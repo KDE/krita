@@ -18,7 +18,7 @@
   <Action name="tool_stamp"/>
 </ToolBar>
 
-<Toolbar name="shape_tools"><Text>Shape Tools</Text>
+<ToolBar name="shape_tools"><Text>Shape Tools</Text>
   <Action name="tool_line"/>
   <Action name="tool_polyline"/>
   <Action name="tool_polygon"/>

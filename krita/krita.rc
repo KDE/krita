@@ -144,10 +144,10 @@
 <ToolBar name="painting_tools" position="left"><Text>Painting Tools</Text>
 </ToolBar>
 
-<ToolBar name="shape_tools" position="left"><Text>Shape Tools</text>
+<ToolBar name="shape_tools" position="left"><Text>Shape Tools</Text>
 </ToolBar>
 
-<ToolBar name="fill_tools" position="left"><Text>Fill Tools</text>
+<ToolBar name="fill_tools" position="left"><Text>Fill Tools</Text>
 </ToolBar>
 
 

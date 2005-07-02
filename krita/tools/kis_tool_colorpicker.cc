@@ -20,6 +20,7 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qlistview.h>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -45,6 +46,8 @@ KisToolColorPicker::KisToolColorPicker()
 	m_subject = 0;
 	m_updateColor = true;
 	m_sampleMerged = true;
+	m_normaliseValues = true;
+	m_pickedColor = KisColor();
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
@@ -86,19 +89,42 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 			return;
 		}
 
-		KisColor c;
-
 		if (m_sampleMerged) {
-			c = img -> mergedPixel(pos.x(), pos.y());
+			m_pickedColor = img -> mergedPixel(pos.x(), pos.y());
 		} else {
-			c = dev -> pixelAt(pos.x(), pos.y());
+			m_pickedColor = dev -> pixelAt(pos.x(), pos.y());
 		}
+
+		displayPickedColor();
 
 		if (m_updateColor) {
 			if (e -> button() == QMouseEvent::LeftButton)
-				m_subject -> setFGColor(c);
+				m_subject -> setFGColor(m_pickedColor);
 			else 
-				m_subject -> setBGColor(c);
+				m_subject -> setBGColor(m_pickedColor);
+		}
+	}
+}
+
+void KisToolColorPicker::displayPickedColor()
+{
+	if (m_pickedColor.data() && m_optionsWidget) {
+
+		vKisChannelInfoSP channels = m_pickedColor.colorStrategy() -> channels();
+		m_optionsWidget -> listViewChannels -> clear();
+
+		for (int i = channels.count() - 1; i >= 0 ; --i) {
+			QString channelValueText;
+
+			if (m_normaliseValues) {
+				channelValueText = m_pickedColor.colorStrategy() -> normalisedChannelValueText(m_pickedColor.data(), i);
+			} else {
+				channelValueText = m_pickedColor.colorStrategy() -> channelValueText(m_pickedColor.data(), i);
+			}
+
+			m_optionsWidget -> listViewChannels -> insertItem(new QListViewItem(m_optionsWidget -> listViewChannels,
+											    channels[i] -> name(),
+											    channelValueText));
 		}
 	}
 }
@@ -120,9 +146,13 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 	
 	m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
 	m_optionsWidget -> cbSampleMerged -> setChecked(m_sampleMerged);
+	m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
+
+	m_optionsWidget -> listViewChannels -> setSorting(-1);
 
 	connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
 	connect(m_optionsWidget -> cbSampleMerged, SIGNAL(toggled(bool)), SLOT(slotSetSampleMerged(bool)));
+	connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
 
 	return m_optionsWidget;
 }
@@ -140,5 +170,11 @@ void KisToolColorPicker::slotSetUpdateColor(bool state)
 void KisToolColorPicker::slotSetSampleMerged(bool state)
 {
 	m_sampleMerged = state;
+}
+
+void KisToolColorPicker::slotSetNormaliseValues(bool state)
+{
+	m_normaliseValues = state;
+	displayPickedColor();
 }
 

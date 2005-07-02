@@ -45,7 +45,7 @@ KisColorSpaceAlpha::KisColorSpaceAlpha() :
 {
 	m_maskColor = Qt::red;
 	m_inverted = false;
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 0, ALPHA));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
 }
 
 KisColorSpaceAlpha::~KisColorSpaceAlpha()
@@ -294,5 +294,21 @@ KisCompositeOpList KisColorSpaceAlpha::userVisiblecompositeOps() const
 	list.append(KisCompositeOp(COMPOSITE_OVER));
 
 	return list;
+}
+
+QString KisColorSpaceAlpha::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisColorSpaceAlpha::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 

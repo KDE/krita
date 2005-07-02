@@ -41,32 +41,49 @@
 
 using namespace WetAndSticky;
 
+enum WetStickyChannelIndex {
+	BLUE_CHANNEL_INDEX,
+	GREEN_CHANNEL_INDEX,
+	RED_CHANNEL_INDEX,
+	ALPHA_CHANNEL_INDEX,
+	HUE_CHANNEL_INDEX,
+	SATURATION_CHANNEL_INDEX,
+	LIGHTNESS_CHANNEL_INDEX,
+	LIQUID_CONTENT_CHANNEL_INDEX,
+	DRYING_RATE_CHANNEL_INDEX,
+	MISCIBILITY_CHANNEL_INDEX,
+	GRAVITATIONAL_DIRECTION_INDEX,
+	GRAVITATIONAL_STRENGTH_CHANNEL_INDEX,
+	ABSORBANCY_CHANNEL_INDEX,
+	PAINT_VOLUME_CHANNEL_INDEX
+};
+
 KisColorSpaceWetSticky::KisColorSpaceWetSticky() :
 	KisStrategyColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
 	Q_INT32 pos = 0;
 	
 	// Basic representational definition
-	m_channels.push_back(new KisChannelInfo(i18n("blue"), pos, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("green"), ++pos, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("red"), ++pos, COLOR, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), ++pos, ALPHA, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Blue"), pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Green"), ++pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Red"), ++pos, COLOR, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), ++pos, ALPHA, 1));
 
 	// Paint definition
-	m_channels.push_back(new KisChannelInfo(i18n("hue"), ++pos, COLOR, sizeof(float)));
-	m_channels.push_back(new KisChannelInfo(i18n("saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
-	m_channels.push_back(new KisChannelInfo(i18n("lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
+	m_channels.push_back(new KisChannelInfo(i18n("Hue"), ++pos, COLOR, sizeof(float)));
+	m_channels.push_back(new KisChannelInfo(i18n("Saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
+	m_channels.push_back(new KisChannelInfo(i18n("Lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
 	
-	m_channels.push_back(new KisChannelInfo(i18n("liquid content"), pos+=sizeof(float), SUBSTANCE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("drying rate"), ++pos, SUBSTANCE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("miscibility"), ++pos, SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Liquid Content"), pos+=sizeof(float), SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Drying Rate"), ++pos, SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Miscibility"), ++pos, SUBSTANCE, 1));
 
 	// Substrate definition
-	m_channels.push_back(new KisChannelInfo(i18n("gravitational direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
-	m_channels.push_back(new KisChannelInfo(i18n("gravitational strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
+	m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
 	
-	m_channels.push_back(new KisChannelInfo(i18n("absorbancy"), ++pos, SUBSTRATE, 1));
-	m_channels.push_back(new KisChannelInfo(i18n("paint volume"), ++pos, SUBSTANCE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Absorbancy"), ++pos, SUBSTRATE, 1));
+	m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
 #ifdef WSDEBUG
 	vKisChannelInfoSP_it it;
@@ -449,5 +466,115 @@ KisCompositeOpList KisColorSpaceWetSticky::userVisiblecompositeOps() const
 	list.append(KisCompositeOp(COMPOSITE_OVER));
 
 	return list;
+}
+
+QString KisColorSpaceWetSticky::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);
+
+	switch (channelIndex) {
+	case BLUE_CHANNEL_INDEX:
+		return QString().setNum(pixel -> blue);
+	case GREEN_CHANNEL_INDEX:
+		return QString().setNum(pixel -> green);
+	case RED_CHANNEL_INDEX:
+		return QString().setNum(pixel -> red);
+	case ALPHA_CHANNEL_INDEX:
+		return QString().setNum(pixel -> alpha);
+	case HUE_CHANNEL_INDEX:
+		return QString().setNum(pixel -> hue);
+	case SATURATION_CHANNEL_INDEX:
+		return QString().setNum(pixel -> saturation);
+	case LIGHTNESS_CHANNEL_INDEX:
+		return QString().setNum(pixel -> lightness);
+	case LIQUID_CONTENT_CHANNEL_INDEX:
+		return QString().setNum(pixel -> liquid_content);
+	case DRYING_RATE_CHANNEL_INDEX:
+		return QString().setNum(pixel -> drying_rate);
+	case MISCIBILITY_CHANNEL_INDEX:
+		return QString().setNum(pixel -> miscibility);
+	case GRAVITATIONAL_DIRECTION_INDEX:
+		{
+			switch (pixel -> direction) {
+			case UP:
+				return i18n("Up");
+			case DOWN:
+				return i18n("Down");
+			case LEFT:
+				return i18n("Left");
+			case RIGHT:
+				return i18n("Right");
+			default:
+				Q_ASSERT(false);
+				return QString();
+			}
+		}
+	case GRAVITATIONAL_STRENGTH_CHANNEL_INDEX:
+		return QString().setNum(pixel -> strength);
+	case ABSORBANCY_CHANNEL_INDEX:
+		return QString().setNum(pixel -> absorbancy);
+	case PAINT_VOLUME_CHANNEL_INDEX:
+		return QString().setNum(pixel -> volume);
+	default:
+		Q_ASSERT(false);
+		return QString();
+	}
+}
+
+QString KisColorSpaceWetSticky::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);
+
+	//XXX: Are these right?
+
+	switch (channelIndex) {
+	case BLUE_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> blue) / UINT8_MAX);
+	case GREEN_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> green) / UINT8_MAX);
+	case RED_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> red) / UINT8_MAX);
+	case ALPHA_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> alpha) / UINT8_MAX);
+	case HUE_CHANNEL_INDEX:
+		return QString().setNum(pixel -> hue);
+	case SATURATION_CHANNEL_INDEX:
+		return QString().setNum(pixel -> saturation);
+	case LIGHTNESS_CHANNEL_INDEX:
+		return QString().setNum(pixel -> lightness);
+	case LIQUID_CONTENT_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> liquid_content) / UINT8_MAX);
+	case DRYING_RATE_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> drying_rate) / UINT8_MAX);
+	case MISCIBILITY_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> miscibility) / UINT8_MAX);
+	case GRAVITATIONAL_DIRECTION_INDEX:
+		{
+			switch (pixel -> direction) {
+			case UP:
+				return i18n("Up");
+			case DOWN:
+				return i18n("Down");
+			case LEFT:
+				return i18n("Left");
+			case RIGHT:
+				return i18n("Right");
+			default:
+				Q_ASSERT(false);
+				return QString();
+			}
+		}
+	case GRAVITATIONAL_STRENGTH_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> strength) / UINT8_MAX);
+	case ABSORBANCY_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> absorbancy) / UINT8_MAX);
+	case PAINT_VOLUME_CHANNEL_INDEX:
+		return QString().setNum(static_cast<float>(pixel -> volume) / UINT8_MAX);
+	default:
+		Q_ASSERT(false);
+		return QString();
+	}
 }
 

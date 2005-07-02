@@ -33,12 +33,38 @@ void KisStrategyColorSpaceGrayscaleTester::allTests()
 	// We need this so that the colour profile loading can operate without crashing.
 	KisFactory *factory = new KisFactory();
 
+	testBasics();
 	testMixColors();
 
 	delete factory;
 }
 
 #define MAX_CHANNEL_GRAYSCALEA 2
+
+#define GRAY_CHANNEL 0
+#define ALPHA_CHANNEL 1
+
+void KisStrategyColorSpaceGrayscaleTester::testBasics()
+{
+	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceGrayscale();
+
+	Q_UINT8 pixel[MAX_CHANNEL_GRAYSCALEA];
+
+	pixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY] = 255;
+	pixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA] = 128;
+
+	QString valueText = cs -> channelValueText(pixel, GRAY_CHANNEL);
+	CHECK(valueText, QString("255"));
+
+	valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
+	CHECK(valueText, QString("128"));
+
+	valueText = cs -> normalisedChannelValueText(pixel, GRAY_CHANNEL);
+	CHECK(valueText, QString().setNum(1.0));
+
+	valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
+	CHECK(valueText, QString().setNum(128.0 / 255.0));
+}
 
 void KisStrategyColorSpaceGrayscaleTester::testMixColors()
 {
@@ -109,4 +135,5 @@ void KisStrategyColorSpaceGrayscaleTester::testMixColors()
 	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 255);
 	CHECK((int)outputPixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 165);
 }
+
 

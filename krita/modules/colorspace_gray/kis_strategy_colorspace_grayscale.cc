@@ -47,8 +47,8 @@ namespace {
 KisStrategyColorSpaceGrayscale::KisStrategyColorSpaceGrayscale() :
 	KisStrategyColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
 {
-	m_channels.push_back(new KisChannelInfo(i18n("gray"), 0, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));
+	m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));
 }
 
 
@@ -953,3 +953,20 @@ void KisStrategyColorSpaceGrayscale::compositeErase(Q_UINT8 *dst,
 		src += srcRowSize;
 	}
 }
+
+QString KisStrategyColorSpaceGrayscale::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisStrategyColorSpaceGrayscale::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
+}
+

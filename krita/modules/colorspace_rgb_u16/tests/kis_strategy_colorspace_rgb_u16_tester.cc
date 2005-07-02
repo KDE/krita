@@ -39,6 +39,11 @@ KUNITTEST_MODULE_REGISTER_TESTER( KisStrategyColorSpaceRGBU16Tester );
 #define NUM_COLOUR_CHANNELS 3
 #define CHANNEL_SIZE 2
 
+#define RED_CHANNEL 0
+#define GREEN_CHANNEL 1
+#define BLUE_CHANNEL 2
+#define ALPHA_CHANNEL 3
+
 #define MAX_CHANNEL_VALUE UINT16_MAX
 #define MIN_CHANNEL_VALUE UINT16_MIN
 
@@ -49,6 +54,7 @@ void KisStrategyColorSpaceRGBU16Tester::allTests()
 
 	testBasics();
 	testToQImage();
+	testCompositeOps();
         //testMixColors();
 
 	delete factory;
@@ -247,9 +253,37 @@ void KisStrategyColorSpaceRGBU16Tester::testBasics()
 	CHECK((int)pixels[3].blue, MIN_CHANNEL_VALUE);
 	CHECK((int)pixels[3].alpha, (int)UINT8_TO_UINT16(OPACITY_OPAQUE / 2));
 
+	pixel[PIXEL_RED] = MAX_CHANNEL_VALUE;
+	pixel[PIXEL_GREEN] = MAX_CHANNEL_VALUE / 2;
+	pixel[PIXEL_BLUE] = MAX_CHANNEL_VALUE / 4;
+	pixel[PIXEL_ALPHA] = MIN_CHANNEL_VALUE;
+
+	QString valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+	CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE));
+
+	valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+	CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 2));
+
+	valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+	CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 4));
+
+	valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+	CHECK(valueText, QString().setNum(MIN_CHANNEL_VALUE));
+
+	valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+	CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE) / MAX_CHANNEL_VALUE));
+
+	valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+	CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE / 2) / MAX_CHANNEL_VALUE));
+
+	valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+	CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE / 4) / MAX_CHANNEL_VALUE));
+
+	valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+	CHECK(valueText, QString().setNum(static_cast<float>(MIN_CHANNEL_VALUE) / MAX_CHANNEL_VALUE));
+
 	/*
 	virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
-	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 	*/
 }
@@ -390,5 +424,63 @@ void KisStrategyColorSpaceRGBU16Tester::testToQImage()
 	CHECK(qGreen(c), (int)UINT16_TO_UINT8(MIN_CHANNEL_VALUE));
 	CHECK(qBlue(c), (int)UINT16_TO_UINT8(MIN_CHANNEL_VALUE));
 	CHECK(qAlpha(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE));
+}
+
+#define NUM_ROWS 2
+#define NUM_COLUMNS 2
+#define SRC_ROW_STRIDE (NUM_COLUMNS * CHANNEL_SIZE)
+#define DST_ROW_STRIDE (NUM_COLUMNS * CHANNEL_SIZE)
+#define MASK_ROW_STRIDE NUM_COLUMNS
+
+/*
+1 alpha 1    0 alpha 1
+1 alpha 0.5  0 alpha 1
+1 alpha 0.5  0 alpha 0.5
+1 alpha 0    0 alpha 0.5
+
+*/
+
+void  KisStrategyColorSpaceRGBU16Tester::testCompositeOps()
+{
+	KisStrategyColorSpaceRGBU16 *cs = new KisStrategyColorSpaceRGBU16();
+
+	KisStrategyColorSpaceRGBU16::Pixel srcPixel;
+	KisStrategyColorSpaceRGBU16::Pixel dstPixel;
+
+	srcPixel.red = UINT8_TO_UINT16(102);
+	srcPixel.green = UINT8_TO_UINT16(170);
+	srcPixel.blue = UINT8_TO_UINT16(238);
+	srcPixel.alpha = KisStrategyColorSpaceRGBU16::U16_OPACITY_OPAQUE;
+
+	dstPixel = srcPixel;
+
+	cs -> compositeDivide(reinterpret_cast<Q_UINT8 *>(&dstPixel), 1, reinterpret_cast<const Q_UINT8 *>(&srcPixel), 
+			    1, 0, 0, 1, 1, KisStrategyColorSpaceRGBU16::U16_OPACITY_OPAQUE);
+
+	XFAIL(dstPixel.red, (Q_UINT16)UINT8_TO_UINT16(253));
+	XFAIL(dstPixel.green, (Q_UINT16)UINT8_TO_UINT16(254));
+	XFAIL(dstPixel.blue, (Q_UINT16)UINT8_TO_UINT16(254));
+	CHECK(dstPixel.alpha, KisStrategyColorSpaceRGBU16::U16_OPACITY_OPAQUE);
+
+	/*
+	KisStrategyColorSpaceRGBU16::Pixel srcPixels[NUM_ROWS * NUM_COLUMNS] = {
+		{MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
+		{MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
+		{MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},
+		{MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
+	};
+
+	KisStrategyColorSpaceRGBU16::Pixel dstPixels[NUM_ROWS * NUM_COLUMNS] = {
+		{MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
+		{MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
+		{MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},
+		{MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
+	};
+
+	cs -> compositeOver(reinterpret_cast<Q_UINT8 *>(dstPixels), DST_ROW_STRIDE, reinterpret_cast<const Q_UINT8 *>(srcPixels), 
+			    SRC_ROW_STRIDE, mask, MASK_ROW_STRIDE, NUM_ROWS, NUM_COLUMNS, opacity);
+	*/
+
+	delete cs;
 }
 

@@ -41,14 +41,11 @@ namespace {
 	const Q_INT32 TYPE_TEMPLATE = 0; // This is the lcms colormodel identifier, 0 if lcms is not appliccable
 }
 
-
-
-
 KisColorSpaceTemplate::KisColorSpaceTemplate() :
 	KisStrategyColorSpace(KisID("TEMPLATEA", i18n("Templatescale/Alpha")), TYPE_TEMPLATE, icMaxEnumData)
 {
-	m_channels.push_back(new KisChannelInfo(i18n("template"), 0, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 1, ALPHA));
+	m_channels.push_back(new KisChannelInfo(i18n("Template"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));
 }
 
 
@@ -769,5 +766,21 @@ void KisColorSpaceTemplate::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRo
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
 	}
+}
+
+QString KisStrategyColorSpaceTemplate::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT8);
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisStrategyColorSpaceTemplate::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT8);
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 

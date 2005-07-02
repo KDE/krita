@@ -430,3 +430,45 @@ KisCompositeOpList KisStrategyColorSpaceTestCS::userVisiblecompositeOps() const
 	return list;
 }
 
+QString KisStrategyColorSpaceTestCS::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+
+	const testcspixel *pix = (const testcspixel *)pixel;
+
+	switch (channelIndex) {
+	case 2:
+		return QString().setNum(pix -> bmg);
+	case 1:
+		return QString().setNum(pix -> g);
+	case 0:
+		return QString().setNum(pix -> r);
+	case 3:
+		return QString().setNum(pix -> alpha);
+	default:
+		Q_ASSERT(false);
+		return QString();
+	}
+}
+
+QString KisStrategyColorSpaceTestCS::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+
+	const testcspixel *pix = (const testcspixel *)pixel;
+
+	switch (channelIndex) {
+	case 2:
+		return QString().setNum(static_cast<float>(pix -> bmg) / UINT16_MAX);
+	case 1:
+		return QString().setNum(static_cast<float>(pix -> g) / UINT8_MAX);
+	case 0:
+		return QString().setNum(static_cast<float>(pix -> r) / UINT8_MAX);
+	case 3:
+		return QString().setNum(static_cast<float>(pix -> alpha) / UINT8_MAX);
+	default:
+		Q_ASSERT(false);
+		return QString();
+	}
+}
+

@@ -29,6 +29,7 @@ public:
 	void testBasics();
 	void testMixColors();
 	void testToQImage();
+	void testCompositeOps();
 };
 
 #endif

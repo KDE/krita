@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_colorspace_wet.h"
 #include "kis_iterators_pixel.h"
+#include "kis_integer_maths.h"
 
 namespace {
 	static const WetPix m_paint = { 707, 0, 707, 0, 707, 0, 240, 0 };
@@ -137,23 +138,23 @@ KisColorSpaceWet::KisColorSpaceWet() :
 		<< i18n("Ivory Black")
 		<< i18n("Pure Water");
 
-	m_channels.push_back(new KisChannelInfo(i18n("red concentration"), 0, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("myth red"), 1, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("green concentration"), 2, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("myth green"), 3, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("blue concentration"), 4, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("myth blue"), 5, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("water volume"), 6, SUBSTANCE));
-	m_channels.push_back(new KisChannelInfo(i18n("paper height"), 7, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), 1, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), 2, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), 3, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), 4, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), 5, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), 6, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), 7, SUBSTANCE));
 
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed red concentration"), 8, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth red"), 9, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed green concentration"), 10, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth green"), 11, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed blue concentration"), 12, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed myth blue"), 13, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed water volume"), 14, SUBSTANCE));
-	m_channels.push_back(new KisChannelInfo(i18n("adsorbed paper height"), 15, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), 8, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), 9, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), 10, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), 11, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), 12, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, SUBSTANCE));
+	m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, SUBSTANCE));
 	
 
 	// we store the conversion in an QRgb (equivalent to unsigned int)
@@ -436,5 +437,23 @@ KisCompositeOpList KisColorSpaceWet::userVisiblecompositeOps() const
 	list.append(KisCompositeOp(COMPOSITE_OVER));
 
 	return list;
+}
+
+QString KisColorSpaceWet::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisColorSpaceWet::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 

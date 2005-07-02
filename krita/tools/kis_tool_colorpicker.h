@@ -45,10 +45,15 @@ public:
 public slots:
 	void slotSetUpdateColor(bool);
 	void slotSetSampleMerged(bool);
+	void slotSetNormaliseValues(bool);
 
 private:
+	void displayPickedColor();
+
 	bool m_updateColor;
 	bool m_sampleMerged;
+	bool m_normaliseValues;
+	KisColor m_pickedColor;
 
 	ColorPickerOptionsWidget *m_optionsWidget;
 	KisCanvasSubject *m_subject;

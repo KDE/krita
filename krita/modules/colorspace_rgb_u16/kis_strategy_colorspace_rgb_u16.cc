@@ -39,13 +39,16 @@ namespace {
 	const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
+const Q_UINT16 KisStrategyColorSpaceRGBU16::U16_OPACITY_OPAQUE;
+const Q_UINT16 KisStrategyColorSpaceRGBU16::U16_OPACITY_TRANSPARENT;
+
 KisStrategyColorSpaceRGBU16::KisStrategyColorSpaceRGBU16() :
-	KisStrategyColorSpace(KisID("RGBA16", i18n("RGB/Alpha 16-bit integer")), TYPE_BGRA_16, icSigRgbData)
+	KisStrategyColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer)")), TYPE_BGRA_16, icSigRgbData)
 {
-	m_channels.push_back(new KisChannelInfo(i18n("red"), PIXEL_RED * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
-	m_channels.push_back(new KisChannelInfo(i18n("green"), PIXEL_GREEN * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
-	m_channels.push_back(new KisChannelInfo(i18n("blue"), PIXEL_BLUE * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));
+	m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
+	m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
+	m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));
 }
 
 KisStrategyColorSpaceRGBU16::~KisStrategyColorSpaceRGBU16()
@@ -415,42 +418,44 @@ void KisStrategyColorSpaceRGBU16::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 
 {
 	while (rows > 0) {
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
+		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
+		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
 		Q_INT32 columns = numColumns;
 		const Q_UINT8 *mask = maskRowStart;
 
 		while (columns > 0) {
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+			Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
+			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
 
 			srcAlpha = QMIN(srcAlpha, dstAlpha);
 
 			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
+			if (mask != 0) {
+				Q_UINT8 U8_mask = *mask;
+
+				if (U8_mask != OPACITY_OPAQUE) {
+					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
+				}
 				mask++;
 			}
 			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
+			if (srcAlpha != U16_OPACITY_TRANSPARENT) {
 
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
+				if (opacity != U16_OPACITY_OPAQUE) {
+					srcAlpha = UINT16_MULT(srcAlpha, opacity);
 				}
 
-				Q_UINT8 srcBlend;
+				Q_UINT16 srcBlend;
 
-				if (dstAlpha == OPACITY_OPAQUE) {
+				if (dstAlpha == U16_OPACITY_OPAQUE) {
 					srcBlend = srcAlpha;
 				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
 					dst[PIXEL_ALPHA] = newAlpha;
 
 					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
+						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
 					} else {
 						srcBlend = srcAlpha;
 					}
@@ -458,12 +463,12 @@ void KisStrategyColorSpaceRGBU16::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 
 
 				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-					Q_UINT8 srcColor = src[channel];
-					Q_UINT8 dstColor = dst[channel];
+					Q_UINT16 srcColor = src[channel];
+					Q_UINT16 dstColor = dst[channel];
 
-					srcColor = QMIN((dstColor * (UINT8_MAX + 1)) / (1 + srcColor), UINT8_MAX);
+					srcColor = QMIN((dstColor * (UINT16_MAX + 1)) / (1 + srcColor), UINT16_MAX);
 
-					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
+					Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
 					dst[channel] = newColor;
 				}
@@ -477,8 +482,9 @@ void KisStrategyColorSpaceRGBU16::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 
 		rows--;
 		srcRowStart += srcRowStride;
 		dstRowStart += dstRowStride;
-		if(maskRowStart)
+		if(maskRowStart) {
 			maskRowStart += maskRowStride;
+		}
 	}
 }
 
@@ -1447,5 +1453,23 @@ KisCompositeOpList KisStrategyColorSpaceRGBU16::userVisiblecompositeOps() const
 	//list.append(KisCompositeOp(COMPOSITE_COLOR));
 
 	return list;
+}
+
+QString KisStrategyColorSpaceRGBU16::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisStrategyColorSpaceRGBU16::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 

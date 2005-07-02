@@ -33,9 +33,53 @@ void KisStrategyColorSpaceRGBTester::allTests()
 	// We need this so that the colour profile loading can operate without crashing.
 	KisFactory *factory = new KisFactory();
 
+	testBasics();
 	testMixColors();
 
 	delete factory;
+}
+
+#define NUM_CHANNELS 4
+
+#define RED_CHANNEL 0
+#define GREEN_CHANNEL 1
+#define BLUE_CHANNEL 2
+#define ALPHA_CHANNEL 3
+
+void KisStrategyColorSpaceRGBTester::testBasics()
+{
+	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGB();
+
+	Q_UINT8 pixel[NUM_CHANNELS];
+
+	pixel[PIXEL_RED] = 255;
+	pixel[PIXEL_GREEN] = 128;
+	pixel[PIXEL_BLUE] = 64;
+	pixel[PIXEL_ALPHA] = 0;
+
+	QString valueText = cs -> channelValueText(pixel, RED_CHANNEL);
+	CHECK(valueText, QString("255"));
+
+	valueText = cs -> channelValueText(pixel, GREEN_CHANNEL);
+	CHECK(valueText, QString("128"));
+
+	valueText = cs -> channelValueText(pixel, BLUE_CHANNEL);
+	CHECK(valueText, QString("64"));
+
+	valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
+	CHECK(valueText, QString("0"));
+
+	valueText = cs -> normalisedChannelValueText(pixel, RED_CHANNEL);
+	CHECK(valueText, QString().setNum(1.0));
+
+	valueText = cs -> normalisedChannelValueText(pixel, GREEN_CHANNEL);
+	CHECK(valueText, QString().setNum(128.0 / 255.0));
+
+	valueText = cs -> normalisedChannelValueText(pixel, BLUE_CHANNEL);
+	CHECK(valueText, QString().setNum(64.0 / 255.0));
+
+	valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
+	CHECK(valueText, QString().setNum(0.0));
 }
 
 void KisStrategyColorSpaceRGBTester::testMixColors()

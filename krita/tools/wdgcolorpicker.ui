@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>166</width>
-            <height>68</height>
+            <width>189</width>
+            <height>264</height>
         </rect>
     </property>
     <property name="caption">
@@ -43,7 +43,48 @@
                         <string>Update Current Color</string>
                     </property>
                 </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbNormaliseValues</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Normalise Integer Values</string>
+                    </property>
+                </widget>
             </vbox>
+        </widget>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>Channel</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Value</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>listViewChannels</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="selectionMode">
+                <enum>NoSelection</enum>
+            </property>
         </widget>
     </vbox>
 </widget>

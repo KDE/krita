@@ -26,6 +26,7 @@ class KisStrategyColorSpaceRGBTester : public KUnitTest::Tester
 {
 public:
         void allTests();
+	void testBasics();
 	void testMixColors();
 };
 

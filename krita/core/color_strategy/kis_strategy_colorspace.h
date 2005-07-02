@@ -116,6 +116,16 @@ public:
 	 */
 	virtual bool alpha() const = 0;
 
+	/**
+	 * Return a string with the channel's value suitable for display in the gui.
+	 */
+	virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
+
+	/**
+	 * Return a string with the channel's value with integer
+	 * channels normalised to the floating point range 0 to 1, if appropriate.
+	 */
+	virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
 	//========== Identification ===============================================//
 

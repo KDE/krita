@@ -27,6 +27,7 @@ class KisStrategyColorSpaceGrayscaleTester : public KUnitTest::Tester
 public:
         void allTests();
 	void testMixColors();
+	void testBasics();
 };
 
 #endif

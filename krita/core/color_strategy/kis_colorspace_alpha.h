@@ -54,6 +54,9 @@ public:
 	virtual Q_INT32 nColorChannels() const { return 0; };
 	virtual Q_INT32 pixelSize() const { return 1; };
 
+	virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+	virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);

@@ -44,11 +44,11 @@ KisStrategyColorSpaceCMYKA::KisStrategyColorSpaceCMYKA() :
 			      (COLORSPACE_SH(PT_CMYK) | CHANNELS_SH(4) | BYTES_SH(1) | EXTRA_SH(1)),
 			      icSigCmykData)
 {
-	m_channels.push_back(new KisChannelInfo(i18n("cyan"), 0, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("magenta"), 1, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("yellow"), 2, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("black"), 3, COLOR));
-	m_channels.push_back(new KisChannelInfo(i18n("alpha"), 4, ALPHA));
+	m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, COLOR));
+	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA));
 }
 
 KisStrategyColorSpaceCMYKA::~KisStrategyColorSpaceCMYKA()
@@ -320,5 +320,21 @@ KisCompositeOpList KisStrategyColorSpaceCMYKA::userVisiblecompositeOps() const
 	list.append(KisCompositeOp(COMPOSITE_OVER));
 
 	return list;
+}
+
+QString KisStrategyColorSpaceCMYKA::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(pixel[channelPosition]);
+}
+
+QString KisStrategyColorSpaceCMYKA::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
+{
+	Q_ASSERT(channelIndex < nChannels());
+	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+
+	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 

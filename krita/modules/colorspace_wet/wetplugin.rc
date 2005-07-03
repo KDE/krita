@@ -4,6 +4,7 @@
 	<Menu name="Watercolor"><text>&amp;Watercolor layer</text>
 		<Action name="wetnessvisualisation"/>
 		<Action name="texturefilter"/>
+		<Action name="wetphysics"/>
 	</Menu>
 </MenuBar>
 <Toolbar name="painting_tools" position="top"><Text>Painting Tools</Text>

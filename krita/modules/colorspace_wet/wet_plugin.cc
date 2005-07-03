@@ -60,6 +60,7 @@
 #include "kis_tool_wet_brush.h"
 #include "kis_wetness_visualisation_filter.h"
 #include "kis_texture_filter.h"
+#include "wetphysicsfilter.h"
 
 typedef KGenericFactory<WetPlugin> WetPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
@@ -113,6 +114,10 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		// Texture filter
 		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
 						SLOT(slotActivated()), actionCollection(), "texturefilter");
+		
+		// Dry filter
+		KisFilterSP kfi = createFilter<WetPhysicsFilter>(m_view);
+		(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
 	}
 
 }

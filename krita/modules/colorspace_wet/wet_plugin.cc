@@ -59,6 +59,7 @@
 #include "kis_wetop.h"
 #include "kis_tool_wet_brush.h"
 #include "kis_wetness_visualisation_filter.h"
+#include "kis_texture_filter.h"
 
 typedef KGenericFactory<WetPlugin> WetPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
@@ -108,6 +109,10 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		WetnessVisualisationFilter* wf = new WetnessVisualisationFilter(m_view);
 		wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
 						SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
+		
+		// Texture filter
+		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
+						SLOT(slotActivated()), actionCollection(), "texturefilter");
 	}
 
 }

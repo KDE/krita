@@ -33,51 +33,57 @@
 KisTexturePainter::KisTexturePainter()
 	: super()
 {
+	// XXX make at least one of these configurable, probably blurh
+	m_height = 1;
+	m_blurh = 0.7;
 }
 
 KisTexturePainter::KisTexturePainter(KisPaintDeviceSP device) : super(device)
 {
+	m_height = 1;
+	m_blurh = 0.7;
 }
 
 void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	// XXX: Make these parameters?
-	double height = 1;
-	double blurh = 0.7;
+	double hscale = 128 * m_height / RAND_MAX;
 
-	double hscale = 128 * height / RAND_MAX;
+	int ibh = (int) floor(256 * m_blurh + 0.5);
 
-        int ibh = (int) floor(256 * blurh + 0.5);
-
-        for (int y2 = h; y2 < h - y; y2++) {
-		KisHLineIterator i = m_device -> createHLineIterator(x, y2, w - x, true);
+	// initialize with random data
+	for (int y2 = 0; y2 < h; y2++) {
+		KisHLineIterator i = m_device -> createHLineIterator(x, y + y2, w, true);
 		while (!i.isDone()) {
-			WetPix * w = (WetPix*)i.rawData();
-			w[0].h = (Q_UINT16)floor(128 + hscale * rand());
+			WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
+			WetPix* w = &(pack->adsorb);
+			w -> h = (Q_UINT16)floor(128 + hscale * rand());
 			++i;
 		}
-        }
+	}
 
-        int lh;
+	int lh;
 
 	// Blur horizontally
-        for (int y2 = h; y2 < h - y; y2++) {
-		KisHLineIterator i = m_device -> createHLineIterator(x, y2, w - x, true);
+	for (int y2 = 0; y2 < h; y2++) {
+		KisHLineIterator i = m_device -> createHLineIterator(x, y + y2, w, true);
 
-		WetPix * w = (WetPix*)i.rawData();
-		lh = w[0].h;
+		WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
+		WetPix* w = &(pack->adsorb);
+		lh = w -> h;
 		++i;
 
 		while (!i.isDone()) {
-			w = (WetPix*)i.rawData();
-			w[0].h +=  ((lh - w[0].h) * ibh + 228) >> 8;
-			lh = w[0].h;
-			w[1].h = w[0].h; // XXX: Do we really need two height values? Krita
-					 // combines the paint and absorbtion layers into one pixel.
+			pack = reinterpret_cast<WetPack*>(i.rawData());
+			w = &(pack->adsorb);
+			w -> h += ((lh - w -> h) * ibh + 128) >> 8;
+			lh = w -> h;
+			// XXX: I don't think we need the second height value here
 			++i;
 		}
+	}
 
-        }
-	// Vertical blurring was commented out in wetdreams, the effect seems to be achievable without this.
-	//int ibv = floor(256 * blurv + 0.5);
+	// Vertical blurring was commented out in wetdreams, the effect seems to be achievable
+	// without this.
+	// I think this is because with blur in one direction, you get more the effect of
+	// having 'fibers' in your paper
 }

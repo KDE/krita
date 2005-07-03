@@ -108,6 +108,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 			// XXX this only does something with .paint, and not with adsorb I assume?
 			KisHLineIteratorPixel it = device -> createHLineIterator(xp, yp, 1, true);
 			currentPack = *(reinterpret_cast<WetPack*>(it.rawData()));
+			WetPix currentData = currentPack.adsorb;
 			currentPix = currentPack.paint;
 
 			xx = xp - (double)x; // ditto?
@@ -120,7 +121,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 			}
 
 			// XXX - 192 is probably only useful for paper with a texture...
-			eff_height = (currentPix.h + currentPix.w/* - 192*/) * (1.0 / 255);
+			eff_height = (currentData.h + currentPix.w - 192) * (1.0 / 255);
 			contact = (press + eff_height) * 0.2;
 			if (contact > 0.5)
 				contact = 1 - 0.5 * exp(-2.0 * contact - 1);

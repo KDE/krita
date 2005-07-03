@@ -59,6 +59,8 @@ void WetnessVisualisationFilter::slotActivated() {
 		m_timer.start(500);
 		cs -> setPaintWetness(true);
 	}
+	if (m_view -> currentImg())
+		m_view -> currentImg() -> notify();
 }
 
 void WetnessVisualisationFilter::slotTimeout() {

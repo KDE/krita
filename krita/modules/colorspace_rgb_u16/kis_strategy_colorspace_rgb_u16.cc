@@ -112,49 +112,39 @@ Q_INT8 KisStrategyColorSpaceRGBU16::difference(const Q_UINT8 *src1U8, const Q_UI
 
 void KisStrategyColorSpaceRGBU16::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
-	/*
 	Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
 	
 	while (nColors--)
 	{
-		Q_UINT32 alpha = (*colors)[PIXEL_ALPHA];
-		Q_UINT32 alphaTimesWeight = UINT8_MULT(alpha, *weights);
+		const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-		totalRed += (*colors)[PIXEL_RED] * alphaTimesWeight;
-		totalGreen += (*colors)[PIXEL_GREEN] * alphaTimesWeight;
-		totalBlue += (*colors)[PIXEL_BLUE] * alphaTimesWeight;
+		Q_UINT32 alpha = pixel -> alpha;
+		Q_UINT32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
+
+		totalRed += UINT16_MULT(pixel -> red, alphaTimesWeight);
+		totalGreen += UINT16_MULT(pixel -> green, alphaTimesWeight);
+		totalBlue += UINT16_MULT(pixel -> blue, alphaTimesWeight);
 		newAlpha += alphaTimesWeight;
 
 		weights++;
 		colors++;
 	}
 
-	Q_ASSERT(newAlpha <= 255);
+	Q_ASSERT(newAlpha <= U16_OPACITY_OPAQUE);
 
-	dst[PIXEL_ALPHA] = newAlpha;
+	Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
+
+	dstPixel -> alpha = newAlpha;
 
 	if (newAlpha > 0) {
-		totalRed = UINT8_DIVIDE(totalRed, newAlpha);
-		totalGreen = UINT8_DIVIDE(totalGreen, newAlpha);
-		totalBlue = UINT8_DIVIDE(totalBlue, newAlpha);
+		totalRed = UINT16_DIVIDE(totalRed, newAlpha);
+		totalGreen = UINT16_DIVIDE(totalGreen, newAlpha);
+		totalBlue = UINT16_DIVIDE(totalBlue, newAlpha);
 	}
 
-	// Divide by 255.
-	totalRed += 0x80;
-	Q_UINT32 dstRed = ((totalRed >> 8) + totalRed) >> 8;
-	Q_ASSERT(dstRed <= 255);
-	dst[PIXEL_RED] = dstRed;
-
-	totalGreen += 0x80;
-	Q_UINT32 dstGreen = ((totalGreen >> 8) + totalGreen) >> 8;
-	Q_ASSERT(dstGreen <= 255);
-	dst[PIXEL_GREEN] = dstGreen;
-
-	totalBlue += 0x80;
-	Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
-	Q_ASSERT(dstBlue <= 255);
-	dst[PIXEL_BLUE] = dstBlue;
-	*/
+	dstPixel -> red = totalRed;
+	dstPixel -> green = totalGreen;
+	dstPixel -> blue = totalBlue;
 }
 
 vKisChannelInfoSP KisStrategyColorSpaceRGBU16::channels() const

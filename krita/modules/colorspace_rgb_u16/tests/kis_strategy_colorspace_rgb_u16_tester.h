@@ -22,6 +22,16 @@
 
 #include <kunittest/tester.h>
 
+#define CHECK_TOLERANCE( x, y, tolerance ) \
+if ((x) <= (y) + (tolerance) && (x) >= (y) - (tolerance)) \
+{ \
+    success(QString(__FILE__) + "[" + QString::number(__LINE__) + "]: passed " + #x); \
+} \
+else \
+{ \
+    failure(QString(__FILE__) + "[" + QString::number(__LINE__) + QString("]: failed ") + #x + "\n Expected " + #y + ", Actual result " + QString::number(x)); \
+} \
+
 class KisStrategyColorSpaceRGBU16Tester : public KUnitTest::Tester
 {
 public:

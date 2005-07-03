@@ -169,7 +169,7 @@ Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src
 	return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
 }
 
-void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst)
+void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
 	Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
 
@@ -178,7 +178,8 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 	
 	while (nColors--)
 	{
-		toQColor(*colors, &c, &opacity);
+		// Ugly hack to get around the current constness mess of the colour strategy...
+		const_cast<KisStrategyColorSpace *>(this) -> toQColor(*colors, &c, &opacity);
 		
 		Q_UINT32 alphaTimesWeight = UINT8_MULT(opacity, *weights);
 
@@ -213,7 +214,7 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 	Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
 	Q_ASSERT(dstBlue <= 255);
 
-	nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
+	const_cast<KisStrategyColorSpace *>(this) -> nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
 void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,

@@ -55,7 +55,7 @@ void KisStrategyColorSpaceRGBU16Tester::allTests()
 	testBasics();
 	testToQImage();
 	testCompositeOps();
-        //testMixColors();
+        testMixColors();
 
 	delete factory;
 }
@@ -293,14 +293,19 @@ void KisStrategyColorSpaceRGBU16Tester::testMixColors()
 	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGBU16();
 
 	// Test mixColors.
-	Q_UINT16 pixel1[4];
-	Q_UINT16 pixel2[4];
-	Q_UINT16 outputPixel[4];
+	Q_UINT16 pixel1[NUM_CHANNELS];
+	Q_UINT16 pixel2[NUM_CHANNELS];
+	Q_UINT16 outputPixel[NUM_CHANNELS];
 
-	pixel1[PIXEL_RED] = 255;
-	pixel1[PIXEL_GREEN] = 255;
-	pixel1[PIXEL_BLUE] = 255;
-	pixel1[PIXEL_ALPHA] = 255;
+	outputPixel[PIXEL_RED] = 0;
+	outputPixel[PIXEL_GREEN] = 0;
+	outputPixel[PIXEL_BLUE] = 0;
+	outputPixel[PIXEL_ALPHA] = 0;
+	
+	pixel1[PIXEL_RED] = UINT16_MAX;
+	pixel1[PIXEL_GREEN] = UINT16_MAX;
+	pixel1[PIXEL_BLUE] = UINT16_MAX;
+	pixel1[PIXEL_ALPHA] = UINT16_MAX;
 
 	pixel2[PIXEL_RED] = 0;
 	pixel2[PIXEL_GREEN] = 0;
@@ -318,10 +323,10 @@ void KisStrategyColorSpaceRGBU16Tester::testMixColors()
 
 	cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+	CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_BLUE], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_ALPHA], UINT16_MAX);
 
 	weights[0] = 0;
 	weights[1] = 255;
@@ -338,47 +343,47 @@ void KisStrategyColorSpaceRGBU16Tester::testMixColors()
 
 	cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 	 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 128);
+	CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_BLUE], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_ALPHA], (128u * UINT16_MAX) / 255u);
 
-	pixel1[PIXEL_RED] = 200;
-	pixel1[PIXEL_GREEN] = 100;
-	pixel1[PIXEL_BLUE] = 50;
-	pixel1[PIXEL_ALPHA] = 255;
+	pixel1[PIXEL_RED] = 20000;
+	pixel1[PIXEL_GREEN] = 10000;
+	pixel1[PIXEL_BLUE] = 5000;
+	pixel1[PIXEL_ALPHA] = UINT16_MAX;
 
-	pixel2[PIXEL_RED] = 100;
-	pixel2[PIXEL_GREEN] = 200;
-	pixel2[PIXEL_BLUE] = 20;
-	pixel2[PIXEL_ALPHA] = 255;
+	pixel2[PIXEL_RED] = 10000;
+	pixel2[PIXEL_GREEN] = 20000;
+	pixel2[PIXEL_BLUE] = 2000;
+	pixel2[PIXEL_ALPHA] = UINT16_MAX;
 
 	cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
-	CHECK((int)outputPixel[PIXEL_RED], 150);
-	CHECK((int)outputPixel[PIXEL_GREEN], 150);
-	CHECK((int)outputPixel[PIXEL_BLUE], 35);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+	CHECK_TOLERANCE((uint)outputPixel[PIXEL_RED], (128u * 20000u + 127u * 10000u) / 255u, 5u);
+	CHECK_TOLERANCE((uint)outputPixel[PIXEL_GREEN], (128u * 10000u + 127u * 20000u) / 255u, 5u);
+	CHECK_TOLERANCE((uint)outputPixel[PIXEL_BLUE], (128u * 5000u + 127u * 2000u) / 255u, 5u);
+	CHECK((uint)outputPixel[PIXEL_ALPHA], UINT16_MAX);
 
 	pixel1[PIXEL_RED] = 0;
 	pixel1[PIXEL_GREEN] = 0;
 	pixel1[PIXEL_BLUE] = 0;
 	pixel1[PIXEL_ALPHA] = 0;
 
-	pixel2[PIXEL_RED] = 255;
-	pixel2[PIXEL_GREEN] = 255;
-	pixel2[PIXEL_BLUE] = 255;
-	pixel2[PIXEL_ALPHA] = 254;
+	pixel2[PIXEL_RED] = UINT16_MAX;
+	pixel2[PIXEL_GREEN] = UINT16_MAX;
+	pixel2[PIXEL_BLUE] = UINT16_MAX;
+	pixel2[PIXEL_ALPHA] = UINT16_MAX;
 
 	weights[0] = 89;
 	weights[1] = 166;
 
 	cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 165);
+	CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
+	CHECK((uint)outputPixel[PIXEL_BLUE], UINT16_MAX);
+	CHECK_TOLERANCE((uint)outputPixel[PIXEL_ALPHA], (89u * 0u + 166u * UINT16_MAX) / 255u, 5u);
 }
 
 #define PIXELS_WIDTH 2

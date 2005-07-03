@@ -273,7 +273,7 @@ public:
 
 	/** Mix the colors given their weights and return in dst
 	 * The sum of weights is assumed 255 */
-	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst);
+	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	
 	/**

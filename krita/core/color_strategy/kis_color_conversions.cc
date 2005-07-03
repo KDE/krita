@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#include <cmath>
 
 #include <qglobal.h>
 #include <kdebug.h>
@@ -141,6 +142,100 @@ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
 	}
 }
 
+#define EPSILON 1e-6
+#define UNDEFINED_HUE -1
+
+void RGBToHSV(float r, float g, float b, float *h, float *s, float *v)
+{
+	float max = QMAX(r, QMAX(g, b));
+	float min = QMIN(r, QMIN(g, b));
+
+	*v = max;
+
+	if (max > EPSILON) {
+		*s = (max - min) / max;
+	} else {
+		*s = 0;
+	}
+
+	if (*s < EPSILON) {
+		*h = UNDEFINED_HUE;
+	} else {
+		float delta = max - min;
+
+		if (r == max) {
+			*h = (g - b) / delta;
+		} else if (g == max) {
+			*h = 2 + (b - r) / delta;
+		} else {
+			*h = 4 + (r - g) / delta;
+		}
+
+		*h *= 60;
+		if (*h < 0) {
+			*h += 360;
+		}
+	}
+}
+
+void HSVToRGB(float h, float s, float v, float *r, float *g, float *b)
+{
+	if (s < EPSILON || h == UNDEFINED_HUE) {
+		// Achromatic case
+
+		*r = v;
+		*g = v;
+		*b = v;
+	} else {
+		float f, p, q, t;
+		int i;
+
+		if (h > 360 - EPSILON) {
+			h -= 360;
+		}
+
+		h /= 60;
+		i = static_cast<int>(floor(h));
+		f = h - i;
+		p = v * (1 - s);
+		q = v * (1 - (s * f));
+		t = v * (1 - (s * (1 - f)));
+
+		switch (i) {
+		case 0:
+			*r = v;
+			*g = t;
+			*b = p;
+			break;
+		case 1:
+			*r = q;
+			*g = v;
+			*b = p;
+			break;
+		case 2:
+			*r = p;
+			*g = v;
+			*b = t;
+			break;
+		case 3:
+			*r = p;
+			*g = q;
+			*b = v;
+			break;
+		case 4:
+			*r = t;
+			*g = p;
+			*b = v;
+			break;
+		case 5:
+			*r = v;
+			*g = p;
+			*b = q;
+			break;
+		}
+	}
+}
+
 void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * lightness, float * saturation)
 {
 	float r = red / 255.0;
@@ -247,5 +342,84 @@ void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b)
 	float saturation = s / 255.0;
 
 	hls_to_rgb(hue, lightness, saturation, r, g, b);
+}
+
+/*
+A Fast HSL-to-RGB Transform
+by Ken Fishkin
+from "Graphics Gems", Academic Press, 1990
+*/
+
+void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
+{
+	float v;
+	float m;
+	float vm;
+	float r2, g2, b2;
+
+	v = QMAX(r,g);
+	v = QMAX(v,b);
+	m = QMIN(r,g);
+	m = QMIN(m,b);
+
+	if ((*l = (m + v) / 2.0) <= 0.0) {
+		*h = UNDEFINED_HUE;
+		*s = 0;
+		return;
+	}
+	if ((*s = vm = v - m) > 0.0) {
+		*s /= (*l <= 0.5) ? (v + m ) :
+		      (2.0 - v - m) ;
+	} else {
+		*h = UNDEFINED_HUE;
+		return;
+	}
+
+
+	r2 = (v - r) / vm;
+	g2 = (v - g) / vm;
+	b2 = (v - b) / vm;
+
+	if (r == v)
+		*h = (g == m ? 5.0 + b2 : 1.0 - g2);
+	else if (g == v)
+		*h = (b == m ? 1.0 + r2 : 3.0 - b2);
+	else
+		*h = (r == m ? 3.0 + g2 : 5.0 - r2);
+
+	*h *= 60;
+}
+
+void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
+
+{
+	float v;
+
+	v = (l <= 0.5) ? (l * (1.0 + sl)) : (l + sl - l * sl);
+	if (v <= 0) {
+		*r = *g = *b = 0.0;
+	} else {
+		float m;
+		float sv;
+		int sextant;
+		float fract, vsf, mid1, mid2;
+
+		m = l + l - v;
+		sv = (v - m ) / v;
+		h /= 60.0;
+		sextant = static_cast<int>(h);    
+		fract = h - sextant;
+		vsf = v * sv * fract;
+		mid1 = m + vsf;
+		mid2 = v - vsf;
+		switch (sextant) {
+		case 0: *r = v; *g = mid1; *b = m; break;
+		case 1: *r = mid2; *g = v; *b = m; break;
+		case 2: *r = m; *g = v; *b = mid1; break;
+		case 3: *r = m; *g = mid2; *b = v; break;
+		case 4: *r = mid1; *g = m; *b = v; break;
+		case 5: *r = v; *g = m; *b = mid2; break;
+		}
+	}
 }
 

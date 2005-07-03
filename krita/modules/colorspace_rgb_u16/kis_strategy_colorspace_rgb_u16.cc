@@ -331,927 +331,411 @@ void KisStrategyColorSpaceRGBU16::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 ds
 	}
 }
 
+#define COMMON_COMPOSITE_OP_PROLOG() \
+	while (rows > 0) { \
+	\
+		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart); \
+		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart); \
+		Q_INT32 columns = numColumns; \
+		const Q_UINT8 *mask = maskRowStart; \
+	\
+		while (columns > 0) { \
+	\
+			Q_UINT16 srcAlpha = src[PIXEL_ALPHA]; \
+			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA]; \
+	\
+			srcAlpha = QMIN(srcAlpha, dstAlpha); \
+	\
+			if (mask != 0) { \
+				Q_UINT8 U8_mask = *mask; \
+	\
+				if (U8_mask != OPACITY_OPAQUE) { \
+					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask)); \
+				} \
+				mask++; \
+			} \
+	\
+			if (srcAlpha != U16_OPACITY_TRANSPARENT) { \
+	\
+				if (opacity != U16_OPACITY_OPAQUE) { \
+					srcAlpha = UINT16_MULT(srcAlpha, opacity); \
+				} \
+	\
+				Q_UINT16 srcBlend; \
+	\
+				if (dstAlpha == U16_OPACITY_OPAQUE) { \
+					srcBlend = srcAlpha; \
+				} else { \
+					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha); \
+					dst[PIXEL_ALPHA] = newAlpha; \
+	\
+					if (newAlpha != 0) { \
+						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha); \
+					} else { \
+						srcBlend = srcAlpha; \
+					} \
+				}
+
+#define COMMON_COMPOSITE_OP_EPILOG() \
+			} \
+	\
+			columns--; \
+			src += MAX_CHANNEL_RGBA; \
+			dst += MAX_CHANNEL_RGBA; \
+		} \
+	\
+		rows--; \
+		srcRowStart += srcRowStride; \
+		dstRowStart += dstRowStride; \
+		if(maskRowStart) { \
+			maskRowStart += maskRowStride; \
+		} \
+	}
+
 void KisStrategyColorSpaceRGBU16::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
-		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		Q_UINT16 srcColor = src[PIXEL_RED];
+		Q_UINT16 dstColor = dst[PIXEL_RED];
 
-		while (columns > 0) {
+		srcColor = UINT16_MULT(srcColor, dstColor);
 
-			Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
+		dst[PIXEL_RED] = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
-			
-			// apply the alphamask
-			if (mask != 0) {
-				Q_UINT8 U8_mask = *mask;
+		srcColor = src[PIXEL_GREEN];
+		dstColor = dst[PIXEL_GREEN];
 
-				if (U8_mask != OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
-				}
-				mask++;
-			}
+		srcColor = UINT16_MULT(srcColor, dstColor);
 
-			if (srcAlpha != U16_OPACITY_TRANSPARENT) {
+		dst[PIXEL_GREEN] = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-				if (opacity != U16_OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, opacity);
-				}
+		srcColor = src[PIXEL_BLUE];
+		dstColor = dst[PIXEL_BLUE];
 
-				Q_UINT16 srcBlend;
+		srcColor = UINT16_MULT(srcColor, dstColor);
 
-				if (dstAlpha == U16_OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				Q_UINT16 srcColor = src[PIXEL_RED];
-				Q_UINT16 dstColor = dst[PIXEL_RED];
-
-				srcColor = UINT16_MULT(srcColor, dstColor);
-
-				dst[PIXEL_RED] = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-				srcColor = src[PIXEL_GREEN];
-				dstColor = dst[PIXEL_GREEN];
-
-				srcColor = UINT16_MULT(srcColor, dstColor);
-
-				dst[PIXEL_GREEN] = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-				srcColor = src[PIXEL_BLUE];
-				dstColor = dst[PIXEL_BLUE];
-
-				srcColor = UINT16_MULT(srcColor, dstColor);
-
-				dst[PIXEL_BLUE] = UINT16_BLEND(srcColor, dstColor, srcBlend);
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart) {
-			maskRowStart += maskRowStride;
-		}
+		dst[PIXEL_BLUE] = UINT16_BLEND(srcColor, dstColor, srcBlend);
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
-		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = QMIN((dstColor * (UINT16_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT16_MAX);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if (mask != 0) {
-				Q_UINT8 U8_mask = *mask;
-
-				if (U8_mask != OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
-				}
-				mask++;
-			}
-			
-			if (srcAlpha != U16_OPACITY_TRANSPARENT) {
-
-				if (opacity != U16_OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, opacity);
-				}
-
-				Q_UINT16 srcBlend;
-
-				if (dstAlpha == U16_OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT16 srcColor = src[channel];
-					Q_UINT16 dstColor = dst[channel];
-
-					srcColor = QMIN((dstColor * (UINT16_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT16_MAX);
-
-					Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart) {
-			maskRowStart += maskRowStride;
+			dst[channel] = newColor;
 		}
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
-		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = UINT16_MAX - UINT16_MULT(UINT16_MAX - dstColor, UINT16_MAX - srcColor);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if(mask != 0) {
-				Q_UINT8 U8_mask = *mask;
-
-				if (U8_mask != OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
-				}
-				mask++;
-			}
-			
-			if (srcAlpha != U16_OPACITY_TRANSPARENT) {
-
-				if (opacity != U16_OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, opacity);
-				}
-
-				Q_UINT16 srcBlend;
-
-				if (dstAlpha == U16_OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT16 srcColor = src[channel];
-					Q_UINT16 dstColor = dst[channel];
-
-					srcColor = UINT16_MAX - UINT16_MULT(UINT16_MAX - dstColor, UINT16_MAX - srcColor);
-
-					Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart) {
-			maskRowStart += maskRowStride;
+			dst[channel] = newColor;
 		}
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
-		Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = UINT16_MULT(dstColor, dstColor + 2u * UINT16_MULT(srcColor, UINT16_MAX - dstColor));
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if(mask != 0) {
-				Q_UINT8 U8_mask = *mask;
-
-				if (U8_mask != OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
-				}
-				mask++;
-			}
-
-			if (srcAlpha != U16_OPACITY_TRANSPARENT) {
-
-				if (opacity != U16_OPACITY_OPAQUE) {
-					srcAlpha = UINT16_MULT(srcAlpha, opacity);
-				}
-
-				Q_UINT16 srcBlend;
-
-				if (dstAlpha == U16_OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT16_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT16 srcColor = src[channel];
-					Q_UINT16 dstColor = dst[channel];
-
-					srcColor = UINT16_MULT(dstColor, dstColor + 2u * UINT16_MULT(srcColor, UINT16_MAX - dstColor));
-
-					Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart) {
-			maskRowStart += maskRowStride;
+			dst[channel] = newColor;
 		}
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = QMIN((dstColor * (UINT16_MAX + 1u)) / (UINT16_MAX + 1u - srcColor), UINT16_MAX);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
-			
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			if (srcAlpha != OPACITY_TRANSPARENT) {
-
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
-
-				Q_UINT8 srcBlend;
-
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT8 srcColor = src[channel];
-					Q_UINT8 dstColor = dst[channel];
-
-					srcColor = QMIN((dstColor * (UINT8_MAX + 1)) / (UINT8_MAX + 1 - srcColor), UINT8_MAX);
-
-					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
+			dst[channel] = newColor;
 		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = QMIN(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
+			srcColor = CLAMP(UINT16_MAX - srcColor, 0u, UINT16_MAX);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
-
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
-
-				Q_UINT8 srcBlend;
-
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT8 srcColor = src[channel];
-					Q_UINT8 dstColor = dst[channel];
-
-					srcColor = QMIN(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
-					srcColor = CLAMP(UINT8_MAX - srcColor, 0, UINT8_MAX);
-
-					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
+			dst[channel] = newColor;
 		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = QMIN(srcColor, dstColor);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
-
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
-
-				Q_UINT8 srcBlend;
-
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT8 srcColor = src[channel];
-					Q_UINT8 dstColor = dst[channel];
-
-					srcColor = QMIN(srcColor, dstColor);
-
-					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
+			dst[channel] = newColor;
 		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
 
-		while (columns > 0) {
+			Q_UINT16 srcColor = src[channel];
+			Q_UINT16 dstColor = dst[channel];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+			srcColor = QMAX(srcColor, dstColor);
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+			Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
-
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
-
-				Q_UINT8 srcBlend;
-
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
-
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-
-					Q_UINT8 srcColor = src[channel];
-					Q_UINT8 dstColor = dst[channel];
-
-					srcColor = QMAX(srcColor, dstColor);
-
-					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
-
-					dst[channel] = newColor;
-				}
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
+			dst[channel] = newColor;
 		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeHue(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		float FSrcRed = static_cast<float>(src[PIXEL_RED]) / UINT16_MAX;
+		float FSrcGreen = static_cast<float>(src[PIXEL_GREEN]) / UINT16_MAX;
+		float FSrcBlue = static_cast<float>(src[PIXEL_BLUE]) / UINT16_MAX;
 
-		while (columns > 0) {
+		Q_UINT16 dstRed = dst[PIXEL_RED];
+		Q_UINT16 dstGreen = dst[PIXEL_GREEN];
+		Q_UINT16 dstBlue = dst[PIXEL_BLUE];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+		float FDstRed = static_cast<float>(dstRed) / UINT16_MAX;
+		float FDstGreen = static_cast<float>(dstGreen) / UINT16_MAX;
+		float FDstBlue = static_cast<float>(dstBlue) / UINT16_MAX;
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+		float srcHue;
+		float srcSaturation;
+		float srcValue;
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
+		float dstHue;
+		float dstSaturation;
+		float dstValue;
 
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
+		RGBToHSV(FSrcRed, FSrcGreen, FSrcBlue, &srcHue, &srcSaturation, &srcValue);
+		RGBToHSV(FDstRed, FDstGreen, FDstBlue, &dstHue, &dstSaturation, &dstValue);
 
-				Q_UINT8 srcBlend;
+		HSVToRGB(srcHue, dstSaturation, dstValue, &FSrcRed, &FSrcGreen, &FSrcBlue);
 
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
+		Q_UINT16 srcRed = static_cast<Q_UINT16>(FSrcRed * UINT16_MAX + 0.5);
+		Q_UINT16 srcGreen = static_cast<Q_UINT16>(FSrcGreen * UINT16_MAX + 0.5);
+		Q_UINT16 srcBlue = static_cast<Q_UINT16>(FSrcBlue * UINT16_MAX + 0.5);
 
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				int dstRed = dst[PIXEL_RED];
-				int dstGreen = dst[PIXEL_GREEN];
-				int dstBlue = dst[PIXEL_BLUE];
-
-				int srcHue;
-				int srcSaturation;
-				int srcValue;
-				int dstHue;
-				int dstSaturation;
-				int dstValue;
-
-				rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
-				rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
-
-				int srcRed;
-				int srcGreen;
-				int srcBlue;
-
-				hsv_to_rgb(srcHue, dstSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
-
-				dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-				dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-				dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
+		dst[PIXEL_RED] = UINT16_BLEND(srcRed, dstRed, srcBlend);
+		dst[PIXEL_GREEN] = UINT16_BLEND(srcGreen, dstGreen, srcBlend);
+		dst[PIXEL_BLUE] = UINT16_BLEND(srcBlue, dstBlue, srcBlend);
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeSaturation(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		float FSrcRed = static_cast<float>(src[PIXEL_RED]) / UINT16_MAX;
+		float FSrcGreen = static_cast<float>(src[PIXEL_GREEN]) / UINT16_MAX;
+		float FSrcBlue = static_cast<float>(src[PIXEL_BLUE]) / UINT16_MAX;
 
-		while (columns > 0) {
+		Q_UINT16 dstRed = dst[PIXEL_RED];
+		Q_UINT16 dstGreen = dst[PIXEL_GREEN];
+		Q_UINT16 dstBlue = dst[PIXEL_BLUE];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+		float FDstRed = static_cast<float>(dstRed) / UINT16_MAX;
+		float FDstGreen = static_cast<float>(dstGreen) / UINT16_MAX;
+		float FDstBlue = static_cast<float>(dstBlue) / UINT16_MAX;
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+		float srcHue;
+		float srcSaturation;
+		float srcValue;
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
+		float dstHue;
+		float dstSaturation;
+		float dstValue;
 
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
+		RGBToHSV(FSrcRed, FSrcGreen, FSrcBlue, &srcHue, &srcSaturation, &srcValue);
+		RGBToHSV(FDstRed, FDstGreen, FDstBlue, &dstHue, &dstSaturation, &dstValue);
 
-				Q_UINT8 srcBlend;
+		HSVToRGB(dstHue, srcSaturation, dstValue, &FSrcRed, &FSrcGreen, &FSrcBlue);
 
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
+		Q_UINT16 srcRed = static_cast<Q_UINT16>(FSrcRed * UINT16_MAX + 0.5);
+		Q_UINT16 srcGreen = static_cast<Q_UINT16>(FSrcGreen * UINT16_MAX + 0.5);
+		Q_UINT16 srcBlue = static_cast<Q_UINT16>(FSrcBlue * UINT16_MAX + 0.5);
 
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				int dstRed = dst[PIXEL_RED];
-				int dstGreen = dst[PIXEL_GREEN];
-				int dstBlue = dst[PIXEL_BLUE];
-
-				int srcHue;
-				int srcSaturation;
-				int srcValue;
-				int dstHue;
-				int dstSaturation;
-				int dstValue;
-
-				rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
-				rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
-
-				int srcRed;
-				int srcGreen;
-				int srcBlue;
-
-				hsv_to_rgb(dstHue, srcSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
-
-				dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-				dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-				dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
+		dst[PIXEL_RED] = UINT16_BLEND(srcRed, dstRed, srcBlend);
+		dst[PIXEL_GREEN] = UINT16_BLEND(srcGreen, dstGreen, srcBlend);
+		dst[PIXEL_BLUE] = UINT16_BLEND(srcBlue, dstBlue, srcBlend);
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeValue(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		float FSrcRed = static_cast<float>(src[PIXEL_RED]) / UINT16_MAX;
+		float FSrcGreen = static_cast<float>(src[PIXEL_GREEN]) / UINT16_MAX;
+		float FSrcBlue = static_cast<float>(src[PIXEL_BLUE]) / UINT16_MAX;
 
-		while (columns > 0) {
+		Q_UINT16 dstRed = dst[PIXEL_RED];
+		Q_UINT16 dstGreen = dst[PIXEL_GREEN];
+		Q_UINT16 dstBlue = dst[PIXEL_BLUE];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+		float FDstRed = static_cast<float>(dstRed) / UINT16_MAX;
+		float FDstGreen = static_cast<float>(dstGreen) / UINT16_MAX;
+		float FDstBlue = static_cast<float>(dstBlue) / UINT16_MAX;
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+		float srcHue;
+		float srcSaturation;
+		float srcValue;
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
+		float dstHue;
+		float dstSaturation;
+		float dstValue;
 
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
+		RGBToHSV(FSrcRed, FSrcGreen, FSrcBlue, &srcHue, &srcSaturation, &srcValue);
+		RGBToHSV(FDstRed, FDstGreen, FDstBlue, &dstHue, &dstSaturation, &dstValue);
 
-				Q_UINT8 srcBlend;
+		HSVToRGB(dstHue, dstSaturation, srcValue, &FSrcRed, &FSrcGreen, &FSrcBlue);
 
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
+		Q_UINT16 srcRed = static_cast<Q_UINT16>(FSrcRed * UINT16_MAX + 0.5);
+		Q_UINT16 srcGreen = static_cast<Q_UINT16>(FSrcGreen * UINT16_MAX + 0.5);
+		Q_UINT16 srcBlue = static_cast<Q_UINT16>(FSrcBlue * UINT16_MAX + 0.5);
 
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				int dstRed = dst[PIXEL_RED];
-				int dstGreen = dst[PIXEL_GREEN];
-				int dstBlue = dst[PIXEL_BLUE];
-
-				int srcHue;
-				int srcSaturation;
-				int srcValue;
-				int dstHue;
-				int dstSaturation;
-				int dstValue;
-
-				rgb_to_hsv(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcSaturation, &srcValue);
-				rgb_to_hsv(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstValue);
-
-				int srcRed;
-				int srcGreen;
-				int srcBlue;
-
-				hsv_to_rgb(dstHue, dstSaturation, srcValue, &srcRed, &srcGreen, &srcBlue);
-
-				dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-				dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-				dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
+		dst[PIXEL_RED] = UINT16_BLEND(srcRed, dstRed, srcBlend);
+		dst[PIXEL_GREEN] = UINT16_BLEND(srcGreen, dstGreen, srcBlend);
+		dst[PIXEL_BLUE] = UINT16_BLEND(srcBlue, dstBlue, srcBlend);
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeColor(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
-	while (rows > 0) {
+	COMMON_COMPOSITE_OP_PROLOG();
 
-		const Q_UINT8 *src = srcRowStart;
-		Q_UINT8 *dst = dstRowStart;
-		Q_INT32 columns = numColumns;
-		const Q_UINT8 *mask = maskRowStart;
+	{
+		float FSrcRed = static_cast<float>(src[PIXEL_RED]) / UINT16_MAX;
+		float FSrcGreen = static_cast<float>(src[PIXEL_GREEN]) / UINT16_MAX;
+		float FSrcBlue = static_cast<float>(src[PIXEL_BLUE]) / UINT16_MAX;
 
-		while (columns > 0) {
+		Q_UINT16 dstRed = dst[PIXEL_RED];
+		Q_UINT16 dstGreen = dst[PIXEL_GREEN];
+		Q_UINT16 dstBlue = dst[PIXEL_BLUE];
 
-			Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
-			Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+		float FDstRed = static_cast<float>(dstRed) / UINT16_MAX;
+		float FDstGreen = static_cast<float>(dstGreen) / UINT16_MAX;
+		float FDstBlue = static_cast<float>(dstBlue) / UINT16_MAX;
 
-			srcAlpha = QMIN(srcAlpha, dstAlpha);
+		float srcHue;
+		float srcSaturation;
+		float srcLightness;
 
-			// apply the alphamask
-			if(mask != 0)
-			{
-				if(*mask != OPACITY_OPAQUE)
-					srcAlpha = UINT8_MULT(srcAlpha, *mask);
-				mask++;
-			}
-			
-			if (srcAlpha != OPACITY_TRANSPARENT) {
+		float dstHue;
+		float dstSaturation;
+		float dstLightness;
 
-				if (opacity != OPACITY_OPAQUE) {
-					srcAlpha = UINT8_MULT(src[PIXEL_ALPHA], opacity);
-				}
+		RGBToHSL(FSrcRed, FSrcGreen, FSrcBlue, &srcHue, &srcSaturation, &srcLightness);
+		RGBToHSL(FDstRed, FDstGreen, FDstBlue, &dstHue, &dstSaturation, &dstLightness);
 
-				Q_UINT8 srcBlend;
+		HSLToRGB(srcHue, srcSaturation, dstLightness, &FSrcRed, &FSrcGreen, &FSrcBlue);
 
-				if (dstAlpha == OPACITY_OPAQUE) {
-					srcBlend = srcAlpha;
-				} else {
-					Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
-					dst[PIXEL_ALPHA] = newAlpha;
+		Q_UINT16 srcRed = static_cast<Q_UINT16>(FSrcRed * UINT16_MAX + 0.5);
+		Q_UINT16 srcGreen = static_cast<Q_UINT16>(FSrcGreen * UINT16_MAX + 0.5);
+		Q_UINT16 srcBlue = static_cast<Q_UINT16>(FSrcBlue * UINT16_MAX + 0.5);
 
-					if (newAlpha != 0) {
-						srcBlend = UINT8_DIVIDE(srcAlpha, newAlpha);
-					} else {
-						srcBlend = srcAlpha;
-					}
-				}
-
-				int dstRed = dst[PIXEL_RED];
-				int dstGreen = dst[PIXEL_GREEN];
-				int dstBlue = dst[PIXEL_BLUE];
-
-				int srcHue;
-				int srcSaturation;
-				int srcLightness;
-				int dstHue;
-				int dstSaturation;
-				int dstLightness;
-
-				rgb_to_hls(src[PIXEL_RED], src[PIXEL_GREEN], src[PIXEL_BLUE], &srcHue, &srcLightness, &srcSaturation);
-				rgb_to_hls(dstRed, dstGreen, dstBlue, &dstHue, &dstLightness, &dstSaturation);
-
-				Q_UINT8 srcRed;
-				Q_UINT8 srcGreen;
-				Q_UINT8 srcBlue;
-
-				hls_to_rgb(srcHue, dstLightness, srcSaturation, &srcRed, &srcGreen, &srcBlue);
-
-				dst[PIXEL_RED] = UINT8_BLEND(srcRed, dstRed, srcBlend);
-				dst[PIXEL_GREEN] = UINT8_BLEND(srcGreen, dstGreen, srcBlend);
-				dst[PIXEL_BLUE] = UINT8_BLEND(srcBlue, dstBlue, srcBlend);
-			}
-
-			columns--;
-			src += MAX_CHANNEL_RGBA;
-			dst += MAX_CHANNEL_RGBA;
-		}
-
-		rows--;
-		srcRowStart += srcRowStride;
-		dstRowStart += dstRowStride;
-		if(maskRowStart)
-			maskRowStart += maskRowStride;
+		dst[PIXEL_RED] = UINT16_BLEND(srcRed, dstRed, srcBlend);
+		dst[PIXEL_GREEN] = UINT16_BLEND(srcGreen, dstGreen, srcBlend);
+		dst[PIXEL_BLUE] = UINT16_BLEND(srcBlue, dstBlue, srcBlend);
 	}
+
+	COMMON_COMPOSITE_OP_EPILOG();
 }
 
 void KisStrategyColorSpaceRGBU16::compositeErase(Q_UINT8 *dst, 
@@ -1445,17 +929,17 @@ KisCompositeOpList KisStrategyColorSpaceRGBU16::userVisiblecompositeOps() const
 
 	list.append(KisCompositeOp(COMPOSITE_OVER));
 	list.append(KisCompositeOp(COMPOSITE_MULT));
-	//list.append(KisCompositeOp(COMPOSITE_BURN));
-	//list.append(KisCompositeOp(COMPOSITE_DODGE));
+	list.append(KisCompositeOp(COMPOSITE_BURN));
+	list.append(KisCompositeOp(COMPOSITE_DODGE));
 	list.append(KisCompositeOp(COMPOSITE_DIVIDE));
 	list.append(KisCompositeOp(COMPOSITE_SCREEN));
 	list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-	//list.append(KisCompositeOp(COMPOSITE_DARKEN));
-	//list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
-	//list.append(KisCompositeOp(COMPOSITE_HUE));
-	//list.append(KisCompositeOp(COMPOSITE_SATURATION));
-	//list.append(KisCompositeOp(COMPOSITE_VALUE));
-	//list.append(KisCompositeOp(COMPOSITE_COLOR));
+	list.append(KisCompositeOp(COMPOSITE_DARKEN));
+	list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
+	list.append(KisCompositeOp(COMPOSITE_HUE));
+	list.append(KisCompositeOp(COMPOSITE_SATURATION));
+	list.append(KisCompositeOp(COMPOSITE_VALUE));
+	list.append(KisCompositeOp(COMPOSITE_COLOR));
 
 	return list;
 }

@@ -26,9 +26,17 @@
 /**
  * A number of often-used conversions between color models
  */
-KRITA_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
 
+// 8-bit integer versions. RGBSL are 0-255, H is 0-360.
+KRITA_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
 KRITA_EXPORT void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
+
+// Floating point versions. RGBSL are 0-1, H is 0-360.
+KRITA_EXPORT void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
+KRITA_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
+
+KRITA_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
+KRITA_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
 KRITA_EXPORT void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s);
 

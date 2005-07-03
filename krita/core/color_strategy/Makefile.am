@@ -11,3 +11,9 @@ libkiscolor_strategy_la_SOURCES = kis_strategy_colorspace.cc \
 
 libkiscolor_strategy_la_METASOURCES = AUTO
 
+if include_kunittest_tests
+TESTSDIR = tests
+endif
+
+SUBDIRS = . $(TESTSDIR)
+

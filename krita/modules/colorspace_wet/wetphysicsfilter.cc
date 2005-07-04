@@ -113,7 +113,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	int ix = width + 1; // keeps track where we are in the one-dimensional arrays
 
 	for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, dy + y2, width - 1, false);
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, dy + y2, width, false);
 		KisHLineIteratorPixel upIt = src->createHLineIterator(dx + 1, dy + y2 - 1, width - 2, false);
 		KisHLineIteratorPixel downIt = src->createHLineIterator(dx + 1, dy + y2 + 1, width - 2, false);
 
@@ -165,7 +165,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 	ix = width + 1;
 
 	for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx + 1, dy + y2, width - 1, false);
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(dx + 1, dy + y2, width - 2, false);
 		while (!srcIt.isDone()) {
 			if ((reinterpret_cast<WetPix*>(srcIt.rawData())) -> w > 0) {
 				/* reduce flow in dry areas */
@@ -191,7 +191,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 		KisHLineIteratorPixel upIt = src->createHLineIterator(dx + 1, dy + y2 - 1, width - 2, false);
 		KisHLineIteratorPixel downIt = src->createHLineIterator(dx + 1, dy + y2 + 1, width - 2, false);
 
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(dx + 1, dy + y2, width - 1, true);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(dx + 1, dy + y2, width - 2, true);
 
 		WetPix left = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
 		++srcIt;
@@ -211,9 +211,9 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 				combinePixels(&wet_mix, &wet_mix, &wet_tmp);
 				reducePixel(&wet_tmp, &down, flow_b[ix]);
 				combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-				reducePixel(&wet_tmp, &up, flow_l[ix]);
+				reducePixel(&wet_tmp, &left, flow_l[ix]);
 				combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-				reducePixel(&wet_tmp, &down, flow_r[ix]);
+				reducePixel(&wet_tmp, &right, flow_r[ix]);
 				combinePixels(&wet_mix, &wet_mix, &wet_tmp);
 
 				WetPix* target = reinterpret_cast<WetPix*>(dstIt.rawData());

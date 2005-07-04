@@ -60,6 +60,7 @@ public:
 	virtual void buttonPress(KisButtonPressEvent *e);
 	virtual void move(KisMoveEvent *e);
 	virtual void buttonRelease(KisButtonReleaseEvent *e);
+	virtual void doubleClick(KisDoubleClickEvent *);
 
 public slots:
 	virtual void activate();

@@ -56,6 +56,7 @@ public slots:
 	void copy();
 	KisLayerSP paste();
 	void pasteNew();
+	void cutToNewLayer();
 	void selectAll();
 	void deselect();
 	void clear();
@@ -84,6 +85,7 @@ private:
 	KAction *m_cut;
 	KAction *m_paste;
 	KAction *m_pasteNew;
+	KAction *m_cutToNewLayer;
 	KAction *m_selectAll;
 	KAction *m_deselect;
 	KAction *m_clear;

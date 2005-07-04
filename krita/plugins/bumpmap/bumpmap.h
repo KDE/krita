@@ -90,8 +90,7 @@ class KisBumpmapConfiguration : public KisFilterConfiguration {
 public:
 
 	KisBumpmapConfiguration();
-
-	KisPaintDeviceSP bumpmap;
+	QString bumpmap;
 	double  azimuth;
 	double  elevation;
 	double  depth;
@@ -101,7 +100,7 @@ public:
 	Q_INT32 ambient;
 	bool    compensate;
 	bool    invert;
-	bool	tile;
+	bool	tiled;
 	enumBumpmapType type;
 };
 
@@ -111,7 +110,7 @@ class KisBumpmapConfigWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	KisBumpmapConfigWidget(KisFilter * filter, QWidget * parent, const char * name = 0, WFlags f = 0 );
+	KisBumpmapConfigWidget(KisFilter * filter, KisView * view, QWidget * parent, const char * name = 0, WFlags f = 0 );
 	virtual ~KisBumpmapConfigWidget() {};
 
 	KisBumpmapConfiguration * config();
@@ -121,6 +120,7 @@ public:
 private:
 
 	KisFilter * m_filter;
+	KisView * m_view;
 
 };
 

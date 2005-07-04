@@ -64,7 +64,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Filter"),
+		m_action = new KRadioAction(i18n("&Filter brush"),
 					    "filter", 0, this,
 					    SLOT(activate()), collection,
 					    name());

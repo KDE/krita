@@ -272,7 +272,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Elliptical Select"),
+		m_action = new KRadioAction(i18n("&Elliptical Select"),
 					    "tool_elliptical_selection" ,
 					    Qt::Key_J,
 					    this,

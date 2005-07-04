@@ -903,6 +903,25 @@ KisLayerSP KisImage::activateLayer(Q_INT32 n)
 	return activate(m_layers[n]);
 }
 
+KisLayerSP KisImage::layer(Q_INT32 n)
+{
+	if (n < 0 || static_cast<Q_UINT32>(n) > m_layers.size())
+		return 0;
+
+	return m_layers[n];
+
+}
+
+KisLayerSP KisImage::findLayer(const QString & name)
+{
+        for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
+                if (m_layers[i]->name() == name)
+                        return m_layers[i];
+        }
+
+}
+
+
 Q_INT32 KisImage::index(const KisLayerSP &layer)
 {
 	for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
@@ -1358,7 +1377,7 @@ KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 
 	gc.end();
 
-	return dev -> pixelAt(x, y);
+	return dev -> colorAt(x, y);
 }
 
 void KisImage::notify()

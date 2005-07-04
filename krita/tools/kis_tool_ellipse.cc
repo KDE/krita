@@ -170,7 +170,7 @@ void KisToolEllipse::setup(KActionCollection *collection)
 	if (m_action == 0) {
 		KShortcut shortcut(Qt::Key_Plus);
 		shortcut.append(KShortcut(Qt::Key_F7));
-		m_action = new KRadioAction(i18n("Tool &Ellipse"),
+		m_action = new KRadioAction(i18n("&Ellipse"),
 					    "ellipse",
 					    shortcut,
 					    this,

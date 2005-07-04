@@ -90,7 +90,8 @@ void KisToolCrop::activate()
 		m_startPos = extent.topLeft();
 		m_endPos = extent.bottomRight();
 		validateSelection();
-		paintOutlineWithHandles();
+		//paintOutlineWithHandles();
+		crop();
 	}
 }
 
@@ -134,7 +135,6 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
 		if (img && img -> activeDevice() && e -> button() == LeftButton) {
 
 			if (img -> bounds().contains(e -> pos().floorQPoint())) {
-				//clearRect();
 
 				m_selecting = true;
 
@@ -276,6 +276,11 @@ void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
 		validateSelection();
 		paintOutlineWithHandles();
 	}
+}
+
+void KisToolCrop::doubleClick(KisDoubleClickEvent *)
+{
+	if (m_haveCropSelection) crop();
 }
 
 void KisToolCrop::validateSelection(void)
@@ -613,7 +618,7 @@ void KisToolCrop::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Crop"), 
+		m_action = new KRadioAction(i18n("&Crop"),
 					    "crop", 
 					    0, 
 					    this,

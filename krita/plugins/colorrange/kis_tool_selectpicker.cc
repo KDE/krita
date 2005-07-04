@@ -212,7 +212,7 @@ void KisToolSelectPicker::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Selection Picker"), "tool_picker_selection", Qt::Key_E, this, SLOT(activate()), collection, name());
+		m_action = new KRadioAction(i18n("&Selection Picker"), "tool_picker_selection", Qt::Key_E, this, SLOT(activate()), collection, name());
 		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;

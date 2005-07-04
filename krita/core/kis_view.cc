@@ -105,7 +105,7 @@
 #include "kis_paintop_box.h"
 #include "kis_color.h"
 #include "kis_toolbox.h"
-
+#include "kis_paintop_registry.h"
 // Dialog boxes
 #include "kis_dlg_progress.h"
 #include "kis_dlg_new_layer.h"
@@ -472,10 +472,10 @@ void KisView::setupActions()
 	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
 	// image actions
-	m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
 	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
 	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+	m_imgFlatten = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
 
 	// setting actions
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
@@ -732,9 +732,13 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 		if (currentTool() == 0) {
 			if (m_inputDevice == INPUT_DEVICE_ERASER) {
-				setCurrentTool(findTool("tool_eraser"));
+				setCurrentTool(findTool("tool_brush"));
+				m_paintop = KisID("eraser", "");
+				// XXX: Set the right entry in the paintop box
 			} else {
 				setCurrentTool(findTool("tool_brush"));
+				m_paintop = KisID("paintbrush", "");
+				// XXX: Set the right entry in the paintop box
 			}
 		} else {
 			setCurrentTool(currentTool());

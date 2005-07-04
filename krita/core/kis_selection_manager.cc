@@ -58,6 +58,7 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_cut(0),
 	  m_paste(0),
 	  m_pasteNew(0),
+	  m_cutToNewLayer(0),
 	  m_selectAll(0),
 	  m_deselect(0),
 	  m_clear(0),
@@ -114,6 +115,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 				collection,
 				"paste_new");
 
+
         m_selectAll =
 		KStdAction::selectAll(this,
 				      SLOT(selectAll()),
@@ -148,9 +150,16 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
         m_toNewLayer =
 		new KAction(i18n("Copy Selection to New Layer"),
-			    0, 0,
+			    "ctrl+shift+j",
 			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
+
+
+	m_cutToNewLayer =
+		new KAction(i18n("Cut Selection to New Layer"),
+			"ctrl+j",
+			this, SLOT(cutToNewLayer()),
+			collection, "cut_selection_to_new_layer");
 
 
 	m_feather =
@@ -259,6 +268,7 @@ void KisSelectionManager::updateGUI()
 	m_cut -> setEnabled(enable);
 	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
 	m_pasteNew -> setEnabled(img != 0 && m_clipboard -> hasClip());
+	m_cutToNewLayer->setEnabled(enable);
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
@@ -558,6 +568,20 @@ void KisSelectionManager::copySelectionToNewLayer()
 	copy();
 	paste();
 }
+
+void KisSelectionManager::cutToNewLayer()
+{
+
+        KisImageSP img = m_parent -> currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img -> activeLayer();
+	if (!layer) return;
+
+	cut();
+	paste();
+}
+
 
 // XXX Krita post 1.4: Make feather radius configurable
 void KisSelectionManager::feather()

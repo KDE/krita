@@ -6,10 +6,12 @@
   <Action name="koffice_redo"/>
   <Separator/>
   <Action name="cut"/>
+  <Action name="cut_selection_to_new_layer"/>
   <Action name="copy"/>
   <Action name="copy_merged"/>
   <Action name="paste"/>
   <Action name="paste_new"/>
+  <Action name="copy_selection_to_new_layer"/>
   <Action name="clear"/>
   <Separator/>
   <Action name="revert"/>
@@ -48,7 +50,6 @@
   <Action name="remove_current_image_tab"/>
   <Action name="scale_image"/>
   <Action name="resizeimgtolayer"/>
-  <Action name="flatten_image"/>
   <Action name="duplicate_image"/>
 </Menu>
 
@@ -85,6 +86,7 @@
   <Action name="merge_layer"/>
   <Action name="merge_visible_layers"/>
   <Action name="merge_linked_layers"/>
+  <Action name="flatten_image"/>
 </Menu>
 
 
@@ -92,7 +94,6 @@
     <Action name="select_all"/>
     <Action name="deselect"/>
     <Action name="reselect"/>
-    <Action name="copy_selection_to_new_layer"/>
     <Action name="invert"/>
     <Separator/>
     <Action name="feather"/>

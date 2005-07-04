@@ -136,7 +136,9 @@ public:
 	const KisLayerSP activeLayer() const;
 	KisLayerSP activate(KisLayerSP layer);
 	KisLayerSP activateLayer(Q_INT32 n);
-
+	KisLayerSP layer(Q_INT32 n);
+	KisLayerSP findLayer(const QString & name);
+	
 	Q_INT32 index(const KisLayerSP &layer);
 
 	KisLayerSP layer(const QString& name);

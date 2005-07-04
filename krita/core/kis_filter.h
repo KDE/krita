@@ -130,6 +130,7 @@ protected:
 	// Convenience functions for progress display.
 	void setProgressTotalSteps(Q_INT32 totalSteps);
 	void setProgress(Q_INT32 progress);
+	void incProgress();
 	void setProgressStage(const QString& stage, Q_INT32 progress);
 	void setProgressDone();
 
@@ -140,7 +141,8 @@ private:
 protected:
 	Q_INT32 m_progressTotalSteps;
 	Q_INT32 m_lastProgressPerCent;
-
+	Q_INT32 m_progressSteps;
+	
 	KisID m_id;
 	KisView * m_view;
 	QWidget* m_widget;

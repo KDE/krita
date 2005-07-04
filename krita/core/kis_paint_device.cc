@@ -968,7 +968,7 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 	return true;
 }
 	
-KisColor KisPaintDevice::pixelAt(Q_INT32 x, Q_INT32 y)
+KisColor KisPaintDevice::colorAt(Q_INT32 x, Q_INT32 y)
 {
 	return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorStrategy, m_profile);
 }

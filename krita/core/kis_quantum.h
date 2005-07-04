@@ -20,9 +20,6 @@
 #define KIS_QUANTUM_H_
 
 #include "kis_global.h"
-#include "kis_quantum_operations.h"
-
-
 /**
  * An editable wrapper around the byte values for a single colour channel.
  */
@@ -33,16 +30,15 @@ public:
 	// simple assignment, and it appears to be the source of hard to track bugs. It's also
 	// needlessly decreasing peformance. AP
 		
-	inline KisQuantum(QUANTUM* q/*, KisQuantumOperation* op = new KisQuantumOperationLinear()*/) : m_quantum(q) /*, m_op(op)*/ { /*Q_ASSERT(m_op);*/};
-	//inline ~KisQuantum() { delete m_op; m_op = 0; }
+	inline KisQuantum(QUANTUM* q) :	m_quantum(q) {};
+	
 public:
 	inline operator QUANTUM() const { return *m_quantum; };
 
 	
 	inline QUANTUM operator=(QUANTUM q)
 		{
-			//Q_ASSERT(m_op);
-			return *m_quantum = q;//m_op->operation(q);
+			return *m_quantum = q;
 		};
 
 	inline QUANTUM operator-=(QUANTUM q)
@@ -64,8 +60,6 @@ public:
 	}
 private:
 	QUANTUM* m_quantum;
-
-	//KisQuantumOperation* m_op;
 };
 
 

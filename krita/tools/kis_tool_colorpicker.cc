@@ -92,7 +92,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 		if (m_sampleMerged) {
 			m_pickedColor = img -> mergedPixel(pos.x(), pos.y());
 		} else {
-			m_pickedColor = dev -> pixelAt(pos.x(), pos.y());
+			m_pickedColor = dev -> colorAt(pos.x(), pos.y());
 		}
 
 		displayPickedColor();
@@ -134,7 +134,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Color Picker"), "colorpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
+		m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

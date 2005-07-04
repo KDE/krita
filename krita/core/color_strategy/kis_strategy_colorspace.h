@@ -246,6 +246,11 @@ public:
 
 
 //============================== Manipulation fucntions ==========================//
+// 
+// The manipulation functions have default implementations that _convert_ the pixel
+// to a QColor and back. Reimplement these methods in your color strategy!
+//
+
 
 	/**
 	 * Set the alpha channel to the given value.
@@ -268,13 +273,23 @@ public:
 
 	
 	// XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
-	/** Get the difference between 2 colors, normalized in the range (0,255) */
+	/**
+	 * Get the difference between 2 colors, normalized in the range (0,255)
+	 */
 	virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
 
-	/** Mix the colors given their weights and return in dst
+	/**
+	 * Mix the colors given their weights and return in dst
 	 * The sum of weights is assumed 255 */
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
+	/**
+	 * Darken all color channels with the given amount. If compensate is true,
+	 * the compensation factor will be used to limit the darkening.
+	 *
+	 * (See the bumpmap filter)
+	 */
+	virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT8 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 	
 	/**
 	 * Compose two arrays of pixels together. If source and target

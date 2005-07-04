@@ -102,7 +102,7 @@ void KisToolMove::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Move"), 
+		m_action = new KRadioAction(i18n("&Move"), 
 					    "move", 
 					    Qt::SHIFT+Qt::Key_V, 
 					    this,

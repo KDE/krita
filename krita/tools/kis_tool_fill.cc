@@ -177,7 +177,7 @@ void KisToolFill::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Fill"), 
+		m_action = new KRadioAction(i18n("&Fill"), 
 					    "color_fill",
 					    Qt::Key_F, 
 					    this, 

@@ -163,7 +163,7 @@ void KisFilter::setProgressTotalSteps(Q_INT32 totalSteps)
 
 		m_progressTotalSteps = totalSteps;
 		m_lastProgressPerCent = 0;
-
+		m_progressSteps = 0;
 		KisProgressDisplayInterface *progress = view() -> progressDisplay();
 
 		progress -> setSubject(this, true, true);
@@ -176,13 +176,20 @@ void KisFilter::setProgress(Q_INT32 progress)
 	if (m_progressEnabled) {
 
 		Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
-
+		m_progressSteps = progress;
+		
 		if (progressPerCent != m_lastProgressPerCent) {
 
 			m_lastProgressPerCent = progressPerCent;
 			emit notifyProgress(this, progressPerCent);
 		}
 	}
+}
+
+void KisFilter::incProgress()
+{
+	setProgress(++m_progressSteps);
+	
 }
 
 void KisFilter::setProgressStage(const QString& stage, Q_INT32 progress)

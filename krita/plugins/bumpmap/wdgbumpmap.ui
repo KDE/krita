@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>465</width>
-            <height>518</height>
+            <width>464</width>
+            <height>574</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,118 +19,66 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QFrame" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>lblLayer</cstring>
+                <cstring>frame3</cstring>
             </property>
-            <property name="text">
-                <string>&amp;Bump map layer:</string>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>cmbLayer</cstring>
-            </property>
-        </widget>
-        <widget class="QButtonGroup" row="1" column="0">
-            <property name="name">
-                <cstring>grpType</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Type</string>
+            <property name="frameShadow">
+                <enum>Raised</enum>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton" row="0" column="0">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>radioLinear</cstring>
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>&amp;Linear</string>
+                        <string>&lt;b&gt;Bumpmapping&lt;/b&gt; is a process where two layers are 
+combined to give one layer the illusion of &lt;i&gt;depth.&lt;/i&gt;. One layer 
+will contain your image, the other a grayscale or black-and-white
+representation of height: the bumpmap. If you do not specify a bumpmap
+layer, you current layer will be used as the bumpmap.</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
+                    <property name="textFormat">
+                        <enum>RichText</enum>
                     </property>
-                    <property name="checked">
-                        <bool>true</bool>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="1" column="0">
+                <spacer row="1" column="0">
                     <property name="name">
-                        <cstring>radioSpherical</cstring>
+                        <cstring>spacer9</cstring>
                     </property>
-                    <property name="text">
-                        <string>&amp;Spherical</string>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
                     </property>
-                </widget>
-                <widget class="QRadioButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>radioSinusoidal</cstring>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
                     </property>
-                    <property name="text">
-                        <string>&amp;Sinusoidal</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
-                </widget>
+                </spacer>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="1" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>grpOptions</cstring>
-            </property>
-            <property name="title">
-                <string>Options</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>chkCompensate</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Compensate for darkening</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>chkTile</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Tile bumpmap</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>checkBox2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>I&amp;nvert bumpmap</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QComboBox" row="0" column="2">
-            <property name="name">
-                <cstring>cmbLayer</cstring>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpSettings</cstring>
             </property>
@@ -155,7 +103,7 @@
                         <number>0.5</number>
                     </property>
                     <property name="value">
-                        <number>9.9</number>
+                        <number>45</number>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -289,69 +237,124 @@
                         <number>360</number>
                     </property>
                     <property name="value">
-                        <number>9.9</number>
+                        <number>135</number>
                     </property>
                 </widget>
             </grid>
         </widget>
-        <widget class="QFrame" row="3" column="0" rowspan="1" colspan="3">
+        <widget class="QButtonGroup" row="2" column="0">
             <property name="name">
-                <cstring>frame3</cstring>
+                <cstring>grpType</cstring>
             </property>
-            <property name="frameShape">
-                <enum>StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
+            <property name="title">
+                <string>&amp;Type</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                        <cstring>radioLinear</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Bumpmapping&lt;/b&gt; is a process where two layers are 
-combined to give one layer the illusion of &lt;i&gt;depth.&lt;/i&gt;. One layer 
-will contain your image, the other a grayscale or black-and-white
-representation of height: the bumpmap. If you do not specify a bumpmap
-layer, the current layer will be used as the bumpmap.</string>
+                        <string>&amp;Linear</string>
                     </property>
-                    <property name="textFormat">
-                        <enum>RichText</enum>
+                    <property name="accel">
+                        <string>Alt+L</string>
                     </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                 </widget>
-                <spacer row="1" column="0">
+                <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
-                        <cstring>spacer9</cstring>
+                        <cstring>radioSpherical</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
+                    <property name="text">
+                        <string>&amp;Spherical</string>
                     </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
+                    <property name="accel">
+                        <string>Alt+S</string>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>40</height>
-                        </size>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>radioSinusoidal</cstring>
                     </property>
-                </spacer>
+                    <property name="text">
+                        <string>&amp;Sinusoidal</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                </widget>
             </grid>
+        </widget>
+        <widget class="QGroupBox" row="2" column="1">
+            <property name="name">
+                <cstring>grpOptions</cstring>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>chkCompensate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Compensate for darkening</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>chkTiled</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Tile bumpmap</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>chkInvert</cstring>
+                    </property>
+                    <property name="text">
+                        <string>I&amp;nvert bumpmap</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>lblLayer</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Bumpmap layer:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbLayer</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>cmbLayer</cstring>
+            </property>
         </widget>
     </grid>
 </widget>

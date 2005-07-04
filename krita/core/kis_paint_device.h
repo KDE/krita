@@ -210,10 +210,10 @@ public:
         bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
 	bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
 
-	/*
-	 * 
+	/**
+	 * Return the KisColor of the pixel at x,y.
 	 */
-	KisColor pixelAt(Q_INT32 x, Q_INT32 y);
+	KisColor colorAt(Q_INT32 x, Q_INT32 y);
 	
         /**
 	 * Set the specified pixel to the specified color. Note that this
@@ -229,6 +229,7 @@ public:
 	 */
         bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity);
 	bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
+	
 	/**
 	 * Return a KisPixel wrapper around these bytes. If there are not enough
 	 * bytes, bad things will happen. XXX: use vectors?

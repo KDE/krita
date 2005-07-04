@@ -267,7 +267,7 @@ int KisScaleVisitor::calcContrib(ContribList *contrib, double scale, double fwid
                 // Expanding image
                 contrib->n = 0;
                 contrib->p = new Contrib[ (int)(fwidth * 2 + 1) ];
-                
+
                 center = (double) i / scale;
                 begin = ceil(center - fwidth);
                 end = floor(center + fwidth);

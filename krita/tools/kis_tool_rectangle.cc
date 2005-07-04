@@ -175,7 +175,7 @@ void KisToolRectangle::setup(KActionCollection *collection)
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("Tool &Rectangle"),
+		m_action = new KRadioAction(i18n("&Rectangle"),
 					    "rectangle",
 					    Qt::Key_F6,
 					    this,

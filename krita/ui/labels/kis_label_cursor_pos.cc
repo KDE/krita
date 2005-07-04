@@ -22,6 +22,8 @@ KisLabelCursorPos::KisLabelCursorPos(QWidget *parent, const char *name, WFlags f
 {
 	setText("0:0");
 	m_doUpdates = true;
+	
+	setFixedSize( 100, parent->height() - 4);
 }
 
 KisLabelCursorPos::~KisLabelCursorPos()

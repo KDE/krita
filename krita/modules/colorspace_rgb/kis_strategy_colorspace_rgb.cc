@@ -84,6 +84,7 @@ void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *
  	kdDebug(DBG_AREA_CMS) << "src: " << downscale(src[PIXEL_RED]) << ", " << downscale(src[PIXEL_GREEN]) << ", " << downscale(src[PIXEL_BLUE]) << "\n";
  	kdDebug(DBG_AREA_CMS) << "src (not scaled down): " << src[PIXEL_RED] << ", " << src[PIXEL_GREEN] << ", " << src[PIXEL_BLUE] << "\n";
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
+	kdDebug(DBG_AREA_CMS) << "Opacity: " << src[PIXEL_ALPHA] << "\n";
 	*opacity = src[PIXEL_ALPHA];
  	kdDebug(DBG_AREA_CMS) << "RGB::toQColor called: " << c->red() << ", " << c->green() << ", " << c->blue() << ", "  << "\n";
 }

@@ -212,7 +212,7 @@ void KisToolPolygon::setup(KActionCollection *collection)
 	if (m_action == 0) {
 		KShortcut shortcut(Qt::Key_Plus);
 		shortcut.append(KShortcut(Qt::Key_F8));
-		m_action = new KRadioAction(i18n("Tool &Polygon"),
+		m_action = new KRadioAction(i18n("&Polygon"),
 					    "polygon",
 					    shortcut,
 					    this,

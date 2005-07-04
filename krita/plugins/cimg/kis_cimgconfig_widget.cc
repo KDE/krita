@@ -40,7 +40,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 
 	l -> add(m_page);
 	nfilter -> setAutoUpdate(false);
-	//CBRconnect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
+	//XXX (CBR) connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
 }
 
 

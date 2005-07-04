@@ -48,7 +48,7 @@
                         <cstring>cbNormaliseValues</cstring>
                     </property>
                     <property name="text">
-                        <string>Normalise Integer Values</string>
+                        <string>Normalize Integer Values</string>
                     </property>
                 </widget>
             </vbox>

@@ -72,6 +72,7 @@ class KisRect;
 class KisPoint;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
+class KisDoubleClickEvent;
 class KisMoveEvent;
 class KisSelectionManager;
 class KoPaletteManager;
@@ -362,6 +363,7 @@ private slots:
 	void canvasGotMoveEvent(KisMoveEvent *e);
 	void canvasGotButtonPressEvent(KisButtonPressEvent *e);
 	void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
+	void canvasGotDoubleClickEvent(KisDoubleClickEvent *e);
 	void canvasGotPaintEvent(QPaintEvent *e);
 	void canvasGotEnterEvent(QEvent *e);
 	void canvasGotLeaveEvent(QEvent *e);

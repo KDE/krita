@@ -52,6 +52,7 @@ class KisEvent;
 class KisMoveEvent;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
+class KisDoubleClickEvent;
 
 class KisCanvas : public QWidget {
 	Q_OBJECT
@@ -79,11 +80,13 @@ signals:
 	void gotMoveEvent(KisMoveEvent *);
 	void gotButtonPressEvent(KisButtonPressEvent *);
 	void gotButtonReleaseEvent(KisButtonReleaseEvent *);
+	void gotDoubleClickEvent(KisDoubleClickEvent *);
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
+	virtual void mouseDoubleClickEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
         virtual void tabletEvent(QTabletEvent *event);
 	virtual void enterEvent(QEvent *event );
@@ -96,6 +99,7 @@ protected:
 	void moveEvent(KisMoveEvent *event);
 	void buttonPressEvent(KisButtonPressEvent *event);
 	void buttonReleaseEvent(KisButtonReleaseEvent *event);
+	void doubleClickEvent(KisDoubleClickEvent *event);
 	void translateTabletEvent(KisEvent *event);
 
 	bool m_enableMoveEventCompressionHint;

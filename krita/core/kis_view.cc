@@ -96,6 +96,7 @@
 #include "strategy/kis_strategy_move.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
+#include "kis_double_click_event.h"
 #include "kis_move_event.h"
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
@@ -1791,6 +1792,35 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 	}
 }
 
+void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
+{
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+	// The event filter doesn't see tablet events going to the canvas.
+	if (e -> device() != INPUT_DEVICE_MOUSE) {
+		m_tabletEventTimer.start();
+	}
+#endif // EXTENDED_X11_TABLET_SUPPORT
+
+	if (e -> device() != currentInputDevice()) {
+		if (e -> device() == INPUT_DEVICE_MOUSE) {
+			if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+				setInputDevice(INPUT_DEVICE_MOUSE);
+			}
+		} else {
+			setInputDevice(e -> device());
+		}
+	}
+
+	if (e -> device() == currentInputDevice() && currentTool()) {
+		KisPoint p = viewToWindow(e -> pos());
+		KisDoubleClickEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
+
+		if (currentTool()) {
+			currentTool() -> doubleClick(&ev);
+		}
+	}
+}
+
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
 	if (currentTool())
@@ -2260,6 +2290,7 @@ void KisView::setupCanvas()
 
 	QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+	QObject::connect(m_canvas, SIGNAL(gotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));

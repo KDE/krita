@@ -217,10 +217,8 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 	const_cast<KisStrategyColorSpace *>(this) -> nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
-void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT8 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
 {
-	kdDebug() << " Darken: " << shade << ", compensate: " << compensate << ", compensation: " << compensation << "\n";
-
 	QColor c;
 	Q_INT32 psize = pixelSize();
 	
@@ -239,7 +237,6 @@ void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT8 sh
 			g = (Q_INT32) (c.green() * shade / 255);
 			b = (Q_INT32) (c.blue() * shade / 255);
 		}
-		kdDebug() << "Color: " << r << ", " << g << ", " << b << "\n";
 		c.setRgb(r, g, b);
 	
 		const_cast<KisStrategyColorSpace *>(this)->nativeColor( c, dst  + (i * psize));

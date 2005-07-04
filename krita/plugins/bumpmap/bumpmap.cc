@@ -35,6 +35,7 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qstring.h>
+#include <qpushbutton.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -220,8 +221,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		bumpmap = src;
 	}
 
-	kdDebug(DBG_AREA_FILTERS) << "Starting bumpmapping\n";
-
 	setProgressTotalSteps(rect.height());
 
 	// ------------------- Map the bumps
@@ -264,65 +263,61 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		
 		xofs2 = MOD ((config->xofs + rect.x()), bmRect.width());
 		
-		KisHLineIterator dstIt = dst->createHLineIterator(rect.x(), y, rect.width(), true);
-		KisHLineIterator srcIt = src->createHLineIterator(rect.x(), y, rect.width(), false);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, rect.width(), true);
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, rect.width(), false);
 
 		Q_INT32 x = 0;
 		while (!srcIt.isDone()) {
 
-		
-			// Calculate surface normal from bumpmap
-			if (config->tiled || row_in_bumpmap
-				&& x >= - (config->xofs + rect.x())
-				&& x < - (config->xofs + rect.x()) + bmRect.width()) {
-
-				if (config->tiled) {
-					xofs1 = MOD (xofs2 - 1, bmRect.width());
-					xofs3 = MOD (xofs2 + 1, bmRect.width());
+			if (srcIt.selectedNess() > MAX_SELECTED / 2) {
+				// Calculate surface normal from bumpmap
+				if (config->tiled || row_in_bumpmap
+					&& x >= - (config->xofs + rect.x())
+					&& x < - (config->xofs + rect.x()) + bmRect.width()) {
+	
+					if (config->tiled) {
+						xofs1 = MOD (xofs2 - 1, bmRect.width());
+						xofs3 = MOD (xofs2 + 1, bmRect.width());
+					}
+					else {
+						xofs1 = CLAMP (xofs2 - 1, 0, bmRect.width() - 1);
+						xofs3 = CLAMP (xofs2 + 1, 0, bmRect.width() - 1);
+					}
+	
+					// We use 8-bit GRAYA, we need only the first byte of every
+					// pixel
+					nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
+						bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
+					ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
+						bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
+	
+					
 				}
 				else {
-					xofs1 = CLAMP (xofs2 - 1, 0, bmRect.width() - 1);
-					xofs3 = CLAMP (xofs2 + 1, 0, bmRect.width() - 1);
+					nx = 0;
+					ny = 0;
 				}
-
-				// We use 8-bit GRAYA, we need only the first byte of every
-				// pixel
-			          nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
-					bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
-				  ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
-					bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
-
-				
-			}
-			else {
-				nx = 0;
-				ny = 0;
-			}
-
-			kdDebug() << "nx: " << nx << ", ny: " << ny << "\n";
-			
-			// Shade
-
-			if ((nx == 0) && (ny == 0)) {
-				shade = background;
-			}
-			else {
-				ndotl = nx * lx + ny * ly + nzlz;
-
-				kdDebug() << "ndotl: " << ndotl << "\n";
-
-				if (ndotl < 0) {
-					shade = (Q_INT32)(compensation * config->ambient);
+	
+				// Shade
+	
+				if ((nx == 0) && (ny == 0)) {
+					shade = background;
 				}
 				else {
-					shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-					shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
+					ndotl = (nx * lx) + (ny * ly) + nzlz;
+	
+					if (ndotl < 0) {
+						shade = (Q_INT32)(compensation * config->ambient);
+					}
+					else {
+						shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+						shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
+					}
 				}
+	
+				// Paint
+				srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
 			}
-
-			// Paint
-			srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
-
 			++srcIt;
 			++dstIt;
 			++x;
@@ -422,7 +417,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisView * vie
 			m_page->cmbLayer->insertItem(layer->name());
 		}
 	}
-	
+	connect( m_page->bnRefresh, SIGNAL(clicked()), filter, SLOT(refreshPreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()

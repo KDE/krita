@@ -289,7 +289,7 @@ public:
 	 *
 	 * (See the bumpmap filter)
 	 */
-	virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT8 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+	virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 	
 	/**
 	 * Compose two arrays of pixels together. If source and target

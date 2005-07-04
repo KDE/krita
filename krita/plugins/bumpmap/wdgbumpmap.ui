@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QFrame" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QFrame" row="3" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>frame3</cstring>
             </property>
@@ -78,7 +78,7 @@ layer, you current layer will be used as the bumpmap.</string>
                 </spacer>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>grpSettings</cstring>
             </property>
@@ -242,7 +242,7 @@ layer, you current layer will be used as the bumpmap.</string>
                 </widget>
             </grid>
         </widget>
-        <widget class="QButtonGroup" row="2" column="0">
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpType</cstring>
             </property>
@@ -283,15 +283,15 @@ layer, you current layer will be used as the bumpmap.</string>
                         <cstring>radioSinusoidal</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Sinusoidal</string>
+                        <string>S&amp;inusoidal</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+S</string>
+                        <string>Alt+I</string>
                     </property>
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="2" column="1">
+        <widget class="QGroupBox" row="1" column="2" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpOptions</cstring>
             </property>
@@ -321,10 +321,10 @@ layer, you current layer will be used as the bumpmap.</string>
                         <cstring>chkTiled</cstring>
                     </property>
                     <property name="text">
-                        <string>Tile bumpmap</string>
+                        <string>&amp;Tile bumpmap</string>
                     </property>
                     <property name="accel">
-                        <string></string>
+                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="1" column="0">
@@ -340,7 +340,7 @@ layer, you current layer will be used as the bumpmap.</string>
                 </widget>
             </grid>
         </widget>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>lblLayer</cstring>
             </property>
@@ -351,9 +351,20 @@ layer, you current layer will be used as the bumpmap.</string>
                 <cstring>cmbLayer</cstring>
             </property>
         </widget>
-        <widget class="QComboBox" row="1" column="1">
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>cmbLayer</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="0" column="3">
+            <property name="name">
+                <cstring>bnRefresh</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Preview</string>
+            </property>
+            <property name="accel">
+                <string>Alt+P</string>
             </property>
         </widget>
     </grid>

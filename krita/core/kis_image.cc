@@ -918,7 +918,7 @@ KisLayerSP KisImage::findLayer(const QString & name)
                 if (m_layers[i]->name() == name)
                         return m_layers[i];
         }
-
+	return 0;
 }
 
 

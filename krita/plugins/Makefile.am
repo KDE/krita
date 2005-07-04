@@ -27,4 +27,5 @@ SUBDIRS = cimg \
 	variations \
 	performancetest \
 	$(kjsembed_plugin) \
-	defaultdockers 
+	defaultdockers \
+	pixelizefilter

@@ -3,7 +3,9 @@
   <MenuBar>
     <Menu name="Filter"><text>&amp;Filter</text>
       <Seperator/>
-      <Action name="convolution_blur"/>
+      <Menu name="Blur"><text>&amp;Blur</text>
+        <Action name="convolution_blur"/>
+      </Menu>
       <Action name="convolution_sharpen"/>
       <Action name="convolution_meanremoval"/>
       <Menu name="Emboss"><text>&amp;Emboss</text>

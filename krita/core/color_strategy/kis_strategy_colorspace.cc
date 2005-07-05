@@ -219,6 +219,7 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 
 void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
 {
+	//kdDebug() << "Darken: " << shade << ", compensate: " << compensate << ", compensation: " << compensation << "\n";
 	QColor c;
 	Q_INT32 psize = pixelSize();
 	
@@ -228,15 +229,16 @@ void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
 		Q_INT32 r, g, b;
 		
 		if (compensate) {
-			r = (Q_INT32) ((c.red() * shade) / (compensation * 255));
-			g = (Q_INT32) ((c.green() * shade) / (compensation * 255));
-			b = (Q_INT32) ((c.blue() * shade) / (compensation * 255));
+			r = (Q_INT32) QMIN(255, ((c.red() * shade) / (compensation * 255)));
+			g = (Q_INT32) QMIN(255, ((c.green() * shade) / (compensation * 255)));
+			b = (Q_INT32) QMIN(255, ((c.blue() * shade) / (compensation * 255)));
 		}
 		else {
-			r = (Q_INT32) (c.red() * shade / 255);
-			g = (Q_INT32) (c.green() * shade / 255);
-			b = (Q_INT32) (c.blue() * shade / 255);
+			r = (Q_INT32) QMIN(255, (c.red() * shade / 255));
+			g = (Q_INT32) QMIN(255, (c.green() * shade / 255));
+			b = (Q_INT32) QMIN(255, (c.blue() * shade / 255));
 		}
+		kdDebug() << "Red: " << r << ", Green " << g << ", Blue "<<  b << "\n";
 		c.setRgb(r, g, b);
 	
 		const_cast<KisStrategyColorSpace *>(this)->nativeColor( c, dst  + (i * psize));

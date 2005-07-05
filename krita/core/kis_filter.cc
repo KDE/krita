@@ -117,7 +117,7 @@ void KisFilter::slotActivated()
 	QRect rect = r1.intersect(r2);
 
 	if (layer->hasSelection()) {
-		QRect r3 = layer -> selection() -> selectedRect();
+		QRect r3 = layer->selection()->selectedExactRect();
 		rect = rect.intersect(r3);
 	}
 

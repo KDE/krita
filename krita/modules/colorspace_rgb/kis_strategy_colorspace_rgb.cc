@@ -250,6 +250,28 @@ void KisStrategyColorSpaceRGB::adjustBrightnessContrast(const Q_UINT8 *src, Q_UI
 	cmsDoTransform(transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
+void KisStrategyColorSpaceRGB::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+{
+	int i = 0;
+	
+	while (i < nPixels * MAX_CHANNEL_RGBA) {
+		if (compensate) {
+			dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
+			dst[++i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
+			dst[++i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
+		}
+		else {
+			dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
+			dst[++i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
+			dst[++i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
+		}
+
+		++i;
+		++i;
+	}
+}
+
+
 void KisStrategyColorSpaceRGB::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
 	while (rows > 0) {

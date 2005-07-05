@@ -67,6 +67,15 @@ public:
 	
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 
+	/**
+	 * Darken all color channels with the given amount. If compensate is true,
+	 * the compensation factor will be used to limit the darkening.
+	 *
+	 * (See the bumpmap filter)
+	 */
+	virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+
+
 protected:
 
 	virtual void bitBlt(Q_UINT8 *dst,

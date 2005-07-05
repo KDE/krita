@@ -103,13 +103,14 @@ namespace {
 		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("GRAYA");
 		KisStrategyColorSpaceSP csOrig = orig->colorStrategy();
 
-		Q_UINT8 * ptr = row;
-		
+
 		bool convert = (csOrig != cs);
 		if (!convert) {
 			// Already GRAYA
 			orig->readBytes(row, x, y, w, 1);
 		}
+		
+		Q_UINT32 i = 0;
 		KisHLineIterator origIt = orig->createHLineIterator(x, y, w, false);
 		while (!origIt.isDone()) {
 			if (convert) {
@@ -117,16 +118,16 @@ namespace {
 				QColor c;
 				QUANTUM opacity;
 					csOrig->toQColor(origIt.rawData(), &c, &opacity);
-				ptr[0] = (c.red() * 0.30
+				row[i] = (c.red() * 0.30
 					  + c.green() * 0.59
 					  + c.blue() * 0.11) + 0.5;
-				ptr[1] = opacity;
+				row[i + 1] = opacity;
 				
 			}
 
-			ptr[0] = lut[waterlevel + ((ptr[0] -  waterlevel) * ptr[1]) / 255];
-
-			ptr += 2;
+			row[i] = lut[waterlevel + ((row[i] -  waterlevel) * row[i + 1]) / 255];
+			
+			row += 2;
 			++origIt;
 		}
 	}
@@ -156,7 +157,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 	Q_INT32 i;
 	double n;
 
-	
 	// ------------------ Prepare parameters
 
 	/* Convert to radians */
@@ -217,7 +217,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		bumpmap = bumplayer;
 	}
 	else {
-		bmRect = rect;
+	 	bmRect = rect;
 		bumpmap = src;
 	}
 
@@ -225,11 +225,12 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 	// ------------------- Map the bumps
 	Q_INT32 yofs1, yofs2, yofs3;
-	
+
+	// ------------------- Initialize offsets
 	if (config->tiled) {
-		yofs2 = MOD(config->yofs + rect.y(), bmRect.height());
-		yofs1 = MOD(yofs2 - 1, bmRect.height());
-		yofs3 = MOD(yofs2 + 1,  bmRect.height());
+		yofs2 = MOD (config->yofs + rect.y(), bmRect.height());
+		yofs1 = MOD (yofs2 - 1, bmRect.height());
+		yofs3 = MOD (yofs2 + 1,  bmRect.height());
 	}
 	else {
 	      yofs2 = CLAMP (config->yofs + rect.y(), 0, bmRect.height() - 1);
@@ -238,6 +239,8 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 	}
 
+	// ---------------------- Load initial three bumpmap scanlines
+	
 	KisStrategyColorSpaceSP srcCs = src->colorStrategy();
 	vKisChannelInfoSP channels = srcCs->channels();
 
@@ -255,25 +258,25 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 	Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
 	
-	for (int y = rect.y(); y < rect.height(); ++y) {
+	for (int y = rect.y(); y < rect.height(); y++) {
 
 		row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bmRect.height());
 
 		// Bumpmap
 		
-		xofs2 = MOD ((config->xofs + rect.x()), bmRect.width());
-		
 		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, rect.width(), true);
 		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, rect.width(), false);
+
+		Q_INT32 tmp = config->xofs + rect.x();
+		xofs2 = MOD (tmp, bmRect.width());
 
 		Q_INT32 x = 0;
 		while (!srcIt.isDone()) {
 
 			if (srcIt.selectedNess() > MAX_SELECTED / 2) {
 				// Calculate surface normal from bumpmap
-				if (config->tiled || row_in_bumpmap
-					&& x >= - (config->xofs + rect.x())
-					&& x < - (config->xofs + rect.x()) + bmRect.width()) {
+				if (config->tiled || row_in_bumpmap &&
+					x >= - tmp&& x < - tmp + bmRect.width()) {
 	
 					if (config->tiled) {
 						xofs1 = MOD (xofs2 - 1, bmRect.width());
@@ -283,7 +286,12 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 						xofs1 = CLAMP (xofs2 - 1, 0, bmRect.width() - 1);
 						xofs3 = CLAMP (xofs2 + 1, 0, bmRect.width() - 1);
 					}
-	
+					#if 0
+					kdDebug() << "x: " << x
+						<< ", x offset 1: " << xofs1
+						<< ", x offset 2: " << xofs2
+						<< ", x offset 3: " << xofs3 << "\n";
+					#endif
 					// We use 8-bit GRAYA, we need only the first byte of every
 					// pixel
 					nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
@@ -318,6 +326,8 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 				// Paint
 				srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
 			}
+		      if (++xofs2 == bmRect.width())
+				xofs2 = 0;
 			++srcIt;
 			++dstIt;
 			++x;

@@ -76,7 +76,8 @@ void KisPreviewView::updateView(QPoint delta)
 	KisPaintDeviceSP pd(m_sourcelayer.data());
 
 	gc.begin(m_clippedview.data());
-	gc.bitBlt(0, 0, COMPOSITE_COPY, pd, delta.x(), delta.y(), m_image->width(), m_image->height());
+	//gc.bitBlt(0, 0, COMPOSITE_COPY, pd, delta.x(), delta.y(), m_image->width(), m_image->height());
+	gc.bltSelection(0, 0, COMPOSITE_COPY, pd, OPACITY_OPAQUE, delta.x(), delta.y(), m_image->width(), m_image->height());
 	gc.end();
 }
 

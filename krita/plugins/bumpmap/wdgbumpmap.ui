@@ -369,5 +369,20 @@ layer, you current layer will be used as the bumpmap.</string>
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>cmbLayer</tabstop>
+    <tabstop>radioLinear</tabstop>
+    <tabstop>chkCompensate</tabstop>
+    <tabstop>chkInvert</tabstop>
+    <tabstop>chkTiled</tabstop>
+    <tabstop>dblAzimuth</tabstop>
+    <tabstop>dblElevation</tabstop>
+    <tabstop>dblDepth</tabstop>
+    <tabstop>intXOffset</tabstop>
+    <tabstop>intYOffset</tabstop>
+    <tabstop>intWaterLevel</tabstop>
+    <tabstop>intAmbient</tabstop>
+    <tabstop>bnRefresh</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

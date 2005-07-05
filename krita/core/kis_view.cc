@@ -468,8 +468,8 @@ void KisView::setupActions()
 	m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
 	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
-	(void)new KAction(i18n("Mirror Along &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
-	(void)new KAction(i18n("Mirror Along &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
+	(void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
+	(void)new KAction(i18n("Flip on &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
 	// image actions
 	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");

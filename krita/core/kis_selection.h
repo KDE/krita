@@ -70,7 +70,16 @@ public:
 	void setMaskColor(const QColor c);
 	QColor maskColor() { return m_maskColor; }
 
+	/**
+	 * Rough, but fastish way of determining the area
+	 * of the tiles used by the selection.
+	 */
 	QRect selectedRect();
+
+	/**
+	 * Slow, but exact way of determining the rectangle
+	 * that encloses the selection
+	 */
 	QRect selectedExactRect();
 	
 	void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);

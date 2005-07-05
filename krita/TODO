@@ -82,7 +82,8 @@ Import/Export
 
 User Interface
 
-	* Enable depth combo now that we have a 16bit/channel colorspace
+	* Add link check to new image dialog to sync width and height
+	* Remove depth combobox: depth is a property of the color model
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
 	* Channels showing (note that we don't do Gimp-type grayscale
 	  mask channels, just showing/hiding the various color

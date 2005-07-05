@@ -271,6 +271,13 @@ void KisStrategyColorSpaceRGB::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT3
 	}
 }
 
+Q_UINT8 KisStrategyColorSpaceRGB::intensity8(const Q_UINT8 * src) const
+{
+        return (Q_UINT8)(src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5;
+
+}
+
+
 
 void KisStrategyColorSpaceRGB::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {

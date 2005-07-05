@@ -50,6 +50,7 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
+#include <kis_pixel.h>
 #include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
@@ -100,34 +101,14 @@ KisFilterBumpmap::KisFilterBumpmap(KisView * view) : KisFilter(id(), view)
 namespace {
 	void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
 	{
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get("GRAYA");
 		KisStrategyColorSpaceSP csOrig = orig->colorStrategy();
 
-
-		bool convert = (csOrig != cs);
-		if (!convert) {
-			// Already GRAYA
-			orig->readBytes(row, x, y, w, 1);
-		}
-		
-		Q_UINT32 i = 0;
-		KisHLineIterator origIt = orig->createHLineIterator(x, y, w, false);
-		while (!origIt.isDone()) {
-			if (convert) {
-				
-				QColor c;
-				QUANTUM opacity;
-					csOrig->toQColor(origIt.rawData(), &c, &opacity);
-				row[i] = (c.red() * 0.30
-					  + c.green() * 0.59
-					  + c.blue() * 0.11) + 0.5;
-				row[i + 1] = opacity;
-				
-			}
-
-			row[i] = lut[waterlevel + ((row[i] -  waterlevel) * row[i + 1]) / 255];
+		KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
+		for (int i = 0; i < w; ++i) {
+			row[0] = csOrig->intensity8(origIt.rawData());
+			row[0] = lut[waterlevel + ((row[0] -  waterlevel) * origIt.pixel().alpha()) / 255];
 			
-			row += 2;
+			++row;
 			++origIt;
 		}
 	}
@@ -221,21 +202,30 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		bumpmap = src;
 	}
 
-	setProgressTotalSteps(rect.height());
+	Q_INT32 sel_h = rect.height();
+	Q_INT32 sel_w = rect.width();
+	Q_INT32 sel_x = rect.x();
+	Q_INT32 sel_y = rect.y();
+	
+	Q_INT32 bm_h = bmRect.height();
+	Q_INT32 bm_w = bmRect.width();
+	Q_INT32 bm_x = bmRect.x();
+	
+	setProgressTotalSteps(sel_h);
 
 	// ------------------- Map the bumps
 	Q_INT32 yofs1, yofs2, yofs3;
 
 	// ------------------- Initialize offsets
 	if (config->tiled) {
-		yofs2 = MOD (config->yofs + rect.y(), bmRect.height());
-		yofs1 = MOD (yofs2 - 1, bmRect.height());
-		yofs3 = MOD (yofs2 + 1,  bmRect.height());
+		yofs2 = MOD (config->yofs + sel_y, bm_h);
+		yofs1 = MOD (yofs2 - 1, bm_h);
+		yofs3 = MOD (yofs2 + 1,  bm_h);
 	}
 	else {
-	      yofs2 = CLAMP (config->yofs + rect.y(), 0, bmRect.height() - 1);
+	      yofs2 = CLAMP (config->yofs + sel_y, 0, bm_h - 1);
 	      yofs1 = yofs2;
-	      yofs3 = CLAMP (yofs2 + 1, 0, bmRect.height() - 1);
+	      yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
 
 	}
 
@@ -245,46 +235,45 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 	vKisChannelInfoSP channels = srcCs->channels();
 
 	// One byte per pixel, converted from the bumpmap layer.
-	Q_UINT8 * bm_row1 = new Q_UINT8[bmRect.width() * 2];
-	Q_UINT8 * bm_row2 = new Q_UINT8[bmRect.width() * 2];
-	Q_UINT8 * bm_row3 = new Q_UINT8[bmRect.width() * 2];
+	Q_UINT8 * bm_row1 = new Q_UINT8[bm_w];
+	Q_UINT8 * bm_row2 = new Q_UINT8[bm_w];
+	Q_UINT8 * bm_row3 = new Q_UINT8[bm_w];
 	Q_UINT8 * tmp_row;
 
-	convertRow(bumpmap, bm_row1, bmRect.x(), yofs1, bmRect.width(), lut, config->waterlevel);
-	convertRow(bumpmap, bm_row2, bmRect.x(), yofs2, bmRect.width(), lut, config->waterlevel);
-	convertRow(bumpmap, bm_row3, bmRect.x(), yofs3, bmRect.width(), lut, config->waterlevel);
+	convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
+	convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
+	convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
 	
 	bool row_in_bumpmap;
 
 	Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
-	
-	for (int y = rect.y(); y < rect.height(); y++) {
+	for (int y = sel_y; y < sel_h + sel_y; y++) {
 
-		row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bmRect.height());
+		row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
 
 		// Bumpmap
 		
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, rect.width(), true);
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, rect.width(), false);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
 
-		Q_INT32 tmp = config->xofs + rect.x();
-		xofs2 = MOD (tmp, bmRect.width());
+		Q_INT32 tmp = config->xofs + sel_x;
+		xofs2 = MOD (tmp, bm_w);
 
 		Q_INT32 x = 0;
-		while (!srcIt.isDone()) {
+		while (x < sel_w || m_cancelRequested) {
 
-			if (srcIt.selectedNess() > MAX_SELECTED / 2) {
+			if (srcIt.isSelected()) {
 				// Calculate surface normal from bumpmap
 				if (config->tiled || row_in_bumpmap &&
-					x >= - tmp&& x < - tmp + bmRect.width()) {
+					x >= - tmp&& x < - tmp + bm_w) {
 	
 					if (config->tiled) {
-						xofs1 = MOD (xofs2 - 1, bmRect.width());
-						xofs3 = MOD (xofs2 + 1, bmRect.width());
+						xofs1 = MOD (xofs2 - 1, bm_w);
+						xofs3 = MOD (xofs2 + 1, bm_w);
 					}
 					else {
-						xofs1 = CLAMP (xofs2 - 1, 0, bmRect.width() - 1);
-						xofs3 = CLAMP (xofs2 + 1, 0, bmRect.width() - 1);
+						xofs1 = CLAMP (xofs2 - 1, 0, bm_w - 1);
+						xofs3 = CLAMP (xofs2 + 1, 0, bm_w - 1);
 					}
 					#if 0
 					kdDebug() << "x: " << x
@@ -292,8 +281,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 						<< ", x offset 2: " << xofs2
 						<< ", x offset 3: " << xofs3 << "\n";
 					#endif
-					// We use 8-bit GRAYA, we need only the first byte of every
-					// pixel
+
 					nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
 						bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
 					ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
@@ -326,7 +314,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 				// Paint
 				srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
 			}
-		      if (++xofs2 == bmRect.width())
+		      if (++xofs2 == bm_w)
 				xofs2 = 0;
 			++srcIt;
 			++dstIt;
@@ -341,21 +329,22 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 			bm_row2 = bm_row3;
 			bm_row3 = tmp_row;
 			
-			if (++yofs2 == bmRect.height()) {
+			if (++yofs2 == bm_h) {
 				yofs2 = 0;
 			}
 			if (config->tiled) {
-				yofs3 = MOD(yofs2 + 1, bmRect.height());
+				yofs3 = MOD(yofs2 + 1, bm_h);
 			}
 			else {
-				yofs3 = CLAMP(yofs2 + 1, 0, bmRect.height() - 1);
+				yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
 			}
 
-			convertRow(bumpmap, bm_row3, bmRect.x(), yofs3, bmRect.width(), lut, config->waterlevel);
+			convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
 		}
 
 		incProgress();
 	}
+	
 	delete [] bm_row1;
 	delete [] bm_row2;
 	delete [] bm_row3;

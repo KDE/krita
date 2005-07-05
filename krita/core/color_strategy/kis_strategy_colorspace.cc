@@ -238,12 +238,21 @@ void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
 			g = (Q_INT32) QMIN(255, (c.green() * shade / 255));
 			b = (Q_INT32) QMIN(255, (c.blue() * shade / 255));
 		}
-		kdDebug() << "Red: " << r << ", Green " << g << ", Blue "<<  b << "\n";
 		c.setRgb(r, g, b);
 	
 		const_cast<KisStrategyColorSpace *>(this)->nativeColor( c, dst  + (i * psize));
 	}
 }
+
+Q_UINT8 KisStrategyColorSpace::intensity8(const Q_UINT8 * src) const
+{
+	QColor c;
+        QUANTUM opacity;
+        const_cast<KisStrategyColorSpace *>(this)->toQColor(src, &c, &opacity);
+        return (Q_UINT8)(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5;
+
+}
+
 
 void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 				   Q_INT32 dststride,

@@ -6,12 +6,10 @@
   <Action name="koffice_redo"/>
   <Separator/>
   <Action name="cut"/>
-  <Action name="cut_selection_to_new_layer"/>
   <Action name="copy"/>
   <Action name="copy_merged"/>
   <Action name="paste"/>
   <Action name="paste_new"/>
-  <Action name="copy_selection_to_new_layer"/>
   <Action name="clear"/>
   <Separator/>
   <Action name="revert"/>
@@ -42,10 +40,6 @@
 	<Action name="img_properties"/>
     </Menu>
 
-  <Separator/>
-  <Action name="import_image"/>
-  <Action name="export_image"/>
-  <Separator/>
   <Action name="add_new_image_tab"/>
   <Action name="remove_current_image_tab"/>
   <Action name="scale_image"/>
@@ -59,7 +53,12 @@
 
 
 <Menu name="Layer"><text>La&amp;yer</text>
-  <Action name="insert_layer"/>
+  <Menu name="LayerNew"><text>New</text>
+  	<Action name="insert_layer"/>
+  	<Action name="insert_image_as_layer"/>
+  	<Action name="cut_selection_to_new_layer"/>
+  	<Action name="copy_selection_to_new_layer"/>
+  </Menu>	
   <Action name="remove_layer"/>
   <Action name="duplicate_layer"/>
   <Action name="hide_layer"/>
@@ -72,7 +71,6 @@
   <Separator/>
   <Action name="resizelayertoowner"/>
   <Separator/>
-  <Action name="insert_image_as_layer"/>
   <Action name="save_layer_as_image"/>
   <Action name="layer_to_image"/>
 <Separator/>
@@ -113,7 +111,7 @@
    <Action name="save_selection"/>
 </Menu>
 
-<Menu name="Filter"><text>F&amp;ilter</text>
+<Menu name="Filter"><text>Filte&amp;r</text>
 	<ActionList name="filters"/>
 </Menu>
 

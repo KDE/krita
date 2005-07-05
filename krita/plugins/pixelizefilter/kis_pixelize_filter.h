@@ -49,7 +49,7 @@ public:
 	virtual QWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-	void pixelize(KisPaintDeviceSP src, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
+	void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };
 
 #endif

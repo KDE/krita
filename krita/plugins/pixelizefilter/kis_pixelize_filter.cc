@@ -3,9 +3,8 @@
  *
  * Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- * ported from digikam, Copyright 2004 by Gilles Caulier,
- * Original Oilpaint algorithm copyrighted 2004 by
- * Pieter Z. Voloshyn <pieter_voloshyn at ame.com.br>.
+ * ported from Gimp, Copyright (C) 1997 Eiichi Takamori <taka@ma1.seikyou.ne.jp>
+ * original pixelize.c for GIMP 0.54 by Tracy Scott
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,29 +50,26 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_pixelize_filter.h"
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+
 KisPixelizeFilter::KisPixelizeFilter(KisView * view) : KisFilter(id(), view)
 {
 }
 
 void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-
-	Q_UNUSED(dst);
-
-	Q_INT32 x = rect.x(), y = rect.y();
-	Q_INT32 width = rect.width();
-	Q_INT32 height = rect.height();
-
-	//read the filter configuration values from the KisFilterConfiguration object
-	Q_UINT32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
-	Q_UINT32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
-
-	kdDebug() << "pixelwidth: " << pixelWidth << endl;
-	kdDebug() << "pixelheight: " << pixelHeight << endl;
-	pixelize(src, x, y, width, height, pixelWidth, pixelHeight);
+        Q_INT32 x = rect.x(), y = rect.y();
+        Q_INT32 width = rect.width();
+        Q_INT32 height = rect.height();
+        
+        //read the filter configuration values from the KisFilterConfiguration object
+        Q_UINT32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
+        Q_UINT32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
+        
+        pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 }
 
-void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
+void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
 {
         Q_INT32 pixelSize = src -> pixelSize();
         Q_INT32 average[ pixelSize ];
@@ -82,19 +78,34 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, int startx, int starty, i
         Q_INT32 count;                
         bool hasAlpha = src -> alpha();
         Q_INT32 rowstride; 
-        
-        setProgressTotalSteps(height);
-        setProgressStage(i18n("Applying pixelize filter..."),0);
 
+        //calculate the total number of pixels
+        Q_INT32 numX=0;
+        Q_INT32 numY=0;
+        
+        for (Q_INT32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
+        {
+                numX++;
+        }
+        for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
+        {
+                numY++;
+        }       
+        
+        setProgressTotalSteps( numX * numY );
+        setProgressStage(i18n("Applying pixelize filter..."),0);
+        
+        Q_INT32 numberOfPixelsProcessed = 0;
+        
         for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
         {
                 Q_INT32 h = pixelHeight - (y % pixelHeight);
-                //h = MIN (h, starty + height - y);
+                h = MIN(h, starty + height - y);
 
                 for (Q_INT32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
                 {
                         Q_INT32 w = pixelWidth - (x % pixelWidth);
-                        //w = MIN (w, startx + width - x);
+                        w = MIN(w, startx + width - x);
                         
                         for (Q_INT32 i = 0; i < pixelSize; i++)
                         {
@@ -102,46 +113,46 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, int startx, int starty, i
                         }
                         count = 0;
 
-                        /* Read */
-                        //bufRow = area.data + (y-area.y)*rowstride + (x-area.x)*bpp;
-
-                        for (Q_INT32 row = 0; row < h; row++)
+                        //read
+                        KisRectIteratorPixel srcIt = src->createRectIterator(x, y, w, h, false);
+                        if ( hasAlpha )
                         {
-                                buf = bufRow;
-                                if (hasAlpha)
+                                while( ! srcIt.isDone() )
                                 {
-                                        for (Q_INT32 col = 0; col < w; col++)
+                                        if(srcIt.isSelected())
                                         {
-                                                Q_INT32 alpha = buf[pixelSize-1];
+                                                Q_INT32 alpha = srcIt.oldRawData()[pixelSize-1];
         
                                                 average[pixelSize-1] += alpha;
                                                 for (Q_INT32 i = 0; i < pixelSize-1; i++)
                                                 {        
-                                                        average[i] += buf[i] * alpha;
-                                                }
-                                                buf += pixelSize;
+                                                        average[i] += srcIt.oldRawData()[i] * alpha;
+                                                }      
+                                                count++;
                                         }
+                                        ++srcIt;
                                 }
-                                else
+                        }
+                        else
+                        {
+                                while( ! srcIt.isDone() )
                                 {
-                                        for (Q_INT32 col = 0; col < w; col++)
+                                        if(srcIt.isSelected())
                                         {
                                                 for (Q_INT32 i = 0; i < pixelSize; i++)
                                                 {        
-                                                        average[i] += buf[i];
-                                                }
-                                                buf += pixelSize;
+                                                        average[i] += srcIt.oldRawData()[i];
+                                                }  
+                                                count++;
                                         }
+                                        ++srcIt;
                                 }
-                                bufRow += rowstride;
                         }
 
-                        count += w*h;
-
-                        /* Average */
+                        //average
                         if (count > 0)
                         {
-                                if (hasAlpha)
+                                if ( hasAlpha )
                                         {
                                         Q_INT32 alpha = average[pixelSize-1];
                         
@@ -157,23 +168,23 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, int startx, int starty, i
                                         average[i] /= count;
                                 }
                         }
-
-                        /* Write */
-                        //bufRow = area.data + (y-area.y)*rowstride + (x-area.x)*bpp;
-                
-                        for (Q_INT32 row = 0; row < h; row++)
+                        //write
+                        srcIt = src->createRectIterator(x, y, w, h, false);
+                        KisRectIteratorPixel dstIt = dst->createRectIterator(x, y, w, h, true );
+                        while( ! srcIt.isDone() )
                         {
-                                buf = bufRow;
-                                for (Q_INT32 col = 0; col < w; col++)
+                                if(srcIt.isSelected())
+                                {
+                                        for( int i = 0; i < pixelSize; i++)
                                         {
-                                        for (Q_INT32 i = 0; i < pixelSize; i++)
-                                        buf[i] = average[i];
-                        
-                                        count++;
-                                        buf += pixelSize;
+                                                dstIt.rawData()[i] = average[i];
                                         }
-                                bufRow += rowstride;
+                                }
+                                ++srcIt;
+                                ++dstIt;
                         }
+                numberOfPixelsProcessed++;
+                setProgress(numberOfPixelsProcessed);
                 }
         }
 		

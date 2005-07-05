@@ -2,7 +2,9 @@
 <kpartgui library="kritapixelizefilter" version="4">
   <MenuBar>
     <Menu name="Filter"><text>&amp;Filter</text>
-      <Action name="pixelize_filter"/>
+      <Menu name="Blur"><text>&amp;Blur</text>
+        <Action name="pixelize_filter"/>
+      </Menu>
     </Menu>
   </MenuBar>
 </kpartgui>

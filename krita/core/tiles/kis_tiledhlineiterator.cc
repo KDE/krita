@@ -187,8 +187,3 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 
 	return *this;
 }
-
-bool KisTiledHLineIterator::isDone() const
-{
-	return m_x > m_right;
-}

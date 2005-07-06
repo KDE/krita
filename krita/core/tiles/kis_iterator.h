@@ -47,25 +47,25 @@ public:
 
 public:	
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	Q_UINT8 * rawData() const { return ACTUAL_RECTITERATOR::rawData();};
+	inline Q_UINT8 * rawData() const { return ACTUAL_RECTITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
+	inline const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
 
 	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
-	KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
+	inline KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
 	
 	/// Goes back one pixel going to the end of the line above when it reaches the beginning of a line
-	//KisRectIterator & operator--() { ACTUAL_RECTITERATOR::operator--(); return *this; };
+	//inline KisRectIterator & operator--() { ACTUAL_RECTITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
-	bool isDone()  const { return ACTUAL_RECTITERATOR::isDone(); };
+	inline bool isDone()  const { return ACTUAL_RECTITERATOR::isDone(); };
 	
 	 // current x position
-	 Q_INT32 x() const { return ACTUAL_RECTITERATOR::x(); };
+	 inline Q_INT32 x() const { return ACTUAL_RECTITERATOR::x(); };
 	 
 	 // current y position
-	 Q_INT32 y() const { return ACTUAL_RECTITERATOR::y(); };
+	 inline Q_INT32 y() const { return ACTUAL_RECTITERATOR::y(); };
 };
 
 class KisHLineIterator : private ACTUAL_HLINEITERATOR
@@ -80,32 +80,32 @@ public:
 
 public:	
 	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	Q_UINT8 *rawData() const { return ACTUAL_HLINEITERATOR::rawData();};
+	inline Q_UINT8 *rawData() const { return ACTUAL_HLINEITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	const Q_UINT8 *oldRawData() const { return ACTUAL_HLINEITERATOR::oldRawData();};
+	inline const Q_UINT8 *oldRawData() const { return ACTUAL_HLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
-	KisHLineIterator & operator++() { ACTUAL_HLINEITERATOR::operator++(); return *this; };
+	inline KisHLineIterator & operator++() { ACTUAL_HLINEITERATOR::operator++(); return *this; };
 	
 	/// Returns the number of consequtive horizontal pixels that we point at
 	/// This is useful for optimizing
-	Q_INT32 nConseqHPixels() const { return ACTUAL_HLINEITERATOR::nConseqHPixels(); };
+	inline Q_INT32 nConseqHPixels() const { return ACTUAL_HLINEITERATOR::nConseqHPixels(); };
 	
 	/// Advances a number of pixels until it reaches the end of the line
-	KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
+	inline KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
-	KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
+	inline KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
-	bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };
+	inline bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };
 	
 	 // current x position
-	 Q_INT32 x() const { return ACTUAL_HLINEITERATOR::x(); };
+	 inline Q_INT32 x() const { return ACTUAL_HLINEITERATOR::x(); };
 	 
 	 // current y position
-	 Q_INT32 y() const { return ACTUAL_HLINEITERATOR::y(); };
+	 inline Q_INT32 y() const { return ACTUAL_HLINEITERATOR::y(); };
 
 };
 
@@ -122,25 +122,25 @@ public:
 
 public:
 	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	Q_UINT8 *rawData() const { return ACTUAL_VLINEITERATOR::rawData();};
+	inline Q_UINT8 *rawData() const { return ACTUAL_VLINEITERATOR::rawData();};
 
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	const Q_UINT8 * oldRawData() const { return ACTUAL_VLINEITERATOR::oldRawData();};
+	inline const Q_UINT8 * oldRawData() const { return ACTUAL_VLINEITERATOR::oldRawData();};
 
 	/// Advances one pixel until it reaches the end of the line
-	KisVLineIterator & operator++() { ACTUAL_VLINEITERATOR::operator++(); return *this; };
+	inline KisVLineIterator & operator++() { ACTUAL_VLINEITERATOR::operator++(); return *this; };
 	
 	/// Goes back one pixel until it reaches the beginning of the line
-	//KisVLineIterator & operator--() { ACTUAL_VLINEITERATOR::operator--(); return *this; };
+	//inline KisVLineIterator & operator--() { ACTUAL_VLINEITERATOR::operator--(); return *this; };
 	
 	/// returns true when iterators has reached the end
-	bool isDone() const { return ACTUAL_VLINEITERATOR::isDone(); };
+	inline bool isDone() const { return ACTUAL_VLINEITERATOR::isDone(); };
 	
 	// current x position
-	Q_INT32 x() const { return ACTUAL_VLINEITERATOR::x(); };
+	inline Q_INT32 x() const { return ACTUAL_VLINEITERATOR::x(); };
 	
 	// current y position
-	Q_INT32 y() const { return ACTUAL_VLINEITERATOR::y(); };
+	inline Q_INT32 y() const { return ACTUAL_VLINEITERATOR::y(); };
 
 };
 

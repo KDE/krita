@@ -198,8 +198,3 @@ KisTiledRectIterator & KisTiledRectIterator::operator -- ()
 	return *this;
 }
 */
-
-bool KisTiledRectIterator::isDone() const
-{
-	return m_beyondEnd;
-}

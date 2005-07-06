@@ -89,11 +89,11 @@ void KoPaletteManager::addWidget(QWidget * widget,
 				 int position,
 				 enumKoPaletteStyle style)
 {
-	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << " caption: " << widget->caption() << "\n";
 	
 	Q_ASSERT(widget);
 
 	if (!widget) return;
+	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << " caption: " << widget->caption() << "\n";
 	
 	QWidget * w = m_widgets->find(name);
 	if (w != 0 )

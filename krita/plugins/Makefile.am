@@ -30,4 +30,4 @@ SUBDIRS = cimg \
 	defaultdockers \
 	pixelizefilter \
 	cubismfilter \
-	historydocker
+	history_docker

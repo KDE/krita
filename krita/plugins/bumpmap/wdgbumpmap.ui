@@ -50,7 +50,7 @@
 combined to give one layer the illusion of &lt;i&gt;depth.&lt;/i&gt;. One layer 
 will contain your image, the other a grayscale or black-and-white
 representation of height: the bumpmap. If you do not specify a bumpmap
-layer, you current layer will be used as the bumpmap.</string>
+layer, the current layer will be used.</string>
                     </property>
                     <property name="textFormat">
                         <enum>RichText</enum>

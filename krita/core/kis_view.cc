@@ -141,7 +141,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_filterRegistry = new KisFilterRegistry();
 	Q_CHECK_PTR(m_filterRegistry);
 
-	m_paletteManager = new KoPaletteManager(this, "Krita palette manager");
+	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
 	Q_ASSERT(m_paletteManager);
 
@@ -238,7 +238,7 @@ KisView::~KisView()
 KoPaletteManager * KisView::paletteManager()
 {
 	if (!m_paletteManager) {
-		m_paletteManager = new KoPaletteManager(this, "Krita palette manager");
+		m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 		Q_CHECK_PTR(m_paletteManager);
 	}
 	return m_paletteManager;
@@ -267,7 +267,7 @@ void KisView::createLayerBox()
         connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
         connect(this, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
 
-	paletteManager()->addWidget(actionCollection(), m_layerBox, "layerbox", "layerpalette", 0);
+	paletteManager()->addWidget(m_layerBox, "layerbox", "layerpalette", 0);
 
 }
 
@@ -275,7 +275,7 @@ void KisView::createPaintopBox()
 {
 	m_paintopBox = new KisPaintopBox(this, "paintopbox");
 	m_paintopBox->setCaption(i18n("Brushes and stuff"));
-	paletteManager()->addWidget(actionCollection(), m_paintopBox, "paintopbox", krita::PAINTBOX, INT_MIN, PALETTE_TOOLBOX);
+	paletteManager()->addWidget(m_paintopBox, "paintopbox", krita::PAINTBOX, INT_MIN, PALETTE_TOOLBOX);
 }
 
 
@@ -634,7 +634,7 @@ void KisView::setCurrentTool(KisTool *tool)
 	if (!tool->optionWidget()) {
 		tool->createOptionWidget(0);
 	}
-	paletteManager()->addWidget(actionCollection(), tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
+	paletteManager()->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
 	if (oldTool)
 	{

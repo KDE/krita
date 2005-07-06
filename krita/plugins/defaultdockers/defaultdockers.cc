@@ -120,7 +120,7 @@ void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 {
 	m_birdEyeBox = new KisBirdEyeBox(view);
         m_birdEyeBox -> setCaption(i18n("Overview"));
-	m_paletteManager->addWidget(actionCollection(), m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
+	m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
 }
 
@@ -128,20 +128,20 @@ void KritaDefaultDockers::createChannelView(KisView * view)
 {
         m_channelView = new KisChannelView((KisDoc*)m_view->getCanvasSubject()->document(), view);
         m_channelView -> setCaption(i18n("Channels"));
-	m_paletteManager->addWidget(actionCollection(), m_channelView, "channelview", "layerpalette");
+	m_paletteManager->addWidget( m_channelView, "channelview", "layerpalette");
 }
 
 void KritaDefaultDockers::createAutoBrush(KisView * view)
 {
 	m_autobrush = new KisAutobrush(view, "autobrush", i18n("Autobrush"));
-	m_paletteManager->addWidget(actionCollection(), m_autobrush, "autobrush", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+	m_paletteManager->addWidget( m_autobrush, "autobrush", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
         connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
 }
 
 void KritaDefaultDockers::createTextBrush(KisView * view)
 {
 	m_textBrush = new KisTextBrush(view, "textbrush", i18n("Text Brush"));
-	m_paletteManager->addWidget(actionCollection(), m_textBrush, "textbrush", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+	m_paletteManager->addWidget( m_textBrush, "textbrush", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
 
 }
@@ -149,7 +149,7 @@ void KritaDefaultDockers::createTextBrush(KisView * view)
 void KritaDefaultDockers::createAutoGradient(KisView * view)
 {
 	m_autogradient = new KisAutogradient(view, "autogradient", i18n("Autogradient"));
-	m_paletteManager->addWidget(actionCollection(), m_autogradient, "autogradient", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+	m_paletteManager->addWidget( m_autogradient, "autogradient", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 	connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(gradientActivated(KisResource*)));
 
 }
@@ -158,7 +158,7 @@ void KritaDefaultDockers::createHSVWidget(KisView * view)
 {
 	m_hsvwidget = new KisHSVWidget(view, "hsv");
         m_hsvwidget -> setCaption(i18n("HSV"));
-	m_paletteManager->addWidget(actionCollection(), m_hsvwidget, "hsvwidget", krita::COLORBOX);
+	m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
         view->getCanvasSubject()->attach(m_hsvwidget);
 
 }
@@ -167,7 +167,7 @@ void KritaDefaultDockers::createRGBWidget(KisView * view)
 {
 	m_rgbwidget = new KisRGBWidget(view, "rgb");
         m_rgbwidget -> setCaption(i18n("RGB"));
-	m_paletteManager->addWidget(actionCollection(), m_rgbwidget, "rgbwidget", krita::COLORBOX);
+	m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
 	view->getCanvasSubject()->attach(m_rgbwidget);
 }
 
@@ -175,7 +175,7 @@ void KritaDefaultDockers::createGrayWidget(KisView * view)
 {
 	m_graywidget = new KisGrayWidget(view, "gray");
         m_graywidget -> setCaption(i18n("Gray"));
-	m_paletteManager->addWidget(actionCollection(), m_graywidget, "graywidget", krita::COLORBOX);
+	m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
         view->getCanvasSubject()->attach(m_graywidget);
 }
 
@@ -195,7 +195,7 @@ void KritaDefaultDockers::createPaletteWidget(KisView * view)
 	connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)),
 		view, SLOT(slotSetFGColor(const KisColor &)));
 
-	m_paletteManager->addWidget(actionCollection(), m_palettewidget, "palettewidget", krita::COLORBOX);
+	m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
 }
 
 void KritaDefaultDockers::createPatternWidget(KisView * view)
@@ -211,7 +211,7 @@ void KritaDefaultDockers::createPatternWidget(KisView * view)
 	rServer = KisFactory::rServerRegistry() -> get("PatternServer");
 	m_patternMediator -> connectServer(rServer);
 	
-	m_paletteManager->addWidget(actionCollection(), m_patternMediator->chooserWidget(), "patterns", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+	m_paletteManager->addWidget( m_patternMediator->chooserWidget(), "patterns", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
 	//KritaDefaultDockers::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
 
@@ -232,7 +232,7 @@ void KritaDefaultDockers::createBrushesWidget(KisView * view)
 	rServer = KisFactory::rServerRegistry() -> get("BrushServer");
 	m_brushMediator -> connectServer(rServer);
 
-	m_paletteManager->addWidget(actionCollection(), m_brushMediator->chooserWidget(), "brushes", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+	m_paletteManager->addWidget( m_brushMediator->chooserWidget(), "brushes", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
 	//KritaDefaultDockers::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
 }
@@ -250,7 +250,7 @@ void KritaDefaultDockers::createGradientsWidget(KisView * view)
 	rServer = KisFactory::rServerRegistry() -> get("GradientServer");
 	m_gradientMediator -> connectServer(rServer);
 
-        m_paletteManager->addWidget(actionCollection(), m_gradientMediator->chooserWidget(), "gradients", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+        m_paletteManager->addWidget( m_gradientMediator->chooserWidget(), "gradients", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
 
 	//KritaDefaultDockers::connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
 

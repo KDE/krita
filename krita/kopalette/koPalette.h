@@ -51,13 +51,16 @@ public:
 	virtual void plug(QWidget * widget, const QString & name, int position) = 0;
 	virtual void unplug(const QWidget * widget) = 0;
         virtual void showPage(QWidget *w) = 0;
-
+        virtual void togglePageHidden(QWidget *w) = 0;
+        virtual void makeVisible(bool v) = 0;
+        
 	void setCaption(const QString & caption);
 
 public slots:
 
 	void slotShade(bool toggle);
 	void slotPlaceChanged(QDockWindow::Place p);
+	
 
 
 protected:

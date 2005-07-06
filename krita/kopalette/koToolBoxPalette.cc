@@ -53,4 +53,32 @@ void KoToolBoxPalette::showPage(QWidget *w)
 	m_page->setCurrentItem( w );
 }
 
+void KoToolBoxPalette::makeVisible(bool v)
+{
+	if (v && m_page->count() > 0) {
+		show();
+	}
+	else {
+		hide();
+	}
+}
+
+void KoToolBoxPalette::togglePageHidden(QWidget *w)
+{
+	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+		int i = *m_hiddenPages.find(w);
+		m_page->insertItem(i, w, w->caption());
+		show();
+	}
+	else {
+		int i = m_page->indexOf(w);
+		m_page->removeItem(w);
+		m_hiddenPages[w] = i;
+		if (m_page->count() == 0) {
+			hide();
+		}
+	} 
+
+}
+
 #include "koToolBoxPalette.moc"

@@ -260,8 +260,8 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 		xofs2 = MOD (tmp, bm_w);
 
 		Q_INT32 x = 0;
-		while (x < sel_w || cancelRequested()) {
-
+		//while (x < sel_w || cancelRequested()) {
+		while (!srcIt.isDone() && !cancelRequested()) {
 			if (srcIt.isSelected()) {
 				// Calculate surface normal from bumpmap
 				if (config->tiled || row_in_bumpmap &&

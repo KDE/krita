@@ -100,8 +100,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
 		w -> setCaption(i18n("Paints"));
 
-		m_view -> paletteManager() -> addWidget(actionCollection(), w,
-			"watercolor docker", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
+		m_view -> paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
 		//i18n("Watercolor Paint Options")
 		
 		m_view -> getCanvasSubject() -> attach(w);

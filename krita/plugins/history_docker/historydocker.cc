@@ -53,7 +53,7 @@ KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const 
 	{
 		return;
 	} else {
-		KisView view = (KisView*) parent;
+		KisView * view = (KisView*) parent;
 		// Create history docker
 		// Add the docker to the docker manager
 		// Connect the undo system to the docker

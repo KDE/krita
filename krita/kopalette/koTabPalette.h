@@ -47,12 +47,14 @@ public:
 	virtual void plug(QWidget * widget, const QString & name, int position = -1);
 	virtual void unplug(const QWidget * widget);
         void showPage(QWidget *w);
-        
+        void makeVisible(bool v);
+        virtual void togglePageHidden(QWidget *w);
 
 private:
 
 	KTabWidget * m_page;
 
+	QMap<QWidget*, int> m_hiddenPages;
 };
 
 #endif //_KO_TAB_PALETTE_

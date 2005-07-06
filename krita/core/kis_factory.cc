@@ -110,8 +110,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 	    KService::Ptr service = *iter;
 	    int errCode = 0;
 	    KParts::Plugin* plugin =
-		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
-		     ( service, this, 0, QStringList(), &errCode);
+		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
 	    if ( plugin )
 		    kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
 	}

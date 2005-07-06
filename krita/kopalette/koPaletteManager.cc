@@ -22,7 +22,11 @@
 #include <qobject.h>
 
 #include <kapplication.h>
+#include <kpopupmenu.h>
+#include <kaction.h>
+#include <kactionclasses.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koView.h>
 #include <koMainWindow.h>
@@ -34,13 +38,13 @@
 #include <koPaletteManager.h>
 
 
-KoPaletteManager::KoPaletteManager(KoView * view, const char * name)
+KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const char * name)
 	: QObject(view, name)
 {
 	kdDebug() << "PaletteManager started: " << name << "\n";
 	
 	m_view = view;
-
+	m_actionCollection = ac;
 	m_actions = new QPtrList<KAction>();
 
 	m_widgets = new QDict<QWidget>();
@@ -55,7 +59,19 @@ KoPaletteManager::KoPaletteManager(KoView * view, const char * name)
 	
 	m_mapper = new QSignalMapper(this);
 	connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(slotTogglePalette(int)));
+	m_viewActionMenu = new KActionMenu(i18n("Palettes"), m_actionCollection, "view_palette_action_menu");
+
+	KToggleAction * m_toggleShowHidePalettes = new KToggleAction(i18n("Hide all Palette Windows"),
+									"f9", this,
+									SLOT(slotToggleAllPalettes()),
+									this, "toggleAllPaletteWindows");
+	m_allPalettesShown = true;
+	m_toggleShowHidePalettes->setCheckedState(i18n("Show all Palette Windows"));
+	m_viewActionMenu->insert(m_toggleShowHidePalettes);
+	m_viewActionMenu->popupMenu()->insertSeparator();
+	
 }
+
 
 KoPaletteManager::~KoPaletteManager()
 {
@@ -67,14 +83,13 @@ KoPaletteManager::~KoPaletteManager()
 	delete m_currentMapping;
 }
 
-void KoPaletteManager::addWidget(KActionCollection * ac,
-				 QWidget * widget,
+void KoPaletteManager::addWidget(QWidget * widget,
 				 const QString & name, 
 				 const QString & paletteName,
 				 int position,
 				 enumKoPaletteStyle style)
 {
-	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << "\n";
+	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << " caption: " << widget->caption() << "\n";
 	
 	Q_ASSERT(widget);
 
@@ -97,8 +112,12 @@ void KoPaletteManager::addWidget(KActionCollection * ac,
 	}
 
 	m_widgetNames->append(name);
-	
-	m_actions->append(new KAction(widget->caption(), 0, m_mapper, SLOT(map()), ac));
+
+	KToggleAction * a = new KToggleAction(i18n("Hide") + " " + widget->caption(), 0, m_mapper, SLOT(map()), m_actionCollection);
+	a->setCheckedState(i18n("Show") + " " + widget->caption());
+	m_mapper->setMapping(a, m_actions->count()); // This is the position at which we'll insert the action
+	m_actions->append(a);
+	m_viewActionMenu->insert(a);
 	
 	palette->plug(widget, name, position);
 	palette->showPage(widget);
@@ -179,8 +198,10 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
 			palette = new KoTabPalette(m_view, name.latin1());
 			break;
 		case (PALETTE_TOOLBOX):
+		default:
 			palette = new KoToolBoxPalette(m_view, name.latin1());
 			break;
+		
 	};
 
 	if(!palette) return 0;
@@ -211,7 +232,6 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
 
 void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt::Dock location)
 {
-	kdDebug() << "Adding palette " << name << "\n";
 	Q_ASSERT(palette);
 	Q_ASSERT(!name.isNull());
 	
@@ -224,11 +244,17 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
 	// Toggle the right palette
 	QString name = *m_widgetNames->at(paletteIndex);
 	QWidget * w = m_widgets->find(name);
-	if (w->isHidden()) {
-		w->show();
-	}
-	else {
-		w->hide();
+	QString pname = *m_currentMapping->find(name);
+	KoPalette * p = m_palettes->find(pname);
+	p->togglePageHidden( w );
+}
+
+void KoPaletteManager::slotToggleAllPalettes()
+{
+	m_allPalettesShown= !m_allPalettesShown;
+	QDictIterator<KoPalette> it(*m_palettes);
+	for (; it.current(); ++it) {
+		it.current()->makeVisible(m_allPalettesShown);
 	}
 }
 

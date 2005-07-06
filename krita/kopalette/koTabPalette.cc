@@ -41,7 +41,7 @@ KoTabPalette::~KoTabPalette()
 {
 }
 
-void KoTabPalette::plug(QWidget * w, const QString & name, int position)
+void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
 {
 	w -> setFont(m_font);
         m_page -> insertTab(w, w -> caption(), position);
@@ -60,6 +60,34 @@ void KoTabPalette::unplug(const QWidget * w)
 void KoTabPalette::showPage(QWidget *w)
 {
 	m_page->showPage(w);
+}
+
+void KoTabPalette::makeVisible(bool v)
+{
+    if (v && m_page->count() > 0)
+        show();
+    else
+        hide();
+
+}
+
+
+
+void KoTabPalette::togglePageHidden(QWidget *w)
+{
+	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+		int i = *m_hiddenPages.find(w);
+		m_page->insertTab(w, w->caption(), i);
+		show();
+	}
+	else {
+		int i = m_page->indexOf(w);
+		m_page->removePage(w);
+		m_hiddenPages[w] = i;
+		if (m_page->count() == 0) {
+			hide();
+		}
+	} 
 }
 
 #include "koTabPalette.moc"

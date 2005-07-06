@@ -28,11 +28,14 @@
 #include <qsignalmapper.h>
 #include <qstringlist.h>
 
-#include <kaction.h>
 
 #include <koView.h>
 
 class KoPalette;
+class KActionMenu;
+class KAction;
+class KActionCollection;
+class KToggleAction;
 
 enum enumKoPaletteStyle {
 #if 0   // XXX
@@ -57,7 +60,7 @@ class KoPaletteManager : public QObject {
 
 public:
 
-	KoPaletteManager(KoView * view, const char * name);
+	KoPaletteManager(KoView * view, KActionCollection * ac, const char * name);
 	virtual ~KoPaletteManager();
 
 public:
@@ -73,7 +76,7 @@ public:
 	 * If the widget occurs in the saved configuration, it is not added to the
 	 * specified palette, but in the place where it was left.
 	 */
-	virtual void addWidget(KActionCollection * ac, QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
+	virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
 
 	/**
 	 * Get a certain widget by name
@@ -126,11 +129,16 @@ public:
 public slots:
 
 	void slotTogglePalette(int paletteIndex);
+	void slotToggleAllPalettes();
 
 private:
 
-	KoView * m_view;
-
+	KoView                  * m_view;
+	KActionCollection       * m_actionCollection;
+	KActionMenu             * m_viewActionMenu;
+	KToggleAction           * m_toggleShowHidePalettes;
+	bool                    m_allPalettesShown;
+	
 	QStringList             * m_widgetNames;
 	QPtrList<KAction>       * m_actions;
 	QDict<QWidget>          * m_widgets;
@@ -141,7 +149,6 @@ private:
 	QMap<QString, QString>  * m_defaultMapping; // widget to docker
 	QMap<QString, QString>  * m_currentMapping; // widget to docker
 	QMap<QString, QString>  * m_savedMapping; // widget to docker
-
 };
 
 #endif

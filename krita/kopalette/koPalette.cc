@@ -135,7 +135,7 @@ void KoPalette::setMainWidget(QWidget * widget)
 }
 
 
-void KoPalette::setCaption(const QString & caption)
+void KoPalette::setCaption(const QString & /*caption*/)
 {
 #if 0
 	QDockWindow::setCaption(caption);

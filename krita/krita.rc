@@ -24,12 +24,9 @@
   <ActionList name="view_split"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
-  <Separator/>
-  	<Menu name="palettes"><text>&amp;Tool palettes</text>
-		<Action name="layerbox"/>
-		<Action name="tooloptions"/>
-	</Menu>
   <Action name="view_ruler"/>
+  <Separator/>
+  <Action name="view_palette_action_menu"/>
   <Separator/>
   <Action name="refresh_canvas"/>
  </Menu>

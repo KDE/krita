@@ -898,24 +898,23 @@ void KisPaintDevice::clearSelection()
 	QRect r = m_selection -> selectedRect();
 	r = r.normalize();
 
+	for (Q_INT32 y = 0; y < r.height(); y++) {
+		KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
+		KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
-	KisRectIterator devIt = createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
- 	KisRectIterator selectionIt = m_selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+		while (!devIt.isDone()) {
+			KisPixel p = toPixel(devIt.rawData());
+			KisPixel s = m_selection -> toPixel(selectionIt.rawData());
+			Q_UINT16 p_alpha, s_alpha;
+			p_alpha = p.alpha();
+			s_alpha = MAX_SELECTED - s.alpha();
 
-	while (!devIt.isDone()) {
- 		KisPixel p = toPixel(devIt.rawData());
- 		KisPixel s = m_selection -> toPixel(selectionIt.rawData());
- 		Q_UINT16 p_alpha, s_alpha;
- 		p_alpha = p.alpha();
- 		s_alpha = MAX_SELECTED - s.alpha();
+			p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
 
-		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
-
-		++devIt;
- 		++selectionIt;
+			++devIt;
+			++selectionIt;
+		}
 	}
-
-
 }
 
 void KisPaintDevice::applySelectionMask(KisSelectionSP mask)

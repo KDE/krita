@@ -242,81 +242,84 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
 
 void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
 {
-	KisRectIteratorPixel srcIt = src->createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
-	KisRectIteratorPixel dstIt = dst->createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+	for (Q_INT32 y = 0; y < r.height(); y++) {
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
 
-	Q_UINT16 w;
-	while (!srcIt.isDone()) {
-		// Two wet pixels in one KisColorSpaceWet pixels.
+		Q_UINT16 w;
+		while (!srcIt.isDone()) {
+			// Two wet pixels in one KisColorSpaceWet pixels.
 
-		WetPack pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
-		WetPix* p = &(pack.paint);
+			WetPack pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
+			WetPix* p = &(pack.paint);
 
-		w = p -> w; // no -1 here because we work on unsigned ints!
+			w = p -> w; // no -1 here because we work on unsigned ints!
 
-		if (w > 0)
-			p -> w = w - 1;
-		else
-			p -> w = 0;
+			if (w > 0)
+				p -> w = w - 1;
+			else
+				p -> w = 0;
 
-		*(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
+			*(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
 
-		++dstIt;
-		++srcIt;
+			++dstIt;
+			++srcIt;
+		}
 	}
 }
 
 void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
 {
 	kdDebug(DBG_AREA_CMS) << "adsorbing" << endl;
-	KisRectIteratorPixel srcIt = src->createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
-	KisRectIteratorPixel dstIt = dst->createRectIterator(r.x(), r.y(), r.width(), r.height(), true);
+	for (Q_INT32 y = 0; y < r.height(); y++) {
+		KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
+		KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
 
-	double ads;
-
-	WetPixDbl wet_top;
-	WetPixDbl wet_bot;
-
-	WetPack pack;
-	Q_UINT16 w;
-
-	while (!srcIt.isDone()) {
-		// Two wet pixels in one KisColorSpaceWet pixels.
-		pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
-		WetPix* paint = &(pack.paint);
-		WetPix* adsorb = &(pack.adsorb);
-
-		/* do adsorption */
-		w = paint -> w;
-
-		if (w == 0) {
+		double ads;
+	
+		WetPixDbl wet_top;
+		WetPixDbl wet_bot;
+	
+		WetPack pack;
+		Q_UINT16 w;
+	
+		while (!srcIt.isDone()) {
+			// Two wet pixels in one KisColorSpaceWet pixels.
+			pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
+			WetPix* paint = &(pack.paint);
+			WetPix* adsorb = &(pack.adsorb);
+	
+			/* do adsorption */
+			w = paint -> w;
+	
+			if (w == 0) {
+				++srcIt;
+				++dstIt;
+				continue;
+			}
+	
+			ads = 0.5 / QMAX(w, 1);
+	
+			wetPixToDouble(&wet_top, paint);
+			wetPixToDouble(&wet_bot, adsorb);
+	
+			mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
+	
+			wetPixFromDouble(adsorb, &wet_bot);
+	
+			paint -> rd *= (1 - ads);
+			paint -> rw *= (1 - ads);
+			paint -> gd *= (1 - ads);
+			paint -> gw *= (1 - ads);
+			paint -> bd *= (1 - ads);
+			paint -> bw *= (1 - ads);
+	
+			*(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
+	
 			++srcIt;
 			++dstIt;
-			continue;
 		}
-
-		ads = 0.5 / QMAX(w, 1);
-
-		wetPixToDouble(&wet_top, paint);
-		wetPixToDouble(&wet_bot, adsorb);
-
-		mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
-
-		wetPixFromDouble(adsorb, &wet_bot);
-
-		paint -> rd *= (1 - ads);
-		paint -> rw *= (1 - ads);
-		paint -> gd *= (1 - ads);
-		paint -> gw *= (1 - ads);
-		paint -> bd *= (1 - ads);
-		paint -> bw *= (1 - ads);
-
-		*(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
-
-		++srcIt;
-		++dstIt;
 	}
-
 	kdDebug(DBG_AREA_CMS) << "adsorbing done" << endl;
 }
 

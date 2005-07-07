@@ -344,20 +344,22 @@ void KisSelectionManager::copy()
 
 	// Apply selection mask.
 
-	KisRectIterator layerIt = clip -> createRectIterator(0, 0, r.width(), r.height(), true);
- 	KisRectIterator selectionIt = selection -> createRectIterator(r.x(), r.y(), r.width(), r.height(), false);
+	for (Q_INT32 y = 0; y < r.height(); y++) {
+		KisHLineIterator layerIt = clip -> createHLineIterator(0, y, r.width(), true);
+		KisHLineIterator selectionIt = selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
-	while (!layerIt.isDone()) {
- 		KisPixel p = clip -> toPixel(layerIt.rawData());
- 		KisPixel s = selection -> toPixel(selectionIt.rawData());
- 		Q_UINT16 p_alpha, s_alpha;
- 		p_alpha = p.alpha();
- 		s_alpha = s.alpha();
-		
-		p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
-		
-		++layerIt;
- 		++selectionIt;
+		while (!layerIt.isDone()) {
+			KisPixel p = clip -> toPixel(layerIt.rawData());
+			KisPixel s = selection -> toPixel(selectionIt.rawData());
+			Q_UINT16 p_alpha, s_alpha;
+			p_alpha = p.alpha();
+			s_alpha = s.alpha();
+
+			p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+
+			++layerIt;
+			++selectionIt;
+		}
 	}
 
 	kdDebug(DBG_AREA_CORE) << "Selection copied: "

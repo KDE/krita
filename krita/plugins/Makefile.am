@@ -29,5 +29,4 @@ SUBDIRS = cimg \
 	$(kjsembed_plugin) \
 	defaultdockers \
 	pixelizefilter \
-	cubismfilter \
-	history_docker
+	cubismfilter

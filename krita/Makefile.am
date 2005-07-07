@@ -50,3 +50,5 @@ messages: rc.cpp
 	rm -f i18ndata
 
 kde_services_DATA = kritapart.desktop
+
+include $(top_srcdir)/admin/Doxyfile.am

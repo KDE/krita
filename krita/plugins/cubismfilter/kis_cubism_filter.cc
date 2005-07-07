@@ -52,6 +52,8 @@
 #include "kis_cubism_filter.h"
 
 #define RANDOMNESS       5
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+#define SQR(x) ((x) * (x))
 
 KisCubismFilter::KisCubismFilter(KisView * view) : KisFilter(id(), view)
 {
@@ -99,6 +101,51 @@ Q_INT32 KisCubismFilter::randomIntRange(Q_INT32 lowestNumber, Q_INT32 highestNum
 
         Q_INT32 range = highestNumber - lowestNumber + 1;
         return lowestNumber + static_cast<Q_INT32>(range *rand()/(RAND_MAX+1.0));
+}
+
+double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y)
+{       
+        double r;
+        
+        if ( oneOverDist==0 )
+                return 1.0;
+        else
+        {
+                r = (vec[0] * x + vec[1] * y) * oneOverDist;
+                if (r < 0.2)
+                        r = 0.2;
+                else if (r > 1.0)
+                        r = 1.0;
+        }
+        return r;
+}
+
+void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max)
+{
+        if (y1 > y2)
+        {
+                Q_INT32 tmp = y2; y2 = y1; y1 = tmp;
+                tmp = x2; x2 = x1; x1 = tmp;
+        }
+        Q_INT32 ydiff = (y2 - y1);
+        
+        if (ydiff)
+        {
+                double xinc = static_cast<double>(x2 - x1) / static_cast<double>(ydiff);
+                double xstart = x1 + 0.5 * xinc;
+                for (Q_INT32 y = y1 ; y < y2; y++)
+                {
+                        if (xstart < min[y - offset])
+                        {        
+                                min[y-offset] = xstart;
+                        }
+                        if (xstart > max[y - offset])
+                        {
+                                max[y-offset] = xstart;
+                        }
+                        xstart += xinc;
+                }
+        }
 }
 
 QWidget* KisCubismFilter::createConfigurationWidget(QWidget* parent)

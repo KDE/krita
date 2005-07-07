@@ -51,6 +51,8 @@ public:
 private:
 	void randomize_indices (Q_INT32 count, Q_INT32* indices);
         Q_INT32 randomIntRange(Q_INT32 lowestNumber, Q_INT32 highestNumber);
+        double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y);
+        void convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
 };
 
 #endif

@@ -77,7 +77,10 @@ void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 			w = &(pack->adsorb);
 			w -> h += ((lh - w -> h) * ibh + 128) >> 8;
 			lh = w -> h;
-			// XXX: I don't think we need the second height value here
+			// XXX to make it easier for us later on, we store the height data in paint
+			// as well!
+			w = &(pack->paint);
+			w -> h = lh;
 			++i;
 		}
 	}

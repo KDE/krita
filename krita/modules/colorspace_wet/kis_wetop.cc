@@ -102,7 +102,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 	y1 = ceil(y + r_fringe);
 
 	for (yp = y0; yp < y1; yp++) {
-		yy = yp - (double)y; // XXX why + 0.5?
+		yy = (yp + 0.5 - y);
 		yy *= yy;
 		for (xp = x0; xp < x1; xp++) {
 			// XXX this only does something with .paint, and not with adsorb I assume?
@@ -111,7 +111,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 			WetPix currentData = currentPack.adsorb;
 			currentPix = currentPack.paint;
 
-			xx = xp - (double)x; // ditto?
+			xx = (xp + 0.5 - x);
 			xx *= xx;
 			rr = yy + xx;
 			if (rr < r * r) {
@@ -130,25 +130,19 @@ void KisWetOp::paintAt(const KisPoint &pos,
 				double rnd = rand() * (1.0 / RAND_MAX);
 
 				v = currentPix.rd;
-				currentPix.rd = CLAMP(floor(v + (paint.rd * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
 				v = currentPix.rw;
-				currentPix.rw = CLAMP(floor(v + (paint.rw * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
 				v = currentPix.gd;
-				currentPix.gd = CLAMP(floor(v + (paint.gd * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
 				v = currentPix.gw;
-				currentPix.gw = CLAMP(floor(v + (paint.gw * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
 				v = currentPix.bd;
-				currentPix.bd = CLAMP(floor(v + (paint.bd * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
 				v = currentPix.bw;
-				currentPix.bw = CLAMP(floor(v + (paint.bw * strength - v) * contact + rnd),
-									  0, 0xffff);
+				currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
 				v = currentPix.w;
-				currentPix.w = CLAMP(floor(v + (paint.w - v) * contact + rnd), 0, 0xffff);
+				currentPix.w = floor(v + (paint.w - v) * contact + rnd);
 
 				currentPack.paint = currentPix;
 				*(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;

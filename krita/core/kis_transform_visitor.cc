@@ -322,6 +322,5 @@ printf("time taken second pass %d\n",time.elapsed());
 	//progress info
         emit notifyProgressDone(this);
 
-	delete filterStrategy;
         return;
 }

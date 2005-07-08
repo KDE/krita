@@ -53,6 +53,18 @@ void KoToolBoxPalette::showPage(QWidget *w)
 	m_page->setCurrentItem( w );
 }
 
+
+int KoToolBoxPalette::indexOf(QWidget *w)
+{
+	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+		return m_page->indexOf(w);
+	}
+	else {
+		return m_page->indexOf(w);
+	}
+}
+
+
 void KoToolBoxPalette::makeVisible(bool v)
 {
 	if (v && m_page->count() > 0) {
@@ -61,6 +73,11 @@ void KoToolBoxPalette::makeVisible(bool v)
 	else {
 		hide();
 	}
+}
+
+bool KoToolBoxPalette::isHidden(QWidget * w)
+{
+	return (m_hiddenPages.find(w) != m_hiddenPages.end());
 }
 
 void KoToolBoxPalette::togglePageHidden(QWidget *w)

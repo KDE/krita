@@ -128,7 +128,7 @@ void KisToolFreehand::initPaint(KisEvent *)
 				m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
 
 			// XXX ugly! hacky!
-			m_target = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(currentImage(), "temp", OPACITY_OPAQUE);
+			m_target = m_currentImage->layerAdd("temp", OPACITY_OPAQUE);
 
 			m_target -> setCompositeOp(m_compositeOp);
 
@@ -192,8 +192,7 @@ void KisToolFreehand::endPaint()
 					       m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
 				adapter -> addCommand(painter.endTransaction());
-				dynamic_cast<KisDoc*>(m_subject->document())->layerRemove(
-					currentImage(), dynamic_cast<KisLayer*>(m_target.data()));
+				m_currentImage->layerRemove(dynamic_cast<KisLayer*>(m_target.data()));
 				currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
 				adapter -> endMacro();
 			} else {

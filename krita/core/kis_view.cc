@@ -61,6 +61,7 @@
 #include <ksharedptr.h>
 
 // KOffice
+#include <koPartSelectAction.h>
 #include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koView.h>
@@ -217,8 +218,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 #endif
 	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
-	connect(m_doc, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-	connect(m_doc, SIGNAL(currentImageUpdated(KisImageSP)), SLOT(currentImageUpdated(KisImageSP)));
 
 	resetMonitorProfile();
 	
@@ -457,6 +456,11 @@ void KisView::setupActions()
 
 	// layer actions
 	m_layerAdd = new KAction(i18n("&Add Layer..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+	
+	m_actionPartLayer = new KoPartSelectAction( i18n( "&Object layer" ), "frame_query",
+                                                    this, SLOT( addPartLayer() ),
+                                                    actionCollection(), "insert_part_layer" );
+	
 	m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
 	m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
 	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
@@ -1043,7 +1047,7 @@ void KisView::next_layer()
 	layer = img -> activeLayer();
 
 	if (layer) {
-		m_doc -> layerNext(img, layer);
+		img->layerNext(layer);
 		resizeEvent(0);
 		updateCanvas();
 	}
@@ -1060,7 +1064,7 @@ void KisView::previous_layer()
 	layer = img -> activeLayer();
 
 	if (layer) {
-		m_doc -> layerPrev(img, layer);
+		img->layerPrev(layer);
 		resizeEvent(0);
 		updateCanvas();
 	}
@@ -1130,7 +1134,7 @@ void KisView::saveLayerAsImage()
 
 	KisImageSP dst = new KisImage(&d, r.width(), r.height(), l->colorStrategy(), l->name());
 	d.setCurrentImage( dst );
-	KisLayerSP layer = d.layerAdd( dst, l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
+	KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
 	if (!layer) return;
 
 	KisPainter p(layer);
@@ -1165,7 +1169,6 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 		d.import(url);
 		img = d.currentImage();
 
-
 		if (currentImg()) {
 			vKisLayerSP v = img -> layers();
 			KisImageSP current = currentImg();
@@ -1178,7 +1181,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 
 				layer -> setImage(current);
 				layer -> setName(current -> nextLayerName());
-				m_doc -> layerAdd(current, layer, 0);
+				current->layerAdd(layer, 0);
 				emit currentLayerChanged(img -> index(layer));
 			}
 			resizeEvent(0);
@@ -1995,7 +1998,7 @@ void KisView::layerProperties()
 				    || layer -> opacity() != dlg.getOpacity()
 				    || layer -> compositeOp() != dlg.getCompositeOp())
 				{
-					m_doc -> setLayerProperties(img, layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+					img->setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
 				}
 
 				if (pt.x() != layer->getX() || pt.y() != layer->getY())
@@ -2017,11 +2020,7 @@ void KisView::layerAdd()
 		NewLayerDialog dlg(img->colorStrategy()->id(), img->nextLayerName(), this);
 
 		if (dlg.exec() == QDialog::Accepted) {
-			KisLayerSP layer = m_doc -> layerAdd(img,
-							     dlg.layerName(),
-							     dlg.compositeOp(),
-							     dlg.opacity(),
-							     KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyID()));
+			KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyID()));
 			if (layer) {
 				emit currentLayerChanged(img -> index(layer));
 				resizeEvent(0);
@@ -2031,6 +2030,14 @@ void KisView::layerAdd()
 			}
 		}
 	}
+}
+
+void KisView::addPartLayer()
+{
+	KisImageSP img = currentImg();
+	if (!img) return;
+	
+	//KisPartLayerSP l = new KisPartLayer(img, m_actionPartLayer->documentEntry());
 }
 
 void KisView::layerRemove()
@@ -2043,7 +2050,7 @@ void KisView::layerRemove()
 		if (layer) {
 			Q_INT32 n = img -> index(layer);
 
-			m_doc -> layerRemove(img, layer);
+			img->layerRemove(layer);
 			emit currentLayerChanged(n - 1);
 			resizeEvent(0);
 			updateCanvas();
@@ -2067,7 +2074,7 @@ void KisView::layerDuplicate()
 	Q_INT32 index = img -> index(active);
 	KisLayerSP dup = new KisLayer(*active);
 	dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
-	KisLayerSP layer = m_doc -> layerAdd(img, dup, index);
+	KisLayerSP layer = img->layerAdd(dup, index);
 
 	if (layer) {
 		emit currentLayerChanged(img -> index(layer));
@@ -2306,7 +2313,7 @@ void KisView::setupCanvas()
 	QObject::connect(m_canvas, SIGNAL(gotDropEvent(QDropEvent*)), this, SLOT(canvasGotDropEvent(QDropEvent*)));
 }
 
-void KisView::currentImageUpdated(KisImageSP img)
+void KisView::imageUpdated(KisImageSP img)
 {
 	if (img == currentImg())
 		canvasRefresh();
@@ -2317,6 +2324,9 @@ void KisView::connectCurrentImg() const
 	if (m_current) {
 		connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+		
+		connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+		connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));
 
 // 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(profileChanged(KisProfileSP)), SLOT(profileChanged(KisProfileSP)));

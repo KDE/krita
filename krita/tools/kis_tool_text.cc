@@ -98,8 +98,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 
 		Q_INT32 height = boundingRect.height();
 		Q_INT32 width = boundingRect.width();
-		KisLayerSP layer = dynamic_cast<KisDoc*>(m_subject->document())->layerAdd(
-			img, '"' + text + '"', OPACITY_OPAQUE);
+		KisLayerSP layer = img->layerAdd('"' + text + '"', OPACITY_OPAQUE);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				QRgb pixel = image.pixel(x, y);

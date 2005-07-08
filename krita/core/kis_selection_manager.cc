@@ -406,7 +406,7 @@ KisLayerSP KisSelectionManager::paste()
 		}
 
 
-		m_doc -> layerAdd(img, layer, img -> index(layer));
+		img->layerAdd(layer, img -> index(layer));
 		layer -> move(0,0);
 		img -> notify();
 

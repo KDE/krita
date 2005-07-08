@@ -77,25 +77,6 @@ private:
 
 
 public:
-	KisLayerSP layerAdd(KisImageSP img, const QString& name, QUANTUM devOpacity);
-	KisLayerSP layerAdd(KisImageSP img,
-			    const QString& name,
-			    const KisCompositeOp& compositeOp,
-			    QUANTUM opacity,
-			    KisStrategyColorSpaceSP colorstrategy);
-
-	KisLayerSP layerAdd(KisImageSP img, KisLayerSP layer, Q_INT32 position);
-	void layerRemove(KisImageSP img, KisLayerSP layer);
-	void layerRaise(KisImageSP img, KisLayerSP layer);
-	void layerLower(KisImageSP img, KisLayerSP layer);
-	void layerNext(KisImageSP img, KisLayerSP layer);
-	void layerPrev(KisImageSP img, KisLayerSP layer);
-	// Set the layerproperties
-	void setLayerProperties(KisImageSP img,
-			     KisLayerSP layer,
-			     QUANTUM opacity,
-			     const KisCompositeOp& compositeOp,
-			     const QString& name);
 
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);
@@ -104,9 +85,7 @@ public:
 
 	/**
 	 * Create a new image that has this document as a parent and
-	 * add it to the current document.
-	 *
-	 * The image has one layer as big as the image.
+	 * replace the current image with this image.
 	 */
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy);
 
@@ -131,8 +110,7 @@ signals:
 	void docUpdated();
 	void docUpdated(const QRect& rect);
 	void imageListUpdated();
-	void layersUpdated(KisImageSP img);
-	void currentImageUpdated(KisImageSP img);
+	
 
 protected:
 	// Overide KoDocument

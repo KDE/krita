@@ -132,10 +132,26 @@ public:
 	// Get the active painting device
 	KisPaintDeviceSP activeDevice();
 
+	KisLayerSP layerAdd(const QString& name, QUANTUM devOpacity);
+	KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisStrategyColorSpaceSP colorstrategy);
+	KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
+	
+	void layerRemove(KisLayerSP layer);
+#if 0	
+	void layerRaise(KisLayerSP layer);
+	void layerLower(KisLayerSP layer);
+#endif		
+	void layerNext(KisLayerSP layer);
+	void layerPrev(KisLayerSP layer);
+
+	void setLayerProperties(KisLayerSP layer, QUANTUM opacity, const KisCompositeOp& compositeOp, const QString& name);
+
 	KisLayerSP activeLayer();
 	const KisLayerSP activeLayer() const;
+	
 	KisLayerSP activate(KisLayerSP layer);
 	KisLayerSP activateLayer(Q_INT32 n);
+	
 	KisLayerSP layer(Q_INT32 n);
 	KisLayerSP findLayer(const QString & name);
 	
@@ -143,13 +159,16 @@ public:
 
 	KisLayerSP layer(const QString& name);
 	KisLayerSP layer(Q_UINT32 npos);
+
 	bool add(KisLayerSP layer, Q_INT32 position);
+	
 	void rm(KisLayerSP layer);
 
 	bool raise(KisLayerSP layer);
 	bool lower(KisLayerSP layer);
 	bool top(KisLayerSP layer);
 	bool bottom(KisLayerSP layer);
+
 	bool setLayerPosition(KisLayerSP layer, Q_INT32 position);
 
 	Q_INT32 nlayers() const;
@@ -207,8 +226,11 @@ signals:
 	void selectionChanged(KisImageSP image);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
+	void layersUpdated(KisImageSP image);
+	void imageUpdated(KisImageSP img);
 	void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
 	void profileChanged(KisProfileSP profile);
+	
 
 public slots:
 	void slotSelectionChanged();

@@ -20,6 +20,7 @@
 #include <qdockwindow.h>
 
 #include <ktabwidget.h>
+#include <kdebug.h>
 
 #include <koView.h>
 
@@ -44,11 +45,12 @@ KoTabPalette::~KoTabPalette()
 void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
 {
 	w -> setFont(m_font);
-        m_page -> insertTab(w, w -> caption(), position);
+        
 	if (w -> layout() != 0) {
  		w -> layout() -> setSpacing(0);
  		w -> layout() -> setMargin(0);
 	}
+	m_page -> insertTab(w, w -> caption(), position);
 
 }
 
@@ -71,6 +73,24 @@ void KoTabPalette::makeVisible(bool v)
 
 }
 
+
+int KoTabPalette::indexOf(QWidget *w)
+{
+	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+		int i = m_page->indexOf(w);
+		kdDebug() << "Hidden widget: " << w->name() << ", position: " << 0 - i << "\n";
+	
+		return -i;
+	}
+	else {
+		return m_page->indexOf(w);
+	}
+}
+
+bool KoTabPalette::isHidden(QWidget * w)
+{
+	return (m_hiddenPages.find(w) != m_hiddenPages.end());
+}
 
 
 void KoTabPalette::togglePageHidden(QWidget *w)

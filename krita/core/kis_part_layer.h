@@ -15,42 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#ifndef _KIS_PART_LAYER_
+#define _KIS_PART_LAYER_
 
-#ifndef _KO_TOOLBOX_PALETTE_
-#define _KO_TOOLBOX_PALETTE_
-
-#include <qdockwindow.h>
-#include <qtoolbox.h>
-
-#include <koPaletteManager.h>
+#include "kis_layer.h"
 
 /**
- * A palette based on a toolbox widget. This does not support drag and drop
- * configuration of palette widgets
+ * A PartLayer is a layer that contains a KOffice Part like a KWord document
+ * or a KSpread spreadsheet. Or whatever. A Karbon drawing.
+ *
+ * The part is rendered into an RBGA8 paint device so we can composite it with
+ * the other layers.
  */
-class KoToolBoxPalette : public KoPalette {
 
-Q_OBJECT
+class KisPartLayer : public KisLayer {
 
-public:
-
-	KoToolBoxPalette(KoView * parent, const char * name);
-	~KoToolBoxPalette();
 
 public:
 
-	virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
-	virtual void unplug(const QWidget * widget);
-        void showPage(QWidget *w);
-        void makeVisible(bool v);
-	int indexOf(QWidget *w);
-	bool isHidden(QWidget *w);
-	void togglePageHidden(QWidget *w);
-private:
-
-	QToolBox * m_page;
+	KisPartLayer();
+	virtual ~KisPartLayer();
 	
-	QMap<QWidget*, int> m_hiddenPages;
+
 };
 
-#endif //_KO_TOOLBOX_PALETTE_
+#endif // _KIS_PART_LAYER_

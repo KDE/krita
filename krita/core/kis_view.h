@@ -55,6 +55,7 @@ class KAction;
 class KPrinter;
 class KToggleAction;
 
+class KoPartSelectAction;
 class KoIconItem;
 class KoTabBar;
 
@@ -318,6 +319,7 @@ public slots:
 	void layerProperties();
 
 	void layerAdd();
+	void addPartLayer();
 	void layerRemove();
 	void layerDuplicate();
 	void layerAddMask(int n);
@@ -333,7 +335,7 @@ public slots:
 	void mergeLinkedLayers();
 	void saveLayerAsImage();
 	
-	void currentImageUpdated(KisImageSP img);
+	void imageUpdated(KisImageSP img);
 	
 	void brushActivated(KisResource *brush);
 	void patternActivated(KisResource *pattern);
@@ -398,7 +400,8 @@ private:
 	KAction *m_imgRename;
 	KAction *m_imgResizeToLayer;
 	KAction *m_imgScan;
-
+	
+	KoPartSelectAction * m_actionPartLayer;
 	KAction *m_layerAdd;
 	KAction *m_layerBottom;
 	KAction *m_layerDup;

@@ -1083,14 +1083,14 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 
 	report = report.append(QString("    painted a 512 x 512 image %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
 
-	doc -> layerAdd(img, "layer 2", OPACITY_OPAQUE);
+	img->layerAdd("layer 2", OPACITY_OPAQUE);
 	l = img -> activeLayer();
 
 	p.begin(l.data());
 	p.fillRect(0, 0, 512, 512, Qt::blue);
 	p.end();
 
-	doc -> layerAdd(img, "layer 3", OPACITY_OPAQUE);
+	img->layerAdd("layer 3", OPACITY_OPAQUE);
 	l = img -> activeLayer();
 
 	p.begin(l.data());

@@ -41,17 +41,14 @@
 KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const char * name)
 	: QObject(view, name)
 {
-	kdDebug() << "PaletteManager started: " << name << "\n";
 	
 	m_view = view;
 	m_actionCollection = ac;
-	m_actions = new QPtrList<KAction>();
 
+	m_actions = new QDict<KToggleAction>();
 	m_widgets = new QDict<QWidget>();
-	
 	m_palettes = new QDict<KoPalette>();
 	m_palettes->setAutoDelete(true);
-	
 	m_defaultMapping = new QMap<QString, QString>();
 	m_currentMapping = new QMap<QString, QString>();
 
@@ -65,9 +62,18 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 									"f9", this,
 									SLOT(slotToggleAllPalettes()),
 									this, "toggleAllPaletteWindows");
+
 	m_allPalettesShown = true;
 	m_toggleShowHidePalettes->setCheckedState(i18n("Show all Palette Windows"));
 	m_viewActionMenu->insert(m_toggleShowHidePalettes);
+
+#if 0
+	KAction * a = new KAction(i18n("Restore Palettes"),
+				  0, this, 
+				  SLOT(slotReset()),
+				  this, "restorePalettes");
+	m_viewActionMenu->insert(a);
+#endif 
 	m_viewActionMenu->popupMenu()->insertSeparator();
 	
 }
@@ -93,7 +99,6 @@ void KoPaletteManager::addWidget(QWidget * widget,
 	Q_ASSERT(widget);
 
 	if (!widget) return;
-	kdDebug() << "Adding widget " << name << " (" << widget << ") to " << paletteName << " caption: " << widget->caption() << "\n";
 	
 	QWidget * w = m_widgets->find(name);
 	if (w != 0 )
@@ -101,30 +106,75 @@ void KoPaletteManager::addWidget(QWidget * widget,
 		removeWidget(name);
 	}
 
-	KoPalette * palette = m_palettes->find(paletteName);;
+	KoPalette * palette = m_palettes->find(paletteName);
 	
 	if (palette == 0) {
 		palette = createPalette(paletteName, widget->caption(), style);
+		m_defaultPaletteOrder.append( paletteName + "," + QString::number(style));
 	}
 
-	if (palette == 0) {
-		kdDebug() << "Tried to find or create palette " << paletteName << " for widget " << name << ", but failed\n";
-	}
-
-	m_widgetNames->append(name);
 
 	KToggleAction * a = new KToggleAction(i18n("Hide") + " " + widget->caption(), 0, m_mapper, SLOT(map()), m_actionCollection);
 	a->setCheckedState(i18n("Show") + " " + widget->caption());
 	m_mapper->setMapping(a, m_actions->count()); // This is the position at which we'll insert the action
-	m_actions->append(a);
+	m_actions->insert( name, a );
 	m_viewActionMenu->insert(a);
 	
 	palette->plug(widget, name, position);
 	palette->showPage(widget);
 	m_widgets->insert(name, widget);
+
+	// Default mappings ready for restoring
 	m_defaultMapping->insert(name, paletteName);
+	m_defaultWidgetOrder.append(name);
+	
+	// Fill the current mappings
+	m_widgetNames->append(name);
 	m_currentMapping->insert(name, paletteName);
 }
+
+
+void KoPaletteManager::slotReset()
+{
+	// Clear all old palettes
+	m_palettes->setAutoDelete( true );
+	m_palettes->clear();
+
+	m_widgetNames->clear();
+
+	// Recreate the palettewindows in the saved order
+	QStringList::iterator it;
+	for (it = m_defaultPaletteOrder.begin(); it != m_defaultPaletteOrder.end(); ++it) {
+		QString s = *it;
+		QString pname = s.section( ",", 0, 0 );;
+		enumKoPaletteStyle style = (enumKoPaletteStyle)s.section(",", 1,1).toInt();
+		createPalette(pname, "", style);
+	}
+
+	// Place all existing (that we didn't throw away!) tabs in the right palette and in the right order
+	for (it = m_defaultWidgetOrder.begin(); it != m_defaultWidgetOrder.end(); ++it) {
+	
+		QString widgetName = *it;
+		QWidget * w = m_widgets->find(widgetName);
+
+		if (!w) {
+			kdDebug() << "Not found: " << widgetName << "\n";
+			continue;
+		}
+		QString paletteName = *m_defaultMapping->find(widgetName);
+		KoPalette * p = m_palettes->find(paletteName);
+		
+		if (p == 0) {
+			// Funny -- we should have a consistent set of palettes without holes!
+			p = createPalette(paletteName, "", PALETTE_DOCKER);
+		}
+		
+		p->plug(w, widgetName, -1); // XXX: This is not good: we should add it in the same place as originally placed
+		m_widgetNames->append(widgetName);
+		m_currentMapping->insert(widgetName, paletteName);
+	}
+}
+
 
 QWidget * KoPaletteManager::widget(const QString & name)
 {
@@ -146,7 +196,6 @@ void KoPaletteManager::showWidget(const QString & name)
 
 void KoPaletteManager::removeWidget(const QString & name)
 {
-	kdDebug() << "Removing widget " << name << "\n";
 	QString palette = *(m_currentMapping->find(name));
 	if (palette.isNull()) return;
 	
@@ -165,8 +214,14 @@ void KoPaletteManager::removeWidget(const QString & name)
 
 void KoPaletteManager::save()
 {
-	kdDebug() << "Saving our palettes to the config file\n";
 	// XXX: Save to the configuration
+	// We save:
+	//   * which tab at which place in which palette 
+	//   * which tab is hidden
+	//   * whether a palette is floating or docked
+	//   * dock location of a docked palette
+	//   * float location of a floated palette
+	//   * order in which the palettes are docked.
 	KApplication *app = KApplication::kApplication();
 	Q_ASSERT(app);
 
@@ -174,22 +229,40 @@ void KoPaletteManager::save()
 	Q_ASSERT(cfg);
 
 	// For all palettes windows in the window
-	// Save the name, caption, type, position and size of the palette
-	// For all widgets in each palette
-	// Save the palette name, name and caption of the widget
 
-	kdDebug() << "Saving palette configuration\n";
-}
+	QString palettes;
+	
+	for (QMap<QString,QString>::Iterator it = m_currentMapping->begin(); it != m_currentMapping->end(); ++it) {
+		QString widgetName = it.key();
+		QString paletteName = it.data();
+		QWidget * w = m_widgets->find(widgetName);
+		KoPalette * p = m_palettes->find(paletteName);
+		bool hidden = p->isHidden(w);
+		
 
-void KoPaletteManager::reset()
-{
-	// Reset to the default settings
-	kdDebug() << "Resetting palette configuration to application default\n";
+		int i = p->indexOf(w);
+		kdDebug() << "Saving: " << paletteName
+			<< " pos: " << p->place() << "," << p->x() << "," << p->y() << "," << p->width() << "," << p->height()
+			<< ", widgetName " << widgetName
+			<< ", index " << i
+			<< ", hidden: " << hidden << "\n";
+			
+		palettes.append(widgetName + ","
+			+ paletteName + ","
+			+ p->place() + ","
+			+ p->x() + ","
+			+ p->y() + ","
+			+ p->width() + ","
+			+ p->height() + ","
+			+ QString::number(i) + "," + QString::number(hidden ? 0:1) + ";");
+	}
+	
+	cfg->writeEntry("palettes", palettes);
+
 }
 
 KoPalette * KoPaletteManager::createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style)
 {
-	kdDebug() << "Creating palette " << name << ", caption: " << caption << "\n";
 	Q_ASSERT(m_view);
 
 	KoPalette * palette = 0;
@@ -216,7 +289,6 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
 void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
 {
 	Q_ASSERT(!name.isNull());
-	kdDebug() << "Placing palette " << name << "\n";
 	
 	KoPalette * palette = m_palettes->find(name);
 	

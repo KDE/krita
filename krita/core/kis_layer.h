@@ -53,6 +53,7 @@ public:
 	void setLocked(bool l);
 	KNamedCommand *setLockedCommand(bool locked);
 
+
 private:
 	QUANTUM m_opacity;
 	//bool m_preserveTransparency;

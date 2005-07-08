@@ -46,6 +46,17 @@ enum enumKoPaletteStyle {
 	PALETTE_SLIDER, // Kivio-style sliders
 };
 
+
+namespace {
+	struct DockerRecord {
+		int position;
+		int x;
+		int y;
+		int w;
+		int h;
+	};
+}
+
 /**
  * Manages the set of dockwindow palettes and their widgets.
  *
@@ -101,11 +112,6 @@ public:
 	 */
 	virtual void save();
 
-	/**
-	 * Restores the palette configuration to the default layout, i.e, the layout 
-	 * preferred by each docker.
-	 */
-	virtual void reset();
 
 	/**
 	 * Create a palette in the given style. with the given name and caption. If
@@ -130,6 +136,13 @@ public slots:
 
 	void slotTogglePalette(int paletteIndex);
 	void slotToggleAllPalettes();
+	/**
+	 * Restores the palette configuration to the default layout, i.e, the layout 
+	 * preferred by each docker.
+	 */
+	virtual void slotReset();
+
+
 
 private:
 
@@ -140,15 +153,16 @@ private:
 	bool                    m_allPalettesShown;
 	
 	QStringList             * m_widgetNames;
-	QPtrList<KAction>       * m_actions;
+	
 	QDict<QWidget>          * m_widgets;
 	QDict<KoPalette>        * m_palettes;
-
+	QDict<KToggleAction>    * m_actions;
 	QSignalMapper           * m_mapper;
 
 	QMap<QString, QString>  * m_defaultMapping; // widget to docker
+	QStringList             m_defaultPaletteOrder; // Order of palette creation
+	QStringList             m_defaultWidgetOrder; // Order of widget addition
 	QMap<QString, QString>  * m_currentMapping; // widget to docker
-	QMap<QString, QString>  * m_savedMapping; // widget to docker
 };
 
 #endif

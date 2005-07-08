@@ -226,6 +226,9 @@ public:
 	 * @param data A pointer to a contiguous memory region containing width * height pixels
 	 * @param width in pixels
 	 * @param height in pixels
+	 * @param srcProfile source profile
+	 * @param dstProfile destination profile
+	 * @param renderingIntent the rendering intent
 	 */
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,

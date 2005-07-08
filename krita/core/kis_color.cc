@@ -132,7 +132,7 @@ void KisColor::convertTo(KisStrategyColorSpaceSP cs, KisProfileSP profile)
 		return;
 
 	Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
-	memset(m_data2, 0, m_colorStrategy->pixelSize());
+	memset(m_data2, 0, cs->pixelSize());
 
 	m_colorStrategy->convertPixelsTo(m_data, m_profile, m_data2, cs, profile, 1);
 

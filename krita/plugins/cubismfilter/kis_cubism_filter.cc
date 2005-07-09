@@ -47,11 +47,14 @@
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_progress_display_interface.h>
+#include <kis_vec.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_cubism_filter.h"
+#include "kis_polygon.h"
 
 #define RANDOMNESS       5
+#define SUPERSAMPLE      4
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define SQR(x) ((x) * (x))
 
@@ -136,7 +139,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
                 for (Q_INT32 y = y1 ; y < y2; y++)
                 {
                         if (xstart < min[y - offset])
-                        {        
+                        {
                                 min[y-offset] = xstart;
                         }
                         if (xstart > max[y - offset])
@@ -146,6 +149,161 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
                         xstart += xinc;
                 }
         }
+}
+
+void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest)
+{
+        Q_INT32         *maxScanlines, *maxScanlinesIter;
+        Q_INT32         *minScanlines, *minScanlinesIter;
+        Q_INT32          val;
+        Q_INT32          alpha;
+        Q_UINT8        buf[4];
+        Q_INT32          i, j, x, y;
+        double       xx, yy;
+        double       vec[2];
+        Q_INT32          x1, y1, x2, y2;
+        Q_INT32          selWidth, selHeight;
+        Q_INT32         *vals, *valsIter, *valsEnd;
+        Q_INT32          b;
+        Q_INT32 xs, ys, xe, ye;
+
+        Q_INT32 sx = 0;//poly->pts[0].x;
+        Q_INT32 sy = 0;//poly->pts[0].y;
+        Q_INT32 ex = 0;//poly->pts[1].x;
+        Q_INT32 ey = 0;//poly->pts[1].y;
+
+        double dist = sqrt (SQR (ex - sx) + SQR (ey - sy));
+        double oneOverDist;
+        if (dist > 0.0)
+        {
+                double oneOverDist = 1/dist;
+                vec[0] = (ex - sx) * oneOverDist;
+                vec[1] = (ey - sy) * oneOverDist;
+        }
+        else
+        {
+                oneOverDist = 0.0;
+        }
+
+        Q_INT32 pixelSize = src -> pixelSize();
+
+        double dMinX, dMinY, dMaxX, dMaxY;
+        //poly-> extents (dMinX, dMinY, dMaxX, dMaxY);
+        Q_INT32 minX = static_cast<Q_INT32>(dMinX);
+        Q_INT32 minY = static_cast<Q_INT32>(dMinY);
+        Q_INT32 maxX = static_cast<Q_INT32>(dMaxX);
+        Q_INT32 maxY = static_cast<Q_INT32>(dMaxY);
+
+        Q_INT32 sizeX = (maxX - minX) * SUPERSAMPLE;
+        Q_INT32 sizeY = (maxY - minY) * SUPERSAMPLE;
+
+        minScanlines = minScanlinesIter = new Q_INT32[sizeX];
+        maxScanlines = maxScanlinesIter = new Q_INT32[sizeY];
+        for (Q_INT32 i = 0; i < sizeY; i++)
+        {
+                minScanlines[i] = maxX * SUPERSAMPLE;
+                maxScanlines[i] = minX * SUPERSAMPLE;
+        }
+        if (0)//poly->npts)
+        {
+                Q_INT32 polyNpts = 0;//poly->npts;
+                KisVector2D *curptr;
+
+                //xs = static_cast<Q_INT32>(poly->pts[poly_npts-1].x);
+                //ys = static_cast<Q_INT32>(poly->pts[poly_npts-1].y);
+                //xe = static_cast<Q_INT32>(poly->pts[0].x);
+                //ye = static_cast<Q_INT32>(poly->pts[0].y);
+
+                xs *= SUPERSAMPLE;
+                ys *= SUPERSAMPLE;
+                xe *= SUPERSAMPLE;
+                ye *= SUPERSAMPLE;
+
+                convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines);
+
+                for (i = 1, curptr = 0/*&poly->pts[0]*/; i < polyNpts; i++)
+                {
+                        xs = static_cast<Q_INT32>(curptr->x());
+                        ys = static_cast<Q_INT32>(curptr->y());
+                        curptr++;
+                        xe = static_cast<Q_INT32>(curptr->x());
+                        ye = static_cast<Q_INT32>(curptr->y());
+                
+                        xs *= SUPERSAMPLE;
+                        ys *= SUPERSAMPLE;
+                        xe *= SUPERSAMPLE;
+                        ye *= SUPERSAMPLE;
+                
+                        convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines);
+                }
+        }
+
+        vals = new Q_INT32[sizeX];
+
+        for (Q_INT32 i = 0; i < sizeY; i++, minScanlinesIter++, maxScanlinesIter++)
+        {
+                if (! (i % SUPERSAMPLE))
+                {
+                        memset (vals, 0, sizeof (Q_INT32) * sizeX);
+                }
+        
+                yy = static_cast<double>(i) / static_cast<double>(SUPERSAMPLE) + minY;
+                
+                for (Q_INT32 j = *minScanlinesIter; j < *maxScanlinesIter; j++)
+                {
+                        x = j - minX * SUPERSAMPLE;
+                        vals[x] += 255;
+                }
+        
+                if (! ((i + 1) % SUPERSAMPLE))
+                {
+                        y = (i / SUPERSAMPLE) + minY;
+        
+                        if (y >= y1 && y < y2)
+                        {
+                                for (Q_INT32 j = 0; j < sizeX; j += SUPERSAMPLE)
+                                {
+                                        x = (j / SUPERSAMPLE) + minX;
+        
+                                        if (x >= x1 && x < x2)
+                                        {
+                                                for (val = 0, valsIter = &vals[j], valsEnd = &valsIter[SUPERSAMPLE]; valsIter < valsEnd; valsIter++)
+                                                {
+                                                        val += *valsIter;
+                                                }
+                                                val /= SQR(SUPERSAMPLE);
+        
+                                                if (val > 0)
+                                                {
+                                                        xx = static_cast<double>(j) / static_cast<double>(SUPERSAMPLE) + minX;
+                                                        alpha = static_cast<Q_INT32>(val * calcAlphaBlend (vec, oneOverDist, xx - sx, yy - sy));
+                                                        //gimp_pixel_rgn_get_pixel (&src_rgn, buf, x, y);
+        #ifndef USE_READABLE_BUT_SLOW_CODE
+                                                        Q_UINT8 *bufIter = buf,
+                                                        *colIter = col,
+                                                        *bufEnd = buf+pixelSize;
+        
+                                                        for(; bufIter < bufEnd; bufIter++, colIter++)
+                                                        *bufIter = (static_cast<Q_UINT8>(*colIter * alpha)
+                                                                        + (static_cast<Q_UINT8>(*bufIter)
+                                                                        * (256 - alpha))) >> 8;
+        #else // original, pre-ECL code 
+                                                        for (b = 0; b < pixelSize; b++)
+                                                        buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
+        #endif
+                                
+                                                        //gimp_pixel_rgn_set_pixel (&src_rgn, buf, x, y);
+                                
+                                                }
+                                        }
+                                }
+                        }
+                }       
+        }
+
+  delete[] vals;
+  delete[] minScanlines;
+  delete[] maxScanlines;
 }
 
 QWidget* KisCubismFilter::createConfigurationWidget(QWidget* parent)

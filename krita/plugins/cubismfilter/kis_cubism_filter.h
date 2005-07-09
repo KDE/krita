@@ -25,6 +25,8 @@
 #include "kis_view.h"
 #include <kdebug.h>
 
+class KisPolygon;
+
 class KisCubismFilterConfiguration : public KisFilterConfiguration
 {
 	public:
@@ -53,6 +55,8 @@ private:
         Q_INT32 randomIntRange(Q_INT32 lowestNumber, Q_INT32 highestNumber);
         double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y);
         void convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
+        void fillPolyColor(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest);
+
 };
 
 #endif

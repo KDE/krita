@@ -50,6 +50,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
 #include "kis_convolution_painter.h"
+#include "kis_integer_maths.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -355,7 +356,7 @@ void KisSelectionManager::copy()
 			p_alpha = p.alpha();
 			s_alpha = s.alpha();
 
-			p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+			p.alpha() = UINT8_MULT(p_alpha, s_alpha);
 
 			++layerIt;
 			++selectionIt;

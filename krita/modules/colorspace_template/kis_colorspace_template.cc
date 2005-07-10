@@ -61,6 +61,10 @@ void KisColorSpaceTemplate::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT
 {
 }
 
+void KisColorSpaceTemplate::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+}
+
 void KisColorSpaceTemplate::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 }
@@ -82,7 +86,7 @@ vKisChannelInfoSP KisColorSpaceTemplate::channels() const
 	return m_channels;
 }
 
-bool KisColorSpaceTemplate::alpha() const
+bool KisColorSpaceTemplate::hasAlpha() const
 {
 	return true;
 }

@@ -62,6 +62,11 @@ void KisColorSpaceAlpha::nativeColor(const QColor& /*c*/, QUANTUM opacity, Q_UIN
 	dst[PIXEL_MASK] = opacity;
 }
 
+void KisColorSpaceAlpha::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	*alpha = *pixel;
+}
+
 void KisColorSpaceAlpha::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
@@ -101,7 +106,7 @@ vKisChannelInfoSP KisColorSpaceAlpha::channels() const
 {
 	return m_channels;
 }
-bool KisColorSpaceAlpha::alpha() const
+bool KisColorSpaceAlpha::hasAlpha() const
 {
 	return true; // Of course!
 }

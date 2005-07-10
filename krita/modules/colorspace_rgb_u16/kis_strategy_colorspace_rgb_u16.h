@@ -35,9 +35,13 @@ public:
 	virtual ~KisStrategyColorSpaceRGBU16();
 
 public:
+	void setPixel(Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha, Q_UINT8 *pixel) const;
+	void getPixel(const Q_UINT8 *pixel, Q_UINT16 *red, Q_UINT16 *green, Q_UINT16 *blue, Q_UINT16 *alpha) const;
+
 	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
+	virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
 	virtual void setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
 	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
@@ -53,7 +57,7 @@ public:
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
-	virtual bool alpha() const;
+	virtual bool hasAlpha() const;
 	virtual Q_INT32 nChannels() const;
 	virtual Q_INT32 nColorChannels() const;
 	virtual Q_INT32 pixelSize() const;

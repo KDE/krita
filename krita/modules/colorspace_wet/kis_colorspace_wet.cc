@@ -207,6 +207,11 @@ void KisColorSpaceWet::nativeColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT
 	nativeColor(c, dst);
 }
 
+void KisColorSpaceWet::getAlpha(const Q_UINT8 */*pixel*/, Q_UINT8 *alpha)
+{
+	*alpha = OPACITY_OPAQUE;
+}
+
 void KisColorSpaceWet::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	Q_UINT8 * rgb = new Q_UINT8[3];
@@ -243,7 +248,7 @@ vKisChannelInfoSP KisColorSpaceWet::channels() const
 	return m_channels;
 }
 
-bool KisColorSpaceWet::alpha() const
+bool KisColorSpaceWet::hasAlpha() const
 {
 	return false;
 }

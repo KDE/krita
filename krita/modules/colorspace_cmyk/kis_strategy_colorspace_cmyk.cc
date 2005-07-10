@@ -117,6 +117,19 @@ void KisStrategyColorSpaceCMYK::nativeColor(const QColor& color, QUANTUM opacity
 	dst[4] = opacity;
 }
 
+void KisStrategyColorSpaceCMYK::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	*alpha = pixel[4];
+}
+
+void KisStrategyColorSpaceCMYK::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+	while (nPixels > 0) {
+		pixels[4] = alpha;
+		--nPixels;
+		pixels += cmyk::MAX_CHANNEL_CMYKA;
+	}
+}
 
 void KisStrategyColorSpaceCMYK::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
 {
@@ -141,7 +154,7 @@ vKisChannelInfoSP KisStrategyColorSpaceCMYK::channels() const
 	return m_channels;
 }
 
-bool KisStrategyColorSpaceCMYK::alpha() const
+bool KisStrategyColorSpaceCMYK::hasAlpha() const
 {
 	return true;
 }

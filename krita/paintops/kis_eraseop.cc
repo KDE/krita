@@ -102,7 +102,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 
 	QRect dstRect;
 
-	if (device -> alpha()) {
+	if (device -> hasAlpha()) {
 		dab -> setOpacity(OPACITY_OPAQUE);
 		for (int y = 0; y < maskHeight; y++) {
 			for (int x = 0; x < maskWidth; x++) {

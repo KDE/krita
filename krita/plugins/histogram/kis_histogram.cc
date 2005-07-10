@@ -69,7 +69,7 @@ void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
 		KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
 
 		Q_INT32 channels = m_layer -> nChannels();
-		bool alpha = m_layer -> alpha();
+		bool alpha = m_layer -> hasAlpha();
 		while( ! srcIt.isDone() )
 		{
 			if (  !srcIt.isSelected()

@@ -224,6 +224,11 @@ void KisColorSpaceWetSticky::mixColors(const Q_UINT8 **colors, const Q_UINT8 *we
 {
 }
 
+void KisColorSpaceWetSticky::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	*alpha = ((CELL_PTR)pixel)->alpha;
+}
+
 void KisColorSpaceWetSticky::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
 {
 	((CELL_PTR)pixels)->alpha = alpha;
@@ -234,7 +239,7 @@ vKisChannelInfoSP KisColorSpaceWetSticky::channels() const
 	return m_channels;
 }
 
-bool KisColorSpaceWetSticky::alpha() const
+bool KisColorSpaceWetSticky::hasAlpha() const
 {
 	return true;
 }

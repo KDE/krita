@@ -68,6 +68,9 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
   	kdDebug(DBG_AREA_CMS) << "convertPixels: src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 
+	Q_INT32 srcPixelSize = pixelSize();
+	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
+
 	if (srcProfile && dstProfile) {
 		if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
  			kdDebug(DBG_AREA_CMS) << "Create new transform: src profile: " 
@@ -90,6 +93,22 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 
 		if (tf) {
 			cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
+
+			if (dstColorStrategy -> hasAlpha())
+			{
+				// Lcms does nothing to the destination alpha channel so we must convert that manually.
+				while (numPixels > 0) {
+					Q_UINT8 alpha;
+
+					getAlpha(src, &alpha);
+					dstColorStrategy -> setAlpha(dst, alpha, 1);
+
+					src += srcPixelSize;
+					dst += dstPixelSize;
+					numPixels--;
+				}
+			}
+
 			return true;
 		}
 		
@@ -97,9 +116,6 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 			  << srcProfile -> productName() << " to " << dstProfile -> productName()
 			  << ", going to convert through RGB!\n";
 	}
-
-	Q_INT32 srcPixelSize = pixelSize();
-	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
 	while (numPixels > 0) {
 		kdDebug(DBG_AREA_CMS) << "Falling back on conversion by qcolor\n";

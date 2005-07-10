@@ -237,7 +237,7 @@ public:
 	KisPixel toPixel(Q_UINT8 * bytes);
 	KisPixelRO toPixelRO(const Q_UINT8 * bytes);
 
-        bool alpha() const;
+        bool hasAlpha() const;
 
 	KisStrategyColorSpaceSP colorStrategy() const;
 
@@ -461,9 +461,9 @@ inline void KisPaintDevice::setImage(KisImage *image)
         m_owner = image;
 }
 
-inline bool KisPaintDevice::alpha() const
+inline bool KisPaintDevice::hasAlpha() const
 {
-        return colorStrategy()->alpha();
+        return colorStrategy() -> hasAlpha();
 }
 
 inline KisPixel KisPaintDevice::toPixel(Q_UINT8 * bytes)

@@ -76,7 +76,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
         Q_UINT8* bufRow; 
         Q_UINT8* buf;
         Q_INT32 count;                
-        bool hasAlpha = src -> alpha();
+        bool hasAlpha = src -> hasAlpha();
         Q_INT32 rowstride; 
 
         //calculate the total number of pixels

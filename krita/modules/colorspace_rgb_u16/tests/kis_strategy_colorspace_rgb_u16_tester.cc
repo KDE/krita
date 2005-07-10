@@ -64,7 +64,7 @@ void KisStrategyColorSpaceRGBU16Tester::testBasics()
 {
 	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGBU16();
 
-	CHECK(cs -> alpha(), true);
+	CHECK(cs -> hasAlpha(), true);
 	CHECK(cs -> nChannels(), NUM_CHANNELS);
 	CHECK(cs -> nColorChannels(), NUM_COLOUR_CHANNELS);
 	CHECK(cs -> pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);

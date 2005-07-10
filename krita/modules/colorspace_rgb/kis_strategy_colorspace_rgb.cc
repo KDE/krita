@@ -73,6 +73,20 @@ void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, QUANTUM opacity, Q_U
 	dst[PIXEL_ALPHA] = opacity;
 }
 
+void KisStrategyColorSpaceRGB::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	*alpha = pixel[PIXEL_ALPHA];
+}
+
+void KisStrategyColorSpaceRGB::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+	while (nPixels > 0) {
+		pixels[PIXEL_ALPHA] = alpha;
+		--nPixels;
+		pixels += MAX_CHANNEL_RGBA;
+	}
+}
+
 void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
@@ -147,7 +161,7 @@ vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
 	return m_channels;
 }
 
-bool KisStrategyColorSpaceRGB::alpha() const
+bool KisStrategyColorSpaceRGB::hasAlpha() const
 {
 	return true;
 }
@@ -480,7 +494,7 @@ void KisStrategyColorSpaceRGB::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dst
 					Q_UINT8 srcColor = src[channel];
 					Q_UINT8 dstColor = dst[channel];
 
-					srcColor = QMIN((dstColor * (UINT8_MAX + 1)) / (1 + srcColor), UINT8_MAX);
+					srcColor = QMIN((dstColor * (UINT8_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT8_MAX);
 
 					Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 

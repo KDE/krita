@@ -33,6 +33,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
+#include "kis_colorspace_registry.h"
 
 namespace {
 	const Q_INT32 MAX_CHANNEL_RGB = 3;
@@ -55,6 +56,26 @@ KisStrategyColorSpaceRGBU16::~KisStrategyColorSpaceRGBU16()
 {
 }
 
+void KisStrategyColorSpaceRGBU16::setPixel(Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha, Q_UINT8 *dst) const
+{
+	Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
+
+	dstPixel -> red = red;
+	dstPixel -> green = green;
+	dstPixel -> blue = blue;
+	dstPixel -> alpha = alpha;
+}
+
+void KisStrategyColorSpaceRGBU16::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *green, Q_UINT16 *blue, Q_UINT16 *alpha) const
+{
+	const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
+
+	*red = srcPixel -> red;
+	*green = srcPixel -> green;
+	*blue = srcPixel -> blue;
+	*alpha = srcPixel -> alpha;
+}
+
 void KisStrategyColorSpaceRGBU16::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
 {
 	Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
@@ -72,6 +93,12 @@ void KisStrategyColorSpaceRGBU16::nativeColor(const QColor& c, QUANTUM opacity, 
 	dst -> green = UINT8_TO_UINT16(c.green());
 	dst -> blue = UINT8_TO_UINT16(c.blue());
 	dst -> alpha = UINT8_TO_UINT16(opacity);
+}
+
+void KisStrategyColorSpaceRGBU16::getAlpha(const Q_UINT8 *U8_pixel, Q_UINT8 *alpha)
+{
+	const Pixel *pixel = reinterpret_cast<const Pixel *>(U8_pixel);
+	*alpha = UINT16_TO_UINT8(pixel -> alpha);
 }
 
 void KisStrategyColorSpaceRGBU16::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
@@ -152,7 +179,7 @@ vKisChannelInfoSP KisStrategyColorSpaceRGBU16::channels() const
 	return m_channels;
 }
 
-bool KisStrategyColorSpaceRGBU16::alpha() const
+bool KisStrategyColorSpaceRGBU16::hasAlpha() const
 {
 	return true;
 }
@@ -177,40 +204,42 @@ QImage KisStrategyColorSpaceRGBU16::convertToQImage(const Q_UINT8 *dataU8, Q_INT
 						 Q_INT32 renderingIntent)
 
 {
-	const Q_UINT16 *data = reinterpret_cast<const Q_UINT16 *>(dataU8);
+	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
+		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	img.setAlphaBuffer(true);
 
-	Q_INT32 i = 0;
-	uchar *j = img.bits();
-
-	while ( i < width * height * MAX_CHANNEL_RGBA) {
-#ifdef __BIG_ENDIAN__
-		*( j + 0)  = UINT16_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-		*( j + 1 ) = UINT16_TO_UINT8(*( data + i + PIXEL_RED ));
-		*( j + 2 ) = UINT16_TO_UINT8(*( data + i + PIXEL_GREEN ));
-		*( j + 3 ) = UINT16_TO_UINT8(*( data + i + PIXEL_BLUE ));
-#else
-		*( j + 3)  = UINT16_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-		*( j + 2 ) = UINT16_TO_UINT8(*( data + i + PIXEL_RED ));
-		*( j + 1 ) = UINT16_TO_UINT8(*( data + i + PIXEL_GREEN ));
-		*( j + 0 ) = UINT16_TO_UINT8(*( data + i + PIXEL_BLUE ));
-#endif
-		i += MAX_CHANNEL_RGBA;
-		j += MAX_CHANNEL_RGBA;
-	}
-
-   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
-
-	/*
 	if (srcProfile != 0 && dstProfile != 0) {
-		convertPixelsTo(img.bits(), srcProfile,
-				img.bits(), this, dstProfile,
+		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+
+		convertPixelsTo(dataU8, srcProfile,
+				img.bits(), dstCS, dstProfile,
 				width * height, renderingIntent);
+	} else {
+		const Q_UINT16 *data = reinterpret_cast<const Q_UINT16 *>(dataU8);
+
+
+		Q_INT32 i = 0;
+		uchar *j = img.bits();
+
+		while ( i < width * height * MAX_CHANNEL_RGBA) {
+	#ifdef __BIG_ENDIAN__
+			*( j + 0)  = UINT16_TO_UINT8(*( data + i + PIXEL_ALPHA ));
+			*( j + 1 ) = UINT16_TO_UINT8(*( data + i + PIXEL_RED ));
+			*( j + 2 ) = UINT16_TO_UINT8(*( data + i + PIXEL_GREEN ));
+			*( j + 3 ) = UINT16_TO_UINT8(*( data + i + PIXEL_BLUE ));
+	#else
+			*( j + 3)  = UINT16_TO_UINT8(*( data + i + PIXEL_ALPHA ));
+			*( j + 2 ) = UINT16_TO_UINT8(*( data + i + PIXEL_RED ));
+			*( j + 1 ) = UINT16_TO_UINT8(*( data + i + PIXEL_GREEN ));
+			*( j + 0 ) = UINT16_TO_UINT8(*( data + i + PIXEL_BLUE ));
+	#endif
+			i += MAX_CHANNEL_RGBA;
+			j += MAX_CHANNEL_RGBA;
+		}
 	}
-	*/
+
 	return img;
 }
 

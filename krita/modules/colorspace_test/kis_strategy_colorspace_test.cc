@@ -74,6 +74,12 @@ void KisStrategyColorSpaceTestCS::nativeColor(const QColor& c, QUANTUM opacity, 
 	pix->alpha = opacity;
 }
 
+void KisStrategyColorSpaceTestCS::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	const testcspixel *pix = (const testcspixel *)pixel;
+	*alpha = pix -> alpha;
+}
+
 void KisStrategyColorSpaceTestCS::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	testcspixel *pix = (testcspixel *)src;
@@ -123,7 +129,7 @@ vKisChannelInfoSP KisStrategyColorSpaceTestCS::channels() const
 	return m_channels;
 }
 
-bool KisStrategyColorSpaceTestCS::alpha() const
+bool KisStrategyColorSpaceTestCS::hasAlpha() const
 {
 	return true;
 }

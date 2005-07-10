@@ -207,7 +207,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 			src -> colorStrategy() -> toQColor(rectIt.rawData(), &color, &opacity);
 
 			// skip non-opaque pixels
-			if (src -> colorStrategy() -> alpha() && opacity != OPACITY_OPAQUE) {
+			if (src -> colorStrategy() -> hasAlpha() && opacity != OPACITY_OPAQUE) {
 				++rectIt;
 				continue;
 			}

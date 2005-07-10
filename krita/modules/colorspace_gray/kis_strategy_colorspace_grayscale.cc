@@ -68,6 +68,20 @@ void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, QUANTUM opacit
 	dst[PIXEL_GRAY_ALPHA] = opacity;
 }
 
+void KisStrategyColorSpaceGrayscale::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+{
+	*alpha = pixel[PIXEL_GRAY_ALPHA];
+}
+
+void KisStrategyColorSpaceGrayscale::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+	while (nPixels > 0) {
+		pixels[PIXEL_GRAY_ALPHA] = alpha;
+		--nPixels;
+		pixels += MAX_CHANNEL_GRAYSCALEA;
+	}
+}
+
 void KisStrategyColorSpaceGrayscale::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
 	c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
@@ -120,7 +134,7 @@ vKisChannelInfoSP KisStrategyColorSpaceGrayscale::channels() const
 	return m_channels;
 }
 
-bool KisStrategyColorSpaceGrayscale::alpha() const
+bool KisStrategyColorSpaceGrayscale::hasAlpha() const
 {
 	return true;
 }

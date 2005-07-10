@@ -114,7 +114,7 @@ public:
 	/**
 	 * Whether this color model has a channel of type ALPHA
 	 */
-	virtual bool alpha() const = 0;
+	virtual bool hasAlpha() const = 0;
 
 	/**
 	 * Return a string with the channel's value suitable for display in the gui.
@@ -208,6 +208,11 @@ public:
  	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 ) = 0;
  	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
 
+	/**
+	 * Get the alpha value of the given pixel.
+	 * XXX: Change to float/int to match setAlpha() when that changes.
+	 */
+	virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) = 0;
 
 	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile) = 0;
 	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile) = 0;

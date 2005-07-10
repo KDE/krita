@@ -34,6 +34,8 @@ public:
 	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
+	virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
+
 	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
 	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -46,7 +48,7 @@ public:
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
 	virtual vKisChannelInfoSP channels() const;
-	virtual bool alpha() const;
+	virtual bool hasAlpha() const;
 	virtual Q_INT32 nChannels() const;
 	virtual Q_INT32 nColorChannels() const;
 	virtual Q_INT32 pixelSize() const;

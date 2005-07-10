@@ -28,17 +28,10 @@
 
 #include "kis_polygon.h"
 
-KisPolygon::KisPolygon()
-{
-        //create an empty KisPoint vector
-        //typedef QValueVector<KisPoint> KisPointVector;
-        m_data = new KisPointVector(4);
-}
-
 void KisPolygon::addPoint(double x, double y)
 {
         KisPoint point(x, y);
-        m_data->append(point);
+        append(point);
 }
 
 void KisPolygon::rotate(double theta)
@@ -49,7 +42,7 @@ void KisPolygon::rotate(double theta)
         st = sin( theta );
         
         KisPointVector::iterator it;
-        for( it = m_data->begin(); it != m_data->end(); ++it )
+        for( it = begin(); it != end(); ++it )
         {
                 ox = (*it).x();
                 oy = (*it).y();
@@ -62,30 +55,25 @@ void KisPolygon::translate(double tx, double ty)
 {
         KisPointVector::iterator it;
         
-        for( it = m_data->begin(); it != m_data->end(); ++it )
+        for( it = begin(); it != end(); ++it )
         {
                 (*it).setX( (*it).x() + tx );
                 (*it).setY( (*it).y() + ty );
         }
 }
 
-void KisPolygon::reset()
-{
-        m_data->clear();
-}
-
 Q_INT32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
 {
-        if (m_data->empty())
+        if ( empty() )
         {
                 return 0;     
         }
-        x1 = x2 = m_data->front().x();
-        y1 = y2 = m_data->front().y();
+        x1 = x2 = front().x();
+        y1 = y2 = front().y();
 
         KisPointVector::iterator it;
         
-        for( it = m_data->begin(); it != m_data->end(); ++it )
+        for( it = begin(); it != end(); ++it )
         {
                 if ((*it).x() < x1)
                 {
@@ -105,4 +93,9 @@ Q_INT32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
                 }
         }
         return 1;
+}
+
+Q_INT32 KisPolygon::numberOfPoints()
+{
+        return count();
 }

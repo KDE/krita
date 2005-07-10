@@ -52,6 +52,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_cubism_filter.h"
 #include "kis_polygon.h"
+#include "kis_point.h"
 
 #define RANDOMNESS       5
 #define SUPERSAMPLE      4
@@ -167,10 +168,10 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         Q_INT32          b;
         Q_INT32 xs, ys, xe, ye;
 
-        Q_INT32 sx = 0;//poly->pts[0].x;
-        Q_INT32 sy = 0;//poly->pts[0].y;
-        Q_INT32 ex = 0;//poly->pts[1].x;
-        Q_INT32 ey = 0;//poly->pts[1].y;
+        Q_INT32 sx = (*poly)[0].x();
+        Q_INT32 sy = (*poly)[0].y();
+        Q_INT32 ex = (*poly)[1].x();
+        Q_INT32 ey = (*poly)[1].y();
 
         double dist = sqrt (SQR (ex - sx) + SQR (ey - sy));
         double oneOverDist;
@@ -188,7 +189,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         Q_INT32 pixelSize = src -> pixelSize();
 
         double dMinX, dMinY, dMaxX, dMaxY;
-        //poly-> extents (dMinX, dMinY, dMaxX, dMaxY);
+        poly -> extents (dMinX, dMinY, dMaxX, dMaxY);
         Q_INT32 minX = static_cast<Q_INT32>(dMinX);
         Q_INT32 minY = static_cast<Q_INT32>(dMinY);
         Q_INT32 maxX = static_cast<Q_INT32>(dMaxX);
@@ -204,15 +205,15 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                 minScanlines[i] = maxX * SUPERSAMPLE;
                 maxScanlines[i] = minX * SUPERSAMPLE;
         }
-        if (0)//poly->npts)
+        if ( poly -> numberOfPoints() )
         {
-                Q_INT32 polyNpts = 0;//poly->npts;
+                Q_INT32 polyNpts = poly -> numberOfPoints();
                 KisVector2D *curptr;
 
-                //xs = static_cast<Q_INT32>(poly->pts[poly_npts-1].x);
-                //ys = static_cast<Q_INT32>(poly->pts[poly_npts-1].y);
-                //xe = static_cast<Q_INT32>(poly->pts[0].x);
-                //ye = static_cast<Q_INT32>(poly->pts[0].y);
+                xs = static_cast<Q_INT32>((*poly)[polyNpts-1].x());
+                ys = static_cast<Q_INT32>((*poly)[polyNpts-1].y());
+                xe = static_cast<Q_INT32>((*poly)[0].x());
+                ye = static_cast<Q_INT32>((*poly)[0].y());
 
                 xs *= SUPERSAMPLE;
                 ys *= SUPERSAMPLE;

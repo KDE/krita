@@ -19,18 +19,13 @@
  */
 
 #include <qvaluevector.h>
- 
-class KisPolygon
+typedef QValueVector<KisPoint> KisPointVector;
+class KisPolygon : public KisPointVector
 {
         public:
-                KisPolygon();
-        private:
                 void addPoint(double x, double y);
                 void translate(double tx, double ty);
                 void rotate(double theta);
                 Q_INT32 extents(double &minX, double &minY, double &maxX, double &maxY);
-                void reset();
-        private:
-                typedef QValueVector<KisPoint> KisPointVector;
-                KisPointVector* m_data;
+                Q_INT32 numberOfPoints();
 };

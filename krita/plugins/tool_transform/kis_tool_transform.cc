@@ -294,6 +294,8 @@ void KisToolTransform::move(KisMoveEvent *e)
 			double newX = invrotX(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
 			double newY = invrotY(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
 			double dx=0, dy=0;
+			double oldScaleX = m_scaleX;
+			double oldScaleY = m_scaleY;
 			
 			if(m_function == MOVE)
 			{
@@ -307,37 +309,186 @@ void KisToolTransform::move(KisMoveEvent *e)
 					- m_clickangle;
 			}
 			
-			if(m_function == TOPSCALE
-					|| m_function == TOPLEFTSCALE
-					|| m_function == TOPRIGHTSCALE)
+			if(m_function == TOPSCALE)
 			{
 				dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
 				m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX>0) // handle the mirrored cases
+						m_scaleX = fabs(m_scaleY);
+					else
+						m_scaleX = -fabs(m_scaleY);
+				}
 			}
 			
-			if(m_function == RIGHTSCALE
-					|| m_function == TOPRIGHTSCALE
-					|| m_function == BOTTOMRIGHTSCALE)
+			if(m_function == TOPRIGHTSCALE)
 			{
 				dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
 				m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+				
+				dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX < m_scaleY)
+					{
+						if(m_scaleX>0) // handle the mirrored cases
+							m_scaleX = fabs(m_scaleY);
+						else
+							m_scaleX = -fabs(m_scaleY);
+						dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
+					}
+					else
+					{
+						if(m_scaleY>0) // handle the mirrored cases
+							m_scaleY = fabs(m_scaleX);
+						else
+							m_scaleY = -fabs(m_scaleX);
+						dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
+					}
+				}
 			}
 			
-			if(m_function == BOTTOMSCALE
-					|| m_function == BOTTOMLEFTSCALE
-					|| m_function == BOTTOMRIGHTSCALE)
+			if(m_function == RIGHTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleY>0) // handle the mirrored cases
+						m_scaleY = fabs(m_scaleX);
+					else
+						m_scaleY = -fabs(m_scaleX);
+				}
+			}
+			
+			if(m_function == BOTTOMRIGHTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
+				
+				dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX < m_scaleY)
+					{
+						if(m_scaleX>0) // handle the mirrored cases
+							m_scaleX = fabs(m_scaleY);
+						else
+							m_scaleX = -fabs(m_scaleY);
+						dx = (m_scaleX - oldScaleX) * (m_endPos.x() - m_org_cenX);
+					}
+					else
+					{
+						if(m_scaleY>0) // handle the mirrored cases
+							m_scaleY = fabs(m_scaleX);
+						else
+							m_scaleY = -fabs(m_scaleX);
+						dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
+					}
+				}
+			}
+			
+			if(m_function == BOTTOMSCALE)
 			{
 				dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
 				m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX>0) // handle the mirrored cases
+						m_scaleX = fabs(m_scaleY);
+					else
+						m_scaleX = -fabs(m_scaleY);
+				}
 			}
 			
-			if(m_function == LEFTSCALE
-					|| m_function == TOPLEFTSCALE
-					|| m_function == BOTTOMLEFTSCALE)
+			if(m_function == BOTTOMLEFTSCALE)
 			{
 				dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
 				m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+				
+				dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX < m_scaleY)
+					{
+						if(m_scaleX>0) // handle the mirrored cases
+							m_scaleX = fabs(m_scaleY);
+						else
+							m_scaleX = -fabs(m_scaleY);
+						dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
+					}
+					else
+					{
+						if(m_scaleY>0) // handle the mirrored cases
+							m_scaleY = fabs(m_scaleX);
+						else
+							m_scaleY = -fabs(m_scaleX);
+						dy = (m_scaleY - oldScaleY) * (m_endPos.y() - m_org_cenY);
+					}
+				}
 			}
+			
+			if(m_function == LEFTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleY>0) // handle the mirrored cases
+						m_scaleY = fabs(m_scaleX);
+					else
+						m_scaleY = -fabs(m_scaleX);
+				}
+			}
+			
+			if(m_function == TOPLEFTSCALE)
+			{
+				dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
+				m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
+				
+				dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
+				m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
+				
+				// enforce same acpect if shift button is pressed
+				if(e->state() & Qt::ShiftButton)
+				{
+					if(m_scaleX < m_scaleY)
+					{
+						if(m_scaleX>0) // handle the mirrored cases
+							m_scaleX = fabs(m_scaleY);
+						else
+							m_scaleX = -fabs(m_scaleY);
+						dx = (m_scaleX - oldScaleX) * (m_startPos.x() - m_org_cenX);
+					}
+					else
+					{
+						if(m_scaleY>0) // handle the mirrored cases
+							m_scaleY = fabs(m_scaleX);
+						else
+							m_scaleY = -fabs(m_scaleX);
+						dy = (m_scaleY - oldScaleY) * (m_startPos.y() - m_org_cenY);
+					}
+				}
+			}
+			
 			m_translateX += rotX(dx, dy);
 			m_translateY += rotY(dx, dy);
 			

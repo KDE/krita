@@ -50,4 +50,5 @@ needed. So simply don't worry.
 But in some cases, when you want to modify already written pixels, as in
 some filters you want to know where true data have been written. Otherwise
 we would have to modify an infinite number of pixels to be sure everything is
-changed. This is where the extent comes in handy.
+changed. This is where the extent comes in handy. If you have absolutely 
+no leeway, use exactBounds which is slow, but sure.

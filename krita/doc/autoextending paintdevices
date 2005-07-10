@@ -6,7 +6,7 @@ storage is autoextending. So it starts with zero tiles, and as writing is
 being done new tiles are added as needed.
 
 There is also a default tile that is only readable (in theory). Whenever
-access is only readaccess you get this tile for areas that don't have there
+access is only readaccess you get this tile for areas that don't have their
 own tile yet. The idea is that the default tile is filled with transparent
 pixels. (Or, with special layers like the background pattern or the selection,
 with something else relevant. bsar)
@@ -20,7 +20,7 @@ The extent of the layer (paintdevice) is 0x0 because nothing has been
 written yet.
 
 Then some drawing is done in one corner and a tile is created automatically.
-Now the extent is 64x64 (or whatever is the size of a tile) because a single
+Now the extent is 64x64 (tilesize defined at compilation) because a single
 tile exists.
 
 If some drawing is done in the opposite corner another tile is created. The
@@ -51,6 +51,3 @@ But in some cases, when you want to modify already written pixels, as in
 some filters you want to know where true data have been written. Otherwise
 we would have to modify an infinite number of pixels to be sure everything is
 changed. This is where the extent comes in handy.
-
-Comments and requests for more details or other areas are most welcome. In
-the end this should go into the docs

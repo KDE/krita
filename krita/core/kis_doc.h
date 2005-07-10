@@ -31,14 +31,19 @@
 #include "kis_composite_op.h"
 
 #include <koffice_export.h>
+
 class QImage;
 class QString;
+
 class DCOPObject;
 class KCommand;
+
 class KoCommandHistory;
 class KMacroCommand;
+
 class KisView;
 class KisNameServer;
+class KisChildDoc;
 
 class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
@@ -57,18 +62,26 @@ public:
 	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
 	virtual bool saveOasis( KoStore*, KoXmlWriter* );
+	virtual bool loadChildren( KoStore* store) { return true; };
 	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
 	virtual QCString mimeType() const;
 
-	// XXX: Use of transparent, zoomX and zoomY is not supported
-	// by Krita because we appear to be doing our zooming
-	// elsewhere. This may affect KOffice compatibility.
+	/**
+	 * Draw the image embedded in another KOffice document
+	 *
+	 * XXX: Use of transparent, zoomX and zoomY is not supported
+	 *      by Krita because we appear to be doing our zooming
+	 *      elsewhere. This may affect KOffice compatibility.
+	 */
 	virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);	
-	
+
+	/**
+	 * Called by KisView to repaint the specified rect.
+	 */
 	virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile);
 	virtual QDomDocument saveXML();
 
-private:
+private: // Undo adapter
 	virtual void addCommand(KCommand *cmd);
 	virtual void setUndo(bool undo);
 	virtual bool undo() const;
@@ -78,8 +91,10 @@ private:
 
 public:
 
+
 	Q_INT32 undoLimit() const;
 	void setUndoLimit(Q_INT32 limit);
+
 	Q_INT32 redoLimit() const;
 	void setRedoLimit(Q_INT32 limit);
 
@@ -90,6 +105,14 @@ public:
 	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy);
 
 	void renameImage(const QString& oldName, const QString& newName);
+
+
+	/**
+	 * Adds the specified child document to this document; this
+	 * is not done with KoDocument::insertChild() because that 
+	 * is protected and cannot be called from KisView.
+	 */
+	KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
 
 	// Makes an otherwise empty document ready for import/export
 	void prepareForImport();
@@ -115,7 +138,8 @@ signals:
 protected:
 	// Overide KoDocument
 	virtual KoView* createViewInstance(QWidget *parent, const char *name);
-
+	virtual bool saveChildren( KoStore * store ) { return true; };
+	
 private slots:
 	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
 	void slotIOProgress(Q_INT8 percentage);

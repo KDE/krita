@@ -18,7 +18,46 @@
 #ifndef _KIS_PART_LAYER_
 #define _KIS_PART_LAYER_
 
+#include <qrect.h>
+
+#include <koDocument.h>
+#include <koDocumentChild.h>
+
 #include "kis_layer.h"
+#include "kis_types.h"
+#include "kis_doc.h"
+
+class KoFrame;
+class KoDocument;
+
+
+/**
+ * The child document is responsible for saving and loading the embedded layers.
+ */
+class KisChildDoc : public KoDocumentChild
+{
+
+public:
+	KisChildDoc ( KisDoc * kisDoc, const QRect& rect, KoDocument * childDoc );
+	KisChildDoc ( KisDoc * kisDdoc );
+
+	virtual ~KisChildDoc();
+	
+	KisDoc * parent() const { return m_doc; }
+	
+	void setPartLayer (KisPartLayerSP layer) { m_partLayer = layer; }
+	
+	KisPartLayerSP partLayer() const { return m_partLayer; }
+	
+	
+protected:
+
+	KisDoc * m_doc;
+	KisPartLayerSP m_partLayer;
+
+};
+ 
+
 
 /**
  * A PartLayer is a layer that contains a KOffice Part like a KWord document
@@ -27,15 +66,25 @@
  * The part is rendered into an RBGA8 paint device so we can composite it with
  * the other layers.
  */
-
 class KisPartLayer : public KisLayer {
 
 
+	Q_OBJECT;
+
 public:
 
-	KisPartLayer();
+	KisPartLayer(KisImageSP img, KisChildDoc * doc);
 	virtual ~KisPartLayer();
-	
+
+	// Called when the layer is made active
+	virtual void activate();
+
+	// Called when another layer is made active
+	virtual void deactivate();
+
+private:
+	KoFrame * m_frame; // The widget that holds the editable view of the embedded part
+	KisChildDoc * m_doc; // The sub-document
 
 };
 

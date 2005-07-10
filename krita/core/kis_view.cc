@@ -107,6 +107,8 @@
 #include "kis_color.h"
 #include "kis_toolbox.h"
 #include "kis_paintop_registry.h"
+#include "kis_part_layer.h"
+
 // Dialog boxes
 #include "kis_dlg_progress.h"
 #include "kis_dlg_new_layer.h"
@@ -2037,8 +2039,26 @@ void KisView::addPartLayer()
 	KisImageSP img = currentImg();
 	if (!img) return;
 	
-	//KisPartLayerSP l = new KisPartLayer(img, m_actionPartLayer->documentEntry());
+	KoDocumentEntry  e = m_actionPartLayer->documentEntry();
+	
+	KoDocument* doc = e.createDoc(m_doc);
+	if ( !doc )
+		return;
+		
+	if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+		return;
+
+	KisChildDoc * childDoc = m_doc->createChildDoc(img->bounds(), doc);
+	
+	KisPartLayer * partLayer = new KisPartLayer(img, childDoc);
+	img->layerAdd(partLayer, 0);
+	
+	m_doc->setModified(true);
+
+	
 }
+
+
 
 void KisView::layerRemove()
 {

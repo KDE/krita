@@ -1175,8 +1175,9 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 	}
 
 	if (layer != m_activeLayer) {
+		if (m_activeLayer) m_activeLayer->deactivate();
 		m_activeLayer = layer;
-		emit activeLayerChanged(KisImageSP(this));
+		if (m_activeLayer) m_activeLayer->activate();
 	}
 
 
@@ -1284,7 +1285,6 @@ void KisImage::rm(KisLayerSP layer)
 	if (layer == m_activeLayer) {
 		if (m_layers.empty()) {
 			m_activeLayer = 0;
-			emit activeLayerChanged(KisImageSP(this));
 		} else {
 			activate(m_layerStack[0]);
 		}

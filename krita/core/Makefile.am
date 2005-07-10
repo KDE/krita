@@ -32,18 +32,16 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	tool/libkistool.la \
 	$(LIB_KOPAINTER)
 
-libkritacore_la_SOURCES = kis_color.cc kis_paint_device.cc kis_layer.cc kis_image.cc \
-		kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc kis_painter.cc \
-		kis_fill_painter.cc kis_gradient_painter.cc kis_convolution_painter.cc kis_cursor.cc \
-		kis_selection.cc kis_command.cc kis_background.cc kis_config.cc \
-		kis_canvas_observer.cc \
-		kis_transaction.cc kis_selected_transaction.cc kis_vec.cc kis_rect.cc kis_iterators_pixel.cc \
-		KRayonViewIface.cc KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc \
-		KIsImageIface.skel kis_selection_manager.cc kis_scale_visitor.cc kis_transform_visitor.cc \
-		kis_rotate_visitor.cc kis_clipboard.cc \
-		kis_filter.cc kis_filter_registry.cc \
-		kis_filter_strategy.cc \
-		kis_composite_op.cc 
+libkritacore_la_SOURCES = kis_color.cc kis_paint_device.cc kis_layer.cc \
+	kis_image.cc 		kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc \
+	kis_painter.cc 		kis_fill_painter.cc kis_gradient_painter.cc \
+	kis_convolution_painter.cc kis_cursor.cc 		kis_selection.cc kis_command.cc kis_background.cc \
+	kis_config.cc 		kis_canvas_observer.cc 		kis_transaction.cc \
+	kis_selected_transaction.cc kis_vec.cc kis_rect.cc kis_iterators_pixel.cc 		KRayonViewIface.cc \
+	KRayonViewIface.skel KIsDocIface.cc KIsDocIface.skel KIsImageIface.cc 		KIsImageIface.skel \
+	kis_selection_manager.cc kis_scale_visitor.cc kis_transform_visitor.cc 		kis_rotate_visitor.cc \
+	kis_clipboard.cc 		kis_filter.cc kis_filter_registry.cc 		kis_filter_strategy.cc \
+			kis_composite_op.cc kis_part_layer.cc
 
 
 noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \

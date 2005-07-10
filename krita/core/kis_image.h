@@ -220,7 +220,6 @@ public:
 	vKisAnnotationSP_it endAnnotations();
 
 signals:
-	void activeLayerChanged(KisImageSP image);
 	void activeSelectionChanged(KisImageSP image);
 	void selectionCreated(KisImageSP image);
 	void selectionChanged(KisImageSP image);

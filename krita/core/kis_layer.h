@@ -37,10 +37,17 @@ public:
 	virtual ~KisLayer();
 
 public:
-	virtual const bool visible() const;
-	virtual void setVisible(bool v);
+
+	// Called when the layer is made active
+	virtual void activate() {};
+
+	// Called when another layer is made active
+	virtual void deactivate() {};
 
 public:
+	virtual const bool visible() const;
+	virtual void setVisible(bool v);
+	
 	QUANTUM opacity() const;
 	void setOpacity(QUANTUM val);
 	KNamedCommand *setOpacityCommand(QUANTUM val);

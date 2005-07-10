@@ -69,6 +69,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
 #include "kis_id.h"
+#include "kis_part_layer.h"
 #include "KIsDocIface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
@@ -1000,6 +1001,14 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 	int totalPercentage = ((m_ioProgressBase + percentage) * 100) / m_ioProgressTotalSteps;
 
 	emitProgress(totalPercentage);
+}
+
+KisChildDoc * KisDoc::createChildDoc( const QRect & rect, KoDocument* childDoc )
+{
+    KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
+    insertChild( ch );
+    return ch;
+
 }
 
 void KisDoc::prepareForImport()

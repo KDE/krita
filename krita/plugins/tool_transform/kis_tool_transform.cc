@@ -93,14 +93,14 @@ KisToolTransform::KisToolTransform()
 	m_endPos = QPoint(0, 0);
 	m_optWidget = 0;
 	m_transaction = 0;
-	m_sizeCursors[0] = KisCursor::sizeFDiagCursor();
-	m_sizeCursors[1] = KisCursor::sizeVerCursor();
-	m_sizeCursors[2] = KisCursor::sizeBDiagCursor();
-	m_sizeCursors[3] = KisCursor::sizeHorCursor();
-	m_sizeCursors[4] = KisCursor::sizeFDiagCursor();
-	m_sizeCursors[5] = KisCursor::sizeVerCursor();
-	m_sizeCursors[6] = KisCursor::sizeBDiagCursor();
-	m_sizeCursors[7] = KisCursor::sizeHorCursor();
+	m_sizeCursors[0] = KisCursor::sizeVerCursor();
+	m_sizeCursors[1] = KisCursor::sizeBDiagCursor();
+	m_sizeCursors[2] = KisCursor::sizeHorCursor();
+	m_sizeCursors[3] = KisCursor::sizeFDiagCursor();
+	m_sizeCursors[4] = KisCursor::sizeVerCursor();
+	m_sizeCursors[5] = KisCursor::sizeBDiagCursor();
+	m_sizeCursors[6] = KisCursor::sizeHorCursor();
+	m_sizeCursors[7] = KisCursor::sizeFDiagCursor();
 }
 
 KisToolTransform::~KisToolTransform()
@@ -190,9 +190,6 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 					m_clickoffset = e -> pos().floorQPoint() 
 						- QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
 					break;
-				case TOPLEFTSCALE:
-					m_clickoffset = e -> pos().floorQPoint() - m_topleft;
-					break;
 				case TOPSCALE:
 					m_clickoffset = e -> pos().floorQPoint() 
 							- QPoint((m_topleft + m_topright)/2);
@@ -218,6 +215,9 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 					m_clickoffset = e -> pos().floorQPoint() 
 							- QPoint((m_topleft + m_bottomleft)/2);
 					break;
+				case TOPLEFTSCALE:
+					m_clickoffset = e -> pos().floorQPoint() - m_topleft;
+					break;
 			}
 			m_selecting = true;
 		}
@@ -236,7 +236,14 @@ int KisToolTransform::distsq(QPoint v,QPoint w)
 
 void KisToolTransform::setFunctionalCursor()
 {
-	int rotOctant = int(8.5 + m_a* 4 / M_PI);
+	int rotOctant = 8 + int(8.5 + m_a* 4 / M_PI);
+	
+	int s;
+	if(m_scaleX*m_scaleY<0)
+		s = -1;
+	else
+		s=1;
+		
 	switch(m_function)
 	{
 		case MOVE:
@@ -245,29 +252,29 @@ void KisToolTransform::setFunctionalCursor()
 		case ROTATE:
 			setCursor(KisCursor::rotateCursor());
 			break;
-		case TOPLEFTSCALE:
-			setCursor(m_sizeCursors[(0+rotOctant)%8]);
-			break;
 		case TOPSCALE:
-			setCursor(m_sizeCursors[(1+rotOctant)%8]);
+			setCursor(m_sizeCursors[(0*s +rotOctant)%8]);
 			break;
 		case TOPRIGHTSCALE:
-			setCursor(m_sizeCursors[(2+rotOctant)%8]);
+			setCursor(m_sizeCursors[(1*s +rotOctant)%8]);
 			break;
 		case RIGHTSCALE:
-			setCursor(m_sizeCursors[(3+rotOctant)%8]);
+			setCursor(m_sizeCursors[(2*s +rotOctant)%8]);
 			break;
 		case BOTTOMRIGHTSCALE:
-			setCursor(m_sizeCursors[(4+rotOctant)%8]);
+			setCursor(m_sizeCursors[(3*s +rotOctant)%8]);
 			break;
 		case BOTTOMSCALE:
-			setCursor(m_sizeCursors[(5+rotOctant)%8]);
+			setCursor(m_sizeCursors[(4*s +rotOctant)%8]);
 			break;
 		case BOTTOMLEFTSCALE:
-			setCursor(m_sizeCursors[(6+rotOctant)%8]);
+			setCursor(m_sizeCursors[(5*s +rotOctant)%8]);
 			break;
 		case LEFTSCALE:
-			setCursor(m_sizeCursors[(7+rotOctant)%8]);
+			setCursor(m_sizeCursors[(6*s +rotOctant)%8]);
+			break;
+		case TOPLEFTSCALE:
+			setCursor(m_sizeCursors[(7*s +rotOctant)%8]);
 			break;
 	}
 }
@@ -507,8 +514,6 @@ void KisToolTransform::move(KisMoveEvent *e)
 			else
 				m_function = MOVE;
 			
-			if(distsq(mousePos, m_topleft)<25)
-				m_function = TOPLEFTSCALE;
 			if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
 				m_function = TOPSCALE;
 			if(distsq(mousePos, m_topright)<25)
@@ -523,6 +528,8 @@ void KisToolTransform::move(KisMoveEvent *e)
 				m_function = BOTTOMLEFTSCALE;
 			if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<25)
 				m_function = LEFTSCALE;
+			if(distsq(mousePos, m_topleft)<25)
+				m_function = TOPLEFTSCALE;
 			
 			setFunctionalCursor();
 		}
@@ -645,7 +652,7 @@ void KisToolTransform::transform() {
 	img -> notify(rc);
 }
 
-void KisToolTransform::setFilter(const KisID &filterID)
+void KisToolTransform::slotSetFilter(const KisID &filterID)
 {
 	m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
 }

@@ -8,9 +8,9 @@ Transform tool
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
 	* Better progress calculation
 	* Make undo work. there seems to be a bug+memory leakage
-	* Fix direction of size cursors when mirroring
 	* Implement gui for shearing and create cursors for shearing
 	* Fix problem of deselecting during tool use
+	* Fix problem of undoing during tool use
 	* Fix problem of clearing "extraLength pixels"
 
 

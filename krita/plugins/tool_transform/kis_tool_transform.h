@@ -72,7 +72,7 @@ private:
 
 private slots:
 
-	void setFilter(const KisID &);
+	void slotSetFilter(const KisID &);
 	void setStartX(int x) { m_startPos.setX(x); }
 	void setStartY(int y) { m_startPos.setY(y); }
 	void setEndX(int x) { m_endPos.setX(x); }

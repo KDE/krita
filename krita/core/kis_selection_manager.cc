@@ -138,34 +138,34 @@ void KisSelectionManager::setup(KActionCollection * collection)
 	
 	m_reselect =
 		new KAction(i18n("&Reselect"),
-			    0, 0,
+			    "Ctrl+Shift+D", 0,
 			    this, SLOT(reselect()),
 			    collection, "reselect");
 	
 	m_invert =
 		new KAction(i18n("&Invert"),
-			    0, 0,
+			    "Ctrl+I", 0,
 			    this, SLOT(invert()),
 			    collection, "invert");
 
 
         m_toNewLayer =
 		new KAction(i18n("Copy Selection to New Layer"),
-			    "ctrl+shift+j",
+			    "Ctrl+J",
 			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
 
 
 	m_cutToNewLayer =
 		new KAction(i18n("Cut Selection to New Layer"),
-			"ctrl+j",
+			"Ctrl+Shift+J",
 			this, SLOT(cutToNewLayer()),
 			collection, "cut_selection_to_new_layer");
 
 
 	m_feather =
 		new KAction(i18n("Feather..."),
-			    0, 0,
+			    "Ctrl+Alt+D", 0,
 			    this, SLOT(feather()),
 			    collection, "feather");
 

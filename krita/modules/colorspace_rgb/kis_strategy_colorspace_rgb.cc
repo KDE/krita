@@ -44,7 +44,7 @@ namespace {
 }
 
 KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
-	KisStrategyColorSpace(KisID("RGBA", i18n("RGB/Alpha")), TYPE_BGRA_8, icSigRgbData)
+	KisStrategyColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR));

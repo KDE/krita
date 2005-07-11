@@ -44,7 +44,7 @@ const Q_UINT16 KisStrategyColorSpaceRGBU16::U16_OPACITY_OPAQUE;
 const Q_UINT16 KisStrategyColorSpaceRGBU16::U16_OPACITY_TRANSPARENT;
 
 KisStrategyColorSpaceRGBU16::KisStrategyColorSpaceRGBU16() :
-	KisStrategyColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer)")), TYPE_BGRA_16, icSigRgbData)
+	KisStrategyColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData)
 {
 	m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
 	m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));

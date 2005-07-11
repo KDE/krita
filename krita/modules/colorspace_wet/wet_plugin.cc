@@ -98,9 +98,10 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
 		Q_CHECK_PTR(w);
 
-		w -> setCaption(i18n("Paints"));
+		w -> setCaption(i18n("Watercolors"));
 
 		m_view -> paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
+		m_view->paletteManager()->showWidget("hsvwidget");
 		//i18n("Watercolor Paint Options")
 		
 		m_view -> getCanvasSubject() -> attach(w);

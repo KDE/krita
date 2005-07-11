@@ -39,7 +39,6 @@
 #include "default_tools.h"
 
 #include "kis_tool_fill.h"
-#include "kis_tool_airbrush.h"
 #include "kis_tool_brush.h"
 #include "kis_tool_freehand.h"
 #include "kis_tool_colorchanger.h"
@@ -53,8 +52,6 @@
 #include "kis_tool_zoom.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_pan.h"
-//#include "kis_tool_eraser.h"
-//#include "kis_tool_pen.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
@@ -78,8 +75,6 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 
 		r -> add(new KisToolFillFactory( actionCollection() ));
 		r -> add(new KisToolGradientFactory( actionCollection() ));
-		//r -> add(new KisToolPenFactory( actionCollection() ));
-		r -> add(new KisToolAirbrushFactory( actionCollection() ));
 		r -> add(new KisToolBrushFactory( actionCollection() ));
 		r -> add(new KisToolColorPickerFactory( actionCollection() ));
 		r -> add(new KisToolLineFactory( actionCollection() ));
@@ -90,7 +85,7 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
 		r -> add(new KisToolEllipseFactory( actionCollection() ));
 		r -> add(new KisToolRectangleFactory( actionCollection() ));
 		r -> add(new KisToolPanFactory( actionCollection() ));
-		//r -> add(new KisToolEraserFactory( actionCollection() ));
+
         }
 }
 

@@ -38,6 +38,7 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
 	virtual KisID id() { return KisID("paintbrush", i18n("paintbrush")); }
+	//virtual QString pixmap() { return "brush.png"; }
 	
 };
 

@@ -52,8 +52,10 @@ public:
 			     const double /*yTilt*/) = 0;
 	void setSource(KisPaintDeviceSP p);
 
-	// Whether this paintop wants to deposit paint even when not moving, i.e. the
-	// tool needs to activate its timer.
+	/**
+	 * Whether this paintop wants to deposit paint even when not moving, i.e. the
+	 * tool needs to activate its timer.
+	 */
 	virtual bool incremental() { return false; }
 	
 protected:
@@ -80,11 +82,15 @@ public:
 	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
 	virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
 
-	// The filename of the pixmap we can use to represent this paintop in the ui.
+	/**
+	 * The filename of the pixmap we can use to represent this paintop in the ui.
+	 */
 	virtual QString pixmap() { return ""; };
 	
-	// Whether this paintop is internal to a certain tool or can be used
-	// in various tools. If false, it won't show up in the toolchest.
+	/**
+	 * Whether this paintop is internal to a certain tool or can be used
+	 * in various tools. If false, it won't show up in the toolchest.
+	 */
 	virtual bool userVisible() { return true; }
 
 	/**

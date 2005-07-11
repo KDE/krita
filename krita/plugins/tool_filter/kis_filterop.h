@@ -37,6 +37,7 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
 	virtual KisID id() { return KisID(("filter"), i18n("filter")); }
+	virtual bool userVisible() { return false; }
 };
 
 

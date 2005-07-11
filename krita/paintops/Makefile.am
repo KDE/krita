@@ -1,3 +1,12 @@
+kritaimagesdir = $(prefix)/share/apps/krita/images
+
+kritaimages_DATA = \
+	airbrush.png \
+	brush.png \
+	eraser.png \
+	pencil.png
+
+
 kde_services_DATA = kritadefaultpaintops.desktop
 
 # all_includes must remain last!

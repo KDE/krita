@@ -54,7 +54,6 @@ public:
 
 signals:
 	void activatedResource(KisResource *r);
-	void addedResource(KisResource *r);
 
 private slots:
 	void setActiveItem(KoIconItem *item);

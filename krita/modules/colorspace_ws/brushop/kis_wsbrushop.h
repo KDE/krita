@@ -34,6 +34,7 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
 	virtual KisID id() { return KisID("wsbrush", i18n("Wet & sticky paintbrush")); }
+	virtual QString pixmap() { return "wetpaintbrush.png"; }
 };
 
 class KisWSBrushOp : public KisPaintOp {

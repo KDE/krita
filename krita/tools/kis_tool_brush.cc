@@ -21,6 +21,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -43,11 +44,27 @@ KisToolBrush::KisToolBrush()
 {
 	setName("tool_brush");
 	setCursor(KisCursor::brushCursor());
+	m_rate = 100; // Conveniently hardcoded for now
+	m_timer = new QTimer(this);
+	Q_CHECK_PTR(m_timer);
+
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
 KisToolBrush::~KisToolBrush()
 {
+	delete m_timer;
+	m_timer = 0;
 }
+
+void KisToolBrush::timeoutPaint()
+{
+	if (currentImage() && painter()) {
+		painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+		currentImage() -> notify(painter() -> dirtyRect());
+	}
+}
+
 
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
@@ -60,8 +77,21 @@ void KisToolBrush::initPaint(KisEvent *e)
 	super::initPaint(e);
 
 	KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
-	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+
+	painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
+	
+	if (op->incremental()) {
+		m_timer -> start( m_rate );
+	}
 }
+
+
+void KisToolBrush::endPaint()
+{
+	m_timer -> stop();
+	super::endPaint();
+}
+
 
 void KisToolBrush::setup(KActionCollection *collection)
 {

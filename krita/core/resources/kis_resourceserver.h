@@ -38,9 +38,6 @@ public:
 	void loadResources();
 	QValueList<KisResource*> resources();
 
-//signals:
-//	void addedResource(KisResource *res);
-
 protected:
 	virtual KisResource* createResource( QString filename ) = 0;
 

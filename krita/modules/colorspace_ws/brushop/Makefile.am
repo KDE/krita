@@ -1,5 +1,8 @@
 kde_services_DATA = kritawsbrushpaintop.desktop
 
+kritaimagesdir = $(prefix)/share/apps/krita/images
+kritaimages_DATA = wetpaintbrush.png
+
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../../..//core \
 	-I$(srcdir)/../../..//core/color_strategy/ \

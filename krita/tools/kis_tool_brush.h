@@ -26,6 +26,7 @@
 #include "kis_tool_factory.h"
 #include "koffice_export.h"
 
+class QTimer;
 class KisPoint;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
@@ -39,8 +40,18 @@ public:
 	virtual void setup(KActionCollection *collection);
 
 protected:
-
+	
 	virtual void initPaint(KisEvent *e);
+	virtual void endPaint();
+
+private slots:
+
+	virtual void timeoutPaint();
+
+private:
+	Q_INT32 m_rate;
+	QTimer * m_timer;
+	
 };
 
 class KisToolBrushFactory : public KisToolFactory {

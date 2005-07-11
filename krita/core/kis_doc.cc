@@ -169,6 +169,7 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
                 if ((ok = slotNewImage()))
                         emit imageListUpdated();
                 setModified(false);
+                KoDocument::setEmpty();
                 setUndo(true);
                 return ok;
         }
@@ -193,21 +194,25 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	if (ret == KoTemplateChooseDia::Template) {
 
 		resetURL();
-
 		ok = loadNativeFormat( file );
-
 		emit imageListUpdated();
-
-		KoDocument::setEmpty();
+		setEmpty();
+		setModified(true);//XXX:hack
 		ok = true;
+		
 	} else if (ret == KoTemplateChooseDia::File) {
+		
 		KURL url( file );
+		kdDebug() << "KisDoc::initDoc opening URL " << url.prettyURL() << endl;
 		ok = openURL(url);
+		
 	} else if (ret == KoTemplateChooseDia::Empty) {
+	
 		if ((ok = slotNewImage())) {
 			emit imageListUpdated();
-			KoDocument::setEmpty();
+			setEmpty();
 		}
+		
 	}
 
 	setModified(false);
@@ -749,6 +754,8 @@ bool KisDoc::completeLoading(KoStore *store)
 	}
 
 	IODone();
+	
+	setModified( false );
 	return true;
 }
 

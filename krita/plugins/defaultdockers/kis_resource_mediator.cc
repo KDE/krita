@@ -46,8 +46,6 @@ void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 	for ( it = resources.begin(); it != resources.end(); ++it )
 		rServerAddedResource( *it );
 
-	//connect(rServer, SIGNAL(addedResource(KisResource*)),
-	//	this, SLOT(rServerAddedResource(KisResource*)));
 }
 
 KisResource *KisResourceMediator::currentResource() const
@@ -107,7 +105,6 @@ void KisResourceMediator::rServerAddedResource(KisResource *resource)
 		m_items[resource] = item;
 
 		m_chooser -> addItem(item);
-		emit addedResource(resource);
 		if (m_activeItem == 0) setActiveItem(item);
 	}
 }

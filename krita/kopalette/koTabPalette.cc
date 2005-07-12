@@ -18,6 +18,7 @@
 
 
 #include <qdockwindow.h>
+#include <qtabwidget.h>
 
 #include <ktabwidget.h>
 #include <kdebug.h>
@@ -30,11 +31,12 @@
 KoTabPalette::KoTabPalette(KoView * parent, const char * name)
 	: KoPalette(parent, name)
 {
-	m_page = new KTabWidget(this);
+	m_page = new QTabWidget(this);
 	m_page->setTabShape(QTabWidget::Triangular);
+	m_page->setFocusPolicy(QWidget::NoFocus);
 	//m_page->setFont(m_font);
 	m_page->setMargin(1);
-	m_page->setTabReorderingEnabled(true);
+// 	m_page->setTabReorderingEnabled(true);
 	setMainWidget(m_page);
 }
 
@@ -51,7 +53,6 @@ void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
  		w -> layout() -> setMargin(0);
 	}
 	m_page -> insertTab(w, w -> caption(), position);
-
 }
 
 void KoTabPalette::unplug(const QWidget * w)

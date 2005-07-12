@@ -25,7 +25,7 @@
 
 class KoView;
 class QWidget;
-class KTabWidget;
+class QTabWidget;
 
 /**
  * This is a palette with a tabwidget. It supports
@@ -54,7 +54,7 @@ public:
 
 private:
 
-	KTabWidget * m_page;
+	QTabWidget * m_page;
 
 	QMap<QWidget*, int> m_hiddenPages;
 };

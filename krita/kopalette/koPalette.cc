@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kglobalsettings.h>
-
+ #include <kaccelmanager.h>
 #include <koView.h>
 
 #include "koPalette.h"
@@ -64,11 +64,11 @@ static const unsigned char img_shadebutton [] = {
 KoPalette::KoPalette(KoView * parent, const char * name)
 	: QDockWindow(parent, name)
 {
-
+	KAcceleratorManager::setNoAccel(this);
 	setCloseMode( QDockWindow::Always );
 	setResizeEnabled(true);
 	setOpaqueMoving(true);
-
+	setFocusPolicy(QWidget::NoFocus);
   	setVerticallyStretchable(false);
   	setHorizontallyStretchable(false);
 	

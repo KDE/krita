@@ -51,12 +51,15 @@ public:
 	virtual QWidget* createConfigurationWidget(QWidget* parent);
 	virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-	void randomize_indices (Q_INT32 count, Q_INT32* indices);
-        Q_INT32 randomIntRange(Q_INT32 lowestNumber, Q_INT32 highestNumber);
+	//this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
+        void randomizeIndices (Q_INT32 count, Q_INT32* indices);
+        Q_INT32 randomIntNumber(Q_INT32 lowestNumber, Q_INT32 highestNumber);
+        double randomDoubleNumber(double lowestNumber, double highestNumber);
         double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y);
-        void convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
+        void convertSegment(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
         void fillPolyColor(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest);
-
+        void cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation);
+        
 };
 
 #endif

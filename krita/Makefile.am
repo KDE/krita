@@ -51,4 +51,5 @@ messages: rc.cpp
 
 kde_services_DATA = kritapart.desktop
 
+DOXYGEN_EXCLUDE = CImg.h
 include $(top_srcdir)/admin/Doxyfile.am

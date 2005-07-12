@@ -6,6 +6,7 @@ Name[ru]=Кисть с параметрами влажности и прилип
 Name[sv]=Målningsoperation med våt och klibbig målarpensel
 Comment=Wet & Sticky paintbrush
 Comment[es]=Brocha mojada y pegajosa
+Comment[pt_BR]=Modelo de cores de tela Molhada & Pegajosa
 Comment[ru]=Кисть с параметрами влажности и прилипания
 Comment[sv]=Våt och klibbig målarpensel
 ServiceTypes=Krita/CoreModule

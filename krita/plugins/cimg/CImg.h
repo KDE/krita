@@ -2889,7 +2889,7 @@ namespace cimg_library {
        - Should be considered as \e read-only. Modifying directly \c CImg<T>::data would probably
        result in a crash.
        - If CImg<T>::data==NULL, the image is empty and contains no pixel data.
-       \see \ref cimg_storage
+       \see cimg_storage
     **/
     T *data;
 
@@ -7143,7 +7143,7 @@ namespace cimg_library {
     //! Display an image into a CImgDisplay window.
     const CImg& display(CImgDisplay& disp,const unsigned int ymin=0,const unsigned int ymax=~0) const { disp.display(*this,ymin,ymax); return *this; }
 
-    //! Same as \ref cimg::wait()
+    //! Same as cimg::wait()
     const CImg& wait(const unsigned int milliseconds) const { cimg::wait(milliseconds); return *this;  }
   
     //! Display an image in a window with a title \p title, and wait a 'closed' or 'keyboard' event.\n
@@ -8823,10 +8823,6 @@ namespace cimg_library {
        \param disp : reference to an existing CImgDisplay instance, where the current image list will be displayed.
        \param axe : specify the axe for image concatenation. Can be 'x','y','z' or 'v'.
        \param align : specify the alignment for image concatenation. Can be 'p' (top), 'c' (center) or 'n' (bottom).
-       \param min_size : specify the minimum size of the opening display window. Images having dimensions below this
-       size will be upscaled.
-       \param max_size : specify the maximum size of the opening display window. Images having dimensions above this
-       size will be downscaled.
        \return A reference to the current CImgl instance is returned.
     **/
     const CImgl& display(CImgDisplay& disp,const char axe='x',const char align='c') const { 
@@ -8841,10 +8837,6 @@ namespace cimg_library {
        \param disp : pointer to an existing CImgDisplay instance, where the current image list will be displayed.
        \param axe : specify the axe for image concatenation. Can be 'x','y','z' or 'v'.
        \param align : specify the alignment for image concatenation. Can be 'p' (top), 'c' (center) or 'n' (bottom).
-       \param min_size : specify the minimum size of the opening display window. Images having dimensions below this
-       size will be upscaled.
-       \param max_size : specify the maximum size of the opening display window. Images having dimensions above this
-       size will be downscaled.
        \return A reference to the current CImgl instance is returned.
     **/
     const CImgl& display(CImgDisplay* disp,const char axe='x',const char align='c') const { 

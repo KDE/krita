@@ -31,7 +31,9 @@
 
 #include <klocale.h>
 #include <kglobalsettings.h>
- #include <kaccelmanager.h>
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
+#include <kaccelmanager.h>
+#endif
 #include <koView.h>
 
 #include "koPalette.h"
@@ -64,7 +66,10 @@ static const unsigned char img_shadebutton [] = {
 KoPalette::KoPalette(KoView * parent, const char * name)
 	: QDockWindow(parent, name)
 {
+
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
 	KAcceleratorManager::setNoAccel(this);
+#endif	
 	setCloseMode( QDockWindow::Always );
 	setResizeEnabled(true);
 	setOpaqueMoving(true);

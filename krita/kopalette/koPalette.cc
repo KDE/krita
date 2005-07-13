@@ -31,9 +31,7 @@
 
 #include <klocale.h>
 #include <kglobalsettings.h>
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
 #include <kaccelmanager.h>
-#endif
 #include <koView.h>
 
 #include "koPalette.h"

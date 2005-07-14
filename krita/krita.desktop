@@ -8,6 +8,7 @@ Exec=krita %u
 DocPath=krita/index.html
 GenericName=Painting and Image Editing Application
 GenericName[es]=Aplicación de pintura y de edición de imágenes
+GenericName[et]=Joonistamine ja pilditöötlus
 GenericName[ru]=Рисование и редактирование изображений
 GenericName[sv]=Målnings- och bildredigeringsprogram
 MimeType=application/x-krita

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Painting and Image Editor Component
 Name[es]=Componente de pintura y de edición de imágenes de KOffice
+Name[et]=KOffice'i joonistamise ja pilditöötluse komponent
 Name[ru]=Компонент рисования и редактирования изображений KOffice
 Name[sv]=Koffice målnings- och bildredigeringskomponent
 X-KDE-Library=libkritapart
@@ -11,6 +12,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krita
 GenericName=Image object
 GenericName[es]=Objeto de imagen
+GenericName[et]=Pildiobjekt
 GenericName[ga]=Réad íomhá
 GenericName[ru]=Рисунок
 GenericName[sv]=Bildobjekt

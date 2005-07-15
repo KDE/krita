@@ -45,7 +45,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_progress_display_interface.h>
 #include <kis_vec.h>
 
@@ -59,7 +58,7 @@
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define SQR(x) ((x) * (x))
 
-KisCubismFilter::KisCubismFilter(KisView * view) : KisFilter(id(), view)
+KisCubismFilter::KisCubismFilter() : KisFilter(id(), "artistic", "&Cubism...")
 {
 }
 
@@ -395,15 +394,15 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         }
 }
 
-QWidget* KisCubismFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );
 	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

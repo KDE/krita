@@ -9,7 +9,6 @@ SUBDIRS = cimg \
 	colorrange \
 	imagesize \
 	screenshot \
-	convolutionfilters \
 	rotateimage \
 	shearimage \
 	colorspaceconversion \
@@ -30,3 +29,5 @@ SUBDIRS = cimg \
 	defaultdockers \
 	pixelizefilter \
 	cubismfilter
+
+#convolutionfilters \

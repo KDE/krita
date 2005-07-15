@@ -34,17 +34,10 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
-
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
-
-        KisFilterSP krdf = createFilter<KisRainDropsFilter>(view);
-	(void) new KAction(i18n("&Raindrops..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "raindrops_filter");
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisRainDropsFilter());
+	}
 }
 
 KisRainDropsFilterPlugin::~KisRainDropsFilterPlugin()

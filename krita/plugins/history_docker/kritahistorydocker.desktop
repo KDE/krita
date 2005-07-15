@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=History Docker
+Comment=Command history docker for Krita
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritahistorydocker

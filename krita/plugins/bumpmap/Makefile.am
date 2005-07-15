@@ -1,7 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritabumpmap.rc
-
-EXTRA_DIST = $(kritarc_DATA)
+kde_services_DATA = kritabumpmapfilter.desktop
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \

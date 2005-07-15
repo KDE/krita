@@ -1,8 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritaembossfilter.rc
-
-EXTRA_DIST = $(kritarc_DATA)
-
+kde_services_DATA = kritaembossfilter.desktop
 
 INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \

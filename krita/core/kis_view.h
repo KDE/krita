@@ -25,7 +25,7 @@
 
 #include <qdatetime.h>
 #include <qpixmap.h>
-
+#include <qstringlist.h>
 #include <list>
 #include <map>
 
@@ -52,6 +52,7 @@ class QWidget;
 
 class DCOPObject;
 class KAction;
+class KActionMenu;
 class KPrinter;
 class KToggleAction;
 
@@ -76,9 +77,9 @@ class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
 class KisMoveEvent;
 class KisSelectionManager;
+class KisFilterManager;
 class KoPaletteManager;
 class KisToolRegistry;
-class KisFilterRegistry;
 class KisCompositeOp;
 class KisLayerBox;
 class KisPaintopBox;
@@ -143,6 +144,7 @@ public: // Plugin access API. XXX: This needs redesign.
 	KisDoc * getDocument() { return m_doc; }
 
 	KisSelectionManager * selectionManager() { return m_selectionManager; }
+	KisFilterManager * filterManager() { return m_filterManager; }
 	KoPaletteManager * paletteManager();
 
 	/**
@@ -233,9 +235,9 @@ private:
 	virtual KisToolControllerInterface *toolController() const;
 	
 	virtual KoDocument *document() const;
+
 	// Sets the specified cursor; returns the previous cursor
 	virtual QCursor setCanvasCursor(const QCursor & cursor);
-	
 
 public:
 
@@ -386,6 +388,7 @@ private:
 	KisCanvas *m_canvas;
 
 	KisSelectionManager * m_selectionManager;
+	KisFilterManager * m_filterManager;
 	KoPaletteManager * m_paletteManager;
 	
         // Fringe benefits
@@ -464,26 +467,22 @@ private:
 	// Monitorprofile for this view
 	KisProfileSP m_monitorProfile;
 
+
 private:
 	mutable KisImageSP m_current;
 
-	// XXX: Temporary re-instatement of old way to load filters and tools
 public:
 	KisToolRegistry * toolRegistry() const;
-	KisFilterRegistry * filterRegistry() const;
-
-	virtual KisFilterSP filterGet(const KisID& id);
-	virtual KisIDList filterList();
 
 private:
-	KisFilterRegistry * m_filterRegistry;
+
 	KisToolRegistry * m_toolRegistry;
 
 protected:
 
 	friend class KisSelectionManager;
+	friend class KisFilterManager;
 
 };
 
 #endif // KIS_VIEW_H_
-

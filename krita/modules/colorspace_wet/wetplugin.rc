@@ -1,12 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritawetplugin" version="1">
-<MenuBar>
-	<Menu name="Watercolor"><text>&amp;Watercolor layer</text>
-		<Action name="wetnessvisualisation"/>
-		<Action name="texturefilter"/>
-		<Action name="wetphysics"/>
-	</Menu>
-</MenuBar>
+<Menu name="View"><text>&amp;View</text>
+	<Action name="wetnessvisualisation"/>
+</Menu>
 <Toolbar name="painting_tools" position="top"><Text>Painting Tools</Text>
 	<Action name="tool_wet_brush"/>
 </Toolbar>

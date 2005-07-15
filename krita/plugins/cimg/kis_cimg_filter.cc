@@ -44,7 +44,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"
@@ -55,8 +54,8 @@ using namespace cimg_library;
 typedef unsigned char uchar;
 
 
-KisCImgFilter::KisCImgFilter(KisView * view) 
-	: KisFilter(id(), view),
+KisCImgFilter::KisCImgFilter() 
+	: KisFilter(id(), "", "&CImg Image Restoration..."),
 	  eigen(CImg<>(2,1), CImg<>(2,2))
 {
 	restore = true;
@@ -584,12 +583,12 @@ bool KisCImgFilter::process()
         return true;
 }
 
-QWidget* KisCImgFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	return new KisCImgconfigWidget(this, parent);
 }
 
-KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisCImgconfigWidget * widget = (KisCImgconfigWidget *) nwidget;
 	if( widget == 0 )

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Convolutions filters
+Comment=Convolution filters
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritaconvolutionfilters

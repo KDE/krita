@@ -40,14 +40,14 @@ class KisPixelizeFilterConfiguration : public KisFilterConfiguration
 class KisPixelizeFilter : public KisFilter
 {
 public:
-	KisPixelizeFilter(KisView * view);
+	KisPixelizeFilter();
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
 	virtual bool supportsPainting() { return true; }
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };

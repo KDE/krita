@@ -41,11 +41,9 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_iterators_pixel.h>
 #include <kis_pixel.h>
 #include <kis_strategy_colorspace.h>
-// #include <kmessagebox.h>
 
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
@@ -65,27 +63,14 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
  		  << "\n";
 
 
-	if ( !parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
-		return;
-	} else {
-		m_view = (KisView*) parent;
+		KisFilterRegistry::instance()->add(new KisBrightnessContrastFilter());
+		KisFilterRegistry::instance()->add(new KisAutoContrast());
+		KisFilterRegistry::instance()->add(new KisGammaCorrectionFilter());
+		KisFilterRegistry::instance()->add(new KisColorAdjustmentFilter());
+		KisFilterRegistry::instance()->add(new KisDesaturateFilter());
 	}
-
-	KisFilterSP kbc = createFilter<KisBrightnessContrastFilter>(m_view);
-	(void) new KAction(i18n("&Brightness / Contrast..."), 0, 0, kbc, SLOT(slotActivated()), actionCollection(), "brightnesscontrast");
-	
-	KisFilterSP kac = createFilter<KisAutoContrast>(m_view);
-	(void) new KAction(i18n("&Auto Contrast"), 0, 0, kac, SLOT(slotActivated()), actionCollection(), "autocontrast");
-
-	KisFilterSP kgc = createFilter<KisGammaCorrectionFilter>(m_view);
-	(void) new KAction(i18n("&Gamma Correction..."), 0, 0, kgc, SLOT(slotActivated()), actionCollection(), "gammacorrection");
-
-	KisFilterSP kfca = createFilter<KisColorAdjustmentFilter>(m_view);
-	(void) new KAction(i18n("&Color Adjustment..."), 0, 0, kfca, SLOT(slotActivated()), actionCollection(), "coloradjustment");
-	
-	KisFilterSP kdf = createFilter<KisDesaturateFilter>(m_view);
-	(void) new KAction(i18n("&Desaturate"), 0, 0, kdf, SLOT(slotActivated()), actionCollection(), "desaturate");
 }
 
 ColorsFilters::~ColorsFilters()
@@ -94,11 +79,14 @@ ColorsFilters::~ColorsFilters()
 
 //==================================================================
 
-KisColorAdjustmentFilter::KisColorAdjustmentFilter(KisView * view) :
-	KisIntegerPerChannelFilter(view, id(), -255, 255, 0)
+KisColorAdjustmentFilter::KisColorAdjustmentFilter() :
+	KisIntegerPerChannelFilter(id(), "adjust", "&Color Adjustment...", -255, 255, 0)
 {
 }
 
+/**
+ * XXX: This filter should write to dst, too!
+ */
 void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisIntegerPerChannelFilterConfiguration* configPC = (KisIntegerPerChannelFilterConfiguration*) config;
@@ -134,11 +122,12 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 //==================================================================
 
-KisGammaCorrectionFilter::KisGammaCorrectionFilter(KisView * view)
-	: KisDoublePerChannelFilter(view, id(), 0.1, 6.0, 1.0)
+KisGammaCorrectionFilter::KisGammaCorrectionFilter()
+	: KisDoublePerChannelFilter(id(), "adjust", "&Gamma Correction...", 0.1, 6.0, 1.0)
 {
 }
 
+// XXX: This filter should write to dst, too!
 void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisDoublePerChannelFilterConfiguration* configPC = (KisDoublePerChannelFilterConfiguration*) config;
@@ -170,10 +159,11 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast(KisView* view) : KisFilter(id(), view)
+KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", "&Auto Contrast")
 {
-
 }
+
+// XXX: This filter should write to dst, too!
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
 {
 	setProgressTotalSteps(rect.width() * rect.height() * 2);
@@ -276,11 +266,12 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 //==================================================================
 
-KisDesaturateFilter::KisDesaturateFilter(KisView * view)
-	: KisFilter(id(), view)
+KisDesaturateFilter::KisDesaturateFilter()
+	: KisFilter(id(), "adjust", "&Desaturate")
 {
 }
 
+//XXX: This filter should write to dst, too!
 void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
 	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);

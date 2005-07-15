@@ -74,7 +74,6 @@
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
-#include "kis_filter_registry.h"
 #include "kis_guide.h"
 #include "kis_gradient.h"
 #include "kis_imagepipe_brush.h"
@@ -120,6 +119,7 @@
 // Action managers
 #include "kis_selection_manager.h"
 #include "koPaletteManager.h"
+#include "kis_filter_manager.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
@@ -137,12 +137,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 		setXMLFile("krita.rc");
 
 
-	// XXX Temporary re-instatement of old way to load filters and tools
+	// XXX Temporary re-instatement of old way to load tools
 	m_toolRegistry = new KisToolRegistry();
 	Q_CHECK_PTR(m_toolRegistry);
-
-	m_filterRegistry = new KisFilterRegistry();
-	Q_CHECK_PTR(m_filterRegistry);
 
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
@@ -153,6 +150,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	m_selectionManager = new KisSelectionManager(this, doc);
 	Q_CHECK_PTR(m_selectionManager);
+	
+	m_filterManager = new KisFilterManager(this, doc);
+	Q_CHECK_PTR(m_filterManager);
 
 	m_doc = doc;
 	m_adapter = adapter;
@@ -208,9 +208,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	setupRulers();
 	setupScrollBars();
 	setupStatusBar();
-
+	
 	setupActions();
-
 	dcopObject();
 
 	createLayerBox();
@@ -234,6 +233,7 @@ KisView::~KisView()
 	delete m_dcop;
 	delete m_paletteManager;
 	delete m_selectionManager;
+	delete m_filterManager;
 }
 
 KoPaletteManager * KisView::paletteManager()
@@ -444,8 +444,9 @@ void KisView::setupStatusBar()
 
 void KisView::setupActions()
 {
-	m_selectionManager -> setup(actionCollection());
-
+	m_selectionManager->setup(actionCollection());
+	m_filterManager->setup(actionCollection());
+	
 	m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
 	connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
@@ -888,6 +889,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_imgMergeLayer -> setEnabled(nlayers > 1 && layerPos < nlayers - 1);
 
 	m_selectionManager -> updateGUI();
+	m_filterManager->updateGUI();
 	imgUpdateGUI();
 }
 
@@ -2348,7 +2350,6 @@ void KisView::connectCurrentImg() const
 		connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));
 
-// 		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), SLOT(imgUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(profileChanged(KisProfileSP)), SLOT(profileChanged(KisProfileSP)));
 		connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
 		connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
@@ -2781,25 +2782,9 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 }
 
 
-// XXX: Temporary re-instatement of old way of getting filter and tools plugins
-KisFilterSP KisView::filterGet(const KisID& id)
-{
-	return filterRegistry()->get( id);
-}
-
-KisIDList KisView::filterList()
-{
-	return filterRegistry()->listKeys();
-}
-
 KisToolRegistry * KisView::toolRegistry() const
 {
 	return m_toolRegistry;
-};
-
-KisFilterRegistry * KisView::filterRegistry() const
-{
-	return m_filterRegistry;
 };
 
 QCursor KisView::setCanvasCursor(const QCursor & cursor)

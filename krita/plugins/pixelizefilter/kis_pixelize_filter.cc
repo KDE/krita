@@ -44,7 +44,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_progress_display_interface.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -52,7 +51,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisPixelizeFilter::KisPixelizeFilter(KisView * view) : KisFilter(id(), view)
+KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "artistic", "&Pixelize...")
 {
 }
 
@@ -191,15 +190,15 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 	setProgressDone();
 }
 
-QWidget* KisPixelizeFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
 	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelheight") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

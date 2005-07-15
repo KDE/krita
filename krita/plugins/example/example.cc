@@ -58,22 +58,17 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
 		  << parent -> className()
 		  << "\n";
 
-	if ( !parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
-		return;
-	} else {
-		m_view = (KisView*) parent;
+		KisFilterRegistry::instance()->add(new KisFilterInvert());
 	}
-
-	KisFilterSP kfi = createFilter<KisFilterInvert>(m_view);
-	(void) new KAction(i18n("&Invert"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_example");
 }
 
 KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert(KisView * view) : KisFilter(id(), view)
+KisFilterInvert::KisFilterInvert() : KisFilter(id(), "", "&Invert")
 {
 }
 

@@ -35,15 +35,10 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, 
                 << "\n";
         KisView * view;
 
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
-
-        KisFilterSP kef = createFilter<KisEmbossFilter>(view);
-	(void) new KAction("&Emboss with Variable Depth...", 0, 0, kef, SLOT(slotActivated()), actionCollection(), "emboss_filter");
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisEmbossFilter());
+	}
 }
 
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()

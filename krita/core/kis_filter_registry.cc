@@ -29,26 +29,25 @@
 #include "kis_filter.h"
 #include "kis_view.h"
 
-// KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
+KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 
 KisFilterRegistry::KisFilterRegistry()
 {
- 	kdDebug(DBG_AREA_REGISTRY) << "Creating KisFilterRegistry" << endl;
-//  	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-//  	KisFilterRegistry::m_singleton = this;
-
+	kdDebug(DBG_AREA_REGISTRY) << "Creating KisFilterRegistry" << endl;
+	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
+	KisFilterRegistry::m_singleton = this;
 }
 
 KisFilterRegistry::~KisFilterRegistry()
 {
 }
 
-// KisFilterRegistry* KisFilterRegistry::instance()
-// {
-//  	if(KisFilterRegistry::m_singleton == 0)
-//  	{
-//  		KisFilterRegistry::m_singleton = new KisFilterRegistry();
-//  	}
-//  	return KisFilterRegistry::m_singleton;
-// }
+KisFilterRegistry* KisFilterRegistry::instance()
+{
+	if(KisFilterRegistry::m_singleton == 0)
+	{
+		KisFilterRegistry::m_singleton = new KisFilterRegistry();
+	}
+	return KisFilterRegistry::m_singleton;
+}
 

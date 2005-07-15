@@ -99,3 +99,4 @@ Q_INT32 KisPolygon::numberOfPoints()
 {
         return count();
 }
+

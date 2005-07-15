@@ -98,7 +98,6 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
 	if (!device) return;
 
 	KisBrush * brush = m_painter -> brush();
-	double oldPressure = m_painter -> pressure();
 	KisPaintDeviceSP dab = m_painter -> dab();
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);

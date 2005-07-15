@@ -23,13 +23,9 @@
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
 
-
-class KisView;
-
-
 class KisDesaturateFilter : public KisFilter {
 public:
-	KisDesaturateFilter(KisView * view);
+	KisDesaturateFilter();
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
@@ -38,7 +34,7 @@ public:
 
 class KisGammaCorrectionFilter : public KisDoublePerChannelFilter {
 public:
-	KisGammaCorrectionFilter(KisView * view);
+	KisGammaCorrectionFilter();
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
@@ -49,7 +45,7 @@ public:
 
 class KisColorAdjustmentFilter : public KisIntegerPerChannelFilter {
 public:
-	KisColorAdjustmentFilter(KisView * view);
+	KisColorAdjustmentFilter();
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
@@ -60,7 +56,7 @@ public:
 
 class KisAutoContrast : public KisFilter {
 public:
-	KisAutoContrast(KisView* view);
+	KisAutoContrast();
 public:
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
@@ -75,7 +71,6 @@ public:
 	virtual ~ColorsFilters();
 
 private:
-	KisView* m_view;
 	KisPainter *m_painter;
 };
 

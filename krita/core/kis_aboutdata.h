@@ -37,6 +37,7 @@ KAboutData * newKritaAboutData()
 			"http://www.koffice.org/krita",
 			"submit@bugs.kde.org");
 	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
+	aboutData->addAuthor("Alan Horkan", 0, "", "http://www.openclipart.org");
 	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
 	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
 	aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");

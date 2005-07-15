@@ -35,18 +35,24 @@ private:
 	Q_INT32 m_contrast;
 };
 
-/** This class is generic for filters that affect channel separately
-	*/
+/** 
+ * This class is generic for filters that affect channel separately
+ */
 class KisBrightnessContrastFilter : public KisFilter
 {
+
 public:
-	KisBrightnessContrastFilter(KisView * view);
+
+	KisBrightnessContrastFilter();
+
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
 	virtual bool supportsPainting() { return true; }
+
 };
 
 #endif

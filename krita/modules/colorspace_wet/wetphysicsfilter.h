@@ -28,7 +28,6 @@
 
 #include "kis_colorspace_wet.h"
 
-class KisView;
 class KisID;
 class QRect;
 
@@ -45,7 +44,7 @@ class QRect;
 class WetPhysicsFilter: public KisFilter
 {
 public:
-	WetPhysicsFilter(KisView * view);
+	WetPhysicsFilter();
 public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect& r);
 

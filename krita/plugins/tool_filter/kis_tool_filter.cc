@@ -91,7 +91,7 @@ void KisToolFilter::initPaint(KisEvent *e)
 	// to go into the tool options widget, and just the data carried over to the filter.
 	// I've got a bit of a problem with core classes having too much GUI about them.
 	// BSAR.
-	dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget ) );
+	dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget, m_source ) );
 }
 
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
@@ -105,11 +105,11 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 	Q_CHECK_PTR(lbFilter);
 
 	// Check which filters support painting
-	KisIDList l = m_subject -> filterList();
+	KisIDList l = KisFilterRegistry::instance()->listKeys();
 	KisIDList l2;
 	KisIDList::iterator it;
 	for (it = l.begin(); it !=  l.end(); ++it) {
-		KisFilterSP f = m_subject -> filterGet(*it);
+		KisFilterSP f = KisFilterRegistry::instance()->get(*it);
 		if (f -> supportsPainting()) {
 			l2.push_back(*it);
 		}
@@ -132,14 +132,14 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 
 void KisToolFilter::changeFilter( const KisID & id)
 {
-	m_filter =  m_subject -> filterGet( id );
+	m_filter =  KisFilterRegistry::instance()->get( id );
 	Q_ASSERT(m_filter != 0);
 	if( m_filterConfigurationWidget != 0 )
 	{
 		m_optionLayout -> remove ( m_filterConfigurationWidget );
 		delete m_filterConfigurationWidget;
 	}
-	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget() );
+	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget(), m_source );
 	if( m_filterConfigurationWidget != 0 )
 	{
 		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );

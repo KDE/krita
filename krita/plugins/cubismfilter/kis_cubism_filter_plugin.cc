@@ -36,15 +36,10 @@ KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const char *name, 
                 << "\n";
         KisView * view;
 
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
-
-        KisFilterSP krdf = createFilter<KisCubismFilter>(view);
-	(void) new KAction(i18n("&Cubism..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "cubism_filter");
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisCubismFilter());
+	}
 }
 
 KisCubismFilterPlugin::~KisCubismFilterPlugin()

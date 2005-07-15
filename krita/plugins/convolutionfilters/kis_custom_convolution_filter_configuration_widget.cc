@@ -35,7 +35,7 @@
 #include "kis_matrix_widget.h"
 
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name)
-	: QWidget( parent, name )
+	: KisFilterConfigWidget ( parent, name )
 {
 	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
 	Q_CHECK_PTR(widgetLayout);

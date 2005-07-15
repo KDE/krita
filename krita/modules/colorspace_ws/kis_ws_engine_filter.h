@@ -49,7 +49,7 @@ class KisWSEngineFilter : public KisFilter
 
 public:
 
-	KisWSEngineFilter(KisView * view);
+	KisWSEngineFilter();
 
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
 
@@ -58,8 +58,8 @@ public:
 	virtual bool supportsIncrementalPainting() { return false; }
 
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 
 private:

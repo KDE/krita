@@ -29,21 +29,21 @@
 #include "kis_matrix_widget.h"
 
 
-KisCustomConvolutionFilter::KisCustomConvolutionFilter(KisView * view) : KisConvolutionFilter(id(), view)
+KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", "&Custom Convolution...")
 {
 
 }
-QWidget* KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
 	KisCustomConvolutionFilterConfigurationWidget* ccfcw = new KisCustomConvolutionFilterConfigurationWidget(this,parent, "custom convolution config widget");
 	Q_CHECK_PTR(ccfcw);
 	return ccfcw;
 }
 
-KisFilterConfiguration* KisCustomConvolutionFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
-	Q_INT32 imgdepth = colorStrategy()->nChannels();
+	Q_INT32 imgdepth = dev->colorStrategy()->nChannels();
 	if ( widget == 0 )
 	{
 		// Create the identity matrices:

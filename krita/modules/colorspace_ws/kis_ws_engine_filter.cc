@@ -56,7 +56,7 @@
  * gravity, viscosity and absorbency.
  *
  */
-KisWSEngineFilter::KisWSEngineFilter(KisView * view) : KisFilter(id(), view)
+KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", "&Wet & Sticky paint engine...")
 {
 }
 
@@ -155,7 +155,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 }
 
-QWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 // 	KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
 // 	kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
@@ -163,7 +163,7 @@ QWidget* KisWSEngineFilter::createConfigurationWidget(QWidget* parent)
 	return 0;
 }
 
-KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 // 	KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
 

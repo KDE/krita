@@ -1,8 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritacubismfilter.rc
-
-EXTRA_DIST = $(kritarc_DATA)
-
+kde_services_DATA = kritacubismfilter.desktop
 
 INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \
@@ -23,7 +19,6 @@ kritacubismfilter_la_SOURCES = kis_cubism_filter_plugin.cc \
 	kis_cubism_filter.cc \
         kis_polygon.cc
 
-        
 noinst_HEADERS = kis_cubism_filter_plugin.h \
 	kis_cubism_filter.h \
         kis_polygon.h

@@ -91,7 +91,7 @@ public:
 		t -> setup(m_ac); 
 		return t; 
 	}
-	virtual KisID id() { return KisID("selectpicker", i18n("Selection picker")); }
+	virtual KisID id() { return KisID("selectpicker", i18n("Select similar")); }
 };
 
 

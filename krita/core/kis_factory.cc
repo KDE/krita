@@ -95,11 +95,12 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 	// Load extension modules and plugins
 //  	KisToolRegistry::instance();
+
 	KisPaintOpRegistry::instance();
-//  	KisFilterRegistry::instance();
+	KisFilterRegistry::instance();
 	KisColorSpaceRegistry::instance();
 
-	// Load modules
+	// Load all modules: color models, paintops, filters
 	KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
 								    QString::fromLatin1("Type == 'Service'"));
 
@@ -112,23 +113,9 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 	    KParts::Plugin* plugin =
 		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
 	    if ( plugin )
-		    kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
+		    kdDebug(DBG_AREA_CORE) << "found plugin " << service -> property("Name").toString() << "\n";
 	}
 
-
-// 	// Load plugins
-// 	offers = KTrader::self() -> query(QString::fromLatin1("Krita/Plugin"),
-// 					      QString::fromLatin1("Type == 'Service'"));
-// 	for(iter = offers.begin(); iter != offers.end(); ++iter)
-// 	{
-// 	    KService::Ptr service = *iter;
-// 	    int errCode = 0;
-// 	    KParts::Plugin* plugin =
-// 		     KParts::ComponentFactory::createInstanceFromService<KParts::Plugin>
-// 		     ( service, this, 0, QStringList(), &errCode);
-// 		// here we ought to check the error code.
-// 	    if ( plugin );
-// 	}
 
 }
 

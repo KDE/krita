@@ -45,13 +45,12 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_progress_display_interface.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 
-KisOilPaintFilter::KisOilPaintFilter(KisView * view) : KisFilter(id(), view)
+KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", "&Oilpaint...")
 {
 }
 
@@ -220,15 +219,15 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 }
 
 
-QWidget* KisOilPaintFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
 	param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

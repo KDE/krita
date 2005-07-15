@@ -19,6 +19,7 @@ Integration
 	* A krita document embedded in another document prints at the wrong place
 	* write the Krita handbook.
 	* There is currently no kimgio module for Krita images.
+        * Embedded KOffice objects don't paint themselves correctly
 
 
 Colorspace independence (found with the test colorstrategy)
@@ -60,7 +61,6 @@ Core
           layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
-        * Add embedding of KOffice objects as layers.
 
 
 File Format:

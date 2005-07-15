@@ -45,9 +45,8 @@
 </Menu>
 
 <Menu name="Adjust"><text>&amp;Adjust</text>
-	<ActionList name="adjust"/>
+	<Action name="adjust_filters"/>
 </Menu>
-
 
 <Menu name="Layer"><text>La&amp;yer</text>
   <Menu name="LayerNew"><text>New</text>
@@ -110,7 +109,14 @@
 </Menu>
 
 <Menu name="Filter"><text>Filte&amp;r</text>
-	<ActionList name="filters"/>
+	<Action name="filter_apply_again"/>
+	<Separator/>
+	<Action name="enhance_filters"/>
+	<Action name="edge_filters"/>
+	<Action name="emboss_filters"/>
+	<Action name="artistic_filters"/>
+	<Action name="blur_filters"/>
+	<Action name="misc_filters"/>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>

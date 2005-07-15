@@ -1,8 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritaraindropsfilter.rc
-
-EXTRA_DIST = $(kritarc_DATA)
-
+kde_services_DATA = kritaraindropsfilter.desktop
 
 INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \

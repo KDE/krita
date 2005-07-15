@@ -802,7 +802,6 @@ bool KisDoc::slotNewImage()
 		qApp -> restoreOverrideCursor();
 		QString name;
 		QUANTUM opacity = dlg.backgroundOpacity();
-		kdDebug() << "New image background opacity: " << opacity << "\n";
 		QColor c = dlg.backgroundColor();
 		KisImageSP img;
 		KisLayerSP layer;

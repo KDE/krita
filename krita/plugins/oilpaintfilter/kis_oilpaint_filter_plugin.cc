@@ -36,15 +36,11 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
                 << "\n";
         KisView * view;
 
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisOilPaintFilter());
+	}
 
-        KisFilterSP krdf = createFilter<KisOilPaintFilter>(view);
-	(void) new KAction(i18n("&Oilpaint..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "oilpaint_filter");
 }
 
 KisOilPaintFilterPlugin::~KisOilPaintFilterPlugin()

@@ -40,16 +40,15 @@ public:
 	KisFilterRegistry();
 	virtual ~KisFilterRegistry();
 
-//  	static KisFilterRegistry* instance();
-
+	static KisFilterRegistry* instance();
 
 private:
 
  	KisFilterRegistry(const KisFilterRegistry&);
  	KisFilterRegistry operator=(const KisFilterRegistry&);
 
-// private:
-//  	static KisFilterRegistry *m_singleton;
+private:
+ 	static KisFilterRegistry *m_singleton;
 };
 
 #endif // KIS_FILTERSPACE_REGISTRY_H_

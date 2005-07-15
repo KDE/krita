@@ -1,8 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritapixelizefilter.rc
-
-EXTRA_DIST = $(kritarc_DATA)
-
+kde_services_DATA = kritapixelizefilter.desktop
 
 INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \

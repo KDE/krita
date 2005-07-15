@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Cubism filter
+Comment=Cubism filter
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritacubismfilter

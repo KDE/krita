@@ -55,7 +55,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_colorspace_registry.h>
 
 #include "wdgbumpmap.h"
@@ -73,28 +72,17 @@ KritaBumpmap::KritaBumpmap(QObject *parent, const char *name, const QStringList 
 	setInstance(KritaBumpmapFactory::instance());
 
 
-	kdDebug(DBG_AREA_PLUGINS) << "Bumpmap plugin. Class: "
-		  << className()
-		  << ", Parent: "
-		  << parent -> className()
-		  << "\n";
-
-	if ( !parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
-		return;
-	} else {
-		m_view = (KisView*) parent;
+		KisFilterRegistry::instance()->add(new KisFilterBumpmap());
 	}
-
-	KisFilterSP kfi = createFilter<KisFilterBumpmap>(m_view);
-	(void) new KAction(i18n("&Bumpmap"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "krita_bumpmap");
 }
 
 KritaBumpmap::~KritaBumpmap()
 {
 }
 
-KisFilterBumpmap::KisFilterBumpmap(KisView * view) : KisFilter(id(), view)
+KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
 {
 }
 
@@ -192,15 +180,23 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 	QRect bmRect;
 	KisPaintDeviceSP bumpmap;
 
-	if (!config->bumpmap.isNull()) {
-		KisPaintDeviceSP bumplayer = m_view->currentImg()->findLayer(config->bumpmap).data();
-		bmRect = bumplayer->exactBounds();
-		bumpmap = bumplayer;
-	}
-	else {
+
+ 	if (!config->bumpmap.isNull()) {
+ 		KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).data();
+ 		if (bumplayer) {
+			bmRect = bumplayer->exactBounds();
+			bumpmap = bumplayer;
+		}
+		else {
+			bmRect = rect;
+			bumpmap = src;
+		}
+ 	}
+ 	else {
 	 	bmRect = rect;
 		bumpmap = src;
 	}
+
 
 	Q_INT32 sel_h = rect.height();
 	Q_INT32 sel_w = rect.width();
@@ -352,15 +348,15 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 }
 
-QWidget* KisFilterBumpmap::createConfigurationWidget(QWidget* parent) 
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, m_view, parent);
+	KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
 
 
 	return w;
 }
 
-KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w) 
+KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceSP) 
 {
 
 	KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
@@ -391,13 +387,13 @@ KisBumpmapConfiguration::KisBumpmapConfiguration()
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisView * view, QWidget * parent, const char * name, WFlags f)
-	: QWidget(parent, name, f),
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
+	: KisFilterConfigWidget(parent, name, f),
 	  m_filter(filter),
-	  m_view(view)
+	  m_device(dev)
 {
 	Q_ASSERT(m_filter);
-	Q_ASSERT(m_view);
+	Q_ASSERT(m_device);
 	
 	m_page = new WdgBumpmap(this);
         QHBoxLayout * l = new QHBoxLayout(this);
@@ -407,7 +403,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisView * vie
         m_filter -> setAutoUpdate(false);
 
 	// Fill combobox with layers
-	KisImageSP img = m_view->currentImg();
+	const KisImageSP img = dev->image();
 	if (img) {
 		vKisLayerSP layers = img->layers();
 		
@@ -416,7 +412,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisView * vie
 			m_page->cmbLayer->insertItem(layer->name());
 		}
 	}
-	connect( m_page->bnRefresh, SIGNAL(clicked()), filter, SLOT(refreshPreview()));
+	connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()

@@ -42,14 +42,14 @@ private:
 class KisRainDropsFilter : public KisFilter
 {
 public:
-	KisRainDropsFilter(KisView * view);
+	KisRainDropsFilter();
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
 	virtual bool supportsPainting() { return false; }
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	void   rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff);
 	bool** CreateBoolArray (uint Columns, uint Rows);

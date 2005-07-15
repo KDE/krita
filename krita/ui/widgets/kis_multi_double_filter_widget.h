@@ -22,8 +22,7 @@
 #include <vector> 
 #include <knuminput.h>
 #include "koffice_export.h"
-
-class KisFilter;
+#include "kis_filter.h"
 
 struct KRITA_EXPORT KisDoubleWidgetParam {
 	KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
@@ -35,17 +34,17 @@ struct KRITA_EXPORT KisDoubleWidgetParam {
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
-class KRITA_EXPORT KisMultiDoubleFilterWidget : public QWidget
+class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
 	Q_OBJECT
-	public:
-		KisMultiDoubleFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
-	public:
-		inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
-		inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
-	private:
-		KDoubleNumInput** m_doubleWidgets;
-		Q_INT32 m_nbdoubleWidgets;
+public:
+	KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
+public:
+	inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
+	inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
+private:
+	KDoubleNumInput** m_doubleWidgets;
+	Q_INT32 m_nbdoubleWidgets;
 };
 
 #endif

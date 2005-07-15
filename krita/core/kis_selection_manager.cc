@@ -260,10 +260,16 @@ void KisSelectionManager::updateGUI()
 		return;
 	}
 
-        KisImageSP img = m_parent -> currentImg();
+	KisImageSP img = m_parent -> currentImg();
+	
+	KisLayerSP l = img->activeLayer();
+	
 	bool enable = false;
-	if (img) {
-		enable = img && img -> activeLayer() && img -> activeLayer() -> hasSelection();
+	if (img && l) {
+		enable = img && img -> activeLayer()
+			&& l->hasSelection()
+			&& !l->locked()
+			&& l->visible();
 	}
 	m_copy -> setEnabled(enable);
 	m_cut -> setEnabled(enable);

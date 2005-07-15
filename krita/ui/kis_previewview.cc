@@ -83,6 +83,9 @@ void KisPreviewView::updateView(QPoint delta)
 
 void KisPreviewView::setSourceLayer(KisLayerSP lay)
 {
+	Q_ASSERT(lay);
+	if (!lay) return;
+
 	m_sourcelayer = lay;
 	KisPainter gc;
 	KisPaintDeviceSP pd(m_sourcelayer.data());

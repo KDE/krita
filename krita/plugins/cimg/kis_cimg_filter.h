@@ -22,8 +22,6 @@
 #define _KIS_CIMG_FILTER_H_
 
 #include "kis_filter.h"
-#include "kis_view.h"
-#include <kdebug.h>
 
 #include "CImg.h"
 
@@ -52,14 +50,14 @@ public:
 class KisCImgFilter : public KisFilter
 {
 public:
-	KisCImgFilter(KisView * view);
+	KisCImgFilter();
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
 	virtual bool supportsPainting() { return false; }
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 private:
 

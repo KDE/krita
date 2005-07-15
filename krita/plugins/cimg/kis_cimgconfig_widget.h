@@ -24,8 +24,9 @@
 
 #include "wdg_cimg.h"
 #include "kis_cimg_filter.h"
+#include "kis_filter.h"
 
-class KisCImgconfigWidget : public QWidget {
+class KisCImgconfigWidget : public KisFilterConfigWidget {
 
 	Q_OBJECT
 

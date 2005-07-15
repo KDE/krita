@@ -24,17 +24,10 @@
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
 #include "kis_matrix.h"
-#include "kis_view.h"
 
-class KisView;
-
-// XXX: All these filters are loaded on document creation. A document
-// can, theoretically, contain zero or more images of different
-// depths. If there are zero images, then closing Krita will crash
-// in the destructor.
 class KisGaussianBlurFilter : public KisConvolutionConstFilter {
 public:
-	KisGaussianBlurFilter(KisView * view);
+	KisGaussianBlurFilter();
 public:
 	static inline KisID id() { return KisID("gaussian blur", i18n("Gaussian Blur")); };
         virtual bool supportsPainting() { return true; }
@@ -43,7 +36,7 @@ public:
 
 class KisSharpenFilter : public KisConvolutionConstFilter {
 public:
-	KisSharpenFilter(KisView * view);
+	KisSharpenFilter();
 public:
 	static inline KisID id() { return KisID("sharpen", i18n("Sharpen")); };
         virtual bool supportsPainting() { return false; }
@@ -52,7 +45,7 @@ public:
 
 class KisMeanRemovalFilter : public KisConvolutionConstFilter {
 public:
-	KisMeanRemovalFilter(KisView * view);
+	KisMeanRemovalFilter();
 public:
 	static inline KisID id() { return KisID("mean removal", i18n("Mean Removal")); };
         virtual bool supportsPainting() { return false; }
@@ -61,7 +54,7 @@ public:
 
 class KisEmbossLaplascianFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossLaplascianFilter(KisView * view);
+	KisEmbossLaplascianFilter();
 public:
 	static inline KisID id() { return KisID("emboss laplascian", i18n("Emboss Laplascian")); };
         virtual bool supportsPainting() { return false; }
@@ -70,7 +63,7 @@ public:
 
 class KisEmbossInAllDirectionsFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossInAllDirectionsFilter(KisView * view);
+	KisEmbossInAllDirectionsFilter();
 public:
 	static inline KisID id() { return KisID("emboss all directions", i18n("Emboss in All Directions")); };
         virtual bool supportsPainting() { return false; }
@@ -79,7 +72,7 @@ public:
 
 class KisEmbossHorizontalVerticalFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossHorizontalVerticalFilter(KisView * view);
+	KisEmbossHorizontalVerticalFilter();
 public:
 	static inline KisID id() { return KisID("", i18n("Emboss Horizontal & Vertical")); };
         virtual bool supportsPainting() { return false; }
@@ -88,7 +81,7 @@ public:
 
 class KisEmbossVerticalFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossVerticalFilter(KisView * view);
+	KisEmbossVerticalFilter();
 public:
 	static inline KisID id() { return KisID("emboss vertical only", i18n("Emboss Vertical Only")); };
         virtual bool supportsPainting() { return false; }
@@ -97,7 +90,7 @@ public:
 
 class KisEmbossHorizontalFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossHorizontalFilter(KisView * view);
+	KisEmbossHorizontalFilter();
 public:
 	static inline KisID id() { return KisID("emboss horizontal only", i18n("Emboss Horizontal Only")); };
         virtual bool supportsPainting() { return false; }
@@ -106,7 +99,7 @@ public:
 
 class KisEmbossDiagonalFilter : public KisConvolutionConstFilter {
 public:
-	KisEmbossDiagonalFilter(KisView * view);
+	KisEmbossDiagonalFilter();
 public:
 	static inline KisID id() { return KisID("emboss diagonal", i18n("Emboss Diagonal")); };
         virtual bool supportsPainting() { return false; }
@@ -115,7 +108,7 @@ public:
 
 class KisTopEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
-	KisTopEdgeDetectionFilter(KisView * view);
+	KisTopEdgeDetectionFilter();
 public:
 	static inline KisID id() { return KisID("top edge detections", i18n("Top Edge Detection")); };
         virtual bool supportsPainting() { return false; }
@@ -124,7 +117,7 @@ public:
 
 class KisRightEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
-	KisRightEdgeDetectionFilter(KisView * view);
+	KisRightEdgeDetectionFilter();
 public:
 	static inline KisID id() { return KisID("right edge detections", i18n("Right Edge Detection")); };
         virtual bool supportsPainting() { return false; }
@@ -133,7 +126,7 @@ public:
 
 class KisBottomEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
-	KisBottomEdgeDetectionFilter(KisView * view);
+	KisBottomEdgeDetectionFilter();
 public:
 	static inline KisID id() { return KisID("bottom edge detections", i18n("Bottom Edge Detection")); };
         virtual bool supportsPainting() { return false; }
@@ -142,7 +135,7 @@ public:
 
 class KisLeftEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
-	KisLeftEdgeDetectionFilter(KisView * view);
+	KisLeftEdgeDetectionFilter();
 public:
 	static inline KisID id() { return KisID("left edge detections", i18n("Left Edge Detection")); };
         virtual bool supportsPainting() { return false; }

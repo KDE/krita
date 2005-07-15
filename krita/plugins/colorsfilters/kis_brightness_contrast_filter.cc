@@ -20,6 +20,8 @@
 
 #include <klocale.h>
 
+#include <qlayout.h>
+
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
 #include "kis_strategy_colorspace.h"
@@ -33,18 +35,22 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 {
 }
 
-KisBrightnessContrastFilter::KisBrightnessContrastFilter(KisView * view ) : KisFilter( id(), view )
+KisBrightnessContrastFilter::KisBrightnessContrastFilter()
+	: KisFilter( id(), "adjust", "&Brightness/contrast...")
 {
 
 }
 
-QWidget* KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
-	QWidget* w = new WdgBrightnessContrast(parent);
+	KisFilterConfigWidget * w = new KisFilterConfigWidget(parent);
+	QHBoxLayout * l = new QHBoxLayout(w);
+	l->setAutoAdd(true);
+	WdgBrightnessContrast * wbc = new WdgBrightnessContrast(w);
 	return w;
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwidget, KisPaintDeviceSP)
 {
 	WdgBrightnessContrast* widget = (WdgBrightnessContrast*) nwidget;
 	

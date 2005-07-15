@@ -50,7 +50,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_emboss_filter.h"
 
-KisEmbossFilter::KisEmbossFilter(KisView * view) : KisFilter(id(), view)
+KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", "&Emboss with Variable Depth...")
 {
 }
 
@@ -149,16 +149,16 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-QWidget* KisEmbossFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
-	QWidget * w = new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 	Q_CHECK_PTR(w);
 	return w;
 }
 
-KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

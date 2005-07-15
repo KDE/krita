@@ -25,7 +25,8 @@
 typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory( "krita" ) )
 
-KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &)
+	: KParts::Plugin(parent, name)
 {
         setInstance(KisPixelizeFilterPluginFactory::instance());
 
@@ -36,15 +37,10 @@ KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const char *na
                 << "\n";
         KisView * view;
 
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
-
-        KisFilterSP krdf = createFilter<KisPixelizeFilter>(view);
-	(void) new KAction(i18n("&Pixelize..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "pixelize_filter");
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisPixelizeFilter());
+	}
 }
 
 KisPixelizeFilterPlugin::~KisPixelizeFilterPlugin()

@@ -30,7 +30,7 @@
 #include "kis_cimg_filter.h"
 
 KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, const char * name, WFlags f)
-	: QWidget(parent, name, f)
+	: KisFilterConfigWidget(parent, name, f)
 {
 	m_page = new WdgCImg(this);
 	Q_CHECK_PTR(m_page);
@@ -40,7 +40,8 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
 
 	l -> add(m_page);
 	nfilter -> setAutoUpdate(false);
-	//XXX (CBR) connect( m_page -> bnRefresh, SIGNAL(clicked()), filter(), SLOT(refreshPreview()));
+	
+	connect( m_page -> bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 

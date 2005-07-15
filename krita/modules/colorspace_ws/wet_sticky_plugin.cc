@@ -42,6 +42,7 @@
 #include "wet_sticky_plugin.h"
 
 #include "kis_colorspace_wet_sticky.h"
+#include "kis_ws_engine_filter.h"
 
 typedef KGenericFactory<WetStickyPlugin> WetStickyPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawsplugin, WetStickyPluginFactory( "kritacore" ) )
@@ -64,6 +65,7 @@ WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStrin
 		m_ColorSpaceWS = new KisColorSpaceWetSticky();
 		Q_CHECK_PTR(m_ColorSpaceWS);
 		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceWS);
+		KisFilterRegistry::instance()->add(new KisWSEngineFilter());
 	}
 
 }

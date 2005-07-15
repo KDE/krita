@@ -1,9 +1,5 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritacimg.rc
-EXTRA_DIST = $(kritarc_DATA)
-
 kde_services_DATA = kritacimg.desktop
 
 # all_includes must remain last!

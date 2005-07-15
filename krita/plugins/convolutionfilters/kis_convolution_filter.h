@@ -27,34 +27,36 @@
 #include <kdebug.h>
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
-	public:
-		KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
-	public:
-		inline KisMatrix3x3* matrixes() { return m_matrixes; };
-	private:
-		KisMatrix3x3* m_matrixes;
+public:
+	KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
+public:
+	inline KisMatrix3x3* matrixes() { return m_matrixes; };
+private:
+	KisMatrix3x3* m_matrixes;
 };
 
 
 class KisConvolutionFilter : public KisFilter {
+	Q_OBJECT
 public:
-	KisConvolutionFilter(const KisID& id, KisView * view);
+	KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry);
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	virtual bool supportsIncrementalPainting() { return false; }
 };
 
 
-/** This class is used for a convolution filter with a constant matrix
+/** 
+ * This class is used for a convolution filter with a constant matrix
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {
-	public:
-		KisConvolutionConstFilter(const KisID& id, KisView * view) : KisConvolutionFilter(id, view) { } ;
-		virtual ~KisConvolutionConstFilter();
-	public:
-		virtual KisFilterConfiguration* configuration(QWidget*);
-	protected:
-		KisMatrix3x3* m_matrixes;
+public:
+	KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) : KisConvolutionFilter(id, category, entry) { } ;
+	virtual ~KisConvolutionConstFilter();
+public:
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+protected:
+	KisMatrix3x3* m_matrixes;
 };
 
 #endif

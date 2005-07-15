@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritawsenginefilter" version="1">
-  <MenuBar>
-    <Menu name="Filter"><text>&amp;Filter</text>
-      <Action name="wsengine_filter"/>
-    </Menu>
-  </MenuBar>
-</kpartgui>

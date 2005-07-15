@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Raindrops filter
+Comment=Raindrops filter
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritaraindropsfilter

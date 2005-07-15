@@ -51,7 +51,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_raindrops_filter.h"
 
-KisRainDropsFilter::KisRainDropsFilter(KisView * view) : KisFilter(id(), view)
+KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", "&Raindrops...")
 {
 }
 
@@ -410,16 +410,16 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
         return ((uchar) ColorValue);
 }
 
-QWidget* KisRainDropsFilter::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	vKisIntegerWidgetParam param;
 	param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
 	param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
 	param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
-	return new KisMultiIntegerFilterWidget(this, parent, id().id().ascii(), id().id().ascii(), param );
+	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
 	if( widget == 0 )

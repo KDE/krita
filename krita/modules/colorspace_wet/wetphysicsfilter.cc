@@ -29,14 +29,13 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_view.h>
 #include <kis_paint_device.h>
 
 #include "wetphysicsfilter.h"
 
 
-WetPhysicsFilter::WetPhysicsFilter(KisView * view)
-	: KisFilter(id(), view)
+WetPhysicsFilter::WetPhysicsFilter()
+	: KisFilter(id(), "artistic", i18n("Dry the paint (25 times)"))
 {
 	m_adsorbCount = 0;
 }

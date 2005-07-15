@@ -49,16 +49,19 @@ private:
 	Q_INT32* m_channels;
 };
 
-/** This class is generic for filters that affect channel separately */
+
+/**
+ * This class is generic for filters that affect channel separately 
+ */
 template <typename Type, class ParamType, class WidgetClass>
 class KisPerChannelFilter
 	: public KisFilter
 {
 public:
-	KisPerChannelFilter(KisView * view, const KisID& id, Type min, Type max, Type initvalue );
+	KisPerChannelFilter(const KisID& id, const QString & category, const QString & name, Type min, Type max, Type initvalue );
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	Type m_min;
 	Type m_max;
@@ -71,6 +74,8 @@ typedef KisPerChannelFilter<Q_INT32, KisIntegerWidgetParam, KisMultiIntegerFilte
 
 typedef KisPerChannelFilterConfiguration<double> KisDoublePerChannelFilterConfiguration;
 typedef KisPerChannelFilter<double, KisDoubleWidgetParam, KisMultiDoubleFilterWidget> KisDoublePerChannelFilter;
+
+
 
 // Implementation of the templatized functions
 
@@ -92,8 +97,8 @@ KisPerChannelFilterConfiguration<Type>::KisPerChannelFilterConfiguration(Q_INT32
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisPerChannelFilter<Type, ParamType, WidgetClass>::KisPerChannelFilter(KisView * view, const KisID& id, Type min, Type max, Type initvalue )
-	: KisFilter( id, view ),
+KisPerChannelFilter<Type, ParamType, WidgetClass>::KisPerChannelFilter(const KisID& id, const QString & category, const QString & name, Type min, Type max, Type initvalue )
+	: KisFilter( id, category, name),
 	  m_min (min),
 	  m_max (max),
 	  m_initvalue (initvalue),
@@ -102,29 +107,29 @@ KisPerChannelFilter<Type, ParamType, WidgetClass>::KisPerChannelFilter(KisView *
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-QWidget* KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent)
+KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 	std::vector<ParamType> param;
 
-	m_nbchannels = colorStrategy() -> nColorChannels();
+	m_nbchannels = dev->colorStrategy()->nColorChannels();
 
 	for(Q_INT32 i = 0; i < m_nbchannels; i++)
 	{
-		KisChannelInfoSP cI = colorStrategy() -> channels()[i];
+		KisChannelInfoSP cI = dev->colorStrategy() -> channels()[i];
 		param.push_back( ParamType( m_min, m_max, m_initvalue, cI->name() ) );
 	}
 
-	WidgetClass * w = new WidgetClass(this, parent, id().id().ascii(), id().id().ascii(), param );
+	WidgetClass * w = new WidgetClass(parent, id().id().ascii(), id().id().ascii(), param );
 	Q_CHECK_PTR(w);
 
 	return w;
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget)
+KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
 	WidgetClass* widget = (WidgetClass*)nwidget;
-	KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , colorStrategy()->channels() );
+	KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , dev->colorStrategy()->channels() );
 	Q_CHECK_PTR(co);
 
 	if( widget == 0 )

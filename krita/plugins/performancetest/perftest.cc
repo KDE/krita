@@ -566,9 +566,9 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 
 	QString report = QString("* Filter test\n");
 
-	KisIDList filters = m_view -> filterList();
+	KisIDList filters = KisFilterRegistry::instance()->listKeys();
 	KisDoc * doc = m_view -> getDocument();
-	KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
+	KisIDList l = KisColorSpaceRegistry::instance()->listKeys();
 
 
 	for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
@@ -580,10 +580,10 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 		QTime t;
 
 		for (KisIDList::Iterator it = filters.begin(); it != filters.end(); ++it) {
-			KisFilterSP f = m_view -> filterGet(*it);
+			KisFilterSP f = KisFilterRegistry::instance()->get(*it);
 			t.restart();
 			f -> enableProgress();
-			f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view)), QRect(0, 0, 1000, 1000));
+			f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data()), l.data()), QRect(0, 0, 1000, 1000));
 			f -> disableProgress();
 			report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 

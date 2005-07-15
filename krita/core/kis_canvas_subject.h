@@ -35,7 +35,6 @@ class KisUndoAdapter;
 class KisProgressDisplayInterface;
 class KisSelectionManager;
 class QWidget;
-class KisFilterRegistry;
 class QCursor;
 class KisColor;
 
@@ -49,6 +48,12 @@ public:
 	virtual ~KisCanvasSubject() {};
 
 public:
+
+	/**
+	 * From now on, the observer will be notified of changes in
+	 * brush, foreground color, background color, pattern, gradient
+	 * and paintop
+	 */
 	virtual void attach(KisCanvasObserver *observer) = 0;
 	virtual void detach(KisCanvasObserver *observer) = 0;
 	
@@ -84,11 +89,8 @@ public:
 	
 	virtual KisSelectionManager * selectionManager() = 0;
 	
-	virtual KisFilterRegistry * filterRegistry() const = 0;
-	virtual KisFilterSP filterGet(const KisID& id) = 0;
-	virtual KisIDList filterList() = 0;
-	
 	virtual QCursor setCanvasCursor(const QCursor &) = 0;
+
 private:
 	KisCanvasSubject(const KisCanvasSubject&);
 	KisCanvasSubject& operator=(const KisCanvasSubject&);

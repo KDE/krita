@@ -86,12 +86,28 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
 		// wet brush op
 		KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
+
+		// Dry filter
+		KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
+		
+		//(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
 	}
 	else if (parent -> inherits("KisView"))
 	{
 		m_view = dynamic_cast<KisView*>(parent);
 		// Create the wet brush paint tool
 		m_view -> toolRegistry() -> add(new KisToolWetBrushFactory( actionCollection() ));
+
+
+		// Wetness visualisation
+		WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
+		wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
+						SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
+
+
+		// Texture filter
+		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
+						SLOT(slotActivated()), actionCollection(), "texturefilter");
 		
 
 		// Create the wet palette
@@ -105,20 +121,8 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		//i18n("Watercolor Paint Options")
 		
 		m_view -> getCanvasSubject() -> attach(w);
-		
-		// Wetness visualisation
-		WetnessVisualisationFilter* wf = new WetnessVisualisationFilter(m_view);
-		wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
-						SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
-		
-		// Texture filter
-		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
-						SLOT(slotActivated()), actionCollection(), "texturefilter");
-		
-		// Dry filter
-		KisFilterSP kfi = createFilter<WetPhysicsFilter>(m_view);
-		(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
 	}
+
 
 }
 

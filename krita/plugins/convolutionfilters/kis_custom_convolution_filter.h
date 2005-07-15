@@ -33,16 +33,17 @@ private:
 };
 
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
+
 public:
-	KisCustomConvolutionFilter(KisView * view);
+	KisCustomConvolutionFilter();
 public:
 	static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
 	virtual bool supportsPainting() { return true; }
 	virtual bool supportsIncrementalPainting() { return true; }
 
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 protected:
 	virtual KisMatrix3x3* matrixes() { return m_matrix; };
 private:

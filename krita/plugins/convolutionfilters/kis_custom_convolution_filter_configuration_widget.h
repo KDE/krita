@@ -21,12 +21,13 @@
 
 #include <vector> 
 #include <qwidget.h> 
+#include <kis_filter.h>
 
 class KisCustomConvolutionFilterConfigurationBaseWidget;
 class KisMatrixWidget;
 class KisFilter;
 
-class KisCustomConvolutionFilterConfigurationWidget : public QWidget
+class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigWidget
 {
 	Q_OBJECT
 	public:

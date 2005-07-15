@@ -1,7 +1,7 @@
 kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritaexample.rc
 
-EXTRA_DIST = $(kritarc_DATA)
+kde_services_DATA = kritaexample.desktop
+
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \

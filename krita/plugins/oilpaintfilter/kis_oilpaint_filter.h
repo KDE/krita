@@ -22,7 +22,6 @@
 #define _KIS_OILPAINT_FILTER_H_
 
 #include "kis_filter.h"
-#include "kis_view.h"
 #include <kdebug.h>
 
 class KisOilPaintFilterConfiguration : public KisFilterConfiguration
@@ -40,14 +39,14 @@ class KisOilPaintFilterConfiguration : public KisFilterConfiguration
 class KisOilPaintFilter : public KisFilter
 {
 public:
-	KisOilPaintFilter(KisView * view);
+	KisOilPaintFilter();
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("oilpaint", i18n("Oilpaint")); };
 	virtual bool supportsPainting() { return true; }
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	void OilPaint(KisPaintDeviceSP src, int x, int y, int w, int h, int BrushSize, int Smoothness);
 	uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);

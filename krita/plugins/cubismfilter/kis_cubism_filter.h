@@ -22,7 +22,6 @@
 #define _KIS_CUBISM_FILTER_H_
 
 #include "kis_filter.h"
-#include "kis_view.h"
 #include <kdebug.h>
 
 class KisPolygon;
@@ -42,14 +41,14 @@ class KisCubismFilterConfiguration : public KisFilterConfiguration
 class KisCubismFilter : public KisFilter
 {
 public:
-	KisCubismFilter(KisView * view);
+	KisCubismFilter();
 public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("cubism", i18n("cubism")); };
 	virtual bool supportsPainting() { return true; }
 public:
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	//this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
         void randomizeIndices (Q_INT32 count, Q_INT32* indices);

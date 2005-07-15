@@ -26,7 +26,6 @@
 #include <kparts/plugin.h>
 
 #include <kis_filter.h>
-#include "kis_view.h"
 #include <kis_paint_device.h>
 
 #include "wdgbumpmap.h"
@@ -50,14 +49,7 @@ class KritaBumpmap : public KParts::Plugin
 public:
 	KritaBumpmap(QObject *parent, const char *name, const QStringList &);
 	virtual ~KritaBumpmap();
-
-private:
-
-	KisView * m_view;
-
 };
-
-
 
 
 /**
@@ -71,15 +63,15 @@ private:
 class KisFilterBumpmap : public KisFilter
 {
 public:
-	KisFilterBumpmap(KisView * view);
+	KisFilterBumpmap();
 public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
 	static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
 	virtual bool supportsPainting() { return false; }
 	virtual bool supportsIncrementalPainting() { return false; }
 
-        virtual QWidget* createConfigurationWidget(QWidget* parent);
-        virtual KisFilterConfiguration* configuration(QWidget*);
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+        virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 };
 
@@ -105,12 +97,12 @@ public:
 };
 
 
-class KisBumpmapConfigWidget : public QWidget {
+class KisBumpmapConfigWidget : public KisFilterConfigWidget {
 
 	Q_OBJECT
 
 public:
-	KisBumpmapConfigWidget(KisFilter * filter, KisView * view, QWidget * parent, const char * name = 0, WFlags f = 0 );
+	KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
 	virtual ~KisBumpmapConfigWidget() {};
 
 	KisBumpmapConfiguration * config();
@@ -120,7 +112,7 @@ public:
 private:
 
 	KisFilter * m_filter;
-	KisView * m_view;
+	KisPaintDeviceSP m_device;
 
 };
 

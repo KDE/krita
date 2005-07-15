@@ -47,6 +47,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <kis_id.h>
+#include <kis_view.h>
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"

@@ -26,8 +26,8 @@
 #include "kis_convolution_painter.h"
 #include "kis_progress_display_interface.h"
 
-KisConvolutionFilter::KisConvolutionFilter(const KisID& id, KisView * view) :
-	KisFilter( id, view )
+KisConvolutionFilter::KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry) :
+	KisFilter( id, category, entry )
 {
 
 }
@@ -39,29 +39,23 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 {
 	KisConvolutionPainter painter( dst );
 
-	if (progressEnabled()) {
-
-		KisProgressDisplayInterface *progress = view() -> progressDisplay();
-
-		if (progress) {
-			progress -> setSubject(&painter, true, true);
-		}
-	}
-
 	KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
 	painter.applyMatrix(amatrixes, src, rect.x(), rect.y(), rect.width(), rect.height());
 
 	if (painter.cancelRequested()) {
 		cancel();
 	}
+
+	setProgressDone();
 }
 
 KisConvolutionConstFilter::~KisConvolutionConstFilter()
 {
 }
 
-KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)
+KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*, KisPaintDeviceSP dev)
 {
 	return new KisConvolutionConfiguration( m_matrixes );
 }
 
+#include "kis_convolution_filter.moc"

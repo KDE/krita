@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Color filters
+Comment=Color filters
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritacolorsfilters

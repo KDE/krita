@@ -35,7 +35,8 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT
 
 }
 
-KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QWidget * parent, const char * name, const char * caption, vKisIntegerWidgetParam iwparam) : QWidget( parent, name )
+KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent, const char * name, const char * caption, vKisIntegerWidgetParam iwparam) : 
+	KisFilterConfigWidget( parent, name )
 {
 	Q_INT32 m_nbintegerWidgets = iwparam.size();
 
@@ -52,7 +53,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget( KisFilter* nfilter, QW
 		m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
 		m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
 
-		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), nfilter, SLOT(refreshPreview()));
+		connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), SIGNAL(sigPleaseUpdatePreview()));
 
 		QLabel* lbl = new QLabel(iwparam[i].name+":", this);
 		widgetLayout -> addWidget( lbl, i , 0);

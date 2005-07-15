@@ -15,18 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 #ifndef _KIS_FILTER_H_
 #define _KIS_FILTER_H_
 
 #include <qobject.h>
 #include <qwidget.h>
+#include <qstring.h>
 
 #include <ksharedptr.h>
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_filter_registry.h"
@@ -34,27 +33,7 @@
 #include "koffice_export.h"
 
 class KisPreviewDialog;
-
-/**
- * Convenience function that creates an instance of a filter and adds it to the
- * filter registry of the specified view.
- */
-template<class F>
-KisFilterSP createFilter(KisView* view)
-{
-       KisFilterSP kfi;
-       if( view->filterRegistry()->exists( F::id() ) )
-       {
-               kfi = view->filterRegistry()->get( F::id() );
-      } else {
-               kfi = new F(view);
-	       Q_CHECK_PTR(kfi);
-               view->filterRegistry()->add(kfi);
-       }
-       return kfi;
-}
-
-
+class KisProgressDisplayInterface;
 
 /**
  * Empty interface for passing filter configuration data
@@ -63,7 +42,17 @@ KisFilterSP createFilter(KisView* view)
 class KisFilterConfiguration {
 };
 
+class KisFilterConfigWidget : public QWidget {
 
+	Q_OBJECT
+
+public:
+
+	KisFilterConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 ) : QWidget(parent, name, f) {};
+	virtual ~KisFilterConfigWidget() {};
+signals:
+	void sigPleaseUpdatePreview();
+};
 
 /**
  * Basic interface of a Krita filter.
@@ -72,7 +61,10 @@ class KRITACORE_EXPORT KisFilter : public KisProgressSubject, public KShared {
 	Q_OBJECT
 public:
 
-	KisFilter(const KisID& id, KisView * view);
+	/**
+	 * Construct a Krita filter
+	 */
+	KisFilter(const KisID& id, const QString & category, const QString & entry);
 	virtual ~KisFilter() {}
 
 public:
@@ -80,7 +72,7 @@ public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
-	virtual KisFilterConfiguration* configuration(QWidget*);
+	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 	// This filter can be used in painting tools as a paint operation
 	virtual bool supportsPainting() = 0;
@@ -92,7 +84,6 @@ public:
 	// This filter supports cutting up the work area and filtering
 	// each chunk in a separate thread. Filters that need access to the
 	// whole area for correct computations should return false.
-	
 	virtual bool supportsThreading() { return true; };
 	
 	// Used when threading is used -- the overlap margin is passed to the
@@ -102,30 +93,33 @@ public:
 
 	virtual void enableProgress();
 	virtual void disableProgress();
-	virtual void setAutoUpdate(bool set);
+	
+	bool KisFilter::autoUpdate();
 
+	// Unique identification for this filter
 	inline const KisID id() const { return m_id; };
+	// Which submenu in the filters menu does filter want to go?
 
-	virtual QWidget* createConfigurationWidget(QWidget* parent);
+	inline QString menuCategory() const { return m_category; };
+	// The i18n'ed string this filter wants to show itself in the menu
+
+	inline QString menuEntry() const { return m_entry; };
+
+	/**
+	 * Create the configuration widget for this filter.
+	 *
+	 * @param parent the Qt owner widget of this widget
+	 * @param dev the paintdevice this filter will act on
+	 */
+	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceSP dev);
 
 	virtual void cancel() { m_cancelRequested = true; }
 
-	inline KisView* view();
-
-public slots:
-
-	void slotActivated();
-
-private slots:
-
-	void refreshPreview();
-
-protected:
-
-  	KisStrategyColorSpaceSP colorStrategy();
-
+	virtual void setAutoUpdate(bool set);
 	bool progressEnabled() const { return m_progressEnabled; }
 	inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
+
+protected:
 
 	// Convenience functions for progress display.
 	void setProgressTotalSteps(Q_INT32 totalSteps);
@@ -137,6 +131,7 @@ protected:
 private:
 	bool m_cancelRequested;
 	bool m_progressEnabled;
+	bool m_autoUpdate;
 
 protected:
 	Q_INT32 m_progressTotalSteps;
@@ -144,30 +139,10 @@ protected:
 	Q_INT32 m_progressSteps;
 	
 	KisID m_id;
-	KisView * m_view;
-	QWidget* m_widget;
-	KisPreviewDialog* m_dialog;
+	QString m_category; // The category in the filter menu this filter fits
+	QString m_entry; // the i18n'ed accelerated menu text
+	
 };
-
-inline KisView* KisFilter::view()
-{
-	return m_view;
-}
-
-
-inline KisStrategyColorSpaceSP KisFilter::colorStrategy()
-{
-	if (!m_view) return 0;
-	KisImageSP img = m_view -> currentImg();
-
-	if (!img) return 0;
-	KisLayerSP layer = img -> activeLayer();
-
-	if (!layer) return 0;
-	return layer -> colorStrategy();
-}
-
-
 
 
 #endif

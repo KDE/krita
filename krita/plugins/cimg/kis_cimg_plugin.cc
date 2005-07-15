@@ -34,17 +34,11 @@ KisCImgPlugin::KisCImgPlugin(QObject *parent, const char *name, const QStringLis
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
 
-        if ( !parent->inherits("KisView") )
-        {
-                return;
-        } else {
-                view = (KisView*) parent;
-        }
-
-        KisFilterSP krdf = createFilter<KisCImgFilter>(view);
-	(void) new KAction(i18n("&CImg Image Restoration..."), 0, 0, krdf, SLOT(slotActivated()), actionCollection(), "cimg_filter");
+	if ( parent->inherits("KisFactory") )
+	{
+		KisFilterRegistry::instance()->add(new KisCImgFilter());
+	}
 }
 
 KisCImgPlugin::~KisCImgPlugin()

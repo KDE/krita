@@ -201,9 +201,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 		dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
 		
 	calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
-	
-	m_progressTotalSteps += int(numLines*srcLen*floatscale);
-	
+		
 	scale = int(floatscale*srcLen);
 	scaleDenom = srcLen;
 		
@@ -348,10 +346,16 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
         progress -> setSubject(this, true, true);
 	m_progressTotalSteps = 0;
 	m_progressStep = 0;
+	QRect r;
+	if(m_dev->hasSelection())
+		r = m_dev->selection()->selectedExactRect();
+	else
+		r = m_dev->exactBounds();
+
 	KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorStrategy(),"temporary");;
 	KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorStrategy(),"temporary");;
 	KisPaintDeviceSP srcdev = m_dev;
-	
+
 	int rotQuadrant = int(rotation /(M_PI/2) + 0.5);
 	double tmp;
 	switch(rotQuadrant)
@@ -386,6 +390,9 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
 	xshear = -tan(rotation);
 	xtranslate += int(tan(rotation)*ytranslate);
 
+	m_progressTotalSteps = int(yscale * r.width() * r.height());
+	m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
+
 QTime time;
 time.start();
 	transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, filterStrategy);
@@ -397,6 +404,7 @@ printf("time taken to clear selection %d\n",time.restart());
 
 printf("time taken second pass %d\n",time.elapsed());
 printf("%d %d\n",xtranslate, ytranslate);
+printf("%d %d\n",m_progressStep,m_progressTotalSteps);
 printf("%f\n",rotation);
 
 	//progress info

@@ -6,7 +6,6 @@ Transform tool
 	* The option widget should be connected
 	* Do subpixel positioning of shearing
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
-	* Better progress calculation
 	* Make undo work. there seems to be a bug+memory leakage
 	* Implement gui, create cursors and update visitor for shearing
 	* Fix problem of deselecting during tool use

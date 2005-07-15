@@ -18,6 +18,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#ifndef _KIS_POLYGON_H_
+#define _KIS_POLYGON_H_
+
 #include <qvaluevector.h>
 typedef QValueVector<KisPoint> KisPointVector;
 class KisPolygon : public KisPointVector
@@ -29,3 +32,5 @@ class KisPolygon : public KisPointVector
                 Q_INT32 extents(double &minX, double &minY, double &maxX, double &maxY);
                 Q_INT32 numberOfPoints();
 };
+
+#endif

@@ -631,11 +631,15 @@ void KisToolTransform::transform() {
 
 	if (!img)
 		return;
-
+/*
 	double tx = m_translateX - m_org_cenX * m_scaleX;
 	double ty = m_translateY - m_org_cenY * m_scaleY;
+	*/
+	
+	double tx = m_translateX - rotX(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
+	double ty = m_translateY - rotY(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
 	KisProgressDisplayInterface *progress = m_subject->progressDisplay();
-
+printf("%f %f\n",tx,ty);
 	if(m_transaction)
 	{
 		m_transaction->unexecute();
@@ -644,7 +648,7 @@ void KisToolTransform::transform() {
 	m_transaction = new TransformCmd(img->activeLayer().data());
 	Q_CHECK_PTR(m_transaction);
 		
-	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, int(tx), int(ty), progress, m_filter);
+	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
 	
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();

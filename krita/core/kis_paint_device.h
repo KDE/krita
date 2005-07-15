@@ -294,7 +294,7 @@ public:
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 	void transform(double  xscale, double  yscale, 
-			Q_INT32  xshear, Q_INT32  yshear,
+			double  xshear, double  yshear, double rotation,
 			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
 	/**

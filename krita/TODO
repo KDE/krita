@@ -4,11 +4,11 @@ Transform tool
 
 	* Implement native integer versions for more filters than Hermite
 	* The option widget should be connected
-	* Make it actually do rotation
+	* Do subpixel positioning of shearing
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
 	* Better progress calculation
 	* Make undo work. there seems to be a bug+memory leakage
-	* Implement gui for shearing and create cursors for shearing
+	* Implement gui, create cursors and update visitor for shearing
 	* Fix problem of deselecting during tool use
 	* Fix problem of undoing during tool use
 	* Fix problem of clearing "extraLength pixels"

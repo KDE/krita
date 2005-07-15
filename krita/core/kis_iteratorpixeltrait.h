@@ -100,7 +100,7 @@ public:
 	/**
 	  * Returns the degree of selectedness of the pixel.
 	  */
-	inline Q_UINT8 selectedNess() const
+	inline Q_UINT8 selectedness() const
 		{
 			if (m_selectionIterator)
 				return *(m_selectionIterator -> rawData());

@@ -580,12 +580,12 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
 }
 
 void KisPaintDevice::transform(double xscale, double  yscale,
-			Q_INT32  xshear, Q_INT32  yshear,
+			double  xshear, double  yshear, double rotation,
 			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
 {
         KisTransformVisitor visitor;
         accept(visitor);
-        visitor.transform(xscale, yscale, xshear,  yshear, xtranslate, ytranslate, progress, filterStrategy);
+        visitor.transform(xscale, yscale, xshear,  yshear, rotation, xtranslate, ytranslate, progress, filterStrategy);
 }
 
 void KisPaintDevice::mirrorX()

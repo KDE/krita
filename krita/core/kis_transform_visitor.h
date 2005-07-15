@@ -39,13 +39,13 @@ public:
 	void visitKisPaintDevice(KisPaintDevice* dev);
 
 	void transform(double  xscale, double  yscale, 
-		Q_INT32  xshear, Q_INT32  yshear,
+		double  xshear, double  yshear, double rotation,
 		Q_INT32  xtranslate, Q_INT32  ytranslate,
 		KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
 
 private:
 	// XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-	template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, Q_INT32  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
+	template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
 	
 	void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
 	void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);

@@ -52,7 +52,7 @@ noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
 		KRayonViewIface.h KIsDocIface.h KIsImageIface.h 	kis_matrix.h \
 		kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h 	\
 		kis_quantum_operations.h kis_filter.h kis_filter_registry.h kis_fileformat_registry.h \
-		kis_docker_manager.h kis_composite_op.h
+		kis_docker_manager.h kis_composite_op.h kis_integer_maths.h
 
 
 libkritacore_la_METASOURCES = AUTO

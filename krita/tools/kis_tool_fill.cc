@@ -136,13 +136,14 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 	m_checkUsePattern->setChecked(m_usePattern);
 	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(widget, 3, 3);
+	QGridLayout *optionLayout = new QGridLayout(widget, 3, 2);
 	super::addOptionWidgetLayout(optionLayout);
 
-	optionLayout -> addWidget(m_lbThreshold, 1, 0);
-	optionLayout -> addWidget(m_slThreshold, 1, 1);
+	optionLayout -> addWidget(m_lbThreshold, 0, 0);
+	optionLayout -> addWidget(m_slThreshold, 0, 1);
 
-	optionLayout -> addWidget(m_checkUsePattern, 2, 0);
+	optionLayout -> addWidget(m_checkUsePattern, 1, 0);
+
 
 	return widget;
 }

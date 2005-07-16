@@ -242,8 +242,6 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 	super::addOptionWidgetLayout(optionLayout);
 
 	optionLayout -> addWidget(m_optWidget, 0, 0);
-	//connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
-
 	return widget;
 }
 

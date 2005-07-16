@@ -41,7 +41,7 @@
 #include "kis_transform_visitor.h"
 #include "kis_profile.h"
 #include "kis_canvas_controller.h"
-
+#include "kis_integer_maths.h"
 
 namespace {
 
@@ -802,7 +802,7 @@ void KisPaintDevice::clearSelection()
 			p_alpha = p.alpha();
 			s_alpha = MAX_SELECTED - s.alpha();
 
-			p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+			p.alpha() = UINT8_MULT(p_alpha, s_alpha);
 
 			++devIt;
 			++selectionIt;

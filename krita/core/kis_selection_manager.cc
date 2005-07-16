@@ -47,6 +47,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
 #include "kis_convolution_painter.h"
+#include "kis_integer_maths.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	: m_parent(parent),
@@ -60,16 +61,7 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
 	  m_reselect(0),
 	  m_invert(0),
 	  m_toNewLayer(0),
-	  m_feather(0),
-	  m_border(0),
-	  m_expand(0),
-	  m_smooth(0),
-	  m_contract(0),
-	  m_grow(0),
-	  m_similar(0),
-	  m_transform(0),
-	  m_load(0),
-	  m_save(0)
+	  m_feather(0)
 {
 	m_pluginActions.setAutoDelete(true);
 	m_clipboard = KisClipboard::instance();
@@ -124,89 +116,29 @@ void KisSelectionManager::setup(KActionCollection * collection)
 	
 	m_reselect =
 		new KAction(i18n("&Reselect"),
-			    0, 0,
+			    0, "Ctrl+Shift+D",
 			    this, SLOT(reselect()),
 			    collection, "reselect");
 	
 	m_invert =
 		new KAction(i18n("&Invert"),
-			    0, 0,
+			    0, "Ctrl+I",
 			    this, SLOT(invert()),
 			    collection, "invert");
 
 
         m_toNewLayer =
 		new KAction(i18n("Copy Selection to New Layer"),
-			    0, 0,
+			    0, "Ctrl+J",
 			    this, SLOT(copySelectionToNewLayer()),
 			    collection, "copy_selection_to_new_layer");
 
 
 	m_feather =
 		new KAction(i18n("Feather..."),
-			    0, 0,
+			    0, "Ctrl+Alt+D",
 			    this, SLOT(feather()),
 			    collection, "feather");
-
-#if 0 // Not implemented yet
-	m_border =
-		new KAction(i18n("Border..."),
-			    0, 0,
-			    this, SLOT(border()),
-			    collection, "border");
-
-	m_expand =
-		new KAction(i18n("Expand..."),
-			    0, 0,
-			    this, SLOT(expand()),
-			    collection, "expand");
-
-	m_smooth =
-		new KAction(i18n("Smooth..."),
-			    0, 0,
-			    this, SLOT(smooth()),
-			    collection, "smooth");
-
-
-	m_contract =
-		new KAction(i18n("Contract..."),
-			    0, 0,
-			    this, SLOT(contract()),
-			    collection, "contract");
-
-	m_grow =
-		new KAction(i18n("Grow"),
-			    0, 0,
-			    this, SLOT(grow()),
-			    collection, "grow");
-
-	m_similar =
-		new KAction(i18n("Similar"),
-			    0, 0,
-			    this, SLOT(similar()),
-			    collection, "similar");
-
-
-	m_transform
-		= new KAction(i18n("Transform..."),
-			      0, 0,
-			      this, SLOT(transform()),
-			      collection, "transform_selection");
-
-
-	m_load
-		= new KAction(i18n("Load..."),
-			      0, 0,
-			      this, SLOT(load()),
-			      collection, "load_selection");
-
-
-	m_save
-		= new KAction(i18n("Save As..."),
-			      0, 0,
-			      this, SLOT(save()),
-			      collection, "save_selection");
-#endif
 
         QClipboard *cb = QApplication::clipboard();
         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
@@ -251,17 +183,7 @@ void KisSelectionManager::updateGUI()
 	m_invert -> setEnabled(enable);
 	m_toNewLayer -> setEnabled(enable);
 	m_feather -> setEnabled(enable);
-#if 0 // Not implemented yet
-	m_border -> setEnabled(enable);
-	m_expand -> setEnabled(enable);
-	m_smooth -> setEnabled(enable);
-	m_contract -> setEnabled(enable);
-	m_grow -> setEnabled(enable);
-	m_similar -> setEnabled(enable);
-	m_transform -> setEnabled(enable);
-	m_load -> setEnabled(enable);
-	m_save -> setEnabled(enable);
-#endif
+
 	m_parent -> updateStatusBarSelectionLabel();
 
 }
@@ -330,7 +252,7 @@ void KisSelectionManager::copy()
 			p_alpha = p.alpha();
 			s_alpha = s.alpha();
 
-			p.alpha() = (Q_UINT8) ((p_alpha * s_alpha) >> 8);
+			p.alpha() = UINT8_MULT(p_alpha, s_alpha);
 
 			++layerIt;
 			++selectionIt;
@@ -570,16 +492,6 @@ void KisSelectionManager::feather()
 	dev -> emitSelectionChanged();
 }
 
-// XXX: Maybe move these esoteric functions to plugins?
-void KisSelectionManager::border() {}
-void KisSelectionManager::expand() {}
-void KisSelectionManager::smooth() {}
-void KisSelectionManager::contract() {}
-void KisSelectionManager::grow() {}
-void KisSelectionManager::similar() {}
-void KisSelectionManager::transform() {}
-void KisSelectionManager::load() {}
-void KisSelectionManager::save() {}
 
 
 #include "kis_selection_manager.moc"

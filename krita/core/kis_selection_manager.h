@@ -62,15 +62,7 @@ public slots:
 	void invert();
 	void copySelectionToNewLayer();
 	void feather();
-	void border();
-	void expand();
-	void smooth();
-	void contract();
-	void grow();
-	void similar();
-	void transform();
-	void load();
-	void save();
+;
 
 private:
 
@@ -89,15 +81,7 @@ private:
 	KAction *m_invert;
 	KAction *m_toNewLayer;
 	KAction *m_feather;
-	KAction *m_border;
-	KAction *m_expand;
-	KAction *m_smooth;
-	KAction *m_contract;
-	KAction *m_grow;
-	KAction *m_similar;
-	KAction *m_transform;
-	KAction *m_load;
-	KAction *m_save;
+
 
 	QPtrList<KAction> m_pluginActions;
 

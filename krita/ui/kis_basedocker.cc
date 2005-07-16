@@ -27,7 +27,6 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-
 #include <qlayout.h>
 
 #include "kis_basedocker.h"
@@ -35,6 +34,7 @@
 KisBaseDocker::KisBaseDocker( QWidget* parent, const char* name)
 	: QDockWindow( QDockWindow::OutsideDock, parent ,name )
 {
+
 	setCloseMode( QDockWindow::Never );
 	setResizeEnabled(true);
 	setOpaqueMoving(true);

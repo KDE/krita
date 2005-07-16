@@ -137,6 +137,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 {
 
 	if (m_subject) {
+		QApplication::setOverrideCursor(KisCursor::waitCursor());
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
@@ -170,6 +171,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 			img -> undoAdapter() -> addCommand(t);
 		m_subject -> canvasController() -> updateCanvas();
 		m_selectionOptionsWidget -> ensureMaskColor();
+		QApplication::restoreOverrideCursor();
 	}
 }
 

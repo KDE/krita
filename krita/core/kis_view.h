@@ -356,6 +356,8 @@ public slots:
 	
 	void slotZoomIn();
 	void slotZoomOut();
+	void slotActualPixels();
+	void slotActualSize();
 	void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
 
 	void slotUpdateFullScreen(bool toggle);
@@ -419,6 +421,8 @@ private:
 
 	KAction *m_zoomIn;
 	KAction *m_zoomOut;
+	KAction *m_actualPixels;
+	KAction *m_actualSize;
 
 	KAction *m_fullScreen;
 	KAction *m_imgProperties;

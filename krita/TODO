@@ -101,7 +101,6 @@ User Interface
 	  for perspective drawings) Bug #108398 
         * Allow snapping to guides.
         * Create templates for often-used image formats. Add save-as-template
-	* Add menu item to zoom back to 1:1
 	* Make rotate actions consistent between layer and image
 	* Add deselect with rmb?
 	* Move crop rectangle by dragging from within

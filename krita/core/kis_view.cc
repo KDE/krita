@@ -161,6 +161,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_vRuler = 0;
 	m_zoomIn = 0;
 	m_zoomOut = 0;
+	m_actualPixels = 0;
+	m_actualSize = 0;
 
 	m_layerAdd = 0;
 	m_layerRm = 0;
@@ -453,9 +455,13 @@ void KisView::setupActions()
 	m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
 	m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
 	m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+	
 	// view actions
 	m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
+	m_actualPixels = new KAction(i18n("Actual Pixels"), "Ctrl+0", this, SLOT(slotActualPixels()), actionCollection(), "actual_pixels");
+	m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
+	m_actualSize->setEnabled(false);
 
 	// layer actions
 	m_layerAdd = new KAction(i18n("&Add Layer..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
@@ -1038,6 +1044,17 @@ void KisView::slotZoomOut()
 {
 	if (zoom() >= KISVIEW_MIN_ZOOM)
 		zoomUpdateGUI(-1, -1, zoom() / 2);
+}
+
+void KisView::slotActualPixels()
+{
+	zoomUpdateGUI(-1, -1, 1.0);
+}
+
+void KisView::slotActualSize()
+{
+	//XXX later this should be update to take screen res and image res into consideration
+	zoomUpdateGUI(-1, -1, 1.0);
 }
 
 void KisView::next_layer()

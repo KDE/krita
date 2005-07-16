@@ -24,6 +24,9 @@
   <ActionList name="view_split"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
+  <Action name="actual_pixels"/>
+  <Action name="actual_size"/>
+  <Separator/>
   <Action name="view_ruler"/>
   <Separator/>
   <Action name="view_palette_action_menu"/>

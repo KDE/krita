@@ -145,7 +145,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("&Contiguous Select"),
-					    "tool_wizard_selection" ,
+					    "tool_contiguous_selection" ,
 					    0,
 					    this,
 					    SLOT(activate()),

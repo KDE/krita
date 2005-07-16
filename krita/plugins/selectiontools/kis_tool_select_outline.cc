@@ -34,7 +34,7 @@
 #include <kis_canvas_subject.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
-#include <kis_tool_select_freehand.h>
+#include <kis_tool_select_outline.h>
 #include <kis_vec.h>
 #include <kis_undo_adapter.h>
 #include <kis_button_press_event.h>
@@ -44,10 +44,10 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 
-KisToolSelectFreehand::KisToolSelectFreehand()
+KisToolSelectOutline::KisToolSelectOutline()
 	: super()
 {
-	setName("tool_select_freehand");
+	setName("tool_select_outline");
 	setCursor(KisCursor::selectCursor());
 
 	m_subject = 0;
@@ -56,11 +56,11 @@ KisToolSelectFreehand::KisToolSelectFreehand()
 	m_selectAction = SELECTION_ADD;
 }
 
-KisToolSelectFreehand::~KisToolSelectFreehand()
+KisToolSelectOutline::~KisToolSelectOutline()
 {
 }
 
-void KisToolSelectFreehand::activate()
+void KisToolSelectOutline::activate()
 {
 	super::activate();
 
@@ -70,13 +70,13 @@ void KisToolSelectFreehand::activate()
 	m_optWidget -> slotActivated();
 }
 
-void KisToolSelectFreehand::update (KisCanvasSubject *subject)
+void KisToolSelectOutline::update (KisCanvasSubject *subject)
 {
 	m_subject = subject;
 	super::update(m_subject);
 }
 
-void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
+void KisToolSelectOutline::buttonPress(KisButtonPressEvent *event)
 {
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
@@ -88,7 +88,7 @@ void KisToolSelectFreehand::buttonPress(KisButtonPressEvent *event)
 	}
 }
 
-void KisToolSelectFreehand::move(KisMoveEvent *event)
+void KisToolSelectOutline::move(KisMoveEvent *event)
 {
 	if (m_dragging) {
 		m_dragStart = m_dragEnd;
@@ -99,7 +99,7 @@ void KisToolSelectFreehand::move(KisMoveEvent *event)
 	}
 }
 
-void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 {
 	if (!m_subject)
 		return;
@@ -115,7 +115,7 @@ void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 			bool hasSelection = layer -> hasSelection();
 
 			//XXX: Fix string
-			KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Freehand Selection"), layer.data());
+			KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), layer.data());
 			KisSelectionSP selection = layer -> selection();
 
 			if (!hasSelection) {
@@ -159,17 +159,17 @@ void KisToolSelectFreehand::buttonRelease(KisButtonReleaseEvent *event)
 	}
 }
 
-void KisToolSelectFreehand::paint(QPainter& gc)
+void KisToolSelectOutline::paint(QPainter& gc)
 {
 	draw(gc);
 }
 
-void KisToolSelectFreehand::paint(QPainter& gc, const QRect&)
+void KisToolSelectOutline::paint(QPainter& gc, const QRect&)
 {
 	draw(gc);
 }
 
-void KisToolSelectFreehand::draw()
+void KisToolSelectOutline::draw()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -180,7 +180,7 @@ void KisToolSelectFreehand::draw()
 	}
 }
 
-void KisToolSelectFreehand::draw(QPainter& gc)
+void KisToolSelectOutline::draw(QPainter& gc)
 {
 	if (!m_subject)
 		return;
@@ -202,7 +202,7 @@ void KisToolSelectFreehand::draw(QPainter& gc)
 	}
 }
 
-void KisToolSelectFreehand::clear()
+void KisToolSelectOutline::clear()
 {
 	if (m_subject) {
 		KisCanvasControllerInterface *controller = m_subject -> canvasController();
@@ -237,13 +237,13 @@ void KisToolSelectFreehand::clear()
 	}
 }
 
-void KisToolSelectFreehand::setup(KActionCollection *collection)
+void KisToolSelectOutline::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Freehand Select"),
-					    "tool_free_form_selection",
+		m_action = new KRadioAction(i18n("&Outline Select"),
+					    "tool_outline_selection",
 					    0,
 					    this,
 					    SLOT(activate()),
@@ -256,26 +256,26 @@ void KisToolSelectFreehand::setup(KActionCollection *collection)
 }
 
 
-QWidget* KisToolSelectFreehand::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectOutline::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new KisSelectionOptions(parent, m_subject);
 	Q_CHECK_PTR(m_optWidget);
-	m_optWidget -> setCaption(i18n("Freehand Selection"));
+	m_optWidget -> setCaption(i18n("Outline Selection"));
 
 	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
 	return m_optWidget;
 }
 
-QWidget* KisToolSelectFreehand::optionWidget()
+QWidget* KisToolSelectOutline::optionWidget()
 {
         return m_optWidget;
 }
 
-void KisToolSelectFreehand::slotSetAction(int action) {
+void KisToolSelectOutline::slotSetAction(int action) {
 	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
 		m_selectAction =(enumSelectionMode)action;
 }
 
-#include "kis_tool_select_freehand.moc"
+#include "kis_tool_select_outline.moc"
 

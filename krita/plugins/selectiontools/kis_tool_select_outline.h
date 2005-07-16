@@ -34,13 +34,13 @@
 
 class KisSelectionOptions;
 
-class KisToolSelectFreehand : public KisToolNonPaint {
+class KisToolSelectOutline : public KisToolNonPaint {
 
 	typedef KisToolNonPaint super;
 	Q_OBJECT
 public:
-	KisToolSelectFreehand();
-	virtual ~KisToolSelectFreehand();
+	KisToolSelectOutline();
+	virtual ~KisToolSelectOutline();
 
         //
         // KisCanvasObserver interface
@@ -87,19 +87,19 @@ private:
 };
 
 
-class KisToolSelectFreehandFactory : public KisToolFactory {
+class KisToolSelectOutlineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectFreehandFactory(KActionCollection * ac) : super(ac) {};
-	virtual ~KisToolSelectFreehandFactory(){};
+	KisToolSelectOutlineFactory(KActionCollection * ac) : super(ac) {};
+	virtual ~KisToolSelectOutlineFactory(){};
 
 	virtual KisTool * createTool() { 
-		KisTool * t =  new KisToolSelectFreehand(); 
+		KisTool * t =  new KisToolSelectOutline(); 
 		Q_CHECK_PTR(t);
 		t -> setup(m_ac); 
 		return t; 
 	}
-	virtual KisID id() { return KisID("freehandselect", i18n("Freehand select tool")); }
+	virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }
 };
 
 

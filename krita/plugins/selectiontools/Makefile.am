@@ -26,14 +26,14 @@ kritaselectiontools_la_SOURCES = \
         kis_tool_select_polygonal.cc \
         kis_tool_select_elliptical.cc \
         kis_tool_select_contiguous.cc \
-        kis_tool_select_freehand.cc
+        kis_tool_select_outline.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritaselectiontools.la
 
 noinst_HEADERS = \
 	selection_tools.h \
-	kis_tool_select_freehand.h \
+	kis_tool_select_outline.h \
 	kis_tool_select_polygonal.h \
 	kis_tool_select_rectangular.h \
 	kis_tool_select_brush.h \
@@ -53,9 +53,9 @@ kritapics_DATA = \
 	tool_rect_selection.png \
 	tool_eraser_selection.png \
 	tool_brush_selection.png  \
-	tool_wizard_selection.png \
+	tool_contiguous_selection.png \
 	tool_elliptical_selection.png \
-	tool_free_form_selection.png \
+	tool_outline_selection.png \
 	tool_polygonal_selection.png
 
 kritapicsdir = $(kde_datadir)/krita/pics

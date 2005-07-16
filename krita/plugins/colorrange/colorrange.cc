@@ -47,7 +47,7 @@
 #include <kis_tool_registry.h>
 #include "colorrange.h"
 #include "dlg_colorrange.h"
-#include "kis_tool_selectpicker.h"
+#include "kis_tool_selectsimilar.h"
 
 typedef KGenericFactory<ColorRange> ColorRangeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
@@ -72,7 +72,7 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 
 		m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
-		m_view -> toolRegistry() -> add(new KisToolSelectPickerFactory(actionCollection()));
+		m_view -> toolRegistry() -> add(new KisToolSelectSimilarFactory(actionCollection()));
 	}
 }
 

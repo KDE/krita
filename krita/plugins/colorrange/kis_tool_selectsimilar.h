@@ -39,14 +39,14 @@ class QCheckBox;
 
 class KisSelectionOptions;
 
-class KisToolSelectPicker : public KisToolNonPaint {
+class KisToolSelectSimilar : public KisToolNonPaint {
 
 	Q_OBJECT
 	typedef KisToolNonPaint super;
 
 public:
-	KisToolSelectPicker();
-	virtual ~KisToolSelectPicker();
+	KisToolSelectSimilar();
+	virtual ~KisToolSelectSimilar();
 
 	void activate();
 	void clear();
@@ -79,19 +79,19 @@ private slots:
 	void slotTimer();
 };
 
-class KisToolSelectPickerFactory : public KisToolFactory {
+class KisToolSelectSimilarFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectPickerFactory(KActionCollection * ac) : super(ac) {};
-	virtual ~KisToolSelectPickerFactory(){};
+	KisToolSelectSimilarFactory(KActionCollection * ac) : super(ac) {};
+	virtual ~KisToolSelectSimilarFactory(){};
 	
 	virtual KisTool * createTool() { 
-		KisTool * t =  new KisToolSelectPicker(); 
+		KisTool * t =  new KisToolSelectSimilar(); 
 		Q_CHECK_PTR(t);
 		t -> setup(m_ac); 
 		return t; 
 	}
-	virtual KisID id() { return KisID("selectpicker", i18n("Select similar")); }
+	virtual KisID id() { return KisID("selectsimilar", i18n("Select similar")); }
 };
 
 

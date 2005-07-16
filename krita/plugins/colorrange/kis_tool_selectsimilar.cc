@@ -46,7 +46,7 @@
 #include <kis_selected_transaction.h>
 #include <kis_undo_adapter.h>
 
-#include "kis_tool_selectpicker.h"
+#include "kis_tool_selectsimilar.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor & c, int fuzziness, enumSelectionMode mode)
 {
@@ -100,9 +100,9 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 
 
 
-KisToolSelectPicker::KisToolSelectPicker()
+KisToolSelectSimilar::KisToolSelectSimilar()
 {
-	setName("tool_selectpicker");
+	setName("tool_select_similar");
 	setCursor(KisCursor::pickerCursor());
 	m_subject = 0;
 	m_optWidget = 0;
@@ -113,11 +113,11 @@ KisToolSelectPicker::KisToolSelectPicker()
 	connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()) );
 }
 
-KisToolSelectPicker::~KisToolSelectPicker()
+KisToolSelectSimilar::~KisToolSelectSimilar()
 {
 }
 
-void KisToolSelectPicker::activate()
+void KisToolSelectSimilar::activate()
 {
 	KisToolNonPaint::activate();
 	m_timer->start(50);
@@ -128,12 +128,12 @@ void KisToolSelectPicker::activate()
 	}
 }
 
-void KisToolSelectPicker::clear()
+void KisToolSelectSimilar::clear()
 {
 	m_timer->stop();
 }
 
-void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
+void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 {
 
 	if (m_subject) {
@@ -157,7 +157,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
-		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Picker"),dev);
+		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
 		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
 
@@ -173,7 +173,7 @@ void KisToolSelectPicker::buttonPress(KisButtonPressEvent *e)
 	}
 }
 
-void KisToolSelectPicker::slotTimer()
+void KisToolSelectSimilar::slotTimer()
 {
 #if KDE_IS_VERSION(3,4,0)
 	int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
@@ -196,7 +196,7 @@ void KisToolSelectPicker::slotTimer()
 	}
 }
 
-void KisToolSelectPicker::setPickerCursor(enumSelectionMode action)
+void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 {
 	switch (action) {
 		case SELECTION_ADD:
@@ -207,40 +207,40 @@ void KisToolSelectPicker::setPickerCursor(enumSelectionMode action)
 	}
 }
 
-void KisToolSelectPicker::setup(KActionCollection *collection)
+void KisToolSelectSimilar::setup(KActionCollection *collection)
 {
 	m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
 	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Selection Picker"), "tool_picker_selection", Qt::Key_E, this, SLOT(activate()), collection, name());
+		m_action = new KRadioAction(i18n("&Similar Select"), "tool_similar_selection", Qt::Key_E, this, SLOT(activate()), collection, name());
 		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
 }
 
-void KisToolSelectPicker::update(KisCanvasSubject *subject)
+void KisToolSelectSimilar::update(KisCanvasSubject *subject)
 {
 	super::update(subject);
 	m_subject = subject;
 }
 
-void KisToolSelectPicker::slotSetFuzziness(int fuzziness)
+void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
 	m_fuzziness = fuzziness;
 }
 
-void KisToolSelectPicker::slotSetAction(int action)
+void KisToolSelectSimilar::slotSetAction(int action)
 {
 	m_defaultSelectAction = (enumSelectionMode)action;
 }
 
-QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
+QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
 {
 	m_optWidget = new QWidget(parent);
 	Q_CHECK_PTR(m_optWidget);
 
-	m_optWidget -> setCaption(i18n("Selection Picker"));
+	m_optWidget -> setCaption(i18n("Similar Select"));
 
 	QVBoxLayout * l = new QVBoxLayout(m_optWidget);
 	Q_CHECK_PTR(l);
@@ -270,9 +270,9 @@ QWidget* KisToolSelectPicker::createOptionWidget(QWidget* parent)
 	return m_optWidget;
 }
 
-QWidget* KisToolSelectPicker::optionWidget()
+QWidget* KisToolSelectSimilar::optionWidget()
 {
 	return m_optWidget;
 }
 
-#include "kis_tool_selectpicker.moc"
+#include "kis_tool_selectsimilar.moc"

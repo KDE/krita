@@ -2,7 +2,7 @@ kritarcdir = $(kde_datadir)/krita/kpartplugins
 kritarc_DATA = colorrange.rc
 EXTRA_DIST = $(kritarc_DATA)
 
-kde_services_DATA = kritatoolselectpicker.desktop
+kde_services_DATA = kritatoolselectsimilar.desktop
 
 INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \
@@ -14,8 +14,8 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 
-kritacolorrange_la_SOURCES = colorrange.cc dlg_colorrange.cc wdg_colorrange.ui kis_tool_selectpicker.cc
-noinst_HEADERS = wdg_colorrange.h dlg_colorrange.h colorrange.h kis_tool_selectpicker.h
+kritacolorrange_la_SOURCES = colorrange.cc dlg_colorrange.cc wdg_colorrange.ui kis_tool_selectsimilar.cc
+noinst_HEADERS = wdg_colorrange.h dlg_colorrange.h colorrange.h kis_tool_selectsimilar.h
 
 kde_module_LTLIBRARIES = kritacolorrange.la
 
@@ -27,6 +27,6 @@ kritacolorrange_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 # directory for pixmaps
-kritapics_DATA=tool_picker_selection.png
+kritapics_DATA=tool_similar_selection.png
 kritapicsdir = $(kde_datadir)/krita/pics
 

@@ -86,7 +86,6 @@ KisDockerManager::KisDockerManager(KisView * view, KActionCollection * ac)
 	m_toolcontrolslider = 0;
 	m_colorslider = 0;
 
-	m_layerchanneldocker = 0;
 	m_shapesdocker = 0;
 	m_fillsdocker = 0;
 	m_toolcontroldocker = 0;
@@ -108,7 +107,6 @@ KisDockerManager::~KisDockerManager()
 	}
 
 	// make sure that the dockers get deleted
-	delete m_layerchanneldocker;
 	delete m_shapesdocker;
 	delete m_fillsdocker;
 	delete m_toolcontroldocker;
@@ -278,11 +276,6 @@ void KisDockerManager::setupDockers()
 		m_colordocker = new KisDockFrameDocker(m_view);
 		m_colordocker -> setCaption(i18n("Color Manager"));
 
-		m_layerchanneldocker = new KisDockFrameDocker(m_view);
-		m_layerchanneldocker -> setCaption(i18n("Layers"));
-
-
-		(void)new KAction(i18n( "Hide &Layers" ), 0, this, SLOT( viewLayerChannelDocker() ), m_ac, "view_layer_docker" );
 		(void)new KAction(i18n( "Hide &Color Manager" ), 0, this, SLOT( viewColorDocker() ), m_ac, "view_color_docker" );
 		(void)new KAction(i18n( "Hide &Tool Properties" ), 0, this, SLOT( viewControlDocker() ), m_ac, "view_control_docker" );
 
@@ -316,24 +309,11 @@ void KisDockerManager::setupDockers()
 
 	connect(m_view, SIGNAL(fgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetFGColor(const QColor&)));
 	connect(m_view, SIGNAL(bgColorChanged(const QColor&)), m_controlWidget, SLOT(slotSetBGColor(const QColor&)));
-#if 0
-	// ---------------------------------------------------------------------
-	// Bird's eye box
-	m_birdEyeBox = new KisBirdEyeBox(m_toolcontroldocker);
-	m_birdEyeBox -> setCaption(i18n("Overview"));
-
-	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
-		m_toolcontrolslider -> plug ( m_birdEyeBox );
-	}
-	else {
-		m_toolcontroldocker -> plug(m_birdEyeBox);
-	}
-#endif 
 
 	// ---------------------------------------------------------------------
 	// Layers
 
-	m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_layerchanneldocker);
+	m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, m_toolcontroldocker);
 	m_layerBox -> setCaption(i18n("Layers"));
 
 	connect(m_layerBox, SIGNAL(itemToggleVisible()), m_view, SLOT(layerToggleVisible()));
@@ -359,20 +339,8 @@ void KisDockerManager::setupDockers()
 		m_layerchannelslider -> plug( m_layerBox );
 	}
 	else {
-		m_layerchanneldocker -> plug(m_layerBox);
+		m_toolcontroldocker -> plug(m_layerBox);
 	}
-
-#if 0	// This doesn't do anything useful yet.
-	// Channels
-	m_channelView = new KisChannelView(m_view -> document(), m_view);
-	m_channelView -> setCaption(i18n("Channels"));
-	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
-		m_layerchannelslider -> plug( m_channelView );
-	}
-	else {
-		m_layerchanneldocker -> plug(m_channelView);
-	}
-#endif
 
 	// ---------------------------------------------------------------------
 	// Shapes
@@ -537,25 +505,15 @@ void KisDockerManager::setupDockers()
 		m_colordocker -> plug(m_palettewidget);
 	}
 
-
-#if 0
-	// Filters XXX: Disable for the release.
-	m_filterBox = new KisFilterBox(m_view, m_view, "filter box");
-	m_paintboxdocker -> plug( m_filterBox, "Painting filters" );
-	m_filterBox -> init();
-#endif
-
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
 		// TODO Here should be a better check
 		if ( m_view -> mainWindow() -> isDockEnabled( DockBottom)) {
 			m_view -> mainWindow()->addDockWindow( m_toolcontroldocker, DockRight );
-			m_view -> mainWindow()->addDockWindow( m_layerchanneldocker, DockRight );
 			m_view -> mainWindow()->addDockWindow( m_colordocker, DockRight );
 			m_view -> mainWindow()->addDockWindow( m_paintboxdocker, DockRight );
 
 
 			m_toolcontroldocker -> show();
-			m_layerchanneldocker -> show();
 			m_paintboxdocker -> show();
 			m_colordocker -> show();
 
@@ -629,19 +587,6 @@ void KisDockerManager::viewControlDocker()
 		m_toolcontroldocker -> hide();
 		((KAction*)m_ac->action("view_control_docker")) -> setText(i18n("Show &Tool Properties"));
 
-	}
-}
-
-void KisDockerManager::viewLayerChannelDocker()
-{
-	if ( m_layerchanneldocker->isVisible() == false )
-	{
-		m_layerchanneldocker->show();
-		((KAction*)m_ac->action("view_layer_docker")) -> setText(i18n("Hide &Layers"));
-	}
-	else {
-		m_layerchanneldocker -> hide();
-		((KAction*)m_ac->action("view_layer_docker")) -> setText(i18n("Show &Layers"));
 	}
 }
 

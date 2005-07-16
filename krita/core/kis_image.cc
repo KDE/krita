@@ -34,7 +34,6 @@
 
 #include "KIsImageIface.h"
 
-#include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
@@ -278,7 +277,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 		m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
 		Q_CHECK_PTR(m_nserver);
 
-		m_guides = rhs.m_guides;
 		m_pixmap = rhs.m_pixmap;
 	}
 
@@ -1188,11 +1186,6 @@ QRect KisImage::bounds() const
 KisUndoAdapter* KisImage::undoAdapter() const
 {
 	return m_adapter;
-}
-
-KisGuideMgr *KisImage::guides() const
-{
-	return const_cast<KisGuideMgr*>(&m_guides);
 }
 
 void KisImage::slotSelectionChanged()

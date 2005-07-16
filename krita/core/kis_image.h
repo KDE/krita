@@ -28,7 +28,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_guide.h"
 #include "kis_scale_visitor.h"
 #include "resources/kis_profile.h"
 #include "kis_annotation.h"
@@ -157,7 +156,6 @@ public:
 	void notifyLayersChanged();
 
 	KisUndoAdapter *undoAdapter() const;
-	KisGuideMgr *guides() const;
 
 	/**
 	 * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
@@ -226,7 +224,6 @@ private:
 
 	KisNameServer *m_nserver;
 	KisUndoAdapter *m_adapter;
-	KisGuideMgr m_guides;
 
 	DCOPObject *m_dcop;
 

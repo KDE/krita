@@ -251,9 +251,6 @@ private:
 	void clearCanvas(const QRect& rc);
 	void connectCurrentImg() const;
 	void disconnectCurrentImg() const;
-	void eraseGuides();
-	void paintGuides();
-	void updateGuides();
 	void imgUpdateGUI();
 
 	void layerUpdateGUI(bool enable);
@@ -401,8 +398,6 @@ private:
 	QScrollBar *m_vScroll; // is not right yet.
 	int m_scrollX;
 	int m_scrollY;
-	KisGuideSP m_currentGuide;
-	QPoint m_lastGuidePoint;
 	KisUndoAdapter *m_adapter;
 	vKisCanvasObserver m_observers;
 	QLabel *m_statusBarZoomLabel;

@@ -124,7 +124,6 @@ private slots:
 
 	void viewColorDocker();
 	void viewControlDocker();
-	void viewLayerChannelDocker();
 	void viewShapesDocker();
 	void viewFillsDocker();
 	void viewPaintBoxDocker();
@@ -142,7 +141,6 @@ private:
 	KoTabbedToolDock *m_colorslider;
 
 	// Dockers
-	KisDockFrameDocker *m_layerchanneldocker;
 	KisDockFrameDocker *m_shapesdocker;
 	KisDockFrameDocker *m_fillsdocker;
 	KisDockFrameDocker *m_toolcontroldocker;

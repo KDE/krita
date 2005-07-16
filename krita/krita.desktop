@@ -11,6 +11,7 @@ GenericName[es]=Aplicación de pintura y de edición de imágenes
 GenericName[et]=Joonistamine ja pilditöötlus
 GenericName[ru]=Рисование и редактирование изображений
 GenericName[sv]=Målnings- och bildredigeringsprogram
+GenericName[tr]=Boyama ve Resim Düzenleme Programı
 MimeType=application/x-krita
 Type=Application
 Icon=krita

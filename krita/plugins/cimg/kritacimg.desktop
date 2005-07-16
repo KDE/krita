@@ -35,6 +35,7 @@ Comment[ru]=Фильтр восстановления на основе CImg
 Comment[sr]=CImg, филтер за обнову слика
 Comment[sr@Latn]=CImg, filter za obnovu slika
 Comment[sv]=Cimg-bildförbättringsfilter
+Comment[tr]=CImg Resim yenileme süzgeci
 Comment[zh_CN]=CImg 图像修复滤镜
 ServiceTypes=Krita/CoreModule
 Type=Service

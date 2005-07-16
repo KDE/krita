@@ -18,6 +18,7 @@ Name[ru]=Обрезка
 Name[sr]=Алат за сасецање
 Name[sr@Latn]=Alat za sasecanje
 Name[sv]=Beskärningsverktyg
+Name[tr]=Kesme Aracı
 Name[zh_CN]=裁剪工具
 ServiceTypes=Krita/CoreModule
 Type=Service

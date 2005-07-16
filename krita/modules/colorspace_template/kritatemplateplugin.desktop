@@ -15,6 +15,7 @@ Comment[es]=Modelo de plantilla de color para desarrolladores
 Comment[et]=Mallvärvimudel arendajatele
 Comment[ru]=Цветовая модель на базе шаблона для разработчиков
 Comment[sv]=Färgmodellmall för utvecklare
+Comment[tr]=Geliştiriciler için Renk model şablonu
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatemplateplugin

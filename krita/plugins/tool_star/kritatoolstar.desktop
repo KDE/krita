@@ -20,6 +20,7 @@ Name[ru]=Звёзды
 Name[sr]=Алат за звезде
 Name[sr@Latn]=Alat za zvezde
 Name[sv]=Stjärnverktyg
+Name[tr]=Yıldız Aracı
 Name[zh_CN]=星形工具
 ServiceTypes=Krita/CoreModule
 Type=Service

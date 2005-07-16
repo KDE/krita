@@ -15,6 +15,7 @@ Name[ru]=Цветовая модель с параметрами влажнос�
 Name[sr]=Модел боја мокрог и лепљивог платна
 Name[sr@Latn]=Model boja mokrog i lepljivog platna
 Name[sv]=Våt och klibbig dukfärgmodell
+Name[tr]=Işlak ve Yapışkan Tuval Renk Modeli
 Name[zh_CN]=湿性/粘性画布色彩模型
 ServiceTypes=Krita/CoreModule
 Type=Service

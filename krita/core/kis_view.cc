@@ -710,7 +710,8 @@ void KisView::paintView(const KisRect& r)
 
 				for (unsigned int i = 0; i < rects.count(); i++) {
 					QRect er = rects[i];
-					gc.fillRect(er, backgroundColor());
+					if (er.isValid())
+						gc.fillRect(er, backgroundColor());
 				}
 
 				wr &= QRect(0, 0, img -> width(), img -> height());

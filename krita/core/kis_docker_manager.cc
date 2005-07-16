@@ -670,6 +670,9 @@ void KisDockerManager::slotPatternChanged(KisPattern * pattern)
 
 void KisDockerManager::resetLayerBox(KisImageSP img, KisLayerSP layer)
 {
+	if (!img) return;
+	if (!layer) return;
+
 	m_layerBox -> setUpdatesEnabled(false);
 	m_layerBox -> clear();
 

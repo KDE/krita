@@ -81,6 +81,8 @@ void KisToolSelectContiguous::activate()
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
 	if (m_subject) {
+		QApplication::setOverrideCursor(KisCursor::waitCursor());
+
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
@@ -98,7 +100,6 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 
 		pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
-		QCursor oldCursor = m_subject -> setCanvasCursor(KisCursor::waitCursor());
 
 		KisFillPainter fillpainter(dev);
 		fillpainter.setFillThreshold(m_fuzziness);
@@ -133,8 +134,8 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		if (adapter)
 			adapter -> addCommand(t);
 			
-		m_subject -> setCanvasCursor(oldCursor);
 		m_subject -> canvasController() -> updateCanvas();
+		QApplication::restoreOverrideCursor();
 	}
 
 }

@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
 
@@ -178,8 +178,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				m_endPos.setX(img -> width());
 			if (img) {
 			
-				QCursor oldCursor = m_subject -> setCanvasCursor(KisCursor::waitCursor());
-
+				QApplication::setOverrideCursor(KisCursor::waitCursor());
 				KisLayerSP layer = img -> activeLayer();
 				bool hasSelection = layer -> hasSelection();
 
@@ -219,8 +218,8 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
 				layer->emitSelectionChanged();
 				img -> notify(rc);
-				m_subject -> setCanvasCursor(oldCursor);
 
+				QApplication::restoreOverrideCursor();
 			}
 		}
 

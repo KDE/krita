@@ -19,7 +19,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qregion.h>
 #include <qwidget.h>
@@ -99,6 +99,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 		KisImageSP img = m_subject -> currentImg();
 
 		if (img) {
+			QApplication::setOverrideCursor(KisCursor::waitCursor());
 			KisLayerSP layer = img -> activeLayer();
 			bool hasSelection = layer -> hasSelection();
 
@@ -143,6 +144,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 				img -> undoAdapter() -> addCommand(t);
 
 			img -> notify(painter.dirtyRect());
+			QApplication::restoreOverrideCursor();
 		}
 
 		m_points.clear();

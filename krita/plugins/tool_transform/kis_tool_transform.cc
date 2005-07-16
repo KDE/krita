@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 #include <qobject.h>
 #include <qcombobox.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -547,9 +548,9 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 	if (m_subject && m_selecting) {
 		m_selecting = false;
 	}
-	setCursor(KisCursor::waitCursor());
+	QApplication::setOverrideCursor(KisCursor::waitCursor());
 	transform();
-	setFunctionalCursor();
+	QApplication::restoreOverrideCursor();
 }
 
 void KisToolTransform::paintOutline()

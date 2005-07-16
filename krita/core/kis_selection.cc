@@ -151,6 +151,10 @@ bool KisSelection::isTotallyUnselected(QRect r)
 
 QRect KisSelection::selectedRect()
 {
-	return extent().unite(m_parentLayer->extent());
+       if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
+               return exactBounds();
+       else
+               return exactBounds().unite(m_parentLayer->exactBounds());
+
 }
 

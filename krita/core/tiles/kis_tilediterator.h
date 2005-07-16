@@ -41,8 +41,8 @@ protected:
 	bool m_writable;
 
 protected:
-	Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
-	Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
+	inline Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
+	inline Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
 	void fetchTileData(Q_INT32 col, Q_INT32 row);
 
 public:
@@ -85,7 +85,8 @@ public:
 	//KisTiledRectIterator & operator--();
 
 	/// returns true when the iterator has reached the end
-	bool isDone() const;
+	inline bool isDone() const { return m_beyondEnd; }
+
 
 protected:
 	 Q_INT32 m_left;
@@ -136,7 +137,8 @@ public:
 	KisTiledHLineIterator & operator--();
 
 	/// returns true when the iterator has reached the end
-	bool isDone() const;
+	bool isDone() const { return m_x > m_right; }
+
 
 protected:
 	 Q_INT32 m_right;
@@ -174,7 +176,8 @@ public:
 	//KisTiledVLineIterator & operator--();
 
 	/// returns true when the iterator has reached the end
-	bool isDone() const;
+	bool isDone() const { return m_y > m_bottom; }
+
 
 protected:
 	 Q_INT32 m_bottom;

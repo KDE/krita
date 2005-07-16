@@ -35,6 +35,42 @@ public:
 		m_selectionIterator = NULL;
 	};
 
+	~KisIteratorPixelTrait()
+	{
+		delete m_selectionIterator;
+	};
+
+	KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs)
+	{
+		if (this == &rhs)
+			return;
+		m_device = rhs.m_device;
+		m_underlyingIterator = rhs.m_underlyingIterator;
+		
+		if (rhs.m_selectionIterator) {
+			m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
+		} else {
+			m_selectionIterator = 0;
+		}
+	}
+	
+	KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs)
+	{
+		if (this == &rhs)
+			return *this;
+		m_device = rhs.m_device;
+		m_underlyingIterator = rhs.m_underlyingIterator;
+		
+		delete m_selectionIterator;
+		if (rhs.m_selectionIterator) {
+			m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
+		} else {
+			m_selectionIterator = 0;
+		}
+		
+		return *this;
+	}
+
 	
 public:
 	/**

@@ -94,8 +94,3 @@ KisTiledVLineIterator & KisTiledVLineIterator::operator -- ()
 	return *this;
 }
 */
-
-bool KisTiledVLineIterator::isDone() const
-{
-	return m_y > m_bottom;
-}

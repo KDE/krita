@@ -392,15 +392,15 @@ void KisView::setupActions()
 	m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
 
 	// layer actions
-	m_layerAdd = new KAction(i18n("&Add Layer..."), "newlayer", 0, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+	m_layerAdd = new KAction(i18n("&Add Layer..."), "newlayer", "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
 	m_layerRm = new KAction(i18n("&Remove Layer"), "deletelayer", 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
 	m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
 	m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
 	m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
-	m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", 0, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
-	m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", 0, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
-	m_layerTop = new KAction(i18n("Layer to Top"), 0, this, SLOT(layerFront()), actionCollection(), "toplayer");
-	m_layerBottom = new KAction(i18n("Layer to Bottom"), 0, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
+	m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", "Ctrl+]", this, SLOT(layerRaise()), actionCollection(), "raiselayer");
+	m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
+	m_layerTop = new KAction(i18n("Layer to Top"), "Ctrl+Shift+]", this, SLOT(layerFront()), actionCollection(), "toplayer");
+	m_layerBottom = new KAction(i18n("Layer to Bottom"), "Ctrl+Shift+[", this, SLOT(layerBack()), actionCollection(), "bottomlayer");
 	m_layerProperties = new KAction(i18n("Layer Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
 	(void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
 	m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
@@ -414,9 +414,9 @@ void KisView::setupActions()
 
 	// image actions
 	m_imgFlatten = new KAction(i18n("Flatten Image"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
-	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), 0, this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
+	m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), "Ctrl+Shift+E", this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
 	m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
-	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), 0, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+	m_imgMergeLayer = new KAction(i18n("&Merge Layer"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
 
 	// setting actions
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");

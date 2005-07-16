@@ -78,8 +78,6 @@ void KisToolCrop::activate()
 {
 	super::activate();
 
-//	if ( (m_startPos - m_endPos) != QPoint(0,0) )
-//		return;
 	// No current crop rectangle, try to use the selection of the device to make a rectangle
 	if (m_subject && m_subject -> currentImg() && m_subject -> currentImg() -> activeDevice()) {
 		KisPaintDeviceSP device = m_subject -> currentImg() -> activeDevice();
@@ -90,7 +88,7 @@ void KisToolCrop::activate()
 		m_startPos = extent.topLeft();
 		m_endPos = extent.bottomRight();
 		validateSelection();
-		paintOutlineWithHandles();
+		crop();
 	}
 }
 
@@ -277,6 +275,12 @@ void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
 		paintOutlineWithHandles();
 	}
 }
+
+void KisToolCrop::doubleClick(KisDoubleClickEvent *)
+{
+       if (m_haveCropSelection) crop();
+}
+
 
 void KisToolCrop::validateSelection(void)
 {

@@ -29,7 +29,8 @@ public:
 		UnknownEvent,
 		MoveEvent,
 		ButtonPressEvent,
-		ButtonReleaseEvent
+		ButtonReleaseEvent,
+		DoubleClickEvent
 	};
 
 	KisEvent() : m_type(UnknownEvent), m_device(INPUT_DEVICE_UNKNOWN) {}

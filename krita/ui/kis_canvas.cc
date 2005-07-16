@@ -63,6 +63,7 @@
 #include "kis_move_event.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
+#include "kis_double_click_event.h"
 
 #ifdef Q_WS_X11
 
@@ -134,6 +135,12 @@ void KisCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
 	KisButtonReleaseEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
 	buttonReleaseEvent(&ke);
+}
+
+void KisCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+{
+	KisDoubleClickEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
+	doubleClickEvent(&ke);
 }
 
 void KisCanvas::mouseMoveEvent(QMouseEvent *e)
@@ -236,6 +243,11 @@ void KisCanvas::buttonPressEvent(KisButtonPressEvent *e)
 void KisCanvas::buttonReleaseEvent(KisButtonReleaseEvent *e)
 {
 	emit gotButtonReleaseEvent(e);
+}
+
+void KisCanvas::doubleClickEvent(KisDoubleClickEvent *e)
+{
+	emit gotDoubleClickEvent(e);
 }
 
 void KisCanvas::translateTabletEvent(KisEvent *e)

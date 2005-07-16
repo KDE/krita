@@ -78,6 +78,10 @@ void KisToolNonPaint::buttonRelease(KisButtonReleaseEvent *)
 {
 }
 
+void KisToolNonPaint::doubleClick(KisDoubleClickEvent *)
+{
+}
+
 void KisToolNonPaint::keyPress(QKeyEvent *)
 {
 }

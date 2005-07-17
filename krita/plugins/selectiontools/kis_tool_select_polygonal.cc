@@ -137,13 +137,10 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 			painter.paintPolygon(m_points);
 
 			m_optWidget -> ensureMaskColor();
-
-			layer->emitSelectionChanged();
+			layer->emitSelectionChanged(painter.dirtyRect());
 
 			if (img -> undoAdapter())
 				img -> undoAdapter() -> addCommand(t);
-
-			img -> notify(painter.dirtyRect());
 			QApplication::restoreOverrideCursor();
 		}
 

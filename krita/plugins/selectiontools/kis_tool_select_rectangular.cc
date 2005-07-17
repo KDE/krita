@@ -198,7 +198,6 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 					selection->clear();
 					if(m_selectAction==SELECTION_SUBTRACT)
 						selection->invert();
-					layer -> emitSelectionChanged();
 				}
 
 				KisSelectionSP tmpSel = new KisSelection(layer.data(),"tmp sel");
@@ -216,8 +215,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				}
 				m_optWidget -> ensureMaskColor();
 
-				layer->emitSelectionChanged();
-				img -> notify(rc);
+				layer->emitSelectionChanged(rc);
 
 				QApplication::restoreOverrideCursor();
 			}

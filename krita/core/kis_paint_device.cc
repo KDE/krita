@@ -323,6 +323,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	m_hasSelection = false;
 	m_selection = 0;
 	m_profile = 0;
+	m_selectionCreated = false;
 }
 
 KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name) :
@@ -363,6 +364,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
 	m_datamanager = new KisDataManager(m_pixelSize, defPixel);
 	Q_CHECK_PTR(m_datamanager);
 	m_extentIsValid = true;
+	m_selectionCreated = false;
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
@@ -839,6 +841,17 @@ void KisPaintDevice::emitSelectionChanged() {
 		m_owner -> slotSelectionChanged();
 }
 
+void KisPaintDevice::emitSelectionChanged(const QRect& r) {
+	if(m_owner)
+		if(m_selectionCreated)
+		{
+			m_owner -> slotSelectionChanged();
+			m_selectionCreated = false;
+		}
+		else
+			m_owner -> slotSelectionChanged(r);
+}
+
 
 KisSelectionSP KisPaintDevice::selection(){
 	if (!m_selection) {
@@ -847,6 +860,7 @@ KisSelectionSP KisPaintDevice::selection(){
 		m_selection -> setVisible(true);
 		m_selection -> setX(m_x);
 		m_selection -> setY(m_y);
+		m_selectionCreated = true;
 	}
 
 	if (!m_hasSelection) {
@@ -867,7 +881,6 @@ bool KisPaintDevice::hasSelection()
 void KisPaintDevice::deselect()
 {
 	m_hasSelection = false;
-	emitSelectionChanged();
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
@@ -876,8 +889,6 @@ void KisPaintDevice::addSelection(KisSelectionSP selection) {
 	selection -> extent(x, y, w, h);
 	painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
 	painter.end();
-
-	emitSelectionChanged();
 }
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
@@ -888,8 +899,6 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 	painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, w, h);
 	selection -> invert();
 	painter.end();
-
-	emitSelectionChanged();
 }
 
 void KisPaintDevice::clearSelection()

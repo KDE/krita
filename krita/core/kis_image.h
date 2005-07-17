@@ -233,6 +233,7 @@ signals:
 
 public slots:
 	void slotSelectionChanged();
+	void slotSelectionChanged(const QRect& r);
 	void slotSelectionCreated();
 
 private:

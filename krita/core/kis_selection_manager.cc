@@ -303,7 +303,6 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 	kdDebug(DBG_AREA_CORE) << "KisSelectionManager::imgSelectionChanged\n";
         if (img == m_parent -> currentImg()) {
                 updateGUI();
-		m_parent -> updateCanvas();
 	}
 
 }
@@ -491,6 +490,8 @@ void KisSelectionManager::deselect()
 	
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
+
+	layer -> emitSelectionChanged();
 }
 
 
@@ -531,11 +532,12 @@ void KisSelectionManager::reselect()
 	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Reselect"), layer.data());
 	Q_CHECK_PTR(t);
 	
-	// The following also emits selectionChanged
-	layer -> selection(); // also sets hasSelection=true
+	layer -> selection(); // sets hasSelection=true
 	
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
+
+	layer -> emitSelectionChanged();
 }
 
 

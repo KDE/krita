@@ -326,6 +326,7 @@ public:
 
 	/** make owning image emit a selectionChanged */
 	void emitSelectionChanged();
+	void emitSelectionChanged(const QRect& r);
 
 	/** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
 	KisSelectionSP selection();
@@ -399,6 +400,8 @@ private:
 	// Contains the actual selection. For now, there can be only
 	// one selection per layer. XXX: is this a limitation?
 	KisSelectionSP m_selection;
+
+	bool m_selectionCreated;
 
 };
 

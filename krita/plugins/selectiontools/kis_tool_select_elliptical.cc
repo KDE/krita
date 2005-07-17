@@ -192,7 +192,6 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 					layer -> selection() -> clear();
 					if(m_selectAction==SELECTION_SUBTRACT)
 						layer -> selection()->invert();
-					layer -> emitSelectionChanged();
 				}
 				QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
 				rc = rc.normalize();
@@ -222,7 +221,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 				if (adapter)
 					adapter -> addCommand(t);
 
-				img -> notify(rc);
+				layer -> emitSelectionChanged(rc);
 				QApplication::restoreOverrideCursor();
 			}
 		}

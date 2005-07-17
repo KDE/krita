@@ -2362,7 +2362,6 @@ void KisView::connectCurrentImg() const
 {
 	if (m_current) {
 		connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
-		connect(m_current, SIGNAL(selectionCreated(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 		
 		connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 		connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));

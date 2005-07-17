@@ -40,11 +40,11 @@ void KisSelectedTransaction::execute()
 {
 	super::execute();
 	m_selTransaction->execute();
-	// The following also emits selectionChanged
 	if(m_redoHasSelection)
 		m_device->selection();
 	else
 		m_device->deselect();
+	m_device->emitSelectionChanged();
 }
 
 void KisSelectedTransaction::unexecute()
@@ -53,9 +53,9 @@ void KisSelectedTransaction::unexecute()
 	
 	super::unexecute();
 	m_selTransaction->unexecute();
-	// The following also emits selectionChanged
 	if(m_hadSelection)
 		m_device->selection();
 	else
 		m_device->deselect();
+	m_device->emitSelectionChanged();
 }

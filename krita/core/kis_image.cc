@@ -1709,13 +1709,20 @@ KisGuideMgr *KisImage::guides() const
 void KisImage::slotSelectionChanged()
 {
  	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
+	notify();
+	emit activeSelectionChanged(KisImageSP(this));
+}
+
+void KisImage::slotSelectionChanged(const QRect& r)
+{
+ 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
+	notify(r);
 	emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionCreated()
 {
- 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionCreated\n";
-	notify();
+	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionCreated\n";
 	emit selectionCreated(KisImageSP(this));
 }
 

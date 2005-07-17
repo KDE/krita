@@ -30,4 +30,4 @@ SUBDIRS = cimg \
 	pixelizefilter \
 	cubismfilter
 
-#convolutionfilters \
+#convolutionfilters 

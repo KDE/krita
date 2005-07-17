@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color filters
+Name[es]=Filtros de color
+Name[et]=Värvifiltrid
 Comment=Color filters
+Comment[es]=Filtros de color
+Comment[et]=Värvifiltrid
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorsfilters

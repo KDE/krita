@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss filter
+Name[es]=Filtro de realce
+Name[et]=Kohrutusfilter
 Comment=Emboss filter
+Comment[es]=Filtro de realce
+Comment[et]=Kohrutusfilter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaembossfilter

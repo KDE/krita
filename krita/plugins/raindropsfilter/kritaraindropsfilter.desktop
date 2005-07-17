@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Raindrops filter
+Name[es]=Filtro de gotas de lluvia
+Name[et]=Vihmapiiskade filter
 Comment=Raindrops filter
+Comment[es]=Filtro de gotas de lluvia
+Comment[et]=Vihmapiiskade filter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaraindropsfilter

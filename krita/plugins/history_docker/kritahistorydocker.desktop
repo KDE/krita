@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=History Docker
+Name[es]=Anclaje del histórico
+Name[et]=Ajaloo dokk
 Comment=Command history docker for Krita
+Comment[es]=Anclaje con el histórico de órdenes para Krita
+Comment[et]=Krita käskude ajaloo dokk
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritahistorydocker

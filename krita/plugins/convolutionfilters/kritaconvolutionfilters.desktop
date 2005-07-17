@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolutions filters
+Name[es]=Filtros de convoluciones
+Name[et]=Konvolutsioonifiltrid
 Comment=Convolution filters
+Comment[es]=Filtros de convoluciones
+Comment[et]=Konvolutsioonifiltrid
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaconvolutionfilters

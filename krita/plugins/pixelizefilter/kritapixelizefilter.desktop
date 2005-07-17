@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize filter
+Name[es]=Filtro de pixelación
+Name[et]=Pikseldamisfilter
 Comment=Pixelize filter
+Comment[es]=Filtro de pixelación
+Comment[et]=Pikseldamisfilter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritapixelizefilter

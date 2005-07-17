@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Oilpaint filter
+Name[es]=Filtro de pintura al óleo
+Name[et]=Õlimaalifilter
 Comment=Oilpaint filter
+Comment[es]=Filtro de pintura al óleo
+Comment[et]=Õlimaalifilter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaoilpaintfilter

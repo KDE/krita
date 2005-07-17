@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Cubism filter
+Name[es]=Filtro de cubismo
+Name[et]=Kubismifilter
 Comment=Cubism filter
+Comment[es]=Filtro de cubismo
+Comment[et]=Kubismifilter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacubismfilter

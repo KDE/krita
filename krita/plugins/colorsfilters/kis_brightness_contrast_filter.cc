@@ -62,6 +62,14 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwid
 	}
 }
 
+std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
+{
+	std::list<KisFilterConfiguration*> list;
+	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( 0, 1 ));
+	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( 1, 0 ));
+	return list;
+}
+
 
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {

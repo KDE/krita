@@ -516,7 +516,7 @@ KisImage::~KisImage()
 	kdDebug(DBG_AREA_CORE) << "IMAGE " << name() << " DESTROYED total now = " << numImages << endl;
 #endif
 	delete m_nserver;
-        delete m_dcop;
+	delete m_dcop;
 }
 
 QString KisImage::name() const
@@ -654,26 +654,30 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 	if (w != width() || h != height()) {
 
-		m_adapter->beginMacro("Scale image");
+		if (m_adapter && m_adapter -> undo()) {
+	m_adapter->beginMacro("Scale image");
+		}
 
 		vKisLayerSP_it it;
 		for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
 			KisLayerSP layer = (*it);
 			KisTransaction *cmd = 0;
 
-			if (m_adapter->undo()) {
+			if (m_adapter && m_adapter -> undo()) {
 				cmd = new KisTransaction("", layer.data());
 				Q_CHECK_PTR(cmd);
 			}
 
 			layer -> scale(sx, sy, m_progress, filterStrategy);
 
-			if (m_adapter->undo()) {
+			if (m_adapter && undoAdapter() -> undo()) {
 				m_adapter->addCommand(cmd);
 			}
 		}
 
-		m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		if (m_adapter && m_adapter -> undo()) {
+			m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+		}
 
 		m_width = w;
 		m_height = h;
@@ -684,7 +688,9 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 		m_bkg = new KisBackground(this, w, h);
 		Q_CHECK_PTR(m_bkg);
 
-		m_adapter->endMacro();
+		if (m_adapter && m_adapter -> undo()) {
+			m_adapter->endMacro();
+		}
 
 		emit sizeChanged(KisImageSP(this), w, h);
 	}

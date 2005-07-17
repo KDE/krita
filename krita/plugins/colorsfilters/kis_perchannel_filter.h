@@ -62,6 +62,8 @@ public:
 public:
 	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+	virtual bool supportsPreview() { return true; }
+	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 private:
 	Type m_min;
 	Type m_max;
@@ -146,5 +148,22 @@ KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::confi
 	}
 	return co;
 }
+
+template <typename Type, class ParamType, class WidgetClass>
+		std::list<KisFilterConfiguration*> KisPerChannelFilter<Type, ParamType, WidgetClass>::listOfExamplesConfiguration(KisPaintDeviceSP dev)
+{
+	std::list<KisFilterConfiguration*> list;
+	for(int i = 0; i < dev->colorStrategy()->nColorChannels(); i++)
+	{
+		KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( dev->colorStrategy()->nColorChannels() , dev->colorStrategy()->channels() );
+		co->valueFor( i ) = m_max;
+		list.insert(list.begin(), co);
+		KisPerChannelFilterConfiguration<Type>* co2 = new KisPerChannelFilterConfiguration<Type>( dev->colorStrategy()->nColorChannels() , dev->colorStrategy()->channels() );
+		co->valueFor( i ) = m_min;
+		list.insert(list.begin(), co2);
+	}
+	return list;
+}
+
 
 #endif

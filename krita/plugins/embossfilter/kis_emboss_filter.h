@@ -43,7 +43,10 @@ public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
 	virtual bool supportsPainting() { return false; }
-public:
+	virtual bool supportsPreview() { return true; }
+	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
+	public:
 	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:

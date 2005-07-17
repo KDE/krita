@@ -18,29 +18,35 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef EXAMPLE_H
-#define EXAMPLE_H
+#ifndef _KRITA_FILTERS_PREVIEW_H_
+#define _KRITA_FILTERS_PREVIEW_H_
 
 #include <kparts/plugin.h>
-#include "kis_filter.h"
 
-class KritaExample : public KParts::Plugin
-{
-public:
-	KritaExample(QObject *parent, const char *name, const QStringList &);
-	virtual ~KritaExample();
+class KisView;
+
+namespace Krita {
+namespace Plugins {
+namespace FiltersPreview {
+	class KritaFiltersPreview : public KParts::Plugin
+	{
+		Q_OBJECT
+		public:
+			KritaFiltersPreview(QObject *parent, const char *name, const QStringList &);
+			virtual ~KritaFiltersPreview();
+		public slots:
+			void showFiltersPreviewDialog();
+		private:
+		
+			KisView * m_view;
+	
+	
+	};
+
+};
+};
 };
 
-class KisFilterInvert : public KisFilter
-{
-public:
-	KisFilterInvert();
-public:
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-	static inline KisID id() { return KisID("invert", i18n("Invert")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
-	virtual bool supportsIncrementalPainting() { return false; }
-};
+
 
 #endif

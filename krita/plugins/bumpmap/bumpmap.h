@@ -68,6 +68,7 @@ public:
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
 	static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
 	virtual bool supportsPainting() { return false; }
+	virtual bool supportsPreview() { return false; }
 	virtual bool supportsIncrementalPainting() { return false; }
 
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

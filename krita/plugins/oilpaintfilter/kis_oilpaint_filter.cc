@@ -237,3 +237,11 @@ KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPa
 		return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
 	}
 }
+
+std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
+{
+	std::list<KisFilterConfiguration*> list;
+	list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));
+	return list;
+}
+

@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritafilterspreview" version="7">
+<MenuBar>
+<Menu name="Filter"><text>&amp;Filter</text>
+	<Seperator/>
+	<Action name="krita_filters_preview"/>
+</Menu>
+</MenuBar>
+</kpartgui>

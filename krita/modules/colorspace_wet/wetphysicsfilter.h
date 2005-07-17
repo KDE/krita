@@ -51,6 +51,7 @@ public:
 	static inline KisID id() { return KisID("wetphysics", i18n("Watercolor physics simulation filter")); };
 
 	virtual bool supportsPainting() { return false; }
+	virtual bool supportsPreview() { return false; }
 
 private:
 

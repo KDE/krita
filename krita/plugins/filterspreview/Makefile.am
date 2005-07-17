@@ -1,0 +1,26 @@
+kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarc_DATA = kritafilterspreview.rc
+
+EXTRA_DIST = $(kritarc_DATA)
+
+INCLUDES  = -I$(srcdir)/../../core \
+	-I$(srcdir)/../../core/compositeop \
+	-I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../core/tiles \
+	-I$(srcdir)/../../core/tool \
+	-I$(srcdir)/../../core/resources \
+	-I$(srcdir)/../../ui \
+	-I$(srcdir)/../../ui/widgets \
+	$(KOFFICE_INCLUDES) \
+	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+
+kritafilterspreview_la_SOURCES = filterspreview.cc kisfilterslistview.cc \
+	kisdlgfilterspreview.cpp
+
+kde_module_LTLIBRARIES = kritafilterspreview.la
+noinst_HEADERS = filterspreview.h kisfilterslistview.h kisdlgfilterspreview.h
+
+kritafilterspreview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritafilterspreview_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+
+kritafilterspreview_la_METASOURCES = AUTO

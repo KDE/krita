@@ -55,6 +55,7 @@ public:
 
 	static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
 	virtual bool supportsPainting() { return false; }
+	virtual bool supportsPreview() { return false; }
 	virtual bool supportsIncrementalPainting() { return false; }
 
 public:

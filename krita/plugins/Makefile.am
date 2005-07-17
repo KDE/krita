@@ -28,6 +28,7 @@ SUBDIRS = cimg \
 	$(kjsembed_plugin) \
 	defaultdockers \
 	pixelizefilter \
-	cubismfilter
+	cubismfilter \
+	filterspreview
 
 #convolutionfilters 

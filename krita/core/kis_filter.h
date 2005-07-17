@@ -18,6 +18,8 @@
 #ifndef _KIS_FILTER_H_
 #define _KIS_FILTER_H_
 
+#include <list>
+
 #include <qobject.h>
 #include <qwidget.h>
 #include <qstring.h>
@@ -77,6 +79,14 @@ public:
 	// This filter can be used in painting tools as a paint operation
 	virtual bool supportsPainting() = 0;
 
+	/// This filter can be displayed in a preview dialog
+	virtual bool supportsPreview() = 0;
+	/** Return a list of default configuration to demonstrates the use of the filter
+	 * @return a list with a null element if the filter do not use a configuration
+	 */
+	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
+	
 	// Can this filter work incrementally when painting, or do we need to work
 	// on the state as it was before painting started. The former is faster.
 	virtual bool supportsIncrementalPainting() { return true; };

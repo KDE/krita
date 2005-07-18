@@ -1,5 +1,5 @@
 # all_includes must remain last!
-INCLUDES  = -I $(srcdir) \
+INCLUDES  = -I$(srcdir) \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 	

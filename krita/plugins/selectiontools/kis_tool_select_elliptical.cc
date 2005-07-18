@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
 
@@ -164,6 +164,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 		if (m_startPos == m_endPos) {
 			clearSelection();
 		} else {
+			QApplication::setOverrideCursor(KisCursor::waitCursor());
 			KisImageSP img = m_subject -> currentImg();
 
 			if (!img)
@@ -223,6 +224,8 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 
 				img -> notify(rc);
 			}
+			QApplication::restoreOverrideCursor();
+
 		}
 		m_selecting = false;
 	}

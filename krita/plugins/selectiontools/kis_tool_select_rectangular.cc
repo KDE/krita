@@ -1,4 +1,3 @@
-
 /*
  *  kis_tool_select_rectangular.cc -- part of Krita
  *
@@ -21,7 +20,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
 
@@ -154,7 +153,7 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
 void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && m_selecting && e -> button() == LeftButton) {
-
+		QApplication::setOverrideCursor(KisCursor::waitCursor());
 		paintOutline();
 
 		if (m_startPos == m_endPos) {
@@ -218,7 +217,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 				img -> notify(rc);
 			}
 		}
-
+		QApplication::restoreOverrideCursor();
 		m_selecting = false;
 	}
 }

@@ -6,6 +6,7 @@ SUBDIRS = cimg \
 	bumpmap \
 	example \
 	colorsfilters \
+	convolutionfilters \
 	colorrange \
 	imagesize \
 	screenshot \
@@ -31,4 +32,3 @@ SUBDIRS = cimg \
 	cubismfilter \
 	filterspreview
 
-#convolutionfilters 

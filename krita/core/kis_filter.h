@@ -76,12 +76,16 @@ public:
 public:
 	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
-	// This filter can be used in painting tools as a paint operation
-	virtual bool supportsPainting() = 0;
+	/**
+         * If true, this filter can be used in painting tools as a paint operation
+         */
+	virtual bool supportsPainting() { return false; };
 
 	/// This filter can be displayed in a preview dialog
-	virtual bool supportsPreview() = 0;
-	/** Return a list of default configuration to demonstrates the use of the filter
+	virtual bool supportsPreview() { return false; };
+
+	/** 
+         * Return a list of default configuration to demonstrates the use of the filter
 	 * @return a list with a null element if the filter do not use a configuration
 	 */
 	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )

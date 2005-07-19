@@ -15,7 +15,8 @@ libkistool_la_SOURCES =  \
 	kis_tool_paint.cc \
 	kis_tool_freehand.cc \
 	kis_tool_non_paint.cc \
-	kis_tool_shape.cc
+	kis_tool_shape.cc \
+	kis_tool_dummy.cc
 
 libkistool_la_METASOURCES = AUTO
 

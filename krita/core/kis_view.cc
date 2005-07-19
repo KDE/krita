@@ -107,6 +107,7 @@
 #include "kis_toolbox.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
+#include "kis_tool_dummy.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -140,6 +141,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	// XXX Temporary re-instatement of old way to load tools
 	m_toolRegistry = new KisToolRegistry();
 	Q_CHECK_PTR(m_toolRegistry);
+	m_toolRegistry->add(KisID("dummy", i18n("Dummy")), new KisToolDummyFactory(actionCollection()));
 
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);

@@ -324,8 +324,6 @@ public slots:
 	void addPartLayer();
 	void layerRemove();
 	void layerDuplicate();
-	void layerAddMask(int n);
-	void layerRmMask(int n);
 	void layerRaise();
 	void layerLower();
 	void layerFront();

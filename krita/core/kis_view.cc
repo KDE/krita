@@ -1127,7 +1127,7 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::saveLayerAsImage()
 {
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+	QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
 	QString mimelist = listMimeFilter.join(" ");
 
 	KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
@@ -2124,14 +2124,6 @@ void KisView::layerDuplicate()
 	} else {
 		KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
 	}
-}
-
-void KisView::layerAddMask(int /*n*/)
-{
-}
-
-void KisView::layerRmMask(int /*n*/)
-{
 }
 
 void KisView::layerRaise()

@@ -69,6 +69,8 @@ private:
 	KisDoc * m_doc;
 
 	KAction * m_reapplyAction;
+
+	QPtrList<KAction> m_filterActions;
 	
 	KisFilterConfiguration * m_lastFilterConfig;
 	KisFilter * m_lastFilter;

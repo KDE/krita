@@ -1,3 +1,5 @@
+THIS IS OBSOLETE
+
 Import/Export & ImageMagick
 
 Import/Export is currently hardcoded to use ImageMagick and the RGB colormodel.
@@ -26,20 +28,6 @@ Issues:
 	* Import/export should be lossless -- i.e., all extra information any file
 	  format may attach to the image should be kept around and used on export.
 	  Examples are Exif data and profiles, but also Gimp comments.
-	  
-	
-
-Notes
-
-        Rename the KOffice filter. It is not hardcoded ImageMagick import
-        anymore.
-
-        Patrick already designed something like this using a list of
-        image builders. However, this does not support a solution to any
-        of the issues above, just enabling/disabling import/export -- and 
-        it wasn't finished.
- 
-Design
 
 
 KisAnnotation contains metadata about an image that is grabbed from
@@ -50,43 +38,4 @@ KisAnnotation
 	KisAnnotation(QString type, QString annotation);
 	KisAnnotation(QString type, QByteArray annotation);;
 
-
-KisFileFormat
-
-        bool read
-        bool write
-        bool supportsMultiLayer
-
-        qstring extension
-        qstring description
-
-        write
-        read
-
-        QWidget configWidget
-
-/** This is not needed, I guess? The modules will just register all
-    their fileformats with the registry.
-KisImpExpModule
-
-        qstring name
-        qstring description
-
-        qstringlist readFilters
-        qstringlist writeFilters
-
-        KisFileFormat getFileFormatFor(qstring extension)
-*/
-
-KisFileFormatRegistry
-
-        The format registry merges the filter lists from all registered
-        imp/exp modules and logs conflicts. I don't think it's useful
-        to let users select between conflicting filter implementations
-        (although it could be KisConfig option).
-
-        qstringlist readFilters
-        qstringlist writeFilters
-
-        KisFileFormat getFileFormatFor(qstring extension)
 

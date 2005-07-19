@@ -271,17 +271,15 @@ void KisSelectionManager::updateGUI()
 			&& !l->locked()
 			&& l->visible();
 	}
-	m_copy -> setEnabled(enable);
+	
 	m_cut -> setEnabled(enable);
-	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
-	m_pasteNew -> setEnabled(img != 0 && m_clipboard -> hasClip());
 	m_cutToNewLayer->setEnabled(enable);
 	m_selectAll -> setEnabled(img != 0);
 	m_deselect -> setEnabled(enable);
 	m_clear -> setEnabled(enable);
 	m_reselect -> setEnabled( ! enable);
 	m_invert -> setEnabled(enable);
-	m_toNewLayer -> setEnabled(enable);
+
 	m_feather -> setEnabled(enable);
 #if 0 // Not implemented yet
 	m_border -> setEnabled(enable);
@@ -294,6 +292,25 @@ void KisSelectionManager::updateGUI()
 	m_load -> setEnabled(enable);
 	m_save -> setEnabled(enable);
 #endif
+
+
+	KAction * a;
+	for (a = m_pluginActions.first(); a; a = m_pluginActions.next()) {
+		a->setEnabled(enable);
+	}
+
+	// You can copy from locked layers and paste the clip into a new layer, even when
+	// the current layer is locked.
+	enable = false;
+	if (img && l ) {
+		enable = img && img->activeLayer() && l->hasSelection() && l->visible();
+	}
+	
+	m_copy -> setEnabled(enable);
+	m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
+	m_pasteNew -> setEnabled(img != 0 && m_clipboard -> hasClip());
+	m_toNewLayer -> setEnabled(enable);
+	
 	m_parent -> updateStatusBarSelectionLabel();
 
 }

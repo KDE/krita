@@ -114,7 +114,9 @@ void KisFilterManager::setup(KActionCollection * ac)
 		m_filterActionMenus.find( f->menuCategory() )->insert(a);
 		
 		// Add filter to list of filters for mapper
-		m_filterMapper->setMapping( a,i);
+		m_filterMapper->setMapping( a, i );
+
+		m_filterActions.append( a );
 		++i;
 	}
 
@@ -122,6 +124,21 @@ void KisFilterManager::setup(KActionCollection * ac)
 
 void KisFilterManager::updateGUI()
 {
+	KisImageSP img = m_view->currentImg();
+	if (!img) return;
+
+	KisLayerSP layer = img->activeLayer();
+	if (!layer) return;
+
+	bool enable =  !(layer->locked() || !layer->visible());
+
+	m_reapplyAction->setEnabled(enable);
+
+	KAction * a;
+	for (a = m_filterActions.first(); a; a = m_filterActions.next()) {
+		a->setEnabled(enable);
+	}
+	
 }
 
 void KisFilterManager::slotApply()

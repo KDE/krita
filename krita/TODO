@@ -20,7 +20,7 @@ Integration
 	* write the Krita handbook.
 	* There is currently no kimgio module for Krita images.
         * Embedded KOffice objects don't paint themselves correctly
-
+	* Hack koMainWindow so the save warning doesn't happen for Krita
 
 Colorspace independence (found with the test colorstrategy)
 
@@ -83,6 +83,7 @@ Import/Export
 
 User Interface
 
+	* Disable all relevant actions when a layer is locked or invisible and set the current tool to the dummy tool.
 	* Add link check to new image dialog to sync width and height
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
 	* Channels showing (note that we don't do Gimp-type grayscale

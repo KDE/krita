@@ -9,6 +9,7 @@
 class KisView;
 class KisFilter;
 class KisFilterConfiguration;
+class KisPreviewView;
 
 namespace Krita {
 namespace Plugins {
@@ -19,8 +20,9 @@ namespace FiltersPreview {
 			KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon, KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig ) : QIconViewItem(parent, text, icon), m_id(id), m_filter(filter), m_filterconfig(filterConfig)
 			{
 			}
-			KisID id() { return m_id; }
-			KisFilter* filter() { return m_filter; }
+			inline KisID id() { return m_id; }
+			inline KisFilter* filter() { return m_filter; }
+                        inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
 		private:
 			KisID m_id;
 			KisFilter* m_filter;

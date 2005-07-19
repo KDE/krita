@@ -20,6 +20,7 @@ KisFiltersListView::KisFiltersListView(KisView* view, QWidget* parent) : KIconVi
 
 void KisFiltersListView::buildPreview()
 {
+	kdDebug() << "kikoo" << endl;
 	// Check which filters support painting
 	KisImageSP img = m_view->currentImg();
 	KisLayerSP activeLayer = img->activeLayer();
@@ -37,6 +38,7 @@ void KisFiltersListView::buildPreview()
 		KisFilterSP f = KisFilterRegistry::instance()->get(*it);
 		
 		if (f -> supportsPreview()) {
+			kdDebug() << (*it).name() << endl;
 			std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceSP)m_thumb);
 			// apply the filter
 			for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
@@ -45,6 +47,7 @@ void KisFiltersListView::buildPreview()
 				KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorStrategy(), "preview");
 				KisLayerSP thumbPreview = new KisLayer(*m_thumb/*imgthumbPreview,"",50*/);
 				imgthumbPreview->add(thumbPreview,0);
+				f->disableProgress();
 				f->process((KisPaintDeviceSP)m_thumb, (KisPaintDeviceSP)thumbPreview,*itc, imgthumbPreview->bounds());
 				QImage qimg =  thumbPreview->convertToQImage(thumbPreview->profile());
 				new KisFiltersIconViewItem( this, (*it).name(),

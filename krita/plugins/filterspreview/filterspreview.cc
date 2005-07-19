@@ -63,7 +63,13 @@ KritaFiltersPreview::~KritaFiltersPreview()
 void KritaFiltersPreview::showFiltersPreviewDialog()
 {
 	KisDlgFiltersPreview dlg(m_view,m_view);
-	dlg.exec();
+	if(dlg.exec())
+	{
+		if(dlg.currentFilter() != 0 )
+		{
+		
+		}
+	}
 }
 
 };

@@ -46,7 +46,7 @@ public:
 	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("cubism", i18n("cubism")); };
 	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
+	virtual bool supportsPreview() { return false; /* TODO: return true when cubism is stable enought */ }
 	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
 	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
 public:

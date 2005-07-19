@@ -90,27 +90,29 @@ KisColorAdjustmentFilter::KisColorAdjustmentFilter() :
 void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisIntegerPerChannelFilterConfiguration* configPC = (KisIntegerPerChannelFilterConfiguration*) config;
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	Q_INT32 depth = src->nChannels() - 1;
 
 	setProgressTotalSteps(rect.width() * rect.height());
 	Q_INT32 pixelsProcessed = 0;
 
-	while( ! rectIt.isDone() && !cancelRequested())
+	while( ! srcIt.isDone() && !cancelRequested())
 	{
-		if (rectIt.isSelected()) {
-			KisPixelRO data = rectIt.oldPixel();
-			KisPixel dstData = rectIt.pixel();
+		if (srcIt.isSelected()) {
+			KisPixelRO data = srcIt.oldPixel();
+			KisPixel dstData = dstIt.pixel();
 			for( int i = 0; i < depth; i++)
 			{
-				KisQuantum d = rectIt[ configPC->channel( i ) ];
+				KisQuantum d = srcIt[ configPC->channel( i ) ];
 				Q_INT32 s = configPC->valueFor( i );
 				if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
 				else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
 				else dstData[ configPC->channel( i ) ] = d + s;
 			}
 		}
-		++rectIt;
+		++dstIt;
+		++srcIt;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);
@@ -131,23 +133,25 @@ KisGammaCorrectionFilter::KisGammaCorrectionFilter()
 void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 	KisDoublePerChannelFilterConfiguration* configPC = (KisDoublePerChannelFilterConfiguration*) config;
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	Q_INT32 depth = src->nChannels() - 1;
 
 	setProgressTotalSteps(rect.width() * rect.height());
 	Q_INT32 pixelsProcessed = 0;
 
-	while( ! rectIt.isDone() && !cancelRequested())
+	while( ! srcIt.isDone() && !cancelRequested())
 	{
-		if (rectIt.isSelected()) {
+		if (srcIt.isSelected()) {
 			for( int i = 0; i < depth; i++)
 			{
-				QUANTUM sd = rectIt.oldRawData()[ configPC->channel( i ) ];
-				KisQuantum dd = rectIt[ configPC->channel( i ) ];
+				QUANTUM sd = srcIt.oldRawData()[ configPC->channel( i ) ];
+				KisQuantum dd = dstIt[ configPC->channel( i ) ];
 				dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
 			}
 		}
-		++rectIt;
+		++dstIt;
+		++srcIt;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);
@@ -169,7 +173,8 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	setProgressTotalSteps(rect.width() * rect.height() * 2);
 	Q_INT32 pixelsProcessed = 0;
 
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
 	// Number of channels in this device except alpha
  	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
@@ -188,29 +193,29 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 		memset(lut[i], 0, (QUANTUM_MAX+1) * sizeof(QUANTUM));
 	}
 
-	while (!rectIt.isDone() && !cancelRequested())
+	while (!srcIt.isDone() && !cancelRequested())
 	{
-		if (rectIt.isSelected()) {
+		if (srcIt.isSelected()) {
 			QUANTUM opacity;
 
 			QColor color;
-			src -> colorStrategy() -> toQColor(rectIt.rawData(), &color, &opacity);
+			src -> colorStrategy() -> toQColor(srcIt.rawData(), &color, &opacity);
 
 			// skip non-opaque pixels
 			if (src -> colorStrategy() -> hasAlpha() && opacity != OPACITY_OPAQUE) {
-				++rectIt;
+				++srcIt;
 				continue;
 			}
 
 			for (int i = 0; i < depth; i++) {
-				QUANTUM index = rectIt.rawData()[i];
+				QUANTUM index = srcIt.rawData()[i];
 				if( index > maxvalues[i])
 					maxvalues[i] = index;
 				if( index < minvalues[i])
 					minvalues[i] = index;
 			}
 		}
-		++rectIt;
+		++srcIt;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);
@@ -235,18 +240,20 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 	// apply
 
-	rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
+	srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
 
-	while (!rectIt.isDone()  && !cancelRequested()) {
-		if (rectIt.isSelected()) {
-			QUANTUM* dstData = rectIt.rawData();
+	while (!srcIt.isDone()  && !cancelRequested()) {
+		if (srcIt.isSelected()) {
+			QUANTUM* dstData = dstIt.rawData();
+			QUANTUM* srcData = srcIt.rawData();
 
 			// Iterate through all channels except alpha
 			for (int i = 0; i < depth; ++i) {
-				dstData[i] = lut[i][dstData[i]];
+				dstData[i] = lut[i][srcData[i]];
 			}
 		}
-		++rectIt;
+		++dstIt;
+		++srcIt;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);
@@ -274,20 +281,21 @@ KisDesaturateFilter::KisDesaturateFilter()
 //XXX: This filter should write to dst, too!
 void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-	KisRectIteratorPixel rectIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
-
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+	
 	KisStrategyColorSpaceSP scs = src -> colorStrategy();
 	KisProfileSP profile = src -> profile();
 
 	setProgressTotalSteps(rect.width() * rect.height());
 	Q_INT32 pixelsProcessed = 0;
 
-	while( ! rectIt.isDone() && !cancelRequested())
+	while( ! srcIt.isDone()  && !cancelRequested())
 	{
-		if (rectIt.isSelected()) {
+		if (srcIt.isSelected()) {
 			QColor c;
 
-			const Q_UINT8 * srcData = rectIt.oldRawData();
+			const Q_UINT8 * srcData = srcIt.oldRawData();
 			// Try to be colorspace independent
 			scs -> toQColor(srcData, &c, profile);
 			;
@@ -300,9 +308,10 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 			// XXX: BSAR: Doesn't this doe the same but better?
 			Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
-			scs -> nativeColor(QColor(lightness, lightness, lightness), rectIt.rawData(), profile);
+			scs -> nativeColor(QColor(lightness, lightness, lightness), dstIt.rawData(), profile);
 		}
-		++rectIt;
+		++srcIt;
+		++dstIt;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);

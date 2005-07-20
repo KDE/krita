@@ -21,10 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-class KisView;
-
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.
  */
@@ -34,10 +30,6 @@ class DefaultPaintOpsPlugin : public KParts::Plugin
 public:
 	DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
 	virtual ~DefaultPaintOpsPlugin();
-
-private:
-
-	KisView* m_view;
 };
 
 #endif // DEFAULT_PAINTOPSGRAY_PLUGIN_H_

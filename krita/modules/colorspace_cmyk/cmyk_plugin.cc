@@ -17,10 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <stdlib.h>
-#include <vector>
-
-#include <qpoint.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -31,12 +27,6 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_view.h>
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
 

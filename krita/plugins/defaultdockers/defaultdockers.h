@@ -29,7 +29,6 @@ class KisView;
 class KisBrush;
 class KisPattern;
 class KisBirdEyeBox;
-class KisChannelView;
 class KisAutoBrush;
 class KisTextBrush;
 class KisAutoGradient;
@@ -51,7 +50,6 @@ public:
 private:
 	//void createControlFrame(KisView * view);
 	void createBirdEyeBox(KisView * view);
-	void createChannelView(KisView * view);
 	void createAutoBrush(KisView * view);
 	void createTextBrush(KisView * view);
 	void createAutoGradient(KisView * view);
@@ -77,7 +75,6 @@ private:
 	KisControlFrame * m_controlWidget;
 #endif
         KisBirdEyeBox * m_birdEyeBox;
-        KisChannelView *m_channelView;
 
         KisAutobrush *m_autobrush;
         KisTextBrush *m_textBrush;

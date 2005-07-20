@@ -50,7 +50,6 @@
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
 #include "kis_birdeye_box.h"
-#include "kis_channelview.h"
 #include "kis_color.h"
 //#include "kis_controlframe.h"
 #include "kis_factory.h"
@@ -89,8 +88,6 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 
  	createBirdEyeBox(m_view);
 	
-	createChannelView(m_view);
-
 	createHSVWidget(m_view);
 	createRGBWidget(m_view);
 	createGrayWidget(m_view);
@@ -122,13 +119,6 @@ void KritaDefaultDockers::createBirdEyeBox(KisView * view)
         m_birdEyeBox -> setCaption(i18n("Overview"));
 	m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
-}
-
-void KritaDefaultDockers::createChannelView(KisView * view)
-{
-        m_channelView = new KisChannelView((KisDoc*)m_view->getCanvasSubject()->document(), view);
-        m_channelView -> setCaption(i18n("Channels"));
-	m_paletteManager->addWidget( m_channelView, "channelview", "layerpalette");
 }
 
 void KritaDefaultDockers::createAutoBrush(KisView * view)

@@ -42,9 +42,7 @@
 #include <koMainWindow.h>
 
 #include <kis_factory.h>
-#include <kis_doc.h>
 #include <kis_image.h>
-#include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>

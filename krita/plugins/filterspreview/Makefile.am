@@ -10,15 +10,16 @@ INCLUDES  = -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../ui \
+	-I../../ui \
 	-I$(srcdir)/../../ui/widgets \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
-kritafilterspreview_la_SOURCES = filterspreview.cc kisfilterslistview.cc \
-	kisdlgfilterspreview.cpp
+kritafilterspreview_la_SOURCES = filterspreview.cc kis_filters_listview.cc \
+	kis_dlg_filterspreview.cc
 
 kde_module_LTLIBRARIES = kritafilterspreview.la
-noinst_HEADERS = filterspreview.h kisfilterslistview.h kisdlgfilterspreview.h
+noinst_HEADERS = filterspreview.h kis_filters_listview.h kis_dlg_filterspreview.h
 
 kritafilterspreview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritafilterspreview_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

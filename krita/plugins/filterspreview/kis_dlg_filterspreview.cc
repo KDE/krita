@@ -9,12 +9,12 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "kisdlgfilterspreview.h"
+#include "kis_dlg_filterspreview.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include "kisfilterslistview.h"
+#include "kis_filters_listview.h"
 #include "kis_filter.h"
 #include "kis_view.h"
 #include "kis_previewwidget.h"

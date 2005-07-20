@@ -24,9 +24,9 @@
 
 #include <kgenericfactory.h>
 
-#include "kisfilterslistview.h"
+#include "kis_filters_listview.h"
 #include "kis_view.h"
-#include "kisdlgfilterspreview.h"
+#include "kis_dlg_filterspreview.h"
 
 namespace Krita {
 namespace Plugins {

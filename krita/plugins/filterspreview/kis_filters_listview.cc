@@ -1,4 +1,4 @@
-#include "kisfilterslistview.h"
+#include "kis_filters_listview.h"
 
 #include "kis_types.h"
 #include "kis_view.h"

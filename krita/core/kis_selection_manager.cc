@@ -261,15 +261,13 @@ void KisSelectionManager::updateGUI()
 	}
 
 	KisImageSP img = m_parent -> currentImg();
-	
-	KisLayerSP l = img->activeLayer();
+	KisLayerSP l = 0;
 	
 	bool enable = false;
-	if (img && l) {
-		enable = img && img -> activeLayer()
-			&& l->hasSelection()
-			&& !l->locked()
-			&& l->visible();
+	if (img) {
+		l = img -> activeLayer();
+
+		enable = l && l -> hasSelection() && !l -> locked() && l -> visible();
 	}
 	
 	m_cut -> setEnabled(enable);

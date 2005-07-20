@@ -26,9 +26,7 @@
 #include <klocale.h>
 
 #include "kis_brush.h"
-#include "kis_view.h"
 #include "kis_cursor.h"
-#include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_tool_duplicate.h"
 #include "kis_painter.h"

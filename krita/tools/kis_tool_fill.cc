@@ -34,9 +34,7 @@
 
 #include "kis_layer.h"
 #include "kis_cursor.h"
-#include "kis_doc.h"
 #include "kis_painter.h"
-#include "kis_view.h"
 #include "kis_tool_brush.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
@@ -47,6 +45,8 @@
 #include "kis_pattern.h"
 #include "kis_fill_painter.h"
 #include "kis_progress_display_interface.h"
+#include "kis_undo_adapter.h"
+#include "kis_canvas_subject.h"
 
 KisToolFill::KisToolFill() 
 	: super(i18n("Fill"))

@@ -52,6 +52,7 @@
 #include "kis_tool_zoom.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_pan.h"
+#include "kis_view.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )

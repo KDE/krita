@@ -27,10 +27,8 @@
 #include <klocale.h>
 
 #include "kis_cursor.h"
-#include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_stamp.h"
-#include "kis_view.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
@@ -145,8 +143,6 @@ void KisToolStamp::buttonPress(KisButtonPressEvent *e)
 
 bool KisToolStamp::stampToCanvas(QPoint pos)
 {
-	KisView *view = getCurrentView();
-	KisImage* img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	float zF = view->zoomFactor();
 
@@ -227,8 +223,6 @@ Better to be safe... */
 
 bool KisToolStamp::stampColor(QPoint pos)
 {
-	KisView *view = getCurrentView();
-	KisImage *img = m_doc->currentImg();
 	KisLayer *lay = img->getCurrentLayer();
 	QImage  *qimg = m_pattern->image();
 
@@ -343,8 +337,6 @@ bool KisToolStamp::stampMonochrome(QPoint /*pos*/)
 void KisToolStamp::move(KisMoveEvent *e)
 {
 #if 0
-	KisView *view = getCurrentView();
-	KisImage * img = m_doc->currentImg();
 	if(!img) return;
 
 	KisLayer *lay = img->getCurrentLayer();

@@ -33,11 +33,9 @@
 #include "kis_paintop_registry.h"
 #include "kis_cmb_composite.h"
 #include "kis_cursor.h"
-#include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
-#include "kis_view.h"
-
+#include "kis_canvas_subject.h"
 
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))

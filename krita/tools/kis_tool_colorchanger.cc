@@ -25,8 +25,6 @@
 
 #include <qcolor.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_tool_colorchanger.h"
@@ -40,7 +38,6 @@ KisToolColorChanger::KisToolColorChanger() :
 
 	m_subject = 0;
 
-// 	KisView *view = getCurrentView();
 // 	// initialize color changer settings
 // 	m_opacity = 255;
 // 	m_usePattern  = false;
@@ -76,7 +73,6 @@ bool KisToolColorChanger::changeColors(int /*startX*/, int /*startY*/)
 // 	int sGreen;
 // 	int sBlue;
 // 	QRgb srgb;
-// 	KisView *view = getCurrentView();
 // 	KisImage *img = m_doc -> currentImg();
 
 // 	if (!img)
@@ -203,7 +199,6 @@ void KisToolColorChanger::buttonPress(KisButtonPressEvent */*e*/)
 
 // 	// User change value ?
 // 	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_m_opacity != m_opacity ) {
-// 		KisView *view = getCurrentView();
 // 		// note that gradients and patterns are not associated with a
 // 		// particular tool, unlike the other options
 

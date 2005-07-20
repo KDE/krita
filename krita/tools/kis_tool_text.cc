@@ -35,7 +35,6 @@
 
 #include <qcolor.h>
 
-#include "kis_doc.h"
 #include "kis_point.h"
 #include "kis_image.h"
 #include "kis_layer.h"

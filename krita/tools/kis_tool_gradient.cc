@@ -32,18 +32,18 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "kis_cursor.h"
-#include "kis_doc.h"
-#include "kis_painter.h"
-#include "kis_gradient_painter.h"
-#include "kis_tool_gradient.h"
-#include "kis_view.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
-#include "kis_move_event.h"
+#include "kis_canvas_subject.h"
 #include "kis_cmb_composite.h"
+#include "kis_cursor.h"
 #include "kis_double_widget.h"
+#include "kis_gradient_painter.h"
+#include "kis_move_event.h"
+#include "kis_painter.h"
 #include "kis_progress_display_interface.h"
+#include "kis_tool_gradient.h"
+#include "kis_undo_adapter.h"
 
 KisToolGradient::KisToolGradient()
 	: super(i18n("Gradient")),

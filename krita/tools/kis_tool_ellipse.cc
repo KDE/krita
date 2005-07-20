@@ -27,8 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_painter.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
@@ -37,6 +35,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
+#include "kis_undo_adapter.h"
 
 KisToolEllipse::KisToolEllipse()
         : super(i18n ("Ellipse")),
@@ -44,12 +43,6 @@ KisToolEllipse::KisToolEllipse()
           m_currentImage (0)
 {
 	setName("tool_ellipse");
-	// initialize ellipse tool settings
-//	m_lineThickness = 4;
-// 	m_opacity = 255;
-// 	m_usePattern = false;
-// 	m_useGradient = false;
-// 	m_fillSolid = false;
 }
 
 KisToolEllipse::~KisToolEllipse()

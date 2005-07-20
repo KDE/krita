@@ -76,3 +76,4 @@ void KritaFiltersPreview::showFiltersPreviewDialog()
 };
 };
 
+#include "filterspreview.moc"

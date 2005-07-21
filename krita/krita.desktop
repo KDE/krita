@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Krita
 Name[eo]=Krito
+Name[hi]=के-रिता
 Name[lo]=ກຣິຕາ
 Exec=krita %u
 DocPath=krita/index.html
@@ -24,6 +25,7 @@ GenericName[fi]=Kuvienmuokkausohjelma
 GenericName[fr]=Logiciel de manipulation d'images
 GenericName[ga]=Clár Ionramhála na nÍomhánna
 GenericName[he]=תוכנית לטיפול בתמונות
+GenericName[hi]=छवि परिवर्तक प्रोग्राम
 GenericName[hr]=Program za obradu slika
 GenericName[hu]=Képszerkesztő
 GenericName[it]=Programma di manipolazione immagini

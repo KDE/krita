@@ -76,6 +76,8 @@ private:
 
 	KoPaletteManager * m_paletteManager;
 	KActionCollection * m_actionCollection;
+
+	KisToolFactory * m_dummyFactory;
 };
 
 

@@ -43,7 +43,7 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
 	m_actionCollection = actionCollection;
 	
 	// Dummy tool for when the layer is locked or invisible
-	KisToolRegistry::instance()->add(KisID("dummy", i18n("Dummy")), new KisToolDummyFactory(actionCollection));
+	m_dummyFactory =  new KisToolDummyFactory(actionCollection);
 
 	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(m_subject);
 	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(m_subject);

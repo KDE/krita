@@ -123,6 +123,8 @@ User Interface
 	  it onto a background image -- or not, if another KOffice app wants it
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
+	* Fix ordering of tools in toolbox
+	* Activate dummy tool when a layer is locked
 
 
 Selections

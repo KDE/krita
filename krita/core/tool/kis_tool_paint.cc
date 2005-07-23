@@ -176,7 +176,7 @@ void KisToolPaint::setCursor(const QCursor& cursor)
 		KisToolControllerInterface *controller = m_subject -> toolController();
 
 		if (controller && controller -> currentTool() == this) {
-			m_subject -> setCanvasCursor(m_cursor);
+			m_subject->canvasController()->setCanvasCursor(m_cursor);
 		}
 	}
 }

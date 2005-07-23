@@ -30,13 +30,14 @@
 #include <kiconloader.h>
 #include <kdualcolorbutton.h>
 #include <kseparator.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kactionclasses.h>
 
 #include <koMainWindow.h>
 
 #include "kis_view.h"
 #include "kis_doc.h"
-#include "kis_tool.h"
-#include "kis_tool_registry.h"
 #include "kis_factory.h"
 
 #include "kis_toolbox.h"
@@ -58,7 +59,6 @@ KisToolBox::KisToolBox( KisView * view, KMainWindow *mainWin, const char* name )
 	QWidget * base = new QWidget( this );
 	m_columnsLayouter = new QBoxLayout( base, d );
 
-
 	d = orientation() == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	m_left = new QWidget( base );
 	m_leftLayout = new QBoxLayout( m_left, d );
@@ -79,7 +79,6 @@ KisToolBox::KisToolBox( KisView * view, KMainWindow *mainWin, const char* name )
 	// XXX: magic number 5: the number entries in the relevant enum. Make this param.
 	for (int i = 0; i < 5; ++i) {
 		ToolList * tl = new ToolList();
-		tl->resize(i * 10); // See Karbon vtoolbox.cc for this
 		m_tools.append(tl);
 	}
 }
@@ -112,21 +111,24 @@ void KisToolBox::slotButtonPressed( int id )
 
 		start += tl->count();
 		if (id < start)
-			emit activeToolChanged( tl->at( id ) );
+			tl->at(id)->activate();
+			//emit activeToolChanged( tl->at( id ) );
 			return;
 	}
 }
 
-void KisToolBox::registerTool( KisTool *tool )
+void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 priority )
 {
-	uint prio = tool->priority();
-	int toolType= (int) tool->toolType();
+	uint prio = priority;
 	ToolList * tl = m_tools.at(toolType);
 	if (prio == 0) {
-		tl->insert(tl->count(), tool);
+		tl->append(tool);
 	}
 	else {
-		tl->insert(prio -1, tool);
+		if (prio - 1 <= tl->count())
+			tl->insert(prio - 1, tool);
+		else
+			tl->append(tool);
 	}
 }
 
@@ -139,7 +141,7 @@ void KisToolBox::setupTools()
 		if (!tl) continue;
 
 		for (uint j = 0; j < tl->count(); ++j) {
-			KisTool *tool = tl->at(j);
+			KAction *tool = tl->at(j);
 			if (tool)
 				addButton(tool->icon().latin1(), tool->name(), id++);
 		}
@@ -176,7 +178,7 @@ QToolButton * KisToolBox::addButton( const char* iconName, QString tooltip, int 
 
 	m_buttonGroup->insert( button, id );
 	m_insertLeft = !m_insertLeft;
-
+	button->show();
 	return button;
 
 }

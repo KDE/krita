@@ -1,10 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritaselectiontools.rc
-
 kde_services_DATA = kritaselectiontools.desktop
-
-EXTRA_DIST = $(kritarc_DATA)
-
 
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../../core \

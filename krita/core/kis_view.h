@@ -27,7 +27,6 @@
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <list>
-#include <map>
 
 #include <koView.h>
 #include <kdebug.h>
@@ -35,7 +34,6 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_global.h"
-#include "kis_tool_controller.h"
 #include "kis_types.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
@@ -60,37 +58,37 @@ class KoPartSelectAction;
 class KoIconItem;
 class KoTabBar;
 
-class KisCanvasObserver;
-class KisRuler;
 class KisBrush;
-class KisCanvas;
-class KisLabelProgress;
-class KisDoc;
-class KisGradient;
-class KisPattern;
-class KisResource;
-class KisUndoAdapter;
-class KisRect;
-class KisPoint;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
-class KisDoubleClickEvent;
-class KisMoveEvent;
-class KisSelectionManager;
-class KisFilterManager;
-class KoPaletteManager;
-class KisToolRegistry;
+class KisCanvas;
+class KisCanvasObserver;
 class KisCompositeOp;
-class KisLayerBox;
-class KisPaintopBox;
-class KisToolBox;
+class KisDoc;
+class KisDoubleClickEvent;
+class KisFilterManager;
 class KisFilterStrategy;
+class KisGradient;
+class KisLabelProgress;
+class KisLayerBox;
+class KisMoveEvent;
+class KisPaintopBox;
+class KisPattern;
+class KisPoint;
+class KisRect;
+class KisResource;
+class KisRuler;
+class KisSelectionManager;
+class KisToolBox;
+class KisToolControllerInterface;
+class KisToolManager;
+class KisUndoAdapter;
+class KoPaletteManager;
 
 class KRITA_EXPORT KisView
 	: public KoView,
 	  public KisCanvasSubject,
-	  private KisCanvasControllerInterface,
-	  private KisToolControllerInterface
+	  private KisCanvasControllerInterface
 {
 
 	Q_OBJECT
@@ -100,10 +98,6 @@ class KRITA_EXPORT KisView
 	typedef std::list<KisCanvasObserver*> vKisCanvasObserver;
 	typedef vKisCanvasObserver::iterator vKisCanvasObserver_it;
 	typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
-
-	typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
-	typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
-
 
 public:
 	KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
@@ -236,8 +230,7 @@ private:
 	
 	virtual KoDocument *document() const;
 
-	// Sets the specified cursor; returns the previous cursor
-	virtual QCursor setCanvasCursor(const QCursor & cursor);
+
 
 public:
 
@@ -267,11 +260,10 @@ private:
 	virtual QRect windowToView(const QRect& rc);
 	virtual KisRect windowToView(const KisRect& rc);
 	virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
+	virtual QCursor setCanvasCursor(const QCursor & cursor);
+	void setInputDevice(enumInputDevice inputDevice);
+	enumInputDevice currentInputDevice() const;
 
-private:
-	// Implement KisToolControllerInterface
-	virtual void setCurrentTool(KisTool *tool);
-	virtual KisTool *currentTool() const;
 
 private:
 	void clearCanvas(const QRect& rc);
@@ -289,7 +281,6 @@ private:
 
 	void paintView(const KisRect& rc);
 
-
 	/**
 	 * Reset the monitor profile to the new settings.
 	 */
@@ -300,17 +291,11 @@ private:
 	void setupRulers();
 	void setupScrollBars();
 	void setupStatusBar();
-	void setupTools();
 
         void updateStatusBarZoomLabel();
 	void updateStatusBarProfileLabel();
 
 	void zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf);
-
-	void setInputDevice(enumInputDevice inputDevice);
-	enumInputDevice currentInputDevice() const;
-
-	KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
 public slots:
 
@@ -390,6 +375,7 @@ private:
 	KisSelectionManager * m_selectionManager;
 	KisFilterManager * m_filterManager;
 	KoPaletteManager * m_paletteManager;
+	KisToolManager * m_toolManager;
 	
         // Fringe benefits
 	KisRuler *m_hRuler;
@@ -458,10 +444,6 @@ private:
 
 	KisID m_paintop;
 
-	enumInputDevice m_inputDevice;
-	InputDeviceToolMap m_inputDeviceToolMap;
-	InputDeviceToolSetMap m_inputDeviceToolSetMap;
-
 	QTime m_tabletEventTimer;
 	QTabletEvent::TabletDevice m_lastTabletEventDevice;
 	QPixmap m_canvasPixmap;
@@ -469,16 +451,11 @@ private:
 	// Monitorprofile for this view
 	KisProfileSP m_monitorProfile;
 
+	// Currently active input device (mouse, stylus, eraser...)
+	enumInputDevice m_inputDevice;
 
 private:
 	mutable KisImageSP m_current;
-
-public:
-	KisToolRegistry * toolRegistry() const;
-
-private:
-
-	KisToolRegistry * m_toolRegistry;
 
 protected:
 

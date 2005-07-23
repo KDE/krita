@@ -69,45 +69,45 @@
 
 // Local
 #include "kis_brush.h"
+#include "kis_button_press_event.h"
+#include "kis_button_release_event.h"
 #include "kis_canvas.h"
+#include "kis_color.h"
+#include "kis_colorspace_registry.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
+#include "kis_double_click_event.h"
 #include "kis_factory.h"
-#include "kis_guide.h"
 #include "kis_gradient.h"
+#include "kis_guide.h"
 #include "kis_imagepipe_brush.h"
+#include "kis_layerbox.h"
 #include "kis_layer.h"
+#include "kis_move_event.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
+#include "kis_paintop_box.h"
+#include "kis_paintop_registry.h"
+#include "kis_part_layer.h"
+#include "kis_profile.h"
+#include "kis_rect.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
 #include "kis_tool.h"
-#include "kis_tool_registry.h"
-#include "kis_tool_non_paint.h"
+#include "kis_toolbox.h"
+#include "kis_tool_manager.h"
+#include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 #include "kis_view.h"
-#include "kis_rect.h"
 #include "KRayonViewIface.h"
-#include "labels/kis_label_progress.h"
 #include "labels/kis_label_cursor_pos.h"
+#include "labels/kis_label_progress.h"
 #include "strategy/kis_strategy_move.h"
-#include "kis_button_press_event.h"
-#include "kis_button_release_event.h"
-#include "kis_double_click_event.h"
-#include "kis_move_event.h"
-#include "kis_colorspace_registry.h"
-#include "kis_profile.h"
-#include "kis_transaction.h"
-#include "kis_layerbox.h"
-#include "kis_paintop_box.h"
-#include "kis_color.h"
-#include "kis_toolbox.h"
-#include "kis_paintop_registry.h"
-#include "kis_part_layer.h"
-#include "kis_tool_dummy.h"
+#include "kis_resource.h"
+#include "kis_pattern.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -136,25 +136,19 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 		setXMLFile("krita_readonly.rc");
 	else
 		setXMLFile("krita.rc");
-
-
-	// XXX Temporary re-instatement of old way to load tools
-	m_toolRegistry = new KisToolRegistry();
-	Q_CHECK_PTR(m_toolRegistry);
-	m_toolRegistry->add(KisID("dummy", i18n("Dummy")), new KisToolDummyFactory(actionCollection()));
-
+	
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
 	Q_ASSERT(m_paletteManager);
-
-
-	m_inputDevice = INPUT_DEVICE_MOUSE;
 
 	m_selectionManager = new KisSelectionManager(this, doc);
 	Q_CHECK_PTR(m_selectionManager);
 	
 	m_filterManager = new KisFilterManager(this, doc);
 	Q_CHECK_PTR(m_filterManager);
+
+	m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
+	Q_CHECK_PTR(m_toolManager);
 
 	m_doc = doc;
 	m_adapter = adapter;
@@ -193,7 +187,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_fg = KisColor(Qt::black);
 	m_bg = KisColor(Qt::white);
 
-
 	m_brush = 0;
 	m_pattern = 0;
 	m_gradient = 0;
@@ -207,7 +200,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	setInstance(KisFactory::global());
 
-	setupTools();
 	setupCanvas();
 	setupRulers();
 	setupScrollBars();
@@ -218,16 +210,20 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	createLayerBox();
 	createPaintopBox();
-#if 0
+
 	createToolBox();
-#endif
 	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
 	resetMonitorProfile();
 	
 	layersUpdated();
-	setCurrentTool(findTool("tool_brush"));
+	
+	m_inputDevice = INPUT_DEVICE_MOUSE;
+	
+	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
+	qApp -> installEventFilter(this);
+	m_tabletEventTimer.start();
 
 }
 
@@ -238,6 +234,7 @@ KisView::~KisView()
 	delete m_paletteManager;
 	delete m_selectionManager;
 	delete m_filterManager;
+	delete m_toolManager;
 }
 
 KoPaletteManager * KisView::paletteManager()
@@ -248,6 +245,7 @@ KoPaletteManager * KisView::paletteManager()
 	}
 	return m_paletteManager;
 }
+
 
 void KisView::createLayerBox()
 {
@@ -261,8 +259,6 @@ void KisView::createLayerBox()
         connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
         connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
         connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
-        connect(m_layerBox, SIGNAL(itemAddMask(int)), this, SLOT(layerAddMask(int)));
-        connect(m_layerBox, SIGNAL(itemRmMask(int)), this, SLOT(layerRmMask(int)));
         connect(m_layerBox, SIGNAL(itemRaise()), this, SLOT(layerRaise()));
         connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
         connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
@@ -298,9 +294,6 @@ DCOPObject* KisView::dcopObject()
 	}
 	return m_dcop;
 }
-
-
-
 
 void KisView::setupScrollBars()
 {
@@ -642,133 +635,6 @@ void KisView::clearCanvas(const QRect& rc)
 	gc.fillRect(rc, backgroundColor());
 }
 
-void KisView::setCurrentTool(KisTool *tool)
-{
-	KisTool *oldTool = currentTool();
-	kdDebug(DBG_AREA_CORE) << "option widget for " << tool->name() << ": " << tool->optionWidget() << "\n";
-	if (!tool->optionWidget()) {
-		tool->createOptionWidget(0);
-	}
-	paletteManager()->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
-
-	if (oldTool)
-	{
-		oldTool -> clear();
-		oldTool -> action() -> setChecked( false );
-	}
-
-	if (tool) {
-		m_inputDeviceToolMap[currentInputDevice()] = tool;
-		setCanvasCursor(tool -> cursor());
-
-		m_canvas -> enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
-
-		notify();
-		tool -> action() -> setChecked( true );
-
-	} else {
-		m_inputDeviceToolMap[currentInputDevice()] = 0;
-		m_canvas -> setCursor(KisCursor::arrowCursor());
-	}
-
-}
-
-KisTool *KisView::currentTool() const
-{
-	InputDeviceToolMap::const_iterator it = m_inputDeviceToolMap.find(currentInputDevice());
-
-	if (it != m_inputDeviceToolMap.end()) {
-		return (*it).second;
-	} else {
-		return 0;
-	}
-}
-
-KisTool *KisView::findTool(const QString &toolName, enumInputDevice inputDevice) const
-{
-	if (inputDevice == INPUT_DEVICE_UNKNOWN) {
-		inputDevice = currentInputDevice();
-	}
-
-	KisTool *tool = 0;
-
-	InputDeviceToolSetMap::const_iterator vit = m_inputDeviceToolSetMap.find(inputDevice);
-
-	Q_ASSERT(vit != m_inputDeviceToolSetMap.end());
-
-	const vKisTool& tools = (*vit).second;
-
-	for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); it++) {
-		KisTool *t = *it;
-		if (t -> name() == toolName) {
-			tool = t;
-			break;
-		}
-	}
-
-	return tool;
-}
-
-void KisView::setInputDevice(enumInputDevice inputDevice)
-{
-	if (inputDevice != m_inputDevice) {
-		KisConfig cfg;
-		InputDeviceToolSetMap::iterator vit = m_inputDeviceToolSetMap.find(m_inputDevice);
-
-		if (vit != m_inputDeviceToolSetMap.end()) {
-			vKisTool& oldTools = (*vit).second;
-			for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); it++) {
-				KisTool *tool = *it;
-				KAction *toolAction = tool -> action();
-				toolAction -> disconnect(SIGNAL(activated()), tool, SLOT(activate()));
-			}
-		}
-		KisTool *oldTool = currentTool();
-		if (oldTool)
-		{
-			paletteManager()->removeWidget(krita::TOOL_OPTION_WIDGET);
-			oldTool -> clear();
-		}
-
-		m_inputDevice = inputDevice;
-
-		vit = m_inputDeviceToolSetMap.find(m_inputDevice);
-
-		Q_ASSERT(vit != m_inputDeviceToolSetMap.end());
-
-		vKisTool& tools = (*vit).second;
-
-		for (vKisTool::iterator it = tools.begin(); it != tools.end(); it++) {
-			KisTool *tool = *it;
-			KAction *toolAction = tool -> action();
-
-			connect(toolAction, SIGNAL(activated()), tool, SLOT(activate()));
-		}
-
-		if (currentTool() == 0) {
-			if (m_inputDevice == INPUT_DEVICE_ERASER) {
-				setCurrentTool(findTool("tool_brush"));
-				m_paintop = KisID("eraser", "");
-				// XXX: Set the right entry in the paintop box
-			} else {
-				setCurrentTool(findTool("tool_brush"));
-				m_paintop = KisID("paintbrush", "");
-				// XXX: Set the right entry in the paintop box
-			}
-		} else {
-			setCurrentTool(currentTool());
-		}
-
-		currentTool() -> action() -> activate();
-	}
-
-}
-
-enumInputDevice KisView::currentInputDevice() const
-{
-	return m_inputDevice;
-}
-
 Q_INT32 KisView::horzValue() const
 {
 	return m_hScroll -> value();
@@ -827,6 +693,42 @@ void KisView::paintView(const KisRect& r)
 	}
 }
 
+void KisView::setInputDevice(enumInputDevice inputDevice)
+{
+	if (inputDevice != m_inputDevice) {
+		m_inputDevice = inputDevice;
+
+		m_toolManager->setToolForInputDevice(m_inputDevice, inputDevice);
+
+
+		// XXX: This is incorrect
+		// On initialisation for an input device, set to eraser if the current input device
+		// is a wacom eraser, else to brush.
+		if (m_toolManager->currentTool() == 0) {
+			if (m_inputDevice == INPUT_DEVICE_ERASER) {
+				m_paintop = KisID("eraser", "");
+				// XXX: Set the right entry in the paintop box
+			} else {
+				m_paintop = KisID("paintbrush", "");
+				// XXX: Set the right entry in the paintop box
+			}
+		}
+#if 0 // XXX -- don't know why this is done?
+		 else {
+			m_toolManager->setCurrentTool(currentTool());
+		}
+#endif
+		m_toolManager->activateCurrentTool();
+	}
+
+}
+
+enumInputDevice KisView::currentInputDevice() const
+{
+	return m_inputDevice;
+}
+
+
 QWidget *KisView::canvas() const
 {
 	return m_canvas;
@@ -876,7 +778,7 @@ void KisView::layerUpdateGUI(bool enable)
 	if (layer)
 		layerPos = img->index(layer);
 
-	enable = enable && img && layer;
+	enable = enable && img && layer && layer->visible() && !layer->locked();
 	m_layerDup -> setEnabled(enable);
 	m_layerRm -> setEnabled(enable);
 	m_layerLink -> setEnabled(enable);
@@ -898,6 +800,7 @@ void KisView::layerUpdateGUI(bool enable)
 
 	m_selectionManager -> updateGUI();
 	m_filterManager->updateGUI();
+	
 	imgUpdateGUI();
 }
 
@@ -1438,8 +1341,8 @@ void KisView::preferences()
     {
 	resetMonitorProfile();
 	canvasRefresh();
-	if (currentTool()) {
-            setCanvasCursor(currentTool() -> cursor());
+	if (m_toolManager->currentTool()) {
+            setCanvasCursor(m_toolManager->currentTool() -> cursor());
 	}
     }
 }
@@ -1544,7 +1447,6 @@ void KisView::brushActivated(KisResource *brush)
 
 void KisView::patternActivated(KisResource *pattern)
 {
-
 	m_pattern = dynamic_cast<KisPattern*>(pattern);
 
 	if (m_pattern) {
@@ -1633,26 +1535,6 @@ void KisView::print(KPrinter& printer)
 	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
 }
 
-void KisView::setupTools()
-{
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = m_toolRegistry -> createTools(this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = m_toolRegistry -> createTools(this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = m_toolRegistry -> createTools(this);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = m_toolRegistry -> createTools(this);
-#if 0
-	KisIDList keys = m_toolRegistry->listKeys();
-	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		KisTool * t = m_toolRegistry->get(*it);
-
-		if (!t) continue;
-
-		m_toolBox->registerTool( t );
-	}
-	m_toolBox->setupTools();
-#endif 	
-	qApp -> installEventFilter(this);
-	m_tabletEventTimer.start();
-}
 
 
 
@@ -1666,13 +1548,13 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
 		bitBlt(m_canvas, er.x(), er.y(), &m_canvasPixmap, er.x(), er.y(), er.width(), er.height());
 	}
 
-	if (currentTool()) {
+	if (m_toolManager->currentTool()) {
 		QPainter gc(m_canvas);
 
 		gc.setClipRegion(event -> region());
 		gc.setClipping(true);
 
-		currentTool() -> paint(gc, event -> rect());
+		m_toolManager->currentTool()->paint(gc, event -> rect());
 	}
 }
 
@@ -1728,11 +1610,11 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 		}
 	}
 
-	if (e -> device() == currentInputDevice() && currentTool()) {
+	if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
 		KisPoint p = viewToWindow(e -> pos());
 		KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
-		currentTool() -> buttonPress(&ev);
+		m_toolManager->currentTool() -> buttonPress(&ev);
 	}
 }
 
@@ -1779,10 +1661,10 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 			m_doc -> setModified(true);
 			paintGuides();
 		}
-	} else if (e -> device() == currentInputDevice() && currentTool()) {
+	} else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
 		KisMoveEvent ev(e -> device(), wp, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> state());
 
-		currentTool() -> move(&ev);
+		m_toolManager->currentTool() -> move(&ev);
 	}
 
 	m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
@@ -1812,12 +1694,12 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 
 	if (img && m_currentGuide) {
 		m_currentGuide = 0;
-	} else if (e -> device() == currentInputDevice() && currentTool()) {
+	} else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
 		KisPoint p = viewToWindow(e -> pos());
 		KisButtonReleaseEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
-		if (currentTool()) {
-			currentTool() -> buttonRelease(&ev);
+		if (m_toolManager->currentTool()) {
+			m_toolManager->currentTool() -> buttonRelease(&ev);
 		}
 	}
 }
@@ -1841,26 +1723,26 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 		}
 	}
 
-	if (e -> device() == currentInputDevice() && currentTool()) {
+	if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
 		KisPoint p = viewToWindow(e -> pos());
 		KisDoubleClickEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
-		if (currentTool()) {
-			currentTool() -> doubleClick(&ev);
+		if (m_toolManager->currentTool()) {
+			m_toolManager->currentTool() -> doubleClick(&ev);
 		}
 	}
 }
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
-	if (currentTool())
-		currentTool() -> enter(e);
+	if (m_toolManager->currentTool())
+		m_toolManager->currentTool() -> enter(e);
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
-	if (currentTool())
-		currentTool() -> leave(e);
+	if (m_toolManager->currentTool())
+		m_toolManager->currentTool() -> leave(e);
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
@@ -1883,14 +1765,14 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-	if (currentTool())
-		currentTool() -> keyPress(event);
+	if (m_toolManager->currentTool())
+		m_toolManager->currentTool() -> keyPress(event);
 }
 
 void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 {
-	if (currentTool())
-		currentTool() -> keyRelease(event);
+	if (m_toolManager->currentTool())
+		m_toolManager->currentTool() -> keyRelease(event);
 }
 
 void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
@@ -2778,7 +2660,7 @@ KisCanvasControllerInterface *KisView::canvasController() const
 
 KisToolControllerInterface *KisView::toolController() const
 {
-	return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(this));
+	return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(m_toolManager));
 }
 
 KoDocument *KisView::document() const
@@ -2790,12 +2672,6 @@ KisProgressDisplayInterface *KisView::progressDisplay() const
 {
 	return m_progress;
 }
-
-
-KisToolRegistry * KisView::toolRegistry() const
-{
-	return m_toolRegistry;
-};
 
 QCursor KisView::setCanvasCursor(const QCursor & cursor)
 {

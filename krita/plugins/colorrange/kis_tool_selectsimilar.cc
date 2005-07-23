@@ -202,10 +202,10 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 {
 	switch (action) {
 		case SELECTION_ADD:
-			m_subject -> setCanvasCursor(KisCursor::pickerPlusCursor());
+			m_subject->canvasController()->setCanvasCursor(KisCursor::pickerPlusCursor());
 			break;
 		case SELECTION_SUBTRACT:
-			m_subject -> setCanvasCursor(KisCursor::pickerMinusCursor());
+			m_subject->canvasController()->setCanvasCursor(KisCursor::pickerMinusCursor());
 	}
 }
 

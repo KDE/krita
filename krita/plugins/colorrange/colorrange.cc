@@ -64,15 +64,17 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
  		  << "\n";
 
 
-	if ( !parent->inherits("KisView") )
+	
+	if ( parent->inherits("KisFactory") )
 	{
+		KisToolRegistry::instance() -> add(new KisToolSelectSimilarFactory(actionCollection()));
+
 		m_view = 0;
-	} else {
+	} else if (parent -> inherits("KisView")) {
 		m_view = dynamic_cast<KisView*>(parent);
 
 		m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
-		m_view -> toolRegistry() -> add(new KisToolSelectSimilarFactory(actionCollection()));
 	}
 }
 

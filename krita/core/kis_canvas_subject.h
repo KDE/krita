@@ -39,8 +39,8 @@ class QCursor;
 class KisColor;
 
 /**
- * The canvas subject is the subset of operations that are directy available to
- * tools.
+ * The canvas subject is the interface implemented by classes that perform the
+ * "controller" role in the model-view-controller paradigm.
  */
 class KisCanvasSubject {
 public:
@@ -88,8 +88,6 @@ public:
 	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
 	
 	virtual KisSelectionManager * selectionManager() = 0;
-	
-	virtual QCursor setCanvasCursor(const QCursor &) = 0;
 
 private:
 	KisCanvasSubject(const KisCanvasSubject&);

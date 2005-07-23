@@ -25,26 +25,19 @@
 #include <kis_tool.h>
 
 class QWidget;
-
+class KAction;
 class KMainWindow;
 class KDualColorButton;
 
 class KisView;
 
-
-
-enum KisToolBoxTypes {
-	TOOLBOX_PAINT = 0,
-	TOOLBOX_SELECT = 1,
-	TOOLBOX_OTHER = 2,
-};
-
 /**
- * KisToolBox is a kind of super-specialized toolbox that can order tools according to
+ * KActionBox is a kind of super-specialized toolbox that can order tools according to
  * type and priority.
  *
  * This is to a large extent a port of the Karbon vtoolbox -- with which it should be
- * merged one day.
+ * merged one day. However, it doesn't depend on a tool-like class, it aggregates
+ * actions.
  */
 class KisToolBox : public KToolBar {
 
@@ -58,14 +51,14 @@ public:
 	// Called by the toolcontroller for each tool. For every category,
 	// there is a separate list, and the tool is categorized correctly.
 	// The tool is not yet added to the widgets; call setupTools()
-	// to do that.
-	void registerTool( KisTool * );
+	// to do that. We don't store the tool.
+	void registerTool(KAction * tool, enumToolType toolType, Q_UINT32 priority);
 
 	// Called when all tools have been added by the tool controller
 	void setupTools();
 
-signals:
-	void activeToolChanged( KisTool * );
+//signals:
+//	void activeToolChanged( KAction * );
 
 public slots:
 	
@@ -93,7 +86,7 @@ private:
 		
 	bool m_insertLeft;
 
-	typedef QPtrVector<KisTool> ToolList;
+	typedef QPtrList<KAction> ToolList;
 	
 	QPtrList<ToolList> m_tools;
 

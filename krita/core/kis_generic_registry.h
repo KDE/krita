@@ -43,7 +43,7 @@ public:
 	void add(KisID id, _T item)
 	{
 		m_storage.insert(typename storageMap::value_type(id, item));
-		kdDebug(DBG_AREA_REGISTRY ) << "Added ID: " << id.id() << ", " << id.name() << "\n";
+		kdDebug() << "Added ID: " << id.id() << ", " << id.name() << "\n";
 	}
 	
 	_T get(const KisID& name) const
@@ -54,7 +54,7 @@ public:
 			p = it -> second;
 		}
 		if (!p) {
-			kdDebug(DBG_AREA_REGISTRY) << "No item " << name.id() << ", " << name.name() << " found\n";
+			kdDebug() << "No item " << name.id() << ", " << name.name() << " found\n";
 			return 0;
 		}
 		return p;

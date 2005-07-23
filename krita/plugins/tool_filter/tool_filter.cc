@@ -35,7 +35,6 @@
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>
 #include <kis_factory.h>
-#include <kis_view.h>
 #include <kis_factory.h>
 
 #include "tool_filter.h"
@@ -58,15 +57,14 @@ ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
  		  << parent -> className()
  		  << "\n";
 
- 	if ( parent->inherits("KisView") )
- 	{
-		KisView * view = dynamic_cast<KisView*>( parent );
-		KisToolRegistry * tr = view -> toolRegistry();
-		tr -> add( new KisToolFilterFactory( actionCollection() ) );
-	}
-	else if ( parent -> inherits( "KisFactory" ) ) {
+	if ( parent -> inherits( "KisFactory" ) ) {
+
 		KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
 		pr -> add( new KisFilterOpFactory );
+
+		KisToolRegistry * tr = KisToolRegistry::instance();
+		tr -> add( new KisToolFilterFactory( actionCollection() ) );
+
  	}
 }
 

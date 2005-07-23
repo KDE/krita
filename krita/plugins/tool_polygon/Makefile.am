@@ -1,7 +1,3 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = kritatoolpolygon.rc
-EXTRA_DIST = $(kritarc_DATA)
-
 kde_services_DATA = kritatoolpolygon.desktop
 
 # all_includes must remain last!

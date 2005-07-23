@@ -35,16 +35,19 @@ class QStringList;
 class KisToolRegistry : public KisGenericRegistry<KisToolFactorySP> {
 
 public:
-	KisToolRegistry();
 	virtual ~KisToolRegistry();
 
-// 	static KisToolRegistry* instance();
+ 	static KisToolRegistry* instance();
 
 	vKisTool createTools(KisCanvasSubject *subject) const;
 	KisTool * createTool(KisCanvasSubject * subject, KisID & id) const;
 	
-// private:
-//     static KisToolRegistry *m_singleton;
+private:
+	KisToolRegistry();
+ 	KisToolRegistry(const KisToolRegistry&);
+ 	KisToolRegistry operator=(const KisToolRegistry&);
+
+	static KisToolRegistry *m_singleton;
 };
 
 #endif // KIS_TOOL_REGISTRY_H_

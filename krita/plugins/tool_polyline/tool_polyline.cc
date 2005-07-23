@@ -55,11 +55,9 @@ ToolPolyline::ToolPolyline(QObject *parent, const char *name, const QStringList 
 		<< parent -> className()
 		<< "\n";
 
-	if ( parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
-		KisView * view = dynamic_cast<KisView *>(parent);
-
-		KisToolRegistry * r = view -> toolRegistry();
+		KisToolRegistry * r = KisToolRegistry::instance();
 
 		r -> add(new KisToolPolylineFactory(actionCollection()));
 	}

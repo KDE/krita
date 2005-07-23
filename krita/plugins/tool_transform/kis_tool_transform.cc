@@ -48,7 +48,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
 #include <kis_id.h>
-#include <kis_view.h>
+#include <kis_tool_controller.h>
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"
@@ -134,7 +134,7 @@ void KisToolTransform::activate()
 		KisToolControllerInterface *controller = m_subject -> toolController();
 
 		if (controller)
-			controller -> setCurrentTool(this);
+			controller->setCurrentTool(this);
 			
 		Q_INT32 x,y,w,h;
 		KisImageSP img = m_subject -> currentImg();

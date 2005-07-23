@@ -27,7 +27,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_id.h"
 
-// KisToolRegistry *KisToolRegistry::m_singleton = 0;
+KisToolRegistry *KisToolRegistry::m_singleton = 0;
 
 KisToolRegistry::KisToolRegistry()
 {
@@ -38,14 +38,14 @@ KisToolRegistry::~KisToolRegistry()
 {
 }
 
-// KisToolRegistry* KisToolRegistry::instance()
-// {
-// 	if(KisToolRegistry::m_singleton == 0)
-// 	{
-// 		KisToolRegistry::m_singleton = new KisToolRegistry();
-// 	}
-// 	return KisToolRegistry::m_singleton;
-// }
+KisToolRegistry* KisToolRegistry::instance()
+{
+ 	if(KisToolRegistry::m_singleton == 0)
+ 	{
+ 		KisToolRegistry::m_singleton = new KisToolRegistry();
+ 	}
+	return KisToolRegistry::m_singleton;
+}
 
 
 

@@ -23,12 +23,18 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include "kis_types.h"
+#include "kis_global.h"
 
 class QWidget;
 class KisTool;
 class KisRect;
 class KisPoint;
 
+/**
+ * Interface for classes that implement a canvas; i.e., a widget where KisImages
+ * are painted onto. This is the "view" part of the model-view-controller paradigm;
+ * the naming is a confusing historical artefact.
+ */
 class KisCanvasControllerInterface {
 public:
 	KisCanvasControllerInterface() {};
@@ -59,6 +65,10 @@ public:
 	virtual QRect windowToView(const QRect& rc) = 0;
 	virtual KisRect windowToView(const KisRect& rc) = 0;
 	virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;
+	virtual QCursor setCanvasCursor(const QCursor &) = 0;
+	virtual void setInputDevice(enumInputDevice inputDevice) = 0;
+	virtual enumInputDevice currentInputDevice() const = 0;
+
 
 private:
 	KisCanvasControllerInterface(const KisCanvasControllerInterface&);

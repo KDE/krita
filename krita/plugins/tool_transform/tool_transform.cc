@@ -55,11 +55,11 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
 		<< parent -> className()
 		<< "\n";
 
-	if ( parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
 		KisView * view = dynamic_cast<KisView *>(parent);
 
-		KisToolRegistry * r = view -> toolRegistry();
+		KisToolRegistry * r = KisToolRegistry::instance();
 		KisToolTransformFactory * f = new KisToolTransformFactory(actionCollection());
 		Q_CHECK_PTR(f);
 		r -> add(f);

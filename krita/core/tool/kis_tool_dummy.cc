@@ -71,7 +71,6 @@ void KisToolDummy::move(KisMoveEvent *e)
 void KisToolDummy::buttonRelease(KisButtonReleaseEvent *e)
 {
 	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
 		m_dragging = false;
 	}
 }

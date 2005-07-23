@@ -743,14 +743,14 @@ void KisToolCrop::setMoveResizeCursor (Q_INT32 handle)
         {
         case (UpperLeft):
         case (LowerRight):
-                m_subject -> setCanvasCursor(KisCursor::sizeFDiagCursor());
+                m_subject->canvasController()->setCanvasCursor(KisCursor::sizeFDiagCursor());
                 return;
         case (LowerLeft):
         case (UpperRight):
-                m_subject -> setCanvasCursor(KisCursor::moveCursor());
+                m_subject->canvasController()->setCanvasCursor(KisCursor::moveCursor());
                 return;
         }
-        m_subject -> setCanvasCursor(KisCursor::selectCursor());
+        m_subject->canvasController()->setCanvasCursor(KisCursor::selectCursor());
         return;
 }
 

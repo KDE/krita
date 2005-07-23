@@ -44,9 +44,6 @@
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_selected_transaction.h>
-#include <kis_tool_controller.h>
-#include <kis_tool.h>
-#include <kis_tool_registry.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
@@ -55,7 +52,6 @@
 #include "wdg_colorrange.h"
 
 
-class KisTool;
 class KisView;
 class KisCanvasSubject;
 class DlgColorRange;

@@ -34,7 +34,6 @@
 #include <kis_types.h>
 #include <kis_tool_registry.h>
 #include <kis_factory.h>
-#include <kis_view.h>
 
 #include "tool_star.h"
 #include "kis_tool_star.h"
@@ -55,11 +54,9 @@ ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &)
 		<< parent -> className()
 		<< "\n";
 
-	if ( parent->inherits("KisView") )
+	if ( parent->inherits("KisFactory") )
 	{
-		KisView * view = dynamic_cast<KisView *>(parent);
-
-		KisToolRegistry * r = view -> toolRegistry();
+		KisToolRegistry * r = KisToolRegistry::instance();
 
 		r -> add(new KisToolStarFactory(actionCollection()));
 	}

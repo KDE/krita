@@ -36,7 +36,6 @@
 #include <kis_tool.h>
 #include <kis_factory.h>
 #include <kis_tool_registry.h>
-#include <kis_view.h>
 
 #include "selection_tools.h"
 
@@ -63,10 +62,9 @@ SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringL
  		  << parent -> className()
  		  << "\n";
 
- 	if ( parent->inherits("KisView") )
+ 	if ( parent->inherits("KisFactory") )
  	{
-		KisView * view = dynamic_cast<KisView*>( parent );
-		KisToolRegistry * r = view -> toolRegistry();
+		KisToolRegistry * r = KisToolRegistry::instance();
 		r -> add(new KisToolSelectOutlineFactory( actionCollection() ));
 		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
 		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));

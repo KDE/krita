@@ -1,22 +1,3 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritadefaultdockers" version="1">
-<MenuBar>
- 	<Menu name="View"><text>&amp;View</text>
-		<Menu name="palettes"><text>&amp;Tool palettes</text>
-			<Action name="controlframe"/>
-			<Action name="birdeyebox"/>
-			<Action name="channelview"/>
-			<Action name="autobrush"/>
-			<Action name="textbrush"/>
-			<Action name="autogradient"/>
-			<Action name="hsvwidget"/>
-			<Action name="rgbwidget"/>
-			<Action name="graywidget"/>
-			<Action name="palette"/>
-			<Action name="pattern"/>
-			<Action name="brushes"/>
-			<Action name="gradients"/>
-		</Menu>
-	</Menu>
-</MenuBar>
 </kpartgui>

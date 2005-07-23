@@ -172,6 +172,7 @@ Tools
 Plugins
 
 	* As many filters as possible :-)
+	* Make convolution filters use the progress bar again.
 	* Load plugins into registry on Krita startup, instead of on
 	  view creation. (Tried this, but failed miserable. BSAR)
 	* The Variations plugin is just a mockup and does not use the same

@@ -36,14 +36,12 @@ class KisFilterRegistry : public KisGenericRegistry<KisFilterSP>,  public KShare
 {
 
 public:
-
-	KisFilterRegistry();
 	virtual ~KisFilterRegistry();
-
+	
 	static KisFilterRegistry* instance();
 
 private:
-
+	KisFilterRegistry();
  	KisFilterRegistry(const KisFilterRegistry&);
  	KisFilterRegistry operator=(const KisFilterRegistry&);
 

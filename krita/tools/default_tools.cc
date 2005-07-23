@@ -52,7 +52,7 @@
 #include "kis_tool_zoom.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_pan.h"
-#include "kis_view.h"
+
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
@@ -69,10 +69,9 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
  		  << parent -> className()
  		  << "\n";
 
- 	if ( parent->inherits("KisView") )
+ 	if ( parent->inherits("KisFactory") )
  	{
-		KisView * view = dynamic_cast<KisView*>( parent );
-		KisToolRegistry * r = view -> toolRegistry();
+		KisToolRegistry * r = KisToolRegistry::instance();
 
 		r -> add(new KisToolFillFactory( actionCollection() ));
 		r -> add(new KisToolGradientFactory( actionCollection() ));

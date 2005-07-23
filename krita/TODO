@@ -1,4 +1,3 @@
-Krita TODO
 
 Transform tool
 
@@ -54,8 +53,6 @@ Core
 	* Anti-aliased filling (requires some simple colorspace
 	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
-	* Make toolbox look like Karbon's toolbox, but follow the
-	  layout of photoshop's toolbox for minimum confusability.
         * Lock layers (make inaccessible) See bug #90456.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
           layer to anything.
@@ -173,8 +170,6 @@ Plugins
 
 	* As many filters as possible :-)
 	* Make convolution filters use the progress bar again.
-	* Load plugins into registry on Krita startup, instead of on
-	  view creation. (Tried this, but failed miserable. BSAR)
 	* The Variations plugin is just a mockup and does not use the same
           preview as the rest of Krita.
 	* What's the difference between gamma correction and colour

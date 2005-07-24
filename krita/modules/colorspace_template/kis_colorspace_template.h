@@ -59,7 +59,8 @@ public:
 
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+				       float exposure = 0.0f);
 
 	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 

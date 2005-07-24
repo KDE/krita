@@ -197,6 +197,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_statusBarZoomLabel = 0;
 	m_statusBarSelectionLabel = 0;
 	m_statusBarProfileLabel = 0;
+	m_HDRExposure = 0;
 
 	setInstance(KisFactory::global());
 
@@ -681,7 +682,7 @@ void KisView::paintView(const KisRect& r)
 				}
 				gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-				m_doc -> paintContent(gc, wr, monitorProfile());
+				m_doc -> paintContent(gc, wr, monitorProfile(), HDRExposure());
 			}
 
 			paintGuides();
@@ -1532,7 +1533,7 @@ void KisView::print(KPrinter& printer)
 		kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
 
 	QRect r = img -> bounds();
-	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
+	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile, HDRExposure());
 }
 
 
@@ -2698,4 +2699,18 @@ QCursor KisView::setCanvasCursor(const QCursor & cursor)
 	return oldCursor;
 }
 
+float KisView::HDRExposure() const
+{
+	return m_HDRExposure;
+}
+
+void KisView::setHDRExposure(float exposure)
+{
+	if (exposure != m_HDRExposure) {
+		m_HDRExposure = exposure;
+		updateCanvas();
+	}
+}
+
 #include "kis_view.moc"
+

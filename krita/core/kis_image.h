@@ -62,13 +62,14 @@ public:
 	virtual void renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 	/// Paint the specified rect onto the painter, adjusting the colors using the
-	/// given profile.
+	/// given profile. The exposure setting is used if the image has a high dynamic range.
 	virtual void renderToPainter(Q_INT32 x1,
 				     Q_INT32 y1,
 				     Q_INT32 x2,
 				     Q_INT32 y2,
 				     QPainter &painter,
-				     KisProfileSP profile);
+				     KisProfileSP profile,
+				     float exposure = 0.0f);
 
 
 public:

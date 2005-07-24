@@ -178,23 +178,26 @@ public:
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device.
 	 *
-	 * x, y left-top point of the rect of pixels
-	 * w, h width and height in pixels
-	 * profile RGB profile to use in conversion. May be 0, in which
+	 * @param x Left coordinate of the rectangle
+	 * @param y Top coordinate of the rectangle
+	 * @param w Width of the rectangle in pixels
+	 * @param h Height of the rectangle in pixels
+	 * @param profile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
+	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.
 	 */
-	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, float exposure = 0.0f);
 
 	/**
-	 * Create an RGBA QImage from a rectangle in the paint device.
+	 * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
 	 *
-	 * The dimensions is so that it takes what is currently on screen. relies on the image() to return an image.
-	 * profile RGB profile to use in conversion. May be 0, in which
+	 * @param profile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
+	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.
 	 */
-	virtual QImage convertToQImage(KisProfileSP dstProfile);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, float exposure = 0.0f);
 
         virtual QString name() const;
         virtual void setName(const QString& name);

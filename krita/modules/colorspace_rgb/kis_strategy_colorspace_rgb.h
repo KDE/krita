@@ -35,6 +35,9 @@ public:
 	virtual ~KisStrategyColorSpaceRGB();
 
 public:
+	void setPixel(Q_UINT8 *pixel, Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, Q_UINT8 alpha) const;
+	void getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *green, Q_UINT8 *blue, Q_UINT8 *alpha) const;
+
 	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
@@ -64,7 +67,8 @@ public:
 
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent);
+				       Q_INT32 renderingIntent,
+				       float exposure = 0.0f);
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	

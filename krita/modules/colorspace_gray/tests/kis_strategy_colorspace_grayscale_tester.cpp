@@ -46,7 +46,7 @@ void KisStrategyColorSpaceGrayscaleTester::allTests()
 
 void KisStrategyColorSpaceGrayscaleTester::testBasics()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceGrayscale();
+	KisStrategyColorSpaceGrayscale *cs = new KisStrategyColorSpaceGrayscale();
 
 	Q_UINT8 pixel[MAX_CHANNEL_GRAYSCALEA];
 
@@ -64,6 +64,19 @@ void KisStrategyColorSpaceGrayscaleTester::testBasics()
 
 	valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
 	CHECK(valueText, QString().setNum(128.0 / 255.0));
+
+	cs -> setPixel(pixel, 128, 192l);
+	CHECK((uint)pixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY], 128u);
+	CHECK((uint)pixel[KisStrategyColorSpaceGrayscale::PIXEL_GRAY_ALPHA], 192u);
+
+	Q_UINT8 gray;
+	Q_UINT8 alpha;
+
+	cs -> getPixel(pixel, &gray, &alpha);
+	CHECK((uint)gray, 128u);
+	CHECK((uint)alpha, 192u);
+
+	delete cs;
 }
 
 void KisStrategyColorSpaceGrayscaleTester::testMixColors()

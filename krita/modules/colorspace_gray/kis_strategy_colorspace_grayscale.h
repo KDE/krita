@@ -31,6 +31,9 @@ public:
 
 public:
 
+	void setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const;
+	void getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *alpha) const;
+
 	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
 	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
@@ -61,7 +64,8 @@ public:
 
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+				       float exposure = 0.0f);
 
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 

@@ -56,6 +56,18 @@ KisStrategyColorSpaceGrayscale::~KisStrategyColorSpaceGrayscale()
 {
 }
 
+void KisStrategyColorSpaceGrayscale::setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const
+{
+	pixel[PIXEL_GRAY] = gray;
+	pixel[PIXEL_GRAY_ALPHA] = alpha;
+}
+
+void KisStrategyColorSpaceGrayscale::getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *alpha) const
+{
+	*gray = pixel[PIXEL_GRAY];
+	*alpha = pixel[PIXEL_GRAY_ALPHA];
+}
+
 void KisStrategyColorSpaceGrayscale::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 	// Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
@@ -157,7 +169,7 @@ Q_INT32 KisStrategyColorSpaceGrayscale::pixelSize() const
 
 QImage KisStrategyColorSpaceGrayscale::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						       KisProfileSP srcProfile, KisProfileSP dstProfile,
-						       Q_INT32 renderingIntent)
+						       Q_INT32 renderingIntent, float /*exposure*/)
 {
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);

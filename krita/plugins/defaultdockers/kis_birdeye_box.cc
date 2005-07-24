@@ -33,7 +33,7 @@
 #include "kis_image.h"
 #include "kis_global.h"
 #include "kis_birdeye_box.h"
-
+#include "kis_double_widget.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)child(X))
 
@@ -68,6 +68,16 @@ KisBirdEyeBox::KisBirdEyeBox(QWidget* parent, const char* name)
 // 	togglePageBorder(true);
 
 // 	canvasZoomChanged();
+	exposureDoubleWidget -> setRange(-10, 10);
+	exposureDoubleWidget -> setPrecision(1);
+	exposureDoubleWidget -> setValue(0);
+	exposureDoubleWidget -> setLineStep(0.1);
+	exposureDoubleWidget -> setPageStep(1);
+
+	connect(exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
+	connect(exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
+	connect(exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
+	m_draggingExposureSlider = false;
 }
 
 KisBirdEyeBox::~KisBirdEyeBox()
@@ -359,4 +369,23 @@ void KisBirdEyeBox::handleMousePress(QPoint /*p*/)
 
 // 	m_pCanvas->setViewCenterPoint(KoPoint(x,y));
 }
+
+void KisBirdEyeBox::exposureValueChanged(double exposure)
+{
+	if (!m_draggingExposureSlider) {
+		emit exposureChanged(static_cast<float>(exposure));
+	}
+}
+
+void KisBirdEyeBox::exposureSliderPressed()
+{
+	m_draggingExposureSlider = true;
+}
+
+void KisBirdEyeBox::exposureSliderReleased()
+{
+	m_draggingExposureSlider = false;
+	exposureValueChanged(exposureDoubleWidget -> value());
+}
+
 #include "kis_birdeye_box.moc"

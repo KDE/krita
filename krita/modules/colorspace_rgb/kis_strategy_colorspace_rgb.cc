@@ -56,6 +56,22 @@ KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 }
 
+void KisStrategyColorSpaceRGB::setPixel(Q_UINT8 *pixel, Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, Q_UINT8 alpha) const
+{
+	pixel[PIXEL_RED] = red;
+	pixel[PIXEL_GREEN] = green;
+	pixel[PIXEL_BLUE] = blue;
+	pixel[PIXEL_ALPHA] = alpha;
+}
+
+void KisStrategyColorSpaceRGB::getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *green, Q_UINT8 *blue, Q_UINT8 *alpha) const
+{
+	*red = pixel[PIXEL_RED];
+	*green = pixel[PIXEL_GREEN];
+	*blue = pixel[PIXEL_BLUE];
+	*alpha = pixel[PIXEL_ALPHA];
+}
+
 void KisStrategyColorSpaceRGB::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
  	//kdDebug(DBG_AREA_CMS) << "nativeColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
@@ -183,7 +199,7 @@ Q_INT32 KisStrategyColorSpaceRGB::pixelSize() const
 
 QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent)
+						 Q_INT32 renderingIntent, float /*exposure*/)
 
 {
 

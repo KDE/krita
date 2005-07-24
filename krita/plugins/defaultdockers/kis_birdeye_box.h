@@ -58,6 +58,12 @@ protected slots:
 	void togglePageBorder(bool);
 	void doAutoResizeMin();
 	void doAutoResizeMax();
+	void exposureValueChanged(double exposure);
+	void exposureSliderPressed();
+	void exposureSliderReleased();
+
+signals:
+	void exposureChanged(float exposure);
 
 protected:
 
@@ -84,6 +90,7 @@ private:
 	bool m_handlePress;
 	QPoint m_lastPos;
 
+	bool m_draggingExposureSlider;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

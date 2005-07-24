@@ -10,7 +10,7 @@ AM_CPPFLAGS = -I$(srcdir)/.. \
 check_LTLIBRARIES = kunittest_kis_strategy_colorspace_rgb_u16_tester.la
 
 kunittest_kis_strategy_colorspace_rgb_u16_tester_la_SOURCES = kis_strategy_colorspace_rgb_u16_tester.cc
-kunittest_kis_strategy_colorspace_rgb_u16_tester_la_LIBADD = -lkunittest ../libkrita_rgb_u16_plugin.la
+kunittest_kis_strategy_colorspace_rgb_u16_tester_la_LIBADD = -lkunittest ../libkrita_rgb_u16.la
 kunittest_kis_strategy_colorspace_rgb_u16_tester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
 
 check-local: kunittest_kis_strategy_colorspace_rgb_u16_tester.la

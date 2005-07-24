@@ -48,7 +48,8 @@ void KisStrategyColorSpaceRGBTester::allTests()
 
 void KisStrategyColorSpaceRGBTester::testBasics()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGB();
+	KisStrategyColorSpaceRGB *cs = new KisStrategyColorSpaceRGB();
+	KisStrategyColorSpaceSP csSP = cs;
 
 	Q_UINT8 pixel[NUM_CHANNELS];
 
@@ -80,6 +81,23 @@ void KisStrategyColorSpaceRGBTester::testBasics()
 
 	valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
 	CHECK(valueText, QString().setNum(0.0));
+
+	cs -> setPixel(pixel, 128, 192, 64, 99);
+	CHECK((uint)pixel[PIXEL_RED], 128u);
+	CHECK((uint)pixel[PIXEL_GREEN], 192u);
+	CHECK((uint)pixel[PIXEL_BLUE], 64u);
+	CHECK((uint)pixel[PIXEL_ALPHA], 99u);
+
+	Q_UINT8 red;
+	Q_UINT8 green;
+	Q_UINT8 blue;
+	Q_UINT8 alpha;
+
+	cs -> getPixel(pixel, &red, &green, &blue, &alpha);
+	CHECK((uint)red, 128u);
+	CHECK((uint)green, 192u);
+	CHECK((uint)blue, 64u);
+	CHECK((uint)alpha, 99u);
 }
 
 void KisStrategyColorSpaceRGBTester::testMixColors()

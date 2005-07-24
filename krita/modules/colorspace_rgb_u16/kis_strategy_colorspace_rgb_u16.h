@@ -31,11 +31,21 @@
 
 class KRITATOOL_EXPORT KisStrategyColorSpaceRGBU16 : public KisStrategyColorSpace {
 public:
+	static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;
+	static const Q_UINT16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
+
+	struct Pixel {
+		Q_UINT16 blue;
+		Q_UINT16 green;
+		Q_UINT16 red;
+		Q_UINT16 alpha;
+	};
+public:
 	KisStrategyColorSpaceRGBU16();
 	virtual ~KisStrategyColorSpaceRGBU16();
 
 public:
-	void setPixel(Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha, Q_UINT8 *pixel) const;
+	void setPixel(Q_UINT8 *pixel, Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha) const;
 	void getPixel(const Q_UINT8 *pixel, Q_UINT16 *red, Q_UINT16 *green, Q_UINT16 *blue, Q_UINT16 *alpha) const;
 
 	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
@@ -67,7 +77,8 @@ public:
 
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent);
+				       Q_INT32 renderingIntent,
+				       float exposure = 0.0f);
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	
@@ -111,16 +122,6 @@ private:
 	static const Q_UINT8 PIXEL_GREEN = 1;
 	static const Q_UINT8 PIXEL_RED = 2;
 	static const Q_UINT8 PIXEL_ALPHA = 3;
-
-	static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;
-	static const Q_UINT16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
-
-	struct Pixel {
-		Q_UINT16 blue;
-		Q_UINT16 green;
-		Q_UINT16 red;
-		Q_UINT16 alpha;
-	};
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_U16_H_

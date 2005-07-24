@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RGB Color Model (32-bit float)
+Name[da]=RGB-farvemodel (16-bit heltal)
+Name[en_GB]=RGB Colour Model (16-bit integer)
+Name[es]=Modelo de color RGB (entero de 16 bits)
+Name[ru]=Цветовая модель RGB (16-битные цвета)
+Name[sv]=RGB-färgmodell (16-bitars heltal)
+Comment=Color model for 16-bit integer per channel RGB images
+Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder
+Comment[en_GB]=Colour model for 16-bit integer per channel RGB images
+Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes RGB
+Comment[ru]=Цветовая модель для изображений в RGB (красный, зелёный, синий) 16-бит/канал RGB
+Comment[sv]=Färgmodell för 16-bitars heltal/kanal RGB-bilder
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=krita_rgb_f32_plugin
+

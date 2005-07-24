@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="krita_rgb_f32_plugin" version="1">
+<Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Mode"><text>&amp;Mode</text>
+            <Action name="convert to RGB(A) (32-bit float)"/>
+    </Menu>
+</Menu>
+
+</kpartgui>

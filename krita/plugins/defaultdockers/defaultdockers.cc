@@ -118,7 +118,7 @@ void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 	m_birdEyeBox = new KisBirdEyeBox(view);
         m_birdEyeBox -> setCaption(i18n("Overview"));
 	m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
-
+	connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), view, SLOT(setHDRExposure(float)));
 }
 
 void KritaDefaultDockers::createAutoBrush(KisView * view)

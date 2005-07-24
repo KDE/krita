@@ -770,7 +770,7 @@ void KisPaintDevice::setProfile(KisProfileSP profile)
 	emit(profileChanged(m_profile));
 }
 
-QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
+QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, float exposure)
 {
 	Q_INT32 x1;
 	Q_INT32 y1;
@@ -788,10 +788,10 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile)
 		extent(x1, y1, w, h);
 	}
 
-	return convertToQImage(dstProfile, x1, y1, w, h);
+	return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
-QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
+QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
 {
 	if (w < 0)
 		w = 0;
@@ -804,7 +804,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 
 	m_datamanager -> readBytes(data, x1, y1, w, h);
   	kdDebug(DBG_AREA_CMS) << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
-	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile);
+	QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile, INTENT_PERCEPTUAL, exposure);
 	delete[] data;
 
 	return image;

@@ -35,6 +35,7 @@ class KisDoubleWidget : public QWidget
 
 	typedef QWidget super;
 public:
+	KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
 	KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);
 	~KisDoubleWidget();
 
@@ -45,8 +46,17 @@ public:
 	void setTickInterval(double tickInterval);
 	double tickInterval() const;
 
+	void setPrecision(int precision);
+	void setLineStep(double step);
+	void setPageStep(double step);
+
+	void setTracking(bool tracking);
+	bool tracking() const;
+
 signals:
 	void valueChanged(double);
+	void sliderPressed();
+	void sliderReleased();
 
 public slots:
 	void setValue(double value);
@@ -54,6 +64,9 @@ public slots:
 protected slots:
 	void setSliderValue(double);
 	void sliderValueChanged(int);
+
+private:
+	void init(double min, double max);
 
 protected:
 	QHBoxLayout* m_layout;

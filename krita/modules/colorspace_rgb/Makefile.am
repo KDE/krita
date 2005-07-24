@@ -20,28 +20,26 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(KOPAINTER_INCLUDES) \
 	$(all_includes)
 
+lib_LTLIBRARIES = libkritargb.la
+libkritargb_la_SOURCES = kis_strategy_colorspace_rgb.cc
+libkritargb_la_LDFLAGS = $(all_libraries)
+libkritargb_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritargbplugin.la
 
 # Srcs for the plugin
-kritargbplugin_la_SOURCES = rgb_plugin.cc kis_strategy_colorspace_rgb.cc
+kritargbplugin_la_SOURCES = rgb_plugin.cc
 noinst_HEADERS = rgb_plugin.h kis_strategy_colorspace_rgb.h
 
 kritargbplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritargbplugin_la_LIBADD =  ../../libkritacommon.la libkritargb.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
 kritargbplugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?
 
 if include_kunittest_tests
 TESTSDIR = tests
-
-# Build a library to link the tests against to avoid warnings about linking to a module.
-check_LTLIBRARIES = libkritargbplugin.la
-libkritargbplugin_la_SOURCES = rgb_plugin.cc kis_strategy_colorspace_rgb.cc
-libkritargbplugin_la_LDFLAGS = $(all_libraries)
-libkritargbplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
-
 endif
 
 SUBDIRS = . templates $(TESTSDIR)

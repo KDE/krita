@@ -234,10 +234,12 @@ public:
 	 * @param srcProfile source profile
 	 * @param dstProfile destination profile
 	 * @param renderingIntent the rendering intent
+	 * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
 	 */
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
+				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+				       float exposure = 0.0f) = 0;
 
 
 

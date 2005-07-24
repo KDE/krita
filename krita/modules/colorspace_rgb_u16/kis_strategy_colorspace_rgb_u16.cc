@@ -56,7 +56,7 @@ KisStrategyColorSpaceRGBU16::~KisStrategyColorSpaceRGBU16()
 {
 }
 
-void KisStrategyColorSpaceRGBU16::setPixel(Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha, Q_UINT8 *dst) const
+void KisStrategyColorSpaceRGBU16::setPixel(Q_UINT8 *dst, Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha) const
 {
 	Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
@@ -201,7 +201,7 @@ Q_INT32 KisStrategyColorSpaceRGBU16::pixelSize() const
 
 QImage KisStrategyColorSpaceRGBU16::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent)
+						 Q_INT32 renderingIntent, float /*exposure*/)
 
 {
 	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"

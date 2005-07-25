@@ -30,7 +30,7 @@ class QColor;
 
 enum enumSelectionMode {
 	SELECTION_ADD,
-	SELECTION_SUBTRACT,
+	SELECTION_SUBTRACT
 };
 
 /**

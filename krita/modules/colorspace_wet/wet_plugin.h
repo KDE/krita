@@ -25,6 +25,8 @@
 
 class KisView;
 class KisColorSpaceWet;
+class KAction;
+class KToggleAction;
 
 /**
  * A plugin wrapper around the WET colour space strategy.
@@ -37,9 +39,12 @@ public:
 	virtual ~WetPlugin();
 
 private:
-
 	KisView* m_view;
 	KisStrategyColorSpaceSP m_colorSpaceWet;
+	KXMLGUIClient* m_dynamicClient;
+
+private slots:
+	void colorSpaceChanged(KisLayerSP layer);
 };
 
 #endif // WET_PLUGIN_H_

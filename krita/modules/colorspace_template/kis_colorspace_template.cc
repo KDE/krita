@@ -109,7 +109,7 @@ Q_INT32 KisColorSpaceTemplate::pixelSize() const
 
 QImage KisColorSpaceTemplate::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						       KisProfileSP srcProfile, KisProfileSP dstProfile,
-						       Q_INT32 renderingIntent, float /*exposure*/)
+							   Q_INT32 renderingIntent, KisRenderInformationSP /*renderInfo*/)
 {
 
 	QImage img(width, height, 32, 0, QImage::LittleEndian);

@@ -201,7 +201,7 @@ Q_INT32 KisStrategyColorSpaceRGBU16::pixelSize() const
 
 QImage KisStrategyColorSpaceRGBU16::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent, float /*exposure*/)
+						 Q_INT32 renderingIntent, KisRenderInformationSP /*renderInfo*/)
 
 {
 	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"

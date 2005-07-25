@@ -33,6 +33,7 @@
 #include "kis_id.h"
 #include "kis_composite_op.h"
 #include "koffice_export.h"
+#include "kis_render_information.h"
 
 class QPainter;
 class KisIteratorPixel;
@@ -160,6 +161,9 @@ public:
 
 	virtual bool valid() { return true; }
 
+	/// returns a standard renderinformation object for a new layer
+	virtual KisRenderInformationSP defaultRenderInformation() const { return 0; }
+
 
 	//========== Display profiles =============================================//
 
@@ -234,12 +238,12 @@ public:
 	 * @param srcProfile source profile
 	 * @param dstProfile destination profile
 	 * @param renderingIntent the rendering intent
-	 * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
+	 * @param renderInfo the KisRenderInformation for the data to be rendered (may be 0)
 	 */
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-				       float exposure = 0.0f) = 0;
+					   KisRenderInformationSP renderInfo = 0) = 0;
 
 
 

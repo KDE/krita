@@ -1,5 +1,5 @@
 kritarcdir = $(kde_datadir)/krita/kpartplugins
-kritarc_DATA = wetplugin.rc
+kritarc_DATA = wetplugin.rc pluggablewetplugin.rc
 kde_services_DATA = kritawetplugin.desktop
 
 EXTRA_DIST = $(kritarc_DATA)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,32 +16,21 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef RGB_F32_PLUGIN_H_
-#define RGB_F32_PLUGIN_H_
+#ifndef KIS_RENDER_INFORMATION_H_
+#define KIS_RENDER_INFORMATION_H_
 
-#include <kparts/plugin.h>
-
-#include "kis_types.h"
-class KisView;
+#include <ksharedptr.h>
 
 /**
- * A plugin wrapper around the RGB F32 colour space strategy.
- */
-class RGBF32Plugin : public KParts::Plugin
+ * This class can contain information a color strategy might need to render a paint device
+ * to a QImage
+ **/
+class KisRenderInformation : public KShared
 {
-	Q_OBJECT
-public:
-	RGBF32Plugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~RGBF32Plugin();
-	
-private:
-
-	KisStrategyColorSpaceSP m_StrategyColorSpaceRGBF32;
-	KisView* m_view;
-
-private slots:
-	void slotHDRExposureChanged(float exposure);
+	// Entirely free for the color strategies to define
 };
 
+typedef KSharedPtr<KisRenderInformation> KisRenderInformationSP;
 
-#endif // RGB_F32_PLUGIN_H_
+
+#endif // KIS_RENDER_INFORMATION_H_

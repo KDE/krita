@@ -236,10 +236,12 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 
 QImage KisStrategyColorSpaceRGBF32::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent, float exposure)
+						 Q_INT32 renderingIntent, KisRenderInformationSP renderInfo)
 
 {
 	const float *data = reinterpret_cast<const float *>(dataU8);
+	Q_ASSERT(renderInfo != 0);
+	float exposure = static_cast<KisF32RenderInformation*>(renderInfo.data()) -> exposure;
 
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	img.setAlphaBuffer(true);

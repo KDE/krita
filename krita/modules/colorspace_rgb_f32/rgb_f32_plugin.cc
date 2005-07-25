@@ -26,12 +26,15 @@
 #include <kis_global.h>
 #include <kis_colorspace_registry.h>
 #include <kis_factory.h>
+#include <kis_view.h>
+#include <kis_layer.h>
+#include <kis_image.h>
 
 #include "rgb_f32_plugin.h"
 #include "kis_strategy_colorspace_rgb_f32.h"
 
 typedef KGenericFactory<RGBF32Plugin> RGBF32PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "kritacore" ) )
 
 
 RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList &)
@@ -50,8 +53,26 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList 
 		m_StrategyColorSpaceRGBF32 = new KisStrategyColorSpaceRGBF32();
 		Q_CHECK_PTR(m_StrategyColorSpaceRGBF32);
 		KisColorSpaceRegistry::instance() -> add(m_StrategyColorSpaceRGBF32);
+	} else if ( parent->inherits("KisView") ) {
+		m_view = (KisView*) parent;
+		connect(m_view, SIGNAL(HDRExposureChanged(float)),
+				this, SLOT(slotHDRExposureChanged(float)));
 	}
+}
 
+void RGBF32Plugin::slotHDRExposureChanged(float exposure)
+{
+	kdDebug(DBG_AREA_PLUGINS) << exposure << endl;
+	KisImageSP image = m_view -> currentImg();
+	if (!image)
+		return;
+	KisLayerSP layer = image -> activeLayer();
+	if (!layer)
+		return;
+	KisF32RenderInformation* renderInfo =
+			dynamic_cast<KisF32RenderInformation*>(layer -> renderInfo().data());
+	Q_ASSERT(renderInfo != 0);
+	renderInfo -> exposure = exposure;
 }
 
 RGBF32Plugin::~RGBF32Plugin()

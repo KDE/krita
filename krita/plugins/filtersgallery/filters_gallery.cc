@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,10 +15,10 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "filterspreview.h"
+#include "filters_gallery.h"
 
 #include <kdebug.h>
 
@@ -26,21 +26,21 @@
 
 #include "kis_filters_listview.h"
 #include "kis_view.h"
-#include "kis_dlg_filterspreview.h"
+#include "kis_dlg_filtersgallery.h"
 
 namespace Krita {
 namespace Plugins {
-namespace FiltersPreview {
+namespace FiltersGallery {
 
-typedef KGenericFactory<KritaFiltersPreview> KritaFiltersPreviewFactory;
-K_EXPORT_COMPONENT_FACTORY( kritafilterspreview, KritaFiltersPreviewFactory( "krita" ) )
+typedef KGenericFactory<KritaFiltersGallery> KritaFiltersGalleryFactory;
+K_EXPORT_COMPONENT_FACTORY( kritafiltersgallery, KritaFiltersGalleryFactory( "krita" ) )
 
-KritaFiltersPreview::KritaFiltersPreview(QObject *parent, const char *name, const QStringList &)
+KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, const QStringList &)
 		: KParts::Plugin(parent, name)
 {
-	setInstance(KritaFiltersPreview::instance());
+	setInstance(KritaFiltersGallery::instance());
 	
-	kdDebug() << "FiltersPreview plugin. Class: "
+	kdDebug() << "FiltersGallery plugin. Class: "
 		  << className()
 		  << ", Parent: "
 		  << parent -> className()
@@ -53,16 +53,16 @@ KritaFiltersPreview::KritaFiltersPreview(QObject *parent, const char *name, cons
 		m_view = (KisView*) parent;
 	}
 
-	(void) new KAction(i18n("&Preview filters"), 0, 0, this, SLOT(showFiltersPreviewDialog()), actionCollection(), "krita_filters_preview");
+	(void) new KAction(i18n("&Gallery filters"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
 }
 
-KritaFiltersPreview::~KritaFiltersPreview()
+KritaFiltersGallery::~KritaFiltersGallery()
 {
 }
 
-void KritaFiltersPreview::showFiltersPreviewDialog()
+void KritaFiltersGallery::showFiltersGalleryDialog()
 {
-	KisDlgFiltersPreview dlg(m_view,m_view);
+	KisDlgFiltersGallery dlg(m_view,m_view);
 	if(dlg.exec())
 	{
 		if(dlg.currentFilter() != 0 )
@@ -76,4 +76,4 @@ void KritaFiltersPreview::showFiltersPreviewDialog()
 };
 };
 
-#include "filterspreview.moc"
+#include "filters_gallery.moc"

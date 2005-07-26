@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #ifndef _KRITA_FILTERS_PREVIEW_H_
@@ -27,15 +27,15 @@ class KisView;
 
 namespace Krita {
 namespace Plugins {
-namespace FiltersPreview {
-	class KritaFiltersPreview : public KParts::Plugin
+namespace FiltersGallery {
+	class KritaFiltersGallery : public KParts::Plugin
 	{
 		Q_OBJECT
 		public:
-			KritaFiltersPreview(QObject *parent, const char *name, const QStringList &);
-			virtual ~KritaFiltersPreview();
+			KritaFiltersGallery(QObject *parent, const char *name, const QStringList &);
+			virtual ~KritaFiltersGallery();
 		public slots:
-			void showFiltersPreviewDialog();
+			void showFiltersGalleryDialog();
 		private:
 		
 			KisView * m_view;

@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include "kis_dlg_filterspreview.h"
+#include "kis_dlg_filtersgallery.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -31,11 +31,11 @@ class KisPreviewView;
 
 namespace Krita {
 namespace Plugins {
-namespace FiltersPreview {
+namespace FiltersGallery {
 
 
-KisDlgFiltersPreview::KisDlgFiltersPreview(KisView* view, QWidget* parent,const char *name)
-	: KDialogBase(parent,name, true,"Preview filters action", Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
+KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
+	: KDialogBase(parent,name, true,"Gallery filters action", Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
 {
 	QFrame* frame = makeMainWidget();
 	m_hlayout = new QHBoxLayout(frame);
@@ -55,12 +55,12 @@ KisDlgFiltersPreview::KisDlgFiltersPreview(KisView* view, QWidget* parent,const 
 }
 
 
-KisDlgFiltersPreview::~KisDlgFiltersPreview()
+KisDlgFiltersGallery::~KisDlgFiltersGallery()
 {
 }
 
 
-void KisDlgFiltersPreview::selectionHasChanged ( QIconViewItem * item )
+void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
 {
 	KisFiltersIconViewItem* kisitem = (KisFiltersIconViewItem*) item;
 	m_currentFilter = kisitem->filter();
@@ -82,7 +82,7 @@ void KisDlgFiltersPreview::selectionHasChanged ( QIconViewItem * item )
 	refreshPreview();
 }
 
-void KisDlgFiltersPreview::refreshPreview( )
+void KisDlgFiltersGallery::refreshPreview( )
 {
 	if(m_currentFilter == 0)
 		return;
@@ -101,4 +101,4 @@ void KisDlgFiltersPreview::refreshPreview( )
 };
 };
 
-#include "kis_dlg_filterspreview.moc"
+#include "kis_dlg_filtersgallery.moc"

@@ -30,5 +30,5 @@ SUBDIRS = cimg \
 	defaultdockers \
 	pixelizefilter \
 	cubismfilter \
-	filterspreview
+	filtersgallery
 

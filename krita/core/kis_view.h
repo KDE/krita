@@ -160,17 +160,10 @@ signals:
 	void paintopChanged(KisID paintop);
 	
 	void currentLayerChanged(int layer);
-	/**
-	 * Indicates when the current layer changed so that the current colorspace could have
-	 * changed.
-	 **/
-	void currentColorSpaceChanged(KisLayerSP layer);
 	
 	void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 	void cursorEnter();
 	void cursorLeave();
-	
-	void HDRExposureChanged(float exposure);
 
 public slots:
 	void slotSetFGColor(const KisColor& c);

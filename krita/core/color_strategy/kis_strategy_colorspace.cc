@@ -65,7 +65,7 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
-//  	kdDebug(DBG_AREA_CMS) << "convertPixels: src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
+  	kdDebug(DBG_AREA_CMS) << "convertPixels: src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 
 	Q_INT32 srcPixelSize = pixelSize();
@@ -118,12 +118,12 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	}
 
 	while (numPixels > 0) {
-//		kdDebug(DBG_AREA_CMS) << "Falling back on conversion by qcolor\n";
+		kdDebug(DBG_AREA_CMS) << "Falling back on conversion by qcolor\n";
 		QColor color;
 		QUANTUM opacity;
 
 		toQColor(src, &color, &opacity);
-//		kdDebug(DBG_AREA_CMS) << "QColor created: " << color.red() << ", " << color.green() << ", " << color.blue() << "\n";
+		kdDebug(DBG_AREA_CMS) << "QColor created: " << color.red() << ", " << color.green() << ", " << color.blue() << "\n";
 		dstColorStrategy -> nativeColor(color, opacity, dst);
 
 		src += srcPixelSize;
@@ -286,7 +286,7 @@ void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 {
 	if (rows <= 0 || cols <= 0)
 		return;
-//  	kdDebug(DBG_AREA_CMS) << id().name() << "::bitBlt. source color space: " << srcSpace -> id().name() << "\n";
+  	kdDebug(DBG_AREA_CMS) << id().name() << "::bitBlt. source color space: " << srcSpace -> id().name() << "\n";
 
 
 	if (m_id!= srcSpace -> id()) {
@@ -297,7 +297,7 @@ void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 		memset(convertedSrcPixels, 0, len * sizeof(Q_UINT8));
 
 		if (srcProfile && dstProfile) {
-// 			kdDebug(DBG_AREA_CMS) << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
+ 			kdDebug(DBG_AREA_CMS) << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
 			for (Q_INT32 row = 0; row < rows; row++) {
 				srcSpace -> convertPixelsTo(src + row * srcRowStride, srcProfile,
 							    convertedSrcPixels + row * cols * pixelSize(), this, dstProfile,

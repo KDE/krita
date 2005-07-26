@@ -50,7 +50,6 @@
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_subject.h>
-#include <kis_xml_gui_client.h>
 
 #include "wet_plugin.h"
 #include "kis_wet_palette_widget.h"
@@ -75,41 +74,33 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
  		  << parent -> className()
  		  << "\n";
 
-	m_dynamicClient = new KisXMLGUIClient("krita/kpartplugins/pluggablewetplugin.rc");
-
 	// This is not a gui plugin; only load it when the doc is created.
 	if ( parent->inherits("KisFactory") )
 	{
 		m_colorSpaceWet = new KisColorSpaceWet();
 		Q_CHECK_PTR(m_colorSpaceWet);
-
 		// colorspace
 		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
-
 		// wet brush op
 		KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 
 		// Dry filter
 		KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
-		
+
+		//(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
 	}
 	else if (parent -> inherits("KisView"))
 	{
-		m_view = (KisView*)parent;
 
+		m_view = (KisView*)parent;
 		// Wetness visualisation
 		WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
-		KToggleAction* visualisationAction = new KToggleAction(i18n("Wetness Visualisation"),
-				0, 0, wf,
-				SLOT(slotActivated()), m_dynamicClient -> actionCollection(),
-				"wetnessvisualisation");
-		wf -> setAction(visualisationAction);
-
+		wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
+						SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
 		// Texture filter
-		new KAction(i18n("Initialize Texture"), 0, 0,
-					new TextureFilter(m_view),
-					SLOT(slotActivated()), m_dynamicClient -> actionCollection(),
-					"texturefilter");
+		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
+						SLOT(slotActivated()), actionCollection(), "texturefilter");
+		
 
 		// Create the wet palette
 		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
@@ -117,43 +108,17 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
 		w -> setCaption(i18n("Watercolors"));
 
-		m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX,
-			INT_MAX, PALETTE_DOCKER);
+		m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
 		m_view->paletteManager()->showWidget("hsvwidget");
-
+		
 		m_view->getCanvasSubject() -> attach(w);
-
-		connect(m_view, SIGNAL(currentColorSpaceChanged(KisLayerSP)),
-				this, SLOT(colorSpaceChanged(KisLayerSP)));
 	}
+
+
 }
 
 WetPlugin::~WetPlugin()
 {
-	delete m_dynamicClient;
-}
-
-void WetPlugin::colorSpaceChanged(KisLayerSP layer)
-{
-	if (!factory()) {
-		kdDebug(DBG_AREA_PLUGINS) << "factory() returned NULL!" << endl;
-		return;
-	}
-	if (layer -> colorStrategy() -> id() == KisID("WET","")) {
-		kdDebug(DBG_AREA_PLUGINS) << "layer changed, wet plugin found WET layer" << endl;
-		if (!factory() -> clients() . contains(m_dynamicClient)) {
-			factory() -> addClient(m_dynamicClient);
-		} else {
-			kdDebug(DBG_AREA_PLUGINS) << "Already merged with the client" << endl;
-		}
-	} else {
-		kdDebug(DBG_AREA_PLUGINS) << "layer changed, wet plugin found non-WET layer" << endl;
-		if (factory() -> clients() . contains(m_dynamicClient)) {
-			factory() -> removeClient(m_dynamicClient);
-		} else {
-			kdDebug(DBG_AREA_PLUGINS) << "Already disconnected from the client" << endl;
-		}
-	}
 }
 
 #include "wet_plugin.moc"

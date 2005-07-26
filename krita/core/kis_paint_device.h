@@ -185,8 +185,9 @@ public:
 	 * @param profile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
+	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.
 	 */
-	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, float exposure = 0.0f);
 
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
@@ -194,8 +195,9 @@ public:
 	 * @param profile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
+	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.
 	 */
-	virtual QImage convertToQImage(KisProfileSP dstProfile);
+	virtual QImage convertToQImage(KisProfileSP dstProfile, float exposure = 0.0f);
 
         virtual QString name() const;
         virtual void setName(const QString& name);
@@ -241,7 +243,6 @@ public:
         bool hasAlpha() const;
 
 	KisStrategyColorSpaceSP colorStrategy() const;
-	KisRenderInformationSP renderInfo() const;
 
 	/**
 	 * Return the icm profile associated with this layer, or
@@ -387,7 +388,6 @@ private:
 	// Operation used to composite this layer with the layers _under_ this layer
 	KisCompositeOp m_compositeOp;
 	KisStrategyColorSpaceSP m_colorStrategy;
-	KisRenderInformationSP m_renderInfo;
 	// Cached for quick access
 	Q_INT32 m_pixelSize;
 	Q_INT32 m_nChannels;
@@ -427,10 +427,6 @@ inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
         return m_colorStrategy;
 }
 
-inline KisRenderInformationSP KisPaintDevice::renderInfo() const
-{
-	return m_renderInfo;
-}
 
 inline Q_INT32 KisPaintDevice::getX()
 {

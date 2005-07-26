@@ -22,7 +22,7 @@
 #include <kparts/plugin.h>
 
 #include "kis_types.h"
-class KisView;
+
 
 /**
  * A plugin wrapper around the RGB F32 colour space strategy.
@@ -37,10 +37,6 @@ public:
 private:
 
 	KisStrategyColorSpaceSP m_StrategyColorSpaceRGBF32;
-	KisView* m_view;
-
-private slots:
-	void slotHDRExposureChanged(float exposure);
 };
 
 

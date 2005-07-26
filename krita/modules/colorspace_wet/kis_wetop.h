@@ -34,7 +34,6 @@ public:
 
 	virtual KisPaintOp * createOp(KisPainter * painter);
 	virtual KisID id() { return KisID("wetbrush", i18n("watercolor brush")); }
-	virtual bool userVisible(KisStrategyColorSpaceSP cs) { return cs -> id() == KisID("WET",""); }
 };
 
 class KisWetOp : public KisPaintOp {

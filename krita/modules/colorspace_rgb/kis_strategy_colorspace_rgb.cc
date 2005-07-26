@@ -199,7 +199,7 @@ Q_INT32 KisStrategyColorSpaceRGB::pixelSize() const
 
 QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent, KisRenderInformationSP /*renderInfo*/)
+						 Q_INT32 renderingIntent, float /*exposure*/)
 
 {
 
@@ -235,8 +235,8 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 wi
 	img = img.copy();
 #endif
 
-//   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-//   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
+   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
+   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
 
 
 	if (srcProfile != 0 && dstProfile != 0) {

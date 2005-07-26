@@ -151,7 +151,7 @@ Q_INT32 KisStrategyColorSpaceTestCS::pixelSize() const
 
 QImage KisStrategyColorSpaceTestCS::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 						 KisProfileSP srcProfile, KisProfileSP dstProfile,
-						 Q_INT32 renderingIntent, KisRenderInformationSP /*renderInfo*/)
+						 Q_INT32 renderingIntent, float /*exposure*/)
 
 {
 	testcspixel *pix = (testcspixel *)data;

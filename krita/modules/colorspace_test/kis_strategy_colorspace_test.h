@@ -59,7 +59,7 @@ public:
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent,
-					   KisRenderInformationSP renderInfo = 0);
+				       float exposure = 0.0f);
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	

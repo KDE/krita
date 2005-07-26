@@ -1600,7 +1600,8 @@ void KisImage::renderToPainter(Q_INT32 x1,
 			       Q_INT32 x2,
 			       Q_INT32 y2,
 			       QPainter &painter,
-			       KisProfileSP profile)
+			       KisProfileSP profile,
+			       float exposure)
 {
 	Q_INT32 x;
 	Q_INT32 y;
@@ -1616,7 +1617,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
 			renderToProjection(x, y, w, h);
 
-			QImage img = m_projection -> convertToQImage(profile, x, y, w, h);
+			QImage img = m_projection -> convertToQImage(profile, x, y, w, h, exposure);
 
 			if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
 				m_activeLayer -> selection()->paintSelection(img, x, y, w, h);

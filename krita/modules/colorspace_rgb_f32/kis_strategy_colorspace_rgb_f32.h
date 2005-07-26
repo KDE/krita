@@ -27,12 +27,6 @@
 #include "kis_strategy_colorspace.h"
 #include "kis_pixel.h"
 
-class KisF32RenderInformation : public KisRenderInformation {
-public:
-	float exposure;
-	KisF32RenderInformation() : exposure(0.0) {}
-};
-
 
 class KRITATOOL_EXPORT KisStrategyColorSpaceRGBF32 : public KisStrategyColorSpace {
 public:
@@ -73,10 +67,9 @@ public:
 	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
 				       KisProfileSP srcProfile, KisProfileSP dstProfile,
 				       Q_INT32 renderingIntent,
-					   KisRenderInformationSP renderInfo = 0);
+				       float exposure = 0.0f);
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
-	virtual KisRenderInformationSP defaultRenderInformation() const { return new KisF32RenderInformation; }
 	
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 

@@ -684,7 +684,7 @@ void KisView::paintView(const KisRect& r)
 				}
 				gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-				m_doc -> paintContent(gc, wr, monitorProfile());
+				m_doc -> paintContent(gc, wr, monitorProfile(), HDRExposure());
 			}
 
 			paintGuides();
@@ -803,9 +803,6 @@ void KisView::layerUpdateGUI(bool enable)
 
 	m_selectionManager -> updateGUI();
 	m_filterManager->updateGUI();
-	m_toolManager->updateGUI();
-
-	emit currentColorSpaceChanged(layer);
 	
 	imgUpdateGUI();
 }
@@ -1538,7 +1535,7 @@ void KisView::print(KPrinter& printer)
 		kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
 
 	QRect r = img -> bounds();
-	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
+	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile, HDRExposure());
 }
 
 
@@ -2713,8 +2710,6 @@ void KisView::setHDRExposure(float exposure)
 {
 	if (exposure != m_HDRExposure) {
 		m_HDRExposure = exposure;
-		// ### shouldn't this be in a different place?
-		emit HDRExposureChanged(m_HDRExposure);
 		updateCanvas();
 	}
 }

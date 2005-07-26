@@ -68,7 +68,8 @@ public:
 				     Q_INT32 x2,
 				     Q_INT32 y2,
 				     QPainter &painter,
-				     KisProfileSP profile);
+				     KisProfileSP profile,
+				     float exposure = 0.0f);
 
 
 public:

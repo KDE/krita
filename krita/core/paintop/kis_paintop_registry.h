@@ -34,7 +34,7 @@ public:
 	KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
 	
 	// Whether we should show this paintop in the toolchest
-	bool userVisible(const KisID & id, KisStrategyColorSpaceSP cs) const;
+	bool userVisible(const KisID & id) const;
 
 	// Get the pixmap to show in the toolchest
 	QPixmap getPixmap(const KisID & id) const;

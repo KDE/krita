@@ -61,14 +61,11 @@ signals:
 private slots:
 	
 	void slotItemSelected(int index);
-	void colorSpaceChanged(KisLayerSP layer);
 
 private:
 	KisView * m_view;
 
 	QValueList<KisID> * m_paintops;
-	QValueList<KisID> * m_displayedOps;
-	KisID m_currentID;
 };
 
 

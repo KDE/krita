@@ -79,10 +79,10 @@ private:
 	QPtrList<QGridLayout> m_layouts; // For every tooltype a grid layout
 	QPtrList<QWidget> m_buttonParents; // For every tooltype a parent widget
 
-
 	typedef QPtrList<KAction> ToolList; // The priority ordered list of tools for a certain tooltype
-	
+		
 	QPtrList<ToolList> m_tools;
+	QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
 
 };
 

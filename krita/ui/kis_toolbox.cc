@@ -94,19 +94,8 @@ void KisToolBox::slotButtonPressed( int id )
 	if( id != m_buttonGroup->selectedId() && m_buttonGroup->selected() ) {
 		m_buttonGroup->selected()->setDown( false );
 	}
+	m_idToActionMap.at(id)->activate();
 
-	int start = 0;
-	
-	for (uint i = 0; i < m_tools.count(); ++i) {
-		ToolList * tl = m_tools.at(i);
-		if (!tl) continue;
-
-		start += tl->count();
-		if (id < start)
-			tl->at(id)->activate();
-			//emit activeToolChanged( tl->at( id ) );
-			return;
-	}
 }
 
 void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 priority )
@@ -146,7 +135,7 @@ void KisToolBox::setupTools()
 				QToolButton * bn = addButton(m_buttonParents.at(i), tool->icon().latin1(), tool->name(), id++);
 				gl->addWidget(bn, row, col);
 				bn->show();
-
+				m_idToActionMap.append( tool );
 				++col;
 				if (col == gl->numCols()) {
 					col = 0;

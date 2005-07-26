@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (32-bit float)
+Name[es]=Modelo de color RGB (decimal de 32 bits)
+Name[et]=RGB värvimudel (32-bitine)
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder
 Comment[en_GB]=Colour model for 16-bit integer per channel RGB images

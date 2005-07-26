@@ -217,6 +217,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	createToolBox();
 	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 	
+	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
 	resetMonitorProfile();
@@ -226,6 +227,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();
 
+	m_toolBox->setBarPos(KToolBar::Left);
 }
 
 
@@ -284,7 +286,7 @@ void KisView::createPaintopBox()
 void KisView::createToolBox()
 {
 	m_toolBox = new KisToolBox(mainWindow(), "toolbox");
-	mainWindow()->moveDockWindow( m_toolBox, Qt::DockLeft, false, 0 );
+	m_toolBox->setBarPos(KToolBar::Left);
 }
 
 DCOPObject* KisView::dcopObject()

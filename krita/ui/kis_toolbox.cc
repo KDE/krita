@@ -45,33 +45,24 @@
 #endif
 
 KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
-	: KToolBar( mainWin, name, false, false )
+	: KToolBar( mainWin, Qt::DockLeft, false, name, true, true)
 {
 	setLabel("Krita");
 	setFullSize( false );
 	setMargin(5);
-	mainWin->moveDockWindow(this, Qt::DockLeft);
+
 	m_buttonGroup = new QButtonGroup( 0L );
+	
 	m_buttonGroup->setExclusive( true );
 	connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
-
+		
 	// Create separate lists for the various sorts of tools
 	for (int i = 0; i < NUMBER_OF_TOOLTYPES ; ++i) {
 
 		ToolList * tl = new ToolList();
 		m_tools.append(tl);
-
-		QWidget * w = new QWidget(this);
-		m_buttonParents.append(w);
-
-		QGridLayout * gl = new QGridLayout(w, 1, 2, -1);
-		m_layouts.append(gl);
-
-		addSeparator();
 	}
 
-	// Color button (and perhaps later other control information
-	m_colorButton = new KDualColorButton(this);
 
 }
 
@@ -116,15 +107,23 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 
 void KisToolBox::setupTools()
 {
+	setBarPos(Left);
 	int id = 0;
-
+	QWidget * w = 0;
 	// Loop through tooltypes
 	for (uint i = 0; i < m_tools.count(); ++i) {
 		ToolList * tl = m_tools.at(i);
-		
-		if (!tl) continue;
 
-		QGridLayout * gl = m_layouts.at(i);
+		if (!tl) continue;
+		if (tl->isEmpty()) continue;
+
+		w = new QWidget(this);
+		m_buttonParents.append(w);
+		
+		QGridLayout * gl = new QGridLayout(w, 1, 2, -1);
+		gl->setMargin(2);
+		gl->setSpacing(1);
+		m_layouts.append(gl);
 
 		// Loop through the tools for this tooltype
 		int col = 0;
@@ -132,7 +131,7 @@ void KisToolBox::setupTools()
 		for (uint j = 0; j < tl->count(); ++j) {
 			KAction *tool = tl->at(j);
 			if (tool) {
-				QToolButton * bn = addButton(m_buttonParents.at(i), tool->icon().latin1(), tool->name(), id++);
+				QToolButton * bn = addButton(w, tool->icon().latin1(), tool->name(), id++);
 				gl->addWidget(bn, row, col);
 				bn->show();
 				m_idToActionMap.append( tool );
@@ -144,15 +143,15 @@ void KisToolBox::setupTools()
 			}
 		}
 		
-		// Add a spacer to avoid the toolbutton from spreading out
-		if (col == 0) {
-			// XXX: Add spacer
-		}
-		
+		addSeparator();
 	}
 	// select first (select tool)
 	m_buttonGroup->setButton( 0 );
 	m_numberOfButtons = id;
+
+	// Color button (and perhaps later other control information
+	m_colorButton = new KDualColorButton(this);
+
 }
 
 QToolButton * KisToolBox::addButton(QWidget * parent,  const char* iconName, QString tooltip, int id )
@@ -179,10 +178,11 @@ QToolButton * KisToolBox::addButton(QWidget * parent,  const char* iconName, QSt
 void KisToolBox::setOrientation ( Qt::Orientation o )
 {
 	if( barPos() == Floating ) { // when floating, make it a standing toolbox.
-		o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
-	}
-	// XXX Reorganize grids according to layout; for now, we're always vertical.
-	QDockWindow::setOrientation( Qt::Vertical );
+                o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
+        }
+        
+	QDockWindow::setOrientation( o );
+
 }
 
 void KisToolBox::enableTools(bool enable)

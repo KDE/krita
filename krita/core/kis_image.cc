@@ -1589,11 +1589,7 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 		KisFlatten<flattenAllVisible> visitor(x, y, w, h);
 
 		visitor(gc, m_layers);
-/*
-		if (m_activeLayer -> hasSelection()) {
-			KisSelectionSP s = m_activeLayer -> selection();
-			visitor(gc, s);
-		}*/
+
 	}
 
 	gc.end();

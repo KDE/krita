@@ -20,7 +20,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include <algorithm>
@@ -212,7 +212,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	createLayerBox();
 	createPaintopBox();
 
+	m_inputDevice = INPUT_DEVICE_MOUSE;
+
 	createToolBox();
+	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
@@ -220,9 +223,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	
 	layersUpdated();
 	
-	m_inputDevice = INPUT_DEVICE_MOUSE;
-	
-	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 	qApp -> installEventFilter(this);
 	m_tabletEventTimer.start();
 
@@ -283,7 +283,7 @@ void KisView::createPaintopBox()
 
 void KisView::createToolBox()
 {
-	m_toolBox = new KisToolBox(this, mainWindow(), "toolbox");
+	m_toolBox = new KisToolBox(mainWindow(), "toolbox");
 	mainWindow()->moveDockWindow( m_toolBox, Qt::DockLeft, false, 0 );
 }
 
@@ -801,6 +801,7 @@ void KisView::layerUpdateGUI(bool enable)
 
 	m_selectionManager -> updateGUI();
 	m_filterManager->updateGUI();
+	m_toolManager->updateGUI();
 
 	emit currentColorSpaceChanged(layer);
 	

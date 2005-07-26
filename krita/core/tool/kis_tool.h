@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef KIS_TOOL_H_
@@ -49,10 +49,12 @@ enum enumToolType {
 	TOOL_FREEHAND = 0, // Freehand drawing tools
 	TOOL_SHAPE = 1,   // Geometric shapes like ellipses and lines
 	TOOL_TRANFORM = 2, // Tools that transform the layer
-	TOOL_CANVAS = 3,   // Tools that affect the canvas: pan, zoom, etc.
-	TOOL_WEIRD = 4,    // Other tools...
+	TOOL_FILL = 3, // Tools that fill parts of the canvas
+	TOOL_SELECT = 4, // Selection tools
+	TOOL_CANVAS = 5,   // Tools that affect the canvas: pan, zoom, etc.
 };
 
+const Q_UINT8 NUMBER_OF_TOOLTYPES = 6;
 
 class KisTool : public QObject, public KisCanvasObserver, public KShared {
 	Q_OBJECT

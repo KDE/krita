@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <stdlib.h>
 #include <vector>
@@ -56,7 +56,6 @@
 #include "kis_wet_palette_widget.h"
 #include "kis_colorspace_wet.h"
 #include "kis_wetop.h"
-#include "kis_tool_wet_brush.h"
 #include "kis_wetness_visualisation_filter.h"
 #include "kis_texture_filter.h"
 #include "wetphysicsfilter.h"
@@ -93,9 +92,6 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 		// Dry filter
 		KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
 		
-		// Create the wet brush paint tool
-		KisToolRegistry::instance() -> add(new KisToolWetBrushFactory(
-				m_dynamicClient -> actionCollection() ) );
 	}
 	else if (parent -> inherits("KisView"))
 	{

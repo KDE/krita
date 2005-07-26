@@ -53,7 +53,6 @@ Core
 	* Anti-aliased filling (requires some simple colorspace
 	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
-        * Lock layers (make inaccessible) See bug #90456.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
           layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
@@ -80,7 +79,7 @@ Import/Export
 
 User Interface
 
-	* Disable all relevant actions when a layer is locked or invisible and set the current tool to the dummy tool.
+	* Disable all relevant actions when a layer is locked or invisible. See bug #90456.
 	* Add link check to new image dialog to sync width and height
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
 	* Channels showing (note that we don't do Gimp-type grayscale

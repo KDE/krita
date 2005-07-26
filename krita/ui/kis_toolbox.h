@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #ifndef _KIS_TOOLBOX_H_
 #define _KIS_TOOLBOX_H_
@@ -28,8 +28,7 @@ class QWidget;
 class KAction;
 class KMainWindow;
 class KDualColorButton;
-
-class KisView;
+class QGridLayout;
 
 /**
  * KActionBox is a kind of super-specialized toolbox that can order tools according to
@@ -45,7 +44,7 @@ class KisToolBox : public KToolBar {
 
 public:
 	
-	KisToolBox( KisView * view, KMainWindow *mainWin, const char* name = 0L );
+	KisToolBox( KMainWindow *mainWin, const char* name = 0L );
 	virtual ~KisToolBox();
 
 	// Called by the toolcontroller for each tool. For every category,
@@ -57,36 +56,31 @@ public:
 	// Called when all tools have been added by the tool controller
 	void setupTools();
 
-//signals:
-//	void activeToolChanged( KAction * );
-
 public slots:
 	
 	virtual void setOrientation ( Orientation o );
 	void slotButtonPressed( int id );
 	void slotPressButton( int id );
 
-private:
-
-	QToolButton *addButton( const char* iconName, QString tooltip, int id );
+	// Enables or disables all buttons and the corresponding actions.
+	void enableTools(bool enable);
 	
 private:
-	KisView * m_view;
 
-	QButtonGroup * m_buttonGroup;
-
-	KDualColorButton * m_colorButton;
+	QToolButton * addButton(QWidget * parent, const char* iconName, QString tooltip, int id );
 	
-	QBoxLayout * m_leftLayout;
-	QBoxLayout * m_rightLayout;
-	QBoxLayout * m_columnsLayouter;
+private:
+	Q_UINT32 m_numberOfButtons;
+	
+	QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
 
-	QWidget * m_left;
-	QWidget * m_right;
-		
-	bool m_insertLeft;
+	KDualColorButton * m_colorButton; // Not functional yet...
 
-	typedef QPtrList<KAction> ToolList;
+	QPtrList<QGridLayout> m_layouts; // For every tooltype a grid layout
+	QPtrList<QWidget> m_buttonParents; // For every tooltype a parent widget
+
+
+	typedef QPtrList<KAction> ToolList; // The priority ordered list of tools for a certain tooltype
 	
 	QPtrList<ToolList> m_tools;
 

@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 
@@ -36,8 +36,6 @@
 
 #include <koMainWindow.h>
 
-#include "kis_view.h"
-#include "kis_doc.h"
 #include "kis_factory.h"
 
 #include "kis_toolbox.h"
@@ -46,41 +44,35 @@
 #include <config.h>
 #endif
 
-KisToolBox::KisToolBox( KisView * view, KMainWindow *mainWin, const char* name )
-	: KToolBar( mainWin, name, false, false ),
-	  m_view( view )
+KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
+	: KToolBar( mainWin, name, false, false )
 {
+	setLabel("Krita");
 	setFullSize( false );
+	setMargin(5);
+	mainWin->moveDockWindow(this, Qt::DockLeft);
 	m_buttonGroup = new QButtonGroup( 0L );
 	m_buttonGroup->setExclusive( true );
 	connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 
-	QBoxLayout::Direction d = orientation() == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
-	QWidget * base = new QWidget( this );
-	m_columnsLayouter = new QBoxLayout( base, d );
+	// Create separate lists for the various sorts of tools
+	for (int i = 0; i < NUMBER_OF_TOOLTYPES ; ++i) {
 
-	d = orientation() == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
-	m_left = new QWidget( base );
-	m_leftLayout = new QBoxLayout( m_left, d );
+		ToolList * tl = new ToolList();
+		m_tools.append(tl);
 
-	m_columnsLayouter->addWidget( m_left );
+		QWidget * w = new QWidget(this);
+		m_buttonParents.append(w);
 
-	m_right = new QWidget( base );
-	m_rightLayout = new QBoxLayout( m_right, d );
-	
-	m_columnsLayouter->addWidget( m_right );
+		QGridLayout * gl = new QGridLayout(w, 1, 2, -1);
+		m_layouts.append(gl);
 
-	m_insertLeft = true;
+		addSeparator();
+	}
 
 	// Color button (and perhaps later other control information
 	m_colorButton = new KDualColorButton(this);
 
-	// Create separate lists for the various sorts of tools
-	// XXX: magic number 5: the number entries in the relevant enum. Make this param.
-	for (int i = 0; i < 5; ++i) {
-		ToolList * tl = new ToolList();
-		m_tools.append(tl);
-	}
 }
 
 KisToolBox::~KisToolBox()
@@ -121,6 +113,7 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 {
 	uint prio = priority;
 	ToolList * tl = m_tools.at(toolType);
+	
 	if (prio == 0) {
 		tl->append(tool);
 	}
@@ -135,29 +128,47 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 void KisToolBox::setupTools()
 {
 	int id = 0;
-	
+
+	// Loop through tooltypes
 	for (uint i = 0; i < m_tools.count(); ++i) {
 		ToolList * tl = m_tools.at(i);
+		
 		if (!tl) continue;
 
+		QGridLayout * gl = m_layouts.at(i);
+
+		// Loop through the tools for this tooltype
+		int col = 0;
+		int row = 0;
 		for (uint j = 0; j < tl->count(); ++j) {
 			KAction *tool = tl->at(j);
-			if (tool)
-				addButton(tool->icon().latin1(), tool->name(), id++);
+			if (tool) {
+				QToolButton * bn = addButton(m_buttonParents.at(i), tool->icon().latin1(), tool->name(), id++);
+				gl->addWidget(bn, row, col);
+				bn->show();
+
+				++col;
+				if (col == gl->numCols()) {
+					col = 0;
+					++row;
+				}
+			}
 		}
-			
+		
+		// Add a spacer to avoid the toolbutton from spreading out
+		if (col == 0) {
+			// XXX: Add spacer
+		}
+		
 	}
-
-	if( !m_insertLeft ) // uneven count, make dummy button
-		addButton( "krita", "", id );
-
 	// select first (select tool)
 	m_buttonGroup->setButton( 0 );
+	m_numberOfButtons = id;
 }
 
-QToolButton * KisToolBox::addButton( const char* iconName, QString tooltip, int id )
+QToolButton * KisToolBox::addButton(QWidget * parent,  const char* iconName, QString tooltip, int id )
 {
-	QToolButton *button = new QToolButton( m_insertLeft ? m_left : m_right );
+	QToolButton *button = new QToolButton(parent);
 	
 	if ( iconName != "" ) {
 		QPixmap pixmap = BarIcon( iconName, KisFactory::global() );
@@ -168,17 +179,9 @@ QToolButton * KisToolBox::addButton( const char* iconName, QString tooltip, int 
 	if ( !tooltip.isEmpty() ) {
 		QToolTip::add( button, tooltip );
 	}
-	
-	if ( m_insertLeft ) {
-		m_leftLayout->addWidget( button );
-	}
-	else {
-		m_rightLayout->addWidget( button );
-	}
-
+   
 	m_buttonGroup->insert( button, id );
-	m_insertLeft = !m_insertLeft;
-	button->show();
+
 	return button;
 
 }
@@ -189,13 +192,30 @@ void KisToolBox::setOrientation ( Qt::Orientation o )
 	if( barPos() == Floating ) { // when floating, make it a standing toolbox.
 		o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
 	}
-	QBoxLayout::Direction d = o == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
-	m_columnsLayouter->setDirection( d );
-	d = o == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
-	m_leftLayout->setDirection( d );
-	m_rightLayout->setDirection( d );
-	QDockWindow::setOrientation( o );
+	// XXX Reorganize grids according to layout; for now, we're always vertical.
+	QDockWindow::setOrientation( Qt::Vertical );
 }
 
+void KisToolBox::enableTools(bool enable)
+{
+	if (m_tools.isEmpty()) return;
+	if (!m_buttonGroup) return;
+	if (m_numberOfButtons <= 0) return;
+
+	for (uint i = 0; i < m_tools.count(); ++i) {
+		ToolList * tl = m_tools.at(i);
+		
+		if (!tl) continue;
+
+		for (uint j = 0; j < tl->count(); ++j) {
+			KAction *tool = tl->at(j);
+			tool->setEnabled(enable);
+		}
+	}
+	m_buttonGroup->setEnabled(enable);
+	for (Q_UINT32 i = 0; i < m_numberOfButtons; ++i) {
+		m_buttonGroup->find( i )->setEnabled( enable );
+	}
+}
 
 #include "kis_toolbox.moc"

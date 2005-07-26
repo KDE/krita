@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "koPaletteManager.h"
 
@@ -31,20 +31,25 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
 	: m_subject(parent),
 	  m_controller(controller)
 {
+	m_oldTool = 0;
+	m_dummyTool = 0;
 }
 
 KisToolManager::~KisToolManager()
 {
+	delete m_dummyTool;
 }
 
 void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
+	m_toolBox = toolbox;
 	m_paletteManager = paletteManager;
 	m_actionCollection = actionCollection;
 	
 	// Dummy tool for when the layer is locked or invisible
-	m_dummyFactory =  new KisToolDummyFactory(actionCollection);
-
+	if (!m_dummyTool)
+		m_dummyTool = KisToolDummyFactory(actionCollection).createTool();
+	
 	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(m_subject);
 	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(m_subject);
 	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(m_subject);
@@ -68,10 +73,48 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
 
 void KisToolManager::updateGUI()
 {
+	Q_ASSERT(m_subject);
+	if (m_subject == 0) {
+		// "Eek, no parent!
+		return;
+	}
+
+	if (!m_toolBox) return;
+
+	KisImageSP img = m_subject->currentImg();
+	KisLayerSP l = 0;
+	
+	bool enable = false;
+	if (img) {
+		l = img -> activeLayer();
+		enable = l && !l -> locked() && l -> visible();
+	}
+
+	m_toolBox->enableTools( enable );
+	if (!enable) {
+		// Store the current tool
+		m_oldTool = currentTool();
+		// Set the dummy tool
+		if (!m_dummyTool) {
+	                m_dummyTool = KisToolDummyFactory(m_actionCollection).createTool();
+		}
+		kdDebug() << "Dummy tool: " << m_dummyTool << "\n";
+		setCurrentTool(m_dummyTool);
+	}
+	else if (enable && m_oldTool) {
+		// retstore the old current tool
+		setCurrentTool(m_oldTool);
+		m_oldTool = 0;
+	}
+	else {
+		m_oldTool = 0;
+		setCurrentTool(findTool("tool_brush"));
+	}
 }
 
 void KisToolManager::setCurrentTool(KisTool *tool)
 {
+	kdDebug() << "set tool: " << tool->name() << "\n";
 	KisTool *oldTool = currentTool();
 	KisCanvas * canvas = (KisCanvas*)m_controller->canvas();
 	

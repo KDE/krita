@@ -65,7 +65,7 @@ enum enumAction {
 	MAGENTAS,
 	HIGHLIGHTS,
 	MIDTONES,
-	SHADOWS,
+	SHADOWS
 };
 
 

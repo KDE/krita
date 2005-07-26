@@ -35,7 +35,7 @@ namespace krita {
 	enum enumBumpmapType {
 		LINEAR = 0,
 		SPHERICAL = 1,
-		SINUSOIDAL = 2,
+		SINUSOIDAL = 2
 	};
 
 };

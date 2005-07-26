@@ -43,7 +43,7 @@ enum enumKoPaletteStyle {
 #endif
 	PALETTE_DOCKER, // QDockWindow based docker with tabs
 	PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
-	PALETTE_SLIDER, // Kivio-style sliders
+	PALETTE_SLIDER // Kivio-style sliders
 };
 
 

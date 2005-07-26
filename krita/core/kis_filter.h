@@ -108,7 +108,7 @@ public:
 	virtual void enableProgress();
 	virtual void disableProgress();
 	
-	bool KisFilter::autoUpdate();
+	bool autoUpdate();
 
 	// Unique identification for this filter
 	inline const KisID id() const { return m_id; };

@@ -38,7 +38,7 @@ namespace WetAndSticky {
 		UP,
 		DOWN,
 		LEFT,
-		RIGHT,
+		RIGHT
 	};	
 
 	/**

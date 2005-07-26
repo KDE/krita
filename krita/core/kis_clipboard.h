@@ -35,7 +35,7 @@ class KisClipboard : public QObject {
 
 public:
 
-	virtual KisClipboard::~KisClipboard();
+	virtual ~KisClipboard();
 
 	static KisClipboard* instance();
 

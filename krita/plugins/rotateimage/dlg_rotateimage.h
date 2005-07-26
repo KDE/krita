@@ -30,7 +30,7 @@
 
 enum enumRotationDirection {
 	CLOCKWISE,
-	COUNTERCLOCKWISE,
+	COUNTERCLOCKWISE
 };
 
 

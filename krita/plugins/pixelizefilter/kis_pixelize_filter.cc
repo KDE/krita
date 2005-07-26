@@ -71,7 +71,7 @@ void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
 {
         Q_INT32 pixelSize = src -> pixelSize();
-        Q_INT32 average[ pixelSize ];
+        QMemArray<Q_INT32> average(  pixelSize );
         Q_UINT8* bufRow; 
         Q_UINT8* buf;
         Q_INT32 count;                

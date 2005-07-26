@@ -51,7 +51,7 @@ enum enumToolType {
 	TOOL_TRANFORM = 2, // Tools that transform the layer
 	TOOL_FILL = 3, // Tools that fill parts of the canvas
 	TOOL_SELECT = 4, // Selection tools
-	TOOL_CANVAS = 5,   // Tools that affect the canvas: pan, zoom, etc.
+	TOOL_CANVAS = 5   // Tools that affect the canvas: pan, zoom, etc.
 };
 
 const Q_UINT8 NUMBER_OF_TOOLTYPES = 6;

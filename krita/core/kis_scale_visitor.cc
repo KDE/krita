@@ -49,7 +49,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         QUANTUM * newData = new QUANTUM[targetW * targetH * m_pixelSize ];
 	Q_CHECK_PTR(newData);
 
-        double weight[ m_pixelSize ];	/* filter calculation variables */
+        double* weight = new double[ m_pixelSize ];	/* filter calculation variables */
 
         QUANTUM *pel = new QUANTUM[ m_pixelSize ];
 	Q_CHECK_PTR(pel);
@@ -57,7 +57,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         QUANTUM *pel2 = new QUANTUM[ m_pixelSize ];
 	Q_CHECK_PTR(pel2);
 
-        bool bPelDelta[ m_pixelSize ];
+        bool* bPelDelta = new bool[ m_pixelSize ];
         ContribList	*contribX;
         ContribList	contribY;
         const Q_INT32 BLACK_PIXEL=0;
@@ -194,6 +194,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         delete[] pel;
         delete[] pel2;
         delete[] tmp;
+        delete[] weight;
+        delete[] bPelDelta;
 	
         if(yscale < 1.0)
         {

@@ -26,9 +26,8 @@
 #include "kis_filter_strategy.h"
 
 
-void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
+void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface * progress, KisFilterStrategy *filterStrategy)
 {
-	
 	double fwidth = filterStrategy->support();
 
         // target image data
@@ -93,8 +92,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         }
         //progress info
         m_cancelRequested = false;
-				if( m_progress )
-					m_progress -> setSubject(this, true, true);
+	if ( progress )
+		progress -> setSubject(this, true, true);
 	emit notifyProgressStage(this,i18n("Scaling layer..."),0);
 		
         // build x weights

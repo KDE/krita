@@ -279,7 +279,7 @@ void KisView::createPaintopBox()
 {
 	m_paintopBox = new KisPaintopBox(this, "paintopbox");
 	m_paintopBox->setCaption(i18n("Brushes and stuff"));
-	paletteManager()->addWidget(m_paintopBox, "paintopbox", krita::PAINTBOX, INT_MIN, PALETTE_TOOLBOX);
+	paletteManager()->addWidget(m_paintopBox, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 }
 
 

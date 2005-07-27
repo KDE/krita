@@ -71,6 +71,8 @@ public:
 
 public:
 
+	virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
+	
 	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
@@ -152,6 +154,7 @@ protected:
 	Q_INT32 m_lastProgressPerCent;
 	Q_INT32 m_progressSteps;
 	
+	KisProgressDisplayInterface * m_progressDisplay;
 	KisID m_id;
 	QString m_category; // The category in the filter menu this filter fits
 	QString m_entry; // the i18n'ed accelerated menu text

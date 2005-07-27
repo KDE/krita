@@ -154,7 +154,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
                                 if ( hasAlpha )
                                         {
                                         Q_INT32 alpha = average[pixelSize-1];
-                        
+
                                         if ((average[pixelSize-1] = alpha / count))
                                         {
                                         for (Q_INT32 i = 0; i < pixelSize-1; i++)

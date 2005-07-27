@@ -175,7 +175,8 @@ bool KisFilterManager::apply()
 	m_lastFilter->enableProgress();
 
 	m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
-
+	m_lastFilter->setProgressDisplay( m_view->progressDisplay());
+	
 	KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), layer.data());
 	Q_CHECK_PTR(cmd);
 	m_lastFilter->process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, m_lastFilterConfig, rect);

@@ -48,6 +48,11 @@ KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaint
 	return 0;
 }
 
+void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
+{
+	m_progressDisplay = progressDisplay;
+}
+
 
 void KisFilter::enableProgress() {
 	m_progressEnabled = true;

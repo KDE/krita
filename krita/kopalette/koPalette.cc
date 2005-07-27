@@ -68,7 +68,7 @@ KoPalette::KoPalette(KoView * parent, const char * name)
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
 	KAcceleratorManager::setNoAccel(this);
 #endif	
-	setCloseMode( QDockWindow::Always );
+	setCloseMode( QDockWindow::Never);
 	setResizeEnabled(true);
 	setOpaqueMoving(true);
 	setFocusPolicy(QWidget::NoFocus);

@@ -47,25 +47,21 @@
 KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
 	: KToolBar( mainWin, Qt::DockLeft, false, name, true, true)
 {
-	setLabel("Krita");
+	setLabel(i18n("Krita"));
 	setName("krita");
 	setFullSize( false );
 	setMargin(5);
-	
 
 	m_buttonGroup = new QButtonGroup( 0L );
-	
 	m_buttonGroup->setExclusive( true );
 	connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
-		
+
 	// Create separate lists for the various sorts of tools
 	for (int i = 0; i < NUMBER_OF_TOOLTYPES ; ++i) {
-
 		ToolList * tl = new ToolList();
 		m_tools.append(tl);
 	}
-
-
+	setBarPos(Left);
 }
 
 KisToolBox::~KisToolBox()
@@ -95,7 +91,7 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 {
 	uint prio = priority;
 	ToolList * tl = m_tools.at(toolType);
-	
+
 	if (prio == 0) {
 		tl->append(tool);
 	}
@@ -107,11 +103,25 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 	}
 }
 
+QToolButton *KisToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
+{
+	QToolButton *button = new QToolButton(parent);
+
+	if ( iconName != "" ) {
+		QPixmap pixmap = BarIcon( iconName, KisFactory::global() );
+		button->setPixmap( pixmap );
+		button->setToggleButton( true );
+	}
+
+	if ( !tooltip.isEmpty() ) {
+		QToolTip::add( button, tooltip );
+	}
+	return button;
+}
+
 void KisToolBox::setupTools()
 {
-	setBarPos(Left);
 	int id = 0;
-	QWidget * w = 0;
 	// Loop through tooltypes
 	for (uint i = 0; i < m_tools.count(); ++i) {
 		ToolList * tl = m_tools.at(i);
@@ -119,33 +129,18 @@ void KisToolBox::setupTools()
 		if (!tl) continue;
 		if (tl->isEmpty()) continue;
 
-		w = new QWidget(this);
-		m_buttonParents.append(w);
-		
-		QGridLayout * gl = new QGridLayout(w, 1, 2, -1);
-		gl->setMargin(2);
-		gl->setSpacing(1);
-		m_layouts.append(gl);
-
-		// Loop through the tools for this tooltype
-		int col = 0;
-		int row = 0;
+		ToolArea *tools = new ToolArea( this );
 		for (uint j = 0; j < tl->count(); ++j) {
 			KAction *tool = tl->at(j);
-			if (tool) {
-				QToolButton * bn = addButton(w, tool->icon().latin1(), tool->name(), id++);
-				gl->addWidget(bn, row, col);
-				bn->show();
-				m_idToActionMap.append( tool );
-				++col;
-				if (col == gl->numCols()) {
-					col = 0;
-					++row;
-				}
-			}
+			if(! tool)
+				continue;
+			QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->name());
+			tools->add(bn);
+			m_buttonGroup->insert( bn, ++id );
+			m_idToActionMap.append( tool );
 		}
-		
 		addSeparator();
+		m_toolBoxes.append(tools);
 	}
 	// select first (select tool)
 	m_buttonGroup->setButton( 0 );
@@ -156,35 +151,18 @@ void KisToolBox::setupTools()
 
 }
 
-QToolButton * KisToolBox::addButton(QWidget * parent,  const char* iconName, QString tooltip, int id )
-{
-	QToolButton *button = new QToolButton(parent);
-	
-	if ( iconName != "" ) {
-		QPixmap pixmap = BarIcon( iconName, KisFactory::global() );
-		button->setPixmap( pixmap );
-		button->setToggleButton( true );
-	}
-	
-	if ( !tooltip.isEmpty() ) {
-		QToolTip::add( button, tooltip );
-	}
-   
-	m_buttonGroup->insert( button, id );
-
-	return button;
-
-}
-
-
 void KisToolBox::setOrientation ( Qt::Orientation o )
 {
-	if( barPos() == Floating ) { // when floating, make it a standing toolbox.
-                o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
-        }
-        
+	if ( barPos() == Floating ) { // when floating, make it a standing toolbox.
+		o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
+	}
+
 	QDockWindow::setOrientation( o );
 
+	for (uint i = 0; i < m_toolBoxes.count(); ++i) {
+		ToolArea *t = m_toolBoxes.at(i);
+		t->setOrientation(o);
+	}
 }
 
 void KisToolBox::enableTools(bool enable)
@@ -195,7 +173,7 @@ void KisToolBox::enableTools(bool enable)
 
 	for (uint i = 0; i < m_tools.count(); ++i) {
 		ToolList * tl = m_tools.at(i);
-		
+	
 		if (!tl) continue;
 
 		for (uint j = 0; j < tl->count(); ++j) {
@@ -207,6 +185,57 @@ void KisToolBox::enableTools(bool enable)
 	for (Q_UINT32 i = 0; i < m_numberOfButtons; ++i) {
 		m_buttonGroup->find( i )->setEnabled( enable );
 	}
+}
+
+
+
+ToolArea::ToolArea(QWidget *parent)
+	:QWidget(parent), left(true)
+{
+	layout = new QBoxLayout(this, QBoxLayout::LeftToRight, 0, 2);
+	QWidget *w = new QWidget(this);
+	layout->addWidget(w);
+	QGridLayout *grid = new QGridLayout(w, 2, 2);
+	QSpacerItem *item = new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	leftRow = new QWidget(w);
+	grid->addWidget(leftRow, 0, 0);
+	grid->addItem(item, 0, 1);
+	grid->addItem(item, 1, 0);
+	m_leftLayout = new QBoxLayout(leftRow, QBoxLayout::TopToBottom, 1);
+
+	w = new QWidget(this);
+	layout->addWidget(w);
+	grid = new QGridLayout(w, 2, 2);
+	rightRow = new QWidget(w);
+	grid->addWidget(rightRow, 0, 0);
+	grid->addItem(item, 0, 1);
+	grid->addItem(item, 1, 0);
+	m_rightLayout = new QBoxLayout(rightRow, QBoxLayout::TopToBottom, 1);
+}
+
+void ToolArea::add(QToolButton *button)
+{
+	if(left)
+		m_leftLayout->addWidget(button);
+	else
+		m_rightLayout->addWidget(button);
+	button->show();
+	left = !left;
+}
+
+QWidget* ToolArea::getNextParent()
+{
+	if(left)
+		return leftRow;
+	return rightRow;
+}
+
+void ToolArea::setOrientation ( Qt::Orientation o )
+{
+	QBoxLayout::Direction dir = o != Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight;
+	m_leftLayout->setDirection(dir);
+	m_rightLayout->setDirection(dir);
+	layout->setDirection(o == Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight);
 }
 
 #include "kis_toolbox.moc"

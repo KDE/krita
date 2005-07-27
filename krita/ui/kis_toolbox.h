@@ -29,6 +29,7 @@ class KAction;
 class KMainWindow;
 class KDualColorButton;
 class QGridLayout;
+class ToolArea;
 
 /**
  * KActionBox is a kind of super-specialized toolbox that can order tools according to
@@ -67,7 +68,7 @@ public slots:
 	
 private:
 
-	QToolButton * addButton(QWidget * parent, const char* iconName, QString tooltip, int id );
+	QToolButton * createButton(QWidget * parent, const char* iconName, QString tooltip);
 	
 private:
 	Q_UINT32 m_numberOfButtons;
@@ -76,14 +77,26 @@ private:
 
 	KDualColorButton * m_colorButton; // Not functional yet...
 
-	QPtrList<QGridLayout> m_layouts; // For every tooltype a grid layout
-	QPtrList<QWidget> m_buttonParents; // For every tooltype a parent widget
+	QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
 
 	typedef QPtrList<KAction> ToolList; // The priority ordered list of tools for a certain tooltype
 		
 	QPtrList<ToolList> m_tools;
 	QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
 
+};
+
+class ToolArea : public QWidget {
+public:
+	ToolArea(QWidget *parent);
+	void setOrientation ( Qt::Orientation o );
+	void add(QToolButton *button);
+	QWidget* getNextParent();
+private:
+	QPtrList<QToolButton> m_children;
+	QBoxLayout *m_leftLayout, *m_rightLayout, *layout;
+	bool left;
+	QWidget *leftRow, *rightRow;
 };
 
 #endif // _KIS_TOOLBOX_H_

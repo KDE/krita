@@ -97,13 +97,13 @@ Q_INT32 KisCubismFilter::randomIntNumber(Q_INT32 lowestNumber, Q_INT32 highestNu
 {
         if(lowestNumber > highestNumber)
         {
-                int temp = lowestNumber;
+                Q_INT32 temp = lowestNumber;
                 lowestNumber = highestNumber;
                 highestNumber = temp;
         }
 
         double range = static_cast<double>( highestNumber - lowestNumber + 1 );
-        return lowestNumber + static_cast<int>(range * rand()/(RAND_MAX+1.0));
+        return lowestNumber + static_cast<Q_INT32>( range * rand()/( RAND_MAX + 1.0 ) );
 }
 
 double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNumber)
@@ -116,7 +116,7 @@ double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNu
         }
 
         double range = highestNumber - lowestNumber;
-        return lowestNumber + range *rand()/(RAND_MAX+1.0);
+        return lowestNumber + range * rand() / (RAND_MAX + 1.0);
 }
 
 double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y)
@@ -150,7 +150,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
                 double xinc = static_cast<double>(x2 - x1) / static_cast<double>(ydiff);
                 double xstart = x1 + 0.5 * xinc;
                 for (Q_INT32 y = y1 ; y < y2; y++)
-                {       
+                {
                         if (xstart < min[y - offset])
                         {
                                 min[y-offset] = xstart;
@@ -166,19 +166,17 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
 
 void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest)
 {
-        Q_INT32         *maxScanlines, *maxScanlinesIter;
-        Q_INT32         *minScanlines, *minScanlinesIter;
-        Q_INT32          val;
-        Q_INT32          alpha;
-        Q_UINT8        buf[4];
-        Q_INT32          i, j, x, y;
-        double       xx, yy;
-        double       vec[2];
-        Q_INT32          x1, y1, x2, y2;
-        Q_INT32          selWidth, selHeight;
+        Q_INT32         val;
+        Q_INT32         alpha;
+        Q_UINT8         buf[4];
+        Q_INT32         i, j, x, y;
+        double          xx, yy;
+        double          vec[2];
+        Q_INT32         x1, y1, x2, y2;
+        Q_INT32         selWidth, selHeight;
         Q_INT32         *vals, *valsIter, *valsEnd;
-        Q_INT32          b;
-        Q_INT32 xs, ys, xe, ye;
+        Q_INT32         b;
+        Q_INT32         xs, ys, xe, ye;
 
         
         Q_INT32 sx = (*poly)[0].x();
@@ -210,10 +208,12 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         Q_INT32 maxY = static_cast<Q_INT32>(dMaxY);
         Q_INT32 sizeX = (maxX - minX) * SUPERSAMPLE;
         Q_INT32 sizeY = (maxY - minY) * SUPERSAMPLE;
-        
-        minScanlines = minScanlinesIter = new Q_INT32[sizeY];
-        maxScanlines = maxScanlinesIter = new Q_INT32[sizeY];
-        
+
+        Q_INT32 *minScanlines = new Q_INT32[sizeY];
+        Q_INT32 *minScanlinesIter = minScanlines;
+        Q_INT32 *maxScanlines = new Q_INT32[sizeY];
+        Q_INT32 *maxScanlinesIter = maxScanlines;
+
         for (Q_INT32 i = 0; i < sizeY; i++)
         {
                 minScanlines[i] = maxX * SUPERSAMPLE;
@@ -223,7 +223,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         if ( poly -> numberOfPoints() )
         {
                 Q_INT32 polyNpts = poly -> numberOfPoints();
-                
+
                 xs = static_cast<Q_INT32>((*poly)[polyNpts-1].x());
                 ys = static_cast<Q_INT32>((*poly)[polyNpts-1].y());
                 xe = static_cast<Q_INT32>((*poly)[0].x());
@@ -235,46 +235,44 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                 ye *= SUPERSAMPLE;
 
                 convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines);
-                
+
                 KisPolygon::iterator it;
-                
+
                 for ( it = poly->begin(); it != poly->end(); )
                 {
                         xs = static_cast<Q_INT32>((*it).x());
                         ys = static_cast<Q_INT32>((*it).y());
-                        
+
                         ++it;
                         xe = static_cast<Q_INT32>((*it).x());
                         ye = static_cast<Q_INT32>((*it).y());
-                        
+
                         xs *= SUPERSAMPLE;
                         ys *= SUPERSAMPLE;
                         xe *= SUPERSAMPLE;
                         ye *= SUPERSAMPLE;
-                        
-                        //this crashes Krita. Basically it is a index out of range problem. The index ranges between ys and ye.
-                        //It is shifted by the offset minY * SUPERSAMPLE
-                        //convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines);      
+
+                        convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines);
                 }
         }
-        
+
         vals = new Q_INT32[sizeX];
-        
+
         for (Q_INT32 i = 0; i < sizeY; i++, minScanlinesIter++, maxScanlinesIter++)
         {
                 if (! (i % SUPERSAMPLE))
                 {
                         memset (vals, 0, sizeof( Q_INT32 ) * sizeX);
                 }
-                
+
                 yy = static_cast<double>(i) / static_cast<double>(SUPERSAMPLE) + minY;
-                
+
                 for (Q_INT32 j = *minScanlinesIter; j < *maxScanlinesIter; j++)
                 {
                         x = j - minX * SUPERSAMPLE;
                         vals[x] += 255;
                 }
-                
+
                 if (! ((i + 1) % SUPERSAMPLE))
                 {
                         y = (i / SUPERSAMPLE) + minY;

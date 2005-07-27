@@ -30,5 +30,6 @@ SUBDIRS = cimg \
 	defaultdockers \
 	pixelizefilter \
 	cubismfilter \
-	filtersgallery
+	filtersgallery \
+	separate_channels
 

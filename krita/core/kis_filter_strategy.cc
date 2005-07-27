@@ -33,14 +33,15 @@ Q_UINT32 KisHermiteFilterStrategy::intValueAt(Q_INT32 t) const {
         if(t < 0) t = -t;
         if(t < 256)
 	{
-	 t =(2 * t - 3*256) * t * t +(256<<16);
-	 
-	 //go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
-	 t = (t+0x8000) >> 16;
-	 
-	 // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
-	 if(t>=128) return t-1;
-	 return t;
+		t =(2 * t - 3*256) * t * t +(256<<16);
+	
+		//go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
+		t = (t + 0x8000) >> 16;
+	
+		// go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
+		if(t >= 128)
+			return t - 1;
+		return t;
 	}
         return(0);
 }
@@ -50,11 +51,31 @@ double KisBoxFilterStrategy::valueAt(double t) const {
         return(0.0);
 }
 
+Q_UINT32 KisBoxFilterStrategy::intValueAt(Q_INT32 t) const {
+        /* f(t) = 1, -0.5 < t <= 0.5 */
+	if((t > -128) && (t <= 128))
+		return 255;
+	return 0;
+}
+
 double KisTriangleFilterStrategy::valueAt(double t) const {
         if(t < 0.0) t = -t;
         if(t < 1.0) return(1.0 - t);
         return(0.0);
 }
+
+Q_UINT32 KisTriangleFilterStrategy::intValueAt(Q_INT32 t) const {
+        /* f(t) = |t|, -1 <= t <= 1 */
+        if(t < 0) t = -t;
+        if(t < 256)
+	{
+		 // calc 256-1 but also go from .8 fixed point to 8bitscale. ie t = (t*255)/256; ie: if(t>=128) return t-1;
+		if(t>=128) return 256 - t;
+		return 255 - t;
+	}
+        return(0);
+}
+
 
 double KisBellFilterStrategy::valueAt(double t) const {
         if(t < 0) t = -t;

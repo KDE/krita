@@ -207,7 +207,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 		
 	Q_UINT8 *weight = new Q_UINT8[100];
 	const Q_UINT8 *colors[100];
-	Q_INT32 support = int(256 * filterStrategy->support());
+	Q_INT32 support = filterStrategy->intSupport();
 	Q_INT32  dstLen, dstStart;
 	Q_INT32 invfscale = 256;
 	
@@ -233,7 +233,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 		dstLen = srcLen * scale / scaleDenom;
 	
 	
-	// Calculate extra length needed due to shear
+	// Calculate extra length (in each side) needed due to shear
 	Q_INT32 extraLen = (support+256)>>8;
 	
 	Q_UINT8 *tmpLine = new Q_UINT8[(srcLen +2*extraLen)* pixelSize];
@@ -293,14 +293,16 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 			center += (extraLen<<8);
 			
 			// find contributing pixels
-			begin = (256 + center - support)>>8; // takes ceiling by adding 256
+			begin = (255 + center - support)>>8; // takes ceiling by adding 255
 			end = (center + support)>>8; // takes floor
-						
+					
+printf("sup=%d begin=%d end=%d",support,begin,end);	
 			Q_UINT8 selectedness = tmpSel[center>>8];
 			if(selectedness)
 			{
 				// calculate weights
 				int num = 0;
+				int sum = 0;
 				Q_INT32 t = ((center - (begin<<8)) * invfscale)>>8;
 				Q_INT32 dt = -(256 * invfscale)>>8;
 				for(int srcpos = begin; srcpos <= end; srcpos++)
@@ -308,11 +310,14 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 					Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 					
 					tmpw >>=8;
+					sum += tmpw;
+printf(" %d=%d",t,tmpw);	
 					weight[num] = tmpw;
 					colors[num] = &tmpLine[srcpos*pixelSize];
 					num++;
 					t += dt;
 				}				
+printf(" )=%d\n",sum);	
 				data = dstIt.rawData();
 				cs->mixColors(colors, weight, num, data);
 				data = dstSelIt.rawData();

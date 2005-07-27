@@ -28,13 +28,15 @@
 class ImageCurves
 {
 public:
-	int getCurveValue(int x) {return x;};
-	void setCurveValue(int x, int y) {};
+	int getCurveValue(int x) {return val[x];};
+	void setCurveValue(int x, int y) {val[x]=y;};
 	void curvesCalculateCurve() {};
 	QPoint getCurvePoint(int p) {return QPoint(0,0);};
 	void setCurvePoint(int p, QPoint qp) {};
 	int getCurvePointX(int p) {return 0;};
 	void setCurvePointX(int p, int x) {};
+private:
+       int val[256];
 };
 
 class KCurve : public QWidget

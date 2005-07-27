@@ -1,7 +1,7 @@
 
 Transform tool
 
-	* Implement native integer versions for more filters than Hermite
+	* Implement native integer versions for bell, bspline, lanczos3 and mitchell filters
 	* The option widget should be connected
 	* Do subpixel positioning of shearing
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)

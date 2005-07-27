@@ -31,5 +31,6 @@ SUBDIRS = cimg \
 	pixelizefilter \
 	cubismfilter \
 	filtersgallery \
-	separate_channels
+	separate_channels \
+	smalltilesfilter
 

@@ -126,12 +126,13 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	Q_INT32 depth = src -> colorStrategy() -> nChannels();
 	
 	// Determine which of the channels we are going to convolve.
-	bool channels[depth];
+	QMemArray<bool> channels(depth);
 	
- 	vKisChannelInfoSP channelInfos = src -> colorStrategy() -> channels();
+	
+	vKisChannelInfoSP channelInfos = src -> colorStrategy() -> channels();
 	vKisChannelInfoSP_cit it;
 	
- 	for (it = channelInfos.begin(); it != channelInfos.end(); ++it){
+	for (it = channelInfos.begin(); it != channelInfos.end(); ++it){
 
 		if ((*it) -> channelType() == COLOR && channelFlags & CONVOLVE_COLOR)
 			channels[(*it) -> pos()] = true;
@@ -177,8 +178,9 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 				
 				KisPixel curPixel = hit.pixel();
 				
-				int sums[depth];
-				memset(&sums, 0, depth * sizeof(int));
+				QMemArray<int> sums(depth);
+				//memset(&sums, 0, depth * sizeof(int));
+				sums.fill(0);
 
 				// Iterate over all contributing pixels that are covered by the kernel
 				// krow = the y position in the kernel matrix

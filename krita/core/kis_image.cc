@@ -1615,6 +1615,8 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
 			Q_INT32 w = QMIN(x2 - x + 1, RENDER_WIDTH);
 
+			
+
 			renderToProjection(x, y, w, h);
 
 			QImage img = m_projection -> convertToQImage(profile, x, y, w, h, exposure);

@@ -151,4 +151,7 @@
 	<Action name="mirrorLayerY"/>
 </ToolBar>
 
+<ToolBar name="krita" position="left"><text>Krita</Text>
+</ToolBar>
+
 </kpartgui>

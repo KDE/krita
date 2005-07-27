@@ -48,8 +48,10 @@ KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
 	: KToolBar( mainWin, Qt::DockLeft, false, name, true, true)
 {
 	setLabel("Krita");
+	setName("krita");
 	setFullSize( false );
 	setMargin(5);
+	
 
 	m_buttonGroup = new QButtonGroup( 0L );
 	

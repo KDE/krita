@@ -52,7 +52,6 @@ public:
 	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 	void separateChannels(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rec);
 };
 

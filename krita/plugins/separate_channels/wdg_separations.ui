@@ -1,0 +1,140 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgSeparations</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgSeparations</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>424</width>
+            <height>343</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>grpAlpha</cstring>
+            </property>
+            <property name="title">
+                <string>Alphachannel </string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Apply Alphachannel before separation</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioButton2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Copy Alphachannel to separation image</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioButton3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Discard Alphachannel</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioButton4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Separate Alphachannel into each own image</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>grpSource</cstring>
+            </property>
+            <property name="title">
+                <string>Image Source</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>radioButton5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>All layers.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>radioButton7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Flatten all visible layers</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radioButton6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Current layer</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkBox2</cstring>
+            </property>
+            <property name="text">
+                <string>Downscale to 8-bit</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>checkBox3</cstring>
+            </property>
+            <property name="text">
+                <string>Output on color layers, not grayscale.</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>41</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

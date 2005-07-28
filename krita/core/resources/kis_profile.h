@@ -50,6 +50,11 @@ public:
 	KisProfile(const QString& file, Q_UINT32 colorType);
 	KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
 
+	// Create a profile from a cms profile handle; this profile does not have associated
+	// raw data, so we cannot save it as an annotation, unless we implement the code
+	// in lcms testbed TestSaveToMem -- XXX.
+	KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
+	
 	virtual ~KisProfile();
 
 	virtual bool load();

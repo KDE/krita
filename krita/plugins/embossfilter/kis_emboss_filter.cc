@@ -101,6 +101,8 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, const QRect& rect, int d)
 		{
 			if (it.isSelected()) {
 
+// XXX: COLORSPACE_INDEPENDENCE
+				
 				QColor color1;
 				src -> colorStrategy() -> toQColor(it.rawData(), &color1);
 

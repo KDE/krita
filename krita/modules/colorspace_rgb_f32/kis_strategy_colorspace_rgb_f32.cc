@@ -69,6 +69,10 @@ KisStrategyColorSpaceRGBF32::KisStrategyColorSpaceRGBF32() :
 	m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));
 	m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), COLOR, sizeof(float)));
 	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), ALPHA, sizeof(float)));
+
+	
+	cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
+	setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
 }
 
 KisStrategyColorSpaceRGBF32::~KisStrategyColorSpaceRGBF32()

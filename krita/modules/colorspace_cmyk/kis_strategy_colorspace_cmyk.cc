@@ -54,15 +54,15 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 		return;
 	}
 
-	m_defaultProfile = getProfileByName("Adobe CMYK"); // XXX: Do not i18n -- this is from a data file
-	if (m_defaultProfile == 0) {
+	setDefaultProfile(  getProfileByName("Adobe CMYK") ); // XXX: Do not i18n -- this is from a data file
+	if (getDefaultProfile() == 0) {
 		kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
 		if (profileCount() != 0) {
-			m_defaultProfile = profiles()[0];
+			setDefaultProfile(  profiles()[0] );
 		}
 	}
 
-	if (m_defaultProfile == 0) {
+	if (getDefaultProfile() == 0) {
 		kdDebug(DBG_AREA_CMS) << "No default CMYK profile; CMYK will not work!\n";
 		return;
 	}
@@ -72,7 +72,7 @@ KisStrategyColorSpaceCMYK::KisStrategyColorSpaceCMYK() :
 	// XXX: For now, always use the generic sRGB profile.
 
 	cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
-	cmsHPROFILE hsCMYK = m_defaultProfile -> profile();
+	cmsHPROFILE hsCMYK = getDefaultProfile()->profile();
 
 	m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
 					      hsCMYK, TYPE_CMYK_8,

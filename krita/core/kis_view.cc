@@ -140,7 +140,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
 	Q_ASSERT(m_paletteManager);
-
+	
 	m_selectionManager = new KisSelectionManager(this, doc);
 	Q_CHECK_PTR(m_selectionManager);
 	
@@ -209,14 +209,16 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	setupActions();
 	dcopObject();
 
-	createLayerBox();
-	createPaintopBox();
 
 	m_inputDevice = INPUT_DEVICE_MOUSE;
 
 	createToolBox();
 	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 	
+	
+	createLayerBox();
+
+	createPaintopBox();
 	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
@@ -279,7 +281,7 @@ void KisView::createPaintopBox()
 {
 	m_paintopBox = new KisPaintopBox(this, "paintopbox");
 	m_paintopBox->setCaption(i18n("Brushes and stuff"));
-	paletteManager()->addWidget(m_paintopBox, "brushes and stuff", krita::CONTROL_PALETTE );
+	paletteManager()->addWidget(m_paintopBox, "brushes and stuff", "layerpalette" );
 }
 
 

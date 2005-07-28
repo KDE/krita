@@ -350,6 +350,15 @@ protected:
 					      KisProfileSP dstProfile,
 					      Q_INT32 renderingIntent);
 
+
+	/**
+	 * Return the default profile for this colorspace. This may be 0,
+	 * if it's the kind of colorstrategy, like CMYK, that doesn't have
+	 * a default profile.
+	 */
+	KisProfileSP  getDefaultProfile() { return m_defaultProfile; };
+	void setDefaultProfile(KisProfileSP profile) { m_defaultProfile = profile; };
+	
 private:
 
 	KisID m_id;
@@ -364,7 +373,8 @@ private:
 
 	vKisProfileSP m_profiles;
 	QStringList m_profileFilenames;
-
+	KisProfileSP m_defaultProfile;
+	
 	Q_INT32 m_alphaPos;
 	Q_INT32 m_alphaSize;
 };

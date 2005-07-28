@@ -50,6 +50,9 @@ KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 	m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR));
 	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA));
+
+	cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
+	setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_8) );
 }
 
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()

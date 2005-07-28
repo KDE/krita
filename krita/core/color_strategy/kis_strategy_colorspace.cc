@@ -33,6 +33,22 @@
 #include "kis_integer_maths.h"
 #include "kis_color_conversions.h"
 
+namespace {
+
+	static KisProfileSP lastUsedSrcProfile;
+	static KisProfileSP lastUsedDstProfile;
+	static cmsHTRANSFORM lastUsedTransform = 0;
+
+	int simpleAdjust(int channel, int brightness, double contrast) {
+
+		int nd = channel + brightness;
+		nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
+		return QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
+
+	}
+
+}
+
 KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
 	: m_id(id),
 	  m_cmType(cmType),
@@ -65,65 +81,72 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
-  	kdDebug(DBG_AREA_CMS) << "convertPixels: src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 	cmsHTRANSFORM tf = 0;
 
 	Q_INT32 srcPixelSize = pixelSize();
 	Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
 
-	if (srcProfile && dstProfile) {
+	if (!srcProfile) {
+		srcProfile = getDefaultProfile();
+	}
+
+	if (!dstProfile) {
+		dstProfile = dstColorStrategy->getDefaultProfile();
+	}
+
+	if (lastUsedTransform != 0) {
+		if (dstProfile == lastUsedDstProfile && srcProfile == lastUsedSrcProfile)
+			tf = lastUsedTransform;
+	}
+
+	if (!tf && srcProfile && dstProfile) {
+	
 		if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
- 			kdDebug(DBG_AREA_CMS) << "Create new transform: src profile: " 
-					      << srcProfile -> productName() 
-					      << ", dst profile: " 
-					      << dstProfile -> productName() << "\n";
 			tf = createTransform(dstColorStrategy,
 					     srcProfile,
 					     dstProfile,
 					     renderingIntent);
-			if (tf == 0) 
-				kdDebug(DBG_AREA_CMS) << "Creating transform failed! src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
-			m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;
+			if (tf) {
+				m_transforms[KisProfilePair(srcProfile, dstProfile)] = tf;
+			}
 		}
 		else {
 			tf = m_transforms[KisProfilePair(srcProfile, dstProfile)];
-			if (tf == 0) 
-				kdDebug(DBG_AREA_CMS) << "Retrieving cached transform failed! src profile: " << srcProfile << ", dst profile: " << dstProfile << "\n";
 		}
 
-		if (tf) {
-			cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
-
-			if (dstColorStrategy -> hasAlpha())
-			{
-				// Lcms does nothing to the destination alpha channel so we must convert that manually.
-				while (numPixels > 0) {
-					Q_UINT8 alpha;
-
-					getAlpha(src, &alpha);
-					dstColorStrategy -> setAlpha(dst, alpha, 1);
-
-					src += srcPixelSize;
-					dst += dstPixelSize;
-					numPixels--;
-				}
-			}
-
-			return true;
-		}
-		
-		kdDebug(DBG_AREA_CMS) << "No transform from "
-			  << srcProfile -> productName() << " to " << dstProfile -> productName()
-			  << ", going to convert through RGB!\n";
+		lastUsedTransform = tf;
+		lastUsedSrcProfile = srcProfile;
+		lastUsedDstProfile = dstProfile;
 	}
 
+	if (tf) {
+			
+		cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
+
+		if (dstColorStrategy -> hasAlpha())
+		{
+			// Lcms does nothing to the destination alpha channel so we must convert that manually.
+			while (numPixels > 0) {
+				Q_UINT8 alpha;
+				getAlpha(src, &alpha);
+				dstColorStrategy -> setAlpha(dst, alpha, 1);
+
+				src += srcPixelSize;
+				dst += dstPixelSize;
+				numPixels--;
+			}
+		}
+
+		return true;
+	}
+	
+
+	// Couldn't get a profile.
 	while (numPixels > 0) {
-		kdDebug(DBG_AREA_CMS) << "Falling back on conversion by qcolor\n";
 		QColor color;
 		QUANTUM opacity;
 
 		toQColor(src, &color, &opacity);
-		kdDebug(DBG_AREA_CMS) << "QColor created: " << color.red() << ", " << color.green() << ", " << color.blue() << "\n";
 		dstColorStrategy -> nativeColor(color, opacity, dst);
 
 		src += srcPixelSize;
@@ -134,15 +157,6 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	return true;
 }
 
-namespace {
-	int simpleAdjust(int channel, int brightness, double contrast) {
-	
-		int nd = channel + brightness;
-		nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
-		return QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
-		
-	}
-}
 void KisStrategyColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels)
 {
 	if (brightness < -100) brightness = -100;
@@ -235,7 +249,6 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 
 void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
 {
-	//kdDebug() << "Darken: " << shade << ", compensate: " << compensate << ", compensation: " << compensation << "\n";
 	QColor c;
 	Q_INT32 psize = pixelSize();
 	
@@ -286,8 +299,6 @@ void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 {
 	if (rows <= 0 || cols <= 0)
 		return;
-  	kdDebug(DBG_AREA_CMS) << id().name() << "::bitBlt. source color space: " << srcSpace -> id().name() << "\n";
-
 
 	if (m_id!= srcSpace -> id()) {
 		int len = pixelSize() * rows * cols;
@@ -297,7 +308,6 @@ void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 		memset(convertedSrcPixels, 0, len * sizeof(Q_UINT8));
 
 		if (srcProfile && dstProfile) {
- 			kdDebug(DBG_AREA_CMS) << "src profile: " << srcProfile -> productName() << ", dst profile: " << dstProfile -> productName() << "\n";
 			for (Q_INT32 row = 0; row < rows; row++) {
 				srcSpace -> convertPixelsTo(src + row * srcRowStride, srcProfile,
 							    convertedSrcPixels + row * cols * pixelSize(), this, dstProfile,
@@ -410,7 +420,6 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 	}
 
 	if (dstProfile && srcProfile ) {
-                kdDebug(DBG_AREA_CMS) << "Going to create transform\n";
 		cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
 						      colorSpaceType(),
 						      dstProfile -> profile(),
@@ -418,13 +427,6 @@ cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dst
 						      renderingIntent,
 						      flags);
 
-		if (!tf) {
-			kdDebug(DBG_AREA_CMS) << "No transform created for: src profile " << srcProfile 
-				  << ", src colorspace: " << colorSpaceType() 
-				  << ", dst profile " << dstProfile 
-				  << ", dst colorspace: " << dstColorStrategy -> colorSpaceType() << "\n";
-		}
-		
 		return tf;
 	}
 	return 0;

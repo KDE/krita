@@ -78,7 +78,7 @@ virtual void bitBlt(Q_UINT8 *dst,
 		    Q_INT32 cols,
 		    const KisCompositeOp& op);
 
-	virtual bool valid() { return m_defaultProfile != 0; }
+	virtual bool valid() { return getDefaultProfile() != 0; }
 
 	KisCompositeOpList userVisiblecompositeOps() const;
 protected:
@@ -87,7 +87,7 @@ protected:
 
 private:
 	vKisChannelInfoSP m_channels;
-	KisProfileSP m_defaultProfile;
+
 	cmsHTRANSFORM m_defaultToRGB;
 	cmsHTRANSFORM m_defaultFromRGB;
 	Q_UINT8 * m_qcolordata;

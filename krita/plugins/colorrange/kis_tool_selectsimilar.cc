@@ -66,7 +66,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 			QColor c2;
 			cs -> toQColor(hiter.rawData(), &c2, &opacity, profile);
 
-			// Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
+			// XXX: Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
 			if (opacity > OPACITY_TRANSPARENT) {
 
 				Q_UINT8 match = matchColors(c, c2, fuzziness);

@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qtimer.h>
+#include <qpushbutton.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -104,6 +105,21 @@ void KisToolBrush::setup(KActionCollection *collection)
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}
+}
+
+QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
+{
+	QWidget *widget = super::createOptionWidget(parent);
+
+
+	QPushButton * bnBrushesPopup = new QPushButton(i18n("Brushes"), parent, "brushes");
+	QHBoxLayout * layout = new QHBoxLayout(widget);
+	layout->add( bnBrushesPopup );
+
+	super::addOptionWidgetLayout(layout);
+	
+	return widget;
+	
 }
 
 

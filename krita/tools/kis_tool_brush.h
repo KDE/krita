@@ -40,6 +40,8 @@ public:
 	virtual void setup(KActionCollection *collection);
 	virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
+	QWidget* createOptionWidget(QWidget* parent);
+
 protected:
 	
 	virtual void initPaint(KisEvent *e);

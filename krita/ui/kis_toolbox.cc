@@ -134,7 +134,7 @@ void KisToolBox::setupTools()
 			KAction *tool = tl->at(j);
 			if(! tool)
 				continue;
-			QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->name());
+			QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->toolTip());
 			tools->add(bn);
 			m_buttonGroup->insert( bn, id++ );
 			m_idToActionMap.append( tool );

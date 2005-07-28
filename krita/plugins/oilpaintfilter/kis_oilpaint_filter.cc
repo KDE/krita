@@ -154,6 +154,8 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 
 		if (bounds.contains(it.x(), it.y())) {
 
+// XXX: COLORSPACE_INDEPENDENCE
+
 			QColor c;
 			src -> colorStrategy() -> toQColor(it.rawData(), &c);
 

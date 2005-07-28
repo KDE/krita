@@ -72,6 +72,14 @@ KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorTy
 	init();
 }
 
+KisProfile::KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType)
+	: super (QString()),
+	  m_profile(profile),
+	  m_lcmsColorType(colorType)
+{
+	init();
+}
+
 KisProfile::~KisProfile()
 {
 	cmsCloseProfile(m_profile);
@@ -131,7 +139,8 @@ KisAnnotationSP KisProfile::annotation() const
 {
 	// XXX we hardcode icc, this is correct for lcms?
 	// XXX productName(), or just "ICC Profile"?
-	return new KisAnnotation("icc", productName(), m_rawData);
+	if (!m_rawData.isEmpty())
+		return new KisAnnotation("icc", productName(), m_rawData);
 }
 
 KisProfileSP KisProfile::getScreenProfile (int screen)

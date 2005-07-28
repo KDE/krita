@@ -91,6 +91,8 @@ private:
 	QPoint m_startPos;
         QPoint m_endPos;
         bool m_selecting;
+	QPoint m_dragStart;
+	QPoint m_dragStop;
 
 	WdgToolCrop* m_optWidget;
 
@@ -103,11 +105,16 @@ private:
         enum handleType
         {
                 None = 0,
-                UpperLeft = 1,
-                UpperRight = 2,
-                LowerLeft = 3,
-                LowerRight = 4
-        };
+		UpperLeft = 1,
+		UpperRight = 2,
+		LowerLeft = 3,
+		LowerRight = 4,
+		Upper = 5,
+		Lower = 6,
+		Left = 7,
+		Right = 8,
+		Inside = 9
+	};
 };
 
 class KisToolCropFactory : public KisToolFactory {

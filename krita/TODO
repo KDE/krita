@@ -1,9 +1,8 @@
 
-Transform tool
+Transform tool (CBR)
 
 	* Implement native integer versions for bell, bspline, lanczos3 and mitchell filters
 	* The option widget should be connected
-	* Do subpixel positioning of shearing
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
 	* Make undo work. there seems to be a bug+memory leakage
 	* Implement gui, create cursors and update visitor for shearing
@@ -14,14 +13,22 @@ Transform tool
 
 Integration
 
+	(BSAR, akademy)
 	* A krita document embedded in KWord has the wrong scaling and transparency
 	* A krita document embedded in another document prints at the wrong place
-	* write the Krita handbook.
-	* There is currently no kimgio module for Krita images.
-        * Embedded KOffice objects don't paint themselves correctly
-	* Hack koMainWindow so the save warning doesn't happen for Krita
+	* Embedded KOffice objects don't paint themselves correctly
+	
+	* write the Krita handbook. Split into chapters for easier concurrent editing.
+	
+	* There is currently no kimgio module for Krita images: implement one by
+	  saving a rendered png image into the krita file and extracting that from
+	  kimgio. Also reuse this image to show the user interface more quickly.
+        
+	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 
 Colorspace independence (found with the test colorstrategy)
+
+	TOMORROW
 
 	* tool gradient uses wrong colors
 	* brightness/contrast and the like don't work.
@@ -41,69 +48,64 @@ Colorspace independence (found with the test colorstrategy)
           profiles in the render/convert/edit paths.
 Core
 
-	* Implement threading for rendering and paint device operations
-	* Histogram computations
+	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
+	* Histogram computations. (CBR)
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
 	  image date, except for an occasional mask) These should work on object
-          layers (embedded KOFfice objects), too.
-	* Mask layers
-	* Layer groups or even better: a hierachy of collapsable folders with layers
-	* Loading and saving of selections
+          layers (embedded KOFfice objects), too. (BSAR)
+	* Mask layers (mask layers created from selection -- vv) (BSAR)
+	* Layer groups or even better: a hierachy of collapsable folders with layers (with d&d) 
+	* Loading and saving of selections 
 	* Anti-aliased filling (requires some simple colorspace
 	  function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
-          layer to anything.
+          layer to anything. Linking should: link a group of layers together. move, transform,
+          merge linked, apply filter.
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
 	* On copying paint devices, do not actually copy the tiles, but only create
-	  new tiles when there is change.
+	  new tiles when there is change. Also create a memory pool for creating new tiles (BART)
 
 
 File Format:
 
 	* Save & load all annotations in .kra files
-	* Save & load undo information in .kra files
 	* Save & load more information, like PNG comments, gamma information, etc
 
 
 Import/Export
 
-	* File/Import and File/Export don't warn when exporting to
-	  an unsupported filetype. (Still valid).
-	* Photoshop files are not recognized when opened, but there is now an
-	  option in the list of filetypes and that works.
-        * Fix gimp XCF import/export (ImageMagick hacking...)
+        * Fix gimp XCF PSD and import/export (ImageMagick hacking...)
 	* Fix imports to import metadata and image files in non-rgb encodings -> move import
 	  export code to color strategies.
 
 
 User Interface
 
+	* Fix layout problems in tool option widgets.
 	* Disable dragging the toolbox from dock position to dock position (see Karbon)
-	* Disable all relevant actions when a layer is locked or invisible. See bug #90456.
+	* Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
+	* Fix locking of tools! (bsar)
 	* Add link check to new image dialog to sync width and height
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
-	* Channels showing (note that we don't do Gimp-type grayscale
-	  mask channels, just showing/hiding the various color
-	  channels.
 	* The description field in color settings is empty
-        * Give color strategies an option page just like tools. Give layers an option page,
-	  combine both pages to show for layer properties. Color strategies can be stateful.
 	* Create brush-shape outline cursor
 	* Implement the following dialogs / widgets:
 		    - Variations (#Boudewijn)
 		    - Gradient (nick from Scribus?)
 	* Improve the preview widget - see "doc/the preview widget"
-	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses)
+	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
 	* Allow guides to be disabled. Allow diagonal guides (useful
 	  for perspective drawings) Bug #108398 
         * Allow snapping to guides.
         * Create templates for often-used image formats. Add save-as-template
 	* Make rotate actions consistent between layer and image
-	* Add deselect with rmb?
-	* Move crop rectangle by dragging from within
+	* Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
+	* Fix crop tool: always use guide points (also on sides, not just corners) to resize the crop rectangle;
+	  move the crop rectangle by dragging in the middle, when pressing shift, keep aspect ratio, implement
+	  gray mask. (Michael Thaler)
 	* Allow shape tools to be filled with gradients
 
 	Dockers
@@ -125,9 +127,7 @@ User Interface
 	  it onto a background image -- or not, if another KOffice app wants it
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
-	* Fix ordering of tools in toolbox
-	* Activate dummy tool when a layer is locked
-
+	  
 
 Selections
 
@@ -165,7 +165,7 @@ Tools
          
 	* Pressure sensivitize all relevant tools (e.g. line tool)
         * Add resize slider to freehand tools that resizes the mean brush size.
-	* Implement path tools
+	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
 
@@ -173,9 +173,6 @@ Tools
 Plugins
 
 	* As many filters as possible :-)
-	* Make convolution filters use the progress bar again.
-	* The Variations plugin is just a mockup and does not use the same
-          preview as the rest of Krita.
 	* What's the difference between gamma correction and colour
 	  adjustment? -> explained by Cyrille's mail, put this in handbook.
 	* Improve brightness/contrast with curve manipulation and a nice GUI
@@ -184,7 +181,6 @@ Plugins
 Modules
 
 	* Add color models for LAB, XYZ, HSV etc.
-	* Finally fix CMYK
 	* Add Wet & Sticky model (in progress already)
 	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
 	* The composite ops in RGB -> composite.h do not take mask into account

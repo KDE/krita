@@ -76,19 +76,18 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
 	KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
 
-	//tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, m_progressDisplay, new KisMitchellFilterStrategy() );
-	
+	tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );
+	QRect tmpRect = tmp -> exactBounds();
 
 	for( Q_UINT32 i=0; i < numberOfTiles; i++ )
 	{
 		for( Q_UINT32 j=0; j < numberOfTiles; j++ )
 		{
-			for( Q_UINT32 row = rect.y(); row < rect.height() / numberOfTiles; row++ )
+			for( Q_UINT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
 			{
-				kdDebug() << "small tiles, row: " << row << endl;
-				KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(rect.x(), row, rect.width() / numberOfTiles, true);
-				KisHLineIteratorPixel dstIt = dst -> createHLineIterator(rect.x() + i * rect.width() / numberOfTiles, row + j * rect.height() / numberOfTiles, rect.width() / numberOfTiles, true);
-							
+				KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
+				KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
+
 				while( ! tmpIt.isDone() )
 				{
 					if(tmpIt.isSelected())

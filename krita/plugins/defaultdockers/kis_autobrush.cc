@@ -19,15 +19,111 @@
 #include "kis_autobrush.h"
 #include <kdebug.h>
 #include <qspinbox.h>
-#include <qcheckbox.h>
+#include <qtoolbutton.h>
 #include <qimage.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 
 
+namespace {
+	/* XPM -- copyright The Gimp */
+	const char *chain_broken_24[] = {
+	/* columns rows colors chars-per-pixel */
+	"9 24 10 1",
+	"  c black",
+	". c #020204",
+	"X c #5A5A5C",
+	"o c gray43",
+	"O c #8F8F91",
+	"+ c #9A9A98",
+	"@ c #B5B5B6",
+	"# c #D0D0D1",
+	"$ c #E8E8E9",
+	"% c None",
+	/* pixels */
+	"%%.....%%",
+	"%.o##@X.%",
+	"%.+...$.%",
+	"%.#.%.#.%",
+	"%.#.%.#.%",
+	"%.@.%.#.%",
+	"%.+...#.%",
+	"%.O.o.O.%",
+	"%%..@..%%",
+	"%%%.#.%%%",
+	"%%%%%%%%%",
+	"%%%%%%%%%",
+	"%%%%%%%%%",
+	"%%%%%%%%%",
+	"%%%.#.%%%",
+	"%%..#..%%",
+	"%.o.@.O.%",
+	"%.@...@.%",
+	"%.@.%.$.%",
+	"%.@.%.$.%",
+	"%.@.%.$.%",
+	"%.#...$.%",
+	"%.o$#$@.%",
+	"%%.....%%"
+	};
+	
+	/* XPM  -- copyright The Gimp */
+	const char *chain_24[] = {
+	/* columns rows colors chars-per-pixel */
+	"9 24 10 1",
+	"  c black",
+	". c #020204",
+	"X c #5A5A5C",
+	"o c gray43",
+	"O c #8F8F91",
+	"+ c #9A9A98",
+	"@ c #B5B5B6",
+	"# c #D0D0D1",
+	"$ c #E8E8E9",
+	"% c None",
+	/* pixels */
+	"%%%%%%%%%",
+	"%%%%%%%%%",
+	"%%.....%%",
+	"%.o##@X.%",
+	"%.+...$.%",
+	"%.#.%.#.%",
+	"%.#.%.#.%",
+	"%.@.%.#.%",
+	"%.+...#.%",
+	"%.O.o.O.%",
+	"%%..@..%%",
+	"%%%.#.%%%",
+	"%%%.#.%%%",
+	"%%..#..%%",
+	"%.o.@.O.%",
+	"%.@...@.%",
+	"%.@.%.$.%",
+	"%.@.%.$.%",
+	"%.@.%.$.%",
+	"%.#...$.%",
+	"%.o$#$@.%",
+	"%%.....%%",
+	"%%%%%%%%%",
+	"%%%%%%%%%"
+	};
+
+
+}
+
 KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
 	setCaption(caption);
+
+	m_linkSize = true;
+	m_linkFade = true;
+	
+	linkFadeToggled(m_linkSize);
+	linkSizeToggled(m_linkFade);
+
+	connect(bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSizeToggled( bool )));
+	connect(bnLinkFade, SIGNAL(toggled(bool)), this, SLOT(linkFadeToggled( bool )));
+	
 	connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 	spinBoxWidth->setMinValue(1);
 	connect(spinBoxWidth,SIGNAL(valueChanged(int)),this,SLOT(spinBoxWidthChanged(int)));
@@ -77,7 +173,7 @@ void KisAutobrush::paramChanged()
 void KisAutobrush::spinBoxWidthChanged(int a)
 {
 	spinBoxHorizontal->setMaxValue(a/2);
-	if(checkBoxSamesize->isChecked())
+	if(m_linkSize)
 	{
 		spinBoxHeigth->setValue(a);
 		spinBoxVertical->setMaxValue(a/2);
@@ -87,7 +183,7 @@ void KisAutobrush::spinBoxWidthChanged(int a)
 void KisAutobrush::spinBoxHeigthChanged(int a)
 {
 	spinBoxVertical->setMaxValue(a/2);
-	if(checkBoxSamesize->isChecked())
+	if(m_linkSize)
 	{
 		spinBoxWidth->setValue(a);
 		spinBoxHorizontal->setMaxValue(a/2);
@@ -96,15 +192,42 @@ void KisAutobrush::spinBoxHeigthChanged(int a)
 }
 void KisAutobrush::spinBoxHorizontalChanged(int a)
 {
-	if(checkBoxSamefade->isChecked())
+	if(m_linkFade)
 		spinBoxVertical->setValue(a);
 	this->paramChanged();
 }
 void KisAutobrush::spinBoxVerticalChanged(int a)
 {
-	if(checkBoxSamefade->isChecked())
+	if(m_linkFade)
 		spinBoxHorizontal->setValue(a);
 	this->paramChanged();
 }
+
+void KisAutobrush::linkSizeToggled(bool b)
+{
+	kdDebug() << "Toggle link size to " << b << "\n";
+	m_linkSize = b;
+
+	if (b) {
+		bnLinkSize->setPixmap(chain_24);
+	}
+	else {
+		bnLinkSize->setPixmap(chain_broken_24);
+	}
+}
+
+void KisAutobrush::linkFadeToggled(bool b)
+{
+	kdDebug() << "Toggle link fade to " << b << "\n";
+	m_linkFade = b;
+
+	if (b) {
+		bnLinkFade->setPixmap(chain_24);
+	}
+	else {
+		bnLinkFade->setPixmap(chain_broken_24);
+	}
+}
+
 
 #include "kis_autobrush.moc"

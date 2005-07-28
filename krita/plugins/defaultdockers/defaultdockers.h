@@ -51,7 +51,6 @@ private:
 	//void createControlFrame(KisView * view);
 	void createBirdEyeBox(KisView * view);
 	void createAutoBrush(KisView * view);
-	void createTextBrush(KisView * view);
 	void createAutoGradient(KisView * view);
 	void createHSVWidget(KisView * view);
 	void createRGBWidget(KisView * view);
@@ -77,7 +76,6 @@ private:
         KisBirdEyeBox * m_birdEyeBox;
 
         KisAutobrush *m_autobrush;
-        KisTextBrush *m_textBrush;
         KisAutogradient* m_autogradient;
 
         KisHSVWidget *m_hsvwidget;

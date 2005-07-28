@@ -31,14 +31,20 @@ public:
 	KisAutobrush(QWidget *parent, const char* name, const QString& caption);
 signals:
 	void activatedResource(KisResource *r);
+
 private slots:
 	void paramChanged();
 	void spinBoxWidthChanged(int );
 	void spinBoxHeigthChanged(int );
 	void spinBoxHorizontalChanged(int);
 	void spinBoxVerticalChanged(int);
+	void linkSizeToggled(bool);
+	void linkFadeToggled(bool);
+
 private:
 	QImage* m_brsh;
+	bool m_linkSize;
+	bool m_linkFade;
 };
 
 

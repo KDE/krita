@@ -46,7 +46,6 @@
 #include "kis_icon_item.h"
 #include "kis_palette_widget.h"
 #include "kis_rgb_widget.h"
-#include "kis_text_brush.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
 #include "kis_birdeye_box.h"
@@ -95,8 +94,7 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
 
 	createBrushesWidget(m_view);
 	createAutoBrush(m_view);
-	createTextBrush(m_view);
-
+	
 	createAutoGradient(m_view);
 	createGradientsWidget(m_view);
 
@@ -128,13 +126,6 @@ void KritaDefaultDockers::createAutoBrush(KisView * view)
         connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
 }
 
-void KritaDefaultDockers::createTextBrush(KisView * view)
-{
-	m_textBrush = new KisTextBrush(view, "textbrush", i18n("Text Brush"));
-	m_paletteManager->addWidget( m_textBrush, "textbrush", krita::PAINTBOX, INT_MAX, PALETTE_TOOLBOX);
-	connect(m_textBrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
-
-}
 
 void KritaDefaultDockers::createAutoGradient(KisView * view)
 {

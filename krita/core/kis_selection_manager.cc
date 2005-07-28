@@ -532,6 +532,7 @@ void KisSelectionManager::clear()
 	
 	if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 	layer -> deselect();
+	layer->emitSelectionChanged();
 }
 
 

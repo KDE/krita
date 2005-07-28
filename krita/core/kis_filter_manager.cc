@@ -73,24 +73,30 @@ void KisFilterManager::setup(KActionCollection * ac)
 	KActionMenu * am = new KActionMenu(i18n("Adjust"), ac, "adjust_filters");
 	m_filterActionMenus.insert("adjust", am);
 
-	am = new KActionMenu(i18n("Enhance"), ac, "enhance_filters");
-	m_filterActionMenus.insert("enhance", am);
-
-	am = new KActionMenu(i18n("Edge detection"), ac, "edge_filters");
-	m_filterActionMenus.insert("edge", am);
-
-	am = new KActionMenu(i18n("Other"), ac, "misc_filters");
-	m_filterActionMenus.insert("", am);
-	
 	am = new KActionMenu(i18n("Artistic"), ac, "artistic_filters");
 	m_filterActionMenus.insert("artistic", am);
 
 	am = new KActionMenu(i18n("Blur"), ac, "blur_filters");
 	m_filterActionMenus.insert("blur", am);
 
+	am = new KActionMenu(i18n("Colors"), ac, "color_filters");
+	m_filterActionMenus.insert("colors", am);
+
+	am = new KActionMenu(i18n("Edge detection"), ac, "edge_filters");
+	m_filterActionMenus.insert("edge", am);
+
 	am = new KActionMenu(i18n("Emboss"), ac, "emboss_filters");
 	m_filterActionMenus.insert("emboss", am);
 
+	am = new KActionMenu(i18n("Enhance"), ac, "enhance_filters");
+	m_filterActionMenus.insert("enhance", am);
+
+	am = new KActionMenu(i18n("Map"), ac, "map_filters");
+	m_filterActionMenus.insert("map", am);	
+
+	am = new KActionMenu(i18n("Other"), ac, "misc_filters");
+	m_filterActionMenus.insert("", am);
+	
 	m_reapplyAction = new KAction(i18n("Apply filter again"),
 				"Ctrl+Shift+J",
 				this, SLOT(slotApply()),

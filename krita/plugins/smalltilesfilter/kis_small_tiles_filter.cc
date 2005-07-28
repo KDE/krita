@@ -54,7 +54,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "artistic", "&Small tiles...")
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", "&Small tiles...")
 {
 }
 
@@ -72,11 +72,12 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
-	KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
-	tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, m_progressDisplay, new KisMitchellFilterStrategy() );
+	/*KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
+	kdDebug() << "Dimensions of tmp: " << tmp-> exactBounds() << endl;
+	//tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, m_progressDisplay, new KisMitchellFilterStrategy() );
 	
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	KisRectIteratorPixel tmpIt = tmp->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x() , rect.y(), rect.width() / numberOfTiles, rect.height() /numberOfTiles, true );
+	KisRectIteratorPixel tmpIt = tmp->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() /numberOfTiles, false);
 	Q_INT32 depth = tmp -> colorStrategy() -> nColorChannels();
 
 	while( ! tmpIt.isDone() )
@@ -85,12 +86,30 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 		{
 			for( int i = 0; i < depth; i++)
 			{
-				dstIt.rawData()[i] = tmpIt.oldRawData()[i];
+				dstIt.rawData()[i] = 128;//tmpIt.oldRawData()[i];
 			}
 		}
 		++tmpIt;
 		++dstIt;
 	}
+	setProgressDone();*/
+	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() / numberOfTiles, true );
+	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() / numberOfTiles, false);
+	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+
+	while( ! srcIt.isDone() )
+	{
+		if(srcIt.isSelected())
+		{
+			for( int i = 0; i < depth; i++)
+			{
+				dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
+			}
+		}
+		++srcIt;
+		++dstIt;
+	}
+	setProgressDone();
 }
 
 KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)

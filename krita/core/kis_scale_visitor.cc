@@ -30,31 +30,27 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 {
 	double fwidth = filterStrategy->support();
 
-        // target image data
-        Q_INT32 targetW;
-        Q_INT32 targetH;
-
-	QRect r = m_dev->exactBounds();
-        Q_INT32 width = r.width();//m_dev->image()->width();
-        Q_INT32 height =  r.height();//m_dev->image()->height();
+	QRect rect = m_dev -> exactBounds();
+        Q_INT32 width = rect.width();
+        Q_INT32 height =  rect.height();
         m_pixelSize=m_dev -> pixelSize();
 
         // compute size of target image
         if ( xscale == 1.0F && yscale == 1.0F ) {
                 return;
         }
-        targetW = QABS( qRound( xscale * width ) );
-        targetH = QABS( qRound( yscale * height ) );
+        Q_INT32 targetW = QABS( qRound( xscale * width ) );
+        Q_INT32 targetH = QABS( qRound( yscale * height ) );
 	
-        QUANTUM * newData = new QUANTUM[targetW * targetH * m_pixelSize ];
+        Q_UINT8* newData = new Q_UINT8[targetW * targetH * m_pixelSize ];
 	Q_CHECK_PTR(newData);
 
         double* weight = new double[ m_pixelSize ];	/* filter calculation variables */
 
-        QUANTUM *pel = new QUANTUM[ m_pixelSize ];
+        Q_UINT8* pel = new Q_UINT8[ m_pixelSize ];
 	Q_CHECK_PTR(pel);
 
-        QUANTUM *pel2 = new QUANTUM[ m_pixelSize ];
+        Q_UINT8 *pel2 = new Q_UINT8[ m_pixelSize ];
 	Q_CHECK_PTR(pel2);
 
         bool* bPelDelta = new bool[ m_pixelSize ];
@@ -65,29 +61,29 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
 
         // create intermediate row to hold vertical dst row zoom
-        QUANTUM * tmp = new QUANTUM[ width * m_pixelSize ];
+        Q_UINT8 * tmp = new Q_UINT8[ width * m_pixelSize ];
 	Q_CHECK_PTR(tmp);
 
 	//create array of pointers to intermediate rows
-	QUANTUM **tmpRows = new QUANTUM*[ height ];
+	Q_UINT8 **tmpRows = new Q_UINT8*[ height ];
 	
         //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
-        QUANTUM **tmpRowsMem;
+        Q_UINT8 **tmpRowsMem;
         if(yscale < 1.0)
         {
-                tmpRowsMem = new QUANTUM*[ (int)(fwidth / yscale * 2 + 1) ];
+                tmpRowsMem = new Q_UINT8*[ (int)(fwidth / yscale * 2 + 1) ];
                 for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
                 {
-                        tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
+                        tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
                         Q_CHECK_PTR(tmpRowsMem[i]);
                 }
         } 
         else 
         {
-                tmpRowsMem = new QUANTUM*[ (int)(fwidth * 2 + 1) ];
+                tmpRowsMem = new Q_UINT8*[ (int)(fwidth * 2 + 1) ];
                 for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
                 {
-                        tmpRowsMem[i] = new QUANTUM[ width * m_pixelSize ];
+                        tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
                         Q_CHECK_PTR(tmpRowsMem[i]);
                 }
         }
@@ -123,7 +119,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 			if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
 			{
 				
-				//tmpRows[contribY.p[srcpos].m_pixel] = new QUANTUM[ width * m_pixelSize * sizeof( QUANTUM ) ];
+				//tmpRows[contribY.p[srcpos].m_pixel] = new Q_UINT8[ width * m_pixelSize * sizeof( Q_UINT8 ) ];
 				tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
 				m_dev -> readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
 			}
@@ -151,7 +147,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
                         for(int channel = 0; channel < m_pixelSize; channel++){
                                 weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                tmp[ x * m_pixelSize + channel ] = static_cast<QUANTUM>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
+                                tmp[ x * m_pixelSize + channel ] = static_cast<Q_UINT8>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
                         }
                 } /* next row in temp column */
                 delete[] contribY.p;

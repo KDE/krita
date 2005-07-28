@@ -87,7 +87,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 			{
 				KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
 				KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
-
+	
 				while( ! tmpIt.isDone() )
 				{
 					if(tmpIt.isSelected())

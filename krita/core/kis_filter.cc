@@ -34,7 +34,8 @@
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
 	m_id(id),
 	m_category(category),
-	m_entry(entry)
+	m_entry(entry),
+	m_progressDisplay(0)
 {
 }
 

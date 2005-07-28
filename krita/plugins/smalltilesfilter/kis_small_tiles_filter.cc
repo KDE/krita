@@ -73,7 +73,7 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
 	KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
-	tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, 0, new KisMitchellFilterStrategy() );
+	tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, m_progressDisplay, new KisMitchellFilterStrategy() );
 	
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel tmpIt = tmp->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);

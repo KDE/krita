@@ -50,7 +50,7 @@ KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
 	setLabel(i18n("Krita"));
 	setName("krita");
 	setFullSize( false );
-	setMargin(5);
+	setMargin(3);
 
 	m_buttonGroup = new QButtonGroup( 0L );
 	m_buttonGroup->setExclusive( true );
@@ -68,7 +68,7 @@ KisToolBox::~KisToolBox()
 {
 	// Delete the lists owned; the owned lists do not delete their tools,
 	// since those are owned by the tool controller
-	m_tools.setAutoDelete(true);
+	// m_tools.setAutoDelete(true);
 }
 
 
@@ -190,44 +190,40 @@ void KisToolBox::enableTools(bool enable)
 
 
 ToolArea::ToolArea(QWidget *parent)
-	:QWidget(parent), left(true)
+	: QWidget(parent), m_left(true)
 {
-	layout = new QBoxLayout(this, QBoxLayout::LeftToRight, 0, 2);
+	m_layout = new QBoxLayout(this, QBoxLayout::LeftToRight, 0, 2);
 	QWidget *w = new QWidget(this);
-	layout->addWidget(w);
+	m_layout->addWidget(w);
 	QGridLayout *grid = new QGridLayout(w, 2, 2);
-	QSpacerItem *item = new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	leftRow = new QWidget(w);
-	grid->addWidget(leftRow, 0, 0);
-	grid->addItem(item, 0, 1);
-	grid->addItem(item, 1, 0);
-	m_leftLayout = new QBoxLayout(leftRow, QBoxLayout::TopToBottom, 1);
+	m_leftRow = new QWidget(w);
+	grid->addWidget(m_leftRow, 0, 0);
+	m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 1);
 
 	w = new QWidget(this);
-	layout->addWidget(w);
+	m_layout->addWidget(w);
 	grid = new QGridLayout(w, 2, 2);
-	rightRow = new QWidget(w);
-	grid->addWidget(rightRow, 0, 0);
-	grid->addItem(item, 0, 1);
-	grid->addItem(item, 1, 0);
-	m_rightLayout = new QBoxLayout(rightRow, QBoxLayout::TopToBottom, 1);
+	m_rightRow = new QWidget(w);
+	grid->addWidget(m_rightRow, 0, 0);
+
+	m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 1);
 }
 
 void ToolArea::add(QToolButton *button)
 {
-	if(left)
+	if (m_left)
 		m_leftLayout->addWidget(button);
 	else
 		m_rightLayout->addWidget(button);
 	button->show();
-	left = !left;
+	m_left = !m_left;
 }
 
 QWidget* ToolArea::getNextParent()
 {
-	if(left)
-		return leftRow;
-	return rightRow;
+	if (m_left)
+		return m_leftRow;
+	return m_rightRow;
 }
 
 void ToolArea::setOrientation ( Qt::Orientation o )
@@ -235,7 +231,7 @@ void ToolArea::setOrientation ( Qt::Orientation o )
 	QBoxLayout::Direction dir = o != Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight;
 	m_leftLayout->setDirection(dir);
 	m_rightLayout->setDirection(dir);
-	layout->setDirection(o == Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight);
+	m_layout->setDirection(o == Qt::Horizontal?QBoxLayout::TopToBottom:QBoxLayout::LeftToRight);
 }
 
 #include "kis_toolbox.moc"

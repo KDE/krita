@@ -87,16 +87,18 @@ private:
 };
 
 class ToolArea : public QWidget {
+
 public:
 	ToolArea(QWidget *parent);
 	void setOrientation ( Qt::Orientation o );
 	void add(QToolButton *button);
 	QWidget* getNextParent();
+
 private:
 	QPtrList<QToolButton> m_children;
-	QBoxLayout *m_leftLayout, *m_rightLayout, *layout;
-	bool left;
-	QWidget *leftRow, *rightRow;
+	QBoxLayout *m_leftLayout, *m_rightLayout, * m_layout;
+	bool m_left;
+	QWidget * m_leftRow, * m_rightRow;
 };
 
 #endif // _KIS_TOOLBOX_H_

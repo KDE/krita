@@ -34,8 +34,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         Q_INT32 targetW;
         Q_INT32 targetH;
 
-        Q_INT32 width = m_dev->image()->width();
-        Q_INT32 height = m_dev->image()->height();
+	QRect r = m_dev->exactBounds();
+        Q_INT32 width = r.width();//m_dev->image()->width();
+        Q_INT32 height =  r.height();//m_dev->image()->height();
         m_pixelSize=m_dev -> pixelSize();
 
         // compute size of target image

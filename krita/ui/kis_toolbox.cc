@@ -136,7 +136,7 @@ void KisToolBox::setupTools()
 				continue;
 			QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->name());
 			tools->add(bn);
-			m_buttonGroup->insert( bn, ++id );
+			m_buttonGroup->insert( bn, id++ );
 			m_idToActionMap.append( tool );
 		}
 		addSeparator();

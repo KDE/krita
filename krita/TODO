@@ -57,6 +57,8 @@ Core
           layer to anything.
 	* Long painter operations (e.g., convolution painter) should use the 
           progressbar and be cancelable.
+	* On copying paint devices, do not actually copy the tiles, but only create
+	  new tiles when there is change.
 
 
 File Format:
@@ -79,6 +81,7 @@ Import/Export
 
 User Interface
 
+	* Disable dragging the toolbox from dock position to dock position (see Karbon)
 	* Disable all relevant actions when a layer is locked or invisible. See bug #90456.
 	* Add link check to new image dialog to sync width and height
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...

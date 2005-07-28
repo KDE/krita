@@ -182,7 +182,7 @@ public:
 	 * @param y Top coordinate of the rectangle
 	 * @param w Width of the rectangle in pixels
 	 * @param h Height of the rectangle in pixels
-	 * @param profile RGB profile to use in conversion. May be 0, in which
+	 * @param dstProfile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
 	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.
@@ -192,7 +192,7 @@ public:
 	/**
 	 * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
 	 *
-	 * @param profile RGB profile to use in conversion. May be 0, in which
+	 * @param dstProfile RGB profile to use in conversion. May be 0, in which
 	 * case it's up to the colour strategy to choose a profile (most
 	 * like sRGB).
 	 * @param exposure The exposure setting used to render a preview of a high dynamic range image.

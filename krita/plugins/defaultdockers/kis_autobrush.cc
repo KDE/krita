@@ -138,6 +138,7 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 	Q_CHECK_PTR(m_brsh);
 
 	paramChanged();
+
 }
 
 
@@ -163,7 +164,6 @@ void KisAutobrush::paramChanged()
 	QPixmap p;
 	p.convertFromImage(*m_brsh);
 	brushPreview->setPixmap(p);
-	//brushPreview->adjustSize ();
 	KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
 	Q_CHECK_PTR(resource);
 

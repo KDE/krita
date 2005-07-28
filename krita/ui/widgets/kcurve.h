@@ -23,78 +23,57 @@
 
 #include <qwidget.h>
 #include <qcolor.h>
-
-#define CLAMP0255(x) (x)
-class ImageCurves
-{
-public:
-	int getCurveValue(int x) {return val[x];};
-	void setCurveValue(int x, int y) {val[x]=y;};
-	void curvesCalculateCurve() {};
-	QPoint getCurvePoint(int p) {return QPoint(0,0);};
-	void setCurvePoint(int p, QPoint qp) {};
-	int getCurvePointX(int p) {return 0;};
-	void setCurvePointX(int p, int x) {};
-private:
-       int val[256];
-};
+#include <qsortedlist.h>
 
 class KCurve : public QWidget
 {
 Q_OBJECT
 
 public:
-	enum CurveType
-	{
-		CURVE_SMOOTH,
-		CURVE_FREE
-	};
-
 	KCurve(int w, int h,                                      // Widget size.
-		ImageCurves *curves,                      // Curves data instance to use.
 		QWidget *parent=0,                                 // Parent widget instance.
 		bool readOnly=false);                              // If true : widget with full edition mode capabilities.
                                                                     // If false : display curve data only without edition.
 
-    	KCurve(QWidget *parent, const char *n);
+	KCurve(QWidget *parent, const char *n);
 	
-	~KCurve();
+	virtual ~KCurve();
 
-    void reset(void);
-    void curveTypeChanged(CurveType);
-    void setCurveGuide(QColor color);
+	void reset(void);
+	void setCurveGuide(QColor color);
     
 
 signals:
     
-    void signalMouseMoved( int x, int y );
-    void signalCurvesChanged(void);
+	void signalCurvesChanged(void);
             
 protected:
 
-    void paintEvent( QPaintEvent * );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void leaveEvent ( QEvent * );
+	void keyPressEvent(QKeyEvent *);
+	void paintEvent(QPaintEvent *);
+	void mousePressEvent (QMouseEvent * e);
+	void mouseReleaseEvent ( QMouseEvent * e );
+	void mouseMoveEvent ( QMouseEvent * e );
+	void leaveEvent ( QEvent * );
     
+public:
+	double getCurveValue(double x);
+	
 private:
-
-    int                   m_clearFlag;          // Clear drawing zone with message.
-    int                   m_leftmost;
-    int                   m_rightmost;
-    int                   m_grab_point;
-    int                   m_last;
+	struct dpoint {
+		double x,y;
+		bool operator <(dpoint &rhs){return x < rhs.x;};
+		bool operator ==(dpoint &rhs){return x == rhs.x;};
+	};
+	double m_leftmost;
+	double m_rightmost;
+	dpoint *m_grab_point;
+	bool m_dragging;
     
-    bool                  m_readOnlyMode;
-    bool                  m_guideVisible;
-    
-    QColor                m_colorGuide;
-    
-    QTimer               *m_blinkTimer;
-    
-    CurveType m_curveType;       // Scale to use for drawing.    
-    ImageCurves *m_curves;             // Curves data instance.    
+	bool m_readOnlyMode;
+	bool m_guideVisible;
+	QColor m_colorGuide;
+	QSortedList<dpoint> m_points;
 };
 
 

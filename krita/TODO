@@ -22,7 +22,7 @@ Integration
 	
 	* There is currently no kimgio module for Krita images: implement one by
 	  saving a rendered png image into the krita file and extracting that from
-	  kimgio. Also reuse this image to show the user interface more quickly.
+	  kimgio.
         
 	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 

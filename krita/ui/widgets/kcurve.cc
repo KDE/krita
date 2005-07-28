@@ -45,32 +45,39 @@
 KCurve::KCurve(QWidget *parent, const char *)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-	m_curves         = new ImageCurves();;
-	m_grab_point     = -1;    
-	m_last           = 0;
+	m_grab_point     = NULL;
 	m_readOnlyMode   = false;
 	m_guideVisible   = false;
-	m_curveType = CURVE_FREE;
-    
-    setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
-    setMinimumSize(50, 50);
+	m_dragging = false;
+	
+	setMouseTracking(true);
+	setPaletteBackgroundColor(Qt::NoBackground);
+	setMinimumSize(150, 50);
+	dpoint *p = new dpoint;
+	p->x = 0.0;p->y=0.0;
+	m_points.inSort(p);
+	p = new dpoint;
+	p->x = 1.0;p->y=1.0;
+	m_points.inSort(p);
 }
 
-KCurve::KCurve(int w, int h,
-                           ImageCurves *curves, QWidget *parent, 
-                           bool readOnly)
+KCurve::KCurve(int w, int h, QWidget *parent, bool readOnly)
             : QWidget(parent, 0, Qt::WDestructiveClose)
 {
-    m_curves         = curves;
-    m_grab_point     = -1;    
-    m_last           = 0;
-    m_readOnlyMode   = readOnly;
-    m_guideVisible   = false;
-    
-    setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
-    setMinimumSize(w, h);
+	m_grab_point = NULL;
+	m_readOnlyMode = readOnly;
+	m_guideVisible = false;
+	m_dragging = false;
+	
+	setMouseTracking(true);
+	setPaletteBackgroundColor(Qt::NoBackground);
+	setMinimumSize(w, h);
+	dpoint *p = new dpoint;
+	p->x = 0.0;p->y=0.0;
+	m_points.inSort(p);
+	p = new dpoint;
+	p->x = 1.0;p->y=1.0;
+	m_points.inSort(p);
 }
 
 KCurve::~KCurve()
@@ -79,7 +86,7 @@ KCurve::~KCurve()
 
 void KCurve::reset(void)
 {
-	m_grab_point   = -1;    
+	m_grab_point   = NULL;    
 	m_guideVisible = false;
 	repaint(false);
 }
@@ -91,34 +98,20 @@ void KCurve::setCurveGuide(QColor color)
 	repaint(false);
 }
 
-void KCurve::curveTypeChanged(CurveType curveType)
+void KCurve::keyPressEvent(QKeyEvent *e)
 {
-	switch ( curveType )
+printf("key here\n");
+	if(e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace)
 	{
-		case CURVE_SMOOTH:
-			//  pick representative points from the curve and make them control points
-		
-			for (int i = 0; i <= 8; i++)
-			{
-				int index = CLAMP0255 (i * 32);
-			
-				m_curves->setCurvePoint(i * 2, QPoint::QPoint(index, 
-					m_curves->getCurveValue(	index)) );
-			}
-			
-			m_curves->curvesCalculateCurve();
-			break;
-         
-		case CURVE_FREE:
-			break;
+printf("del or bs\n");
+		if(m_grab_point)
+			m_points.remove(m_grab_point);
+		delete m_grab_point;
+		m_grab_point = 0;
 	}
-	m_curveType = curveType;
-	
-	repaint(false);             
-	emit signalCurvesChanged();        
 }
 
-void KCurve::paintEvent( QPaintEvent * )
+void KCurve::paintEvent(QPaintEvent *)
 {
 	int    x, y;
 	int    wWidth = width();
@@ -145,42 +138,53 @@ void KCurve::paintEvent( QPaintEvent * )
 	p1.drawLine(0, 2*wHeight/3, wWidth, 2*wHeight/3);     
 
 	// Draw curve.
-	int curvePrevVal = 0;
+	double curvePrevVal = getCurveValue(0.0);
 	p1.setPen(QPen::QPen(Qt::black, 1, Qt::SolidLine));	
 	for (x = 0 ; x < wWidth ; x++)
 	{
-		int    i, j;
-		int    curveVal;
+		double curveX;
+		double curveVal;
 		
-		i = (x * 256) / wWidth;
-		j = ((x + 1) * 256) / wWidth;
+		curveX = (x + 0.5) / wWidth;
 		
-		curveVal = m_curves->getCurveValue(i);
+		curveVal = getCurveValue(curveX);
 		
-		p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / 256),
-			x,     wHeight - ((curveVal * wHeight) / 256));                             
+		p1.drawLine(x - 1, wHeight - int(curvePrevVal * wHeight),
+			x,     wHeight - int(curveVal * wHeight));                             
 		
 		curvePrevVal = curveVal;
 	}
+	p1.drawLine(x - 1, wHeight - int(curvePrevVal * wHeight),
+		x,     wHeight - int(getCurveValue(1.0) * wHeight));                             
 	
 	// Drawing curve handles.
-	if ( !m_readOnlyMode && m_curveType == CURVE_SMOOTH )
-	{      
-		p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
+	if ( !m_readOnlyMode )
+	{
+		dpoint *p = m_points.first();
 		
-		for (int p = 0 ; p < 17 ; p++)
+		while(p)
 		{
-			QPoint curvePoint = m_curves->getCurvePoint(p);
+			double curveX = p->x;
+			double curveY = p->y;
 		
-			if (curvePoint.x() >= 0)
+			if(p == m_grab_point)
 			{
-				p1.drawEllipse( ((curvePoint.x() * wWidth) / 256) - 2, 
-				wHeight - 2 - ((curvePoint.y() * 256) / wHeight),
-				4, 4 ); 
+				p1.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
+				p1.drawEllipse( int(curveX * wWidth) - 2, 
+					wHeight - 2 - int(curveY * wHeight), 4, 4 ); 
 			}
+			else
+			{
+				p1.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
+			
+				p1.drawEllipse( int(curveX * wWidth) - 3, 
+					wHeight - 3 - int(curveY * wHeight), 6, 6 ); 
+			}
+			
+			p = m_points.next();
 		}
 	}
-		
+	
 	p1.end();
 	bitBlt(this, 0, 0, &pm);
 }
@@ -189,74 +193,58 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
 {
 	if (m_readOnlyMode) return;
 	
-	int i;
-	int closest_point;
-	int distance;
+	dpoint *closest_point=NULL;
+	double distance;
 	
 	if (e->button() != Qt::LeftButton)
 		return;
 	
-	int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
-	int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
+	double x = e->pos().x() / (float)width();
+	double y = 1.0 - e->pos().y() / (float)height();
 	
-	distance = 65536;
+	distance = 1000; // just a big number
 	
-	for (i = 0, closest_point = 0 ; i < 17 ; i++)
+	dpoint *p = m_points.first();
+	while(p)
 	{
-		if (m_curves->getCurvePointX(i) != -1)
+		if (fabs (x - p->x) < distance)
 		{
-			if (abs (x - m_curves->getCurvePointX(i)) < distance)
-			{
-				distance = abs (x - m_curves->getCurvePointX(i));
-				closest_point = i;
-			}
+			distance = fabs(x - p->x);
+			closest_point = p;
 		}
+		p = m_points.next();
 	}
 	
-	if (distance > 8)
-		closest_point = (x + 8) / 16;   
+	if(closest_point == NULL || distance * width() > 5)
+	{
+		closest_point = new dpoint;
+		closest_point->x = x;
+		m_points.inSort(closest_point);
+	}
 	
+	m_grab_point = closest_point;
+	m_grab_point->x = x;
+	m_grab_point->y = y;
+	m_dragging = true;
+
 	setCursor( KCursor::crossCursor() );
 	
-	switch( m_curveType )
-	{
-		case CURVE_SMOOTH:
-			// Determine the leftmost and rightmost points.
-			m_leftmost = -1;
-			
-			for (i = closest_point - 1 ; i >= 0 ; i--)
-			{
-				if (m_curves->getCurvePointX(i) != -1)
-				{
-					m_leftmost = m_curves->getCurvePointX(i);
-					break;
-				}
-			}
-			
-			m_rightmost = 256;
-			
-			for (i = closest_point + 1 ; i < 17 ; i++)
-			{
-				if (m_curves->getCurvePointX(i) != -1)
-				{
-					m_rightmost = m_curves->getCurvePointX(i);
-					break;
-				}
-			}
-			
-			m_grab_point = closest_point;
-			m_curves->setCurvePoint(m_grab_point, QPoint::QPoint(x, 255 - y));
-			
-			break;
-		
-		case CURVE_FREE:
-			m_curves->setCurveValue(x, 255 - y);
-			m_grab_point = x;
-			m_last = y;
-			break;
-	}
+	// Determine the leftmost and rightmost points.
+	m_leftmost = 0;
+	m_rightmost = 1;
 	
-	m_curves->curvesCalculateCurve();
+	p = m_points.first();
+	while(p)
+	{
+		if (p != m_grab_point)
+		{
+			if(p->x> m_leftmost && p->x < x)
+				m_leftmost = p->x;
+			if(p->x < m_rightmost && p->x > x)
+				m_rightmost = p->x;
+		}
+		p = m_points.next();
+	}
 	repaint(false);
 }
 
@@ -268,8 +256,7 @@ void KCurve::mouseReleaseEvent ( QMouseEvent * e )
 		return;
 	
 	setCursor( KCursor::arrowCursor() );    
-	m_grab_point = -1;
-	m_curves->curvesCalculateCurve();
+	m_dragging = false;
 	repaint(false);
 	emit signalCurvesChanged();
 }
@@ -278,104 +265,105 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 {
 	if (m_readOnlyMode) return;
 	
-	int i;
-	int closest_point;
+	dpoint *closest_point;
 	int x1, x2, y1, y2;
-	int distance;
-		
-	int x = CLAMP0255( (int)(e->pos().x()*(255.0/(float)width())) );
-	int y = CLAMP0255( (int)(e->pos().y()*(255.0/(float)height())) );
-
-	distance = 65536;
-   
-	for (i = 0, closest_point = 0 ; i < 17 ; i++)
+	double distance;
+	
+	double x = e->pos().x() / (float)width();
+	double y = 1.0 - e->pos().y() / (float)height();
+	
+	distance = 1000;
+	
+	dpoint *p = m_points.first();
+	while(p)
 	{
-		if (m_curves->getCurvePointX(i) != -1)
+		if (fabs (x - p->x) < distance)
 		{
-			if (abs (x - m_curves->getCurvePointX(i)) < distance)
-			{
-				distance = abs (x - m_curves->getCurvePointX(i));
-				closest_point = i;
-			}
+			distance = fabs(x - p->x);
+			closest_point = p;
 		}
+		p = m_points.next();
 	}
 	
-	if (distance > 8)
-		closest_point = (x + 8) / 16;   
-   
-	switch ( m_curveType )
+	if (m_dragging == NULL)   // If no point is selected... 
 	{
-		case CURVE_SMOOTH:
-			if (m_grab_point == -1)   // If no point is grabbed... 
-			{
-				if ( m_curves->getCurvePointX(closest_point) != -1 )
-					setCursor( KCursor::arrowCursor() );    
-				else
-					setCursor( KCursor::crossCursor() );
-			}
-			else  // Else, drag the grabbed point
-			{
-				setCursor( KCursor::crossCursor() );
-				
-				m_curves->setCurvePointX(m_grab_point, -1);
-				
-				if (x > m_leftmost && x < m_rightmost)
-				{
-					closest_point = (x + 8) / 16;
-					
-					if (m_curves->getCurvePointX(closest_point) == -1)
-						m_grab_point = closest_point;
-					
-					m_curves->setCurvePoint(m_grab_point, QPoint::QPoint(x, 255 - y));
-				}
-				
-			m_curves->curvesCalculateCurve();
-			emit signalCurvesChanged();
-			}
-			
-			break;
+		if ( distance * width() > 3 )
+			setCursor( KCursor::arrowCursor() );    
+		else
+			setCursor( KCursor::crossCursor() );
+	}
+	else  // Else, drag the selected point
+	{
+		setCursor( KCursor::crossCursor() );
 		
-		case CURVE_FREE:
-			if (m_grab_point != -1)
-			{
-				if (m_grab_point > x)
-				{
-					x1 = x;
-					x2 = m_grab_point;
-					y1 = y;
-					y2 = m_last;
-				}
-				else
-				{
-					x1 = m_grab_point;
-					x2 = x;
-					y1 = m_last;
-					y2 = y;
-				}
+		if (x < m_leftmost)
+			x = m_leftmost;
+			
+		if(x > m_rightmost)
+			x = m_rightmost;
+		
+		if(y > 1.0)
+			y = 1.0;
+		if(y < 0.0)
+			y = 0.0;
+		m_grab_point->x = x;
+		m_grab_point->y = y;
+		
+		emit signalCurvesChanged();
+	}
+		
+	repaint(false);
+}
 
-				if (x2 != x1)
-				{
-					for (i = x1 ; i <= x2 ; i++)
-						m_curves->setCurveValue(i, 255 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
-				}
-				else
-					m_curves->setCurveValue(x, 255 - y);
-				
-				m_grab_point = x;
-				m_last = y;
-			}
-			
-			emit signalCurvesChanged();
-			break;
-		}
+double KCurve::getCurveValue(double x)
+{
+	double t;
+	dpoint *p;
+	dpoint *p0,*p1,*p2,*p3;
+	double c0,c1,c2,c3;
+	
+	if(m_points.count() == 0)
+		return 0.5;
+	
+	// First find curve segment
+	p = m_points.first();
+	if(x < p->x)
+		return p->y;
 		
-		emit signalMouseMoved(x, 255 - y);
-		repaint(false);
+	p = m_points.last();
+	if(x >= p->x)
+		return p->y;
+	
+	// Find the four control points (two on each side of x)	
+	p = m_points.first();
+	while(x >= p->x)
+	{
+		p = m_points.next();
+	}
+	m_points.prev();
+	
+	if((p0 = m_points.prev()) == NULL)
+		p1 = p0 = m_points.first();
+	else
+		p1 = m_points.next();
+	
+	p2 = m_points.next();
+	if(p = m_points.next())
+		p3 = p;
+	else
+		p3 = p2;
+	
+	// Calculate the value
+	t = (x - p1->x) / (p2->x - p1->x);
+	c2 = (p2->y - p0->y) * (p2->x-p1->x) / (p2->x-p0->x);
+	c3 = p1->y;
+	c0 = -2*p2->y + 2*c3 + c2 + (p3->y - p1->y) * (p2->x - p1->x) / (p3->x - p1->x);
+	c1 = p2->y - c3 - c2 - c0;
+	return ((c0*t + c1)*t + c2)*t + c3;
 }
 
 void KCurve::leaveEvent( QEvent * )
 {
-	emit signalMouseMoved(-1, -1);
 }
 
 #include "kcurve.moc"

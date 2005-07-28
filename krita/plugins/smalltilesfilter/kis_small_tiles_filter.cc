@@ -26,6 +26,7 @@
 
 #include <qpoint.h>
 #include <qspinbox.h>
+#include <qvaluevector.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -72,43 +73,38 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
-	/*KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
-	kdDebug() << "Dimensions of tmp: " << tmp-> exactBounds() << endl;
+	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+	KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
+
 	//tmp -> scale( rect.width() / numberOfTiles, rect.height() / numberOfTiles, m_progressDisplay, new KisMitchellFilterStrategy() );
 	
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x() , rect.y(), rect.width() / numberOfTiles, rect.height() /numberOfTiles, true );
-	KisRectIteratorPixel tmpIt = tmp->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() /numberOfTiles, false);
-	Q_INT32 depth = tmp -> colorStrategy() -> nColorChannels();
 
-	while( ! tmpIt.isDone() )
+	for( Q_UINT32 i=0; i < numberOfTiles; i++ )
 	{
-		if(tmpIt.isSelected())
+		for( Q_UINT32 j=0; j < numberOfTiles; j++ )
 		{
-			for( int i = 0; i < depth; i++)
+			for( Q_UINT32 row = rect.y(); row < rect.height() / numberOfTiles; row++ )
 			{
-				dstIt.rawData()[i] = 128;//tmpIt.oldRawData()[i];
+				kdDebug() << "small tiles, row: " << row << endl;
+				KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(rect.x(), row, rect.width() / numberOfTiles, true);
+				KisHLineIteratorPixel dstIt = dst -> createHLineIterator(rect.x() + i * rect.width() / numberOfTiles, row + j * rect.height() / numberOfTiles, rect.width() / numberOfTiles, true);
+							
+				while( ! tmpIt.isDone() )
+				{
+					if(tmpIt.isSelected())
+					{
+						for( int i = 0; i < depth; i++)
+						{
+							dstIt.rawData()[i] = tmpIt.oldRawData()[i];
+						}
+					}
+					++tmpIt;
+					++dstIt;
+				}
 			}
 		}
-		++tmpIt;
-		++dstIt;
 	}
-	setProgressDone();*/
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() / numberOfTiles, true );
-	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width() / numberOfTiles, rect.height() / numberOfTiles, false);
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-
-	while( ! srcIt.isDone() )
-	{
-		if(srcIt.isSelected())
-		{
-			for( int i = 0; i < depth; i++)
-			{
-				dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
-			}
-		}
-		++srcIt;
-		++dstIt;
-	}
+	
 	setProgressDone();
 }
 

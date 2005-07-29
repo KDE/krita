@@ -1,5 +1,5 @@
 /*
- * This file is part of Krita
+ * This file is part of the KDE project
  *
  * Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
@@ -15,29 +15,35 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
-#ifndef _KIS_SEPARATE_CHANNELS_PLUGIN_H_
-#define _KIS_SEPARATE_CHANNELS_PLUGIN_H_
+#ifndef _KIS_CHANNEL_SEPARATOR_H_
+#define _KIS_CHANNEL_SEPARATOR_H_
 
-#include <kparts/plugin.h>
+#include <kis_progress_subject.h>
 
 class KisView;
+class KisProgressDisplayInterface;
 
-class KisSeparateChannelsPlugin : public KParts::Plugin
-{
+class KisChannelSeparator : public KisProgressSubject {
+
 	Q_OBJECT
+
 public:
-	KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisSeparateChannelsPlugin();
 
-private slots:
+	KisChannelSeparator(KisView * view);
+	virtual ~KisChannelSeparator() {};
 
-	void slotSeparate();
+	void separate(KisProgressDisplayInterface * progress);
+
+public: // Implement KisProgressSubject
+        virtual void cancel() { m_cancelRequested = true; }
 
 private:
-
 	KisView * m_view;
+	bool m_cancelRequested;
+
 };
 
 #endif

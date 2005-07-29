@@ -106,7 +106,7 @@
                 <cstring>checkBox2</cstring>
             </property>
             <property name="text">
-                <string>Downscale to 8-bit</string>
+                <string>Downscale to 8-bit before separating</string>
             </property>
         </widget>
         <widget class="QCheckBox">

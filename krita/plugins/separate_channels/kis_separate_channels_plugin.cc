@@ -18,28 +18,44 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kinstance.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <ktempfile.h>
+#include <kdebug.h>
 #include <kgenericfactory.h>
-#include "kis_separate_channels_plugin.h"
-#include "kis_separate_channels.h"
 
-typedef KGenericFactory<KisSeparateChannelsPlugin> KisSeparateChannelsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KisSeparateChannelsPluginFactory( "krita" ) )
+#include <kis_view.h>
+#include <kis_types.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+
+#include "kis_separate_channels_plugin.h"
+#include "kis_channel_separator.h"
+#include "dlg_separate.h"
+
+K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) );
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &)
 	: KParts::Plugin(parent, name)
 {
-        setInstance(KisSeparateChannelsPluginFactory::instance());
+        setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
 
         kdDebug(DBG_AREA_PLUGINS) << "Separate plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
+        
 
-	if ( parent->inherits("KisFactory") )
+	if ( !parent->inherits("KisView") )
 	{
-		KisFilterRegistry::instance()->add(new KisSeparateChannels());
+		m_view = 0;
+	} else {
+		m_view = (KisView*) parent;
+		(void) new KAction(i18n("Separate image..."), 0, 0, this, SLOT(slotSeparate()), actionCollection(), "separate");
 	}
 }
 
@@ -47,3 +63,25 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 {
 }
 
+void KisSeparateChannelsPlugin::slotSeparate()
+{
+	KisImageSP image = m_view->currentImg();
+	if (!image) return;
+
+	DlgSeparate * dlgSeparate = new DlgSeparate(m_view, "Separate");
+	Q_CHECK_PTR(dlgSeparate);
+
+	dlgSeparate->setCaption(i18n("Separate Image"));
+
+	if (dlgSeparate->exec() == QDialog::Accepted) {
+		
+		KisChannelSeparator separator(m_view);
+		separator.separate(m_view->progressDisplay());
+		
+	}
+
+	delete dlgSeparate;
+
+}
+
+#include "kis_separate_channels_plugin.moc"

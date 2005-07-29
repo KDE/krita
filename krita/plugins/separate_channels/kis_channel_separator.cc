@@ -24,10 +24,6 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
-#include <qspinbox.h>
-#include <qptrvector.h>
-
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kinstance.h>
@@ -42,65 +38,70 @@
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_filter_registry.h>
+#include <kis_transaction.h>
+#include <kis_undo_adapter.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
+#include <kis_strategy_colorspace.h>
+#include <kis_colorspace_registry.h>
+#include <kis_view.h>
+#include <kis_paint_device.h>
 
-#include "kis_multi_integer_filter_widget.h"
-#include "kis_separate_channels.h"
-#include "kis_strategy_colorspace.h"
-#include "kis_colorspace_registry.h"
+#include "kis_channel_separator.h"
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
-
-KisSeparateChannels::KisSeparateChannels() : KisFilter(id(), "artistic", "&Separate channels...")
+KisChannelSeparator::KisChannelSeparator(KisView * view)
+	: m_view(view)
 {
 }
 
-void KisSeparateChannels::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
 {
-        Q_INT32 x = rect.x(), y = rect.y();
-        Q_INT32 width = rect.width();
-        Q_INT32 height = rect.height();
-        
-        //read the filter configuration values from the KisFilterConfiguration object
-        Q_UINT32 pixelWidth = ((KisSeparateChannelsConfiguration*)configuration)->pixelWidth();
-        Q_UINT32 pixelHeight = ((KisSeparateChannelsConfiguration*)configuration)->pixelHeight();
-        
-        //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-	separateChannels(src, dst, rect);
-}
+	KisImageSP image = m_view->currentImg();
+	if (!image) return;
 
-void KisSeparateChannels::separateChannels(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect)
-{
+	KisLayerSP src = image->activeLayer();
+	if (!src) return;
+		
+	m_cancelRequested = false;
+	if ( progress )
+		progress -> setSubject(this, true, true);
+	emit notifyProgressStage(this, i18n("Separating image..."), 0);
+
+	KisUndoAdapter * undo = 0;
+	KisTransaction * t = 0;
+	if ((undo = image->undoAdapter())) {
+		t = new KisTransaction(i18n("Separate Image"), src.data());
+	}
+
 	Q_UINT32 numberOfChannels = src -> nChannels();
 	KisStrategyColorSpaceSP colorStrategy = src -> colorStrategy();
 	vKisChannelInfoSP channels = colorStrategy -> channels();
 
-	setProgressTotalSteps( numberOfChannels );
-        setProgressStage(i18n("Applying separate channels..."),0);
-	
 	vKisLayerSP layers;
-	
+
 	vKisChannelInfoSP_cit begin = channels.begin();
 	vKisChannelInfoSP_cit end = channels.end();
-	
+
+
+	QRect rect = image->bounds();
+
 	int i = 0;
 	for (vKisChannelInfoSP_cit it = begin; it != end; ++it)
 	{
+
 		KisChannelInfoSP ch = (*it);
-		
+
 		KisLayerSP dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA" ), ch->name());
-		kdDebug() << "Adding layer: " << ch->name() << endl;	
 		layers.push_back(dev);
-	
+
 		KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 		// XXX: Casper is going to make sure that these iterators align!
 		KisRectIteratorPixel dstIt = dev->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
 		while( ! srcIt.isDone() )
-		{	
+		{
 			if(srcIt.isSelected())
 			{
 				dstIt.rawData()[0] = srcIt.oldRawData()[i];
@@ -110,37 +111,28 @@ void KisSeparateChannels::separateChannels(KisPaintDeviceSP src, KisPaintDeviceS
 			++srcIt;
 		}
 		++i;
+
+		emit notifyProgress(this, (i * 100) / numberOfChannels);
+		if (m_cancelRequested) {
+			break;
+		}
 	}
 
-	KisImageSP img = src -> image();
-	
 	vKisLayerSP_it it;
 
-	for ( it = layers.begin(); it != layers.end(); ++it ) {
-		KisLayerSP layer = (*it);
-		img->add( layer, -1);	
+	if (!m_cancelRequested) {
+		for ( it = layers.begin(); it != layers.end(); ++it ) {
+			KisLayerSP layer = (*it);
+			image->add( layer, -1);
+		}
+		if (undo) undo -> addCommand(t);
+
+		m_view->getDocument()->setModified(true);
+		m_view->layersUpdated();
 	}
-	kdDebug() << "Number of Layers: " << img->nlayers() << endl;
 
-
-	setProgressDone();
+	emit notifyProgressDone(this);
+	
 }
 
-KisFilterConfigWidget * KisSeparateChannels::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
-{
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelheight") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
-}
-
-KisFilterConfiguration* KisSeparateChannels::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
-{
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisSeparateChannelsConfiguration( 10, 10);
-	} else {
-		return new KisSeparateChannelsConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-	}
-}
+#include "kis_channel_separator.moc"

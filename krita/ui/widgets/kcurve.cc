@@ -59,6 +59,7 @@ KCurve::KCurve(QWidget *parent, const char *)
 	p = new dpoint;
 	p->x = 1.0;p->y=1.0;
 	m_points.inSort(p);
+	setFocusPolicy(QWidget::StrongFocus);
 }
 
 KCurve::KCurve(int w, int h, QWidget *parent, bool readOnly)
@@ -78,6 +79,7 @@ KCurve::KCurve(int w, int h, QWidget *parent, bool readOnly)
 	p = new dpoint;
 	p->x = 1.0;p->y=1.0;
 	m_points.inSort(p);
+	setFocusPolicy(QWidget::StrongFocus);
 }
 
 KCurve::~KCurve()
@@ -100,14 +102,13 @@ void KCurve::setCurveGuide(QColor color)
 
 void KCurve::keyPressEvent(QKeyEvent *e)
 {
-printf("key here\n");
 	if(e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace)
 	{
-printf("del or bs\n");
 		if(m_grab_point)
 			m_points.remove(m_grab_point);
 		delete m_grab_point;
 		m_grab_point = 0;
+		repaint(false);
 	}
 }
 

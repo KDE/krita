@@ -175,6 +175,38 @@ void KisStrategyColorSpaceRGB::mixColors(const Q_UINT8 **colors, const Q_UINT8 *
 	dst[PIXEL_BLUE] = dstBlue;
 }
 
+void KisStrategyColorSpaceRGB::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+	Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+
+	colors += 4;
+//	while (nColors--)
+//	{
+		Q_INT32 weight = 1; (*kernelValues);
+		
+		if (weight != 0) {
+			totalRed += (*colors)[PIXEL_RED];// * weight;
+			totalGreen += (*colors)[PIXEL_GREEN];// * weight;
+			totalBlue += (*colors)[PIXEL_BLUE];// * weight;
+			totalAlpha += (*colors)[PIXEL_ALPHA];// * weight;
+		}
+		colors++;
+		kernelValues++;
+//	}
+
+
+
+	if (channelFlags & FLAG_COLOR) {
+		dst[PIXEL_RED] = totalRed; //CLAMP((totalRed / factor) + offset, 0, QUANTUM_MAX);
+		dst[PIXEL_GREEN] = totalGreen; //CLAMP((totalGreen / factor) + offset, 0, QUANTUM_MAX);
+		dst[PIXEL_BLUE] = totalBlue;// CLAMP((totalGreen / factor) + offset, 0, QUANTUM_MAX);
+	}
+	else if (channelFlags & FLAG_ALPHA) {
+		dst[PIXEL_ALPHA] = totalAlpha; //CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
+	}
+	
+}
+
 vKisChannelInfoSP KisStrategyColorSpaceRGB::channels() const
 {
 	return m_channels;
@@ -237,10 +269,6 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 wi
 	// be factored out again if needed.
 	img = img.copy();
 #endif
-
-   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
-
 
 	if (srcProfile != 0 && dstProfile != 0) {
 		convertPixelsTo(img.bits(), srcProfile,

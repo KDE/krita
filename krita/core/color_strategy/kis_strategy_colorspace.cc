@@ -247,6 +247,10 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 	const_cast<KisStrategyColorSpace *>(this) -> nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
+void KisStrategyColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+}
+
 void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
 {
 	QColor c;

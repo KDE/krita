@@ -51,7 +51,6 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::update (KisCanvasSubject *subject)
 {
-	kdDebug (DBG_AREA_TOOLS) << "KisToolRectangle::update(" << subject << ")" << endl;
         super::update (subject);
         if (m_subject)
             m_currentImage = m_subject->currentImg ();
@@ -59,7 +58,6 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
 
 void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 {
- 	kdDebug (DBG_AREA_TOOLS) << "KisToolRectangle::buttonPress" << event->pos () << endl;
 	if (m_currentImage && event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = m_dragCenter = m_dragEnd = event -> pos();
@@ -69,7 +67,6 @@ void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 
 void KisToolRectangle::move(KisMoveEvent *event)
 {
- 	kdDebug (DBG_AREA_TOOLS) << "KisToolRectangle::move" << event->pos () << endl;
 	if (m_dragging) {
 		// erase old lines on canvas
 		draw(m_dragStart, m_dragEnd);
@@ -151,10 +148,6 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 		return;
 
 	KisCanvasControllerInterface *controller = m_subject->canvasController ();
- 	kdDebug (DBG_AREA_TOOLS) << "KisToolRectangle::draw(" << start << "," << end << ")"
- 			<< " windowToView: start=" << controller->windowToView (start)
- 			<< " windowToView: end=" << controller->windowToView (end)
- 			<< endl;
 	QWidget *canvas = controller->canvas ();
 	QPainter p (canvas);
 

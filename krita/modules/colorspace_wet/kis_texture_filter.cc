@@ -31,7 +31,6 @@ TextureFilter::TextureFilter(KisView* view)
 }
 
 void TextureFilter::slotActivated() {
-	kdDebug(DBG_AREA_CMS) << "texture painter activated" << endl;
 	if (!m_view -> currentImg())
 		return;
 	if (!m_view -> currentImg() -> activeDevice())

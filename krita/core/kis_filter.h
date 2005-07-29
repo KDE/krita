@@ -28,8 +28,6 @@
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_image.h"
-#include "kis_layer.h"
 #include "kis_filter_registry.h"
 #include "kis_id.h"
 #include "koffice_export.h"

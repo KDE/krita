@@ -207,9 +207,6 @@ QImage KisStrategyColorSpaceRGBU16::convertToQImage(const Q_UINT8 *dataU8, Q_INT
 						 Q_INT32 renderingIntent, float /*exposure*/)
 
 {
-	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
-
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	img.setAlphaBuffer(true);
 

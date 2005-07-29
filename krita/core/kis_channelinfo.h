@@ -28,6 +28,15 @@ enum enumChannelType {
 	SUBSTRATE // The channel represents a real-world painting substrate like a canvas
 };
 
+
+enum enumChannelFlags {
+	FLAG_COLOR = 1,
+	FLAG_ALPHA = (1 << 1),
+	FLAG_SUBSTANCE = (1 << 2),
+	FLAG_SUBSTRATE = (1 << 3)
+};
+
+
 /** 
  * This class gives some basic information about a channel,
  * that is, one of the components that makes up a particular 

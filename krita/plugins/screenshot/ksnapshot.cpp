@@ -462,7 +462,6 @@ void KSnapshot::slotMovePointer(int x, int y)
 
 void KSnapshot::exit()
 {
-	kdDebug() << "exit: reject\n";
 
 	KConfig *conf=KGlobal::config();
 	conf->setGroup("GENERAL");
@@ -478,7 +477,6 @@ void KSnapshot::exit()
 
 void KSnapshot::slotOk()
 {
-	kdDebug() << "Accept\n";
 
 	KConfig *conf=KGlobal::config();
 	conf->setGroup("GENERAL");

@@ -356,7 +356,7 @@ void KisView::updateStatusBarSelectionLabel()
 
 	KisImageSP img = currentImg();
 	if (img) {
-		KisLayerSP layer = img -> activeLayer();
+		KisLayerSP layer = img->activeLayer();
 		if (layer) {
 			if (layer -> hasSelection()) {
 				m_statusBarSelectionLabel -> setText(i18n("Selection Active"));

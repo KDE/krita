@@ -271,9 +271,6 @@ QImage KisStrategyColorSpaceRGBF32::convertToQImage(const Q_UINT8 *dataU8, Q_INT
 		j += MAX_CHANNEL_RGBA;
 	}
 
-   	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-   		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
-
 	/*
 	if (srcProfile != 0 && dstProfile != 0) {
 		convertPixelsTo(img.bits(), srcProfile,

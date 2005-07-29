@@ -139,7 +139,6 @@ void KisKJSEmbed::slotLoadScript()
 		Script* script = Script::loadFromFile(m_jsEmbedPart, *it );
 		if(script != 0)
 		{
-			kdDebug(DBG_AREA_SCRIPT) << "KisKJSEmbed::slotLoadScript() script " << *it << " successfully loaded." << endl;
 			m_vScripts.push_back( script );
 			m_scriptMenu->insertItem( *it, script, SLOT(execute()) );
 		}

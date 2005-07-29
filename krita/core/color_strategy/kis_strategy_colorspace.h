@@ -56,7 +56,6 @@ struct transform {
 };
 
 
-
 /**
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
@@ -292,6 +291,12 @@ public:
 	 * Mix the colors given their weights and return in dst
 	 * The sum of weights is assumed 255 */
 	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+
+	/**
+	 * Convolve the given array of pointers to pixels and return the result
+	 * in dst. The kernel values are clamped between -128 and 128
+	 */
+	virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const;
 
 	/**
 	 * Darken all color channels with the given amount. If compensate is true,

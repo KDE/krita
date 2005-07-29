@@ -205,7 +205,6 @@ void KisAutobrush::spinBoxVerticalChanged(int a)
 
 void KisAutobrush::linkSizeToggled(bool b)
 {
-	kdDebug() << "Toggle link size to " << b << "\n";
 	m_linkSize = b;
 
 	if (b) {
@@ -218,7 +217,6 @@ void KisAutobrush::linkSizeToggled(bool b)
 
 void KisAutobrush::linkFadeToggled(bool b)
 {
-	kdDebug() << "Toggle link fade to " << b << "\n";
 	m_linkFade = b;
 
 	if (b) {

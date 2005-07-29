@@ -39,9 +39,10 @@
 #include "kis_selection_manager.h"
 #include "kis_painter.h"
 #include "kis_iterators_pixel.h"
-#include <kis_iteratorpixeltrait.h>
+#include "kis_iteratorpixeltrait.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+#include "kis_channelinfo.h"
 #include "kis_colorspace_registry.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
@@ -640,21 +641,22 @@ void KisSelectionManager::feather()
 	k.height = 3;
 	k.factor = 16;
 	k.offset = 0;
-	k.data.push_back( 1 );
-	k.data.push_back( 2 );
-	k.data.push_back( 1 );
-	k.data.push_back( 2 );
-	k.data.push_back( 4 );
-	k.data.push_back( 2 );
-	k.data.push_back( 1 );
-	k.data.push_back( 2 );
-	k.data.push_back( 1 );
+	k.data = new Q_INT32(9);
+	k.data[0] = 1;
+	k.data[0] = 2;
+	k.data[0] = 1;
+	k.data[0] = 2;
+	k.data[0] = 4;
+	k.data[0] = 2;
+	k.data[0] = 1;
+	k.data[0] = 2;
+	k.data[0] = 1;
 	
 	QRect rect = selection -> extent();
 	// Make sure we've got enough space around the edges.
 	rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 3, rect.height() + 3);
 	
-	painter.applyMatrix(&k, selection.data(), rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, CONVOLVE_ALPHA);
+	painter.applyMatrix(&k, selection.data(), rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
 	painter.end();
 
 	if (img -> undoAdapter())

@@ -79,10 +79,10 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 	kernel -> height = 3;
 	kernel -> factor = matrix[0].factor();
 	kernel -> offset = matrix[0].offset();
+	kernel->data = new Q_INT32(9);
 	for (int row = 0; row < 3; ++row) {
 		for (int col = 0; col < 3; ++col) {
-			kernel -> data.push_back(matrix[0][col][row]);
-			
+			kernel -> data[row * 3 + col] = matrix[0][col][row];
 		}
 	}
 	applyMatrix(kernel, src, x, y, w, h);
@@ -90,8 +90,8 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 
 
 void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
-	KisConvolutionBorderOp borderOp,
-	KisConvolutionChannelFlags channelFlags )
+					KisConvolutionBorderOp borderOp,
+					enumChannelFlags  channelFlags )
 {
 	// Make the area we cover as small as possible
 	if (src -> hasSelection()) {
@@ -110,41 +110,20 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 
 	// Determine the kernel's extent from the center pixel
 	Q_INT32 kw, kh, kd;
-	kw = kernel[0].width;
-	kh = kernel[0].height;
+	kw = kernel->width;
+	kh = kernel->height;
 	kd = (kw - 1) / 2;
 	
 	// Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
 	if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
 	
-	
 	m_cancelRequested = false;
 	int lastProgressPercent = 0;
 	emit notifyProgress(this, 0);
 
+	KisStrategyColorSpaceSP cs = src->colorStrategy();
 	// The total number of channels in a pixel
-	Q_INT32 depth = src -> colorStrategy() -> nChannels();
-	
-	// Determine which of the channels we are going to convolve.
-	QMemArray<bool> channels(depth);
-	
-	
-	vKisChannelInfoSP channelInfos = src -> colorStrategy() -> channels();
-	vKisChannelInfoSP_cit it;
-	
-	for (it = channelInfos.begin(); it != channelInfos.end(); ++it){
-
-		if ((*it) -> channelType() == COLOR && channelFlags & CONVOLVE_COLOR)
-			channels[(*it) -> pos()] = true;
-		else if ((*it) -> channelType() == ALPHA && channelFlags & CONVOLVE_ALPHA)
-			channels[(*it) -> pos()] = true;
-		else if ((*it) -> channelType() == SUBSTANCE && channelFlags & CONVOLVE_SUBSTANCE)
-			channels[(*it) -> pos()] = true;
-		else if ((*it) -> channelType() == SUBSTRATE && channelFlags & CONVOLVE_SUBSTRATE)
-			channels[(*it) -> pos()] = true;
-		else
-			channels[(*it) -> pos()] = false;
-	}
+	Q_INT32 depth = cs->nChannels();
 
 	// Determine whether we convolve border pixels, or not.
 	switch (borderOp) {
@@ -160,10 +139,10 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 			h -= kh - 1;
 	}
 		
-	// Iterate over all pixels in our rect.
-	
-	// XXX: Cache already seen pixels for the kernel iterator.?
-	// XXX: Is it faster to use src->pixel(x,y, false)?
+	// Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
+
+	QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
+	pixelPtrCache.fill(0);
 
 	// row == the y position of the pixel we want to change in the paint device
 	for (int row = y; row < y + h; ++row) {
@@ -176,51 +155,28 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 		while (!hit.isDone()) {
 			if (hit.isSelected()) {
 				
-				KisPixel curPixel = hit.pixel();
-				
-				QMemArray<int> sums(depth);
-				//memset(&sums, 0, depth * sizeof(int));
-				sums.fill(0);
-
 				// Iterate over all contributing pixels that are covered by the kernel
 				// krow = the y position in the kernel matrix
+				Q_INT32 i = 0;
 				for (Q_INT32 krow = 0; krow <  kh; ++krow) {
-	
-					// kx = the x position in the kernel matrix
-					int kx = 0;
 	
 					// col - kd = the left starting point of the kernel as centered on our pixel
 					// krow - kd = the offset for the top of the kernel as centered on our pixel
-					// kw = the kernel of a matrix line
+					// kw = the width of the kernel
+					
+					// Fill the cache with pointers to the pixels under the kernel
 					KisHLineIteratorPixel kit = src -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
 					while (!kit.isDone()) {
-						KisPixelRO p = kit.oldPixel();
-						Q_INT32 kval = kernel[0].data[(kw * krow) + kx];
-						// Calculate for each channel of the current pixel the sum of all matrix pixels
-						if (kval != 0) {
-							for (int i = 0; i < depth;  ++i) {
-								if (channels[i]) {
-									sums[i] = sums[i] + (p[i] * kval);
-								}
-							}
-						}
-						++kx;
+						pixelPtrCache[i] = kit.rawData();
 						++kit;
+						++i;
 					}
 				}
-				
-				// We got the total value of the channels of the pixels surrounding our pixel now, including the value of our own pixel,
-				// multiplied with the values of kernel. Compute the weighted value for every channel.
-				for (int i = 0; i < depth; ++i) {
-					if (channels[i]) {
-						curPixel[i] = CLAMP(((sums[i] / kernel[0].factor) + kernel[0].offset),
-											0, QUANTUM_MAX );
-					}
-				}
+				cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+				pixelPtrCache.fill(0);
 			}
 			++col;
 			++hit;
-
 		}
 
 		int progressPercent = 100 - ((((y + h) - row) * 100) / h);

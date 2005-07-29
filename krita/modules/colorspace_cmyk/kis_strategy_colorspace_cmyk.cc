@@ -92,7 +92,7 @@ KisStrategyColorSpaceCMYK::~KisStrategyColorSpaceCMYK()
 {
 	// XXX: These deletes cause a crash, but since the color strategy is a singleton
 	//      that's only deleted at application close, it's no big deal.
-	delete [] m_qcolordata;
+	// delete [] m_qcolordata;
 	//cmsDeleteTransform(m_defaultToRGB);
 	//cmsDeleteTransform(m_defaultFromRGB);
 }
@@ -179,16 +179,12 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 w
 						  Q_INT32 renderingIntent, float /*exposure*/)
 
 {
-  	kdDebug(DBG_AREA_CMS) << "convertToQImage: (" << width << ", " << height << ")"
-  		  << " srcProfile: " << srcProfile << ", " << "dstProfile: " << dstProfile << "\n";
-
 	QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
 	memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
 	KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 
  	if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-   		kdDebug(DBG_AREA_CMS) << "Going to use default transform\n";
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)
  				cmsDoTransform(m_defaultToRGB,
@@ -196,7 +192,6 @@ QImage KisStrategyColorSpaceCMYK::convertToQImage(const Q_UINT8 *data, Q_INT32 w
 					&(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
  	}
  	else {
-   		kdDebug(DBG_AREA_CMS) << "Going to transform with profiles\n";
  		// Do a nice calibrated conversion
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)

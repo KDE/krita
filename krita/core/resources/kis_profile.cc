@@ -106,19 +106,10 @@ bool KisProfile::init()
 {
 	if (m_profile) {
 		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
-  		kdDebug(DBG_AREA_CMS) << "\tColorspaceSignature: " << m_colorSpaceSignature << "\n";
-
 		m_deviceClass = cmsGetDeviceClass(m_profile);
-
 		m_productName = cmsTakeProductName(m_profile);
-  		kdDebug(DBG_AREA_CMS) << "\tProduct name: " << m_productName << "\n";
-
 		m_productDescription = cmsTakeProductDesc(m_profile);
-  		kdDebug(DBG_AREA_CMS) << "\tDescription: " << m_productDescription << "\n";
-
 		m_productInfo = cmsTakeProductInfo(m_profile);
-  		kdDebug(DBG_AREA_CMS) << "\tInfo: " << m_productInfo << "\n";
-
 		setValid(true);
 		return true;
 	}

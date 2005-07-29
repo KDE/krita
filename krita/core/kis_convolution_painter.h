@@ -41,6 +41,7 @@
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
+#include "kis_channelinfo.h"
 #include "kis_painter.h"
 #include "koffice_export.h"
 
@@ -52,19 +53,13 @@ enum KisConvolutionBorderOp {
 	BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
-enum KisConvolutionChannelFlags {
-	CONVOLVE_COLOR = 1,
-	CONVOLVE_ALPHA = (1 << 1),
-	CONVOLVE_SUBSTANCE = (1 << 2),
-	CONVOLVE_SUBSTRATE = (1 << 3)
-};
 
 struct KisKernel {
 	Q_UINT32 width;
 	Q_UINT32 height;
 	Q_INT32 offset;
 	Q_INT32 factor;
-	QValueVector<Q_INT32> data;
+	Q_INT32 * data;
 };
 
 class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
@@ -104,7 +99,7 @@ public:
 	 */
 	void applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
 		KisConvolutionBorderOp borderOp = BORDER_AVOID,
-		KisConvolutionChannelFlags channelFlags = CONVOLVE_COLOR);
+		enumChannelFlags channelFlags = FLAG_COLOR);
 
 
 

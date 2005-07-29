@@ -28,6 +28,7 @@
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_filter.h"
+#include "kis_layer.h"
 #include "kis_filter_manager.h"
 #include "kis_previewwidget.h"
 #include "kis_previewdialog.h"

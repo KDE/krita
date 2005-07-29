@@ -67,11 +67,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
 	m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
 
-	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
-	m_page -> cmbColorSpaces -> setCurrent(image -> colorStrategy() -> id()); // XXX i18n?
-	m_page -> cmbColorSpaces -> setEnabled(false); // XXX: re-enable when colorspace conversion is possible
 	m_page -> cmbColorSpaces -> hide();
-	m_page -> lblColorSpaces -> hide();
+	m_page -> lblColorSpaces -> setText(image->colorStrategy()->id().name());
 
 
 	fillCmbProfiles(image -> colorStrategy() -> id());

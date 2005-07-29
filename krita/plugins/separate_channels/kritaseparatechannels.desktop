@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Separate channels
+Name[es]=Canales separados
+Name[et]=Kanalid eraldi
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaseparatechannels

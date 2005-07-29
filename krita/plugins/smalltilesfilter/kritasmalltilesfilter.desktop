@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Small tiles filter
+Name[es]=Filtro de azulejos pequeños
+Name[et]=Pisipaanide filter
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

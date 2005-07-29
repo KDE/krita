@@ -32,5 +32,6 @@ SUBDIRS = cimg \
 	cubismfilter \
 	filtersgallery \
 	separate_channels \
-	smalltilesfilter
+	smalltilesfilter \
+	sobelfilter
 

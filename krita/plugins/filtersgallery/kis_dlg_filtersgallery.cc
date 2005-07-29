@@ -24,6 +24,9 @@
 
 #include "kis_filters_listview.h"
 #include "kis_filter.h"
+#include "kis_paint_device.h"
+#include "kis_layer.h"
+#include "kis_types.h"
 #include "kis_view.h"
 #include "kis_previewwidget.h"
 class KisPreviewView;

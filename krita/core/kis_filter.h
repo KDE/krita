@@ -31,6 +31,8 @@
 #include "kis_filter_registry.h"
 #include "kis_id.h"
 #include "koffice_export.h"
+#include "kis_progress_subject.h"
+#include "kis_paint_device.h"
 
 class KisPreviewDialog;
 class KisProgressDisplayInterface;

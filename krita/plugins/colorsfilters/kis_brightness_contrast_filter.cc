@@ -41,6 +41,11 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 }
 
+Q_UINT16 KisBrightnessContrastFilterConfiguration::transferValue(Q_UINT8 i)
+{
+	return (i << 8) | i;
+}
+ 
 KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
 	KisFilterConfigWidget * w = new KisFilterConfigWidget(parent);
@@ -75,6 +80,12 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 {
 	KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
+	Q_UINT16 transfer[256];
+	for(int i=0; i <256; i++)
+		transfer[i] = configBC->transferValue(i);
+
+	KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(transfer);
+		
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
@@ -84,7 +95,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 	while( ! srcIt.isDone()  && !cancelRequested())
 	{
 		// change the brightness and contrast
-		src->colorStrategy()->adjustBrightnessContrast(srcIt.oldRawData(), dstIt.rawData(), configBC->brightness(),configBC->contrast(),1);
+		src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, 1);
 					
 		++srcIt;
 		++dstIt;

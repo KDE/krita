@@ -69,6 +69,8 @@ private:
 	double m_rightmost;
 	dpoint *m_grab_point;
 	bool m_dragging;
+	double m_grabOffsetX;
+	double m_grabOffsetY;
     
 	bool m_readOnlyMode;
 	bool m_guideVisible;

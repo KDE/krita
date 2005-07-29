@@ -157,33 +157,22 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	return true;
 }
 
-void KisStrategyColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels)
+KisColorAdjustment *KisStrategyColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
-	if (brightness < -100) brightness = -100;
-	if (brightness > 100) brightness = 100;
-	if (contrast < -100) contrast = 100;
-	if (contrast > 100) contrast = 100;
+	LPGAMMATABLE transferFunctions[3];
+	transferFunctions[0] = cmsBuildGamma(256, 1.0);
+	transferFunctions[1] = cmsBuildGamma(256, 1.0);
+	transferFunctions[2] = cmsBuildGamma(256, 1.0);
 
-	int psize = pixelSize();
-
-
-	QColor c1, c2;
-	
-	for (int i = 0; i < nPixels; ++i) {
-
-		toQColor(src + (i * psize), &c1);
-
-		double dblContrast = (100.0 + contrast) / 100;
-		dblContrast *= dblContrast;
-
-		// change the brightness
-		c2.setRgb( simpleAdjust(c1.red(), brightness, dblContrast),
-			   simpleAdjust(c1.green(), brightness, dblContrast),
-			   simpleAdjust(c1.blue(), brightness, dblContrast));
-		   
-		nativeColor(c2, dst + (i * psize));
-	}
+	for(int i =0; i < 256; i++)
+		transferFunctions[0]->GammaTable[i] = transferValues[i];
+	return NULL;
 }
+
+void KisStrategyColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
+{
+}
+
 
 // BC: should this default be HSV-based?
 Q_INT8 KisStrategyColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)

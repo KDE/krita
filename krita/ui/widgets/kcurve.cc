@@ -216,16 +216,24 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
 		p = m_points.next();
 	}
 	
+		
 	if(closest_point == NULL || distance * width() > 5)
 	{
 		closest_point = new dpoint;
 		closest_point->x = x;
+		closest_point->y = y;
 		m_points.inSort(closest_point);
 	}
+	else
+		if(fabs(y - closest_point->y) * width() > 5)
+			return;
+		
 	
 	m_grab_point = closest_point;
-	m_grab_point->x = x;
-	m_grab_point->y = y;
+	m_grabOffsetX = m_grab_point->x - x;
+	m_grabOffsetY = m_grab_point->y - y;
+	m_grab_point->x = x + m_grabOffsetX;
+	m_grab_point->y = y + m_grabOffsetY;
 	m_dragging = true;
 
 	setCursor( KCursor::crossCursor() );
@@ -266,29 +274,27 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 {
 	if (m_readOnlyMode) return;
 	
-	dpoint *closest_point;
 	int x1, x2, y1, y2;
-	double distance;
 	
 	double x = e->pos().x() / (float)width();
 	double y = 1.0 - e->pos().y() / (float)height();
-	
-	distance = 1000;
-	
-	dpoint *p = m_points.first();
-	while(p)
+		
+	if (m_dragging == NULL)   // If no point is selected set the the cursor shape if on top
 	{
-		if (fabs (x - p->x) < distance)
+		double distance = 1000;
+		double ydistance = 1000;
+		dpoint *p = m_points.first();
+		while(p)
 		{
-			distance = fabs(x - p->x);
-			closest_point = p;
+			if (fabs (x - p->x) < distance)
+			{
+				distance = fabs(x - p->x);
+				ydistance = fabs(y - p->y);
+			}
+			p = m_points.next();
 		}
-		p = m_points.next();
-	}
 	
-	if (m_dragging == NULL)   // If no point is selected... 
-	{
-		if ( distance * width() > 3 )
+		if (distance * width() > 5 || ydistance * height() > 5)
 			setCursor( KCursor::arrowCursor() );    
 		else
 			setCursor( KCursor::crossCursor() );
@@ -296,6 +302,9 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 	else  // Else, drag the selected point
 	{
 		setCursor( KCursor::crossCursor() );
+		
+		x += m_grabOffsetX;
+		y += m_grabOffsetY;
 		
 		if (x < m_leftmost)
 			x = m_leftmost;
@@ -305,8 +314,10 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 		
 		if(y > 1.0)
 			y = 1.0;
+			
 		if(y < 0.0)
 			y = 0.0;
+			
 		m_grab_point->x = x;
 		m_grab_point->y = y;
 		
@@ -322,6 +333,7 @@ double KCurve::getCurveValue(double x)
 	dpoint *p;
 	dpoint *p0,*p1,*p2,*p3;
 	double c0,c1,c2,c3;
+	double val;
 	
 	if(m_points.count() == 0)
 		return 0.5;
@@ -360,7 +372,13 @@ double KCurve::getCurveValue(double x)
 	c3 = p1->y;
 	c0 = -2*p2->y + 2*c3 + c2 + (p3->y - p1->y) * (p2->x - p1->x) / (p3->x - p1->x);
 	c1 = p2->y - c3 - c2 - c0;
-	return ((c0*t + c1)*t + c2)*t + c3;
+	val = ((c0*t + c1)*t + c2)*t + c3;
+	
+	if(val < 0.0)
+		val = 0.0;
+	if(val > 1.0)
+		val = 1.0;
+	return val;
 }
 
 void KCurve::leaveEvent( QEvent * )

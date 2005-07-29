@@ -30,6 +30,7 @@ public:
 public:
 	inline Q_INT32 brightness() { return m_brightness; };
 	inline Q_INT32 contrast() { return m_contrast; };
+	Q_UINT16 transferValue(Q_UINT8 i);
 private:
 	Q_INT32 m_brightness;
 	Q_INT32 m_contrast;

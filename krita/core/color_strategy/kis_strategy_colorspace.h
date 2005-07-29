@@ -55,6 +55,7 @@ struct transform {
 	Q_UINT32 renderIntent;
 };
 
+struct KisColorAdjustment;
 
 /**
  * A colorspace strategy is the definition of a certain color model
@@ -274,11 +275,16 @@ public:
 
 
 	/**
-	 * Adjust the brightness and contrast of a series of pixels as told by
-	 * brightness [-100;100]
-	 * contrast [-100;100]
+	 * Create an adjustment object for adjusting the brightness and contrast
+	 * transferValues is a 256 bins array with values from 0 to 0xFFFF
 	 */
-	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels);
+	virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
+
+	
+	/**
+	 * Apply the adjustment created with on of the other functions
+	 */
+	virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 
 	
 	// XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?

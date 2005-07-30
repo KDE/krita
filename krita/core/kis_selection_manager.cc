@@ -295,7 +295,7 @@ void KisSelectionManager::updateGUI()
 
 	KAction * a;
 	for (a = m_pluginActions.first(); a; a = m_pluginActions.next()) {
-		a->setEnabled(enable);
+		a->setEnabled(img != 0);
 	}
 
 	// You can copy from locked layers and paste the clip into a new layer, even when

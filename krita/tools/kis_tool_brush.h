@@ -1,6 +1,4 @@
-/**
- *  kis_tool_brush.h - part of Krita
- *
+/*
  *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,6 +19,7 @@
 #ifndef KIS_TOOL_BRUSH_H_
 #define KIS_TOOL_BRUSH_H_
 
+
 #include "kis_tool_freehand.h"
 
 #include "kis_tool_factory.h"
@@ -28,6 +27,7 @@
 
 class QTimer;
 class KisPoint;
+class QHBoxLayout;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
 	Q_OBJECT
@@ -40,8 +40,6 @@ public:
 	virtual void setup(KActionCollection *collection);
 	virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
-	QWidget* createOptionWidget(QWidget* parent);
-
 protected:
 	
 	virtual void initPaint(KisEvent *e);
@@ -50,11 +48,12 @@ protected:
 private slots:
 
 	virtual void timeoutPaint();
-
+	
 private:
 	Q_INT32 m_rate;
 	QTimer * m_timer;
-	
+
+
 };
 
 class KisToolBrushFactory : public KisToolFactory {

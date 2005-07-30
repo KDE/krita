@@ -83,6 +83,9 @@ void KisFilterManager::setup(KActionCollection * ac)
 	am = new KActionMenu(i18n("Colors"), ac, "color_filters");
 	m_filterActionMenus.insert("colors", am);
 
+	am = new KActionMenu(i18n("Decor"), ac, "decor_filters");
+	m_filterActionMenus.insert("decor", am);
+
 	am = new KActionMenu(i18n("Edge detection"), ac, "edge_filters");
 	m_filterActionMenus.insert("edge", am);
 

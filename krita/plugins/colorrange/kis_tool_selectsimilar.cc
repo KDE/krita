@@ -159,7 +159,6 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 		if(img -> undoAdapter())
 			img -> undoAdapter() -> addCommand(t);
 		m_subject -> canvasController() -> updateCanvas();
-		m_selectionOptionsWidget -> ensureMaskColor();
 		QApplication::restoreOverrideCursor();
 	}
 }

@@ -89,8 +89,6 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 		}
 		KisSelectionSP selection = layer -> selection();
 		
-		m_optWidget -> ensureMaskColor();
-		
 		m_painter = new KisPainter(selection.data());
 		Q_CHECK_PTR(m_painter);
 		m_painter -> setPaintColor(Qt::black);

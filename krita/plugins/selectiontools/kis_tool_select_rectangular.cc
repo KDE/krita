@@ -213,8 +213,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 					default:
 						break;
 				}
-				m_optWidget -> ensureMaskColor();
-
+				
 				layer->emitSelectionChanged(rc);
 
 				QApplication::restoreOverrideCursor();

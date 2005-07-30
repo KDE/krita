@@ -77,9 +77,11 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 	KisKernel * kernel = new KisKernel();
 	kernel -> width = 3;
 	kernel -> height = 3;
+
 	kernel -> factor = matrix->factor();
 	kernel -> offset = matrix->offset();
 	kernel->data = new Q_INT32[9];
+	
 	for (int row = 0; row < 3; ++row) {
 		for (int col = 0; col < 3; ++col) {
 			kernel -> data[row * 3 + col] = matrix[0][col][row];

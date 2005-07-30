@@ -44,7 +44,6 @@ class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
 
 public:
 	KisSelection(KisPaintDeviceSP layer, const QString& name);
-	KisSelection(KisPaintDeviceSP layer, const QString& name, QColor c);
 
 	virtual ~KisSelection();
 
@@ -53,7 +52,7 @@ public:
 
 	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
-	QImage maskImage();
+	QImage KisSelection::maskImage();
 
 	void select(QRect r);
 
@@ -65,10 +64,6 @@ public:
 
 	// Tests if the the rect is totally outside the selection
 	bool isTotallyUnselected(QRect r);
-
-	// Keep the selection but set the mask to color c.
-	void setMaskColor(const QColor c);
-	QColor maskColor() { return m_maskColor; }
 
 	/**
 	 * Rough, but fastish way of determining the area
@@ -87,7 +82,6 @@ public:
 private:
 	KisPaintDeviceSP m_parentLayer;
 	KisColorSpaceAlphaSP m_alpha;
-	QColor m_maskColor;
 };
 
 #endif // KIS_SELECTION_H_

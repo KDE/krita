@@ -41,16 +41,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 		name)
 {
 	m_parentLayer = layer;
-	m_maskColor = Qt::white;
 	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
- 	m_alpha -> setMaskColor(m_maskColor);
-}
-
-KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name, QColor color)
-	: super(layer -> colorStrategy(), name)
-{
-	m_parentLayer = layer;
-	m_maskColor = color;
 }
 
 
@@ -60,45 +51,45 @@ KisSelection::~KisSelection()
 
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
-	QColor c;
-	QUANTUM opacity;
-	if (pixel(x, y, &c, &opacity)) {
-		return opacity;
-	}
-	else {
-		return MIN_SELECTED;
-	}
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+	
+	Q_UINT8 *pix = iter.rawData();
+	
+	return *pix;
 }
 
 void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
-	setPixel(x, y, m_maskColor, s);
+	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+	
+	Q_UINT8 *pix = iter.rawData();
+	
+	*pix = s;
 }
 
 QImage KisSelection::maskImage()
 {
-	Q_INT32 x, y, w, h, y2, x2;
-	m_parentLayer -> exactBounds(x, y, w, h);
-	QImage img = QImage(w, h, 32);;
+        Q_INT32 x, y, w, h, y2, x2;
+        m_parentLayer -> exactBounds(x, y, w, h);
+        QImage img = QImage(w, h, 32);;
 
-	for (y2 = y; y2 < h - y; ++y2) {
-		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-		x2 = 0;
-		while (!it.isDone()) {
-			Q_UINT8 s = MAX_SELECTED - *(it.rawData());
-			Q_INT32 c = qRgb(s, s, s);
-			img.setPixel(x2, y2, c);
-			++x2;
-			++it;
-		}
-	}
-	return img;
+        for (y2 = y; y2 < h - y; ++y2) {
+                KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+                x2 = 0;
+                while (!it.isDone()) {
+                        Q_UINT8 s = MAX_SELECTED - *(it.rawData());
+                        Q_INT32 c = qRgb(s, s, s);
+                        img.setPixel(x2, y2, c);
+                        ++x2;
+                        ++it;
+                }
+        }
+        return img;
 }
-
 void KisSelection::select(QRect r)
 {
 	KisFillPainter painter(this);
-	painter.fillRect(r, m_maskColor, MAX_SELECTED);
+	painter.fillRect(r, KisColor(Qt::white), MAX_SELECTED);
 	Q_INT32 x, y, w, h;
 	extent(x, y, w, h);
 	kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
@@ -107,7 +98,7 @@ void KisSelection::select(QRect r)
 void KisSelection::clear(QRect r)
 {
 	KisFillPainter painter(this);
-	painter.fillRect(r, m_maskColor, MIN_SELECTED);
+	painter.fillRect(r, KisColor(Qt::white), MIN_SELECTED);
 }
 
 void KisSelection::clear()
@@ -132,12 +123,6 @@ void KisSelection::invert()
 	}
 	Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
 	m_datamanager -> setDefaultPixel(&defPixel);
-}
-
-void KisSelection::setMaskColor(QColor c)
-{
-	m_alpha -> setMaskColor(c);
-	m_maskColor = c;
 }
 
 bool KisSelection::isTotallyUnselected(QRect r)
@@ -169,7 +154,6 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 	Q_INT32 x2;
 	uchar *j = img.bits();
 
-#if 1 // blueish monochrome with outline
 	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
 		KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
 		Q_UINT8 preS = *(it.rawData());
@@ -217,69 +201,4 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 			++nextLineIt;
 		}
 	}
-#endif
-#if 0 // blueish monocrome
-	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
-		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-		x2 = 0;
-		while (!it.isDone()) {
-			Q_UINT8 s = *(it.rawData());
-			if(s!=MAX_SELECTED)
-			{
-				Q_UINT8 invs = MAX_SELECTED - s;
-				
-				Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
-
-				if(s==MIN_SELECTED)
-				{
-					*(j+0) = 165+g ;
-					*(j+1) = 128+g;
-					*(j+2) = 128+g;
-				}
-				else
-				{
-					*(j+0) = UINT8_BLEND(*(j+0), g+165, s);
-					*(j+1) = UINT8_BLEND(*(j+1), g+128, s);
-					*(j+2) = UINT8_BLEND(*(j+2), g+128, s);
-				}
-			}
-			j+=4;
-			++x2;
-			++it;
-		}
-	}
-#endif
-#if 0 // inverted grayscale with jump at crossing
-	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
-		KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-		x2 = 0;
-		while (!it.isDone()) {
-			Q_UINT8 s = *(it.rawData());
-			if(s!=MAX_SELECTED)
-			{
-				Q_UINT8 invs = MAX_SELECTED - s;
-				
-				Q_UINT8 g = 255 - (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 6;
-				if(g<256/3-5)
-					g-=30;
-				if(s==MIN_SELECTED)
-				{
-					*(j+0) = g ;
-					*(j+1) = g;
-					*(j+2) = g;
-				}
-				else
-				{
-					 g = (invs*g)>>8;
-					*(j+0) = g + ((s**(j+0))>>8);
-					*(j+1) = g + ((s**(j+1))>>8);
-					*(j+2) = g + ((s**(j+2))>>8);
-				}
-			}
-			j+=4;
-			++x2;
-			++it;
-		}
-	}
-#endif
 }

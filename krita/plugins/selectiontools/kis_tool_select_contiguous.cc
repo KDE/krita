@@ -103,10 +103,6 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		KisFillPainter fillpainter(dev);
 		fillpainter.setFillThreshold(m_fuzziness);
 		KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
-
-		QColor c = m_options -> maskColor();
-		if (c.isValid())
-			selection -> setMaskColor(c);
 		
 		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev.data());
 		
@@ -127,8 +123,6 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 		}
 		
-		m_options -> ensureMaskColor();
-
 		KisUndoAdapter *adapter = img -> undoAdapter();
 		if (adapter)
 			adapter -> addCommand(t);

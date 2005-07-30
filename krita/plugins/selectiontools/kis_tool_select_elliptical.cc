@@ -215,8 +215,6 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 						break;
 				}
 				
-				m_optWidget -> ensureMaskColor();
-					
 				KisUndoAdapter *adapter = img -> undoAdapter();
 				if (adapter)
 					adapter -> addCommand(t);

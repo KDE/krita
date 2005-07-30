@@ -148,8 +148,6 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
 			layer->emitSelectionChanged();
 			
-			m_optWidget -> ensureMaskColor();
-
 			if (img -> undoAdapter())
 				img -> undoAdapter() -> addCommand(t);
 

@@ -66,8 +66,6 @@ public:
 
 	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 
-	virtual void setMaskColor(QColor c) { m_maskColor = c; }
-
 protected:
 
 	/**
@@ -98,9 +96,6 @@ protected:
 
 private:
 	vKisChannelInfoSP m_channels;
-
-	QColor m_maskColor;
-	bool m_inverted;
 };
 
 #endif // KIS_COLORSPACE_ALPHA_H_

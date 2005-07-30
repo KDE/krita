@@ -501,7 +501,6 @@ void KisSelectionManager::deselect()
 	KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Deselect"), layer.data());
 	Q_CHECK_PTR(t);
 	
-	// The following also emits selectionChanged
 	layer -> deselect();
 	
 	if (img -> undoAdapter())

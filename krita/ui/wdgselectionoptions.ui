@@ -9,10 +9,13 @@
             <x>0</x>
             <y>0</y>
             <width>180</width>
-            <height>60</height>
+            <height>31</height>
         </rect>
     </property>
-    <grid>
+    <property name="caption">
+        <string>WdgSelectionOptions</string>
+    </property>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -22,54 +25,57 @@
         <property name="spacing">
             <number>2</number>
         </property>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>lblMaskColor</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <property name="text">
-                <string>Mask color:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>cmbMaskColor</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>lblAction</cstring>
-            </property>
-            <property name="text">
-                <string>Action:</string>
-            </property>
-        </widget>
-        <widget class="QComboBox" row="2" column="1">
-            <item>
-                <property name="text">
-                    <string>Add</string>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Subtract</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>cmbAction</cstring>
-            </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>lblAction</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Action:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>Add</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Subtract</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbAction</cstring>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-        <widget class="KColorButton" row="1" column="1">
+        <spacer>
             <property name="name">
-                <cstring>bnMaskColor</cstring>
+                <cstring>spacer1</cstring>
             </property>
-            <property name="text">
-                <string></string>
+            <property name="orientation">
+                <enum>Vertical</enum>
             </property>
-        </widget>
-    </grid>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcolorbutton.h</includehint>
-</includehints>
 </UI>

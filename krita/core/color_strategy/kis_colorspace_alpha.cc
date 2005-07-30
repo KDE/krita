@@ -43,8 +43,6 @@ namespace {
 KisColorSpaceAlpha::KisColorSpaceAlpha() :
 	KisStrategyColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
 {
-	m_maskColor = Qt::red;
-	m_inverted = false;
 	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
 }
 
@@ -69,18 +67,13 @@ void KisColorSpaceAlpha::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
 
 void KisColorSpaceAlpha::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfileSP /*profile*/)
 {
-	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
+	c -> setRgb(255, 255, 255);
 }
 
 void KisColorSpaceAlpha::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
-	c -> setRgb(m_maskColor.red(), m_maskColor.green(), m_maskColor.blue());
-	if (m_inverted) {
-		*opacity = OPACITY_OPAQUE - src[PIXEL_MASK];
-	}
-	else {
-		*opacity = src[PIXEL_MASK];
-	}
+	c -> setRgb(255, 255, 255);
+	*opacity = src[PIXEL_MASK];
 }
 
 Q_INT8 KisColorSpaceAlpha::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
@@ -161,7 +154,7 @@ bool KisColorSpaceAlpha::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcP
 
 	while ( i < numPixels ) {
 
-		dstColorStrategy -> nativeColor(m_maskColor, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
+		dstColorStrategy -> nativeColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
 		i += 1;
 		j += size;

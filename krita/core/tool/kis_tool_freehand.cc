@@ -134,7 +134,6 @@ void KisToolFreehand::initPaint(KisEvent *)
 
 			if (device -> hasSelection()) {
 				m_target -> addSelection(device -> selection());
-				m_target -> selection() -> setMaskColor( device -> selection() -> maskColor() );
 			}
 
 			dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);

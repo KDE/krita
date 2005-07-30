@@ -28,13 +28,17 @@
 class KisSobelFilterConfiguration : public KisFilterConfiguration
 {
 	public:
-                KisSobelFilterConfiguration(Q_UINT32 pixelWidth, Q_UINT32 pixelHeight) : m_pixelWidth(pixelWidth), m_pixelHeight(pixelHeight) {};
+                KisSobelFilterConfiguration(bool doHorizontally, bool doVertically, bool keepSign, bool makeOpaque) : m_doHorizontally(doHorizontally), m_doVertically(doVertically), m_keepSign(keepSign), m_makeOpaque(makeOpaque) {};
 	public:
-                inline Q_UINT32 pixelWidth() { return m_pixelWidth; };
-                inline Q_UINT32 pixelHeight() {return m_pixelHeight; };
-        private:
-                Q_UINT32 m_pixelWidth;
-                Q_UINT32 m_pixelHeight;
+                inline bool doHorizontally() { return m_doHorizontally; };
+                inline bool doVertically() {return m_doVertically; };
+		inline bool keepSign() {return m_keepSign; };
+		inline bool makeOpaque() {return m_makeOpaque; };
+	private:
+                bool m_doHorizontally;
+                bool m_doVertically;
+		bool m_keepSign;
+		bool m_makeOpaque;
 };
 
 class KisSobelFilter : public KisFilter
@@ -47,13 +51,13 @@ public:
 	virtual bool supportsPainting() { return true; }
 	virtual bool supportsPreview() { return true; }
 	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(10,10)); return list; }
+	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }
 public:
 	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
 	void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-	void sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign);
+	void sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);
 };
 
 #endif

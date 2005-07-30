@@ -46,7 +46,7 @@
 #include <kis_types.h>
 #include <kis_progress_display_interface.h>
 
-#include "kis_multi_integer_filter_widget.h"
+#include "kis_multi_bool_filter_widget.h"
 #include "kis_sobel_filter.h"
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -62,11 +62,13 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
         Q_INT32 height = rect.height();
         
         //read the filter configuration values from the KisFilterConfiguration object
-        Q_UINT32 pixelWidth = ((KisSobelFilterConfiguration*)configuration)->pixelWidth();
-        Q_UINT32 pixelHeight = ((KisSobelFilterConfiguration*)configuration)->pixelHeight();
-        
+        bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
+        bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
+	bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
+	bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
+
         //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-	sobel(src, dst, true, true, true);
+	sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -86,7 +88,7 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign)
+void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
 	QRect rect = src -> exactBounds();
 	Q_UINT32 x = rect.x();
@@ -164,6 +166,16 @@ void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHo
 			
 		//store the dest 
 		dst -> writeBytes(dest, x, row, width, 1);
+		
+		if ( makeOpaque )
+		{
+			KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
+			while( ! dstIt.isDone() )
+                        {
+				dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
+				++dstIt;
+			}
+		}
 		setProgress(row);		
 	}
 	setProgressDone();
@@ -177,19 +189,21 @@ void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHo
 
 KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelheight") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+	vKisBoolWidgetParam param;
+	param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally") ) );
+	param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically") ) );
+	param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result") ) );
+	param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque") ) );
+	return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+	KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
 	if( widget == 0 )
 	{
-		return new KisSobelFilterConfiguration( 10, 10);
+		return new KisSobelFilterConfiguration( true, true, true, true);
 	} else {
-		return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+		return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
 	}
 }

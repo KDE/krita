@@ -36,7 +36,6 @@ class QWidget;
 class KActionCollection;
 class KRadioAction;
 class KDialog;
-class QColor;
 class KisBrush;
 class KisGradient;
 class KisPattern;

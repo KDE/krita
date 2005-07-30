@@ -43,7 +43,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
 #include "kis_integer_maths.h"
-
+#include "kis_colorspace_registry.h"
 namespace {
 
 	class KisPaintDeviceCommand : public KNamedCommand {
@@ -737,27 +737,13 @@ KisUndoAdapter *KisPaintDevice::undoAdapter() const
 void KisPaintDevice::convertFromImage(const QImage& img)
 {
 	// XXX: Apply import profile
-
-	// XXX: Optimize this.
-	QColor c;
-	QRgb rgb;
-	Q_INT32 opacity;
-
-	if (img.isNull())
-		return;
-
-	for (Q_INT32 y = 0; y < img.height(); y++) {
-		for (Q_INT32 x = 0; x < img.width(); x++) {
-			rgb = img.pixel(x, y);
-			c.setRgb(qRed(rgb), qGreen(rgb), qBlue(rgb));
-
-			if (img.hasAlphaBuffer())
-				opacity = qAlpha(rgb);
-			else
-				opacity = OPACITY_OPAQUE;
-
-			setPixel(x, y, c, opacity);
-		}
+	if (colorStrategy() == KisColorSpaceRegistry::instance()->get("RGBA")) {
+		writeBytes(img.bits(), 0, 0, img.width(), img.height());
+	}
+	else {
+		Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
+		KisColorSpaceRegistry::instance()->get("RGBA")->convertPixelsTo(img.bits(), 0, dstData, colorStrategy(), 0, img.width() * img.height());
+		writeBytes(dstData, 0, 0, img.width(), img.height());
 	}
 }
 

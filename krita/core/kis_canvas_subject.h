@@ -68,7 +68,7 @@ public:
 	virtual void setFGColor(const KisColor& c) = 0;
 	
 	virtual KisBrush *currentBrush() const = 0;
-	
+
 	virtual KisPattern *currentPattern() const = 0;
 	
 	virtual KisGradient *currentGradient() const = 0;

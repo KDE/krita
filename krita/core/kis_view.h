@@ -150,6 +150,11 @@ public: // Plugin access API. XXX: This needs redesign.
 	// The exposure setting to use for rendering previews of high dynamic range images.
 	float HDRExposure() const;
 
+	/**
+	 * Get the main toolbox for this view.
+	 */
+	KisToolBox * toolBox() { return m_toolBox; };
+
 signals:
 	void bgColorChanged(const KisColor& c);
 	void fgColorChanged(const KisColor& c);

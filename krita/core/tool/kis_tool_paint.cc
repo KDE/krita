@@ -136,7 +136,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 	m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
 
 	m_optionWidgetLayout -> setRowSpacing(3, 6);
-
+	
 	return m_optionWidget;
 }
 
@@ -149,7 +149,6 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
 	Q_ASSERT(m_optionWidget != 0);
 	Q_ASSERT(m_optionWidgetLayout != 0);
-
 	m_optionWidgetLayout -> addMultiCellLayout(layout, 3, 3, 0, 1);
 }
 

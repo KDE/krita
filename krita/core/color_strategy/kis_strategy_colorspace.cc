@@ -141,7 +141,8 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	}
 	
 
-	// Couldn't get a profile.
+	// Couldn't get a profile. Use QColor -- this is okay here, because even if we were to use KisColor,
+	// we still wouldn't be able to get a transform. That's why we're here...
 	while (numPixels > 0) {
 		QColor color;
 		QUANTUM opacity;

@@ -26,7 +26,6 @@
 #include <climits>
 #include <strings.h>
 
-#include "qcolor.h"
 #include "qbrush.h"
 #include "qfontinfo.h"
 #include "qfontmetrics.h"
@@ -864,7 +863,8 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 				KisHLineIterator it = polygonMask -> createHLineIterator(xl, y, xr - xl + 1, true);
 
 				while (!it.isDone()) {
-					polygonMask -> colorStrategy() -> nativeColor(QColor(0, 0, 0), MAX_SELECTED, it.rawData());
+					// We're using a selection here, that means alpha colorspace, that means one byte.
+					it.rawData()[0] = MAX_SELECTED;
 					++it;
 				}
 			}

@@ -33,7 +33,6 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qvaluevector.h>
-#include <qcolor.h>
 
 #include <kcommand.h>
 

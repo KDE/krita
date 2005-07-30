@@ -23,7 +23,6 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qcolor.h>
 #include <qtimer.h>
 
 #include <kapplication.h>
@@ -42,13 +41,12 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
-#include <kis_color_utilities.h>
 #include <kis_selected_transaction.h>
 #include <kis_undo_adapter.h>
 
 #include "kis_tool_selectsimilar.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor & c, int fuzziness, enumSelectionMode mode)
+void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8 * c, int fuzziness, enumSelectionMode mode)
 {
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
@@ -63,28 +61,20 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const QColor 
 		KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
 		KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
 		while (!hiter.isDone()) {
-			QColor c2;
-			cs -> toQColor(hiter.rawData(), &c2, &opacity, profile);
 
 			// XXX: Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
 			if (opacity > OPACITY_TRANSPARENT) {
 
-				Q_UINT8 match = matchColors(c, c2, fuzziness);
+				Q_UINT8 match = cs->difference(c, hiter.rawData());
 
 				if (mode == SELECTION_ADD) {
-					Q_UINT8 d = *(selIter.rawData());
-					if (d + match > MAX_SELECTED) {
+					if (match <= fuzziness) {
 						*(selIter.rawData()) = MAX_SELECTED;
 					}
-					else {
-						*(selIter.rawData()) = match + d;
-					}
-
 				}
 				else if (mode == SELECTION_SUBTRACT) {
-					Q_UINT8 selectedness = *(selIter.rawData());
-					if (match < selectedness) {
-						*(selIter.rawData()) = selectedness - match;
+					if (match <= fuzziness) {
+						*(selIter.rawData()) = MIN_SELECTED;
 					}
 					else {
 						*(selIter.rawData()) = 0;
@@ -141,7 +131,6 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 		KisImageSP img;
 		KisPaintDeviceSP dev;
 		QPoint pos;
-		QColor c;
 		QUANTUM opacity;
 
 		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
@@ -160,10 +149,10 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 
 		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
-		dev -> pixel(pos.x(), pos.y(), &c, &opacity);
+		KisColor c = dev->colorAt(pos.x(), pos.y());
 
 		if (opacity > OPACITY_TRANSPARENT)
-			selectByColor(dev, dev -> selection(), c, m_fuzziness, m_currentSelectAction);
+			selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);
 		else
 			m_subject -> selectionManager() -> selectAll();
 

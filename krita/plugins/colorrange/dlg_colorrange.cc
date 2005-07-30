@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <qapplication.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qslider.h>
@@ -50,13 +51,62 @@
 #include <kis_strategy_colorspace.h>
 #include <kis_profile.h>
 #include "kis_color_conversions.h"
-#include "kis_color_utilities.h"
 #include "kis_selected_transaction.h"
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
 
+namespace {
 
+// XXX: Poynton says: hsv/hls is not what one ought to use for colour calculations.
+//      Unfortunately, I don't know enough to be able to use anything else.
+
+	bool isReddish(int h)
+	{
+		return ((h > 330 && h < 360) || ( h > 0 && h < 40));
+	}
+
+	bool isYellowish(int h)
+	{
+		return (h> 40 && h < 65);
+	}
+
+	bool isGreenish(int h)
+	{
+		return (h > 70 && h < 155);
+	}
+
+	bool isCyanish(int h)
+	{
+		return (h > 150 && h < 190);
+	}
+
+	bool isBlueish(int h)
+	{
+		return (h > 185 && h < 270);
+	}
+
+	bool isMagentaish(int h)
+	{
+		return (h > 265 && h < 330);
+	}
+
+	bool isHighlight(int v)
+	{
+		return (v > 200);
+	}
+
+	bool isMidTone(int v)
+	{
+		return (v > 100 && v < 200);
+	}
+
+	bool isShadow(int v)
+	{
+		return (v < 100);
+	}
+
+}
 
 Q_UINT32 matchColors(const QColor & c, enumAction action)
 {
@@ -237,6 +287,7 @@ void DlgColorRange::slotAdd(bool on)
 
 void DlgColorRange::slotSelectClicked()
 {
+	QApplication::setOverrideCursor(KisCursor::waitCursor());
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
 	m_layer -> exactBounds(x, y, w, h);
@@ -291,6 +342,7 @@ void DlgColorRange::slotSelectClicked()
 		}
 	}
 	updatePreview();
+	QApplication::restoreOverrideCursor();
 }
 
 void DlgColorRange::slotDeselectClicked()

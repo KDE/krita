@@ -77,9 +77,9 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 	KisKernel * kernel = new KisKernel();
 	kernel -> width = 3;
 	kernel -> height = 3;
-	kernel -> factor = matrix[0].factor();
-	kernel -> offset = matrix[0].offset();
-	kernel->data = new Q_INT32(9);
+	kernel -> factor = matrix->factor();
+	kernel -> offset = matrix->offset();
+	kernel->data = new Q_INT32[9];
 	for (int row = 0; row < 3; ++row) {
 		for (int col = 0; col < 3; ++col) {
 			kernel -> data[row * 3 + col] = matrix[0][col][row];
@@ -122,9 +122,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	emit notifyProgress(this, 0);
 
 	KisStrategyColorSpaceSP cs = src->colorStrategy();
-	// The total number of channels in a pixel
-	Q_INT32 depth = cs->nChannels();
-
+	
 	// Determine whether we convolve border pixels, or not.
 	switch (borderOp) {
 		case BORDER_DEFAULT_FILL :

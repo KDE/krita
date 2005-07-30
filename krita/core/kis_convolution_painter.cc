@@ -167,11 +167,12 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 					// Fill the cache with pointers to the pixels under the kernel
 					KisHLineIteratorPixel kit = src -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
 					while (!kit.isDone()) {
-						pixelPtrCache[i] = kit.rawData();
+						pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
 						++kit;
 						++i;
 					}
 				}
+				Q_ASSERT (i==kw*kh);
 				cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
 				pixelPtrCache.fill(0);
 			}

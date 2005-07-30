@@ -42,7 +42,6 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
-#include <kis_color_utilities.h>
 #include <kis_selection_options.h>
 #include <kis_canvas_observer.h>
 #include <kis_fill_painter.h>

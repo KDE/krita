@@ -60,7 +60,6 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
 		KisTool * t = KisToolRegistry::instance()->get(*it)->createTool();
 
 		if (!t) continue;
-
 		toolbox->registerTool( t->action(), t->toolType(), t->priority() );
 
 		delete(t); // These tools share their action, and the action for this tool has already been created.

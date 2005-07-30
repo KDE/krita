@@ -90,16 +90,8 @@ void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 pr
 {
 	uint prio = priority;
 	ToolList * tl = m_tools.at(toolType);
-
-	if (prio == 0) {
-		tl->append(tool);
-	}
-	else {
-		if (prio - 1 <= tl->count())
-			tl->insert(prio - 1, tool);
-		else
-			tl->append(tool);
-	}
+	while( (*tl)[prio] ) prio++;
+	(*tl)[prio] = tool;
 }
 
 QToolButton *KisToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
@@ -129,8 +121,10 @@ void KisToolBox::setupTools()
 		if (tl->isEmpty()) continue;
 
 		ToolArea *tools = new ToolArea( this );
-		for (uint j = 0; j < tl->count(); ++j) {
-			KAction *tool = tl->at(j);
+		ToolList::Iterator it;
+		for ( it = tl->begin(); it != tl->end(); ++it )
+		{
+			KAction *tool = it.data();
 			if(! tool)
 				continue;
 			QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->toolTip());
@@ -173,10 +167,10 @@ void KisToolBox::enableTools(bool enable)
 	
 		if (!tl) continue;
 
-		for (uint j = 0; j < tl->count(); ++j) {
-			KAction *tool = tl->at(j);
-			tool->setEnabled(enable);
-		}
+		
+		ToolList::Iterator it;
+		for ( it = tl->begin(); it != tl->end(); ++it )
+			it.data()->setEnabled(enable);
 	}
 	m_buttonGroup->setEnabled(enable);
 	for (Q_UINT32 i = 0; i < m_numberOfButtons; ++i) {

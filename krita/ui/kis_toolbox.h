@@ -78,7 +78,7 @@ private:
 
 	QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
 
-	typedef QPtrList<KAction> ToolList; // The priority ordered list of tools for a certain tooltype
+	typedef QMap< int, KAction*> ToolList; // The priority ordered list of tools for a certain tooltype
 		
 	QPtrList<ToolList> m_tools;
 	QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.

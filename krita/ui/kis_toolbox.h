@@ -57,6 +57,7 @@ public:
 	// Called when all tools have been added by the tool controller
 	void setupTools();
 
+
 public slots:
 	
 	virtual void setOrientation ( Orientation o );
@@ -74,8 +75,6 @@ private:
 	Q_UINT32 m_numberOfButtons;
 	
 	QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
-
-	KDualColorButton * m_colorButton; // Not functional yet...
 
 	QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
 

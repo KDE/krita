@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
-#include <kdualcolorbutton.h>
 #include <kseparator.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -146,10 +145,8 @@ void KisToolBox::setupTools()
 	m_buttonGroup->setButton( 0 );
 	m_numberOfButtons = id;
 
-	// Color button (and perhaps later other control information
-	m_colorButton = new KDualColorButton(this);
-
 }
+
 
 void KisToolBox::setOrientation ( Qt::Orientation o )
 {
@@ -195,10 +192,15 @@ ToolArea::ToolArea(QWidget *parent)
 	m_layout = new QBoxLayout(this, QBoxLayout::LeftToRight, 0, 2);
 	QWidget *w = new QWidget(this);
 	m_layout->addWidget(w);
+	m_layout->setSpacing(0);
+	m_layout->setMargin(0);
+
 	QGridLayout *grid = new QGridLayout(w, 2, 2);
 	m_leftRow = new QWidget(w);
 	grid->addWidget(m_leftRow, 0, 0);
-	m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 1);
+	m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 0);
+	m_leftLayout->setMargin(0);
+	m_leftLayout->setSpacing(0);
 
 	w = new QWidget(this);
 	m_layout->addWidget(w);
@@ -206,7 +208,9 @@ ToolArea::ToolArea(QWidget *parent)
 	m_rightRow = new QWidget(w);
 	grid->addWidget(m_rightRow, 0, 0);
 
-	m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 1);
+	m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 0);
+	m_rightLayout->setMargin(0);
+	m_rightLayout->setSpacing(0);
 }
 
 void ToolArea::add(QToolButton *button)

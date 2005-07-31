@@ -214,7 +214,10 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 						break;
 				}
 				
-				layer->emitSelectionChanged(rc);
+				if(hasSelection)
+					layer->emitSelectionChanged(rc);
+				else
+					layer->emitSelectionChanged();
 
 				QApplication::restoreOverrideCursor();
 			}

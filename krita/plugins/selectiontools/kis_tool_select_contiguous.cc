@@ -127,7 +127,8 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 		if (adapter)
 			adapter -> addCommand(t);
 			
-		m_subject -> canvasController() -> updateCanvas();
+		dev->emitSelectionChanged();
+		
 		QApplication::restoreOverrideCursor();
 	}
 

@@ -187,7 +187,8 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 								
 				KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
 
-				if(! layer -> hasSelection())
+				bool hasSelection = layer -> hasSelection();
+				if(! hasSelection)
 				{
 					layer -> selection() -> clear();
 					if(m_selectAction==SELECTION_SUBTRACT)
@@ -219,7 +220,11 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 				if (adapter)
 					adapter -> addCommand(t);
 
-				layer -> emitSelectionChanged(rc);
+				if(hasSelection)
+					layer->emitSelectionChanged(rc);
+				else
+					layer->emitSelectionChanged();
+					
 				QApplication::restoreOverrideCursor();
 			}
 		}

@@ -1720,17 +1720,12 @@ void KisImage::slotSelectionChanged()
 
 void KisImage::slotSelectionChanged(const QRect& r)
 {
- 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
-	notify(r);
+ 	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
+	QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
+	
+	notify(r2);
 	emit activeSelectionChanged(KisImageSP(this));
 }
-
-void KisImage::slotSelectionCreated()
-{
-	kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionCreated\n";
-	emit selectionCreated(KisImageSP(this));
-}
-
 
 KisStrategyColorSpaceSP KisImage::colorStrategy() const
 {

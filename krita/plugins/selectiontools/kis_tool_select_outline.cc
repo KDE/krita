@@ -146,12 +146,14 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
 			painter.paintPolygon(m_points);
 
-			layer->emitSelectionChanged();
+			if(hasSelection)
+				layer->emitSelectionChanged(painter.dirtyRect());
+			else
+				layer->emitSelectionChanged();
 			
 			if (img -> undoAdapter())
 				img -> undoAdapter() -> addCommand(t);
 
-			img -> notify(painter.dirtyRect());
 			QApplication::restoreOverrideCursor();
 		}
 

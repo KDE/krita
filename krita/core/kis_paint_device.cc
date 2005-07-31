@@ -830,7 +830,7 @@ void KisPaintDevice::emitSelectionChanged() {
 
 void KisPaintDevice::emitSelectionChanged(const QRect& r) {
 	if(m_owner)
-			m_owner -> slotSelectionChanged();
+		m_owner -> slotSelectionChanged(r);
 }
 
 
@@ -843,11 +843,8 @@ KisSelectionSP KisPaintDevice::selection(){
 		m_selection -> setY(m_y);
 	}
 
-	if (!m_hasSelection) {
-		m_hasSelection = true;
-		if(m_owner)
-			m_owner -> slotSelectionCreated();
-	}
+	m_hasSelection = true;
+	
 	return m_selection;
 }
 

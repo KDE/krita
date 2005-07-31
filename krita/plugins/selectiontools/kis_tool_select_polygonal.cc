@@ -136,10 +136,14 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 
 			painter.paintPolygon(m_points);
 
-			layer->emitSelectionChanged(painter.dirtyRect());
+			if(hasSelection)
+				layer->emitSelectionChanged(painter.dirtyRect());
+			else
+				layer->emitSelectionChanged();
 
 			if (img -> undoAdapter())
 				img -> undoAdapter() -> addCommand(t);
+				
 			QApplication::restoreOverrideCursor();
 		}
 

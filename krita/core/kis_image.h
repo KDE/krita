@@ -222,7 +222,6 @@ public:
 
 signals:
 	void activeSelectionChanged(KisImageSP image);
-	void selectionCreated(KisImageSP image);
 	void selectionChanged(KisImageSP image);
 	void update(KisImageSP image, const QRect& rc);
 	void layersChanged(KisImageSP image);
@@ -235,7 +234,6 @@ signals:
 public slots:
 	void slotSelectionChanged();
 	void slotSelectionChanged(const QRect& r);
-	void slotSelectionCreated();
 
 private:
 	KisImage& operator=(const KisImage& rhs);

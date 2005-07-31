@@ -325,7 +325,6 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpaceSP colorStrategy, const QStr
 	m_hasSelection = false;
 	m_selection = 0;
 	m_profile = 0;
-	m_selectionCreated = false;
 }
 
 KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrategy, const QString& name) :
@@ -367,7 +366,6 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpaceSP colorStrat
         delete [] defPixel;
 	Q_CHECK_PTR(m_datamanager);
 	m_extentIsValid = true;
-	m_selectionCreated = false;
 }
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
@@ -832,13 +830,7 @@ void KisPaintDevice::emitSelectionChanged() {
 
 void KisPaintDevice::emitSelectionChanged(const QRect& r) {
 	if(m_owner)
-		if(m_selectionCreated)
-		{
 			m_owner -> slotSelectionChanged();
-			m_selectionCreated = false;
-		}
-		else
-			m_owner -> slotSelectionChanged(r);
 }
 
 
@@ -849,7 +841,6 @@ KisSelectionSP KisPaintDevice::selection(){
 		m_selection -> setVisible(true);
 		m_selection -> setX(m_x);
 		m_selection -> setY(m_y);
-		m_selectionCreated = true;
 	}
 
 	if (!m_hasSelection) {

@@ -398,14 +398,11 @@ private:
 	void accept(KisRotateVisitor &);
 	void accept(KisTransformVisitor &);
 
-	// Whether there is a selection valid for this layer
+	// Whether the selection is active
 	bool m_hasSelection;
 	// Contains the actual selection. For now, there can be only
 	// one selection per layer. XXX: is this a limitation?
 	KisSelectionSP m_selection;
-
-	bool m_selectionCreated;
-
 };
 
 inline Q_INT32 KisPaintDevice::pixelSize() const

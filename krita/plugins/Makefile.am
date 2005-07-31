@@ -33,5 +33,6 @@ SUBDIRS = cimg \
 	filtersgallery \
 	separate_channels \
 	smalltilesfilter \
-	sobelfilter
+	sobelfilter \
+	roundcorners
 

@@ -46,6 +46,12 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
 	connect(intNumInputLeftOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedLeftOpacity(int) ));
 // 	intNumInputRightOpacity -> setRange( 0, 100, false);
 	connect(intNumInputRightOpacity, SIGNAL( valueChanged(int) ), SLOT( slotChangedRightOpacity(int) ));
+
+}
+
+void KisAutogradient::activate()
+{
+	paramChanged();
 }
 
 void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)

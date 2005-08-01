@@ -91,6 +91,7 @@ Import/Export
 
 User Interface
 
+	* Add out-of-gamut selection
 	* Fix crash with tablet because of tool refactoring.
 	* Fix layout problems in tool option widgets.
 	* Disable dragging the toolbox from dock position to dock position (see Karbon)

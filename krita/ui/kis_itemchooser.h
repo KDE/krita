@@ -42,6 +42,7 @@ public:
 
 	KoIconItem *currentItem();
 	void setCurrent(KoIconItem *item);
+	void setCurrent(int index);
 
 public slots:
 	void addItem(KoIconItem *item);

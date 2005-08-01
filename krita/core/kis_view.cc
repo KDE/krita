@@ -42,6 +42,7 @@
 #include <qstringlist.h>
 
 // KDE
+#include <kglobalsettings.h>
 #include <dcopobject.h>
 #include <kaction.h>
 #include <kcolordialog.h>
@@ -137,8 +138,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	else
 		setXMLFile("krita.rc");
 
-	createToolBox();
-	
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
 	Q_ASSERT(m_paletteManager);
@@ -201,6 +200,13 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_statusBarProfileLabel = 0;
 	m_HDRExposure = 0;
 
+	createToolBox();
+
+	createLayerBox();
+	
+	createPaintopBox();
+	
+	// Now the view plugins will be loaded.
 	setInstance(KisFactory::global());
 
 	setupCanvas();
@@ -214,12 +220,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	m_inputDevice = INPUT_DEVICE_MOUSE;
 
-	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
-	
-	
-	createLayerBox();
-
-	createPaintopBox();
 	
 	connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
@@ -231,6 +231,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 	m_tabletEventTimer.start();
 
 	m_toolBox->setBarPos(KToolBar::Left);
+
+	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 }
 
 
@@ -282,7 +284,7 @@ void KisView::createPaintopBox()
 {
 	m_paintopBox = new KisPaintopBox(this, "paintopbox");
 	m_paintopBox->setCaption(i18n("Brushes and stuff"));
-	paletteManager()->addWidget(m_paintopBox, "brushes and stuff", "layerpalette" );
+	paletteManager()->addWidget(m_paintopBox, i18n("Brushes and tools"), "paintopbox" );
 }
 
 
@@ -608,11 +610,11 @@ void KisView::resizeEvent(QResizeEvent *)
 			paintView(viewToWindow(drawRect));
 		}
 	}
-
+	int fontheight = QFontMetrics(KGlobalSettings::generalFont()).height() * 3;
 	m_vScroll -> setPageStep(drawH);
-	m_vScroll -> setLineStep(drawH/4);
+	m_vScroll -> setLineStep(fontheight);
 	m_hScroll -> setPageStep(drawW);
-	m_hScroll -> setLineStep(drawW/4);
+	m_hScroll -> setLineStep(fontheight);
 
 	if (m_vScroll -> isVisible())
 		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());

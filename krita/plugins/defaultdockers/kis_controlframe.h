@@ -25,21 +25,45 @@
 #include <qframe.h>
 #include <qtabwidget.h>
 #include <qdockwindow.h>
-#include <kdualcolorbutton.h>
-#include <qcolor.h>
 #include <koFrameButton.h>
 
-class KDualColorButton;
+class QWidget;
+
+class KToolBar;
+
 class KoIconItem;
 class KisIconWidget;
 class KisGradientWidget;
 
+class KisAutobrush;
+class KisAutogradient;
 class KisBrush;
-class KisPattern;
+class KisBrushChooser;
 class KisGradient;
-class KisColor;
+class KisGradientChooser;
+class KisItemChooser;
+class KisPattern;
+class KisResourceMediator;
+class KisView;
 
-enum ActiveColor { ac_Foreground, ac_Background};
+class KisPopupFrame : public QFrame {
+
+	Q_OBJECT
+
+public:
+
+	KisPopupFrame(QWidget * parent, const char * name = 0, WFlags f = 0)
+		: QFrame(parent, name, f) {};
+
+public:
+
+	void setChooser(KisItemChooser * chooser) { m_chooser = chooser; };
+	KisItemChooser * chooser() { return m_chooser; };
+
+private:
+	KisItemChooser * m_chooser;
+};
+
 
 /**
  *   Control Frame - status display with access to
@@ -49,32 +73,54 @@ class KisControlFrame : public QFrame {
 	Q_OBJECT
 
 public:
-	KisControlFrame(QWidget *parent = 0, const char *name = 0 );
-	ActiveColor activeColor();
+	KisControlFrame(KisView * view, QWidget *parent = 0, const char *name = 0 );
 
 public slots:
-	void slotSetFGColor(const KisColor& c);
-	void slotSetBGColor(const KisQColor& c);
 
 	void slotSetBrush(KoIconItem *item);
 	void slotSetPattern(KoIconItem *item);
 	void slotSetGradient(KoIconItem *item);
 
-signals:
-	void fgColorChanged(const KisQColor& c);
-	void bgColorChanged(const KisQColor& c);
-	void activeColorChanged(ActiveColor ac);
+	void slotShowBrushChooser();
+	void slotShowPatternChooser();
+	void slotShowGradientChooser();
 
-protected slots:
-	void slotFGColorSelected(const KisQColor& c);
-	void slotBGColorSelected(const KisQColor& c);
-	void slotActiveColorChanged(KDualColorButton::DualColor dc);
+        void slotBrushChanged(KisBrush * brush);
+	void slotPatternChanged(KisPattern * pattern);
+	void slotGradientChanged(KisGradient * gradient);
 
 private:
-	KDualColorButton *m_pColorButton;
-	KisIconWidget *m_pBrushWidget;
-	KisIconWidget *m_pPatternWidget;
-	KisIconWidget *m_pGradientWidget;
+	
+	void createBrushesChooser(KisView * view);
+	void createPatternsChooser(KisView * view);
+	void createGradientsChooser(KisView * view);
+
+
+private:
+	QFont m_font;
+
+	QTabWidget * m_brushesTab;
+	QTabWidget * m_gradientTab;
+
+	KisIconWidget *m_brushWidget;
+	KisIconWidget *m_patternWidget;
+	KisIconWidget *m_gradientWidget;
+
+	KisPopupFrame * m_brushChooserPopup;
+	KisPopupFrame * m_patternChooserPopup;
+	KisPopupFrame * m_gradientChooserPopup;
+	
+        KisResourceMediator *m_brushMediator;
+        KisResourceMediator *m_patternMediator;
+        KisResourceMediator *m_gradientMediator;
+
+	KisView * m_view;
+	KToolBar * m_toolbar;
+
+	KisAutobrush * m_autobrush;
+	KisAutogradient * m_autogradient;
+	KisBrushChooser * m_brushChooser;
+	KisGradientChooser * m_gradientChooser;
 };
 
 #endif

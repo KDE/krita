@@ -29,15 +29,12 @@ class KisView;
 class KisBrush;
 class KisPattern;
 class KisBirdEyeBox;
-class KisAutoBrush;
-class KisTextBrush;
-class KisAutoGradient;
 class KisHSVWidget;
 class KisRGBWidget;
 class KisGrayWidget;
 class KisPaletteWidget;
 class KisResourceMediator;
-//class KisControlFrame;
+class KisControlFrame;
 
 class KritaDefaultDockers : public KParts::Plugin
 {
@@ -48,44 +45,27 @@ public:
 	virtual ~KritaDefaultDockers();
 
 private:
-	//void createControlFrame(KisView * view);
+	void createControlFrame(KisView * view);
 	void createBirdEyeBox(KisView * view);
-	void createAutoBrush(KisView * view);
-	void createAutoGradient(KisView * view);
 	void createHSVWidget(KisView * view);
 	void createRGBWidget(KisView * view);
+	void createPaletteWidget(KisView * view);
 	void createGrayWidget(KisView * view);
-	void createPaletteWidget(KisView * view);	
-	void createPatternWidget(KisView * view);
-	void createBrushesWidget(KisView * view);
-	void createGradientsWidget(KisView * view);
-#if 0	
-public XXXslots:
-        void slotBrushChanged(KisBrush * brush);
-        void slotGradientChanged(KisGradient * gradient);
-        void slotPatternChanged(KisPattern * pattern);
-#endif
 private:
 
 	KisView * m_view;
 
 	KoPaletteManager * m_paletteManager;
-#if 0
-	KisControlFrame * m_controlWidget;
-#endif
-        KisBirdEyeBox * m_birdEyeBox;
 
-        KisAutobrush *m_autobrush;
-        KisAutogradient* m_autogradient;
+	KisControlFrame * m_controlWidget;
+
+        KisBirdEyeBox * m_birdEyeBox;
 
         KisHSVWidget *m_hsvwidget;
         KisRGBWidget *m_rgbwidget;
         KisGrayWidget *m_graywidget;
         KisPaletteWidget *m_palettewidget;
 
-        KisResourceMediator *m_brushMediator;
-        KisResourceMediator *m_patternMediator;
-        KisResourceMediator *m_gradientMediator;
 
 };
 

@@ -29,6 +29,8 @@ class KisAutobrush : public KisWdgAutobrush
 	Q_OBJECT
 public:
 	KisAutobrush(QWidget *parent, const char* name, const QString& caption);
+	void activate();
+	
 signals:
 	void activatedResource(KisResource *r);
 

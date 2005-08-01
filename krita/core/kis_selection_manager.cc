@@ -655,7 +655,7 @@ void KisSelectionManager::feather()
 	// Make sure we've got enough space around the edges.
 	rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 3, rect.height() + 3);
 	
-	painter.applyMatrix(&k, selection.data(), rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
+	painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
 	painter.end();
 
 	if (img -> undoAdapter())

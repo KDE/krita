@@ -139,9 +139,15 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 
 	paramChanged();
 
+	
+	connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
+
 }
 
-
+void KisAutobrush::activate()
+{
+	paramChanged();
+}
 
 void KisAutobrush::paramChanged()
 {

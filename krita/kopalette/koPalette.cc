@@ -80,12 +80,9 @@ KoPalette::KoPalette(KoView * parent, const char * name)
 	layout() -> setMargin(0);
 
 	// Compute a font that's smaller that the general font
-	m_font = KGlobalSettings::toolBarFont();
-	QFont f2 = KGlobalSettings::generalFont();
-	if (m_font.pointSize() >= f2.pointSize() ) {
-		float ps = f2.pointSize() * 0.8;
-		m_font.setPointSize((int)ps);
-	}	
+	m_font  = KGlobalSettings::generalFont();
+	float ps = m_font.pointSize() * 0.7;
+	m_font.setPointSize((int)ps);
 	setFont(m_font);
 
 #if 0 // Photoshop doesn't shade either, let's try for minimum size

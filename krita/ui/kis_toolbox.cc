@@ -138,9 +138,7 @@ void KisToolBox::setupTools()
 	// select first (select tool)
 	m_buttonGroup->setButton( 0 );
 	m_numberOfButtons = id;
-
 }
-
 
 void KisToolBox::setOrientation ( Qt::Orientation o )
 {
@@ -207,7 +205,7 @@ ToolArea::ToolArea(QWidget *parent)
 	m_rightLayout->setSpacing(0);
 }
 
-void ToolArea::add(QToolButton *button)
+void ToolArea::add(QWidget *button)
 {
 	if (m_left)
 		m_leftLayout->addWidget(button);

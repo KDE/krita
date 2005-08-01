@@ -24,6 +24,7 @@ kritadefaultdockers_la_SOURCES = defaultdockers.cc \
 	kis_palette_widget.cc \
 	kis_pattern_chooser.cc \
 	kis_resource_mediator.cc \
+	kis_controlframe.cc \
 	wdgautobrush.ui \
 	wdgautogradient.ui \
 	wdgbirdeye.ui
@@ -38,6 +39,7 @@ noinst_HEADERS = defaultdockers.h \
 	kis_gradient_chooser.h \
 	kis_palette_widget.h \
 	kis_pattern_chooser.h \
+	kis_controlframe.h \
 	kis_resource_mediator.h
 
 kritadefaultdockers_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

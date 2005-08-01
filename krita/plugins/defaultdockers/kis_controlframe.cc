@@ -23,138 +23,272 @@
 #include <stdlib.h>
 
 #include <qlayout.h>
+#include <qtabwidget.h>
 
+#include <kmainwindow.h>
 #include <kglobalsettings.h>
-#include <kdualcolorbutton.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <klocale.h>
-
+#include <ktoolbar.h>
 #include <koFrameButton.h>
 
+#include "kis_factory.h"
 #include "kis_controlframe.h"
-
+#include "kis_resource_mediator.h"
+#include "kis_itemchooser.h"
+#include "kis_pattern_chooser.h"
+#include "kis_gradient_chooser.h"
+#include "kis_icon_item.h"
 #include "kis_iconwidget.h"
 #include "kis_brush.h"
 #include "kis_pattern.h"
 #include "kis_gradient.h"
-#include "kis_color.h"
+#include "kis_brush_chooser.h"
+#include "kis_view.h"
+#include "kis_toolbox.h"
+#include "kis_autobrush.h"
+#include "kis_autogradient.h"
 
-KisControlFrame::KisControlFrame( QWidget* parent, const char* name )
+KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* name )
 	: QFrame( parent, name )
+	, m_brushWidget(0)
+	, m_patternWidget(0)
+	, m_gradientWidget(0)
+	, m_brushChooserPopup(0)
+	, m_patternChooserPopup(0)
+	, m_gradientChooserPopup(0)
+	, m_brushMediator(0)
+        , m_patternMediator(0)
+        , m_gradientMediator(0)
+	, m_view(view)
 {
-	/*
-	  QString defaultPattern = getenv("KDEDIR") + QString("/")
-	  + KStandardDirs::kde_default("data")
-	  + "krayon/patterns/wizard.png";
-	*/
 	setFrameStyle(Panel | Raised);
 	setLineWidth(1);
 
-	QBoxLayout * l = new QHBoxLayout(this);
+	m_font  = KGlobalSettings::generalFont();
+	float ps = m_font.pointSize() * 0.7;
+	m_font.setPointSize((int)ps);
+
+	m_toolbar = new KToolBar(m_view->mainWindow(), Qt::DockLeft, false, "resources", false, true);
+	m_toolbar->setBarPos(KToolBar::Left);
+	m_toolbar->setName("resources");
+
+	m_brushWidget = new KisIconWidget(m_toolbar, "brushes");
+	m_brushWidget->show();
 	
+	m_patternWidget = new KisIconWidget(m_toolbar, "patterns");
+	m_patternWidget->show();
+
+	m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
+	m_gradientWidget->show();
+
+	m_brushWidget -> setFixedSize( 34, 34 );
+	connect(m_brushWidget, SIGNAL(clicked()), this, SLOT(slotShowBrushChooser()));
+
+	m_patternWidget -> setFixedSize( 34, 34 );
+	connect(m_patternWidget, SIGNAL(clicked()), this, SLOT(slotShowPatternChooser()));
 	
-	m_pColorButton = new KDualColorButton(this);
-	l -> addWidget(m_pColorButton);
-	l -> insertSpacing(0, 2);
+	m_gradientWidget -> setFixedSize( 34, 34 );
+	connect(m_gradientWidget, SIGNAL(clicked()), this, SLOT(slotShowGradientChooser()));
 
-	m_pBrushWidget = new KisIconWidget(this);
-	l -> addWidget(m_pBrushWidget);
-	l -> insertSpacing(1, 2);
-
-	m_pPatternWidget = new KisIconWidget(this);
-	l -> addWidget(m_pPatternWidget);
-	l -> insertSpacing(2, 2);
-
-	m_pGradientWidget = new KisIconWidget(this);
-	l -> addWidget(m_pGradientWidget);
-	l -> insertSpacing(3, 2);
-
-	l -> addItem(new QSpacerItem(1, 1));
-
-	m_pColorButton -> setFixedSize( 34, 34 );
-	m_pBrushWidget -> setFixedSize( 34, 34 );
-	m_pPatternWidget -> setFixedSize( 34, 34 );
-	m_pGradientWidget -> setFixedSize( 34, 34 );
+	createBrushesChooser(m_view);
+	createPatternsChooser(m_view);
+	createGradientsChooser(m_view);
 
 
-	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
-		SLOT(slotFGColorSelected(const QColor &)));
-	
-	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this,
-		SLOT(slotBGColorSelected(const QColor &)));
-	
-	connect(m_pColorButton, SIGNAL(currentChanged(KDualColorButton::DualColor)),
-		this, SLOT(slotActiveColorChanged(KDualColorButton::DualColor )));
 }
 
-ActiveColor KisControlFrame::activeColor()
-{
-	if (m_pColorButton->current() == KDualColorButton::Foreground)
-		return ac_Foreground;
-	else
-		return ac_Background;
-}
-
-void KisControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
-{
-	if(s == KDualColorButton::Foreground)
-		slotFGColorSelected(m_pColorButton->currentColor());
-	else
-		slotBGColorSelected(m_pColorButton->currentColor());
-}
 
 void KisControlFrame::slotSetBrush(KoIconItem *item)
 {
 	if (item)
-		m_pBrushWidget -> slotSetItem(*item);
+		m_brushWidget -> slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetPattern(KoIconItem *item)
 {
 	if (item)
-		m_pPatternWidget -> slotSetItem(*item);
+		m_patternWidget -> slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetGradient(KoIconItem *item)
 {
 	if (item)
-		m_pGradientWidget -> slotSetItem(*item);
+		m_gradientWidget -> slotSetItem(*item);
 }
 
-void KisControlFrame::slotSetFGColor(const QColor& c)
+
+void KisControlFrame::slotShowBrushChooser()
 {
-	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	if (!m_brushChooserPopup) return;
+	if (!m_brushWidget) return;
 
-	m_pColorButton->setCurrent(KDualColorButton::Foreground);
-	m_pColorButton->setForeground( c );
-    
-	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	m_brushChooserPopup->move( this->mapToGlobal( m_brushWidget->rect().bottomLeft() ) );
+	m_brushChooserPopup->show();
+	
 }
 
-void KisControlFrame::slotSetBGColor(const QColor& c)
+
+void KisControlFrame::slotShowPatternChooser()
 {
-	disconnect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	disconnect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-    
-	m_pColorButton->setCurrent(KDualColorButton::Background);
-	m_pColorButton->setBackground( c );
-    
-	connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+	if (!m_patternChooserPopup ) return;
+	if (!m_patternWidget) return;
+
+	m_patternChooserPopup ->move( this->mapToGlobal( m_patternWidget->rect().bottomLeft() ) );
+	m_patternChooserPopup ->show();
+	
 }
 
-void KisControlFrame::slotFGColorSelected(const QColor& c)
+void KisControlFrame::slotShowGradientChooser()
 {
-	emit fgColorChanged( c);
+	if (!m_gradientChooserPopup ) return;
+	if (!m_gradientWidget) return;
+
+	m_gradientChooserPopup ->move( this->mapToGlobal( m_gradientWidget->rect().bottomLeft() ) );
+	m_gradientChooserPopup ->show();
+	
 }
 
-void KisControlFrame::slotBGColorSelected(const QColor& c)
+void KisControlFrame::slotBrushChanged(KisBrush * brush)
 {
-	emit bgColorChanged( c );
+        KisIconItem *item;
+
+        if((item = m_brushMediator -> itemFor(brush)))
+        {
+                slotSetBrush(item);
+        } else {
+                slotSetBrush( new KisIconItem(brush) );
+        }
+
 }
+
+void KisControlFrame::slotPatternChanged(KisPattern * pattern)
+{
+        KisIconItem *item;
+        if (!pattern)
+                return;
+
+        if ( (item = m_patternMediator -> itemFor(pattern)) )
+                slotSetPattern(item);
+        else
+                slotSetPattern( new KisIconItem(pattern) );
+}
+
+
+void KisControlFrame::slotGradientChanged(KisGradient * gradient)
+{
+        KisIconItem *item;
+        if (!gradient)
+                return;
+
+        if ( (item = m_gradientMediator -> itemFor(gradient)) )
+                slotSetGradient(item);
+        else
+                slotSetGradient( new KisIconItem(gradient) );
+}
+
+void KisControlFrame::createBrushesChooser(KisView * view)
+{
+
+	m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup", WType_Popup | WStyle_DialogBorder);
+	m_brushChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
+	m_brushChooserPopup->setLineWidth(2);
+
+	QHBoxLayout * l = new QHBoxLayout(m_brushChooserPopup, 2, 2, "brushpopuplayout");
+
+	QTabWidget * m_brushesTab = new QTabWidget(m_brushChooserPopup, "brushestab");
+	m_brushesTab->setTabShape(QTabWidget::Triangular);
+	m_brushesTab->setFocusPolicy(QWidget::NoFocus);
+	m_brushesTab->setFont(m_font);
+	m_brushesTab->setMargin(1);
+	
+	l->add(m_brushesTab);
+	
+	KisBrushChooser * m_brushChooser = new KisBrushChooser(m_brushesTab, "brush_chooser");
+	m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
+	
+	KisAutobrush * m_autobrush = new KisAutobrush(m_brushesTab, "autobrush", i18n("Autobrush"));
+	m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
+	connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
+	
+	m_brushChooser->setFont(m_font);
+	m_brushMediator = new KisResourceMediator( m_brushChooser, this);
+	connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
+	
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("ImagePipeBrushServer");
+	m_brushMediator -> connectServer(rServer);
+	rServer = KisFactory::rServerRegistry() -> get("BrushServer");
+	m_brushMediator -> connectServer(rServer);
+
+	KisControlFrame::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
+	m_brushChooser->setCurrent( 0 );
+	m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
+
+}
+
+void KisControlFrame::createPatternsChooser(KisView * view)
+{
+	m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup", WType_Popup | WStyle_DialogBorder);
+	m_patternChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
+	m_patternChooserPopup->setLineWidth(2);
+	KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup, "pattern_chooser");
+
+	QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup, 2, 2, "patternpopuplayout");
+	l2->add( chooser );
+	chooser->setFont(m_font);
+
+	m_patternMediator = new KisResourceMediator( chooser, view);
+	connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
+
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry() -> get("PatternServer");
+	m_patternMediator -> connectServer(rServer);
+	
+	KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
+	chooser->setCurrent( 0 );
+	m_patternMediator->setActiveItem( chooser->currentItem() );
+}
+
+
+void KisControlFrame::createGradientsChooser(KisView * view)
+{
+	m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup", WType_Popup | WStyle_DialogBorder);
+	m_gradientChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
+	m_gradientChooserPopup->setLineWidth(2);
+
+	QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup, 2, 2, "gradientpopuplayout");
+
+	QTabWidget * m_gradientTab = new QTabWidget(m_gradientChooserPopup, "gradientstab");
+	m_gradientTab->setTabShape(QTabWidget::Triangular);
+	m_gradientTab->setFocusPolicy(QWidget::NoFocus);
+	m_gradientTab->setFont(m_font);
+	m_gradientTab->setMargin(1);
+	
+	l2->add( m_gradientTab);
+
+	KisGradientChooser * m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup, "gradient_chooser");
+	m_gradientChooser->setFont(m_font);
+
+	m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
+
+	KisAutogradient * m_autogradient = new KisAutogradient(m_gradientChooserPopup, "autogradient", i18n("Autogradient"));
+        connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(gradientActivated(KisResource*)));
+	m_gradientTab->addTab(m_autogradient, i18n("Autogradient"));
+	
+	m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
+	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
+
+	KisResourceServerBase* rServer;
+	rServer = KisFactory::rServerRegistry()->get("GradientServer");
+	m_gradientMediator -> connectServer(rServer);
+
+	connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
+	m_gradientChooser->setCurrent( 0 );
+	m_gradientMediator->setActiveItem( m_gradientChooser->currentItem() );
+}
+
 
 #include "kis_controlframe.moc"
 

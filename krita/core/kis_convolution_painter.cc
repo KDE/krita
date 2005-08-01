@@ -67,13 +67,6 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	applyMatrix(matrix, m_device, x, y, w, h);
-}
-
-
-void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-
 	KisKernel * kernel = new KisKernel();
 	kernel -> width = 3;
 	kernel -> height = 3;
@@ -87,22 +80,22 @@ void KisConvolutionPainter::applyMatrix(KisMatrix3x3 * matrix, KisPaintDeviceSP 
 			kernel -> data[row * 3 + col] = matrix[0][col][row];
 		}
 	}
-	applyMatrix(kernel, src, x, y, w, h);
+	applyMatrix(kernel, x, y, w, h);
 }
 
 
-void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
 					KisConvolutionBorderOp borderOp,
 					enumChannelFlags  channelFlags )
 {
 	// Make the area we cover as small as possible
-	if (src -> hasSelection()) {
+	if (m_device -> hasSelection()) {
 
-		if (src -> selection() -> isTotallyUnselected(QRect(x, y, w, h))) {
+		if (m_device -> selection() -> isTotallyUnselected(QRect(x, y, w, h))) {
 			return;
 		}
 
-		QRect r = src -> selection() -> extent().intersect(QRect(x, y, w, h));
+		QRect r = m_device -> selection() -> extent().intersect(QRect(x, y, w, h));
 		x = r.x();
 		y = r.y();
 		w = r.width();
@@ -123,7 +116,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 	int lastProgressPercent = 0;
 	emit notifyProgress(this, 0);
 
-	KisStrategyColorSpaceSP cs = src->colorStrategy();
+	KisStrategyColorSpaceSP cs = m_device->colorStrategy();
 	
 	// Determine whether we convolve border pixels, or not.
 	switch (borderOp) {
@@ -150,7 +143,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 		// col = the x position of the pixel we want to change
 		int col = x; 
 		
-		KisHLineIteratorPixel hit = src -> createHLineIterator(x, row, w, true);
+		KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
 		
 		while (!hit.isDone()) {
 			if (hit.isSelected()) {
@@ -165,7 +158,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, KisPaintDeviceSP src
 					// kw = the width of the kernel
 					
 					// Fill the cache with pointers to the pixels under the kernel
-					KisHLineIteratorPixel kit = src -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+					KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
 					while (!kit.isDone()) {
 						pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
 						++kit;

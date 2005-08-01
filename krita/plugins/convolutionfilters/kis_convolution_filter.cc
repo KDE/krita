@@ -38,12 +38,13 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 				   KisFilterConfiguration* configuration,
 				   const QRect& rect)
 {
+	// XXX: We don't do anything with src here -- carefully test this for problems.
 	KisConvolutionPainter painter( dst );
 	if (m_progressDisplay)
 		m_progressDisplay->setSubject( &painter, true, true );
 		
 	KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
-	painter.applyMatrix(amatrixes, src, rect.x(), rect.y(), rect.width(), rect.height());
+	painter.applyMatrix(amatrixes, rect.x(), rect.y(), rect.width(), rect.height());
 
 	if (painter.cancelRequested()) {
 		cancel();

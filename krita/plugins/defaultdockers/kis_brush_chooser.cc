@@ -27,7 +27,8 @@
 #include "kis_icon_item.h"
 #include "kis_brush.h"
 
-KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name) : super(parent, name)
+KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
+	: super(parent, name)
 {
 	m_lbSpacing = new QLabel(i18n("Spacing: "), this);
 	m_slSpacing = new KisDoubleWidget(0.01, 10, this, "double_widget");

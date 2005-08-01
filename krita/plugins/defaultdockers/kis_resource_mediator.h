@@ -26,7 +26,7 @@ class KoIconItem;
 class KisItemChooser;
 class KisIconItem;
 class KisResource;
-
+class KisResourceServerBase;
 
 /**
  * A resource mediator manages access to resources like
@@ -52,11 +52,14 @@ public:
 	KisResource *resourceFor(KisIconItem *item) const;
 	QWidget *chooserWidget() const;
 
+public slots:
+	
+	void setActiveItem(KoIconItem *item);
+
 signals:
 	void activatedResource(KisResource *r);
 
 private slots:
-	void setActiveItem(KoIconItem *item);
 	void rServerAddedResource(KisResource *resource);
 
 private:

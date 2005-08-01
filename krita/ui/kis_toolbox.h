@@ -57,7 +57,6 @@ public:
 	// Called when all tools have been added by the tool controller
 	void setupTools();
 
-
 public slots:
 	
 	virtual void setOrientation ( Orientation o );
@@ -66,6 +65,8 @@ public slots:
 
 	// Enables or disables all buttons and the corresponding actions.
 	void enableTools(bool enable);
+	
+
 	
 private:
 
@@ -90,14 +91,17 @@ class ToolArea : public QWidget {
 public:
 	ToolArea(QWidget *parent);
 	void setOrientation ( Qt::Orientation o );
-	void add(QToolButton *button);
+	void add(QWidget *button);
 	QWidget* getNextParent();
 
 private:
-	QPtrList<QToolButton> m_children;
+	QPtrList<QWidget> m_children;
 	QBoxLayout *m_leftLayout, *m_rightLayout, * m_layout;
 	bool m_left;
 	QWidget * m_leftRow, * m_rightRow;
+
+	
 };
+
 
 #endif // _KIS_TOOLBOX_H_

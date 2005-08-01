@@ -1,10 +1,4 @@
 # location for the rc file
-#kritarcdir = $(kde_datadir)/krita/kpartplugins
-
-# rc file containing the GUI for the plugin
-#kritarc_DATA = rgb_u16_plugin.rc
-
-# Install the desktop file needed to detect the plugin
 kde_services_DATA = krita_rgb_u16_plugin.desktop
 
 #EXTRA_DIST = $(kritarc_DATA)

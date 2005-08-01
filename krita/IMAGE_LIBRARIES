@@ -132,7 +132,7 @@ stalled so much that the move to Gegl didn't happen before Gimp 2.0.
 However, the Thawte millionaire whose name has escaped me, has
 promised to support gegl development financially, freeing the
 developer to work full-time on it. It is, more or less, an attempt to
-write a templated library in C++ with the help of a custom language to
+write a templated library in C with the help of a custom language to
 describe image operations.
 
 Advantages:

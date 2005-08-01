@@ -30,13 +30,8 @@ class KCurve : public QWidget
 Q_OBJECT
 
 public:
-	KCurve(int w, int h,                                      // Widget size.
-		QWidget *parent=0,                                 // Parent widget instance.
-		bool readOnly=false);                              // If true : widget with full edition mode capabilities.
-                                                                    // If false : display curve data only without edition.
+	KCurve(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 
-	KCurve(QWidget *parent, const char *n);
-	
 	virtual ~KCurve();
 
 	void reset(void);

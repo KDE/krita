@@ -42,8 +42,8 @@
 
 #include "kcurve.h"
 
-KCurve::KCurve(QWidget *parent, const char *)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
+KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
+            : QWidget(parent, name, f)
 {
 	m_grab_point     = NULL;
 	m_readOnlyMode   = false;
@@ -53,26 +53,6 @@ KCurve::KCurve(QWidget *parent, const char *)
 	setMouseTracking(true);
 	setPaletteBackgroundColor(Qt::NoBackground);
 	setMinimumSize(150, 50);
-	dpoint *p = new dpoint;
-	p->x = 0.0;p->y=0.0;
-	m_points.inSort(p);
-	p = new dpoint;
-	p->x = 1.0;p->y=1.0;
-	m_points.inSort(p);
-	setFocusPolicy(QWidget::StrongFocus);
-}
-
-KCurve::KCurve(int w, int h, QWidget *parent, bool readOnly)
-            : QWidget(parent, 0, Qt::WDestructiveClose)
-{
-	m_grab_point = NULL;
-	m_readOnlyMode = readOnly;
-	m_guideVisible = false;
-	m_dragging = false;
-	
-	setMouseTracking(true);
-	setPaletteBackgroundColor(Qt::NoBackground);
-	setMinimumSize(w, h);
 	dpoint *p = new dpoint;
 	p->x = 0.0;p->y=0.0;
 	m_points.inSort(p);

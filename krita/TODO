@@ -153,6 +153,7 @@ Profiles
         * Support out-of-gamut warning indications for parts of an image 
           containing unprintable colours (no idea how to implement this). -> this
           is pretty easy with lcms
+	* preferences dialog can show non-existent profile for the monitor profile -> confusing
 
 
 Tools

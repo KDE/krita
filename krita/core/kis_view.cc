@@ -136,6 +136,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 		setXMLFile("krita_readonly.rc");
 	else
 		setXMLFile("krita.rc");
+
+	createToolBox();
 	
 	m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
 	Q_CHECK_PTR(m_paletteManager);
@@ -212,7 +214,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 	m_inputDevice = INPUT_DEVICE_MOUSE;
 
-	createToolBox();
 	m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 	
 	
@@ -609,7 +610,9 @@ void KisView::resizeEvent(QResizeEvent *)
 	}
 
 	m_vScroll -> setPageStep(drawH);
+	m_vScroll -> setLineStep(drawH/4);
 	m_hScroll -> setPageStep(drawW);
+	m_hScroll -> setLineStep(drawW/4);
 
 	if (m_vScroll -> isVisible())
 		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());

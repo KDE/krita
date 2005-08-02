@@ -56,7 +56,6 @@ public:
 
 	// Called when all tools have been added by the tool controller
 	void setupTools();
-
 public slots:
 	
 	virtual void setOrientation ( Orientation o );

@@ -31,8 +31,11 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
 	: m_subject(parent),
 	  m_controller(controller)
 {
+	m_toolBox = 0;
 	m_oldTool = 0;
 	m_dummyTool = 0;
+	m_paletteManager = 0;
+	m_actionCollection = 0;
 }
 
 KisToolManager::~KisToolManager()
@@ -97,7 +100,6 @@ void KisToolManager::updateGUI()
 		if (!m_dummyTool) {
 	                m_dummyTool = KisToolDummyFactory(m_actionCollection).createTool();
 		}
-		kdDebug() << "Dummy tool: " << m_dummyTool << "\n";
 		setCurrentTool(m_dummyTool);
 	}
 	else if (enable && m_oldTool) {
@@ -113,7 +115,6 @@ void KisToolManager::updateGUI()
 
 void KisToolManager::setCurrentTool(KisTool *tool)
 {
-	kdDebug() << "set tool: " << tool->name() << "\n";
 	KisTool *oldTool = currentTool();
 	KisCanvas * canvas = (KisCanvas*)m_controller->canvas();
 	

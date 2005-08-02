@@ -808,8 +808,9 @@ void KisView::layerUpdateGUI(bool enable)
 	m_imgMergeLinked -> setEnabled(nlinked > 1);
 	m_imgMergeLayer -> setEnabled(nlayers > 1 && layerPos < nlayers - 1);
 
-	m_selectionManager -> updateGUI();
+	m_selectionManager->updateGUI();
 	m_filterManager->updateGUI();
+	m_toolManager->updateGUI();
 	
 	imgUpdateGUI();
 }

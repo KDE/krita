@@ -21,19 +21,17 @@
 #ifndef _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 #define _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 
+#include <qwidget.h>
+
 #include "kis_filter.h"
 #include <kdebug.h>
+#include "wdg_brightness_contrast.h"
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
 public:
-	KisBrightnessContrastFilterConfiguration(Q_INT32 nbrightness, Q_INT32 ncontrast);
+	KisBrightnessContrastFilterConfiguration();
 public:
-	inline Q_INT32 brightness() { return m_brightness; };
-	inline Q_INT32 contrast() { return m_contrast; };
-	Q_UINT16 transferValue(Q_UINT8 i);
-private:
-	Q_INT32 m_brightness;
-	Q_INT32 m_contrast;
+	Q_UINT16 transfer[256];
 };
 
 /** 
@@ -49,13 +47,24 @@ public:
 public:
 
 	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+	virtual KisFilterConfiguration* configuration(QWidget *, KisPaintDeviceSP dev);
 	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
 	static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
 	virtual bool supportsPainting() { return true; }
 	virtual bool supportsPreview() { return true; }
 	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
+};
+
+class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
+
+public:
+	KisBrightnessContrastConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
+	virtual ~KisBrightnessContrastConfigWidget() {};
+
+	KisBrightnessContrastFilterConfiguration * config();
+
+	WdgBrightnessContrast * m_page;
 };
 
 #endif

@@ -55,6 +55,18 @@ KisStrategyColorSpaceRGB::KisStrategyColorSpaceRGB() :
 	setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_8) );
 }
 
+struct KisColorAdjustment
+{
+	~KisColorAdjustment() { cmsDeleteTransform(transform);
+		cmsCloseProfile(profiles[0]);
+		cmsCloseProfile(profiles[1]);
+		cmsCloseProfile(profiles[2]);
+	}
+
+	cmsHPROFILE profiles[3];
+	cmsHTRANSFORM transform;
+};
+
 KisStrategyColorSpaceRGB::~KisStrategyColorSpaceRGB()
 {
 }
@@ -276,36 +288,30 @@ QImage KisStrategyColorSpaceRGB::convertToQImage(const Q_UINT8 *data, Q_INT32 wi
 	return img;
 }
 
-void KisStrategyColorSpaceRGB::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
+KisColorAdjustment *KisStrategyColorSpaceRGB::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
-	static cmsHPROFILE profiles[3];
-	static cmsHTRANSFORM transform=0;
-	static Q_INT8 oldb=0;
-	static Q_INT8 oldc=0;
-	
-	if((oldb != brightness || oldc != contrast) && transform!=0)
-	{
-		cmsDeleteTransform(transform);
-		cmsCloseProfile(profiles[0]);
-		cmsCloseProfile(profiles[1]);
-		cmsCloseProfile(profiles[2]);
-		transform=0;
-	}
+	LPGAMMATABLE transferFunctions[3];
+	transferFunctions[0] = cmsBuildGamma(256, 1.0);
+	transferFunctions[1] = cmsBuildGamma(256, 1.0);
+	transferFunctions[2] = cmsBuildGamma(256, 1.0);
 
-	if(transform==0)
-	{
-		double a,b;
-		a=contrast/100.0+1.0;
-		a *= a;
-		b= 50 -50*a + brightness;
-		profiles[0] = cmsCreate_sRGBProfile();
-		profiles[1] = cmsCreateBCHSWabstractProfile(30, b, a, 0, 0, 6504, 6504);
-		profiles[2] = cmsCreate_sRGBProfile();
-		transform  = cmsCreateMultiprofileTransform(profiles, 3, TYPE_BGRA_8, TYPE_BGRA_8, INTENT_PERCEPTUAL, 0);
-		oldb=brightness;
-		oldc=contrast;
-	}
-	cmsDoTransform(transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
+	for(int i =0; i < 256; i++)
+		transferFunctions[0]->GammaTable[i] = transferValues[i];
+		
+	KisColorAdjustment *adj = new KisColorAdjustment;
+	adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
+	cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
+	
+	adj->profiles[0] = cmsCreate_sRGBProfile();
+	adj->profiles[2] = cmsCreate_sRGBProfile();
+	adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, TYPE_BGRA_8, TYPE_BGRA_8, INTENT_PERCEPTUAL, 0);
+
+	return adj;
+}
+
+void KisStrategyColorSpaceRGB::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
+{
+	cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
 void KisStrategyColorSpaceRGB::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const

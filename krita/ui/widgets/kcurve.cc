@@ -247,7 +247,7 @@ void KCurve::mouseReleaseEvent ( QMouseEvent * e )
 	setCursor( KCursor::arrowCursor() );    
 	m_dragging = false;
 	repaint(false);
-	emit signalCurvesChanged();
+	emit modified();
 }
 
 void KCurve::mouseMoveEvent ( QMouseEvent * e )
@@ -301,7 +301,7 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 		m_grab_point->x = x;
 		m_grab_point->y = y;
 		
-		emit signalCurvesChanged();
+		emit modified();
 	}
 		
 	repaint(false);

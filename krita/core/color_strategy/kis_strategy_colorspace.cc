@@ -160,13 +160,6 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 
 KisColorAdjustment *KisStrategyColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
-	LPGAMMATABLE transferFunctions[3];
-	transferFunctions[0] = cmsBuildGamma(256, 1.0);
-	transferFunctions[1] = cmsBuildGamma(256, 1.0);
-	transferFunctions[2] = cmsBuildGamma(256, 1.0);
-
-	for(int i =0; i < 256; i++)
-		transferFunctions[0]->GammaTable[i] = transferValues[i];
 	return NULL;
 }
 

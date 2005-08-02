@@ -40,7 +40,7 @@ public:
 
 signals:
     
-	void signalCurvesChanged(void);
+	void modified(void);
             
 protected:
 

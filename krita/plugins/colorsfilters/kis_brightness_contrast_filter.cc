@@ -2,7 +2,8 @@
  * This file is part of Krita
  *
  * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *
+  * Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -28,50 +29,40 @@
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "tiles/kis_iterator.h"
+#include "kcurve.h"
 
-KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration(Q_INT32 nbrightness, Q_INT32 ncontrast) :
-	m_brightness(nbrightness),
-	m_contrast(ncontrast)
+KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
 {
 }
-
+ 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 	: KisFilter( id(), "adjust", "&Brightness/contrast...")
 {
 
 }
 
-Q_UINT16 KisBrightnessContrastFilterConfiguration::transferValue(Q_UINT8 i)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP)
 {
-	return (i << 8) | i;
-}
- 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
-{
-	KisFilterConfigWidget * w = new KisFilterConfigWidget(parent);
-	QHBoxLayout * l = new QHBoxLayout(w);
-	l->setAutoAdd(true);
-	WdgBrightnessContrast * wbc = new WdgBrightnessContrast(w);
-	return w;
+	return new KisBrightnessContrastConfigWidget(parent);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget* nwidget, KisPaintDeviceSP)
+KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceSP)
 {
-	WdgBrightnessContrast* widget = (WdgBrightnessContrast*) nwidget;
+	KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
 	
 	if ( widget == 0 )
 	{
-		return new KisBrightnessContrastFilterConfiguration( 0, 0 );
+		return new KisBrightnessContrastFilterConfiguration();
 	} else {
-		return new KisBrightnessContrastFilterConfiguration( 1, 1 );
+		return widget->config();
 	}
 }
 
 std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
 {
+//XXX should really come up with a list of configurations
 	std::list<KisFilterConfiguration*> list;
-	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( 0, 1 ));
-	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( 1, 0 ));
+	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( ));
 	return list;
 }
 
@@ -80,11 +71,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 {
 	KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
-	Q_UINT16 transfer[256];
-	for(int i=0; i <256; i++)
-		transfer[i] = configBC->transferValue(i);
-
-	KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(transfer);
+	KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(configBC->transfer);
 		
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -105,4 +92,35 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 	}
 
 	setProgressDone();
+}
+
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, const char * name, WFlags f)
+	: KisFilterConfigWidget(parent, name, f)
+{
+	m_page = new WdgBrightnessContrast(this);
+	QHBoxLayout * l = new QHBoxLayout(this);
+	Q_CHECK_PTR(l);
+
+	l -> add(m_page);
+
+	connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+}
+
+KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::config()
+{
+	KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
+
+	for(int i=0; i <256; i++)
+	{
+		Q_INT32 val;
+		val = int(0xFFFF * m_page->kCurve->getCurveValue( i / 255.0));
+		if(val >0xFFFF)
+			val=0xFFFF;
+		if(val <0)
+			val = 0;
+			
+		cfg->transfer[i] = val;
+	}
+	
+	return cfg;
 }

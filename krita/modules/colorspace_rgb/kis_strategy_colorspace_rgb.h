@@ -73,7 +73,10 @@ public:
 
 	virtual KisCompositeOpList userVisiblecompositeOps() const;
 	
-	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
+	virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
+	virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
+
+	
 
 	/**
 	 * Darken all color channels with the given amount. If compensate is true,
@@ -83,7 +86,7 @@ public:
 	 */
 	virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 
-	Q_UINT8 intensity8(const Q_UINT8 * src) const;
+	virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
 
 protected:

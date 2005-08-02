@@ -85,7 +85,7 @@
                         </property>
                         <widget class="KCurve">
                             <property name="name">
-                                <cstring>kCurve2</cstring>
+                                <cstring>kCurve</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -242,7 +242,7 @@
 <customwidgets>
     <customwidget>
         <class>KCurve</class>
-        <header location="local">../../ui/widgets/kcurve.h</header>
+        <header location="local">/home/cbr/kdesvn/koffice/krita/ui/widgets/kcurve.h</header>
         <sizehint>
             <width>33</width>
             <height>23</height>

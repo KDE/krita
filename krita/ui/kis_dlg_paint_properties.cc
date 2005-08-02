@@ -35,7 +35,7 @@ KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 					 const QPoint& pos,
 					 Q_INT32 opacity,
 					 const KisCompositeOp& compositeOp,
-					 const KisStrategyColorSpaceSP colorSpace,
+					 const KisStrategyColorSpace * colorSpace,
 					 QWidget *parent, const char *name, WFlags f)
 	: super(parent, name, f, name, Ok | Cancel)
 {

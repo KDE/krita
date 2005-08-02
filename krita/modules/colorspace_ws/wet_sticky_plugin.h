@@ -43,7 +43,7 @@ public:
 private:
 
 	KisView* m_view;
-	KisStrategyColorSpaceSP m_ColorSpaceWS;
+	KisStrategyColorSpace * m_ColorSpaceWS;
 };
 
 #endif // WET_STICKY_PLUGIN_H_

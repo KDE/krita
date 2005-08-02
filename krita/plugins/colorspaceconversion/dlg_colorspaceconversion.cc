@@ -92,7 +92,7 @@ void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
 	cmb -> clear();
 	cmb -> insertItem(i18n("None"));
 
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;

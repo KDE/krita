@@ -286,7 +286,7 @@ KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixel
 	return outputMask;
 }
 
-KisLayerSP KisBrush::image(KisStrategyColorSpaceSP colorSpace, double pressure, double subPixelX, double subPixelY) const
+KisLayerSP KisBrush::image(KisStrategyColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
 {
 	if (m_scaledBrushes.isEmpty()) {
 		createScaledBrushes();

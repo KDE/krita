@@ -77,7 +77,7 @@ bool KisStrategyColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 }
 
 bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-					    Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+					    Q_UINT8 * dst, KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
@@ -279,7 +279,7 @@ Q_UINT8 KisStrategyColorSpace::intensity8(const Q_UINT8 * src) const
 
 void KisStrategyColorSpace::bitBlt(Q_UINT8 *dst,
 				   Q_INT32 dststride,
-				   KisStrategyColorSpaceSP srcSpace,
+				   KisStrategyColorSpace * srcSpace,
 				   const Q_UINT8 *src,
 				   Q_INT32 srcRowStride,
 				   const Q_UINT8 *srcAlphaMask,
@@ -401,7 +401,7 @@ KisProfileSP KisStrategyColorSpace::getProfileByName(const QString & name)
 
 }
 
-cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpaceSP dstColorStrategy,
+cmsHTRANSFORM KisStrategyColorSpace::createTransform(KisStrategyColorSpace * dstColorStrategy,
 						     KisProfileSP srcProfile,
 						     KisProfileSP dstProfile,
 						     Q_INT32 renderingIntent)

@@ -398,7 +398,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			colorspacename = "RGBA";
 		}
 		
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+		KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
 		if (cs == 0) {
 			// return 0;
 			if (colorspacename  == "Grayscale + Alpha")
@@ -548,7 +548,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
 	
 	QString colorspacename = element.attribute("colorspacename");
-	KisStrategyColorSpaceSP colorSpace = img -> colorStrategy();
+	KisStrategyColorSpace * colorSpace = img -> colorStrategy();
 	
 	kdDebug() << "Colorspace name in layer: " << colorspacename << "\n";
 	if (!colorspacename.isNull()) {
@@ -770,7 +770,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpaceSP colorstrategy)
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpace * colorstrategy)
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
 	Q_CHECK_PTR(img);
@@ -806,7 +806,7 @@ bool KisDoc::slotNewImage()
 		KisImageSP img;
 		KisLayerSP layer;
 
-		KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
+		KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
 
 		if (!cs) return false;
 

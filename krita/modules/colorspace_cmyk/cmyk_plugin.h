@@ -37,8 +37,8 @@ public:
 	
 private:
 
-	KisStrategyColorSpaceSP m_StrategyColorSpaceCMYKA;
-	KisStrategyColorSpaceSP m_StrategyColorSpaceCMYK;
+	KisStrategyColorSpace * m_StrategyColorSpaceCMYKA;
+	KisStrategyColorSpace * m_StrategyColorSpaceCMYK;
 };
 
 #endif // CMYK_PLUGIN_H_

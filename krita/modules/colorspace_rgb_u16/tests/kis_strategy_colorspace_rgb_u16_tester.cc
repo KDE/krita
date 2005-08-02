@@ -63,7 +63,7 @@ void KisStrategyColorSpaceRGBU16Tester::allTests()
 void KisStrategyColorSpaceRGBU16Tester::testBasics()
 {
 	KisStrategyColorSpaceRGBU16 *cs = new KisStrategyColorSpaceRGBU16();
-	KisStrategyColorSpaceSP csSP = cs;
+	KisStrategyColorSpace * csSP = cs;
 
 	CHECK(cs -> hasAlpha(), true);
 	CHECK(cs -> nChannels(), NUM_CHANNELS);
@@ -308,7 +308,7 @@ void KisStrategyColorSpaceRGBU16Tester::testBasics()
 
 void KisStrategyColorSpaceRGBU16Tester::testMixColors()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGBU16();
+	KisStrategyColorSpace * cs = new KisStrategyColorSpaceRGBU16();
 
 	// Test mixColors.
 	Q_UINT16 pixel1[NUM_CHANNELS];
@@ -409,7 +409,7 @@ void KisStrategyColorSpaceRGBU16Tester::testMixColors()
 
 void KisStrategyColorSpaceRGBU16Tester::testToQImage()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGBU16();
+	KisStrategyColorSpace * cs = new KisStrategyColorSpaceRGBU16();
 
 	KisStrategyColorSpaceRGBU16::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
 		{MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},

@@ -36,7 +36,7 @@ public:
 	
 private:
 
-	KisStrategyColorSpaceSP m_StrategyColorSpaceTestCS;
+	KisStrategyColorSpace * m_StrategyColorSpaceTestCS;
 };
 
 

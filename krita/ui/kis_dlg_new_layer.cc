@@ -120,7 +120,7 @@ QString NewLayerDialog::layerName() const
 
 void NewLayerDialog::slotSetColorStrategy(const KisID &colorStrategyId)
 {
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
+	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
 	if (cs) {
 		m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
 	}

@@ -95,10 +95,6 @@ typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 
 typedef QValueVector<QPoint> vKisSegments;
 
-class KisStrategyColorSpace;
-typedef KSharedPtr<KisStrategyColorSpace> KisStrategyColorSpaceSP;
-typedef QMap<Q_INT32, KisStrategyColorSpaceSP> KisStrategyColorSpaceMap;
-
 class KisGuide;
 typedef KSharedPtr<KisGuide> KisGuideSP;
 
@@ -139,4 +135,5 @@ typedef vKisFileFormatSP::const_iterator vKisFileFormatSP_cit;
 class KisMemento;
 typedef KSharedPtr<KisMemento> KisMementoSP;
 
+class KisStrategyColorSpace;
 #endif // KISTYPES_H_

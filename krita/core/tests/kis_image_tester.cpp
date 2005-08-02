@@ -54,7 +54,7 @@ void KisImageTester::allTests()
 
 void KisImageTester::mergeTests()
 {
-	KisStrategyColorSpaceSP colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+	KisStrategyColorSpace * colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 
 	KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 

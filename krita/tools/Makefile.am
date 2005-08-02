@@ -23,7 +23,6 @@ kritadefaulttools_la_SOURCES = \
         kis_tool_fill.cc \
         kis_tool_rectangle.cc \
         kis_tool_ellipse.cc \
-        kis_tool_colorchanger.cc  \
 	kis_tool_pan.cc \
 	kis_tool_text.cc \
 	kis_tool_gradient.cc \
@@ -36,7 +35,6 @@ noinst_HEADERS = \
 	default_tools.h \
 	kis_tool_fill.h \
 	kis_tool_brush.h \
-	kis_tool_colorchanger.h \
 	kis_tool_gradient.h \
 	kis_tool_rectangle.h \
 	kis_tool_colorpicker.h \

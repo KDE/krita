@@ -179,8 +179,8 @@ namespace {
 
 	public:
 		KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img, 
-				       KisStrategyColorSpaceSP beforeColorSpace, KisProfileSP beforeProfile, 
-				       KisStrategyColorSpaceSP afterColorSpace, KisProfileSP afterProfile
+				       KisStrategyColorSpace * beforeColorSpace, KisProfileSP beforeProfile, 
+				       KisStrategyColorSpace * afterColorSpace, KisProfileSP afterProfile
 				       ) : super(i18n("Convert Image Type"))
 			{
 				m_adapter = adapter;
@@ -223,8 +223,8 @@ namespace {
 	private:
 		KisUndoAdapter *m_adapter;
 		KisImageSP m_img;
-		KisStrategyColorSpaceSP m_beforeColorSpace;
-		KisStrategyColorSpaceSP m_afterColorSpace;
+		KisStrategyColorSpace * m_beforeColorSpace;
+		KisStrategyColorSpace * m_afterColorSpace;
 		KisProfileSP m_beforeProfile;
 		KisProfileSP m_afterProfile;
 	};
@@ -435,7 +435,7 @@ namespace {
 
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpace * colorStrategy, const QString& name)
 {
 #if DEBUG_IMAGES
 	numImages++;
@@ -552,7 +552,7 @@ QString KisImage::nextLayerName() const
 	return m_nserver -> name();
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpaceSP colorStrategy, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpace * colorStrategy, const QString& name)
 {
 	Q_ASSERT(colorStrategy != 0);
 
@@ -817,7 +817,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 	}
 }
 
-void KisImage::convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisImage::convertTo(KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
 	// XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
 	if ( (m_colorStrategy -> id() == dstColorStrategy -> id())
@@ -968,7 +968,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, QUANTUM devOpacity)
 	return layer;
 }
 
-KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, QUANTUM opacity, KisStrategyColorSpaceSP colorstrategy)
+KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, QUANTUM opacity, KisStrategyColorSpace * colorstrategy)
 {
 	KisLayerSP layer;
 	layer = new KisLayer(colorstrategy, name);
@@ -1727,12 +1727,12 @@ void KisImage::slotSelectionChanged(const QRect& r)
 	emit activeSelectionChanged(KisImageSP(this));
 }
 
-KisStrategyColorSpaceSP KisImage::colorStrategy() const
+KisStrategyColorSpace * KisImage::colorStrategy() const
 {
 	return m_colorStrategy;
 }
 
-void KisImage::setColorStrategy(KisStrategyColorSpaceSP colorStrategy)
+void KisImage::setColorStrategy(KisStrategyColorSpace * colorStrategy)
 {
 	m_colorStrategy = colorStrategy;
 

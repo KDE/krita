@@ -603,7 +603,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
 		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
-		KisStrategyColorSpaceSP cs = layer->colorStrategy();
+		KisStrategyColorSpace * cs = layer->colorStrategy();
 		for (int y = starty; y <= endy; y++) {
 			KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
 			for (int x = startx; x <= endx; x++) {

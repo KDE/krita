@@ -37,7 +37,7 @@ void TextureFilter::slotActivated() {
 		return;
 
 	KisPaintDeviceSP device = m_view -> currentImg() -> activeDevice();
-	KisStrategyColorSpaceSP cs = device -> colorStrategy();
+	KisStrategyColorSpace * cs = device -> colorStrategy();
 
 	if (cs -> id() != KisID("WET","")) {
 		kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";

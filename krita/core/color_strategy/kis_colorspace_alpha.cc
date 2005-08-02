@@ -142,7 +142,7 @@ QImage KisColorSpaceAlpha::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
 }
 
 bool KisColorSpaceAlpha::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
-					 Q_UINT8 *dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+					 Q_UINT8 *dst, KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile,
 					 Q_UINT32 numPixels,
 					 Q_INT32 /*renderingIntent*/)
 {

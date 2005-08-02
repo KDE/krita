@@ -76,7 +76,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
 	}
 
 	Q_UINT32 numberOfChannels = src -> nChannels();
-	KisStrategyColorSpaceSP colorStrategy = src -> colorStrategy();
+	KisStrategyColorSpace * colorStrategy = src -> colorStrategy();
 	vKisChannelInfoSP channels = colorStrategy -> channels();
 
 	vKisLayerSP layers;

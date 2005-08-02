@@ -38,7 +38,7 @@ public:
 private:
 
 	KisView* m_view;
-	KisStrategyColorSpaceSP m_colorSpaceTemplate;
+	KisStrategyColorSpace * m_colorSpaceTemplate;
 };
 
 #endif // TEMPLATE_PLUGIN_H_

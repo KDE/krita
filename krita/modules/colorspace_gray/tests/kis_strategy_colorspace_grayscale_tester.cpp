@@ -81,7 +81,7 @@ void KisStrategyColorSpaceGrayscaleTester::testBasics()
 
 void KisStrategyColorSpaceGrayscaleTester::testMixColors()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceGrayscale();
+	KisStrategyColorSpace * cs = new KisStrategyColorSpaceGrayscale();
 
 	Q_UINT8 pixel1[MAX_CHANNEL_GRAYSCALEA];
 	Q_UINT8 pixel2[MAX_CHANNEL_GRAYSCALEA];

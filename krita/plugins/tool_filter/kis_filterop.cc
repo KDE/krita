@@ -67,7 +67,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 	KisBrush * brush = m_painter -> brush();
 	if (!brush) return;
 
-	KisStrategyColorSpaceSP colorStrategy = m_source -> colorStrategy();
+	KisStrategyColorSpace * colorStrategy = m_source -> colorStrategy();
 
 	KisPoint hotSpot = brush -> hotSpot(pressure);
 	KisPoint pt = pos - hotSpot;

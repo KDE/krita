@@ -141,7 +141,7 @@ QImage KisColorSpaceTemplate::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 	}
 	else {
 		// Do a nice calibrated conversion
-		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+		KisStrategyColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 		convertPixelsTo(const_cast<Q_UINT8 *>(data), srcProfile,
 				img.bits(), dstCS, dstProfile,
 				width * height, renderingIntent);

@@ -204,7 +204,7 @@ bool KisPattern::init()
 	return true;
 }
 
-KisLayerSP KisPattern::image(KisStrategyColorSpaceSP colorSpace) {
+KisLayerSP KisPattern::image(KisStrategyColorSpace * colorSpace) {
 	// XXX: What does this do? (bsar)
 	QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
 	if (it != m_colorspaces.end())

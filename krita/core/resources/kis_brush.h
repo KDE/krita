@@ -67,7 +67,7 @@ public:
 	*/
 	virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 	// XXX: return non-tiled simple buffer
-	virtual KisLayerSP image(KisStrategyColorSpaceSP colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+	virtual KisLayerSP image(KisStrategyColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 
 	void setHotSpot(KisPoint);
 	KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;

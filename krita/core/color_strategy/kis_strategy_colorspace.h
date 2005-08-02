@@ -250,7 +250,7 @@ public:
 	 * Returns false if the conversion failed, true if it succeeded
 	 */
 	virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-				     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+				     Q_UINT8 * dst, KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile,
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -324,7 +324,7 @@ public:
 	 */
 	virtual void bitBlt(Q_UINT8 *dst,
 			    Q_INT32 dststride,
-			    KisStrategyColorSpaceSP srcSpace,
+			    KisStrategyColorSpace * srcSpace,
 			    const Q_UINT8 *src,
 			    Q_INT32 srcRowStride,
 			    const Q_UINT8 *srcAlphaMask,
@@ -356,7 +356,7 @@ protected:
 			    Q_INT32 cols,
 			    const KisCompositeOp& op) = 0;
 
-	virtual cmsHTRANSFORM createTransform(KisStrategyColorSpaceSP dstColorStrategy,
+	virtual cmsHTRANSFORM createTransform(KisStrategyColorSpace * dstColorStrategy,
 					      KisProfileSP srcProfile,
 					      KisProfileSP dstProfile,
 					      Q_INT32 renderingIntent);

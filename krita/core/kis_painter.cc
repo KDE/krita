@@ -192,7 +192,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	sw = srcRect.width();
 	sh = srcRect.height();
 
-	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
+	KisStrategyColorSpace * srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
 	Q_INT32 dstY = dy;
@@ -287,7 +287,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	sw = srcRect.width();
 	sh = srcRect.height();
 
-	KisStrategyColorSpaceSP srcCs = srcdev -> colorStrategy();
+	KisStrategyColorSpace * srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
 	Q_INT32 dstY = dy;
@@ -879,6 +879,11 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 	polygon -> applySelectionMask(polygonMask);
 
 	QRect r = polygon -> extent();
+
+	// The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
+	// and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
+	addDirtyRect( r );
+	
 	bltSelection(r.x(), r.y(), compositeOp(), polygon, opacity(), r.x(), r.y(), r.width(), r.height());
 }
 

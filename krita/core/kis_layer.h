@@ -30,9 +30,9 @@ class KRITACORE_EXPORT KisLayer : public KisPaintDevice {
 	Q_OBJECT
 
 public:
-	KisLayer(KisStrategyColorSpaceSP colorStrategy, const QString& name);
+	KisLayer(KisStrategyColorSpace * colorStrategy, const QString& name);
 	KisLayer(KisImage *img, const QString& name, QUANTUM opacity);
-	KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrategyColorSpaceSP colorStrategy);
+	KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrategyColorSpace * colorStrategy);
 	KisLayer(const KisLayer& rhs);
 	virtual ~KisLayer();
 

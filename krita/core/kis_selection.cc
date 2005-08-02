@@ -41,7 +41,7 @@ KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
 		name)
 {
 	m_parentLayer = layer;
-	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy().data()));
+	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy()));
 }
 
 

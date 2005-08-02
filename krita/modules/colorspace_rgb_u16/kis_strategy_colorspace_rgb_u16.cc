@@ -211,7 +211,7 @@ QImage KisStrategyColorSpaceRGBU16::convertToQImage(const Q_UINT8 *dataU8, Q_INT
 	img.setAlphaBuffer(true);
 
 	if (srcProfile != 0 && dstProfile != 0) {
-		KisStrategyColorSpaceSP dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+		KisStrategyColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 		convertPixelsTo(dataU8, srcProfile,
 				img.bits(), dstCS, dstProfile,

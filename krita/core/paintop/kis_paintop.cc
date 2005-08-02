@@ -57,7 +57,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	KisProfileSP profile = m_painter -> device() -> profile();
 	KisColor kc = m_painter -> paintColor();
 	
-	KisStrategyColorSpaceSP colorStrategy = dab -> colorStrategy();
+	KisStrategyColorSpace * colorStrategy = dab -> colorStrategy();
 
 	Q_INT32 pixelSize = colorStrategy->pixelSize();
 	

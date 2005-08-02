@@ -54,7 +54,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8
 	QUANTUM opacity;
 	dev -> exactBounds(x, y, w, h);
 
-	KisStrategyColorSpaceSP cs = dev -> colorStrategy();
+	KisStrategyColorSpace * cs = dev -> colorStrategy();
 	KisProfileSP profile = dev -> profile();
 
 	for (int y2 = y; y2 < h - y; ++y2) {

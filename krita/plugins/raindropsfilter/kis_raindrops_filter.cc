@@ -120,7 +120,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
 
         bool      FindAnother = false;              // To search for good coordinates
 
-	KisStrategyColorSpaceSP cs = src -> colorStrategy();
+	KisStrategyColorSpace * cs = src -> colorStrategy();
 
         QDateTime dt = QDateTime::currentDateTime();
         QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );

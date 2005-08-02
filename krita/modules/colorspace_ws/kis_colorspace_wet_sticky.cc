@@ -298,7 +298,7 @@ QImage KisColorSpaceWetSticky::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
 }
 
 bool KisColorSpaceWetSticky::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*srcProfile*/,
-					     Q_UINT8 * dst, KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile,
+					     Q_UINT8 * dst, KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile,
 					     Q_UINT32 numPixels,
 					     Q_INT32 /*renderingIntent*/)
 {

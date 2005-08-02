@@ -59,11 +59,11 @@ class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
         Q_OBJECT
 
 public:
-	KisPaintDevice(KisStrategyColorSpaceSP colorStrategy,
+	KisPaintDevice(KisStrategyColorSpace * colorStrategy,
 			const QString& name);
 	
 	KisPaintDevice(KisImage *img,
-			KisStrategyColorSpaceSP colorStrategy,
+			KisStrategyColorSpace * colorStrategy,
 			const QString& name);
 
 	KisPaintDevice(const KisPaintDevice& rhs);
@@ -168,7 +168,7 @@ public:
 	/**
 	 *   Converts the paint device to a different colorspace
 	 */
-	virtual void convertTo(KisStrategyColorSpaceSP dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+	virtual void convertTo(KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	/**
 	 * Fill this paint device with the data from img;
@@ -242,7 +242,7 @@ public:
 
         bool hasAlpha() const;
 
-	KisStrategyColorSpaceSP colorStrategy() const;
+	KisStrategyColorSpace * colorStrategy() const;
 
 	/**
 	 * Return the icm profile associated with this layer, or
@@ -264,7 +264,7 @@ public:
 	/**
 	 * Replace the pixel data, color strategy, and profile.
 	 */
-	void setData(KisDataManagerSP data, KisStrategyColorSpaceSP colorStrategy, KisProfileSP profile);
+	void setData(KisDataManagerSP data, KisStrategyColorSpace * colorStrategy, KisProfileSP profile);
 
 	KisCompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
@@ -387,7 +387,7 @@ private:
 	QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	KisCompositeOp m_compositeOp;
-	KisStrategyColorSpaceSP m_colorStrategy;
+	KisStrategyColorSpace * m_colorStrategy;
 	// Cached for quick access
 	Q_INT32 m_pixelSize;
 	Q_INT32 m_nChannels;
@@ -418,7 +418,7 @@ inline Q_INT32 KisPaintDevice::nChannels() const
 ;
 }
 
-inline KisStrategyColorSpaceSP KisPaintDevice::colorStrategy() const
+inline KisStrategyColorSpace * KisPaintDevice::colorStrategy() const
 {
 	Q_ASSERT(m_colorStrategy != 0);
         return m_colorStrategy;

@@ -257,8 +257,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 	m_size = m_width * m_height;
 
 	KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
-	KisStrategyColorSpaceSP colorStrategy = selection -> colorStrategy();
-	KisStrategyColorSpaceSP devColorStrategy = sourceDevice -> colorStrategy();
+	KisStrategyColorSpace * colorStrategy = selection -> colorStrategy();
+	KisStrategyColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
 	
 	QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
 	KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);

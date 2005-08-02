@@ -49,7 +49,7 @@ void KisStrategyColorSpaceRGBTester::allTests()
 void KisStrategyColorSpaceRGBTester::testBasics()
 {
 	KisStrategyColorSpaceRGB *cs = new KisStrategyColorSpaceRGB();
-	KisStrategyColorSpaceSP csSP = cs;
+	KisStrategyColorSpace * csSP = cs;
 
 	Q_UINT8 pixel[NUM_CHANNELS];
 
@@ -102,7 +102,7 @@ void KisStrategyColorSpaceRGBTester::testBasics()
 
 void KisStrategyColorSpaceRGBTester::testMixColors()
 {
-	KisStrategyColorSpaceSP cs = new KisStrategyColorSpaceRGB();
+	KisStrategyColorSpace * cs = new KisStrategyColorSpaceRGB();
 
 	// Test mixColors.
 	Q_UINT8 pixel1[4];

@@ -39,7 +39,7 @@ public:
 private:
 
 	KisView* m_view;
-	KisStrategyColorSpaceSP m_colorSpaceWet;
+	KisStrategyColorSpace * m_colorSpaceWet;
 };
 
 #endif // WET_PLUGIN_H_

@@ -34,7 +34,7 @@ class QStringList;
  *      - a mapping of lcms color model identifiers to color strategies
  *     -  a mapping of icm color model identifiers to color stratiegs
  */
-class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpaceSP> {
+class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisStrategyColorSpace *> {
 
 public:
 	virtual ~KisColorSpaceRegistry();

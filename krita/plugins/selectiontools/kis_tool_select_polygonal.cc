@@ -136,10 +136,9 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 
 			painter.paintPolygon(m_points);
 
-			/* XXX painter seems to not update dirtyRect 
 			if(hasSelection)
 				layer->emitSelectionChanged(painter.dirtyRect());
-			else*/
+			else
 				layer->emitSelectionChanged();
 
 			if (img -> undoAdapter())

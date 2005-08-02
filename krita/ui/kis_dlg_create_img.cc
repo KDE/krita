@@ -131,7 +131,7 @@ QString KisDlgCreateImg::imgDescription() const
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
+	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
 	if (!cs) return 0;
 
 	vKisProfileSP resourceslist = cs -> profiles();
@@ -155,7 +155,7 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 
-	KisStrategyColorSpaceSP cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 	if (cs == 0) return;
 
 	vKisProfileSP profileList = cs -> profiles();

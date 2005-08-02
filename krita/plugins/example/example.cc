@@ -78,6 +78,8 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
 
+	int pixelsProcessed = 0;
+	setProgressTotalSteps(rect.width() * rect.height());
 	while( ! srcIt.isDone() )
 	{
 		if(srcIt.isSelected())
@@ -87,7 +89,9 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 				dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
 			}
 		}
+		setProgress(++pixelsProcessed);
 		++srcIt;
 		++dstIt;
 	}
+	setProgressDone(); // Must be called even if you don't really support progression
 }

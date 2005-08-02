@@ -38,7 +38,7 @@ namespace FiltersGallery {
 
 
 KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
-	: KDialogBase(parent,name, true,"Gallery filters action", Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
+  : KDialogBase(parent,name, true,i18n("Filters Gallery"), Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
 {
 	QFrame* frame = makeMainWidget();
 	m_hlayout = new QHBoxLayout(frame);

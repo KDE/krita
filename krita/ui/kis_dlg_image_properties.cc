@@ -81,7 +81,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 	}
 
 	m_page -> sliderOpacity -> setEnabled(false); // XXX re-enable when figured out a way to do this
-	m_page -> sliderOpacity -> hide();
+	m_page -> opacityPanel -> hide();
 	m_page -> lblOpacity -> hide();
 	
 	m_page -> cmbColor -> setEnabled(false); // XXX re-enable when figured out a way to do this

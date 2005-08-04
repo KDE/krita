@@ -37,6 +37,7 @@ libkisui_la_SOURCES = \
     kis_guide.cc \
     kis_paintop_box.cc \
     kis_toolbox.cc \
+    kis_color_cup.cc \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdgselectionoptions.ui \
@@ -73,6 +74,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgmatrix.h \
     kis_previewwidgetbase.h \
     kis_previewdialog.h \
+    kis_color_cup.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \

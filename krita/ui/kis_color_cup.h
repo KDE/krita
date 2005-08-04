@@ -16,52 +16,48 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_WET_PALETTE_WIDGET_H
-#define KIS_WET_PALETTE_WIDGET_H
+#ifndef KIS_COLOR_CUP_H
+#define KIS_COLOR_CUP_H
 
-#include "qwidget.h"
 #include "qpushbutton.h"
-
-#include "kis_canvas_subject.h"
-#include "kis_canvas_observer.h"
+#include "qcolor.h"
 
 #include <koffice_export.h>
 
-class KoFrameButton;
-class QGridLayout;
-class QColor;
-class QLabel;
-class QSpinBox;
-class QColor;
-class KIntNumInput;
-class KDoubleNumInput;
+class QSize;
+class QPainter;
 
-class KRITAUI_EXPORT KisWetPaletteWidget
-	 : public QWidget,
-	   public KisCanvasObserver
-{
+class KisColorCup : public QPushButton {
+
 	Q_OBJECT
-	typedef QWidget super;
 
 public:
-	KisWetPaletteWidget(QWidget *parent = 0L, const char *name = 0);
-	virtual ~KisWetPaletteWidget() {}
 
-protected slots:
+	KisColorCup(QWidget * parent, const char * name = 0);
+	KisColorCup(const QColor & c, QWidget * parent, const char * name = 0);
+	virtual ~KisColorCup() {};
 
-	void slotFGColorSelected(const QColor& c);
-	void slotWetnessChanged(int);
-	void slotStrengthChanged(double);
+	void setColor(const QColor & c) {m_color = c; };
+	QColor color() { return m_color; };
+signals:
+
+	void changed(const QColor &);
+
+public:
+
+	QSize sizeHint() const;
+
+private slots:
+
+	void slotClicked();
+
+protected:
+
+	virtual void drawButtonLabel( QPainter *p );
 
 private:
-	void update(KisCanvasSubject*);
 
-private:
-	KisCanvasSubject *m_subject;
-	KDoubleNumInput* m_strength;
-	KIntNumInput* m_wetness;
-
-
+	QColor m_color;
 };
 
 #endif

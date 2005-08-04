@@ -2,6 +2,12 @@ Toolbox
 
 	* crash when opening second view
 	* crash when using wacom pad
+	
+Bugs
+
+	* On opening a second image after loading first image but not changing it,
+	  the second image should be loaded in a second view and not replace the 
+	  first image in the first view.
 
 Transform tool (CBR)
 

@@ -22,8 +22,13 @@
 
 #include <stdlib.h>
 
+#include <qapplication.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qframe.h>
+#include <qwidget.h>
+#include <qevent.h>
+#include <qtimer.h>
 
 #include <kmainwindow.h>
 #include <kglobalsettings.h>
@@ -49,6 +54,41 @@
 #include "kis_toolbox.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
+
+KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name, WFlags)
+	: QFrame(parent, name, WStyle_Customize | WType_Popup | WStyle_NoBorder)
+{
+	setFocusPolicy(StrongFocus);
+}
+
+void KisPopupFrame::keyPressEvent(QKeyEvent * e)
+{
+	if (e->key()== Qt::Key_Escape)
+	{
+		hide();
+		e->accept();
+	}
+	else {
+		e->ignore();
+	}
+}
+
+#if 0
+void KisPopupFrame::checkWhoHasGotFocus()
+{
+
+	kdDebug() << "We are: " << this << "\n";
+
+	QObject * w = qApp->focusWidget();
+
+	while (w != 0) {
+		kdDebug() << "Widget " << w << " has focus, it has parent " << w->parent() << "\n";
+		w = w->parent();
+		if (w==this) return;
+	}
+	hide();
+}
+#endif
 
 KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* name )
 	: QFrame( parent, name )
@@ -119,24 +159,43 @@ void KisControlFrame::slotSetGradient(KoIconItem *item)
 }
 
 
+
+
+
 void KisControlFrame::slotShowBrushChooser()
 {
 	if (!m_brushChooserPopup) return;
 	if (!m_brushWidget) return;
 
-	m_brushChooserPopup->move( this->mapToGlobal( m_brushWidget->rect().bottomLeft() ) );
-	m_brushChooserPopup->show();
-	
-}
+	if (!m_brushChooserPopup->isShown()) {
 
+		m_patternChooserPopup->hide();
+		m_gradientChooserPopup->hide();
+	
+		m_brushChooserPopup->move( m_brushWidget->mapToGlobal( m_brushWidget->rect().topRight() ) );
+		m_brushChooserPopup->show();
+	}
+	else {
+		m_brushChooserPopup->hide();
+	}
+}
 
 void KisControlFrame::slotShowPatternChooser()
 {
 	if (!m_patternChooserPopup ) return;
 	if (!m_patternWidget) return;
 
-	m_patternChooserPopup ->move( this->mapToGlobal( m_patternWidget->rect().bottomLeft() ) );
-	m_patternChooserPopup ->show();
+	if (!m_patternChooserPopup->isShown()) {
+
+		m_brushChooserPopup->hide();
+		m_gradientChooserPopup->hide();
+	
+		m_patternChooserPopup ->move( m_patternWidget->mapToGlobal( m_patternWidget->rect().topRight() ) );
+		m_patternChooserPopup ->show();
+	}
+	else {
+		m_patternChooserPopup->hide();
+	}
 	
 }
 
@@ -145,8 +204,17 @@ void KisControlFrame::slotShowGradientChooser()
 	if (!m_gradientChooserPopup ) return;
 	if (!m_gradientWidget) return;
 
-	m_gradientChooserPopup ->move( this->mapToGlobal( m_gradientWidget->rect().bottomLeft() ) );
-	m_gradientChooserPopup ->show();
+	if (!m_gradientChooserPopup->isShown()) {
+
+		m_brushChooserPopup->hide();
+		m_patternChooserPopup->hide();
+
+		m_gradientChooserPopup ->move( m_gradientWidget->mapToGlobal( m_gradientWidget->rect().topRight() ) );
+		m_gradientChooserPopup ->show();
+	}
+	else {
+		m_gradientChooserPopup->hide();
+       	}
 	
 }
 

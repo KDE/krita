@@ -168,7 +168,8 @@ void KisToolBox::enableTools(bool enable)
 		
 		ToolList::Iterator it;
 		for ( it = tl->begin(); it != tl->end(); ++it )
-			it.data()->setEnabled(enable);
+			if (it != 0 && it.data())
+				it.data()->setEnabled(enable);
 	}
 	m_buttonGroup->setEnabled(enable);
 	for (Q_UINT32 i = 0; i < m_numberOfButtons; ++i) {

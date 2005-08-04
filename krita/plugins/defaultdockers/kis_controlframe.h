@@ -28,6 +28,7 @@
 #include <koFrameButton.h>
 
 class QWidget;
+class QTimer;
 
 class KToolBar;
 
@@ -52,8 +53,8 @@ class KisPopupFrame : public QFrame {
 
 public:
 
-	KisPopupFrame(QWidget * parent, const char * name = 0, WFlags f = 0)
-		: QFrame(parent, name, f) {};
+	KisPopupFrame(QWidget * parent, const char * name = 0, WFlags f = 0);
+	virtual void keyPressEvent(QKeyEvent *);
 
 public:
 

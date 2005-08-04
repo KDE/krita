@@ -27,6 +27,8 @@
 #include <qcolor.h>
 
 #include <kdebug.h>
+#include <ktoolbarbutton.h>
+#include <ktoolbar.h>
 
 #include "kis_undo_adapter.h"
 #include "kis_global.h"
@@ -45,6 +47,15 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 {
 	m_autoupdate = true;
 	connect(m_preview, SIGNAL(updated()), this, SLOT(redirectUpdated()));
+	kToolBar1->insertButton("viewmag+",0, true, "zoom+");
+	connect(kToolBar1->getButton(0),SIGNAL(clicked()),m_preview,SLOT(zoomIn()));
+	kToolBar1->insertButton("viewmag-",1, true, "zoom-");
+	connect(kToolBar1->getButton(1),SIGNAL(clicked()),m_preview,SLOT(zoomOut()));
+	kToolBar1->insertLineSeparator();
+	kToolBar1->insertButton("reload",2, true, "update");
+	kToolBar1->insertButton("",3, true, "autoupdate");
+	kToolBar1->insertButton("",4, true, "switch");
+	kToolBar1->insertButton("",5, true, "popup original and preview");
 }
 
 void KisPreviewWidget::redirectUpdated() {
@@ -54,7 +65,6 @@ void KisPreviewWidget::redirectUpdated() {
 
 void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
 {
-	m_original->setSourceLayer(lay);
 	m_preview->setSourceLayer(lay);
 }
 

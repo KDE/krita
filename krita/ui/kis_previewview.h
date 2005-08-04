@@ -73,8 +73,8 @@ private:
         void render(QPainter &painter, KisImageSP image);
         void updateView(QPoint delta);
 
-        KisLayerSP m_sourcelayer, m_previewlayer;
-        KisImageSP m_sourceimage, m_previewimage;
+        KisLayerSP m_sourcelayer, m_clippedview;
+        KisImageSP m_image;
         QPoint m_startDrag, m_pos;
         double m_zoom;
         bool m_moving;

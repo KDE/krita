@@ -310,3 +310,23 @@ QString KisColorSpaceAlpha::normalisedChannelValueText(const Q_UINT8 *pixel, Q_U
 	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 
+
+void KisColorSpaceAlpha::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+	Q_INT32 totalAlpha = 0;
+
+	while (nColors--)
+	{
+		Q_INT32 weight = *kernelValues;
+		
+		if (weight != 0) {
+			totalAlpha += (*colors)[PIXEL_MASK] * weight;
+		}
+		colors++;
+		kernelValues++;
+	}
+	
+	if (channelFlags & FLAG_ALPHA) {
+		dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
+	}
+}

@@ -254,6 +254,7 @@ void KisToolSelectOutline::setup(KActionCollection *collection)
 					    name());
 		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
+		m_action -> setToolTip(i18n("Select an outline"));
 		m_ownAction = true;
 	}
 }

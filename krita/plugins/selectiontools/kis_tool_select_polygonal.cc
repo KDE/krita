@@ -253,6 +253,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
 					    name());
 		Q_CHECK_PTR(m_action);
 		m_action -> setExclusiveGroup("tools");
+		m_action -> setToolTip(i18n("Select a polygonal area"));
 		m_ownAction = true;
 	}
 }

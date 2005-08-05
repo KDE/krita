@@ -170,6 +170,7 @@ void KisToolEllipse::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		m_action -> setToolTip(i18n("Draw an ellipse"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

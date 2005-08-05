@@ -184,6 +184,7 @@ void KisToolFill::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		m_action -> setToolTip(i18n("Contiguous fill"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

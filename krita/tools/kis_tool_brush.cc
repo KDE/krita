@@ -103,6 +103,7 @@ void KisToolBrush::setup(KActionCollection *collection)
 					    "paintbrush", 0, this,
 					    SLOT(activate()), collection,
 					    name());
+		m_action -> setToolTip(i18n("Draw freehand"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

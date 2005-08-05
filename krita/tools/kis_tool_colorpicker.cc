@@ -135,6 +135,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
+		m_action -> setToolTip(i18n("Color picker"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

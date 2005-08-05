@@ -231,6 +231,7 @@ void KisToolLine::setup(KActionCollection *collection)
 					    "line", Qt::Key_L, this,
 					    SLOT(activate()), collection,
 					    name());
+		m_action -> setToolTip(i18n("Draw a line"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

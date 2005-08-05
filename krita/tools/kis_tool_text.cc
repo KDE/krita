@@ -157,6 +157,7 @@ void KisToolText::setup(KActionCollection *collection)
 					    collection,
 					    name());
 		m_action -> setExclusiveGroup("tools");
+		m_action -> setToolTip(i18n("Text"));
 		m_ownAction = true;
 	}
 }

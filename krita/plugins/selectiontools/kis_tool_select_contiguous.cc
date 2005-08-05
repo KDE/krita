@@ -150,6 +150,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
 					    collection,
 					    name());
 		Q_CHECK_PTR(m_action);
+		m_action -> setToolTip(i18n("Select a contiguous area"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

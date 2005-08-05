@@ -168,6 +168,7 @@ void KisToolRectangle::setup(KActionCollection *collection)
 					    SLOT(activate()),
 					    collection,
 					    name());
+		m_action -> setToolTip(i18n("Draw a rectangle"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

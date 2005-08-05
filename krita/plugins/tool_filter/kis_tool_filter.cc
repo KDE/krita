@@ -69,6 +69,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 					    SLOT(activate()), collection,
 					    name());
 		Q_CHECK_PTR(m_action);
+		m_action -> setToolTip(i18n("Paint with filters"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

@@ -146,6 +146,7 @@ void KisToolZoom::setup(KActionCollection *collection)
 
 	if (m_action == 0) {
 		m_action = new KRadioAction(i18n("&Zoom"), "viewmag", Qt::Key_Z, this, SLOT(activate()), collection, name());
+		m_action -> setToolTip(i18n("Zoom"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

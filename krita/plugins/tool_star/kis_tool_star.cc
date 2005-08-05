@@ -186,6 +186,7 @@ void KisToolStar::setup(KActionCollection *collection)
 					    name());
 		Q_CHECK_PTR(m_action);
 
+		m_action -> setToolTip(i18n("Draw a star"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	        m_innerOuterRatio=40;

@@ -77,6 +77,7 @@ void KisToolDuplicate::setup(KActionCollection *collection)
 					    "stamp", Qt::Key_C, this,
 					    SLOT(activate()), collection,
 					    name());
+		m_action -> setToolTip(i18n("Duplicate parts of an image"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

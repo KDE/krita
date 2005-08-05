@@ -221,6 +221,7 @@ void KisToolPolygon::setup(KActionCollection *collection)
 					    name());
 		Q_CHECK_PTR(m_action);
 
+		m_action -> setToolTip(i18n("Draw a polygon"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
         }

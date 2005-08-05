@@ -308,6 +308,7 @@ void KisToolGradient::setup(KActionCollection *collection)
 					    "blend", Qt::Key_G, this,
 					    SLOT(activate()), collection,
 					    name());
+		m_action -> setToolTip(i18n("Draw a gradient"));
 		m_action -> setExclusiveGroup("tools");
 		m_ownAction = true;
 	}

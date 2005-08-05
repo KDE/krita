@@ -136,10 +136,11 @@ void KisStrategyColorSpaceRGB::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *
 
 Q_INT8 KisStrategyColorSpaceRGB::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
-	//return KisStrategyColorSpace::difference(src1, src2);
+	if (src1[PIXEL_ALPHA] == OPACITY_TRANSPARENT || src2[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
+		return (src1[PIXEL_ALPHA] == src2[PIXEL_ALPHA]) ? 0 : QUANTUM_MAX;
 	return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
 				QMAX(QABS(src2[PIXEL_GREEN] - src1[PIXEL_GREEN]),
-	QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
+					QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
 }
 
 void KisStrategyColorSpaceRGB::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const

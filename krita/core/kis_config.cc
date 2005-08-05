@@ -171,6 +171,15 @@ void KisConfig::setDither8Bit(bool dither8Bit)
 	m_cfg -> writeEntry("dither8Bit", dither8Bit);
 }
 
+bool KisConfig::showRulers() const
+{
+	return m_cfg->readBoolEntry("showrulers", false);
+}
+
+void KisConfig::setShowRulers(bool rulers)
+{
+	m_cfg->writeEntry("showrulers", rulers);
+}
 
 bool KisConfig::askProfileOnOpen() const
 {

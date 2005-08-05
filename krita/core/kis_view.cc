@@ -238,6 +238,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 KisView::~KisView()
 {
+	KisConfig cfg;
+	cfg.setShowRulers( m_RulerAction->isChecked() );
+
 	delete m_dcop;
 	delete m_paletteManager;
 	delete m_selectionManager;
@@ -449,6 +452,8 @@ void KisView::setupStatusBar()
 
 void KisView::setupActions()
 {
+	KisConfig cfg;
+
 	m_selectionManager->setup(actionCollection());
 	m_filterManager->setup(actionCollection());
 	
@@ -496,15 +501,16 @@ void KisView::setupActions()
 	// setting actions
 	KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
-	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+	m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), "Ctrl+R", this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+	m_RulerAction->setChecked(cfg.showRulers());
         m_RulerAction->setCheckedState(i18n("Hide Rulers"));
         m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
         m_RulerAction->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
                                           "document. The rulers show the position and width of pages and of frames and can "
                                           "be used to position tabulators among others.<p>Uncheck this to disable "
                                           "the rulers from being displayed." ) );
+	showRuler();
 
-	m_RulerAction->setChecked( true );
 }
 
 void KisView::resizeEvent(QResizeEvent *)
@@ -630,6 +636,11 @@ void KisView::resizeEvent(QResizeEvent *)
 	{
 		m_hRuler -> show();
 		m_vRuler -> show();
+	}
+	else {
+		m_hRuler -> hide();
+		m_vRuler -> hide();
+
 	}
 }
 
@@ -1374,7 +1385,6 @@ void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 // range: 0 - 100
 void KisView::layerOpacity(int opacity)
 {
-	kdDebug(DBG_AREA_CORE) << "Opacity set to " << opacity << endl;
 	KisImageSP img = currentImg();
 	if (!img) return;
 
@@ -1479,7 +1489,6 @@ void KisView::gradientActivated(KisResource *gradient)
 
 void KisView::paintopActivated(const KisID & paintop)
 {
-	kdDebug(DBG_AREA_CORE) << "paintop activated: " << paintop.name() << "\n";
 	
 	if (paintop.id().isNull() || paintop.id().isEmpty()) {
 		return;

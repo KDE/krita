@@ -58,6 +58,9 @@ public:
 	bool dither8Bit() const;
 	void setDither8Bit(bool dither8Bit);
 
+	bool showRulers() const;
+	void setShowRulers(bool rulers);
+
 	bool askProfileOnOpen() const;
 	void setAskProfileOnOpen(bool askProfileOnOpen);
 

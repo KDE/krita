@@ -20,12 +20,12 @@
 #ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
-#include <qframe.h>
+#include <qtoolbutton.h>
 
 class KoIconItem;
 
-class KisIconWidget : public QFrame {
-	typedef QFrame super;
+class KisIconWidget : public QToolButton {
+	typedef QToolButton super;
 	Q_OBJECT
 
 /**
@@ -38,12 +38,8 @@ public:
 public slots:
 	void slotSetItem(KoIconItem& item);
 
-signals:
-	void clicked();
-
 protected:
-	virtual void drawContents(QPainter *gc);
-	virtual void mousePressEvent(QMouseEvent *e);
+	virtual void drawButtonLabel(QPainter *gc);
 
 private:
 	KoIconItem *m_item;

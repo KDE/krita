@@ -55,8 +55,8 @@
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
 
-KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name, WFlags)
-	: QFrame(parent, name, WStyle_Customize | WType_Popup | WStyle_NoBorder)
+KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
+	: QPopupMenu(parent, name)
 {
 	setFocusPolicy(StrongFocus);
 }
@@ -124,19 +124,21 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
 	m_gradientWidget->show();
 
 	m_brushWidget -> setFixedSize( 34, 34 );
-	connect(m_brushWidget, SIGNAL(clicked()), this, SLOT(slotShowBrushChooser()));
 
 	m_patternWidget -> setFixedSize( 34, 34 );
-	connect(m_patternWidget, SIGNAL(clicked()), this, SLOT(slotShowPatternChooser()));
 	
 	m_gradientWidget -> setFixedSize( 34, 34 );
-	connect(m_gradientWidget, SIGNAL(clicked()), this, SLOT(slotShowGradientChooser()));
 
 	createBrushesChooser(m_view);
 	createPatternsChooser(m_view);
 	createGradientsChooser(m_view);
 
-
+	m_brushWidget->setPopup(m_brushChooserPopup);
+	m_brushWidget->setPopupDelay(1);
+	m_patternWidget->setPopup(m_patternChooserPopup);
+	m_patternWidget->setPopupDelay(1);
+	m_gradientWidget->setPopup(m_gradientChooserPopup);
+	m_gradientWidget->setPopupDelay(1);
 }
 
 
@@ -156,66 +158,6 @@ void KisControlFrame::slotSetGradient(KoIconItem *item)
 {
 	if (item)
 		m_gradientWidget -> slotSetItem(*item);
-}
-
-
-
-
-
-void KisControlFrame::slotShowBrushChooser()
-{
-	if (!m_brushChooserPopup) return;
-	if (!m_brushWidget) return;
-
-	if (!m_brushChooserPopup->isShown()) {
-
-		m_patternChooserPopup->hide();
-		m_gradientChooserPopup->hide();
-	
-		m_brushChooserPopup->move( m_brushWidget->mapToGlobal( m_brushWidget->rect().topRight() ) );
-		m_brushChooserPopup->show();
-	}
-	else {
-		m_brushChooserPopup->hide();
-	}
-}
-
-void KisControlFrame::slotShowPatternChooser()
-{
-	if (!m_patternChooserPopup ) return;
-	if (!m_patternWidget) return;
-
-	if (!m_patternChooserPopup->isShown()) {
-
-		m_brushChooserPopup->hide();
-		m_gradientChooserPopup->hide();
-	
-		m_patternChooserPopup ->move( m_patternWidget->mapToGlobal( m_patternWidget->rect().topRight() ) );
-		m_patternChooserPopup ->show();
-	}
-	else {
-		m_patternChooserPopup->hide();
-	}
-	
-}
-
-void KisControlFrame::slotShowGradientChooser()
-{
-	if (!m_gradientChooserPopup ) return;
-	if (!m_gradientWidget) return;
-
-	if (!m_gradientChooserPopup->isShown()) {
-
-		m_brushChooserPopup->hide();
-		m_patternChooserPopup->hide();
-
-		m_gradientChooserPopup ->move( m_gradientWidget->mapToGlobal( m_gradientWidget->rect().topRight() ) );
-		m_gradientChooserPopup ->show();
-	}
-	else {
-		m_gradientChooserPopup->hide();
-       	}
-	
 }
 
 void KisControlFrame::slotBrushChanged(KisBrush * brush)
@@ -259,9 +201,7 @@ void KisControlFrame::slotGradientChanged(KisGradient * gradient)
 void KisControlFrame::createBrushesChooser(KisView * view)
 {
 
-	m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup", WType_Popup | WStyle_DialogBorder);
-	m_brushChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
-	m_brushChooserPopup->setLineWidth(2);
+	m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup");
 
 	QHBoxLayout * l = new QHBoxLayout(m_brushChooserPopup, 2, 2, "brushpopuplayout");
 
@@ -298,14 +238,21 @@ void KisControlFrame::createBrushesChooser(KisView * view)
 
 void KisControlFrame::createPatternsChooser(KisView * view)
 {
-	m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup", WType_Popup | WStyle_DialogBorder);
-	m_patternChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
-	m_patternChooserPopup->setLineWidth(2);
-	KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup, "pattern_chooser");
+	m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup");
 
 	QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup, 2, 2, "patternpopuplayout");
-	l2->add( chooser );
+
+	QTabWidget * m_patternsTab = new QTabWidget(m_patternChooserPopup, "patternstab");
+	m_patternsTab->setTabShape(QTabWidget::Triangular);
+	m_patternsTab->setFocusPolicy(QWidget::NoFocus);
+	m_patternsTab->setFont(m_font);
+	m_patternsTab->setMargin(1);
+	l2->add( m_patternsTab );
+
+	KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup, "pattern_chooser");
 	chooser->setFont(m_font);
+	chooser->setMinimumSize(200, 150);
+	m_patternsTab->addTab(chooser, i18n("Patterns"));
 
 	m_patternMediator = new KisResourceMediator( chooser, view);
 	connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
@@ -322,9 +269,7 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 
 void KisControlFrame::createGradientsChooser(KisView * view)
 {
-	m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup", WType_Popup | WStyle_DialogBorder);
-	m_gradientChooserPopup->setFrameStyle(QFrame::Panel | QFrame::Raised );
-	m_gradientChooserPopup->setLineWidth(2);
+	m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup");
 
 	QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup, 2, 2, "gradientpopuplayout");
 

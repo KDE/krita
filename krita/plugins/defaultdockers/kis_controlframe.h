@@ -26,6 +26,7 @@
 #include <qtabwidget.h>
 #include <qdockwindow.h>
 #include <koFrameButton.h>
+#include <qpopupmenu.h>
 
 class QWidget;
 class QTimer;
@@ -47,13 +48,13 @@ class KisPattern;
 class KisResourceMediator;
 class KisView;
 
-class KisPopupFrame : public QFrame {
+class KisPopupFrame : public QPopupMenu {
 
 	Q_OBJECT
 
 public:
 
-	KisPopupFrame(QWidget * parent, const char * name = 0, WFlags f = 0);
+	KisPopupFrame(QWidget * parent, const char * name = 0);
 	virtual void keyPressEvent(QKeyEvent *);
 
 public:
@@ -82,11 +83,7 @@ public slots:
 	void slotSetPattern(KoIconItem *item);
 	void slotSetGradient(KoIconItem *item);
 
-	void slotShowBrushChooser();
-	void slotShowPatternChooser();
-	void slotShowGradientChooser();
-
-        void slotBrushChanged(KisBrush * brush);
+	void slotBrushChanged(KisBrush * brush);
 	void slotPatternChanged(KisPattern * pattern);
 	void slotGradientChanged(KisGradient * gradient);
 
@@ -110,10 +107,10 @@ private:
 	KisPopupFrame * m_brushChooserPopup;
 	KisPopupFrame * m_patternChooserPopup;
 	KisPopupFrame * m_gradientChooserPopup;
-	
-        KisResourceMediator *m_brushMediator;
-        KisResourceMediator *m_patternMediator;
-        KisResourceMediator *m_gradientMediator;
+
+	KisResourceMediator *m_brushMediator;
+	KisResourceMediator *m_patternMediator;
+	KisResourceMediator *m_gradientMediator;
 
 	KisView * m_view;
 	KToolBar * m_toolbar;

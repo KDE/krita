@@ -24,8 +24,6 @@
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent, name)
 {
 	m_item = 0;
-	setBackgroundColor(white);
-	setFrameStyle(QFrame::Panel | QFrame::Sunken);
 }
 
 void KisIconWidget::slotSetItem(KoIconItem& item)
@@ -34,7 +32,7 @@ void KisIconWidget::slotSetItem(KoIconItem& item)
 	repaint();
 }
 
-void KisIconWidget::drawContents(QPainter *p)
+void KisIconWidget::drawButtonLabel(QPainter *p)
 {
 	if (m_item) {
 		const QPixmap& pix = m_item -> pixmap();
@@ -76,11 +74,6 @@ void KisIconWidget::drawContents(QPainter *p)
 		p -> setPen(gray);
 		p -> drawRect(0, 0, cw + 1, ch + 1);
 	}
-}
-
-void KisIconWidget::mousePressEvent(QMouseEvent *)
-{
-	emit clicked();
 }
 
 #include "kis_iconwidget.moc"

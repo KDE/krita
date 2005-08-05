@@ -661,7 +661,7 @@ void KisSelectionManager::feather()
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
 		
-	delete k.data;
+	delete[] k.data;
 
 	dev -> emitSelectionChanged();
 }

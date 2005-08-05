@@ -24,6 +24,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qapplication.h>
+#include <qcheckbox.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -57,6 +58,7 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super()
 	m_optWidget = 0;
 	m_options = 0;
 	m_fuzziness = 20;
+	m_sampleMerged = false;
 	m_selectAction = SELECTION_ADD;
 
 	//XXX : make wizard cursor from tool icon.
@@ -102,6 +104,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 		KisFillPainter fillpainter(dev);
 		fillpainter.setFillThreshold(m_fuzziness);
+		fillpainter.setSampleMerged(m_sampleMerged);
 		KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
 		
 		KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev.data());
@@ -208,12 +211,25 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 	hbox -> addWidget(input);
 	connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
+	QCheckBox* samplemerged = new QCheckBox(i18n("Sample merged"), m_optWidget);
+	l -> addWidget( samplemerged );
+	samplemerged -> setChecked(m_sampleMerged);
+	connect(samplemerged, SIGNAL(stateChanged(int)),
+			this, SLOT(slotSetSampleMerged(int)));
+
 	return m_optWidget;
 }
 
 QWidget* KisToolSelectContiguous::optionWidget()
 {
         return m_optWidget;
+}
+
+void KisToolSelectContiguous::slotSetSampleMerged(int state)
+{
+	if (state == QButton::NoChange)
+		return;
+	m_sampleMerged = (state == QButton::On);
 }
 
 #include "kis_tool_select_contiguous.moc"

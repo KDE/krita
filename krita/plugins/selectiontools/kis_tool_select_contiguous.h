@@ -61,6 +61,7 @@ public:
 public slots:
 	virtual void slotSetFuzziness(int);
 	virtual void slotSetAction(int);
+	virtual void slotSetSampleMerged(int);
 	virtual void activate();
 
 
@@ -71,6 +72,7 @@ private:
 
 	int m_fuzziness;
 	enumSelectionMode m_selectAction;
+	bool m_sampleMerged;
 };
 
 class KisToolSelectContiguousFactory : public KisToolFactory {

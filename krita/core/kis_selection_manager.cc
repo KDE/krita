@@ -640,26 +640,28 @@ void KisSelectionManager::feather()
 	k.height = 3;
 	k.factor = 16;
 	k.offset = 0;
-	k.data = new Q_INT32(9);
+	k.data = new Q_INT32[9];
 	k.data[0] = 1;
-	k.data[0] = 2;
-	k.data[0] = 1;
-	k.data[0] = 2;
-	k.data[0] = 4;
-	k.data[0] = 2;
-	k.data[0] = 1;
-	k.data[0] = 2;
-	k.data[0] = 1;
+	k.data[1] = 2;
+	k.data[2] = 1;
+	k.data[3] = 2;
+	k.data[4] = 4;
+	k.data[5] = 2;
+	k.data[6] = 1;
+	k.data[7] = 2;
+	k.data[8] = 1;
 	
 	QRect rect = selection -> extent();
 	// Make sure we've got enough space around the edges.
-	rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 3, rect.height() + 3);
+	rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
 	
 	painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
 	painter.end();
 
 	if (img -> undoAdapter())
 		img -> undoAdapter() -> addCommand(t);
+		
+	delete k.data;
 
 	dev -> emitSelectionChanged();
 }

@@ -45,7 +45,8 @@ libkisui_la_SOURCES = \
     wdgnewimage.ui \
     wdgcolorsettings.ui \
     wdgapplyprofile.ui \
-    wdglayerbox.ui
+    wdglayerbox.ui \
+    wdgperformancesettings.ui
 
 
 noinst_HEADERS = kis_dlg_preferences.h \
@@ -78,7 +79,8 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
-    wdglayerbox.h 
+    wdglayerbox.h \
+    wdgperformancesettings.h
 
 
 libkisui_la_METASOURCES = AUTO

@@ -73,6 +73,15 @@ public:
 	Q_INT32 maxNumberOfThreads();
 	void setMaxNumberOfThreads(Q_INT32 numberOfThreads);
 
+	/// Maximum tiles in memory (this is a guideline, not absolute)
+	Q_INT32 maxTilesInMem() const;
+	void setMaxTilesInMem(Q_INT32 tiles);
+
+	/// Number of tiles that will be swapped at once. The higher, the more swapped, but more
+	/// chance that it will become slow
+	Q_INT32 swappiness() const;
+	void setSwappiness(Q_INT32 swappiness);
+
 private:
 	KisConfig(const KisConfig&);
 	KisConfig& operator=(const KisConfig&);

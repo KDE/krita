@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qbuttongroup.h>
+#include <qslider.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -47,6 +48,10 @@
 #include "kis_cmb_idlist.h"
 #include "kis_profile.h"
 #include "wdgcolorsettings.h"
+#include "wdgperformancesettings.h"
+
+// for the performance update
+#include "tiles/kis_tilemanager.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 	: QWidget( _parent, _name )
@@ -272,6 +277,29 @@ void ColorSettingsTab::refillImportProfiles(const KisID & s)
 	}
 }
 
+PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
+	: QWidget(parent, name)
+{
+	// XXX: Make sure only profiles that fit the specified color model
+	// are shown in the profile combos
+
+	QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+	m_page = new WdgPerformanceSettings(this);
+	l -> addWidget(m_page, 0, 0);
+
+	KisConfig cfg;
+
+	// it's scaled from 0 - 6, but the config is in 0 - 300
+	m_page -> m_swappiness -> setValue(cfg.swappiness() / 50);
+	m_page -> m_maxTiles -> setValue(cfg.maxTilesInMem());
+}
+
+void PerformanceTab::setDefault()
+{
+	m_page -> m_swappiness -> setValue(3);
+	m_page -> m_maxTiles -> setValue(500);
+}
+
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 	: KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
 {
@@ -288,6 +316,9 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
 	vbox = addVBoxPage( i18n( "Color Settings"), i18n( "Color Settings"), BarIcon( "colorize", KIcon::SizeMedium ));
 	m_colorSettings = new ColorSettingsTab( vbox );
+	
+	vbox = addVBoxPage( i18n( "Performance Settings"), i18n( "Performance Settings"), BarIcon( "fork", KIcon::SizeMedium ));
+	m_performanceSettings = new PerformanceTab ( vbox );
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -326,6 +357,12 @@ bool PreferencesDialog::editPreferences()
 		cfg.setAskProfileOnPaste( dialog -> m_colorSettings -> m_page -> chkAskPaste -> isChecked());
 		cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
 		cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
+
+		// it's scaled from 0 - 6, but the config is in 0 - 300
+		cfg.setSwappiness(dialog -> m_performanceSettings -> m_page -> m_swappiness -> value() * 50);
+		cfg.setMaxTilesInMem(dialog -> m_performanceSettings -> m_page -> m_maxTiles -> value());
+		// let the tile manager know
+		KisTileManager::instance() -> configChanged();
 	}
         delete dialog;
         return baccept;

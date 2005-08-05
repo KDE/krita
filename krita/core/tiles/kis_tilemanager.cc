@@ -27,6 +27,8 @@
 
 #include <kstaticdeleter.h>
 
+#include "kis_config.h"
+
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
 #include "kis_tilemanager.h"
@@ -38,6 +40,8 @@ KisTileManager* KisTileManager::m_singleton = 0;
 static KStaticDeleter<KisTileManager> staticDeleter;
 
 KisTileManager::KisTileManager() {
+	KisConfig config;
+
 	Q_ASSERT(KisTileManager::m_singleton == 0);
 	KisTileManager::m_singleton = this;
 	m_fileSize = 0;
@@ -45,9 +49,8 @@ KisTileManager::KisTileManager() {
 	m_bytesTotal = 0;
 
 	m_currentInMem = 0;
-	// ### make these configurable
-	m_maxInMem = 500;
-	m_swappiness = 100;
+	m_maxInMem = config.maxTilesInMem();
+	m_swappiness = config.swappiness();
 
 	counter = 0;
 }
@@ -253,4 +256,15 @@ void KisTileManager::printInfo() {
 	kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
 	kdDebug(DBG_AREA_TILES) << m_freeList.size() << " elements in the freelist\n";
 	kdDebug(DBG_AREA_TILES) << endl;
+}
+
+void KisTileManager::configChanged() {
+	KisConfig config;
+	m_maxInMem = config.maxTilesInMem();
+	m_swappiness = config.swappiness();
+
+	kdDebug(DBG_AREA_TILES) << "TileManager has new config: maxinmem: " << m_maxInMem
+			<< " swappiness: " << m_swappiness << endl;
+	
+	doSwapping();
 }

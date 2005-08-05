@@ -31,6 +31,7 @@ class QLineEdit;
 class QCheckBox;
 class KURLRequester;
 class WdgColorSettings;
+class WdgPerformanceSettings;
 class KisCmbIDList;
 class KisID;
 
@@ -113,6 +114,21 @@ public:
 };
 
 
+/**
+ *  "Directories"-tab for preferences dialog
+ */
+class PerformanceTab : public QWidget
+{
+Q_OBJECT
+
+public:
+	PerformanceTab( QWidget *parent = 0, const char *name = 0 );
+
+public:
+	void setDefault();
+	WdgPerformanceSettings * m_page;
+};
+
 //=======================
 
 /**
@@ -138,6 +154,7 @@ protected:
 	DirectoriesTab* m_directories;
 	UndoRedoTab* m_undoRedo;
 	ColorSettingsTab* m_colorSettings;
+	PerformanceTab* m_performanceSettings;
 
 protected slots:
 

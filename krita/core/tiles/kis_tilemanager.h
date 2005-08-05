@@ -40,6 +40,9 @@ public:
 	void ensureTileLoaded(KisTile* tile);
 	void maySwapTile(KisTile* tile);
 
+public slots:
+	void configChanged();
+
 private:
 	KisTileManager();
 	KisTileManager(KisTileManager& rhs) {}

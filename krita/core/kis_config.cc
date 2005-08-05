@@ -34,6 +34,8 @@ namespace {
 	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
 	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 	const Q_INT32 DEFAULT_MAX_THREADS = 4;
+	const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
+	const Q_INT32 DEFAULT_SWAPPINESS = 100;
 }
 
 KisConfig::KisConfig()
@@ -223,3 +225,22 @@ void KisConfig::setMaxNumberOfThreads(Q_INT32 maxThreads)
 	m_cfg -> writeEntry("maxthreads", maxThreads);
 }
 
+Q_INT32 KisConfig::maxTilesInMem() const
+{
+	return m_cfg -> readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
+}
+
+void KisConfig::setMaxTilesInMem(Q_INT32 tiles)
+{
+	m_cfg -> writeEntry("maxtilesinmem", tiles);
+}
+
+Q_INT32 KisConfig::swappiness() const
+{
+	return m_cfg -> readNumEntry("swappiness", DEFAULT_SWAPPINESS);
+}
+
+void KisConfig::setSwappiness(Q_INT32 swappiness)
+{
+	m_cfg -> writeEntry("swappiness", swappiness);
+}

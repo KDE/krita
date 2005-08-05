@@ -56,97 +56,110 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 	int WIDTH = 24;
 	int HEIGHT = 24;
 
-	b = new KisColorCup(QColor(240, 32, 160), this);
+	b = new KisColorCup(this);
+	b->setColor( QColor(240, 32, 160) );
 	l -> addWidget(b, 0, 0);
 	QToolTip::add(b, i18n("Quinacridone Rose"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(159, 88, 43), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(159, 88, 43));
 	l -> addWidget(b, 0, 1);
 	QToolTip::add(b,i18n("Indian Red"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(254, 220, 64), this);
+	b = new KisColorCup(this);
+	b->setColor( QColor(254, 220, 64) );
 	l -> addWidget(b, 0, 2);
 	QToolTip::add(b,i18n("Cadmium Yellow"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(36, 180, 32), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(254, 220, 64));
 	l -> addWidget(b, 0, 3);
 	QToolTip::add(b,i18n("Hookers Green"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(16, 185, 215), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(16, 185, 215));
 	l -> addWidget(b, 0, 4);
 	QToolTip::add(b,i18n("Cerulean Blue"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(96, 32, 8), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(96, 32, 8));
 	l -> addWidget(b, 0, 5);
 	QToolTip::add(b,i18n("Burnt Umber"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(254, 96, 8), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(254, 96, 8));
 	l -> addWidget(b, 0, 6);
 	QToolTip::add(b,i18n("Cadmium Red"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(255, 136, 8), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(255, 136, 8));
 	l -> addWidget(b, 0, 7);
 	QToolTip::add(b,i18n("Brilliant Orange"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(240, 199, 8), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(240, 199, 8));
 	l -> addWidget(b, 1, 0);
 	QToolTip::add(b,i18n("Hansa Yellow"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(96, 170, 130), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(96, 170, 130));
 	l -> addWidget(b, 1, 1);
 	QToolTip::add(b,i18n("Phthalo Green"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(48, 32, 170), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(48, 32, 170));
 	l -> addWidget(b, 1, 2);
 	QToolTip::add(b,i18n("French Ultramarine"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(118, 16, 135), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(118, 16, 135));
 	l -> addWidget(b, 1, 3);
 	QToolTip::add(b,i18n("Interference Lilac"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(254, 254, 254), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(254, 254, 254));
 	l -> addWidget(b, 1, 4);
 	QToolTip::add(b,i18n("Titanium White"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(64, 64, 74), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(64, 64, 74));
 	l -> addWidget(b, 1, 5);
 	QToolTip::add(b,i18n("Ivory Black"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-	b = new KisColorCup(QColor(255, 255, 255), this);
+	b = new KisColorCup(this);
+	b->setColor(QColor(255, 255, 255));
 	l -> addWidget(b, 1, 6);
 	QToolTip::add(b,i18n("Pure Water"));
 	b -> setFixedSize(WIDTH, HEIGHT);
 	connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
-
-
 
 	QHBoxLayout * h1 = new QHBoxLayout(vl, 0, "strength layout");
 	QLabel * label = new QLabel(i18n("Paint strength:"), this);

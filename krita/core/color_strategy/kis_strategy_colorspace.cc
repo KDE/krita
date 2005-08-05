@@ -158,7 +158,7 @@ bool KisStrategyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 	return true;
 }
 
-KisColorAdjustment *KisStrategyColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
+KisColorAdjustment *KisStrategyColorSpace::createBrightnessContrastAdjustment(Q_UINT16 */*transferValues*/)
 {
 	return NULL;
 }
@@ -232,6 +232,42 @@ void KisStrategyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
 
 void KisStrategyColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
+	Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+
+	QColor dstColor;
+	Q_UINT8 dstOpacity;
+	
+	const_cast<KisStrategyColorSpace *>(this)->toQColor(dst, &dstColor, &dstOpacity);
+	
+	while (nColors--)
+	{
+		Q_INT32 weight = *kernelValues;
+		
+		if (weight != 0) {
+			QColor c;
+			Q_UINT8 opacity;
+			const_cast<KisStrategyColorSpace *>(this)->toQColor( *colors, &c, &opacity );
+			totalRed += c.red() * weight;
+			totalGreen += c.green() * weight;
+			totalBlue += c.blue() * weight;
+			totalAlpha += opacity * weight;
+		}
+		colors++;
+		kernelValues++;
+	}
+
+
+	if (channelFlags & FLAG_COLOR) {
+		const_cast<KisStrategyColorSpace *>(this)->nativeColor(QColor(CLAMP((totalRed / factor) + offset, 0, QUANTUM_MAX),
+										CLAMP((totalGreen / factor) + offset, 0, QUANTUM_MAX),
+										CLAMP((totalBlue / factor) + offset, 0, QUANTUM_MAX)),
+			dstOpacity,
+			dst);
+	}
+	if (channelFlags & FLAG_ALPHA) {
+		const_cast<KisStrategyColorSpace *>(this)->nativeColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX), dst);
+	}
+
 }
 
 void KisStrategyColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const

@@ -96,6 +96,8 @@ void KoPaletteManager::addWidget(QWidget * widget,
 				 enumKoPaletteStyle style)
 {
 	
+	kdDebug() << "Adding widget " << name << "\n";
+	
 	Q_ASSERT(widget);
 
 	if (!widget) return;
@@ -196,6 +198,8 @@ void KoPaletteManager::showWidget(const QString & name)
 
 void KoPaletteManager::removeWidget(const QString & name)
 {
+	kdDebug() << "Removing widget: " << name << "\n";
+	
 	QString palette = *(m_currentMapping->find(name));
 	if (palette.isNull()) return;
 	
@@ -209,6 +213,11 @@ void KoPaletteManager::removeWidget(const QString & name)
 	m_widgets->remove(name);
 	m_currentMapping->remove(name);
 	
+	KAction * a = m_actions->take(name);
+	m_viewActionMenu->remove(a);
+	m_actionCollection->remove(a);
+	
+	kdDebug() << "Done removing widget " << name << "\n";
 }
 
 

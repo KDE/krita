@@ -118,19 +118,23 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 	KisTool *oldTool = currentTool();
 	KisCanvas * canvas = (KisCanvas*)m_controller->canvas();
 	
-	if (!tool->optionWidget()) {
-		tool->createOptionWidget(0);
-	}
-	
-	m_paletteManager->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
 	if (oldTool)
 	{
 		oldTool -> clear();
 		oldTool -> action() -> setChecked( false );
+		
+		m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
 	}
 
 	if (tool) {
+	
+		if (!tool->optionWidget()) {
+			tool->createOptionWidget(0);
+		}
+	
+		m_paletteManager->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
+
 		m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
 		m_controller->setCanvasCursor(tool->cursor());
 		
@@ -200,7 +204,10 @@ void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputD
 
 void KisToolManager::activateCurrentTool()
 {
-	currentTool() -> action() -> activate();
+	KisTool * t = currentTool();
+	if (t && t->action()) {
+		t->action()->activate();
+	}
 }
 
 KisTool * KisToolManager::findTool(const QString &toolName, enumInputDevice inputDevice) const

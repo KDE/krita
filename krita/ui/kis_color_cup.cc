@@ -31,7 +31,10 @@
 #include <qspinbox.h>
 #include <qstyle.h>
 #include <qtooltip.h>
+#include <qwidget.h>
+#include <qframe.h>
 
+#include <kcolordialog.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <koFrameButton.h>
@@ -41,25 +44,42 @@
 #include <kis_color.h>
 #include <kis_color_cup.h>
 
+KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
+	: QFrame(parent, name, WType_Popup | WStyle_Customize | WStyle_NoBorder)
+{
+	m_color = c;
+	setMargin(4);
+	kdDebug() << "Constructing the color popup\n";
+	setFocusPolicy(StrongFocus);
+	QHBoxLayout * l  = new QHBoxLayout(this);
+	l->add(m_khsSelector = new KHSSelector(this));
+	m_khsSelector->setMinimumSize(140, 7);
+	l->add(m_valueSelector = new KValueSelector(this));
+	m_valueSelector->setMinimumSize(26, 70);
+	m_khsSelector->show();
+	m_valueSelector->show();
 
+};
 
 KisColorCup::KisColorCup(QWidget * parent, const char * name)
 	: QPushButton(parent, name)
 {
 	m_color = Qt::black;
+	m_popup = new KisColorPopup(m_color, this, "colorpopup");
 	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	connect(m_popup, SIGNAL(changed( const QColor &)), this, SLOT(setColor(const QColor &)));
 }
 
-KisColorCup::KisColorCup(const QColor & c, QWidget * parent, const char * name)
-	: QPushButton(parent, name)
+void KisColorCup::setColor(const QColor & c)
 {
 	m_color = c;
-	connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	emit changed(c);
 }
 
 void KisColorCup::slotClicked()
-{
-	emit changed(m_color);
+{	
+	m_popup->move(this->mapToGlobal( this->rect().topRight() ) );
+	m_popup->show();
 }
 
 QSize KisColorCup::sizeHint() const

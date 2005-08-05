@@ -19,13 +19,38 @@
 #ifndef KIS_COLOR_CUP_H
 #define KIS_COLOR_CUP_H
 
-#include "qpushbutton.h"
-#include "qcolor.h"
+#include <qpushbutton.h>
+#include <qcolor.h>
+#include <qframe.h>
 
 #include <koffice_export.h>
 
 class QSize;
 class QPainter;
+class QWidget;
+class KHSSelector;
+class KValueSelector;
+
+class KisColorPopup : public QFrame {
+
+	Q_OBJECT;
+
+public:
+
+	KisColorPopup(QColor color, QWidget * w, const char * name);
+	virtual ~KisColorPopup() {};
+
+signals:
+
+	void changed(const QColor &);
+
+private:
+
+	KHSSelector * m_khsSelector;
+	KValueSelector * m_valueSelector;
+
+	QColor m_color;
+};
 
 class KisColorCup : public QPushButton {
 
@@ -34,11 +59,11 @@ class KisColorCup : public QPushButton {
 public:
 
 	KisColorCup(QWidget * parent, const char * name = 0);
-	KisColorCup(const QColor & c, QWidget * parent, const char * name = 0);
+	
 	virtual ~KisColorCup() {};
-
-	void setColor(const QColor & c) {m_color = c; };
+	
 	QColor color() { return m_color; };
+	
 signals:
 
 	void changed(const QColor &);
@@ -47,8 +72,13 @@ public:
 
 	QSize sizeHint() const;
 
-private slots:
+public slots:
 
+	void setColor(const QColor & c);
+
+
+private slots:
+	
 	void slotClicked();
 
 protected:
@@ -57,6 +87,7 @@ protected:
 
 private:
 
+	KisColorPopup * m_popup;
 	QColor m_color;
 };
 

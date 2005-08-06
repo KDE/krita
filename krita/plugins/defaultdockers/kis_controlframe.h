@@ -116,7 +116,6 @@ private:
 	KToolBar * m_toolbar;
 
 	KisAutobrush * m_autobrush;
-	KisAutogradient * m_autogradient;
 	KisBrushChooser * m_brushChooser;
 	KisGradientChooser * m_gradientChooser;
 };

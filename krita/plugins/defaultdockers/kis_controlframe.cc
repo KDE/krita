@@ -73,22 +73,6 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 	}
 }
 
-#if 0
-void KisPopupFrame::checkWhoHasGotFocus()
-{
-
-	kdDebug() << "We are: " << this << "\n";
-
-	QObject * w = qApp->focusWidget();
-
-	while (w != 0) {
-		kdDebug() << "Widget " << w << " has focus, it has parent " << w->parent() << "\n";
-		w = w->parent();
-		if (w==this) return;
-	}
-	hide();
-}
-#endif
 
 KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* name )
 	: QFrame( parent, name )
@@ -281,15 +265,11 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 	
 	l2->add( m_gradientTab);
 
-	KisGradientChooser * m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup, "gradient_chooser");
+	KisGradientChooser * m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");
 	m_gradientChooser->setFont(m_font);
-
+	m_gradientChooser->setMinimumSize(200, 150);
 	m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
-	KisAutogradient * m_autogradient = new KisAutogradient(m_gradientChooserPopup, "autogradient", i18n("Autogradient"));
-        connect(m_autogradient, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(gradientActivated(KisResource*)));
-	m_gradientTab->addTab(m_autogradient, i18n("Autogradient"));
-	
 	m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
 	connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 

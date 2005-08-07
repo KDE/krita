@@ -31,8 +31,6 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
 	: m_subject(parent),
 	  m_controller(controller)
 {
-	kdDebug() << "Toolmanager " << this << "created for canvassubject: " << parent << "\n";
-
 	m_toolBox = 0;
 	m_oldTool = 0;
 	m_dummyTool = 0;
@@ -47,8 +45,6 @@ KisToolManager::~KisToolManager()
 
 void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
-	kdDebug() << "Toolmanager " << this << " setup. Toolbox: " << toolbox << ", palettemanager: " << paletteManager << ", actioncollection: " << actionCollection << "\n";
-
 	m_toolBox = toolbox;
 	m_paletteManager = paletteManager;
 	m_actionCollection = actionCollection;
@@ -198,7 +194,6 @@ void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputD
 	for (vKisTool::iterator it = tools.begin(); it != tools.end(); it++) {
 		KisTool *tool = *it;
 		KAction *toolAction = tool -> action();
-
 		connect(toolAction, SIGNAL(activated()), tool, SLOT(activate()));
 	}
 }

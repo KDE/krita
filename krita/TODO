@@ -99,7 +99,6 @@ User Interface
 	* Fix layout problems in tool option widgets.
 	* Disable dragging the toolbox from dock position to dock position (see Karbon)
 	* Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
-	* Fix locking of tools! (bsar)
 	* Add link check to new image dialog to sync width and height
 	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
 	* The description field in color settings is empty

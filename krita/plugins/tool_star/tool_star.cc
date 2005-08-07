@@ -58,7 +58,7 @@ ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &)
 	{
 		KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolStarFactory(actionCollection()));
+		r -> add(new KisToolStarFactory());
 	}
 
 }

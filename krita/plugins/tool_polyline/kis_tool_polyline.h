@@ -83,13 +83,13 @@ private:
 class KisToolPolylineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPolylineFactory(KActionCollection * ac) : super(ac) {};
+	KisToolPolylineFactory() : super() {};
 	virtual ~KisToolPolylineFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolPolyline(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }

@@ -113,8 +113,6 @@ void KisFilterManager::setup(KActionCollection * ac)
 	for ( KisIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
 		f = KisFilterRegistry::instance()->get(*it);
 
-		kdDebug() << "filter loaded: " << f->id().name() << ", mapping to: " << f->menuCategory() << ", " << f->menuEntry() << "\n";
-		
 		if (!f) break;
 
 		// Create action

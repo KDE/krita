@@ -31,6 +31,8 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
 	: m_subject(parent),
 	  m_controller(controller)
 {
+	kdDebug() << "Toolmanager " << this << "created for canvassubject: " << parent << "\n";
+
 	m_toolBox = 0;
 	m_oldTool = 0;
 	m_dummyTool = 0;
@@ -45,29 +47,28 @@ KisToolManager::~KisToolManager()
 
 void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
+	kdDebug() << "Toolmanager " << this << " setup. Toolbox: " << toolbox << ", palettemanager: " << paletteManager << ", actioncollection: " << actionCollection << "\n";
+
 	m_toolBox = toolbox;
 	m_paletteManager = paletteManager;
 	m_actionCollection = actionCollection;
 	
 	// Dummy tool for when the layer is locked or invisible
 	if (!m_dummyTool)
-		m_dummyTool = KisToolDummyFactory(actionCollection).createTool();
+		m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
 	
-	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(m_subject);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(m_subject);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(m_subject);
-	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(m_subject);
-	
-	KisIDList keys = KisToolRegistry::instance()->listKeys();
-	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		KisTool * t = KisToolRegistry::instance()->get(*it)->createTool();
-
+	m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+	m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+		
+	vKisTool tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
+	for (vKisTool_it it = tools.begin(); it != tools.end(); it++) {
+		KisTool * t = *it;
 		if (!t) continue;
 		toolbox->registerTool( t->action(), t->toolType(), t->priority() );
-
-		delete(t); // These tools share their action, and the action for this tool has already been created.
 	}
-	
+
 	toolbox->setupTools();
 
 	setCurrentTool(findTool("tool_brush"));
@@ -98,7 +99,7 @@ void KisToolManager::updateGUI()
 		m_oldTool = currentTool();
 		// Set the dummy tool
 		if (!m_dummyTool) {
-	                m_dummyTool = KisToolDummyFactory(m_actionCollection).createTool();
+	                m_dummyTool = KisToolDummyFactory().createTool(m_actionCollection);
 		}
 		setCurrentTool(m_dummyTool);
 	}

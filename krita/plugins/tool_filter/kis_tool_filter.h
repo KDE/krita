@@ -64,13 +64,13 @@ private:
 class KisToolFilterFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolFilterFactory(KActionCollection * ac) : super( ac ) {};
+	KisToolFilterFactory() : super() {};
 	virtual ~KisToolFilterFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolFilter();
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("filter", i18n("Filter tool")); }

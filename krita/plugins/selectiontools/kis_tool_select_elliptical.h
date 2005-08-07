@@ -78,13 +78,13 @@ private:
 class KisToolSelectEllipticalFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectEllipticalFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectEllipticalFactory() : super() {};
 	virtual ~KisToolSelectEllipticalFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectElliptical(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }

@@ -72,18 +72,18 @@ DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList 
  	{
 		KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolFillFactory( actionCollection() ));
-		r -> add(new KisToolGradientFactory( actionCollection() ));
-		r -> add(new KisToolBrushFactory( actionCollection() ));
-		r -> add(new KisToolColorPickerFactory( actionCollection() ));
-		r -> add(new KisToolLineFactory( actionCollection() ));
-		r -> add(new KisToolTextFactory( actionCollection() ));
-		r -> add(new KisToolDuplicateFactory( actionCollection() ));
-		r -> add(new KisToolMoveFactory( actionCollection() ));
-		r -> add(new KisToolZoomFactory( actionCollection() ));
-		r -> add(new KisToolEllipseFactory( actionCollection() ));
-		r -> add(new KisToolRectangleFactory( actionCollection() ));
-		r -> add(new KisToolPanFactory( actionCollection() ));
+		r -> add(new KisToolFillFactory());
+		r -> add(new KisToolGradientFactory());
+		r -> add(new KisToolBrushFactory());
+		r -> add(new KisToolColorPickerFactory());
+		r -> add(new KisToolLineFactory());
+		r -> add(new KisToolTextFactory());
+		r -> add(new KisToolDuplicateFactory());
+		r -> add(new KisToolMoveFactory());
+		r -> add(new KisToolZoomFactory());
+		r -> add(new KisToolEllipseFactory());
+		r -> add(new KisToolRectangleFactory());
+		r -> add(new KisToolPanFactory());
 
         }
 }

@@ -120,13 +120,13 @@ private:
 class KisToolCropFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolCropFactory(KActionCollection * ac ) : super(ac) {};
+	KisToolCropFactory() : super() {};
 	virtual ~KisToolCropFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t = new KisToolCrop(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t;
 	}
 	virtual KisID id() { return KisID("crop", i18n("Crop tool")); }

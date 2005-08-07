@@ -92,13 +92,13 @@ private:
 class KisToolSelectOutlineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectOutlineFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectOutlineFactory() : super() {};
 	virtual ~KisToolSelectOutlineFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectOutline(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }

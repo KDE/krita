@@ -96,8 +96,6 @@ void KoPaletteManager::addWidget(QWidget * widget,
 				 enumKoPaletteStyle style)
 {
 	
-	kdDebug() << "Adding widget " << name << "\n";
-	
 	Q_ASSERT(widget);
 
 	if (!widget) return;
@@ -160,7 +158,6 @@ void KoPaletteManager::slotReset()
 		QWidget * w = m_widgets->find(widgetName);
 
 		if (!w) {
-			kdDebug() << "Not found: " << widgetName << "\n";
 			continue;
 		}
 		QString paletteName = *m_defaultMapping->find(widgetName);
@@ -198,8 +195,6 @@ void KoPaletteManager::showWidget(const QString & name)
 
 void KoPaletteManager::removeWidget(const QString & name)
 {
-	kdDebug() << "Removing widget: " << name << "\n";
-	
 	QString palette = *(m_currentMapping->find(name));
 	if (palette.isNull()) return;
 	
@@ -217,7 +212,6 @@ void KoPaletteManager::removeWidget(const QString & name)
 	m_viewActionMenu->remove(a);
 	m_actionCollection->remove(a);
 	
-	kdDebug() << "Done removing widget " << name << "\n";
 }
 
 
@@ -250,12 +244,13 @@ void KoPaletteManager::save()
 		
 
 		int i = p->indexOf(w);
+#if 0
 		kdDebug() << "Saving: " << paletteName
 			<< " pos: " << p->place() << "," << p->x() << "," << p->y() << "," << p->width() << "," << p->height()
 			<< ", widgetName " << widgetName
 			<< ", index " << i
 			<< ", hidden: " << hidden << "\n";
-			
+#endif			
 		palettes.append(widgetName + ","
 			+ paletteName + ","
 			+ p->place() + ","

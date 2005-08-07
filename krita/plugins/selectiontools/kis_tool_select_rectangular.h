@@ -78,12 +78,12 @@ private:
 class KisToolSelectRectangularFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectRectangularFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectRectangularFactory() : super() {};
 	virtual ~KisToolSelectRectangularFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectRectangular(); 
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		Q_CHECK_PTR(t);
 		return t; 
 	}

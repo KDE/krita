@@ -77,13 +77,13 @@ class KisToolLine : public KisToolPaint {
 class KisToolLineFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolLineFactory(KActionCollection * ac) : super(ac) {};
+	KisToolLineFactory() : super() {};
 	virtual ~KisToolLineFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolLine(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("line", i18n("Line tool")); }

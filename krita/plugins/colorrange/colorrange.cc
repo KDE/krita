@@ -67,7 +67,7 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
 	
 	if ( parent->inherits("KisFactory") )
 	{
-		KisToolRegistry::instance() -> add(new KisToolSelectSimilarFactory(actionCollection()));
+		KisToolRegistry::instance() -> add(new KisToolSelectSimilarFactory());
 
 		m_view = 0;
 	} else if (parent -> inherits("KisView")) {

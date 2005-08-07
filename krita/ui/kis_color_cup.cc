@@ -49,7 +49,6 @@ KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
 {
 	m_color = c;
 	setMargin(4);
-	kdDebug() << "Constructing the color popup\n";
 	setFocusPolicy(StrongFocus);
 	QHBoxLayout * l  = new QHBoxLayout(this);
 	l->add(m_khsSelector = new KHSSelector(this));

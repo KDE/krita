@@ -105,13 +105,13 @@ private:
 class KisToolGradientFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolGradientFactory(KActionCollection * ac) : super(ac) {};
+	KisToolGradientFactory() : super() {};
 	virtual ~KisToolGradientFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolGradient(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }

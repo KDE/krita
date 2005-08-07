@@ -60,7 +60,7 @@ ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
 	{
 		KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolPolygonFactory(actionCollection()));
+		r -> add(new KisToolPolygonFactory());
 	}
 
 }

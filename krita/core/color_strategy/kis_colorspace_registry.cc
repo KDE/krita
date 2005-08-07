@@ -26,7 +26,6 @@ KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
 KisColorSpaceRegistry::KisColorSpaceRegistry()
 {
- 	kdDebug(DBG_AREA_REGISTRY) << " creating a KisColorSpaceRegistry" << endl;
 	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
 	KisColorSpaceRegistry::m_singleton = this;
 }

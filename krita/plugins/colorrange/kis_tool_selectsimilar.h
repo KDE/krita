@@ -83,13 +83,13 @@ private slots:
 class KisToolSelectSimilarFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectSimilarFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectSimilarFactory() : super() {};
 	virtual ~KisToolSelectSimilarFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectSimilar(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("selectsimilar", i18n("Select similar")); }

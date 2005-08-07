@@ -59,13 +59,13 @@ private:
 class KisToolBrushFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolBrushFactory(KActionCollection * ac) : super(ac) {};
+	KisToolBrushFactory() : super() {};
 	virtual ~KisToolBrushFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolBrush(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("brush", i18n("Brush tool")); }

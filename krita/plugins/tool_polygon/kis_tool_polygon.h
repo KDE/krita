@@ -80,13 +80,13 @@ private:
 class KisToolPolygonFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPolygonFactory(KActionCollection * ac) : super(ac) {};
+	KisToolPolygonFactory() : super() {};
 	virtual ~KisToolPolygonFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolPolygon(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }

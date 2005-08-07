@@ -39,8 +39,8 @@ public:
 
  	static KisToolRegistry* instance();
 
-	vKisTool createTools(KisCanvasSubject *subject) const;
-	KisTool * createTool(KisCanvasSubject * subject, KisID & id) const;
+	vKisTool createTools(KActionCollection * ac, KisCanvasSubject *subject) const;
+	KisTool * createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const;
 	
 private:
 	KisToolRegistry();

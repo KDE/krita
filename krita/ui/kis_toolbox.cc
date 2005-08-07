@@ -79,6 +79,7 @@ void KisToolBox::slotPressButton( int id )
 
 void KisToolBox::slotButtonPressed( int id )
 {
+	kdDebug() << "Button pressed " << id << " Total buttons: " << m_numberOfButtons << "\n";
 	if( id != m_buttonGroup->selectedId() && m_buttonGroup->selected() ) {
 		m_buttonGroup->selected()->setDown( false );
 	}

@@ -98,6 +98,5 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 	
 	QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
 	
-	kdDebug(DBG_AREA_REGISTRY) << "Found pixmap " << fname << " for " << id.id() << "\n";
 	return QPixmap(fname);
 }

@@ -60,13 +60,13 @@ private:
 class KisToolTextFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolTextFactory(KActionCollection * ac) : super(ac) {};
+	KisToolTextFactory() : super() {};
 	virtual ~KisToolTextFactory(){};
 	
-	virtual KisTool * createTool() {
+	virtual KisTool * createTool(KActionCollection * ac) {
 		KisTool * t =  new KisToolText(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("text", i18n("Text tool")); }

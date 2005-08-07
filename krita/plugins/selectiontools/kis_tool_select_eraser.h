@@ -62,13 +62,13 @@ private:
 class KisToolSelectEraserFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectEraserFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectEraserFactory() : super() {};
 	virtual ~KisToolSelectEraserFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectEraser(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }

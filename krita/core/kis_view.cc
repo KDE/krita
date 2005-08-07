@@ -2618,8 +2618,9 @@ void KisView::detach(KisCanvasObserver *observer)
 
 void KisView::notify()
 {
-	for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++)
+	for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++) {
 		(*it) -> update(this);
+	}
 }
 
 KisImageSP KisView::currentImg() const

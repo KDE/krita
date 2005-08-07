@@ -55,13 +55,13 @@ private:
 class KisToolMoveFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolMoveFactory(KActionCollection * ac) : super(ac) {};
+	KisToolMoveFactory() : super() {};
 	virtual ~KisToolMoveFactory(){};
 	
-	virtual KisTool * createTool() {
+	virtual KisTool * createTool(KActionCollection * ac) {
 		KisTool * t =  new KisToolMove(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("move", i18n("Move tool")); }

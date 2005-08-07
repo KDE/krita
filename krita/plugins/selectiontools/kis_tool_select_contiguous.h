@@ -78,13 +78,13 @@ private:
 class KisToolSelectContiguousFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolSelectContiguousFactory(KActionCollection * ac) : super(ac) {};
+	KisToolSelectContiguousFactory() : super() {};
 	virtual ~KisToolSelectContiguousFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolSelectContiguous(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }

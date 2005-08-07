@@ -49,7 +49,7 @@ KisToolRegistry* KisToolRegistry::instance()
 
 
 
-vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
+vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *subject) const
 {
 	Q_ASSERT(subject);
 
@@ -61,7 +61,7 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 	{
 		KisToolFactorySP f = get(*it);
 
-		KisTool * tool = f -> createTool();
+		KisTool * tool = f -> createTool(ac);
 		subject -> attach(tool);
 		tools.push_back(tool);
 	}
@@ -71,9 +71,10 @@ vKisTool KisToolRegistry::createTools(KisCanvasSubject *subject) const
 	return tools;
 }
 
-KisTool * KisToolRegistry::createTool(KisCanvasSubject * subject, KisID & id) const
+KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const
 {
 	KisToolFactorySP f = get(id);
-	KisTool * t = f -> createTool();
+	KisTool * t = f -> createTool(ac);
+	subject->attach(t);
 	return t;
 }

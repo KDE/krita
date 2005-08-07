@@ -61,13 +61,13 @@ private:
 class KisToolDummyFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolDummyFactory(KActionCollection * ac) : super(ac) {};
-	virtual ~KisToolDummyFactory(){};
+	KisToolDummyFactory() : super() {};
+	virtual ~KisToolDummyFactory() {};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolDummy();
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("dummy", i18n("Dummy tool")); }

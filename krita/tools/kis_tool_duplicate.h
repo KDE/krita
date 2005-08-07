@@ -65,13 +65,13 @@ protected:
 class KisToolDuplicateFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolDuplicateFactory(KActionCollection * ac) : super(ac) {};
+	KisToolDuplicateFactory() : super() {};
 	virtual ~KisToolDuplicateFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolDuplicate();
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("duplicate", i18n("Duplicate tool")); }

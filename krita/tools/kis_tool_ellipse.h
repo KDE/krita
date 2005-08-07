@@ -72,13 +72,13 @@ protected:
 class KisToolEllipseFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolEllipseFactory(KActionCollection * ac) : super(ac) {};
+	KisToolEllipseFactory() : super() {};
 	virtual ~KisToolEllipseFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolEllipse(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac);
+		t -> setup(ac);
 		return t; 
 	}
 	virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }

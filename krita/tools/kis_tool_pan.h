@@ -57,13 +57,13 @@ private:
 class KisToolPanFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolPanFactory(KActionCollection * ac) : super(ac) {};
+	KisToolPanFactory() : super() {};
 	virtual ~KisToolPanFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolPan(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("pan", i18n("Pan tool")); }

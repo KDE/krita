@@ -114,13 +114,13 @@ private:
 class KisToolTransformFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolTransformFactory(KActionCollection * ac ) : super(ac) {};
+	KisToolTransformFactory() : super() {};
 	virtual ~KisToolTransformFactory(){};
 
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t = new KisToolTransform(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); return t;
+		t -> setup(ac); return t;
 	}
 	virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
 };

@@ -78,13 +78,13 @@ protected:
 class KisToolRectangleFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolRectangleFactory(KActionCollection * ac) : super(ac) {};
+	KisToolRectangleFactory() : super() {};
 	virtual ~KisToolRectangleFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolRectangle(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }

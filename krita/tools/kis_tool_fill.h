@@ -82,13 +82,13 @@ private:
 class KisToolFillFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolFillFactory(KActionCollection * ac) : super(ac) {};
+	KisToolFillFactory() : super() {};
 	virtual ~KisToolFillFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisToolFill * t = new KisToolFill(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("fill", i18n("Fill tool")); }

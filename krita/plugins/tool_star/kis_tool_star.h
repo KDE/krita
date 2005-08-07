@@ -86,13 +86,13 @@ private:
 class KisToolStarFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolStarFactory(KActionCollection * ac) : super(ac) {};
+	KisToolStarFactory() : super() {};
 	virtual ~KisToolStarFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t =  new KisToolStar(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("starshape", i18n("Star tool")); }

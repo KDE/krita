@@ -64,13 +64,13 @@ private:
 class KisToolZoomFactory : public KisToolFactory {
 	typedef KisToolFactory super;
 public:
-	KisToolZoomFactory(KActionCollection * ac) : super(ac) {};
+	KisToolZoomFactory() : super() {};
 	virtual ~KisToolZoomFactory(){};
 	
-	virtual KisTool * createTool() { 
+	virtual KisTool * createTool(KActionCollection * ac) { 
 		KisTool * t = new KisToolZoom(); 
 		Q_CHECK_PTR(t);
-		t -> setup(m_ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 	virtual KisID id() { return KisID("zoom", i18n("Zoom tool")); }

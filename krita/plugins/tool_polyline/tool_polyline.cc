@@ -59,7 +59,7 @@ ToolPolyline::ToolPolyline(QObject *parent, const char *name, const QStringList 
 	{
 		KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolPolylineFactory(actionCollection()));
+		r -> add(new KisToolPolylineFactory());
 	}
 
 }

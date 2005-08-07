@@ -63,7 +63,7 @@ ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
 		pr -> add( new KisFilterOpFactory );
 
 		KisToolRegistry * tr = KisToolRegistry::instance();
-		tr -> add( new KisToolFilterFactory( actionCollection() ) );
+		tr -> add( new KisToolFilterFactory());
 
  	}
 }

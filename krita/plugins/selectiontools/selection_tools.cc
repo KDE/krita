@@ -65,13 +65,13 @@ SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringL
  	if ( parent->inherits("KisFactory") )
  	{
 		KisToolRegistry * r = KisToolRegistry::instance();
-		r -> add(new KisToolSelectOutlineFactory( actionCollection() ));
-		r -> add(new KisToolSelectPolygonalFactory( actionCollection() ));
-		r -> add(new KisToolSelectRectangularFactory( actionCollection() ));
-		r -> add(new KisToolSelectBrushFactory( actionCollection() ));
-		r -> add(new KisToolSelectContiguousFactory( actionCollection() ));
-		r -> add(new KisToolSelectEllipticalFactory( actionCollection() ));
-		r -> add(new KisToolSelectEraserFactory( actionCollection() ));
+		r -> add(new KisToolSelectOutlineFactory());
+		r -> add(new KisToolSelectPolygonalFactory());
+		r -> add(new KisToolSelectRectangularFactory());
+		r -> add(new KisToolSelectBrushFactory());
+		r -> add(new KisToolSelectContiguousFactory());
+		r -> add(new KisToolSelectEllipticalFactory());
+		r -> add(new KisToolSelectEraserFactory());
         }
 }
 

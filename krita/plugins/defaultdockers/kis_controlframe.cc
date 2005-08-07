@@ -107,11 +107,9 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
 	m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
 	m_gradientWidget->show();
 
-	m_brushWidget -> setFixedSize( 34, 34 );
-
-	m_patternWidget -> setFixedSize( 34, 34 );
-	
-	m_gradientWidget -> setFixedSize( 34, 34 );
+	m_brushWidget -> setFixedSize( 32, 32 );
+	m_patternWidget -> setFixedSize( 32, 32 );
+	m_gradientWidget -> setFixedSize( 32, 32 );
 
 	createBrushesChooser(m_view);
 	createPatternsChooser(m_view);

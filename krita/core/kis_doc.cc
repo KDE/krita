@@ -70,7 +70,7 @@
 #include "kis_profile.h"
 #include "kis_id.h"
 #include "kis_part_layer.h"
-#include "KIsDocIface.h"
+#include "kis_doc_iface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -151,7 +151,7 @@ QCString KisDoc::mimeType() const
 DCOPObject *KisDoc::dcopObject()
 {
 	if (!m_dcop) {
-		m_dcop = new KIsDocIface(this);
+		m_dcop = new KisDocIface(this);
 		Q_CHECK_PTR(m_dcop);
 	}
 	return m_dcop;

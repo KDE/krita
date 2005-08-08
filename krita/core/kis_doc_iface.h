@@ -1,5 +1,4 @@
-/*
- * This file is part of the KDE project
+/* This file is part of the KDE project
  *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,31 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_IFACE_H
-#define KIS_IMAGE_IFACE_H
+#ifndef KIS_DOC_IFACE_H
+#define KIS_DOC_IFACE_H
 
 #include <KoViewIface.h>
+#include <KoDocumentIface.h>
 #include <dcopref.h>
 #include <qstring.h>
 
-class KisImage;
+class KisDoc;
 
-class KIsImageIface : virtual public DCOPObject
+class KisDocIface : virtual public KoDocumentIface
 {
 	K_DCOP
 public:
-	KIsImageIface( KisImage *img_ );
+	KisDocIface( KisDoc *doc_ );
 k_dcop:
-	QString name()const;
-	int height() const;
-	int width() const;
-	bool empty() const;
+	virtual DCOPRef currentImage();
 
-	void setName(const QString& name);
+	virtual int undoLimit () const;
+	virtual void setUndoLimit(int limit);
+	virtual int redoLimit() const;
+	virtual void setRedoLimit(int limit);
+
+	virtual void renameImage(const QString& oldName, const QString& newName);
 
 private:
-
-	KisImage *m_img;
+	KisDoc *m_doc;
 };
 
 #endif

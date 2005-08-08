@@ -1,6 +1,4 @@
-/*
- *  This file is part of the KDE project
- *
+/* This file is part of the KDE project
  *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,40 +16,50 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "KIsImageIface.h"
+#ifndef KRAYON_VIEW_IFACE_H
+#define KRAYON_VIEW_IFACE_H
 
-#include "kis_image.h"
+#include <KoViewIface.h>
 
-#include <dcopclient.h>
+#include <qstring.h>
 
-KIsImageIface::KIsImageIface( KisImage *img_ )
-	: DCOPObject()
+class KisView;
+
+/**
+ * This is the definition of the interface Krita presents to
+ * dcop.
+ */
+class KisViewIface : public KoViewIface
 {
-	m_img = img_;
-}
+	K_DCOP
+public:
+	KisViewIface( KisView *view_ );
+	k_dcop:
+	void copy();
+	void cut();
+	void removeSelection();
+	void paste();
+	void copySelectionToNewLayer();
+	void selectAll();
+	void unSelectAll();
 
-QString KIsImageIface::name()const
-{
-	return m_img->name();
-}
+	// layer action slots
+	void next_layer();
+	void previous_layer();
 
-int KIsImageIface::height() const
-{
-	return m_img->height();
-}
+	void slotImportImage();
 
-int KIsImageIface::width() const
-{
-	return m_img->width();
-}
+	// settings action slots
+	void preferences();
 
-bool KIsImageIface::empty() const
-{
-	return m_img->empty();
-}
+	void rotateLayer180();
+	void rotateLayerLeft90();
+	void rotateLayerRight90();
+	void mirrorLayerX();
+	void mirrorLayerY();
 
-void KIsImageIface::setName(const QString& name)
-{
-	m_img->setName( name );
-}
+private:
+	KisView *m_view;
+};
 
+#endif

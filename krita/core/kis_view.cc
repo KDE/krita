@@ -103,7 +103,7 @@
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 #include "kis_view.h"
-#include "KRayonViewIface.h"
+#include "kis_view_iface.h"
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_progress.h"
 #include "strategy/kis_strategy_move.h"
@@ -300,7 +300,7 @@ void KisView::createToolBox()
 DCOPObject* KisView::dcopObject()
 {
 	if (!m_dcop) {
-		m_dcop = new KRayonViewIface(this);
+		m_dcop = new KisViewIface(this);
 		Q_CHECK_PTR(m_dcop);
 	}
 	return m_dcop;

@@ -16,22 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KIsDocIface.h"
+#include "kis_doc_iface.h"
 #include <kapplication.h>
 
 #include "kis_doc.h"
 #include <dcopclient.h>
 
-KIsDocIface::KIsDocIface( KisDoc *doc_ )
+KisDocIface::KisDocIface( KisDoc *doc_ )
 	: KoDocumentIface( doc_ )
 {
 	m_doc = doc_;
 }
 
 
-DCOPRef KIsDocIface::image()
+DCOPRef KisDocIface::currentImage()
 {
-	KisImage *img=0;//XXX
+	KisImage *img = m_doc->currentImage();
 	if( !img )
 		return DCOPRef();
 	else
@@ -40,27 +40,27 @@ DCOPRef KIsDocIface::image()
 
 }
 
-int KIsDocIface::undoLimit () const
+int KisDocIface::undoLimit () const
 {
 	return m_doc->undoLimit();
 }
 
-void KIsDocIface::setUndoLimit(int limit)
+void KisDocIface::setUndoLimit(int limit)
 {
 	m_doc->setUndoLimit(limit);
 }
 
-int KIsDocIface::redoLimit() const
+int KisDocIface::redoLimit() const
 {
 	return m_doc->redoLimit();
 }
 
-void KIsDocIface::setRedoLimit(int limit)
+void KisDocIface::setRedoLimit(int limit)
 {
 	m_doc->setRedoLimit(limit);
 }
 
-void KIsDocIface::renameImage(const QString& oldName, const QString& newName)
+void KisDocIface::renameImage(const QString& oldName, const QString& newName)
 {
 	m_doc->renameImage(oldName,newName);
 }

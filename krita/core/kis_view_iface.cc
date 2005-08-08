@@ -18,95 +18,95 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "KRayonViewIface.h"
+#include "kis_view_iface.h"
 
 #include "kis_view.h"
 
 #include <dcopclient.h>
 
-KRayonViewIface::KRayonViewIface( KisView *view_ )
+KisViewIface::KisViewIface( KisView *view_ )
 	: KoViewIface( view_ )
 {
 	m_view = view_;
 }
 
-void KRayonViewIface::copy()
+void KisViewIface::copy()
 {
 // 	m_view->copy();
 }
 
-void KRayonViewIface::cut()
+void KisViewIface::cut()
 {
 // 	m_view->cut();
 }
 
-void KRayonViewIface::removeSelection()
+void KisViewIface::removeSelection()
 {
 // 	m_view->removeSelection();
 }
 
-void KRayonViewIface::paste()
+void KisViewIface::paste()
 {
 // 	m_view->paste();
 }
 
-void KRayonViewIface::copySelectionToNewLayer()
+void KisViewIface::copySelectionToNewLayer()
 {
 // 	m_view->copySelectionToNewLayer();
 }
 
-void KRayonViewIface::selectAll()
+void KisViewIface::selectAll()
 {
 // 	m_view->selectAll();
 }
 
-void KRayonViewIface::unSelectAll()
+void KisViewIface::unSelectAll()
 {
 // 	m_view->unSelectAll();
 }
 
 
-void KRayonViewIface::next_layer()
+void KisViewIface::next_layer()
 {
 	m_view->next_layer();
 }
 
-void KRayonViewIface::previous_layer()
+void KisViewIface::previous_layer()
 {
 	m_view->previous_layer();
 }
 
-void KRayonViewIface::slotImportImage()
+void KisViewIface::slotImportImage()
 {
 }
 
 
-void KRayonViewIface::preferences()
+void KisViewIface::preferences()
 {
     m_view->preferences();
 }
 
-void KRayonViewIface::rotateLayer180()
+void KisViewIface::rotateLayer180()
 {
     m_view->rotateLayer180();
 }
 
-void KRayonViewIface::rotateLayerLeft90()
+void KisViewIface::rotateLayerLeft90()
 {
     m_view->rotateLayerLeft90();
 }
 
-void KRayonViewIface::rotateLayerRight90()
+void KisViewIface::rotateLayerRight90()
 {
     m_view->rotateLayerRight90();
 }
 
-void KRayonViewIface::mirrorLayerX()
+void KisViewIface::mirrorLayerX()
 {
     m_view->mirrorLayerX();
 }
 
-void KRayonViewIface::mirrorLayerY()
+void KisViewIface::mirrorLayerY()
 {
     m_view->mirrorLayerY();
 }

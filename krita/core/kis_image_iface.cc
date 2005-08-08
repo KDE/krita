@@ -1,4 +1,6 @@
-/* This file is part of the KDE project
+/*
+ *  This file is part of the KDE project
+ *
  *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -14,35 +16,42 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+*/
 
-#ifndef KIS_DOC_IFACE_H
-#define KIS_DOC_IFACE_H
+#include "kis_image_iface.h"
 
-#include <KoViewIface.h>
-#include <KoDocumentIface.h>
-#include <dcopref.h>
-#include <qstring.h>
+#include "kis_image.h"
 
-class KisDoc;
+#include <dcopclient.h>
 
-class KIsDocIface : virtual public KoDocumentIface
+KisImageIface::KisImageIface( KisImage *img_ )
+	: DCOPObject()
 {
-	K_DCOP
-public:
-	KIsDocIface( KisDoc *doc_ );
-k_dcop:
-	virtual DCOPRef image();
+	m_img = img_;
+}
 
-	virtual int undoLimit () const;
-	virtual void setUndoLimit(int limit);
-	virtual int redoLimit() const;
-	virtual void setRedoLimit(int limit);
+QString KisImageIface::name()const
+{
+	return m_img->name();
+}
 
-	virtual void renameImage(const QString& oldName, const QString& newName);
+int KisImageIface::height() const
+{
+	return m_img->height();
+}
 
-private:
-	KisDoc *m_doc;
-};
+int KisImageIface::width() const
+{
+	return m_img->width();
+}
 
-#endif
+bool KisImageIface::empty() const
+{
+	return m_img->empty();
+}
+
+void KisImageIface::setName(const QString& name)
+{
+	m_img->setName( name );
+}
+

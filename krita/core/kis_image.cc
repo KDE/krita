@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "KIsImageIface.h"
+#include "kis_image_iface.h"
 
 #include "kis_command.h"
 #include "kis_types.h"
@@ -503,7 +503,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 DCOPObject *KisImage::dcopObject()
 {
 	if (!m_dcop) {
-		m_dcop = new KIsImageIface(this);
+		m_dcop = new KisImageIface(this);
 		Q_CHECK_PTR(m_dcop);
 	}
 	return m_dcop;

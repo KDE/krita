@@ -21,6 +21,7 @@
 
 #include <KoViewIface.h>
 #include <KoDocumentIface.h>
+
 #include <dcopref.h>
 #include <qstring.h>
 

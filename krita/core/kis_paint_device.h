@@ -34,8 +34,10 @@
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-
+#include "kis_paint_device_iface.h"
 #include <koffice_export.h>
+
+class DCOPObject;
 
 class QImage;
 class QSize;
@@ -68,6 +70,7 @@ public:
 
 	KisPaintDevice(const KisPaintDevice& rhs);
 	virtual ~KisPaintDevice();
+	virtual DCOPObject *dcopObject();
 
 public:
         // Implement KisRenderInterface
@@ -403,6 +406,9 @@ private:
 	// Contains the actual selection. For now, there can be only
 	// one selection per layer. XXX: is this a limitation?
 	KisSelectionSP m_selection;
+	
+	DCOPObject * m_dcop;
+
 };
 
 inline Q_INT32 KisPaintDevice::pixelSize() const

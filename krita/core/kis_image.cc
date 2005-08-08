@@ -1031,26 +1031,6 @@ void KisImage::layerRemove(KisLayerSP layer)
 	}
 }
 
-#if 0
-void KisImage::layerRaise(KisLayerSP layer)
-{
-	if (layer) {
-		m_doc->setModified(true);
-		raise(layer);
-		emit layersUpdated(this);
-	}
-}
-
-void KisImage::layerLower(KisLayerSP layer)
-{
-	if (layer) {
-		m_doc->setModified(true);
-		lower(layer);
-		emit layersUpdated(this);
-	}
-}
-#endif
-
 void KisImage::layerNext(KisLayerSP l)
 {
 	if (l) {

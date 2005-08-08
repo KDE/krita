@@ -1,6 +1,7 @@
 /*
- * This file is part of the KDE project
- *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+ *  This file is part of the KDE project
+ *
+ *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,42 +16,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+*/
+#include <kapplication.h>
 
-#ifndef KIS_IMAGE_IFACE_H
-#define KIS_IMAGE_IFACE_H
+#include "kis_paint_device_iface.h"
 
-#include <dcopref.h>
-#include <dcopobject.h>
+#include "kis_paint_device.h"
 
+#include <dcopclient.h>
 
-#include <qstring.h>
-
-class KisImage;
-class KisPaintDeviceIface;
-
-class KisImageIface : virtual public DCOPObject
+KisPaintDeviceIface::KisPaintDeviceIface( KisPaintDevice * parent )
+	: DCOPObject()
 {
-	K_DCOP
-public:
-	KisImageIface( KisImage *img_ );
-k_dcop:
-	QString name()const;
-	int height() const;
-	int width() const;
-	bool empty() const;
+	m_parent = parent;
+}
 
-	void setName(const QString& name);
 
-	/**
-	 * Get the active painting device.
-	 */
-	DCOPRef activeDevice();
-	
+QString KisPaintDeviceIface::name() const
+{
+	return m_parent->name();
+}
 
-private:
-
-	KisImage *m_img;
-};
-
-#endif
+void KisPaintDeviceIface::setName(const QString& name)
+{
+	m_parent->setName(name);
+}

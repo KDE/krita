@@ -55,16 +55,15 @@ class KisBrush;
 class KisPattern;
 
 /**
-  KisPainter contains the graphics primitives necessary to draw on a
-  KisPaintDevice. This is the same kind of abstraction as used in Qt
-  itself, where you have QPainter and QPaintDevice.
-
-  However, KisPainter works on a tiled image and supports different
-  colour models, and that's a lot more complicated.
-
-  KisPainter supports transactions that can group various paint operations
-  in one undoable step.
-
+ * KisPainter contains the graphics primitives necessary to draw on a
+ * KisPaintDevice. This is the same kind of abstraction as used in Qt
+ * itself, where you have QPainter and QPaintDevice.
+ *
+ * However, KisPainter works on a tiled image and supports different
+ * colour models, and that's a lot more complicated.
+ *
+ * KisPainter supports transactions that can group various paint operations
+ * in one undoable step.
  */
 class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
 	typedef KisProgressSubject super;

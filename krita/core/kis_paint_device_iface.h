@@ -1,6 +1,5 @@
-/*
- * This file is part of the KDE project
- *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+/* This file is part of the KDE project
+ *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,40 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_IFACE_H
-#define KIS_IMAGE_IFACE_H
+#ifndef _KIS_PAINT_DEVICE_IFACE_H
+#define _KIS_PAINT_DEVICE_IFACE_H
 
 #include <dcopref.h>
 #include <dcopobject.h>
 
-
 #include <qstring.h>
 
-class KisImage;
-class KisPaintDeviceIface;
+class KisPaintDevice;
 
-class KisImageIface : virtual public DCOPObject
+class KisPaintDeviceIface : virtual public DCOPObject
 {
 	K_DCOP
 public:
-	KisImageIface( KisImage *img_ );
+	KisPaintDeviceIface( KisPaintDevice * parent );
 k_dcop:
-	QString name()const;
-	int height() const;
-	int width() const;
-	bool empty() const;
 
-	void setName(const QString& name);
+        virtual QString name() const;
+        virtual void setName(const QString& name);
 
-	/**
-	 * Get the active painting device.
-	 */
-	DCOPRef activeDevice();
-	
 
 private:
 
-	KisImage *m_img;
+	KisPaintDevice *m_parent;
 };
 
 #endif

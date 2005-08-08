@@ -36,7 +36,8 @@ DCOPRef KisDocIface::currentImage()
 		return DCOPRef();
 	else
 		return DCOPRef( kapp->dcopClient()->appId(),
-				img->dcopObject()->objId() );
+				img->dcopObject()->objId(),
+				"KisImageIface");
 
 }
 

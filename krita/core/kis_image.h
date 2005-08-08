@@ -138,10 +138,6 @@ public:
 	KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
 	
 	void layerRemove(KisLayerSP layer);
-#if 0	
-	void layerRaise(KisLayerSP layer);
-	void layerLower(KisLayerSP layer);
-#endif		
 	void layerNext(KisLayerSP layer);
 	void layerPrev(KisLayerSP layer);
 

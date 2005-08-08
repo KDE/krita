@@ -44,6 +44,8 @@
 #include "kis_color.h"
 #include "kis_integer_maths.h"
 #include "kis_colorspace_registry.h"
+#include "kis_paint_device_iface.h"
+
 namespace {
 
 	class KisPaintDeviceCommand : public KNamedCommand {
@@ -296,6 +298,7 @@ namespace {
 KisPaintDevice::KisPaintDevice(KisStrategyColorSpace * colorStrategy, const QString& name) :
 	KShared()
 {
+	m_dcop = 0;
 	Q_ASSERT(colorStrategy != 0);
 	Q_ASSERT(name.isEmpty() == false);
 	if (name.isEmpty()) kdDebug(DBG_AREA_CORE) << "Empty name \n";
@@ -330,6 +333,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpace * colorStrategy, const QStr
 KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpace * colorStrategy, const QString& name) :
 	KShared()
 {
+	m_dcop = 0;
 	Q_ASSERT(name.isEmpty() == false);
 
         m_x = 0;
@@ -372,7 +376,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 {
         if (this != &rhs) {
                 m_owner = 0;
-
+		m_dcop = rhs.m_dcop;
                 if (rhs.m_datamanager) {
 			m_datamanager = new KisDataManager(*rhs.m_datamanager);
 			Q_CHECK_PTR(m_datamanager);
@@ -394,7 +398,18 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 
 KisPaintDevice::~KisPaintDevice()
 {
+	delete m_dcop;
 }
+
+DCOPObject *KisPaintDevice::dcopObject()
+{
+	if (!m_dcop) {
+		m_dcop = new KisPaintDeviceIface(this);
+		Q_CHECK_PTR(m_dcop);
+	}
+	return m_dcop;
+}
+
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {

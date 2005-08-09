@@ -144,6 +144,8 @@ KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
 			return *this;
 		m_yInTile = m_topInTile;
 		m_xInTile = m_leftInTile;
+		remainInTile= (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
+		remainInTile += m_rightInTile - m_xInTile + 1;
 	}
 
 	int lWidth = m_rightInTile - m_leftInTile + 1;

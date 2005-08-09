@@ -27,7 +27,15 @@ class KisTile;
 class KisTiledDataManager;
 
 /**
- * Provides a way to store tiles on disk to a swap file, to reduce memory usage.
+ * This class keeps has the intention to make certain tile-related operations faster or more
+ * efficient. It does this by keeping lots of info on KisTiles, and manages the way they are
+ * created, used, etc.
+ * It mainly does the following more visible things
+ *  * provide a way to store tiles on disk to a swap file, to reduce memory usage
+ *  * keep a list of previously swapped (but now unused) tiles, to reuse these when we want
+ *    to swap new tiles.
+ *  * tries to preallocate and recycle some tiles to make future allocations faster
+ *    (not done yet)
  */
 class KisTileManager  {
 public:
@@ -40,7 +48,7 @@ public:
 	void ensureTileLoaded(KisTile* tile);
 	void maySwapTile(KisTile* tile);
 
-public slots:
+public:
 	void configChanged();
 
 private:
@@ -53,18 +61,21 @@ private:
 	KTempFile m_tempFile;
 	int m_fileSize;
 
-	typedef struct { KisTile *tile; bool inMem; int filePos; int size; int fsize; } TileInfo;
+	struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
+		bool validNode; QValueList<TileInfo*>::iterator node; };
 	typedef struct { Q_UINT8 *pointer; int filePos; int size; } FreeInfo;
 	typedef QMap<KisTile*, TileInfo*> TileMap;
 	typedef QValueList<TileInfo*> TileList;
 	typedef QValueList<FreeInfo*> FreeList;
+	typedef QValueVector<FreeList> FreeListList;
 
 	TileMap m_tileMap;
 	TileList m_swappableList;
-	FreeList m_freeList;
+	FreeListList m_freeLists;
 	Q_INT32 m_maxInMem;
 	Q_INT32 m_currentInMem;
 	Q_INT32 m_swappiness;
+	Q_INT32 m_tileSize; // size of a tile if it used 1 byte per pixel
 	unsigned long m_bytesInMem;
 	unsigned long m_bytesTotal;
 

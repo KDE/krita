@@ -52,24 +52,35 @@ KisTileManager::KisTileManager() {
 	m_maxInMem = config.maxTilesInMem();
 	m_swappiness = config.swappiness();
 
+	m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
+	m_freeLists.reserve(8);
+
 	counter = 0;
 }
 
 KisTileManager::~KisTileManager() {
 	kdDebug(DBG_AREA_TILES) << "Destructing TileManager: unmapping everything" << endl;
 
-	if (!m_freeList.empty()) { // Let's see if there is an item in the freelist that fits
-		FreeList::iterator it = m_freeList.begin();
-		FreeList::iterator end = m_freeList.end();
-
-		while (it != end) {
-			// munmap it
-			munmap((*it) -> pointer, (*it) -> size);
-			delete *it;
-			++it;
-		}
+	if (!m_freeLists.empty()) { // See if there are any nonempty freelists
+		FreeListList::iterator listsIt = m_freeLists.begin();
+		FreeListList::iterator listsEnd = m_freeLists.end();
 		
-		m_freeList.clear();
+		while(listsIt != listsEnd) {
+			if ( ! (*listsIt).empty() ) {
+				FreeList::iterator it = (*listsIt).begin();
+				FreeList::iterator end = (*listsIt).end();
+
+				while (it != end) {
+					// munmap it
+					munmap((*it) -> pointer, (*it) -> size);
+					delete *it;
+					++it;
+				}
+				(*listsIt).clear();
+			}
+			++listsIt;
+		}
+		m_freeLists.clear();
 	}
 
 	kdDebug(DBG_AREA_TILES) << "Destructing TileManager: deleting file" << endl;
@@ -92,9 +103,11 @@ void KisTileManager::registerTile(KisTile* tile) {
 	info -> filePos = -1;
 	info -> size = tile -> WIDTH * tile -> HEIGHT * tile -> m_pixelSize;
 	info -> fsize = 0; // the size in the file
+	info -> validNode = true;
 
 	m_tileMap[tile] = info;
 	m_swappableList.push_back(info);
+	info -> node = -- m_swappableList.end();
 
 	m_currentInMem++;
 	m_bytesTotal += info -> size;
@@ -117,7 +130,10 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 		freeInfo -> pointer = tile -> m_data;
 		freeInfo -> filePos = info -> filePos;
 		freeInfo -> size = info -> fsize;
-		m_freeList.push_back(freeInfo);
+		int pixelSize = (info -> size / m_tileSize);
+		if (m_freeLists.capacity() <= pixelSize)
+			m_freeLists.resize(pixelSize);
+		m_freeLists[pixelSize].push_back(freeInfo);
 
 		madvise(info -> tile -> m_data, info -> fsize, MADV_DONTNEED);
 
@@ -129,7 +145,10 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 		m_currentInMem--;
 	}
 
-	m_swappableList.remove(info);
+	if (info -> validNode) {
+		m_swappableList.erase(info -> node);
+		info -> validNode = false;
+	}
 
 	m_bytesTotal -= info -> size;
 
@@ -142,7 +161,10 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
 void KisTileManager::ensureTileLoaded(KisTile* tile) {
 	TileInfo* info = m_tileMap[tile];
-	m_swappableList.remove(info);
+	if (info -> validNode) {
+		m_swappableList.erase(info -> node);
+		info -> validNode = false;
+	}
 
 	if (!info -> inMem) {
 		fromSwap(info);
@@ -150,7 +172,11 @@ void KisTileManager::ensureTileLoaded(KisTile* tile) {
 }
 
 void KisTileManager::maySwapTile(KisTile* tile) {
-	m_swappableList.push_back(m_tileMap[tile]);
+	TileInfo* info = m_tileMap[tile];
+	m_swappableList.push_back(info);
+	info -> validNode = true;
+	info -> node = -- m_swappableList.end();
+	
 	doSwapping();
 }
 
@@ -175,28 +201,17 @@ void KisTileManager::toSwap(TileInfo* info) {
 		// ### check return values of mmap functions!
 		KisTile *tile = info -> tile;
 		Q_UINT8* data = 0;
+		int pixelSize = (info -> size / m_tileSize);
+		if (m_freeLists.capacity() > pixelSize) {
+			if (!m_freeLists[pixelSize].empty()) {
+				// found one
+				FreeList::iterator it = m_freeLists[pixelSize].begin();
+				data = (*it) -> pointer;
+				info -> filePos = (*it) -> filePos;
+				info -> fsize = (*it) -> size;
 
-		if (!m_freeList.empty()) { // Let's see if there is an item in the freelist that fits
-			FreeList::iterator it = m_freeList.begin();
-			FreeList::iterator end = m_freeList.end();
-
-			while (it != end) {
-				if ( (*it) -> size >= info -> size ) {
-					// found one
-					data = (*it) -> pointer;
-					info -> filePos = (*it) -> filePos;
-					info -> fsize = (*it) -> size;
-
-					delete *it;
-					m_freeList.erase(it);
-
-					kdDebug(DBG_AREA_TILES) << "found in freelist\n";
-
-					break;
-				} else {
-					kdDebug(DBG_AREA_TILES) << (*it) -> size << " < " << info -> size << endl;
-				}
-				++it;
+				delete *it;
+				m_freeLists[pixelSize].erase(it);
 			}
 		}
 
@@ -245,6 +260,7 @@ void KisTileManager::doSwapping() {
 
 	for (Q_INT32 i = 0; i < count; i++) {
 		toSwap(m_swappableList.front());
+		m_swappableList.front() -> validNode = false;
 		m_swappableList.pop_front();
 	}
 #endif
@@ -254,7 +270,13 @@ void KisTileManager::printInfo() {
 	kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
 	kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
 	kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
-	kdDebug(DBG_AREA_TILES) << m_freeList.size() << " elements in the freelist\n";
+	kdDebug(DBG_AREA_TILES) << "Freelists information\n";
+	for (int i = 0; i < m_freeLists.capacity(); i++) {
+		if ( ! m_freeLists[i].empty() ) {
+			kdDebug(DBG_AREA_TILES) << m_freeLists[i].size()
+					<< " elements in the freelist for pixelsize " << i << "\n";
+		}
+	}
 	kdDebug(DBG_AREA_TILES) << endl;
 }
 

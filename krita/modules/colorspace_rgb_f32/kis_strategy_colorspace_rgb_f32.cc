@@ -59,7 +59,7 @@ inline float FLOAT_BLEND(float a, float b, float alpha)
 
 #define EPSILON 1e-6
 
-// FIXME: lcsm doesn't support 32-bit float
+// FIXME: lcms doesn't support 32-bit float
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 KisStrategyColorSpaceRGBF32::KisStrategyColorSpaceRGBF32() :

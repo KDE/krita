@@ -49,7 +49,7 @@ namespace {
 
 }
 
-KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature)
+KisStrategyColorSpace::KisStrategyColorSpace(const KisID& id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
 	: m_id(id),
 	  m_cmType(cmType),
 	  m_colorSpaceSignature(colorSpaceSignature)

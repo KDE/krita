@@ -73,7 +73,7 @@ public:
 	 * @param cmType The littlecms colorstrategy type we wrap.
 	 * @param colorSpaceSignature The icc signature for the colorspace we are.
 	 */
-	KisStrategyColorSpace(const KisID & id, Q_UINT32 cmType, icColorSpaceSignature colorSpaceSignature);
+	KisStrategyColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature);
 
 	virtual ~KisStrategyColorSpace();
 
@@ -254,7 +254,6 @@ public:
 				     Q_UINT32 numPixels,
 				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-
 //============================== Manipulation fucntions ==========================//
 // 
 // The manipulation functions have default implementations that _convert_ the pixel
@@ -373,7 +372,7 @@ protected:
 private:
 
 	KisID m_id;
-	Q_UINT32 m_cmType;                           // The colorspace type as defined by littlecms
+	DWORD m_cmType;                           // The colorspace type as defined by littlecms
 	icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
 	typedef QMap<KisProfilePair, cmsHTRANSFORM>  TransformMap;

@@ -34,7 +34,6 @@
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-#include "kis_paint_device_iface.h"
 #include <koffice_export.h>
 
 class DCOPObject;
@@ -213,7 +212,7 @@ public:
 	 *
 	 * @return true if the operation was succesful.
 	 */
-        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity);
+        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
 	bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
 
 	/**
@@ -227,13 +226,16 @@ public:
          * to QImage, not QPixmap. This means that this is not undoable; also,
          * there is no compositing with an existing value at this location.
 	 *
-	 *  The color values will be transformed from the display profile to
-	 *  the paint device profile.
+	 * The color values will be transformed from the display profile to
+	 * the paint device profile.
+	 *
+	 * Note that this will use 8-bit values and may cause a significant
+	 * degradation when used on 16-bit or hdr quality images.
 	 *
 	 * @return true if the operation was succesful
 	 *
 	 */
-        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity);
+        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
 	bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
 	
 	/**

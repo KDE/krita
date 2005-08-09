@@ -282,7 +282,7 @@ public:
 
 	
 	/**
-	 * Apply the adjustment created with on of the other functions
+	 * Apply the adjustment created with onr of the other functions
 	 */
 	virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 

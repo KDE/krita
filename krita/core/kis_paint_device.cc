@@ -801,7 +801,7 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
 	if (h < 0)
 		h = 0;
 
-	QUANTUM * data = new QUANTUM[w * h * m_pixelSize];
+	Q_UINT8 * data = new Q_UINT8 [w * h * m_pixelSize];
 	Q_CHECK_PTR(data);
 
 	m_datamanager -> readBytes(data, x1, y1, w, h);
@@ -895,6 +895,7 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 
 void KisPaintDevice::clearSelection()
 {
+	
 	if (!hasSelection()) return;
 
 	QRect r = m_selection -> selectedRect();
@@ -907,10 +908,11 @@ void KisPaintDevice::clearSelection()
 		while (!devIt.isDone()) {
 			KisPixel p = toPixel(devIt.rawData());
 			KisPixel s = m_selection -> toPixel(selectionIt.rawData());
+			// XXX: Why Q_UIN16 here? Doesn't that clash with UINT8_MULT later on?
 			Q_UINT16 p_alpha, s_alpha;
 			p_alpha = p.alpha();
 			s_alpha = MAX_SELECTED - s.alpha();
-
+			// XXX: Move to colorspace
 			p.alpha() = UINT8_MULT(p_alpha, s_alpha);
 
 			++devIt;
@@ -933,7 +935,7 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 
 			KisPixel pixel = toPixel(pixelIt.rawData());
 			KisPixel maskValue = mask -> toPixel(maskIt.rawData());
-
+			// XXX: Move to colorspace
 			pixel.alpha() = (pixel.alpha() * maskValue.alpha()) / MAX_SELECTED;
 
 			++pixelIt;
@@ -942,7 +944,7 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 	}
 }
 
-bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, QUANTUM *opacity)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
 {
 	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 	
@@ -974,7 +976,7 @@ KisColor KisPaintDevice::colorAt(Q_INT32 x, Q_INT32 y)
 	return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorStrategy, m_profile);
 }
 
-bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, QUANTUM opacity)
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)
 {
 	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 

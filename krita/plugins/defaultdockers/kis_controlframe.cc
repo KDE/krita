@@ -91,7 +91,7 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
 	setLineWidth(1);
 
 	m_font  = KGlobalSettings::generalFont();
-	float ps = m_font.pointSize() * 0.7;
+	float ps = m_font.pointSize() * 0.8;
 	m_font.setPointSize((int)ps);
 
 	m_toolbar = new KToolBar(m_view->mainWindow(), Qt::DockLeft, false, "resources", false, true);
@@ -99,12 +99,15 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
 	m_toolbar->setName("resources");
 
 	m_brushWidget = new KisIconWidget(m_toolbar, "brushes");
+	m_brushWidget->setTextLabel( i18n("Brush shapes") );
 	m_brushWidget->show();
 	
 	m_patternWidget = new KisIconWidget(m_toolbar, "patterns");
+	m_patternWidget->setTextLabel( i18n("Fill patterns") );
 	m_patternWidget->show();
 
 	m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
+	m_gradientWidget->setTextLabel( i18n("Gradients") );
 	m_gradientWidget->show();
 
 	m_brushWidget -> setFixedSize( 32, 32 );

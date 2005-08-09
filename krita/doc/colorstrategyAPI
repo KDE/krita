@@ -2,84 +2,57 @@ This is a working document. It list the places where pixels are mangled and requ
 
 The purpose is to find out which functions an API in colorstrategy must have to support pixelmangling in a colorstretegy independent manner.
 
-====================
-Requested functions:
 
-a function that take X number of pixels and associated weights and produce a weighted average.
+Requested function: apply an alpha mask to pixels
+Problem: alpha is hard-coded 8-bit in KisPixel, when it should be free
 
+void KisPaintDevice::clearSelection()
+{
+	if (!hasSelection()) return;
 
+	QRect r = m_selection -> selectedRect();
+	r = r.normalize();
 
-====================
-Usecases:
+	for (Q_INT32 y = 0; y < r.height(); y++) {
+		KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
+		KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
-plugins/convolutionfilters:
----------------------
-The plugin creates matrices for each of the color channels. That would
-be wrong.  A single matrix would be enough telling how to mix the colors.
-Another matrix telling how to mix the alpha is ok though.
+		while (!devIt.isDone()) {
+			KisPixel p = toPixel(devIt.rawData());
+			KisPixel s = m_selection -> toPixel(selectionIt.rawData());
+			// XXX: Why Q_UIN16 here? Doesn't that clash with UINT8_MULT later on?
+			Q_UINT16 p_alpha, s_alpha;
+			p_alpha = p.alpha();
+			s_alpha = MAX_SELECTED - s.alpha();
 
-core/kis_convolution_painter.cc:
----------------------
-The convolution painter assume that we know how to mix several colors into one. That won't hold for hsv and lab, and is slightly inaccurate for the other colorstrategies as well.
+			p.alpha() = UINT8_MULT(p_alpha, s_alpha);
 
-
-core/builder/kis_image_magick_builder.cc:
----------------------
-(this file will be moved to a plugin soon)
-The builder is hardcoded to rgba because it needs to convert between ImageMagick
-pixel packets and Krita pixels. Currently the code is like:
-
-	KisHLineIteratorPixel hiter = layer -> createHLineIterator(0, y, image->columns, true);
-	while(! hiter.isDone())
-	{
-		Q_UINT8 *ptr= hiter.rawData();
-		// XXX: not colorstrategy and bitdepth independent
-		*(ptr++) = pp->blue;
-		*(ptr++) = pp->green;
-		*(ptr++) = pp->red;
-		*(ptr++) = OPACITY_OPAQUE - pp->opacity;
-
-		pp++;
-		hiter++;
+			++devIt;
+			++selectionIt;
+		}
 	}
+}
 
-The traditional way of solving in Krita would be to add a toImageMagickImage
-and fromImageMagick method analogous to the toQImage and fromQImage methods,
-or to add nativeColor and toPixelPacket methods -- but this is not extensible,
-for instance when we want to support openExr.
+void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
+{
+	QRect r = mask -> extent();
+	crop(r);
 
+	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
 
+		KisHLineIterator pixelIt = createHLineIterator(r.x(), y, r.width(), true);
+		KisHLineIterator maskIt = mask -> createHLineIterator(r.x(), y, r.width(), false);
 
+		while (!pixelIt.isDone()) {
 
-====================
-Requested function:
+			KisPixel pixel = toPixel(pixelIt.rawData());
+			KisPixel maskValue = mask -> toPixel(maskIt.rawData());
 
-a function that take 2 colours, and calculates the 'distance' or 'difference' between it.
+			pixel.alpha() = (pixel.alpha() * maskValue.alpha()) / MAX_SELECTED;
 
+			++pixelIt;
+			++maskIt;
+		}
+	}
+}
 
-====================
-Usecases:
-
-core/kis_fill_painter.cc:
----------------------
-
-The fill painter needs to know if a pixel doesn't vary too much from the seed pixel.
-Currently it calculates this in an RGB-only way, by taking the difference of the channels
-of the 2 points.
-
-------------------------------
-It is quite often necessary to blank a pixel The color strategy should have a function
-to return a blank pixel. Ditto with a default pixel.
-
-
-==================
-Requested function
-
-A function that takes color channels and alpha channel and combines those in the right
-order and at the right place
-
-Usecase:
-
-KisPaintop:
-
-alpha from mast + color from color selector, together a new color

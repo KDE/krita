@@ -86,6 +86,12 @@ public:
 	 *
 	 * If the widget occurs in the saved configuration, it is not added to the
 	 * specified palette, but in the place where it was left.
+	 *
+	 * @param widget the widget that will be inserted as a tab or entry in the palette
+	 * @param name the name under which the palette will be stored. Not the caption -- do not i18n this. 
+	 * @param paletteName the unique name of the palette this widget will be a child of. If the palette already exists, the current widget is added to it.
+	 * @param position the position of the widget in the palettes
+	 * @param style docker, toolbox or slider
 	 */
 	virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
 
@@ -114,7 +120,7 @@ public:
 
 
 	/**
-	 * Create a palette in the given style. with the given name and caption. If
+	 * Create an empty palette in the given style. with the given name and caption. If
 	 * the palette already exists, nothing is done. 
 	 */
 	virtual KoPalette * createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style = PALETTE_DOCKER);

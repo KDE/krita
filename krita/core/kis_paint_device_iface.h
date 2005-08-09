@@ -36,6 +36,38 @@ k_dcop:
         virtual QString name() const;
         virtual void setName(const QString& name);
 
+	/**
+	 * Return the number of bytes a pixel takes.
+	 */
+	Q_INT32 pixelSize() const;
+
+	/**
+	 * Return the number of channels a pixel takes
+	 */
+	Q_INT32 nChannels() const;
+
+	/**
+	 * Read the bytes representing the rectangle described by x, y, w, h into
+	 * data. If data is not big enough, Krita will gladly overwrite the rest
+	 * of your precious memory.
+	 *
+	 * Since this is a copy, you need to make sure you have enough memory.
+	 *
+	 * Reading from areas not previously initialized will read the default
+	 * pixel value into data.
+	 */
+	QByteArray readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+
+	/**
+	 * Copy the bytes in data into the rect specified by x, y, w, h. If there
+	 * data is too small or uninitialized, Krita will happily read parts of
+	 * memory you never wanted to be read.
+	 *
+	 * If the data is written to areas of the paint device not previously initialized,
+	 * the paint device will grow.
+	 */
+	void writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+
 
 private:
 

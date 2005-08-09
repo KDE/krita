@@ -19,7 +19,13 @@ Transform tool (CBR)
 	* Fix problem of deselecting during tool use
 	* Fix problem of undoing during tool use
 	* Fix problem of clearing "extraLength pixels"
-
+	* Add a messagebox that asks whether the changes should be committed or not:
+		
+		"Sure you want to cancel the Transform" ?
+			[Discard] [Apply] [Cancel]
+			
+	* Apply the changes first on the canvas pixmap, not on the actual layer for
+	  quick interactivity 
 
 Integration
 
@@ -37,8 +43,6 @@ Integration
 	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 
 Colorspace independence (found with the test colorstrategy)
-
-	TOMORROW
 
 	* tool gradient uses wrong colors
 	* brightness/contrast and the like don't work.
@@ -94,6 +98,8 @@ Import/Export
 
 User Interface
 
+	* Add opacity widget (One that grows more white or transparent (showing those gray blocks) based on the
+	  input)
 	* Add out-of-gamut selection
 	* Fix crash with tablet because of tool refactoring.
 	* Fix layout problems in tool option widgets.
@@ -119,7 +125,6 @@ User Interface
 	  move the crop rectangle by dragging in the middle, when pressing shift, keep aspect ratio, implement
 	  gray mask. (Michael Thaler)
 	* Allow shape tools to be filled with gradients
-
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker
 		  windows, create new docker if tab dropped outside existing
@@ -139,7 +144,11 @@ User Interface
 	  it onto a background image -- or not, if another KOffice app wants it
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
-	  
+	* Put rotateimage, not rotatelayer in the toolbar
+	* In the Layers popup-menu the 'level' talks about formost and hindmost,
+	  since the dialog is about stacking vertically instead of horizontally, I'd use 'top
+	  most' and 'bottom most'
+
 
 Selections
 
@@ -163,7 +172,7 @@ Profiles
 Tools
 
 	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
-	
+	* Zoom tool should zoom out when alt is pressed. Show zoom-minus cursor in that case
 	* Implement the following tools or paintops: 
 		    - fix airbrush tool (add rate option, add increase
 		      of brush size if kept in one place)
@@ -181,7 +190,7 @@ Tools
 	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
-
+	* Add statusbar messages for tools about modifier keys and other use hints
 
 Plugins
 

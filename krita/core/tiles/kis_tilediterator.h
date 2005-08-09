@@ -80,6 +80,11 @@ public:
 	~KisTiledRectIterator();
 
 public:
+	Q_INT32 nConseqPixels() const;
+	
+	/// Advances a number of pixels until it reaches the end of the rect
+	KisTiledRectIterator & operator+=(int n);
+	
 	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
 	KisTiledRectIterator & operator++();
 

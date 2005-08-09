@@ -52,6 +52,13 @@ public:
 	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
 	inline const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
 
+	/// Returns the number of consequtive pixels that we point at
+	/// This is useful for optimizing
+	inline Q_INT32 nConseqPixels() const { return ACTUAL_RECTITERATOR::nConseqPixels(); };
+	
+	/// Advances a number of pixels until it reaches the end of the rect
+	inline KisRectIterator & operator+=(int n) { ACTUAL_RECTITERATOR::operator+=(n); return *this; };
+	
 	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
 	inline KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
 	

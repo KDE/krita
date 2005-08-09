@@ -120,6 +120,48 @@ KisTiledRectIterator::~KisTiledRectIterator( )
 {
 }
 
+Q_INT32 KisTiledRectIterator::nConseqPixels() const
+{
+	if(m_leftInTile || (m_rightInTile != KisTile::WIDTH - 1))
+		return m_rightInTile - m_xInTile + 1;
+	else
+		return KisTile::WIDTH * (m_bottomInTile - m_yInTile + 1) - m_xInTile;
+}
+
+KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
+{
+	int remainInTile;
+	
+	remainInTile= (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
+	remainInTile += m_rightInTile - m_xInTile + 1;
+	
+	// This while loop may not bet the fastest, but usually it's not entered more than once.
+	while(n >= remainInTile)
+	{
+		n -= remainInTile;
+		nextTile();
+		if(m_beyondEnd)
+			return *this;
+		m_yInTile = m_topInTile;
+		m_xInTile = m_leftInTile;
+	}
+
+	int lWidth = m_rightInTile - m_leftInTile + 1;
+	while(n >= lWidth)
+	{
+		n -= lWidth;
+		m_yInTile++;
+	}
+	m_xInTile += n;
+	m_x = m_col * KisTile::WIDTH + m_xInTile;
+	m_y = m_row * KisTile::HEIGHT + m_yInTile;
+	fetchTileData(m_col, m_row);
+	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
+	
+	return *this;
+}
+
+
 KisTiledRectIterator & KisTiledRectIterator::operator ++ ()
 {
 	// advance through rect completing each tile before moving on

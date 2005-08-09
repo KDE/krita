@@ -570,12 +570,6 @@ void KisPaintDevice::accept(KisRotateVisitor& visitor)
         visitor.visitKisPaintDevice(this);
 }
 
-void KisPaintDevice::accept(KisTransformVisitor& visitor)
-{
-        visitor.visitKisPaintDevice(this);
-}
-
-
 void KisPaintDevice::scale(double xscale, double yscale, KisProgressDisplayInterface * progress, KisFilterStrategy *filterStrategy)
 {
         KisScaleVisitor visitor;
@@ -595,15 +589,6 @@ void KisPaintDevice::shear(double angleX, double angleY, KisProgressDisplayInter
         KisRotateVisitor visitor;
         accept(visitor);
         visitor.shear(angleX, angleY, progress);
-}
-
-void KisPaintDevice::transform(double xscale, double  yscale,
-			double  xshear, double  yshear, double rotation,
-			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
-{
-        KisTransformVisitor visitor;
-        accept(visitor);
-        visitor.transform(xscale, yscale, xshear,  yshear, rotation, xtranslate, ytranslate, progress, filterStrategy);
 }
 
 void KisPaintDevice::mirrorX()

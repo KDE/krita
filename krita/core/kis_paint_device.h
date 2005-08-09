@@ -50,7 +50,6 @@ class KisHLineIteratorPixel;
 class KNamedCommand;
 class KisRotateVisitor;
 class KisScaleVisitor;
-class KisTransformVisitor;
 class KisFilterStrategy;
 
 /**
@@ -301,9 +300,6 @@ public:
 	void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
-	void transform(double  xscale, double  yscale, 
-			double  xshear, double  yshear, double rotation,
-			Q_INT32  xtranslate, Q_INT32  ytranslate, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 
 	/**
 	 * Mirror the device along the X axis
@@ -401,7 +397,6 @@ private:
 
 	void accept(KisScaleVisitor &);
 	void accept(KisRotateVisitor &);
-	void accept(KisTransformVisitor &);
 
 	// Whether the selection is active
 	bool m_hasSelection;

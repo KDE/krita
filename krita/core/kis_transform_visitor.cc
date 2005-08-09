@@ -27,6 +27,22 @@
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 
+KisTransformVisitor::KisTransformVisitor(double xscale, double yscale, 
+				    double xshear, double yshear, double rotation,
+				    Q_INT32 xtranslate, Q_INT32 ytranslate,
+				    KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
+{
+	m_xscale = xscale;
+	m_yscale = yscale;
+	m_xshear = xshear;
+	m_yshear = yshear;
+	m_rotation = rotation,
+	m_xtranslate = xtranslate;
+	m_ytranslate = ytranslate;
+	m_progress = progress;
+	m_filter = filter;
+}
+
 void KisTransformVisitor::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
 	KisSelectionSP dstSelection;
@@ -341,26 +357,31 @@ printf(" )=%d\n",sum);
 	delete [] weight;
 }
 
-void KisTransformVisitor::transform(double  xscale, double  yscale, 
-				    double  xshear, double  yshear, double rotation,
-				    Q_INT32  xtranslate, Q_INT32  ytranslate,
-				    KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
+bool KisTransformVisitor::visit(KisPainter &gc, KisPaintDevice *dev)
 {
         //progress info
         m_cancelRequested = false;
-        progress -> setSubject(this, true, true);
+        m_progress -> setSubject(this, true, true);
 	m_progressTotalSteps = 0;
 	m_progressStep = 0;
 	QRect r;
-	if(m_dev->hasSelection())
-		r = m_dev->selection()->selectedExactRect();
+	if(dev->hasSelection())
+		r = dev->selection()->selectedExactRect();
 	else
-		r = m_dev->exactBounds();
+		r = dev->exactBounds();
 
-	KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorStrategy(),"temporary");;
-	KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorStrategy(),"temporary");;
-	KisPaintDeviceSP srcdev = m_dev;
+	KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev->colorStrategy(),"temporary");;
+	KisPaintDeviceSP tmpdev2 = new KisPaintDevice(dev->colorStrategy(),"temporary");;
+	KisPaintDeviceSP srcdev = dev;
 
+	double xscale = m_xscale;
+	double yscale = m_yscale;
+	double xshear = m_xshear;
+	double yshear = m_yshear;
+	double rotation = m_rotation;
+	Q_INT32 xtranslate = m_xtranslate;
+	Q_INT32 ytranslate = m_ytranslate;
+	
 	int rotQuadrant = int(rotation /(M_PI/2) + 0.5);
 	double tmp;
 	switch(rotQuadrant)
@@ -400,12 +421,23 @@ void KisTransformVisitor::transform(double  xscale, double  yscale,
 
 QTime time;
 time.start();
-	transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, filterStrategy);
+	if ( m_cancelRequested) {
+		emit notifyProgressDone(this);
+		return false;
+	}
+	
+	transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
 printf("time taken first pass %d\n",time.restart());
-	if(m_dev->hasSelection())
-		m_dev->selection()->clear();
+	if(dev->hasSelection())
+		dev->selection()->clear();
 printf("time taken to clear selection %d\n",time.restart());
-	transformPass <KisHLineIteratorPixel>(tmpdev2, m_dev, xscale, xshear, xtranslate, filterStrategy);
+	
+	if ( m_cancelRequested) {
+		emit notifyProgressDone(this);
+		return false;
+	}
+	
+	transformPass <KisHLineIteratorPixel>(tmpdev2, dev, xscale, xshear, xtranslate, m_filter);
 
 printf("time taken second pass %d\n",time.elapsed());
 printf("%d %d\n",xtranslate, ytranslate);
@@ -415,5 +447,5 @@ printf("%f\n",rotation);
 	//progress info
         emit notifyProgressDone(this);
 
-        return;
+        return m_cancelRequested;
 }

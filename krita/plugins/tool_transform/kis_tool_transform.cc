@@ -49,6 +49,7 @@
 #include <kis_cmb_idlist.h>
 #include <kis_id.h>
 #include <kis_tool_controller.h>
+#include <kis_transform_visitor.h>
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"
@@ -649,8 +650,10 @@ printf("%f %f\n",tx,ty);
 	}	
 	m_transaction = new TransformCmd(img->activeLayer().data());
 	Q_CHECK_PTR(m_transaction);
-		
-	img->activeLayer()->transform(m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
+	
+	KisTransformVisitor t(m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
+	KisPainter gc(img->activeLayer());
+	t.visit(gc, img->activeLayer());
 	
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();

@@ -81,11 +81,14 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 
 	while( ! srcIt.isDone()  && !cancelRequested())
 	{
+		Q_UINT32 npix;
+		npix = srcIt.nConseqPixels();
+		
 		// change the brightness and contrast
-		src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, 1);
+		src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
 					
-		++srcIt;
-		++dstIt;
+		srcIt+=npix;
+		dstIt+=npix;
 
 		pixelsProcessed++;
 		setProgress(pixelsProcessed);

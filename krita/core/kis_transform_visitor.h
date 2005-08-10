@@ -79,6 +79,7 @@ public:
 		return true; 
 	}
 	
+	bool isCanceled() { return m_cancelRequested;};
 private:
 	bool visit(KisPainter& gc, KisPaintDevice *dev);
 	

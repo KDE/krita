@@ -655,6 +655,14 @@ printf("%f %f\n",tx,ty);
 	KisPainter gc(img->activeLayer());
 	t.visit(gc, img->activeLayer());
 	
+	if(t.isCanceled())
+	{
+		m_transaction->unexecute();
+		delete m_transaction;
+		m_transaction = 0;
+		activate();
+		return;
+	}
 	QRect rc = img->activeLayer()->extent();
 	rc = rc.normalize();
 	

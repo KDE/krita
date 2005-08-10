@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 #include "kis_image.h"
-#include "kis_strategy_colorspace_rgb_f32.h"
+#include "kis_rgb_f32_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 

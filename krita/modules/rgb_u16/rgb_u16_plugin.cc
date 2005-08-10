@@ -28,7 +28,7 @@
 #include <kis_factory.h>
 
 #include "rgb_u16_plugin.h"
-#include "kis_strategy_colorspace_rgb_u16.h"
+#include "kis_rgb_u16_colorspace.h"
 
 typedef KGenericFactory<RGBU16Plugin> RGBU16PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_rgb_u16_plugin, RGBU16PluginFactory( "krita" ) )

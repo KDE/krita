@@ -21,7 +21,7 @@
 
 #include "kis_factory.h"
 #include "kis_strategy_colorspace_rgb_tester.h"
-#include "kis_strategy_colorspace_rgb.h"
+#include "kis_rgb_colorspace.h"
 
 using namespace KUnitTest;
 

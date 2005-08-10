@@ -23,7 +23,7 @@
 #include <kis_image.h>
 #include <kis_colorspace_registry.h>
 
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 #include "kis_wetness_visualisation_filter.h"
 
 WetnessVisualisationFilter::WetnessVisualisationFilter(KisView* view)

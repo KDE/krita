@@ -7,7 +7,7 @@ consistency, these are the rules new code should adhere to:
 
 Indentation
 
-	With real tabs, each tab eight spaces. Use the default Linux indentation
+	With four spaces. Use the default Java indentation
 	style of (X)Emacs or KDevelop -- also for brace placement.
 
 Includes

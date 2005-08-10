@@ -28,7 +28,7 @@
 #include <kis_factory.h>
 
 #include "rgb_f32_plugin.h"
-#include "kis_strategy_colorspace_rgb_f32.h"
+#include "kis_rgb_f32_colorspace.h"
 
 typedef KGenericFactory<RGBF32Plugin> RGBF32PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "krita" ) )

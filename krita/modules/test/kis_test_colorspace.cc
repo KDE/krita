@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 #include "kis_image.h"
-#include "kis_strategy_colorspace_test.h"
+#include "kis_test_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"

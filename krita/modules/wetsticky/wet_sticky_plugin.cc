@@ -30,7 +30,7 @@
 
 #include "wet_sticky_plugin.h"
 
-#include "kis_colorspace_wet_sticky.h"
+#include "kis_wet_sticky_colorspace.h"
 #include "kis_ws_engine_filter.h"
 
 typedef KGenericFactory<WetStickyPlugin> WetStickyPluginFactory;

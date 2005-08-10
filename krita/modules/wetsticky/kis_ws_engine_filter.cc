@@ -44,7 +44,7 @@
 #include <kis_colorspace_registry.h>
 
 #include "kis_ws_engine_filter.h"
-#include "kis_colorspace_wet_sticky.h"
+#include "kis_wet_sticky_colorspace.h"
 
 /**
  * The Wet & Sticky Engine filter is based on the wet & sticky model

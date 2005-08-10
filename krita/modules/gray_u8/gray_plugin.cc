@@ -31,7 +31,7 @@
 
 #include "gray_plugin.h"
 
-#include "kis_strategy_colorspace_grayscale.h"
+#include "kis_gray_colorspace.h"
 
 typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "kritacore" ) )

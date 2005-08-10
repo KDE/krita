@@ -32,7 +32,7 @@
 
 #include "cmyk_plugin.h"
 
-#include "kis_strategy_colorspace_cmyk.h"
+#include "kis_cmyk_colorspace.h"
 
 typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )

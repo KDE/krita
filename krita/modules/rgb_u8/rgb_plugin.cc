@@ -36,7 +36,7 @@
 
 #include "rgb_plugin.h"
 
-#include "kis_strategy_colorspace_rgb.h"
+#include "kis_rgb_colorspace.h"
 
 typedef KGenericFactory<RGBPlugin> RGBPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritargbplugin, RGBPluginFactory( "krita" ) )

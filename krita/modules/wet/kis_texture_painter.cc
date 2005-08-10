@@ -27,7 +27,7 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 #include "kis_texture_painter.h"
 
 KisTexturePainter::KisTexturePainter()

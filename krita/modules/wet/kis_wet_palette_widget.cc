@@ -41,7 +41,7 @@
 #include <kis_color.h>
 #include <kis_color_cup.h>
 
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 #include "kis_wet_palette_widget.h"
 
 KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : super(parent, name)

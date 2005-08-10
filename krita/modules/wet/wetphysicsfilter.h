@@ -26,7 +26,7 @@
 #include <kis_filter.h>
 #include <kis_types.h>
 
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 
 class KisID;
 class QRect;

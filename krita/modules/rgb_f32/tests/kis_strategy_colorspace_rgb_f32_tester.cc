@@ -21,7 +21,7 @@
 
 #include "kis_factory.h"
 #include "kis_strategy_colorspace_rgb_f32_tester.h"
-#include "kis_strategy_colorspace_rgb_f32.h"
+#include "kis_rgb_f32_colorspace.h"
 #include "kis_integer_maths.h"
 #include "kis_paint_device.h"
 

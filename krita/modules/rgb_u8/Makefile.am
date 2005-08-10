@@ -21,7 +21,7 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(all_includes)
 
 lib_LTLIBRARIES = libkritargb.la
-libkritargb_la_SOURCES = kis_strategy_colorspace_rgb.cc
+libkritargb_la_SOURCES = kis_rgb_colorspace.cc
 libkritargb_la_LDFLAGS = $(all_libraries)
 libkritargb_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
@@ -30,7 +30,7 @@ kde_module_LTLIBRARIES = kritargbplugin.la
 
 # Srcs for the plugin
 kritargbplugin_la_SOURCES = rgb_plugin.cc
-noinst_HEADERS = rgb_plugin.h kis_strategy_colorspace_rgb.h
+noinst_HEADERS = rgb_plugin.h kis_rgb_colorspace.h
 
 kritargbplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritargbplugin_la_LIBADD =  ../../libkritacommon.la libkritargb.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

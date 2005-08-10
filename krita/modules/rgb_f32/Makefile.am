@@ -22,7 +22,7 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 
 lib_LTLIBRARIES = libkrita_rgb_f32.la
-libkrita_rgb_f32_la_SOURCES = kis_strategy_colorspace_rgb_f32.cc
+libkrita_rgb_f32_la_SOURCES = kis_rgb_f32_colorspace.cc
 libkrita_rgb_f32_la_LDFLAGS = $(all_libraries)
 libkrita_rgb_f32_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
@@ -31,7 +31,7 @@ kde_module_LTLIBRARIES = krita_rgb_f32_plugin.la
 
 # Srcs for the plugin
 krita_rgb_f32_plugin_la_SOURCES = rgb_f32_plugin.cc
-noinst_HEADERS = rgb_f32_plugin.h kis_strategy_colorspace_rgb_f32.h
+noinst_HEADERS = rgb_f32_plugin.h kis_rgb_f32_colorspace.h
 
 krita_rgb_f32_plugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 krita_rgb_f32_plugin_la_LIBADD =  ../../libkritacommon.la libkrita_rgb_f32.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

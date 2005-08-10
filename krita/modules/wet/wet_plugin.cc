@@ -53,7 +53,7 @@
 
 #include "wet_plugin.h"
 #include "kis_wet_palette_widget.h"
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 #include "kis_wetop.h"
 #include "kis_wetness_visualisation_filter.h"
 #include "kis_texture_filter.h"

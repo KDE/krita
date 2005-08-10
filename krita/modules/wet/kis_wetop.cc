@@ -29,7 +29,7 @@
 #include <kis_iterators_pixel.h>
 
 #include "kis_wetop.h"
-#include "kis_colorspace_wet.h"
+#include "kis_wet_colorspace.h"
 
 KisPaintOp * KisWetOpFactory::createOp(KisPainter * painter)
 {

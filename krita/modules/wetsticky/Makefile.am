@@ -13,8 +13,8 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritawsplugin.la
 
-kritawsplugin_la_SOURCES = wet_sticky_plugin.cc kis_colorspace_wet_sticky.cc kis_ws_engine_filter.cc
-noinst_HEADERS = wet_sticky_plugin.h kis_colorspace_wet_sticky.h kis_ws_engine_filter.h
+kritawsplugin_la_SOURCES = wet_sticky_plugin.cc kis_wet_sticky_colorspace.cc kis_ws_engine_filter.cc
+noinst_HEADERS = wet_sticky_plugin.h kis_wet_sticky_colorspace.h kis_ws_engine_filter.h
 
 kritawsplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritawsplugin_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

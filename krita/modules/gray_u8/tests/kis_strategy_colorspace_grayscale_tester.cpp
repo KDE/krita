@@ -21,7 +21,7 @@
 
 #include "kis_factory.h"
 #include "kis_strategy_colorspace_grayscale_tester.h"
-#include "kis_strategy_colorspace_grayscale.h"
+#include "kis_gray_colorspace.h"
 
 using namespace KUnitTest;
 

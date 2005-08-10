@@ -15,7 +15,7 @@ INCLUDES  = -I$(srcdir)/../../core \
 	$(all_includes)
 
 lib_LTLIBRARIES = libkrita_rgb_u16.la
-libkrita_rgb_u16_la_SOURCES = kis_strategy_colorspace_rgb_u16.cc
+libkrita_rgb_u16_la_SOURCES = kis_rgb_u16_colorspace.cc
 libkrita_rgb_u16_la_LDFLAGS = $(all_libraries)
 libkrita_rgb_u16_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
 
@@ -24,7 +24,7 @@ kde_module_LTLIBRARIES = krita_rgb_u16_plugin.la
 
 # Srcs for the plugin
 krita_rgb_u16_plugin_la_SOURCES = rgb_u16_plugin.cc
-noinst_HEADERS = rgb_u16_plugin.h kis_strategy_colorspace_rgb_u16.h
+noinst_HEADERS = rgb_u16_plugin.h kis_rgb_u16_colorspace.h
 
 krita_rgb_u16_plugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 krita_rgb_u16_plugin_la_LIBADD =  ../../libkritacommon.la libkrita_rgb_u16.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)

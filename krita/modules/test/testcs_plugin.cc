@@ -37,7 +37,7 @@
 
 #include "testcs_plugin.h"
 
-#include "kis_strategy_colorspace_test.h"
+#include "kis_test_colorspace.h"
 
 typedef KGenericFactory<TestCSPlugin> TestCSPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatestcsplugin, TestCSPluginFactory( "krita" ) )

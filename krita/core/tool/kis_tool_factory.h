@@ -29,11 +29,11 @@ class KisToolFactory  : public KShared
 {
 
 public:
-	KisToolFactory() {}
-	virtual ~KisToolFactory() {};
+    KisToolFactory() {}
+    virtual ~KisToolFactory() {};
 
-	virtual KisTool * createTool(KActionCollection * ac) = 0;
-	virtual KisID id() { return KisID("Abstract Tool", i18n("Abstract Tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) = 0;
+    virtual KisID id() { return KisID("Abstract Tool", i18n("Abstract Tool")); }
 
 };
 

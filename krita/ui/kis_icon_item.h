@@ -25,22 +25,22 @@ class KisResource;
 class KisIconItem : public KoIconItem {
 
 public:
-	KisIconItem(KisResource *resource);
-	virtual ~KisIconItem();
+    KisIconItem(KisResource *resource);
+    virtual ~KisIconItem();
 
-	virtual QPixmap& pixmap() const;
-	virtual QPixmap& thumbPixmap() const;
+    virtual QPixmap& pixmap() const;
+    virtual QPixmap& thumbPixmap() const;
 
-	KisResource *resource() const;
+    KisResource *resource() const;
 
-	virtual int compare(const KoIconItem *other) const;
+    virtual int compare(const KoIconItem *other) const;
 
-	void updatePixmaps();
+    void updatePixmaps();
 
 private:
-	KisResource *m_resource;
-	QPixmap m_pixmap;
-	QPixmap m_thumb;
+    KisResource *m_resource;
+    QPixmap m_pixmap;
+    QPixmap m_thumb;
 };
 
 #endif // KIS_ICON_ITEM_H_

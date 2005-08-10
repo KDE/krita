@@ -28,14 +28,14 @@ class KisView;
  */
 class ToolPolyline : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToolPolyline(QObject *parent, const char *name, const QStringList &);
-	virtual ~ToolPolyline();
+    ToolPolyline(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolPolyline();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
 };
 

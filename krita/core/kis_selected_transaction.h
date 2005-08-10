@@ -26,22 +26,22 @@
 #include "kis_transaction.h"
 #include "koffice_export.h"
 class KRITACORE_EXPORT KisSelectedTransaction : public KisTransaction {
-	typedef KisTransaction super;
+    typedef KisTransaction super;
 public:
-	KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);
-	virtual ~KisSelectedTransaction();
+    KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);
+    virtual ~KisSelectedTransaction();
 
 public:
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 public:
 
 private:
-	KisPaintDeviceSP m_device;
-	KisTransaction *m_selTransaction;
-	bool m_hadSelection;
-	bool m_redoHasSelection;
+    KisPaintDeviceSP m_device;
+    KisTransaction *m_selTransaction;
+    bool m_hadSelection;
+    bool m_redoHasSelection;
 };
 
 #endif // KIS_SELECTED_TRANSACTION_H_

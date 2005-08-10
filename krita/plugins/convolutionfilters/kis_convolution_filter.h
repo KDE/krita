@@ -28,21 +28,21 @@
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 public:
-	KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
+    KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
 public:
-	inline KisMatrix3x3* matrixes() { return m_matrixes; };
+    inline KisMatrix3x3* matrixes() { return m_matrixes; };
 private:
-	KisMatrix3x3* m_matrixes;
+    KisMatrix3x3* m_matrixes;
 };
 
 
 class KisConvolutionFilter : public KisFilter {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry);
+    KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry);
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	virtual bool supportsIncrementalPainting() { return false; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual bool supportsIncrementalPainting() { return false; }
 };
 
 
@@ -51,12 +51,12 @@ public:
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {
 public:
-	KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) : KisConvolutionFilter(id, category, entry) { } ;
-	virtual ~KisConvolutionConstFilter();
+    KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) : KisConvolutionFilter(id, category, entry) { } ;
+    virtual ~KisConvolutionConstFilter();
 public:
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 protected:
-	KisMatrix3x3* m_matrixes;
+    KisMatrix3x3* m_matrixes;
 };
 
 #endif

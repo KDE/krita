@@ -28,14 +28,14 @@ class KisView;
  */
 class ToolCrop : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToolCrop(QObject *parent, const char *name, const QStringList &);
-	virtual ~ToolCrop();
+    ToolCrop(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolCrop();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
 };
 

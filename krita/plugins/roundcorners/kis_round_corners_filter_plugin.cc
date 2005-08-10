@@ -26,7 +26,7 @@ typedef KGenericFactory<KisRoundCornersFilterPlugin> KisRoundCornersFilterPlugin
 K_EXPORT_COMPONENT_FACTORY( kritaroundcornersfilter, KisRoundCornersFilterPluginFactory( "krita" ) )
 
 KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
         setInstance(KisRoundCornersFilterPluginFactory::instance());
 
@@ -37,10 +37,10 @@ KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const 
                 << "\n";
         KisView * view;
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisRoundCornersFilter());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisRoundCornersFilter());
+    }
 }
 
 KisRoundCornersFilterPlugin::~KisRoundCornersFilterPlugin()

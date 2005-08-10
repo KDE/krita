@@ -45,15 +45,15 @@
 #include "kis_paintop_registry.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal()
-	: super()
+    : super()
 {
-	setName("tool_select_polygonal");
-	setCursor(KisCursor::selectCursor());
+    setName("tool_select_polygonal");
+    setCursor(KisCursor::selectCursor());
 
-	m_subject = 0;
-	m_dragging = false;
-	m_optWidget = 0;
-	m_selectAction = SELECTION_ADD;
+    m_subject = 0;
+    m_dragging = false;
+    m_optWidget = 0;
+    m_selectAction = SELECTION_ADD;
 }
 
 KisToolSelectPolygonal::~KisToolSelectPolygonal()
@@ -62,212 +62,212 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 
 void KisToolSelectPolygonal::activate()
 {
-	super::activate();
+    super::activate();
 
-	if (!m_optWidget)
-		return;
+    if (!m_optWidget)
+        return;
 
-	m_optWidget -> slotActivated();
+    m_optWidget -> slotActivated();
 }
 
 void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	super::update(m_subject);
+    m_subject = subject;
+    super::update(m_subject);
 }
 
 void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 {
-	if (event -> button() == LeftButton) {
-		m_dragging = true;
+    if (event -> button() == LeftButton) {
+        m_dragging = true;
 
-		if (m_points.isEmpty())
-		{
-			m_dragStart = event -> pos();
-			m_dragEnd = event -> pos();
-			m_points.append(m_dragStart);
-		} else {
-			m_dragStart = m_dragEnd;
-			m_dragEnd = event -> pos();
-			draw();
-		}
-	} else if (event -> button() == RightButton) {
-		// erase old lines on canvas
-		draw();
-		m_dragging = false;
+        if (m_points.isEmpty())
+        {
+            m_dragStart = event -> pos();
+            m_dragEnd = event -> pos();
+            m_points.append(m_dragStart);
+        } else {
+            m_dragStart = m_dragEnd;
+            m_dragEnd = event -> pos();
+            draw();
+        }
+    } else if (event -> button() == RightButton) {
+        // erase old lines on canvas
+        draw();
+        m_dragging = false;
 
-		KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject -> currentImg();
 
-		if (img) {
-			QApplication::setOverrideCursor(KisCursor::waitCursor());
-			KisLayerSP layer = img -> activeLayer();
-			bool hasSelection = layer -> hasSelection();
+        if (img) {
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
+            KisLayerSP layer = img -> activeLayer();
+            bool hasSelection = layer -> hasSelection();
 
-			//XXX: Fix string
-			KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), layer.data());
-			KisSelectionSP selection = layer -> selection();
+            //XXX: Fix string
+            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), layer.data());
+            KisSelectionSP selection = layer -> selection();
 
-			if (!hasSelection)
-			{
-				selection -> clear();
-			}
+            if (!hasSelection)
+            {
+                selection -> clear();
+            }
 
-			KisPainter painter(selection.data());
+            KisPainter painter(selection.data());
 
-			painter.setPaintColor(Qt::black);
-			painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-			painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-			painter.setBrush(m_subject -> currentBrush());
-			painter.setOpacity(OPACITY_OPAQUE);
-			KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
-			painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+            painter.setPaintColor(Qt::black);
+            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+            painter.setBrush(m_subject -> currentBrush());
+            painter.setOpacity(OPACITY_OPAQUE);
+            KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+            painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
 
-			switch(m_selectAction)
-			{
-				case SELECTION_ADD:
-					painter.setCompositeOp(COMPOSITE_OVER);
-					break;
-				case SELECTION_SUBTRACT:
-					painter.setCompositeOp(COMPOSITE_SUBTRACT);
-					break;
-				default:
-					break;
-			}
+            switch(m_selectAction)
+            {
+                case SELECTION_ADD:
+                    painter.setCompositeOp(COMPOSITE_OVER);
+                    break;
+                case SELECTION_SUBTRACT:
+                    painter.setCompositeOp(COMPOSITE_SUBTRACT);
+                    break;
+                default:
+                    break;
+            }
 
-			painter.paintPolygon(m_points);
+            painter.paintPolygon(m_points);
 
-			if(hasSelection)
-				layer->emitSelectionChanged(painter.dirtyRect());
-			else
-				layer->emitSelectionChanged();
+            if(hasSelection)
+                layer->emitSelectionChanged(painter.dirtyRect());
+            else
+                layer->emitSelectionChanged();
 
-			if (img -> undoAdapter())
-				img -> undoAdapter() -> addCommand(t);
-				
-			QApplication::restoreOverrideCursor();
-		}
+            if (img -> undoAdapter())
+                img -> undoAdapter() -> addCommand(t);
+                
+            QApplication::restoreOverrideCursor();
+        }
 
-		m_points.clear();
-	}
+        m_points.clear();
+    }
 }
 
 void KisToolSelectPolygonal::move(KisMoveEvent *event)
 {
-	if (m_dragging) {
-		// erase old lines on canvas
-		draw();
-		// get current mouse position
-		m_dragEnd = event -> pos();
-		// draw new lines on canvas
-		draw();
-	}
+    if (m_dragging) {
+        // erase old lines on canvas
+        draw();
+        // get current mouse position
+        m_dragEnd = event -> pos();
+        // draw new lines on canvas
+        draw();
+    }
 }
 
 void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
 {
-	if (!m_subject)
-		return;
+    if (!m_subject)
+        return;
 
-	if (m_dragging && event -> button() == LeftButton)  {
-		m_dragging = false;
-		m_points.append (m_dragEnd);
-	}
+    if (m_dragging && event -> button() == LeftButton)  {
+        m_dragging = false;
+        m_points.append (m_dragEnd);
+    }
 
-	if (m_dragging && event -> button() == RightButton) {
-		
+    if (m_dragging && event -> button() == RightButton) {
+        
         }
 }
 
 void KisToolSelectPolygonal::paint(QPainter& gc)
 {
-	draw(gc);
+    draw(gc);
 }
 
 void KisToolSelectPolygonal::paint(QPainter& gc, const QRect&)
 {
-	draw(gc);
+    draw(gc);
 }
 
 void KisToolSelectPolygonal::draw()
 {
-	if (m_subject) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		QWidget *canvas = controller -> canvas();
-		QPainter gc(canvas);
+    if (m_subject) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        QWidget *canvas = controller -> canvas();
+        QPainter gc(canvas);
 
-		draw(gc);
-	}
+        draw(gc);
+    }
 }
 
 void KisToolSelectPolygonal::draw(QPainter& gc)
 {
-	if (!m_subject)
-		return;
+    if (!m_subject)
+        return;
 
-	QPen pen(Qt::white, 0, Qt::DotLine);
+    QPen pen(Qt::white, 0, Qt::DotLine);
 
-	gc.setPen(pen);
+    gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
 
-	KisCanvasControllerInterface *controller = m_subject -> canvasController();
-	KisPoint start, end;
-	QPoint startPos;
-	QPoint endPos;
+    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisPoint start, end;
+    QPoint startPos;
+    QPoint endPos;
 
-	if (m_dragging) {
-		startPos = controller -> windowToView(m_dragStart.floorQPoint());
-		endPos = controller -> windowToView(m_dragEnd.floorQPoint());
-		gc.drawLine(startPos, endPos);
-	} else {
-		for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+    if (m_dragging) {
+        startPos = controller -> windowToView(m_dragStart.floorQPoint());
+        endPos = controller -> windowToView(m_dragEnd.floorQPoint());
+        gc.drawLine(startPos, endPos);
+    } else {
+        for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-			if (it == m_points.begin())
-			{
-				start = (*it);
-			} else {
-				end = (*it);
-				
-				startPos = controller -> windowToView(start.floorQPoint());
-				endPos = controller -> windowToView(end.floorQPoint());
-				
-				gc.drawLine(startPos, endPos);
+            if (it == m_points.begin())
+            {
+                start = (*it);
+            } else {
+                end = (*it);
+                
+                startPos = controller -> windowToView(start.floorQPoint());
+                endPos = controller -> windowToView(end.floorQPoint());
+                
+                gc.drawLine(startPos, endPos);
 
-				start = end;
-			}
-		}
-	}
+                start = end;
+            }
+        }
+    }
 }
 
 
 void KisToolSelectPolygonal::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Polygonal Select"),
-					    "tool_polygonal_selection" ,
-					    0,
-					    this,
-					    SLOT(activate()),
-					    collection,
-					    name());
-		Q_CHECK_PTR(m_action);
-		m_action -> setExclusiveGroup("tools");
-		m_action -> setToolTip(i18n("Select a polygonal area"));
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Polygonal Select"),
+                        "tool_polygonal_selection" ,
+                        0,
+                        this,
+                        SLOT(activate()),
+                        collection,
+                        name());
+        Q_CHECK_PTR(m_action);
+        m_action -> setExclusiveGroup("tools");
+        m_action -> setToolTip(i18n("Select a polygonal area"));
+        m_ownAction = true;
+    }
 }
 
 
 QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 {
-	m_optWidget = new KisSelectionOptions(parent, m_subject);
-	Q_CHECK_PTR(m_optWidget);
-	m_optWidget -> setCaption(i18n("Selection Polygons"));
+    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    Q_CHECK_PTR(m_optWidget);
+    m_optWidget -> setCaption(i18n("Selection Polygons"));
 
-	connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-	return m_optWidget;
+    return m_optWidget;
 }
 
 QWidget* KisToolSelectPolygonal::optionWidget()
@@ -276,8 +276,8 @@ QWidget* KisToolSelectPolygonal::optionWidget()
 }
 
 void KisToolSelectPolygonal::slotSetAction(int action) {
-	if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
-		m_selectAction =(enumSelectionMode)action;
+    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+        m_selectAction =(enumSelectionMode)action;
 }
 
 

@@ -25,28 +25,28 @@
 */
 
 class KisSimpleNoiseReducerConfiguration
-	: public KisFilterConfiguration
+    : public KisFilterConfiguration
 {
-	public:
-		KisSimpleNoiseReducerConfiguration(int nt, int ws) : threshold(nt), windowsize(ws) { }
-		int threshold;
-		int windowsize;
+    public:
+        KisSimpleNoiseReducerConfiguration(int nt, int ws) : threshold(nt), windowsize(ws) { }
+        int threshold;
+        int windowsize;
 };
 
 class KisSimpleNoiseReducer : public KisFilter
 {
-	public:
-		KisSimpleNoiseReducer();
-		~KisSimpleNoiseReducer();
-	public:
-		virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-		virtual KisFilterConfiguration* configuration(QWidget* nwidget, KisPaintDeviceSP dev);
-		virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    public:
+        KisSimpleNoiseReducer();
+        ~KisSimpleNoiseReducer();
+    public:
+        virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+        virtual KisFilterConfiguration* configuration(QWidget* nwidget, KisPaintDeviceSP dev);
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
-		static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reduceer")); };
-		virtual bool supportsPainting() { return true; }
-		virtual bool supportsPreview() { return true; }
-		virtual bool supportsIncrementalPainting() { return false; }
+        static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reduceer")); };
+        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPreview() { return true; }
+        virtual bool supportsIncrementalPainting() { return false; }
 };
 
 #endif

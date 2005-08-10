@@ -32,29 +32,29 @@ class KisPainter;
 class KisDuplicateOpFactory  : public KisPaintOpFactory  {
 
 public:
-	KisDuplicateOpFactory() {}
-	virtual ~KisDuplicateOpFactory() {}
+    KisDuplicateOpFactory() {}
+    virtual ~KisDuplicateOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
-	virtual bool userVisible() { return false; }
-	
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
+    virtual bool userVisible() { return false; }
+    
 };
 
 class KisDuplicateOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisDuplicateOp(KisPainter * painter);
-	virtual ~KisDuplicateOp();
+    KisDuplicateOp(KisPainter * painter);
+    virtual ~KisDuplicateOp();
 
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

@@ -36,10 +36,10 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
                 << "\n";
         KisView * view;
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisOilPaintFilter());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisOilPaintFilter());
+    }
 
 }
 

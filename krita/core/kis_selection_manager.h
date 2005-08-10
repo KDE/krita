@@ -35,75 +35,75 @@ class KisClipboard;
  */
 class KRITACORE_EXPORT KisSelectionManager : public QObject {
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisSelectionManager(KisView * parent, KisDoc * doc);
-	virtual ~KisSelectionManager();
+    KisSelectionManager(KisView * parent, KisDoc * doc);
+    virtual ~KisSelectionManager();
 
-	void setup(KActionCollection * collection);
+    void setup(KActionCollection * collection);
 
-	void addSelectionAction(KAction * action);
+    void addSelectionAction(KAction * action);
 
 public slots:
 
-	void updateGUI();
-	void imgSelectionChanged(KisImageSP img);
-	void clipboardDataChanged();
+    void updateGUI();
+    void imgSelectionChanged(KisImageSP img);
+    void clipboardDataChanged();
 
-	void cut();
-	void copy();
-	KisLayerSP paste();
-	void pasteNew();
-	void cutToNewLayer();
-	void selectAll();
-	void deselect();
-	void clear();
-	void reselect();
-	void invert();
-	void copySelectionToNewLayer();
-	void feather();
-	void border();
-	void expand();
-	void smooth();
-	void contract();
-	void grow();
-	void similar();
-	void transform();
-	void load();
-	void save();
+    void cut();
+    void copy();
+    KisLayerSP paste();
+    void pasteNew();
+    void cutToNewLayer();
+    void selectAll();
+    void deselect();
+    void clear();
+    void reselect();
+    void invert();
+    void copySelectionToNewLayer();
+    void feather();
+    void border();
+    void expand();
+    void smooth();
+    void contract();
+    void grow();
+    void similar();
+    void transform();
+    void load();
+    void save();
 
 private:
 
-	KisView * m_parent;
-	KisDoc * m_doc;
+    KisView * m_parent;
+    KisDoc * m_doc;
 
-	KisClipboard * m_clipboard;
+    KisClipboard * m_clipboard;
 
-	KAction *m_copy;
-	KAction *m_cut;
-	KAction *m_paste;
-	KAction *m_pasteNew;
-	KAction *m_cutToNewLayer;
-	KAction *m_selectAll;
-	KAction *m_deselect;
-	KAction *m_clear;
-	KAction *m_reselect;
-	KAction *m_invert;
-	KAction *m_toNewLayer;
-	KAction *m_feather;
-	KAction *m_border;
-	KAction *m_expand;
-	KAction *m_smooth;
-	KAction *m_contract;
-	KAction *m_grow;
-	KAction *m_similar;
-	KAction *m_transform;
-	KAction *m_load;
-	KAction *m_save;
+    KAction *m_copy;
+    KAction *m_cut;
+    KAction *m_paste;
+    KAction *m_pasteNew;
+    KAction *m_cutToNewLayer;
+    KAction *m_selectAll;
+    KAction *m_deselect;
+    KAction *m_clear;
+    KAction *m_reselect;
+    KAction *m_invert;
+    KAction *m_toNewLayer;
+    KAction *m_feather;
+    KAction *m_border;
+    KAction *m_expand;
+    KAction *m_smooth;
+    KAction *m_contract;
+    KAction *m_grow;
+    KAction *m_similar;
+    KAction *m_transform;
+    KAction *m_load;
+    KAction *m_save;
 
-	QPtrList<KAction> m_pluginActions;
+    QPtrList<KAction> m_pluginActions;
 
 };
 

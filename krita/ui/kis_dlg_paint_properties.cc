@@ -32,70 +32,70 @@
 #include "kis_abstract_colorspace.h"
 
 KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
-					 const QPoint& pos,
-					 Q_INT32 opacity,
-					 const KisCompositeOp& compositeOp,
-					 const KisAbstractColorSpace * colorSpace,
-					 QWidget *parent, const char *name, WFlags f)
-	: super(parent, name, f, name, Ok | Cancel)
+                     const QPoint& pos,
+                     Q_INT32 opacity,
+                     const KisCompositeOp& compositeOp,
+                     const KisAbstractColorSpace * colorSpace,
+                     QWidget *parent, const char *name, WFlags f)
+    : super(parent, name, f, name, Ok | Cancel)
 {
-	QWidget *page = new QWidget(this);
+    QWidget *page = new QWidget(this);
 
-	QVBoxLayout *layout;
-	QGridLayout *grid;
-	QGridLayout *gridInBox;
-	QGroupBox *grp;
-	QLabel *lbl;
+    QVBoxLayout *layout;
+    QGridLayout *grid;
+    QGridLayout *gridInBox;
+    QGroupBox *grp;
+    QLabel *lbl;
 
-	opacity = opacity * 100 / 255;
+    opacity = opacity * 100 / 255;
 
-	if (opacity)
-		opacity++;
+    if (opacity)
+        opacity++;
 
-	setCaption(i18n("Layer Properties"));
-	setMainWidget(page);
+    setCaption(i18n("Layer Properties"));
+    setMainWidget(page);
 
-	layout = new QVBoxLayout(page, 3);
-	grid = new QGridLayout(layout, 6, 2, 3);
+    layout = new QVBoxLayout(page, 3);
+    grid = new QGridLayout(layout, 6, 2, 3);
 
-	lbl = new QLabel(i18n("Name:"), page);
-	m_name = new KLineEdit(deviceName, page);
-	grid -> addWidget(lbl, 0, 0);
-	grid -> addWidget(m_name, 0, 1);
+    lbl = new QLabel(i18n("Name:"), page);
+    m_name = new KLineEdit(deviceName, page);
+    grid -> addWidget(lbl, 0, 0);
+    grid -> addWidget(m_name, 0, 1);
         connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
-	lbl = new QLabel(i18n("Opacity:"), page);
+    lbl = new QLabel(i18n("Opacity:"), page);
 
-	m_opacity = new KIntNumInput(page);
-	m_opacity -> setRange(0, 100, 13, true);
-	m_opacity -> setValue(opacity);
-	m_opacity -> setSuffix("%");
+    m_opacity = new KIntNumInput(page);
+    m_opacity -> setRange(0, 100, 13, true);
+    m_opacity -> setValue(opacity);
+    m_opacity -> setSuffix("%");
 
-	grid -> addWidget(lbl, 1, 0);
-	grid -> addWidget(m_opacity, 1, 1);
+    grid -> addWidget(lbl, 1, 0);
+    grid -> addWidget(m_opacity, 1, 1);
 
 
-	lbl = new QLabel(i18n("Composite mode:"), page);
-	m_cmbComposite = new KisCmbComposite(page);
-	m_cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
-	m_cmbComposite -> setCurrentItem(compositeOp);
-	grid -> addWidget(lbl, 2, 0);
-	grid -> addWidget(m_cmbComposite, 2, 1);
+    lbl = new QLabel(i18n("Composite mode:"), page);
+    m_cmbComposite = new KisCmbComposite(page);
+    m_cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
+    m_cmbComposite -> setCurrentItem(compositeOp);
+    grid -> addWidget(lbl, 2, 0);
+    grid -> addWidget(m_cmbComposite, 2, 1);
 
-	grp = new QGroupBox(i18n("Position"), page);
-	gridInBox = new QGridLayout(grp, 3, 2, 12);
-	gridInBox -> setRowSpacing(0, 10);
+    grp = new QGroupBox(i18n("Position"), page);
+    gridInBox = new QGridLayout(grp, 3, 2, 12);
+    gridInBox -> setRowSpacing(0, 10);
 
-	lbl = new QLabel(i18n("X axis:"), grp);
-	m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.x(), 10, grp);
-	gridInBox -> addWidget(lbl, 1, 0);
-	gridInBox -> addWidget(m_x, 1, 1);
+    lbl = new QLabel(i18n("X axis:"), grp);
+    m_x = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.x(), 10, grp);
+    gridInBox -> addWidget(lbl, 1, 0);
+    gridInBox -> addWidget(m_x, 1, 1);
 
-	lbl = new QLabel(i18n("Y axis:"), grp);
-	m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.y(), 10, grp);
-	gridInBox -> addWidget(lbl, 2, 0);
-	gridInBox -> addWidget(m_y, 2, 1);
+    lbl = new QLabel(i18n("Y axis:"), grp);
+    m_y = new KIntSpinBox(SHRT_MIN, SHRT_MAX, 10, pos.y(), 10, grp);
+    gridInBox -> addWidget(lbl, 2, 0);
+    gridInBox -> addWidget(m_y, 2, 1);
 
-	grid -> addMultiCellWidget(grp, 3, 4, 0, 1);
+    grid -> addMultiCellWidget(grp, 3, 4, 0, 1);
 
         slotNameChanged( m_name->text() );
 }
@@ -111,27 +111,27 @@ void KisPaintPropertyDlg::slotNameChanged( const QString &_text )
 
 QString KisPaintPropertyDlg::getName() const
 {
-	return m_name -> text();
+    return m_name -> text();
 }
 
 int KisPaintPropertyDlg::getOpacity() const
 {
-	Q_INT32 opacity = m_opacity -> value();
+    Q_INT32 opacity = m_opacity -> value();
 
-	if (!opacity)
-		return 0;
+    if (!opacity)
+        return 0;
 
-	opacity = opacity * 255 / 100;
-	return opacity - 1;
+    opacity = opacity * 255 / 100;
+    return opacity - 1;
 }
 
 QPoint KisPaintPropertyDlg::getPosition() const
 {
-	return QPoint(m_x -> value(), m_y -> value());
+    return QPoint(m_x -> value(), m_y -> value());
 }
 
 
 KisCompositeOp KisPaintPropertyDlg::getCompositeOp() const
 {
-	return m_cmbComposite -> currentItem();
+    return m_cmbComposite -> currentItem();
 }

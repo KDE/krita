@@ -29,25 +29,25 @@ class WdgGeometryOptions;
 
 class KRITACORE_EXPORT KisToolShape : public KisToolPaint {
 
-	Q_OBJECT
-	typedef KisToolPaint super;
+    Q_OBJECT
+    typedef KisToolPaint super;
 
 public:
-	KisToolShape(const QString& UIName);
-	virtual ~KisToolShape();
+    KisToolShape(const QString& UIName);
+    virtual ~KisToolShape();
 
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
 
 protected:
-	virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
-	// Add the tool-specific layout to the default option widget's layout.
-	void addOptionWidgetLayout(QLayout *layout);
+    // Add the tool-specific layout to the default option widget's layout.
+    void addOptionWidgetLayout(QLayout *layout);
 
-	KisPainter::FillStyle fillStyle();
+    KisPainter::FillStyle fillStyle();
 
 private:
-	QGridLayout *m_optionLayout;
+    QGridLayout *m_optionLayout;
         WdgGeometryOptions *m_shapeOptionsWidget;
 };
 

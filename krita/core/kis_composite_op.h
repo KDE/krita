@@ -25,76 +25,76 @@
 #include "kis_id.h"
 #include "koffice_export.h"
 enum CompositeOp {
-	COMPOSITE_OVER,
-	COMPOSITE_IN,
-	COMPOSITE_OUT,
-	COMPOSITE_ATOP,
-	COMPOSITE_XOR,
-	COMPOSITE_PLUS,
-	COMPOSITE_MINUS,
-	COMPOSITE_ADD,
-	COMPOSITE_SUBTRACT,
-	COMPOSITE_DIFF,
-	COMPOSITE_MULT,
-	COMPOSITE_DIVIDE,
-	COMPOSITE_DODGE,
-	COMPOSITE_BURN,
-	COMPOSITE_BUMPMAP,
-	COMPOSITE_COPY,
-	COMPOSITE_COPY_RED,
-	COMPOSITE_COPY_GREEN,
-	COMPOSITE_COPY_BLUE,
-	COMPOSITE_COPY_OPACITY,
-	COMPOSITE_CLEAR,
-	COMPOSITE_DISSOLVE,
-	COMPOSITE_DISPLACE,
+    COMPOSITE_OVER,
+    COMPOSITE_IN,
+    COMPOSITE_OUT,
+    COMPOSITE_ATOP,
+    COMPOSITE_XOR,
+    COMPOSITE_PLUS,
+    COMPOSITE_MINUS,
+    COMPOSITE_ADD,
+    COMPOSITE_SUBTRACT,
+    COMPOSITE_DIFF,
+    COMPOSITE_MULT,
+    COMPOSITE_DIVIDE,
+    COMPOSITE_DODGE,
+    COMPOSITE_BURN,
+    COMPOSITE_BUMPMAP,
+    COMPOSITE_COPY,
+    COMPOSITE_COPY_RED,
+    COMPOSITE_COPY_GREEN,
+    COMPOSITE_COPY_BLUE,
+    COMPOSITE_COPY_OPACITY,
+    COMPOSITE_CLEAR,
+    COMPOSITE_DISSOLVE,
+    COMPOSITE_DISPLACE,
 #if 0
-	COMPOSITE_MODULATE,
-	COMPOSITE_THRESHOLD,
+    COMPOSITE_MODULATE,
+    COMPOSITE_THRESHOLD,
 #endif
-	COMPOSITE_NO,
-	COMPOSITE_DARKEN,
-	COMPOSITE_LIGHTEN,
-	COMPOSITE_HUE,
-	COMPOSITE_SATURATION,
-	COMPOSITE_VALUE,
-	COMPOSITE_COLOR,
-	COMPOSITE_COLORIZE,
-	COMPOSITE_LUMINIZE,
-	COMPOSITE_SCREEN,
-	COMPOSITE_OVERLAY,
-	COMPOSITE_COPY_CYAN,
-	COMPOSITE_COPY_MAGENTA,
-	COMPOSITE_COPY_YELLOW,
-	COMPOSITE_COPY_BLACK,
-	COMPOSITE_ERASE,
-	COMPOSITE_UNDEF
+    COMPOSITE_NO,
+    COMPOSITE_DARKEN,
+    COMPOSITE_LIGHTEN,
+    COMPOSITE_HUE,
+    COMPOSITE_SATURATION,
+    COMPOSITE_VALUE,
+    COMPOSITE_COLOR,
+    COMPOSITE_COLORIZE,
+    COMPOSITE_LUMINIZE,
+    COMPOSITE_SCREEN,
+    COMPOSITE_OVERLAY,
+    COMPOSITE_COPY_CYAN,
+    COMPOSITE_COPY_MAGENTA,
+    COMPOSITE_COPY_YELLOW,
+    COMPOSITE_COPY_BLACK,
+    COMPOSITE_ERASE,
+    COMPOSITE_UNDEF
 };
 
 class KRITACORE_EXPORT KisCompositeOp {
 public:
-	KisCompositeOp();
-	KisCompositeOp(const QString& id);
-	KisCompositeOp(CompositeOp compositeOp);
+    KisCompositeOp();
+    KisCompositeOp(const QString& id);
+    KisCompositeOp(CompositeOp compositeOp);
 
-	KisID id() const { return m_id; }
-	CompositeOp op() const { return m_op; }
+    KisID id() const { return m_id; }
+    CompositeOp op() const { return m_op; }
 
-	bool isValid() const { return m_valid; }
+    bool isValid() const { return m_valid; }
 
-	bool operator==(const KisCompositeOp& other) const;
-	bool operator!=(const KisCompositeOp& other) const;
-
-private:
-	void fillMap();
+    bool operator==(const KisCompositeOp& other) const;
+    bool operator!=(const KisCompositeOp& other) const;
 
 private:
-	CompositeOp m_op;
-	KisID m_id;
-	bool m_valid;
+    void fillMap();
 
-	typedef std::map<KisID, CompositeOp> KisIDCompositeOpMap;
-	static KisIDCompositeOpMap s_idOpMap;
+private:
+    CompositeOp m_op;
+    KisID m_id;
+    bool m_valid;
+
+    typedef std::map<KisID, CompositeOp> KisIDCompositeOpMap;
+    static KisIDCompositeOpMap s_idOpMap;
 };
 
 typedef QValueList<KisCompositeOp> KisCompositeOpList;

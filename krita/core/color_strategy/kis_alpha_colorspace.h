@@ -32,72 +32,72 @@
  */
 class KisAlphaColorSpace : public KisAbstractColorSpace {
 public:
-	KisAlphaColorSpace();
-	virtual ~KisAlphaColorSpace();
+    KisAlphaColorSpace();
+    virtual ~KisAlphaColorSpace();
 
 public:
-	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-	virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
+    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
 
-	virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
-	virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
-	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
-	
-	virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
-	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
+    
+    virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
+    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-	virtual vKisChannelInfoSP channels() const;
-	virtual bool hasAlpha() const;
-	virtual Q_INT32 nChannels() const { return 1; };
-	virtual Q_INT32 nColorChannels() const { return 0; };
-	virtual Q_INT32 pixelSize() const { return 1; };
+    virtual vKisChannelInfoSP channels() const;
+    virtual bool hasAlpha() const;
+    virtual Q_INT32 nChannels() const { return 1; };
+    virtual Q_INT32 nColorChannels() const { return 0; };
+    virtual Q_INT32 pixelSize() const { return 1; };
 
-	virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-	virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
-	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-				       float exposure = 0.0f);
+    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+                       KisProfileSP srcProfile, KisProfileSP dstProfile,
+                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                       float exposure = 0.0f);
 
-	virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
+    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
 
-	virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
+    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
 
 protected:
 
-	/**
-	 * Convert a byte array of srcLen pixels *src to the specified color space
-	 * and put the converted bytes into the prepared byte array *dst.
-	 *
-	 * Returns false if the conversion failed, true if it succeeded
-	 */
-	virtual bool convertPixelsTo(const Q_UINT8 *src, KisProfileSP srcProfile,
-				     Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
-				     Q_UINT32 numPixels,
-				     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    /**
+     * Convert a byte array of srcLen pixels *src to the specified color space
+     * and put the converted bytes into the prepared byte array *dst.
+     *
+     * Returns false if the conversion failed, true if it succeeded
+     */
+    virtual bool convertPixelsTo(const Q_UINT8 *src, KisProfileSP srcProfile,
+                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                     Q_UINT32 numPixels,
+                     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 
-	virtual void bitBlt(Q_UINT8 *dst,
-			    Q_INT32 dststride,
-			    const Q_UINT8 *src,
-			    Q_INT32 srcRowStride,
-			    const Q_UINT8 *srcAlphaMask,
-			    Q_INT32 maskRowStride,
-			    QUANTUM opacity,
-			    Q_INT32 rows,
-			    Q_INT32 cols,
-			    const KisCompositeOp& op);
+    virtual void bitBlt(Q_UINT8 *dst,
+                Q_INT32 dststride,
+                const Q_UINT8 *src,
+                Q_INT32 srcRowStride,
+                const Q_UINT8 *srcAlphaMask,
+                Q_INT32 maskRowStride,
+                QUANTUM opacity,
+                Q_INT32 rows,
+                Q_INT32 cols,
+                const KisCompositeOp& op);
 
-	KisCompositeOpList userVisiblecompositeOps() const;
+    KisCompositeOpList userVisiblecompositeOps() const;
 
 private:
-	vKisChannelInfoSP m_channels;
+    vKisChannelInfoSP m_channels;
 };
 
 #endif // KIS_COLORSPACE_ALPHA_H_

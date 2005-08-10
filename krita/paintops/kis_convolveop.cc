@@ -35,14 +35,14 @@
 
 KisPaintOp * KisConvolveOpFactory::createOp(KisPainter * painter)
 { 
-	KisPaintOp * op = new KisConvolveOp(painter); 
-	Q_CHECK_PTR(op);
-	return op; 
+    KisPaintOp * op = new KisConvolveOp(painter); 
+    Q_CHECK_PTR(op);
+    return op; 
 }
 
 
 KisConvolveOp::KisConvolveOp(KisPainter * painter)
-	: super(painter) 
+    : super(painter) 
 {
 }
 
@@ -51,10 +51,10 @@ KisConvolveOp::~KisConvolveOp()
 }
 
 void KisConvolveOp::paintAt(const KisPoint &/*pos*/,
-			    const double /*pressure*/,
-			    const double /*xTilt*/,
-			    const double /*yTilt*/)
+                const double /*pressure*/,
+                const double /*xTilt*/,
+                const double /*yTilt*/)
 {
-	// XXX: use convolve painter here.
-	
+    // XXX: use convolve painter here.
+    
 }

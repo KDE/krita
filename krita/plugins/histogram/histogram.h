@@ -27,17 +27,17 @@ class KisView;
 
 class Histogram : public KParts::Plugin
 {
-		Q_OBJECT
-	public:
-		Histogram(QObject *parent, const char *name, const QStringList &);
-		virtual ~Histogram();
-	
-	private slots:
-		void slotActivated();
+        Q_OBJECT
+    public:
+        Histogram(QObject *parent, const char *name, const QStringList &);
+        virtual ~Histogram();
+    
+    private slots:
+        void slotActivated();
 
-	private:
-		KisView * m_view;
-		KisPainter * m_painter;
+    private:
+        KisView * m_view;
+        KisPainter * m_painter;
 
 };
 

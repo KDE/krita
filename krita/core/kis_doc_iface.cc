@@ -23,45 +23,45 @@
 #include <dcopclient.h>
 
 KisDocIface::KisDocIface( KisDoc *doc_ )
-	: KoDocumentIface( doc_ )
+    : KoDocumentIface( doc_ )
 {
-	m_doc = doc_;
+    m_doc = doc_;
 }
 
 
 DCOPRef KisDocIface::currentImage()
 {
-	KisImage *img = m_doc->currentImage();
-	if( !img )
-		return DCOPRef();
-	else
-		return DCOPRef( kapp->dcopClient()->appId(),
-				img->dcopObject()->objId(),
-				"KisImageIface");
+    KisImage *img = m_doc->currentImage();
+    if( !img )
+        return DCOPRef();
+    else
+        return DCOPRef( kapp->dcopClient()->appId(),
+                img->dcopObject()->objId(),
+                "KisImageIface");
 
 }
 
 int KisDocIface::undoLimit () const
 {
-	return m_doc->undoLimit();
+    return m_doc->undoLimit();
 }
 
 void KisDocIface::setUndoLimit(int limit)
 {
-	m_doc->setUndoLimit(limit);
+    m_doc->setUndoLimit(limit);
 }
 
 int KisDocIface::redoLimit() const
 {
-	return m_doc->redoLimit();
+    return m_doc->redoLimit();
 }
 
 void KisDocIface::setRedoLimit(int limit)
 {
-	m_doc->setRedoLimit(limit);
+    m_doc->setRedoLimit(limit);
 }
 
 void KisDocIface::renameImage(const QString& oldName, const QString& newName)
 {
-	m_doc->renameImage(oldName,newName);
+    m_doc->renameImage(oldName,newName);
 }

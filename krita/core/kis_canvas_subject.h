@@ -44,54 +44,54 @@ class KisColor;
  */
 class KisCanvasSubject {
 public:
-	KisCanvasSubject() {};
-	virtual ~KisCanvasSubject() {};
+    KisCanvasSubject() {};
+    virtual ~KisCanvasSubject() {};
 
 public:
 
-	/**
-	 * From now on, the observer will be notified of changes in
-	 * brush, foreground color, background color, pattern, gradient
-	 * and paintop
-	 */
-	virtual void attach(KisCanvasObserver *observer) = 0;
-	virtual void detach(KisCanvasObserver *observer) = 0;
-	
-	virtual void notify() = 0;
-	
-	virtual KisImageSP currentImg() const = 0;
-	
-	virtual KisColor bgColor() const = 0;
-	virtual void setBGColor(const KisColor& c) = 0;
-	
-	virtual KisColor fgColor() const = 0;
-	virtual void setFGColor(const KisColor& c) = 0;
-	
-	virtual KisBrush *currentBrush() const = 0;
+    /**
+     * From now on, the observer will be notified of changes in
+     * brush, foreground color, background color, pattern, gradient
+     * and paintop
+     */
+    virtual void attach(KisCanvasObserver *observer) = 0;
+    virtual void detach(KisCanvasObserver *observer) = 0;
+    
+    virtual void notify() = 0;
+    
+    virtual KisImageSP currentImg() const = 0;
+    
+    virtual KisColor bgColor() const = 0;
+    virtual void setBGColor(const KisColor& c) = 0;
+    
+    virtual KisColor fgColor() const = 0;
+    virtual void setFGColor(const KisColor& c) = 0;
+    
+    virtual KisBrush *currentBrush() const = 0;
 
-	virtual KisPattern *currentPattern() const = 0;
-	
-	virtual KisGradient *currentGradient() const = 0;
-	
-	virtual KisID currentPaintop() const = 0;
-	
-	virtual double zoomFactor() const = 0;
-	
-	virtual KisUndoAdapter *undoAdapter() const = 0;
-	
-	virtual KisCanvasControllerInterface *canvasController() const = 0;
-	
-	virtual KisToolControllerInterface *toolController() const = 0;
-	
-	virtual KoDocument *document() const = 0;
-	
-	virtual KisProgressDisplayInterface *progressDisplay() const = 0;
-	
-	virtual KisSelectionManager * selectionManager() = 0;
+    virtual KisPattern *currentPattern() const = 0;
+    
+    virtual KisGradient *currentGradient() const = 0;
+    
+    virtual KisID currentPaintop() const = 0;
+    
+    virtual double zoomFactor() const = 0;
+    
+    virtual KisUndoAdapter *undoAdapter() const = 0;
+    
+    virtual KisCanvasControllerInterface *canvasController() const = 0;
+    
+    virtual KisToolControllerInterface *toolController() const = 0;
+    
+    virtual KoDocument *document() const = 0;
+    
+    virtual KisProgressDisplayInterface *progressDisplay() const = 0;
+    
+    virtual KisSelectionManager * selectionManager() = 0;
 
 private:
-	KisCanvasSubject(const KisCanvasSubject&);
-	KisCanvasSubject& operator=(const KisCanvasSubject&);
+    KisCanvasSubject(const KisCanvasSubject&);
+    KisCanvasSubject& operator=(const KisCanvasSubject&);
 };
 
 #endif // KIS_CANVAS_SUBJECT_H_

@@ -37,12 +37,12 @@ class KisPainter;
 
 class KisToolRectangle : public KisToolShape {
 
-	typedef KisToolShape super;
-	Q_OBJECT
+    typedef KisToolShape super;
+    Q_OBJECT
 
 public:
-	KisToolRectangle();
-	virtual ~KisToolRectangle();
+    KisToolRectangle();
+    virtual ~KisToolRectangle();
 
         //
         // KisCanvasObserver interface
@@ -54,40 +54,40 @@ public:
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void draw(const KisPoint&, const KisPoint&);
+    virtual void draw(const KisPoint&, const KisPoint&);
 
 protected:
-	int m_lineThickness;
+    int m_lineThickness;
 
-	KisPoint m_dragCenter;
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
-	QRect m_final_lines;
+    KisPoint m_dragCenter;
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
+    QRect m_final_lines;
 
-	bool m_dragging;
-	KisImageSP m_currentImage;
+    bool m_dragging;
+    KisImageSP m_currentImage;
 };
 
 class KisToolRectangleFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolRectangleFactory() : super() {};
-	virtual ~KisToolRectangleFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolRectangle(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }
+    KisToolRectangleFactory() : super() {};
+    virtual ~KisToolRectangleFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolRectangle(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }
 };
 
 

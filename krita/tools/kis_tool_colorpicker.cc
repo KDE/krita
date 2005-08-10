@@ -40,14 +40,14 @@
 
 KisToolColorPicker::KisToolColorPicker()
 {
-	setName("tool_colorpicker");
-	setCursor(KisCursor::pickerCursor());
-	m_optionsWidget = 0;
-	m_subject = 0;
-	m_updateColor = true;
-	m_sampleMerged = true;
-	m_normaliseValues = true;
-	m_pickedColor = KisColor();
+    setName("tool_colorpicker");
+    setCursor(KisCursor::pickerCursor());
+    m_optionsWidget = 0;
+    m_subject = 0;
+    m_updateColor = true;
+    m_sampleMerged = true;
+    m_normaliseValues = true;
+    m_pickedColor = KisColor();
 }
 
 KisToolColorPicker::~KisToolColorPicker() 
@@ -56,126 +56,126 @@ KisToolColorPicker::~KisToolColorPicker()
 
 void KisToolColorPicker::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	super::update(m_subject);
+    m_subject = subject;
+    super::update(m_subject);
 }
 
 void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 {
-	if (m_subject) {
-		if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
-			return;
+    if (m_subject) {
+        if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
+            return;
 
-		KisImageSP img;
+        KisImageSP img;
 
-		if (!m_subject || !(img = m_subject -> currentImg()))
-			return;
+        if (!m_subject || !(img = m_subject -> currentImg()))
+            return;
 
-		KisPaintDeviceSP dev = img -> activeDevice();
+        KisPaintDeviceSP dev = img -> activeDevice();
 
-		if (!m_sampleMerged) {
-			if (!dev ) {
-				return;
-			}
-			if (!dev -> visible()) {
-				KMessageBox::information(0, i18n("Cannot pick the color as the active layer is hidden."));
-				return;
-			}
-		}
+        if (!m_sampleMerged) {
+            if (!dev ) {
+                return;
+            }
+            if (!dev -> visible()) {
+                KMessageBox::information(0, i18n("Cannot pick the color as the active layer is hidden."));
+                return;
+            }
+        }
 
-		QPoint pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
+        QPoint pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 
-		if (!img -> bounds().contains(pos)) {
-			return;
-		}
+        if (!img -> bounds().contains(pos)) {
+            return;
+        }
 
-		if (m_sampleMerged) {
-			m_pickedColor = img -> mergedPixel(pos.x(), pos.y());
-		} else {
-			m_pickedColor = dev -> colorAt(pos.x(), pos.y());
-		}
+        if (m_sampleMerged) {
+            m_pickedColor = img -> mergedPixel(pos.x(), pos.y());
+        } else {
+            m_pickedColor = dev -> colorAt(pos.x(), pos.y());
+        }
 
-		displayPickedColor();
+        displayPickedColor();
 
-		if (m_updateColor) {
-			if (e -> button() == QMouseEvent::LeftButton)
-				m_subject -> setFGColor(m_pickedColor);
-			else 
-				m_subject -> setBGColor(m_pickedColor);
-		}
-	}
+        if (m_updateColor) {
+            if (e -> button() == QMouseEvent::LeftButton)
+                m_subject -> setFGColor(m_pickedColor);
+            else 
+                m_subject -> setBGColor(m_pickedColor);
+        }
+    }
 }
 
 void KisToolColorPicker::displayPickedColor()
 {
-	if (m_pickedColor.data() && m_optionsWidget) {
+    if (m_pickedColor.data() && m_optionsWidget) {
 
-		vKisChannelInfoSP channels = m_pickedColor.colorStrategy() -> channels();
-		m_optionsWidget -> listViewChannels -> clear();
+        vKisChannelInfoSP channels = m_pickedColor.colorStrategy() -> channels();
+        m_optionsWidget -> listViewChannels -> clear();
 
-		for (int i = channels.count() - 1; i >= 0 ; --i) {
-			QString channelValueText;
+        for (int i = channels.count() - 1; i >= 0 ; --i) {
+            QString channelValueText;
 
-			if (m_normaliseValues) {
-				channelValueText = m_pickedColor.colorStrategy() -> normalisedChannelValueText(m_pickedColor.data(), i);
-			} else {
-				channelValueText = m_pickedColor.colorStrategy() -> channelValueText(m_pickedColor.data(), i);
-			}
+            if (m_normaliseValues) {
+                channelValueText = m_pickedColor.colorStrategy() -> normalisedChannelValueText(m_pickedColor.data(), i);
+            } else {
+                channelValueText = m_pickedColor.colorStrategy() -> channelValueText(m_pickedColor.data(), i);
+            }
 
-			m_optionsWidget -> listViewChannels -> insertItem(new QListViewItem(m_optionsWidget -> listViewChannels,
-											    channels[i] -> name(),
-											    channelValueText));
-		}
-	}
+            m_optionsWidget -> listViewChannels -> insertItem(new QListViewItem(m_optionsWidget -> listViewChannels,
+                                                channels[i] -> name(),
+                                                channelValueText));
+        }
+    }
 }
 
 void KisToolColorPicker::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
-		m_action -> setToolTip(i18n("Color picker"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", Qt::Key_E, this, SLOT(activate()), collection, name());
+        m_action -> setToolTip(i18n("Color picker"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 {
-	m_optionsWidget = new ColorPickerOptionsWidget(parent);
-	
-	m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
-	m_optionsWidget -> cbSampleMerged -> setChecked(m_sampleMerged);
-	m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
+    m_optionsWidget = new ColorPickerOptionsWidget(parent);
+    
+    m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
+    m_optionsWidget -> cbSampleMerged -> setChecked(m_sampleMerged);
+    m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
 
-	m_optionsWidget -> listViewChannels -> setSorting(-1);
+    m_optionsWidget -> listViewChannels -> setSorting(-1);
 
-	connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
-	connect(m_optionsWidget -> cbSampleMerged, SIGNAL(toggled(bool)), SLOT(slotSetSampleMerged(bool)));
-	connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
+    connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
+    connect(m_optionsWidget -> cbSampleMerged, SIGNAL(toggled(bool)), SLOT(slotSetSampleMerged(bool)));
+    connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
 
-	return m_optionsWidget;
+    return m_optionsWidget;
 }
 
 QWidget* KisToolColorPicker::optionWidget()
 {
-	return m_optionsWidget;
+    return m_optionsWidget;
 }
 
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
-	m_updateColor = state;
+    m_updateColor = state;
 }
 
 void KisToolColorPicker::slotSetSampleMerged(bool state)
 {
-	m_sampleMerged = state;
+    m_sampleMerged = state;
 }
 
 void KisToolColorPicker::slotSetNormaliseValues(bool state)
 {
-	m_normaliseValues = state;
-	displayPickedColor();
+    m_normaliseValues = state;
+    displayPickedColor();
 }
 

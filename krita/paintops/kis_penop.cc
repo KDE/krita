@@ -39,14 +39,14 @@
 
 KisPaintOp * KisPenOpFactory::createOp(KisPainter * painter)
 { 
-	KisPaintOp * op = new KisPenOp(painter); 
-	Q_CHECK_PTR(op);
-	return op; 
+    KisPaintOp * op = new KisPenOp(painter); 
+    Q_CHECK_PTR(op);
+    return op; 
 }
 
 
 KisPenOp::KisPenOp(KisPainter * painter)
-	: super(painter) 
+    : super(painter) 
 {
 }
 
@@ -55,79 +55,79 @@ KisPenOp::~KisPenOp()
 }
 
 void KisPenOp::paintAt(const KisPoint &pos,
-		       const double pressure,
-		       const double /*xTilt*/,
-		       const double /*yTilt*/)
+               const double pressure,
+               const double /*xTilt*/,
+               const double /*yTilt*/)
 {
-	if (!m_painter) return;
-	KisPaintDeviceSP device = m_painter -> device();
-	if (!device) return;
-	KisBrush * brush = m_painter -> brush();
-	if (!brush) return;
+    if (!m_painter) return;
+    KisPaintDeviceSP device = m_painter -> device();
+    if (!device) return;
+    KisBrush * brush = m_painter -> brush();
+    if (!brush) return;
 
 
-	KisPoint hotSpot = brush -> hotSpot(pressure);
-	KisPoint pt = pos - hotSpot;
+    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint pt = pos - hotSpot;
 
-	// Split the coordinates into integer plus fractional parts. The integer
-	// is where the dab will be positioned and the fractional part determines
-	// the sub-pixel positioning.
-	Q_INT32 x;
-	double xFraction;
-	Q_INT32 y;
-	double yFraction;
+    // Split the coordinates into integer plus fractional parts. The integer
+    // is where the dab will be positioned and the fractional part determines
+    // the sub-pixel positioning.
+    Q_INT32 x;
+    double xFraction;
+    Q_INT32 y;
+    double yFraction;
 
-	splitCoordinate(pt.x(), &x, &xFraction);
-	splitCoordinate(pt.y(), &y, &yFraction);
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
 
-	KisPaintDeviceSP dab = 0;
-	if (brush -> brushType() == IMAGE || 
-	    brush -> brushType() == PIPE_IMAGE) {
-		dab = brush -> image(device -> colorStrategy(), pressure);
-	}
-	else {
-		// Compute mask without sub-pixel positioning
-		KisAlphaMaskSP mask = brush -> mask(pressure);
-		dab = computeDab(mask);
-	}
+    KisPaintDeviceSP dab = 0;
+    if (brush -> brushType() == IMAGE || 
+        brush -> brushType() == PIPE_IMAGE) {
+        dab = brush -> image(device -> colorStrategy(), pressure);
+    }
+    else {
+        // Compute mask without sub-pixel positioning
+        KisAlphaMaskSP mask = brush -> mask(pressure);
+        dab = computeDab(mask);
+    }
 
-	m_painter -> setPressure(pressure);
-	QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
-	QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    m_painter -> setPressure(pressure);
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-	KisImage * image = device -> image();
+    KisImage * image = device -> image();
 
-	if (image != 0) {
-		dstRect &= image -> bounds();
-	}
+    if (image != 0) {
+        dstRect &= image -> bounds();
+    }
 
-	if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-	if (dab -> hasAlpha()) {
-		// Set all alpha > opaque/2 to opaque, the rest to transparent.
-		// XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
+    if (dab -> hasAlpha()) {
+        // Set all alpha > opaque/2 to opaque, the rest to transparent.
+        // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
 
-		KisRectIterator pixelIt = dab -> createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
+        KisRectIterator pixelIt = dab -> createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
 
-		while (!pixelIt.isDone()) {
+        while (!pixelIt.isDone()) {
 
-			KisPixel pixel = dab -> toPixel(pixelIt.rawData());
+            KisPixel pixel = dab -> toPixel(pixelIt.rawData());
 
-			if (pixel.alpha() < (4 * OPACITY_OPAQUE) / 10) {
-				pixel.alpha() = OPACITY_TRANSPARENT;
-			} else {
-				pixel.alpha() = OPACITY_OPAQUE;
-			}
+            if (pixel.alpha() < (4 * OPACITY_OPAQUE) / 10) {
+                pixel.alpha() = OPACITY_TRANSPARENT;
+            } else {
+                pixel.alpha() = OPACITY_OPAQUE;
+            }
 
-			++pixelIt;
-		}
-	}
+            ++pixelIt;
+        }
+    }
 
-	Q_INT32 sx = dstRect.x() - x;
-	Q_INT32 sy = dstRect.y() - y;
-	Q_INT32 sw = dstRect.width();
-	Q_INT32 sh = dstRect.height();
+    Q_INT32 sx = dstRect.x() - x;
+    Q_INT32 sy = dstRect.y() - y;
+    Q_INT32 sw = dstRect.width();
+    Q_INT32 sh = dstRect.height();
 
-	m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
-	m_painter -> addDirtyRect(dstRect);
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
+    m_painter -> addDirtyRect(dstRect);
 }

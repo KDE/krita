@@ -51,94 +51,94 @@ K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFacto
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
 
-	setInstance(ColorSpaceConversionFactory::instance());
+    setInstance(ColorSpaceConversionFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "ColorSpaceconversion plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "ColorSpaceconversion plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	(void) new KAction(i18n("&Convert Image Type..."), 0, 0, this, SLOT(slotImgColorSpaceConversion()), actionCollection(), "imgcolorspaceconversion");
-	(void) new KAction(i18n("&Convert Layer Type..."), 0, 0, this, SLOT(slotLayerColorSpaceConversion()), actionCollection(), "layercolorspaceconversion");
+    (void) new KAction(i18n("&Convert Image Type..."), 0, 0, this, SLOT(slotImgColorSpaceConversion()), actionCollection(), "imgcolorspaceconversion");
+    (void) new KAction(i18n("&Convert Layer Type..."), 0, 0, this, SLOT(slotLayerColorSpaceConversion()), actionCollection(), "layercolorspaceconversion");
 
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+    }
 }
 
 ColorSpaceConversion::~ColorSpaceConversion()
 {
-	m_view = 0;
+    m_view = 0;
 }
 
 void ColorSpaceConversion::slotImgColorSpaceConversion()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
-	Q_CHECK_PTR(dlgColorSpaceConversion);
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    Q_CHECK_PTR(dlgColorSpaceConversion);
 
-	dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> id().name());
+    dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> id().name());
 
-	dlgColorSpaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> id());
+    dlgColorSpaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> id());
 
-	if (image -> profile()) {
-		dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
-	}
+    if (image -> profile()) {
+        dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
+    }
 
-	if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
-		// XXX: Do the rest of the stuff
-		KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-		KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
-		// XXX: Should we actually set the profile here?
-		image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
-		image -> convertTo(cs,
-				   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-				   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
-	}
-	delete dlgColorSpaceConversion;
+    if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
+        // XXX: Do the rest of the stuff
+        KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
+        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
+        // XXX: Should we actually set the profile here?
+        image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        image -> convertTo(cs,
+                   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+    }
+    delete dlgColorSpaceConversion;
 }
 
 void ColorSpaceConversion::slotLayerColorSpaceConversion()
 {
 
-	KisImageSP image = m_view -> currentImg();
-	if (!image) return;
+    KisImageSP image = m_view -> currentImg();
+    if (!image) return;
 
-	KisPaintDeviceSP dev = image -> activeDevice();
-	if (!dev) return;
+    KisPaintDeviceSP dev = image -> activeDevice();
+    if (!dev) return;
 
-	DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
-	Q_CHECK_PTR(dlgColorSpaceConversion);
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
+    Q_CHECK_PTR(dlgColorSpaceConversion);
 
-	dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> id().name());
-	dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
+    dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> id().name());
+    dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
 
-	KisProfileSP p = dev -> profile();
-	if ( p ) {
-		dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
-	}
+    KisProfileSP p = dev -> profile();
+    if ( p ) {
+        dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
+    }
 
-	if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
-		KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-		KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
-		dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
-		dev -> convertTo(cs,
-				   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-				   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
-		image -> notify();
-		image -> notifyLayersChanged();
-	}
-	delete dlgColorSpaceConversion;
+    if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
+        KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
+        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
+        dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        dev -> convertTo(cs,
+                   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        image -> notify();
+        image -> notifyLayersChanged();
+    }
+    delete dlgColorSpaceConversion;
 }
 
 #include "colorspaceconversion.moc"

@@ -46,22 +46,22 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolpolygon, ToolPolygonFactory( "krita" ) )
 
 
 ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ToolPolygonFactory::instance());
+    setInstance(ToolPolygonFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "Polygon tool plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "Polygon tool plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisToolRegistry * r = KisToolRegistry::instance();
+    if ( parent->inherits("KisFactory") )
+    {
+        KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolPolygonFactory());
-	}
+        r -> add(new KisToolPolygonFactory());
+    }
 
 }
 

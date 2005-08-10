@@ -53,7 +53,7 @@
 const int HEIGHT = 32;
 
 KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const char *name)
-	: super(parent, name)
+    : super(parent, name)
 {
         QVBoxLayout *vbox = new QVBoxLayout(this);
         vbox -> setAutoAdd(true);
@@ -63,7 +63,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_flags = f;
 
         m_lst = new WdgLayerBox(this);
-	setMinimumSize(m_lst -> minimumSizeHint());
+    setMinimumSize(m_lst -> minimumSizeHint());
 
         QToolTip::add(m_lst -> bnAdd, i18n("Create new %1").arg(label));
 
@@ -75,7 +75,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_lst -> bnLower -> setEnabled(false);
         QToolTip::add(m_lst -> bnLower, i18n("Lower current %1").arg(label));
 
-	QToolTip::add(m_lst -> bnProperties, i18n("Properties for %1").arg(label));
+    QToolTip::add(m_lst -> bnProperties, i18n("Properties for %1").arg(label));
 
         mnu = new KPopupMenu();
         mnu -> insertItem(i18n("Raise %1").arg(label), RAISE);
@@ -96,7 +96,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
                 m_contextMnu -> insertItem(i18n("Linked"), LINKING);
 
 
-	m_contextMnu -> insertItem(i18n("Locked"), LOCKING);
+    m_contextMnu -> insertItem(i18n("Locked"), LOCKING);
         m_contextMnu -> insertItem(i18n("Properties"), PROPERTIES);
         m_contextMnu -> insertSeparator();
 
@@ -109,23 +109,23 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         }
 
         connect(m_contextMnu, SIGNAL(activated(int)),
-		SLOT(slotMenuAction(int)));
+        SLOT(slotMenuAction(int)));
         connect(m_contextMnu, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
         connect(mnu, SIGNAL(activated(int)), SLOT(slotMenuAction(int)));
 
-	connect(m_lst -> listLayers, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
+    connect(m_lst -> listLayers, SIGNAL(contextMenuRequested(QListBoxItem *, const QPoint&)), SLOT(slotShowContextMenu(QListBoxItem*, const QPoint&)));
         connect(m_lst -> listLayers, SIGNAL(clicked(QListBoxItem *, const QPoint&)), SLOT(slotClicked(QListBoxItem*, const QPoint&)));
         connect(m_lst -> listLayers, SIGNAL(doubleClicked(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
         connect(m_lst -> listLayers, SIGNAL(returnPressed(QListBoxItem*)), SLOT(slotDoubleClicked(QListBoxItem*)));
-	connect(m_lst -> listLayers, SIGNAL(highlighted(int)), SIGNAL(itemSelected(int)));
+    connect(m_lst -> listLayers, SIGNAL(highlighted(int)), SIGNAL(itemSelected(int)));
 
         connect(m_lst -> bnAdd, SIGNAL(clicked()), SLOT(slotAddClicked()));
         connect(m_lst -> bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
         connect(m_lst -> bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
         connect(m_lst -> bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-	connect(m_lst -> bnProperties, SIGNAL(clicked()), SIGNAL(itemProperties()));
-	connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(opacityChanged(int)));
-	connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(itemComposite(const KisCompositeOp&)));
+    connect(m_lst -> bnProperties, SIGNAL(clicked()), SIGNAL(itemProperties()));
+    connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(opacityChanged(int)));
+    connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(itemComposite(const KisCompositeOp&)));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -145,55 +145,55 @@ void KisLayerBox::slotMenuAction(int mnuId)
         p = dynamic_cast<KisLayerBoxItem*>(m_lst -> listLayers -> item(n));
 
         switch (mnuId) {
-	case VISIBLE:
-		emit itemToggleVisible();
-		break;
-	case SELECTION:
-		emit itemSelected(n);
-		break;
-	case LINKING:
-		emit itemToggleLinked();
-		break;
-	case PROPERTIES:
-		emit itemProperties();
-		break;
-	case ADD:
-		emit itemAdd();
-		break;
-	case REMOVE:
-		emit itemRemove();
-		break;
-	case ADDMASK:
-		emit itemAddMask(n);
-		break;
-	case REMOVEMASK:
-		emit itemRmMask(n);
-		break;
-	case RAISE:
-		emit itemRaise();
-		break;
-	case LOWER:
-		emit itemLower();
-		break;
-	case FRONT:
-		emit itemFront();
-		break;
-	case BACK:
-		emit itemBack();
-		break;
-	case LEVEL:
-		emit itemLevel(n);
-		break;
-	case LOCKING:
-		emit itemToggleLocked();
+    case VISIBLE:
+        emit itemToggleVisible();
+        break;
+    case SELECTION:
+        emit itemSelected(n);
+        break;
+    case LINKING:
+        emit itemToggleLinked();
+        break;
+    case PROPERTIES:
+        emit itemProperties();
+        break;
+    case ADD:
+        emit itemAdd();
+        break;
+    case REMOVE:
+        emit itemRemove();
+        break;
+    case ADDMASK:
+        emit itemAddMask(n);
+        break;
+    case REMOVEMASK:
+        emit itemRmMask(n);
+        break;
+    case RAISE:
+        emit itemRaise();
+        break;
+    case LOWER:
+        emit itemLower();
+        break;
+    case FRONT:
+        emit itemFront();
+        break;
+    case BACK:
+        emit itemBack();
+        break;
+    case LEVEL:
+        emit itemLevel(n);
+        break;
+    case LOCKING:
+        emit itemToggleLocked();
         }
 
         m_lst -> bnDelete -> setEnabled(m_lst -> listLayers -> count());
         m_lst -> bnRaise -> setEnabled(m_lst -> listLayers -> selectedItem() && m_lst -> listLayers ->
-				 selectedItem() != m_lst -> listLayers -> item(0));
+                 selectedItem() != m_lst -> listLayers -> item(0));
         m_lst -> bnLower -> setEnabled(m_lst -> listLayers -> selectedItem() && m_lst -> listLayers ->
-				 currentItem() != -1 && static_cast<uint>(m_lst -> listLayers -> currentItem()) != m_lst -> listLayers ->
-				 count() - 1);
+                 currentItem() != -1 && static_cast<uint>(m_lst -> listLayers -> currentItem()) != m_lst -> listLayers ->
+                 count() - 1);
         m_lst -> listLayers -> triggerUpdate(false);
 }
 
@@ -205,15 +205,15 @@ void KisLayerBox::slotAboutToShow()
         m_contextMnu -> setItemEnabled(SELECTION, enabled);
         m_contextMnu -> setItemEnabled(LEVEL, m_lst -> listLayers -> count() > 1);
         m_contextMnu -> setItemEnabled(LINKING, enabled);
-	m_contextMnu -> setItemEnabled(LOCKING, enabled);
+    m_contextMnu -> setItemEnabled(LOCKING, enabled);
         m_contextMnu -> setItemEnabled(PROPERTIES, enabled);
         m_contextMnu -> setItemEnabled(REMOVE, enabled);
         m_contextMnu -> setItemEnabled(ADDMASK, enabled);
         m_contextMnu -> setItemEnabled(REMOVEMASK, enabled);
         m_contextMnu -> setItemEnabled(RAISE, m_lst -> listLayers -> item(m_lst -> listLayers ->
-							    currentItem()) != m_lst -> listLayers -> firstItem());
+                                currentItem()) != m_lst -> listLayers -> firstItem());
         m_contextMnu -> setItemEnabled(LOWER, m_lst -> listLayers -> item(m_lst -> listLayers ->
-							    currentItem()) != m_lst -> listLayers -> item(m_lst -> listLayers -> count() - 1));
+                                currentItem()) != m_lst -> listLayers -> item(m_lst -> listLayers -> count() - 1));
 }
 
 void KisLayerBox::slotShowContextMenu(QListBoxItem *item, const QPoint& pos)
@@ -237,8 +237,8 @@ void KisLayerBox::slotClicked(QListBoxItem *item, const QPoint& pos)
                         slotMenuAction(VISIBLE);
                 else if (p -> intersectLinkedRect(pos, m))
                         slotMenuAction(LINKING);
-		else if (p -> intersectLockedRect(pos, m))
-			slotMenuAction(LOCKING);
+        else if (p -> intersectLockedRect(pos, m))
+            slotMenuAction(LOCKING);
         }
 }
 
@@ -249,36 +249,36 @@ void KisLayerBox::slotDoubleClicked(QListBoxItem * /*item*/)
 
 void KisLayerBox::slotSetCurrentItem(int n)
 {
-	if (n != m_lst -> listLayers -> currentItem()) {
-		m_lst -> listLayers -> setSelected(n, true);
-	} else {
-		//kdDebug() << "Not calling setSelected as is same\n";
+    if (n != m_lst -> listLayers -> currentItem()) {
+        m_lst -> listLayers -> setSelected(n, true);
+    } else {
+        //kdDebug() << "Not calling setSelected as is same\n";
 
-	}
-	m_lst -> bnRaise -> setEnabled(n > 0);
-	m_lst -> bnLower -> setEnabled(n < m_lst -> listLayers -> count() - 1);
+    }
+    m_lst -> bnRaise -> setEnabled(n > 0);
+    m_lst -> bnLower -> setEnabled(n < m_lst -> listLayers -> count() - 1);
 }
 
 void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
 {
-	m_lst -> cmbComposite -> blockSignals(true);
-	m_lst -> cmbComposite -> setCurrentItem(compositeOp);
-	m_lst -> cmbComposite -> blockSignals(false);
+    m_lst -> cmbComposite -> blockSignals(true);
+    m_lst -> cmbComposite -> setCurrentItem(compositeOp);
+    m_lst -> cmbComposite -> blockSignals(false);
 }
 
 void KisLayerBox::setColorStrategy(const KisAbstractColorSpace * colorSpace)
 {
-	m_lst -> cmbComposite -> blockSignals(true);
-	m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
-	m_lst -> cmbComposite -> blockSignals(false);
+    m_lst -> cmbComposite -> blockSignals(true);
+    m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
+    m_lst -> cmbComposite -> blockSignals(false);
 }
 
 // range: 0-100
 void KisLayerBox::setOpacity(int opacity)
 {
-	m_lst -> intOpacity -> blockSignals(true);
-	m_lst -> intOpacity -> setValue(opacity);
-	m_lst -> intOpacity -> blockSignals(false);
+    m_lst -> intOpacity -> blockSignals(true);
+    m_lst -> intOpacity -> setValue(opacity);
+    m_lst -> intOpacity -> blockSignals(false);
 }
 
 
@@ -294,7 +294,7 @@ void KisLayerBox::insertItem(const QString& name, bool visible, bool linked, boo
 
         p -> setVisible(visible);
         p -> setLinked(linked);
-	p -> setLocked(locked);
+    p -> setLocked(locked);
 
         m_lst -> listLayers -> insertItem(p);
         m_lst -> listLayers -> setCurrentItem(p);
@@ -349,32 +349,32 @@ void KisLayerBox::setSelected(int index)
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 {
-	setUpdatesEnabled(enable);
-	m_lst -> intOpacity -> setUpdatesEnabled(enable);
-	m_lst -> cmbComposite -> setUpdatesEnabled(enable);
+    setUpdatesEnabled(enable);
+    m_lst -> intOpacity -> setUpdatesEnabled(enable);
+    m_lst -> cmbComposite -> setUpdatesEnabled(enable);
 
-	m_lst -> listLayers -> blockSignals(!enable);
-	m_lst -> intOpacity -> blockSignals(!enable);
-	m_lst -> cmbComposite -> blockSignals(!enable);
+    m_lst -> listLayers -> blockSignals(!enable);
+    m_lst -> intOpacity -> blockSignals(!enable);
+    m_lst -> cmbComposite -> blockSignals(!enable);
 }
 
 void KisLayerBox::updateAll()
 {
-	update();
-	m_lst -> intOpacity -> update();
-	m_lst -> cmbComposite -> update();
+    update();
+    m_lst -> intOpacity -> update();
+    m_lst -> cmbComposite -> update();
 }
 
 // ===========================================================================
 
 KisLayerBoxItem::KisLayerBoxItem(const QString& label, QListBox *parent,
-				 KisLayerBox::flags f)
+                 KisLayerBox::flags f)
 {
         init(label, parent, f);
 }
 
 void KisLayerBoxItem::init(const QString& label, QListBox *parent,
-			   KisLayerBox::flags f)
+               KisLayerBox::flags f)
 {
         KIconLoader il( "krita" );
 
@@ -397,7 +397,7 @@ void KisLayerBoxItem::init(const QString& label, QListBox *parent,
         m_parent = parent;
         m_visible = true;
         m_linked = false;
-	m_locked = false;
+    m_locked = false;
 
         m_flags = f;
 }
@@ -417,7 +417,7 @@ int KisLayerBoxItem::width(const QListBox *lb) const
         QFontMetrics fm(font);
 
         m_size.setWidth(kMax(fm.maxWidth() * m_label.length(),
-			     static_cast<uint>(lb -> width())));
+                 static_cast<uint>(lb -> width())));
         return m_size.width();
 }
 
@@ -440,44 +440,44 @@ void KisLayerBoxItem::paint(QPainter *gc)
         gc -> fillRect(0, 0, width(), height() - 1, br);
 
         m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_visibleRect,
-					  m_parent -> colorGroup());
+                      m_parent -> colorGroup());
         pt = QPoint(m_visibleRect.left() + 2, m_visibleRect.top() + 2);
         pix = m_visible ? &m_visiblePix : &m_invisiblePix;
         gc -> drawPixmap(pt, *pix, QRect(0, 0, m_visibleRect.width(),
-					 m_visibleRect.height()));
+                     m_visibleRect.height()));
 
         m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_linkedRect,
-					  m_parent -> colorGroup());
+                      m_parent -> colorGroup());
         pt = QPoint(m_linkedRect.left() + 2, m_linkedRect.top() + 2);
         pix = m_linked ? &m_linkedPix : &m_unlinkedPix;
         gc -> drawPixmap(pt, *pix, QRect(0, 0, m_linkedRect.width(),
-					 m_linkedRect.height()));
+                     m_linkedRect.height()));
 
         m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_lockedRect,
-					  m_parent -> colorGroup());
+                      m_parent -> colorGroup());
         pt = QPoint(m_lockedRect.left() + 2, m_lockedRect.top() + 2);
         pix = m_locked ? &m_lockedPix : &m_unlockedPix;
         gc -> drawPixmap(pt, *pix, QRect(0, 0, m_lockedRect.width(),
-					 m_lockedRect.height()));
+                     m_lockedRect.height()));
 
         m_parent -> style().drawPrimitive(QStyle::PE_Panel, gc, m_previewRect,
-					  m_parent -> colorGroup());
+                      m_parent -> colorGroup());
         gc -> drawRect(0, 0, width() - 1, height() - 1);
 
-	QPen pen = isSelected() ? m_parent -> colorGroup().highlightedText() : m_parent -> colorGroup().text();
-	gc -> setPen(pen);
+    QPen pen = isSelected() ? m_parent -> colorGroup().highlightedText() : m_parent -> colorGroup().text();
+    gc -> setPen(pen);
 
         gc -> drawText(HEIGHT * 4 + 3 * 3, 20, m_label);
 }
 
 QPixmap KisLayerBoxItem::loadPixmap(const QString& filename, const KIconLoader&
-				    il, int size)
+                    il, int size)
 {
         QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup, size);
 
         if (pixmap.isNull())
                 KMessageBox::error(0, i18n("Can't find %1").arg(filename),
-				   i18n("Canvas"));
+                   i18n("Canvas"));
 
         return pixmap;
 }

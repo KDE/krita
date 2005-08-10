@@ -25,17 +25,17 @@ class KisView;
 
 class ColorRange : public KParts::Plugin
 {
-		Q_OBJECT
-	public:
-		ColorRange(QObject *parent, const char *name, const QStringList &);
-		virtual ~ColorRange();
-	
-	private slots:
-		void slotActivated();
+        Q_OBJECT
+    public:
+        ColorRange(QObject *parent, const char *name, const QStringList &);
+        virtual ~ColorRange();
+    
+    private slots:
+        void slotActivated();
 
-	private:
-		KisView * m_view;
-		KisPainter * m_painter;
+    private:
+        KisView * m_view;
+        KisPainter * m_painter;
 
 };
 

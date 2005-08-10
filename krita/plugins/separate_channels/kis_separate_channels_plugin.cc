@@ -39,7 +39,7 @@
 K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) );
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
 
@@ -50,13 +50,13 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char
                 << "\n";
         
 
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-		(void) new KAction(i18n("Separate image..."), 0, 0, this, SLOT(slotSeparate()), actionCollection(), "separate");
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+        (void) new KAction(i18n("Separate image..."), 0, 0, this, SLOT(slotSeparate()), actionCollection(), "separate");
+    }
 }
 
 KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
@@ -65,22 +65,22 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 
 void KisSeparateChannelsPlugin::slotSeparate()
 {
-	KisImageSP image = m_view->currentImg();
-	if (!image) return;
+    KisImageSP image = m_view->currentImg();
+    if (!image) return;
 
-	DlgSeparate * dlgSeparate = new DlgSeparate(m_view, "Separate");
-	Q_CHECK_PTR(dlgSeparate);
+    DlgSeparate * dlgSeparate = new DlgSeparate(m_view, "Separate");
+    Q_CHECK_PTR(dlgSeparate);
 
-	dlgSeparate->setCaption(i18n("Separate Image"));
+    dlgSeparate->setCaption(i18n("Separate Image"));
 
-	if (dlgSeparate->exec() == QDialog::Accepted) {
-		
-		KisChannelSeparator separator(m_view);
-		separator.separate(m_view->progressDisplay());
-		
-	}
+    if (dlgSeparate->exec() == QDialog::Accepted) {
+        
+        KisChannelSeparator separator(m_view);
+        separator.separate(m_view->progressDisplay());
+        
+    }
 
-	delete dlgSeparate;
+    delete dlgSeparate;
 
 }
 

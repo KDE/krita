@@ -33,8 +33,8 @@
 
 KisPaintOp::KisPaintOp(KisPainter * painter)
 {
-	m_painter = painter;
-	setSource(painter->device());
+    m_painter = painter;
+    setSource(painter->device());
 }
 
 KisPaintOp::~KisPaintOp()
@@ -43,66 +43,66 @@ KisPaintOp::~KisPaintOp()
 
 KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 {
-	// XXX: According to the SeaShore source, the Gimp uses a
-	// temporary layer the size of the layer that is being painted
-	// on. This layer is cleared between painting actions. Our
-	// temporary layer, dab, is for every paintAt, composited with
-	// the target layer. We only use a real temporary layer for things
-	// like filter tools.
+    // XXX: According to the SeaShore source, the Gimp uses a
+    // temporary layer the size of the layer that is being painted
+    // on. This layer is cleared between painting actions. Our
+    // temporary layer, dab, is for every paintAt, composited with
+    // the target layer. We only use a real temporary layer for things
+    // like filter tools.
 
-	KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
-	Q_CHECK_PTR(dab);
+    KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
+    Q_CHECK_PTR(dab);
 
-	// XXX: Quick hack: we should use the correct color instead of going via QColor
-	KisProfileSP profile = m_painter -> device() -> profile();
-	KisColor kc = m_painter -> paintColor();
-	
-	KisAbstractColorSpace * colorStrategy = dab -> colorStrategy();
+    // XXX: Quick hack: we should use the correct color instead of going via QColor
+    KisProfileSP profile = m_painter -> device() -> profile();
+    KisColor kc = m_painter -> paintColor();
+    
+    KisAbstractColorSpace * colorStrategy = dab -> colorStrategy();
 
-	Q_INT32 pixelSize = colorStrategy->pixelSize();
-	
-	Q_INT32 maskWidth = mask -> width();
-	Q_INT32 maskHeight = mask -> height();
-	
-	// Convert the kiscolor to the right colorspace.
-	kc.convertTo(colorStrategy, profile);
+    Q_INT32 pixelSize = colorStrategy->pixelSize();
+    
+    Q_INT32 maskWidth = mask -> width();
+    Q_INT32 maskHeight = mask -> height();
+    
+    // Convert the kiscolor to the right colorspace.
+    kc.convertTo(colorStrategy, profile);
 
-	for (int y = 0; y < maskHeight; y++)
-	{
-		KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, true);
-		int x=0;
-		while(! hiter.isDone())
-		{
-			// XXX: Set mask
-			colorStrategy->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
-			memcpy(hiter.rawData(), kc.data(), pixelSize);
-// 			colorStrategy -> nativeColor(c,
-// 						     mask -> alphaAt(x++, y),
-// 						     hiter.rawData(),
-// 						     profile);
-			++hiter;
-		}
-	}
+    for (int y = 0; y < maskHeight; y++)
+    {
+        KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, true);
+        int x=0;
+        while(! hiter.isDone())
+        {
+            // XXX: Set mask
+            colorStrategy->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
+            memcpy(hiter.rawData(), kc.data(), pixelSize);
+//             colorStrategy -> nativeColor(c,
+//                              mask -> alphaAt(x++, y),
+//                              hiter.rawData(),
+//                              profile);
+            ++hiter;
+        }
+    }
 
-	return dab;
+    return dab;
 }
 
 void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction)
 {
-	Q_INT32 i = static_cast<Q_INT32>(coordinate);
+    Q_INT32 i = static_cast<Q_INT32>(coordinate);
 
-	if (coordinate < 0) {
-		// We always want the fractional part to be positive.
-		// E.g. -1.25 becomes -2 and +0.75
-		i--;
-	}
+    if (coordinate < 0) {
+        // We always want the fractional part to be positive.
+        // E.g. -1.25 becomes -2 and +0.75
+        i--;
+    }
 
-	double f = coordinate - i;
+    double f = coordinate - i;
 
-	*whole = i;
-	*fraction = f;
+    *whole = i;
+    *fraction = f;
 }
 
 void KisPaintOp::setSource(KisPaintDeviceSP p) {
-	m_source = p;
+    m_source = p;
 }

@@ -25,54 +25,54 @@
 
 class KisDesaturateFilter : public KisFilter {
 public:
-	KisDesaturateFilter();
+    KisDesaturateFilter();
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return true; }
 };
 
 class KisGammaCorrectionFilter : public KisDoublePerChannelFilter {
 public:
-	KisGammaCorrectionFilter();
+    KisGammaCorrectionFilter();
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsIncrementalPainting() { return false; }
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsIncrementalPainting() { return false; }
 };
 
 class KisColorAdjustmentFilter : public KisIntegerPerChannelFilter {
 public:
-	KisColorAdjustmentFilter();
+    KisColorAdjustmentFilter();
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsIncrementalPainting() { return false; }
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsIncrementalPainting() { return false; }
 
 };
 
 class KisAutoContrast : public KisFilter {
 public:
-	KisAutoContrast();
+    KisAutoContrast();
 public:
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
-	virtual bool supportsPreview() { return true; }
-	virtual bool supportsPainting() { return false; }
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
+    virtual bool supportsPreview() { return true; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
 class ColorsFilters : public KParts::Plugin
 {
 public:
-	ColorsFilters(QObject *parent, const char *name, const QStringList &);
-	virtual ~ColorsFilters();
+    ColorsFilters(QObject *parent, const char *name, const QStringList &);
+    virtual ~ColorsFilters();
 
 private:
-	KisPainter *m_painter;
+    KisPainter *m_painter;
 };
 
 #endif

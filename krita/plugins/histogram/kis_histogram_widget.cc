@@ -32,7 +32,7 @@
 #include "kis_types.h"
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
-	: super(parent, name)
+    : super(parent, name)
 {
 }
 
@@ -43,43 +43,43 @@ KisHistogramWidget::~KisHistogramWidget()
 
 void KisHistogramWidget::setChannels(vKisChannelInfoSP channels, Q_INT32 channelCount) 
 {
-	for (int i = 0; i < channelCount; i++) {
-		KisChannelInfo* channel = channels[i];
-		cmbChannel -> insertItem(channel -> name());
-	}
+    for (int i = 0; i < channelCount; i++) {
+        KisChannelInfo* channel = channels[i];
+        cmbChannel -> insertItem(channel -> name());
+    }
 }
 
 
 void KisHistogramWidget::setHistogram(KisHistogramSP histogram) 
 {
-	Q_UINT32 height = pixHistogram -> height();
-	m_histogram = histogram;
-	// XXX should the width be resisable?
-	m_pix = QPixmap(QUANTUM_MAX + 1, height);
-	m_pix.fill();
-  	QPainter p(&m_pix);
-	p.setBrush(Qt::black);
-	
-	vBins::iterator it;
-	Q_UINT32 i = 0;
+    Q_UINT32 height = pixHistogram -> height();
+    m_histogram = histogram;
+    // XXX should the width be resisable?
+    m_pix = QPixmap(QUANTUM_MAX + 1, height);
+    m_pix.fill();
+      QPainter p(&m_pix);
+    p.setBrush(Qt::black);
+    
+    vBins::iterator it;
+    Q_UINT32 i = 0;
 
-	
-	if (m_histogram -> getHistogramType() == LINEAR) {
-		double factor = (double)height / (double)m_histogram -> getHighest();
-		for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-			p.drawLine(i, height, i, height - static_cast<Q_INT32>((double)(*it) * factor));
-			i++;
-		}
-	} else {
-		double factor = (double)height / (double)log(m_histogram -> getHighest());
-		for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-			p.drawLine(i, height, i, height - static_cast<Q_INT32>(log((double)*it) * factor));
-			i++;
-		}
-	}
+    
+    if (m_histogram -> getHistogramType() == LINEAR) {
+        double factor = (double)height / (double)m_histogram -> getHighest();
+        for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
+            p.drawLine(i, height, i, height - static_cast<Q_INT32>((double)(*it) * factor));
+            i++;
+        }
+    } else {
+        double factor = (double)height / (double)log(m_histogram -> getHighest());
+        for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
+            p.drawLine(i, height, i, height - static_cast<Q_INT32>(log((double)*it) * factor));
+            i++;
+        }
+    }
 
 
-	pixHistogram -> setPixmap(m_pix);
+    pixHistogram -> setPixmap(m_pix);
 
 }
 

@@ -39,54 +39,54 @@ class KisTiledDataManager;
  */
 class KisTileManager  {
 public:
-	~KisTileManager();
-	static KisTileManager* instance();
+    ~KisTileManager();
+    static KisTileManager* instance();
 
 public:
-	void registerTile(KisTile* tile);
-	void deregisterTile(KisTile* tile);
-	void ensureTileLoaded(KisTile* tile);
-	void maySwapTile(KisTile* tile);
+    void registerTile(KisTile* tile);
+    void deregisterTile(KisTile* tile);
+    void ensureTileLoaded(KisTile* tile);
+    void maySwapTile(KisTile* tile);
 
 public:
-	void configChanged();
+    void configChanged();
 
 private:
-	KisTileManager();
-	KisTileManager(KisTileManager& rhs) {}
-	KisTileManager operator=(const KisTileManager&);
+    KisTileManager();
+    KisTileManager(KisTileManager& rhs) {}
+    KisTileManager operator=(const KisTileManager&);
 
 private:
-	static KisTileManager *m_singleton;
-	KTempFile m_tempFile;
-	int m_fileSize;
+    static KisTileManager *m_singleton;
+    KTempFile m_tempFile;
+    int m_fileSize;
 
-	struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
-		bool validNode; QValueList<TileInfo*>::iterator node; };
-	typedef struct { Q_UINT8 *pointer; int filePos; int size; } FreeInfo;
-	typedef QMap<KisTile*, TileInfo*> TileMap;
-	typedef QValueList<TileInfo*> TileList;
-	typedef QValueList<FreeInfo*> FreeList;
-	typedef QValueVector<FreeList> FreeListList;
+    struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
+        bool validNode; QValueList<TileInfo*>::iterator node; };
+    typedef struct { Q_UINT8 *pointer; int filePos; int size; } FreeInfo;
+    typedef QMap<KisTile*, TileInfo*> TileMap;
+    typedef QValueList<TileInfo*> TileList;
+    typedef QValueList<FreeInfo*> FreeList;
+    typedef QValueVector<FreeList> FreeListList;
 
-	TileMap m_tileMap;
-	TileList m_swappableList;
-	FreeListList m_freeLists;
-	Q_INT32 m_maxInMem;
-	Q_INT32 m_currentInMem;
-	Q_INT32 m_swappiness;
-	Q_INT32 m_tileSize; // size of a tile if it used 1 byte per pixel
-	unsigned long m_bytesInMem;
-	unsigned long m_bytesTotal;
+    TileMap m_tileMap;
+    TileList m_swappableList;
+    FreeListList m_freeLists;
+    Q_INT32 m_maxInMem;
+    Q_INT32 m_currentInMem;
+    Q_INT32 m_swappiness;
+    Q_INT32 m_tileSize; // size of a tile if it used 1 byte per pixel
+    unsigned long m_bytesInMem;
+    unsigned long m_bytesTotal;
 
-	// debug
-	int counter;
+    // debug
+    int counter;
 
 private:
-	void fromSwap(TileInfo* info);
-	void toSwap(TileInfo* info);
-	void doSwapping();
-	void printInfo();
+    void fromSwap(TileInfo* info);
+    void toSwap(TileInfo* info);
+    void doSwapping();
+    void printInfo();
 };
 
 #endif // KIS_TILEMANAGER_H_

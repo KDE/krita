@@ -33,27 +33,27 @@
 #include "kis_gradient_chooser.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name)
-	: KDialogBase(parent, name, false, i18n("Custom Gradient"), Close)
+    : KDialogBase(parent, name, false, i18n("Custom Gradient"), Close)
 {
-	m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
-	setMainWidget(m_page);
-	connect(m_page, SIGNAL(activatedResource(KisResource *)), view, SLOT(gradientActivated(KisResource*)));
+    m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
+    setMainWidget(m_page);
+    connect(m_page, SIGNAL(activatedResource(KisResource *)), view, SLOT(gradientActivated(KisResource*)));
 };
 
 KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const char *name) : super(parent, name)
 {
-	m_lbName = new QLabel(this);
-	
-	m_customGradient = new QPushButton(i18n("Custom Gradient..."), this, "custom gradient button");
-	
-	KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, this, "autogradient");
-	connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
-	
-	QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
-	
-	mainLayout->addWidget(m_lbName);
-	mainLayout->addWidget(chooserWidget(), 10);
-	mainLayout->addWidget(m_customGradient, 10);
+    m_lbName = new QLabel(this);
+    
+    m_customGradient = new QPushButton(i18n("Custom Gradient..."), this, "custom gradient button");
+    
+    KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, this, "autogradient");
+    connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
+    
+    QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
+    
+    mainLayout->addWidget(m_lbName);
+    mainLayout->addWidget(chooserWidget(), 10);
+    mainLayout->addWidget(m_customGradient, 10);
 
 }
 
@@ -63,13 +63,13 @@ KisGradientChooser::~KisGradientChooser()
 
 void KisGradientChooser::update(KoIconItem *item)
 {
-	KisIconItem *kisItem = static_cast<KisIconItem *>(item);
+    KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 
-	if (item) {
-		KisGradient *gradient = static_cast<KisGradient *>(kisItem -> resource());
+    if (item) {
+        KisGradient *gradient = static_cast<KisGradient *>(kisItem -> resource());
 
-		m_lbName -> setText(gradient -> name());
-	}
+        m_lbName -> setText(gradient -> name());
+    }
 }
 
 

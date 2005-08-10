@@ -26,10 +26,10 @@
  */
 class DefaultPaintOpsPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~DefaultPaintOpsPlugin();
+    DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~DefaultPaintOpsPlugin();
 };
 
 #endif // DEFAULT_PAINTOPSGRAY_PLUGIN_H_

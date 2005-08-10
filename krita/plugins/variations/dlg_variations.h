@@ -34,28 +34,28 @@
  */
 class DlgVariations: public KDialogBase {
 
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgVariations(QWidget * parent = 0,
-		      const char* name = 0);
-	~DlgVariations();
+    DlgVariations(QWidget * parent = 0,
+              const char* name = 0);
+    ~DlgVariations();
 
-	/**
-	 * Set the initial preview pixmap
-	 */
-	void setPixmap(QPixmap pix);
+    /**
+     * Set the initial preview pixmap
+     */
+    void setPixmap(QPixmap pix);
 
 private slots:
 
-	void okClicked();
+    void okClicked();
 
 private:
 
-	WdgVariations * m_page;
-	QPixmap m_previewPix;
+    WdgVariations * m_page;
+    QPixmap m_previewPix;
 };
 
 #endif // DLG_VARIATIONS

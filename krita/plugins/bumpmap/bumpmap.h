@@ -32,11 +32,11 @@
 
 namespace krita {
 
-	enum enumBumpmapType {
-		LINEAR = 0,
-		SPHERICAL = 1,
-		SINUSOIDAL = 2
-	};
+    enum enumBumpmapType {
+        LINEAR = 0,
+        SPHERICAL = 1,
+        SINUSOIDAL = 2
+    };
 
 };
 
@@ -47,29 +47,29 @@ using namespace krita;
 class KritaBumpmap : public KParts::Plugin
 {
 public:
-	KritaBumpmap(QObject *parent, const char *name, const QStringList &);
-	virtual ~KritaBumpmap();
+    KritaBumpmap(QObject *parent, const char *name, const QStringList &);
+    virtual ~KritaBumpmap();
 };
 
 
 /**
  * First stab at a bumpmapping filter. For now, this is taken both
  * from the Gimp source and the code from emboss.c:
- *			 ANSI C code from the article
- *			 "Fast Embossing Effects on Raster Image Data"
- *			 by John Schlag, jfs@kerner.com
- * 			in "Graphics Gems IV", Academic Press, 1994
+ *             ANSI C code from the article
+ *             "Fast Embossing Effects on Raster Image Data"
+ *             by John Schlag, jfs@kerner.com
+ *             in "Graphics Gems IV", Academic Press, 1994
  */
 class KisFilterBumpmap : public KisFilter
 {
 public:
-	KisFilterBumpmap();
+    KisFilterBumpmap();
 public:
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-	static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return false; }
-	virtual bool supportsIncrementalPainting() { return false; }
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+    static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return false; }
+    virtual bool supportsIncrementalPainting() { return false; }
 
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
         virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
@@ -82,38 +82,38 @@ class KisBumpmapConfiguration : public KisFilterConfiguration {
 
 public:
 
-	KisBumpmapConfiguration();
-	QString bumpmap;
-	double  azimuth;
-	double  elevation;
-	double  depth;
-	Q_INT32 xofs;
-	Q_INT32 yofs;
-	Q_INT32 waterlevel;
-	Q_INT32 ambient;
-	bool    compensate;
-	bool    invert;
-	bool	tiled;
-	enumBumpmapType type;
+    KisBumpmapConfiguration();
+    QString bumpmap;
+    double  azimuth;
+    double  elevation;
+    double  depth;
+    Q_INT32 xofs;
+    Q_INT32 yofs;
+    Q_INT32 waterlevel;
+    Q_INT32 ambient;
+    bool    compensate;
+    bool    invert;
+    bool    tiled;
+    enumBumpmapType type;
 };
 
 
 class KisBumpmapConfigWidget : public KisFilterConfigWidget {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
-	virtual ~KisBumpmapConfigWidget() {};
+    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
+    virtual ~KisBumpmapConfigWidget() {};
 
-	KisBumpmapConfiguration * config();
+    KisBumpmapConfiguration * config();
 
-	WdgBumpmap * m_page;
+    WdgBumpmap * m_page;
 
 private:
 
-	KisFilter * m_filter;
-	KisPaintDeviceSP m_device;
+    KisFilter * m_filter;
+    KisPaintDeviceSP m_device;
 
 };
 

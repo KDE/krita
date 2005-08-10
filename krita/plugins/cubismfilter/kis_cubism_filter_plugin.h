@@ -25,8 +25,8 @@
 class KisCubismFilterPlugin : public KParts::Plugin
 {
 public:
-	KisCubismFilterPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisCubismFilterPlugin();
+    KisCubismFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisCubismFilterPlugin();
 };
 
 #endif

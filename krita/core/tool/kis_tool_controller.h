@@ -23,16 +23,16 @@ class KisTool;
 
 class KisToolControllerInterface {
 public:
-	KisToolControllerInterface() {};
-	virtual ~KisToolControllerInterface() {};
+    KisToolControllerInterface() {};
+    virtual ~KisToolControllerInterface() {};
 
 public:
-	virtual void setCurrentTool(KisTool *tool) = 0;
-	virtual KisTool *currentTool() const = 0;
+    virtual void setCurrentTool(KisTool *tool) = 0;
+    virtual KisTool *currentTool() const = 0;
 
 private:
-	KisToolControllerInterface(const KisToolControllerInterface&);
-	KisToolControllerInterface& operator=(const KisToolControllerInterface&);
+    KisToolControllerInterface(const KisToolControllerInterface&);
+    KisToolControllerInterface& operator=(const KisToolControllerInterface&);
 };
 
 #endif // KIS_TOOL_CONTROLLER_H_

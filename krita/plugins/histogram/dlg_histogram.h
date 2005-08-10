@@ -35,29 +35,29 @@
  * XXX: Also for complete image?
  */
 class DlgHistogram: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgHistogram(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgHistogram();
+    DlgHistogram(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgHistogram();
 
-	void setHistogram(KisHistogramSP histogram);
-	void setLayer(KisLayerSP layer);
+    void setHistogram(KisHistogramSP histogram);
+    void setLayer(KisLayerSP layer);
 
 private slots:
 
-	void okClicked();
-	void slotChannelSelected(const QString & channelName);
-	void slotTypeSwitched(int id);
+    void okClicked();
+    void slotChannelSelected(const QString & channelName);
+    void slotTypeSwitched(int id);
 
 private:
 
-	KisHistogramWidget * m_page;
-	KisHistogramSP m_histogram;
-	KisLayerSP m_layer;
+    KisHistogramWidget * m_page;
+    KisHistogramSP m_histogram;
+    KisLayerSP m_layer;
 };
 
 #endif // DLG_HISTOGRAM

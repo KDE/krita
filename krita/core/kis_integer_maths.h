@@ -30,46 +30,46 @@
 
 inline uint UINT8_MULT(uint a, uint b)
 {
-	uint c = a * b + 0x80u;
-	return ((c >> 8) + c) >> 8;
+    uint c = a * b + 0x80u;
+    return ((c >> 8) + c) >> 8;
 }
 
 inline uint UINT8_DIVIDE(uint a, uint b)
 {
-	uint c = (a * UINT8_MAX + (b / 2u)) / b;
-	return c;
+    uint c = (a * UINT8_MAX + (b / 2u)) / b;
+    return c;
 }
 
 inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 {
-	return UINT8_MULT(a - b, alpha) + b;
+    return UINT8_MULT(a - b, alpha) + b;
 }
 
 inline uint UINT16_MULT(uint a, uint b)
 {
-	uint c = a * b + 0x8000u;
-	return ((c >> 16) + c) >> 16;
+    uint c = a * b + 0x8000u;
+    return ((c >> 16) + c) >> 16;
 }
 
 inline uint UINT16_DIVIDE(uint a, uint b)
 {
-	uint c = (a * UINT16_MAX + (b / 2u)) / b;
-	return c;
+    uint c = (a * UINT16_MAX + (b / 2u)) / b;
+    return c;
 }
 
 inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 {
-	return UINT16_MULT(a - b, alpha) + b;
+    return UINT16_MULT(a - b, alpha) + b;
 }
 
 inline uint UINT8_TO_UINT16(uint c)
 {
-	return c | (c<<8);
+    return c | (c<<8);
 }
 
 inline uint UINT16_TO_UINT8(uint c)
 {
-	return c / 257u;
+    return c / 257u;
 }
 
 #endif

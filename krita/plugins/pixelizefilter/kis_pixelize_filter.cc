@@ -186,25 +186,25 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
                 setProgress(numberOfPixelsProcessed);
                 }
         }
-		
-	setProgressDone();
+        
+    setProgressDone();
 }
 
 KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelheight") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelheight") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisPixelizeFilterConfiguration( 10, 10);
-	} else {
-		return new KisPixelizeFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisPixelizeFilterConfiguration( 10, 10);
+    } else {
+        return new KisPixelizeFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+    }
 }

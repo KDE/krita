@@ -28,51 +28,51 @@ class ColorPickerOptionsWidget;
 
 class KisToolColorPicker : public KisToolNonPaint {
 
-	Q_OBJECT
-	typedef KisToolNonPaint super;
+    Q_OBJECT
+    typedef KisToolNonPaint super;
 
 public:
-	KisToolColorPicker();
-	virtual ~KisToolColorPicker();
+    KisToolColorPicker();
+    virtual ~KisToolColorPicker();
 
 public:
-	virtual void update(KisCanvasSubject *subject);
-	virtual void setup(KActionCollection *collection);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
-	virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual void update(KisCanvasSubject *subject);
+    virtual void setup(KActionCollection *collection);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
+    virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
 public slots:
-	void slotSetUpdateColor(bool);
-	void slotSetSampleMerged(bool);
-	void slotSetNormaliseValues(bool);
+    void slotSetUpdateColor(bool);
+    void slotSetSampleMerged(bool);
+    void slotSetNormaliseValues(bool);
 
 private:
-	void displayPickedColor();
+    void displayPickedColor();
 
-	bool m_updateColor;
-	bool m_sampleMerged;
-	bool m_normaliseValues;
-	KisColor m_pickedColor;
+    bool m_updateColor;
+    bool m_sampleMerged;
+    bool m_normaliseValues;
+    KisColor m_pickedColor;
 
-	ColorPickerOptionsWidget *m_optionsWidget;
-	KisCanvasSubject *m_subject;
+    ColorPickerOptionsWidget *m_optionsWidget;
+    KisCanvasSubject *m_subject;
 };
 
 class KisToolColorPickerFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolColorPickerFactory() : super() {};
-	virtual ~KisToolColorPickerFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolColorPicker(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t;
-	}
-	virtual KisID id() { return KisID("colorpicker", i18n("Color picker")); }
+    KisToolColorPickerFactory() : super() {};
+    virtual ~KisToolColorPickerFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolColorPicker(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t;
+    }
+    virtual KisID id() { return KisID("colorpicker", i18n("Color picker")); }
 };
 
 

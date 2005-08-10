@@ -27,12 +27,12 @@
 
 KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : super(parent, name)
 {
-	m_lbName = new QLabel(this);
+    m_lbName = new QLabel(this);
 
-	QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
+    QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
 
-	mainLayout -> addWidget(m_lbName);
-	mainLayout -> addWidget(chooserWidget(), 10);
+    mainLayout -> addWidget(m_lbName);
+    mainLayout -> addWidget(chooserWidget(), 10);
 }
 
 KisPatternChooser::~KisPatternChooser()
@@ -41,15 +41,15 @@ KisPatternChooser::~KisPatternChooser()
 
 void KisPatternChooser::update(KoIconItem *item)
 {
-	KisIconItem *kisItem = static_cast<KisIconItem *>(item);
+    KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 
-	if (item) {
-		KisPattern *pattern = static_cast<KisPattern *>(kisItem -> resource());
+    if (item) {
+        KisPattern *pattern = static_cast<KisPattern *>(kisItem -> resource());
 
-		QString text = QString("%1 (%2 x %3)").arg(pattern -> name()).arg(pattern -> width()).arg(pattern -> height());
+        QString text = QString("%1 (%2 x %3)").arg(pattern -> name()).arg(pattern -> width()).arg(pattern -> height());
 
-		m_lbName -> setText(text);
-	}
+        m_lbName -> setText(text);
+    }
 }
 
 #include "kis_pattern_chooser.moc"

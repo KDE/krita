@@ -23,11 +23,11 @@
 
 template< class _iT, class _beType>
 class KisIteratorProxy {
-	typedef KisIteratorProxy<_iT, _beType> thisType;
-	public:
-		KisIteratorProxy(_iT* proxyed) : m_proxyed(proxyed) { };
-	protected:
-		_iT* m_proxyed;
+    typedef KisIteratorProxy<_iT, _beType> thisType;
+    public:
+        KisIteratorProxy(_iT* proxyed) : m_proxyed(proxyed) { };
+    protected:
+        _iT* m_proxyed;
 };
 
 #endif

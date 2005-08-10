@@ -35,84 +35,84 @@ KisColorWheel::KisColorWheel( QWidget *parent, const char *name ): KXYSelector( 
 
 void KisColorWheel::resizeEvent( QResizeEvent * )
 {
-	drawWheel(&m_pixmap);
-	setRange( 0, 0, contentsRect().width(), contentsRect().height() );
+    drawWheel(&m_pixmap);
+    setRange( 0, 0, contentsRect().width(), contentsRect().height() );
 }
 
 void KisColorWheel::drawContents( QPainter *painter )
 {
-	painter->drawPixmap( contentsRect().x(), contentsRect().y(), m_pixmap );
+    painter->drawPixmap( contentsRect().x(), contentsRect().y(), m_pixmap );
 }
 
 void KisColorWheel::drawWheel( QPixmap *pixmap )
 {
-	int size = QMIN(contentsRect().width(), contentsRect().height());
-	QPoint center(size/2, size/2);
-	
-	QImage image( size, size, 32 );
-	image.fill(colorGroup ().background().pixel());
+    int size = QMIN(contentsRect().width(), contentsRect().height());
+    QPoint center(size/2, size/2);
+    
+    QImage image( size, size, 32 );
+    image.fill(colorGroup ().background().pixel());
 
-	QColor col;
-	int a, b, h, s;
-	uint *p;
+    QColor col;
+    int a, b, h, s;
+    uint *p;
 
-	for ( a = size-1; a >= 0; a-- )
-	{
-		p = (uint*) image.scanLine( size - a - 1 );
-		for( b = 0; b < size; b++ )
-		{
-			s = (int)(sqrt(pow(a-center.y(), 2) + pow(b-center.x(), 2))/(size/2)*255);
-			if(s<=255)
-			{
-				h = (int)(atan2( b-center.x(), a-center.y())* 180.0 / pi);
-				if(h<0) h += 360;
-				if(h>360) h -= 360;
-				
-				col.setHsv( h, s, 210 );
-				*p = col.rgb();
-			}
-			p++;
-		}
-	}
-	pixmap->convertFromImage( image );
+    for ( a = size-1; a >= 0; a-- )
+    {
+        p = (uint*) image.scanLine( size - a - 1 );
+        for( b = 0; b < size; b++ )
+        {
+            s = (int)(sqrt(pow(a-center.y(), 2) + pow(b-center.x(), 2))/(size/2)*255);
+            if(s<=255)
+            {
+                h = (int)(atan2( b-center.x(), a-center.y())* 180.0 / pi);
+                if(h<0) h += 360;
+                if(h>360) h -= 360;
+                
+                col.setHsv( h, s, 210 );
+                *p = col.rgb();
+            }
+            p++;
+        }
+    }
+    pixmap->convertFromImage( image );
 }
 
 void KisColorWheel::mousePressEvent( QMouseEvent *e )
 {
-	int size = QMIN(contentsRect().width(), contentsRect().height());
-	QPoint center(size/2, size/2);
+    int size = QMIN(contentsRect().width(), contentsRect().height());
+    QPoint center(size/2, size/2);
 
-	int xVal, yVal;
-	valuesFromPosition( e->pos().x() - 2, e->pos().y() - 2, xVal, yVal );
-	setValues( xVal, yVal );
+    int xVal, yVal;
+    valuesFromPosition( e->pos().x() - 2, e->pos().y() - 2, xVal, yVal );
+    setValues( xVal, yVal );
 
-	int h, s;
+    int h, s;
 
-	s = (int)(sqrt(pow(yVal-center.y(), 2) + pow(xVal-center.x(), 2))/(size/2)*255);
-	if(s>255) s = 255;	
+    s = (int)(sqrt(pow(yVal-center.y(), 2) + pow(xVal-center.x(), 2))/(size/2)*255);
+    if(s>255) s = 255;    
 
-	h = (int)(atan2( xVal-center.x(), yVal-center.y())* 180.0 / pi);
-	if(h<0) h += 360;
-	if(h>360) h -= 360;
+    h = (int)(atan2( xVal-center.x(), yVal-center.y())* 180.0 / pi);
+    if(h<0) h += 360;
+    if(h>360) h -= 360;
 
-	m_color.setHSV( h, s, 255);
-	emit valueChanged(m_color);
+    m_color.setHSV( h, s, 255);
+    emit valueChanged(m_color);
 }
 
 void KisColorWheel::mouseMoveEvent( QMouseEvent *e )
 {
-	mousePressEvent( e );
+    mousePressEvent( e );
 }
 
 void KisColorWheel::slotSetValue(const KoColor& c)
 {
-	int size = QMIN(contentsRect().width(), contentsRect().height());
-	QPoint center(size/2, size/2);
+    int size = QMIN(contentsRect().width(), contentsRect().height());
+    QPoint center(size/2, size/2);
 
-	int xVal, yVal;
-	xVal = (int)(sin(c.H() * pi /180) * c.S() / 255 * (size/2) + center.x());
-	yVal = (int)(cos(c.H() * pi /180) * c.S() / 255 * (size/2) + center.y());
-	setValues( xVal, yVal );
+    int xVal, yVal;
+    xVal = (int)(sin(c.H() * pi /180) * c.S() / 255 * (size/2) + center.x());
+    yVal = (int)(cos(c.H() * pi /180) * c.S() / 255 * (size/2) + center.y());
+    setValues( xVal, yVal );
 }
 
 #include "kis_colorwheel.moc"

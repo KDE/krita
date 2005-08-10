@@ -27,17 +27,17 @@ class KisView;
 
 class Variations : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
         Variations(QObject *parent, const char *name, const QStringList &);
-	virtual ~Variations();
-	
+    virtual ~Variations();
+    
 private slots:
-	void slotVariationsActivated();
+    void slotVariationsActivated();
 
 private:
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

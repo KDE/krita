@@ -32,44 +32,44 @@ class KSqueezedTextLabel;
 
 
 class KisToolText : public KisToolPaint {
-	typedef KisToolPaint super;
-	Q_OBJECT
+    typedef KisToolPaint super;
+    Q_OBJECT
 
 public:
-	KisToolText();
-	virtual ~KisToolText();
+    KisToolText();
+    virtual ~KisToolText();
 
-	virtual void update(KisCanvasSubject *subject);
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_FILL; }
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void update(KisCanvasSubject *subject);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-	virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget(QWidget* parent);
 public slots:
-	virtual void setFont();
+    virtual void setFont();
 
 private:
-	KisCanvasSubject *m_subject;
-	QFont m_font;
-	QLabel *m_lbFont;
-	KSqueezedTextLabel *m_lbFontName;
-	QPushButton *m_btnMoreFonts;
+    KisCanvasSubject *m_subject;
+    QFont m_font;
+    QLabel *m_lbFont;
+    KSqueezedTextLabel *m_lbFontName;
+    QPushButton *m_btnMoreFonts;
 };
 
 
 class KisToolTextFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolTextFactory() : super() {};
-	virtual ~KisToolTextFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) {
-		KisTool * t =  new KisToolText(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("text", i18n("Text tool")); }
+    KisToolTextFactory() : super() {};
+    virtual ~KisToolTextFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolText(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("text", i18n("Text tool")); }
 };
 
 

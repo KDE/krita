@@ -30,8 +30,8 @@
  * the situation where different layers have a different color model?
  */
 enum enumHistogramType {
-	LINEAR,
-	LOGARITHMIC
+    LINEAR,
+    LOGARITHMIC
 };
 
 typedef QValueVector<Q_UINT32> vBins;
@@ -39,52 +39,52 @@ typedef QValueVector<Q_UINT32> vBins;
 class KisHistogram : public KShared {
 
 public:
-	KisHistogram(KisLayerSP layer, 
-		     const KisChannelInfo & initialChannel, 
-		     const enumHistogramType type);
+    KisHistogram(KisLayerSP layer, 
+             const KisChannelInfo & initialChannel, 
+             const enumHistogramType type);
 
-	virtual ~KisHistogram();
+    virtual ~KisHistogram();
 
-	void computeHistogramFor(const KisChannelInfo & channel);
+    void computeHistogramFor(const KisChannelInfo & channel);
 
-	/**
-	 * Returns an iterator over the values comprising this histogram
-	 */
-	vBins::iterator begin() { return m_values.begin();}
-	/**
-	 * Returns an iterator that shows where the values comprising
-	 * this histogram end.
-	 */
-	vBins::iterator end() { return m_values.end();}
+    /**
+     * Returns an iterator over the values comprising this histogram
+     */
+    vBins::iterator begin() { return m_values.begin();}
+    /**
+     * Returns an iterator that shows where the values comprising
+     * this histogram end.
+     */
+    vBins::iterator end() { return m_values.end();}
 
-	QUANTUM getMax() { return m_max; }
-	QUANTUM getMin() { return m_min; }
-	Q_UINT32 getHighest() { return m_high; }
-	Q_UINT32 getLowest() { return m_low; }
-	double getMean() { return m_mean; }
-	double getMedian() { return m_median; }
-	double getStandardDeviation() { return m_stddev; }
-	Q_UINT32 getPixels () { return m_pixels; }
-	Q_UINT32 getCount() { return m_count; }
-	Q_UINT8 getPercentile() { return m_percentile; }
-	enumHistogramType getHistogramType() { return m_type; }
-	void setHistogramType(enumHistogramType type) { m_type = type; }
+    QUANTUM getMax() { return m_max; }
+    QUANTUM getMin() { return m_min; }
+    Q_UINT32 getHighest() { return m_high; }
+    Q_UINT32 getLowest() { return m_low; }
+    double getMean() { return m_mean; }
+    double getMedian() { return m_median; }
+    double getStandardDeviation() { return m_stddev; }
+    Q_UINT32 getPixels () { return m_pixels; }
+    Q_UINT32 getCount() { return m_count; }
+    Q_UINT8 getPercentile() { return m_percentile; }
+    enumHistogramType getHistogramType() { return m_type; }
+    void setHistogramType(enumHistogramType type) { m_type = type; }
 
 
 private:
-	// Dump the histogram to debug.
-	void dump(); 
+    // Dump the histogram to debug.
+    void dump(); 
 
-	KisLayerSP m_layer;
+    KisLayerSP m_layer;
 
-	enumHistogramType m_type;
-	
-	vBins m_values;
-	QUANTUM m_max, m_min;
-	Q_UINT32 m_high, m_low;
-	double m_mean, m_median, m_stddev;
-	Q_UINT32 m_pixels, m_count;
-	Q_UINT8 m_percentile;
+    enumHistogramType m_type;
+    
+    vBins m_values;
+    QUANTUM m_max, m_min;
+    Q_UINT32 m_high, m_low;
+    double m_mean, m_median, m_stddev;
+    Q_UINT32 m_pixels, m_count;
+    Q_UINT8 m_percentile;
 
 };
 

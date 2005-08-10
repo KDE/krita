@@ -47,21 +47,21 @@ typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 
 KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(KritaExampleFactory::instance());
+    setInstance(KritaExampleFactory::instance());
 
 
-	kdDebug(DBG_AREA_PLUGINS) << "Example plugin. Class: "
-		  << className()
-		  << ", Parent: "
-		  << parent -> className()
-		  << "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "Example plugin. Class: "
+          << className()
+          << ", Parent: "
+          << parent -> className()
+          << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisFilterInvert());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisFilterInvert());
+    }
 }
 
 KritaExample::~KritaExample()
@@ -74,24 +74,24 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", "&Invert")
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
 
-	int pixelsProcessed = 0;
-	setProgressTotalSteps(rect.width() * rect.height());
-	while( ! srcIt.isDone() )
-	{
-		if(srcIt.isSelected())
-		{
-			for( int i = 0; i < depth; i++)
-			{
-				dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
-			}
-		}
-		setProgress(++pixelsProcessed);
-		++srcIt;
-		++dstIt;
-	}
-	setProgressDone(); // Must be called even if you don't really support progression
+    int pixelsProcessed = 0;
+    setProgressTotalSteps(rect.width() * rect.height());
+    while( ! srcIt.isDone() )
+    {
+        if(srcIt.isSelected())
+        {
+            for( int i = 0; i < depth; i++)
+            {
+                dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
+            }
+        }
+        setProgress(++pixelsProcessed);
+        ++srcIt;
+        ++dstIt;
+    }
+    setProgressDone(); // Must be called even if you don't really support progression
 }

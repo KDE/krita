@@ -21,37 +21,37 @@
 #include "kis_iterators_pixel.h"
 
 KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*/) :
-	super(img, "background flyweight", OPACITY_OPAQUE)
+    super(img, "background flyweight", OPACITY_OPAQUE)
 {
-	Q_INT32 y;
+    Q_INT32 y;
         Q_UINT8* src = new Q_UINT8[pixelSize()];
-	Q_UINT32 d = pixelSize();
+    Q_UINT32 d = pixelSize();
 
-	Q_ASSERT( colorStrategy() != 0 );
+    Q_ASSERT( colorStrategy() != 0 );
 
-	for (y = 0; y < 64; y++)
-	{
-		// This is a little tricky. The background layer doesn't have any pixel
-		// data written to it yet. So, if we open a read-only iterator, it'll give
-		// us the default tile, i.e., the empty tile. Fortunately this default tile
-		// is not shared among all paint devices, because...
-		KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);
-		while( ! hiter.isDone())
-		{
-			QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
-			QColor c(v,v,v);
-			colorStrategy() -> nativeColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
+    for (y = 0; y < 64; y++)
+    {
+        // This is a little tricky. The background layer doesn't have any pixel
+        // data written to it yet. So, if we open a read-only iterator, it'll give
+        // us the default tile, i.e., the empty tile. Fortunately this default tile
+        // is not shared among all paint devices, because...
+        KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);
+        while( ! hiter.isDone())
+        {
+            QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
+            QColor c(v,v,v);
+            colorStrategy() -> nativeColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
 
-			// We cold-bloodedly copy our check pattern bang over the default tile data.
-			// Now the default tile is checkered. This begs the questions -- should we add
-			// a setDefaultBackground method to the data manager?
-			memcpy(hiter.rawData(), src, d);
+            // We cold-bloodedly copy our check pattern bang over the default tile data.
+            // Now the default tile is checkered. This begs the questions -- should we add
+            // a setDefaultBackground method to the data manager?
+            memcpy(hiter.rawData(), src, d);
 
-			++hiter;
-		}
-	}
+            ++hiter;
+        }
+    }
         delete [] src;
-	setExtentIsValid(false);
+    setExtentIsValid(false);
 }
 
 KisBackground::~KisBackground()

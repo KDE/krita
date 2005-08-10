@@ -50,20 +50,20 @@ class KisView;
 
 class KisPopupFrame : public QPopupMenu {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	KisPopupFrame(QWidget * parent, const char * name = 0);
-	virtual void keyPressEvent(QKeyEvent *);
+    KisPopupFrame(QWidget * parent, const char * name = 0);
+    virtual void keyPressEvent(QKeyEvent *);
 
 public:
 
-	void setChooser(KisItemChooser * chooser) { m_chooser = chooser; };
-	KisItemChooser * chooser() { return m_chooser; };
+    void setChooser(KisItemChooser * chooser) { m_chooser = chooser; };
+    KisItemChooser * chooser() { return m_chooser; };
 
 private:
-	KisItemChooser * m_chooser;
+    KisItemChooser * m_chooser;
 };
 
 
@@ -72,52 +72,52 @@ private:
  *   color selector, brushes, patterns, and preview
  */
 class KisControlFrame : public QFrame {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KisControlFrame(KisView * view, QWidget *parent = 0, const char *name = 0 );
+    KisControlFrame(KisView * view, QWidget *parent = 0, const char *name = 0 );
 
 public slots:
 
-	void slotSetBrush(KoIconItem *item);
-	void slotSetPattern(KoIconItem *item);
-	void slotSetGradient(KoIconItem *item);
+    void slotSetBrush(KoIconItem *item);
+    void slotSetPattern(KoIconItem *item);
+    void slotSetGradient(KoIconItem *item);
 
-	void slotBrushChanged(KisBrush * brush);
-	void slotPatternChanged(KisPattern * pattern);
-	void slotGradientChanged(KisGradient * gradient);
-
-private:
-	
-	void createBrushesChooser(KisView * view);
-	void createPatternsChooser(KisView * view);
-	void createGradientsChooser(KisView * view);
-
+    void slotBrushChanged(KisBrush * brush);
+    void slotPatternChanged(KisPattern * pattern);
+    void slotGradientChanged(KisGradient * gradient);
 
 private:
-	QFont m_font;
+    
+    void createBrushesChooser(KisView * view);
+    void createPatternsChooser(KisView * view);
+    void createGradientsChooser(KisView * view);
 
-	QTabWidget * m_brushesTab;
-	QTabWidget * m_gradientTab;
 
-	KisIconWidget *m_brushWidget;
-	KisIconWidget *m_patternWidget;
-	KisIconWidget *m_gradientWidget;
+private:
+    QFont m_font;
 
-	KisPopupFrame * m_brushChooserPopup;
-	KisPopupFrame * m_patternChooserPopup;
-	KisPopupFrame * m_gradientChooserPopup;
+    QTabWidget * m_brushesTab;
+    QTabWidget * m_gradientTab;
 
-	KisResourceMediator *m_brushMediator;
-	KisResourceMediator *m_patternMediator;
-	KisResourceMediator *m_gradientMediator;
+    KisIconWidget *m_brushWidget;
+    KisIconWidget *m_patternWidget;
+    KisIconWidget *m_gradientWidget;
 
-	KisView * m_view;
-	KToolBar * m_toolbar;
+    KisPopupFrame * m_brushChooserPopup;
+    KisPopupFrame * m_patternChooserPopup;
+    KisPopupFrame * m_gradientChooserPopup;
 
-	KisAutobrush * m_autobrush;
-	KisBrushChooser * m_brushChooser;
-	KisGradientChooser * m_gradientChooser;
+    KisResourceMediator *m_brushMediator;
+    KisResourceMediator *m_patternMediator;
+    KisResourceMediator *m_gradientMediator;
+
+    KisView * m_view;
+    KToolBar * m_toolbar;
+
+    KisAutobrush * m_autobrush;
+    KisBrushChooser * m_brushChooser;
+    KisGradientChooser * m_gradientChooser;
 };
 
 #endif

@@ -23,6 +23,6 @@
 
 QRect KisRect::qRect() const
 {
-	return QRect(static_cast<int>(floor(left())), static_cast<int>(floor(top())), static_cast<int>(ceil(right()) - floor(left())), static_cast<int>(ceil(bottom()) - floor(top())));
+    return QRect(static_cast<int>(floor(left())), static_cast<int>(floor(top())), static_cast<int>(ceil(right()) - floor(left())), static_cast<int>(ceil(bottom()) - floor(top())));
 }
 

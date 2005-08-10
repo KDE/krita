@@ -28,21 +28,21 @@ class KisProgressDisplayInterface;
 
 class KisChannelSeparator : public KisProgressSubject {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	KisChannelSeparator(KisView * view);
-	virtual ~KisChannelSeparator() {};
+    KisChannelSeparator(KisView * view);
+    virtual ~KisChannelSeparator() {};
 
-	void separate(KisProgressDisplayInterface * progress);
+    void separate(KisProgressDisplayInterface * progress);
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
 
 private:
-	KisView * m_view;
-	bool m_cancelRequested;
+    KisView * m_view;
+    bool m_cancelRequested;
 
 };
 

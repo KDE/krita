@@ -27,41 +27,41 @@
 #include "kis_filter.h"
 
 KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nname) :
-	min(nmin),
-	max(nmax),
-	initvalue(ninitvalue),
-	name(nname)
+    min(nmin),
+    max(nmax),
+    initvalue(ninitvalue),
+    name(nname)
 {
 
 }
 
 KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam) 
-	: KisFilterConfigWidget( parent, name )
+    : KisFilterConfigWidget( parent, name )
 {
-	Q_INT32 m_nbdoubleWidgets = dwparam.size();
+    Q_INT32 m_nbdoubleWidgets = dwparam.size();
 
-	this->setCaption(caption);
+    this->setCaption(caption);
 
-	QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
-	widgetLayout -> setColStretch ( 1, 1 );
+    QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
+    widgetLayout -> setColStretch ( 1, 1 );
 
-	m_doubleWidgets = new KDoubleNumInput*[ m_nbdoubleWidgets ];
+    m_doubleWidgets = new KDoubleNumInput*[ m_nbdoubleWidgets ];
 
-	for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
-	{
-		m_doubleWidgets[i] = new KDoubleNumInput(this, dwparam[i].name.ascii());
-		m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max ); 
-		m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
+    for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
+    {
+        m_doubleWidgets[i] = new KDoubleNumInput(this, dwparam[i].name.ascii());
+        m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max ); 
+        m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
 
-		connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+        connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
 
-		QLabel* lbl = new QLabel(dwparam[i].name+":", this);
-		widgetLayout -> addWidget( lbl, i , 0);
+        QLabel* lbl = new QLabel(dwparam[i].name+":", this);
+        widgetLayout -> addWidget( lbl, i , 0);
 
-		widgetLayout -> addWidget( m_doubleWidgets[i], i , 1);
-	}
-	QSpacerItem * sp = new QSpacerItem(1, 1);
-	widgetLayout -> addItem(sp, m_nbdoubleWidgets, 0);
+        widgetLayout -> addWidget( m_doubleWidgets[i], i , 1);
+    }
+    QSpacerItem * sp = new QSpacerItem(1, 1);
+    widgetLayout -> addItem(sp, m_nbdoubleWidgets, 0);
 
 }
 

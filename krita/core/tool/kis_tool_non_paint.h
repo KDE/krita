@@ -40,52 +40,52 @@ class KisCanvasSubject;
 
 class KRITACORE_EXPORT KisToolNonPaint : public KisTool {
 
-	Q_OBJECT
-	typedef KisTool super;
+    Q_OBJECT
+    typedef KisTool super;
 
 public:
-	KisToolNonPaint();
-	virtual ~KisToolNonPaint();
+    KisToolNonPaint();
+    virtual ~KisToolNonPaint();
 
 // CanvasObserver
 public:
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
 // KisTool
 public:
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void clear();
-	virtual void clear(const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void clear();
+    virtual void clear(const QRect& rc);
 
-	virtual void enter(QEvent *e);
-	virtual void leave(QEvent *e);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-	virtual void doubleClick(KisDoubleClickEvent *e);
-	virtual void keyPress(QKeyEvent *e);
-	virtual void keyRelease(QKeyEvent *e);
+    virtual void enter(QEvent *e);
+    virtual void leave(QEvent *e);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void doubleClick(KisDoubleClickEvent *e);
+    virtual void keyPress(QKeyEvent *e);
+    virtual void keyRelease(QKeyEvent *e);
 
-	virtual QCursor cursor();
-	virtual void setCursor(const QCursor& cursor);
-	virtual QWidget* createOptionWidget(QWidget* parent) ;
-	virtual QWidget* optionWidget();
+    virtual QCursor cursor();
+    virtual void setCursor(const QCursor& cursor);
+    virtual QWidget* createOptionWidget(QWidget* parent) ;
+    virtual QWidget* optionWidget();
 
-	virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual enumToolType toolType() { return TOOL_CANVAS; }
 
 public slots:
-	virtual void activate();
+    virtual void activate();
 
 protected:
-	void notifyModified() const;
-	
+    void notifyModified() const;
+    
 protected:
-	KisCanvasSubject *m_subject;
+    KisCanvasSubject *m_subject;
 
 private:
-	QCursor m_cursor;
-	QWidget m_optWidget;
+    QCursor m_cursor;
+    QWidget m_optWidget;
 };
 
 #endif // KIS_TOOL_NON_PAINT_H_

@@ -27,20 +27,20 @@
 class KritaExample : public KParts::Plugin
 {
 public:
-	KritaExample(QObject *parent, const char *name, const QStringList &);
-	virtual ~KritaExample();
+    KritaExample(QObject *parent, const char *name, const QStringList &);
+    virtual ~KritaExample();
 };
 
 class KisFilterInvert : public KisFilter
 {
 public:
-	KisFilterInvert();
+    KisFilterInvert();
 public:
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-	static inline KisID id() { return KisID("invert", i18n("Invert")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
-	virtual bool supportsIncrementalPainting() { return false; }
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+    static inline KisID id() { return KisID("invert", i18n("Invert")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return true; }
+    virtual bool supportsIncrementalPainting() { return false; }
 };
 
 #endif

@@ -29,26 +29,26 @@ class KisPainter;
 class KisWetOpFactory : public KisPaintOpFactory  {
 
 public:
-	KisWetOpFactory() {}
-	virtual ~KisWetOpFactory() {}
+    KisWetOpFactory() {}
+    virtual ~KisWetOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("wetbrush", i18n("watercolor brush")); }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("wetbrush", i18n("watercolor brush")); }
 };
 
 class KisWetOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisWetOp(KisPainter * painter);
-	virtual ~KisWetOp();
+    KisWetOp(KisPainter * painter);
+    virtual ~KisWetOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

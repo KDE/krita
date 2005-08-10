@@ -34,12 +34,12 @@ class KisRect;
 
 class KisToolPolygon : public KisToolShape {
 
-	typedef KisToolShape super;
-	Q_OBJECT
+    typedef KisToolShape super;
+    Q_OBJECT
 
 public:
-	KisToolPolygon();
-	virtual ~KisToolPolygon();
+    KisToolPolygon();
+    virtual ~KisToolPolygon();
 
         //
         // KisCanvasObserver interface
@@ -51,24 +51,24 @@ public:
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	void draw(QPainter& gc);
-	void draw();
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    void draw(QPainter& gc);
+    void draw();
 
 protected:
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
 
-	bool m_dragging;
-	KisImageSP m_currentImage;
+    bool m_dragging;
+    KisImageSP m_currentImage;
 private:
         typedef QValueVector<KisPoint> KisPointVector;
         KisPointVector m_points;
@@ -78,18 +78,18 @@ private:
 #include "kis_tool_factory.h"
 
 class KisToolPolygonFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolPolygonFactory() : super() {};
-	virtual ~KisToolPolygonFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolPolygon(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
+    KisToolPolygonFactory() : super() {};
+    virtual ~KisToolPolygonFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolPolygon(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
 };
 
 

@@ -29,38 +29,38 @@
 #include "wdg_rotateimage.h"
 
 enum enumRotationDirection {
-	CLOCKWISE,
-	COUNTERCLOCKWISE
+    CLOCKWISE,
+    COUNTERCLOCKWISE
 };
 
 
 class DlgRotateImage: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgRotateImage(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgRotateImage();
+    DlgRotateImage(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgRotateImage();
 
-	void setAngle(Q_UINT32 w);
-	Q_INT32 angle();
+    void setAngle(Q_UINT32 w);
+    Q_INT32 angle();
 
-	void setDirection (enumRotationDirection direction);
-	enumRotationDirection direction();
-	
+    void setDirection (enumRotationDirection direction);
+    enumRotationDirection direction();
+    
 private slots:
 
-	void okClicked();
-	void resetPreview();
-	void slotAngleValueChanged( int );
+    void okClicked();
+    void resetPreview();
+    void slotAngleValueChanged( int );
 
 private:
 
-	WdgRotateImage * m_page;
-	double m_oldAngle;	
-	bool m_lock;
+    WdgRotateImage * m_page;
+    double m_oldAngle;    
+    bool m_lock;
 
 };
 

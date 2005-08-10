@@ -32,35 +32,35 @@ class QButtonGroup;
 
 
 class KisDlgCreateImg : public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
-	KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
-			Q_INT32 maxHeight, Q_INT32 defHeight, 
-			QString colorStrategyName, 
-			QString imageName,
-			QWidget *parent = 0, const char *name = 0);
-	virtual ~KisDlgCreateImg();
+    KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
+            Q_INT32 maxHeight, Q_INT32 defHeight, 
+            QString colorStrategyName, 
+            QString imageName,
+            QWidget *parent = 0, const char *name = 0);
+    virtual ~KisDlgCreateImg();
 
 public:
-	QColor backgroundColor() const;
-	QUANTUM backgroundOpacity() const;
-	KisID colorStrategyID() const;
-	Q_INT32 imgWidth() const;
-	Q_INT32 imgHeight() const;
-	QString imgName() const;
-	double imgResolution() const;
-	QString imgDescription() const;
-	KisProfileSP profile() const;
+    QColor backgroundColor() const;
+    QUANTUM backgroundOpacity() const;
+    KisID colorStrategyID() const;
+    Q_INT32 imgWidth() const;
+    Q_INT32 imgHeight() const;
+    QString imgName() const;
+    double imgResolution() const;
+    QString imgDescription() const;
+    KisProfileSP profile() const;
 
 private slots:
 
-	void fillCmbProfiles(const KisID &);
+    void fillCmbProfiles(const KisID &);
 
 private:
 
-	WdgNewImage * m_page;
+    WdgNewImage * m_page;
 };
 
 

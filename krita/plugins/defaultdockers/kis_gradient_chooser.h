@@ -27,33 +27,33 @@ class QPushButton;
 class KisView;
 class KisCustomGradientDialog : public KDialogBase {
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name);
-	
+    KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name);
+    
 private:
-	
-	KisAutogradient * m_page;
+    
+    KisAutogradient * m_page;
 
 };
 
 class KisGradientChooser : public KisItemChooser {
-	typedef KisItemChooser super;
-	Q_OBJECT
+    typedef KisItemChooser super;
+    Q_OBJECT
 
 public:
-	// XXX: On library redesign, remove m_view parameter here, it's just a temporary hack for the autogradient dialog!
-	KisGradientChooser(KisView * view, QWidget *parent = 0, const char *name = 0);
-	virtual ~KisGradientChooser();
+    // XXX: On library redesign, remove m_view parameter here, it's just a temporary hack for the autogradient dialog!
+    KisGradientChooser(KisView * view, QWidget *parent = 0, const char *name = 0);
+    virtual ~KisGradientChooser();
 
 protected:
-	virtual void update(KoIconItem *item);
+    virtual void update(KoIconItem *item);
 
 private:
-	QLabel *m_lbName;
-	QPushButton * m_customGradient;
+    QLabel *m_lbName;
+    QPushButton * m_customGradient;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

@@ -30,44 +30,44 @@ class KisID;
 
 class PerfTest : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	PerfTest(QObject *parent, const char *name, const QStringList &);
-	virtual ~PerfTest();
-	
+    PerfTest(QObject *parent, const char *name, const QStringList &);
+    virtual ~PerfTest();
+    
 private slots:
 
-	void slotPerfTest();
+    void slotPerfTest();
 
 private:
 
-	QString bltTest(Q_UINT32 testCount);
-	QString fillTest(Q_UINT32 testCount);
-	QString gradientTest(Q_UINT32 testCount);
-	QString pixelTest(Q_UINT32 testCount);
-	QString shapeTest(Q_UINT32 testCount);
-	QString layerTest(Q_UINT32 testCount);
-	QString scaleTest(Q_UINT32 testCount);
-	QString rotateTest(Q_UINT32 testCount);
-	QString renderTest(Q_UINT32 restCount);
-	QString selectionTest(Q_UINT32 testCount);
-	QString colorConversionTest(Q_UINT32 testCount);
-	QString filterTest(Q_UINT32 testCount);
-	QString readBytesTest(Q_UINT32 testCount);
-	QString writeBytesTest(Q_UINT32 testCount);
-	QString iteratorTest(Q_UINT32 testCount);
-	QString paintViewTest(Q_UINT32 testCount);
+    QString bltTest(Q_UINT32 testCount);
+    QString fillTest(Q_UINT32 testCount);
+    QString gradientTest(Q_UINT32 testCount);
+    QString pixelTest(Q_UINT32 testCount);
+    QString shapeTest(Q_UINT32 testCount);
+    QString layerTest(Q_UINT32 testCount);
+    QString scaleTest(Q_UINT32 testCount);
+    QString rotateTest(Q_UINT32 testCount);
+    QString renderTest(Q_UINT32 restCount);
+    QString selectionTest(Q_UINT32 testCount);
+    QString colorConversionTest(Q_UINT32 testCount);
+    QString filterTest(Q_UINT32 testCount);
+    QString readBytesTest(Q_UINT32 testCount);
+    QString writeBytesTest(Q_UINT32 testCount);
+    QString iteratorTest(Q_UINT32 testCount);
+    QString paintViewTest(Q_UINT32 testCount);
 
-	QString doBlit(const KisCompositeOp& op, 
-		       KisID cspace,
-		       QUANTUM opacity,
-		       Q_UINT32 testCount,
-		       KisImageSP img);
+    QString doBlit(const KisCompositeOp& op, 
+               KisID cspace,
+               QUANTUM opacity,
+               Q_UINT32 testCount,
+               KisImageSP img);
 
 private:
 
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

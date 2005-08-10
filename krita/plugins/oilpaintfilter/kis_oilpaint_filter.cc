@@ -57,18 +57,18 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", "&Oilpaint.
 void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
-	Q_UNUSED(dst);
+    Q_UNUSED(dst);
 
-	Q_INT32 x = rect.x(), y = rect.y();
-	Q_INT32 width = rect.width();
-	Q_INT32 height = rect.height();
+    Q_INT32 x = rect.x(), y = rect.y();
+    Q_INT32 width = rect.width();
+    Q_INT32 height = rect.height();
 
-	//read the filter configuration values from the KisFilterConfiguration object
-	Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
-	Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
+    //read the filter configuration values from the KisFilterConfiguration object
+    Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
+    Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
 
 
-	OilPaint(src, x, y, width, height, brushSize, smooth);
+    OilPaint(src, x, y, width, height, brushSize, smooth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -87,30 +87,30 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int h, int BrushSize, int Smoothness)
 {
-	setProgressTotalSteps(h);
-	setProgressStage(i18n("Applying oilpaint filter..."),0);
+    setProgressTotalSteps(h);
+    setProgressStage(i18n("Applying oilpaint filter..."),0);
 
-	QRect bounds(x, y, w, h);
+    QRect bounds(x, y, w, h);
 
-	for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
+    for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
 
-		KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, true);
+        KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, true);
 
-		while (!it.isDone() && !cancelRequested()) {
+        while (!it.isDone() && !cancelRequested()) {
 
-			if (it.isSelected()) {
+            if (it.isSelected()) {
 
-				uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-				src -> colorStrategy() -> nativeColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
-			}
+                uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
+                src -> colorStrategy() -> nativeColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
+            }
 
-			++it;
-		}
+            ++it;
+        }
 
-		setProgress(yOffset);
-	}
+        setProgress(yOffset);
+    }
 
-	setProgressDone();
+    setProgressDone();
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -132,7 +132,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int 
 uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
 {
         uint color;
-	uint I;
+    uint I;
 
         double Scale = Intensity / 255.0;
 
@@ -146,70 +146,70 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
         memset(IntensityCount, 0, (Intensity + 1) * sizeof (uchar));
 
         /*for (i = 0; i <= Intensity; ++i)
-	  IntensityCount[i] = 0;*/
+      IntensityCount[i] = 0;*/
 
-	KisRectIteratorPixel it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
+    KisRectIteratorPixel it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
 
-	while (!it.isDone()) {
+    while (!it.isDone()) {
 
-		if (bounds.contains(it.x(), it.y())) {
+        if (bounds.contains(it.x(), it.y())) {
 
 // XXX: COLORSPACE_INDEPENDENCE
 
-			QColor c;
-			src -> colorStrategy() -> toQColor(it.rawData(), &c);
+            QColor c;
+            src -> colorStrategy() -> toQColor(it.rawData(), &c);
 
-			// Swapping red and blue here is done because that gives the same
-			// output as digikam, even though it might be interpreted as a bug
-			// in both applications.
-			int b = c.red();
-			int g = c.green();
-			int r = c.blue();
+            // Swapping red and blue here is done because that gives the same
+            // output as digikam, even though it might be interpreted as a bug
+            // in both applications.
+            int b = c.red();
+            int g = c.green();
+            int r = c.blue();
 
-			I = (uint)(GetIntensity (r, g, b) * Scale);
-			IntensityCount[I]++;
+            I = (uint)(GetIntensity (r, g, b) * Scale);
+            IntensityCount[I]++;
 
-			if (IntensityCount[I] == 1)
-			{
-				AverageColorR[I] = r;
-				AverageColorG[I] = g;
-				AverageColorB[I] = b;
-			}
-			else
-			{
-				AverageColorR[I] += r;
-				AverageColorG[I] += g;
-				AverageColorB[I] += b;
-			}
-		}
+            if (IntensityCount[I] == 1)
+            {
+                AverageColorR[I] = r;
+                AverageColorG[I] = g;
+                AverageColorB[I] = b;
+            }
+            else
+            {
+                AverageColorR[I] += r;
+                AverageColorG[I] += g;
+                AverageColorB[I] += b;
+            }
+        }
 
-		++it;
-	}
+        ++it;
+    }
 
         I = 0;
         int MaxInstance = 0;
 
         for (int i = 0 ; i <= Intensity ; ++i)
         {
-		if (IntensityCount[i] > MaxInstance)
+        if (IntensityCount[i] > MaxInstance)
                 {
-			I = i;
-			MaxInstance = IntensityCount[i];
+            I = i;
+            MaxInstance = IntensityCount[i];
                 }
         }
 
         int R, G, B;
-		if (MaxInstance != 0) {
-        	R = AverageColorR[I] / MaxInstance;
-        	G = AverageColorG[I] / MaxInstance;
-        	B = AverageColorB[I] / MaxInstance;
-		} else {
-			R = 0;
-			G = 0;
-			B = 0;
-		}
+        if (MaxInstance != 0) {
+            R = AverageColorR[I] / MaxInstance;
+            G = AverageColorG[I] / MaxInstance;
+            B = AverageColorB[I] / MaxInstance;
+        } else {
+            R = 0;
+            G = 0;
+            B = 0;
+        }
 
-	// Swap red and blue back to get the correct colour.
+    // Swap red and blue back to get the correct colour.
         color = qRgb (B, G, R);
 
         delete [] IntensityCount;        // free all the arrays
@@ -223,27 +223,27 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 
 KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
-	param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
+    param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisOilPaintFilterConfiguration( 1, 30);
-	} else {
-		return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisOilPaintFilterConfiguration( 1, 30);
+    } else {
+        return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+    }
 }
 
 std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
 {
-	std::list<KisFilterConfiguration*> list;
-	list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));
-	return list;
+    std::list<KisFilterConfiguration*> list;
+    list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));
+    return list;
 }
 

@@ -32,34 +32,34 @@ class QSpinBox;
 class KDualColorButton;
 
 class KRITAUI_EXPORT KisGrayWidget
-	 : public QWidget,
-	   public KisCanvasObserver
+     : public QWidget,
+       public KisCanvasObserver
 {
-	Q_OBJECT
-	typedef QWidget super;
+    Q_OBJECT
+    typedef QWidget super;
 
 public:
-	KisGrayWidget(QWidget *parent = 0L, const char *name = 0);
-	virtual ~KisGrayWidget() {}
+    KisGrayWidget(QWidget *parent = 0L, const char *name = 0);
+    virtual ~KisGrayWidget() {}
 
 protected slots:
-	virtual void slotChanged(int v);
+    virtual void slotChanged(int v);
 
-	void slotFGColorSelected(const QColor& c);
-	void slotBGColorSelected(const QColor& c);
-
-private:
-	void update(KisCanvasSubject*);
+    void slotFGColorSelected(const QColor& c);
+    void slotBGColorSelected(const QColor& c);
 
 private:
-	KisCanvasSubject *m_subject;
-	KoColorSlider *mSlider;
-	QLabel *mLabel;
-	QSpinBox *mIn;
-	KDualColorButton *m_ColorButton;
+    void update(KisCanvasSubject*);
 
-	QColor m_fgColor;
-	QColor m_bgColor;
+private:
+    KisCanvasSubject *m_subject;
+    KoColorSlider *mSlider;
+    QLabel *mLabel;
+    QSpinBox *mIn;
+    KDualColorButton *m_ColorButton;
+
+    QColor m_fgColor;
+    QColor m_bgColor;
 };
 
 #endif

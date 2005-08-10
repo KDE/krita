@@ -26,27 +26,27 @@
 
 class KisAutobrush : public KisWdgAutobrush
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisAutobrush(QWidget *parent, const char* name, const QString& caption);
-	void activate();
-	
+    KisAutobrush(QWidget *parent, const char* name, const QString& caption);
+    void activate();
+    
 signals:
-	void activatedResource(KisResource *r);
+    void activatedResource(KisResource *r);
 
 private slots:
-	void paramChanged();
-	void spinBoxWidthChanged(int );
-	void spinBoxHeigthChanged(int );
-	void spinBoxHorizontalChanged(int);
-	void spinBoxVerticalChanged(int);
-	void linkSizeToggled(bool);
-	void linkFadeToggled(bool);
+    void paramChanged();
+    void spinBoxWidthChanged(int );
+    void spinBoxHeigthChanged(int );
+    void spinBoxHorizontalChanged(int);
+    void spinBoxVerticalChanged(int);
+    void linkSizeToggled(bool);
+    void linkFadeToggled(bool);
 
 private:
-	QImage* m_brsh;
-	bool m_linkSize;
-	bool m_linkFade;
+    QImage* m_brsh;
+    bool m_linkSize;
+    bool m_linkFade;
 };
 
 

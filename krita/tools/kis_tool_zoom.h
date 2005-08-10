@@ -29,51 +29,51 @@ class KisCanvasSubject;
 
 class KisToolZoom : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolZoom();
-	virtual ~KisToolZoom();
+    KisToolZoom();
+    virtual ~KisToolZoom();
 
 public:
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
 public:
-	virtual void setup(KActionCollection *collection);
+    virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_CANVAS; }
 
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
 
 private:
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
+    void paintOutline();
+    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-	KisCanvasSubject *m_subject;
-	QPoint m_startPos;
-	QPoint m_endPos;
-	bool m_dragging;
+    KisCanvasSubject *m_subject;
+    QPoint m_startPos;
+    QPoint m_endPos;
+    bool m_dragging;
 };
 
 
 class KisToolZoomFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolZoomFactory() : super() {};
-	virtual ~KisToolZoomFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t = new KisToolZoom(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("zoom", i18n("Zoom tool")); }
+    KisToolZoomFactory() : super() {};
+    virtual ~KisToolZoomFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t = new KisToolZoom(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("zoom", i18n("Zoom tool")); }
 };
 
 

@@ -26,10 +26,10 @@
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name) 
-	: super( false, parent, name )
+    : super( false, parent, name )
 {
-	connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
-	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
+    connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
+    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
 }
 
 KisCmbComposite::~KisCmbComposite()
@@ -38,49 +38,49 @@ KisCmbComposite::~KisCmbComposite()
 
 void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
 {
-	super::clear();
-	m_list = list;
-	KisCompositeOpList::iterator it;
+    super::clear();
+    m_list = list;
+    KisCompositeOpList::iterator it;
         for( it = m_list.begin(); it != m_list.end(); ++it )
-		insertItem((*it).id().name());
+        insertItem((*it).id().name());
 }
 
 KisCompositeOp KisCmbComposite::currentItem() const
 {
-	Q_UINT32 i = super::currentItem();
-	if (i > m_list.count()) return KisCompositeOp();
+    Q_UINT32 i = super::currentItem();
+    if (i > m_list.count()) return KisCompositeOp();
 
-	return m_list[i];
+    return m_list[i];
 }
 
 void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
 {
-	if (m_list.find(op) != m_list.end()) {
-		super::setCurrentText(op.id().name());
-	}
+    if (m_list.find(op) != m_list.end()) {
+        super::setCurrentText(op.id().name());
+    }
 }
 
 void KisCmbComposite::setCurrentText(const QString & s)
 {
-	KisCompositeOpList::iterator it;
+    KisCompositeOpList::iterator it;
         for( it = m_list.begin(); it != m_list.end(); ++it )
-		if ((*it).id().id() == s) {
-			super::setCurrentText((*it).id().name());
-		}
+        if ((*it).id().id() == s) {
+            super::setCurrentText((*it).id().name());
+        }
 }
 
 void KisCmbComposite::slotOpActivated(int i)
 {
-	if (i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
-	emit activated(m_list[i]);
+    emit activated(m_list[i]);
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
-	if (i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
-	emit highlighted(m_list[i]);
+    emit highlighted(m_list[i]);
 }
 
 

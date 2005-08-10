@@ -21,41 +21,41 @@
 #include "kis_selection.h"
 
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device) :
-	KisTransaction(name, device),
-	m_device(device),
-	m_hadSelection(device->hasSelection())
+    KisTransaction(name, device),
+    m_device(device),
+    m_hadSelection(device->hasSelection())
 {
-	m_selTransaction = new KisTransaction(name, device->selection().data());
-	
-	if(! m_hadSelection)
-		m_device->deselect(); // let us not be the cause of select
+    m_selTransaction = new KisTransaction(name, device->selection().data());
+    
+    if(! m_hadSelection)
+        m_device->deselect(); // let us not be the cause of select
 }
 
 KisSelectedTransaction::~KisSelectedTransaction()
 {
-	delete m_selTransaction;
+    delete m_selTransaction;
 }
 
 void KisSelectedTransaction::execute()
 {
-	super::execute();
-	m_selTransaction->execute();
-	if(m_redoHasSelection)
-		m_device->selection();
-	else
-		m_device->deselect();
-	m_device->emitSelectionChanged();
+    super::execute();
+    m_selTransaction->execute();
+    if(m_redoHasSelection)
+        m_device->selection();
+    else
+        m_device->deselect();
+    m_device->emitSelectionChanged();
 }
 
 void KisSelectedTransaction::unexecute()
 {
-	m_redoHasSelection = m_device->hasSelection();
-	
-	super::unexecute();
-	m_selTransaction->unexecute();
-	if(m_hadSelection)
-		m_device->selection();
-	else
-		m_device->deselect();
-	m_device->emitSelectionChanged();
+    m_redoHasSelection = m_device->hasSelection();
+    
+    super::unexecute();
+    m_selTransaction->unexecute();
+    if(m_hadSelection)
+        m_device->selection();
+    else
+        m_device->deselect();
+    m_device->emitSelectionChanged();
 }

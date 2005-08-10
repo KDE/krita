@@ -32,14 +32,14 @@ KisClipboard *KisClipboard::m_singleton = 0;
 
 KisClipboard::KisClipboard()
 {
-	Q_ASSERT(KisClipboard::m_singleton == 0);
-	KisClipboard::m_singleton = this;
+    Q_ASSERT(KisClipboard::m_singleton == 0);
+    KisClipboard::m_singleton = this;
 
-	m_pushedClipboard = false;
-	m_clip = 0;
+    m_pushedClipboard = false;
+    m_clip = 0;
 
-	connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
-		 this, SLOT( clipboardDataChanged() ) );
+    connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
+         this, SLOT( clipboardDataChanged() ) );
 
 
 }
@@ -50,71 +50,71 @@ KisClipboard::~KisClipboard()
 
 KisClipboard* KisClipboard::instance()
 {
-	if(KisClipboard::m_singleton == 0)
-	{
-		KisClipboard::m_singleton = new KisClipboard();
-		Q_CHECK_PTR(KisClipboard::m_singleton);
-	}
-	return KisClipboard::m_singleton;
+    if(KisClipboard::m_singleton == 0)
+    {
+        KisClipboard::m_singleton = new KisClipboard();
+        Q_CHECK_PTR(KisClipboard::m_singleton);
+    }
+    return KisClipboard::m_singleton;
 }
 
 void KisClipboard::setClip(KisPaintDeviceSP selection)
 {
-	m_clip = selection;
+    m_clip = selection;
 
-	if (selection) {
-		KisConfig cfg;
-		QImage qimg;
+    if (selection) {
+        KisConfig cfg;
+        QImage qimg;
 
-		if (cfg.applyMonitorProfileOnCopy()) {
-			// XXX: Is this a performance problem?
-			KisConfig cfg;
-			QString monitorProfileName = cfg.monitorProfile();
-			KisProfileSP monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
-			qimg = selection -> convertToQImage(monitorProfile);
-		}
-		else {
-			qimg = selection -> convertToQImage(0);
-		}
-		QClipboard *cb = QApplication::clipboard();
+        if (cfg.applyMonitorProfileOnCopy()) {
+            // XXX: Is this a performance problem?
+            KisConfig cfg;
+            QString monitorProfileName = cfg.monitorProfile();
+            KisProfileSP monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+            qimg = selection -> convertToQImage(monitorProfile);
+        }
+        else {
+            qimg = selection -> convertToQImage(0);
+        }
+        QClipboard *cb = QApplication::clipboard();
 
-		cb -> setImage(qimg);
-		m_pushedClipboard = true;
-	}
+        cb -> setImage(qimg);
+        m_pushedClipboard = true;
+    }
 }
 
 KisPaintDeviceSP KisClipboard::clip()
 {
-	return m_clip;
+    return m_clip;
 }
 
 void KisClipboard::clipboardDataChanged()
 {
-	if (!m_pushedClipboard) {
-		QClipboard *cb = QApplication::clipboard();
-		QImage qimg = cb -> image();
+    if (!m_pushedClipboard) {
+        QClipboard *cb = QApplication::clipboard();
+        QImage qimg = cb -> image();
 
-		if (!qimg.isNull()) {
-			KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
+        if (!qimg.isNull()) {
+            KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
 
-			m_clip =
-				new KisPaintDevice(cs,
-						   "KisClipboard created clipboard selection");
-			Q_CHECK_PTR(m_clip);
-			m_clip -> convertFromImage(qimg);
-		}
-	}
+            m_clip =
+                new KisPaintDevice(cs,
+                           "KisClipboard created clipboard selection");
+            Q_CHECK_PTR(m_clip);
+            m_clip -> convertFromImage(qimg);
+        }
+    }
 
-	m_pushedClipboard = false;
+    m_pushedClipboard = false;
 }
 
 
 bool KisClipboard::hasClip() 
 {
-	if (m_clip != 0) {
-		return true;
-	}
-	return false;
+    if (m_clip != 0) {
+        return true;
+    }
+    return false;
 }
 
 #include "kis_clipboard.moc"

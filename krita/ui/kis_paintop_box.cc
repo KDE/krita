@@ -33,48 +33,48 @@
 #include "kis_paintop_box.h"
 
 KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
-	: super (parent, name, f),
-	  m_view(parent)
+    : super (parent, name, f),
+      m_view(parent)
 {
-	setCaption(i18n("Painter's Toolchest"));
-	m_paintops = new QValueList<KisID>();
+    setCaption(i18n("Painter's Toolchest"));
+    m_paintops = new QValueList<KisID>();
 
-	connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
-	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
+    connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
+    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
 
-	// XXX: Let's see... Are all paintops loaded and ready?
-	KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
-	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		if (KisPaintOpRegistry::instance()->userVisible(*it)) {
-			addItem(*it);
-		}
-	}
-	setCurrentItem( m_paintops->findIndex(KisID("paintbrush","")));
+    // XXX: Let's see... Are all paintops loaded and ready?
+    KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
+    for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+        if (KisPaintOpRegistry::instance()->userVisible(*it)) {
+            addItem(*it);
+        }
+    }
+    setCurrentItem( m_paintops->findIndex(KisID("paintbrush","")));
 
 }
-	
+    
 KisPaintopBox::~KisPaintopBox()
 {
-	delete m_paintops;
+    delete m_paintops;
 }
 
 void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 {
-	m_paintops->append(paintop);
-	QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(paintop);
-	if (pm.isNull()) {
-		insertItem(paintop.name());
-	}
-	else {
-		insertItem(pm);
-	}
-	
+    m_paintops->append(paintop);
+    QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(paintop);
+    if (pm.isNull()) {
+        insertItem(paintop.name());
+    }
+    else {
+        insertItem(pm);
+    }
+    
 }
 
 void KisPaintopBox::slotItemSelected(int index)
 {
-	KisID id = *m_paintops->at(index);
-	emit selected(id);
+    KisID id = *m_paintops->at(index);
+    emit selected(id);
 }
 
 #include "kis_paintop_box.moc"

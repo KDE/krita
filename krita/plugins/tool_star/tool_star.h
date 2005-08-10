@@ -28,14 +28,14 @@ class KisView;
  */
 class ToolStar : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToolStar(QObject *parent, const char *name, const QStringList &);
-	virtual ~ToolStar();
+    ToolStar(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolStar();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
 };
 

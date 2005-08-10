@@ -30,14 +30,14 @@ class KisView;
  */
 class TemplatePaintOpsPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	TemplatePaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~TemplatePaintOpsPlugin();
+    TemplatePaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~TemplatePaintOpsPlugin();
 
 private:
 
-	KisView* m_view;
+    KisView* m_view;
 };
 
 #endif // TEMPLATE_PAINTOPS_PLUGIN_H_

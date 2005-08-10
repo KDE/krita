@@ -1,8 +1,8 @@
 /*
-	FILE:		canvas.h
-	PURPOSE:	Defines the public routines for manipulating the canvas.
-	AUTHOR:		Kevin Waite 
-	VERSION:	1.00  (10-May-91)
+    FILE:        canvas.h
+    PURPOSE:    Defines the public routines for manipulating the canvas.
+    AUTHOR:        Kevin Waite 
+    VERSION:    1.00  (10-May-91)
 
 Copyright 1991, 1992, 2002, 2003 Tunde Cockshott, Kevin Waite, David England. 
 

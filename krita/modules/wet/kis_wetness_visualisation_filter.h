@@ -31,18 +31,18 @@ class WetnessVisualisationFilter : public QObject
 {
 Q_OBJECT
 public:
-	WetnessVisualisationFilter(KisView* view);
-	virtual ~WetnessVisualisationFilter() {}
-	void setAction(KToggleAction* action);
-	
+    WetnessVisualisationFilter(KisView* view);
+    virtual ~WetnessVisualisationFilter() {}
+    void setAction(KToggleAction* action);
+    
 private slots:
-	void slotActivated();
-	void slotTimeout();
+    void slotActivated();
+    void slotTimeout();
 
 private:
-	KisView * m_view;
-	KToggleAction * m_action;
-	QTimer m_timer;
+    KisView * m_view;
+    KToggleAction * m_action;
+    QTimer m_timer;
 };
 
 #endif // _WETNESS_VISUALISATION_FILTER_H

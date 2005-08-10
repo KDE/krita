@@ -69,18 +69,18 @@ const Q_UINT8 MIN_SELECTED = 0;
 const Q_UINT8 SELECTION_THRESHOLD = 1;
 
 enum enumInputDevice {
-	INPUT_DEVICE_UNKNOWN,
-	INPUT_DEVICE_MOUSE,	// Standard mouse
-	INPUT_DEVICE_STYLUS,	// Wacom stylus
-	INPUT_DEVICE_ERASER,	// Wacom eraser
-	INPUT_DEVICE_PUCK	// Wacom puck
+    INPUT_DEVICE_UNKNOWN,
+    INPUT_DEVICE_MOUSE,    // Standard mouse
+    INPUT_DEVICE_STYLUS,    // Wacom stylus
+    INPUT_DEVICE_ERASER,    // Wacom eraser
+    INPUT_DEVICE_PUCK    // Wacom puck
 };
 
 enum enumCursorStyle {
-	CURSOR_STYLE_TOOLICON,
-	CURSOR_STYLE_CROSSHAIR,
-	CURSOR_STYLE_POINTER,
-	CURSOR_STYLE_OUTLINE
+    CURSOR_STYLE_TOOLICON,
+    CURSOR_STYLE_CROSSHAIR,
+    CURSOR_STYLE_POINTER,
+    CURSOR_STYLE_OUTLINE
 };
 
 /*
@@ -99,13 +99,13 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
 namespace krita {
 
-	// String constants for palettes and palette widgets
-	const QString TOOL_OPTION_WIDGET ("tooloptions");
-	
-	const QString CONTROL_PALETTE ("controlpalette");
-	const QString PAINTBOX ("paintbox");
-	const QString COLORBOX ("colorbox");
-	const QString LAYERBOX ("layerbox");
+    // String constants for palettes and palette widgets
+    const QString TOOL_OPTION_WIDGET ("tooloptions");
+    
+    const QString CONTROL_PALETTE ("controlpalette");
+    const QString PAINTBOX ("paintbox");
+    const QString COLORBOX ("colorbox");
+    const QString LAYERBOX ("layerbox");
 }
 
 #endif // KISGLOBAL_H_

@@ -30,45 +30,45 @@ class KisPoint;
 class QHBoxLayout;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
-	Q_OBJECT
-	typedef KisToolFreehand super;
+    Q_OBJECT
+    typedef KisToolFreehand super;
 
 public:
-	KisToolBrush();
-	virtual ~KisToolBrush();
-	virtual void update(KisCanvasSubject *subject);
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    KisToolBrush();
+    virtual ~KisToolBrush();
+    virtual void update(KisCanvasSubject *subject);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
 protected:
-	
-	virtual void initPaint(KisEvent *e);
-	virtual void endPaint();
+    
+    virtual void initPaint(KisEvent *e);
+    virtual void endPaint();
 
 private slots:
 
-	virtual void timeoutPaint();
-	
+    virtual void timeoutPaint();
+    
 private:
-	Q_INT32 m_rate;
-	QTimer * m_timer;
+    Q_INT32 m_rate;
+    QTimer * m_timer;
 
 
 };
 
 class KisToolBrushFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolBrushFactory() : super() {};
-	virtual ~KisToolBrushFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolBrush(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("brush", i18n("Brush tool")); }
+    KisToolBrushFactory() : super() {};
+    virtual ~KisToolBrushFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolBrush(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("brush", i18n("Brush tool")); }
 };
 
 

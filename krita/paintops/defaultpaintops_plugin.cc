@@ -43,29 +43,29 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( 
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(DefaultPaintOpsPluginFactory::instance());
+           setInstance(DefaultPaintOpsPluginFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "DefaultPaintOpsPlugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "DefaultPaintOpsPlugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	// This is not a gui plugin; only load it when the doc is created.
-	if ( parent->inherits("KisFactory") )
-	{
+    // This is not a gui plugin; only load it when the doc is created.
+    if ( parent->inherits("KisFactory") )
+    {
 
-		// Add hard-coded paint ops. Plugin paintops will add
-		// themselves in the plugin initialization code.
-		KisPaintOpRegistry::instance() -> add ( new KisAirbrushOpFactory );
-		KisPaintOpRegistry::instance() -> add ( new KisBrushOpFactory );
-		KisPaintOpRegistry::instance() -> add ( new KisConvolveOpFactory );
-		KisPaintOpRegistry::instance() -> add ( new KisDuplicateOpFactory );
-		KisPaintOpRegistry::instance() -> add ( new KisEraseOpFactory );
-		KisPaintOpRegistry::instance() -> add ( new KisPenOpFactory );
-	}
+        // Add hard-coded paint ops. Plugin paintops will add
+        // themselves in the plugin initialization code.
+        KisPaintOpRegistry::instance() -> add ( new KisAirbrushOpFactory );
+        KisPaintOpRegistry::instance() -> add ( new KisBrushOpFactory );
+        KisPaintOpRegistry::instance() -> add ( new KisConvolveOpFactory );
+        KisPaintOpRegistry::instance() -> add ( new KisDuplicateOpFactory );
+        KisPaintOpRegistry::instance() -> add ( new KisEraseOpFactory );
+        KisPaintOpRegistry::instance() -> add ( new KisPenOpFactory );
+    }
 
 }
 

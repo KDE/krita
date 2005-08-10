@@ -36,94 +36,94 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 }
  
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-	: KisFilter( id(), "adjust", "&Brightness/contrast...")
+    : KisFilter( id(), "adjust", "&Brightness/contrast...")
 {
 
 }
 
 KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP)
 {
-	return new KisBrightnessContrastConfigWidget(parent);
+    return new KisBrightnessContrastConfigWidget(parent);
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceSP)
 {
-	KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
-	
-	if ( widget == 0 )
-	{
-		return new KisBrightnessContrastFilterConfiguration();
-	} else {
-		return widget->config();
-	}
+    KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
+    
+    if ( widget == 0 )
+    {
+        return new KisBrightnessContrastFilterConfiguration();
+    } else {
+        return widget->config();
+    }
 }
 
 std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
 {
 //XXX should really come up with a list of configurations
-	std::list<KisFilterConfiguration*> list;
-	list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( ));
-	return list;
+    std::list<KisFilterConfiguration*> list;
+    list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( ));
+    return list;
 }
 
 
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-	KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
+    KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
-	KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(configBC->transfer);
-		
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(configBC->transfer);
+        
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
-	setProgressTotalSteps(rect.width() * rect.height());
-	Q_INT32 pixelsProcessed = 0;
+    setProgressTotalSteps(rect.width() * rect.height());
+    Q_INT32 pixelsProcessed = 0;
 
-	while( ! srcIt.isDone()  && !cancelRequested())
-	{
-		Q_UINT32 npix;
-		npix = srcIt.nConseqPixels();
-		
-		// change the brightness and contrast
-		src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
-					
-		srcIt+=npix;
-		dstIt+=npix;
+    while( ! srcIt.isDone()  && !cancelRequested())
+    {
+        Q_UINT32 npix;
+        npix = srcIt.nConseqPixels();
+        
+        // change the brightness and contrast
+        src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
+                    
+        srcIt+=npix;
+        dstIt+=npix;
 
-		pixelsProcessed++;
-		setProgress(pixelsProcessed);
-	}
+        pixelsProcessed++;
+        setProgress(pixelsProcessed);
+    }
 
-	setProgressDone();
+    setProgressDone();
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, const char * name, WFlags f)
-	: KisFilterConfigWidget(parent, name, f)
+    : KisFilterConfigWidget(parent, name, f)
 {
-	m_page = new WdgBrightnessContrast(this);
-	QHBoxLayout * l = new QHBoxLayout(this);
-	Q_CHECK_PTR(l);
+    m_page = new WdgBrightnessContrast(this);
+    QHBoxLayout * l = new QHBoxLayout(this);
+    Q_CHECK_PTR(l);
 
-	l -> add(m_page);
+    l -> add(m_page);
 
-	connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::config()
 {
-	KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
+    KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
 
-	for(int i=0; i <256; i++)
-	{
-		Q_INT32 val;
-		val = int(0xFFFF * m_page->kCurve->getCurveValue( i / 255.0));
-		if(val >0xFFFF)
-			val=0xFFFF;
-		if(val <0)
-			val = 0;
-			
-		cfg->transfer[i] = val;
-	}
-	
-	return cfg;
+    for(int i=0; i <256; i++)
+    {
+        Q_INT32 val;
+        val = int(0xFFFF * m_page->kCurve->getCurveValue( i / 255.0));
+        if(val >0xFFFF)
+            val=0xFFFF;
+        if(val <0)
+            val = 0;
+            
+        cfg->transfer[i] = val;
+    }
+    
+    return cfg;
 }

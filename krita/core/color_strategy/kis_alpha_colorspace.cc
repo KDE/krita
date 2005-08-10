@@ -37,13 +37,13 @@
 #include "kis_integer_maths.h"
 
 namespace {
-	const Q_UINT8 PIXEL_MASK = 0;
+    const Q_UINT8 PIXEL_MASK = 0;
 }
 
 KisAlphaColorSpace::KisAlphaColorSpace() :
-	KisAbstractColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
+    KisAbstractColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
 {
-	m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
 }
 
 KisAlphaColorSpace::~KisAlphaColorSpace()
@@ -52,281 +52,281 @@ KisAlphaColorSpace::~KisAlphaColorSpace()
 
 void KisAlphaColorSpace::nativeColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-	dst[PIXEL_MASK] = OPACITY_OPAQUE;
+    dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
 void KisAlphaColorSpace::nativeColor(const QColor& /*c*/, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-	dst[PIXEL_MASK] = opacity;
+    dst[PIXEL_MASK] = opacity;
 }
 
 void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
 {
-	*alpha = *pixel;
+    *alpha = *pixel;
 }
 
 void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfileSP /*profile*/)
 {
-	c -> setRgb(255, 255, 255);
+    c -> setRgb(255, 255, 255);
 }
 
 void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
 {
-	c -> setRgb(255, 255, 255);
-	*opacity = src[PIXEL_MASK];
+    c -> setRgb(255, 255, 255);
+    *opacity = src[PIXEL_MASK];
 }
 
 Q_INT8 KisAlphaColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
-	return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
+    return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
 void KisAlphaColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
-	if (nColors > 0) {
-		Q_UINT32 total = 0;
+    if (nColors > 0) {
+        Q_UINT32 total = 0;
 
-		while(nColors)
-		{
-			nColors--;
-			total += *colors[nColors] * weights[nColors];
-		}
-		*dst = total / 255;
-	}
+        while(nColors)
+        {
+            nColors--;
+            total += *colors[nColors] * weights[nColors];
+        }
+        *dst = total / 255;
+    }
 }
 
 vKisChannelInfoSP KisAlphaColorSpace::channels() const
 {
-	return m_channels;
+    return m_channels;
 }
 bool KisAlphaColorSpace::hasAlpha() const
 {
-	return true; // Of course!
+    return true; // Of course!
 }
 
 // XXX: We convert the alpha space to create a mask for display in selection previews
 // etc. No need to actually use the profiles here to create a mask image -- they don't
 // need to be true color.
 QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-					   KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
-					   Q_INT32 /*renderingIntent*/, float /*exposure*/)
+                       KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
+                       Q_INT32 /*renderingIntent*/, float /*exposure*/)
 {
 
-	QImage img(width, height, 32, 0, QImage::LittleEndian);
+    QImage img(width, height, 32, 0, QImage::LittleEndian);
 
-	Q_INT32 i = 0;
-	uchar *j = img.bits();
+    Q_INT32 i = 0;
+    uchar *j = img.bits();
 
-	while ( i < width * height * pixelSize()) {
+    while ( i < width * height * pixelSize()) {
 
-		// Temporary copy until I figure out something better
+        // Temporary copy until I figure out something better
 
-		Q_UINT8 PIXEL_BLUE = 0;
-		Q_UINT8 PIXEL_GREEN = 1;
-		Q_UINT8 PIXEL_RED = 2;
-		Q_UINT8 PIXEL_ALPHA = 3;
+        Q_UINT8 PIXEL_BLUE = 0;
+        Q_UINT8 PIXEL_GREEN = 1;
+        Q_UINT8 PIXEL_RED = 2;
+        Q_UINT8 PIXEL_ALPHA = 3;
 
-		// XXX: for previews of the mask, it is be handy to
-		// make this always black.
+        // XXX: for previews of the mask, it is be handy to
+        // make this always black.
 
-		*( j + PIXEL_RED )   = *( data + i );
-		*( j + PIXEL_GREEN ) = *( data + i );
-		*( j + PIXEL_BLUE )  = *( data + i );
-		*( j + PIXEL_ALPHA ) = *( data + i );
+        *( j + PIXEL_RED )   = *( data + i );
+        *( j + PIXEL_GREEN ) = *( data + i );
+        *( j + PIXEL_BLUE )  = *( data + i );
+        *( j + PIXEL_ALPHA ) = *( data + i );
 
-		i += 1;
-		j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
+        i += 1;
+        j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
 
-	}
-	return img;
+    }
+    return img;
 }
 
 bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
-					 Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
-					 Q_UINT32 numPixels,
-					 Q_INT32 /*renderingIntent*/)
+                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                     Q_UINT32 numPixels,
+                     Q_INT32 /*renderingIntent*/)
 {
-	// No lcms trickery here, we are a QColor + opacity channel
-	Q_INT32 size = dstColorStrategy -> pixelSize();
+    // No lcms trickery here, we are a QColor + opacity channel
+    Q_INT32 size = dstColorStrategy -> pixelSize();
 
-	Q_UINT32 j = 0;
-	Q_UINT32 i = 0;
+    Q_UINT32 j = 0;
+    Q_UINT32 i = 0;
 
-	while ( i < numPixels ) {
+    while ( i < numPixels ) {
 
-		dstColorStrategy -> nativeColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
+        dstColorStrategy -> nativeColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
-		i += 1;
-		j += size;
+        i += 1;
+        j += size;
 
-	}
-	return true;
+    }
+    return true;
 
 }
 
 void KisAlphaColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
-	//XXX does nothing for now
+    //XXX does nothing for now
 }
 
 //XXX bitblt of ColorSpaceAlpha does not take mask into consideration as this is probably not
 // used ever
 void KisAlphaColorSpace::bitBlt(Q_UINT8 *dst,
-				Q_INT32 dststride,
-				const Q_UINT8 *src,
-				Q_INT32 srcRowStride,
-				const Q_UINT8 *srcAlphaMask,
-				Q_INT32 maskRowStride,
-				QUANTUM opacity,
-				Q_INT32 rows,
-				Q_INT32 cols,
-				const KisCompositeOp& op)
+                Q_INT32 dststride,
+                const Q_UINT8 *src,
+                Q_INT32 srcRowStride,
+                const Q_UINT8 *srcAlphaMask,
+                Q_INT32 maskRowStride,
+                QUANTUM opacity,
+                Q_INT32 rows,
+                Q_INT32 cols,
+                const KisCompositeOp& op)
 {
 
-	Q_UINT8 *d;
-	const Q_UINT8 *s;
- 	Q_INT32 i;
-	Q_INT32 linesize;
+    Q_UINT8 *d;
+    const Q_UINT8 *s;
+     Q_INT32 i;
+    Q_INT32 linesize;
 
-	if (rows <= 0 || cols <= 0)
-		return;
-	switch (op.op()) {
-	case COMPOSITE_COPY:
-		linesize = sizeof(Q_UINT8) * cols;
-		d = dst;
-		s = src;
-		while (rows-- > 0) {
-			memcpy(d, s, linesize);
-			d += dststride;
-			s += srcRowStride;
-		}
-		return;
-	case COMPOSITE_CLEAR:
-		linesize = sizeof(Q_UINT8) * cols;
-		d = dst;
-		while (rows-- > 0) {
-			memset(d, OPACITY_TRANSPARENT, linesize);
-			d += dststride;
-		}
-		return;
-	case COMPOSITE_ERASE:
-		while (rows-- > 0) {
-			d = dst;
-			s = src;
+    if (rows <= 0 || cols <= 0)
+        return;
+    switch (op.op()) {
+    case COMPOSITE_COPY:
+        linesize = sizeof(Q_UINT8) * cols;
+        d = dst;
+        s = src;
+        while (rows-- > 0) {
+            memcpy(d, s, linesize);
+            d += dststride;
+            s += srcRowStride;
+        }
+        return;
+    case COMPOSITE_CLEAR:
+        linesize = sizeof(Q_UINT8) * cols;
+        d = dst;
+        while (rows-- > 0) {
+            memset(d, OPACITY_TRANSPARENT, linesize);
+            d += dststride;
+        }
+        return;
+    case COMPOSITE_ERASE:
+        while (rows-- > 0) {
+            d = dst;
+            s = src;
 
-			for (i = cols; i > 0; i--, d ++, s ++) {
-				if (d[PIXEL_MASK] < s[PIXEL_MASK]) {
-					continue;
-				}
-				else {
-					d[PIXEL_MASK] = s[PIXEL_MASK];
-				}
+            for (i = cols; i > 0; i--, d ++, s ++) {
+                if (d[PIXEL_MASK] < s[PIXEL_MASK]) {
+                    continue;
+                }
+                else {
+                    d[PIXEL_MASK] = s[PIXEL_MASK];
+                }
 
-			}
+            }
 
-			dst += dststride;
-			src += srcRowStride;
-		}
-		return;
-	case COMPOSITE_SUBTRACT:
-		while (rows-- > 0) {
-			d = dst;
-			s = src;
+            dst += dststride;
+            src += srcRowStride;
+        }
+        return;
+    case COMPOSITE_SUBTRACT:
+        while (rows-- > 0) {
+            d = dst;
+            s = src;
 
-			for (i = cols; i > 0; i--, d++, s++) {
-				if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
-					d[PIXEL_MASK] = MIN_SELECTED;
-				} else {
-					d[PIXEL_MASK] -= s[PIXEL_MASK];
-				}
-			}
+            for (i = cols; i > 0; i--, d++, s++) {
+                if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
+                    d[PIXEL_MASK] = MIN_SELECTED;
+                } else {
+                    d[PIXEL_MASK] -= s[PIXEL_MASK];
+                }
+            }
 
-			dst += dststride;
-			src += srcRowStride;
-		}
-		return;
-	case COMPOSITE_OVER:
-	default:
-		if (opacity == OPACITY_TRANSPARENT)
-			return;
-		if (opacity != OPACITY_OPAQUE) {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d++, s++) {
-					if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
-						continue;
-					int srcAlpha = (s[PIXEL_MASK] * opacity + UINT8_MAX / 2) / UINT8_MAX;
-					d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
-				}
-				dst += dststride;
-				src += srcRowStride;
-			}
-		}
-		else {
-			while (rows-- > 0) {
-				d = dst;
-				s = src;
-				for (i = cols; i > 0; i--, d++, s++) {
-					if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
-						continue;
-					if (d[PIXEL_MASK] == OPACITY_TRANSPARENT || s[PIXEL_MASK] == OPACITY_OPAQUE) {
-						memcpy(d, s, 1);
-						continue;
-					}
-					int srcAlpha = s[PIXEL_MASK];
-					d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
-				}
-				dst += dststride;
-				src += srcRowStride;
-			}
-		}
+            dst += dststride;
+            src += srcRowStride;
+        }
+        return;
+    case COMPOSITE_OVER:
+    default:
+        if (opacity == OPACITY_TRANSPARENT)
+            return;
+        if (opacity != OPACITY_OPAQUE) {
+            while (rows-- > 0) {
+                d = dst;
+                s = src;
+                for (i = cols; i > 0; i--, d++, s++) {
+                    if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
+                        continue;
+                    int srcAlpha = (s[PIXEL_MASK] * opacity + UINT8_MAX / 2) / UINT8_MAX;
+                    d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
+                }
+                dst += dststride;
+                src += srcRowStride;
+            }
+        }
+        else {
+            while (rows-- > 0) {
+                d = dst;
+                s = src;
+                for (i = cols; i > 0; i--, d++, s++) {
+                    if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
+                        continue;
+                    if (d[PIXEL_MASK] == OPACITY_TRANSPARENT || s[PIXEL_MASK] == OPACITY_OPAQUE) {
+                        memcpy(d, s, 1);
+                        continue;
+                    }
+                    int srcAlpha = s[PIXEL_MASK];
+                    d[PIXEL_MASK] = (d[PIXEL_MASK] * (UINT8_MAX - srcAlpha) + srcAlpha * UINT8_MAX + UINT8_MAX / 2) / UINT8_MAX;
+                }
+                dst += dststride;
+                src += srcRowStride;
+            }
+        }
 
-	}
+    }
 }
 
 KisCompositeOpList KisAlphaColorSpace::userVisiblecompositeOps() const
 {
-	KisCompositeOpList list;
+    KisCompositeOpList list;
 
-	list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_OVER));
 
-	return list;
+    return list;
 }
 
 QString KisAlphaColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
-	Q_ASSERT(channelIndex < nChannels());
-	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_ASSERT(channelIndex < nChannels());
+    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
 
-	return QString().setNum(pixel[channelPosition]);
+    return QString().setNum(pixel[channelPosition]);
 }
 
 QString KisAlphaColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
-	Q_ASSERT(channelIndex < nChannels());
-	Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_ASSERT(channelIndex < nChannels());
+    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
 
-	return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
+    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 
 
 void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
-	Q_INT32 totalAlpha = 0;
+    Q_INT32 totalAlpha = 0;
 
-	while (nColors--)
-	{
-		Q_INT32 weight = *kernelValues;
-		
-		if (weight != 0) {
-			totalAlpha += (*colors)[PIXEL_MASK] * weight;
-		}
-		colors++;
-		kernelValues++;
-	}
-	
-	if (channelFlags & FLAG_ALPHA) {
-		dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
-	}
+    while (nColors--)
+    {
+        Q_INT32 weight = *kernelValues;
+        
+        if (weight != 0) {
+            totalAlpha += (*colors)[PIXEL_MASK] * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+    
+    if (channelFlags & FLAG_ALPHA) {
+        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
+    }
 }

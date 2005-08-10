@@ -30,74 +30,74 @@
 
 class KisGuide : public KShared {
 public:
-	KisGuide(Qt::Orientation o);
-	virtual ~KisGuide();
+    KisGuide(Qt::Orientation o);
+    virtual ~KisGuide();
 
-	Qt::Orientation orientation() { return orient; }
-	double position(){ return pos; }
-	bool isSelected() { return selected; }
+    Qt::Orientation orientation() { return orient; }
+    double position(){ return pos; }
+    bool isSelected() { return selected; }
 
 public:
-	double pos;
-	QPixmap buffer;
-	bool hasBuffer;
-	bool selected;
-	Qt::Orientation orient;
+    double pos;
+    QPixmap buffer;
+    bool hasBuffer;
+    bool selected;
+    Qt::Orientation orient;
 };
 
 typedef KSharedPtr<KisGuide> KisGuideSP;
 
 class KisGuideMgr {
-	typedef QValueList<KisGuideSP> vKisGuideSP;
-	typedef vKisGuideSP::iterator vKisGuideSP_it;
-	typedef vKisGuideSP::const_iterator vKisGuideSP_cit;
+    typedef QValueList<KisGuideSP> vKisGuideSP;
+    typedef vKisGuideSP::iterator vKisGuideSP_it;
+    typedef vKisGuideSP::const_iterator vKisGuideSP_cit;
 
 public:
-	KisGuideMgr();
-	~KisGuideMgr();
+    KisGuideMgr();
+    ~KisGuideMgr();
 
 public:
-	KisGuideSP add(double pos, Qt::Orientation o);
-	void remove(KisGuideSP gd);
-	KisGuideSP find(double x, double y, double d);
-	KisGuideSP findHorizontal(double y, double d);
-	KisGuideSP findVertical(double x, double d);
-	bool hasSelected() const;
-	Q_INT32 selectedCount() const;
+    KisGuideSP add(double pos, Qt::Orientation o);
+    void remove(KisGuideSP gd);
+    KisGuideSP find(double x, double y, double d);
+    KisGuideSP findHorizontal(double y, double d);
+    KisGuideSP findVertical(double x, double d);
+    bool hasSelected() const;
+    Q_INT32 selectedCount() const;
 
-	void save(QDomElement& element);
-	void load(const QDomElement& element);
+    void save(QDomElement& element);
+    void load(const QDomElement& element);
 
-	void select(KisGuideSP gd);
-	void unselect(KisGuideSP gd);
-	void selectAll();
-	void unselectAll();
-	void removeSelected();
+    void select(KisGuideSP gd);
+    void unselect(KisGuideSP gd);
+    void selectAll();
+    void unselectAll();
+    void removeSelected();
 
-	void resize(const QSize& size);
-	void resize();
-	void erase(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT32 yOffset, double zoom);
-	void paint(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT32 yOffset, double zoom);
-	void moveSelectedByX(double d);
-	void moveSelectedByY(double d);
-
-private:
-	void resizeLinesPixmap(const QSize& size, QPixmap *vLine, QPixmap *hLine, QPixmap *linePattern);
+    void resize(const QSize& size);
+    void resize();
+    void erase(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT32 yOffset, double zoom);
+    void paint(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT32 yOffset, double zoom);
+    void moveSelectedByX(double d);
+    void moveSelectedByY(double d);
 
 private:
-	QSize m_size;
-	QPixmap m_vGuideLines;
-	QPixmap m_hGuideLines;
-	QPixmap m_pattern;
-	QPixmap m_vGuideLinesSelected;
-	QPixmap m_hGuideLinesSelected;
-	QPixmap m_patternSelected;
-	vKisGuideSP m_lines;
-	vKisGuideSP m_slines;
+    void resizeLinesPixmap(const QSize& size, QPixmap *vLine, QPixmap *hLine, QPixmap *linePattern);
 
 private:
-	static const char *s_xbm[];
-	static const char *s_xbm_selected[];
+    QSize m_size;
+    QPixmap m_vGuideLines;
+    QPixmap m_hGuideLines;
+    QPixmap m_pattern;
+    QPixmap m_vGuideLinesSelected;
+    QPixmap m_hGuideLinesSelected;
+    QPixmap m_patternSelected;
+    vKisGuideSP m_lines;
+    vKisGuideSP m_slines;
+
+private:
+    static const char *s_xbm[];
+    static const char *s_xbm_selected[];
 };
 
 #endif // KIS_GUIDE_H_

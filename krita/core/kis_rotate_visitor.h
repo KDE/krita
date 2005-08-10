@@ -29,40 +29,40 @@ class KisRotateVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
         
         /* Structs for the image rescaling routine */
-	
+    
 public:
         KisRotateVisitor();
         ~KisRotateVisitor();
 
         void visitKisPaintDevice(KisPaintDevice* dev);
 
-	
+    
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
 private:
         KisPaintDeviceSP m_dev;
 
-	// Implement KisProgressSubject
-	bool m_cancelRequested;
+    // Implement KisProgressSubject
+    bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
 
-	void initProgress(Q_INT32 totalSteps);
-	void incrementProgress();
-	void setProgressDone();
+    void initProgress(Q_INT32 totalSteps);
+    void incrementProgress();
+    void setProgressDone();
 
-	KisProgressDisplayInterface *m_progress;
-	Q_INT32 m_progressStep;
-	Q_INT32 m_progressTotalSteps;
-	Q_INT32 m_lastProgressPerCent;
+    KisProgressDisplayInterface *m_progress;
+    Q_INT32 m_progressStep;
+    Q_INT32 m_progressTotalSteps;
+    Q_INT32 m_lastProgressPerCent;
 
-	KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
-	KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
-	KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
-	KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation);
+    KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
+    KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
+    KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
+    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation);
 
-	KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
-	KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);
+    KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
+    KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);
 
 };
 

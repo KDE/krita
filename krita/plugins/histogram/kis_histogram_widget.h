@@ -31,21 +31,21 @@
  */
 class KisHistogramWidget : public WdgHistogram {
 
-	typedef WdgHistogram super;
-	Q_OBJECT
+    typedef WdgHistogram super;
+    Q_OBJECT
 
 
 public:
-	KisHistogramWidget(QWidget *parent, const char *name);
-	virtual ~KisHistogramWidget();
+    KisHistogramWidget(QWidget *parent, const char *name);
+    virtual ~KisHistogramWidget();
 
-	void setHistogram(KisHistogramSP histogram);
-	void setChannels(vKisChannelInfoSP channels, Q_INT32 channelCount);
-	
+    void setHistogram(KisHistogramSP histogram);
+    void setChannels(vKisChannelInfoSP channels, Q_INT32 channelCount);
+    
 private:
 
-	QPixmap m_pix;
-	KisHistogramSP m_histogram;
+    QPixmap m_pix;
+    KisHistogramSP m_histogram;
 };
 
 

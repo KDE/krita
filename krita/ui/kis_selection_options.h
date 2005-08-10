@@ -29,25 +29,25 @@ class WdgSelectionOptions;
 class KRITAUI_EXPORT KisSelectionOptions : public QWidget
 {
 
-	Q_OBJECT
+    Q_OBJECT
 
-	typedef QWidget super;
+    typedef QWidget super;
 
 public:
-	KisSelectionOptions( QWidget *parent, KisCanvasSubject * subject);
-	virtual ~KisSelectionOptions();
+    KisSelectionOptions( QWidget *parent, KisCanvasSubject * subject);
+    virtual ~KisSelectionOptions();
 
-	int action();
+    int action();
 
 signals:
-	void actionChanged(int);
+    void actionChanged(int);
 
 public slots:
-	void slotActivated();
+    void slotActivated();
 
 private:
-	WdgSelectionOptions * m_page;
-	KisCanvasSubject* m_subject;
+    WdgSelectionOptions * m_page;
+    KisCanvasSubject* m_subject;
 };
 
 #endif

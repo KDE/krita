@@ -29,8 +29,8 @@ class QColor;
 
 
 enum enumSelectionMode {
-	SELECTION_ADD,
-	SELECTION_SUBTRACT
+    SELECTION_ADD,
+    SELECTION_SUBTRACT
 };
 
 /**
@@ -40,48 +40,48 @@ enum enumSelectionMode {
  */
 class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
 
-	typedef KisPaintDevice super;
+    typedef KisPaintDevice super;
 
 public:
-	KisSelection(KisPaintDeviceSP layer, const QString& name);
+    KisSelection(KisPaintDeviceSP layer, const QString& name);
 
-	virtual ~KisSelection();
+    virtual ~KisSelection();
 
-	// Returns selectedness, or 0 if invalid coordinates
-	QUANTUM selected(Q_INT32 x, Q_INT32 y);
+    // Returns selectedness, or 0 if invalid coordinates
+    QUANTUM selected(Q_INT32 x, Q_INT32 y);
 
-	void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+    void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
-	QImage KisSelection::maskImage();
+    QImage KisSelection::maskImage();
 
-	void select(QRect r);
+    void select(QRect r);
 
-	void invert();
+    void invert();
 
-	void clear(QRect r);
+    void clear(QRect r);
 
-	void clear();
+    void clear();
 
-	// Tests if the the rect is totally outside the selection
-	bool isTotallyUnselected(QRect r);
+    // Tests if the the rect is totally outside the selection
+    bool isTotallyUnselected(QRect r);
 
-	/**
-	 * Rough, but fastish way of determining the area
-	 * of the tiles used by the selection.
-	 */
-	QRect selectedRect();
+    /**
+     * Rough, but fastish way of determining the area
+     * of the tiles used by the selection.
+     */
+    QRect selectedRect();
 
-	/**
-	 * Slow, but exact way of determining the rectangle
-	 * that encloses the selection
-	 */
-	QRect selectedExactRect();
-	
-	void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-	
+    /**
+     * Slow, but exact way of determining the rectangle
+     * that encloses the selection
+     */
+    QRect selectedExactRect();
+    
+    void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    
 private:
-	KisPaintDeviceSP m_parentLayer;
-	KisAlphaColorSpaceSP m_alpha;
+    KisPaintDeviceSP m_parentLayer;
+    KisAlphaColorSpaceSP m_alpha;
 };
 
 #endif // KIS_SELECTION_H_

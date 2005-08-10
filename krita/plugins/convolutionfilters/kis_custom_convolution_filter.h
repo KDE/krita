@@ -25,29 +25,29 @@
 
 class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
 public:
-	KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
-	};
-	~KisCustomConvolutionConfiguration() { delete m_matrixes; };
+    KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
+    };
+    ~KisCustomConvolutionConfiguration() { delete m_matrixes; };
 private:
-	KisMatrix3x3* m_matrixes;
+    KisMatrix3x3* m_matrixes;
 };
 
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
 
 public:
-	KisCustomConvolutionFilter();
+    KisCustomConvolutionFilter();
 public:
-	static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsIncrementalPainting() { return true; }
+    static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsIncrementalPainting() { return true; }
 
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 protected:
-	virtual KisMatrix3x3* matrixes() { return m_matrix; };
+    virtual KisMatrix3x3* matrixes() { return m_matrix; };
 private:
-	KisMatrix3x3* m_matrix;
+    KisMatrix3x3* m_matrix;
 };
 
 

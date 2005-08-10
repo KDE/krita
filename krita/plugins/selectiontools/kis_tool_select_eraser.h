@@ -34,44 +34,44 @@ class KisSelectionOptions;
  * this... Depends a bit on how we're going to visualize selections.
  */
 class KisToolSelectEraser : public KisToolFreehand {
-	Q_OBJECT
-	typedef KisToolFreehand super;
+    Q_OBJECT
+    typedef KisToolFreehand super;
 
 public:
-	KisToolSelectEraser();
-	virtual ~KisToolSelectEraser();
+    KisToolSelectEraser();
+    virtual ~KisToolSelectEraser();
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 2; }
-	virtual enumToolType toolType() { return TOOL_SELECT; }
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 2; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
 public slots:
-	virtual void activate();
+    virtual void activate();
 
 protected:
 
-	virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KisEvent *e);
 private:
-	KisSelectionOptions * m_optWidget;
+    KisSelectionOptions * m_optWidget;
 
 };
 
 
 class KisToolSelectEraserFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectEraserFactory() : super() {};
-	virtual ~KisToolSelectEraserFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectEraser(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
+    KisToolSelectEraserFactory() : super() {};
+    virtual ~KisToolSelectEraserFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectEraser(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
 };
 
 

@@ -28,43 +28,43 @@
 // XXX: Moving is not nearly smooth enough!
 class KisToolMove : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolMove();
-	virtual ~KisToolMove();
+    KisToolMove();
+    virtual ~KisToolMove();
 
 public:
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
 public:
-	virtual void setup(KActionCollection *collection);
+    virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_CANVAS; }
 
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisStrategyMove m_strategy;
+    KisCanvasSubject *m_subject;
+    KisStrategyMove m_strategy;
 };
 
 
 class KisToolMoveFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolMoveFactory() : super() {};
-	virtual ~KisToolMoveFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) {
-		KisTool * t =  new KisToolMove(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("move", i18n("Move tool")); }
+    KisToolMoveFactory() : super() {};
+    virtual ~KisToolMoveFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolMove(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("move", i18n("Move tool")); }
 };
 
 

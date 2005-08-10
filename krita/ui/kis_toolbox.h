@@ -41,65 +41,65 @@ class ToolArea;
  */
 class KisToolBox : public KToolBar {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	
-	KisToolBox( KMainWindow *mainWin, const char* name = 0L );
-	virtual ~KisToolBox();
+    
+    KisToolBox( KMainWindow *mainWin, const char* name = 0L );
+    virtual ~KisToolBox();
 
-	// Called by the toolcontroller for each tool. For every category,
-	// there is a separate list, and the tool is categorized correctly.
-	// The tool is not yet added to the widgets; call setupTools()
-	// to do that. We don't store the tool.
-	void registerTool(KAction * tool, enumToolType toolType, Q_UINT32 priority);
+    // Called by the toolcontroller for each tool. For every category,
+    // there is a separate list, and the tool is categorized correctly.
+    // The tool is not yet added to the widgets; call setupTools()
+    // to do that. We don't store the tool.
+    void registerTool(KAction * tool, enumToolType toolType, Q_UINT32 priority);
 
-	// Called when all tools have been added by the tool controller
-	void setupTools();
+    // Called when all tools have been added by the tool controller
+    void setupTools();
 public slots:
-	
-	virtual void setOrientation ( Orientation o );
-	void slotButtonPressed( int id );
-	void slotPressButton( int id );
+    
+    virtual void setOrientation ( Orientation o );
+    void slotButtonPressed( int id );
+    void slotPressButton( int id );
 
-	// Enables or disables all buttons and the corresponding actions.
-	void enableTools(bool enable);
-	
+    // Enables or disables all buttons and the corresponding actions.
+    void enableTools(bool enable);
+    
 
-	
+    
 private:
 
-	QToolButton * createButton(QWidget * parent, const char* iconName, QString tooltip);
-	
+    QToolButton * createButton(QWidget * parent, const char* iconName, QString tooltip);
+    
 private:
-	Q_UINT32 m_numberOfButtons;
-	
-	QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
+    Q_UINT32 m_numberOfButtons;
+    
+    QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
 
-	QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
+    QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
 
-	typedef QMap< int, KAction*> ToolList; // The priority ordered list of tools for a certain tooltype
-		
-	QPtrList<ToolList> m_tools;
-	QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
+    typedef QMap< int, KAction*> ToolList; // The priority ordered list of tools for a certain tooltype
+        
+    QPtrList<ToolList> m_tools;
+    QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
 
 };
 
 class ToolArea : public QWidget {
 
 public:
-	ToolArea(QWidget *parent);
-	void setOrientation ( Qt::Orientation o );
-	void add(QWidget *button);
-	QWidget* getNextParent();
+    ToolArea(QWidget *parent);
+    void setOrientation ( Qt::Orientation o );
+    void add(QWidget *button);
+    QWidget* getNextParent();
 
 private:
-	QPtrList<QWidget> m_children;
-	QBoxLayout *m_leftLayout, *m_rightLayout, * m_layout;
-	bool m_left;
-	QWidget * m_leftRow, * m_rightRow;
+    QPtrList<QWidget> m_children;
+    QBoxLayout *m_leftLayout, *m_rightLayout, * m_layout;
+    bool m_left;
+    QWidget * m_leftRow, * m_rightRow;
 
-	
+    
 };
 
 

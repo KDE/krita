@@ -44,40 +44,40 @@ class QRect;
 class WetPhysicsFilter: public KisFilter
 {
 public:
-	WetPhysicsFilter();
+    WetPhysicsFilter();
 public:
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect& r);
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect& r);
 
-	static inline KisID id() { return KisID("wetphysics", i18n("Watercolor physics simulation filter")); };
+    static inline KisID id() { return KisID("wetphysics", i18n("Watercolor physics simulation filter")); };
 
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return false; }
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return false; }
 
 private:
 
-	void flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
-	void dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
+    void flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
+    void dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
 
-	// Move stuff from the upperlayer to the lower layer. This is filter-level stuff.
-	void adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
+    // Move stuff from the upperlayer to the lower layer. This is filter-level stuff.
+    void adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
 
-	// NOTE: this does not set the height fields
-	void combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2);
-	void dilutePixel (WetPixDbl *dst, WetPix *src, double dilution);
-	void reducePixel (WetPixDbl *dst, WetPix *src, double dilution);
+    // NOTE: this does not set the height fields
+    void combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2);
+    void dilutePixel (WetPixDbl *dst, WetPix *src, double dilution);
+    void reducePixel (WetPixDbl *dst, WetPix *src, double dilution);
 
-	/*
+    /*
          * Allows visualization of adsorption by rotating the hue 120 degrees
-	 * layer-merge combining. src1 is the top layer
+     * layer-merge combining. src1 is the top layer
          *
-	 * This does not set the dst h or w fields.
+     * This does not set the dst h or w fields.
          */
-	void mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1, WetPixDbl *src2);
+    void mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1, WetPixDbl *src2);
 
 
 private:
 
-	Q_INT32 m_adsorbCount;
+    Q_INT32 m_adsorbCount;
 
 
 };

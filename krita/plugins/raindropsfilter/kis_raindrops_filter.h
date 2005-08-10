@@ -28,34 +28,34 @@
 class KisRainDropsFilterConfiguration : public KisFilterConfiguration
 {
 public:
-	KisRainDropsFilterConfiguration(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes) : m_dropSize(dropSize), m_number(number), m_fishEyes(fishEyes) {};
+    KisRainDropsFilterConfiguration(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes) : m_dropSize(dropSize), m_number(number), m_fishEyes(fishEyes) {};
 public:
-	inline Q_UINT32 dropSize() { return m_dropSize; };
-	inline Q_UINT32 number() {return m_number; };
-	inline Q_UINT32 fishEyes() {return m_fishEyes; };
+    inline Q_UINT32 dropSize() { return m_dropSize; };
+    inline Q_UINT32 number() {return m_number; };
+    inline Q_UINT32 fishEyes() {return m_fishEyes; };
 private:
-	Q_UINT32 m_dropSize;
-	Q_UINT32 m_number;
-	Q_UINT32 m_fishEyes;
+    Q_UINT32 m_dropSize;
+    Q_UINT32 m_number;
+    Q_UINT32 m_fishEyes;
 };
 
 class KisRainDropsFilter : public KisFilter
 {
 public:
-	KisRainDropsFilter();
+    KisRainDropsFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return false; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return false; }
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	void   rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff);
-	bool** CreateBoolArray (uint Columns, uint Rows);
-	void   FreeBoolArray (bool** lpbArray, uint Columns);
-	uchar  LimitValues (int ColorValue);
+    void   rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff);
+    bool** CreateBoolArray (uint Columns, uint Rows);
+    void   FreeBoolArray (bool** lpbArray, uint Columns);
+    uchar  LimitValues (int ColorValue);
 };
 
 #endif

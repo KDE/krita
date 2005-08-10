@@ -27,26 +27,26 @@
 #include "kis_texture_filter.h"
 
 TextureFilter::TextureFilter(KisView* view)
-	: m_view(view) {
+    : m_view(view) {
 }
 
 void TextureFilter::slotActivated() {
-	if (!m_view -> currentImg())
-		return;
-	if (!m_view -> currentImg() -> activeDevice())
-		return;
+    if (!m_view -> currentImg())
+        return;
+    if (!m_view -> currentImg() -> activeDevice())
+        return;
 
-	KisPaintDeviceSP device = m_view -> currentImg() -> activeDevice();
-	KisAbstractColorSpace * cs = device -> colorStrategy();
+    KisPaintDeviceSP device = m_view -> currentImg() -> activeDevice();
+    KisAbstractColorSpace * cs = device -> colorStrategy();
 
-	if (cs -> id() != KisID("WET","")) {
-		kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
-		return;
-	}
+    if (cs -> id() != KisID("WET","")) {
+        kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
+        return;
+    }
 
-	// XXX if params of the painter get configurable, make them here configurable as well?
-	KisTexturePainter painter(device);
-	painter.createTexture(0, 0, m_view -> currentImg() -> width(), m_view -> currentImg() -> height());
-	painter.end();
-	m_view -> currentImg() -> notify();
+    // XXX if params of the painter get configurable, make them here configurable as well?
+    KisTexturePainter painter(device);
+    painter.createTexture(0, 0, m_view -> currentImg() -> width(), m_view -> currentImg() -> height());
+    painter.end();
+    m_view -> currentImg() -> notify();
 }

@@ -26,19 +26,19 @@ class KCommand;
 
 class KisUndoAdapter {
 public:
-	KisUndoAdapter();
-	virtual ~KisUndoAdapter();
+    KisUndoAdapter();
+    virtual ~KisUndoAdapter();
 
 public:
-	virtual void addCommand(KCommand *cmd) = 0;
-	virtual void setUndo(bool undo) = 0;
-	virtual bool undo() const = 0;
-	virtual void beginMacro(const QString& macroName) = 0;
-	virtual void endMacro() = 0;
+    virtual void addCommand(KCommand *cmd) = 0;
+    virtual void setUndo(bool undo) = 0;
+    virtual bool undo() const = 0;
+    virtual void beginMacro(const QString& macroName) = 0;
+    virtual void endMacro() = 0;
 
 private:
-	KisUndoAdapter(const KisUndoAdapter&);
-	KisUndoAdapter& operator=(const KisUndoAdapter&);
+    KisUndoAdapter(const KisUndoAdapter&);
+    KisUndoAdapter& operator=(const KisUndoAdapter&);
 };
 
 inline

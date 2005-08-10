@@ -33,62 +33,62 @@ class KValueSelector;
 
 class KisColorPopup : public QFrame {
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisColorPopup(QColor color, QWidget * w, const char * name);
-	virtual ~KisColorPopup() {};
+    KisColorPopup(QColor color, QWidget * w, const char * name);
+    virtual ~KisColorPopup() {};
 
 signals:
 
-	void changed(const QColor &);
+    void changed(const QColor &);
 
 private:
 
-	KHSSelector * m_khsSelector;
-	KValueSelector * m_valueSelector;
+    KHSSelector * m_khsSelector;
+    KValueSelector * m_valueSelector;
 
-	QColor m_color;
+    QColor m_color;
 };
 
 class KisColorCup : public QPushButton {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	KisColorCup(QWidget * parent, const char * name = 0);
-	
-	virtual ~KisColorCup() {};
-	
-	QColor color() { return m_color; };
-	
+    KisColorCup(QWidget * parent, const char * name = 0);
+    
+    virtual ~KisColorCup() {};
+    
+    QColor color() { return m_color; };
+    
 signals:
 
-	void changed(const QColor &);
+    void changed(const QColor &);
 
 public:
 
-	QSize sizeHint() const;
+    QSize sizeHint() const;
 
 public slots:
 
-	void setColor(const QColor & c);
+    void setColor(const QColor & c);
 
 
 private slots:
-	
-	void slotClicked();
+    
+    void slotClicked();
 
 protected:
 
-	virtual void drawButtonLabel( QPainter *p );
+    virtual void drawButtonLabel( QPainter *p );
 
 private:
 
-	KisColorPopup * m_popup;
-	QColor m_color;
+    KisColorPopup * m_popup;
+    QColor m_color;
 };
 
 #endif

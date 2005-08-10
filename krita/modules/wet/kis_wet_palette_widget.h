@@ -37,29 +37,29 @@ class KIntNumInput;
 class KDoubleNumInput;
 
 class KRITAUI_EXPORT KisWetPaletteWidget
-	 : public QWidget,
-	   public KisCanvasObserver
+     : public QWidget,
+       public KisCanvasObserver
 {
-	Q_OBJECT
-	typedef QWidget super;
+    Q_OBJECT
+    typedef QWidget super;
 
 public:
-	KisWetPaletteWidget(QWidget *parent = 0L, const char *name = 0);
-	virtual ~KisWetPaletteWidget() {}
+    KisWetPaletteWidget(QWidget *parent = 0L, const char *name = 0);
+    virtual ~KisWetPaletteWidget() {}
 
 protected slots:
 
-	void slotFGColorSelected(const QColor& c);
-	void slotWetnessChanged(int);
-	void slotStrengthChanged(double);
+    void slotFGColorSelected(const QColor& c);
+    void slotWetnessChanged(int);
+    void slotStrengthChanged(double);
 
 private:
-	void update(KisCanvasSubject*);
+    void update(KisCanvasSubject*);
 
 private:
-	KisCanvasSubject *m_subject;
-	KDoubleNumInput* m_strength;
-	KIntNumInput* m_wetness;
+    KisCanvasSubject *m_subject;
+    KDoubleNumInput* m_strength;
+    KIntNumInput* m_wetness;
 
 
 };

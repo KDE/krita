@@ -47,126 +47,126 @@ class KisChildDoc;
 
 class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
-	typedef KoDocument super;
-	Q_OBJECT
+    typedef KoDocument super;
+    Q_OBJECT
 
 public:
-	KisDoc(QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false);
-	virtual ~KisDoc();
+    KisDoc(QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false);
+    virtual ~KisDoc();
 
 public:
-	// Overide KoDocument
-	virtual bool completeLoading(KoStore *store);
-	virtual bool completeSaving(KoStore*);
-	virtual DCOPObject* dcopObject();
-	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-	virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
-	virtual bool saveOasis( KoStore*, KoXmlWriter* );
-	virtual bool loadChildren( KoStore* store) { return true; };
-	virtual bool loadXML(QIODevice *, const QDomDocument& doc);
-	virtual QCString mimeType() const;
+    // Overide KoDocument
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore*);
+    virtual DCOPObject* dcopObject();
+    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
+    virtual bool saveOasis( KoStore*, KoXmlWriter* );
+    virtual bool loadChildren( KoStore* store) { return true; };
+    virtual bool loadXML(QIODevice *, const QDomDocument& doc);
+    virtual QCString mimeType() const;
 
-	/**
-	 * Draw the image embedded in another KOffice document
-	 *
-	 * XXX: Use of transparent, zoomX and zoomY is not supported
-	 *      by Krita because we appear to be doing our zooming
-	 *      elsewhere. This may affect KOffice compatibility.
-	 */
-	virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);	
+    /**
+     * Draw the image embedded in another KOffice document
+     *
+     * XXX: Use of transparent, zoomX and zoomY is not supported
+     *      by Krita because we appear to be doing our zooming
+     *      elsewhere. This may affect KOffice compatibility.
+     */
+    virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);    
 
-	/**
-	 * Called by KisView to repaint the specified rect.
-	 */
-	virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile, float exposure = 0.0f);
-	virtual QDomDocument saveXML();
+    /**
+     * Called by KisView to repaint the specified rect.
+     */
+    virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile, float exposure = 0.0f);
+    virtual QDomDocument saveXML();
 
 private: // Undo adapter
-	virtual void addCommand(KCommand *cmd);
-	virtual void setUndo(bool undo);
-	virtual bool undo() const;
-	virtual void beginMacro(const QString& macroName);
-	virtual void endMacro();
+    virtual void addCommand(KCommand *cmd);
+    virtual void setUndo(bool undo);
+    virtual bool undo() const;
+    virtual void beginMacro(const QString& macroName);
+    virtual void endMacro();
 
 
 public:
 
 
-	Q_INT32 undoLimit() const;
-	void setUndoLimit(Q_INT32 limit);
+    Q_INT32 undoLimit() const;
+    void setUndoLimit(Q_INT32 limit);
 
-	Q_INT32 redoLimit() const;
-	void setRedoLimit(Q_INT32 limit);
+    Q_INT32 redoLimit() const;
+    void setRedoLimit(Q_INT32 limit);
 
-	/**
-	 * Create a new image that has this document as a parent and
-	 * replace the current image with this image.
-	 */
-	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy);
+    /**
+     * Create a new image that has this document as a parent and
+     * replace the current image with this image.
+     */
+    KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy);
 
-	void renameImage(const QString& oldName, const QString& newName);
+    void renameImage(const QString& oldName, const QString& newName);
 
 
-	/**
-	 * Adds the specified child document to this document; this
-	 * is not done with KoDocument::insertChild() because that 
-	 * is protected and cannot be called from KisView.
-	 */
-	KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
+    /**
+     * Adds the specified child document to this document; this
+     * is not done with KoDocument::insertChild() because that 
+     * is protected and cannot be called from KisView.
+     */
+    KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
 
-	// Makes an otherwise empty document ready for import/export
-	void prepareForImport();
-	
-	KisImageSP currentImage() { return m_currentImage;};
-	void setCurrentImage(KisImageSP image);
+    // Makes an otherwise empty document ready for import/export
+    void prepareForImport();
+    
+    KisImageSP currentImage() { return m_currentImage;};
+    void setCurrentImage(KisImageSP image);
 
-	KisUndoAdapter * undoAdapter() { return this; }
-	
+    KisUndoAdapter * undoAdapter() { return this; }
+    
 public slots:
-	void slotImageUpdated();
-	void slotImageUpdated(const QRect& rect);
-	bool slotNewImage();
-	void slotDocumentRestored();
-	void slotCommandExecuted();
+    void slotImageUpdated();
+    void slotImageUpdated(const QRect& rect);
+    bool slotNewImage();
+    void slotDocumentRestored();
+    void slotCommandExecuted();
 
 signals:
-	void docUpdated();
-	void docUpdated(const QRect& rect);
-	void imageListUpdated();
-	
+    void docUpdated();
+    void docUpdated(const QRect& rect);
+    void imageListUpdated();
+    
 
 protected:
-	// Overide KoDocument
-	virtual KoView* createViewInstance(QWidget *parent, const char *name);
-	virtual bool saveChildren( KoStore * store ) { return true; };
-	
+    // Overide KoDocument
+    virtual KoView* createViewInstance(QWidget *parent, const char *name);
+    virtual bool saveChildren( KoStore * store ) { return true; };
+    
 private slots:
-	void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-	void slotIOProgress(Q_INT8 percentage);
+    void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+    void slotIOProgress(Q_INT8 percentage);
 
 private:
-	QDomElement saveImage(QDomDocument& doc, KisImageSP img);
-	KisImageSP loadImage(const QDomElement& elem);
-	QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
-	KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
-	bool init();
-	
-	void setIOSteps(Q_INT32 nsteps);
-	void IOCompletedStep();
-	void IODone();
+    QDomElement saveImage(QDomDocument& doc, KisImageSP img);
+    KisImageSP loadImage(const QDomElement& elem);
+    QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
+    KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
+    bool init();
+    
+    void setIOSteps(Q_INT32 nsteps);
+    void IOCompletedStep();
+    void IODone();
 
 private:
 
-	bool m_undo;
-	KoCommandHistory *m_cmdHistory;
-	KisImageSP m_currentImage;
-	DCOPObject *m_dcop;
-	KisNameServer *m_nserver;
-	KMacroCommand *m_currentMacro;
-	Q_INT32 m_macroNestDepth;
-	Q_INT32 m_conversionDepth;
-	int m_ioProgressTotalSteps;
-	int m_ioProgressBase;
+    bool m_undo;
+    KoCommandHistory *m_cmdHistory;
+    KisImageSP m_currentImage;
+    DCOPObject *m_dcop;
+    KisNameServer *m_nserver;
+    KMacroCommand *m_currentMacro;
+    Q_INT32 m_macroNestDepth;
+    Q_INT32 m_conversionDepth;
+    int m_ioProgressTotalSteps;
+    int m_ioProgressBase;
 };
 
 #endif // KIS_DOC_H_

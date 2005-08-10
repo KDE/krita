@@ -28,8 +28,8 @@
 
 KisToolShape::KisToolShape(const QString& UIName) : super(UIName)
 {
-	m_shapeOptionsWidget = 0;
-	m_optionLayout = 0;
+    m_shapeOptionsWidget = 0;
+    m_optionLayout = 0;
 }
 
 KisToolShape::~KisToolShape()
@@ -38,33 +38,33 @@ KisToolShape::~KisToolShape()
 
 QWidget* KisToolShape::createOptionWidget(QWidget* parent)
 {
-	QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget(parent);
 
-	m_shapeOptionsWidget = new WdgGeometryOptions(widget);
-	Q_CHECK_PTR(m_shapeOptionsWidget);
+    m_shapeOptionsWidget = new WdgGeometryOptions(widget);
+    Q_CHECK_PTR(m_shapeOptionsWidget);
 
-	m_optionLayout = new QGridLayout(widget, 2, 1);
-	super::addOptionWidgetLayout(m_optionLayout);
+    m_optionLayout = new QGridLayout(widget, 2, 1);
+    super::addOptionWidgetLayout(m_optionLayout);
 
-	m_optionLayout -> addWidget(m_shapeOptionsWidget, 0, 0);
+    m_optionLayout -> addWidget(m_shapeOptionsWidget, 0, 0);
 
-	return widget;
+    return widget;
 }
 
 void KisToolShape::addOptionWidgetLayout(QLayout *layout)
 {
-	Q_ASSERT(m_optionLayout != 0);
+    Q_ASSERT(m_optionLayout != 0);
 
-	m_optionLayout -> addMultiCellLayout(layout, 1, 1, 0, 1);
+    m_optionLayout -> addMultiCellLayout(layout, 1, 1, 0, 1);
 }
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)
 {
-	if (m_shapeOptionsWidget) {
-		return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget -> cmbFill -> currentItem());
-	} else {
-		return KisPainter::FillStyleNone;
-	}
+    if (m_shapeOptionsWidget) {
+        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget -> cmbFill -> currentItem());
+    } else {
+        return KisPainter::FillStyleNone;
+    }
 }
 
 #include "kis_tool_shape.moc"

@@ -30,75 +30,75 @@
 
 template<typename _T>
 class KisGenericRegistry {
-	typedef std::map<KisID, _T> storageMap;
+    typedef std::map<KisID, _T> storageMap;
 public:
-	KisGenericRegistry() { };
-	virtual ~KisGenericRegistry() { };
+    KisGenericRegistry() { };
+    virtual ~KisGenericRegistry() { };
 public:
-	void add(_T item)
-	{
-		m_storage.insert( typename storageMap::value_type( item->id(), item) );
-	}
+    void add(_T item)
+    {
+        m_storage.insert( typename storageMap::value_type( item->id(), item) );
+    }
 
-	void add(KisID id, _T item)
-	{
-		m_storage.insert(typename storageMap::value_type(id, item));
-		//kdDebug() << "Added ID: " << id.id() << ", " << id.name() << "\n";
-	}
-	
-	_T get(const KisID& name) const
-	{
-		_T p;
-		typename storageMap::const_iterator it = m_storage.find(name);
-		if (it != m_storage.end()) {
-			p = it -> second;
-		}
-		if (!p) {
-			//kdDebug() << "No item " << name.id() << ", " << name.name() << " found\n";
-			return 0;
-		}
-		return p;
-	}
+    void add(KisID id, _T item)
+    {
+        m_storage.insert(typename storageMap::value_type(id, item));
+        //kdDebug() << "Added ID: " << id.id() << ", " << id.name() << "\n";
+    }
+    
+    _T get(const KisID& name) const
+    {
+        _T p;
+        typename storageMap::const_iterator it = m_storage.find(name);
+        if (it != m_storage.end()) {
+            p = it -> second;
+        }
+        if (!p) {
+            //kdDebug() << "No item " << name.id() << ", " << name.name() << " found\n";
+            return 0;
+        }
+        return p;
+    }
 
-	/**
-	 * Get a single entry based on the identifying part of KisID, not the
-	 * the descriptive part.
-	 */
-	_T get(const QString& id) const
-	{
-		return get(KisID(id, ""));
-	}
-
-
-	bool exists(const KisID& id) const
-	{
-		typename storageMap::const_iterator it = m_storage.find(id);
-		return (it != m_storage.end());
-	}
-
-	bool exists(const QString& id) const
-	{
-		return exists(KisID(id, ""));
-	}
+    /**
+     * Get a single entry based on the identifying part of KisID, not the
+     * the descriptive part.
+     */
+    _T get(const QString& id) const
+    {
+        return get(KisID(id, ""));
+    }
 
 
-	KisIDList listKeys() const
-	{
-		KisIDList list;
-		typename storageMap::const_iterator it = m_storage.begin();
-		typename storageMap::const_iterator endit = m_storage.end();
-		while( it != endit )
-		{
-			list.append(it->first);
-			++it;
-		}
-		return list;
-	}
+    bool exists(const KisID& id) const
+    {
+        typename storageMap::const_iterator it = m_storage.find(id);
+        return (it != m_storage.end());
+    }
+
+    bool exists(const QString& id) const
+    {
+        return exists(KisID(id, ""));
+    }
+
+
+    KisIDList listKeys() const
+    {
+        KisIDList list;
+        typename storageMap::const_iterator it = m_storage.begin();
+        typename storageMap::const_iterator endit = m_storage.end();
+        while( it != endit )
+        {
+            list.append(it->first);
+            ++it;
+        }
+        return list;
+    }
 
 protected:
-	KisGenericRegistry(const KisGenericRegistry&) { };
-	KisGenericRegistry operator=(const KisGenericRegistry&) { };
-	storageMap m_storage;
+    KisGenericRegistry(const KisGenericRegistry&) { };
+    KisGenericRegistry operator=(const KisGenericRegistry&) { };
+    storageMap m_storage;
 };
 
 #endif

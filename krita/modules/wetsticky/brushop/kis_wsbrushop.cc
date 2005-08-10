@@ -31,13 +31,13 @@
 
 KisPaintOp * KisWSBrushOpFactory::createOp(KisPainter * painter)
 {
-	KisPaintOp * op = new KisWSBrushOp(painter);
-	Q_CHECK_PTR(op);
-	return op;
+    KisPaintOp * op = new KisWSBrushOp(painter);
+    Q_CHECK_PTR(op);
+    return op;
 }
 
 KisWSBrushOp::KisWSBrushOp(KisPainter * painter)
-	: super(painter)
+    : super(painter)
 {
 }
 
@@ -46,72 +46,72 @@ KisWSBrushOp::~KisWSBrushOp()
 }
 
 void KisWSBrushOp::paintAt(const KisPoint &pos,
-			 const double pressure,
-			 const double /*xTilt*/,
-			 const double /*yTilt*/)
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/)
 {
-	// Painting should be implemented according to the following algorithm:
-	// retrieve brush
-	// if brush == mask
-	//          retrieve mask
-	// else if brush == image
-	//          retrieve image
-	// subsample (mask | image) for position -- pos should be double!
-	// apply filters to mask (colour | gradient | pattern | etc.
-	// composite filtered mask into temporary layer
-	// composite temporary layer into target layer
-	// @see: doc/brush.txt
+    // Painting should be implemented according to the following algorithm:
+    // retrieve brush
+    // if brush == mask
+    //          retrieve mask
+    // else if brush == image
+    //          retrieve image
+    // subsample (mask | image) for position -- pos should be double!
+    // apply filters to mask (colour | gradient | pattern | etc.
+    // composite filtered mask into temporary layer
+    // composite temporary layer into target layer
+    // @see: doc/brush.txt
 
-	if (!m_painter -> device()) return;
+    if (!m_painter -> device()) return;
 
-	KisBrush *brush = m_painter -> brush();
-	
-	Q_ASSERT(brush);
-	if (!brush) return;
-	
-	KisPaintDeviceSP device = m_painter -> device();
+    KisBrush *brush = m_painter -> brush();
+    
+    Q_ASSERT(brush);
+    if (!brush) return;
+    
+    KisPaintDeviceSP device = m_painter -> device();
 
-	KisPoint hotSpot = brush -> hotSpot(pressure);
-	KisPoint pt = pos - hotSpot;
+    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint pt = pos - hotSpot;
 
-	// Split the coordinates into integer plus fractional parts. The integer
-	// is where the dab will be positioned and the fractional part determines
-	// the sub-pixel positioning.
-	Q_INT32 x;
-	double xFraction;
-	Q_INT32 y;
-	double yFraction;
+    // Split the coordinates into integer plus fractional parts. The integer
+    // is where the dab will be positioned and the fractional part determines
+    // the sub-pixel positioning.
+    Q_INT32 x;
+    double xFraction;
+    Q_INT32 y;
+    double yFraction;
 
-	splitCoordinate(pt.x(), &x, &xFraction);
-	splitCoordinate(pt.y(), &y, &yFraction);
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
 
-	KisLayerSP dab = 0;
+    KisLayerSP dab = 0;
 
-	if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-		dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
-	}
-	else {
-		KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
-		dab = computeDab(mask);
-	}
-	m_painter -> setPressure(pressure);
+    if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
+        dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+    }
+    else {
+        KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+        dab = computeDab(mask);
+    }
+    m_painter -> setPressure(pressure);
 
-	QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
-	QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-	KisImage * image = device -> image();
-	
-	if (image != 0) {
-		dstRect &= image -> bounds();
-	}
-	
-	if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    KisImage * image = device -> image();
+    
+    if (image != 0) {
+        dstRect &= image -> bounds();
+    }
+    
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-	Q_INT32 sx = dstRect.x() - x;
-	Q_INT32 sy = dstRect.y() - y;
-	Q_INT32 sw = dstRect.width();
-	Q_INT32 sh = dstRect.height();
+    Q_INT32 sx = dstRect.x() - x;
+    Q_INT32 sy = dstRect.y() - y;
+    Q_INT32 sw = dstRect.width();
+    Q_INT32 sh = dstRect.height();
 
-	m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
-	m_painter -> addDirtyRect(dstRect);
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
+    m_painter -> addDirtyRect(dstRect);
 }

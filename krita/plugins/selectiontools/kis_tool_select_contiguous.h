@@ -39,55 +39,55 @@ class KisSelectionOptions;
  */
 class KisToolSelectContiguous : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolSelectContiguous();
-	virtual ~KisToolSelectContiguous();
+    KisToolSelectContiguous();
+    virtual ~KisToolSelectContiguous();
 
 public:
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 7; }
-	virtual enumToolType toolType() { return TOOL_SELECT; };
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 7; }
+    virtual enumToolType toolType() { return TOOL_SELECT; };
 
-	virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
 
-	virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void buttonPress(KisButtonPressEvent *event);
 
 public slots:
-	virtual void slotSetFuzziness(int);
-	virtual void slotSetAction(int);
-	virtual void slotSetSampleMerged(int);
-	virtual void activate();
+    virtual void slotSetFuzziness(int);
+    virtual void slotSetAction(int);
+    virtual void slotSetSampleMerged(int);
+    virtual void activate();
 
 
 private:
-	KisCanvasSubject *m_subject;
+    KisCanvasSubject *m_subject;
         QWidget * m_optWidget;
-	KisSelectionOptions * m_options; // Default options widget
+    KisSelectionOptions * m_options; // Default options widget
 
-	int m_fuzziness;
-	enumSelectionMode m_selectAction;
-	bool m_sampleMerged;
+    int m_fuzziness;
+    enumSelectionMode m_selectAction;
+    bool m_sampleMerged;
 };
 
 class KisToolSelectContiguousFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectContiguousFactory() : super() {};
-	virtual ~KisToolSelectContiguousFactory(){};
+    KisToolSelectContiguousFactory() : super() {};
+    virtual ~KisToolSelectContiguousFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectContiguous(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectContiguous(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }
 };
 
 

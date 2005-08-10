@@ -30,13 +30,13 @@ KUNITTEST_MODULE_REGISTER_TESTER( KisRgbColorSpaceTester );
 
 void KisRgbColorSpaceTester::allTests()
 {
-	// We need this so that the colour profile loading can operate without crashing.
-	KisFactory *factory = new KisFactory();
+    // We need this so that the colour profile loading can operate without crashing.
+    KisFactory *factory = new KisFactory();
 
-	testBasics();
-	testMixColors();
+    testBasics();
+    testMixColors();
 
-	delete factory;
+    delete factory;
 }
 
 #define NUM_CHANNELS 4
@@ -48,148 +48,148 @@ void KisRgbColorSpaceTester::allTests()
 
 void KisRgbColorSpaceTester::testBasics()
 {
-	KisRgbColorSpace *cs = new KisRgbColorSpace();
-	KisAbstractColorSpace * csSP = cs;
+    KisRgbColorSpace *cs = new KisRgbColorSpace();
+    KisAbstractColorSpace * csSP = cs;
 
-	Q_UINT8 pixel[NUM_CHANNELS];
+    Q_UINT8 pixel[NUM_CHANNELS];
 
-	pixel[PIXEL_RED] = 255;
-	pixel[PIXEL_GREEN] = 128;
-	pixel[PIXEL_BLUE] = 64;
-	pixel[PIXEL_ALPHA] = 0;
+    pixel[PIXEL_RED] = 255;
+    pixel[PIXEL_GREEN] = 128;
+    pixel[PIXEL_BLUE] = 64;
+    pixel[PIXEL_ALPHA] = 0;
 
-	QString valueText = cs -> channelValueText(pixel, RED_CHANNEL);
-	CHECK(valueText, QString("255"));
+    QString valueText = cs -> channelValueText(pixel, RED_CHANNEL);
+    CHECK(valueText, QString("255"));
 
-	valueText = cs -> channelValueText(pixel, GREEN_CHANNEL);
-	CHECK(valueText, QString("128"));
+    valueText = cs -> channelValueText(pixel, GREEN_CHANNEL);
+    CHECK(valueText, QString("128"));
 
-	valueText = cs -> channelValueText(pixel, BLUE_CHANNEL);
-	CHECK(valueText, QString("64"));
+    valueText = cs -> channelValueText(pixel, BLUE_CHANNEL);
+    CHECK(valueText, QString("64"));
 
-	valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
-	CHECK(valueText, QString("0"));
+    valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
+    CHECK(valueText, QString("0"));
 
-	valueText = cs -> normalisedChannelValueText(pixel, RED_CHANNEL);
-	CHECK(valueText, QString().setNum(1.0));
+    valueText = cs -> normalisedChannelValueText(pixel, RED_CHANNEL);
+    CHECK(valueText, QString().setNum(1.0));
 
-	valueText = cs -> normalisedChannelValueText(pixel, GREEN_CHANNEL);
-	CHECK(valueText, QString().setNum(128.0 / 255.0));
+    valueText = cs -> normalisedChannelValueText(pixel, GREEN_CHANNEL);
+    CHECK(valueText, QString().setNum(128.0 / 255.0));
 
-	valueText = cs -> normalisedChannelValueText(pixel, BLUE_CHANNEL);
-	CHECK(valueText, QString().setNum(64.0 / 255.0));
+    valueText = cs -> normalisedChannelValueText(pixel, BLUE_CHANNEL);
+    CHECK(valueText, QString().setNum(64.0 / 255.0));
 
-	valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
-	CHECK(valueText, QString().setNum(0.0));
+    valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
+    CHECK(valueText, QString().setNum(0.0));
 
-	cs -> setPixel(pixel, 128, 192, 64, 99);
-	CHECK((uint)pixel[PIXEL_RED], 128u);
-	CHECK((uint)pixel[PIXEL_GREEN], 192u);
-	CHECK((uint)pixel[PIXEL_BLUE], 64u);
-	CHECK((uint)pixel[PIXEL_ALPHA], 99u);
+    cs -> setPixel(pixel, 128, 192, 64, 99);
+    CHECK((uint)pixel[PIXEL_RED], 128u);
+    CHECK((uint)pixel[PIXEL_GREEN], 192u);
+    CHECK((uint)pixel[PIXEL_BLUE], 64u);
+    CHECK((uint)pixel[PIXEL_ALPHA], 99u);
 
-	Q_UINT8 red;
-	Q_UINT8 green;
-	Q_UINT8 blue;
-	Q_UINT8 alpha;
+    Q_UINT8 red;
+    Q_UINT8 green;
+    Q_UINT8 blue;
+    Q_UINT8 alpha;
 
-	cs -> getPixel(pixel, &red, &green, &blue, &alpha);
-	CHECK((uint)red, 128u);
-	CHECK((uint)green, 192u);
-	CHECK((uint)blue, 64u);
-	CHECK((uint)alpha, 99u);
+    cs -> getPixel(pixel, &red, &green, &blue, &alpha);
+    CHECK((uint)red, 128u);
+    CHECK((uint)green, 192u);
+    CHECK((uint)blue, 64u);
+    CHECK((uint)alpha, 99u);
 }
 
 void KisRgbColorSpaceTester::testMixColors()
 {
-	KisAbstractColorSpace * cs = new KisRgbColorSpace();
+    KisAbstractColorSpace * cs = new KisRgbColorSpace();
 
-	// Test mixColors.
-	Q_UINT8 pixel1[4];
-	Q_UINT8 pixel2[4];
-	Q_UINT8 outputPixel[4];
+    // Test mixColors.
+    Q_UINT8 pixel1[4];
+    Q_UINT8 pixel2[4];
+    Q_UINT8 outputPixel[4];
 
-	pixel1[PIXEL_RED] = 255;
-	pixel1[PIXEL_GREEN] = 255;
-	pixel1[PIXEL_BLUE] = 255;
-	pixel1[PIXEL_ALPHA] = 255;
+    pixel1[PIXEL_RED] = 255;
+    pixel1[PIXEL_GREEN] = 255;
+    pixel1[PIXEL_BLUE] = 255;
+    pixel1[PIXEL_ALPHA] = 255;
 
-	pixel2[PIXEL_RED] = 0;
-	pixel2[PIXEL_GREEN] = 0;
-	pixel2[PIXEL_BLUE] = 0;
-	pixel2[PIXEL_ALPHA] = 0;
+    pixel2[PIXEL_RED] = 0;
+    pixel2[PIXEL_GREEN] = 0;
+    pixel2[PIXEL_BLUE] = 0;
+    pixel2[PIXEL_ALPHA] = 0;
 
-	const Q_UINT8 *pixelPtrs[2];
-	Q_UINT8 weights[2];
+    const Q_UINT8 *pixelPtrs[2];
+    Q_UINT8 weights[2];
 
-	pixelPtrs[0] = pixel1;
-	pixelPtrs[1] = pixel2;
+    pixelPtrs[0] = pixel1;
+    pixelPtrs[1] = pixel2;
 
-	weights[0] = 255;
-	weights[1] = 0;
+    weights[0] = 255;
+    weights[1] = 0;
 
-	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+    CHECK((int)outputPixel[PIXEL_RED], 255);
+    CHECK((int)outputPixel[PIXEL_GREEN], 255);
+    CHECK((int)outputPixel[PIXEL_BLUE], 255);
+    CHECK((int)outputPixel[PIXEL_ALPHA], 255);
 
-	weights[0] = 0;
-	weights[1] = 255;
+    weights[0] = 0;
+    weights[1] = 255;
 
-	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_RED], 0);
-	CHECK((int)outputPixel[PIXEL_GREEN], 0);
-	CHECK((int)outputPixel[PIXEL_BLUE], 0);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 0);
+    CHECK((int)outputPixel[PIXEL_RED], 0);
+    CHECK((int)outputPixel[PIXEL_GREEN], 0);
+    CHECK((int)outputPixel[PIXEL_BLUE], 0);
+    CHECK((int)outputPixel[PIXEL_ALPHA], 0);
 
-	weights[0] = 128;
-	weights[1] = 127;
+    weights[0] = 128;
+    weights[1] = 127;
 
-	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
-	 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 128);
+    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+     
+    CHECK((int)outputPixel[PIXEL_RED], 255);
+    CHECK((int)outputPixel[PIXEL_GREEN], 255);
+    CHECK((int)outputPixel[PIXEL_BLUE], 255);
+    CHECK((int)outputPixel[PIXEL_ALPHA], 128);
 
-	pixel1[PIXEL_RED] = 200;
-	pixel1[PIXEL_GREEN] = 100;
-	pixel1[PIXEL_BLUE] = 50;
-	pixel1[PIXEL_ALPHA] = 255;
+    pixel1[PIXEL_RED] = 200;
+    pixel1[PIXEL_GREEN] = 100;
+    pixel1[PIXEL_BLUE] = 50;
+    pixel1[PIXEL_ALPHA] = 255;
 
-	pixel2[PIXEL_RED] = 100;
-	pixel2[PIXEL_GREEN] = 200;
-	pixel2[PIXEL_BLUE] = 20;
-	pixel2[PIXEL_ALPHA] = 255;
+    pixel2[PIXEL_RED] = 100;
+    pixel2[PIXEL_GREEN] = 200;
+    pixel2[PIXEL_BLUE] = 20;
+    pixel2[PIXEL_ALPHA] = 255;
 
-	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_RED], 150);
-	CHECK((int)outputPixel[PIXEL_GREEN], 150);
-	CHECK((int)outputPixel[PIXEL_BLUE], 35);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+    CHECK((int)outputPixel[PIXEL_RED], 150);
+    CHECK((int)outputPixel[PIXEL_GREEN], 150);
+    CHECK((int)outputPixel[PIXEL_BLUE], 35);
+    CHECK((int)outputPixel[PIXEL_ALPHA], 255);
 
-	pixel1[PIXEL_RED] = 0;
-	pixel1[PIXEL_GREEN] = 0;
-	pixel1[PIXEL_BLUE] = 0;
-	pixel1[PIXEL_ALPHA] = 0;
+    pixel1[PIXEL_RED] = 0;
+    pixel1[PIXEL_GREEN] = 0;
+    pixel1[PIXEL_BLUE] = 0;
+    pixel1[PIXEL_ALPHA] = 0;
 
-	pixel2[PIXEL_RED] = 255;
-	pixel2[PIXEL_GREEN] = 255;
-	pixel2[PIXEL_BLUE] = 255;
-	pixel2[PIXEL_ALPHA] = 254;
+    pixel2[PIXEL_RED] = 255;
+    pixel2[PIXEL_GREEN] = 255;
+    pixel2[PIXEL_BLUE] = 255;
+    pixel2[PIXEL_ALPHA] = 254;
 
-	weights[0] = 89;
-	weights[1] = 166;
+    weights[0] = 89;
+    weights[1] = 166;
 
-	cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
 
-	CHECK((int)outputPixel[PIXEL_RED], 255);
-	CHECK((int)outputPixel[PIXEL_GREEN], 255);
-	CHECK((int)outputPixel[PIXEL_BLUE], 255);
-	CHECK((int)outputPixel[PIXEL_ALPHA], 165);
+    CHECK((int)outputPixel[PIXEL_RED], 255);
+    CHECK((int)outputPixel[PIXEL_GREEN], 255);
+    CHECK((int)outputPixel[PIXEL_BLUE], 255);
+    CHECK((int)outputPixel[PIXEL_ALPHA], 165);
 }
 

@@ -22,14 +22,14 @@
 
 KisCommand::KisCommand(KisUndoAdapter *adapter)
 {
-	m_name = "";
-	m_undoAdapter = adapter;
+    m_name = "";
+    m_undoAdapter = adapter;
 }
 
 KisCommand::KisCommand(const QString& name, KisUndoAdapter *adapter)
 {
-	m_name = name;
-	m_undoAdapter = adapter;
+    m_name = name;
+    m_undoAdapter = adapter;
 }
 
 KisCommand::~KisCommand()
@@ -38,6 +38,6 @@ KisCommand::~KisCommand()
 
 QString KisCommand::name() const
 {
-	return m_name;
+    return m_name;
 }
 

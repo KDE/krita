@@ -24,8 +24,8 @@
 class KisEmbossFilterPlugin : public KParts::Plugin
 {
 public:
-	KisEmbossFilterPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisEmbossFilterPlugin();
+    KisEmbossFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisEmbossFilterPlugin();
 };
 
 #endif

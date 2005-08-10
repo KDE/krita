@@ -37,20 +37,20 @@
 
 KisToolPaint::KisToolPaint(const QString& UIName)
 {
-	m_subject = 0;
+    m_subject = 0;
 
-	m_UIName = UIName;
+    m_UIName = UIName;
 
-	m_optionWidget = 0;
-	m_optionWidgetLayout = 0;
+    m_optionWidget = 0;
+    m_optionWidgetLayout = 0;
 
-	m_lbOpacity = 0;
-	m_slOpacity = 0;
-	m_lbComposite= 0;
-	m_cmbComposite = 0;
+    m_lbOpacity = 0;
+    m_slOpacity = 0;
+    m_lbComposite= 0;
+    m_cmbComposite = 0;
 
-	m_opacity = OPACITY_OPAQUE;
-	m_compositeOp = COMPOSITE_OVER;
+    m_opacity = OPACITY_OPAQUE;
+    m_compositeOp = COMPOSITE_OVER;
 }
 
 KisToolPaint::~KisToolPaint()
@@ -59,8 +59,8 @@ KisToolPaint::~KisToolPaint()
 
 void KisToolPaint::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	updateCompositeOpComboBox();
+    m_subject = subject;
+    updateCompositeOpComboBox();
 }
 
 void KisToolPaint::paint(QPainter&)
@@ -113,114 +113,114 @@ void KisToolPaint::keyRelease(QKeyEvent *)
 
 QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 {
-	m_optionWidget = new QWidget(parent);
-	m_optionWidget -> setCaption(m_UIName);
+    m_optionWidget = new QWidget(parent);
+    m_optionWidget -> setCaption(m_UIName);
 
-	m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
-	m_slOpacity = new KIntNumInput( m_optionWidget, "int_m_optionwidget");
-	m_slOpacity -> setRange( 0, 100);
-	m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
-	m_slOpacity -> setSuffix("%");
-	connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
+    m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
+    m_slOpacity = new KIntNumInput( m_optionWidget, "int_m_optionwidget");
+    m_slOpacity -> setRange( 0, 100);
+    m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
+    m_slOpacity -> setSuffix("%");
+    connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
-	m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
-	m_cmbComposite = new KisCmbComposite(m_optionWidget);
-	connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
+    m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
+    m_cmbComposite = new KisCmbComposite(m_optionWidget);
+    connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
-	m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
+    m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
 
-	m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
-	m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
+    m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
+    m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
 
-	m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
-	m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
+    m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
+    m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
 
-	m_optionWidgetLayout -> setRowSpacing(3, 6);
-	
-	return m_optionWidget;
+    m_optionWidgetLayout -> setRowSpacing(3, 6);
+    
+    return m_optionWidget;
 }
 
 QWidget* KisToolPaint::optionWidget()
 {
-	return m_optionWidget;
+    return m_optionWidget;
 }
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
-	Q_ASSERT(m_optionWidget != 0);
-	Q_ASSERT(m_optionWidgetLayout != 0);
-	m_optionWidgetLayout -> addMultiCellLayout(layout, 3, 3, 0, 1);
+    Q_ASSERT(m_optionWidget != 0);
+    Q_ASSERT(m_optionWidgetLayout != 0);
+    m_optionWidgetLayout -> addMultiCellLayout(layout, 3, 3, 0, 1);
 }
 
 void KisToolPaint::slotSetOpacity(int opacityPerCent)
 {
-	m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
+    m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
 }
 
 void KisToolPaint::slotSetCompositeMode(const KisCompositeOp& compositeOp)
 {
-	m_compositeOp = compositeOp;
+    m_compositeOp = compositeOp;
 }
 
 QCursor KisToolPaint::cursor()
 {
-	return m_cursor;
+    return m_cursor;
 }
 
 void KisToolPaint::setCursor(const QCursor& cursor)
 {
-	m_cursor = cursor;
+    m_cursor = cursor;
 
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject -> toolController();
 
-		if (controller && controller -> currentTool() == this) {
-			m_subject->canvasController()->setCanvasCursor(m_cursor);
-		}
-	}
+        if (controller && controller -> currentTool() == this) {
+            m_subject->canvasController()->setCanvasCursor(m_cursor);
+        }
+    }
 }
 
 void KisToolPaint::activate()
 {
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject -> toolController();
 
-		if (controller)
-			controller -> setCurrentTool(this);
-		updateCompositeOpComboBox();
-	}
+        if (controller)
+            controller -> setCurrentTool(this);
+        updateCompositeOpComboBox();
+    }
 }
 
 void KisToolPaint::notifyModified() const
 {
-	if (m_subject) {
-		KoDocument *doc = m_subject -> document();
+    if (m_subject) {
+        KoDocument *doc = m_subject -> document();
 
-		if (doc) {
-			doc -> setModified(true);
-		}
-	}
+        if (doc) {
+            doc -> setModified(true);
+        }
+    }
 }
 
 void KisToolPaint::updateCompositeOpComboBox()
 {
-	if (m_optionWidget && m_subject) {
-		KisImageSP img = m_subject -> currentImg();
+    if (m_optionWidget && m_subject) {
+        KisImageSP img = m_subject -> currentImg();
 
-		if (img) {
-			KisPaintDeviceSP device = img -> activeDevice();
+        if (img) {
+            KisPaintDeviceSP device = img -> activeDevice();
 
-			if (device) {
-				KisCompositeOpList compositeOps = device -> colorStrategy() -> userVisiblecompositeOps();
-				m_cmbComposite -> setCompositeOpList(compositeOps);
+            if (device) {
+                KisCompositeOpList compositeOps = device -> colorStrategy() -> userVisiblecompositeOps();
+                m_cmbComposite -> setCompositeOpList(compositeOps);
 
-				if (compositeOps.find(m_compositeOp) == compositeOps.end()) {
-					m_compositeOp = COMPOSITE_OVER;
-				}
-				m_cmbComposite -> setCurrentItem(m_compositeOp);
-			}
-		}
-	}
+                if (compositeOps.find(m_compositeOp) == compositeOps.end()) {
+                    m_compositeOp = COMPOSITE_OVER;
+                }
+                m_cmbComposite -> setCurrentItem(m_compositeOp);
+            }
+        }
+    }
 }
 
 #include "kis_tool_paint.moc"

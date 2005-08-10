@@ -29,12 +29,12 @@
 
 KisToolPan::KisToolPan()
 {
-	setName("tool_pan");
-	m_subject = 0;
-	m_dragging = false;
-	m_openHandCursor = KisCursor::openHandCursor();
-	m_closedHandCursor = KisCursor::closedHandCursor();
-	setCursor(m_openHandCursor);
+    setName("tool_pan");
+    m_subject = 0;
+    m_dragging = false;
+    m_openHandCursor = KisCursor::openHandCursor();
+    m_closedHandCursor = KisCursor::closedHandCursor();
+    setCursor(m_openHandCursor);
 }
 
 KisToolPan::~KisToolPan()
@@ -43,53 +43,53 @@ KisToolPan::~KisToolPan()
 
 void KisToolPan::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	super::update(m_subject);
+    m_subject = subject;
+    super::update(m_subject);
 }
 
 void KisToolPan::buttonPress(KisButtonPressEvent *e)
 {
-	if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
-		m_origScrollX = controller -> horzValue();
-		m_origScrollY = controller -> vertValue();
-		m_dragPos = controller -> windowToView(e -> pos());
-		m_dragging = true;
-		setCursor(m_closedHandCursor);
-	}
+        m_origScrollX = controller -> horzValue();
+        m_origScrollY = controller -> vertValue();
+        m_dragPos = controller -> windowToView(e -> pos());
+        m_dragging = true;
+        setCursor(m_closedHandCursor);
+    }
 }
 
 void KisToolPan::move(KisMoveEvent *e)
 {
-	if (m_subject && m_dragging) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    if (m_subject && m_dragging) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
-		KisPoint currPos = controller -> windowToView(e -> pos());
-		KisPoint delta = currPos - m_dragPos;
-		controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
-	}
+        KisPoint currPos = controller -> windowToView(e -> pos());
+        KisPoint delta = currPos - m_dragPos;
+        controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
+    }
 }
 
 void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 {
-	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
-		setCursor(m_openHandCursor);
-		m_dragging = false;
-	}
+    if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        setCursor(m_openHandCursor);
+        m_dragging = false;
+    }
 }
 
 void KisToolPan::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Pan"), "tool_pan", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
-		m_action -> setToolTip(i18n("Pan"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Pan"), "tool_pan", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
+        m_action -> setToolTip(i18n("Pan"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 #include "kis_tool_pan.moc"

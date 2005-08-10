@@ -34,388 +34,388 @@ void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProg
 {
         KisPoint centreOfRotation;
 
-	if (rotateAboutImageCentre) {
-		centreOfRotation = KisPoint(m_dev -> image() -> width() / 2.0,  m_dev -> image() -> height() / 2.0);
-	} else {
-		QRect r = m_dev -> exactBounds();
-		centreOfRotation = KisPoint(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
-	}
+    if (rotateAboutImageCentre) {
+        centreOfRotation = KisPoint(m_dev -> image() -> width() / 2.0,  m_dev -> image() -> height() / 2.0);
+    } else {
+        QRect r = m_dev -> exactBounds();
+        centreOfRotation = KisPoint(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
+    }
 
-	m_progress = progress;
+    m_progress = progress;
 
-	KisPaintDeviceSP rotated = rotate(m_dev, angle, centreOfRotation);
+    KisPaintDeviceSP rotated = rotate(m_dev, angle, centreOfRotation);
 
-	if (!m_dev -> hasSelection()) {
-		// Clear everything
-		m_dev -> clear();
-	} else {
-		// Clear selected pixels
-		m_dev -> clearSelection();
-	}
-	
-	KisPainter p(m_dev);
-	QRect r = rotated -> extent();
+    if (!m_dev -> hasSelection()) {
+        // Clear everything
+        m_dev -> clear();
+    } else {
+        // Clear selected pixels
+        m_dev -> clearSelection();
+    }
+    
+    KisPainter p(m_dev);
+    QRect r = rotated -> extent();
 
-	// OVER ipv COPY
-	p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, rotated, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-	p.end();
+    // OVER ipv COPY
+    p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, rotated, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    p.end();
 }
 
 void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *progress) 
 {
-	const double pi=3.1415926535897932385;
-	double thetaX = angleX * pi / 180;
-	double shearX = tan(thetaX);
-	double thetaY = angleY * pi / 180;
-	double shearY = tan(thetaY);
+    const double pi=3.1415926535897932385;
+    double thetaX = angleX * pi / 180;
+    double shearX = tan(thetaX);
+    double thetaY = angleY * pi / 180;
+    double shearY = tan(thetaY);
 
-	QRect r = m_dev -> exactBounds();
+    QRect r = m_dev -> exactBounds();
 
-	const int xShearSteps = r.height();
-	const int yShearSteps = r.width();
+    const int xShearSteps = r.height();
+    const int yShearSteps = r.width();
 
-	m_progress = progress;
-	initProgress(xShearSteps + yShearSteps);
+    m_progress = progress;
+    initProgress(xShearSteps + yShearSteps);
 
 
-	KisPaintDeviceSP sheared;
+    KisPaintDeviceSP sheared;
 
-	if (m_dev -> hasSelection()) {
-		sheared = new KisPaintDevice(m_dev -> colorStrategy(), "shear");
-		KisPainter p1(sheared);
-		p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-		p1.end();
- 		sheared = xShear(sheared, shearX);
-	}
-	else {
-		sheared = xShear(m_dev, shearX);
-	}
+    if (m_dev -> hasSelection()) {
+        sheared = new KisPaintDevice(m_dev -> colorStrategy(), "shear");
+        KisPainter p1(sheared);
+        p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+        p1.end();
+         sheared = xShear(sheared, shearX);
+    }
+    else {
+        sheared = xShear(m_dev, shearX);
+    }
 
- 	sheared = yShear(sheared, shearY);
+     sheared = yShear(sheared, shearY);
 
- 	if (!m_dev -> hasSelection()) {
-		m_dev -> clear();
- 	} else {
- 		// Clear selected pixels
- 		m_dev -> clearSelection();
- 	}
-	
-	KisPainter p2(m_dev);
-	r = sheared -> extent();
+     if (!m_dev -> hasSelection()) {
+        m_dev -> clear();
+     } else {
+         // Clear selected pixels
+         m_dev -> clearSelection();
+     }
+    
+    KisPainter p2(m_dev);
+    r = sheared -> extent();
 
-	p2.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-	p2.end();
+    p2.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    p2.end();
 
-	setProgressDone();
+    setProgressDone();
 }
 
 KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 {
-	KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	dst -> setX(src -> getX());
-	dst -> setY(src -> getY());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    dst -> setX(src -> getX());
+    dst -> setY(src -> getY());
 
-	Q_INT32 pixelSize = src -> pixelSize();
-	QRect r = src -> exactBounds();
-	Q_INT32 x = 0;
+    Q_INT32 pixelSize = src -> pixelSize();
+    QRect r = src -> exactBounds();
+    Q_INT32 x = 0;
 
-	for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
-		KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
-		KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+    for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
+        KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
+        KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
 
-			while (!hit.isDone()) {
-			if (hit.isSelected())  {
-				memcpy(vit.rawData(), hit.rawData(), pixelSize);
-			}
-			++hit;
-			++vit;
-		}
-		++x;
-		incrementProgress();
-	}
+            while (!hit.isDone()) {
+            if (hit.isSelected())  {
+                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+            }
+            ++hit;
+            ++vit;
+        }
+        ++x;
+        incrementProgress();
+    }
 
-	return dst;
+    return dst;
 }
 
 KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 {
-	KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	dst -> setX(src -> getX());
-	dst -> setY(src -> getY());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    dst -> setX(src -> getX());
+    dst -> setY(src -> getY());
 
-	Q_INT32 pixelSize = src -> pixelSize();
-	QRect r = src -> exactBounds();
-	Q_INT32 x = 0;
+    Q_INT32 pixelSize = src -> pixelSize();
+    QRect r = src -> exactBounds();
+    Q_INT32 x = 0;
 
-	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
-		// Read the horizontal line from back to front, write onto the vertical column
-		KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
-		KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+    for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+        // Read the horizontal line from back to front, write onto the vertical column
+        KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
+        KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
 
-		hit += r.width() - 1;
-		while (!vit.isDone()) {
-			if (hit.isSelected()) {
-				memcpy(vit.rawData(), hit.rawData(), pixelSize);
-			}
-			--hit;
-			++vit;
-		}
-		++x;
-		incrementProgress();
-	}
+        hit += r.width() - 1;
+        while (!vit.isDone()) {
+            if (hit.isSelected()) {
+                memcpy(vit.rawData(), hit.rawData(), pixelSize);
+            }
+            --hit;
+            ++vit;
+        }
+        ++x;
+        incrementProgress();
+    }
 
-	return dst;
+    return dst;
 }
 
 KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
 {
-	KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	dst -> setX(src -> getX());
-	dst -> setY(src -> getY());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    dst -> setX(src -> getX());
+    dst -> setY(src -> getY());
 
-	Q_INT32 pixelSize = src -> pixelSize();
-	QRect r = src -> exactBounds();
+    Q_INT32 pixelSize = src -> pixelSize();
+    QRect r = src -> exactBounds();
 
-	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
-		KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
-		KisHLineIterator dstIt = dst -> createHLineIterator(r.x(), r.y() + r.bottom() - y, r.width(), true);
+    for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+        KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
+        KisHLineIterator dstIt = dst -> createHLineIterator(r.x(), r.y() + r.bottom() - y, r.width(), true);
 
-		srcIt += r.width() - 1;
-		while (!dstIt.isDone()) {
-			if (srcIt.isSelected())  {
-				memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
-			}
-			--srcIt;
-			++dstIt;
-		}
-		incrementProgress();
-	}
+        srcIt += r.width() - 1;
+        while (!dstIt.isDone()) {
+            if (srcIt.isSelected())  {
+                memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
+            }
+            --srcIt;
+            ++dstIt;
+        }
+        incrementProgress();
+    }
 
-	return dst;
+    return dst;
 }
 
 KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation)
 {
-	const double pi = 3.1415926535897932385;
+    const double pi = 3.1415926535897932385;
 
-	if (angle >= 315 && angle < 360) {
-		angle = angle - 360;
-	} else if (angle > -360 && angle < -45) {
-		angle = angle + 360;
-	}
+    if (angle >= 315 && angle < 360) {
+        angle = angle - 360;
+    } else if (angle > -360 && angle < -45) {
+        angle = angle + 360;
+    }
 
-	QRect r = src -> exactBounds();
+    QRect r = src -> exactBounds();
 
-	const int xShearSteps = r.height();
-	const int yShearSteps = r.width();
-	const int fixedRotateSteps = r.height();
+    const int xShearSteps = r.height();
+    const int yShearSteps = r.width();
+    const int fixedRotateSteps = r.height();
 
-	KisPaintDeviceSP dst;
+    KisPaintDeviceSP dst;
 
-	if (angle == 90) {
-		initProgress(fixedRotateSteps);
-		dst = rotateRight90(src);
-	} else if (angle == 180) {
-		initProgress(fixedRotateSteps);
-		dst = rotate180(src);
-	} else if (angle == 270) {
-		initProgress(fixedRotateSteps);
-		dst = rotateLeft90(src);
-	} else {
-		double theta;
+    if (angle == 90) {
+        initProgress(fixedRotateSteps);
+        dst = rotateRight90(src);
+    } else if (angle == 180) {
+        initProgress(fixedRotateSteps);
+        dst = rotate180(src);
+    } else if (angle == 270) {
+        initProgress(fixedRotateSteps);
+        dst = rotateLeft90(src);
+    } else {
+        double theta;
 
-		if (angle >= -45 && angle < 45) {
+        if (angle >= -45 && angle < 45) {
 
-			theta = angle * pi / 180;
-			dst = src;
-			initProgress(yShearSteps + (2 * xShearSteps));
-		}
-		else if (angle >= 45 && angle < 135) {
+            theta = angle * pi / 180;
+            dst = src;
+            initProgress(yShearSteps + (2 * xShearSteps));
+        }
+        else if (angle >= 45 && angle < 135) {
 
-			initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
-			dst = rotateRight90(src);
-			theta = (angle - 90) * pi / 180;
-		}
-		else if (angle >= 135 && angle < 225) {
+            initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
+            dst = rotateRight90(src);
+            theta = (angle - 90) * pi / 180;
+        }
+        else if (angle >= 135 && angle < 225) {
 
-			initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
-			dst = rotate180(src);
-			theta = (angle - 180) * pi / 180;
+            initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
+            dst = rotate180(src);
+            theta = (angle - 180) * pi / 180;
 
-		} else {
+        } else {
 
-			initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
-			dst = rotateLeft90(src);
-			theta = (angle - 270) * pi / 180;
-		}
+            initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
+            dst = rotateLeft90(src);
+            theta = (angle - 270) * pi / 180;
+        }
 
-		double shearX = tan(theta / 2);
-		double shearY = sin(theta);
+        double shearX = tan(theta / 2);
+        double shearY = sin(theta);
 
-		//first perform a shear along the x-axis by tan(theta/2)
-		dst = xShear(dst, shearX);
-		//next perform a shear along the y-axis by sin(theta)
-		dst = yShear(dst, shearY);
-		//again perform a shear along the x-axis by tan(theta/2)
-		dst = xShear(dst, shearX);
-	}
+        //first perform a shear along the x-axis by tan(theta/2)
+        dst = xShear(dst, shearX);
+        //next perform a shear along the y-axis by sin(theta)
+        dst = yShear(dst, shearY);
+        //again perform a shear along the x-axis by tan(theta/2)
+        dst = xShear(dst, shearX);
+    }
 
-	KisPoint srcCentre(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
-	KisPoint srcCentreRelativeToCentreOfRotation = srcCentre - centreOfRotation;
+    KisPoint srcCentre(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
+    KisPoint srcCentreRelativeToCentreOfRotation = srcCentre - centreOfRotation;
 
-	double sinAngle = sin(angle * pi / 180);
-	double cosAngle = cos(angle * pi / 180);
+    double sinAngle = sin(angle * pi / 180);
+    double cosAngle = cos(angle * pi / 180);
 
-	KisPoint rotatedSrcCentreRelativeToCentreOfRotation(srcCentreRelativeToCentreOfRotation.x() * cosAngle - srcCentreRelativeToCentreOfRotation.y() * sinAngle,
-							    srcCentreRelativeToCentreOfRotation.x() * sinAngle + srcCentreRelativeToCentreOfRotation.y() * cosAngle);
-	KisPoint dstCentre = centreOfRotation + rotatedSrcCentreRelativeToCentreOfRotation;
+    KisPoint rotatedSrcCentreRelativeToCentreOfRotation(srcCentreRelativeToCentreOfRotation.x() * cosAngle - srcCentreRelativeToCentreOfRotation.y() * sinAngle,
+                                srcCentreRelativeToCentreOfRotation.x() * sinAngle + srcCentreRelativeToCentreOfRotation.y() * cosAngle);
+    KisPoint dstCentre = centreOfRotation + rotatedSrcCentreRelativeToCentreOfRotation;
 
-	QRect dstR = dst -> exactBounds();
-	KisPoint dstTopLeft(dstCentre.x() - (dstR.width() / 2.0), dstCentre.y() - (dstR.height() / 2.0));
+    QRect dstR = dst -> exactBounds();
+    KisPoint dstTopLeft(dstCentre.x() - (dstR.width() / 2.0), dstCentre.y() - (dstR.height() / 2.0));
 
-	KisPaintDeviceSP rotatedSrc = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	rotatedSrc -> setX(src -> getX());
-	rotatedSrc -> setY(src -> getY());
+    KisPaintDeviceSP rotatedSrc = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    rotatedSrc -> setX(src -> getX());
+    rotatedSrc -> setY(src -> getY());
 
-	KisPainter p(rotatedSrc);
+    KisPainter p(rotatedSrc);
 
-	p.bitBlt(dstTopLeft.floorX(), dstTopLeft.floorY(), COMPOSITE_OVER, dst, OPACITY_OPAQUE, dstR.x(), dstR.y(), dstR.width(), dstR.height());
-	p.end();
+    p.bitBlt(dstTopLeft.floorX(), dstTopLeft.floorY(), COMPOSITE_OVER, dst, OPACITY_OPAQUE, dstR.x(), dstR.y(), dstR.width(), dstR.height());
+    p.end();
 
-	setProgressDone();
+    setProgressDone();
 
-	return rotatedSrc;
+    return rotatedSrc;
 }
 
 KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 {
-	KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	dst -> setX(src -> getX());
-	dst -> setY(src -> getY());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    dst -> setX(src -> getX());
+    dst -> setY(src -> getY());
 
-	QRect r = src -> exactBounds();
+    QRect r = src -> exactBounds();
 
         double displacement;
         Q_INT32 displacementInt;
         double weight;
         
-	for (Q_INT32 y = r.top(); y <= r.bottom(); y++) {
+    for (Q_INT32 y = r.top(); y <= r.bottom(); y++) {
 
-		//calculate displacement
-		if (shearX >= 0) {
-			displacement = (r.bottom() - y) * shearX;
-		} else {
-			displacement = (y - r.top()) * QABS(shearX);
-		}
+        //calculate displacement
+        if (shearX >= 0) {
+            displacement = (r.bottom() - y) * shearX;
+        } else {
+            displacement = (y - r.top()) * QABS(shearX);
+        }
 
-		displacementInt = (Q_INT32)(floor(displacement));
-		weight = displacement - displacementInt;
+        displacementInt = (Q_INT32)(floor(displacement));
+        weight = displacement - displacementInt;
 
-		Q_UINT8 pixelWeights[2];
+        Q_UINT8 pixelWeights[2];
 
-		pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
-		pixelWeights[1] = 255 - pixelWeights[0];
+        pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
+        pixelWeights[1] = 255 - pixelWeights[0];
 
-		KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width() + 1, false);
-		KisHLineIteratorPixel leftSrcIt = src -> createHLineIterator(r.x() - 1, y, r.width() + 1, false);
-		KisHLineIteratorPixel dstIt = dst -> createHLineIterator(r.x() + displacementInt, y, r.width() + 1, true);
+        KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width() + 1, false);
+        KisHLineIteratorPixel leftSrcIt = src -> createHLineIterator(r.x() - 1, y, r.width() + 1, false);
+        KisHLineIteratorPixel dstIt = dst -> createHLineIterator(r.x() + displacementInt, y, r.width() + 1, true);
 
-		while (!srcIt.isDone()) {
+        while (!srcIt.isDone()) {
 
-			const Q_UINT8 *pixelPtrs[2];
+            const Q_UINT8 *pixelPtrs[2];
 
-			pixelPtrs[0] = leftSrcIt.rawData();
-			pixelPtrs[1] = srcIt.rawData();
+            pixelPtrs[0] = leftSrcIt.rawData();
+            pixelPtrs[1] = srcIt.rawData();
 
-			src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
-			++srcIt;
-			++leftSrcIt;
-			++dstIt;
-		}
-		incrementProgress();
-	}        
+            ++srcIt;
+            ++leftSrcIt;
+            ++dstIt;
+        }
+        incrementProgress();
+    }        
 
-	return dst;
+    return dst;
 }
 
 KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 {
-	KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
-	dst -> setX(src -> getX());
-	dst -> setY(src -> getY());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorStrategy(), "temporary");
+    dst -> setX(src -> getX());
+    dst -> setY(src -> getY());
 
-	QRect r = src -> exactBounds();
+    QRect r = src -> exactBounds();
 
         double displacement;
         Q_INT32 displacementInt;
         double weight;
 
-	for (Q_INT32 x = r.left(); x <= r.right(); x++) {
+    for (Q_INT32 x = r.left(); x <= r.right(); x++) {
 
-		//calculate displacement
-		if (shearY >= 0) {
-			displacement = (x - r.left()) * shearY;
-		} else {
-			displacement = (r.right() - x) * QABS(shearY);
-		}
+        //calculate displacement
+        if (shearY >= 0) {
+            displacement = (x - r.left()) * shearY;
+        } else {
+            displacement = (r.right() - x) * QABS(shearY);
+        }
 
-		displacementInt = (Q_INT32)(floor(displacement));
-		weight = displacement - displacementInt;
+        displacementInt = (Q_INT32)(floor(displacement));
+        weight = displacement - displacementInt;
 
-		Q_UINT8 pixelWeights[2];
+        Q_UINT8 pixelWeights[2];
 
-		pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
-		pixelWeights[1] = 255 - pixelWeights[0];
+        pixelWeights[0] = static_cast<Q_UINT8>(weight * 255 + 0.5);
+        pixelWeights[1] = 255 - pixelWeights[0];
 
-		KisVLineIteratorPixel srcIt = src -> createVLineIterator(x, r.y(), r.height() + 1, false);
-		KisVLineIteratorPixel leftSrcIt = src -> createVLineIterator(x, r.y() - 1, r.height() + 1, false);
-		KisVLineIteratorPixel dstIt = dst -> createVLineIterator(x, r.y() + displacementInt, r.height() + 1, true);
+        KisVLineIteratorPixel srcIt = src -> createVLineIterator(x, r.y(), r.height() + 1, false);
+        KisVLineIteratorPixel leftSrcIt = src -> createVLineIterator(x, r.y() - 1, r.height() + 1, false);
+        KisVLineIteratorPixel dstIt = dst -> createVLineIterator(x, r.y() + displacementInt, r.height() + 1, true);
 
-		while (!srcIt.isDone()) {
+        while (!srcIt.isDone()) {
 
-			const Q_UINT8 *pixelPtrs[2];
+            const Q_UINT8 *pixelPtrs[2];
 
-			pixelPtrs[0] = leftSrcIt.rawData();
-			pixelPtrs[1] = srcIt.rawData();
+            pixelPtrs[0] = leftSrcIt.rawData();
+            pixelPtrs[1] = srcIt.rawData();
 
-			src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
-			++srcIt;
-			++leftSrcIt;
-			++dstIt;
-		}
-		incrementProgress();
-	}
+            ++srcIt;
+            ++leftSrcIt;
+            ++dstIt;
+        }
+        incrementProgress();
+    }
 
         return dst;
 }
 
 void KisRotateVisitor::initProgress(Q_INT32 totalSteps)
 {
-	m_progressTotalSteps = totalSteps;
-	m_progressStep = 0;
-	m_lastProgressPerCent = 0;
+    m_progressTotalSteps = totalSteps;
+    m_progressStep = 0;
+    m_lastProgressPerCent = 0;
 
-	Q_ASSERT(m_progress != 0);
-	m_progress -> setSubject(this, true, false);
-	emit notifyProgress(this, 0);
+    Q_ASSERT(m_progress != 0);
+    m_progress -> setSubject(this, true, false);
+    emit notifyProgress(this, 0);
 }
 
 void KisRotateVisitor::incrementProgress()
 {
-	m_progressStep++;
-	Q_INT32 progressPerCent = (m_progressStep * 100) / m_progressTotalSteps;
+    m_progressStep++;
+    Q_INT32 progressPerCent = (m_progressStep * 100) / m_progressTotalSteps;
 
-	if (progressPerCent != m_lastProgressPerCent) {
-		m_lastProgressPerCent = progressPerCent;
-		emit notifyProgress(this, progressPerCent);
-	}
+    if (progressPerCent != m_lastProgressPerCent) {
+        m_lastProgressPerCent = progressPerCent;
+        emit notifyProgress(this, progressPerCent);
+    }
 }
 
 void KisRotateVisitor::setProgressDone()
 {
-	emit notifyProgressDone(this);
+    emit notifyProgressDone(this);
 }
 
 

@@ -28,29 +28,29 @@
 #include "kis_progress_subject.h"
 
 KisConvolutionFilter::KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry) :
-	KisFilter( id, category, entry )
+    KisFilter( id, category, entry )
 {
 
 }
 
 void KisConvolutionFilter::process(KisPaintDeviceSP src,
-				   KisPaintDeviceSP dst,
-				   KisFilterConfiguration* configuration,
-				   const QRect& rect)
+                   KisPaintDeviceSP dst,
+                   KisFilterConfiguration* configuration,
+                   const QRect& rect)
 {
-	// XXX: We don't do anything with src here -- carefully test this for problems.
-	KisConvolutionPainter painter( dst );
-	if (m_progressDisplay)
-		m_progressDisplay->setSubject( &painter, true, true );
-		
-	KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
-	painter.applyMatrix(amatrixes, rect.x(), rect.y(), rect.width(), rect.height());
+    // XXX: We don't do anything with src here -- carefully test this for problems.
+    KisConvolutionPainter painter( dst );
+    if (m_progressDisplay)
+        m_progressDisplay->setSubject( &painter, true, true );
+        
+    KisMatrix3x3* amatrixes = ((KisConvolutionConfiguration*)configuration)->matrixes();
+    painter.applyMatrix(amatrixes, rect.x(), rect.y(), rect.width(), rect.height());
 
-	if (painter.cancelRequested()) {
-		cancel();
-	}
+    if (painter.cancelRequested()) {
+        cancel();
+    }
 
-	setProgressDone();
+    setProgressDone();
 }
 
 KisConvolutionConstFilter::~KisConvolutionConstFilter()
@@ -59,7 +59,7 @@ KisConvolutionConstFilter::~KisConvolutionConstFilter()
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*, KisPaintDeviceSP dev)
 {
-	return new KisConvolutionConfiguration( m_matrixes );
+    return new KisConvolutionConfiguration( m_matrixes );
 }
 
 #include "kis_convolution_filter.moc"

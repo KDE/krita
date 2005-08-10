@@ -39,45 +39,45 @@ class KisColorWheel;
 class KValueSelector;
 
 class KRITAUI_EXPORT KisHSVWidget
-	 : public QWidget,
-	   public KisCanvasObserver
+     : public QWidget,
+       public KisCanvasObserver
 {
-	Q_OBJECT
-	typedef QWidget super;
+    Q_OBJECT
+    typedef QWidget super;
 
 public:
-	KisHSVWidget(QWidget *parent = 0L, const char *name = 0);
-	virtual ~KisHSVWidget() {}
+    KisHSVWidget(QWidget *parent = 0L, const char *name = 0);
+    virtual ~KisHSVWidget() {}
 
 protected slots:
-	virtual void slotHChanged(int h);
-	virtual void slotSChanged(int s);
-	virtual void slotVChanged(int v);
-	virtual void slotWheelChanged(const KoColor& c);
+    virtual void slotHChanged(int h);
+    virtual void slotSChanged(int s);
+    virtual void slotVChanged(int v);
+    virtual void slotWheelChanged(const KoColor& c);
 
-	void slotFGColorSelected(const QColor& c);
-	void slotBGColorSelected(const QColor& c);
-
-private:
-	void update(KisCanvasSubject*);
+    void slotFGColorSelected(const QColor& c);
+    void slotBGColorSelected(const QColor& c);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisColorWheel *m_colorwheel;
-	KValueSelector *m_VSelector;
-	QLabel *mHLabel;
-	QLabel *mSLabel;
-	QLabel *mVLabel;
-	QSpinBox *mHIn;
-	QSpinBox *mSIn;
-	QSpinBox *mVIn;
-	KDualColorButton *m_ColorButton;
+    void update(KisCanvasSubject*);
 
-	KoColor m_fgColor;
-	KoColor m_bgColor;
+private:
+    KisCanvasSubject *m_subject;
+    KisColorWheel *m_colorwheel;
+    KValueSelector *m_VSelector;
+    QLabel *mHLabel;
+    QLabel *mSLabel;
+    QLabel *mVLabel;
+    QSpinBox *mHIn;
+    QSpinBox *mSIn;
+    QSpinBox *mVIn;
+    KDualColorButton *m_ColorButton;
 
-	bool locked;
-	bool autovalue;
+    KoColor m_fgColor;
+    KoColor m_bgColor;
+
+    bool locked;
+    bool autovalue;
 };
 
 #endif

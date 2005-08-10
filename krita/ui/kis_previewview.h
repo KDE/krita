@@ -34,7 +34,7 @@ class KisUndoAdapter;
  **/
 class KisPreviewView : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
         KisPreviewView(QWidget* parent = 0, const char * name = 0, WFlags f = 0);
@@ -46,7 +46,7 @@ public:
         void updateView();
 
 public slots:
-	void setZoom(double zoom);
+    void setZoom(double zoom);
         void zoomIn();
         void zoomOut();
         void updatedPreview();

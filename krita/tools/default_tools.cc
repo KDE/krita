@@ -58,32 +58,32 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
 
 
 DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(DefaultToolsFactory::instance());
+           setInstance(DefaultToolsFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Default tools plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Default tools plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
- 	if ( parent->inherits("KisFactory") )
- 	{
-		KisToolRegistry * r = KisToolRegistry::instance();
+     if ( parent->inherits("KisFactory") )
+     {
+        KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolFillFactory());
-		r -> add(new KisToolGradientFactory());
-		r -> add(new KisToolBrushFactory());
-		r -> add(new KisToolColorPickerFactory());
-		r -> add(new KisToolLineFactory());
-		r -> add(new KisToolTextFactory());
-		r -> add(new KisToolDuplicateFactory());
-		r -> add(new KisToolMoveFactory());
-		r -> add(new KisToolZoomFactory());
-		r -> add(new KisToolEllipseFactory());
-		r -> add(new KisToolRectangleFactory());
-		r -> add(new KisToolPanFactory());
+        r -> add(new KisToolFillFactory());
+        r -> add(new KisToolGradientFactory());
+        r -> add(new KisToolBrushFactory());
+        r -> add(new KisToolColorPickerFactory());
+        r -> add(new KisToolLineFactory());
+        r -> add(new KisToolTextFactory());
+        r -> add(new KisToolDuplicateFactory());
+        r -> add(new KisToolMoveFactory());
+        r -> add(new KisToolZoomFactory());
+        r -> add(new KisToolEllipseFactory());
+        r -> add(new KisToolRectangleFactory());
+        r -> add(new KisToolPanFactory());
 
         }
 }

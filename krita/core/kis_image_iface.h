@@ -31,26 +31,26 @@ class KisPaintDeviceIface;
 
 class KisImageIface : virtual public DCOPObject
 {
-	K_DCOP
+    K_DCOP
 public:
-	KisImageIface( KisImage *img_ );
+    KisImageIface( KisImage *img_ );
 k_dcop:
-	QString name()const;
-	int height() const;
-	int width() const;
-	bool empty() const;
+    QString name()const;
+    int height() const;
+    int width() const;
+    bool empty() const;
 
-	void setName(const QString& name);
+    void setName(const QString& name);
 
-	/**
-	 * Get the active painting device.
-	 */
-	DCOPRef activeDevice();
-	
+    /**
+     * Get the active painting device.
+     */
+    DCOPRef activeDevice();
+    
 
 private:
 
-	KisImage *m_img;
+    KisImage *m_img;
 };
 
 #endif

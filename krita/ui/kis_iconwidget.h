@@ -25,24 +25,24 @@
 class KoIconItem;
 
 class KisIconWidget : public QToolButton {
-	typedef QToolButton super;
-	Q_OBJECT
+    typedef QToolButton super;
+    Q_OBJECT
 
 /**
  * The icon widget is used in the control box where the current color and brush
  * are shown.
  */
 public:
-	KisIconWidget(QWidget *parent = 0, const char *name = 0);
+    KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
 public slots:
-	void slotSetItem(KoIconItem& item);
+    void slotSetItem(KoIconItem& item);
 
 protected:
-	virtual void drawButtonLabel(QPainter *gc);
+    virtual void drawButtonLabel(QPainter *gc);
 
 private:
-	KoIconItem *m_item;
+    KoIconItem *m_item;
 };
 
 #endif // KIS_ICONWIDGET_H_

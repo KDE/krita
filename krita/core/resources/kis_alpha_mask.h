@@ -33,66 +33,66 @@
  * KisPaintDevices: use a KisSelection for that.
  */
 class KRITACORE_EXPORT KisAlphaMask : public KShared {
-	
+    
  public:
-	/**
-	   Create an alpha mask based on the specified QImage. If the image is
-	   not a grayscale, the mask value is calculated from the effective grey
-	   level and alpha value.
-	*/
-	KisAlphaMask(const QImage& img);
+    /**
+       Create an alpha mask based on the specified QImage. If the image is
+       not a grayscale, the mask value is calculated from the effective grey
+       level and alpha value.
+    */
+    KisAlphaMask(const QImage& img);
 
-	/**
-	   As above except quicker as the image does not need to be scanned
-	   to see if it has any colour pixels.
-	*/
-	KisAlphaMask(const QImage& img, bool hasColor);
+    /**
+       As above except quicker as the image does not need to be scanned
+       to see if it has any colour pixels.
+    */
+    KisAlphaMask(const QImage& img, bool hasColor);
 
-	/**
-	   Create a transparent mask.
-	*/
-	KisAlphaMask(Q_INT32 width, Q_INT32 height);
+    /**
+       Create a transparent mask.
+    */
+    KisAlphaMask(Q_INT32 width, Q_INT32 height);
 
-	virtual ~KisAlphaMask();
+    virtual ~KisAlphaMask();
 
-	/**
-	   @return the number of alpha values in a scanline.
-	*/
-	Q_INT32 height() const;
+    /**
+       @return the number of alpha values in a scanline.
+    */
+    Q_INT32 height() const;
 
-	/**
-	   @return the number of lines in the mask.
-	 */
-   	Q_INT32 width() const;
+    /**
+       @return the number of lines in the mask.
+     */
+       Q_INT32 width() const;
 
-	/**
-	   @return the alpha value at the specified position.
+    /**
+       @return the alpha value at the specified position.
 
-	   Returns QUANTUM OPACITY_TRANSPARENT if the value is
-	   outside the bounds of the mask.
+       Returns QUANTUM OPACITY_TRANSPARENT if the value is
+       outside the bounds of the mask.
 
-	   XXX: this is, of course, not the best way of masking.
-	   Better would be to let KisAlphaMask fill a chunk of memory
-	   with the alpha values at the right position, something like
-	   void applyMask(QUANTUM *pixeldata, Q_INT32 pixelWidth,
-	   Q_INT32 alphaPos). That would be fastest, or we could
-	   provide an iterator over the mask, that would be nice, too.
-	*/
-	QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
+       XXX: this is, of course, not the best way of masking.
+       Better would be to let KisAlphaMask fill a chunk of memory
+       with the alpha values at the right position, something like
+       void applyMask(QUANTUM *pixeldata, Q_INT32 pixelWidth,
+       Q_INT32 alphaPos). That would be fastest, or we could
+       provide an iterator over the mask, that would be nice, too.
+    */
+    QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
 
-	void setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha);
+    void setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha);
 
-	// Create a new mask by interpolating between mask1 and mask2 as t
-	// goes from 0 to 1.
-	static KisAlphaMaskSP interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t);
+    // Create a new mask by interpolating between mask1 and mask2 as t
+    // goes from 0 to 1.
+    static KisAlphaMaskSP interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t);
 
 private:
-	void computeAlpha(const QImage& img);
-	void copyAlpha(const QImage& img);
+    void computeAlpha(const QImage& img);
+    void copyAlpha(const QImage& img);
 
-	QValueVector<QUANTUM> m_data;
-	Q_INT32 m_width;
-	Q_INT32 m_height;
+    QValueVector<QUANTUM> m_data;
+    Q_INT32 m_width;
+    Q_INT32 m_height;
 };
 
 #endif // KIS_ALPHA_MASK_

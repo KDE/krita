@@ -64,25 +64,25 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
         //read the filter configuration values from the KisFilterConfiguration object
         bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
         bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
-	bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
-	bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
+    bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
+    bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
 
         //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-	sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
+    sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
-	y = CLAMP (y, 0, h - 1);
-	Q_UINT32 pixelSize = src -> pixelSize();
+    y = CLAMP (y, 0, h - 1);
+    Q_UINT32 pixelSize = src -> pixelSize();
 
-	src -> readBytes( data, x, y, w, 1 );
+    src -> readBytes( data, x, y, w, 1 );
 
-	for (Q_UINT32 b = 0; b < pixelSize; b++)
-	{
-		data[-(int)pixelSize + b] = data[b];
-		data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
-	}	
+    for (Q_UINT32 b = 0; b < pixelSize; b++)
+    {
+        data[-(int)pixelSize + b] = data[b];
+        data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
+    }    
 }
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
@@ -90,120 +90,120 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x
 
 void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
-	QRect rect = src -> exactBounds();
-	Q_UINT32 x = rect.x();
-	Q_UINT32 y = rect.y();
-	Q_UINT32 width = rect.width();
-	Q_UINT32 height = rect.height();
-	Q_UINT32 pixelSize = src -> pixelSize();
-	bool hasAlpha = src -> hasAlpha();
+    QRect rect = src -> exactBounds();
+    Q_UINT32 x = rect.x();
+    Q_UINT32 y = rect.y();
+    Q_UINT32 width = rect.width();
+    Q_UINT32 height = rect.height();
+    Q_UINT32 pixelSize = src -> pixelSize();
+    bool hasAlpha = src -> hasAlpha();
 
-	setProgressTotalSteps( height );
+    setProgressTotalSteps( height );
         setProgressStage(i18n("Applying sobel filter..."),0);
 
-	/*  allocate row buffers  */
-	Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
-	Q_CHECK_PTR(prevRow);
-	Q_UINT8* curRow = new Q_UINT8[ (width + 2) * pixelSize];
-	Q_CHECK_PTR(curRow);
-	Q_UINT8* nextRow = new Q_UINT8[ (width + 2) * pixelSize];
-	Q_CHECK_PTR(nextRow);
-	Q_UINT8* dest = new Q_UINT8[ width  * pixelSize];
-	Q_CHECK_PTR(dest);
+    /*  allocate row buffers  */
+    Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(prevRow);
+    Q_UINT8* curRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(curRow);
+    Q_UINT8* nextRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(nextRow);
+    Q_UINT8* dest = new Q_UINT8[ width  * pixelSize];
+    Q_CHECK_PTR(dest);
 
-	Q_UINT8* pr = prevRow + pixelSize;
-	Q_UINT8* cr = curRow + pixelSize;
-	Q_UINT8* nr = nextRow + pixelSize;
+    Q_UINT8* pr = prevRow + pixelSize;
+    Q_UINT8* cr = curRow + pixelSize;
+    Q_UINT8* nr = nextRow + pixelSize;
 
-	prepareRow (src, pr, x, y - 1, width, height);
-	prepareRow (src, cr, x, y, width, height);
+    prepareRow (src, pr, x, y - 1, width, height);
+    prepareRow (src, cr, x, y, width, height);
   
-	Q_UINT32 counter =0;
-	Q_UINT8* d;
-	Q_UINT8* tmp;
-	Q_INT32 gradient, horGradient, verGradient;
-	// loop through the rows, applying the sobel convolution 
-	for (Q_UINT32 row = 0; row < height; row++)
-	{
-		
-		// prepare the next row 
-		prepareRow (src, nr, x, row + 1, width, height);
-		d = dest;
-		
-		for (Q_UINT32 col = 0; col < width * pixelSize; col++)
-		{
-			horGradient = (doHorizontal ?
-					((pr[col - pixelSize] +  2 * pr[col] + pr[col + pixelSize]) -
-					(nr[col - pixelSize] + 2 * nr[col] + nr[col + pixelSize]))
-					: 0);
-			
-			verGradient = (doVertical ?
-					((pr[col - pixelSize] + 2 * cr[col - pixelSize] + nr[col - pixelSize]) -
-					(pr[col + pixelSize] + 2 * cr[col + pixelSize] + nr[col + pixelSize]))
-					: 0);
-			gradient = (doVertical && doHorizontal) ?
-			(ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 
-			: (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
-			: (ROUND (QABS (horGradient + verGradient) / 4.0)));
-			
-			if (hasAlpha && (((col + 1) % pixelSize) == 0))
-			{ // the alpha channel
-				*d++ = (counter == 0) ? 0 : 255;
-				counter = 0;
-			}
-			else
-			{
-				*d++ = gradient;
-				if (gradient > 10) counter ++;
-			}
-        	}
-		
-		//  shuffle the row pointers 
-		tmp = pr;
-		pr = cr;
-		cr = nr;
-		nr = tmp;
-			
-		//store the dest 
-		dst -> writeBytes(dest, x, row, width, 1);
-		
-		if ( makeOpaque )
-		{
-			KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
-			while( ! dstIt.isDone() )
+    Q_UINT32 counter =0;
+    Q_UINT8* d;
+    Q_UINT8* tmp;
+    Q_INT32 gradient, horGradient, verGradient;
+    // loop through the rows, applying the sobel convolution 
+    for (Q_UINT32 row = 0; row < height; row++)
+    {
+        
+        // prepare the next row 
+        prepareRow (src, nr, x, row + 1, width, height);
+        d = dest;
+        
+        for (Q_UINT32 col = 0; col < width * pixelSize; col++)
+        {
+            horGradient = (doHorizontal ?
+                    ((pr[col - pixelSize] +  2 * pr[col] + pr[col + pixelSize]) -
+                    (nr[col - pixelSize] + 2 * nr[col] + nr[col + pixelSize]))
+                    : 0);
+            
+            verGradient = (doVertical ?
+                    ((pr[col - pixelSize] + 2 * cr[col - pixelSize] + nr[col - pixelSize]) -
+                    (pr[col + pixelSize] + 2 * cr[col + pixelSize] + nr[col + pixelSize]))
+                    : 0);
+            gradient = (doVertical && doHorizontal) ?
+            (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 
+            : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
+            : (ROUND (QABS (horGradient + verGradient) / 4.0)));
+            
+            if (hasAlpha && (((col + 1) % pixelSize) == 0))
+            { // the alpha channel
+                *d++ = (counter == 0) ? 0 : 255;
+                counter = 0;
+            }
+            else
+            {
+                *d++ = gradient;
+                if (gradient > 10) counter ++;
+            }
+            }
+        
+        //  shuffle the row pointers 
+        tmp = pr;
+        pr = cr;
+        cr = nr;
+        nr = tmp;
+            
+        //store the dest 
+        dst -> writeBytes(dest, x, row, width, 1);
+        
+        if ( makeOpaque )
+        {
+            KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
+            while( ! dstIt.isDone() )
                         {
-				dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
-				++dstIt;
-			}
-		}
-		setProgress(row);		
-	}
-	setProgressDone();
+                dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
+                ++dstIt;
+            }
+        }
+        setProgress(row);        
+    }
+    setProgressDone();
 
-	delete[] prevRow;
-	delete[] curRow;
-	delete[] nextRow;
-	delete[] dest;
+    delete[] prevRow;
+    delete[] curRow;
+    delete[] nextRow;
+    delete[] dest;
 }
 
 
 KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisBoolWidgetParam param;
-	param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally") ) );
-	param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically") ) );
-	param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result") ) );
-	param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque") ) );
-	return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisBoolWidgetParam param;
+    param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally") ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically") ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result") ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque") ) );
+    return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisSobelFilterConfiguration( true, true, true, true);
-	} else {
-		return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
-	}
+    KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisSobelFilterConfiguration( true, true, true, true);
+    } else {
+        return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
+    }
 }

@@ -29,27 +29,27 @@ class QStringList;
 
 /**
  * This class will contain:
- *  	- a registry of singleton color strategies
- *	- a mapping of ImageMagick color model identifiers to color strategies
+ *      - a registry of singleton color strategies
+ *    - a mapping of ImageMagick color model identifiers to color strategies
  *      - a mapping of lcms color model identifiers to color strategies
  *     -  a mapping of icm color model identifiers to color stratiegs
  */
 class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisAbstractColorSpace *> {
 
 public:
-	virtual ~KisColorSpaceRegistry();
+    virtual ~KisColorSpaceRegistry();
 
-	static KisColorSpaceRegistry* instance();
+    static KisColorSpaceRegistry* instance();
 
-	KisProfileSP getProfileByName(const QString & name) const;
-	
+    KisProfileSP getProfileByName(const QString & name) const;
+    
 private:
-	KisColorSpaceRegistry();
-	KisColorSpaceRegistry(const KisColorSpaceRegistry&);
-	KisColorSpaceRegistry operator=(const KisColorSpaceRegistry&);
+    KisColorSpaceRegistry();
+    KisColorSpaceRegistry(const KisColorSpaceRegistry&);
+    KisColorSpaceRegistry operator=(const KisColorSpaceRegistry&);
 
 private:
-	static KisColorSpaceRegistry *m_singleton;
+    static KisColorSpaceRegistry *m_singleton;
 
 };
 

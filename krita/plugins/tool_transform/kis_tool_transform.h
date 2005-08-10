@@ -38,91 +38,91 @@ class KisFilterStrategy;
  */
 class KisToolTransform : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolTransform();
-	virtual ~KisToolTransform();
+    KisToolTransform();
+    virtual ~KisToolTransform();
 
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_CANVAS; }
 
-	virtual void clear();
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void clear();
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
-	void transform();
-	void recalcOutline();
-	double rotX(double x, double y) { return m_cosa*x - m_sina*y;};
-	double rotY(double x, double y) { return m_sina*x + m_cosa*y;};
-	double invrotX(double x, double y) { return m_cosa*x + m_sina*y;};
-	double invrotY(double x, double y) { return -m_sina*x + m_cosa*y;};
-	int det(QPoint v,QPoint w);
-	int distsq(QPoint v,QPoint w);
-	void setFunctionalCursor();
+    void paintOutline();
+    void paintOutline(QPainter& gc, const QRect& rc);
+    void transform();
+    void recalcOutline();
+    double rotX(double x, double y) { return m_cosa*x - m_sina*y;};
+    double rotY(double x, double y) { return m_sina*x + m_cosa*y;};
+    double invrotX(double x, double y) { return m_cosa*x + m_sina*y;};
+    double invrotY(double x, double y) { return -m_sina*x + m_cosa*y;};
+    int det(QPoint v,QPoint w);
+    int distsq(QPoint v,QPoint w);
+    void setFunctionalCursor();
 
 private slots:
 
-	void slotSetFilter(const KisID &);
-	void setStartX(int x) { m_startPos.setX(x); }
-	void setStartY(int y) { m_startPos.setY(y); }
-	void setEndX(int x) { m_endPos.setX(x); }
-	void setEndY(int y) { m_endPos.setY(y); }
+    void slotSetFilter(const KisID &);
+    void setStartX(int x) { m_startPos.setX(x); }
+    void setStartY(int y) { m_startPos.setY(y); }
+    void setEndX(int x) { m_endPos.setX(x); }
+    void setEndY(int y) { m_endPos.setY(y); }
 
 protected slots:
-	virtual void activate();
+    virtual void activate();
 
 private:
-	enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
-				BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
-	QCursor m_sizeCursors[8];
-	function m_function;
-	QPoint m_startPos;
-	QPoint m_endPos;
-	bool m_selecting;
-	QPoint m_topleft;
-	QPoint m_topright;
-	QPoint m_bottomleft;
-	QPoint m_bottomright;
-	double m_scaleX;
-	double m_scaleY;
-	double m_translateX;
-	double m_translateY;
-	QPoint m_clickoffset;
-	double m_org_cenX;
-	double m_org_cenY;
-	double m_cosa;
-	double m_sina;
-	double m_a;
-	double m_clickangle;
-	KisTransaction *m_transaction;
-	KisFilterStrategy *m_filter;
-	
-	WdgToolTransform *m_optWidget;
+    enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
+                BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
+    QCursor m_sizeCursors[8];
+    function m_function;
+    QPoint m_startPos;
+    QPoint m_endPos;
+    bool m_selecting;
+    QPoint m_topleft;
+    QPoint m_topright;
+    QPoint m_bottomleft;
+    QPoint m_bottomright;
+    double m_scaleX;
+    double m_scaleY;
+    double m_translateX;
+    double m_translateY;
+    QPoint m_clickoffset;
+    double m_org_cenX;
+    double m_org_cenY;
+    double m_cosa;
+    double m_sina;
+    double m_a;
+    double m_clickangle;
+    KisTransaction *m_transaction;
+    KisFilterStrategy *m_filter;
+    
+    WdgToolTransform *m_optWidget;
 };
 
 class KisToolTransformFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolTransformFactory() : super() {};
-	virtual ~KisToolTransformFactory(){};
+    KisToolTransformFactory() : super() {};
+    virtual ~KisToolTransformFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t = new KisToolTransform(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); return t;
-	}
-	virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t = new KisToolTransform(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); return t;
+    }
+    virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
 };
 
 

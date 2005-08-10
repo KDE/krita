@@ -30,17 +30,17 @@ class KisScaleVisitor : public KisProgressSubject {
         typedef KisProgressSubject super;  
         
         /* Structs for the image rescaling routine */
-	class Contrib {
+    class Contrib {
                 public:
                         Q_INT32 m_pixel;
                         double m_weight;
-	};
+    };
  
-	class ContribList {
-	       public:
+    class ContribList {
+           public:
                         Q_INT32  n;  //number of contributors
                         Contrib *p; //pointer to list of contributions
-	};
+    };
 
 public:
         KisScaleVisitor();
@@ -49,23 +49,23 @@ public:
         void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 private:
         KisPaintDevice* m_dev;
-    	Q_INT32 m_pixelSize;    
+        Q_INT32 m_pixelSize;    
         
         /**
-	 * calc_x_contrib()
-	 *       
-	 * Calculates the filter weights for a single target column.
-	 * contribX->p must be freed afterwards.
-	 *
-	 * Returns -1 if error, 0 otherwise.
-	 */
+     * calc_x_contrib()
+     *       
+     * Calculates the filter weights for a single target column.
+     * contribX->p must be freed afterwards.
+     *
+     * Returns -1 if error, 0 otherwise.
+     */
                 
         int calcContrib(ContribList *contribX, double cale, double fwidth, int srcwidth, KisFilterStrategy *filterStrategy, Q_INT32 i);
 
         ContribList * contrib;  //array of contribution lists
 
-	// Implement KisProgressSubject
-	bool m_cancelRequested;
+    // Implement KisProgressSubject
+    bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
 
 };

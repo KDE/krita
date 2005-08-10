@@ -31,42 +31,42 @@ class QImage;
  */
 class KisClipboard : public QObject {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	virtual ~KisClipboard();
+    virtual ~KisClipboard();
 
-	static KisClipboard* instance();
+    static KisClipboard* instance();
 
-	/**
-	 * Sets the clipboard to the contents of the specified paint device; also
-	 * set the system clipboard to a QImage representation of the specified 
-	 * paint device.
-	 */
-	void setClip(KisPaintDeviceSP layer);
-	
-	/**
-	 * Get the contents of the clipboard in the form of a paint device.
-	 */
-	KisPaintDeviceSP clip();
+    /**
+     * Sets the clipboard to the contents of the specified paint device; also
+     * set the system clipboard to a QImage representation of the specified 
+     * paint device.
+     */
+    void setClip(KisPaintDeviceSP layer);
+    
+    /**
+     * Get the contents of the clipboard in the form of a paint device.
+     */
+    KisPaintDeviceSP clip();
 
-	bool hasClip();
+    bool hasClip();
 
 private slots:
 
-	void clipboardDataChanged();
+    void clipboardDataChanged();
 private:
 
-	KisClipboard();
-	KisClipboard(const KisClipboard &);
-	KisClipboard operator=(const KisClipboard &);
+    KisClipboard();
+    KisClipboard(const KisClipboard &);
+    KisClipboard operator=(const KisClipboard &);
 
-	static KisClipboard * m_singleton;
+    static KisClipboard * m_singleton;
 
-	KisPaintDeviceSP m_clip;
+    KisPaintDeviceSP m_clip;
 
-	bool m_pushedClipboard;
+    bool m_pushedClipboard;
 
 
 };

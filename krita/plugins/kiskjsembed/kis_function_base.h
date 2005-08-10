@@ -24,56 +24,56 @@
 #include <kjsembed/jsproxy_imp.h>
 
 namespace KJSEmbed {
-	class KJSEmbedPart;
+    class KJSEmbedPart;
 };
 
 class KisView;
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			namespace Bindings {
-				/**
-				 * This is the base class used to create a function for KisKJSEmbed.
-				 * To add a new function, you need to derivate FunctionBase, then to implement
-				 * its function call, then to instantiate FunctionBase from FunctionsFactory.
-				 * This class is also used to add the functions to an object.
-				 */
-				class FunctionBase : public KJSEmbed::JSProxyImp {
-					public:
-						/**
-						 * This function is used when a Function is attached to a single object
-						 */
-						FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent);
-						/**
-						 * This function is used for the functions of an object, because in such case,
-						 * different objects share the same class
-						 */
-						FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name);
-					public:
-						/** Returns true if this object implements the call function. */
-						virtual bool implementsCall() const { return true; }
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            namespace Bindings {
+                /**
+                 * This is the base class used to create a function for KisKJSEmbed.
+                 * To add a new function, you need to derivate FunctionBase, then to implement
+                 * its function call, then to instantiate FunctionBase from FunctionsFactory.
+                 * This class is also used to add the functions to an object.
+                 */
+                class FunctionBase : public KJSEmbed::JSProxyImp {
+                    public:
+                        /**
+                         * This function is used when a Function is attached to a single object
+                         */
+                        FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent);
+                        /**
+                         * This function is used for the functions of an object, because in such case,
+                         * different objects share the same class
+                         */
+                        FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name);
+                    public:
+                        /** Returns true if this object implements the call function. */
+                        virtual bool implementsCall() const { return true; }
 
-						/** Invokes the call function. */
-						virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args ) =0;
-					private:
-						KJSEmbed::KJSEmbedPart* m_part;
-				};
-				/**
-				 * This class is used when you want to bind a function which needs to access to
-				 * KisView.
-				 */
-				class GlobalFunctionBase : public FunctionBase {
-					public:
-						GlobalFunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent, KisView* view );
-					protected:
-						KisView* view() { return m_view; };
-					private:
-						KisView* m_view;
-				};
-			};
-		};
-	};
+                        /** Invokes the call function. */
+                        virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args ) =0;
+                    private:
+                        KJSEmbed::KJSEmbedPart* m_part;
+                };
+                /**
+                 * This class is used when you want to bind a function which needs to access to
+                 * KisView.
+                 */
+                class GlobalFunctionBase : public FunctionBase {
+                    public:
+                        GlobalFunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent, KisView* view );
+                    protected:
+                        KisView* view() { return m_view; };
+                    private:
+                        KisView* m_view;
+                };
+            };
+        };
+    };
 };
 
 #endif

@@ -33,24 +33,24 @@ class KisColorWheel : public KXYSelector
   Q_OBJECT
 
 public:
-	KisColorWheel( QWidget *parent=0, const char *name=0 );
+    KisColorWheel( QWidget *parent=0, const char *name=0 );
 
 signals:
-	void valueChanged(const KoColor& c);
+    void valueChanged(const KoColor& c);
 
 public slots:
-	virtual void slotSetValue(const KoColor& c);
+    virtual void slotSetValue(const KoColor& c);
 
 protected:
-	virtual void drawWheel( QPixmap *pixmap );
-	virtual void resizeEvent( QResizeEvent * );
-	virtual void mousePressEvent( QMouseEvent *e );
-	virtual void mouseMoveEvent( QMouseEvent *e );
-	virtual void drawContents( QPainter *painter );
+    virtual void drawWheel( QPixmap *pixmap );
+    virtual void resizeEvent( QResizeEvent * );
+    virtual void mousePressEvent( QMouseEvent *e );
+    virtual void mouseMoveEvent( QMouseEvent *e );
+    virtual void drawContents( QPainter *painter );
 
 private:
-	QPixmap m_pixmap;
-	KoColor m_color;
+    QPixmap m_pixmap;
+    KoColor m_color;
 };
 
 #endif

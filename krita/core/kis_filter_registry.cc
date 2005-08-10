@@ -33,8 +33,8 @@ KisFilterRegistry *KisFilterRegistry::m_singleton = 0;
 
 KisFilterRegistry::KisFilterRegistry()
 {
-	Q_ASSERT(KisFilterRegistry::m_singleton == 0);
-	KisFilterRegistry::m_singleton = this;
+    Q_ASSERT(KisFilterRegistry::m_singleton == 0);
+    KisFilterRegistry::m_singleton = this;
 }
 
 KisFilterRegistry::~KisFilterRegistry()
@@ -43,10 +43,10 @@ KisFilterRegistry::~KisFilterRegistry()
 
 KisFilterRegistry* KisFilterRegistry::instance()
 {
-	if(KisFilterRegistry::m_singleton == 0)
-	{
-		KisFilterRegistry::m_singleton = new KisFilterRegistry();
-	}
-	return KisFilterRegistry::m_singleton;
+    if(KisFilterRegistry::m_singleton == 0)
+    {
+        KisFilterRegistry::m_singleton = new KisFilterRegistry();
+    }
+    return KisFilterRegistry::m_singleton;
 }
 

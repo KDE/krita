@@ -43,22 +43,22 @@ K_EXPORT_COMPONENT_FACTORY( kritargbplugin, RGBPluginFactory( "krita" ) )
 
 
 RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-		setInstance(RGBPluginFactory::instance());
+        setInstance(RGBPluginFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "RGB Color model plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "RGB Color model plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		m_ColorSpaceRGBA = new KisRgbColorSpace();
-		Q_CHECK_PTR(m_ColorSpaceRGBA);
-		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBA);
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        m_ColorSpaceRGBA = new KisRgbColorSpace();
+        Q_CHECK_PTR(m_ColorSpaceRGBA);
+        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBA);
+    }
 
 }
 

@@ -67,15 +67,15 @@ typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabumpmap, KritaBumpmapFactory( "krita" ) )
 
 KritaBumpmap::KritaBumpmap(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(KritaBumpmapFactory::instance());
+    setInstance(KritaBumpmapFactory::instance());
 
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisFilterBumpmap());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisFilterBumpmap());
+    }
 }
 
 KritaBumpmap::~KritaBumpmap()
@@ -87,292 +87,292 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
 }
 
 namespace {
-	void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
-	{
-		KisAbstractColorSpace * csOrig = orig->colorStrategy();
+    void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
+    {
+        KisAbstractColorSpace * csOrig = orig->colorStrategy();
 
-		KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
-		for (int i = 0; i < w; ++i) {
-			row[0] = csOrig->intensity8(origIt.rawData());
-			row[0] = lut[waterlevel + ((row[0] -  waterlevel) * origIt.pixel().alpha()) / 255];
-			
-			++row;
-			++origIt;
-		}
-	}
-	
+        KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
+        for (int i = 0; i < w; ++i) {
+            row[0] = csOrig->intensity8(origIt.rawData());
+            row[0] = lut[waterlevel + ((row[0] -  waterlevel) * origIt.pixel().alpha()) / 255];
+            
+            ++row;
+            ++origIt;
+        }
+    }
+    
 }
 
 void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rect)
 {
-	if (!src) return;
-	if (!dst) return;
-	if (!cfg) return;
-	if (!rect.isValid()) return;
-	if (rect.isNull()) return;
-	if (rect.isEmpty()) return;
-	
-	KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
+    if (!src) return;
+    if (!dst) return;
+    if (!cfg) return;
+    if (!rect.isValid()) return;
+    if (rect.isNull()) return;
+    if (rect.isEmpty()) return;
+    
+    KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
-	Q_INT32 lx, ly;       /* X and Y components of light vector */
-	Q_INT32 nz2, nzlz;    /* nz^2, nz*lz */
-	Q_INT32 background;   /* Shade for vertical normals */
-	double  compensation; /* Background compensation */
-	Q_UINT8 lut[256];     /* Look-up table for modes */
+    Q_INT32 lx, ly;       /* X and Y components of light vector */
+    Q_INT32 nz2, nzlz;    /* nz^2, nz*lz */
+    Q_INT32 background;   /* Shade for vertical normals */
+    double  compensation; /* Background compensation */
+    Q_UINT8 lut[256];     /* Look-up table for modes */
 
-	double azimuth;
-	double elevation;
-	Q_INT32 lz, nz;
-	Q_INT32 i;
-	double n;
+    double azimuth;
+    double elevation;
+    Q_INT32 lz, nz;
+    Q_INT32 i;
+    double n;
 
-	// ------------------ Prepare parameters
+    // ------------------ Prepare parameters
 
-	/* Convert to radians */
-	azimuth   = M_PI * config->azimuth / 180.0;
-	elevation = M_PI * config->elevation / 180.0;
+    /* Convert to radians */
+    azimuth   = M_PI * config->azimuth / 180.0;
+    elevation = M_PI * config->elevation / 180.0;
 
-	/* Calculate the light vector */
-	lx = (Q_INT32)(cos(azimuth) * cos(elevation) * 255.0);
-	ly = (Q_INT32)(sin(azimuth) * cos(elevation) * 255.0);
-	
-	lz = (Q_INT32)(sin(elevation) * 255.0);
+    /* Calculate the light vector */
+    lx = (Q_INT32)(cos(azimuth) * cos(elevation) * 255.0);
+    ly = (Q_INT32)(sin(azimuth) * cos(elevation) * 255.0);
+    
+    lz = (Q_INT32)(sin(elevation) * 255.0);
 
-	/* Calculate constant Z component of surface normal */
-	nz = (Q_INT32)((6 * 255) / config->depth);
-	nz2  = nz * nz;
-	nzlz = nz * lz;
+    /* Calculate constant Z component of surface normal */
+    nz = (Q_INT32)((6 * 255) / config->depth);
+    nz2  = nz * nz;
+    nzlz = nz * lz;
 
-	/* Optimize for vertical normals */
-	background = lz;
+    /* Optimize for vertical normals */
+    background = lz;
 
-	/* Calculate darkness compensation factor */
-	compensation = sin(elevation);
+    /* Calculate darkness compensation factor */
+    compensation = sin(elevation);
 
-	/* Create look-up table for map type */
-	for (i = 0; i < 256; i++)
-	{
-		switch (config->type)
-		{
-		case SPHERICAL:
-			n = i / 255.0 - 1.0;
-			lut[i] = (int) (255.0 * sqrt(1.0 - n * n) + 0.5);
-			break;
-			
-		case SINUSOIDAL:
-			n = i / 255.0;
-			lut[i] = (int) (255.0 *
-					(sin((-M_PI / 2.0) + M_PI * n) + 1.0) /
-					2.0 + 0.5);
-			break;
-			
-		case LINEAR:
-			default:
-			lut[i] = i;
-		}
-		
-		if (config->invert)
-			lut[i] = 255 - lut[i];
-	}
-
-
-	// Crate a grayscale layer from the bumpmap layer.
-	QRect bmRect;
-	KisPaintDeviceSP bumpmap;
+    /* Create look-up table for map type */
+    for (i = 0; i < 256; i++)
+    {
+        switch (config->type)
+        {
+        case SPHERICAL:
+            n = i / 255.0 - 1.0;
+            lut[i] = (int) (255.0 * sqrt(1.0 - n * n) + 0.5);
+            break;
+            
+        case SINUSOIDAL:
+            n = i / 255.0;
+            lut[i] = (int) (255.0 *
+                    (sin((-M_PI / 2.0) + M_PI * n) + 1.0) /
+                    2.0 + 0.5);
+            break;
+            
+        case LINEAR:
+            default:
+            lut[i] = i;
+        }
+        
+        if (config->invert)
+            lut[i] = 255 - lut[i];
+    }
 
 
- 	if (!config->bumpmap.isNull()) {
- 		KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).data();
- 		if (bumplayer) {
-			bmRect = bumplayer->exactBounds();
-			bumpmap = bumplayer;
-		}
-		else {
-			bmRect = rect;
-			bumpmap = src;
-		}
- 	}
- 	else {
-	 	bmRect = rect;
-		bumpmap = src;
-	}
+    // Crate a grayscale layer from the bumpmap layer.
+    QRect bmRect;
+    KisPaintDeviceSP bumpmap;
 
 
-	Q_INT32 sel_h = rect.height();
-	Q_INT32 sel_w = rect.width();
-	Q_INT32 sel_x = rect.x();
-	Q_INT32 sel_y = rect.y();
-	
-	Q_INT32 bm_h = bmRect.height();
-	Q_INT32 bm_w = bmRect.width();
-	Q_INT32 bm_x = bmRect.x();
-	
-	setProgressTotalSteps(sel_h);
-
-	// ------------------- Map the bumps
-	Q_INT32 yofs1, yofs2, yofs3;
-
-	// ------------------- Initialize offsets
-	if (config->tiled) {
-		yofs2 = MOD (config->yofs + sel_y, bm_h);
-		yofs1 = MOD (yofs2 - 1, bm_h);
-		yofs3 = MOD (yofs2 + 1,  bm_h);
-	}
-	else {
-	      yofs2 = CLAMP (config->yofs + sel_y, 0, bm_h - 1);
-	      yofs1 = yofs2;
-	      yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
-
-	}
-
-	// ---------------------- Load initial three bumpmap scanlines
-	
-	KisAbstractColorSpace * srcCs = src->colorStrategy();
-	vKisChannelInfoSP channels = srcCs->channels();
-
-	// One byte per pixel, converted from the bumpmap layer.
-	Q_UINT8 * bm_row1 = new Q_UINT8[bm_w];
-	Q_UINT8 * bm_row2 = new Q_UINT8[bm_w];
-	Q_UINT8 * bm_row3 = new Q_UINT8[bm_w];
-	Q_UINT8 * tmp_row;
-
-	convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
-	convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
-	convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
-	
-	bool row_in_bumpmap;
-
-	Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
-	for (int y = sel_y; y < sel_h + sel_y; y++) {
-
-		row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
-
-		// Bumpmap
-		
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
-
-		Q_INT32 tmp = config->xofs + sel_x;
-		xofs2 = MOD (tmp, bm_w);
-
-		Q_INT32 x = 0;
-		//while (x < sel_w || cancelRequested()) {
-		while (!srcIt.isDone() && !cancelRequested()) {
-			if (srcIt.isSelected()) {
-				// Calculate surface normal from bumpmap
-				if (config->tiled || row_in_bumpmap &&
-					x >= - tmp&& x < - tmp + bm_w) {
-	
-					if (config->tiled) {
-						xofs1 = MOD (xofs2 - 1, bm_w);
-						xofs3 = MOD (xofs2 + 1, bm_w);
-					}
-					else {
-						xofs1 = CLAMP (xofs2 - 1, 0, bm_w - 1);
-						xofs3 = CLAMP (xofs2 + 1, 0, bm_w - 1);
-					}
-					#if 0
-					kdDebug() << "x: " << x
-						<< ", x offset 1: " << xofs1
-						<< ", x offset 2: " << xofs2
-						<< ", x offset 3: " << xofs3 << "\n";
-					#endif
-
-					nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
-						bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
-					ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
-						bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
-	
-					
-				}
-				else {
-					nx = 0;
-					ny = 0;
-				}
-	
-				// Shade
-	
-				if ((nx == 0) && (ny == 0)) {
-					shade = background;
-				}
-				else {
-					ndotl = (nx * lx) + (ny * ly) + nzlz;
-	
-					if (ndotl < 0) {
-						shade = (Q_INT32)(compensation * config->ambient);
-					}
-					else {
-						shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-						shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
-					}
-				}
-	
-				// Paint
-				srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
-			}
-		      if (++xofs2 == bm_w)
-				xofs2 = 0;
-			++srcIt;
-			++dstIt;
-			++x;
-		}
+     if (!config->bumpmap.isNull()) {
+         KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).data();
+         if (bumplayer) {
+            bmRect = bumplayer->exactBounds();
+            bumpmap = bumplayer;
+        }
+        else {
+            bmRect = rect;
+            bumpmap = src;
+        }
+     }
+     else {
+         bmRect = rect;
+        bumpmap = src;
+    }
 
 
-		// Next line
-		if (config->tiled || row_in_bumpmap) {
-			tmp_row = bm_row1;
-			bm_row1 = bm_row2;
-			bm_row2 = bm_row3;
-			bm_row3 = tmp_row;
-			
-			if (++yofs2 == bm_h) {
-				yofs2 = 0;
-			}
-			if (config->tiled) {
-				yofs3 = MOD(yofs2 + 1, bm_h);
-			}
-			else {
-				yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
-			}
+    Q_INT32 sel_h = rect.height();
+    Q_INT32 sel_w = rect.width();
+    Q_INT32 sel_x = rect.x();
+    Q_INT32 sel_y = rect.y();
+    
+    Q_INT32 bm_h = bmRect.height();
+    Q_INT32 bm_w = bmRect.width();
+    Q_INT32 bm_x = bmRect.x();
+    
+    setProgressTotalSteps(sel_h);
 
-			convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
-		}
+    // ------------------- Map the bumps
+    Q_INT32 yofs1, yofs2, yofs3;
 
-		incProgress();
-	}
-	
-	delete [] bm_row1;
-	delete [] bm_row2;
-	delete [] bm_row3;
-	setProgressDone();
+    // ------------------- Initialize offsets
+    if (config->tiled) {
+        yofs2 = MOD (config->yofs + sel_y, bm_h);
+        yofs1 = MOD (yofs2 - 1, bm_h);
+        yofs3 = MOD (yofs2 + 1,  bm_h);
+    }
+    else {
+          yofs2 = CLAMP (config->yofs + sel_y, 0, bm_h - 1);
+          yofs1 = yofs2;
+          yofs3 = CLAMP (yofs2 + 1, 0, bm_h - 1);
+
+    }
+
+    // ---------------------- Load initial three bumpmap scanlines
+    
+    KisAbstractColorSpace * srcCs = src->colorStrategy();
+    vKisChannelInfoSP channels = srcCs->channels();
+
+    // One byte per pixel, converted from the bumpmap layer.
+    Q_UINT8 * bm_row1 = new Q_UINT8[bm_w];
+    Q_UINT8 * bm_row2 = new Q_UINT8[bm_w];
+    Q_UINT8 * bm_row3 = new Q_UINT8[bm_w];
+    Q_UINT8 * tmp_row;
+
+    convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
+    convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
+    convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+    
+    bool row_in_bumpmap;
+
+    Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
+    for (int y = sel_y; y < sel_h + sel_y; y++) {
+
+        row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
+
+        // Bumpmap
+        
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
+
+        Q_INT32 tmp = config->xofs + sel_x;
+        xofs2 = MOD (tmp, bm_w);
+
+        Q_INT32 x = 0;
+        //while (x < sel_w || cancelRequested()) {
+        while (!srcIt.isDone() && !cancelRequested()) {
+            if (srcIt.isSelected()) {
+                // Calculate surface normal from bumpmap
+                if (config->tiled || row_in_bumpmap &&
+                    x >= - tmp&& x < - tmp + bm_w) {
+    
+                    if (config->tiled) {
+                        xofs1 = MOD (xofs2 - 1, bm_w);
+                        xofs3 = MOD (xofs2 + 1, bm_w);
+                    }
+                    else {
+                        xofs1 = CLAMP (xofs2 - 1, 0, bm_w - 1);
+                        xofs3 = CLAMP (xofs2 + 1, 0, bm_w - 1);
+                    }
+                    #if 0
+                    kdDebug() << "x: " << x
+                        << ", x offset 1: " << xofs1
+                        << ", x offset 2: " << xofs2
+                        << ", x offset 3: " << xofs3 << "\n";
+                    #endif
+
+                    nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
+                        bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
+                    ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
+                        bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
+    
+                    
+                }
+                else {
+                    nx = 0;
+                    ny = 0;
+                }
+    
+                // Shade
+    
+                if ((nx == 0) && (ny == 0)) {
+                    shade = background;
+                }
+                else {
+                    ndotl = (nx * lx) + (ny * ly) + nzlz;
+    
+                    if (ndotl < 0) {
+                        shade = (Q_INT32)(compensation * config->ambient);
+                    }
+                    else {
+                        shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                        shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
+                    }
+                }
+    
+                // Paint
+                srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
+            }
+              if (++xofs2 == bm_w)
+                xofs2 = 0;
+            ++srcIt;
+            ++dstIt;
+            ++x;
+        }
+
+
+        // Next line
+        if (config->tiled || row_in_bumpmap) {
+            tmp_row = bm_row1;
+            bm_row1 = bm_row2;
+            bm_row2 = bm_row3;
+            bm_row3 = tmp_row;
+            
+            if (++yofs2 == bm_h) {
+                yofs2 = 0;
+            }
+            if (config->tiled) {
+                yofs3 = MOD(yofs2 + 1, bm_h);
+            }
+            else {
+                yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
+            }
+
+            convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
+        }
+
+        incProgress();
+    }
+    
+    delete [] bm_row1;
+    delete [] bm_row2;
+    delete [] bm_row3;
+    setProgressDone();
 
 }
 
 KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
+    KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
 
 
-	return w;
+    return w;
 }
 
 KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceSP) 
 {
 
-	KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
-	if (widget == 0) {
-		return new KisBumpmapConfiguration();
-	}
-	else {
-		return widget->config();
-	}
+    KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
+    if (widget == 0) {
+        return new KisBumpmapConfiguration();
+    }
+    else {
+        return widget->config();
+    }
 
 }
 
 
 KisBumpmapConfiguration::KisBumpmapConfiguration()
 {
-	bumpmap = QString();
+    bumpmap = QString();
         azimuth = 135.0;
         elevation = 45.0;
         depth = 3;
@@ -382,44 +382,44 @@ KisBumpmapConfiguration::KisBumpmapConfiguration()
         ambient = 0;
         compensate = true;
         invert = false;
-	tiled = true;
-	type = krita::LINEAR;
+    tiled = true;
+    type = krita::LINEAR;
 }
 
 
 KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
-	: KisFilterConfigWidget(parent, name, f),
-	  m_filter(filter),
-	  m_device(dev)
+    : KisFilterConfigWidget(parent, name, f),
+      m_filter(filter),
+      m_device(dev)
 {
-	Q_ASSERT(m_filter);
-	Q_ASSERT(m_device);
-	
-	m_page = new WdgBumpmap(this);
+    Q_ASSERT(m_filter);
+    Q_ASSERT(m_device);
+    
+    m_page = new WdgBumpmap(this);
         QHBoxLayout * l = new QHBoxLayout(this);
         Q_CHECK_PTR(l);
 
         l -> add(m_page);
         m_filter -> setAutoUpdate(false);
 
-	// Fill combobox with layers
-	const KisImageSP img = dev->image();
-	if (img) {
-		vKisLayerSP layers = img->layers();
-		
-		for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
-			const KisLayerSP& layer = *it;
-			m_page->cmbLayer->insertItem(layer->name());
-		}
-	}
-	connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
+    // Fill combobox with layers
+    const KisImageSP img = dev->image();
+    if (img) {
+        vKisLayerSP layers = img->layers();
+        
+        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
+            const KisLayerSP& layer = *it;
+            m_page->cmbLayer->insertItem(layer->name());
+        }
+    }
+    connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
 {
-	KisBumpmapConfiguration * cfg = new KisBumpmapConfiguration();
-	cfg->bumpmap = m_page->cmbLayer->currentText();
-	cfg->azimuth = m_page->dblAzimuth->value();
+    KisBumpmapConfiguration * cfg = new KisBumpmapConfiguration();
+    cfg->bumpmap = m_page->cmbLayer->currentText();
+    cfg->azimuth = m_page->dblAzimuth->value();
         cfg->elevation = m_page->dblElevation->value();
         cfg->depth = m_page->dblDepth->value();
         cfg->xofs = m_page->intXOffset->value();
@@ -428,10 +428,10 @@ KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
         cfg->ambient = m_page->intAmbient->value();
         cfg->compensate = m_page->chkCompensate->isChecked();
         cfg->invert = m_page->chkInvert->isChecked();
-	cfg->tiled = m_page->chkTiled->isChecked();
-	cfg->type = (enumBumpmapType)m_page->grpType->selectedId();
-	
-	return cfg;
+    cfg->tiled = m_page->chkTiled->isChecked();
+    cfg->type = (enumBumpmapType)m_page->grpType->selectedId();
+    
+    return cfg;
 }
 
 #include "bumpmap.moc"

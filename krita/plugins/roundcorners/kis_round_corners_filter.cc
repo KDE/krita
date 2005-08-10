@@ -60,99 +60,99 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
 {
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 radius = ((KisRoundCornersFilterConfiguration*)configuration)->radius();
-	Q_UINT32 pixelSize = src -> pixelSize();
-	
-	setProgressTotalSteps( rect.height() );
+    Q_UINT32 pixelSize = src -> pixelSize();
+    
+    setProgressTotalSteps( rect.height() );
         setProgressStage(i18n("Applying pixelize filter..."),0);
 
-	for (Q_INT32 y = rect.y(); y < rect.height(); y++)
-	{
-		Q_UINT32 x = rect.x();
-		Q_UINT32 x0 = rect.x();
-		Q_UINT32 y0 = rect.x();
-		Q_UINT32 width = rect.width();
-		Q_UINT32 height = rect.height();
-		KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y, width, true );
-		KisHLineIteratorPixel srcIt = src->createHLineIterator(x, y, width, false);
-		while( ! srcIt.isDone() )
-		{
-			if(srcIt.isSelected())
-			{
-				for( int i = 0; i < pixelSize; i++)
-				{
-					if ( i < pixelSize - 1 )
-					{
-						dstIt.rawData()[i] = srcIt.oldRawData()[i];
-					}
-					else
-					{
-						if( x <= radius && y <= radius)
-						{	
-							double dx = radius - x;
-							double dy = radius - y;
-							double dradius = static_cast<double>(radius);
-							if ( dx >= sqrt( dradius*dradius - dy*dy ) )
-							{
-								dstIt.rawData()[i] = 0;
-							}
-						}
-						else if( x >= x0 + width - radius && y <= radius)
-						{
-							double dx = x + radius - x0 - width;
-							double dy = radius - y;
-							double dradius = static_cast<double>(radius);
-							if ( dx >= sqrt( dradius*dradius - dy*dy ) )
-							{
-								dstIt.rawData()[i] = 0;
-							}
-						}
-						else if( x <= radius && y >= y0 + height - radius)
-						{
-							double dx = radius - x;
-							double dy = y + radius - y0 - height;
-							double dradius = static_cast<double>(radius);
-							if ( dx >= sqrt( dradius*dradius - dy*dy ) )
-							{
-								dstIt.rawData()[i] = 0;
-							}
-						}
-						else if( x >= x0 + width - radius && y >= y0 + height - radius)
-						{
-							
-							double dx = x + radius - x0 - width;
-							double dy = y + radius - y0 - height;
-							double dradius = static_cast<double>(radius);
-							if ( dx >= sqrt( dradius*dradius - dy*dy ) )
-							{
-								dstIt.rawData()[i] = 0;
-							}
-						}
-					}
-				}
-			}
-			++srcIt;
-			++dstIt;
-			++x;
-		}
-		setProgress(y);
-	}
-	setProgressDone();
+    for (Q_INT32 y = rect.y(); y < rect.height(); y++)
+    {
+        Q_UINT32 x = rect.x();
+        Q_UINT32 x0 = rect.x();
+        Q_UINT32 y0 = rect.x();
+        Q_UINT32 width = rect.width();
+        Q_UINT32 height = rect.height();
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y, width, true );
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(x, y, width, false);
+        while( ! srcIt.isDone() )
+        {
+            if(srcIt.isSelected())
+            {
+                for( int i = 0; i < pixelSize; i++)
+                {
+                    if ( i < pixelSize - 1 )
+                    {
+                        dstIt.rawData()[i] = srcIt.oldRawData()[i];
+                    }
+                    else
+                    {
+                        if( x <= radius && y <= radius)
+                        {    
+                            double dx = radius - x;
+                            double dy = radius - y;
+                            double dradius = static_cast<double>(radius);
+                            if ( dx >= sqrt( dradius*dradius - dy*dy ) )
+                            {
+                                dstIt.rawData()[i] = 0;
+                            }
+                        }
+                        else if( x >= x0 + width - radius && y <= radius)
+                        {
+                            double dx = x + radius - x0 - width;
+                            double dy = radius - y;
+                            double dradius = static_cast<double>(radius);
+                            if ( dx >= sqrt( dradius*dradius - dy*dy ) )
+                            {
+                                dstIt.rawData()[i] = 0;
+                            }
+                        }
+                        else if( x <= radius && y >= y0 + height - radius)
+                        {
+                            double dx = radius - x;
+                            double dy = y + radius - y0 - height;
+                            double dradius = static_cast<double>(radius);
+                            if ( dx >= sqrt( dradius*dradius - dy*dy ) )
+                            {
+                                dstIt.rawData()[i] = 0;
+                            }
+                        }
+                        else if( x >= x0 + width - radius && y >= y0 + height - radius)
+                        {
+                            
+                            double dx = x + radius - x0 - width;
+                            double dy = y + radius - y0 - height;
+                            double dradius = static_cast<double>(radius);
+                            if ( dx >= sqrt( dradius*dradius - dy*dy ) )
+                            {
+                                dstIt.rawData()[i] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            ++srcIt;
+            ++dstIt;
+            ++x;
+        }
+        setProgress(y);
+    }
+    setProgressDone();
 }
 
 KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisRoundCornersFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisRoundCornersFilterConfiguration( 30 );
-	} else {
-		return new KisRoundCornersFilterConfiguration( widget->valueAt( 0 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisRoundCornersFilterConfiguration( 30 );
+    } else {
+        return new KisRoundCornersFilterConfiguration( widget->valueAt( 0 ) );
+    }
 }

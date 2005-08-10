@@ -35,27 +35,27 @@
 #include "kis_matrix_widget.h"
 
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name)
-	: KisFilterConfigWidget ( parent, name )
+    : KisFilterConfigWidget ( parent, name )
 {
-	QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
-	Q_CHECK_PTR(widgetLayout);
+    QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
+    Q_CHECK_PTR(widgetLayout);
 
-	QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");
-	Q_CHECK_PTR(bnRefresh);
+    QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");
+    Q_CHECK_PTR(bnRefresh);
 
-	QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
-	Q_CHECK_PTR(spacer);
+    QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    Q_CHECK_PTR(spacer);
 
-	widgetLayout -> addWidget(bnRefresh, 0, 0);
-	widgetLayout -> addItem(spacer, 0, 1);
+    widgetLayout -> addWidget(bnRefresh, 0, 0);
+    widgetLayout -> addItem(spacer, 0, 1);
 
-	m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
-	Q_CHECK_PTR(m_ccfcws);
+    m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
+    Q_CHECK_PTR(m_ccfcws);
 
-	widgetLayout -> addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
+    widgetLayout -> addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
 
-	connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
-	
+    connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
+    
 }
 
 #include "kis_custom_convolution_filter_configuration_widget.moc"

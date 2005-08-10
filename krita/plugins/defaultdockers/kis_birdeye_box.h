@@ -32,65 +32,65 @@ class KoZoomHandler;
 
 class KisBirdEyeBox : public WdgBirdEye
 { 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	KisBirdEyeBox(QWidget* parent=0, const char* name=0);
-	~KisBirdEyeBox();
+    KisBirdEyeBox(QWidget* parent=0, const char* name=0);
+    ~KisBirdEyeBox();
 
-	bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 public slots:
 
-	void show();
+    void show();
 
-	void zoomChanged(int);
-	void zoomMinus();
-	void zoomPlus();
+    void zoomChanged(int);
+    void zoomMinus();
+    void zoomPlus();
 
 protected slots:
 
 
-	void updateVisibleArea();
-	void canvasZoomChanged();
-/* 	void slotUpdateView(KivioPage*); */
-	void togglePageBorder(bool);
-	void doAutoResizeMin();
-	void doAutoResizeMax();
-	void exposureValueChanged(double exposure);
-	void exposureSliderPressed();
-	void exposureSliderReleased();
+    void updateVisibleArea();
+    void canvasZoomChanged();
+/*     void slotUpdateView(KivioPage*); */
+    void togglePageBorder(bool);
+    void doAutoResizeMin();
+    void doAutoResizeMax();
+    void exposureValueChanged(double exposure);
+    void exposureSliderPressed();
+    void exposureSliderReleased();
 
 signals:
-	void exposureChanged(float exposure);
+    void exposureChanged(float exposure);
 
 protected:
 
-	void updateView();
-	void handleMouseMove(QPoint);
-	void handleMouseMoveAction(QPoint);
-	void handleMousePress(QPoint);
+    void updateView();
+    void handleMouseMove(QPoint);
+    void handleMouseMoveAction(QPoint);
+    void handleMousePress(QPoint);
 
 private:
-	KisView* m_view;
-	KisDoc* m_doc;
+    KisView* m_view;
+    KisDoc* m_doc;
 
-	KAction* m_zoomIn;
-	KAction* m_zoomOut;
-	QPixmap* m_buffer;
+    KAction* m_zoomIn;
+    KAction* m_zoomOut;
+    QPixmap* m_buffer;
 
-	bool m_showPageBorders;
+    bool m_showPageBorders;
 
-	QSize m_minSize;
-	QSize m_maxSize;
+    QSize m_minSize;
+    QSize m_maxSize;
 
-	QRect m_area;
-	AlignmentFlags m_apos;
-	bool m_handlePress;
-	QPoint m_lastPos;
+    QRect m_area;
+    AlignmentFlags m_apos;
+    bool m_handlePress;
+    QPoint m_lastPos;
 
-	bool m_draggingExposureSlider;
+    bool m_draggingExposureSlider;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

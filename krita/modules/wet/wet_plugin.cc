@@ -64,55 +64,55 @@ K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
 
 
 WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(WetPluginFactory::instance());
+    setInstance(WetPluginFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Wet Color model plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Wet Color model plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	// This is not a gui plugin; only load it when the doc is created.
-	if ( parent->inherits("KisFactory") )
-	{
-		m_colorSpaceWet = new KisWetColorSpace();
-		Q_CHECK_PTR(m_colorSpaceWet);
-		// colorspace
-		KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
-		// wet brush op
-		KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
+    // This is not a gui plugin; only load it when the doc is created.
+    if ( parent->inherits("KisFactory") )
+    {
+        m_colorSpaceWet = new KisWetColorSpace();
+        Q_CHECK_PTR(m_colorSpaceWet);
+        // colorspace
+        KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
+        // wet brush op
+        KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 
-		// Dry filter
-		KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
+        // Dry filter
+        KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
 
-		//(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
-	}
-	else if (parent -> inherits("KisView"))
-	{
+        //(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
+    }
+    else if (parent -> inherits("KisView"))
+    {
 
-		m_view = (KisView*)parent;
-		// Wetness visualisation
-		WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
-		wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
-						SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
-		// Texture filter
-		(void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
-						SLOT(slotActivated()), actionCollection(), "texturefilter");
-		
+        m_view = (KisView*)parent;
+        // Wetness visualisation
+        WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
+        wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
+                        SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
+        // Texture filter
+        (void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
+                        SLOT(slotActivated()), actionCollection(), "texturefilter");
+        
 
-		// Create the wet palette
-		KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
-		Q_CHECK_PTR(w);
+        // Create the wet palette
+        KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
+        Q_CHECK_PTR(w);
 
-		w -> setCaption(i18n("Watercolors"));
+        w -> setCaption(i18n("Watercolors"));
 
-		m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
-		m_view->paletteManager()->showWidget("hsvwidget");
-		
-		m_view->getCanvasSubject() -> attach(w);
-	}
+        m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
+        m_view->paletteManager()->showWidget("hsvwidget");
+        
+        m_view->getCanvasSubject() -> attach(w);
+    }
 
 
 }

@@ -36,41 +36,41 @@ class KisPoint;
  */
 class KRITATOOL_EXPORT KisToolDummy : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolDummy();
-	virtual ~KisToolDummy();
+    KisToolDummy();
+    virtual ~KisToolDummy();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void setup(KActionCollection *collection);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void setup(KActionCollection *collection);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisPoint m_dragPos;
-	Q_INT32 m_origScrollX;
-	Q_INT32 m_origScrollY;
-	bool m_dragging;
+    KisCanvasSubject *m_subject;
+    KisPoint m_dragPos;
+    Q_INT32 m_origScrollX;
+    Q_INT32 m_origScrollY;
+    bool m_dragging;
 };
 
 class KisToolDummyFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolDummyFactory() : super() {};
-	virtual ~KisToolDummyFactory() {};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolDummy();
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("dummy", i18n("Dummy tool")); }
+    KisToolDummyFactory() : super() {};
+    virtual ~KisToolDummyFactory() {};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolDummy();
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("dummy", i18n("Dummy tool")); }
 };
 
 

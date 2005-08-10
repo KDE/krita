@@ -49,25 +49,25 @@ typedef KGenericFactory<Variations> VariationsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritavariations, VariationsFactory( "krita" ) )
 
 Variations::Variations(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(VariationsFactory::instance());
+    setInstance(VariationsFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Variations plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Variations plugin. Class: " 
+           << className() 
+           << ", Parent: " 
+           << parent -> className()
+           << "\n";
 
 
-	(void) new KAction(i18n("&Variations..."), 0, 0, this, SLOT(slotVariationsActivated()), actionCollection(), "variations");
-	
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-	}
+    (void) new KAction(i18n("&Variations..."), 0, 0, this, SLOT(slotVariationsActivated()), actionCollection(), "variations");
+    
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+    }
 }
 
 Variations::~Variations()
@@ -76,19 +76,19 @@ Variations::~Variations()
 
 void Variations::slotVariationsActivated()
 {
-	DlgVariations * dlgVariations = new DlgVariations(m_view, "Variations");
-	Q_CHECK_PTR(dlgVariations);
-	// Render layer to a QIMage -- keep in mind possibility of selection
+    DlgVariations * dlgVariations = new DlgVariations(m_view, "Variations");
+    Q_CHECK_PTR(dlgVariations);
+    // Render layer to a QIMage -- keep in mind possibility of selection
 
-	// Scale QImage 
+    // Scale QImage 
 
-	// Set original QImage in dialog
-		
-	if (dlgVariations -> exec() == QDialog::Accepted) {
-		// Retrieve changes made by dialog
-		// Apply changes to layer (selection)
-	}
-	delete dlgVariations;
+    // Set original QImage in dialog
+        
+    if (dlgVariations -> exec() == QDialog::Accepted) {
+        // Retrieve changes made by dialog
+        // Apply changes to layer (selection)
+    }
+    delete dlgVariations;
 }
 
 #include "variations.moc"

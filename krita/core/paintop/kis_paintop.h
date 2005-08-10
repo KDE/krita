@@ -44,59 +44,59 @@ class KRITACORE_EXPORT KisPaintOp : public KShared
 public:
 
         KisPaintOp(KisPainter * painter);
-	virtual ~KisPaintOp();
+    virtual ~KisPaintOp();
 
-	virtual void paintAt(const KisPoint &pos,
-			     const double pressure,
-			     const double /*xTilt*/,
-			     const double /*yTilt*/) = 0;
-	void setSource(KisPaintDeviceSP p);
+    virtual void paintAt(const KisPoint &pos,
+                 const double pressure,
+                 const double /*xTilt*/,
+                 const double /*yTilt*/) = 0;
+    void setSource(KisPaintDeviceSP p);
 
-	/**
-	 * Whether this paintop wants to deposit paint even when not moving, i.e. the
-	 * tool needs to activate its timer.
-	 */
-	virtual bool incremental() { return false; }
-	
+    /**
+     * Whether this paintop wants to deposit paint even when not moving, i.e. the
+     * tool needs to activate its timer.
+     */
+    virtual bool incremental() { return false; }
+    
 protected:
 
-	virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
+    virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
 
 
-	/**
-	 * Split the coordinate into whole + fraction, where fraction is always >= 0.
-	 */
-	virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
+    /**
+     * Split the coordinate into whole + fraction, where fraction is always >= 0.
+     */
+    virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
 
-	KisPainter * m_painter;
-	KisPaintDeviceSP m_source; // use this layer as source layer for the operation
+    KisPainter * m_painter;
+    KisPaintDeviceSP m_source; // use this layer as source layer for the operation
 };
 
 class KisPaintOpFactory  : public KShared
 {
 
 public:
-	KisPaintOpFactory() {};
-	virtual ~KisPaintOpFactory() {};
+    KisPaintOpFactory() {};
+    virtual ~KisPaintOpFactory() {};
 
-	virtual KisPaintOp * createOp(KisPainter * painter) = 0;
-	virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
+    virtual KisPaintOp * createOp(KisPainter * painter) = 0;
+    virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
 
-	/**
-	 * The filename of the pixmap we can use to represent this paintop in the ui.
-	 */
-	virtual QString pixmap() { return ""; };
-	
-	/**
-	 * Whether this paintop is internal to a certain tool or can be used
-	 * in various tools. If false, it won't show up in the toolchest.
-	 */
-	virtual bool userVisible() { return true; }
+    /**
+     * The filename of the pixmap we can use to represent this paintop in the ui.
+     */
+    virtual QString pixmap() { return ""; };
+    
+    /**
+     * Whether this paintop is internal to a certain tool or can be used
+     * in various tools. If false, it won't show up in the toolchest.
+     */
+    virtual bool userVisible() { return true; }
 
-	/**
-	 * Slot the paint op into the relevant toolbox, if so desired. It's
-	 * up to the paintop to decide whether it want to so something with this
-	 */
-	virtual void slot(KisPaintBox * box) { Q_UNUSED(box); };
+    /**
+     * Slot the paint op into the relevant toolbox, if so desired. It's
+     * up to the paintop to decide whether it want to so something with this
+     */
+    virtual void slot(KisPaintBox * box) { Q_UNUSED(box); };
 };
 #endif // KIS_PAINTOP_H_

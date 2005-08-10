@@ -32,52 +32,52 @@
  * on a (range of) colors.
  */
 class DlgImageSize: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgImageSize(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgImageSize();
+    DlgImageSize(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgImageSize();
 
-	void hideScaleBox();
+    void hideScaleBox();
 
-	void setWidth(Q_UINT32 w);
-	void setWidthPercent(Q_UINT32 w);
-	void setMaximumWidth(Q_UINT32 w);
-	Q_INT32 width();
-	
-	void setHeight(Q_UINT32 h);
-	void setHeightPercent(Q_UINT32 h);
-	void setMaximumHeight(Q_UINT32 h);
-	Q_INT32 height();
+    void setWidth(Q_UINT32 w);
+    void setWidthPercent(Q_UINT32 w);
+    void setMaximumWidth(Q_UINT32 w);
+    Q_INT32 width();
+    
+    void setHeight(Q_UINT32 h);
+    void setHeightPercent(Q_UINT32 h);
+    void setMaximumHeight(Q_UINT32 h);
+    Q_INT32 height();
 
-	bool scale();
-	bool cropLayers();
-	
-	KisFilterStrategy *filterType();
+    bool scale();
+    bool cropLayers();
+    
+    KisFilterStrategy *filterType();
 
 private slots:
 
-	void okClicked();
-	void slotWidthPixelsChanged(int w);
-	void slotHeightPixelsChanged(int h);
-	void slotWidthPercentChanged(int w);
-	void slotHeightPercentChanged(int h);
+    void okClicked();
+    void slotWidthPixelsChanged(int w);
+    void slotHeightPixelsChanged(int h);
+    void slotWidthPercentChanged(int w);
+    void slotHeightPercentChanged(int h);
 
 private:
 
-	void blockAll();
-	void unblockAll();
+    void blockAll();
+    void unblockAll();
 
-	WdgImageSize * m_page;
-	double m_oldW, m_oldH;
-	double m_oldWPercent, m_oldHPercent;
-	double m_origW, m_origH;
-	double m_maxW, m_maxH;
-	
-	bool m_lock;
+    WdgImageSize * m_page;
+    double m_oldW, m_oldH;
+    double m_oldWPercent, m_oldHPercent;
+    double m_origW, m_origH;
+    double m_maxW, m_maxH;
+    
+    bool m_lock;
 
 };
 

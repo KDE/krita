@@ -28,17 +28,17 @@
 
 KisDlgProgress::KisDlgProgress(KisProgressSubject *subject, QWidget *parent, const char *name) : super(parent, name, true, i18n("Importing Image"), Cancel)
 {
-	QVBox *page = makeVBoxMainWidget();
+    QVBox *page = makeVBoxMainWidget();
 
-	Q_ASSERT(subject);
-	m_lbl = new QLabel(page);
-	m_lbl -> setText(i18n("Initializing..."));
-	m_bar = new KProgress(100, page);
-	m_subject = subject;
-	connect(subject, SIGNAL(notifyProgress(KisProgressSubject*, int)), this, SLOT(update(KisProgressSubject*, int)));
-	connect(subject, SIGNAL(notifyProgressStage(KisProgressSubject*, const QString&, int)), this, SLOT(updateStage(KisProgressSubject*, const QString&, int)));
-	connect(subject, SIGNAL(notifyProgressDone(KisProgressSubject*)), this, SLOT(subjectDone(KisProgressSubject*)));
-	connect(subject, SIGNAL(notifyProgressError(KisProgressSubject*)), this, SLOT(subjectError(KisProgressSubject*)));
+    Q_ASSERT(subject);
+    m_lbl = new QLabel(page);
+    m_lbl -> setText(i18n("Initializing..."));
+    m_bar = new KProgress(100, page);
+    m_subject = subject;
+    connect(subject, SIGNAL(notifyProgress(KisProgressSubject*, int)), this, SLOT(update(KisProgressSubject*, int)));
+    connect(subject, SIGNAL(notifyProgressStage(KisProgressSubject*, const QString&, int)), this, SLOT(updateStage(KisProgressSubject*, const QString&, int)));
+    connect(subject, SIGNAL(notifyProgressDone(KisProgressSubject*)), this, SLOT(subjectDone(KisProgressSubject*)));
+    connect(subject, SIGNAL(notifyProgressError(KisProgressSubject*)), this, SLOT(subjectError(KisProgressSubject*)));
 }
 
 KisDlgProgress::~KisDlgProgress()
@@ -47,29 +47,29 @@ KisDlgProgress::~KisDlgProgress()
 
 void KisDlgProgress::updateStage(KisProgressSubject *, const QString& stage, int percent)
 {
-	m_lbl -> setText(stage);
-	m_bar -> setValue(percent);
+    m_lbl -> setText(stage);
+    m_bar -> setValue(percent);
 }
 
 void KisDlgProgress::update(KisProgressSubject *, int percent)
 {
-	m_bar -> setValue(percent);
+    m_bar -> setValue(percent);
 }
 
 void KisDlgProgress::subjectDone(KisProgressSubject *)
 {
-	accept();
+    accept();
 }
 
 void KisDlgProgress::subjectError(KisProgressSubject *)
 {
-	reject();
+    reject();
 }
 
 void KisDlgProgress::slotCancel()
 {
-	m_subject -> cancel();
-	super::slotCancel();
+    m_subject -> cancel();
+    super::slotCancel();
 }
 
 #include "kis_dlg_progress.moc"

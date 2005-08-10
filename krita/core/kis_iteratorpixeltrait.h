@@ -28,103 +28,103 @@ template< typename _iTp>
 class KisIteratorPixelTrait
 {
 public:
-	KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
-	:	m_device(ndevice),
-		m_underlyingIterator(underlyingIterator)
-	{
-		m_selectionIterator = NULL;
-	};
+    KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
+    :    m_device(ndevice),
+        m_underlyingIterator(underlyingIterator)
+    {
+        m_selectionIterator = NULL;
+    };
 
-	~KisIteratorPixelTrait()
-	{
-		delete m_selectionIterator;
-	};
+    ~KisIteratorPixelTrait()
+    {
+        delete m_selectionIterator;
+    };
 
-	KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs)
-	{
-		if (this == &rhs)
-			return;
-		m_device = rhs.m_device;
-		m_underlyingIterator = rhs.m_underlyingIterator;
-		
-		if (rhs.m_selectionIterator) {
-			m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
-		} else {
-			m_selectionIterator = 0;
-		}
-	}
-	
-	KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs)
-	{
-		if (this == &rhs)
-			return *this;
-		m_device = rhs.m_device;
-		m_underlyingIterator = rhs.m_underlyingIterator;
-		
-		delete m_selectionIterator;
-		if (rhs.m_selectionIterator) {
-			m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
-		} else {
-			m_selectionIterator = 0;
-		}
-		
-		return *this;
-	}
+    KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs)
+    {
+        if (this == &rhs)
+            return;
+        m_device = rhs.m_device;
+        m_underlyingIterator = rhs.m_underlyingIterator;
+        
+        if (rhs.m_selectionIterator) {
+            m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
+        } else {
+            m_selectionIterator = 0;
+        }
+    }
+    
+    KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs)
+    {
+        if (this == &rhs)
+            return *this;
+        m_device = rhs.m_device;
+        m_underlyingIterator = rhs.m_underlyingIterator;
+        
+        delete m_selectionIterator;
+        if (rhs.m_selectionIterator) {
+            m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
+        } else {
+            m_selectionIterator = 0;
+        }
+        
+        return *this;
+    }
 
-	
+    
 public:
-	/**
-	 * Return the current pixel
-	 */
- 	inline KisPixel pixel() const { return m_device->toPixel(m_underlyingIterator->rawData()); };
+    /**
+     * Return the current pixel
+     */
+     inline KisPixel pixel() const { return m_device->toPixel(m_underlyingIterator->rawData()); };
         inline KisPixelRO oldPixel() const { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
 
-	/**
-	 * Return one channel from the current kispixel. Does not check whether
-	 * channel index actually exists in this colorspace.
-	 */
-	inline KisQuantum operator[](int index) const
-			{ return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
-			
-	/**
-	 * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
-	 */
-	inline bool isSelected() const
-		{
-			if (m_selectionIterator)
-				return *(m_selectionIterator->rawData()) > SELECTION_THRESHOLD;
-			else
-				return true;
-		};
+    /**
+     * Return one channel from the current kispixel. Does not check whether
+     * channel index actually exists in this colorspace.
+     */
+    inline KisQuantum operator[](int index) const
+            { return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
+            
+    /**
+     * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
+     */
+    inline bool isSelected() const
+        {
+            if (m_selectionIterator)
+                return *(m_selectionIterator->rawData()) > SELECTION_THRESHOLD;
+            else
+                return true;
+        };
 
-	/**
-	  * Returns the degree of selectedness of the pixel.
-	  */
-	inline Q_UINT8 selectedness() const
-		{
-			if (m_selectionIterator)
-				return *(m_selectionIterator -> rawData());
-			else {
-				return MAX_SELECTED;
-			}
-		};
-		
-						
-					
-	
+    /**
+      * Returns the degree of selectedness of the pixel.
+      */
+    inline Q_UINT8 selectedness() const
+        {
+            if (m_selectionIterator)
+                return *(m_selectionIterator -> rawData());
+            else {
+                return MAX_SELECTED;
+            }
+        };
+        
+                        
+                    
+    
 protected:
-	KisPaintDevice *m_device;
+    KisPaintDevice *m_device;
 
-	//KisAbstractColorSpace * m_colorSpace;
+    //KisAbstractColorSpace * m_colorSpace;
 
-	// XXX: Is this fix correct? BSAR
-	//inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
-	inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
+    // XXX: Is this fix correct? BSAR
+    //inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
+    inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
 
-	void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
+    void setSelectionIterator(_iTp *si){m_selectionIterator = si;};
 
-	_iTp *m_underlyingIterator;
-	_iTp *m_selectionIterator;
+    _iTp *m_underlyingIterator;
+    _iTp *m_selectionIterator;
 };
 
 #endif

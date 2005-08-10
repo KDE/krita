@@ -28,19 +28,19 @@
 
 class KisCImgconfigWidget : public KisFilterConfigWidget {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-	virtual ~KisCImgconfigWidget() {};
+    KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+    virtual ~KisCImgconfigWidget() {};
 
 public:
 
-	KisCImgFilterConfiguration * config();
+    KisCImgFilterConfiguration * config();
 
 private:
-	WdgCImg * m_page;
+    WdgCImg * m_page;
 
 };
 

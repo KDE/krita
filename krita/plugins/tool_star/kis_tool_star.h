@@ -35,12 +35,12 @@ class WdgToolStar;
 
 class KisToolStar : public KisToolShape {
 
-	typedef KisToolShape super;
-	Q_OBJECT
+    typedef KisToolShape super;
+    Q_OBJECT
 
 public:
-	KisToolStar();
-	virtual ~KisToolStar();
+    KisToolStar();
+    virtual ~KisToolStar();
 
         //
         // KisCanvasObserver interface
@@ -54,48 +54,48 @@ public:
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void draw(const KisPoint& start, const KisPoint& stop);
-	//virtual void draw(KisPainter *gc, const QRect& rc);
+    virtual void draw(const KisPoint& start, const KisPoint& stop);
+    //virtual void draw(KisPainter *gc, const QRect& rc);
 
 protected:
-	int m_lineThickness;
+    int m_lineThickness;
 
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
-	QRect m_final_lines;
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
+    QRect m_final_lines;
 
-	bool m_dragging;
-	KisImageSP m_currentImage;
+    bool m_dragging;
+    KisImageSP m_currentImage;
 private:
         vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
         Q_INT32 m_innerOuterRatio;
         Q_INT32 m_vertices;
-	WdgToolStar* m_optWidget;
+    WdgToolStar* m_optWidget;
 };
 
 
 #include "kis_tool_factory.h"
 
 class KisToolStarFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolStarFactory() : super() {};
-	virtual ~KisToolStarFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolStar(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("starshape", i18n("Star tool")); }
+    KisToolStarFactory() : super() {};
+    virtual ~KisToolStarFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolStar(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("starshape", i18n("Star tool")); }
 };
 
 

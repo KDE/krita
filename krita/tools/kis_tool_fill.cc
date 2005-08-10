@@ -49,25 +49,25 @@
 #include "kis_canvas_subject.h"
 
 KisToolFill::KisToolFill() 
-	: super(i18n("Fill"))
+    : super(i18n("Fill"))
 {
-	setName("tool_fill");
-	m_subject = 0;
-	m_oldColor = 0;
-	m_threshold = 15;
-	m_usePattern = false;
-	m_sampleMerged = false;
+    setName("tool_fill");
+    m_subject = 0;
+    m_oldColor = 0;
+    m_threshold = 15;
+    m_usePattern = false;
+    m_sampleMerged = false;
 
-	// set custom cursor.
-	setCursor(KisCursor::fillerCursor());
+    // set custom cursor.
+    setCursor(KisCursor::fillerCursor());
 }
 
 void KisToolFill::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	m_currentImage = subject -> currentImg();
+    m_subject = subject;
+    m_currentImage = subject -> currentImg();
 
-	super::update(m_subject);
+    super::update(m_subject);
 }
 
 KisToolFill::~KisToolFill() 
@@ -76,118 +76,118 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
-	KisPaintDeviceSP device = m_currentImage->activeDevice();
+    KisPaintDeviceSP device = m_currentImage->activeDevice();
 
-	KisFillPainter painter(device);
-	painter.beginTransaction(i18n("Floodfill"));
-	painter.setPaintColor(m_subject -> fgColor());
-	painter.setOpacity(m_opacity);
-	painter.setFillThreshold(m_threshold);
-	painter.setCompositeOp(m_compositeOp);
-	painter.setPattern(m_subject -> currentPattern());
-	painter.setSampleMerged(m_sampleMerged);
-	
-	KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
-	if (progress) {
-		progress -> setSubject(&painter, true, true);
-	}
+    KisFillPainter painter(device);
+    painter.beginTransaction(i18n("Floodfill"));
+    painter.setPaintColor(m_subject -> fgColor());
+    painter.setOpacity(m_opacity);
+    painter.setFillThreshold(m_threshold);
+    painter.setCompositeOp(m_compositeOp);
+    painter.setPattern(m_subject -> currentPattern());
+    painter.setSampleMerged(m_sampleMerged);
+    
+    KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
+    if (progress) {
+        progress -> setSubject(&painter, true, true);
+    }
 
-	if (m_usePattern)
-		painter.fillPattern(startX, startY);
-	else
-		painter.fillColor(startX, startY);
+    if (m_usePattern)
+        painter.fillPattern(startX, startY);
+    else
+        painter.fillColor(startX, startY);
 
-	m_currentImage -> notify();
-	notifyModified();
+    m_currentImage -> notify();
+    notifyModified();
 
-	KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-	if (adapter) {
-		adapter -> addCommand(painter.endTransaction());
-	}
+    KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+    if (adapter) {
+        adapter -> addCommand(painter.endTransaction());
+    }
 
-	return true;
+    return true;
 }
 
 void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
-	if (!m_subject) return;
-	if (!m_currentImage || !m_currentImage -> activeDevice()) return;
-	if (e->button() != QMouseEvent::LeftButton) return;
-	int x, y;
-	x = e -> pos().floorX();
-	y = e -> pos().floorY();
-	if (!m_currentImage -> bounds().contains(x, y)) {
-		return;
-	}
-	flood(x, y);
-	notifyModified();
+    if (!m_subject) return;
+    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (e->button() != QMouseEvent::LeftButton) return;
+    int x, y;
+    x = e -> pos().floorX();
+    y = e -> pos().floorY();
+    if (!m_currentImage -> bounds().contains(x, y)) {
+        return;
+    }
+    flood(x, y);
+    notifyModified();
 }
 
 QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 {
-	QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget(parent);
 
-	m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
-	m_slThreshold = new KIntNumInput( widget, "int_widget");
-	m_slThreshold -> setRange( 0, 255); 
-	m_slThreshold -> setValue(m_threshold);
-	connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
+    m_slThreshold = new KIntNumInput( widget, "int_widget");
+    m_slThreshold -> setRange( 0, 255); 
+    m_slThreshold -> setValue(m_threshold);
+    connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
-	m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
-	m_checkUsePattern->setChecked(m_usePattern);
-	connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
+    m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
+    m_checkUsePattern->setChecked(m_usePattern);
+    connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
 
-	m_checkSampleMerged = new QCheckBox(i18n("Sample merged"), widget);
-	m_checkSampleMerged->setChecked(m_sampleMerged);
-	connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
+    m_checkSampleMerged = new QCheckBox(i18n("Sample merged"), widget);
+    m_checkSampleMerged->setChecked(m_sampleMerged);
+    connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
 
-	QGridLayout *optionLayout = new QGridLayout(widget, 4, 3);
-	super::addOptionWidgetLayout(optionLayout);
+    QGridLayout *optionLayout = new QGridLayout(widget, 4, 3);
+    super::addOptionWidgetLayout(optionLayout);
 
-	optionLayout -> addWidget(m_lbThreshold, 1, 0);
-	optionLayout -> addWidget(m_slThreshold, 1, 1);
+    optionLayout -> addWidget(m_lbThreshold, 1, 0);
+    optionLayout -> addWidget(m_slThreshold, 1, 1);
 
-	optionLayout -> addMultiCellWidget(m_checkUsePattern, 2, 2, 0, 2);
-	optionLayout -> addMultiCellWidget(m_checkSampleMerged, 3, 3, 0, 2);
+    optionLayout -> addMultiCellWidget(m_checkUsePattern, 2, 2, 0, 2);
+    optionLayout -> addMultiCellWidget(m_checkSampleMerged, 3, 3, 0, 2);
 
-	return widget;
+    return widget;
 }
 
 void KisToolFill::slotSetThreshold(int threshold)
 {
-	m_threshold = threshold;
+    m_threshold = threshold;
 }
 
 void KisToolFill::slotSetUsePattern(int state)
 {
-	if (state == QButton::NoChange)
-		return;
-	m_usePattern = (state == QButton::On);
+    if (state == QButton::NoChange)
+        return;
+    m_usePattern = (state == QButton::On);
 }
 
 void KisToolFill::slotSetSampleMerged(int state)
 {
-	if (state == QButton::NoChange)
-		return;
-	m_sampleMerged = (state == QButton::On);
+    if (state == QButton::NoChange)
+        return;
+    m_sampleMerged = (state == QButton::On);
 }
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Fill"), 
-					    "color_fill",
-					    Qt::Key_F, 
-					    this, 
-					    SLOT(activate()),
-					    collection,
-					    name());
-		m_action -> setToolTip(i18n("Contiguous fill"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Fill"), 
+                        "color_fill",
+                        Qt::Key_F, 
+                        this, 
+                        SLOT(activate()),
+                        collection,
+                        name());
+        m_action -> setToolTip(i18n("Contiguous fill"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 #include "kis_tool_fill.moc"

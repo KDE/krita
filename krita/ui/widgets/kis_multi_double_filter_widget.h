@@ -25,26 +25,26 @@
 #include "kis_filter.h"
 
 struct KRITA_EXPORT KisDoubleWidgetParam {
-	KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
-	double min;
-	double max;
-	double initvalue;
-	QString name;
+    KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
+    double min;
+    double max;
+    double initvalue;
+    QString name;
 };
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
 class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
+    KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
 public:
-	inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
-	inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
+    inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
+    inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
 private:
-	KDoubleNumInput** m_doubleWidgets;
-	Q_INT32 m_nbdoubleWidgets;
+    KDoubleNumInput** m_doubleWidgets;
+    Q_INT32 m_nbdoubleWidgets;
 };
 
 #endif

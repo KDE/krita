@@ -29,30 +29,30 @@ class KisCanvasSubject;
 
 class KRITAUI_EXPORT KisStrategyMove {
 public:
-	KisStrategyMove();
-	explicit KisStrategyMove(KisCanvasSubject *subject);
-	virtual ~KisStrategyMove();
+    KisStrategyMove();
+    explicit KisStrategyMove(KisCanvasSubject *subject);
+    virtual ~KisStrategyMove();
 
 public:
-	void reset(KisCanvasSubject *subject);
-	void startDrag(const QPoint& pos);
-	void drag(const QPoint& pos);
-	void endDrag(const QPoint& pos, bool undo = true);
-	void simpleMove(const QPoint& pt1, const QPoint& pt2);
-	void simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2);
+    void reset(KisCanvasSubject *subject);
+    void startDrag(const QPoint& pos);
+    void drag(const QPoint& pos);
+    void endDrag(const QPoint& pos, bool undo = true);
+    void simpleMove(const QPoint& pt1, const QPoint& pt2);
+    void simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2);
 
 private:
-	KisStrategyMove(const KisStrategyMove&);
-	KisStrategyMove& operator=(const KisStrategyMove&);
+    KisStrategyMove(const KisStrategyMove&);
+    KisStrategyMove& operator=(const KisStrategyMove&);
 
 private:
-	KoDocument *m_doc; 
-	KisCanvasControllerInterface *m_controller; 
-	KisCanvasSubject *m_subject;
-	QPoint m_dragStart;
-	QPoint m_layerStart;
-	QPoint m_layerPosition;
-	bool m_dragging;
+    KoDocument *m_doc; 
+    KisCanvasControllerInterface *m_controller; 
+    KisCanvasSubject *m_subject;
+    QPoint m_dragStart;
+    QPoint m_layerStart;
+    QPoint m_layerPosition;
+    bool m_dragging;
 };
 
 #endif // KIS_STRATEGY_MOVE_H_

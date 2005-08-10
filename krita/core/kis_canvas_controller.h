@@ -37,42 +37,42 @@ class KisPoint;
  */
 class KisCanvasControllerInterface {
 public:
-	KisCanvasControllerInterface() {};
-	virtual ~KisCanvasControllerInterface() {};
+    KisCanvasControllerInterface() {};
+    virtual ~KisCanvasControllerInterface() {};
 
 public:
-	virtual QWidget *canvas() const = 0;
-	virtual Q_INT32 horzValue() const = 0;
-	virtual Q_INT32 vertValue() const = 0;
-	virtual void scrollTo(Q_INT32 x, Q_INT32 y) = 0;
-	virtual void updateCanvas() = 0;
-	virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
-	virtual void updateCanvas(const QRect& rc) = 0;
-	virtual void zoomIn() = 0;
-	virtual void zoomIn(Q_INT32 x, Q_INT32 y) = 0;
-	virtual void zoomOut() = 0;
-	virtual void zoomOut(Q_INT32 x, Q_INT32 y) = 0;
-	virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
-	virtual void zoomTo(const QRect& r) = 0;
-	virtual void zoomTo(const KisRect& r) = 0;
-	virtual QPoint viewToWindow(const QPoint& pt) = 0;
-	virtual KisPoint viewToWindow(const KisPoint& pt) = 0;
-	virtual QRect viewToWindow(const QRect& rc) = 0;
-	virtual KisRect viewToWindow(const KisRect& rc) = 0;
-	virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y) = 0;
-	virtual QPoint windowToView(const QPoint& pt) = 0;
-	virtual KisPoint windowToView(const KisPoint& pt) = 0;
-	virtual QRect windowToView(const QRect& rc) = 0;
-	virtual KisRect windowToView(const KisRect& rc) = 0;
-	virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;
-	virtual QCursor setCanvasCursor(const QCursor &) = 0;
-	virtual void setInputDevice(enumInputDevice inputDevice) = 0;
-	virtual enumInputDevice currentInputDevice() const = 0;
+    virtual QWidget *canvas() const = 0;
+    virtual Q_INT32 horzValue() const = 0;
+    virtual Q_INT32 vertValue() const = 0;
+    virtual void scrollTo(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void updateCanvas() = 0;
+    virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+    virtual void updateCanvas(const QRect& rc) = 0;
+    virtual void zoomIn() = 0;
+    virtual void zoomIn(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void zoomOut() = 0;
+    virtual void zoomOut(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+    virtual void zoomTo(const QRect& r) = 0;
+    virtual void zoomTo(const KisRect& r) = 0;
+    virtual QPoint viewToWindow(const QPoint& pt) = 0;
+    virtual KisPoint viewToWindow(const KisPoint& pt) = 0;
+    virtual QRect viewToWindow(const QRect& rc) = 0;
+    virtual KisRect viewToWindow(const KisRect& rc) = 0;
+    virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y) = 0;
+    virtual QPoint windowToView(const QPoint& pt) = 0;
+    virtual KisPoint windowToView(const KisPoint& pt) = 0;
+    virtual QRect windowToView(const QRect& rc) = 0;
+    virtual KisRect windowToView(const KisRect& rc) = 0;
+    virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;
+    virtual QCursor setCanvasCursor(const QCursor &) = 0;
+    virtual void setInputDevice(enumInputDevice inputDevice) = 0;
+    virtual enumInputDevice currentInputDevice() const = 0;
 
 
 private:
-	KisCanvasControllerInterface(const KisCanvasControllerInterface&);
-	KisCanvasControllerInterface& operator=(const KisCanvasControllerInterface&);
+    KisCanvasControllerInterface(const KisCanvasControllerInterface&);
+    KisCanvasControllerInterface& operator=(const KisCanvasControllerInterface&);
 };
 
 #endif // KIS_CANVAS_CONTROLLER_H_

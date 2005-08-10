@@ -1,4 +1,4 @@
-	/*
+    /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -32,96 +32,96 @@
 #include "kis_types.h"
 
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
-	m_id(id),
-	m_category(category),
-	m_entry(entry),
-	m_progressDisplay(0)
+    m_id(id),
+    m_category(category),
+    m_entry(entry),
+    m_progressDisplay(0)
 {
 }
 
 KisFilterConfiguration * KisFilter::configuration(QWidget*, KisPaintDeviceSP)
 {
-	return 0;
+    return 0;
 }
 
 KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceSP)
 {
-	return 0;
+    return 0;
 }
 
 void KisFilter::setProgressDisplay(KisProgressDisplayInterface * progressDisplay)
 {
-	m_progressDisplay = progressDisplay;
+    m_progressDisplay = progressDisplay;
 }
 
 
 void KisFilter::enableProgress() {
-	m_progressEnabled = true;
-	m_cancelRequested = false;
+    m_progressEnabled = true;
+    m_cancelRequested = false;
 }
 
 void KisFilter::disableProgress() {
-	m_progressEnabled = false;
-	m_cancelRequested = false;
+    m_progressEnabled = false;
+    m_cancelRequested = false;
 }
 
 void KisFilter::setProgressTotalSteps(Q_INT32 totalSteps)
 {
-	if (m_progressEnabled) {
+    if (m_progressEnabled) {
 
-		m_progressTotalSteps = totalSteps;
-		m_lastProgressPerCent = 0;
-		m_progressSteps = 0;
-		emit notifyProgress(this, 0);
-	}
+        m_progressTotalSteps = totalSteps;
+        m_lastProgressPerCent = 0;
+        m_progressSteps = 0;
+        emit notifyProgress(this, 0);
+    }
 }
 
 void KisFilter::setProgress(Q_INT32 progress)
 {
-	if (m_progressEnabled) {
+    if (m_progressEnabled) {
 
-		Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
-		m_progressSteps = progress;
-		
-		if (progressPerCent != m_lastProgressPerCent) {
+        Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+        m_progressSteps = progress;
+        
+        if (progressPerCent != m_lastProgressPerCent) {
 
-			m_lastProgressPerCent = progressPerCent;
-			emit notifyProgress(this, progressPerCent);
-		}
-	}
+            m_lastProgressPerCent = progressPerCent;
+            emit notifyProgress(this, progressPerCent);
+        }
+    }
 }
 
 void KisFilter::incProgress()
 {
-	setProgress(++m_progressSteps);
-	
+    setProgress(++m_progressSteps);
+    
 }
 
 void KisFilter::setProgressStage(const QString& stage, Q_INT32 progress)
 {
-	if (m_progressEnabled) {
+    if (m_progressEnabled) {
 
-		Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+        Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
 
-		m_lastProgressPerCent = progressPerCent;
-		emit notifyProgressStage(this, stage, progressPerCent);
-	}
+        m_lastProgressPerCent = progressPerCent;
+        emit notifyProgressStage(this, stage, progressPerCent);
+    }
 }
 
 void KisFilter::setProgressDone()
 {
-	if (m_progressEnabled) {
-		emit notifyProgressDone(this);
-	}
+    if (m_progressEnabled) {
+        emit notifyProgressDone(this);
+    }
 }
 
 
 bool KisFilter::autoUpdate() {
-	return m_autoUpdate;
+    return m_autoUpdate;
 }
 
 void KisFilter::setAutoUpdate(bool set) {
-	m_autoUpdate = set;
+    m_autoUpdate = set;
 }
 
 

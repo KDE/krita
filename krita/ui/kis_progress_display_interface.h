@@ -23,14 +23,14 @@ class KisProgressSubject;
 
 class KisProgressDisplayInterface {
 public:
-	KisProgressDisplayInterface() {}
-	virtual ~KisProgressDisplayInterface() {}
+    KisProgressDisplayInterface() {}
+    virtual ~KisProgressDisplayInterface() {}
 
-	virtual void setSubject(KisProgressSubject *subject, bool modal, bool canCancel) = 0;
+    virtual void setSubject(KisProgressSubject *subject, bool modal, bool canCancel) = 0;
 
 private:
-	KisProgressDisplayInterface(const KisProgressDisplayInterface&);
-	KisProgressDisplayInterface& operator=(const KisProgressDisplayInterface&);
+    KisProgressDisplayInterface(const KisProgressDisplayInterface&);
+    KisProgressDisplayInterface& operator=(const KisProgressDisplayInterface&);
 };
 
 #endif // KIS_PROGRESS_DISPLAY_INTERFACE_H_

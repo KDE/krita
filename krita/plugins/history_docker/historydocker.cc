@@ -38,26 +38,26 @@ typedef KGenericFactory<KritaHistoryDocker> KritaHistoryDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistorydocker, KritaHistoryDockerFactory( "krita" ) )
 
 KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(KritaHistoryDockerFactory::instance());
+    setInstance(KritaHistoryDockerFactory::instance());
 
 
-	kdDebug(DBG_AREA_PLUGINS) << "HistoryDocker plugin. Class: "
-		  << className()
-		  << ", Parent: "
-		  << parent -> className()
-		  << "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "HistoryDocker plugin. Class: "
+          << className()
+          << ", Parent: "
+          << parent -> className()
+          << "\n";
 
-	if ( !parent->inherits("KisView") )
-	{
-		return;
-	} else {
-		KisView * view = (KisView*) parent;
-		// Create history docker
-		// Add the docker to the docker manager
-		// Connect the undo system to the docker
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        return;
+    } else {
+        KisView * view = (KisView*) parent;
+        // Create history docker
+        // Add the docker to the docker manager
+        // Connect the undo system to the docker
+    }
 
 }
 

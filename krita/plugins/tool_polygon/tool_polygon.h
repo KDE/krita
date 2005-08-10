@@ -28,14 +28,14 @@ class KisView;
  */
 class ToolPolygon : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToolPolygon(QObject *parent, const char *name, const QStringList &);
-	virtual ~ToolPolygon();
+    ToolPolygon(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolPolygon();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
 };
 

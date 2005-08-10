@@ -40,47 +40,47 @@ class KisToolBox;
  */
 class KisToolManager : public QObject, public KisToolControllerInterface {
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInterface * controller);
-	~KisToolManager();
+    KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInterface * controller);
+    ~KisToolManager();
 
 public:
 
-	void setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
-	void updateGUI();
+    void setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
+    void updateGUI();
 
-	virtual void setCurrentTool(KisTool *tool);
-	virtual void setCurrentTool(const QString & toolName);
-	
-	virtual KisTool *currentTool() const;
-	
-	void setToolForInputDevice(enumInputDevice oldDevice, enumInputDevice newDevice);
+    virtual void setCurrentTool(KisTool *tool);
+    virtual void setCurrentTool(const QString & toolName);
+    
+    virtual KisTool *currentTool() const;
+    
+    void setToolForInputDevice(enumInputDevice oldDevice, enumInputDevice newDevice);
 
-	KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
+    KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
-	void activateCurrentTool();
-	
+    void activateCurrentTool();
+    
 private:
 
-	typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
-	typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
+    typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
+    typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
 
-	InputDeviceToolMap m_inputDeviceToolMap;
-	InputDeviceToolSetMap m_inputDeviceToolSetMap;
-	
-	KisCanvasSubject * m_subject;
-	KisCanvasControllerInterface * m_controller;
+    InputDeviceToolMap m_inputDeviceToolMap;
+    InputDeviceToolSetMap m_inputDeviceToolSetMap;
+    
+    KisCanvasSubject * m_subject;
+    KisCanvasControllerInterface * m_controller;
 
-	KoPaletteManager * m_paletteManager;
-	KActionCollection * m_actionCollection;
+    KoPaletteManager * m_paletteManager;
+    KActionCollection * m_actionCollection;
 
-	KisToolBox * m_toolBox;
+    KisToolBox * m_toolBox;
 
-	KisTool * m_oldTool;
-	KisTool * m_dummyTool;
+    KisTool * m_oldTool;
+    KisTool * m_dummyTool;
 };
 
 

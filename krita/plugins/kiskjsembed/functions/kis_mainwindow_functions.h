@@ -24,45 +24,45 @@
 #include "kis_function_base.h"
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			namespace Bindings {
-				namespace Functions {
-					class RaiseFunction : public GlobalFunctionBase
-					{
-						public:
-							RaiseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
-						public:
-							virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
-					};
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            namespace Bindings {
+                namespace Functions {
+                    class RaiseFunction : public GlobalFunctionBase
+                    {
+                        public:
+                            RaiseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
+                        public:
+                            virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
+                    };
 
-					class LowerFunction : public GlobalFunctionBase
-					{
-						public:
-							LowerFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
-						public:
-							virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
-					};
+                    class LowerFunction : public GlobalFunctionBase
+                    {
+                        public:
+                            LowerFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
+                        public:
+                            virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
+                    };
 
-					class CloseFunction : public GlobalFunctionBase
-					{
-						public:
-							CloseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
-						public:
-							virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
-					};
+                    class CloseFunction : public GlobalFunctionBase
+                    {
+                        public:
+                            CloseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
+                        public:
+                            virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
+                    };
 
-					class QuitFunction : public GlobalFunctionBase
-					{
-						public:
-							QuitFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
-						public:
-							virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
-					};
-				};
-			};
-		};
-	};
+                    class QuitFunction : public GlobalFunctionBase
+                    {
+                        public:
+                            QuitFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view);
+                        public:
+                            virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
+                    };
+                };
+            };
+        };
+    };
 };
 
 #endif

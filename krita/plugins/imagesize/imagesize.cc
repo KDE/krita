@@ -55,141 +55,141 @@ typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ImageSizeFactory::instance());
+    setInstance(ImageSizeFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Imagesize plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Imagesize plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	(void) new KAction(i18n("Change &Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
-	(void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
+    (void) new KAction(i18n("Change &Image Size..."), 0, 0, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
+    (void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
 
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-		// Selection manager takes ownership?
-		KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
-		Q_CHECK_PTR(a);
-		m_view -> selectionManager() -> addSelectionAction(a);
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+        // Selection manager takes ownership?
+        KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
+        Q_CHECK_PTR(a);
+        m_view -> selectionManager() -> addSelectionAction(a);
+    }
 }
 
 ImageSize::~ImageSize()
 {
-	m_view = 0;
+    m_view = 0;
 }
 
 void ImageSize::slotImageSize()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "ImageSize");
-	Q_CHECK_PTR(dlgImageSize);
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "ImageSize");
+    Q_CHECK_PTR(dlgImageSize);
 
-	dlgImageSize -> setCaption(i18n("Image Size"));
+    dlgImageSize -> setCaption(i18n("Image Size"));
 
-	KisConfig cfg;
+    KisConfig cfg;
 
-	dlgImageSize -> setWidth(image -> width());
-	dlgImageSize -> setHeight(image -> height());
-	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
-	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+    dlgImageSize -> setWidth(image -> width());
+    dlgImageSize -> setHeight(image -> height());
+    dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
+    dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	if (dlgImageSize -> exec() == QDialog::Accepted) {
-		Q_INT32 w = dlgImageSize -> width();
-		Q_INT32 h = dlgImageSize -> height();
+    if (dlgImageSize -> exec() == QDialog::Accepted) {
+        Q_INT32 w = dlgImageSize -> width();
+        Q_INT32 h = dlgImageSize -> height();
 
-		if (dlgImageSize -> scale()) {
-			m_view -> scaleCurrentImage((double)w / ((double)(image -> width())),
-						    (double)h / ((double)(image -> height())),
-						    dlgImageSize -> filterType());
-		}
-		else {
-			m_view -> resizeCurrentImage(w, h, dlgImageSize -> cropLayers());
-		}
+        if (dlgImageSize -> scale()) {
+            m_view -> scaleCurrentImage((double)w / ((double)(image -> width())),
+                            (double)h / ((double)(image -> height())),
+                            dlgImageSize -> filterType());
+        }
+        else {
+            m_view -> resizeCurrentImage(w, h, dlgImageSize -> cropLayers());
+        }
 
-	}
+    }
 
-	delete dlgImageSize;
+    delete dlgImageSize;
 }
 
 void ImageSize::slotLayerSize()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize");
-	Q_CHECK_PTR(dlgLayerSize);
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize");
+    Q_CHECK_PTR(dlgLayerSize);
 
-	dlgLayerSize -> setCaption(i18n("Layer Size"));
+    dlgLayerSize -> setCaption(i18n("Layer Size"));
 
-	KisConfig cfg;
+    KisConfig cfg;
 
-	dlgLayerSize -> setWidth(image -> width());
-	dlgLayerSize -> setHeight(image -> height());
-	dlgLayerSize -> setMaximumWidth(cfg.maxImgWidth());
-	dlgLayerSize -> setMaximumHeight(cfg.maxImgHeight());
+    dlgLayerSize -> setWidth(image -> width());
+    dlgLayerSize -> setHeight(image -> height());
+    dlgLayerSize -> setMaximumWidth(cfg.maxImgWidth());
+    dlgLayerSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	if (dlgLayerSize -> exec() == QDialog::Accepted) {
-		Q_INT32 w = dlgLayerSize -> width();
-		Q_INT32 h = dlgLayerSize -> height();
+    if (dlgLayerSize -> exec() == QDialog::Accepted) {
+        Q_INT32 w = dlgLayerSize -> width();
+        Q_INT32 h = dlgLayerSize -> height();
 
-		m_view -> scaleLayer((double)w / ((double)(image -> width())),
-					(double)h / ((double)(image -> height())),
-					dlgLayerSize -> filterType());
-	}
-	delete dlgLayerSize;
+        m_view -> scaleLayer((double)w / ((double)(image -> width())),
+                    (double)h / ((double)(image -> height())),
+                    dlgLayerSize -> filterType());
+    }
+    delete dlgLayerSize;
 }
 
 void ImageSize::slotSelectionScale()
 {
-	// XXX: figure out a way to add selection actions to the selection
-	// manager to enable/disable
+    // XXX: figure out a way to add selection actions to the selection
+    // manager to enable/disable
 
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	KisLayerSP layer = image -> activeLayer();
+    KisLayerSP layer = image -> activeLayer();
 
-	if (!layer) return;
+    if (!layer) return;
 
-	if (!layer -> hasSelection()) return;
+    if (!layer -> hasSelection()) return;
 
 
-	DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
-	Q_CHECK_PTR(dlgImageSize);
+    DlgImageSize * dlgImageSize = new DlgImageSize(m_view, "SelectionScale");
+    Q_CHECK_PTR(dlgImageSize);
 
-	dlgImageSize -> setCaption(i18n("Scale Selection"));
+    dlgImageSize -> setCaption(i18n("Scale Selection"));
 
-	KisConfig cfg;
+    KisConfig cfg;
 
-	dlgImageSize -> setWidth(image -> width());
-	dlgImageSize -> setHeight(image -> height());
-	dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
-	dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
+    dlgImageSize -> setWidth(image -> width());
+    dlgImageSize -> setHeight(image -> height());
+    dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
+    dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
-	dlgImageSize -> hideScaleBox();
+    dlgImageSize -> hideScaleBox();
 
-	if (dlgImageSize -> exec() == QDialog::Accepted) {
-		Q_INT32 w = dlgImageSize -> width();
-		Q_INT32 h = dlgImageSize -> height();
+    if (dlgImageSize -> exec() == QDialog::Accepted) {
+        Q_INT32 w = dlgImageSize -> width();
+        Q_INT32 h = dlgImageSize -> height();
 
-		m_view -> scaleLayer((double)w / ((double)(image -> width())),
-				     (double)h / ((double)(image -> height())),
-				     dlgImageSize -> filterType());
+        m_view -> scaleLayer((double)w / ((double)(image -> width())),
+                     (double)h / ((double)(image -> height())),
+                     dlgImageSize -> filterType());
 
-	}
-	delete dlgImageSize;
+    }
+    delete dlgImageSize;
 }
 
 

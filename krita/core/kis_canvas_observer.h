@@ -23,15 +23,15 @@ class KisCanvasSubject;
 
 class KisCanvasObserver {
 public:
-	KisCanvasObserver();
-	virtual ~KisCanvasObserver();
+    KisCanvasObserver();
+    virtual ~KisCanvasObserver();
 
 public:
-	virtual void update(KisCanvasSubject *subject) = 0;
+    virtual void update(KisCanvasSubject *subject) = 0;
 
 private:
-	KisCanvasObserver(const KisCanvasObserver&);
-	KisCanvasObserver& operator=(const KisCanvasObserver&);
+    KisCanvasObserver(const KisCanvasObserver&);
+    KisCanvasObserver& operator=(const KisCanvasObserver&);
 };
 
 #endif // KIS_CANVAS_OBSERVER_H_

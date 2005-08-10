@@ -37,69 +37,69 @@
 #include "wdgconvertcolorspace.h"
 
 DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
-						  const char * name)
-	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+                          const char * name)
+    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
 {
-	m_page = new WdgConvertColorSpace(this, "colorspace_conversion");
-	Q_CHECK_PTR(m_page);
+    m_page = new WdgConvertColorSpace(this, "colorspace_conversion");
+    Q_CHECK_PTR(m_page);
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
 
-	fillCmbDestProfile(m_page -> cmbColorSpaces -> currentItem());
+    fillCmbDestProfile(m_page -> cmbColorSpaces -> currentItem());
 
-	// XXX: Until we have implemented high bit depth images
-	m_page -> cmbDepth -> setEnabled(false);
+    // XXX: Until we have implemented high bit depth images
+    m_page -> cmbDepth -> setEnabled(false);
 
-	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
-		this, SLOT(fillCmbDestProfile(const KisID &)));
+    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+        this, SLOT(fillCmbDestProfile(const KisID &)));
 
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
 
 }
 
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {
-	delete m_page;
+    delete m_page;
 }
 
 // SLOTS
 
 void DlgColorSpaceConversion::okClicked()
 {
-	accept();
+    accept();
 }
 
 
 void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
-	fillCmbProfile(m_page -> cmbDestProfile, s);
-	
+    fillCmbProfile(m_page -> cmbDestProfile, s);
+    
 }
 
 void DlgColorSpaceConversion::fillCmbSrcProfile(const KisID & s)
 {
-	fillCmbProfile(m_page -> cmbSourceProfile, s);
+    fillCmbProfile(m_page -> cmbSourceProfile, s);
 
 }
 
 void DlgColorSpaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
 {
-	cmb -> clear();
-	cmb -> insertItem(i18n("None"));
+    cmb -> clear();
+    cmb -> insertItem(i18n("None"));
 
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 
-	vKisProfileSP profileList = cs -> profiles();
+    vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		cmb -> insertItem((*it) -> productName());
+        cmb -> insertItem((*it) -> productName());
 
-	}
+    }
 }
 
 

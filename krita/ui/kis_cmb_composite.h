@@ -39,33 +39,33 @@
 
 class KRITAUI_EXPORT KisCmbComposite : public QComboBox
 {
-	typedef QComboBox super;
+    typedef QComboBox super;
 
-	Q_OBJECT
+    Q_OBJECT
 
  public: 
 
-	KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
-	virtual ~KisCmbComposite();
+    KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
+    virtual ~KisCmbComposite();
 
-	KisCompositeOp currentItem() const;
+    KisCompositeOp currentItem() const;
 
-	void setCompositeOpList(const KisCompositeOpList& list);
-	void setCurrentItem(const KisCompositeOp& op);
-	void setCurrentText(const QString & s);
+    void setCompositeOpList(const KisCompositeOpList& list);
+    void setCurrentItem(const KisCompositeOp& op);
+    void setCurrentText(const QString & s);
 
 signals:
 
-	void activated(const KisCompositeOp &);
-	void highlighted(const KisCompositeOp &);
+    void activated(const KisCompositeOp &);
+    void highlighted(const KisCompositeOp &);
 
 private slots:
 
-	void slotOpActivated(int i);
-	void slotOpHighlighted(int i);
+    void slotOpActivated(int i);
+    void slotOpHighlighted(int i);
 
 private:
-	KisCompositeOpList m_list;
+    KisCompositeOpList m_list;
 };
 
 #endif

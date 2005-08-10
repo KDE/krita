@@ -34,23 +34,23 @@ Q_OBJECT
 
 public:
 
-	KoToolBoxPalette(KoView * parent, const char * name);
-	~KoToolBoxPalette();
+    KoToolBoxPalette(KoView * parent, const char * name);
+    ~KoToolBoxPalette();
 
 public:
 
-	virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
-	virtual void unplug(const QWidget * widget);
+    virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
+    virtual void unplug(const QWidget * widget);
         void showPage(QWidget *w);
         void makeVisible(bool v);
-	int indexOf(QWidget *w);
-	bool isHidden(QWidget *w);
-	void togglePageHidden(QWidget *w);
+    int indexOf(QWidget *w);
+    bool isHidden(QWidget *w);
+    void togglePageHidden(QWidget *w);
 private:
 
-	QToolBox * m_page;
-	
-	QMap<QWidget*, int> m_hiddenPages;
+    QToolBox * m_page;
+    
+    QMap<QWidget*, int> m_hiddenPages;
 };
 
 #endif //_KO_TOOLBOX_PALETTE_

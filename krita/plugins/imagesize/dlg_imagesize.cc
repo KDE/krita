@@ -46,230 +46,230 @@ using namespace std;
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
 DlgImageSize::DlgImageSize( QWidget *  parent,
-			    const char * name)
-	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+                const char * name)
+    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
 {
-	m_lock = false;
+    m_lock = false;
 
-	m_page = new WdgImageSize(this, "image_size");
-	Q_CHECK_PTR(m_page);
+    m_page = new WdgImageSize(this, "image_size");
+    Q_CHECK_PTR(m_page);
 
-	m_page -> cmbFilterType -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
-	m_page -> cmbFilterType -> setCurrentText("Mitchell");
+    m_page -> cmbFilterType -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
+    m_page -> cmbFilterType -> setCurrentText("Mitchell");
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	unblockAll();
+    unblockAll();
 
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
 
 }
 
 DlgImageSize::~DlgImageSize()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void DlgImageSize::hideScaleBox()
 {
-	m_page -> grpResizeScale -> hide();
+    m_page -> grpResizeScale -> hide();
 }
 
 void DlgImageSize::setWidth(Q_UINT32 w)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> lblWidthOriginal -> setNum((int)w);
-	m_page -> intWidth -> setValue(w);
-	m_oldW = w;
-	m_origW = w;
+    m_page -> lblWidthOriginal -> setNum((int)w);
+    m_page -> intWidth -> setValue(w);
+    m_oldW = w;
+    m_origW = w;
 
-	unblockAll();
+    unblockAll();
 }
 
 void DlgImageSize::setWidthPercent(Q_UINT32 w)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> intWidthPercent -> setValue(w);
-	m_oldWPercent = w;
+    m_page -> intWidthPercent -> setValue(w);
+    m_oldWPercent = w;
 
-	unblockAll();
+    unblockAll();
 }
 
 
 void DlgImageSize::setMaximumWidth(Q_UINT32 w)
 {
-	m_page -> intWidth -> setMaxValue(w);
-	m_maxW = w;
+    m_page -> intWidth -> setMaxValue(w);
+    m_maxW = w;
 }
 
 Q_INT32 DlgImageSize::width()
 {
-	//return (Q_INT32)qRound(m_oldW);
-	return (Q_INT32)qRound(m_page -> intWidth -> value());
+    //return (Q_INT32)qRound(m_oldW);
+    return (Q_INT32)qRound(m_page -> intWidth -> value());
 }
 
 void DlgImageSize::setHeight(Q_UINT32 h)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> lblHeightOriginal -> setNum((int)h);
-	m_page -> intHeight -> setValue(h);
-	m_oldH = h;
-	m_origH = h;
+    m_page -> lblHeightOriginal -> setNum((int)h);
+    m_page -> intHeight -> setValue(h);
+    m_oldH = h;
+    m_origH = h;
 
-	unblockAll();
+    unblockAll();
 }
 
 
 void DlgImageSize::setHeightPercent(Q_UINT32 h)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> intHeightPercent -> setValue(h);
-	m_oldHPercent = h;
+    m_page -> intHeightPercent -> setValue(h);
+    m_oldHPercent = h;
 
-	unblockAll();
+    unblockAll();
 }
 
 
 
 void DlgImageSize::setMaximumHeight(Q_UINT32 h)
 {
-	m_page -> intHeight -> setMaxValue(h);
-	m_maxH = h;
+    m_page -> intHeight -> setMaxValue(h);
+    m_maxH = h;
 }
 
 
 Q_INT32 DlgImageSize::height()
 {
-	//return (Q_INT32)qRound(m_oldH);
-	return (Q_INT32)qRound(m_page -> intHeight -> value());
+    //return (Q_INT32)qRound(m_oldH);
+    return (Q_INT32)qRound(m_page -> intHeight -> value());
 }
 
 bool DlgImageSize::scale()
 {
-	return m_page -> radioScale -> isChecked();
+    return m_page -> radioScale -> isChecked();
 }
 
 bool DlgImageSize::cropLayers()
 {
-	return m_page -> chkCrop -> isChecked();
+    return m_page -> chkCrop -> isChecked();
 }
 
 KisFilterStrategy *DlgImageSize::filterType()
 {
-	KisID filterID = m_page -> cmbFilterType -> currentItem();
-	KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(filterID);
-	return filter;
+    KisID filterID = m_page -> cmbFilterType -> currentItem();
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+    return filter;
 }
 
 // SLOTS
 
 void DlgImageSize::okClicked()
 {
-	accept();
+    accept();
 }
 
 void DlgImageSize::slotWidthPixelsChanged(int w)
 {
-	blockAll();
+    blockAll();
 
-	double wPercent = double(w) * 100 / double(m_origW);
+    double wPercent = double(w) * 100 / double(m_origW);
 
-	m_page -> intWidthPercent -> setValue(qRound(wPercent));
+    m_page -> intWidthPercent -> setValue(qRound(wPercent));
 
-	// Set height in pixels and percent of necessary
-	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intHeightPercent -> setValue(qRound(wPercent));
+    // Set height in pixels and percent of necessary
+    if (m_page -> chkConstrain -> isChecked()) {
+        m_page -> intHeightPercent -> setValue(qRound(wPercent));
 
-		m_oldH = qRound(m_origH * wPercent / 100);
-		m_page -> intHeight -> setValue(qRound(m_oldH));
+        m_oldH = qRound(m_origH * wPercent / 100);
+        m_page -> intHeight -> setValue(qRound(m_oldH));
 
-	}
-	m_oldW = w;
+    }
+    m_oldW = w;
 
-	unblockAll();
+    unblockAll();
 }
 
 void DlgImageSize::slotHeightPixelsChanged(int h)
 {
-	blockAll();
+    blockAll();
 
-	double hPercent = double(h) * 100 / double(m_origH);
+    double hPercent = double(h) * 100 / double(m_origH);
 
-	m_page -> intHeightPercent -> setValue(qRound(hPercent));
+    m_page -> intHeightPercent -> setValue(qRound(hPercent));
 
-	// Set width in pixels and percent of necessary
-	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intWidthPercent -> setValue(qRound(hPercent));
+    // Set width in pixels and percent of necessary
+    if (m_page -> chkConstrain -> isChecked()) {
+        m_page -> intWidthPercent -> setValue(qRound(hPercent));
 
-		m_oldW = qRound(m_origW * hPercent / 100);
-		m_page -> intWidth -> setValue(qRound(m_oldW));
+        m_oldW = qRound(m_origW * hPercent / 100);
+        m_page -> intWidth -> setValue(qRound(m_oldW));
 
-	}
-	m_oldH = h;
+    }
+    m_oldH = h;
 
-	unblockAll();
+    unblockAll();
 }
 
 void DlgImageSize::slotWidthPercentChanged(int w)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> intWidth -> setValue(qRound(w * m_origW / 100));
+    m_page -> intWidth -> setValue(qRound(w * m_origW / 100));
 
-	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intHeightPercent -> setValue(w);
-		m_page -> intHeight -> setValue(qRound( w * m_origH / 100));
-	}
+    if (m_page -> chkConstrain -> isChecked()) {
+        m_page -> intHeightPercent -> setValue(w);
+        m_page -> intHeight -> setValue(qRound( w * m_origH / 100));
+    }
 
-	unblockAll();
+    unblockAll();
 }
 
 void DlgImageSize::slotHeightPercentChanged(int h)
 {
-	blockAll();
+    blockAll();
 
-	m_page -> intHeight -> setValue(qRound(h * m_origH / 100));
-	if (m_page -> chkConstrain -> isChecked()) {
-		m_page -> intWidthPercent -> setValue(h);
-		m_page -> intWidth -> setValue(qRound( h * m_origW / 100));
-	}
+    m_page -> intHeight -> setValue(qRound(h * m_origH / 100));
+    if (m_page -> chkConstrain -> isChecked()) {
+        m_page -> intWidthPercent -> setValue(h);
+        m_page -> intWidth -> setValue(qRound( h * m_origW / 100));
+    }
 
-	unblockAll();
+    unblockAll();
 
 }
 
 
 void DlgImageSize::blockAll()
 {
-	// XXX: more efficient to use blockSignals?
-	m_page -> intWidth -> disconnect();
-	m_page -> intHeight -> disconnect();
-	m_page -> intWidthPercent -> disconnect();
-	m_page -> intHeightPercent -> disconnect();
+    // XXX: more efficient to use blockSignals?
+    m_page -> intWidth -> disconnect();
+    m_page -> intHeight -> disconnect();
+    m_page -> intWidthPercent -> disconnect();
+    m_page -> intHeightPercent -> disconnect();
 
 }
 
 void DlgImageSize::unblockAll()
 {
-	// XXX: more efficient to use blockSignals?
-	connect (m_page -> intWidth, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotWidthPixelsChanged(int)));
+    // XXX: more efficient to use blockSignals?
+    connect (m_page -> intWidth, SIGNAL(valueChanged(int)),
+         this, SLOT(slotWidthPixelsChanged(int)));
 
-	connect (m_page -> intHeight, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotHeightPixelsChanged(int)));
+    connect (m_page -> intHeight, SIGNAL(valueChanged(int)),
+         this, SLOT(slotHeightPixelsChanged(int)));
 
-	connect (m_page -> intWidthPercent, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotWidthPercentChanged(int)));
+    connect (m_page -> intWidthPercent, SIGNAL(valueChanged(int)),
+         this, SLOT(slotWidthPercentChanged(int)));
 
-	connect (m_page -> intHeightPercent, SIGNAL(valueChanged(int)),
-		 this, SLOT(slotHeightPercentChanged(int)));
+    connect (m_page -> intHeightPercent, SIGNAL(valueChanged(int)),
+         this, SLOT(slotHeightPercentChanged(int)));
 
 
 }

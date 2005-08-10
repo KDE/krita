@@ -29,26 +29,26 @@ class KisPainter;
 class KisTemplateOpFactory : public KisPaintOpFactory  {
 
 public:
-	KisTemplateOpFactory() {}
-	virtual ~KisTemplateOpFactory() {}
+    KisTemplateOpFactory() {}
+    virtual ~KisTemplateOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("template", i18n("template paintop")); }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("template", i18n("template paintop")); }
 };
 
 class KisTemplateOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisTemplateOp(KisPainter * painter);
-	virtual ~KisTemplateOp();
+    KisTemplateOp(KisPainter * painter);
+    virtual ~KisTemplateOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

@@ -27,57 +27,57 @@
 template<typename _Tp, int _W, int _H>
 class KisMatrix
 {
-	typedef KisMatrix<_Tp, _W, _H> KisMatrixT;
-	public:
-		KisMatrix() {};
-		KisMatrix( _Tp values[_H][_W], _Tp factor, _Tp offset) : m_factor(factor), m_offset(offset)
-		{
-			for(int i = 0; i < _H; i++)
-			{
-				memcpy(m_values[i], values[i], sizeof(_Tp) * _W);
-			}
-			computeSum();
-		};
-	public:
-		/** This function is used only for debugging
-			*/
-		void dump()
-		{
- 			kdDebug(DBG_AREA_MATH) << "KisMatrixT::dump()" << endl;
-			for(int i = 0; i < _H; i++)
-			{
-				for(int j = 0; j < _W; j++)
-				{
-					kdDebug(DBG_AREA_MATH) << "m_values[" << i << "][" << j << "]=" << m_values[i][j] << endl;
-				}
-			}
-		};
-	public:
-		/** This operator return a row.
-			*/
-		inline _Tp* operator[](int i) { return m_values[i]; };
-	public:
-		void computeSum()
-		{
-			m_sum = 0;
-			for(int i = 0; i < _H; i++)
-			{
-				for(int j = 0; j < _W; j++)
-				{
-					m_sum += m_values[i][j];
-				}
-			}
-		};
-		inline _Tp sum() { return m_sum; }
-		inline void setFactor(_Tp factor) { m_factor = factor; };
-		inline _Tp factor() { return m_factor; };
-		inline void setOffset(_Tp offset) { m_offset = offset; };
-		inline _Tp offset() { return m_offset; };
-	private:
-		_Tp m_values[_H][_W];
-		_Tp m_factor;
-		_Tp m_offset;
-		_Tp m_sum;
+    typedef KisMatrix<_Tp, _W, _H> KisMatrixT;
+    public:
+        KisMatrix() {};
+        KisMatrix( _Tp values[_H][_W], _Tp factor, _Tp offset) : m_factor(factor), m_offset(offset)
+        {
+            for(int i = 0; i < _H; i++)
+            {
+                memcpy(m_values[i], values[i], sizeof(_Tp) * _W);
+            }
+            computeSum();
+        };
+    public:
+        /** This function is used only for debugging
+            */
+        void dump()
+        {
+             kdDebug(DBG_AREA_MATH) << "KisMatrixT::dump()" << endl;
+            for(int i = 0; i < _H; i++)
+            {
+                for(int j = 0; j < _W; j++)
+                {
+                    kdDebug(DBG_AREA_MATH) << "m_values[" << i << "][" << j << "]=" << m_values[i][j] << endl;
+                }
+            }
+        };
+    public:
+        /** This operator return a row.
+            */
+        inline _Tp* operator[](int i) { return m_values[i]; };
+    public:
+        void computeSum()
+        {
+            m_sum = 0;
+            for(int i = 0; i < _H; i++)
+            {
+                for(int j = 0; j < _W; j++)
+                {
+                    m_sum += m_values[i][j];
+                }
+            }
+        };
+        inline _Tp sum() { return m_sum; }
+        inline void setFactor(_Tp factor) { m_factor = factor; };
+        inline _Tp factor() { return m_factor; };
+        inline void setOffset(_Tp offset) { m_offset = offset; };
+        inline _Tp offset() { return m_offset; };
+    private:
+        _Tp m_values[_H][_W];
+        _Tp m_factor;
+        _Tp m_offset;
+        _Tp m_sum;
 };
 
 typedef KisMatrix<int, 3, 3> KisMatrix3x3;

@@ -35,22 +35,22 @@ K_EXPORT_COMPONENT_FACTORY( krita_rgb_u16_plugin, RGBU16PluginFactory( "krita" )
 
 
 RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-		setInstance(RGBU16PluginFactory::instance());
+        setInstance(RGBU16PluginFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "16-bit integer RGB Color model plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "16-bit integer RGB Color model plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		m_ColorSpaceRGBU16 = new KisRgbU16ColorSpace();
-		Q_CHECK_PTR(m_ColorSpaceRGBU16);
-		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBU16);
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        m_ColorSpaceRGBU16 = new KisRgbU16ColorSpace();
+        Q_CHECK_PTR(m_ColorSpaceRGBU16);
+        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBU16);
+    }
 
 }
 

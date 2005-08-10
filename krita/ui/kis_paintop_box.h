@@ -41,31 +41,31 @@ class QString;
  */
 class KisPaintopBox : public QListBox {
 
-	Q_OBJECT
+    Q_OBJECT
 
-	typedef QListBox super;
-	
+    typedef QListBox super;
+    
 public:
-	KisPaintopBox (KisView * parent, const char * name = 0, WFlags f = 0);
-	
-	~KisPaintopBox();
+    KisPaintopBox (KisView * parent, const char * name = 0, WFlags f = 0);
+    
+    ~KisPaintopBox();
 
 public slots:
 
-	void addItem(const KisID & paintop, const QString & category = "");
+    void addItem(const KisID & paintop, const QString & category = "");
 
 signals:
-	
-	void selected(const KisID & id);
+    
+    void selected(const KisID & id);
 
 private slots:
-	
-	void slotItemSelected(int index);
+    
+    void slotItemSelected(int index);
 
 private:
-	KisView * m_view;
+    KisView * m_view;
 
-	QValueList<KisID> * m_paintops;
+    QValueList<KisID> * m_paintops;
 };
 
 

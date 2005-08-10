@@ -28,41 +28,41 @@
 class KRITACORE_EXPORT KisTiledIterator {
 
 protected:
-	KisTiledDataManager *m_ktm;
-	Q_INT32 m_pixelSize;		// bytes per pixel
-	Q_INT32 m_x;		// current x position
-	Q_INT32 m_y;		// cirrent y position
-	Q_INT32 m_row;	// row in tilemgr
-	Q_INT32 m_col;	// col in tilemgr
-	Q_UINT8 *m_data;
-	Q_UINT8 *m_oldData;
-	Q_INT32 m_offset;
-	KisTile *m_tile;
-	bool m_writable;
+    KisTiledDataManager *m_ktm;
+    Q_INT32 m_pixelSize;        // bytes per pixel
+    Q_INT32 m_x;        // current x position
+    Q_INT32 m_y;        // cirrent y position
+    Q_INT32 m_row;    // row in tilemgr
+    Q_INT32 m_col;    // col in tilemgr
+    Q_UINT8 *m_data;
+    Q_UINT8 *m_oldData;
+    Q_INT32 m_offset;
+    KisTile *m_tile;
+    bool m_writable;
 
 protected:
-	inline Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
-	inline Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
-	void fetchTileData(Q_INT32 col, Q_INT32 row);
+    inline Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
+    inline Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
+    void fetchTileData(Q_INT32 col, Q_INT32 row);
 
 public:
-	KisTiledIterator( KisTiledDataManager *ktm);
-	KisTiledIterator(const KisTiledIterator&);
-	KisTiledIterator& operator=(const KisTiledIterator&);
-	~KisTiledIterator();
+    KisTiledIterator( KisTiledDataManager *ktm);
+    KisTiledIterator(const KisTiledIterator&);
+    KisTiledIterator& operator=(const KisTiledIterator&);
+    ~KisTiledIterator();
 
 public:
-	// current x position
-	Q_INT32 x() const { return m_x; };
+    // current x position
+    Q_INT32 x() const { return m_x; };
 
-	// cirrent y position
-	Q_INT32 y() const { return m_y; };
+    // cirrent y position
+    Q_INT32 y() const { return m_y; };
 
-	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	Q_UINT8 *rawData() const;
+    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    Q_UINT8 *rawData() const;
 
-	/// Returns a pointer to the pixel data as it was at the moment tof he last memento creation.
-	const Q_UINT8 * oldRawData() const;
+    /// Returns a pointer to the pixel data as it was at the moment tof he last memento creation.
+    const Q_UINT8 * oldRawData() const;
 };
 
 /**
@@ -73,47 +73,47 @@ class KRITACORE_EXPORT KisTiledRectIterator : public KisTiledIterator
 {
 
 public:
-	/// do not call constructor directly use factory method in KisDataManager instead.
-	KisTiledRectIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
-	KisTiledRectIterator(const KisTiledRectIterator&);
-	KisTiledRectIterator& operator=(const KisTiledRectIterator&);
-	~KisTiledRectIterator();
+    /// do not call constructor directly use factory method in KisDataManager instead.
+    KisTiledRectIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
+    KisTiledRectIterator(const KisTiledRectIterator&);
+    KisTiledRectIterator& operator=(const KisTiledRectIterator&);
+    ~KisTiledRectIterator();
 
 public:
-	Q_INT32 nConseqPixels() const;
-	
-	/// Advances a number of pixels until it reaches the end of the rect
-	KisTiledRectIterator & operator+=(int n);
-	
-	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
-	KisTiledRectIterator & operator++();
+    Q_INT32 nConseqPixels() const;
+    
+    /// Advances a number of pixels until it reaches the end of the rect
+    KisTiledRectIterator & operator+=(int n);
+    
+    /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
+    KisTiledRectIterator & operator++();
 
-	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
-	//KisTiledRectIterator & operator--();
+    /// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
+    //KisTiledRectIterator & operator--();
 
-	/// returns true when the iterator has reached the end
-	inline bool isDone() const { return m_beyondEnd; }
+    /// returns true when the iterator has reached the end
+    inline bool isDone() const { return m_beyondEnd; }
 
 
 protected:
-	 Q_INT32 m_left;
-	 Q_INT32 m_top;
-	 Q_INT32 m_w;
-	 Q_INT32 m_h;
-	 Q_INT32 m_topRow;
-	 Q_INT32 m_bottomRow;
-	 Q_INT32 m_leftCol;
-	 Q_INT32 m_rightCol;
-	 Q_INT32 m_xInTile;
-	 Q_INT32 m_yInTile;
-	 Q_INT32 m_leftInTile;
-	 Q_INT32 m_rightInTile;
-	 Q_INT32 m_topInTile;
-	 Q_INT32 m_bottomInTile;
-	 bool m_beyondEnd;
+     Q_INT32 m_left;
+     Q_INT32 m_top;
+     Q_INT32 m_w;
+     Q_INT32 m_h;
+     Q_INT32 m_topRow;
+     Q_INT32 m_bottomRow;
+     Q_INT32 m_leftCol;
+     Q_INT32 m_rightCol;
+     Q_INT32 m_xInTile;
+     Q_INT32 m_yInTile;
+     Q_INT32 m_leftInTile;
+     Q_INT32 m_rightInTile;
+     Q_INT32 m_topInTile;
+     Q_INT32 m_bottomInTile;
+     bool m_beyondEnd;
 
 private:
-	 void nextTile();
+     void nextTile();
 };
 
 /**
@@ -124,43 +124,43 @@ class KRITACORE_EXPORT KisTiledHLineIterator : public KisTiledIterator
 {
 
 public:
-	/// do not call constructor directly use factory method in KisDataManager instead.
-	KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32 w, bool writable);
-	KisTiledHLineIterator(const KisTiledHLineIterator&);
-	KisTiledHLineIterator& operator=(const KisTiledHLineIterator&);
-	~KisTiledHLineIterator();
+    /// do not call constructor directly use factory method in KisDataManager instead.
+    KisTiledHLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32 w, bool writable);
+    KisTiledHLineIterator(const KisTiledHLineIterator&);
+    KisTiledHLineIterator& operator=(const KisTiledHLineIterator&);
+    ~KisTiledHLineIterator();
 
 public:
-	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
-	KisTiledHLineIterator & operator++();
+    /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
+    KisTiledHLineIterator & operator++();
 
-	/// Returns the number of consequtive horizontal pixels that we point at
-	/// This is useful for optimizing
-	Q_INT32 nConseqHPixels() const;
+    /// Returns the number of consequtive horizontal pixels that we point at
+    /// This is useful for optimizing
+    Q_INT32 nConseqHPixels() const;
 
-	/// Advances a number of pixels until it reaches the end of the line
-	KisTiledHLineIterator & operator+=(int);
+    /// Advances a number of pixels until it reaches the end of the line
+    KisTiledHLineIterator & operator+=(int);
 
-	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
-	KisTiledHLineIterator & operator--();
+    /// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
+    KisTiledHLineIterator & operator--();
 
-	/// returns true when the iterator has reached the end
-	bool isDone() const { return m_x > m_right; }
+    /// returns true when the iterator has reached the end
+    bool isDone() const { return m_x > m_right; }
 
 
 protected:
-	 Q_INT32 m_right;
-	 Q_INT32 m_left;
-	 Q_INT32 m_leftCol;
-	 Q_INT32 m_rightCol;
-	 Q_INT32 m_xInTile;
-	 Q_INT32 m_yInTile;
-	 Q_INT32 m_leftInTile;
-	 Q_INT32 m_rightInTile;
+     Q_INT32 m_right;
+     Q_INT32 m_left;
+     Q_INT32 m_leftCol;
+     Q_INT32 m_rightCol;
+     Q_INT32 m_xInTile;
+     Q_INT32 m_yInTile;
+     Q_INT32 m_leftInTile;
+     Q_INT32 m_rightInTile;
 
 private:
-	 void nextTile();
-	 void prevTile();
+     void nextTile();
+     void prevTile();
 };
 
 /**
@@ -171,34 +171,34 @@ class KRITACORE_EXPORT KisTiledVLineIterator : public KisTiledIterator
 {
 
 public:
-	/// do not call constructor directly use factory method in KisDataManager instead.
-	KisTiledVLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 h, bool writable);
-	KisTiledVLineIterator(const KisTiledVLineIterator&);
-	KisTiledVLineIterator& operator=(const KisTiledVLineIterator&);
-	~KisTiledVLineIterator();
+    /// do not call constructor directly use factory method in KisDataManager instead.
+    KisTiledVLineIterator( KisTiledDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 h, bool writable);
+    KisTiledVLineIterator(const KisTiledVLineIterator&);
+    KisTiledVLineIterator& operator=(const KisTiledVLineIterator&);
+    ~KisTiledVLineIterator();
 
 public:
-	/// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
-	KisTiledVLineIterator & operator++();
+    /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
+    KisTiledVLineIterator & operator++();
 
-	/// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
-	//KisTiledVLineIterator & operator--();
+    /// Goes back one pixel. Going to the end of the line above when it reaches the beginning of a line
+    //KisTiledVLineIterator & operator--();
 
-	/// returns true when the iterator has reached the end
-	bool isDone() const { return m_y > m_bottom; }
+    /// returns true when the iterator has reached the end
+    bool isDone() const { return m_y > m_bottom; }
 
 
 protected:
-	 Q_INT32 m_bottom;
-	 Q_INT32 m_topRow;
-	 Q_INT32 m_bottomRow;
-	 Q_INT32 m_xInTile;
-	 Q_INT32 m_yInTile;
-	 Q_INT32 m_topInTile;
-	 Q_INT32 m_bottomInTile;
+     Q_INT32 m_bottom;
+     Q_INT32 m_topRow;
+     Q_INT32 m_bottomRow;
+     Q_INT32 m_xInTile;
+     Q_INT32 m_yInTile;
+     Q_INT32 m_topInTile;
+     Q_INT32 m_bottomInTile;
 
 private:
-	 void nextTile();
+     void nextTile();
 };
 
 #endif // KIS_TILED_ITERATOR_H_

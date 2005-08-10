@@ -35,37 +35,37 @@ class KisResourceServerBase;
  * resource type.
  */
 class KisResourceMediator : public QObject {
-	Q_OBJECT
-	typedef QObject super;
+    Q_OBJECT
+    typedef QObject super;
 
 public:
-	KisResourceMediator(KisItemChooser *chooser,
-			    QObject *parent = 0,
-			    const char *name = 0);
-	virtual ~KisResourceMediator();
+    KisResourceMediator(KisItemChooser *chooser,
+                QObject *parent = 0,
+                const char *name = 0);
+    virtual ~KisResourceMediator();
 
 public:
-	void connectServer(KisResourceServerBase* rServer);
-	KisResource *currentResource() const;
-	KisIconItem *itemFor(KisResource *r) const;
-	KisResource *resourceFor(KoIconItem *item) const;
-	KisResource *resourceFor(KisIconItem *item) const;
-	QWidget *chooserWidget() const;
+    void connectServer(KisResourceServerBase* rServer);
+    KisResource *currentResource() const;
+    KisIconItem *itemFor(KisResource *r) const;
+    KisResource *resourceFor(KoIconItem *item) const;
+    KisResource *resourceFor(KisIconItem *item) const;
+    QWidget *chooserWidget() const;
 
 public slots:
-	
-	void setActiveItem(KoIconItem *item);
+    
+    void setActiveItem(KoIconItem *item);
 
 signals:
-	void activatedResource(KisResource *r);
+    void activatedResource(KisResource *r);
 
 private slots:
-	void rServerAddedResource(KisResource *resource);
+    void rServerAddedResource(KisResource *resource);
 
 private:
-	KisItemChooser *m_chooser;
-	QMap<KisResource*, KisIconItem*> m_items;
-	KoIconItem *m_activeItem;
+    KisItemChooser *m_chooser;
+    QMap<KisResource*, KisIconItem*> m_items;
+    KoIconItem *m_activeItem;
 };
 
 #endif // KIS_RESOURCE_MEDIATOR_H_

@@ -30,39 +30,39 @@ class KisCImgFilterConfiguration : public KisFilterConfiguration
 
 public:
 
-	KisCImgFilterConfiguration() {};
+    KisCImgFilterConfiguration() {};
 
 public:
 
-	Q_INT32 nb_iter;    // Number of smoothing iterations
-	float   dt;         // Time step
-	float   dlength;    // Integration step
-	float   dtheta;     // Angular step (in degrees)
-	float   sigma;      // Structure tensor blurring
-	float   power1;     // Diffusion limiter along isophote
-	float   power2;     // Diffusion limiter along gradient
-	float   gauss_prec; //  Precision of the gaussian function
-	bool    onormalize; // Output image normalization (in [0,255])
-	bool    linear;     // Use linear interpolation for integration ?
+    Q_INT32 nb_iter;    // Number of smoothing iterations
+    float   dt;         // Time step
+    float   dlength;    // Integration step
+    float   dtheta;     // Angular step (in degrees)
+    float   sigma;      // Structure tensor blurring
+    float   power1;     // Diffusion limiter along isophote
+    float   power2;     // Diffusion limiter along gradient
+    float   gauss_prec; //  Precision of the gaussian function
+    bool    onormalize; // Output image normalization (in [0,255])
+    bool    linear;     // Use linear interpolation for integration ?
 };
 
 
 class KisCImgFilter : public KisFilter
 {
 public:
-	KisCImgFilter();
+    KisCImgFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return false; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return false; }
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 private:
 
-	bool process();
+    bool process();
 
        // Compute smoothed structure tensor field G
         void compute_smoothed_tensor();
@@ -114,7 +114,7 @@ private:
         cimg_library::CImgl<> eigen;
         cimg_library::CImg<unsigned char> mask;
 
-	
+    
 
 };
 

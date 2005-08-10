@@ -36,12 +36,12 @@ class KisRect;
 
 class KisToolPolyline : public KisToolPaint {
 
-	typedef KisToolPaint super;
-	Q_OBJECT
+    typedef KisToolPaint super;
+    Q_OBJECT
 
 public:
-	KisToolPolyline();
-	virtual ~KisToolPolyline();
+    KisToolPolyline();
+    virtual ~KisToolPolyline();
 
         //
         // KisCanvasObserver interface
@@ -53,25 +53,25 @@ public:
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
 
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
-
-protected:
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	void draw(QPainter& gc);
-	void draw();
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    void draw(QPainter& gc);
+    void draw();
 
-	bool m_dragging;
-	KisImageSP m_currentImage;
+protected:
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
+
+    bool m_dragging;
+    KisImageSP m_currentImage;
 private:
         typedef QValueVector<KisPoint> KisPointVector;
         KisPointVector m_points;
@@ -81,18 +81,18 @@ private:
 #include "kis_tool_factory.h"
 
 class KisToolPolylineFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolPolylineFactory() : super() {};
-	virtual ~KisToolPolylineFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolPolyline(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
+    KisToolPolylineFactory() : super() {};
+    virtual ~KisToolPolylineFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolPolyline(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
 };
 
 

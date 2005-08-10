@@ -21,12 +21,12 @@
 #include <qlabel.h>
 
 class KisLabelZoom : public QLabel {
-	Q_OBJECT
-		
-	KisLabelZoom( QWidget *parent, const char *name = 0, WFlags f = 0 ) :
-		QLabel( parent, name, f ) {}
-	virtual ~KisLabelZoom() {}
-		
+    Q_OBJECT
+        
+    KisLabelZoom( QWidget *parent, const char *name = 0, WFlags f = 0 ) :
+        QLabel( parent, name, f ) {}
+    virtual ~KisLabelZoom() {}
+        
 };
 
 #endif // KIS_LABEL_ZOOM_H_

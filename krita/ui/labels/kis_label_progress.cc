@@ -32,20 +32,20 @@
 
 KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
 {
-	m_subject = 0;
-	m_modal = false;
+    m_subject = 0;
+    m_modal = false;
 
-	QHBoxLayout *box = new QHBoxLayout(this);
-	box -> setAutoAdd(true);
+    QHBoxLayout *box = new QHBoxLayout(this);
+    box -> setAutoAdd(true);
 
-	QIconSet cancelIconSet = SmallIconSet("stop");
+    QIconSet cancelIconSet = SmallIconSet("stop");
 
-	m_cancelButton = new QToolButton(this, "cancel_button");
-	m_cancelButton -> setIconSet(cancelIconSet);
-	QToolTip::add(m_cancelButton, i18n("Cancel"));
-	connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
+    m_cancelButton = new QToolButton(this, "cancel_button");
+    m_cancelButton -> setIconSet(cancelIconSet);
+    QToolTip::add(m_cancelButton, i18n("Cancel"));
+    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
 
-	m_bar = new KProgress(100, this);
+    m_bar = new KProgress(100, this);
 }
 
 KisLabelProgress::~KisLabelProgress()
@@ -54,105 +54,105 @@ KisLabelProgress::~KisLabelProgress()
 
 void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool canCancel)
 {
-	reset();
+    reset();
 
-	if (subject) {
-		m_subject = subject;
-		m_modal = modal;
+    if (subject) {
+        m_subject = subject;
+        m_modal = modal;
 
-		connect(subject, SIGNAL(notifyProgress(KisProgressSubject*, int)), this, SLOT(update(KisProgressSubject*, int)));
-		connect(subject, SIGNAL(notifyProgressStage(KisProgressSubject*, const QString&, int)), this, SLOT(updateStage(KisProgressSubject*, const QString&, int)));
-		connect(subject, SIGNAL(notifyProgressDone(KisProgressSubject*)), this, SLOT(done(KisProgressSubject*)));
-		connect(subject, SIGNAL(notifyProgressError(KisProgressSubject*)), this, SLOT(error(KisProgressSubject*)));
-		connect(subject, SIGNAL(destroyed()), this, SLOT(subjectDestroyed()));
+        connect(subject, SIGNAL(notifyProgress(KisProgressSubject*, int)), this, SLOT(update(KisProgressSubject*, int)));
+        connect(subject, SIGNAL(notifyProgressStage(KisProgressSubject*, const QString&, int)), this, SLOT(updateStage(KisProgressSubject*, const QString&, int)));
+        connect(subject, SIGNAL(notifyProgressDone(KisProgressSubject*)), this, SLOT(done(KisProgressSubject*)));
+        connect(subject, SIGNAL(notifyProgressError(KisProgressSubject*)), this, SLOT(error(KisProgressSubject*)));
+        connect(subject, SIGNAL(destroyed()), this, SLOT(subjectDestroyed()));
 
-		show();
+        show();
 
-		if (canCancel) {
-			if (modal) {
-				m_cancelButton -> grabMouse();
-				m_cancelButton -> grabKeyboard();
-			}
-		}
-		else {
-			m_cancelButton -> hide();
+        if (canCancel) {
+            if (modal) {
+                m_cancelButton -> grabMouse();
+                m_cancelButton -> grabKeyboard();
+            }
+        }
+        else {
+            m_cancelButton -> hide();
 
-			if (modal) {
-				// Only visible widgets can grab.
-				grabMouse();
-				grabKeyboard();
-			}
-		}
+            if (modal) {
+                // Only visible widgets can grab.
+                grabMouse();
+                grabKeyboard();
+            }
+        }
 
-		if (modal) {
-			QApplication::setOverrideCursor(KisCursor::waitCursor());
-		}
+        if (modal) {
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
+        }
 
-		m_bar -> setValue(0);
-	}
+        m_bar -> setValue(0);
+    }
 }
 
 void KisLabelProgress::reset()
 {
-	if (m_subject) {
-		m_subject -> disconnect(this);
-		m_subject = 0;
+    if (m_subject) {
+        m_subject -> disconnect(this);
+        m_subject = 0;
 
-		if (m_modal) {
-			QApplication::restoreOverrideCursor();
-		}
+        if (m_modal) {
+            QApplication::restoreOverrideCursor();
+        }
 
-		m_modal = false;
-	}
+        m_modal = false;
+    }
 
-	releaseMouse();
-	releaseKeyboard();
-	m_cancelButton -> releaseMouse();
-	m_cancelButton -> releaseKeyboard();
-	hide();
+    releaseMouse();
+    releaseKeyboard();
+    m_cancelButton -> releaseMouse();
+    m_cancelButton -> releaseKeyboard();
+    hide();
 }
 
 void KisLabelProgress::update(KisProgressSubject *, int percent)
 {
-	m_bar -> setValue(percent);
+    m_bar -> setValue(percent);
 
-	KApplication *app = KApplication::kApplication();
-	Q_ASSERT(app);
+    KApplication *app = KApplication::kApplication();
+    Q_ASSERT(app);
 
-	app -> processEvents();
+    app -> processEvents();
 }
 
 void KisLabelProgress::updateStage(KisProgressSubject *, const QString&, int percent)
 {
-	m_bar -> setValue(percent);
+    m_bar -> setValue(percent);
 
-	KApplication *app = KApplication::kApplication();
-	Q_ASSERT(app);
+    KApplication *app = KApplication::kApplication();
+    Q_ASSERT(app);
 
-	app -> processEvents();
+    app -> processEvents();
 }
 
 void KisLabelProgress::cancelPressed()
 {
-	if (m_subject) {
-		m_subject -> cancel();
-		reset();
-	}
+    if (m_subject) {
+        m_subject -> cancel();
+        reset();
+    }
 }
 
 void KisLabelProgress::subjectDestroyed()
 {
-	reset();
+    reset();
 }
 
 void KisLabelProgress::done(KisProgressSubject *)
 {
-	reset();
+    reset();
 }
 
 void KisLabelProgress::error(KisProgressSubject *)
 {
-	reset();
+    reset();
 }
 
 #include "kis_label_progress.moc"

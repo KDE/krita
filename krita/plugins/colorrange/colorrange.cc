@@ -53,29 +53,29 @@ typedef KGenericFactory<ColorRange> ColorRangeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
 
 ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ColorRangeFactory::instance());
+    setInstance(ColorRangeFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Colorrange plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Colorrange plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
 
-	
-	if ( parent->inherits("KisFactory") )
-	{
-		KisToolRegistry::instance() -> add(new KisToolSelectSimilarFactory());
+    
+    if ( parent->inherits("KisFactory") )
+    {
+        KisToolRegistry::instance() -> add(new KisToolSelectSimilarFactory());
 
-		m_view = 0;
-	} else if (parent -> inherits("KisView")) {
-		m_view = dynamic_cast<KisView*>(parent);
+        m_view = 0;
+    } else if (parent -> inherits("KisView")) {
+        m_view = dynamic_cast<KisView*>(parent);
 
-		m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
+        m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
-	}
+    }
 }
 
 ColorRange::~ColorRange()
@@ -84,13 +84,13 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	if (!layer) return;
+    KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+    if (!layer) return;
 
-	DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
-	Q_CHECK_PTR(dlgColorRange);
+    DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
+    Q_CHECK_PTR(dlgColorRange);
 
-	dlgColorRange -> exec();
+    dlgColorRange -> exec();
 }
 
 #include "colorrange.moc"

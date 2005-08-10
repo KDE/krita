@@ -37,8 +37,8 @@ RaiseFunction::RaiseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, K
 
 KJS::Value RaiseFunction::call( KJS::ExecState*, KJS::Object&, const KJS::List& )
 {
-	view()->mainWindow()->raise();
-	return KJS::Null();
+    view()->mainWindow()->raise();
+    return KJS::Null();
 }
 
 LowerFunction::LowerFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view) : GlobalFunctionBase( part, QString("lower"), parent, view)
@@ -48,8 +48,8 @@ LowerFunction::LowerFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, K
 
 KJS::Value LowerFunction::call( KJS::ExecState*, KJS::Object&, const KJS::List& )
 {
-	view()->mainWindow()->lower();
-	return KJS::Null();
+    view()->mainWindow()->lower();
+    return KJS::Null();
 }
 
 CloseFunction::CloseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view) : GlobalFunctionBase( part, QString("close"), parent, view)
@@ -59,8 +59,8 @@ CloseFunction::CloseFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, K
 
 KJS::Value CloseFunction::call( KJS::ExecState*, KJS::Object&, const KJS::List& )
 {
-	view()->shell()->slotFileClose();
-	return KJS::Null();
+    view()->shell()->slotFileClose();
+    return KJS::Null();
 }
 
 QuitFunction::QuitFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, KisView* view) : GlobalFunctionBase( part, QString("quit"), parent, view)
@@ -70,8 +70,8 @@ QuitFunction::QuitFunction(KJSEmbed::KJSEmbedPart *part, KJS::Object parent, Kis
 
 KJS::Value QuitFunction::call( KJS::ExecState*, KJS::Object&, const KJS::List& )
 {
-	view()->shell()->slotFileQuit();
-	return KJS::Null();
+    view()->shell()->slotFileQuit();
+    return KJS::Null();
 }
 
 }; }; }; }; };

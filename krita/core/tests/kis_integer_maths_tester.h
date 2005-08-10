@@ -25,9 +25,9 @@ class KisIntegerMathsTester : public KUnitTest::Tester
 {
 public:
         void allTests();
-	void UINT8Tests();
-	void UINT16Tests();
-	void conversionTests();
+    void UINT8Tests();
+    void UINT16Tests();
+    void conversionTests();
 };
 
 #endif

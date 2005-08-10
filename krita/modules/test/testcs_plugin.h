@@ -29,14 +29,14 @@
  */
 class TestCSPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	TestCSPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~TestCSPlugin();
-	
+    TestCSPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~TestCSPlugin();
+    
 private:
 
-	KisAbstractColorSpace * m_ColorSpaceTestCS;
+    KisAbstractColorSpace * m_ColorSpaceTestCS;
 };
 
 

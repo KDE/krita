@@ -33,26 +33,26 @@ class QComboBox;
  * XXX
  */
 class DlgColorSpaceConversion: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgColorSpaceConversion(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgColorSpaceConversion();
+    DlgColorSpaceConversion(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgColorSpaceConversion();
 
-	WdgConvertColorSpace * m_page;
+    WdgConvertColorSpace * m_page;
 
 public slots:
 
-	void okClicked();
-	void fillCmbDestProfile(const KisID &);
-	void fillCmbSrcProfile(const KisID &);
+    void okClicked();
+    void fillCmbDestProfile(const KisID &);
+    void fillCmbSrcProfile(const KisID &);
 
 private:
 
-	void fillCmbProfile(QComboBox * cmb, const KisID &);
+    void fillCmbProfile(QComboBox * cmb, const KisID &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

@@ -31,7 +31,7 @@ KisToolRegistry *KisToolRegistry::m_singleton = 0;
 
 KisToolRegistry::KisToolRegistry()
 {
- 	kdDebug(DBG_AREA_REGISTRY) << " creating a KisToolRegistry" << endl;
+     kdDebug(DBG_AREA_REGISTRY) << " creating a KisToolRegistry" << endl;
 }
 
 KisToolRegistry::~KisToolRegistry()
@@ -40,41 +40,41 @@ KisToolRegistry::~KisToolRegistry()
 
 KisToolRegistry* KisToolRegistry::instance()
 {
- 	if(KisToolRegistry::m_singleton == 0)
- 	{
- 		KisToolRegistry::m_singleton = new KisToolRegistry();
- 	}
-	return KisToolRegistry::m_singleton;
+     if(KisToolRegistry::m_singleton == 0)
+     {
+         KisToolRegistry::m_singleton = new KisToolRegistry();
+     }
+    return KisToolRegistry::m_singleton;
 }
 
 
 
 vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *subject) const
 {
-	Q_ASSERT(subject);
+    Q_ASSERT(subject);
 
-	vKisTool tools;
+    vKisTool tools;
 
-	KisIDList factories = listKeys();
+    KisIDList factories = listKeys();
 
-	for (KisIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
-	{
-		KisToolFactorySP f = get(*it);
+    for (KisIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
+    {
+        KisToolFactorySP f = get(*it);
 
-		KisTool * tool = f -> createTool(ac);
-		subject -> attach(tool);
-		tools.push_back(tool);
-	}
+        KisTool * tool = f -> createTool(ac);
+        subject -> attach(tool);
+        tools.push_back(tool);
+    }
 
-	subject -> notify();
+    subject -> notify();
 
-	return tools;
+    return tools;
 }
 
 KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const
 {
-	KisToolFactorySP f = get(id);
-	KisTool * t = f -> createTool(ac);
-	subject->attach(t);
-	return t;
+    KisToolFactorySP f = get(id);
+    KisTool * t = f -> createTool(ac);
+    subject->attach(t);
+    return t;
 }

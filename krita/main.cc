@@ -23,20 +23,20 @@
 #include "core/kis_aboutdata.h"
 
 static const KCmdLineOptions options[] = {
-	{ "+[file(s)]", I18N_NOOP("File(s) or URL(s) to open"), 0 },
-	KCmdLineLastOption
+    { "+[file(s)]", I18N_NOOP("File(s) or URL(s) to open"), 0 },
+    KCmdLineLastOption
 };
 
 extern "C" KRITA_EXPORT int kdemain(int argc, char **argv)
 {
-	KCmdLineArgs::init(argc, argv, newKritaAboutData());
-	KCmdLineArgs::addCmdLineOptions(options);
+    KCmdLineArgs::init(argc, argv, newKritaAboutData());
+    KCmdLineArgs::addCmdLineOptions(options);
 
-	KoApplication app;
+    KoApplication app;
 
-	if (!app.start())
-		return 1;
+    if (!app.start())
+        return 1;
 
-	return app.exec();
+    return app.exec();
 }
 

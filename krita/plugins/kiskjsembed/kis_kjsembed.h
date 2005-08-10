@@ -27,8 +27,8 @@
 #include <vector>
 
 namespace KJSEmbed {
-	class KJSEmbedPart;
-	class JSConsoleWidget;
+    class KJSEmbedPart;
+    class JSConsoleWidget;
 };
 
 class KisView;
@@ -38,37 +38,37 @@ class QPopupMenu;
 class KoTabbedToolDock;
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			class Script;
-			namespace Bindings {
-				class FunctionsFactory;
-				class ObjectsFactory;
-			};
-			class KisKJSEmbed : public KParts::Plugin
-			{
-				Q_OBJECT
-			public:
-				KisKJSEmbed(QObject *parent, const char *name, const QStringList &);
-				virtual ~KisKJSEmbed();
-			private:
-				void initBindings();
-			private slots:
-				void slotLoadScript();
-				void viewConsoleDocker(bool v);
-			private:
-				KisView* m_view;
-				KFileDialog* m_fileDialog;
-				KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
-				KJSEmbed::JSConsoleWidget* m_jsConsoleWidget;
-				KoTabbedToolDock* m_consoleDocker;
-				Bindings::FunctionsFactory* m_functionsFactory;
-				Bindings::ObjectsFactory* m_objectsFactory;
-				std::vector<Script*> m_vScripts;
-				QPopupMenu* m_scriptMenu;
-			};
-		};
-	};
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            class Script;
+            namespace Bindings {
+                class FunctionsFactory;
+                class ObjectsFactory;
+            };
+            class KisKJSEmbed : public KParts::Plugin
+            {
+                Q_OBJECT
+            public:
+                KisKJSEmbed(QObject *parent, const char *name, const QStringList &);
+                virtual ~KisKJSEmbed();
+            private:
+                void initBindings();
+            private slots:
+                void slotLoadScript();
+                void viewConsoleDocker(bool v);
+            private:
+                KisView* m_view;
+                KFileDialog* m_fileDialog;
+                KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
+                KJSEmbed::JSConsoleWidget* m_jsConsoleWidget;
+                KoTabbedToolDock* m_consoleDocker;
+                Bindings::FunctionsFactory* m_functionsFactory;
+                Bindings::ObjectsFactory* m_objectsFactory;
+                std::vector<Script*> m_vScripts;
+                QPopupMenu* m_scriptMenu;
+            };
+        };
+    };
 };
 
 

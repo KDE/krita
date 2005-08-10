@@ -36,14 +36,14 @@ m_jsEmbedPart(jsembedpart), m_script(script)
 
 Script* Script::loadFromFile(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& file)
 {
-	QString scripttxt = jsembedpart->loadFile(file);
-	return new Script(jsembedpart, scripttxt);
+    QString scripttxt = jsembedpart->loadFile(file);
+    return new Script(jsembedpart, scripttxt);
 }
 
 void Script::execute()
 {
-	KJS::Completion result = m_jsEmbedPart->completion();
-	m_jsEmbedPart->execute( result, m_script, KJS::Null());
+    KJS::Completion result = m_jsEmbedPart->completion();
+    m_jsEmbedPart->execute( result, m_script, KJS::Null());
 }
 
 }; }; };

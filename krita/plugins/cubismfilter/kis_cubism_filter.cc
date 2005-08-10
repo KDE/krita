@@ -394,19 +394,19 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
 KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );
-	param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisCubismFilterConfiguration( 10, 10);
-	} else {
-		return new KisCubismFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisCubismFilterConfiguration( 10, 10);
+    } else {
+        return new KisCubismFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+    }
 }

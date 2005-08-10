@@ -26,8 +26,8 @@ KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
 KisColorSpaceRegistry::KisColorSpaceRegistry()
 {
-	Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
-	KisColorSpaceRegistry::m_singleton = this;
+    Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
+    KisColorSpaceRegistry::m_singleton = this;
 }
 
 KisColorSpaceRegistry::~KisColorSpaceRegistry()
@@ -36,22 +36,22 @@ KisColorSpaceRegistry::~KisColorSpaceRegistry()
 
 KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 {
-	if(KisColorSpaceRegistry::m_singleton == 0)
-	{
-		KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
-		Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
-		m_singleton->add(new KisXyzColorSpace());
-	}
-	return KisColorSpaceRegistry::m_singleton;
+    if(KisColorSpaceRegistry::m_singleton == 0)
+    {
+        KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
+        Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
+        m_singleton->add(new KisXyzColorSpace());
+    }
+    return KisColorSpaceRegistry::m_singleton;
 }
 
 KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name) const
 {
-	KisProfileSP profile = 0;
-	KisIDList keys = listKeys();
-	for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-		profile = get(*it) -> getProfileByName(name);
-		if (profile != 0) return profile;
-	}
-	return profile;
+    KisProfileSP profile = 0;
+    KisIDList keys = listKeys();
+    for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+        profile = get(*it) -> getProfileByName(name);
+        if (profile != 0) return profile;
+    }
+    return profile;
 }

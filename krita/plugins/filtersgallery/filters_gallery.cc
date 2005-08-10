@@ -36,24 +36,24 @@ typedef KGenericFactory<KritaFiltersGallery> KritaFiltersGalleryFactory;
 K_EXPORT_COMPONENT_FACTORY( kritafiltersgallery, KritaFiltersGalleryFactory( "krita" ) )
 
 KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(KritaFiltersGallery::instance());
-	
-	kdDebug() << "FiltersGallery plugin. Class: "
-		  << className()
-		  << ", Parent: "
-		  << parent -> className()
-		  << "\n";
+    setInstance(KritaFiltersGallery::instance());
+    
+    kdDebug() << "FiltersGallery plugin. Class: "
+          << className()
+          << ", Parent: "
+          << parent -> className()
+          << "\n";
 
-	if ( !parent->inherits("KisView") )
-	{
-		return;
-	} else {
-		m_view = (KisView*) parent;
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        return;
+    } else {
+        m_view = (KisView*) parent;
+    }
 
-	(void) new KAction(i18n("&Filters gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
+    (void) new KAction(i18n("&Filters gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
 }
 
 KritaFiltersGallery::~KritaFiltersGallery()
@@ -62,14 +62,14 @@ KritaFiltersGallery::~KritaFiltersGallery()
 
 void KritaFiltersGallery::showFiltersGalleryDialog()
 {
-	KisDlgFiltersGallery dlg(m_view,m_view);
-	if(dlg.exec())
-	{
-		if(dlg.currentFilter() != 0 )
-		{
-		
-		}
-	}
+    KisDlgFiltersGallery dlg(m_view,m_view);
+    if(dlg.exec())
+    {
+        if(dlg.currentFilter() != 0 )
+        {
+        
+        }
+    }
 }
 
 };

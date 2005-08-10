@@ -38,9 +38,9 @@
 
 KisToolMove::KisToolMove()
 {
-	setName("tool_move");
-	m_subject = 0;
-	setCursor(KisCursor::moveCursor());
+    setName("tool_move");
+    m_subject = 0;
+    setCursor(KisCursor::moveCursor());
 }
 
 KisToolMove::~KisToolMove()
@@ -49,69 +49,69 @@ KisToolMove::~KisToolMove()
 
 void KisToolMove::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	m_strategy.reset(subject);
-	super::update(subject);
+    m_subject = subject;
+    m_strategy.reset(subject);
+    super::update(subject);
 }
 
 void KisToolMove::buttonPress(KisButtonPressEvent *e)
 {
-	if (m_subject && e -> button() == QMouseEvent::LeftButton) {
-		QPoint pos = e -> pos().floorQPoint();
-		KisImageSP img = m_subject -> currentImg();
-		KisLayerSP dev;
+    if (m_subject && e -> button() == QMouseEvent::LeftButton) {
+        QPoint pos = e -> pos().floorQPoint();
+        KisImageSP img = m_subject -> currentImg();
+        KisLayerSP dev;
 
-		if (!img || !(dev = img -> activeLayer()))
-			return;
+        if (!img || !(dev = img -> activeLayer()))
+            return;
 
-		if (dev -> hasSelection()) {
-			QRect r = dev -> selection() -> selectedRect();
+        if (dev -> hasSelection()) {
+            QRect r = dev -> selection() -> selectedRect();
 
-			if (r.contains(pos)) {
-				// XXX: Put in undo macro
-				m_subject -> selectionManager() -> copy();
-				m_subject -> selectionManager() -> clear();
-				dev = m_subject -> selectionManager() -> paste();
-				if (dev) {
-					dev -> move(r.x(), r.y());
-					img -> activate(dev);
-					m_strategy.startDrag(pos);
-				}
-			}
-		}
-		else {
-			m_strategy.startDrag(pos);
-		}
-	}
+            if (r.contains(pos)) {
+                // XXX: Put in undo macro
+                m_subject -> selectionManager() -> copy();
+                m_subject -> selectionManager() -> clear();
+                dev = m_subject -> selectionManager() -> paste();
+                if (dev) {
+                    dev -> move(r.x(), r.y());
+                    img -> activate(dev);
+                    m_strategy.startDrag(pos);
+                }
+            }
+        }
+        else {
+            m_strategy.startDrag(pos);
+        }
+    }
 }
 
 void KisToolMove::move(KisMoveEvent *e)
 {
-	if (m_subject)
-		m_strategy.drag(e -> pos().floorQPoint());
+    if (m_subject)
+        m_strategy.drag(e -> pos().floorQPoint());
 }
 
 void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 {
-	if (m_subject && e -> button() == QMouseEvent::LeftButton)
-		m_strategy.endDrag(e -> pos().floorQPoint());
+    if (m_subject && e -> button() == QMouseEvent::LeftButton)
+        m_strategy.endDrag(e -> pos().floorQPoint());
 }
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Move"), 
-					    "move", 
-					    Qt::SHIFT+Qt::Key_V, 
-					    this,
-					    SLOT(activate()),
-					    collection,
-					    name());
-		m_action -> setToolTip(i18n("Move"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Move"), 
+                        "move", 
+                        Qt::SHIFT+Qt::Key_V, 
+                        this,
+                        SLOT(activate()),
+                        collection,
+                        name());
+        m_action -> setToolTip(i18n("Move"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 

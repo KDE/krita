@@ -36,10 +36,10 @@ class KisF32RgbColorSpaceTester : public KUnitTest::Tester
 {
 public:
         void allTests();
-	void testBasics();
-	void testMixColors();
-	void testToQImage();
-	void testCompositeOps();
+    void testBasics();
+    void testMixColors();
+    void testToQImage();
+    void testCompositeOps();
 };
 
 #endif

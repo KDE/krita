@@ -26,23 +26,23 @@
 #include "kis_previewdialog.h"
  
 KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool modal, const QString &caption)
-	: super (parent, name, modal, caption, Ok | Cancel, Ok)
+    : super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
-	QHBox* layout = new QHBox(this);
-	layout -> setSpacing( 6 );
-	
-	m_containerFrame = new QFrame( layout, "container" );
+    QHBox* layout = new QHBox(this);
+    layout -> setSpacing( 6 );
+    
+    m_containerFrame = new QFrame( layout, "container" );
 
-	QGroupBox* groupBox = new QGroupBox( "Preview", layout, "groupBox" );
-	groupBox -> setColumnLayout(0, Qt::Vertical );
-	groupBox -> layout()->setSpacing( 6 );
-	groupBox -> layout()->setMargin( 11 );
-	QGridLayout *groupBoxLayout = new QGridLayout( groupBox -> layout(), 1, 1);
-	m_preview = new KisPreviewWidget( groupBox, "previewWidget" );
-	groupBoxLayout -> addWidget( m_preview, 0 , 0);
-	Q_CHECK_PTR(m_preview);
+    QGroupBox* groupBox = new QGroupBox( "Preview", layout, "groupBox" );
+    groupBox -> setColumnLayout(0, Qt::Vertical );
+    groupBox -> layout()->setSpacing( 6 );
+    groupBox -> layout()->setMargin( 11 );
+    QGridLayout *groupBoxLayout = new QGridLayout( groupBox -> layout(), 1, 1);
+    m_preview = new KisPreviewWidget( groupBox, "previewWidget" );
+    groupBoxLayout -> addWidget( m_preview, 0 , 0);
+    Q_CHECK_PTR(m_preview);
 
-	setMainWidget(layout);
+    setMainWidget(layout);
 }
 
 KisPreviewDialog::~KisPreviewDialog()

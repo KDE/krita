@@ -34,29 +34,29 @@
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
 DlgSeparate::DlgSeparate( QWidget *  parent,
-			  const char * name)
-	: super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok)
+              const char * name)
+    : super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok)
 {
-	m_page = new WdgSeparations(this, "separate_image");
-	Q_CHECK_PTR(m_page);
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    m_page = new WdgSeparations(this, "separate_image");
+    Q_CHECK_PTR(m_page);
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
 }
 
 DlgSeparate::~DlgSeparate()
 {
-	delete m_page;
+    delete m_page;
 }
 
 // SLOTS
 
 void DlgSeparate::okClicked()
 {
-	accept();
+    accept();
 }
 
 

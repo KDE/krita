@@ -25,8 +25,8 @@
 class KisSobelFilterPlugin : public KParts::Plugin
 {
 public:
-	KisSobelFilterPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisSobelFilterPlugin();
+    KisSobelFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisSobelFilterPlugin();
 };
 
 #endif

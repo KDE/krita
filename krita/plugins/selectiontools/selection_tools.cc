@@ -52,26 +52,26 @@ K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" 
 
 
 SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(SelectionToolsFactory::instance());
+           setInstance(SelectionToolsFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Selection tools plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Selection tools plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
- 	if ( parent->inherits("KisFactory") )
- 	{
-		KisToolRegistry * r = KisToolRegistry::instance();
-		r -> add(new KisToolSelectOutlineFactory());
-		r -> add(new KisToolSelectPolygonalFactory());
-		r -> add(new KisToolSelectRectangularFactory());
-		r -> add(new KisToolSelectBrushFactory());
-		r -> add(new KisToolSelectContiguousFactory());
-		r -> add(new KisToolSelectEllipticalFactory());
-		r -> add(new KisToolSelectEraserFactory());
+     if ( parent->inherits("KisFactory") )
+     {
+        KisToolRegistry * r = KisToolRegistry::instance();
+        r -> add(new KisToolSelectOutlineFactory());
+        r -> add(new KisToolSelectPolygonalFactory());
+        r -> add(new KisToolSelectRectangularFactory());
+        r -> add(new KisToolSelectBrushFactory());
+        r -> add(new KisToolSelectContiguousFactory());
+        r -> add(new KisToolSelectEllipticalFactory());
+        r -> add(new KisToolSelectEraserFactory());
         }
 }
 

@@ -37,14 +37,14 @@
 
 KisPaintOp * KisEraseOpFactory::createOp(KisPainter * painter)
 { 
-	KisPaintOp * op = new KisEraseOp(painter); 
-	Q_CHECK_PTR(op);
-	return op; 
+    KisPaintOp * op = new KisEraseOp(painter); 
+    Q_CHECK_PTR(op);
+    return op; 
 }
 
 
 KisEraseOp::KisEraseOp(KisPainter * painter)
-	: super(painter)
+    : super(painter)
 {
 }
 
@@ -53,9 +53,9 @@ KisEraseOp::~KisEraseOp()
 }
 
 void KisEraseOp::paintAt(const KisPoint &pos,
-			 const double pressure,
-			 const double /*xTilt*/,
-			 const double /*yTilt*/)
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -77,91 +77,91 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 // in one layer and your pencil in another is not the same as really working
 // with the combination.
 
-	if (!m_painter) return;
-	
-	KisPaintDeviceSP device = m_painter -> device();
-	if (!device) return;
+    if (!m_painter) return;
+    
+    KisPaintDeviceSP device = m_painter -> device();
+    if (!device) return;
 
-	KisBrush *brush = m_painter -> brush();
-	KisPoint hotSpot = brush -> hotSpot(pressure);
-	KisPoint pt = pos - hotSpot;
+    KisBrush *brush = m_painter -> brush();
+    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint pt = pos - hotSpot;
 
-	Q_INT32 destX;
-	double xFraction;
-	Q_INT32 destY;
-	double yFraction;
+    Q_INT32 destX;
+    double xFraction;
+    Q_INT32 destY;
+    double yFraction;
 
-	splitCoordinate(pt.x(), &destX, &xFraction);
-	splitCoordinate(pt.y(), &destY, &yFraction);
+    splitCoordinate(pt.x(), &destX, &xFraction);
+    splitCoordinate(pt.y(), &destY, &yFraction);
 
-	KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+    KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 
-	KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
-	Q_CHECK_PTR(dab);
+    KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
+    Q_CHECK_PTR(dab);
 
-	Q_INT32 maskWidth = mask -> width();
-	Q_INT32 maskHeight = mask -> height();
+    Q_INT32 maskWidth = mask -> width();
+    Q_INT32 maskHeight = mask -> height();
 
-	QRect dstRect;
+    QRect dstRect;
 
-	if (device -> hasAlpha()) {
-		dab -> setOpacity(OPACITY_OPAQUE);
-		KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
-		KisProfileSP profile = dab -> profile();
-		KisAbstractColorSpace* cs = dab -> colorStrategy();
-		while (!it.isDone()) {
-			// the color doesn't matter, since we only composite the alpha
-			cs -> nativeColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),
-							  it.rawData(), profile);
-			++it;
-		}
+    if (device -> hasAlpha()) {
+        dab -> setOpacity(OPACITY_OPAQUE);
+        KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
+        KisProfileSP profile = dab -> profile();
+        KisAbstractColorSpace* cs = dab -> colorStrategy();
+        while (!it.isDone()) {
+            // the color doesn't matter, since we only composite the alpha
+            cs -> nativeColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),
+                              it.rawData(), profile);
+            ++it;
+        }
 
-		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-		dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
+        QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+        dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-		KisImage * image = device -> image();
+        KisImage * image = device -> image();
 
-		if (image != 0) {
-			dstRect &= image -> bounds();
-		}
+        if (image != 0) {
+            dstRect &= image -> bounds();
+        }
 
-		if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+        if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-		Q_INT32 sx = dstRect.x() - destX;
-		Q_INT32 sy = dstRect.y() - destY;
-		Q_INT32 sw = dstRect.width();
-		Q_INT32 sh = dstRect.height();
+        Q_INT32 sx = dstRect.x() - destX;
+        Q_INT32 sy = dstRect.y() - destY;
+        Q_INT32 sw = dstRect.width();
+        Q_INT32 sh = dstRect.height();
 
-		m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
+        m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
 
- 	} else {
-		dab -> setOpacity(OPACITY_TRANSPARENT);
-		for (int y = 0; y < maskHeight; y++) {
-			for (int x = 0; x < maskWidth; x++) {
-				// XXX: Change QColor to KisColor
-				QColor c = m_painter->backgroundColor().toQColor();
-				dab -> setPixel(x, y, c, mask->alphaAt(x, y));
-			}
-		}
-		QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-		dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
+     } else {
+        dab -> setOpacity(OPACITY_TRANSPARENT);
+        for (int y = 0; y < maskHeight; y++) {
+            for (int x = 0; x < maskWidth; x++) {
+                // XXX: Change QColor to KisColor
+                QColor c = m_painter->backgroundColor().toQColor();
+                dab -> setPixel(x, y, c, mask->alphaAt(x, y));
+            }
+        }
+        QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+        dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-		KisImage * image = device -> image();
+        KisImage * image = device -> image();
 
-		if (image != 0) {
-			dstRect &= image -> bounds();
-		}
+        if (image != 0) {
+            dstRect &= image -> bounds();
+        }
 
-		if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+        if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-		Q_INT32 sx = dstRect.x() - destX;
-		Q_INT32 sy = dstRect.y() - destY;
-		Q_INT32 sw = dstRect.width();
-		Q_INT32 sh = dstRect.height();
+        Q_INT32 sx = dstRect.x() - destX;
+        Q_INT32 sy = dstRect.y() - destY;
+        Q_INT32 sw = dstRect.width();
+        Q_INT32 sh = dstRect.height();
 
-		m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
- 	}
+        m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
+     }
 
-	m_painter -> addDirtyRect(dstRect);
+    m_painter -> addDirtyRect(dstRect);
 }
 

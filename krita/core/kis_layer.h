@@ -25,48 +25,48 @@
 class KNamedCommand;
 
 class KRITACORE_EXPORT KisLayer : public KisPaintDevice {
-	typedef KisPaintDevice super;
+    typedef KisPaintDevice super;
 
-	Q_OBJECT
-
-public:
-	KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name);
-	KisLayer(KisImage *img, const QString& name, QUANTUM opacity);
-	KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorStrategy);
-	KisLayer(const KisLayer& rhs);
-	virtual ~KisLayer();
+    Q_OBJECT
 
 public:
-
-	// Called when the layer is made active
-	virtual void activate() {};
-
-	// Called when another layer is made active
-	virtual void deactivate() {};
+    KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name);
+    KisLayer(KisImage *img, const QString& name, QUANTUM opacity);
+    KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorStrategy);
+    KisLayer(const KisLayer& rhs);
+    virtual ~KisLayer();
 
 public:
-	virtual const bool visible() const;
-	virtual void setVisible(bool v);
-	
-	QUANTUM opacity() const;
-	void setOpacity(QUANTUM val);
-	KNamedCommand *setOpacityCommand(QUANTUM val);
 
-	bool linked() const;
-	void setLinked(bool l);
-	KNamedCommand *setLinkedCommand(bool linked);
+    // Called when the layer is made active
+    virtual void activate() {};
 
-	bool locked() const;
-	void setLocked(bool l);
-	KNamedCommand *setLockedCommand(bool locked);
+    // Called when another layer is made active
+    virtual void deactivate() {};
+
+public:
+    virtual const bool visible() const;
+    virtual void setVisible(bool v);
+    
+    QUANTUM opacity() const;
+    void setOpacity(QUANTUM val);
+    KNamedCommand *setOpacityCommand(QUANTUM val);
+
+    bool linked() const;
+    void setLinked(bool l);
+    KNamedCommand *setLinkedCommand(bool linked);
+
+    bool locked() const;
+    void setLocked(bool l);
+    KNamedCommand *setLockedCommand(bool locked);
 
 
 private:
-	QUANTUM m_opacity;
-	//bool m_preserveTransparency;
-	//bool m_initial;
-	bool m_linked;
-	bool m_locked;
+    QUANTUM m_opacity;
+    //bool m_preserveTransparency;
+    //bool m_initial;
+    bool m_linked;
+    bool m_locked;
 };
 
 #endif // KIS_LAYER_H_

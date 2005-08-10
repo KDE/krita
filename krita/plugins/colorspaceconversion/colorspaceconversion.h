@@ -30,20 +30,20 @@ class KisView;
  */
 class ColorSpaceConversion : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ColorSpaceConversion(QObject *parent, const char *name, const QStringList &);
-	virtual ~ColorSpaceConversion();
-	
+    ColorSpaceConversion(QObject *parent, const char *name, const QStringList &);
+    virtual ~ColorSpaceConversion();
+    
 private slots:
 
-	void slotImgColorSpaceConversion();
-	void slotLayerColorSpaceConversion();
+    void slotImgColorSpaceConversion();
+    void slotLayerColorSpaceConversion();
 
 private:
 
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

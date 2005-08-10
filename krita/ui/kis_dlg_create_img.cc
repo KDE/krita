@@ -44,126 +44,126 @@
 #include "kis_cmb_idlist.h"
 
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
-				 Q_INT32 maxHeight, Q_INT32 defHeight, 
-				 QString colorStrategyName, QString imageName,
-				 QWidget *parent, const char *name)
-	: super(parent, name, true, "", Ok | Cancel)
+                 Q_INT32 maxHeight, Q_INT32 defHeight, 
+                 QString colorStrategyName, QString imageName,
+                 QWidget *parent, const char *name)
+    : super(parent, name, true, "", Ok | Cancel)
 {
 
-	setCaption(i18n("New Image"));
+    setCaption(i18n("New Image"));
 
-	m_page = new WdgNewImage(this);
+    m_page = new WdgNewImage(this);
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	m_page -> txtName -> setText(imageName);
+    m_page -> txtName -> setText(imageName);
 
-	m_page -> intWidth -> setValue(defWidth);
-	m_page -> intWidth -> setMaxValue(maxWidth);
-	m_page -> intHeight -> setValue(defHeight);
-	m_page -> intHeight -> setMaxValue(maxHeight);
-	m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
+    m_page -> intWidth -> setValue(defWidth);
+    m_page -> intWidth -> setMaxValue(maxWidth);
+    m_page -> intHeight -> setValue(defHeight);
+    m_page -> intHeight -> setMaxValue(maxHeight);
+    m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
 
-	m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
-	m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
+    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
 
-	connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
-		this, SLOT(fillCmbProfiles(const KisID &)));
+    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+        this, SLOT(fillCmbProfiles(const KisID &)));
 
-	// Temporary KisID; this will be matched to the translated ID in the current KisIDList.
-	fillCmbProfiles(KisID(colorStrategyName, ""));
+    // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
+    fillCmbProfiles(KisID(colorStrategyName, ""));
 
 }
 
 KisDlgCreateImg::~KisDlgCreateImg()
 {
-	delete m_page;
+    delete m_page;
 }
 
 Q_INT32 KisDlgCreateImg::imgWidth() const
 {
-	return m_page -> intWidth -> value();
+    return m_page -> intWidth -> value();
 }
 
 Q_INT32 KisDlgCreateImg::imgHeight() const
 {
-	return m_page -> intHeight -> value();
+    return m_page -> intHeight -> value();
 }
 
 KisID KisDlgCreateImg::colorStrategyID() const
 {
-	return m_page -> cmbColorSpaces -> currentItem();
+    return m_page -> cmbColorSpaces -> currentItem();
 }
 
 QColor KisDlgCreateImg::backgroundColor() const
 {
-	return QColor(m_page -> cmbColor -> color());
+    return QColor(m_page -> cmbColor -> color());
 }
 
 QUANTUM KisDlgCreateImg::backgroundOpacity() const
 {
-	// XXX: This widget is sizeof quantum dependent. Scale
-	// to selected bit depth.
-	Q_INT32 opacity = m_page -> sliderOpacity -> value();
+    // XXX: This widget is sizeof quantum dependent. Scale
+    // to selected bit depth.
+    Q_INT32 opacity = m_page -> sliderOpacity -> value();
 
-	if (!opacity)
-		return 0;
+    if (!opacity)
+        return 0;
 
-	opacity = opacity * 255 / 100;
-	return opacity;
+    opacity = opacity * 255 / 100;
+    return opacity;
 }
 
 QString KisDlgCreateImg::imgName() const
 {
-	return m_page -> txtName -> text();
+    return m_page -> txtName -> text();
 }
 
 double KisDlgCreateImg::imgResolution() const
 {
-	return m_page -> doubleResolution -> value();
+    return m_page -> doubleResolution -> value();
  }
 
 QString KisDlgCreateImg::imgDescription() const
 {
-	return m_page -> txtDescription -> text();
+    return m_page -> txtDescription -> text();
 }
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
-	if (!cs) return 0;
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
+    if (!cs) return 0;
 
-	vKisProfileSP resourceslist = cs -> profiles();
-	Q_UINT32 index = m_page -> cmbProfile -> currentItem();
-	
-	if (resourceslist.count() == 0 || 
-	    index > resourceslist.count() ||
-	    index == 0) { 
-		return 0;
-	}
-	else {
-		return resourceslist.at(index - 1);
-	}
-	
+    vKisProfileSP resourceslist = cs -> profiles();
+    Q_UINT32 index = m_page -> cmbProfile -> currentItem();
+    
+    if (resourceslist.count() == 0 || 
+        index > resourceslist.count() ||
+        index == 0) { 
+        return 0;
+    }
+    else {
+        return resourceslist.at(index - 1);
+    }
+    
 }
 
 void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 {
 
 
-	m_page -> cmbProfile -> clear();
-	m_page -> cmbProfile -> insertItem(i18n("None"));
+    m_page -> cmbProfile -> clear();
+    m_page -> cmbProfile -> insertItem(i18n("None"));
 
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
-	if (cs == 0) return;
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    if (cs == 0) return;
 
-	vKisProfileSP profileList = cs -> profiles();
+    vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-			m_page -> cmbProfile -> insertItem((*it) -> productName());
-	}
-	
+            m_page -> cmbProfile -> insertItem((*it) -> productName());
+    }
+    
 
 }
 

@@ -66,38 +66,38 @@ typedef KGenericFactory<KritaDefaultDockers> KritaDefaultDockersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaultdockers, KritaDefaultDockersFactory( "krita" ) )
 
 KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(KritaDefaultDockersFactory::instance());
+    setInstance(KritaDefaultDockersFactory::instance());
 
 
-	kdDebug(DBG_AREA_PLUGINS) << "DefaultDockers plugin. Class: "
-		  << className()
-		  << ", Parent: "
-		  << parent -> className()
-		  << "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "DefaultDockers plugin. Class: "
+          << className()
+          << ", Parent: "
+          << parent -> className()
+          << "\n";
 
-	if ( !parent->inherits("KisView") )
-	{
-		return;
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        return;
+    }
 
-	m_view = (KisView*) parent;
+    m_view = (KisView*) parent;
 
-	m_paletteManager = m_view->paletteManager();
-	Q_ASSERT(m_paletteManager);
+    m_paletteManager = m_view->paletteManager();
+    Q_ASSERT(m_paletteManager);
 
- 	createBirdEyeBox(m_view);
-	
-	createHSVWidget(m_view);
-	createRGBWidget(m_view);
-	createGrayWidget(m_view);
-	createPaletteWidget(m_view);
-	createControlFrame(m_view);
+     createBirdEyeBox(m_view);
+    
+    createHSVWidget(m_view);
+    createRGBWidget(m_view);
+    createGrayWidget(m_view);
+    createPaletteWidget(m_view);
+    createControlFrame(m_view);
 
-	m_paletteManager->showWidget("hsvwidget");
-	m_paletteManager->showWidget("layerbox");
-	m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
+    m_paletteManager->showWidget("hsvwidget");
+    m_paletteManager->showWidget("layerbox");
+    m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
 
 }
 
@@ -107,63 +107,63 @@ KritaDefaultDockers::~KritaDefaultDockers()
 
 void KritaDefaultDockers::createControlFrame(KisView * view) 
 {
-	m_controlWidget = new KisControlFrame(view, view, "control frame");
-	m_controlWidget->setCaption(i18n("Current stuff"));
-	//m_paletteManager->addWidget( m_controlWidget, "controlwidget", krita::CONTROL_PALETTE);
+    m_controlWidget = new KisControlFrame(view, view, "control frame");
+    m_controlWidget->setCaption(i18n("Current stuff"));
+    //m_paletteManager->addWidget( m_controlWidget, "controlwidget", krita::CONTROL_PALETTE);
 }
-	
+    
 
 void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 {
-	m_birdEyeBox = new KisBirdEyeBox(view);
+    m_birdEyeBox = new KisBirdEyeBox(view);
         m_birdEyeBox -> setCaption(i18n("Overview"));
-	m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
-	connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), view, SLOT(setHDRExposure(float)));
+    m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
+    connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), view, SLOT(setHDRExposure(float)));
 }
 
 
 void KritaDefaultDockers::createHSVWidget(KisView * view)
 {
-	m_hsvwidget = new KisHSVWidget(view, "hsv");
+    m_hsvwidget = new KisHSVWidget(view, "hsv");
         m_hsvwidget -> setCaption(i18n("HSV"));
-	m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
+    m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
         view->getCanvasSubject()->attach(m_hsvwidget);
 
 }
 
 void KritaDefaultDockers::createRGBWidget(KisView * view)
 {
-	m_rgbwidget = new KisRGBWidget(view, "rgb");
+    m_rgbwidget = new KisRGBWidget(view, "rgb");
         m_rgbwidget -> setCaption(i18n("RGB"));
-	m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
-	view->getCanvasSubject()->attach(m_rgbwidget);
+    m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
+    view->getCanvasSubject()->attach(m_rgbwidget);
 }
 
 void KritaDefaultDockers::createGrayWidget(KisView * view)
 {
-	m_graywidget = new KisGrayWidget(view, "gray");
+    m_graywidget = new KisGrayWidget(view, "gray");
         m_graywidget -> setCaption(i18n("Gray"));
-	m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
+    m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
         view->getCanvasSubject()->attach(m_graywidget);
 }
 
 void KritaDefaultDockers::createPaletteWidget(KisView * view)
 {
-	m_palettewidget = new KisPaletteWidget(view);
+    m_palettewidget = new KisPaletteWidget(view);
         m_palettewidget -> setCaption(i18n("Palettes"));
 
-	KisResourceServerBase* rServer;
-	rServer = KisFactory::rServerRegistry() -> get("PaletteServer");
-	QValueList<KisResource*> resources = rServer->resources();
-	QValueList<KisResource*>::iterator it;
-	for ( it = resources.begin(); it != resources.end(); ++it )
-		m_palettewidget -> slotAddPalette( *it );
+    KisResourceServerBase* rServer;
+    rServer = KisFactory::rServerRegistry() -> get("PaletteServer");
+    QValueList<KisResource*> resources = rServer->resources();
+    QValueList<KisResource*>::iterator it;
+    for ( it = resources.begin(); it != resources.end(); ++it )
+        m_palettewidget -> slotAddPalette( *it );
 
 
-	connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)),
-		view, SLOT(slotSetFGColor(const KisColor &)));
+    connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)),
+        view, SLOT(slotSetFGColor(const KisColor &)));
 
-	m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
+    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
 }
 
 #include "defaultdockers.moc"

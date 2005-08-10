@@ -38,22 +38,22 @@ class KisChildDoc : public KoDocumentChild
 {
 
 public:
-	KisChildDoc ( KisDoc * kisDoc, const QRect& rect, KoDocument * childDoc );
-	KisChildDoc ( KisDoc * kisDdoc );
+    KisChildDoc ( KisDoc * kisDoc, const QRect& rect, KoDocument * childDoc );
+    KisChildDoc ( KisDoc * kisDdoc );
 
-	virtual ~KisChildDoc();
-	
-	KisDoc * parent() const { return m_doc; }
-	
-	void setPartLayer (KisPartLayerSP layer) { m_partLayer = layer; }
-	
-	KisPartLayerSP partLayer() const { return m_partLayer; }
-	
-	
+    virtual ~KisChildDoc();
+    
+    KisDoc * parent() const { return m_doc; }
+    
+    void setPartLayer (KisPartLayerSP layer) { m_partLayer = layer; }
+    
+    KisPartLayerSP partLayer() const { return m_partLayer; }
+    
+    
 protected:
 
-	KisDoc * m_doc;
-	KisPartLayerSP m_partLayer;
+    KisDoc * m_doc;
+    KisPartLayerSP m_partLayer;
 
 };
  
@@ -69,22 +69,22 @@ protected:
 class KisPartLayer : public KisLayer {
 
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisPartLayer(KisImageSP img, KisChildDoc * doc);
-	virtual ~KisPartLayer();
+    KisPartLayer(KisImageSP img, KisChildDoc * doc);
+    virtual ~KisPartLayer();
 
-	// Called when the layer is made active
-	virtual void activate();
+    // Called when the layer is made active
+    virtual void activate();
 
-	// Called when another layer is made active
-	virtual void deactivate();
+    // Called when another layer is made active
+    virtual void deactivate();
 
 private:
-	KoFrame * m_frame; // The widget that holds the editable view of the embedded part
-	KisChildDoc * m_doc; // The sub-document
+    KoFrame * m_frame; // The widget that holds the editable view of the embedded part
+    KisChildDoc * m_doc; // The sub-document
 
 };
 

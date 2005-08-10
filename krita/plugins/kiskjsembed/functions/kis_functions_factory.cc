@@ -35,15 +35,15 @@ using namespace Bindings::Functions;
 
 FunctionsFactory::FunctionsFactory( KJSEmbed::KJSEmbedPart *part, KisView* view )
 {
-	KJS::ExecState *exec = part->globalExec();
-	// Functions concerning KisView
-	m_jsObjMainWindow = exec->interpreter()->builtinObject().construct( exec, KJS::List() );
-	new RaiseFunction( part, m_jsObjMainWindow, view );
-	new LowerFunction( part, m_jsObjMainWindow, view );
-	new CloseFunction( part, m_jsObjMainWindow, view );
-	new QuitFunction( part, m_jsObjMainWindow, view );
+    KJS::ExecState *exec = part->globalExec();
+    // Functions concerning KisView
+    m_jsObjMainWindow = exec->interpreter()->builtinObject().construct( exec, KJS::List() );
+    new RaiseFunction( part, m_jsObjMainWindow, view );
+    new LowerFunction( part, m_jsObjMainWindow, view );
+    new CloseFunction( part, m_jsObjMainWindow, view );
+    new QuitFunction( part, m_jsObjMainWindow, view );
 
-	exec->interpreter()->globalObject().put( exec, "MainWindow", m_jsObjMainWindow);
+    exec->interpreter()->globalObject().put( exec, "MainWindow", m_jsObjMainWindow);
 }
 
 }; }; }; };

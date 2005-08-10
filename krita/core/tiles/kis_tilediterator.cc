@@ -24,91 +24,91 @@
 
 KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
 {
-	Q_ASSERT(ndevice != 0);
-	m_ktm = ndevice;
-	m_x = 0;
-	m_y = 0;
-	m_row = 0;
-	m_col = 0;
-	m_pixelSize = m_ktm -> pixelSize();
-	m_tile = 0;
+    Q_ASSERT(ndevice != 0);
+    m_ktm = ndevice;
+    m_x = 0;
+    m_y = 0;
+    m_row = 0;
+    m_col = 0;
+    m_pixelSize = m_ktm -> pixelSize();
+    m_tile = 0;
 }
 
 KisTiledIterator::~KisTiledIterator( )
 {
-	if (m_tile)
-		m_tile -> removeReader();
+    if (m_tile)
+        m_tile -> removeReader();
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
 {
-	if (this != &rhs) {
-		m_ktm = rhs.m_ktm;
-		m_pixelSize = rhs.m_pixelSize;
-		m_x = rhs.m_x;
-		m_y = rhs.m_y;
-		m_row = rhs.m_row;
-		m_col = rhs.m_col;
-		m_data = rhs.m_data;
-		m_oldData = rhs.m_oldData;
-		m_offset = rhs.m_offset;
-		m_tile = rhs.m_tile;
-		m_writable = rhs.m_writable;
-		if (m_tile)
-			m_tile -> addReader();
-	}
+    if (this != &rhs) {
+        m_ktm = rhs.m_ktm;
+        m_pixelSize = rhs.m_pixelSize;
+        m_x = rhs.m_x;
+        m_y = rhs.m_y;
+        m_row = rhs.m_row;
+        m_col = rhs.m_col;
+        m_data = rhs.m_data;
+        m_oldData = rhs.m_oldData;
+        m_offset = rhs.m_offset;
+        m_tile = rhs.m_tile;
+        m_writable = rhs.m_writable;
+        if (m_tile)
+            m_tile -> addReader();
+    }
 }
 
 KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
 {
-	if (this != &rhs) {
-		if (m_tile)
-			m_tile -> removeReader();
-		m_ktm = rhs.m_ktm;
-		m_pixelSize = rhs.m_pixelSize;
-		m_x = rhs.m_x;
-		m_y = rhs.m_y;
-		m_row = rhs.m_row;
-		m_col = rhs.m_col;
-		m_data = rhs.m_data;
-		m_oldData = rhs.m_oldData;
-		m_offset = rhs.m_offset;
-		m_tile = rhs.m_tile;
-		m_writable = rhs.m_writable;
-		if (m_tile)
-			m_tile -> addReader();
-	}
-	return *this;
+    if (this != &rhs) {
+        if (m_tile)
+            m_tile -> removeReader();
+        m_ktm = rhs.m_ktm;
+        m_pixelSize = rhs.m_pixelSize;
+        m_x = rhs.m_x;
+        m_y = rhs.m_y;
+        m_row = rhs.m_row;
+        m_col = rhs.m_col;
+        m_data = rhs.m_data;
+        m_oldData = rhs.m_oldData;
+        m_offset = rhs.m_offset;
+        m_tile = rhs.m_tile;
+        m_writable = rhs.m_writable;
+        if (m_tile)
+            m_tile -> addReader();
+    }
+    return *this;
 }
 
 Q_UINT8 * KisTiledIterator::rawData() const
 {
-	return m_data + m_offset;
+    return m_data + m_offset;
 }
 
 
 const Q_UINT8 * KisTiledIterator::oldRawData() const
 {
 #ifdef DEBUG
-	// Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
-	// as rawData().
-	kdWarning(!m_ktm -> hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
+    // Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
+    // as rawData().
+    kdWarning(!m_ktm -> hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
 #endif
-	return m_oldData + m_offset;
+    return m_oldData + m_offset;
 }
 
 void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
-	if (m_tile)
-		m_tile -> removeReader();
+    if (m_tile)
+        m_tile -> removeReader();
 
-	m_tile = m_ktm->getTile(col, row, m_writable);
-	Q_ASSERT(m_tile != 0);
-	m_tile -> addReader();
+    m_tile = m_ktm->getTile(col, row, m_writable);
+    Q_ASSERT(m_tile != 0);
+    m_tile -> addReader();
 
-	m_data = m_tile->data();
-	Q_ASSERT(m_data != 0);
+    m_data = m_tile->data();
+    Q_ASSERT(m_data != 0);
 
-	// set old data but default to current value
-	m_oldData = m_ktm->getOldTile(col, row, m_tile)->data();
+    // set old data but default to current value
+    m_oldData = m_ktm->getOldTile(col, row, m_tile)->data();
 }

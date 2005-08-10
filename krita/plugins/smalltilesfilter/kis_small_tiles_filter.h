@@ -27,9 +27,9 @@
 
 class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
 {
-	public:
+    public:
                 KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles) : m_numberOfTiles(numberOfTiles) {};
-	public:
+    public:
                 inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };
         private:
                 Q_UINT32 m_numberOfTiles;
@@ -38,19 +38,19 @@ class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
 class KisSmallTilesFilter : public KisFilter
 {
 public:
-	KisSmallTilesFilter();
+    KisSmallTilesFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("smalltiles", i18n("Small tiles")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
-	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("smalltiles", i18n("Small tiles")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return true; }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles);
+    void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles);
 };
 
 #endif

@@ -23,11 +23,11 @@
 #include "kis_layer.h"
 
 class KisBackground : public KisLayer {
-	typedef KisLayer super;
+    typedef KisLayer super;
 
 public:
-	KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height);
-	virtual ~KisBackground();
+    KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height);
+    virtual ~KisBackground();
 };
 
 #endif // KIS_BACKGROUND_H_

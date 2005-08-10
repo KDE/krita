@@ -27,29 +27,29 @@
 #include "wdg_shearimage.h"
 
 class DlgShearImage: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgShearImage(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgShearImage();
+    DlgShearImage(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgShearImage();
 
-	void setAngleX(Q_UINT32 w);
-	void setAngleY(Q_UINT32 w);
+    void setAngleX(Q_UINT32 w);
+    void setAngleY(Q_UINT32 w);
         Q_INT32 angleX();
         Q_INT32 angleY();
         
 private slots:
 
-	void okClicked();
+    void okClicked();
         
 private:
 
-	WdgShearImage * m_page;
-	double m_oldAngle;	
-	bool m_lock;
+    WdgShearImage * m_page;
+    double m_oldAngle;    
+    bool m_lock;
 
 };
 

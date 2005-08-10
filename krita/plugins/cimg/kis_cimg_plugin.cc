@@ -35,10 +35,10 @@ KisCImgPlugin::KisCImgPlugin(QObject *parent, const char *name, const QStringLis
                 << parent -> className()
                 << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisCImgFilter());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisCImgFilter());
+    }
 }
 
 KisCImgPlugin::~KisCImgPlugin()

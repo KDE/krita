@@ -31,14 +31,14 @@ class TextureFilter : public QObject
 {
 Q_OBJECT
 public:
-	TextureFilter(KisView* view);
-	virtual ~TextureFilter() {}
-	
+    TextureFilter(KisView* view);
+    virtual ~TextureFilter() {}
+    
 private slots:
-	void slotActivated();
+    void slotActivated();
 
 private:
-	KisView * m_view;
+    KisView * m_view;
 };
 
 #endif // _TEXTURE_FILTER_H

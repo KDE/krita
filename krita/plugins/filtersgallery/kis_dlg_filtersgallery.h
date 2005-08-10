@@ -31,30 +31,30 @@ class KisPreviewWidget;
 namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
-	class KisFiltersListView;
+    class KisFiltersListView;
 
 /**
 @author Cyrille Berger
 */
 class KisDlgFiltersGallery : public KDialogBase
 {
-	Q_OBJECT
-	public:
-		KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name = "");
+    Q_OBJECT
+    public:
+        KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name = "");
 
                 ~KisDlgFiltersGallery();
         public:
           inline KisFilter* currentFilter() { return m_currentFilter; };
-	private slots:
-		void refreshPreview();
-		void selectionHasChanged ( QIconViewItem * item );
-	private:
-		KisPreviewWidget* m_previewWidget;
-		KisView* m_view;
-		KisFiltersListView* m_kflw;
-		QWidget* m_currentConfigWidget;
-		KisFilter* m_currentFilter;
-		QHBoxLayout* m_hlayout;
+    private slots:
+        void refreshPreview();
+        void selectionHasChanged ( QIconViewItem * item );
+    private:
+        KisPreviewWidget* m_previewWidget;
+        KisView* m_view;
+        KisFiltersListView* m_kflw;
+        QWidget* m_currentConfigWidget;
+        KisFilter* m_currentFilter;
+        QHBoxLayout* m_hlayout;
 };
 
 };

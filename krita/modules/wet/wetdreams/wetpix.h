@@ -31,50 +31,50 @@ typedef struct _WetPixDbl WetPixDbl;
 */
 
 struct _WetPix {
-	u16 rd;			/*  Total red channel concentration */
-	u16 rw;			/*  Myth-red concentration */
-	u16 gd;			/*  Total green channel concentration */
-	u16 gw;			/*  Myth-green concentration */
-	u16 bd;			/*  Total blue channel concentration */
-	u16 bw;			/*  Myth-blue concentration */
-	u16 w;			/*  Water volume */
-	u16 h;			/*  Height of paper surface */
+    u16 rd;            /*  Total red channel concentration */
+    u16 rw;            /*  Myth-red concentration */
+    u16 gd;            /*  Total green channel concentration */
+    u16 gw;            /*  Myth-green concentration */
+    u16 bd;            /*  Total blue channel concentration */
+    u16 bw;            /*  Myth-blue concentration */
+    u16 w;            /*  Water volume */
+    u16 h;            /*  Height of paper surface */
 };
 
 struct _WetLayer {
-	WetPix *buf;
-	int width;
-	int height;
-	int rowstride;
+    WetPix *buf;
+    int width;
+    int height;
+    int rowstride;
 };
 
 struct _WetPack {
-	int n_layers;
-	WetLayer **layers;
+    int n_layers;
+    WetLayer **layers;
 };
 
 struct _WetPixDbl {
-	double rd;		/*  Total red channel concentration */
-	double rw;		/*  Myth-red concentration */
-	double gd;		/*  Total green channel concentration */
-	double gw;		/*  Myth-green concentration */
-	double bd;		/*  Total blue channel concentration */
-	double bw;		/*  Myth-blue concentration */
-	double w;		/*  Water volume */
-	double h;		/*  Height of paper surface */
+    double rd;        /*  Total red channel concentration */
+    double rw;        /*  Myth-red concentration */
+    double gd;        /*  Total green channel concentration */
+    double gw;        /*  Myth-green concentration */
+    double bd;        /*  Total blue channel concentration */
+    double bw;        /*  Myth-blue concentration */
+    double w;        /*  Water volume */
+    double h;        /*  Height of paper surface */
 };
 
 void wet_composite(byte * rgb, int rgb_rowstride,
-		   WetPix * wet, int wet_rowstride,
-		   int width, int height);
+           WetPix * wet, int wet_rowstride,
+           int width, int height);
 
 void wet_composite_layer(byte * rgb, int rgb_rowstride,
-			 WetLayer * layer,
-			 int x0, int y0, int width, int height);
+             WetLayer * layer,
+             int x0, int y0, int width, int height);
 
 void wet_pack_render(byte * rgb, int rgb_rowstride,
-		     WetPack * pack,
-		     int x0, int y0, int width, int height);
+             WetPack * pack,
+             int x0, int y0, int width, int height);
 
 WetLayer *wet_layer_new(int width, int height);
 

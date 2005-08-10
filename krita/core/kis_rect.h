@@ -24,20 +24,20 @@
 
 class KisRect : public KoRect
 {
-	typedef KoRect super;
+    typedef KoRect super;
 public:
-	KisRect() {}
-	KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
-	KisRect(const KisPoint& topLeft, const KisPoint& bottomRight) : super(topLeft, bottomRight) {}
-	KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
-	KisRect(const KoRect& r) : super(r) {}
+    KisRect() {}
+    KisRect(double x, double y, double w, double h) : super(x, y, w, h) {}
+    KisRect(const KisPoint& topLeft, const KisPoint& bottomRight) : super(topLeft, bottomRight) {}
+    KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
+    KisRect(const KoRect& r) : super(r) {}
 
-	QRect qRect() const;
+    QRect qRect() const;
 
 private:
-	// Use qRect() which uses ceil() and floor() to return a rectangle 
-	// 'enclosing' the rectangle, whereas toQRect rounds the points.
-	QRect toQRect() const;
+    // Use qRect() which uses ceil() and floor() to return a rectangle 
+    // 'enclosing' the rectangle, whereas toQRect rounds the points.
+    QRect toQRect() const;
 };
 
 #endif // KIS_RECT_H_

@@ -27,45 +27,45 @@
 #include <dcopclient.h>
 
 KisImageIface::KisImageIface( KisImage *img_ )
-	: DCOPObject()
+    : DCOPObject()
 {
-	m_img = img_;
+    m_img = img_;
 }
 
 QString KisImageIface::name()const
 {
-	return m_img->name();
+    return m_img->name();
 }
 
 int KisImageIface::height() const
 {
-	return m_img->height();
+    return m_img->height();
 }
 
 int KisImageIface::width() const
 {
-	return m_img->width();
+    return m_img->width();
 }
 
 bool KisImageIface::empty() const
 {
-	return m_img->empty();
+    return m_img->empty();
 }
 
 void KisImageIface::setName(const QString& name)
 {
-	m_img->setName( name );
+    m_img->setName( name );
 }
 
 DCOPRef KisImageIface::activeDevice()
 {
-	KisPaintDeviceSP dev = m_img->activeDevice();
+    KisPaintDeviceSP dev = m_img->activeDevice();
 
-	if( !dev )
-		return DCOPRef();
-	else
-		return DCOPRef( kapp->dcopClient()->appId(),
-				dev->dcopObject()->objId(),
-				"KisPaintDeviceIface");
+    if( !dev )
+        return DCOPRef();
+    else
+        return DCOPRef( kapp->dcopClient()->appId(),
+                dev->dcopObject()->objId(),
+                "KisPaintDeviceIface");
 
 }

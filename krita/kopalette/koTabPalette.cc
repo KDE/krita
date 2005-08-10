@@ -29,15 +29,15 @@
 #include <koTabPalette.h>
 
 KoTabPalette::KoTabPalette(KoView * parent, const char * name)
-	: KoPalette(parent, name)
+    : KoPalette(parent, name)
 {
-	m_page = new QTabWidget(this);
-	m_page->setTabShape(QTabWidget::Triangular);
-	m_page->setFocusPolicy(QWidget::NoFocus);
-	//m_page->setFont(m_font);
-	m_page->setMargin(1);
-// 	m_page->setTabReorderingEnabled(true);
-	setMainWidget(m_page);
+    m_page = new QTabWidget(this);
+    m_page->setTabShape(QTabWidget::Triangular);
+    m_page->setFocusPolicy(QWidget::NoFocus);
+    //m_page->setFont(m_font);
+    m_page->setMargin(1);
+//     m_page->setTabReorderingEnabled(true);
+    setMainWidget(m_page);
 }
 
 KoTabPalette::~KoTabPalette()
@@ -46,23 +46,23 @@ KoTabPalette::~KoTabPalette()
 
 void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
 {
-	w -> setFont(m_font);
+    w -> setFont(m_font);
         
-	if (w -> layout() != 0) {
- 		w -> layout() -> setSpacing(0);
- 		w -> layout() -> setMargin(0);
-	}
-	m_page -> insertTab(w, w -> caption(), position);
+    if (w -> layout() != 0) {
+         w -> layout() -> setSpacing(0);
+         w -> layout() -> setMargin(0);
+    }
+    m_page -> insertTab(w, w -> caption(), position);
 }
 
 void KoTabPalette::unplug(const QWidget * w)
 {
-	m_page->removePage(const_cast<QWidget *>(w));
+    m_page->removePage(const_cast<QWidget *>(w));
 }
 
 void KoTabPalette::showPage(QWidget *w)
 {
-	m_page->showPage(w);
+    m_page->showPage(w);
 }
 
 void KoTabPalette::makeVisible(bool v)
@@ -77,38 +77,38 @@ void KoTabPalette::makeVisible(bool v)
 
 int KoTabPalette::indexOf(QWidget *w)
 {
-	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
-		int i = m_page->indexOf(w);
-		kdDebug() << "Hidden widget: " << w->name() << ", position: " << 0 - i << "\n";
-	
-		return -i;
-	}
-	else {
-		return m_page->indexOf(w);
-	}
+    if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+        int i = m_page->indexOf(w);
+        kdDebug() << "Hidden widget: " << w->name() << ", position: " << 0 - i << "\n";
+    
+        return -i;
+    }
+    else {
+        return m_page->indexOf(w);
+    }
 }
 
 bool KoTabPalette::isHidden(QWidget * w)
 {
-	return (m_hiddenPages.find(w) != m_hiddenPages.end());
+    return (m_hiddenPages.find(w) != m_hiddenPages.end());
 }
 
 
 void KoTabPalette::togglePageHidden(QWidget *w)
 {
-	if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
-		int i = *m_hiddenPages.find(w);
-		m_page->insertTab(w, w->caption(), i);
-		show();
-	}
-	else {
-		int i = m_page->indexOf(w);
-		m_page->removePage(w);
-		m_hiddenPages[w] = i;
-		if (m_page->count() == 0) {
-			hide();
-		}
-	} 
+    if (m_hiddenPages.find(w) != m_hiddenPages.end()) {
+        int i = *m_hiddenPages.find(w);
+        m_page->insertTab(w, w->caption(), i);
+        show();
+    }
+    else {
+        int i = m_page->indexOf(w);
+        m_page->removePage(w);
+        m_hiddenPages[w] = i;
+        if (m_page->count() == 0) {
+            hide();
+        }
+    } 
 }
 
 #include "koTabPalette.moc"

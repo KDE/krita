@@ -34,9 +34,9 @@ using namespace Objects;
 
 ObjectsFactory::ObjectsFactory( KJSEmbed::KJSEmbedPart *part, KisView* )
 {
-	KJS::ExecState *exec = part->globalExec();
+    KJS::ExecState *exec = part->globalExec();
 
-	new PaintDeviceFactory( part->globalObject() , part);
+    new PaintDeviceFactory( part->globalObject() , part);
 }
 
 }; }; }; };

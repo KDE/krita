@@ -50,7 +50,7 @@ class KisGradient;
 class KRITACORE_EXPORT KisGradientPainter : public KisPainter
 {
 
-	typedef KisPainter super;
+    typedef KisPainter super;
 
 public:
 
@@ -58,38 +58,38 @@ public:
         KisGradientPainter(KisPaintDeviceSP device);
 
 
-	enum enumGradientShape {
-		GradientShapeLinear,
-		GradientShapeBiLinear,
-		GradientShapeRadial,
-		GradientShapeSquare,
-		GradientShapeConical,
-		GradientShapeConicalSymetric
-	};
+    enum enumGradientShape {
+        GradientShapeLinear,
+        GradientShapeBiLinear,
+        GradientShapeRadial,
+        GradientShapeSquare,
+        GradientShapeConical,
+        GradientShapeConicalSymetric
+    };
 
-	enum enumGradientRepeat {
-		GradientRepeatNone,
-		GradientRepeatForwards,
-		GradientRepeatAlternate
-	};
+    enum enumGradientRepeat {
+        GradientRepeatNone,
+        GradientRepeatForwards,
+        GradientRepeatAlternate
+    };
 
-	void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
-	void setGradient(KisGradient* gradient) { m_gradient = gradient; }
+    void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
+    void setGradient(KisGradient* gradient) { m_gradient = gradient; }
 
-	bool paintGradient(const KisPoint& gradientVectorStart,
-			   const KisPoint& gradientVectorEnd,
-			   enumGradientShape shape,
-			   enumGradientRepeat repeat,
-			   double antiAliasThreshold,
-			   bool reverseGradient,
-			   Q_INT32 startx,
-			   Q_INT32 starty,
-			   Q_INT32 width,
-			   Q_INT32 height);
+    bool paintGradient(const KisPoint& gradientVectorStart,
+               const KisPoint& gradientVectorEnd,
+               enumGradientShape shape,
+               enumGradientRepeat repeat,
+               double antiAliasThreshold,
+               bool reverseGradient,
+               Q_INT32 startx,
+               Q_INT32 starty,
+               Q_INT32 width,
+               Q_INT32 height);
 
 
 private:
-	KisGradient *m_gradient;
+    KisGradient *m_gradient;
 
 
 };

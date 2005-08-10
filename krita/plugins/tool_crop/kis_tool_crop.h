@@ -41,60 +41,60 @@ class WdgToolCrop;
  */
 class KisToolCrop : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolCrop();
-	virtual ~KisToolCrop();
+    KisToolCrop();
+    virtual ~KisToolCrop();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_CANVAS; }
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-	virtual void doubleClick(KisDoubleClickEvent *);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void doubleClick(KisDoubleClickEvent *);
 
 public slots:
-	virtual void activate();
+    virtual void activate();
 private:
-	void clearRect();
-	void cropLayer(KisLayerSP layer, QRect rc);
+    void clearRect();
+    void cropLayer(KisLayerSP layer, QRect rc);
         QRegion handles(QRect rect);
         void paintOutlineWithHandles();
         void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
         Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
         void setMoveResizeCursor (Q_INT32 handle);
-	void validateSelection(void);
-	void setOptionWidgetStartX(Q_INT32 x);
-	void setOptionWidgetStartY(Q_INT32 y);
-	void setOptionWidgetEndX(Q_INT32 x);
-	void setOptionWidgetEndY(Q_INT32 y);
+    void validateSelection(void);
+    void setOptionWidgetStartX(Q_INT32 x);
+    void setOptionWidgetStartY(Q_INT32 y);
+    void setOptionWidgetEndX(Q_INT32 x);
+    void setOptionWidgetEndY(Q_INT32 y);
 
 private slots:
 
-	void crop();
-	void setStartX(int x);
-	void setStartY(int y);
-	void setEndX(int x);
-	void setEndY(int y);
+    void crop();
+    void setStartX(int x);
+    void setStartY(int y);
+    void setEndX(int x);
+    void setEndY(int y);
 
 private:
-	KisCanvasSubject *m_subject;
-	QPoint m_startPos;
+    KisCanvasSubject *m_subject;
+    QPoint m_startPos;
         QPoint m_endPos;
         bool m_selecting;
-	QPoint m_dragStart;
-	QPoint m_dragStop;
+    QPoint m_dragStart;
+    QPoint m_dragStop;
 
-	WdgToolCrop* m_optWidget;
+    WdgToolCrop* m_optWidget;
 
         Q_INT32 m_handleSize;
         QRegion m_handlesRegion;
@@ -105,31 +105,31 @@ private:
         enum handleType
         {
                 None = 0,
-		UpperLeft = 1,
-		UpperRight = 2,
-		LowerLeft = 3,
-		LowerRight = 4,
-		Upper = 5,
-		Lower = 6,
-		Left = 7,
-		Right = 8,
-		Inside = 9
-	};
+        UpperLeft = 1,
+        UpperRight = 2,
+        LowerLeft = 3,
+        LowerRight = 4,
+        Upper = 5,
+        Lower = 6,
+        Left = 7,
+        Right = 8,
+        Inside = 9
+    };
 };
 
 class KisToolCropFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolCropFactory() : super() {};
-	virtual ~KisToolCropFactory(){};
+    KisToolCropFactory() : super() {};
+    virtual ~KisToolCropFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t = new KisToolCrop(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t;
-	}
-	virtual KisID id() { return KisID("crop", i18n("Crop tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t = new KisToolCrop(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t;
+    }
+    virtual KisID id() { return KisID("crop", i18n("Crop tool")); }
 };
 
 

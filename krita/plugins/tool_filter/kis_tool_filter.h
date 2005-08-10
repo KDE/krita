@@ -36,44 +36,44 @@ class KisCmbIDList;
 
 
 class KisToolFilter : public KisToolFreehand {
-	Q_OBJECT
-	typedef KisToolFreehand super;
+    Q_OBJECT
+    typedef KisToolFreehand super;
 
 public:
-	KisToolFilter();
-	virtual ~KisToolFilter();
+    KisToolFilter();
+    virtual ~KisToolFilter();
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_FREEHAND; }
-	virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
-	void changeFilter( const KisID & filter);
+    void changeFilter( const KisID & filter);
 
 protected:
-	virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KisEvent *e);
 
 private:
-	KisFilterSP m_filter;
-	QWidget* m_filterConfigurationWidget;
-	QGridLayout* m_optionLayout;
-	KisCmbIDList * m_cbFilter;
+    KisFilterSP m_filter;
+    QWidget* m_filterConfigurationWidget;
+    QGridLayout* m_optionLayout;
+    KisCmbIDList * m_cbFilter;
 };
 
 
 class KisToolFilterFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolFilterFactory() : super() {};
-	virtual ~KisToolFilterFactory(){};
+    KisToolFilterFactory() : super() {};
+    virtual ~KisToolFilterFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolFilter();
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolFilter();
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
 };
 
 #endif //__KIS_TOOL_FILTER_H__

@@ -54,7 +54,7 @@
 class KRITACORE_EXPORT KisFillPainter : public KisPainter
 {
 
-	typedef KisPainter super;
+    typedef KisPainter super;
 
 public:
 
@@ -62,79 +62,79 @@ public:
         KisFillPainter(KisPaintDeviceSP device);
 
 
-	/**
+    /**
          * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
-	 */
+     */
         void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
         void eraseRect(const QRect& rc);
 
-	/**
+    /**
          * Fill a rectangle with a certain color.
-	 */
+     */
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c);
         void fillRect(const QRect& rc, const KisColor& c);
 
-	/**
+    /**
          * Fill a rectangle with a certain color and opacity.
-	 */
+     */
         void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, QUANTUM opacity);
         void fillRect(const QRect& rc, const KisColor& c, QUANTUM opacity);
 
-	/**
-	 * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
-	 * entire rectangle.
-	 */
-	void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern);
-	void fillRect(const QRect& rc, KisPattern * pattern);
+    /**
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle.
+     */
+    void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern);
+    void fillRect(const QRect& rc, KisPattern * pattern);
 
-	/**
-	 * Fills the enclosed area around the point with the set color. If there is a
-	 * selection, the whole selection is filled
-	 **/
-	void fillColor(int startX, int startY);
+    /**
+     * Fills the enclosed area around the point with the set color. If there is a
+     * selection, the whole selection is filled
+     **/
+    void fillColor(int startX, int startY);
 
-	/**
-	 * Fills the enclosed area around the point with the set pattern. If there is a
-	 * selection, the whole selection is filled
-	 **/
-	void fillPattern(int startX, int startY);
-	
-	/**
-	 * Returns a selection mask for the floodfill starting at the specified position.
-	 **/
-	KisSelectionSP createFloodSelection(int startX, int startY);
-
-	void setFillThreshold(int threshold);
+    /**
+     * Fills the enclosed area around the point with the set pattern. If there is a
+     * selection, the whole selection is filled
+     **/
+    void fillPattern(int startX, int startY);
     
-	/** Sets the width of the layer */
-	void setWidth(int w) { m_width = w; }
+    /**
+     * Returns a selection mask for the floodfill starting at the specified position.
+     **/
+    KisSelectionSP createFloodSelection(int startX, int startY);
 
-	/** Sets the height of the layer */
-	void setHeight(int h) { m_height = h; }
+    void setFillThreshold(int threshold);
+    
+    /** Sets the width of the layer */
+    void setWidth(int w) { m_width = w; }
 
-	/** If sample merged is set to true, the paint device will get the bounds of the
-	 * floodfill from the complete image instead of the layer */
+    /** Sets the height of the layer */
+    void setHeight(int h) { m_height = h; }
 
-	bool sampleMerged() { return m_sampleMerged; }
-	void setSampleMerged(bool set) { m_sampleMerged = set; }
+    /** If sample merged is set to true, the paint device will get the bounds of the
+     * floodfill from the complete image instead of the layer */
+
+    bool sampleMerged() { return m_sampleMerged; }
+    void setSampleMerged(bool set) { m_sampleMerged = set; }
 
 private:
-	// for floodfill
-	/**
-	 * calculates the difference between 2 pixel values. Returns a value between 0 and
-	 * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
-	 * returned when anti-aliasing is off
-	 **/
-	void genericFillStart(int startX, int startY);
-	void genericFillEnd(KisPaintDeviceSP filled);
+    // for floodfill
+    /**
+     * calculates the difference between 2 pixel values. Returns a value between 0 and
+     * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
+     * returned when anti-aliasing is off
+     **/
+    void genericFillStart(int startX, int startY);
+    void genericFillEnd(KisPaintDeviceSP filled);
 
-	KisSelectionSP m_selection;
+    KisSelectionSP m_selection;
 
-	int m_threshold;
-	int m_size;
-	int m_width, m_height;
-	QRect m_rect;
-	bool m_sampleMerged;
+    int m_threshold;
+    int m_size;
+    int m_width, m_height;
+    QRect m_rect;
+    bool m_sampleMerged;
 };
 
 
@@ -153,14 +153,14 @@ void KisFillPainter::fillRect(const QRect& rc, const KisColor& c)
 inline
 void KisFillPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-	KisColor c(Qt::black);
+    KisColor c(Qt::black);
         fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT);
 }
 
 inline
 void KisFillPainter::eraseRect(const QRect& rc)
 {
-	KisColor c(Qt::black);
+    KisColor c(Qt::black);
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT);
 }
 
@@ -173,13 +173,13 @@ void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, QUANTUM opacit
 inline
 void KisFillPainter::fillRect(const QRect& rc, KisPattern *pattern)
 {
-	fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
 }
 
 inline
 void KisFillPainter::setFillThreshold(int threshold)
 {
-	m_threshold = threshold;
+    m_threshold = threshold;
 }
 
 

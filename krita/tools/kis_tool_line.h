@@ -38,55 +38,55 @@ class QWidget;
 
 class KisToolLine : public KisToolPaint {
 
-	Q_OBJECT
-	typedef KisToolPaint super;
+    Q_OBJECT
+    typedef KisToolPaint super;
 
  public:
-	KisToolLine();
-	virtual ~KisToolLine();
+    KisToolLine();
+    virtual ~KisToolLine();
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
-	virtual void update(KisCanvasSubject *subject);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
 
  private:
-	void paintLine();
-	void paintLine(QPainter& gc, const QRect& rc);
+    void paintLine();
+    void paintLine(QPainter& gc, const QRect& rc);
 
-	KisPoint straightLine(KisPoint point);
+    KisPoint straightLine(KisPoint point);
 
 
-	bool m_dragging;
+    bool m_dragging;
 
-	KisPoint m_startPos;
-	KisPoint m_endPos;
+    KisPoint m_startPos;
+    KisPoint m_endPos;
 
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
-	KisPainter *m_painter;
+    KisCanvasSubject *m_subject;
+    KisImageSP m_currentImage;
+    KisPainter *m_painter;
 };
 
 
 class KisToolLineFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolLineFactory() : super() {};
-	virtual ~KisToolLineFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolLine(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("line", i18n("Line tool")); }
+    KisToolLineFactory() : super() {};
+    virtual ~KisToolLineFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolLine(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("line", i18n("Line tool")); }
 };
 
 

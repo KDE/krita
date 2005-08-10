@@ -45,22 +45,22 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolpolyline, ToolPolylineFactory( "krita" ) )
 
 
 ToolPolyline::ToolPolyline(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ToolPolylineFactory::instance());
+    setInstance(ToolPolylineFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "Polyline tool plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "Polyline tool plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisToolRegistry * r = KisToolRegistry::instance();
+    if ( parent->inherits("KisFactory") )
+    {
+        KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolPolylineFactory());
-	}
+        r -> add(new KisToolPolylineFactory());
+    }
 
 }
 

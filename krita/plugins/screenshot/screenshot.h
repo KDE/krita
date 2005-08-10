@@ -27,17 +27,17 @@ class KSnapshot;
 
 class Screenshot : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	Screenshot(QObject *parent, const char *name, const QStringList &);
-	virtual ~Screenshot();
-	
+    Screenshot(QObject *parent, const char *name, const QStringList &);
+    virtual ~Screenshot();
+    
 private slots:
-	void slotScreenshot();
-	void slotScreenGrabbed();
+    void slotScreenshot();
+    void slotScreenGrabbed();
 
 private:
-	KSnapshot * snapshot;
+    KSnapshot * snapshot;
 };
 
 #endif

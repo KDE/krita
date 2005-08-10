@@ -27,9 +27,9 @@
 
 class KisPixelizeFilterConfiguration : public KisFilterConfiguration
 {
-	public:
+    public:
                 KisPixelizeFilterConfiguration(Q_UINT32 pixelWidth, Q_UINT32 pixelHeight) : m_pixelWidth(pixelWidth), m_pixelHeight(pixelHeight) {};
-	public:
+    public:
                 inline Q_UINT32 pixelWidth() { return m_pixelWidth; };
                 inline Q_UINT32 pixelHeight() {return m_pixelHeight; };
         private:
@@ -40,19 +40,19 @@ class KisPixelizeFilterConfiguration : public KisFilterConfiguration
 class KisPixelizeFilter : public KisFilter
 {
 public:
-	KisPixelizeFilter();
+    KisPixelizeFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
-	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return true; }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
+    void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };
 
 #endif

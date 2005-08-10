@@ -38,76 +38,76 @@ class KIntNumInput;
 class KisCmbComposite;
 
 enum enumBrushMode {
-	PAINT,
-	PAINT_STYLUS,
-	ERASE,
-	ERASE_STYLUS,
-	HOVER
+    PAINT,
+    PAINT_STYLUS,
+    ERASE,
+    ERASE_STYLUS,
+    HOVER
 };
 
 class KRITACORE_EXPORT KisToolPaint : public KisTool {
 
-	Q_OBJECT
-	typedef KisTool super;
+    Q_OBJECT
+    typedef KisTool super;
 
 public:
-	KisToolPaint(const QString& UIName);
-	virtual ~KisToolPaint();
+    KisToolPaint(const QString& UIName);
+    virtual ~KisToolPaint();
 
 public:
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void clear();
-	virtual void clear(const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void clear();
+    virtual void clear(const QRect& rc);
 
-	virtual void enter(QEvent *e);
-	virtual void leave(QEvent *e);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
-	virtual void doubleClick(KisDoubleClickEvent *e);
-	virtual void keyPress(QKeyEvent *e);
-	virtual void keyRelease(QKeyEvent *e);
+    virtual void enter(QEvent *e);
+    virtual void leave(QEvent *e);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void doubleClick(KisDoubleClickEvent *e);
+    virtual void keyPress(QKeyEvent *e);
+    virtual void keyRelease(QKeyEvent *e);
 
-	virtual QCursor cursor();
-	virtual void setCursor(const QCursor& cursor);
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual QCursor cursor();
+    virtual void setCursor(const QCursor& cursor);
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
 public slots:
-	virtual void activate();
-	void slotSetOpacity(int opacityPerCent);
-	void slotSetCompositeMode(const KisCompositeOp& compositeOp);
+    virtual void activate();
+    void slotSetOpacity(int opacityPerCent);
+    void slotSetCompositeMode(const KisCompositeOp& compositeOp);
 
 protected:
-	void notifyModified() const;
+    void notifyModified() const;
 
-	// Add the tool-specific layout to the default option widget's layout.
-	void addOptionWidgetLayout(QLayout *layout);
+    // Add the tool-specific layout to the default option widget's layout.
+    void addOptionWidgetLayout(QLayout *layout);
 
 private:
-	void updateCompositeOpComboBox();
+    void updateCompositeOpComboBox();
 
 protected:
-	KisCanvasSubject *m_subject;
-	QRect m_dirtyRect;
-	QUANTUM m_opacity;
-	KisCompositeOp m_compositeOp;
+    KisCanvasSubject *m_subject;
+    QRect m_dirtyRect;
+    QUANTUM m_opacity;
+    KisCompositeOp m_compositeOp;
 
 private:
-	QString m_UIName;
+    QString m_UIName;
 
-	QCursor m_cursor;
+    QCursor m_cursor;
 
-	QWidget *m_optionWidget;
-	QGridLayout *m_optionWidgetLayout;
+    QWidget *m_optionWidget;
+    QGridLayout *m_optionWidgetLayout;
 
-	QLabel *m_lbOpacity;
-	KIntNumInput *m_slOpacity;
-	QLabel *m_lbComposite;
-	KisCmbComposite *m_cmbComposite;
+    QLabel *m_lbOpacity;
+    KIntNumInput *m_slOpacity;
+    QLabel *m_lbComposite;
+    KisCmbComposite *m_cmbComposite;
 };
 
 #endif // KIS_TOOL_PAINT_H_

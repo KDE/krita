@@ -31,32 +31,32 @@ class KIntNumInput;
 class KisCmbComposite;
 
 class KisPaintPropertyDlg : public KDialogBase {
-	typedef KDialogBase super;
+    typedef KDialogBase super;
     Q_OBJECT
 
 public:
-	KisPaintPropertyDlg(const QString& deviceName,
-			    const QPoint& pos,
-			    Q_INT32 opacity,
-			    const KisCompositeOp& compositeOp,
-			    const KisAbstractColorSpace * colorSpace,
-			    QWidget *parent = 0, const char *name = 0, WFlags f = 0);
-	virtual ~KisPaintPropertyDlg();
+    KisPaintPropertyDlg(const QString& deviceName,
+                const QPoint& pos,
+                Q_INT32 opacity,
+                const KisCompositeOp& compositeOp,
+                const KisAbstractColorSpace * colorSpace,
+                QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+    virtual ~KisPaintPropertyDlg();
 
-	QString getName() const;
-	Q_INT32 getOpacity() const;
-	KisCompositeOp getCompositeOp() const;
-	QPoint getPosition() const;
+    QString getName() const;
+    Q_INT32 getOpacity() const;
+    KisCompositeOp getCompositeOp() const;
+    QPoint getPosition() const;
 protected slots:
     void slotNameChanged( const QString & );
 
 
 private:
-	KLineEdit *m_name;
-	KIntNumInput *m_opacity;
-	KIntSpinBox *m_x;
-	KIntSpinBox *m_y;
-	KisCmbComposite *m_cmbComposite;
+    KLineEdit *m_name;
+    KIntNumInput *m_opacity;
+    KIntSpinBox *m_x;
+    KIntSpinBox *m_y;
+    KisCmbComposite *m_cmbComposite;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

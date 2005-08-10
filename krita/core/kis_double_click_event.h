@@ -21,10 +21,10 @@
 #include "kis_button_event.h"
 
 class KisDoubleClickEvent : public KisButtonEvent {
-	typedef KisButtonEvent super;
+    typedef KisButtonEvent super;
 public:
-	KisDoubleClickEvent() {}
-	KisDoubleClickEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(DoubleClickEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
+    KisDoubleClickEvent() {}
+    KisDoubleClickEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(DoubleClickEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
 };
 
 #endif // KIS_DOUBLE_CLICK_EVENT_H_

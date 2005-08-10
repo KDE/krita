@@ -41,14 +41,14 @@
 #include "kis_colorspace_registry.h"
 
 namespace {
-	struct GimpPatternHeader {
-		Q_UINT32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
-		Q_UINT32 version;      /*  pattern file version #  */
-		Q_UINT32 width;        /*  width of pattern */
-		Q_UINT32 height;       /*  height of pattern  */
-		Q_UINT32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
-		Q_UINT32 magic_number; /*  GIMP brush magic number  */
-	};
+    struct GimpPatternHeader {
+        Q_UINT32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
+        Q_UINT32 version;      /*  pattern file version #  */
+        Q_UINT32 width;        /*  width of pattern */
+        Q_UINT32 height;       /*  height of pattern  */
+        Q_UINT32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
+        Q_UINT32 magic_number; /*  GIMP brush magic number  */
+    };
 }
 
 KisPattern::KisPattern(const QString& file) : super(file)
@@ -61,195 +61,195 @@ KisPattern::~KisPattern()
 
 bool KisPattern::load()
 {
-	QFile file(filename());
-	file.open(IO_ReadOnly);
-	QByteArray data = file.readAll();
-	if (!data.isEmpty()) {
-		Q_INT32 startPos = m_data.size();
+    QFile file(filename());
+    file.open(IO_ReadOnly);
+    QByteArray data = file.readAll();
+    if (!data.isEmpty()) {
+        Q_INT32 startPos = m_data.size();
 
-		m_data.resize(m_data.size() + data.count());
-		memcpy(&m_data[startPos], data.data(), data.count());
-	}
-	file.close();
-	return init();
+        m_data.resize(m_data.size() + data.count());
+        memcpy(&m_data[startPos], data.data(), data.count());
+    }
+    file.close();
+    return init();
 }
 
 bool KisPattern::save()
 {
-	return false;
+    return false;
 }
 
 QImage KisPattern::img()
 {
-	return m_img;
+    return m_img;
 }
 
 bool KisPattern::init()
 {
-	// load Gimp patterns
-	GimpPatternHeader bh;
-	Q_INT32 k;
-	QValueVector<char> name;
+    // load Gimp patterns
+    GimpPatternHeader bh;
+    Q_INT32 k;
+    QValueVector<char> name;
 
-	if (sizeof(GimpPatternHeader) > m_data.size()) {
-		return false;
-	}
+    if (sizeof(GimpPatternHeader) > m_data.size()) {
+        return false;
+    }
 
-	memcpy(&bh, &m_data[0], sizeof(GimpPatternHeader));
-	bh.header_size = ntohl(bh.header_size);
-	bh.version = ntohl(bh.version);
-	bh.width = ntohl(bh.width);
-	bh.height = ntohl(bh.height);
-	bh.bytes = ntohl(bh.bytes);
-	bh.magic_number = ntohl(bh.magic_number);
+    memcpy(&bh, &m_data[0], sizeof(GimpPatternHeader));
+    bh.header_size = ntohl(bh.header_size);
+    bh.version = ntohl(bh.version);
+    bh.width = ntohl(bh.width);
+    bh.height = ntohl(bh.height);
+    bh.bytes = ntohl(bh.bytes);
+    bh.magic_number = ntohl(bh.magic_number);
 
-	if (bh.header_size > m_data.size() || bh.header_size == 0) {
-		return false;
-	}
+    if (bh.header_size > m_data.size() || bh.header_size == 0) {
+        return false;
+    }
 
-	name.resize(bh.header_size - sizeof(GimpPatternHeader));
-	memcpy(&name[0], &m_data[sizeof(GimpPatternHeader)], name.size());
+    name.resize(bh.header_size - sizeof(GimpPatternHeader));
+    memcpy(&name[0], &m_data[sizeof(GimpPatternHeader)], name.size());
 
-	if (name[name.size() - 1]) {
-		return false;
-	}
+    if (name[name.size() - 1]) {
+        return false;
+    }
 
-	setName(i18n(&name[0]));
+    setName(i18n(&name[0]));
 
-	if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
-		return false;
-	}
+    if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
+        return false;
+    }
 
-	k = bh.header_size;
+    k = bh.header_size;
 
-	if (bh.bytes == 1) {
-		// Grayscale
-		Q_INT32 val;
+    if (bh.bytes == 1) {
+        // Grayscale
+        Q_INT32 val;
 
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-				if (static_cast<Q_UINT32>(k) > m_data.size()) {
-					kdDebug(DBG_AREA_FILE) << "failed in gray\n";
-					return false;
-				}
+        for (Q_UINT32 y = 0; y < bh.height; y++) {
+            for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
+                if (static_cast<Q_UINT32>(k) > m_data.size()) {
+                    kdDebug(DBG_AREA_FILE) << "failed in gray\n";
+                    return false;
+                }
 
-				val = m_data[k];
-				m_img.setPixel(x, y, qRgb(val, val, val));
-				m_img.setAlphaBuffer(false);
-			}
-		}
-	} else if (bh.bytes == 2) {
-		// Grayscale + A
-		Q_INT32 val;
-		Q_INT32 alpha;
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-				if (static_cast<Q_UINT32>(k + 2) > m_data.size()) {
-					kdDebug(DBG_AREA_FILE) << "failed in grayA\n";
-					return false;
-				}
+                val = m_data[k];
+                m_img.setPixel(x, y, qRgb(val, val, val));
+                m_img.setAlphaBuffer(false);
+            }
+        }
+    } else if (bh.bytes == 2) {
+        // Grayscale + A
+        Q_INT32 val;
+        Q_INT32 alpha;
+        for (Q_UINT32 y = 0; y < bh.height; y++) {
+            for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
+                if (static_cast<Q_UINT32>(k + 2) > m_data.size()) {
+                    kdDebug(DBG_AREA_FILE) << "failed in grayA\n";
+                    return false;
+                }
 
-				val = m_data[k];
-				alpha = m_data[k++];
-				m_img.setPixel(x, y, qRgba(val, val, val, alpha));
-				m_img.setAlphaBuffer(true);
-			}
-		}
-	} else if (bh.bytes == 3) {
-		// RGB without alpha
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++) {
-				if (static_cast<Q_UINT32>(k + 3) > m_data.size()) {
-					kdDebug(DBG_AREA_FILE) << "failed in RGB\n";
-					return false;
-				}
+                val = m_data[k];
+                alpha = m_data[k++];
+                m_img.setPixel(x, y, qRgba(val, val, val, alpha));
+                m_img.setAlphaBuffer(true);
+            }
+        }
+    } else if (bh.bytes == 3) {
+        // RGB without alpha
+        for (Q_UINT32 y = 0; y < bh.height; y++) {
+            for (Q_UINT32 x = 0; x < bh.width; x++) {
+                if (static_cast<Q_UINT32>(k + 3) > m_data.size()) {
+                    kdDebug(DBG_AREA_FILE) << "failed in RGB\n";
+                    return false;
+                }
 
-				m_img.setPixel(x, y, qRgb(m_data[k],
-							  m_data[k + 1],
-							  m_data[k + 2]));
-				k += 3;
-				m_img.setAlphaBuffer(false);
-			}
-		}
-	} else if (bh.bytes == 4) {
-		// Has alpha
-		for (Q_UINT32 y = 0; y < bh.height; y++) {
-			for (Q_UINT32 x = 0; x < bh.width; x++) {
-				if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
-					kdDebug(DBG_AREA_FILE) << "failed in RGBA\n";
-					return false;
-				}
+                m_img.setPixel(x, y, qRgb(m_data[k],
+                              m_data[k + 1],
+                              m_data[k + 2]));
+                k += 3;
+                m_img.setAlphaBuffer(false);
+            }
+        }
+    } else if (bh.bytes == 4) {
+        // Has alpha
+        for (Q_UINT32 y = 0; y < bh.height; y++) {
+            for (Q_UINT32 x = 0; x < bh.width; x++) {
+                if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
+                    kdDebug(DBG_AREA_FILE) << "failed in RGBA\n";
+                    return false;
+                }
 
-				m_img.setPixel(x, y, qRgba(m_data[k],
-							   m_data[k + 1],
-							   m_data[k + 2],
-							   m_data[k + 3]));
-				k += 4;
-				m_img.setAlphaBuffer(true);
-			}
-		}
-	} else {
-		return false;
-	}
+                m_img.setPixel(x, y, qRgba(m_data[k],
+                               m_data[k + 1],
+                               m_data[k + 2],
+                               m_data[k + 3]));
+                k += 4;
+                m_img.setAlphaBuffer(true);
+            }
+        }
+    } else {
+        return false;
+    }
 
-	if (m_img.isNull()) {
-		return false;
-	}
+    if (m_img.isNull()) {
+        return false;
+    }
 
-	setWidth(m_img.width());
-	setHeight(m_img.height());
+    setWidth(m_img.width());
+    setHeight(m_img.height());
 
-	setValid(true);
+    setValid(true);
 
-	return true;
+    return true;
 }
 
 KisLayerSP KisPattern::image(KisAbstractColorSpace * colorSpace) {
-	// XXX: What does this do? (bsar)
-	QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
-	if (it != m_colorspaces.end())
-		return (*it);
-	Q_INT32 width = m_img.width();
-	Q_INT32 height = m_img.height();
-	KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
-	Q_CHECK_PTR(layer);
+    // XXX: What does this do? (bsar)
+    QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
+    if (it != m_colorspaces.end())
+        return (*it);
+    Q_INT32 width = m_img.width();
+    Q_INT32 height = m_img.height();
+    KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
+    Q_CHECK_PTR(layer);
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
-			QRgb pixel = m_img.pixel(x, y);
-			int red = qRed(pixel);
-			int green = qGreen(pixel);
-			int blue = qBlue(pixel);
-			int alpha = qAlpha(pixel);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            QRgb pixel = m_img.pixel(x, y);
+            int red = qRed(pixel);
+            int green = qGreen(pixel);
+            int blue = qBlue(pixel);
+            int alpha = qAlpha(pixel);
 
-			QColor colour = QColor(red, green, blue);
-			QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
+            QColor colour = QColor(red, green, blue);
+            QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 
-			layer -> setPixel(x, y, colour, a);
-		}
-	}
-	m_colorspaces[colorSpace->id().id()] = layer;
-	return layer;
+            layer -> setPixel(x, y, colour, a);
+        }
+    }
+    m_colorspaces[colorSpace->id().id()] = layer;
+    return layer;
 }
 
 Q_INT32 KisPattern::width() const
 {
-	return m_width;
+    return m_width;
 }
 
 void KisPattern::setWidth(Q_INT32 w)
 {
-	m_width = w;
+    m_width = w;
 }
 
 Q_INT32 KisPattern::height() const
 {
-	return m_height;
+    return m_height;
 }
 
 void KisPattern::setHeight(Q_INT32 h)
 {
-	m_height = h;
+    m_height = h;
 }
 
 #include "kis_pattern.moc"

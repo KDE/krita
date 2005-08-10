@@ -26,8 +26,8 @@
 class KritaHistoryDocker : public KParts::Plugin
 {
 public:
-	KritaHistoryDocker(QObject *parent, const char *name, const QStringList &);
-	virtual ~KritaHistoryDocker();
+    KritaHistoryDocker(QObject *parent, const char *name, const QStringList &);
+    virtual ~KritaHistoryDocker();
 };
 
 

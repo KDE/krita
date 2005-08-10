@@ -38,26 +38,26 @@ class KisControlFrame;
 
 class KritaDefaultDockers : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KritaDefaultDockers(QObject *parent, const char *name, const QStringList &);
-	virtual ~KritaDefaultDockers();
+    KritaDefaultDockers(QObject *parent, const char *name, const QStringList &);
+    virtual ~KritaDefaultDockers();
 
 private:
-	void createControlFrame(KisView * view);
-	void createBirdEyeBox(KisView * view);
-	void createHSVWidget(KisView * view);
-	void createRGBWidget(KisView * view);
-	void createPaletteWidget(KisView * view);
-	void createGrayWidget(KisView * view);
+    void createControlFrame(KisView * view);
+    void createBirdEyeBox(KisView * view);
+    void createHSVWidget(KisView * view);
+    void createRGBWidget(KisView * view);
+    void createPaletteWidget(KisView * view);
+    void createGrayWidget(KisView * view);
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
-	KoPaletteManager * m_paletteManager;
+    KoPaletteManager * m_paletteManager;
 
-	KisControlFrame * m_controlWidget;
+    KisControlFrame * m_controlWidget;
 
         KisBirdEyeBox * m_birdEyeBox;
 

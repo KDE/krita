@@ -52,69 +52,69 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
 ShearImage::ShearImage(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ShearImageFactory::instance());
+    setInstance(ShearImageFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	(void) new KAction(i18n("&Shear Image..."), 0, 0, this, SLOT(slotShearImage()), actionCollection(), "shearimage");
-	(void) new KAction(i18n("&Shear Layer..."), 0, 0, this, SLOT(slotShearLayer()), actionCollection(), "shearlayer");
+    (void) new KAction(i18n("&Shear Image..."), 0, 0, this, SLOT(slotShearImage()), actionCollection(), "shearimage");
+    (void) new KAction(i18n("&Shear Layer..."), 0, 0, this, SLOT(slotShearLayer()), actionCollection(), "shearlayer");
 
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+    }
 }
 
 ShearImage::~ShearImage()
 {
-	m_view = 0;
+    m_view = 0;
 }
 
 void ShearImage::slotShearImage()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
-	Q_CHECK_PTR(dlgShearImage);
+    DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
+    Q_CHECK_PTR(dlgShearImage);
 
-	dlgShearImage -> setCaption(i18n("Shear Image"));
+    dlgShearImage -> setCaption(i18n("Shear Image"));
 
         if (dlgShearImage -> exec() == QDialog::Accepted) {
-		Q_INT32 angleX = dlgShearImage -> angleX();
+        Q_INT32 angleX = dlgShearImage -> angleX();
                 Q_INT32 angleY = dlgShearImage -> angleY();
                 m_view -> shearCurrentImage(angleX, angleY);
-	}
+    }
         delete dlgShearImage;
 }
 
 void ShearImage::slotShearLayer()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
-	Q_CHECK_PTR(dlgShearImage);
+    DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
+    Q_CHECK_PTR(dlgShearImage);
 
-	dlgShearImage -> setCaption("Shear Layer");
+    dlgShearImage -> setCaption("Shear Layer");
 
-	if (dlgShearImage -> exec() == QDialog::Accepted) {
+    if (dlgShearImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angleX = dlgShearImage -> angleX();
                 Q_INT32 angleY = dlgShearImage -> angleY();
                 m_view -> shearLayer(angleX, angleY);
 
-	}
-	delete dlgShearImage;
+    }
+    delete dlgShearImage;
 }
 
 #include "shearimage.moc"

@@ -23,37 +23,37 @@
 #include "kis_paint_device.h"
 
 KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
-	KisHLineIterator(dm, x - offsetx, y - offsety, w, writable),
-	KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
-	m_offsetx(offsetx), m_offsety(offsety)
+    KisHLineIterator(dm, x - offsetx, y - offsety, w, writable),
+    KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
+    m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm) {
-		KisHLineIterator * i = new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, false);
-		Q_CHECK_PTR(i);
-		KisIteratorPixelTrait <KisHLineIterator>::setSelectionIterator(i);
-	}
+    if(sel_dm) {
+        KisHLineIterator * i = new KisHLineIterator(sel_dm, x - offsetx, y - offsety, w, false);
+        Q_CHECK_PTR(i);
+        KisIteratorPixelTrait <KisHLineIterator>::setSelectionIterator(i);
+    }
 }
 
 KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
-	KisVLineIterator(dm, x - offsetx, y - offsety, h, writable),
-	KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
-	m_offsetx(offsetx), m_offsety(offsety)
+    KisVLineIterator(dm, x - offsetx, y - offsety, h, writable),
+    KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
+    m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm) {
-		KisVLineIterator * i = new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, false);
-		Q_CHECK_PTR(i);
-		KisIteratorPixelTrait <KisVLineIterator>::setSelectionIterator(i);
-	}
+    if(sel_dm) {
+        KisVLineIterator * i = new KisVLineIterator(sel_dm, x - offsetx, y - offsety, h, false);
+        Q_CHECK_PTR(i);
+        KisIteratorPixelTrait <KisVLineIterator>::setSelectionIterator(i);
+    }
 }
 
 KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
-	KisRectIterator(dm, x - offsetx, y - offsety, w, h, writable),
-	KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
-	m_offsetx(offsetx), m_offsety(offsety)
+    KisRectIterator(dm, x - offsetx, y - offsety, w, h, writable),
+    KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
+    m_offsetx(offsetx), m_offsety(offsety)
 {
-	if(sel_dm) {
-		KisRectIterator * i = new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, false);
-		Q_CHECK_PTR(i);
-		KisIteratorPixelTrait <KisRectIterator>::setSelectionIterator(i);
-	}
+    if(sel_dm) {
+        KisRectIterator * i = new KisRectIterator(sel_dm, x - offsetx, y - offsety, w, h, false);
+        Q_CHECK_PTR(i);
+        KisIteratorPixelTrait <KisRectIterator>::setSelectionIterator(i);
+    }
 }

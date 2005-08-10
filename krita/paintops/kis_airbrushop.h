@@ -32,32 +32,32 @@ class KisPainter;
 class KisAirbrushOpFactory : public KisPaintOpFactory {
 
 public:
-	KisAirbrushOpFactory() {}
-	virtual ~KisAirbrushOpFactory() {}
+    KisAirbrushOpFactory() {}
+    virtual ~KisAirbrushOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("airbrush", i18n("airbrush")); }
-//	virtual QString pixmap() { return "airbrush.png"; }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("airbrush", i18n("airbrush")); }
+//    virtual QString pixmap() { return "airbrush.png"; }
 };
 
 
 
 class KisAirbrushOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisAirbrushOp(KisPainter * painter);
-	virtual ~KisAirbrushOp();
+    KisAirbrushOp(KisPainter * painter);
+    virtual ~KisAirbrushOp();
 
-	// We want to spray even when the pointer doesn't move.
-	virtual bool incremental() { return true; }
+    // We want to spray even when the pointer doesn't move.
+    virtual bool incremental() { return true; }
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

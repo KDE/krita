@@ -30,47 +30,47 @@ class KCurve : public QWidget
 Q_OBJECT
 
 public:
-	KCurve(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+    KCurve(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 
-	virtual ~KCurve();
+    virtual ~KCurve();
 
-	void reset(void);
-	void setCurveGuide(QColor color);
+    void reset(void);
+    void setCurveGuide(QColor color);
     
 
 signals:
     
-	void modified(void);
+    void modified(void);
             
 protected:
 
-	void keyPressEvent(QKeyEvent *);
-	void paintEvent(QPaintEvent *);
-	void mousePressEvent (QMouseEvent * e);
-	void mouseReleaseEvent ( QMouseEvent * e );
-	void mouseMoveEvent ( QMouseEvent * e );
-	void leaveEvent ( QEvent * );
+    void keyPressEvent(QKeyEvent *);
+    void paintEvent(QPaintEvent *);
+    void mousePressEvent (QMouseEvent * e);
+    void mouseReleaseEvent ( QMouseEvent * e );
+    void mouseMoveEvent ( QMouseEvent * e );
+    void leaveEvent ( QEvent * );
     
 public:
-	double getCurveValue(double x);
-	
-private:
-	struct dpoint {
-		double x,y;
-		bool operator <(dpoint &rhs){return x < rhs.x;};
-		bool operator ==(dpoint &rhs){return x == rhs.x;};
-	};
-	double m_leftmost;
-	double m_rightmost;
-	dpoint *m_grab_point;
-	bool m_dragging;
-	double m_grabOffsetX;
-	double m_grabOffsetY;
+    double getCurveValue(double x);
     
-	bool m_readOnlyMode;
-	bool m_guideVisible;
-	QColor m_colorGuide;
-	QSortedList<dpoint> m_points;
+private:
+    struct dpoint {
+        double x,y;
+        bool operator <(dpoint &rhs){return x < rhs.x;};
+        bool operator ==(dpoint &rhs){return x == rhs.x;};
+    };
+    double m_leftmost;
+    double m_rightmost;
+    dpoint *m_grab_point;
+    bool m_dragging;
+    double m_grabOffsetX;
+    double m_grabOffsetY;
+    
+    bool m_readOnlyMode;
+    bool m_guideVisible;
+    QColor m_colorGuide;
+    QSortedList<dpoint> m_points;
 };
 
 

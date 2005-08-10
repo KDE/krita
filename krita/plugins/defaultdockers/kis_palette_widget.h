@@ -44,43 +44,43 @@ class KisColor;
  */
 class KisPaletteWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisPaletteWidget( QWidget *parent, int minWidth=210, int cols = 16);
-	virtual ~KisPaletteWidget();
+    KisPaletteWidget( QWidget *parent, int minWidth=210, int cols = 16);
+    virtual ~KisPaletteWidget();
 
-	QString palette() const;
+    QString palette() const;
 
 public slots:
-	void setPalette(const QString &paletteName);
+    void setPalette(const QString &paletteName);
 
 signals:
-	void colorSelected( const KisColor &);
-	void colorDoubleClicked( const KisColor &, const QString &);
+    void colorSelected( const KisColor &);
+    void colorDoubleClicked( const KisColor &, const QString &);
 
 protected slots:
-	void slotColorCellSelected( int );
-	void slotColorCellDoubleClicked( int );
-	void slotSetPalette( const QString &_paletteName );
+    void slotColorCellSelected( int );
+    void slotColorCellDoubleClicked( int );
+    void slotSetPalette( const QString &_paletteName );
 
 public slots:
-	// Called by the resource server whenever a palette is loaded.
-	void slotAddPalette(KisResource * palette);
+    // Called by the resource server whenever a palette is loaded.
+    void slotAddPalette(KisResource * palette);
 
 protected:
-	void readNamedColor( void );
+    void readNamedColor( void );
 
 protected:
 
-	QDict<KisPalette> m_namedPaletteMap;
-	KisPalette * m_currentPalette;
-	QComboBox *combo;
-	KColorCells *cells;
-	QScrollView *sv;
-	int mMinWidth;
-	int mCols;
-	bool init;
+    QDict<KisPalette> m_namedPaletteMap;
+    KisPalette * m_currentPalette;
+    QComboBox *combo;
+    KColorCells *cells;
+    QScrollView *sv;
+    int mMinWidth;
+    int mCols;
+    bool init;
 };
 
-#endif		// __KCOLORDIALOG_H__
+#endif        // __KCOLORDIALOG_H__
 

@@ -25,8 +25,8 @@
 class KisPixelizeFilterPlugin : public KParts::Plugin
 {
 public:
-	KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisPixelizeFilterPlugin();
+    KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisPixelizeFilterPlugin();
 };
 
 #endif

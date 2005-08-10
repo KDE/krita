@@ -32,36 +32,36 @@
  */
 class KisCmbIDList : public QComboBox
 {
-	typedef QComboBox super;
+    typedef QComboBox super;
 
-	Q_OBJECT
-
-public:
-
-	KisCmbIDList(QWidget * parent = 0, const char * name = 0 );
-	virtual ~KisCmbIDList();
-
+    Q_OBJECT
 
 public:
-	void setIDList(const KisIDList & list);
-	void setCurrent(const KisID id);
-	void setCurrentText(const QString & s);
 
-	KisID currentItem() const;
+    KisCmbIDList(QWidget * parent = 0, const char * name = 0 );
+    virtual ~KisCmbIDList();
+
+
+public:
+    void setIDList(const KisIDList & list);
+    void setCurrent(const KisID id);
+    void setCurrentText(const QString & s);
+
+    KisID currentItem() const;
 
 signals:
 
-	void activated(const KisID &);
-	void highlighted(const KisID &);
+    void activated(const KisID &);
+    void highlighted(const KisID &);
 
 private slots:
 
-	void slotIDActivated(int i);
-	void slotIDHighlighted(int i);
+    void slotIDActivated(int i);
+    void slotIDHighlighted(int i);
 
 private:
 
-	KisIDList m_list;
+    KisIDList m_list;
 
 };
 #endif

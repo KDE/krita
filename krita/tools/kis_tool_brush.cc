@@ -41,72 +41,72 @@
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
 {
-	setName("tool_brush");
-	setCursor(KisCursor::brushCursor());
-	m_rate = 100; // Conveniently hardcoded for now
-	m_timer = new QTimer(this);
-	Q_CHECK_PTR(m_timer);
+    setName("tool_brush");
+    setCursor(KisCursor::brushCursor());
+    m_rate = 100; // Conveniently hardcoded for now
+    m_timer = new QTimer(this);
+    Q_CHECK_PTR(m_timer);
 
-	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 
 }
 
 KisToolBrush::~KisToolBrush()
 {
-	delete m_timer;
-	m_timer = 0;
+    delete m_timer;
+    m_timer = 0;
 }
 
 void KisToolBrush::timeoutPaint()
 {
-	if (currentImage() && painter()) {
-		painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
-		currentImage() -> notify(painter() -> dirtyRect());
-	}
+    if (currentImage() && painter()) {
+        painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+        currentImage() -> notify(painter() -> dirtyRect());
+    }
 }
 
 
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
-	super::update(subject);
-	setCursor(KisCursor::brushCursor());
+    super::update(subject);
+    setCursor(KisCursor::brushCursor());
 }
 
 void KisToolBrush::initPaint(KisEvent *e) 
 {
-	super::initPaint(e);
+    super::initPaint(e);
 
-	KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
 
-	painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
-	
-	if (op->incremental()) {
-		m_timer -> start( m_rate );
-	}
+    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
+    
+    if (op->incremental()) {
+        m_timer -> start( m_rate );
+    }
 }
 
 
 void KisToolBrush::endPaint()
 {
-	m_timer -> stop();
-	super::endPaint();
+    m_timer -> stop();
+    super::endPaint();
 }
 
 
 void KisToolBrush::setup(KActionCollection *collection)
 {
-	
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Brush"),
-					    "paintbrush", 0, this,
-					    SLOT(activate()), collection,
-					    name());
-		m_action -> setToolTip(i18n("Draw freehand"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Brush"),
+                        "paintbrush", 0, this,
+                        SLOT(activate()), collection,
+                        name());
+        m_action -> setToolTip(i18n("Draw freehand"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 

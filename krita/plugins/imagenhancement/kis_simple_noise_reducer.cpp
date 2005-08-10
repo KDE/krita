@@ -21,7 +21,7 @@
 #include "kis_multi_integer_filter_widget.h"
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-	: KisFilter(id(), "enhance", "&Simple Noise Reduction")
+    : KisFilter(id(), "enhance", "&Simple Noise Reduction")
 {
 }
 
@@ -32,106 +32,106 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 
 KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold") ) );
-	param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold") ) );
+    param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisSimpleNoiseReducer::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisSimpleNoiseReducerConfiguration( 50, 1);
-	} else {
-		return new KisSimpleNoiseReducerConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisSimpleNoiseReducerConfiguration( 50, 1);
+    } else {
+        return new KisSimpleNoiseReducerConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+    }
 }
 
 inline int ABS(int v)
 {
-	if(v < 0) return -v;
-	return v;
+    if(v < 0) return -v;
+    return v;
 }
 
 void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-	int threshold, windowsize;
-	if(config !=0)
-	{
-		KisSimpleNoiseReducerConfiguration* configSNRC = (KisSimpleNoiseReducerConfiguration*)config;
-		threshold = configSNRC->threshold;
-		windowsize = configSNRC->windowsize;
-	} else {
-		threshold = 50;
-		windowsize = 1;
-	}
-	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-	QRect extends = src->extent();
-	int lastx = extends.width() - windowsize;
-	int lasty = extends.height() - windowsize;
-	int* means = new int[depth];
-	
-	int pixelsProcessed = 0;
-	setProgressTotalSteps(rect.width() * rect.height());
-	while( ! srcIt.isDone() )
-	{
-		if(srcIt.isSelected())
-		{
-			int x = srcIt.x();
-			int y = srcIt.y();
-			int lx = ( x >= lastx ) ? 2 * windowsize - (x - lastx ) : 2 * windowsize + 1;
-			int ly = ( y >= lasty ) ? 2 * windowsize - (y - lasty ) : 2 * windowsize + 1;
-			if(x > windowsize) x -= windowsize;
-			else x = 0;
-			if(y > windowsize) y -= windowsize;
-			else y = 0;
-			KisRectIteratorPixel neighbourgh_srcIt = src->createRectIterator(x, y, lx, ly, false);
-			// Reinit means
-			for( int i = 0; i < depth; i++)
-			{
-				means[i] = 0;
-			}
-			while( ! neighbourgh_srcIt.isDone() )
-			{
-				if(neighbourgh_srcIt.x() != srcIt.x() || neighbourgh_srcIt.y() != srcIt.y() )
-				{
-					for( int i = 0; i < depth; i++)
-					{
-						means[i] += neighbourgh_srcIt.oldRawData()[i];
-					}
-				}
-				++neighbourgh_srcIt;
-			}
-			// Count the number of time that the data is too much different from is neighbourgh
-			int pixelsnb = lx * ly - 1;
-			int depthbad = 0;
-			for( int i = 0; i < depth; i++)
-			{
-				means[i] /= pixelsnb;
-				if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
-				{
-// 					kdDebug() << ABS(means[i] - srcIt.oldRawData()[i]) << " " << ( 0.1 * means[i] ) << " " << means[i] << " " << (int)srcIt.oldRawData()[i] << endl;
-					++depthbad;
-				}
-			}
-// 			kdDebug() << depthbad << " " << (depth / 2) << endl;
-			// Change the value of the pixel, if the pixel is too much different
-			if(depthbad > depth / 2)
-			{
-				for( int i = 0; i < depth; i++)
-				{
-					dstIt.rawData()[i] = means[i];
-				}
-			}
-		}
-		setProgress(++pixelsProcessed);
-		++srcIt;
-		++dstIt;
-	}
-	setProgressDone(); // Must be called even if you don't really support progression
+    int threshold, windowsize;
+    if(config !=0)
+    {
+        KisSimpleNoiseReducerConfiguration* configSNRC = (KisSimpleNoiseReducerConfiguration*)config;
+        threshold = configSNRC->threshold;
+        windowsize = configSNRC->windowsize;
+    } else {
+        threshold = 50;
+        windowsize = 1;
+    }
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+    QRect extends = src->extent();
+    int lastx = extends.width() - windowsize;
+    int lasty = extends.height() - windowsize;
+    int* means = new int[depth];
+    
+    int pixelsProcessed = 0;
+    setProgressTotalSteps(rect.width() * rect.height());
+    while( ! srcIt.isDone() )
+    {
+        if(srcIt.isSelected())
+        {
+            int x = srcIt.x();
+            int y = srcIt.y();
+            int lx = ( x >= lastx ) ? 2 * windowsize - (x - lastx ) : 2 * windowsize + 1;
+            int ly = ( y >= lasty ) ? 2 * windowsize - (y - lasty ) : 2 * windowsize + 1;
+            if(x > windowsize) x -= windowsize;
+            else x = 0;
+            if(y > windowsize) y -= windowsize;
+            else y = 0;
+            KisRectIteratorPixel neighbourgh_srcIt = src->createRectIterator(x, y, lx, ly, false);
+            // Reinit means
+            for( int i = 0; i < depth; i++)
+            {
+                means[i] = 0;
+            }
+            while( ! neighbourgh_srcIt.isDone() )
+            {
+                if(neighbourgh_srcIt.x() != srcIt.x() || neighbourgh_srcIt.y() != srcIt.y() )
+                {
+                    for( int i = 0; i < depth; i++)
+                    {
+                        means[i] += neighbourgh_srcIt.oldRawData()[i];
+                    }
+                }
+                ++neighbourgh_srcIt;
+            }
+            // Count the number of time that the data is too much different from is neighbourgh
+            int pixelsnb = lx * ly - 1;
+            int depthbad = 0;
+            for( int i = 0; i < depth; i++)
+            {
+                means[i] /= pixelsnb;
+                if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
+                {
+//                     kdDebug() << ABS(means[i] - srcIt.oldRawData()[i]) << " " << ( 0.1 * means[i] ) << " " << means[i] << " " << (int)srcIt.oldRawData()[i] << endl;
+                    ++depthbad;
+                }
+            }
+//             kdDebug() << depthbad << " " << (depth / 2) << endl;
+            // Change the value of the pixel, if the pixel is too much different
+            if(depthbad > depth / 2)
+            {
+                for( int i = 0; i < depth; i++)
+                {
+                    dstIt.rawData()[i] = means[i];
+                }
+            }
+        }
+        setProgress(++pixelsProcessed);
+        ++srcIt;
+        ++dstIt;
+    }
+    setProgressDone(); // Must be called even if you don't really support progression
 }
 

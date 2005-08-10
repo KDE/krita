@@ -37,42 +37,42 @@ class KoColorSlider;
 class QColor;
 
 class KRITAUI_EXPORT KisRGBWidget
-	 : public QWidget,
-	   public KisCanvasObserver
+     : public QWidget,
+       public KisCanvasObserver
 {
-	Q_OBJECT
-	typedef QWidget super;
+    Q_OBJECT
+    typedef QWidget super;
 
 public:
-	KisRGBWidget(QWidget *parent = 0L, const char *name = 0);
-	virtual ~KisRGBWidget() {}
+    KisRGBWidget(QWidget *parent = 0L, const char *name = 0);
+    virtual ~KisRGBWidget() {}
 
 protected slots:
-	virtual void slotRChanged(int r);
-	virtual void slotGChanged(int g);
-	virtual void slotBChanged(int b);
+    virtual void slotRChanged(int r);
+    virtual void slotGChanged(int g);
+    virtual void slotBChanged(int b);
 
-	void slotFGColorSelected(const QColor& c);
-	void slotBGColorSelected(const QColor& c);
-
-private:
-	void update(KisCanvasSubject*);
+    void slotFGColorSelected(const QColor& c);
+    void slotBGColorSelected(const QColor& c);
 
 private:
-	KisCanvasSubject *m_subject;
-	KoColorSlider *mRSlider;
-	KoColorSlider *mGSlider;
-	KoColorSlider *mBSlider;
-	QLabel *mRLabel;
-	QLabel *mGLabel;
-	QLabel *mBLabel;
-	QSpinBox *mRIn;
-	QSpinBox *mGIn;
-	QSpinBox *mBIn;
-	KDualColorButton *m_ColorButton;
+    void update(KisCanvasSubject*);
 
-	QColor m_fgColor;
-	QColor m_bgColor;
+private:
+    KisCanvasSubject *m_subject;
+    KoColorSlider *mRSlider;
+    KoColorSlider *mGSlider;
+    KoColorSlider *mBSlider;
+    QLabel *mRLabel;
+    QLabel *mGLabel;
+    QLabel *mBLabel;
+    QSpinBox *mRIn;
+    QSpinBox *mGIn;
+    QSpinBox *mBIn;
+    KDualColorButton *m_ColorButton;
+
+    QColor m_fgColor;
+    QColor m_bgColor;
 };
 
 #endif

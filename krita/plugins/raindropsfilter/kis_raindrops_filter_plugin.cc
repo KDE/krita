@@ -34,10 +34,10 @@ KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisRainDropsFilter());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisRainDropsFilter());
+    }
 }
 
 KisRainDropsFilterPlugin::~KisRainDropsFilterPlugin()

@@ -27,10 +27,10 @@
 #include "kis_cmb_idlist.h"
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
-	: super( false, parent, name )
+    : super( false, parent, name )
 {
-	connect(this, SIGNAL(activated(int)), this, SLOT(slotIDActivated(int)));
-	connect(this, SIGNAL(highlighted(int)), this, SLOT(slotIDHighlighted(int)));
+    connect(this, SIGNAL(activated(int)), this, SLOT(slotIDActivated(int)));
+    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotIDHighlighted(int)));
 }
 
 KisCmbIDList::~KisCmbIDList()
@@ -40,54 +40,54 @@ KisCmbIDList::~KisCmbIDList()
 
 void KisCmbIDList::setIDList(const KisIDList & list)
 {
-	m_list = list;
-	KisIDList::iterator it;
+    m_list = list;
+    KisIDList::iterator it;
         for( it = m_list.begin(); it != m_list.end(); ++it )
-		insertItem((*it).name());
+        insertItem((*it).name());
 }
 
 
 KisID KisCmbIDList::currentItem() const
 {
-	Q_UINT32 i = super::currentItem();
-	if (i > m_list.count()) return KisID();
+    Q_UINT32 i = super::currentItem();
+    if (i > m_list.count()) return KisID();
 
-	return m_list[i];
+    return m_list[i];
 }
 
 void KisCmbIDList::setCurrent(const KisID id)
 {
-	if (m_list.find(id) != m_list.end()) 
-		super::setCurrentText(id.name());
-	else {
-		m_list.push_back(id);
-		insertItem(id.name());
-		super::setCurrentText(id.name());
-	}
+    if (m_list.find(id) != m_list.end()) 
+        super::setCurrentText(id.name());
+    else {
+        m_list.push_back(id);
+        insertItem(id.name());
+        super::setCurrentText(id.name());
+    }
 }
 
 void KisCmbIDList::setCurrentText(const QString & s)
 {
-	KisIDList::iterator it;
+    KisIDList::iterator it;
         for( it = m_list.begin(); it != m_list.end(); ++it )
-		if ((*it).id() == s) {
-			super::setCurrentText((*it).name());
-		}
+        if ((*it).id() == s) {
+            super::setCurrentText((*it).name());
+        }
 }
 
 void KisCmbIDList::slotIDActivated(int i)
 {
-	if (i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
-	emit activated(m_list[i]);
+    emit activated(m_list[i]);
 
 }
 
 void KisCmbIDList::slotIDHighlighted(int i)
 {
-	if (i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
-	emit highlighted(m_list[i]);
+    emit highlighted(m_list[i]);
 
 }
 

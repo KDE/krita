@@ -27,49 +27,49 @@
 #include "kis_wetness_visualisation_filter.h"
 
 WetnessVisualisationFilter::WetnessVisualisationFilter(KisView* view)
-	: m_view(view), m_action(0) {
-	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
+    : m_view(view), m_action(0) {
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }
 
 // XXX this needs to work on a per-layer basis!
 
 void WetnessVisualisationFilter::setAction(KToggleAction* action) {
-	m_action = action;
-	if (!m_action)
-		return;
-	KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
-	Q_ASSERT(cs);
-	m_action -> setChecked(cs -> paintWetness());
+    m_action = action;
+    if (!m_action)
+        return;
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
+            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+    Q_ASSERT(cs);
+    m_action -> setChecked(cs -> paintWetness());
 }
 
 void WetnessVisualisationFilter::slotActivated() {
-	kdDebug(DBG_AREA_CMS) << "activated" << endl;
-	if (!m_action) {
-		kdDebug(DBG_AREA_CMS) << "no action" << endl;
-		return;
-	}
-	KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
-	Q_ASSERT(cs);
-	if (!m_action -> isChecked()) {
-		m_timer.stop();
-		cs -> setPaintWetness(false);
-	} else {
-		m_timer.start(500);
-		cs -> setPaintWetness(true);
-	}
-	if (m_view -> currentImg())
-		m_view -> currentImg() -> notify();
+    kdDebug(DBG_AREA_CMS) << "activated" << endl;
+    if (!m_action) {
+        kdDebug(DBG_AREA_CMS) << "no action" << endl;
+        return;
+    }
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
+            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+    Q_ASSERT(cs);
+    if (!m_action -> isChecked()) {
+        m_timer.stop();
+        cs -> setPaintWetness(false);
+    } else {
+        m_timer.start(500);
+        cs -> setPaintWetness(true);
+    }
+    if (m_view -> currentImg())
+        m_view -> currentImg() -> notify();
 }
 
 void WetnessVisualisationFilter::slotTimeout() {
-	kdDebug() << "repaint" << endl;
-	KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-			KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
-	Q_ASSERT(cs);
-	cs -> resetPhase();
+    kdDebug() << "repaint" << endl;
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
+            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+    Q_ASSERT(cs);
+    cs -> resetPhase();
 
-	if (m_view -> currentImg())
-		m_view -> currentImg() -> notify();
+    if (m_view -> currentImg())
+        m_view -> currentImg() -> notify();
 }

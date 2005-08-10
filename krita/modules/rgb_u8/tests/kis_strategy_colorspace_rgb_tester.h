@@ -26,8 +26,8 @@ class KisRgbColorSpaceTester : public KUnitTest::Tester
 {
 public:
         void allTests();
-	void testBasics();
-	void testMixColors();
+    void testBasics();
+    void testMixColors();
 };
 
 #endif

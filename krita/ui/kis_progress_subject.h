@@ -23,19 +23,19 @@
 #include <koffice_export.h>
 
 class KRITAUI_EXPORT KisProgressSubject : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 
 protected:
-	virtual ~KisProgressSubject();
+    virtual ~KisProgressSubject();
 
 public:
-	virtual void cancel() = 0;
+    virtual void cancel() = 0;
 
 signals:
-	void notifyProgress(KisProgressSubject *subject, int percent);
-	void notifyProgressStage(KisProgressSubject *subject, const QString& stage, int percent);
-	void notifyProgressDone(KisProgressSubject *subject);
-	void notifyProgressError(KisProgressSubject *subject);
+    void notifyProgress(KisProgressSubject *subject, int percent);
+    void notifyProgressStage(KisProgressSubject *subject, const QString& stage, int percent);
+    void notifyProgressDone(KisProgressSubject *subject);
+    void notifyProgressError(KisProgressSubject *subject);
 };
 
 #endif // KIS_PROGRESS_SUBJECT_H_

@@ -30,14 +30,14 @@ class KisView;
  */
 class WSBrushPaintOpPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WSBrushPaintOpPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~WSBrushPaintOpPlugin();
+    WSBrushPaintOpPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~WSBrushPaintOpPlugin();
 
 private:
 
-	KisView* m_view;
+    KisView* m_view;
 };
 
 #endif // WSBRUSH_PAINTOP_PLUGIN_H_

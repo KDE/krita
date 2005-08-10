@@ -25,8 +25,8 @@
 class KisCImgPlugin : public KParts::Plugin
 {
 public:
-	KisCImgPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisCImgPlugin();
+    KisCImgPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisCImgPlugin();
 };
 
 #endif

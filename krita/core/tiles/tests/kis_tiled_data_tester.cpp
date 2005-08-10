@@ -33,41 +33,41 @@ static Q_UINT8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, OPACITY_TRANSPARENT};
 
 void KisTiledDataTester::allTests()
 {
-	KisDataManager *dm = new KisDataManager(TEST_PIXEL_SIZE, defaultPixel);
+    KisDataManager *dm = new KisDataManager(TEST_PIXEL_SIZE, defaultPixel);
 
-	Q_INT32 extentX;
-	Q_INT32 extentY;
-	Q_INT32 extentWidth;
-	Q_INT32 extentHeight;
+    Q_INT32 extentX;
+    Q_INT32 extentY;
+    Q_INT32 extentWidth;
+    Q_INT32 extentHeight;
 
-	dm -> extent(extentX, extentY, extentWidth, extentHeight);
-	CHECK(extentWidth, 0);
-	CHECK(extentHeight, 0);
+    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    CHECK(extentWidth, 0);
+    CHECK(extentHeight, 0);
 
-	const Q_UINT8 *readOnlyPixel = dm -> pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-	dm -> extent(extentX, extentY, extentWidth, extentHeight);
-	CHECK(extentWidth, 0);
-	CHECK(extentHeight, 0);
+    const Q_UINT8 *readOnlyPixel = dm -> pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    CHECK(extentWidth, 0);
+    CHECK(extentHeight, 0);
 
-	Q_UINT8 *writablePixel = dm -> writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-	dm -> extent(extentX, extentY, extentWidth, extentHeight);
-	CHECK(extentX, 0);
-	CHECK(extentY, 0);
-	CHECK(extentWidth, KisTile::WIDTH);
-	CHECK(extentHeight, KisTile::HEIGHT);
+    Q_UINT8 *writablePixel = dm -> writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    CHECK(extentX, 0);
+    CHECK(extentY, 0);
+    CHECK(extentWidth, KisTile::WIDTH);
+    CHECK(extentHeight, KisTile::HEIGHT);
 
-	writablePixel = dm -> writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
-	dm -> extent(extentX, extentY, extentWidth, extentHeight);
-	CHECK(extentX, -KisTile::WIDTH);
-	CHECK(extentY, -KisTile::HEIGHT);
-	CHECK(extentWidth, 2*KisTile::WIDTH);
-	CHECK(extentHeight, 2*KisTile::HEIGHT);
+    writablePixel = dm -> writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
+    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    CHECK(extentX, -KisTile::WIDTH);
+    CHECK(extentY, -KisTile::HEIGHT);
+    CHECK(extentWidth, 2*KisTile::WIDTH);
+    CHECK(extentHeight, 2*KisTile::HEIGHT);
 
-	dm -> clear();
-	dm -> extent(extentX, extentY, extentWidth, extentHeight);
-	CHECK(extentWidth, 0);
-	CHECK(extentHeight, 0);
+    dm -> clear();
+    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    CHECK(extentWidth, 0);
+    CHECK(extentHeight, 0);
 
-	delete dm;
+    delete dm;
 }
 

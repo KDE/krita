@@ -26,22 +26,22 @@
 
 class KisPaintDeviceVisitor {
 public:
-	KisPaintDeviceVisitor();
-	virtual ~KisPaintDeviceVisitor();
+    KisPaintDeviceVisitor();
+    virtual ~KisPaintDeviceVisitor();
 
 public:
-	virtual bool visit(KisPainter& gc, vKisPaintDeviceSP& devs) = 0;
-	virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev) = 0;
-	virtual bool visit(KisPainter& gc, vKisLayerSP& layers) = 0;
-	virtual bool visit(KisPainter& gc, KisLayerSP layer) = 0;
-	virtual bool visit(KisPainter& gc, KisSelectionSP selection) = 0;
+    virtual bool visit(KisPainter& gc, vKisPaintDeviceSP& devs) = 0;
+    virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev) = 0;
+    virtual bool visit(KisPainter& gc, vKisLayerSP& layers) = 0;
+    virtual bool visit(KisPainter& gc, KisLayerSP layer) = 0;
+    virtual bool visit(KisPainter& gc, KisSelectionSP selection) = 0;
 
 public:
-	bool operator()(KisPainter& gc, vKisPaintDeviceSP& devs);
-	bool operator()(KisPainter& gc, KisPaintDeviceSP dev);
-	bool operator()(KisPainter& gc, vKisLayerSP& layers);
-	bool operator()(KisPainter& gc, KisLayerSP layer);
-	bool operator()(KisPainter& gc, KisSelectionSP selection);
+    bool operator()(KisPainter& gc, vKisPaintDeviceSP& devs);
+    bool operator()(KisPainter& gc, KisPaintDeviceSP dev);
+    bool operator()(KisPainter& gc, vKisLayerSP& layers);
+    bool operator()(KisPainter& gc, KisLayerSP layer);
+    bool operator()(KisPainter& gc, KisSelectionSP selection);
 };
 
 inline
@@ -57,31 +57,31 @@ KisPaintDeviceVisitor::~KisPaintDeviceVisitor()
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, vKisPaintDeviceSP& devs)
 {
-	return visit(gc, devs);
+    return visit(gc, devs);
 }
 
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisPaintDeviceSP dev)
 {
-	return visit(gc, dev);
+    return visit(gc, dev);
 }
 
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, vKisLayerSP& layers)
 {
-	return visit(gc, layers);
+    return visit(gc, layers);
 }
 
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisLayerSP layer)
 {
-	return visit(gc, layer);
+    return visit(gc, layer);
 }
 
 inline
 bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisSelectionSP selection)
 {
-	return visit(gc, selection);
+    return visit(gc, selection);
 }
 
 

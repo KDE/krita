@@ -36,32 +36,32 @@ class KisCmbIDList;
 #include <kis_global.h>
 
 class NewLayerDialog : public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
-	NewLayerDialog(const KisID colorSpace,
-		       const QString & deviceName,
-		       QWidget *parent = 0,
-		       const char *name = 0);
+    NewLayerDialog(const KisID colorSpace,
+               const QString & deviceName,
+               QWidget *parent = 0,
+               const char *name = 0);
 
-	QString layerName() const;
-	KisCompositeOp compositeOp() const;
-	Q_INT32 opacity() const;
-	QPoint position() const;
-	KisID colorStrategyID() const;
+    QString layerName() const;
+    KisCompositeOp compositeOp() const;
+    Q_INT32 opacity() const;
+    QPoint position() const;
+    KisID colorStrategyID() const;
 
 private slots:
-	void slotSetColorStrategy(const KisID &colorStrategyId);
+    void slotSetColorStrategy(const KisID &colorStrategyId);
 
 protected slots:
     void slotNameChanged( const QString & );
 
 private:
-	KLineEdit *m_name;
-	KIntNumInput *m_opacity;
-	KisCmbComposite *m_cmbComposite;
-	KisCmbIDList *m_cmbImageType;
+    KLineEdit *m_name;
+    KIntNumInput *m_opacity;
+    KisCmbComposite *m_cmbComposite;
+    KisCmbIDList *m_cmbImageType;
 };
 
 #endif // KIS_DLG_NEW_LAYER_H_

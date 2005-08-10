@@ -33,18 +33,18 @@
 */
 
 KisDlgTransform::KisDlgTransform( QWidget *  parent,
-				  const char * name)
-	: super (parent, name, true, "", Ok | Cancel)
+                  const char * name)
+    : super (parent, name, true, "", Ok | Cancel)
 {
-	m_page = new WdgMatrix(this);
-	setCaption(i18n("Transform Current Layer"));
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    m_page = new WdgMatrix(this);
+    setCaption(i18n("Transform Current Layer"));
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 }
 
 KisDlgTransform::~KisDlgTransform()
 {
-	delete m_page;
+    delete m_page;
 }
 
 #include "kis_dlg_transform.moc"

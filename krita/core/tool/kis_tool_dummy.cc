@@ -29,10 +29,10 @@
 
 KisToolDummy::KisToolDummy()
 {
-	setName("tool_dummy");
-	m_subject = 0;
-	m_dragging = false;
-	setCursor(QCursor::forbiddenCursor);
+    setName("tool_dummy");
+    m_subject = 0;
+    m_dragging = false;
+    setCursor(QCursor::forbiddenCursor);
 }
 
 KisToolDummy::~KisToolDummy()
@@ -41,49 +41,49 @@ KisToolDummy::~KisToolDummy()
 
 void KisToolDummy::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	super::update(m_subject);
+    m_subject = subject;
+    super::update(m_subject);
 }
 
 void KisToolDummy::buttonPress(KisButtonPressEvent *e)
 {
-	if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
-		m_origScrollX = controller -> horzValue();
-		m_origScrollY = controller -> vertValue();
-		m_dragPos = controller -> windowToView(e -> pos());
-		m_dragging = true;
-	}
+        m_origScrollX = controller -> horzValue();
+        m_origScrollY = controller -> vertValue();
+        m_dragPos = controller -> windowToView(e -> pos());
+        m_dragging = true;
+    }
 }
 
 void KisToolDummy::move(KisMoveEvent *e)
 {
-	if (m_subject && m_dragging) {
-		KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    if (m_subject && m_dragging) {
+        KisCanvasControllerInterface *controller = m_subject -> canvasController();
 
-		KisPoint currPos = controller -> windowToView(e -> pos());
-		KisPoint delta = currPos - m_dragPos;
-		controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
-	}
+        KisPoint currPos = controller -> windowToView(e -> pos());
+        KisPoint delta = currPos - m_dragPos;
+        controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
+    }
 }
 
 void KisToolDummy::buttonRelease(KisButtonReleaseEvent *e)
 {
-	if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
-		m_dragging = false;
-	}
+    if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
+        m_dragging = false;
+    }
 }
 
 void KisToolDummy::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Dummy"), "tool_dummy", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Dummy"), "tool_dummy", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 #include "kis_tool_dummy.moc"

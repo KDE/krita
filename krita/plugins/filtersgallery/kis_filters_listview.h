@@ -34,31 +34,31 @@ namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
 
-	class KisFiltersIconViewItem : public QIconViewItem {
-		public:
-			KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon, KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig ) : QIconViewItem(parent, text, icon), m_id(id), m_filter(filter), m_filterconfig(filterConfig)
-			{
-			}
-			inline KisID id() { return m_id; }
-			inline KisFilter* filter() { return m_filter; }
+    class KisFiltersIconViewItem : public QIconViewItem {
+        public:
+            KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon, KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig ) : QIconViewItem(parent, text, icon), m_id(id), m_filter(filter), m_filterconfig(filterConfig)
+            {
+            }
+            inline KisID id() { return m_id; }
+            inline KisFilter* filter() { return m_filter; }
                         inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
-		private:
-			KisID m_id;
-			KisFilter* m_filter;
-			KisFilterConfiguration* m_filterconfig;
-	};
-	class KisFiltersListView : public KIconView {
-		public:
-			KisFiltersListView(KisView* view, QWidget* parent);
-		public:
-			void buildPreview();
-// 			KisImageSP image();
-// 			KisLayerSP layer();
-		private:
-			KisView* m_view;
-			KisImageSP m_imgthumb;
-			KisLayerSP m_thumb;
-	};
+        private:
+            KisID m_id;
+            KisFilter* m_filter;
+            KisFilterConfiguration* m_filterconfig;
+    };
+    class KisFiltersListView : public KIconView {
+        public:
+            KisFiltersListView(KisView* view, QWidget* parent);
+        public:
+            void buildPreview();
+//             KisImageSP image();
+//             KisLayerSP layer();
+        private:
+            KisView* m_view;
+            KisImageSP m_imgthumb;
+            KisLayerSP m_thumb;
+    };
 
 };
 };

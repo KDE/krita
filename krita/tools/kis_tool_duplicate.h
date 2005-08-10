@@ -32,49 +32,49 @@ class KisButtonPressEvent;
 
 class KisToolDuplicate : public KisToolFreehand {
 
-	typedef KisToolFreehand super;
-	Q_OBJECT
+    typedef KisToolFreehand super;
+    Q_OBJECT
 
 public:
-	KisToolDuplicate();
-	virtual ~KisToolDuplicate();
+    KisToolDuplicate();
+    virtual ~KisToolDuplicate();
   
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_FREEHAND; }
-	virtual void buttonPress(KisButtonPressEvent *e);
-	
-	virtual void paintAt(const KisPoint &pos,
-			     const double pressure,
-			     const double xTilt,
-			     const double yTilt);
-	
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual void buttonPress(KisButtonPressEvent *e);
+    
+    virtual void paintAt(const KisPoint &pos,
+                 const double pressure,
+                 const double xTilt,
+                 const double yTilt);
+    
 
 protected slots:
-	virtual void activate();
+    virtual void activate();
 
 protected:
-	virtual void initPaint(KisEvent *e);
+    virtual void initPaint(KisEvent *e);
 
-	// Tool starting duplicate
-	KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
-	bool m_isOffsetNotUptodate; // Tells if the offset is update
-	KisPoint m_position; // Give the position of the last alt-click
+    // Tool starting duplicate
+    KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
+    bool m_isOffsetNotUptodate; // Tells if the offset is update
+    KisPoint m_position; // Give the position of the last alt-click
 };
 
 
 class KisToolDuplicateFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolDuplicateFactory() : super() {};
-	virtual ~KisToolDuplicateFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolDuplicate();
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("duplicate", i18n("Duplicate tool")); }
+    KisToolDuplicateFactory() : super() {};
+    virtual ~KisToolDuplicateFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolDuplicate();
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("duplicate", i18n("Duplicate tool")); }
 };
 
 

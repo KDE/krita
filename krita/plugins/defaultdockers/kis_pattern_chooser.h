@@ -23,18 +23,18 @@
 class QLabel;
 
 class KisPatternChooser : public KisItemChooser {
-	typedef KisItemChooser super;
-	Q_OBJECT
+    typedef KisItemChooser super;
+    Q_OBJECT
 
 public:
-	KisPatternChooser(QWidget *parent = 0, const char *name = 0);
-	virtual ~KisPatternChooser();
+    KisPatternChooser(QWidget *parent = 0, const char *name = 0);
+    virtual ~KisPatternChooser();
 
 protected:
-	virtual void update(KoIconItem *item);
+    virtual void update(KoIconItem *item);
 
 private:
-	QLabel *m_lbName;
+    QLabel *m_lbName;
 };
 
 #endif // KIS_PATTERN_CHOOSER_H_

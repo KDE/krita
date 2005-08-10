@@ -25,26 +25,26 @@
 #include <qstring.h>
 
 namespace KJSEmbed {
-	class KJSEmbedPart;
+    class KJSEmbedPart;
 };
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			class Script : public QObject {
-				Q_OBJECT
-				public:
-					Script(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& script);
-				public:
-					static Script* loadFromFile(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& file);
-				public slots:
-					void execute();
-				private:
-					KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
-					QString m_script;
-			};
-		};
-	};
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            class Script : public QObject {
+                Q_OBJECT
+                public:
+                    Script(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& script);
+                public:
+                    static Script* loadFromFile(KJSEmbed::KJSEmbedPart* jsembedpart, const QString& file);
+                public slots:
+                    void execute();
+                private:
+                    KJSEmbed::KJSEmbedPart* m_jsEmbedPart;
+                    QString m_script;
+            };
+        };
+    };
 };
 
 #endif

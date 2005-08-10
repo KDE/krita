@@ -45,25 +45,25 @@ K_EXPORT_COMPONENT_FACTORY( kritatooltransform, ToolTransformFactory( "krita" ) 
 
 
 ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ToolTransformFactory::instance());
+    setInstance(ToolTransformFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "Transform tool plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "Transform tool plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisView * view = dynamic_cast<KisView *>(parent);
+    if ( parent->inherits("KisFactory") )
+    {
+        KisView * view = dynamic_cast<KisView *>(parent);
 
-		KisToolRegistry * r = KisToolRegistry::instance();
-		KisToolTransformFactory * f = new KisToolTransformFactory();
-		Q_CHECK_PTR(f);
-		r -> add(f);
-	}
+        KisToolRegistry * r = KisToolRegistry::instance();
+        KisToolTransformFactory * f = new KisToolTransformFactory();
+        Q_CHECK_PTR(f);
+        r -> add(f);
+    }
 
 }
 

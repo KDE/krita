@@ -35,63 +35,63 @@ class KActionCollection;
 
 class KisToolFill : public KisToolPaint {
 
-	typedef KisToolPaint super;
-	Q_OBJECT
+    typedef KisToolPaint super;
+    Q_OBJECT
 
 public:
 
-	KisToolFill();
-	virtual ~KisToolFill();
+    KisToolFill();
+    virtual ~KisToolFill();
   
-	virtual void setup(KActionCollection *collection);
+    virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_FILL; }
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void buttonPress(KisButtonPressEvent*); 
+    virtual void buttonPress(KisButtonPressEvent*); 
 
-	bool flood(int startX, int startY);
+    bool flood(int startX, int startY);
       
-	virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
-	virtual void slotSetThreshold(int);
-	virtual void slotSetUsePattern(int);
-	virtual void slotSetSampleMerged(int);
+    virtual void slotSetThreshold(int);
+    virtual void slotSetUsePattern(int);
+    virtual void slotSetSampleMerged(int);
 
 private:
-	int m_threshold;
-	Q_INT32 m_depth;
-	KisLayerSP m_lay;
-	QUANTUM* m_oldColor, *m_color;
-	KisPainter *m_painter;
-	KisCanvasSubject *m_subject;
-	KisImageSP m_currentImage;
-	bool *m_map, m_sampleMerged, m_usePattern, m_useSelection;
-	KisSelectionSP m_selection;
+    int m_threshold;
+    Q_INT32 m_depth;
+    KisLayerSP m_lay;
+    QUANTUM* m_oldColor, *m_color;
+    KisPainter *m_painter;
+    KisCanvasSubject *m_subject;
+    KisImageSP m_currentImage;
+    bool *m_map, m_sampleMerged, m_usePattern, m_useSelection;
+    KisSelectionSP m_selection;
 
-	QLabel *m_lbThreshold;
-	KIntNumInput *m_slThreshold;
-	QCheckBox *m_checkUsePattern;
-	QCheckBox *m_checkSampleMerged;
+    QLabel *m_lbThreshold;
+    KIntNumInput *m_slThreshold;
+    QCheckBox *m_checkUsePattern;
+    QCheckBox *m_checkSampleMerged;
 };
 
 
 #include "kis_tool_factory.h"
 
 class KisToolFillFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolFillFactory() : super() {};
-	virtual ~KisToolFillFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisToolFill * t = new KisToolFill(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("fill", i18n("Fill tool")); }
+    KisToolFillFactory() : super() {};
+    virtual ~KisToolFillFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisToolFill * t = new KisToolFill(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("fill", i18n("Fill tool")); }
 
 };
 

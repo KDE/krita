@@ -25,55 +25,55 @@
 #include <dcopclient.h>
 
 KisViewIface::KisViewIface( KisView *view_ )
-	: KoViewIface( view_ )
+    : KoViewIface( view_ )
 {
-	m_view = view_;
+    m_view = view_;
 }
 
 void KisViewIface::copy()
 {
-// 	m_view->copy();
+//     m_view->copy();
 }
 
 void KisViewIface::cut()
 {
-// 	m_view->cut();
+//     m_view->cut();
 }
 
 void KisViewIface::removeSelection()
 {
-// 	m_view->removeSelection();
+//     m_view->removeSelection();
 }
 
 void KisViewIface::paste()
 {
-// 	m_view->paste();
+//     m_view->paste();
 }
 
 void KisViewIface::copySelectionToNewLayer()
 {
-// 	m_view->copySelectionToNewLayer();
+//     m_view->copySelectionToNewLayer();
 }
 
 void KisViewIface::selectAll()
 {
-// 	m_view->selectAll();
+//     m_view->selectAll();
 }
 
 void KisViewIface::unSelectAll()
 {
-// 	m_view->unSelectAll();
+//     m_view->unSelectAll();
 }
 
 
 void KisViewIface::next_layer()
 {
-	m_view->next_layer();
+    m_view->next_layer();
 }
 
 void KisViewIface::previous_layer()
 {
-	m_view->previous_layer();
+    m_view->previous_layer();
 }
 
 void KisViewIface::slotImportImage()

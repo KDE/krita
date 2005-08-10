@@ -27,34 +27,34 @@ class QToolButton;
 class KProgress;
 
 class KisLabelProgress : public QLabel, public KisProgressDisplayInterface {
-	Q_OBJECT
-	typedef QLabel super;
+    Q_OBJECT
+    typedef QLabel super;
 
 public:
-	KisLabelProgress(QWidget *parent, const char *name = 0, WFlags f = 0);
-	virtual ~KisLabelProgress();
+    KisLabelProgress(QWidget *parent, const char *name = 0, WFlags f = 0);
+    virtual ~KisLabelProgress();
 
 public:
-	// Implements KisProgressDisplayInterface
-	void setSubject(KisProgressSubject *subject, bool modal, bool canCancel);
+    // Implements KisProgressDisplayInterface
+    void setSubject(KisProgressSubject *subject, bool modal, bool canCancel);
 
 private slots:
-	virtual void update(KisProgressSubject *subject, int percent);
-	virtual void updateStage(KisProgressSubject *subject, const QString& stage, int percent);
-	virtual void done(KisProgressSubject *subject);
-	virtual void error(KisProgressSubject *subject);
-	virtual void subjectDestroyed();
+    virtual void update(KisProgressSubject *subject, int percent);
+    virtual void updateStage(KisProgressSubject *subject, const QString& stage, int percent);
+    virtual void done(KisProgressSubject *subject);
+    virtual void error(KisProgressSubject *subject);
+    virtual void subjectDestroyed();
 
 private slots:
-	void cancelPressed();
+    void cancelPressed();
 
 private:
-	void reset();
+    void reset();
 
-	KisProgressSubject *m_subject;
-	KProgress *m_bar;
-	QToolButton *m_cancelButton;
-	bool m_modal;
+    KisProgressSubject *m_subject;
+    KProgress *m_bar;
+    QToolButton *m_cancelButton;
+    bool m_modal;
 };
 
 #endif // KIS_LABEL_PROGRESS_H_

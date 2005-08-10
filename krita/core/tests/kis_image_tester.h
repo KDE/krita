@@ -25,7 +25,7 @@ class KisImageTester : public KUnitTest::Tester
 {
 public:
         void allTests();
-	void mergeTests();
+    void mergeTests();
 };
 
 #endif

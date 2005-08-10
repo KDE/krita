@@ -33,16 +33,16 @@
 #include "kis_paint_device.h"
 
 KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject)
-	: super(parent),
-	  m_subject(subject)
+    : super(parent),
+      m_subject(subject)
 {
-	m_page = new WdgSelectionOptions(this);
-	Q_CHECK_PTR(m_page);
+    m_page = new WdgSelectionOptions(this);
+    Q_CHECK_PTR(m_page);
 
-	QVBoxLayout * l = new QVBoxLayout(this);
-	l -> addWidget(m_page);
+    QVBoxLayout * l = new QVBoxLayout(this);
+    l -> addWidget(m_page);
 
-	connect(m_page -> cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
+    connect(m_page -> cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -51,20 +51,20 @@ KisSelectionOptions::~KisSelectionOptions()
 
 int KisSelectionOptions::action()
 {
-	return m_page -> cmbAction -> currentItem();
+    return m_page -> cmbAction -> currentItem();
 }
 
 void KisSelectionOptions::slotActivated()
 {
-	
-	if (!m_subject) return;
-	KisImageSP img = m_subject -> currentImg();
-	if (!img) return;
-	KisLayerSP l = img -> activeLayer();
-	if (!l) return;
+    
+    if (!m_subject) return;
+    KisImageSP img = m_subject -> currentImg();
+    if (!img) return;
+    KisLayerSP l = img -> activeLayer();
+    if (!l) return;
 
-	if (l -> hasSelection()) {
-	}
+    if (l -> hasSelection()) {
+    }
 }
 
 #include "kis_selection_options.moc"

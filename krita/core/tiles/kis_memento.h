@@ -28,35 +28,35 @@ class KisTiledDataManager;
 class KisMemento : public KShared
 {
 public:
-	KisMemento(Q_UINT32 pixelSize);
-	~KisMemento();
+    KisMemento(Q_UINT32 pixelSize);
+    ~KisMemento();
 /*
-	// For consolidating transactions
-	virtual KisTransaction &operator+=(const KisTransaction &) = 0;
-	// For consolidating transactions
-	virtual KisTransaction &operator+(const KisTransaction &,
-				  const KisTransaction &) = 0;
+    // For consolidating transactions
+    virtual KisTransaction &operator+=(const KisTransaction &) = 0;
+    // For consolidating transactions
+    virtual KisTransaction &operator+(const KisTransaction &,
+                  const KisTransaction &) = 0;
 */
-	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
 
-	// For debugging use
-	bool valid() const { return m_valid; }
-	void setInvalid() { m_valid = false; }
+    // For debugging use
+    bool valid() const { return m_valid; }
+    void setInvalid() { m_valid = false; }
 
 private:
-	friend class KisTiledDataManager;
-	KisTiledDataManager *originator;
-	KisTile **m_hashTable;	
-	Q_UINT32 m_numTiles;
-	KisTile **m_redoHashTable;
-	struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};
-	DeletedTile *m_delTilesTable;
-	Q_UINT8 *m_defPixel;
-	Q_UINT8 *m_redoDefPixel;
-	void deleteAll(DeletedTile *deletedtile);
-	void deleteAll(KisTile *tile);
+    friend class KisTiledDataManager;
+    KisTiledDataManager *originator;
+    KisTile **m_hashTable;    
+    Q_UINT32 m_numTiles;
+    KisTile **m_redoHashTable;
+    struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};
+    DeletedTile *m_delTilesTable;
+    Q_UINT8 *m_defPixel;
+    Q_UINT8 *m_redoDefPixel;
+    void deleteAll(DeletedTile *deletedtile);
+    void deleteAll(KisTile *tile);
 
-	bool m_valid;
+    bool m_valid;
 };
 
 #endif // KIS_MEMENTO_H_

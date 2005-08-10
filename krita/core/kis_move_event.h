@@ -21,10 +21,10 @@
 #include "kis_event.h"
 
 class KisMoveEvent : public KisEvent {
-	typedef KisEvent super;
+    typedef KisEvent super;
 public:
-	KisMoveEvent() {}
-	KisMoveEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : super(MoveEvent, device, pos, globalPos, pressure, xTilt, yTilt, state) {}
+    KisMoveEvent() {}
+    KisMoveEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : super(MoveEvent, device, pos, globalPos, pressure, xTilt, yTilt, state) {}
 };
 
 #endif // KIS_MOVE_EVENT_H_

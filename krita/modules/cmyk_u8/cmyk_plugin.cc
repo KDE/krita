@@ -39,24 +39,24 @@ K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )
 
 
 CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(CMYKPluginFactory::instance());
+           setInstance(CMYKPluginFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "CMYK Color model plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "CMYK Color model plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		m_ColorSpaceCMYK = new KisCmykColorSpace();
-		Q_CHECK_PTR(m_ColorSpaceCMYK);
+    if ( parent->inherits("KisFactory") )
+    {
+        m_ColorSpaceCMYK = new KisCmykColorSpace();
+        Q_CHECK_PTR(m_ColorSpaceCMYK);
 
- 		if (m_ColorSpaceCMYK -> valid())
- 			KisColorSpaceRegistry::instance() -> add(m_ColorSpaceCMYK);
-	}
+         if (m_ColorSpaceCMYK -> valid())
+             KisColorSpaceRegistry::instance() -> add(m_ColorSpaceCMYK);
+    }
 
 }
 

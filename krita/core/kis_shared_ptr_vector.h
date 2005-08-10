@@ -32,29 +32,29 @@
 template <class T>
 class KisSharedPtrVector : public QValueVector< KSharedPtr<T> >
 {
-	typedef QValueVector< KSharedPtr<T> > super;
+    typedef QValueVector< KSharedPtr<T> > super;
 public:
-	KisSharedPtrVector() {}
+    KisSharedPtrVector() {}
 
-	void pop_back()
-	{
-        	if (!super::empty()) {
-			super::back() = 0;
-			super::pop_back();
-		}
-	}
+    void pop_back()
+    {
+            if (!super::empty()) {
+            super::back() = 0;
+            super::pop_back();
+        }
+    }
 
-	typename super::iterator erase(typename super::iterator it)
-	{
-		*it = 0;
-		return super::erase(it);
-	}
+    typename super::iterator erase(typename super::iterator it)
+    {
+        *it = 0;
+        return super::erase(it);
+    }
 
-	typename super::iterator erase(typename super::iterator first, typename super::iterator last)
-	{
-		qFill(first, last, 0);
-		return super::erase(first, last);
-	}
+    typename super::iterator erase(typename super::iterator first, typename super::iterator last)
+    {
+        qFill(first, last, 0);
+        return super::erase(first, last);
+    }
 };
 
 #endif // KIS_SHARED_PTR_VECTOR_H

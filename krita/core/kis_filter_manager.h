@@ -44,43 +44,43 @@ class KisPreviewDialog;
  */
 class KRITACORE_EXPORT KisFilterManager : public QObject {
 
-	Q_OBJECT;
+    Q_OBJECT;
 
 public:
 
-	KisFilterManager(KisView * parent, KisDoc * doc);
-	~KisFilterManager();
+    KisFilterManager(KisView * parent, KisDoc * doc);
+    ~KisFilterManager();
 
-	void setup(KActionCollection * ac);
-	void updateGUI();
+    void setup(KActionCollection * ac);
+    void updateGUI();
 
 
-	bool apply();
+    bool apply();
 
 protected slots:
 
-	void slotApply();
-	void slotApplyFilter(int);
-	void refreshPreview();
+    void slotApply();
+    void slotApplyFilter(int);
+    void refreshPreview();
 
 private:
 
-	KisView * m_view;
-	KisDoc * m_doc;
+    KisView * m_view;
+    KisDoc * m_doc;
 
-	KAction * m_reapplyAction;
+    KAction * m_reapplyAction;
 
-	QPtrList<KAction> m_filterActions;
-	
-	KisFilterConfiguration * m_lastFilterConfig;
-	KisFilter * m_lastFilter;
-	KisPreviewDialog * m_lastDialog;
-	KisFilterConfigWidget * m_lastWidget;
-	
-	KisIDList m_filterList; // Map the actions in the signalmapper to the filters
-	QSignalMapper * m_filterMapper;
-	
-	QDict<KActionMenu> m_filterActionMenus;
+    QPtrList<KAction> m_filterActions;
+    
+    KisFilterConfiguration * m_lastFilterConfig;
+    KisFilter * m_lastFilter;
+    KisPreviewDialog * m_lastDialog;
+    KisFilterConfigWidget * m_lastWidget;
+    
+    KisIDList m_filterList; // Map the actions in the signalmapper to the filters
+    QSignalMapper * m_filterMapper;
+    
+    QDict<KActionMenu> m_filterActionMenus;
 };
 
 #endif

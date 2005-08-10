@@ -28,45 +28,45 @@ class KisPoint;
 
 class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolPan();
-	virtual ~KisToolPan();
+    KisToolPan();
+    virtual ~KisToolPan();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void setup(KActionCollection *collection);
+    virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_CANVAS; }
 
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisPoint m_dragPos;
-	Q_INT32 m_origScrollX;
-	Q_INT32 m_origScrollY;
-	bool m_dragging;
-	QCursor m_openHandCursor;
-	QCursor m_closedHandCursor;
+    KisCanvasSubject *m_subject;
+    KisPoint m_dragPos;
+    Q_INT32 m_origScrollX;
+    Q_INT32 m_origScrollY;
+    bool m_dragging;
+    QCursor m_openHandCursor;
+    QCursor m_closedHandCursor;
 };
 
 class KisToolPanFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolPanFactory() : super() {};
-	virtual ~KisToolPanFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolPan(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
+    KisToolPanFactory() : super() {};
+    virtual ~KisToolPanFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolPan(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
 };
 
 

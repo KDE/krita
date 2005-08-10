@@ -39,22 +39,22 @@ class KToggleAction;
 
 enum enumKoPaletteStyle {
 #if 0   // XXX
- 	PALETTE_SLIDER, // Sliding docker as in Kivio
+     PALETTE_SLIDER, // Sliding docker as in Kivio
 #endif
-	PALETTE_DOCKER, // QDockWindow based docker with tabs
-	PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
-	PALETTE_SLIDER // Kivio-style sliders
+    PALETTE_DOCKER, // QDockWindow based docker with tabs
+    PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
+    PALETTE_SLIDER // Kivio-style sliders
 };
 
 
 namespace {
-	struct DockerRecord {
-		int position;
-		int x;
-		int y;
-		int w;
-		int h;
-	};
+    struct DockerRecord {
+        int position;
+        int x;
+        int y;
+        int w;
+        int h;
+    };
 }
 
 /**
@@ -66,109 +66,109 @@ namespace {
  */
 class KoPaletteManager : public QObject {
 
-	Q_OBJECT
+    Q_OBJECT
 
 
 public:
 
-	KoPaletteManager(KoView * view, KActionCollection * ac, const char * name);
-	virtual ~KoPaletteManager();
+    KoPaletteManager(KoView * view, KActionCollection * ac, const char * name);
+    virtual ~KoPaletteManager();
 
 public:
-	/**
-	 * Add a new tab with the given name an description to the specified palette.
-	 * The widget's caption is used, where necessary. If there is no
-	 * palette with this name, a new palette is created with the given palette name
-	 * and the widget's caption.
-	 *
-	 * If there is already a widget with the given name, that widget will be
-	 * unplugged (but not destroyed) and the given widget will be plugged in place.
-	 *
-	 * If the widget occurs in the saved configuration, it is not added to the
-	 * specified palette, but in the place where it was left.
-	 *
-	 * @param widget the widget that will be inserted as a tab or entry in the palette
-	 * @param name the name under which the palette will be stored. Not the caption -- do not i18n this. 
-	 * @param paletteName the unique name of the palette this widget will be a child of. If the palette already exists, the current widget is added to it.
-	 * @param position the position of the widget in the palettes
-	 * @param style docker, toolbox or slider
-	 */
-	virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
+    /**
+     * Add a new tab with the given name an description to the specified palette.
+     * The widget's caption is used, where necessary. If there is no
+     * palette with this name, a new palette is created with the given palette name
+     * and the widget's caption.
+     *
+     * If there is already a widget with the given name, that widget will be
+     * unplugged (but not destroyed) and the given widget will be plugged in place.
+     *
+     * If the widget occurs in the saved configuration, it is not added to the
+     * specified palette, but in the place where it was left.
+     *
+     * @param widget the widget that will be inserted as a tab or entry in the palette
+     * @param name the name under which the palette will be stored. Not the caption -- do not i18n this. 
+     * @param paletteName the unique name of the palette this widget will be a child of. If the palette already exists, the current widget is added to it.
+     * @param position the position of the widget in the palettes
+     * @param style docker, toolbox or slider
+     */
+    virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
 
-	/**
-	 * Get a certain widget by name
-	 */
-	virtual QWidget * widget(const QString & name);
+    /**
+     * Get a certain widget by name
+     */
+    virtual QWidget * widget(const QString & name);
 
-	/**
-	 * Show a the specified palette wherever it currently is.
-	 */
-	virtual void showWidget(const QString & name);
-	 
-	/**
-	 * Remove the widget with the specified name from whichever
-	 * palette it is currently in. If it is the last widget in
-	 * the palette, the palette is destroyed. If the name does
-	 * not occur, nothing is done.
-	 */
-	virtual void removeWidget(const QString & name);
+    /**
+     * Show a the specified palette wherever it currently is.
+     */
+    virtual void showWidget(const QString & name);
+     
+    /**
+     * Remove the widget with the specified name from whichever
+     * palette it is currently in. If it is the last widget in
+     * the palette, the palette is destroyed. If the name does
+     * not occur, nothing is done.
+     */
+    virtual void removeWidget(const QString & name);
 
-	/**
-	 * Saves the current palette configuration to the application config object.
-	 */
-	virtual void save();
+    /**
+     * Saves the current palette configuration to the application config object.
+     */
+    virtual void save();
 
 
-	/**
-	 * Create an empty palette in the given style. with the given name and caption. If
-	 * the palette already exists, nothing is done. 
-	 */
-	virtual KoPalette * createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style = PALETTE_DOCKER);
+    /**
+     * Create an empty palette in the given style. with the given name and caption. If
+     * the palette already exists, nothing is done. 
+     */
+    virtual KoPalette * createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style = PALETTE_DOCKER);
 
-	/**
-	 * Move the specified palette to the specified location. If there is already
-	 * a location for the palette in the saved settings, then move it there
-	 * instead of the specified location.
-	 */
-	virtual void placePalette(const QString & name, Dock location = DockRight);
+    /**
+     * Move the specified palette to the specified location. If there is already
+     * a location for the palette in the saved settings, then move it there
+     * instead of the specified location.
+     */
+    virtual void placePalette(const QString & name, Dock location = DockRight);
 
-	/**
-	 * Add a palette; this can be used to add palettes other than those in the two
-	 * default styles.
-	 */
-	 virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
+    /**
+     * Add a palette; this can be used to add palettes other than those in the two
+     * default styles.
+     */
+     virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
 
 public slots:
 
-	void slotTogglePalette(int paletteIndex);
-	void slotToggleAllPalettes();
-	/**
-	 * Restores the palette configuration to the default layout, i.e, the layout 
-	 * preferred by each docker.
-	 */
-	virtual void slotReset();
+    void slotTogglePalette(int paletteIndex);
+    void slotToggleAllPalettes();
+    /**
+     * Restores the palette configuration to the default layout, i.e, the layout 
+     * preferred by each docker.
+     */
+    virtual void slotReset();
 
 
 
 private:
 
-	KoView                  * m_view;
-	KActionCollection       * m_actionCollection;
-	KActionMenu             * m_viewActionMenu;
-	KToggleAction           * m_toggleShowHidePalettes;
-	bool                    m_allPalettesShown;
-	
-	QStringList             * m_widgetNames;
-	
-	QDict<QWidget>          * m_widgets;
-	QDict<KoPalette>        * m_palettes;
-	QDict<KToggleAction>    * m_actions;
-	QSignalMapper           * m_mapper;
+    KoView                  * m_view;
+    KActionCollection       * m_actionCollection;
+    KActionMenu             * m_viewActionMenu;
+    KToggleAction           * m_toggleShowHidePalettes;
+    bool                    m_allPalettesShown;
+    
+    QStringList             * m_widgetNames;
+    
+    QDict<QWidget>          * m_widgets;
+    QDict<KoPalette>        * m_palettes;
+    QDict<KToggleAction>    * m_actions;
+    QSignalMapper           * m_mapper;
 
-	QMap<QString, QString>  * m_defaultMapping; // widget to docker
-	QStringList             m_defaultPaletteOrder; // Order of palette creation
-	QStringList             m_defaultWidgetOrder; // Order of widget addition
-	QMap<QString, QString>  * m_currentMapping; // widget to docker
+    QMap<QString, QString>  * m_defaultMapping; // widget to docker
+    QStringList             m_defaultPaletteOrder; // Order of palette creation
+    QStringList             m_defaultWidgetOrder; // Order of widget addition
+    QMap<QString, QString>  * m_currentMapping; // widget to docker
 };
 
 #endif

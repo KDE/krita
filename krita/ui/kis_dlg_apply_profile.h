@@ -31,24 +31,24 @@
 class KisID;
 
 class KisDlgApplyProfile : public KDialogBase {
-	typedef KDialogBase super;
+    typedef KDialogBase super;
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KisDlgApplyProfile(QWidget *parent = 0, 
-			   const char *name = 0);
-	virtual ~KisDlgApplyProfile();
+    KisDlgApplyProfile(QWidget *parent = 0, 
+               const char *name = 0);
+    virtual ~KisDlgApplyProfile();
 
 
-	KisProfileSP profile() const;
-	int renderIntent() const;
+    KisProfileSP profile() const;
+    int renderIntent() const;
 
-	void fillCmbProfiles(const KisID & s);
+    void fillCmbProfiles(const KisID & s);
 
 private:
-	
-	WdgApplyProfile * m_page;
+    
+    WdgApplyProfile * m_page;
 };
 
 

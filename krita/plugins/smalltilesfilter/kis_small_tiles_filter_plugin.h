@@ -25,8 +25,8 @@
 class KisSmallTilesFilterPlugin : public KParts::Plugin
 {
 public:
-	KisSmallTilesFilterPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisSmallTilesFilterPlugin();
+    KisSmallTilesFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisSmallTilesFilterPlugin();
 };
 
 #endif

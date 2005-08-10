@@ -21,10 +21,10 @@
 #include "kis_button_event.h"
 
 class KisButtonReleaseEvent : public KisButtonEvent {
-	typedef KisButtonEvent super;
+    typedef KisButtonEvent super;
 public:
-	KisButtonReleaseEvent() {}
-	KisButtonReleaseEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(ButtonReleaseEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
+    KisButtonReleaseEvent() {}
+    KisButtonReleaseEvent(enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(ButtonReleaseEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
 };
 
 #endif // KIS_BUTTON_RELEASE_EVENT_H_

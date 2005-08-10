@@ -30,20 +30,20 @@ class QRect;
 
 class KisTransaction : public KCommand {
 public:
-	KisTransaction(const QString& name, KisPaintDeviceSP device);
-	virtual ~KisTransaction();
+    KisTransaction(const QString& name, KisPaintDeviceSP device);
+    virtual ~KisTransaction();
 
 public:
-	virtual void execute();
-	virtual void unexecute();
-	virtual QString name() const;
+    virtual void execute();
+    virtual void unexecute();
+    virtual QString name() const;
 
 public:
 
 private:
-	QString m_name;
-	KisPaintDeviceSP m_device;
-	KisMementoSP m_memento;
+    QString m_name;
+    KisPaintDeviceSP m_device;
+    KisMementoSP m_memento;
 };
 
 #endif // KIS_TILE_COMMAND_H_

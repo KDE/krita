@@ -73,54 +73,54 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
-	Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-	KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
+    Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+    KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
 
-	tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );
-	QRect tmpRect = tmp -> exactBounds();
+    tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );
+    QRect tmpRect = tmp -> exactBounds();
 
-	for( Q_UINT32 i=0; i < numberOfTiles; i++ )
-	{
-		for( Q_UINT32 j=0; j < numberOfTiles; j++ )
-		{
-			for( Q_UINT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
-			{
-				KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
-				KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
-	
-				while( ! tmpIt.isDone() )
-				{
-					if(tmpIt.isSelected())
-					{
-						for( int i = 0; i < depth; i++)
-						{
-							dstIt.rawData()[i] = tmpIt.oldRawData()[i];
-						}
-					}
-					++tmpIt;
-					++dstIt;
-				}
-			}
-		}
-	}
-	
-	setProgressDone();
+    for( Q_UINT32 i=0; i < numberOfTiles; i++ )
+    {
+        for( Q_UINT32 j=0; j < numberOfTiles; j++ )
+        {
+            for( Q_UINT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
+            {
+                KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
+                KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
+    
+                while( ! tmpIt.isDone() )
+                {
+                    if(tmpIt.isSelected())
+                    {
+                        for( int i = 0; i < depth; i++)
+                        {
+                            dstIt.rawData()[i] = tmpIt.oldRawData()[i];
+                        }
+                    }
+                    ++tmpIt;
+                    ++dstIt;
+                }
+            }
+        }
+    }
+    
+    setProgressDone();
 }
 
 KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of Tiles") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of Tiles") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisSmallTilesFilterConfiguration( 2 );
-	} else {
-		return new KisSmallTilesFilterConfiguration( widget->valueAt( 0 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisSmallTilesFilterConfiguration( 2 );
+    } else {
+        return new KisSmallTilesFilterConfiguration( widget->valueAt( 0 ) );
+    }
 }

@@ -38,21 +38,21 @@ K_EXPORT_COMPONENT_FACTORY( kritawsbrushpaintop, WSBrushPaintOpPluginFactory( "k
 
 
 WSBrushPaintOpPlugin::WSBrushPaintOpPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(WSBrushPaintOpPluginFactory::instance());
+           setInstance(WSBrushPaintOpPluginFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "WSBrushPaintOpPlugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "WSBrushPaintOpPlugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	// This is not a gui plugin; only load it when the doc is created.
-	if ( parent->inherits("KisFactory") )
-	{
-		KisPaintOpRegistry::instance() -> add ( new KisWSBrushOpFactory );
-	}
+    // This is not a gui plugin; only load it when the doc is created.
+    if ( parent->inherits("KisFactory") )
+    {
+        KisPaintOpRegistry::instance() -> add ( new KisWSBrushOpFactory );
+    }
 
 }
 

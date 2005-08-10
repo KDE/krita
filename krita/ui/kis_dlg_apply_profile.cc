@@ -31,48 +31,48 @@
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
-	: super(parent, name, true, "", Ok | Cancel)
+    : super(parent, name, true, "", Ok | Cancel)
 {
 
-	setCaption(i18n("Apply Image Profile to Clipboard Data"));
-	m_page = new WdgApplyProfile(this);
+    setCaption(i18n("Apply Image Profile to Clipboard Data"));
+    m_page = new WdgApplyProfile(this);
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	// XXX: This is BAD! (bsar)
-	fillCmbProfiles(KisID("RGBA", ""));
-	KisConfig cfg;
-	m_page -> grpRenderIntent -> setButton(cfg.renderIntent());
+    // XXX: This is BAD! (bsar)
+    fillCmbProfiles(KisID("RGBA", ""));
+    KisConfig cfg;
+    m_page -> grpRenderIntent -> setButton(cfg.renderIntent());
 
 }
 
 KisDlgApplyProfile::~KisDlgApplyProfile()
 {
-	delete m_page;
+    delete m_page;
 }
 
 
 KisProfileSP KisDlgApplyProfile::profile() const
 {
-	QString profileName;
+    QString profileName;
 
-	if (m_page -> cmbProfile -> currentItem() == 0) {
-		// Use import profile
-		KisConfig cfg;
-		profileName = cfg.importProfile();
-	} else {
-		profileName = m_page -> cmbProfile -> currentText();
-	}
-	// XXX: This is bad -- hardcoded for one color model. This dialog ought to be part
-	// of the rgba color strategy.
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
-	return cs -> getProfileByName(profileName);
+    if (m_page -> cmbProfile -> currentItem() == 0) {
+        // Use import profile
+        KisConfig cfg;
+        profileName = cfg.importProfile();
+    } else {
+        profileName = m_page -> cmbProfile -> currentText();
+    }
+    // XXX: This is bad -- hardcoded for one color model. This dialog ought to be part
+    // of the rgba color strategy.
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+    return cs -> getProfileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
 {
-	return m_page -> grpRenderIntent -> selectedId();
+    return m_page -> grpRenderIntent -> selectedId();
 }
 
 
@@ -80,15 +80,15 @@ int KisDlgApplyProfile::renderIntent() const
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
 
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
-	m_page -> cmbProfile -> clear();
-	m_page -> cmbProfile -> insertItem(i18n("None"));
-	vKisProfileSP profileList = cs -> profiles();
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    m_page -> cmbProfile -> clear();
+    m_page -> cmbProfile -> insertItem(i18n("None"));
+    vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-		m_page -> cmbProfile -> insertItem((*it) -> productName());
-	}
-	
+        m_page -> cmbProfile -> insertItem((*it) -> productName());
+    }
+    
 
 }
 

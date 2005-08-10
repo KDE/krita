@@ -29,13 +29,13 @@ namespace Bindings {
 
 FunctionBase::FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent) : JSProxyImp(part->globalExec()), m_part(part)
 {
-	parent.put( part->globalExec() , KJS::Identifier(name), KJS::Object(this) );
-	setName( KJS::Identifier( name ) );
+    parent.put( part->globalExec() , KJS::Identifier(name), KJS::Object(this) );
+    setName( KJS::Identifier( name ) );
 }
 
 FunctionBase::FunctionBase(KJSEmbed::KJSEmbedPart *part, QString name) : JSProxyImp(part->globalExec()), m_part(part)
 {
-	setName( KJS::Identifier( name ) );
+    setName( KJS::Identifier( name ) );
 }
 
 GlobalFunctionBase::GlobalFunctionBase(KJSEmbed::KJSEmbedPart *part, QString name, KJS::Object parent, KisView* view ) : FunctionBase( part, name, parent), m_view(view)

@@ -44,23 +44,23 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolcrop, ToolCropFactory( "krita" ) )
 
 
 ToolCrop::ToolCrop(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(ToolCropFactory::instance());
+    setInstance(ToolCropFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "Crop tool plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "Crop tool plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
+    if ( parent->inherits("KisFactory") )
+    {
 
-		KisToolRegistry * r = KisToolRegistry::instance();
+        KisToolRegistry * r = KisToolRegistry::instance();
 
-		r -> add(new KisToolCropFactory());
-	}
+        r -> add(new KisToolCropFactory());
+    }
 
 }
 

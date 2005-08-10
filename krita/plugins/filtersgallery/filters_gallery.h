@@ -28,20 +28,20 @@ class KisView;
 namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
-	class KritaFiltersGallery : public KParts::Plugin
-	{
-		Q_OBJECT
-		public:
-			KritaFiltersGallery(QObject *parent, const char *name, const QStringList &);
-			virtual ~KritaFiltersGallery();
-		public slots:
-			void showFiltersGalleryDialog();
-		private:
-		
-			KisView * m_view;
-	
-	
-	};
+    class KritaFiltersGallery : public KParts::Plugin
+    {
+        Q_OBJECT
+        public:
+            KritaFiltersGallery(QObject *parent, const char *name, const QStringList &);
+            virtual ~KritaFiltersGallery();
+        public slots:
+            void showFiltersGalleryDialog();
+        private:
+        
+            KisView * m_view;
+    
+    
+    };
 
 };
 };

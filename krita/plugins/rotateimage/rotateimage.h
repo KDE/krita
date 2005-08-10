@@ -26,20 +26,20 @@ class KisView;
 
 class RotateImage : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RotateImage(QObject *parent, const char *name, const QStringList &);
-	virtual ~RotateImage();
+    RotateImage(QObject *parent, const char *name, const QStringList &);
+    virtual ~RotateImage();
 
 private slots:
 
-	void slotRotateImage();
-	void slotRotateLayer();
+    void slotRotateImage();
+    void slotRotateLayer();
 
 private:
 
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

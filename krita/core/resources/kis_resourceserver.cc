@@ -32,7 +32,7 @@
 #include "kis_resourceserver.h"
 
 KisResourceServerBase::KisResourceServerBase(QString type, QStringList fileExtensions)
-	: m_fileExtensions(fileExtensions), m_type(type), m_loaded(false)
+    : m_fileExtensions(fileExtensions), m_type(type), m_loaded(false)
 {
 }
 
@@ -42,36 +42,36 @@ KisResourceServerBase::~KisResourceServerBase()
 
 void KisResourceServerBase::loadResources()
 {
-	QStringList filenames;
+    QStringList filenames;
 
-	QStringList::Iterator it;
-	for ( it = m_fileExtensions.begin(); it != m_fileExtensions.end(); ++it ) 
-		filenames += KisFactory::global() -> dirs() -> findAllResources(m_type.ascii(), (*it));
-	
-	while( !filenames.empty() )
-	{
-		QString front = *filenames.begin();
-		filenames.pop_front();
+    QStringList::Iterator it;
+    for ( it = m_fileExtensions.begin(); it != m_fileExtensions.end(); ++it ) 
+        filenames += KisFactory::global() -> dirs() -> findAllResources(m_type.ascii(), (*it));
+    
+    while( !filenames.empty() )
+    {
+        QString front = *filenames.begin();
+        filenames.pop_front();
 
-		KisResource *resource;
-		resource = createResource(front);
-		if(resource -> load() && resource -> valid())
-		{
-			m_resources.append(resource);
-			Q_CHECK_PTR(resource);
-		}
-		else
-			delete resource;
-	}
-	m_loaded = true;
+        KisResource *resource;
+        resource = createResource(front);
+        if(resource -> load() && resource -> valid())
+        {
+            m_resources.append(resource);
+            Q_CHECK_PTR(resource);
+        }
+        else
+            delete resource;
+    }
+    m_loaded = true;
 }
 
 QValueList<KisResource*> KisResourceServerBase::resources()
 {
-	if(!m_loaded)
-		loadResources();
+    if(!m_loaded)
+        loadResources();
 
-	return m_resources;
+    return m_resources;
 }
 
 #include "kis_resourceserver.moc"

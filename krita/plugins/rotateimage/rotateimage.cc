@@ -52,72 +52,72 @@ K_EXPORT_COMPONENT_FACTORY( kritarotateimage, RotateImageFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
 RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(RotateImageFactory::instance());
+    setInstance(RotateImageFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "RotateImage plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
 
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-		(void) new KAction(i18n("&Rotate Image..."), 0, 0, this, SLOT(slotRotateImage()), actionCollection(), "rotateimage");
-		
-		(void) new KAction(i18n("&Rotate Layer..."), 0, 0, this, SLOT(slotRotateLayer()), actionCollection(), "rotatelayer");
-		
-		(void)new KAction(i18n("Rotate &180"), 0, m_view, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-		(void)new KAction(i18n("Rotate &270"), "rotate_ccw", 0, m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-		(void)new KAction(i18n("Rotate &90"), "rotate_cw", 0, m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
-	}
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+        (void) new KAction(i18n("&Rotate Image..."), 0, 0, this, SLOT(slotRotateImage()), actionCollection(), "rotateimage");
+        
+        (void) new KAction(i18n("&Rotate Layer..."), 0, 0, this, SLOT(slotRotateLayer()), actionCollection(), "rotatelayer");
+        
+        (void)new KAction(i18n("Rotate &180"), 0, m_view, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
+        (void)new KAction(i18n("Rotate &270"), "rotate_ccw", 0, m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
+        (void)new KAction(i18n("Rotate &90"), "rotate_cw", 0, m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+    }
 }
 
 RotateImage::~RotateImage()
 {
-	m_view = 0;
+    m_view = 0;
 }
 
 void RotateImage::slotRotateImage()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
-	Q_CHECK_PTR(dlgRotateImage);
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
+    Q_CHECK_PTR(dlgRotateImage);
 
-	dlgRotateImage -> setCaption(i18n("Rotate Image"));
+    dlgRotateImage -> setCaption(i18n("Rotate Image"));
 
         if (dlgRotateImage -> exec() == QDialog::Accepted) {
-		Q_INT32 angle = dlgRotateImage -> angle();
+        Q_INT32 angle = dlgRotateImage -> angle();
                 m_view -> rotateCurrentImage(angle);
-	}
+    }
         delete dlgRotateImage;
 }
 
 void RotateImage::slotRotateLayer()
 {
-	KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> currentImg();
 
-	if (!image) return;
+    if (!image) return;
 
-	DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
-	Q_CHECK_PTR(dlgRotateImage);
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
+    Q_CHECK_PTR(dlgRotateImage);
 
-	dlgRotateImage -> setCaption("Rotate Layer");
+    dlgRotateImage -> setCaption("Rotate Layer");
 
-	if (dlgRotateImage -> exec() == QDialog::Accepted) {
+    if (dlgRotateImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angle = dlgRotateImage -> angle();
-		m_view -> rotateLayer(angle);
+        m_view -> rotateLayer(angle);
 
-	}
-	delete dlgRotateImage;
+    }
+    delete dlgRotateImage;
 }
 
 #include "rotateimage.moc"

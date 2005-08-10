@@ -27,38 +27,38 @@
 #include "kis_filter.h"
 
 KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nname) :
-	initvalue(ninitvalue),
-	name(nname)
+    initvalue(ninitvalue),
+    name(nname)
 {
 
 }
 
 KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, const char * caption, vKisBoolWidgetParam iwparam) : 
-	KisFilterConfigWidget( parent, name )
+    KisFilterConfigWidget( parent, name )
 {
-	Q_INT32 m_nbboolWidgets = iwparam.size();
+    Q_INT32 m_nbboolWidgets = iwparam.size();
 
-	this->setCaption(caption);
+    this->setCaption(caption);
 
-	QGridLayout *widgetLayout = new QGridLayout(this, m_nbboolWidgets + 1, 3);
-	widgetLayout -> setColStretch ( 1, 1 );
+    QGridLayout *widgetLayout = new QGridLayout(this, m_nbboolWidgets + 1, 3);
+    widgetLayout -> setColStretch ( 1, 1 );
 
-	m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
+    m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 
-	for( Q_INT32 i = 0; i < m_nbboolWidgets; ++i)
-	{
-		m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
-		m_boolWidgets[i] -> setChecked( iwparam[i].initvalue );
+    for( Q_INT32 i = 0; i < m_nbboolWidgets; ++i)
+    {
+        m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
+        m_boolWidgets[i] -> setChecked( iwparam[i].initvalue );
 
-		connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
+        connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
 
-		QLabel* lbl = new QLabel(iwparam[i].name+":", this);
-		widgetLayout -> addWidget( lbl, i , 0);
+        QLabel* lbl = new QLabel(iwparam[i].name+":", this);
+        widgetLayout -> addWidget( lbl, i , 0);
 
-		widgetLayout -> addWidget( m_boolWidgets[i], i , 1);
-	}
-	QSpacerItem * sp = new QSpacerItem(1, 1);
-	widgetLayout -> addItem(sp, m_nbboolWidgets, 0);
+        widgetLayout -> addWidget( m_boolWidgets[i], i , 1);
+    }
+    QSpacerItem * sp = new QSpacerItem(1, 1);
+    widgetLayout -> addItem(sp, m_nbboolWidgets, 0);
 
 }
 

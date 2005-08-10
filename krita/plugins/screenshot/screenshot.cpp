@@ -39,43 +39,43 @@
 typedef KGenericFactory<Screenshot> ScreenshotFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plugin" ) )
 
-	Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
-		: KParts::Plugin(parent, name)
+    Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
+        : KParts::Plugin(parent, name)
 {
-	setInstance(ScreenshotFactory::instance());
+    setInstance(ScreenshotFactory::instance());
 
-// 	kdDebug() << "Screenshot plugin. Class: " 
-// 		  << className() 
-// 		  << ", Parent: " 
-// 		  << parent -> className()
-// 		  << "\n";
+//     kdDebug() << "Screenshot plugin. Class: " 
+//           << className() 
+//           << ", Parent: " 
+//           << parent -> className()
+//           << "\n";
 
-	KImageIO::registerFormats(); // ???
+    KImageIO::registerFormats(); // ???
 
-	snapshot = new KSnapshot();
-	Q_CHECK_PTR(snapshot);
-	connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
+    snapshot = new KSnapshot();
+    Q_CHECK_PTR(snapshot);
+    connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
 
-	(void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
-	
+    (void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
+    
 }
 
 Screenshot::~Screenshot()
 {
-	delete snapshot;
+    delete snapshot;
 }
 
 void Screenshot::slotScreenshot()
 {
-	snapshot -> show();
+    snapshot -> show();
 }     
 
 void Screenshot::slotScreenGrabbed()
 {
-	KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
-	snapshot -> save(temp.name());
-	     
-	KoView *view = dynamic_cast<KoView *>(parent());
-	if(view)
-		view -> koDocument() -> import(temp.name());
+    KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
+    snapshot -> save(temp.name());
+         
+    KoView *view = dynamic_cast<KoView *>(parent());
+    if(view)
+        view -> koDocument() -> import(temp.name());
 }

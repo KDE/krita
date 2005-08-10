@@ -48,13 +48,13 @@
 typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagenhancement, KritaImageEnhancementFactory( "krita" ) )
 
-		KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const char *name, const QStringList &)
+        KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const char *name, const QStringList &)
   : KParts::Plugin(parent, name)
 {
-	setInstance(KritaImageEnhancementFactory::instance());
+    setInstance(KritaImageEnhancementFactory::instance());
 
 
-	kdDebug(DBG_AREA_PLUGINS) << "KritaImageEnhancement plugin. Class: "
+    kdDebug(DBG_AREA_PLUGINS) << "KritaImageEnhancement plugin. Class: "
       << className()
       << ", Parent: "
       << parent -> className()

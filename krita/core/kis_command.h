@@ -26,29 +26,29 @@
 class KisUndoAdapter;
 
 class KisCommand : public KCommand {
-	typedef KCommand super;
+    typedef KCommand super;
 
 public:
-	KisCommand(KisUndoAdapter *undoAdapter);
-	KisCommand(const QString& name, KisUndoAdapter *undoAdapter);
-	virtual ~KisCommand();
+    KisCommand(KisUndoAdapter *undoAdapter);
+    KisCommand(const QString& name, KisUndoAdapter *undoAdapter);
+    virtual ~KisCommand();
 
-	virtual void execute() = 0;
-	virtual void unexecute() = 0;
-	virtual QString name() const;
+    virtual void execute() = 0;
+    virtual void unexecute() = 0;
+    virtual QString name() const;
 
 protected:
-	KisUndoAdapter *adapter() const;
+    KisUndoAdapter *adapter() const;
 
 private:
-	KisUndoAdapter *m_undoAdapter;
-	QString m_name;
+    KisUndoAdapter *m_undoAdapter;
+    QString m_name;
 };
 
 inline
 KisUndoAdapter *KisCommand::adapter() const
 {
-	return m_undoAdapter;
+    return m_undoAdapter;
 }
 
 #endif // KIS_COMMAND_H_

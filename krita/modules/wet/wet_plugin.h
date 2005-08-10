@@ -31,15 +31,15 @@ class KisWetColorSpace;
  */
 class WetPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WetPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~WetPlugin();
+    WetPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~WetPlugin();
 
 private:
 
-	KisView* m_view;
-	KisAbstractColorSpace * m_colorSpaceWet;
+    KisView* m_view;
+    KisAbstractColorSpace * m_colorSpaceWet;
 };
 
 #endif // WET_PLUGIN_H_

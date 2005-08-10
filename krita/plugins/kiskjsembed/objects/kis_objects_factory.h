@@ -24,24 +24,24 @@
 #include <kjs/object.h>
 
 namespace KJSEmbed {
-	class KJSEmbedPart;
+    class KJSEmbedPart;
 };
 
 class KisView;
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			namespace Bindings {
-				class ObjectsFactory {
-					public:
-						ObjectsFactory( KJSEmbed::KJSEmbedPart *part, KisView* view );
-					private:
-						KJS::Object m_jsObjMainWindow;
-				};
-			};
-		};
-	};
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            namespace Bindings {
+                class ObjectsFactory {
+                    public:
+                        ObjectsFactory( KJSEmbed::KJSEmbedPart *part, KisView* view );
+                    private:
+                        KJS::Object m_jsObjMainWindow;
+                };
+            };
+        };
+    };
 };
 
 

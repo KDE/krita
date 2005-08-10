@@ -36,72 +36,72 @@ class KisSelectionOptions;
 
 class KisToolSelectOutline : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 public:
-	KisToolSelectOutline();
-	virtual ~KisToolSelectOutline();
+    KisToolSelectOutline();
+    virtual ~KisToolSelectOutline();
 
         //
         // KisCanvasObserver interface
         //
 
-	virtual void update (KisCanvasSubject *subject);
+    virtual void update (KisCanvasSubject *subject);
 
         //
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 6; }
-	virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 6; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
 
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-	QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
 public slots:
-	virtual void slotSetAction(int);
-	virtual void activate();
+    virtual void slotSetAction(int);
+    virtual void activate();
 
 
 protected:
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	void draw(QPainter& gc);
-	void draw();
-	void clear();
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    void draw(QPainter& gc);
+    void draw();
+    void clear();
 
 protected:
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
 
-	bool m_dragging;
+    bool m_dragging;
 private:
-	typedef QValueVector<KisPoint> KisPointVector;
-	KisCanvasSubject *m_subject;
-	KisPointVector m_points;
-	KisSelectionOptions * m_optWidget;
-	enumSelectionMode m_selectAction;
+    typedef QValueVector<KisPoint> KisPointVector;
+    KisCanvasSubject *m_subject;
+    KisPointVector m_points;
+    KisSelectionOptions * m_optWidget;
+    enumSelectionMode m_selectAction;
 };
 
 
 class KisToolSelectOutlineFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectOutlineFactory() : super() {};
-	virtual ~KisToolSelectOutlineFactory(){};
+    KisToolSelectOutlineFactory() : super() {};
+    virtual ~KisToolSelectOutlineFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectOutline(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectOutline(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }
 };
 
 

@@ -41,53 +41,53 @@
 //     and be available only through the color strategy 
 //     that matches the profile's color model
 class KisProfile : public KisResource, public KShared {
-	typedef KisResource super;
-	Q_OBJECT
+    typedef KisResource super;
+    Q_OBJECT
 
 public:
-	KisProfile(Q_UINT32 colorType);
-	KisProfile(QByteArray rawData, Q_UINT32 colorType);
-	KisProfile(const QString& file, Q_UINT32 colorType);
-	KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
+    KisProfile(Q_UINT32 colorType);
+    KisProfile(QByteArray rawData, Q_UINT32 colorType);
+    KisProfile(const QString& file, Q_UINT32 colorType);
+    KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
 
-	// Create a profile from a cms profile handle; this profile does not have associated
-	// raw data, so we cannot save it as an annotation, unless we implement the code
-	// in lcms testbed TestSaveToMem -- XXX.
-	KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
-	
-	virtual ~KisProfile();
+    // Create a profile from a cms profile handle; this profile does not have associated
+    // raw data, so we cannot save it as an annotation, unless we implement the code
+    // in lcms testbed TestSaveToMem -- XXX.
+    KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
+    
+    virtual ~KisProfile();
 
-	virtual bool load();
-	virtual bool save();
-	virtual QImage img();
+    virtual bool load();
+    virtual bool save();
+    virtual QImage img();
 
-	icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
-	icProfileClassSignature deviceClass() const { return m_deviceClass; }
-	QString productName() const { return m_productName; }
-	QString productDescription() const { return m_productDescription; }
-	QString productInfo() const { return m_productInfo; }
-	QString manufacturer() const { return m_manufacturer; }
-	cmsHPROFILE profile() const { return m_profile; }
-	Q_UINT32 colorType() { return m_lcmsColorType; }
-	KisAnnotationSP annotation() const;
+    icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
+    icProfileClassSignature deviceClass() const { return m_deviceClass; }
+    QString productName() const { return m_productName; }
+    QString productDescription() const { return m_productDescription; }
+    QString productInfo() const { return m_productInfo; }
+    QString manufacturer() const { return m_manufacturer; }
+    cmsHPROFILE profile() const { return m_profile; }
+    Q_UINT32 colorType() { return m_lcmsColorType; }
+    KisAnnotationSP annotation() const;
 
 public:
 
-	static KisProfileSP getScreenProfile(int screen = -1);
+    static KisProfileSP getScreenProfile(int screen = -1);
 
 private:
-	bool init();
-	
-	cmsHPROFILE m_profile;
-	icColorSpaceSignature m_colorSpaceSignature;
-	icProfileClassSignature m_deviceClass;
-	QString m_productName;
-	QString m_productDescription;
-	QString m_productInfo;
-	QString m_manufacturer;
-	Q_UINT32 m_lcmsColorType;
+    bool init();
+    
+    cmsHPROFILE m_profile;
+    icColorSpaceSignature m_colorSpaceSignature;
+    icProfileClassSignature m_deviceClass;
+    QString m_productName;
+    QString m_productDescription;
+    QString m_productInfo;
+    QString m_manufacturer;
+    Q_UINT32 m_lcmsColorType;
 
-	QByteArray m_rawData;
+    QByteArray m_rawData;
 };
 
 

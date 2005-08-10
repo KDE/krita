@@ -38,81 +38,81 @@
 class KisRectIterator : private ACTUAL_RECTITERATOR
 {
 public:
-	/// Constructor, but use factory method in paint device instead.
-	KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable) :
-				ACTUAL_RECTITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, h, writable) {};
-	KisRectIterator(const KisRectIterator& rhs) : ACTUAL_RECTITERATOR(rhs) {}
-	KisRectIterator& operator=(const KisRectIterator& rhs)
-		{ ACTUAL_RECTITERATOR::operator=(rhs); return *this; }
+    /// Constructor, but use factory method in paint device instead.
+    KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable) :
+                ACTUAL_RECTITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, h, writable) {};
+    KisRectIterator(const KisRectIterator& rhs) : ACTUAL_RECTITERATOR(rhs) {}
+    KisRectIterator& operator=(const KisRectIterator& rhs)
+        { ACTUAL_RECTITERATOR::operator=(rhs); return *this; }
 
-public:	
-	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	inline Q_UINT8 * rawData() const { return ACTUAL_RECTITERATOR::rawData();};
+public:    
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    inline Q_UINT8 * rawData() const { return ACTUAL_RECTITERATOR::rawData();};
 
-	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	inline const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
+    /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
+    inline const Q_UINT8 * oldRawData() const { return ACTUAL_RECTITERATOR::oldRawData();};
 
-	/// Returns the number of consequtive pixels that we point at
-	/// This is useful for optimizing
-	inline Q_INT32 nConseqPixels() const { return ACTUAL_RECTITERATOR::nConseqPixels(); };
-	
-	/// Advances a number of pixels until it reaches the end of the rect
-	inline KisRectIterator & operator+=(int n) { ACTUAL_RECTITERATOR::operator+=(n); return *this; };
-	
-	/// Advances one pixel going to the beginning of the next line when it reaches the end of a line
-	inline KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
-	
-	/// Goes back one pixel going to the end of the line above when it reaches the beginning of a line
-	//inline KisRectIterator & operator--() { ACTUAL_RECTITERATOR::operator--(); return *this; };
-	
-	/// returns true when iterators has reached the end
-	inline bool isDone()  const { return ACTUAL_RECTITERATOR::isDone(); };
-	
-	 // current x position
-	 inline Q_INT32 x() const { return ACTUAL_RECTITERATOR::x(); };
-	 
-	 // current y position
-	 inline Q_INT32 y() const { return ACTUAL_RECTITERATOR::y(); };
+    /// Returns the number of consequtive pixels that we point at
+    /// This is useful for optimizing
+    inline Q_INT32 nConseqPixels() const { return ACTUAL_RECTITERATOR::nConseqPixels(); };
+    
+    /// Advances a number of pixels until it reaches the end of the rect
+    inline KisRectIterator & operator+=(int n) { ACTUAL_RECTITERATOR::operator+=(n); return *this; };
+    
+    /// Advances one pixel going to the beginning of the next line when it reaches the end of a line
+    inline KisRectIterator & operator++() { ACTUAL_RECTITERATOR::operator++(); return *this; };
+    
+    /// Goes back one pixel going to the end of the line above when it reaches the beginning of a line
+    //inline KisRectIterator & operator--() { ACTUAL_RECTITERATOR::operator--(); return *this; };
+    
+    /// returns true when iterators has reached the end
+    inline bool isDone()  const { return ACTUAL_RECTITERATOR::isDone(); };
+    
+     // current x position
+     inline Q_INT32 x() const { return ACTUAL_RECTITERATOR::x(); };
+     
+     // current y position
+     inline Q_INT32 y() const { return ACTUAL_RECTITERATOR::y(); };
 };
 
 class KisHLineIterator : private ACTUAL_HLINEITERATOR
 {
 public:
-	/// Constructor, but use factory method in paint device instead.
-	KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable) :
-				ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, writable) {};
-	KisHLineIterator(const KisHLineIterator& rhs) : ACTUAL_HLINEITERATOR(rhs) {}
-	KisHLineIterator& operator=(const KisHLineIterator& rhs)
-		{ ACTUAL_HLINEITERATOR::operator=(rhs); return *this; }
+    /// Constructor, but use factory method in paint device instead.
+    KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable) :
+                ACTUAL_HLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, w, writable) {};
+    KisHLineIterator(const KisHLineIterator& rhs) : ACTUAL_HLINEITERATOR(rhs) {}
+    KisHLineIterator& operator=(const KisHLineIterator& rhs)
+        { ACTUAL_HLINEITERATOR::operator=(rhs); return *this; }
 
-public:	
-	/// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	inline Q_UINT8 *rawData() const { return ACTUAL_HLINEITERATOR::rawData();};
+public:    
+    /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    inline Q_UINT8 *rawData() const { return ACTUAL_HLINEITERATOR::rawData();};
 
-	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	inline const Q_UINT8 *oldRawData() const { return ACTUAL_HLINEITERATOR::oldRawData();};
+    /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
+    inline const Q_UINT8 *oldRawData() const { return ACTUAL_HLINEITERATOR::oldRawData();};
 
-	/// Advances one pixel until it reaches the end of the line
-	inline KisHLineIterator & operator++() { ACTUAL_HLINEITERATOR::operator++(); return *this; };
-	
-	/// Returns the number of consequtive horizontal pixels that we point at
-	/// This is useful for optimizing
-	inline Q_INT32 nConseqHPixels() const { return ACTUAL_HLINEITERATOR::nConseqHPixels(); };
-	
-	/// Advances a number of pixels until it reaches the end of the line
-	inline KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
-	
-	/// Goes back one pixel until it reaches the beginning of the line
-	inline KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
-	
-	/// returns true when iterators has reached the end
-	inline bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };
-	
-	 // current x position
-	 inline Q_INT32 x() const { return ACTUAL_HLINEITERATOR::x(); };
-	 
-	 // current y position
-	 inline Q_INT32 y() const { return ACTUAL_HLINEITERATOR::y(); };
+    /// Advances one pixel until it reaches the end of the line
+    inline KisHLineIterator & operator++() { ACTUAL_HLINEITERATOR::operator++(); return *this; };
+    
+    /// Returns the number of consequtive horizontal pixels that we point at
+    /// This is useful for optimizing
+    inline Q_INT32 nConseqHPixels() const { return ACTUAL_HLINEITERATOR::nConseqHPixels(); };
+    
+    /// Advances a number of pixels until it reaches the end of the line
+    inline KisHLineIterator & operator+=(int n) { ACTUAL_HLINEITERATOR::operator+=(n); return *this; };
+    
+    /// Goes back one pixel until it reaches the beginning of the line
+    inline KisHLineIterator & operator--() { ACTUAL_HLINEITERATOR::operator--(); return *this; };
+    
+    /// returns true when iterators has reached the end
+    inline bool isDone()  const { return ACTUAL_HLINEITERATOR::isDone(); };
+    
+     // current x position
+     inline Q_INT32 x() const { return ACTUAL_HLINEITERATOR::x(); };
+     
+     // current y position
+     inline Q_INT32 y() const { return ACTUAL_HLINEITERATOR::y(); };
 
 };
 
@@ -120,34 +120,34 @@ class KisVLineIterator : private ACTUAL_VLINEITERATOR
 {
 
 public:
-	/// Constructor, but use factory method in paint device instead.
-	KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable) :
-				ACTUAL_VLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, h, writable) {};
-	KisVLineIterator(const KisVLineIterator& rhs) : ACTUAL_VLINEITERATOR(rhs) {}
-	KisVLineIterator& operator=(const KisVLineIterator& rhs)
-		{ ACTUAL_VLINEITERATOR::operator=(rhs); return *this; }
+    /// Constructor, but use factory method in paint device instead.
+    KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable) :
+                ACTUAL_VLINEITERATOR((ACTUAL_DATAMGR * )dm, x, y, h, writable) {};
+    KisVLineIterator(const KisVLineIterator& rhs) : ACTUAL_VLINEITERATOR(rhs) {}
+    KisVLineIterator& operator=(const KisVLineIterator& rhs)
+        { ACTUAL_VLINEITERATOR::operator=(rhs); return *this; }
 
 public:
-	/// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-	inline Q_UINT8 *rawData() const { return ACTUAL_VLINEITERATOR::rawData();};
+    /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
+    inline Q_UINT8 *rawData() const { return ACTUAL_VLINEITERATOR::rawData();};
 
-	/// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-	inline const Q_UINT8 * oldRawData() const { return ACTUAL_VLINEITERATOR::oldRawData();};
+    /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
+    inline const Q_UINT8 * oldRawData() const { return ACTUAL_VLINEITERATOR::oldRawData();};
 
-	/// Advances one pixel until it reaches the end of the line
-	inline KisVLineIterator & operator++() { ACTUAL_VLINEITERATOR::operator++(); return *this; };
-	
-	/// Goes back one pixel until it reaches the beginning of the line
-	//inline KisVLineIterator & operator--() { ACTUAL_VLINEITERATOR::operator--(); return *this; };
-	
-	/// returns true when iterators has reached the end
-	inline bool isDone() const { return ACTUAL_VLINEITERATOR::isDone(); };
-	
-	// current x position
-	inline Q_INT32 x() const { return ACTUAL_VLINEITERATOR::x(); };
-	
-	// current y position
-	inline Q_INT32 y() const { return ACTUAL_VLINEITERATOR::y(); };
+    /// Advances one pixel until it reaches the end of the line
+    inline KisVLineIterator & operator++() { ACTUAL_VLINEITERATOR::operator++(); return *this; };
+    
+    /// Goes back one pixel until it reaches the beginning of the line
+    //inline KisVLineIterator & operator--() { ACTUAL_VLINEITERATOR::operator--(); return *this; };
+    
+    /// returns true when iterators has reached the end
+    inline bool isDone() const { return ACTUAL_VLINEITERATOR::isDone(); };
+    
+    // current x position
+    inline Q_INT32 x() const { return ACTUAL_VLINEITERATOR::x(); };
+    
+    // current y position
+    inline Q_INT32 y() const { return ACTUAL_VLINEITERATOR::y(); };
 
 };
 

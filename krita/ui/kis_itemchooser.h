@@ -32,36 +32,36 @@ class KoIconItem;
 typedef QPtrList<KoIconItem> vKoIconItem;
 
 class KisItemChooser : public QWidget {
-	typedef QWidget super;
-	Q_OBJECT
+    typedef QWidget super;
+    Q_OBJECT
 
 public:
-	KisItemChooser(QWidget *parent = 0,
-		       const char *name = 0);
-	virtual ~KisItemChooser();
+    KisItemChooser(QWidget *parent = 0,
+               const char *name = 0);
+    virtual ~KisItemChooser();
 
-	KoIconItem *currentItem();
-	void setCurrent(KoIconItem *item);
-	void setCurrent(int index);
+    KoIconItem *currentItem();
+    void setCurrent(KoIconItem *item);
+    void setCurrent(int index);
 
 public slots:
-	void addItem(KoIconItem *item);
-	void addItems(const vKoIconItem& items);
+    void addItem(KoIconItem *item);
+    void addItems(const vKoIconItem& items);
 
 signals:
-	void selected(KoIconItem *item);
+    void selected(KoIconItem *item);
 
 protected:
-	virtual void update(KoIconItem *item) = 0;
-	QWidget *chooserWidget() const;
-	void notify();
+    virtual void update(KoIconItem *item) = 0;
+    QWidget *chooserWidget() const;
+    void notify();
 
 private slots:
-	void slotItemSelected(KoIconItem *item);
+    void slotItemSelected(KoIconItem *item);
 
 private:
-	QHBox *m_frame;
-	KoIconChooser *m_chooser;
+    QHBox *m_frame;
+    KoIconChooser *m_chooser;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

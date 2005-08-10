@@ -36,8 +36,8 @@ class KisColorConversionsTester : public KUnitTest::Tester
 {
 public:
         void allTests();
-	void testRGBHSV();
-	void testRGBHSL();
+    void testRGBHSV();
+    void testRGBHSL();
 };
 
 #endif

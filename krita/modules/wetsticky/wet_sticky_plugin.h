@@ -35,15 +35,15 @@ class KisView;
  */
 class WetStickyPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WetStickyPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~WetStickyPlugin();
-	
+    WetStickyPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~WetStickyPlugin();
+    
 private:
 
-	KisView* m_view;
-	KisAbstractColorSpace * m_ColorSpaceWS;
+    KisView* m_view;
+    KisAbstractColorSpace * m_ColorSpaceWS;
 };
 
 #endif // WET_STICKY_PLUGIN_H_

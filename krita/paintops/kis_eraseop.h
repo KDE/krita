@@ -31,28 +31,28 @@
 class KisEraseOpFactory : public KisPaintOpFactory {
 
 public:
-	KisEraseOpFactory() {}
-	virtual ~KisEraseOpFactory() {}
+    KisEraseOpFactory() {}
+    virtual ~KisEraseOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("eraser", i18n("eraser")); }
-	//virtual QString pixmap() { return "eraser.png"; }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("eraser", i18n("eraser")); }
+    //virtual QString pixmap() { return "eraser.png"; }
 };
 
 
 class KisEraseOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisEraseOp(KisPainter * painter);
-	virtual ~KisEraseOp();
+    KisEraseOp(KisPainter * painter);
+    virtual ~KisEraseOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

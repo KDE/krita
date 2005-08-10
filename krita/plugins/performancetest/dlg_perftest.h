@@ -27,30 +27,30 @@
 #include "wdg_perftest.h"
 
 class DlgPerfTest: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgPerfTest(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgPerfTest();
-	
-	WdgPerfTest * page();
+    DlgPerfTest(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgPerfTest();
+    
+    WdgPerfTest * page();
 
 private slots:
 
-	void okClicked();
+    void okClicked();
         void selectAllClicked();
-	void deselectAllClicked();
+    void deselectAllClicked();
 
-	void setAllTestCheckBoxes(bool checked);
+    void setAllTestCheckBoxes(bool checked);
 
 private:
 
-	WdgPerfTest * m_page;
-	double m_oldAngle;	
-	bool m_lock;
+    WdgPerfTest * m_page;
+    double m_oldAngle;    
+    bool m_lock;
 
 };
 

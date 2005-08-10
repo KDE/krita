@@ -33,10 +33,10 @@
  */
 class SelectionTools : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SelectionTools(QObject *parent, const char *name, const QStringList &);
-	virtual ~SelectionTools();
+    SelectionTools(QObject *parent, const char *name, const QStringList &);
+    virtual ~SelectionTools();
 
 };
 

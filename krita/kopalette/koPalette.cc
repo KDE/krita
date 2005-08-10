@@ -62,60 +62,60 @@ static const unsigned char img_shadebutton [] = {
 
 
 KoPalette::KoPalette(KoView * parent, const char * name)
-	: QDockWindow(parent, name)
+    : QDockWindow(parent, name)
 {
 
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
-	KAcceleratorManager::setNoAccel(this);
-#endif	
-	setCloseMode( QDockWindow::Never);
-	setResizeEnabled(true);
-	setOpaqueMoving(true);
-	setFocusPolicy(QWidget::NoFocus);
-  	setVerticallyStretchable(false);
-  	setHorizontallyStretchable(false);
-	
-	setNewLine(true);
-	layout() -> setSpacing(0);
-	layout() -> setMargin(0);
+    KAcceleratorManager::setNoAccel(this);
+#endif    
+    setCloseMode( QDockWindow::Never);
+    setResizeEnabled(true);
+    setOpaqueMoving(true);
+    setFocusPolicy(QWidget::NoFocus);
+      setVerticallyStretchable(false);
+      setHorizontallyStretchable(false);
+    
+    setNewLine(true);
+    layout() -> setSpacing(0);
+    layout() -> setMargin(0);
 
-	// Compute a font that's smaller that the general font
-	m_font  = KGlobalSettings::generalFont();
-	float ps = m_font.pointSize() * 0.7;
-	m_font.setPointSize((int)ps);
-	setFont(m_font);
+    // Compute a font that's smaller that the general font
+    m_font  = KGlobalSettings::generalFont();
+    float ps = m_font.pointSize() * 0.7;
+    m_font.setPointSize((int)ps);
+    setFont(m_font);
 
 #if 0 // Photoshop doesn't shade either, let's try for minimum size
-	// XXX: Use a KDE icon for this?
-	QImage img;
-	img.loadFromData( img_shadebutton, sizeof( img_shadebutton), "PNG" );
-	m_pixShadeButton = img;
+    // XXX: Use a KDE icon for this?
+    QImage img;
+    img.loadFromData( img_shadebutton, sizeof( img_shadebutton), "PNG" );
+    m_pixShadeButton = img;
 
-	m_wdgDockerTabLayout = new QGridLayout( layout(), 1, 1, 0, "wdgDockerTabLayout");
- 	m_wdgDockerTabLayout->layout()-> setSpacing(0);
-	
-	m_lblCaption = new QLabel( this, "lblCaption" );
-	m_lblCaption->setBackgroundMode( QLabel::PaletteMid );
-	m_lblCaption->setFont(m_font);
+    m_wdgDockerTabLayout = new QGridLayout( layout(), 1, 1, 0, "wdgDockerTabLayout");
+     m_wdgDockerTabLayout->layout()-> setSpacing(0);
+    
+    m_lblCaption = new QLabel( this, "lblCaption" );
+    m_lblCaption->setBackgroundMode( QLabel::PaletteMid );
+    m_lblCaption->setFont(m_font);
 
-	m_wdgDockerTabLayout->addWidget( m_lblCaption, 0, 0 );
+    m_wdgDockerTabLayout->addWidget( m_lblCaption, 0, 0 );
 
-	m_bnShade = new QToolButton( this, "bnShade" );
-	m_bnShade->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_bnShade->sizePolicy().hasHeightForWidth() ) );
-	m_bnShade->setMinimumSize( QSize( 18, 18 ) );
-	m_bnShade->setMaximumSize( QSize( 18, 18 ) );
-	m_bnShade->setBackgroundMode( QToolButton::PaletteMid );
-	m_bnShade->setToggleButton( true );
-	m_bnShade->setOn( false );
-	m_bnShade->setIconSet( QIconSet( m_pixShadeButton ) );
-	QToolTip::add( m_bnShade, i18n( "Shade or unshade the palette" ) );
-	
-	m_wdgDockerTabLayout->addWidget( m_bnShade, 0, 1 );
+    m_bnShade = new QToolButton( this, "bnShade" );
+    m_bnShade->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_bnShade->sizePolicy().hasHeightForWidth() ) );
+    m_bnShade->setMinimumSize( QSize( 18, 18 ) );
+    m_bnShade->setMaximumSize( QSize( 18, 18 ) );
+    m_bnShade->setBackgroundMode( QToolButton::PaletteMid );
+    m_bnShade->setToggleButton( true );
+    m_bnShade->setOn( false );
+    m_bnShade->setIconSet( QIconSet( m_pixShadeButton ) );
+    QToolTip::add( m_bnShade, i18n( "Shade or unshade the palette" ) );
+    
+    m_wdgDockerTabLayout->addWidget( m_bnShade, 0, 1 );
 
-	QObject::connect(m_bnShade, SIGNAL(toggled(bool)), this, SLOT(slotShade(bool)));
-	QObject::connect(this, SIGNAL(placeChanged(QDockWindow::Place)), this, SLOT(slotPlaceChanged(QDockWindow::Place)));
+    QObject::connect(m_bnShade, SIGNAL(toggled(bool)), this, SLOT(slotShade(bool)));
+    QObject::connect(this, SIGNAL(placeChanged(QDockWindow::Place)), this, SLOT(slotPlaceChanged(QDockWindow::Place)));
 #endif
-	
+    
 }
 
 KoPalette::~KoPalette()
@@ -125,65 +125,65 @@ KoPalette::~KoPalette()
 void KoPalette::setMainWidget(QWidget * widget)
 {
 #if 0
-	m_wdgDockerTabLayout->addMultiCellWidget( widget, 1, 1, 0, 1 );
+    m_wdgDockerTabLayout->addMultiCellWidget( widget, 1, 1, 0, 1 );
 #endif
-	setWidget(widget);
-	resize( QSize(285, 233).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
-	widget->setFont(m_font);
-	m_page = widget;
+    setWidget(widget);
+    resize( QSize(285, 233).expandedTo(minimumSizeHint()) );
+    clearWState( WState_Polished );
+    widget->setFont(m_font);
+    m_page = widget;
 }
 
 
 void KoPalette::setCaption(const QString & /*caption*/)
 {
 #if 0
-	QDockWindow::setCaption(caption);
- 	m_lblCaption -> setText(caption);
+    QDockWindow::setCaption(caption);
+     m_lblCaption -> setText(caption);
 #endif
 }
 
 void KoPalette::slotShade(bool toggle)
 {
-	m_shaded = toggle;
-	if (!toggle) {
- 		m_page -> show();
-	}
-	else {
- 		m_page -> hide();
-		if (!m_docked) {
-			resize(minimumSize());
-		}
+    m_shaded = toggle;
+    if (!toggle) {
+         m_page -> show();
+    }
+    else {
+         m_page -> hide();
+        if (!m_docked) {
+            resize(minimumSize());
+        }
 
-	}
+    }
 }
 
 void KoPalette::slotPlaceChanged(QDockWindow::Place p)
 {
 
-	if (p == QDockWindow::InDock) {
-		m_docked = true;
+    if (p == QDockWindow::InDock) {
+        m_docked = true;
 #if 0
-		m_lblCaption -> show();
-		m_bnShade -> show();
-		m_lblCaption -> setText(caption());
+        m_lblCaption -> show();
+        m_bnShade -> show();
+        m_lblCaption -> setText(caption());
 #endif
-		resize(sizeHint());
-	}
-	else {
-		if (m_docked) {
+        resize(sizeHint());
+    }
+    else {
+        if (m_docked) {
 #if 0
-			m_lblCaption -> hide();
-			m_bnShade -> hide();
+            m_lblCaption -> hide();
+            m_bnShade -> hide();
 #endif 
-			m_page-> show();
+            m_page-> show();
 #if 0
-			m_lblCaption -> setText("");
+            m_lblCaption -> setText("");
 #endif
-			resize(sizeHint());
-		}
-		m_docked = false;
-	}
+            resize(sizeHint());
+        }
+        m_docked = false;
+    }
 }
 
 #include "koPalette.moc"

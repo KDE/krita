@@ -49,21 +49,21 @@ K_EXPORT_COMPONENT_FACTORY( kritatemplatepaintops, TemplatePaintOpsPluginFactory
 
 
 TemplatePaintOpsPlugin::TemplatePaintOpsPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(TemplatePaintOpsPluginFactory::instance());
+           setInstance(TemplatePaintOpsPluginFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "TemplatePaintOpsPlugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "TemplatePaintOpsPlugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	// This is not a gui plugin; only load it when the doc is created.
-	if ( parent->inherits("KisFactory") )
-	{
-		KisPaintOpRegistry::instance() -> add ( new KisTemplateOpFactory );
-	}
+    // This is not a gui plugin; only load it when the doc is created.
+    if ( parent->inherits("KisFactory") )
+    {
+        KisPaintOpRegistry::instance() -> add ( new KisTemplateOpFactory );
+    }
 
 }
 

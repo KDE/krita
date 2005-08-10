@@ -31,12 +31,12 @@ class KisRect;
 
 class KisToolEllipse : public KisToolShape {
 
-	typedef KisToolShape super;
-	Q_OBJECT
+    typedef KisToolShape super;
+    Q_OBJECT
 
 public:
-	KisToolEllipse();
-	virtual ~KisToolEllipse();
+    KisToolEllipse();
+    virtual ~KisToolEllipse();
 
         //
         // KisCanvasObserver interface
@@ -48,40 +48,40 @@ public:
         // KisToolPaint interface
         //
 
-	virtual void setup(KActionCollection *collection);
-	virtual enumToolType toolType() { return TOOL_SHAPE; }
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void setup(KActionCollection *collection);
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
 protected:
-	virtual void draw(const KisPoint& start, const KisPoint& stop);
+    virtual void draw(const KisPoint& start, const KisPoint& stop);
 
 protected:
-	KisPoint m_dragCenter;
-	KisPoint m_dragStart;
-	KisPoint m_dragEnd;
+    KisPoint m_dragCenter;
+    KisPoint m_dragStart;
+    KisPoint m_dragEnd;
 
-	bool m_dragging;
-	KisImageSP m_currentImage;
+    bool m_dragging;
+    KisImageSP m_currentImage;
 };
 
 
 #include "kis_tool_factory.h"
 
 class KisToolEllipseFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolEllipseFactory() : super() {};
-	virtual ~KisToolEllipseFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolEllipse(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac);
-		return t; 
-	}
-	virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }
+    KisToolEllipseFactory() : super() {};
+    virtual ~KisToolEllipseFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolEllipse(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac);
+        return t; 
+    }
+    virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }
 };
 
 

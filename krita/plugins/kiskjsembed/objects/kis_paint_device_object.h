@@ -28,49 +28,49 @@
 class KisPaintDevice;
 
 namespace Krita {
-	namespace Plugins {
-		namespace KisKJSEmbed {
-			namespace Bindings {
-				namespace Objects {
-					/**
-					 * This class is used to construct a new PaintDevice for use in JSEmbed
-					 */
-					class PaintDeviceFactory : public ObjectFactoryBase {
-						public:
-							PaintDeviceFactory( KJS::Object parent, KJSEmbed::KJSEmbedPart *part);
-						public:
-							virtual KJS::Object construct( KJS::ExecState *exec, const KJS::List &args );
-						private:
-							virtual void createBindings();
+    namespace Plugins {
+        namespace KisKJSEmbed {
+            namespace Bindings {
+                namespace Objects {
+                    /**
+                     * This class is used to construct a new PaintDevice for use in JSEmbed
+                     */
+                    class PaintDeviceFactory : public ObjectFactoryBase {
+                        public:
+                            PaintDeviceFactory( KJS::Object parent, KJSEmbed::KJSEmbedPart *part);
+                        public:
+                            virtual KJS::Object construct( KJS::ExecState *exec, const KJS::List &args );
+                        private:
+                            virtual void createBindings();
 
-					};
-					/**
-					 * This class is a proxy for a KisPaintDevice
-					 */
-					class PaintDeviceObject : public KJS::ObjectImp {
-						public:
-							PaintDeviceObject();
-						public:
-							inline KisPaintDevice* paintDevice() { return m_paintDevice; };
-						public:
-							static PaintDeviceObject* toPaintDeviceObject(KJS::ObjectImp* imp) { return dynamic_cast<PaintDeviceObject*>(imp); }
-						private:
-							KisPaintDevice* m_paintDevice;
-					};
-				};
-				namespace Functions {
-					namespace PaintDevice {
-						class Width : public FunctionBase {
-							public:
-								Width(KJSEmbed::KJSEmbedPart *part);
-							public:
-								virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
-						};
-					};
-				};
-			};
-		};
-	};
+                    };
+                    /**
+                     * This class is a proxy for a KisPaintDevice
+                     */
+                    class PaintDeviceObject : public KJS::ObjectImp {
+                        public:
+                            PaintDeviceObject();
+                        public:
+                            inline KisPaintDevice* paintDevice() { return m_paintDevice; };
+                        public:
+                            static PaintDeviceObject* toPaintDeviceObject(KJS::ObjectImp* imp) { return dynamic_cast<PaintDeviceObject*>(imp); }
+                        private:
+                            KisPaintDevice* m_paintDevice;
+                    };
+                };
+                namespace Functions {
+                    namespace PaintDevice {
+                        class Width : public FunctionBase {
+                            public:
+                                Width(KJSEmbed::KJSEmbedPart *part);
+                            public:
+                                virtual KJS::Value call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args );
+                        };
+                    };
+                };
+            };
+        };
+    };
 };
 
 #endif

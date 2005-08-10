@@ -33,61 +33,61 @@ class KisSelectionOptions;
 
 class KisToolSelectRectangular : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolSelectRectangular();
-	virtual ~KisToolSelectRectangular();
+    KisToolSelectRectangular();
+    virtual ~KisToolSelectRectangular();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 3; }
-	virtual enumToolType toolType() { return TOOL_SELECT; }
-	virtual QWidget * createOptionWidget(QWidget* parent);
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 3; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual QWidget * createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
 
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 public slots:
-	virtual void slotSetAction(int);
-	virtual void activate();
+    virtual void slotSetAction(int);
+    virtual void activate();
 
 
 private:
-	void clearSelection();
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
+    void clearSelection();
+    void paintOutline();
+    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisPoint m_centerPos;
-	KisPoint m_startPos;
-	KisPoint m_endPos;
-	bool m_selecting;
-	KisSelectionOptions * m_optWidget;
-	enumSelectionMode m_selectAction;
+    KisCanvasSubject *m_subject;
+    KisPoint m_centerPos;
+    KisPoint m_startPos;
+    KisPoint m_endPos;
+    bool m_selecting;
+    KisSelectionOptions * m_optWidget;
+    enumSelectionMode m_selectAction;
 
 };
 
 class KisToolSelectRectangularFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectRectangularFactory() : super() {};
-	virtual ~KisToolSelectRectangularFactory(){};
+    KisToolSelectRectangularFactory() : super() {};
+    virtual ~KisToolSelectRectangularFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectRectangular(); 
-		t -> setup(ac); 
-		Q_CHECK_PTR(t);
-		return t; 
-	}
-	virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectRectangular(); 
+        t -> setup(ac); 
+        Q_CHECK_PTR(t);
+        return t; 
+    }
+    virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
 };
 
 

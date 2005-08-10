@@ -50,40 +50,40 @@ PaintDeviceFactory::PaintDeviceFactory(KJS::Object parent,KJSEmbed::KJSEmbedPart
 
 KJS::Object PaintDeviceFactory::construct( KJS::ExecState *exec, const KJS::List &args )
 {
-	if( args.size() < 2 )
-	{
-		QString msg = i18n( "Method requires at least 2 arguments, received %1" ).arg( args.size() );
-		KJS::Object err = KJS::Error::create( exec, KJS::GeneralError, msg.utf8() );
-		exec->setException( err );
-		return err;
-	}
-	int w = args[0].toInt32(exec);
-	int h = args[1].toInt32(exec);
-	QString cs;
-	if( args.size() > 2 )
-	{
-		cs = args[2].toString(exec).qstring();
-	} else {
-		cs = "RGBA";
-	}
-	QString name = "unamed";
-	if( args.size() > 3 )
-	{
-		name = args[3].toString(exec).qstring();
-	}
-	KJS::Object proxy( new PaintDeviceObject() );
-	bind(proxy);
-	return proxy;
+    if( args.size() < 2 )
+    {
+        QString msg = i18n( "Method requires at least 2 arguments, received %1" ).arg( args.size() );
+        KJS::Object err = KJS::Error::create( exec, KJS::GeneralError, msg.utf8() );
+        exec->setException( err );
+        return err;
+    }
+    int w = args[0].toInt32(exec);
+    int h = args[1].toInt32(exec);
+    QString cs;
+    if( args.size() > 2 )
+    {
+        cs = args[2].toString(exec).qstring();
+    } else {
+        cs = "RGBA";
+    }
+    QString name = "unamed";
+    if( args.size() > 3 )
+    {
+        name = args[3].toString(exec).qstring();
+    }
+    KJS::Object proxy( new PaintDeviceObject() );
+    bind(proxy);
+    return proxy;
 }
 
 void PaintDeviceFactory::createBindings()
 {
-	addBinding( new Width(part()) );
+    addBinding( new Width(part()) );
 }
 
 PaintDeviceObject::PaintDeviceObject()
 {
-	m_paintDevice = new KisPaintDevice(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
+    m_paintDevice = new KisPaintDevice(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
 }
 
 };
@@ -93,8 +93,8 @@ Width::Width(KJSEmbed::KJSEmbedPart *part) : FunctionBase(part, "width") {
 }
 KJS::Value Width::call( KJS::ExecState *exec, KJS::Object &self, const KJS::List &args )
 {
-	Objects::PaintDeviceObject* pdo = Objects::PaintDeviceObject::toPaintDeviceObject( self.imp() );
-	return KJS::Number( pdo->paintDevice()->extent().width() );
+    Objects::PaintDeviceObject* pdo = Objects::PaintDeviceObject::toPaintDeviceObject( self.imp() );
+    return KJS::Number( pdo->paintDevice()->extent().width() );
 }
 
 }; }; }; }; }; };

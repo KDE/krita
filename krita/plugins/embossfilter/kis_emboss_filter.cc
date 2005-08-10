@@ -56,16 +56,16 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", "&Emboss with Var
 
 void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-	Q_UNUSED(dst);
+    Q_UNUSED(dst);
 
 
-	//read the filter configuration values from the KisFilterConfiguration object
-	Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
+    //read the filter configuration values from the KisFilterConfiguration object
+    Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
 
-	//the actual filter function from digikam. It needs a pointer to a QUANTUM array
-	//with the actual pixel data.
+    //the actual filter function from digikam. It needs a pointer to a QUANTUM array
+    //with the actual pixel data.
 
-	Emboss(src, rect, embossdepth);
+    Emboss(src, rect, embossdepth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -87,43 +87,43 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, const QRect& rect, int d)
         float Depth = d / 10.0;
         int    R = 0, G = 0, B = 0;
         uchar  Gray = 0;
-	int Width = rect.width();
-	int Height = rect.height();
+    int Width = rect.width();
+    int Height = rect.height();
 
-	setProgressTotalSteps(Height);
-	setProgressStage(i18n("Applying emboss filter..."),0);
+    setProgressTotalSteps(Height);
+    setProgressStage(i18n("Applying emboss filter..."),0);
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-		KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+        KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
 
-		for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it)
-		{
-			if (it.isSelected()) {
+        for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it)
+        {
+            if (it.isSelected()) {
 
 // XXX: COLORSPACE_INDEPENDENCE
-				
-				QColor color1;
-				src -> colorStrategy() -> toQColor(it.rawData(), &color1);
+                
+                QColor color1;
+                src -> colorStrategy() -> toQColor(it.rawData(), &color1);
 
-				QColor color2;
-				QUANTUM opacity2;
-				src -> pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
+                QColor color2;
+                QUANTUM opacity2;
+                src -> pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
 
-				R = abs((int)((color1.red() - color2.red()) * Depth + (QUANTUM_MAX / 2)));
-				G = abs((int)((color1.green() - color2.green()) * Depth + (QUANTUM_MAX / 2)));
-				B = abs((int)((color1.blue() - color2.blue()) * Depth + (QUANTUM_MAX / 2)));
+                R = abs((int)((color1.red() - color2.red()) * Depth + (QUANTUM_MAX / 2)));
+                G = abs((int)((color1.green() - color2.green()) * Depth + (QUANTUM_MAX / 2)));
+                B = abs((int)((color1.blue() - color2.blue()) * Depth + (QUANTUM_MAX / 2)));
 
-				Gray = CLAMP((R + G + B) / 3, 0, QUANTUM_MAX);
+                Gray = CLAMP((R + G + B) / 3, 0, QUANTUM_MAX);
 
-				src -> colorStrategy() -> nativeColor(QColor(Gray, Gray, Gray), it.rawData());
-			}
-		}
-
-		setProgress(y);
+                src -> colorStrategy() -> nativeColor(QColor(Gray, Gray, Gray), it.rawData());
+            }
         }
 
-	setProgressDone();
+        setProgress(y);
+        }
+
+    setProgressDone();
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -153,20 +153,20 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
 
 KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
-	KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
-	Q_CHECK_PTR(w);
-	return w;
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
+    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    Q_CHECK_PTR(w);
+    return w;
 }
 
 KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisEmbossFilterConfiguration( 30 );
-	} else {
-		return new KisEmbossFilterConfiguration( widget->valueAt( 0 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisEmbossFilterConfiguration( 30 );
+    } else {
+        return new KisEmbossFilterConfiguration( widget->valueAt( 0 ) );
+    }
 }

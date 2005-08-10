@@ -44,22 +44,22 @@ K_EXPORT_COMPONENT_FACTORY( kritatestcsplugin, TestCSPluginFactory( "krita" ) )
 
 
 TestCSPlugin::TestCSPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-		setInstance(TestCSPluginFactory::instance());
+        setInstance(TestCSPluginFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "TestCS Color model plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "TestCS Color model plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		m_ColorSpaceTestCS = new KisTestColorSpace();
-		Q_CHECK_PTR(m_ColorSpaceTestCS);
-		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceTestCS);
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        m_ColorSpaceTestCS = new KisTestColorSpace();
+        Q_CHECK_PTR(m_ColorSpaceTestCS);
+        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceTestCS);
+    }
 
 }
 

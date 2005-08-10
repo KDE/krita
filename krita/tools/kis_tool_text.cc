@@ -46,11 +46,11 @@
 #include "kis_color.h"
 
 KisToolText::KisToolText()
-	: super(i18n("Text"))
+    : super(i18n("Text"))
 {
-	setName("tool_text");
-	m_subject = 0;
-	setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
+    setName("tool_text");
+    m_subject = 0;
+    setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
 }
 
 KisToolText::~KisToolText()
@@ -59,107 +59,107 @@ KisToolText::~KisToolText()
 
 void KisToolText::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	super::update(subject);
+    m_subject = subject;
+    super::update(subject);
 }
 
 void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
-	if (m_subject && e->button() == QMouseEvent::LeftButton) {
-		KisImageSP img = m_subject->currentImg();
-		KisPaintDeviceSP dev;
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        KisImageSP img = m_subject->currentImg();
+        KisPaintDeviceSP dev;
 
-		if (!img || !(dev = img->activeDevice()))
-			return;
+        if (!img || !(dev = img->activeDevice()))
+            return;
 
-		bool ok;
-		QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
-			 QString::null, &ok);
-		if (!ok)
-			return;
-		QFontMetrics metrics(m_font);
-		QRect boundingRect = metrics.boundingRect(text).normalize();
-		int xB = - boundingRect.x();
-		int yB = - boundingRect.y();
+        bool ok;
+        QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),
+             QString::null, &ok);
+        if (!ok)
+            return;
+        QFontMetrics metrics(m_font);
+        QRect boundingRect = metrics.boundingRect(text).normalize();
+        int xB = - boundingRect.x();
+        int yB = - boundingRect.y();
 
-		if (boundingRect.x() < 0 || boundingRect.y() < 0)
-			boundingRect.moveBy(- boundingRect.x(), - boundingRect.y());
+        if (boundingRect.x() < 0 || boundingRect.y() < 0)
+            boundingRect.moveBy(- boundingRect.x(), - boundingRect.y());
 
-		QPixmap pixels(boundingRect.width(), boundingRect.height());
-		{
-			QPainter paint(&pixels);
-			paint.fillRect(boundingRect, Qt::white);
-			paint.setFont(m_font);
-			paint.setBrush(QBrush(Qt::black));
-			paint.drawText(xB, yB, text);
-		}
-		QImage image = pixels.convertToImage();
+        QPixmap pixels(boundingRect.width(), boundingRect.height());
+        {
+            QPainter paint(&pixels);
+            paint.fillRect(boundingRect, Qt::white);
+            paint.setFont(m_font);
+            paint.setBrush(QBrush(Qt::black));
+            paint.drawText(xB, yB, text);
+        }
+        QImage image = pixels.convertToImage();
 
-		Q_INT32 height = boundingRect.height();
-		Q_INT32 width = boundingRect.width();
-		KisLayerSP layer = img->layerAdd('"' + text + '"', OPACITY_OPAQUE);
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				QRgb pixel = image.pixel(x, y);
-				 // use the 'blackness' as alpha :)
-				QUANTUM alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
-				QColor c = m_subject->fgColor().toQColor();
-				layer->setPixel(x, y, c, alpha);
-			}
-		}
+        Q_INT32 height = boundingRect.height();
+        Q_INT32 width = boundingRect.width();
+        KisLayerSP layer = img->layerAdd('"' + text + '"', OPACITY_OPAQUE);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                QRgb pixel = image.pixel(x, y);
+                 // use the 'blackness' as alpha :)
+                QUANTUM alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
+                QColor c = m_subject->fgColor().toQColor();
+                layer->setPixel(x, y, c, alpha);
+            }
+        }
 
-		layer -> setOpacity(m_opacity);
-		layer -> setCompositeOp(m_compositeOp);
+        layer -> setOpacity(m_opacity);
+        layer -> setCompositeOp(m_compositeOp);
 
-		Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
-		Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
-		layer->move(x, y);
-		img->notify();
-	}
+        Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
+        Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
+        layer->move(x, y);
+        img->notify();
+    }
 }
 
 void KisToolText::setFont() {
-	KFontDialog::getFont( m_font, false/*, QWidget* parent! */ );
-	m_lbFontName->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
+    KFontDialog::getFont( m_font, false/*, QWidget* parent! */ );
+    m_lbFontName->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
 }
 
 QWidget* KisToolText::createOptionWidget(QWidget* parent)
 {
-	QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget(parent);
 
-	m_lbFont = new QLabel(i18n("Font: "), widget);
-	m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
-		.arg(m_font.pointSize()), widget);
-	m_btnMoreFonts = new QPushButton("...", widget);
+    m_lbFont = new QLabel(i18n("Font: "), widget);
+    m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
+        .arg(m_font.pointSize()), widget);
+    m_btnMoreFonts = new QPushButton("...", widget);
 
-	connect(m_btnMoreFonts, SIGNAL(released()), this, SLOT(setFont()));
+    connect(m_btnMoreFonts, SIGNAL(released()), this, SLOT(setFont()));
 
-	QGridLayout *optionLayout = new QGridLayout(widget, 3, 1);
-	super::addOptionWidgetLayout(optionLayout);
+    QGridLayout *optionLayout = new QGridLayout(widget, 3, 1);
+    super::addOptionWidgetLayout(optionLayout);
 
-	optionLayout->addWidget(m_lbFont, 0, 0);
-	optionLayout->addWidget(m_lbFontName, 0, 1);
-	optionLayout->addWidget(m_btnMoreFonts, 0, 2);
-	
-	return widget;
+    optionLayout->addWidget(m_lbFont, 0, 0);
+    optionLayout->addWidget(m_lbFontName, 0, 1);
+    optionLayout->addWidget(m_btnMoreFonts, 0, 2);
+    
+    return widget;
 }
 
 void KisToolText::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("T&ext"), 
-					    "tool_text", 
-					    Qt::SHIFT+Qt::Key_T, 
-					    this,
-					    SLOT(activate()),
-					    collection,
-					    name());
-		m_action -> setExclusiveGroup("tools");
-		m_action -> setToolTip(i18n("Text"));
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("T&ext"), 
+                        "tool_text", 
+                        Qt::SHIFT+Qt::Key_T, 
+                        this,
+                        SLOT(activate()),
+                        collection,
+                        name());
+        m_action -> setExclusiveGroup("tools");
+        m_action -> setToolTip(i18n("Text"));
+        m_ownAction = true;
+    }
 }
 
 #include "kis_tool_text.moc"

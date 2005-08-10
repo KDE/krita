@@ -23,15 +23,15 @@
 
 KisTool::KisTool()
 {
-	m_action = 0;
-	m_ownAction = false;
+    m_action = 0;
+    m_ownAction = false;
 }
 
 KisTool::~KisTool()
 {
-	if (m_ownAction) {
-		delete m_action;
-		m_action = 0;
-	}
+    if (m_ownAction) {
+        delete m_action;
+        m_action = 0;
+    }
 }
 

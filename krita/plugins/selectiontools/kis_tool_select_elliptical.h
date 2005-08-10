@@ -34,60 +34,60 @@ class KisSelectionOptions;
 
 class KisToolSelectElliptical : public KisToolNonPaint {
 
-	typedef KisToolNonPaint super;
-	Q_OBJECT
+    typedef KisToolNonPaint super;
+    Q_OBJECT
 
 public:
-	KisToolSelectElliptical();
-	virtual ~KisToolSelectElliptical();
+    KisToolSelectElliptical();
+    virtual ~KisToolSelectElliptical();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 4; }
-	virtual QWidget * createOptionWidget(QWidget* parent);
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 4; }
+    virtual QWidget * createOptionWidget(QWidget* parent);
         virtual QWidget* optionWidget();
-	virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
 
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 public slots:
-	virtual void slotSetAction(int);
-	virtual void activate();
+    virtual void slotSetAction(int);
+    virtual void activate();
 
 
 private:
-	void clearSelection();
-	void paintOutline();
-	void paintOutline(QPainter& gc, const QRect& rc);
+    void clearSelection();
+    void paintOutline();
+    void paintOutline(QPainter& gc, const QRect& rc);
 
 private:
-	KisCanvasSubject *m_subject;
-	KisPoint m_centerPos;
-	KisPoint m_startPos;
-	KisPoint m_endPos;
-	bool m_selecting;
-	KisSelectionOptions * m_optWidget;
-	enumSelectionMode m_selectAction;
+    KisCanvasSubject *m_subject;
+    KisPoint m_centerPos;
+    KisPoint m_startPos;
+    KisPoint m_endPos;
+    bool m_selecting;
+    KisSelectionOptions * m_optWidget;
+    enumSelectionMode m_selectAction;
 };
 
 class KisToolSelectEllipticalFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectEllipticalFactory() : super() {};
-	virtual ~KisToolSelectEllipticalFactory(){};
+    KisToolSelectEllipticalFactory() : super() {};
+    virtual ~KisToolSelectEllipticalFactory(){};
 
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectElliptical(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectElliptical(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
 };
 
 

@@ -28,9 +28,9 @@ class KisPolygon;
 
 class KisCubismFilterConfiguration : public KisFilterConfiguration
 {
-	public:
+    public:
                 KisCubismFilterConfiguration(Q_UINT32 tileSize, Q_UINT32 tileSaturation) : m_tileSize(tileSize), m_tileSaturation(tileSaturation) {};
-	public:
+    public:
                 inline Q_UINT32 tileSize() { return m_tileSize; };
                 inline Q_UINT32 tileSaturation() {return m_tileSaturation; };
         private:
@@ -41,19 +41,19 @@ class KisCubismFilterConfiguration : public KisFilterConfiguration
 class KisCubismFilter : public KisFilter
 {
 public:
-	KisCubismFilter();
+    KisCubismFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("cubism", i18n("cubism")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return false; /* TODO: return true when cubism is stable enought */ }
-	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("cubism", i18n("cubism")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return false; /* TODO: return true when cubism is stable enought */ }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	//this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
+    //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
         void randomizeIndices (Q_INT32 count, Q_INT32* indices);
         Q_INT32 randomIntNumber(Q_INT32 lowestNumber, Q_INT32 highestNumber);
         double randomDoubleNumber(double lowestNumber, double highestNumber);

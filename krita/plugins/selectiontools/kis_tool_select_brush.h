@@ -36,45 +36,45 @@ class KisSelectionOptions;
  * Depends a bit on how we're going to visualize selections.
  */
 class KisToolSelectBrush : public KisToolFreehand {
-	Q_OBJECT
-	typedef KisToolFreehand super;
+    Q_OBJECT
+    typedef KisToolFreehand super;
 
 public:
-	KisToolSelectBrush();
-	virtual ~KisToolSelectBrush();
+    KisToolSelectBrush();
+    virtual ~KisToolSelectBrush();
 
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 1; }
-	virtual enumToolType toolType() { return TOOL_SELECT; }
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 1; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
 public slots:
-	virtual void activate();
+    virtual void activate();
 
 protected:
 
-	virtual void initPaint(KisEvent *e);
-	virtual void endPaint();
+    virtual void initPaint(KisEvent *e);
+    virtual void endPaint();
 
 private:
-	KisSelectionOptions * m_optWidget;
-	KisSelectedTransaction *m_transaction;
+    KisSelectionOptions * m_optWidget;
+    KisSelectedTransaction *m_transaction;
 };
 
 class KisToolSelectBrushFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectBrushFactory() : super() {};
-	virtual ~KisToolSelectBrushFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectBrush();
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("brushselect", i18n("Brush select tool")); }
+    KisToolSelectBrushFactory() : super() {};
+    virtual ~KisToolSelectBrushFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectBrush();
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("brushselect", i18n("Brush select tool")); }
 };
 
 

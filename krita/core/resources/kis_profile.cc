@@ -43,95 +43,95 @@
 
 
 KisProfile::KisProfile(Q_UINT32 colorType)
-	: super(QString()),
-	  m_lcmsColorType(colorType)
+    : super(QString()),
+      m_lcmsColorType(colorType)
 {
 }
 
 KisProfile::KisProfile(QByteArray rawData, Q_UINT32 colorType)
-	: super (QString()),
-	  m_lcmsColorType(colorType),
-	  m_rawData(rawData)
+    : super (QString()),
+      m_lcmsColorType(colorType),
+      m_rawData(rawData)
 {
-	m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
-	init();
+    m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
+    init();
 }
 
 KisProfile::KisProfile(const QString& file, Q_UINT32 colorType) 
-	: super(file),
-	  m_lcmsColorType(colorType)
+    : super(file),
+      m_lcmsColorType(colorType)
 {
 }
 
 KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType)
-	: super (QString()),
-	  m_profile(profile),
-	  m_lcmsColorType(colorType),
-	  m_rawData(rawData)
+    : super (QString()),
+      m_profile(profile),
+      m_lcmsColorType(colorType),
+      m_rawData(rawData)
 {
-	init();
+    init();
 }
 
 KisProfile::KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType)
-	: super (QString()),
-	  m_profile(profile),
-	  m_lcmsColorType(colorType)
+    : super (QString()),
+      m_profile(profile),
+      m_lcmsColorType(colorType)
 {
-	init();
+    init();
 }
 
 KisProfile::~KisProfile()
 {
-	cmsCloseProfile(m_profile);
+    cmsCloseProfile(m_profile);
 }
 
 
 bool KisProfile::load()
 {
-	//cmsErrorAction(LCMS_ERROR_IGNORE);
+    //cmsErrorAction(LCMS_ERROR_IGNORE);
 
- 	//m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
-	// XXX this should be more efficient: we load the file twice
-	QFile file(filename());
-	file.open(IO_ReadOnly);
-	m_rawData = file.readAll();
-	m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
-	file.close();
+     //m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
+    // XXX this should be more efficient: we load the file twice
+    QFile file(filename());
+    file.open(IO_ReadOnly);
+    m_rawData = file.readAll();
+    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
+    file.close();
 
-	return init();
+    return init();
 
 }
 
 bool KisProfile::init() 
 {
-	if (m_profile) {
-		m_colorSpaceSignature = cmsGetColorSpace(m_profile);
-		m_deviceClass = cmsGetDeviceClass(m_profile);
-		m_productName = cmsTakeProductName(m_profile);
-		m_productDescription = cmsTakeProductDesc(m_profile);
-		m_productInfo = cmsTakeProductInfo(m_profile);
-		setValid(true);
-		return true;
-	}
-	return false;
+    if (m_profile) {
+        m_colorSpaceSignature = cmsGetColorSpace(m_profile);
+        m_deviceClass = cmsGetDeviceClass(m_profile);
+        m_productName = cmsTakeProductName(m_profile);
+        m_productDescription = cmsTakeProductDesc(m_profile);
+        m_productInfo = cmsTakeProductInfo(m_profile);
+        setValid(true);
+        return true;
+    }
+    return false;
 }
 
 bool KisProfile::save()
 {
-	return false;
+    return false;
 }
 
 QImage KisProfile::img()
 {
-	return QImage();
+    return QImage();
 }
 
 KisAnnotationSP KisProfile::annotation() const
 {
-	// XXX we hardcode icc, this is correct for lcms?
-	// XXX productName(), or just "ICC Profile"?
-	if (!m_rawData.isEmpty())
-		return new KisAnnotation("icc", productName(), m_rawData);
+    // XXX we hardcode icc, this is correct for lcms?
+    // XXX productName(), or just "ICC Profile"?
+    if (!m_rawData.isEmpty())
+        return new KisAnnotation("icc", productName(), m_rawData);
 }
 
 KisProfileSP KisProfile::getScreenProfile (int screen)
@@ -139,45 +139,45 @@ KisProfileSP KisProfile::getScreenProfile (int screen)
 
 #ifdef Q_WS_X11
 
-	Atom type;
-	int format;
-	unsigned long nitems;
-	unsigned long bytes_after;
-	Q_UINT8 * str;
-	
-	cmsHPROFILE profile = NULL;
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    Q_UINT8 * str;
+    
+    cmsHPROFILE profile = NULL;
 
-	static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
+    static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
 
-	if  ( XGetWindowProperty ( qt_xdisplay(),
-					qt_xrootwin( screen ),
-					icc_atom,
-					0,
-					INT_MAX,
-					False,
-					XA_CARDINAL,
-					&type,
-					&format,
-					&nitems,
-					&bytes_after,
-					(unsigned char **) &str)
-				) {
-		if ( nitems )
- 			profile =
-				cmsOpenProfileFromMem(&str,
-							nitems * sizeof(long));
-		
-		QByteArray bytes (nitems);
-		bytes.assign((char*)str, (Q_UINT32)nitems);
-		
-		return new KisProfile(profile, bytes, TYPE_BGRA_8);
-	} else {
-		kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
-		return NULL;
-	}
+    if  ( XGetWindowProperty ( qt_xdisplay(),
+                    qt_xrootwin( screen ),
+                    icc_atom,
+                    0,
+                    INT_MAX,
+                    False,
+                    XA_CARDINAL,
+                    &type,
+                    &format,
+                    &nitems,
+                    &bytes_after,
+                    (unsigned char **) &str)
+                ) {
+        if ( nitems )
+             profile =
+                cmsOpenProfileFromMem(&str,
+                            nitems * sizeof(long));
+        
+        QByteArray bytes (nitems);
+        bytes.assign((char*)str, (Q_UINT32)nitems);
+        
+        return new KisProfile(profile, bytes, TYPE_BGRA_8);
+    } else {
+        kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
+        return NULL;
+    }
 #else
-	return NULL;
-	
+    return NULL;
+    
 #endif
 }
 

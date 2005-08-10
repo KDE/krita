@@ -33,27 +33,27 @@ class KisPainter;
 class KisConvolveOpFactory : public KisPaintOpFactory  {
 
 public:
-	KisConvolveOpFactory() {}
-	virtual ~KisConvolveOpFactory() {}
+    KisConvolveOpFactory() {}
+    virtual ~KisConvolveOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID("convolve", i18n("convolve")); }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID("convolve", i18n("convolve")); }
 };
 
 
 class KisConvolveOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisConvolveOp(KisPainter * painter);
-	virtual ~KisConvolveOp();
+    KisConvolveOp(KisPainter * painter);
+    virtual ~KisConvolveOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

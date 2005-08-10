@@ -34,8 +34,8 @@ KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
-	Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
-	KisPaintOpRegistry::m_singleton = this;
+    Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
+    KisPaintOpRegistry::m_singleton = this;
 }
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
@@ -44,59 +44,59 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
-	if(KisPaintOpRegistry::m_singleton == 0)
-	{
-		KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
-		Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
-	}
-	return KisPaintOpRegistry::m_singleton;
+    if(KisPaintOpRegistry::m_singleton == 0)
+    {
+        KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
+        Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
+    }
+    return KisPaintOpRegistry::m_singleton;
 }
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter) const
 {
-	KisPaintOpFactorySP f = get(id);
-	if (f) {
-		return f -> createOp(painter);
-	}
-	else {
-		return 0;
-	}
+    KisPaintOpFactorySP f = get(id);
+    if (f) {
+        return f -> createOp(painter);
+    }
+    else {
+        return 0;
+    }
 }
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painter) const
 {
-	return paintOp(KisID(id, ""), painter);
+    return paintOp(KisID(id, ""), painter);
 }
 
 bool KisPaintOpRegistry::userVisible(const KisID & id) const
 {
 
-	KisPaintOpFactorySP f = get(id);
-	if (!f) {
-		kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
-		return false;
-	}
-	
-	return f->userVisible();
-	
+    KisPaintOpFactorySP f = get(id);
+    if (!f) {
+        kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        return false;
+    }
+    
+    return f->userVisible();
+    
 }
 
 QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 {
-	KisPaintOpFactorySP f = get(id);
-	
-	if (!f) {
-		kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
-		return QPixmap();
-	}
+    KisPaintOpFactorySP f = get(id);
+    
+    if (!f) {
+        kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        return QPixmap();
+    }
 
-	QString pname = f->pixmap();
-	
-	if (pname.isEmpty() || pname.isNull() || pname == "") {
-		return QPixmap();
-	}
-	
-	QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
-	
-	return QPixmap(fname);
+    QString pname = f->pixmap();
+    
+    if (pname.isEmpty() || pname.isNull() || pname == "") {
+        return QPixmap();
+    }
+    
+    QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
+    
+    return QPixmap(fname);
 }

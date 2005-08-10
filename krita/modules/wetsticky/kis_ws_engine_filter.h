@@ -29,16 +29,16 @@ class KisWSEngineFilterConfiguration : public KisFilterConfiguration
 
 public:
 
-	KisWSEngineFilterConfiguration() { m_pixels = 10000; }
+    KisWSEngineFilterConfiguration() { m_pixels = 10000; }
 
-	KisWSEngineFilterConfiguration(Q_UINT32 pixels = 0) { m_pixels = pixels; }
+    KisWSEngineFilterConfiguration(Q_UINT32 pixels = 0) { m_pixels = pixels; }
 
-	Q_UINT32 pixels() { return m_pixels; }
+    Q_UINT32 pixels() { return m_pixels; }
 
 private:
 
-	Q_UINT32 m_pixels; // The number of pixels the filter should
-			   // move. 0 means keep running indefinitely
+    Q_UINT32 m_pixels; // The number of pixels the filter should
+               // move. 0 means keep running indefinitely
 
 
 
@@ -49,28 +49,28 @@ class KisWSEngineFilter : public KisFilter
 
 public:
 
-	KisWSEngineFilter();
+    KisWSEngineFilter();
 
-	virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
 
-	static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return false; }
-	virtual bool supportsIncrementalPainting() { return false; }
+    static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return false; }
+    virtual bool supportsIncrementalPainting() { return false; }
 
 public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 
 private:
 
 private:
 
-	KisWSEngineFilterConfiguration * m_cfg;
-	KisPaintDeviceSP m_src;
-	KisPaintDeviceSP m_dst;
-	QRect m_rect;
+    KisWSEngineFilterConfiguration * m_cfg;
+    KisPaintDeviceSP m_src;
+    KisPaintDeviceSP m_dst;
+    QRect m_rect;
 
 };
 

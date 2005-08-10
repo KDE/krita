@@ -33,66 +33,66 @@ class KisEvent;
 // XXX: rename this to KisToolFreehand -- Freehand is one word, so
 // 'hand' must not be capitalized.
 class KRITACORE_EXPORT KisToolFreehand : public KisToolPaint {
-	Q_OBJECT
-	typedef KisToolPaint super;
+    Q_OBJECT
+    typedef KisToolPaint super;
 
 public:
-	KisToolFreehand(const QString transactionText);
-	virtual ~KisToolFreehand();
+    KisToolFreehand(const QString transactionText);
+    virtual ~KisToolFreehand();
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void buttonPress(KisButtonPressEvent *e);
-	virtual void move(KisMoveEvent *e);
-	virtual void buttonRelease(KisButtonReleaseEvent *e);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
+    virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-	virtual enumToolType toolType() { return TOOL_FREEHAND; }
-
-protected:
-	virtual void paintAt(const KisPoint &pos,
-			     const double pressure,
-			     const double xTilt,
-			     const double yTilt);
-
-	virtual void paintLine(const KisPoint & pos1,
-			       const double pressure1,
-			       const double xtilt1,
-			       const double ytilt1,
-			       const KisPoint & pos2,
-			       const double pressure2,
-			       const double xtilt2,
-			       const double ytilt2);
-
-	// XXX: why not make this a protected member attribute for the
-	// use of subclasses? BSAR.
-	inline KisPainter * painter() { return m_painter; };
-	virtual void initPaint(KisEvent *e);
-	virtual void endPaint();
-
-	KisImageSP currentImage();
-
-	/**
-	 * Use a temporary drawing layer (true), or draw directly on the paint device (false).
-	 * To be set before KisToolFreehand::initPaint is called.
-	 **/
-	void setUseTempLayer(bool u);
+    virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
 protected:
-	KisPoint m_prevPos;
-	double m_prevPressure;
-	double m_prevXTilt;
-	double m_prevYTilt;
-	double m_dragDist;
+    virtual void paintAt(const KisPoint &pos,
+                 const double pressure,
+                 const double xTilt,
+                 const double yTilt);
 
-	bool m_useTempLayer;
-	KisPaintDeviceSP m_target;
-	KisPaintDeviceSP m_source;
+    virtual void paintLine(const KisPoint & pos1,
+                   const double pressure1,
+                   const double xtilt1,
+                   const double ytilt1,
+                   const KisPoint & pos2,
+                   const double pressure2,
+                   const double xtilt2,
+                   const double ytilt2);
 
-	QString m_transactionText;
-	enumBrushMode m_mode;
-	KisPainter *m_painter;
+    // XXX: why not make this a protected member attribute for the
+    // use of subclasses? BSAR.
+    inline KisPainter * painter() { return m_painter; };
+    virtual void initPaint(KisEvent *e);
+    virtual void endPaint();
 
-	KisImageSP m_currentImage;
+    KisImageSP currentImage();
+
+    /**
+     * Use a temporary drawing layer (true), or draw directly on the paint device (false).
+     * To be set before KisToolFreehand::initPaint is called.
+     **/
+    void setUseTempLayer(bool u);
+
+protected:
+    KisPoint m_prevPos;
+    double m_prevPressure;
+    double m_prevXTilt;
+    double m_prevYTilt;
+    double m_dragDist;
+
+    bool m_useTempLayer;
+    KisPaintDeviceSP m_target;
+    KisPaintDeviceSP m_source;
+
+    QString m_transactionText;
+    enumBrushMode m_mode;
+    KisPainter *m_painter;
+
+    KisImageSP m_currentImage;
 };
 
 

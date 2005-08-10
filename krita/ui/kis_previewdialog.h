@@ -27,18 +27,18 @@ class KisPreviewWidget;
 class QFrame;
 
 class KisPreviewDialog: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
-	KisPreviewDialog( QWidget* parent = 0, const char* name = 0, bool modal = false, const QString &caption=QString::null);
-	~KisPreviewDialog();
+    KisPreviewDialog( QWidget* parent = 0, const char* name = 0, bool modal = false, const QString &caption=QString::null);
+    ~KisPreviewDialog();
 
-	KisPreviewWidget* previewWidget() { return m_preview; }
-	QFrame* container() { return m_containerFrame; }
+    KisPreviewWidget* previewWidget() { return m_preview; }
+    QFrame* container() { return m_containerFrame; }
 private:
-	KisPreviewWidget* m_preview;
-	QFrame* m_containerFrame;
+    KisPreviewWidget* m_preview;
+    QFrame* m_containerFrame;
 };
 
 #endif

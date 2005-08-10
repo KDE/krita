@@ -27,10 +27,10 @@
 
 KisIconItem::KisIconItem(KisResource *resource)
 {
-	m_resource = resource;
-	validPixmap = false;
-	validThumb = false;
-	updatePixmaps();
+    m_resource = resource;
+    validPixmap = false;
+    validThumb = false;
+    updatePixmaps();
 }
 
 KisIconItem::~KisIconItem()
@@ -39,78 +39,78 @@ KisIconItem::~KisIconItem()
 
 void KisIconItem::updatePixmaps()
 {
-	validPixmap = false;
-	validThumb = false;
+    validPixmap = false;
+    validThumb = false;
 
-	if (m_resource && m_resource -> valid()) {
-		QImage img = m_resource -> img();
+    if (m_resource && m_resource -> valid()) {
+        QImage img = m_resource -> img();
 
-		if (img.isNull()) {
-			m_resource -> setValid(false);
-			m_resource = 0;
-			return;
-		}
+        if (img.isNull()) {
+            m_resource -> setValid(false);
+            m_resource = 0;
+            return;
+        }
 
-		if (img.width() > THUMB_SIZE || img.height() > THUMB_SIZE) {
-			QImage thumb = img;
-			Q_INT32 xsize = THUMB_SIZE;
-			Q_INT32 ysize = THUMB_SIZE;
-			Q_INT32 picW  = thumb.width();
-			Q_INT32 picH  = thumb.height();
+        if (img.width() > THUMB_SIZE || img.height() > THUMB_SIZE) {
+            QImage thumb = img;
+            Q_INT32 xsize = THUMB_SIZE;
+            Q_INT32 ysize = THUMB_SIZE;
+            Q_INT32 picW  = thumb.width();
+            Q_INT32 picH  = thumb.height();
 
-			if (picW > picH) {
-				float yFactor = (float)((float)(float)picH / (float)picW);
+            if (picW > picH) {
+                float yFactor = (float)((float)(float)picH / (float)picW);
 
-				ysize = (Q_INT32)(yFactor * (float)THUMB_SIZE);
-			
-				if (ysize > THUMB_SIZE) 
-					ysize = THUMB_SIZE;
-			} else if (picW < picH) {
-				float xFactor = (float)((float)picW / (float)picH);
+                ysize = (Q_INT32)(yFactor * (float)THUMB_SIZE);
+            
+                if (ysize > THUMB_SIZE) 
+                    ysize = THUMB_SIZE;
+            } else if (picW < picH) {
+                float xFactor = (float)((float)picW / (float)picH);
 
-				xsize = (Q_INT32)(xFactor * (float)THUMB_SIZE);
+                xsize = (Q_INT32)(xFactor * (float)THUMB_SIZE);
 
-				if (xsize > THUMB_SIZE) 
-					xsize = THUMB_SIZE;
-			}
+                if (xsize > THUMB_SIZE) 
+                    xsize = THUMB_SIZE;
+            }
 
-			thumb = thumb.smoothScale(xsize, ysize);
+            thumb = thumb.smoothScale(xsize, ysize);
 
-			if (!thumb.isNull()) {
-				m_thumb = QPixmap(thumb);
-				validThumb = !m_thumb.isNull();
-			}
-		}
+            if (!thumb.isNull()) {
+                m_thumb = QPixmap(thumb);
+                validThumb = !m_thumb.isNull();
+            }
+        }
 
-		img = img.convertDepth(32);
-		m_pixmap = QPixmap(img);
-		validPixmap = true;
-	}
+        img = img.convertDepth(32);
+        m_pixmap = QPixmap(img);
+        validPixmap = true;
+    }
 }
 
 QPixmap& KisIconItem::pixmap() const
 {
-	return const_cast<QPixmap&>(m_pixmap);
+    return const_cast<QPixmap&>(m_pixmap);
 }
 
 QPixmap& KisIconItem::thumbPixmap() const
 {
-	return const_cast<QPixmap&>(m_thumb);
+    return const_cast<QPixmap&>(m_thumb);
 }
 
 KisResource *KisIconItem::resource() const
 {
-	return m_resource;
+    return m_resource;
 }
 
 int KisIconItem::compare(const KoIconItem *o) const
 {
-	const KisIconItem *other = dynamic_cast<const KisIconItem *>(o);
+    const KisIconItem *other = dynamic_cast<const KisIconItem *>(o);
 
-	if (other != 0) {
-		return m_resource -> name().localeAwareCompare(other -> m_resource -> name());
-	} else {
-		return 0;
-	}
+    if (other != 0) {
+        return m_resource -> name().localeAwareCompare(other -> m_resource -> name());
+    } else {
+        return 0;
+    }
 }
 

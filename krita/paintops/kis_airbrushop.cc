@@ -36,14 +36,14 @@
 
 KisPaintOp * KisAirbrushOpFactory::createOp(KisPainter * painter)
 { 
-	KisPaintOp * op = new KisAirbrushOp(painter); 
-	Q_CHECK_PTR(op);
-	return op; 
+    KisPaintOp * op = new KisAirbrushOp(painter); 
+    Q_CHECK_PTR(op);
+    return op; 
 }
 
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
-	: super(painter) 
+    : super(painter) 
 {
 }
 
@@ -52,9 +52,9 @@ KisAirbrushOp::~KisAirbrushOp()
 }
 
 void KisAirbrushOp::paintAt(const KisPoint &pos,
-			    const double pressure,
-			    const double /*xTilt*/,
-			    const double /*yTilt*/)
+                const double pressure,
+                const double /*xTilt*/,
+                const double /*yTilt*/)
 {
 // See: http://www.sysf.physto.se/~klere/airbrush/ for information
 // about _real_ airbrushes.
@@ -89,55 +89,55 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
 // airbrush, for the first and up to now the last time...
 //
 
-	if (!m_painter) return;
+    if (!m_painter) return;
 
-	KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
 
-	// For now: use the current brush shape -- it beats calculating
-	// ellipes and cones, and it shows the working of the timer.
-	if (!device) return;
+    // For now: use the current brush shape -- it beats calculating
+    // ellipes and cones, and it shows the working of the timer.
+    if (!device) return;
 
-	KisBrush * brush = m_painter -> brush();
-	KisPaintDeviceSP dab = m_painter -> dab();
+    KisBrush * brush = m_painter -> brush();
+    KisPaintDeviceSP dab = m_painter -> dab();
 
-	KisPoint hotSpot = brush -> hotSpot(pressure);
-	KisPoint pt = pos - hotSpot;
+    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint pt = pos - hotSpot;
 
-	Q_INT32 x;
-	double xFraction;
-	Q_INT32 y;
-	double yFraction;
+    Q_INT32 x;
+    double xFraction;
+    Q_INT32 y;
+    double yFraction;
 
-	splitCoordinate(pt.x(), &x, &xFraction);
-	splitCoordinate(pt.y(), &y, &yFraction);
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
 
-	if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-		dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
-	}
-	else {
-		KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
-		dab = computeDab(mask);
-	}
+    if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
+        dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+    }
+    else {
+        KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+        dab = computeDab(mask);
+    }
 
-	m_painter -> setDab(dab); // Cache dab for future paints in the painter.
-	m_painter -> setPressure(pressure); // Cache pressure in the current painter.
+    m_painter -> setDab(dab); // Cache dab for future paints in the painter.
+    m_painter -> setPressure(pressure); // Cache pressure in the current painter.
 
-	QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
-	QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-	KisImage * image = device -> image();
+    KisImage * image = device -> image();
 
-	if (image != 0) {
-		dstRect &= image -> bounds();
-	}
+    if (image != 0) {
+        dstRect &= image -> bounds();
+    }
 
-	if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-	Q_INT32 sx = dstRect.x() - x;
-	Q_INT32 sy = dstRect.y() - y;
-	Q_INT32 sw = dstRect.width();
-	Q_INT32 sh = dstRect.height();
+    Q_INT32 sx = dstRect.x() - x;
+    Q_INT32 sy = dstRect.y() - y;
+    Q_INT32 sw = dstRect.width();
+    Q_INT32 sh = dstRect.height();
 
-	m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), OPACITY_OPAQUE / 50, sx, sy, sw, sh);
-	m_painter -> addDirtyRect(dstRect);
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), OPACITY_OPAQUE / 50, sx, sy, sw, sh);
+    m_painter -> addDirtyRect(dstRect);
 }

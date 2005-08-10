@@ -33,10 +33,10 @@
  */
 class DefaultTools : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DefaultTools(QObject *parent, const char *name, const QStringList &);
-	virtual ~DefaultTools();
+    DefaultTools(QObject *parent, const char *name, const QStringList &);
+    virtual ~DefaultTools();
 
 };
 

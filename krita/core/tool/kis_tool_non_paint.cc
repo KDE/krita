@@ -30,7 +30,7 @@
 
 KisToolNonPaint::KisToolNonPaint()
 {
-	m_subject = 0;
+    m_subject = 0;
 }
 
 KisToolNonPaint::~KisToolNonPaint()
@@ -39,7 +39,7 @@ KisToolNonPaint::~KisToolNonPaint()
 
 void KisToolNonPaint::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
+    m_subject = subject;
 }
 
 void KisToolNonPaint::paint(QPainter&)
@@ -93,51 +93,51 @@ void KisToolNonPaint::keyRelease(QKeyEvent *)
 
 QWidget* KisToolNonPaint::createOptionWidget(QWidget* /*parent*/)
 {
-	return 0;
+    return 0;
 }
 
 QWidget* KisToolNonPaint::optionWidget()
 {
-	return 0;
+    return 0;
 }
 
 QCursor KisToolNonPaint::cursor()
 {
-	return m_cursor;
+    return m_cursor;
 }
 
 void KisToolNonPaint::setCursor(const QCursor& cursor)
 {
-	m_cursor = cursor;
+    m_cursor = cursor;
 
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject -> toolController();
 
-		if (controller && controller -> currentTool() == this) {
-			m_subject->canvasController()->setCanvasCursor(m_cursor);
-		}
-	}
+        if (controller && controller -> currentTool() == this) {
+            m_subject->canvasController()->setCanvasCursor(m_cursor);
+        }
+    }
 }
 
 void KisToolNonPaint::activate()
 {
-	if (m_subject) {
-		KisToolControllerInterface *controller = m_subject -> toolController();
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject -> toolController();
 
-		if (controller)
-			controller -> setCurrentTool(this);
-	}
+        if (controller)
+            controller -> setCurrentTool(this);
+    }
 }
 
 void KisToolNonPaint::notifyModified() const
 {
-	if (m_subject) {
-		KoDocument *doc = m_subject -> document();
+    if (m_subject) {
+        KoDocument *doc = m_subject -> document();
 
-		if (doc) {
-			doc -> setModified(true);
-		}
-	}
+        if (doc) {
+            doc -> setModified(true);
+        }
+    }
 }
 
 #include "kis_tool_non_paint.moc"

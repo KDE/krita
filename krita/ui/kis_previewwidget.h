@@ -41,56 +41,56 @@ class KisUndoAdapter;
  */
 class KisPreviewWidget : public PreviewWidgetBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	/** Constructs the widget */
-	KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
+    /** Constructs the widget */
+    KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
 
-	/** @return the layer, so the dialog can apply its effect on it. */
-	KisLayerSP getLayer();
+    /** @return the layer, so the dialog can apply its effect on it. */
+    KisLayerSP getLayer();
 
-	/**
-	 * returns the zoom factor. This could be useful if the filter has to rely on
-	 * the whole layer. With this and getPos(), there is enough information to
-	 * paint the preview from a source different from the layer in @see getLayer */
-	double getZoom();
+    /**
+     * returns the zoom factor. This could be useful if the filter has to rely on
+     * the whole layer. With this and getPos(), there is enough information to
+     * paint the preview from a source different from the layer in @see getLayer */
+    double getZoom();
 
-	/** returns the 'vector' the image in the preview has been moved by. @see getZoom */
-	QPoint getPos();
+    /** returns the 'vector' the image in the preview has been moved by. @see getZoom */
+    QPoint getPos();
 
-	/** returns if the preview is automatically updated */
-	bool getAutoUpdate();
+    /** returns if the preview is automatically updated */
+    bool getAutoUpdate();
     
 
 public slots:
 
-	/** Sets the preview to use the layer specified as argument */
-	void slotSetLayer(KisLayerSP lay);
+    /** Sets the preview to use the layer specified as argument */
+    void slotSetLayer(KisLayerSP lay);
 
-	/** 
-	 * This should be called at the beginning of the effect. This ensures that 
-	 * the layer in the preview widget is in the right state. */
-	void slotRenewLayer();
+    /** 
+     * This should be called at the beginning of the effect. This ensures that 
+     * the layer in the preview widget is in the right state. */
+    void slotRenewLayer();
 
-	/**
-	 * Call this when the effect has finished updating the layer. Makes the preview
-	 * repaint itself. */
-	void slotUpdate();
+    /**
+     * Call this when the effect has finished updating the layer. Makes the preview
+     * repaint itself. */
+    void slotUpdate();
 
-	/** Enables or disables the automatically updating of the preview */
-	void slotSetAutoUpdate(bool set);
+    /** Enables or disables the automatically updating of the preview */
+    void slotSetAutoUpdate(bool set);
 
 signals:
-	/** This is emitted when the position or zoom factor of the widget has changed */
-	void updated();
+    /** This is emitted when the position or zoom factor of the widget has changed */
+    void updated();
 
 private slots:
 
-	void redirectUpdated();
+    void redirectUpdated();
 
 private:
-	bool m_autoupdate;
+    bool m_autoupdate;
 };
 
 #endif

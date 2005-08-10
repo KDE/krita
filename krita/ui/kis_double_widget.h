@@ -31,47 +31,47 @@ class KDoubleSpinBox;
 
 class KisDoubleWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	typedef QWidget super;
+    typedef QWidget super;
 public:
-	KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
-	KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);
-	~KisDoubleWidget();
+    KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
+    KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);
+    ~KisDoubleWidget();
 
-	double value() const;
-	void setRange(double min, double max);
+    double value() const;
+    void setRange(double min, double max);
 
-	void setTickmarks(QSlider::TickSetting tickMarks);
-	void setTickInterval(double tickInterval);
-	double tickInterval() const;
+    void setTickmarks(QSlider::TickSetting tickMarks);
+    void setTickInterval(double tickInterval);
+    double tickInterval() const;
 
-	void setPrecision(int precision);
-	void setLineStep(double step);
-	void setPageStep(double step);
+    void setPrecision(int precision);
+    void setLineStep(double step);
+    void setPageStep(double step);
 
-	void setTracking(bool tracking);
-	bool tracking() const;
+    void setTracking(bool tracking);
+    bool tracking() const;
 
 signals:
-	void valueChanged(double);
-	void sliderPressed();
-	void sliderReleased();
+    void valueChanged(double);
+    void sliderPressed();
+    void sliderReleased();
 
 public slots:
-	void setValue(double value);
+    void setValue(double value);
 
 protected slots:
-	void setSliderValue(double);
-	void sliderValueChanged(int);
+    void setSliderValue(double);
+    void sliderValueChanged(int);
 
 private:
-	void init(double min, double max);
+    void init(double min, double max);
 
 protected:
-	QHBoxLayout* m_layout;
-	QSlider* m_slider;
-	KDoubleSpinBox *m_spinBox;
+    QHBoxLayout* m_layout;
+    QSlider* m_slider;
+    KDoubleSpinBox *m_spinBox;
 };
 
 #endif // KIS_DOUBLE_WIDGET_H

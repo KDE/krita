@@ -26,20 +26,20 @@ class KisView;
 
 class ShearImage : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ShearImage(QObject *parent, const char *name, const QStringList &);
-	virtual ~ShearImage();
+    ShearImage(QObject *parent, const char *name, const QStringList &);
+    virtual ~ShearImage();
 
 private slots:
 
-	void slotShearImage();
-	void slotShearLayer();
+    void slotShearImage();
+    void slotShearLayer();
 
 private:
 
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

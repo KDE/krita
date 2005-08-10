@@ -27,21 +27,21 @@ class KisPainter;
 
 class ImageSize : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ImageSize(QObject *parent, const char *name, const QStringList &);
-	virtual ~ImageSize();
-	
+    ImageSize(QObject *parent, const char *name, const QStringList &);
+    virtual ~ImageSize();
+    
 private slots:
 
-	void slotImageSize();
-	void slotLayerSize();
-	void slotSelectionScale();
+    void slotImageSize();
+    void slotLayerSize();
+    void slotSelectionScale();
 
 private:
 
-	KisView * m_view;
-	KisPainter * m_painter;
+    KisView * m_view;
+    KisPainter * m_painter;
 
 };
 

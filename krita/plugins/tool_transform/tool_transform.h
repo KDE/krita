@@ -28,14 +28,14 @@ class KisView;
  */
 class ToolTransform : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToolTransform(QObject *parent, const char *name, const QStringList &);
-	virtual ~ToolTransform();
+    ToolTransform(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolTransform();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 
 };
 

@@ -57,7 +57,7 @@
 
 
 KisConvolutionPainter::KisConvolutionPainter()
-	: super()
+    : super()
 {
 }
 
@@ -67,124 +67,124 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 
 void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	KisKernel * kernel = new KisKernel();
-	kernel -> width = 3;
-	kernel -> height = 3;
+    KisKernel * kernel = new KisKernel();
+    kernel -> width = 3;
+    kernel -> height = 3;
 
-	kernel -> factor = matrix->factor();
-	kernel -> offset = matrix->offset();
-	kernel->data = new Q_INT32[9];
-	
-	for (int row = 0; row < 3; ++row) {
-		for (int col = 0; col < 3; ++col) {
-			kernel -> data[row * 3 + col] = matrix[0][col][row];
-		}
-	}
-	applyMatrix(kernel, x, y, w, h);
+    kernel -> factor = matrix->factor();
+    kernel -> offset = matrix->offset();
+    kernel->data = new Q_INT32[9];
+    
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 3; ++col) {
+            kernel -> data[row * 3 + col] = matrix[0][col][row];
+        }
+    }
+    applyMatrix(kernel, x, y, w, h);
 }
 
 
 void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
-					KisConvolutionBorderOp borderOp,
-					enumChannelFlags  channelFlags )
+                    KisConvolutionBorderOp borderOp,
+                    enumChannelFlags  channelFlags )
 {
-	// Make the area we cover as small as possible
-	if (m_device -> hasSelection()) {
+    // Make the area we cover as small as possible
+    if (m_device -> hasSelection()) {
 
-		if (m_device -> selection() -> isTotallyUnselected(QRect(x, y, w, h))) {
-			return;
-		}
+        if (m_device -> selection() -> isTotallyUnselected(QRect(x, y, w, h))) {
+            return;
+        }
 
-		QRect r = m_device -> selection() -> extent().intersect(QRect(x, y, w, h));
-		x = r.x();
-		y = r.y();
-		w = r.width();
-		h = r.height();
+        QRect r = m_device -> selection() -> extent().intersect(QRect(x, y, w, h));
+        x = r.x();
+        y = r.y();
+        w = r.width();
+        h = r.height();
 
-	}
+    }
 
-	// Determine the kernel's extent from the center pixel
-	Q_INT32 kw, kh, kd;
-	kw = kernel->width;
-	kh = kernel->height;
-	kd = (kw - 1) / 2;
-	
-	// Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-	if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
-	
-	m_cancelRequested = false;
-	int lastProgressPercent = 0;
-	emit notifyProgress(this, 0);
+    // Determine the kernel's extent from the center pixel
+    Q_INT32 kw, kh, kd;
+    kw = kernel->width;
+    kh = kernel->height;
+    kd = (kw - 1) / 2;
+    
+    // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
+    if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
+    
+    m_cancelRequested = false;
+    int lastProgressPercent = 0;
+    emit notifyProgress(this, 0);
 
-	KisAbstractColorSpace * cs = m_device->colorStrategy();
-	
-	// Determine whether we convolve border pixels, or not.
-	switch (borderOp) {
-		case BORDER_DEFAULT_FILL :
-			break;
-		case BORDER_WRAP:
-		case BORDER_REPEAT:
-		case BORDER_AVOID:
-		default :
-			x += (kw - 1) / 2;
-			y += (kh - 1) / 2;
-			w -= kw - 1;
-			h -= kh - 1;
-	}
-		
-	// Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
+    KisAbstractColorSpace * cs = m_device->colorStrategy();
+    
+    // Determine whether we convolve border pixels, or not.
+    switch (borderOp) {
+        case BORDER_DEFAULT_FILL :
+            break;
+        case BORDER_WRAP:
+        case BORDER_REPEAT:
+        case BORDER_AVOID:
+        default :
+            x += (kw - 1) / 2;
+            y += (kh - 1) / 2;
+            w -= kw - 1;
+            h -= kh - 1;
+    }
+        
+    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
-	QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
-	pixelPtrCache.fill(0);
+    QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
+    pixelPtrCache.fill(0);
 
-	// row == the y position of the pixel we want to change in the paint device
-	for (int row = y; row < y + h; ++row) {
+    // row == the y position of the pixel we want to change in the paint device
+    for (int row = y; row < y + h; ++row) {
 
-		// col = the x position of the pixel we want to change
-		int col = x; 
-		
-		KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
-		
-		while (!hit.isDone()) {
-			if (hit.isSelected()) {
-				
-				// Iterate over all contributing pixels that are covered by the kernel
-				// krow = the y position in the kernel matrix
-				Q_INT32 i = 0;
-				for (Q_INT32 krow = 0; krow <  kh; ++krow) {
-	
-					// col - kd = the left starting point of the kernel as centered on our pixel
-					// krow - kd = the offset for the top of the kernel as centered on our pixel
-					// kw = the width of the kernel
-					
-					// Fill the cache with pointers to the pixels under the kernel
-					KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
-					while (!kit.isDone()) {
-						pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
-						++kit;
-						++i;
-					}
-				}
-				Q_ASSERT (i==kw*kh);
-				cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
-				pixelPtrCache.fill(0);
-			}
-			++col;
-			++hit;
-		}
+        // col = the x position of the pixel we want to change
+        int col = x; 
+        
+        KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
+        
+        while (!hit.isDone()) {
+            if (hit.isSelected()) {
+                
+                // Iterate over all contributing pixels that are covered by the kernel
+                // krow = the y position in the kernel matrix
+                Q_INT32 i = 0;
+                for (Q_INT32 krow = 0; krow <  kh; ++krow) {
+    
+                    // col - kd = the left starting point of the kernel as centered on our pixel
+                    // krow - kd = the offset for the top of the kernel as centered on our pixel
+                    // kw = the width of the kernel
+                    
+                    // Fill the cache with pointers to the pixels under the kernel
+                    KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+                    while (!kit.isDone()) {
+                        pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                        ++kit;
+                        ++i;
+                    }
+                }
+                Q_ASSERT (i==kw*kh);
+                cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
+                pixelPtrCache.fill(0);
+            }
+            ++col;
+            ++hit;
+        }
 
-		int progressPercent = 100 - ((((y + h) - row) * 100) / h);
-		
-		if (progressPercent > lastProgressPercent) {
-			emit notifyProgress(this, progressPercent);
-			lastProgressPercent = progressPercent;
+        int progressPercent = 100 - ((((y + h) - row) * 100) / h);
+        
+        if (progressPercent > lastProgressPercent) {
+            emit notifyProgress(this, progressPercent);
+            lastProgressPercent = progressPercent;
 
-			if (m_cancelRequested) {
-				return;
-			}
-		}		
-	
-	}
-	
-	emit notifyProgressDone(this);
+            if (m_cancelRequested) {
+                return;
+            }
+        }        
+    
+    }
+    
+    emit notifyProgressDone(this);
 }

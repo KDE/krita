@@ -28,28 +28,28 @@ class QStringList;
 class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
 
 public:
-	virtual ~KisPaintOpRegistry();
+    virtual ~KisPaintOpRegistry();
 
-	KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
-	KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
-	
-	// Whether we should show this paintop in the toolchest
-	bool userVisible(const KisID & id) const;
+    KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
+    KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
+    
+    // Whether we should show this paintop in the toolchest
+    bool userVisible(const KisID & id) const;
 
-	// Get the pixmap to show in the toolchest
-	QPixmap getPixmap(const KisID & id) const;
+    // Get the pixmap to show in the toolchest
+    QPixmap getPixmap(const KisID & id) const;
 
-	
+    
 public:
-	static KisPaintOpRegistry* instance();
+    static KisPaintOpRegistry* instance();
 
 private:
-	KisPaintOpRegistry();
-	KisPaintOpRegistry(const KisPaintOpRegistry&);
-	KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
+    KisPaintOpRegistry();
+    KisPaintOpRegistry(const KisPaintOpRegistry&);
+    KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
 
 private:
-	static KisPaintOpRegistry *m_singleton;
+    static KisPaintOpRegistry *m_singleton;
 };
 
 #endif // KIS_PAINTOP_REGISTRY_H_

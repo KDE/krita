@@ -20,10 +20,10 @@
 
 KisLabelCursorPos::KisLabelCursorPos(QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
 {
-	setText("0:0");
-	m_doUpdates = true;
-	
-	setMinimumSize( 200, parent->height() - 4);
+    setText("0:0");
+    m_doUpdates = true;
+    
+    setMinimumSize( 200, parent->height() - 4);
 }
 
 KisLabelCursorPos::~KisLabelCursorPos()
@@ -32,22 +32,22 @@ KisLabelCursorPos::~KisLabelCursorPos()
 
 void KisLabelCursorPos::updatePos(Q_INT32 xpos, Q_INT32 ypos)
 {
-	if (m_doUpdates) {
-		QString s;
+    if (m_doUpdates) {
+        QString s;
 
-		s.sprintf("%d:%d", xpos, ypos);
-		setText(s);
-	}
+        s.sprintf("%d:%d", xpos, ypos);
+        setText(s);
+    }
 }
 
 void KisLabelCursorPos::enter()
 {
-	m_doUpdates = true;
+    m_doUpdates = true;
 }
 
 void KisLabelCursorPos::leave()
 {
-	m_doUpdates = false;
-	setText(QString::null);
+    m_doUpdates = false;
+    setText(QString::null);
 }
 

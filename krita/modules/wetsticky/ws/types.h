@@ -1,8 +1,8 @@
 /*
-	FILE:		types.h
-	PURPOSE:	Defines all the main types used in Wet&Sticky.
-	AUTHORS:	Kevin Waite and David England
-	VERSION:	1.00  (10-May-91)
+    FILE:        types.h
+    PURPOSE:    Defines all the main types used in Wet&Sticky.
+    AUTHORS:    Kevin Waite and David England
+    VERSION:    1.00  (10-May-91)
 
 Copyright 1991, 1992, 2002, 2003 Tunde Cockshott, Kevin Waite, David England. 
 

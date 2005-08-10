@@ -57,32 +57,32 @@
 #include "kis_palette.h"
 
 KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
-	: QWidget( parent ), mMinWidth(minWidth), mCols(cols)
+    : QWidget( parent ), mMinWidth(minWidth), mCols(cols)
 {
-	init = false;
+    init = false;
 
-	cells = 0;
-	m_currentPalette = 0;
+    cells = 0;
+    m_currentPalette = 0;
 
-	QVBoxLayout *layout = new QVBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout( this );
 
-	combo = new QComboBox( false, this );
-	layout->addWidget(combo);
+    combo = new QComboBox( false, this );
+    layout->addWidget(combo);
 
-	sv = new QScrollView( this );
-	QSize cellSize = QSize( mMinWidth, 120);
-	sv->setHScrollBarMode( QScrollView::AlwaysOff);
-	sv->setVScrollBarMode( QScrollView::AlwaysOn);
-	QSize minSize = QSize(sv->verticalScrollBar()->width(), 0);
-	minSize += QSize(sv->frameWidth(), 0);
-	minSize += QSize(cellSize);
-	sv->setFixedSize(minSize);
-	layout->addWidget(sv);
+    sv = new QScrollView( this );
+    QSize cellSize = QSize( mMinWidth, 120);
+    sv->setHScrollBarMode( QScrollView::AlwaysOff);
+    sv->setVScrollBarMode( QScrollView::AlwaysOn);
+    QSize minSize = QSize(sv->verticalScrollBar()->width(), 0);
+    minSize += QSize(sv->frameWidth(), 0);
+    minSize += QSize(cellSize);
+    sv->setFixedSize(minSize);
+    layout->addWidget(sv);
 
-	setFixedSize(sizeHint());
+    setFixedSize(sizeHint());
 
-	connect( combo, SIGNAL(activated(const QString &)),
-		 this, SLOT(slotSetPalette( const QString &)));
+    connect( combo, SIGNAL(activated(const QString &)),
+         this, SLOT(slotSetPalette( const QString &)));
 }
 
 KisPaletteWidget::~KisPaletteWidget()
@@ -91,7 +91,7 @@ KisPaletteWidget::~KisPaletteWidget()
 
 QString KisPaletteWidget::palette() const
 {
-	return combo->currentText();
+    return combo->currentText();
 }
 
 
@@ -106,98 +106,98 @@ QString KisPaletteWidget::palette() const
 //
 void KisPaletteWidget::slotSetPalette( const QString &_paletteName )
 {
-	setPalette( _paletteName );
-	slotColorCellSelected(0); // FIXME: We need to save the current value!!
+    setPalette( _paletteName );
+    slotColorCellSelected(0); // FIXME: We need to save the current value!!
 }
 
 
 void KisPaletteWidget::setPalette( const QString &_paletteName )
 {
-	QString paletteName( _paletteName);
+    QString paletteName( _paletteName);
 
-	m_currentPalette = m_namedPaletteMap[paletteName];
+    m_currentPalette = m_namedPaletteMap[paletteName];
 
-	if (combo->currentText() != paletteName)
-	{
-		bool found = false;
-		for(int i = 0; i < combo->count(); i++)
-		{
-			if (combo->text(i) == paletteName)
-			{
-				combo->setCurrentItem(i);
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{
-			combo->insertItem(paletteName);
-			combo->setCurrentItem(combo->count()-1);
-		}
-	}
+    if (combo->currentText() != paletteName)
+    {
+        bool found = false;
+        for(int i = 0; i < combo->count(); i++)
+        {
+            if (combo->text(i) == paletteName)
+            {
+                combo->setCurrentItem(i);
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            combo->insertItem(paletteName);
+            combo->setCurrentItem(combo->count()-1);
+        }
+    }
 
-	delete cells;
+    delete cells;
 
-	int rows = (m_currentPalette -> nColors() + mCols -1 ) / mCols;
+    int rows = (m_currentPalette -> nColors() + mCols -1 ) / mCols;
 
-	if (rows < 1) rows = 1;
+    if (rows < 1) rows = 1;
 
-	cells = new KColorCells( sv->viewport(), rows, mCols);
-	Q_CHECK_PTR(cells);
+    cells = new KColorCells( sv->viewport(), rows, mCols);
+    Q_CHECK_PTR(cells);
 
-	cells->setShading(false);
-	cells->setAcceptDrags(false);
+    cells->setShading(false);
+    cells->setAcceptDrags(false);
 
-	QSize cellSize = QSize( mMinWidth, mMinWidth * rows / mCols);
-	cells->setFixedSize( cellSize );
+    QSize cellSize = QSize( mMinWidth, mMinWidth * rows / mCols);
+    cells->setFixedSize( cellSize );
 
-	for( int i = 0; i < m_currentPalette -> nColors(); i++)
-	{
-		QColor c = m_currentPalette -> getColor(i).color;
-		cells->setColor( i, c );
-	}
+    for( int i = 0; i < m_currentPalette -> nColors(); i++)
+    {
+        QColor c = m_currentPalette -> getColor(i).color;
+        cells->setColor( i, c );
+    }
 
-	connect( cells, SIGNAL( colorSelected( int ) ),
-		 SLOT( slotColorCellSelected( int ) ) );
+    connect( cells, SIGNAL( colorSelected( int ) ),
+         SLOT( slotColorCellSelected( int ) ) );
 
-	connect( cells, SIGNAL( colorDoubleClicked( int ) ),
-		 SLOT( slotColorCellDoubleClicked( int ) ) );
+    connect( cells, SIGNAL( colorDoubleClicked( int ) ),
+         SLOT( slotColorCellDoubleClicked( int ) ) );
 
-	sv->addChild( cells );
-	cells->show();
-	sv->updateScrollBars();
+    sv->addChild( cells );
+    cells->show();
+    sv->updateScrollBars();
 
 }
 
 void KisPaletteWidget::slotColorCellSelected( int col )
 {
-	if (!m_currentPalette || (col >= m_currentPalette->nColors()))
-		return;
-	emit colorSelected( KisColor(m_currentPalette->getColor(col).color) );
+    if (!m_currentPalette || (col >= m_currentPalette->nColors()))
+        return;
+    emit colorSelected( KisColor(m_currentPalette->getColor(col).color) );
 
 }
 
 void KisPaletteWidget::slotColorCellDoubleClicked( int col )
 {
-	if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
-		return;
-	emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color), m_currentPalette->getColor(col).name);
+    if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
+        return;
+    emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color), m_currentPalette->getColor(col).name);
 }
 
 
 void KisPaletteWidget::slotAddPalette(KisResource * palette)
 {
-	KisPalette * p = dynamic_cast<KisPalette*>(palette);
-	
-	m_namedPaletteMap.insert(palette -> name(), p);
+    KisPalette * p = dynamic_cast<KisPalette*>(palette);
+    
+    m_namedPaletteMap.insert(palette -> name(), p);
 
-	combo -> insertItem(palette -> name());
+    combo -> insertItem(palette -> name());
 
-	if (!init) {
-		combo -> setCurrentItem(0);
-		setPalette(combo ->currentText());
-		init = true;
-	}
+    if (!init) {
+        combo -> setCurrentItem(0);
+        setPalette(combo ->currentText());
+        init = true;
+    }
 }
 
 

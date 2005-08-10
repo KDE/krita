@@ -25,17 +25,17 @@
 
 struct KisWidgetInfo
 {
-	KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwhatsThis, bool isContainer);
-	QString includeFile;
-	QString toolTip;
-	QString whatsThis;
-	bool isContainer;
+    KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwhatsThis, bool isContainer);
+    QString includeFile;
+    QString toolTip;
+    QString whatsThis;
+    bool isContainer;
 };
 
 class KisWidgetsPlugin : public QWidgetPlugin
 {
-	typedef std::map<QString, KisWidgetInfo> widgetInfoMap;
-	typedef widgetInfoMap::const_iterator widgetInfoMap_cit;
+    typedef std::map<QString, KisWidgetInfo> widgetInfoMap;
+    typedef widgetInfoMap::const_iterator widgetInfoMap_cit;
 
 public:
   KisWidgetsPlugin();

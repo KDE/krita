@@ -40,20 +40,20 @@ class KisID;
  */
 class GeneralTab : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	GeneralTab( QWidget *parent = 0, const char *name = 0 );
+    GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
-	bool saveOnExit();
-	enumCursorStyle cursorStyle();
+    bool saveOnExit();
+    enumCursorStyle cursorStyle();
     void setDefault();
 
 private:
 
-	QCheckBox *m_saveOnExit;
-	QComboBox *m_cmbCursorShape;
+    QCheckBox *m_saveOnExit;
+    QComboBox *m_cmbCursorShape;
 };
 
 
@@ -64,11 +64,11 @@ private:
  */
 class DirectoriesTab : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	DirectoriesTab( QWidget *parent = 0, const char *name = 0 );
+    DirectoriesTab( QWidget *parent = 0, const char *name = 0 );
 
 private slots:
 
@@ -77,40 +77,40 @@ private slots:
 private:
     void setDefault();
 
-	KURLRequester *m_pLineEdit, *m_pGimpGradients;
+    KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
 
 //=======================
 
 class UndoRedoTab : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
         void setDefault();
 
-	UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
+    UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
 };
 
 //=======================
 
 class ColorSettingsTab : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
+    ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
 
 private slots:
 
-	void refillMonitorProfiles(const KisID & s);
-	void refillPrintProfiles(const KisID & s);
-	void refillImportProfiles(const KisID & s);
+    void refillMonitorProfiles(const KisID & s);
+    void refillPrintProfiles(const KisID & s);
+    void refillImportProfiles(const KisID & s);
 
 public:
     void setDefault();
-	WdgColorSettings * m_page;
+    WdgColorSettings * m_page;
 };
 
 
@@ -122,11 +122,11 @@ class PerformanceTab : public QWidget
 Q_OBJECT
 
 public:
-	PerformanceTab( QWidget *parent = 0, const char *name = 0 );
+    PerformanceTab( QWidget *parent = 0, const char *name = 0 );
 
 public:
-	void setDefault();
-	WdgPerformanceSettings * m_page;
+    void setDefault();
+    WdgPerformanceSettings * m_page;
 };
 
 //=======================
@@ -136,29 +136,29 @@ public:
  */
 class PreferencesDialog : public KDialogBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	static bool editPreferences();
+    static bool editPreferences();
 
 
 protected:
 
-	PreferencesDialog( QWidget *parent = 0, const char *name = 0 );
-	~PreferencesDialog();
+    PreferencesDialog( QWidget *parent = 0, const char *name = 0 );
+    ~PreferencesDialog();
 
 protected:
 
-	GeneralTab* m_general;
-	DirectoriesTab* m_directories;
-	UndoRedoTab* m_undoRedo;
-	ColorSettingsTab* m_colorSettings;
-	PerformanceTab* m_performanceSettings;
+    GeneralTab* m_general;
+    DirectoriesTab* m_directories;
+    UndoRedoTab* m_undoRedo;
+    ColorSettingsTab* m_colorSettings;
+    PerformanceTab* m_performanceSettings;
 
 protected slots:
 
-	void slotDefault();
+    void slotDefault();
 
 };
 

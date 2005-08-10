@@ -21,21 +21,21 @@
 #include <qlabel.h>
 
 class KisLabelCursorPos : public QLabel {
-	Q_OBJECT
-	typedef QLabel super;
+    Q_OBJECT
+    typedef QLabel super;
 
 public:
-	KisLabelCursorPos(QWidget *parent, const char *name = 0, WFlags f = 0);
-	virtual ~KisLabelCursorPos();
+    KisLabelCursorPos(QWidget *parent, const char *name = 0, WFlags f = 0);
+    virtual ~KisLabelCursorPos();
 
 public slots:
-	void updatePos(Q_INT32 xpos, Q_INT32 ypos);
-	void enter();
-	void leave();
+    void updatePos(Q_INT32 xpos, Q_INT32 ypos);
+    void enter();
+    void leave();
 
 private:
-	bool m_doUpdates;
-	Q_INT32 m_ypos;
+    bool m_doUpdates;
+    Q_INT32 m_ypos;
 };
 
 #endif // KIS_LABEL_CURSOR_POS_H_

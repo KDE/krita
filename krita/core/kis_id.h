@@ -61,48 +61,48 @@ class KisID : public KShared {
 
 public:
 
-	KisID() : m_id(QString::null), m_name(QString::null) {}
+    KisID() : m_id(QString::null), m_name(QString::null) {}
 
-	KisID(const QString & id, const QString & name)
-		: m_id(id),
-		  m_name(name) {};
+    KisID(const QString & id, const QString & name)
+        : m_id(id),
+          m_name(name) {};
 
-	QString id() const { return m_id; };
+    QString id() const { return m_id; };
         QString name() const { return m_name; };
 
-	friend inline bool operator==(const KisID &, const KisID &);
-	friend inline bool operator!=(const KisID &, const KisID &);
-	friend inline bool operator<(const KisID &, const KisID &);
-	friend inline bool operator>(const KisID &, const KisID &);
+    friend inline bool operator==(const KisID &, const KisID &);
+    friend inline bool operator!=(const KisID &, const KisID &);
+    friend inline bool operator<(const KisID &, const KisID &);
+    friend inline bool operator>(const KisID &, const KisID &);
 
 
 private:
 
-	QString m_id;
-	QString m_name;
+    QString m_id;
+    QString m_name;
 
 };
 
 inline bool operator==(const KisID &v1, const KisID &v2)
 {
-	 return v1.m_id == v2.m_id;
+     return v1.m_id == v2.m_id;
 }
 
 inline bool operator!=(const KisID &v1, const KisID &v2)
 {
-	return v1.m_id != v2.m_id;
+    return v1.m_id != v2.m_id;
 }
 
 
 inline bool operator<(const KisID &v1, const KisID &v2)
 {
-	return v1.m_id < v2.m_id;
+    return v1.m_id < v2.m_id;
 }
 
 
 inline bool operator>(const KisID &v1, const KisID &v2)
 {
-	return v1.m_id < v2.m_id;
+    return v1.m_id < v2.m_id;
 }
 
 

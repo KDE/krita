@@ -49,13 +49,13 @@ KisToolStar::KisToolStar()
           m_dragging (false),
           m_currentImage (0)
 {
-	setName("tool_star");
-	// initialize ellipse tool settings
-//	m_lineThickness = 4;
-// 	m_opacity = 255;
-// 	m_usePattern = false;
-// 	m_useGradient = false;
-// 	m_fillSolid = false;
+    setName("tool_star");
+    // initialize ellipse tool settings
+//    m_lineThickness = 4;
+//     m_opacity = 255;
+//     m_usePattern = false;
+//     m_useGradient = false;
+//     m_fillSolid = false;
 }
 
 KisToolStar::~KisToolStar()
@@ -71,10 +71,10 @@ void KisToolStar::update (KisCanvasSubject *subject)
 
 void KisToolStar::buttonPress(KisButtonPressEvent *event)
 {
-	if (m_currentImage && event -> button() == LeftButton) {
-		m_dragging = true;
-		m_dragStart = event -> pos();
-		m_dragEnd = event -> pos();
+    if (m_currentImage && event -> button() == LeftButton) {
+        m_dragging = true;
+        m_dragStart = event -> pos();
+        m_dragEnd = event -> pos();
                 m_vertices = ((WdgToolStar*)m_optWidget) -> verticesSpinBox -> value();
                 m_innerOuterRatio = ((WdgToolStar*)m_optWidget) -> ratioSpinBox -> value();
         }
@@ -82,20 +82,20 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
 
 void KisToolStar::move(KisMoveEvent *event)
 {
-	if (m_dragging) {
-		// erase old lines on canvas
-		draw(m_dragStart, m_dragEnd);
-		// move (alt) or resize star
-		if (event -> state() & Qt::AltButton) {
-			KisPoint trans = event -> pos() - m_dragEnd;
-			m_dragStart += trans;
-			m_dragEnd += trans;
-		} else {
-			m_dragEnd = event -> pos();
-		}
-		// draw new lines on canvas
-		draw(m_dragStart, m_dragEnd);
-	}
+    if (m_dragging) {
+        // erase old lines on canvas
+        draw(m_dragStart, m_dragEnd);
+        // move (alt) or resize star
+        if (event -> state() & Qt::AltButton) {
+            KisPoint trans = event -> pos() - m_dragEnd;
+            m_dragStart += trans;
+            m_dragEnd += trans;
+        } else {
+            m_dragEnd = event -> pos();
+        }
+        // draw new lines on canvas
+        draw(m_dragStart, m_dragEnd);
+    }
 }
 
 void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
@@ -103,10 +103,10 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_subject || !m_currentImage)
             return;
 
-	if (m_dragging && event -> button() == LeftButton) {
-		// erase old lines on canvas
-		draw(m_dragStart, m_dragEnd);
-		m_dragging = false;
+    if (m_dragging && event -> button() == LeftButton) {
+        // erase old lines on canvas
+        draw(m_dragStart, m_dragEnd);
+        m_dragging = false;
 
                 if (m_dragStart == m_dragEnd)
                         return;
@@ -119,22 +119,22 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
                 painter.beginTransaction (i18n("Star"));
 
                 painter.setPaintColor(m_subject -> fgColor());
-		painter.setBackgroundColor(m_subject -> bgColor());
-		painter.setFillStyle(fillStyle());
-		painter.setBrush(m_subject -> currentBrush());
-		painter.setPattern(m_subject -> currentPattern());
+        painter.setBackgroundColor(m_subject -> bgColor());
+        painter.setFillStyle(fillStyle());
+        painter.setBrush(m_subject -> currentBrush());
+        painter.setPattern(m_subject -> currentPattern());
                 painter.setOpacity(m_opacity);
                 painter.setCompositeOp(m_compositeOp);
-		KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
-		painter.setPaintOp(op); // Painter takes ownership
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
+        painter.setPaintOp(op); // Painter takes ownership
 
                 //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
                 vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
-		painter.paintPolygon(coord);
-		//painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
+        painter.paintPolygon(coord);
+        //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
                 m_currentImage -> notify( painter.dirtyRect() );
-		notifyModified();
+        notifyModified();
 
                 KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
                 if (adapter) {
@@ -149,23 +149,23 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
             return;
 
         KisCanvasControllerInterface *controller = m_subject -> canvasController();
-        QWidget *canvas = controller->canvas ();	
+        QWidget *canvas = controller->canvas ();    
         QPainter p (canvas);
         QPen pen(Qt::SolidLine);
 
         KisPoint startPos;
-        KisPoint endPos;	
+        KisPoint endPos;    
         startPos = controller -> windowToView(start);
         endPos = controller -> windowToView(end);
 
         p.setRasterOp(Qt::NotROP);
 
-	vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+    vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 
-	for (uint i = 0; i < points.count() - 1; i++) {
-		p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
-	}
-	p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
+    for (uint i = 0; i < points.count() - 1; i++) {
+        p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
+    }
+    p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
 
         p.end ();
 }
@@ -174,22 +174,22 @@ void KisToolStar::setup(KActionCollection *collection)
 {
         m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		KShortcut shortcut(Qt::Key_Plus);
-		shortcut.append(KShortcut(Qt::Key_F8));
-		m_action = new KRadioAction(i18n("&Star"),
-					    "tool_star",
-					    shortcut,
-					    this,
-					    SLOT(activate()),
-					    collection,
-					    name());
-		Q_CHECK_PTR(m_action);
+    if (m_action == 0) {
+        KShortcut shortcut(Qt::Key_Plus);
+        shortcut.append(KShortcut(Qt::Key_F8));
+        m_action = new KRadioAction(i18n("&Star"),
+                        "tool_star",
+                        shortcut,
+                        this,
+                        SLOT(activate()),
+                        collection,
+                        name());
+        Q_CHECK_PTR(m_action);
 
-		m_action -> setToolTip(i18n("Draw a star"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	        m_innerOuterRatio=40;
+        m_action -> setToolTip(i18n("Draw a star"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+            m_innerOuterRatio=40;
                 m_vertices=5;
         }
 }
@@ -197,7 +197,7 @@ void KisToolStar::setup(KActionCollection *collection)
 vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
         double R=0, r=0;
-	Q_INT32 n=0;
+    Q_INT32 n=0;
         double angle;
         
         vKisPoint starCoordinatesArray(2*N);
@@ -226,18 +226,18 @@ vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, do
 
 QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 {
-	QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget(parent);
 
-	m_optWidget = new WdgToolStar(widget);
-	Q_CHECK_PTR(m_optWidget);
+    m_optWidget = new WdgToolStar(widget);
+    Q_CHECK_PTR(m_optWidget);
 
-	QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
-	super::addOptionWidgetLayout(optionLayout);
+    QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
+    super::addOptionWidgetLayout(optionLayout);
 
-	optionLayout -> addWidget(m_optWidget, 0, 0);
-	//connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+    optionLayout -> addWidget(m_optWidget, 0, 0);
+    //connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-	return widget;
+    return widget;
 }
 
 #include "kis_tool_star.moc"

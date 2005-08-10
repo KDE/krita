@@ -41,58 +41,58 @@ class KisSelectionOptions;
 
 class KisToolSelectSimilar : public KisToolNonPaint {
 
-	Q_OBJECT
-	typedef KisToolNonPaint super;
+    Q_OBJECT
+    typedef KisToolNonPaint super;
 
 public:
-	KisToolSelectSimilar();
-	virtual ~KisToolSelectSimilar();
+    KisToolSelectSimilar();
+    virtual ~KisToolSelectSimilar();
 
-	void activate();
-	void clear();
+    void activate();
+    void clear();
 
-	virtual void update(KisCanvasSubject *subject);
-	virtual void setup(KActionCollection *collection);
-	virtual Q_UINT32 priority() { return 8; }
-	virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual void update(KisCanvasSubject *subject);
+    virtual void setup(KActionCollection *collection);
+    virtual Q_UINT32 priority() { return 8; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
 
 public slots:
-	virtual void slotSetFuzziness(int);
-	virtual void slotSetAction(int);
-	
+    virtual void slotSetFuzziness(int);
+    virtual void slotSetAction(int);
+    
 private:
-	virtual QWidget* createOptionWidget(QWidget* parent);
-	virtual QWidget* optionWidget();
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
 
-	virtual void buttonPress(KisButtonPressEvent *e);
-	void setPickerCursor(enumSelectionMode);
+    virtual void buttonPress(KisButtonPressEvent *e);
+    void setPickerCursor(enumSelectionMode);
 
-	KisCanvasSubject *m_subject;
-	QWidget *m_optWidget;
-	KisSelectionOptions *m_selectionOptionsWidget;
+    KisCanvasSubject *m_subject;
+    QWidget *m_optWidget;
+    KisSelectionOptions *m_selectionOptionsWidget;
 
-	int m_fuzziness;
-	enumSelectionMode m_defaultSelectAction;
-	enumSelectionMode m_currentSelectAction;
-	QTimer *m_timer;
+    int m_fuzziness;
+    enumSelectionMode m_defaultSelectAction;
+    enumSelectionMode m_currentSelectAction;
+    QTimer *m_timer;
 
 private slots:
-	void slotTimer();
+    void slotTimer();
 };
 
 class KisToolSelectSimilarFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolSelectSimilarFactory() : super() {};
-	virtual ~KisToolSelectSimilarFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolSelectSimilar(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("selectsimilar", i18n("Select similar")); }
+    KisToolSelectSimilarFactory() : super() {};
+    virtual ~KisToolSelectSimilarFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolSelectSimilar(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("selectsimilar", i18n("Select similar")); }
 };
 
 

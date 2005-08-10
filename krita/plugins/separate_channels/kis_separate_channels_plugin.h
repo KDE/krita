@@ -26,18 +26,18 @@ class KisView;
 
 class KisSeparateChannelsPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &);
-	virtual ~KisSeparateChannelsPlugin();
+    KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &);
+    virtual ~KisSeparateChannelsPlugin();
 
 private slots:
 
-	void slotSeparate();
+    void slotSeparate();
 
 private:
 
-	KisView * m_view;
+    KisView * m_view;
 };
 
 #endif

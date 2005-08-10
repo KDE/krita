@@ -28,37 +28,37 @@
 class KisResource;
 
 class KisResourceServerBase : public QObject {
-	typedef QObject super;
-	Q_OBJECT
+    typedef QObject super;
+    Q_OBJECT
 
 public:
-	KisResourceServerBase(QString type, QStringList fileExtensions);
-	virtual ~KisResourceServerBase();
+    KisResourceServerBase(QString type, QStringList fileExtensions);
+    virtual ~KisResourceServerBase();
 
-	void loadResources();
-	QValueList<KisResource*> resources();
+    void loadResources();
+    QValueList<KisResource*> resources();
 
 protected:
-	virtual KisResource* createResource( QString filename ) = 0;
+    virtual KisResource* createResource( QString filename ) = 0;
 
 private:
-	QValueList<KisResource*> m_resources;
-	QStringList m_fileExtensions;
-	QString m_type;
+    QValueList<KisResource*> m_resources;
+    QStringList m_fileExtensions;
+    QString m_type;
 
-	bool m_loaded;
+    bool m_loaded;
 
 };
 
 template <class T> class KisResourceServer : public KisResourceServerBase {
-	typedef KisResourceServerBase super;
+    typedef KisResourceServerBase super;
 
 public:
-	KisResourceServer(QString type, QStringList fileExtensions) :super( type, fileExtensions) {}
-	virtual ~KisResourceServer(){}
+    KisResourceServer(QString type, QStringList fileExtensions) :super( type, fileExtensions) {}
+    virtual ~KisResourceServer(){}
 
 private:
-	KisResource* createResource( QString filename ){return new T(filename);}
+    KisResource* createResource( QString filename ){return new T(filename);}
 };
 
 #endif // KIS_RESOURCESERVER_H_

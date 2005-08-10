@@ -28,228 +28,228 @@
 #include "kis_config.h"
 
 namespace {
-	const Q_INT32 IMG_WIDTH_MAX = USHRT_MAX;
-	const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
-	const Q_INT32 IMG_DEFAULT_WIDTH = 512;
-	const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
-	const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
-	const Q_INT32 DEFAULT_MAX_THREADS = 4;
-	const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
-	const Q_INT32 DEFAULT_SWAPPINESS = 100;
+    const Q_INT32 IMG_WIDTH_MAX = USHRT_MAX;
+    const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
+    const Q_INT32 IMG_DEFAULT_WIDTH = 512;
+    const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
+    const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+    const Q_INT32 DEFAULT_MAX_THREADS = 4;
+    const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
+    const Q_INT32 DEFAULT_SWAPPINESS = 100;
 }
 
 KisConfig::KisConfig()
 {
-	KApplication *app = KApplication::kApplication();
+    KApplication *app = KApplication::kApplication();
 
-	Q_ASSERT(app);
+    Q_ASSERT(app);
 
-	m_cfg = app -> config();
+    m_cfg = app -> config();
 
 }
 
 KisConfig::~KisConfig()
 {
-	m_cfg -> sync();
+    m_cfg -> sync();
 }
 
 Q_INT32 KisConfig::maxImgWidth() const
 {
-	return m_cfg -> readNumEntry("imgWidthMax", IMG_WIDTH_MAX);
+    return m_cfg -> readNumEntry("imgWidthMax", IMG_WIDTH_MAX);
 }
 
 Q_INT32 KisConfig::defImgWidth() const
 {
-	return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
+    return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
 }
 
 Q_INT32 KisConfig::maxImgHeight() const
 {
-	return m_cfg -> readNumEntry("imgHeightMax", IMG_HEIGHT_MAX);
+    return m_cfg -> readNumEntry("imgHeightMax", IMG_HEIGHT_MAX);
 }
 
 Q_INT32 KisConfig::defImgHeight() const
 {
-	return m_cfg -> readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
+    return m_cfg -> readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
 void KisConfig::defImgWidth(Q_INT32 width)
 {
-	m_cfg -> writeEntry("imgWidthDef", width);
+    m_cfg -> writeEntry("imgWidthDef", width);
 }
 
 void KisConfig::defImgHeight(Q_INT32 height)
 {
-	m_cfg -> writeEntry("imgHeightDef", height);
+    m_cfg -> writeEntry("imgHeightDef", height);
 }
 
 enumCursorStyle KisConfig::defCursorStyle() const
 {
-	return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
+    return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
 }
 
 void KisConfig::defCursorStyle(enumCursorStyle style)
 {
-	m_cfg -> writeEntry("cursorStyleDef", style);
+    m_cfg -> writeEntry("cursorStyleDef", style);
 }
 
 
 QString KisConfig::monitorProfile() const
 {
-//	kdDebug () << "Profile: " << m_cfg -> readEntry("monitorProfile", "None") << "\n";
-	return m_cfg -> readEntry("monitorProfile", "None");
+//    kdDebug () << "Profile: " << m_cfg -> readEntry("monitorProfile", "None") << "\n";
+    return m_cfg -> readEntry("monitorProfile", "None");
 }
 
 void KisConfig::setMonitorProfile(QString monitorProfile)
 {
-	m_cfg -> writeEntry("monitorProfile", monitorProfile);
+    m_cfg -> writeEntry("monitorProfile", monitorProfile);
 }
 
 
 QString KisConfig::workingColorSpace() const
 {
-	return m_cfg -> readEntry("workingColorSpace", "RGBA");
+    return m_cfg -> readEntry("workingColorSpace", "RGBA");
 }
 
 void KisConfig::setWorkingColorSpace(QString workingColorSpace)
 {
-	m_cfg -> writeEntry(workingColorSpace, workingColorSpace);
+    m_cfg -> writeEntry(workingColorSpace, workingColorSpace);
 }
 
 
 QString KisConfig::importProfile() const
 {
-	return m_cfg -> readEntry("importProfile", "None");
+    return m_cfg -> readEntry("importProfile", "None");
 }
 
 void KisConfig::setImportProfile(QString importProfile)
 {
-	m_cfg -> writeEntry("importProfile", importProfile);
+    m_cfg -> writeEntry("importProfile", importProfile);
 }
 
 
 QString KisConfig::printerColorSpace() const
 {
-	return m_cfg -> readEntry("printerColorSpace", "CMYK");
+    return m_cfg -> readEntry("printerColorSpace", "CMYK");
 }
 
 void KisConfig::setPrinterColorSpace(QString printerColorSpace)
 {
-	m_cfg -> writeEntry("printerColorSpace", printerColorSpace);
+    m_cfg -> writeEntry("printerColorSpace", printerColorSpace);
 }
 
 
 QString KisConfig::printerProfile() const
 {
-	return m_cfg -> readEntry("printerProfile", "None");
+    return m_cfg -> readEntry("printerProfile", "None");
 }
 
 void KisConfig::setPrinterProfile(QString printerProfile)
 {
-	m_cfg -> writeEntry("printerProfile", printerProfile);
+    m_cfg -> writeEntry("printerProfile", printerProfile);
 }
 
 
 bool KisConfig::useBlackPointCompensation() const
 {
-	return m_cfg -> readBoolEntry("useBlackPointCompensation", false);
+    return m_cfg -> readBoolEntry("useBlackPointCompensation", false);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
 {
-	m_cfg -> writeEntry("useBlackPointCompensation", useBlackPointCompensation);
+    m_cfg -> writeEntry("useBlackPointCompensation", useBlackPointCompensation);
 }
 
 
 bool KisConfig::dither8Bit() const
 {
-	return m_cfg -> readBoolEntry("dither8Bit", false);
+    return m_cfg -> readBoolEntry("dither8Bit", false);
 }
 
 void KisConfig::setDither8Bit(bool dither8Bit)
 {
-	m_cfg -> writeEntry("dither8Bit", dither8Bit);
+    m_cfg -> writeEntry("dither8Bit", dither8Bit);
 }
 
 bool KisConfig::showRulers() const
 {
-	return m_cfg->readBoolEntry("showrulers", false);
+    return m_cfg->readBoolEntry("showrulers", false);
 }
 
 void KisConfig::setShowRulers(bool rulers)
 {
-	m_cfg->writeEntry("showrulers", rulers);
+    m_cfg->writeEntry("showrulers", rulers);
 }
 
 bool KisConfig::askProfileOnOpen() const
 {
-	return m_cfg -> readBoolEntry("askProfileOnOpen", true);
+    return m_cfg -> readBoolEntry("askProfileOnOpen", true);
 }
 
 void KisConfig::setAskProfileOnOpen(bool askProfileOnOpen)
 {
-	m_cfg -> writeEntry("askProfileOnOpen", askProfileOnOpen);
+    m_cfg -> writeEntry("askProfileOnOpen", askProfileOnOpen);
 }
 
 
 bool KisConfig::askProfileOnPaste() const
 {
-	return m_cfg -> readBoolEntry("askProfileOnPaste", true);
+    return m_cfg -> readBoolEntry("askProfileOnPaste", true);
 }
 
 void KisConfig::setAskProfileOnPaste(bool askProfileOnPaste)
 {
-	m_cfg -> writeEntry("askProfileOnPaste", askProfileOnPaste);
+    m_cfg -> writeEntry("askProfileOnPaste", askProfileOnPaste);
 }
 
 
 bool KisConfig::applyMonitorProfileOnCopy() const
 {
-	return m_cfg -> readBoolEntry("applyMonitorProfileOnCopy", false);
+    return m_cfg -> readBoolEntry("applyMonitorProfileOnCopy", false);
 }
 
 void KisConfig::setApplyMonitorProfileOnCopy(bool applyMonitorProfileOnCopy)
 {
-	m_cfg -> writeEntry("applyMonitorProfileOnCopy", applyMonitorProfileOnCopy);
+    m_cfg -> writeEntry("applyMonitorProfileOnCopy", applyMonitorProfileOnCopy);
 }
 
 
 Q_INT32 KisConfig::renderIntent()
 {
-	return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
+    return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
 }
 
 void KisConfig::setRenderIntent(Q_INT32 renderIntent)
 {
-	m_cfg -> writeEntry("renderIntent", renderIntent);
+    m_cfg -> writeEntry("renderIntent", renderIntent);
 }
 
 Q_INT32 KisConfig::maxNumberOfThreads()
 {
-	return m_cfg -> readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
+    return m_cfg -> readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
 }
 
 void KisConfig::setMaxNumberOfThreads(Q_INT32 maxThreads)
 {
-	m_cfg -> writeEntry("maxthreads", maxThreads);
+    m_cfg -> writeEntry("maxthreads", maxThreads);
 }
 
 Q_INT32 KisConfig::maxTilesInMem() const
 {
-	return m_cfg -> readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
+    return m_cfg -> readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
 }
 
 void KisConfig::setMaxTilesInMem(Q_INT32 tiles)
 {
-	m_cfg -> writeEntry("maxtilesinmem", tiles);
+    m_cfg -> writeEntry("maxtilesinmem", tiles);
 }
 
 Q_INT32 KisConfig::swappiness() const
 {
-	return m_cfg -> readNumEntry("swappiness", DEFAULT_SWAPPINESS);
+    return m_cfg -> readNumEntry("swappiness", DEFAULT_SWAPPINESS);
 }
 
 void KisConfig::setSwappiness(Q_INT32 swappiness)
 {
-	m_cfg -> writeEntry("swappiness", swappiness);
+    m_cfg -> writeEntry("swappiness", swappiness);
 }

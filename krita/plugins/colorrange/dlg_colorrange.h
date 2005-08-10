@@ -57,15 +57,15 @@ class DlgColorRange;
 
 
 enum enumAction {
-	REDS,
-	YELLOWS,
-	GREENS,
-	CYANS,
-	BLUES,
-	MAGENTAS,
-	HIGHLIGHTS,
-	MIDTONES,
-	SHADOWS
+    REDS,
+    YELLOWS,
+    GREENS,
+    CYANS,
+    BLUES,
+    MAGENTAS,
+    HIGHLIGHTS,
+    MIDTONES,
+    SHADOWS
 };
 
 
@@ -74,44 +74,44 @@ enum enumAction {
  * on a (range of) colors.
  */
 class DlgColorRange: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 
 
 public:
 
-	DlgColorRange(KisView * view, KisLayerSP layer, QWidget * parent = 0, const char* name = 0);
-	~DlgColorRange();
+    DlgColorRange(KisView * view, KisLayerSP layer, QWidget * parent = 0, const char* name = 0);
+    ~DlgColorRange();
 
 private slots:
 
-	void okClicked();
-	void cancelClicked();
-	
-	void slotInvertClicked();
-	void slotSelectionTypeChanged(int index);
-	void updatePreview();
-	void slotSubtract(bool on);
-	void slotAdd(bool on);
-	void slotSelectClicked();
-	void slotDeselectClicked();
-				
+    void okClicked();
+    void cancelClicked();
+    
+    void slotInvertClicked();
+    void slotSelectionTypeChanged(int index);
+    void updatePreview();
+    void slotSubtract(bool on);
+    void slotAdd(bool on);
+    void slotSelectClicked();
+    void slotDeselectClicked();
+                
 private:
-	QImage createMask(KisSelectionSP selection, KisLayerSP layer);
+    QImage createMask(KisSelectionSP selection, KisLayerSP layer);
 
 private:
 
-	WdgColorRange * m_page;
-	KisSelectionSP m_selection;
-	KisLayerSP m_layer;
-	KisView * m_view;
-	KisCanvasSubject * m_subject;
-	enumSelectionMode m_mode;
-	QCursor m_oldCursor;
-	KisSelectedTransaction *m_transaction;
-	enumAction m_currentAction;
-	bool m_invert;
+    WdgColorRange * m_page;
+    KisSelectionSP m_selection;
+    KisLayerSP m_layer;
+    KisView * m_view;
+    KisCanvasSubject * m_subject;
+    enumSelectionMode m_mode;
+    QCursor m_oldCursor;
+    KisSelectedTransaction *m_transaction;
+    enumAction m_currentAction;
+    bool m_invert;
 };
 
 

@@ -39,20 +39,20 @@ class KisAnnotation : public KShared {
 
 public:
 
-	KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
-		: m_type(type),
-		  m_description(description),
-		  m_annotation(data) {};
+    KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
+        : m_type(type),
+          m_description(description),
+          m_annotation(data) {};
 
-	QString & type() {return m_type;};
-	QString & description() {return m_description;};
-	QByteArray & annotation() { return m_annotation;};
+    QString & type() {return m_type;};
+    QString & description() {return m_description;};
+    QByteArray & annotation() { return m_annotation;};
 
 private:
 
-	QString m_type;
-	QString m_description;
-	QByteArray m_annotation;
+    QString m_type;
+    QString m_description;
+    QByteArray m_annotation;
 
 };
 

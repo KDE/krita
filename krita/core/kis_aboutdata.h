@@ -27,37 +27,37 @@
 
 KAboutData * newKritaAboutData()
 {
-	KAboutData * aboutData = new KAboutData( "krita",
-			I18N_NOOP("Krita"),
-			KRITA_VERSION,
-			I18N_NOOP("KOffice image manipulation application"),
-			KAboutData::License_GPL,
-			I18N_NOOP("(c) 1999-2004 The Krita team.\n"),
-			"",
-			"http://www.koffice.org/krita",
-			"submit@bugs.kde.org");
-	aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
-	aboutData->addAuthor("Alan Horkan", 0, "", "http://www.openclipart.org");
-	aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
-	aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
-	aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
-	aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
-	aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
-	aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
-	aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
+    KAboutData * aboutData = new KAboutData( "krita",
+            I18N_NOOP("Krita"),
+            KRITA_VERSION,
+            I18N_NOOP("KOffice image manipulation application"),
+            KAboutData::License_GPL,
+            I18N_NOOP("(c) 1999-2004 The Krita team.\n"),
+            "",
+            "http://www.koffice.org/krita",
+            "submit@bugs.kde.org");
+    aboutData->addAuthor("Adrian Page", 0, "Adrian.Page@tesco.net");
+    aboutData->addAuthor("Alan Horkan", 0, "", "http://www.openclipart.org");
+    aboutData->addAuthor("Bart Coppens", 0, "kde@bartcoppens.be");
+    aboutData->addAuthor("Boudewijn Rempt", 0, "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
+    aboutData->addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
+    aboutData->addAuthor("Casper Boemann", 0, "cbr@boemann.dk");
+    aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
+    aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
+    aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
         aboutData->addAuthor("Danny Allen", 0 , "danny@dannyallen.co.uk");
-	aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
-	aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
-	aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
-	aboutData->addAuthor("Melchior Franz", 0, "mfranz@kde.org");
-	aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
-	aboutData->addAuthor("Michael Thaler", 0, "michael.thaler@physik.tu-muenchen.de");
-	aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
-	aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
-	aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
-	aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
-	aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
-	return aboutData;
+    aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
+    aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
+    aboutData->addAuthor("Melchior Franz", 0, "mfranz@kde.org");
+    aboutData->addAuthor("Michael Koch", 0, "koch@kde.org");
+    aboutData->addAuthor("Michael Thaler", 0, "michael.thaler@physik.tu-muenchen.de");
+    aboutData->addAuthor("Patrick Julien", 0, "freak@codepimps.org");
+    aboutData->addAuthor("Roger Larsson", 0, "roger.larsson@norran.net");
+    aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
+    aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
+    aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
+    return aboutData;
 }
 
 #endif // KIS_ABOUT_DATA_H_

@@ -1,4 +1,4 @@
-	/*
+    /*
  * This file is part of the Krita
  *
  * Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
@@ -23,62 +23,62 @@
 #include "kis_iterator.h"
 
 KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x,  Q_INT32 y, Q_INT32 h, bool writable) :
-	KisTiledIterator(ndevice),
-	m_bottom(y + h - 1)
+    KisTiledIterator(ndevice),
+    m_bottom(y + h - 1)
 {
-	m_writable = writable;
-	m_x = x;
-	m_y = y;
+    m_writable = writable;
+    m_x = x;
+    m_y = y;
 
-	// Find tile row,col matching x,y
-	m_col = xToCol(m_x);
-	m_topRow = yToRow(m_y);
-	m_bottomRow = yToRow(m_bottom);
-	m_row = m_topRow;
+    // Find tile row,col matching x,y
+    m_col = xToCol(m_x);
+    m_topRow = yToRow(m_y);
+    m_bottomRow = yToRow(m_bottom);
+    m_row = m_topRow;
 
-	// calc limits within the tile
-	m_xInTile = m_x - m_col * KisTile::WIDTH;
-	m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
+    // calc limits within the tile
+    m_xInTile = m_x - m_col * KisTile::WIDTH;
+    m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
 
-	if(m_row == m_bottomRow)
-		m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
-	else
-		m_bottomInTile = KisTile::HEIGHT - 1;
+    if(m_row == m_bottomRow)
+        m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
+    else
+        m_bottomInTile = KisTile::HEIGHT - 1;
 
-	m_yInTile = m_topInTile;
+    m_yInTile = m_topInTile;
 
-	fetchTileData(m_col, m_row);
-	m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
+    fetchTileData(m_col, m_row);
+    m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 
 KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
-	: KisTiledIterator(rhs)
+    : KisTiledIterator(rhs)
 {
-	if (this != &rhs) {
-		m_bottom = rhs.m_bottom;
-		m_topRow = rhs.m_topRow;
-		m_bottomRow = rhs.m_bottomRow;
-		m_xInTile = rhs.m_xInTile;
-		m_yInTile = rhs.m_yInTile;
-		m_topInTile = rhs.m_topInTile;
-		m_bottomInTile = rhs.m_bottomInTile;
-	}
+    if (this != &rhs) {
+        m_bottom = rhs.m_bottom;
+        m_topRow = rhs.m_topRow;
+        m_bottomRow = rhs.m_bottomRow;
+        m_xInTile = rhs.m_xInTile;
+        m_yInTile = rhs.m_yInTile;
+        m_topInTile = rhs.m_topInTile;
+        m_bottomInTile = rhs.m_bottomInTile;
+    }
 }
 
 KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineIterator& rhs)
 {
-	if (this != &rhs) {
-		KisTiledIterator::operator=(rhs);
-		
-		m_bottom = rhs.m_bottom;
-		m_topRow = rhs.m_topRow;
-		m_bottomRow = rhs.m_bottomRow;
-		m_xInTile = rhs.m_xInTile;
-		m_yInTile = rhs.m_yInTile;
-		m_topInTile = rhs.m_topInTile;
-		m_bottomInTile = rhs.m_bottomInTile;
-	}
-	return *this;
+    if (this != &rhs) {
+        KisTiledIterator::operator=(rhs);
+        
+        m_bottom = rhs.m_bottom;
+        m_topRow = rhs.m_topRow;
+        m_bottomRow = rhs.m_bottomRow;
+        m_xInTile = rhs.m_xInTile;
+        m_yInTile = rhs.m_yInTile;
+        m_topInTile = rhs.m_topInTile;
+        m_bottomInTile = rhs.m_bottomInTile;
+    }
+    return *this;
 }
 
 KisTiledVLineIterator::~KisTiledVLineIterator( )
@@ -87,40 +87,40 @@ KisTiledVLineIterator::~KisTiledVLineIterator( )
 
 KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 {
-	if(m_yInTile >= m_bottomInTile)
-	{
-		nextTile();
-		fetchTileData(m_col, m_row);
-		m_yInTile =m_topInTile;
-		m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
-	}
-	else
-	{
-		m_yInTile++;
-		m_offset += m_pixelSize * KisTile::WIDTH;
-	}
-	m_y++;
+    if(m_yInTile >= m_bottomInTile)
+    {
+        nextTile();
+        fetchTileData(m_col, m_row);
+        m_yInTile =m_topInTile;
+        m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
+    }
+    else
+    {
+        m_yInTile++;
+        m_offset += m_pixelSize * KisTile::WIDTH;
+    }
+    m_y++;
 
-	return *this;
+    return *this;
 }
 
 void KisTiledVLineIterator::nextTile()
 {
-	if(m_row < m_bottomRow)
-	{
-		m_row++;
-		m_topInTile = 0;
+    if(m_row < m_bottomRow)
+    {
+        m_row++;
+        m_topInTile = 0;
 
-		if(m_row == m_bottomRow)
-			m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
-		else
-			m_bottomInTile = KisTile::HEIGHT - 1;
-	}
+        if(m_row == m_bottomRow)
+            m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
+        else
+            m_bottomInTile = KisTile::HEIGHT - 1;
+    }
 }
 
 /*
 KisTiledVLineIterator & KisTiledVLineIterator::operator -- ()
 {
-	return *this;
+    return *this;
 }
 */

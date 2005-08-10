@@ -26,25 +26,25 @@ class QCheckBox;
 class KisDoubleWidget;
 
 class KisBrushChooser : public KisItemChooser {
-	typedef KisItemChooser super;
-	Q_OBJECT
+    typedef KisItemChooser super;
+    Q_OBJECT
 
 public:
-	KisBrushChooser(QWidget *parent = 0, const char *name = 0);
-	virtual ~KisBrushChooser();
+    KisBrushChooser(QWidget *parent = 0, const char *name = 0);
+    virtual ~KisBrushChooser();
 
 protected:
-	virtual void update(KoIconItem *item);
+    virtual void update(KoIconItem *item);
 
 private slots:
-	void slotSetItemSpacing(double spacing);
-	void slotSetItemUseColorAsMask(bool);
+    void slotSetItemSpacing(double spacing);
+    void slotSetItemUseColorAsMask(bool);
 
 private:
-	QLabel *m_lbName;
-	QLabel *m_lbSpacing;
-	KisDoubleWidget *m_slSpacing;
-	QCheckBox *m_chkColorMask;
+    QLabel *m_lbName;
+    QLabel *m_lbSpacing;
+    KisDoubleWidget *m_slSpacing;
+    QCheckBox *m_chkColorMask;
 };
 
 #endif // KIS_BRUSH_CHOOSER_H_

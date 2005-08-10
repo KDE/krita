@@ -29,9 +29,9 @@
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
 public:
-	KisBrightnessContrastFilterConfiguration();
+    KisBrightnessContrastFilterConfiguration();
 public:
-	Q_UINT16 transfer[256];
+    Q_UINT16 transfer[256];
 };
 
 /** 
@@ -42,29 +42,29 @@ class KisBrightnessContrastFilter : public KisFilter
 
 public:
 
-	KisBrightnessContrastFilter();
+    KisBrightnessContrastFilter();
 
 public:
 
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget *, KisPaintDeviceSP dev);
-	virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
-	virtual bool supportsPainting() { return true; }
-	virtual bool supportsPreview() { return true; }
-	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget *, KisPaintDeviceSP dev);
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
+    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPreview() { return true; }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
 };
 
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 
 public:
-	KisBrightnessContrastConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
-	virtual ~KisBrightnessContrastConfigWidget() {};
+    KisBrightnessContrastConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
+    virtual ~KisBrightnessContrastConfigWidget() {};
 
-	KisBrightnessContrastFilterConfiguration * config();
+    KisBrightnessContrastFilterConfiguration * config();
 
-	WdgBrightnessContrast * m_page;
+    WdgBrightnessContrast * m_page;
 };
 
 #endif

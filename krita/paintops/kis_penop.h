@@ -32,28 +32,28 @@ class KisPainter;
 class KisPenOpFactory  : public KisPaintOpFactory  {
 
 public:
-	KisPenOpFactory() {}
-	virtual ~KisPenOpFactory() {}
+    KisPenOpFactory() {}
+    virtual ~KisPenOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id(){ return KisID("pen", i18n("pen")); }
-//	virtual QString pixmap() { return "pencil.png"; }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id(){ return KisID("pen", i18n("pen")); }
+//    virtual QString pixmap() { return "pencil.png"; }
 };
 
 
 class KisPenOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisPenOp(KisPainter * painter);
-	virtual ~KisPenOp();
+    KisPenOp(KisPainter * painter);
+    virtual ~KisPenOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 
 };
 

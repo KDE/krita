@@ -35,22 +35,22 @@ K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "krita" )
 
 
 RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-		setInstance(RGBF32PluginFactory::instance());
+        setInstance(RGBF32PluginFactory::instance());
 
-	kdDebug(DBG_AREA_PLUGINS) << "32-bit float RGB Color model plugin. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+    kdDebug(DBG_AREA_PLUGINS) << "32-bit float RGB Color model plugin. Class: "
+        << className()
+        << ", Parent: "
+        << parent -> className()
+        << "\n";
 
-	if ( parent->inherits("KisFactory") )
-	{
-		m_ColorSpaceRGBF32 = new KisF32RgbColorSpace();
-		Q_CHECK_PTR(m_ColorSpaceRGBF32);
-		KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBF32);
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        m_ColorSpaceRGBF32 = new KisF32RgbColorSpace();
+        Q_CHECK_PTR(m_ColorSpaceRGBF32);
+        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBF32);
+    }
 
 }
 

@@ -80,26 +80,26 @@ public:
                   m_colorStrategy(colorStrategy),
                   m_profile(profile) {};
 
-	virtual ~KisPixelRO() {}
+    virtual ~KisPixelRO() {}
 
-	
+    
 public:
 
-	QUANTUM operator[](int index) const { return m_channels[index]; }
+    QUANTUM operator[](int index) const { return m_channels[index]; }
 
-	QUANTUM alpha() const { return m_alpha[0]; }
+    QUANTUM alpha() const { return m_alpha[0]; }
 
-	KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; }
+    KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; }
 
-	void setProfile(KisProfileSP profile) { m_profile = profile; }
+    void setProfile(KisProfileSP profile) { m_profile = profile; }
 
-	KisProfileSP profile() const { return m_profile; }
+    KisProfileSP profile() const { return m_profile; }
 
 private:
-	const QUANTUM* m_channels;
-	const QUANTUM* m_alpha;
-	KisAbstractColorSpace * m_colorStrategy;
-	KisProfileSP m_profile;
+    const QUANTUM* m_channels;
+    const QUANTUM* m_alpha;
+    KisAbstractColorSpace * m_colorStrategy;
+    KisProfileSP m_profile;
 };
 
 
@@ -113,15 +113,15 @@ class KisPixel {
 
 public:
 
-	/**
-	 * Create a new pixel with the specified number of channels and alpha channels.
-	 */
-	KisPixel(int nbChannels, int nbAlphaChannels = 1, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0) 
+    /**
+     * Create a new pixel with the specified number of channels and alpha channels.
+     */
+    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0) 
 
-		: m_channels(new QUANTUM(nbChannels)), 
-		  m_alpha(new QUANTUM(nbAlphaChannels)), 
-		  m_colorStrategy(colorStrategy), 
-		  m_profile(profile) { };
+        : m_channels(new QUANTUM(nbChannels)), 
+          m_alpha(new QUANTUM(nbAlphaChannels)), 
+          m_colorStrategy(colorStrategy), 
+          m_profile(profile) { };
 
         /**
          * Create a read/write pixel for existing channel data.
@@ -133,28 +133,28 @@ public:
                     m_profile(profile) {};
 
 
-		virtual ~KisPixel() {}
+        virtual ~KisPixel() {}
 
 public:
 
-	KisQuantum operator[](int index) const { return KisQuantum(&m_channels[index]); };
+    KisQuantum operator[](int index) const { return KisQuantum(&m_channels[index]); };
 
-	KisQuantum alpha() const { return KisQuantum(m_alpha); };
+    KisQuantum alpha() const { return KisQuantum(m_alpha); };
 
-	KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; };
+    KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; };
 
-	void setProfile(KisProfileSP profile) { m_profile = profile; }
+    void setProfile(KisProfileSP profile) { m_profile = profile; }
 
-	KisProfileSP profile() const { return m_profile; }
+    KisProfileSP profile() const { return m_profile; }
 
-	QUANTUM* channels() const { return m_channels; }
+    QUANTUM* channels() const { return m_channels; }
  
 
 private:
-	QUANTUM* m_channels;
-	QUANTUM* m_alpha;
-	KisAbstractColorSpace * m_colorStrategy;
-	KisProfileSP m_profile;
+    QUANTUM* m_channels;
+    QUANTUM* m_alpha;
+    KisAbstractColorSpace * m_colorStrategy;
+    KisProfileSP m_profile;
 };
 
 #endif

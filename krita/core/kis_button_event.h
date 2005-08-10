@@ -21,15 +21,15 @@
 #include "kis_event.h"
 
 class KisButtonEvent : public KisEvent {
-	typedef KisEvent super;
+    typedef KisEvent super;
 public:
-	Qt::ButtonState button() const { return m_button; }
+    Qt::ButtonState button() const { return m_button; }
 
 protected:
-	KisButtonEvent() {}
-	KisButtonEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(type, device, pos, globalPos, pressure, xTilt, yTilt, state), m_button(button) {}
+    KisButtonEvent() {}
+    KisButtonEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(type, device, pos, globalPos, pressure, xTilt, yTilt, state), m_button(button) {}
 
-	Qt::ButtonState m_button;
+    Qt::ButtonState m_button;
 };
 
 #endif // KIS_BUTTON_EVENT_H_

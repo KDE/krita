@@ -25,34 +25,34 @@
 
 
 DlgVariations::DlgVariations( QWidget *  parent,
-				    const char * name)
-	: super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
+                    const char * name)
+    : super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
-	m_previewPix = QPixmap();
-	m_page = new WdgVariations(this, "variations");
-	Q_CHECK_PTR(m_page);
-	setCaption(i18n("Variations"));
-	setMainWidget(m_page);
-	resize(m_page -> size());
+    m_previewPix = QPixmap();
+    m_page = new WdgVariations(this, "variations");
+    Q_CHECK_PTR(m_page);
+    setCaption(i18n("Variations"));
+    setMainWidget(m_page);
+    resize(m_page -> size());
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
 }
 
 DlgVariations::~DlgVariations()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void DlgVariations::setPixmap(QPixmap pix) 
 {
-	m_previewPix = pix;
-	m_previewPix.detach();
+    m_previewPix = pix;
+    m_previewPix.detach();
 }
 
 void DlgVariations::okClicked()
 {
-	accept();
+    accept();
 }
 
 #include "dlg_variations.moc"

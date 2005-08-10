@@ -31,35 +31,35 @@ class KisView;
  */
 class KisViewIface : public KoViewIface
 {
-	K_DCOP
+    K_DCOP
 public:
-	KisViewIface( KisView *view_ );
-	k_dcop:
-	void copy();
-	void cut();
-	void removeSelection();
-	void paste();
-	void copySelectionToNewLayer();
-	void selectAll();
-	void unSelectAll();
+    KisViewIface( KisView *view_ );
+    k_dcop:
+    void copy();
+    void cut();
+    void removeSelection();
+    void paste();
+    void copySelectionToNewLayer();
+    void selectAll();
+    void unSelectAll();
 
-	// layer action slots
-	void next_layer();
-	void previous_layer();
+    // layer action slots
+    void next_layer();
+    void previous_layer();
 
-	void slotImportImage();
+    void slotImportImage();
 
-	// settings action slots
-	void preferences();
+    // settings action slots
+    void preferences();
 
-	void rotateLayer180();
-	void rotateLayerLeft90();
-	void rotateLayerRight90();
-	void mirrorLayerX();
-	void mirrorLayerY();
+    void rotateLayer180();
+    void rotateLayerLeft90();
+    void rotateLayerRight90();
+    void mirrorLayerX();
+    void mirrorLayerY();
 
 private:
-	KisView *m_view;
+    KisView *m_view;
 };
 
 #endif

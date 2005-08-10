@@ -51,155 +51,155 @@ class KoStore;
 class KisTiledDataManager : public KShared {
 
 protected:
-	KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel);
-	~KisTiledDataManager();
-	KisTiledDataManager(const KisTiledDataManager &dm);
-	KisTiledDataManager & operator=(const KisTiledDataManager &dm);
+    KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel);
+    ~KisTiledDataManager();
+    KisTiledDataManager(const KisTiledDataManager &dm);
+    KisTiledDataManager & operator=(const KisTiledDataManager &dm);
 
 
 protected:
-	// Allow the baseclass of iterators acces to the interior
-	// derived iterator classes must go through KisTiledIterator
-	friend class KisTiledIterator;
+    // Allow the baseclass of iterators acces to the interior
+    // derived iterator classes must go through KisTiledIterator
+    friend class KisTiledIterator;
 
 protected:
 
-	void setDefaultPixel(const Q_UINT8 *defPixel);
-	const Q_UINT8 * defaultPixel() { return m_defPixel;};
-	
-	KisMementoSP getMemento();
-	void rollback(KisMementoSP memento);
-	void rollforward(KisMementoSP memento);
+    void setDefaultPixel(const Q_UINT8 *defPixel);
+    const Q_UINT8 * defaultPixel() { return m_defPixel;};
+    
+    KisMementoSP getMemento();
+    void rollback(KisMementoSP memento);
+    void rollforward(KisMementoSP memento);
 
-	// For debugging use.
-	bool hasCurrentMemento() const { return m_currentMemento != 0; }
-
-protected:
-	/**
-	 * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
-	 *
-	 */
-	bool write(KoStore *store);
-	bool read(KoStore *store);
+    // For debugging use.
+    bool hasCurrentMemento() const { return m_currentMemento != 0; }
 
 protected:
-
-	Q_UINT32 pixelSize();
-
-	void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
-
-	void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    /**
+     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
+     *
+     */
+    bool write(KoStore *store);
+    bool read(KoStore *store);
 
 protected:
 
-	void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def);
-	void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, Q_UINT8 * def);
-	void clear();
+    Q_UINT32 pixelSize();
 
+    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+
+    void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 protected:
 
-	void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-			    Q_INT32 w, Q_INT32 h);
+    void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def);
+    void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, Q_UINT8 * def);
+    void clear();
 
 
 protected:
 
-
-	/**
-	 * Get a read-only pointer to pixel (x, y).
-	 */
-	const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
-
-	/**
-	 * Get a read-write pointer to pixel (x, y).
-	 */
-	Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
-
-	/**
-	 * write the specified data to x, y. There is no checking on pixelSize!
-	 */
-	void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data);
+    void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+                Q_INT32 w, Q_INT32 h);
 
 
-	/**
-	 * Copy the bytes in the specified rect to a vector. The caller is responsible
-	 * for managing the vector.
-	 */
-	void readBytes(Q_UINT8 * bytes,
-		       Q_INT32 x, Q_INT32 y,
-		       Q_INT32 w, Q_INT32 h);
-	/**
-	 * Copy the bytes in the vector to the specified rect. If there are bytes left
-	 * in the vector after filling the rect, they will be ignored. If there are
-	 * not enough bytes, the rest of the rect will be filled with the default value
-	 * given (by default, 0);
-	 */
-	void writeBytes(const Q_UINT8 * bytes,
-			Q_INT32 x, Q_INT32 y,
-			Q_INT32 w, Q_INT32 h);
+protected:
 
-	/// Get the number of contiguous columns starting at x, valid for all values
-	/// of y between minY and maxY.
-	Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
 
-	/// Get the number of contiguous rows starting at y, valid for all values
-	/// of x between minX and maxX.
-	Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
+    /**
+     * Get a read-only pointer to pixel (x, y).
+     */
+    const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
 
-	/// Get the row stride at pixel (x, y). This is the number of bytes to add to a
-	/// pointer to pixel (x, y) to access (x, y + 1).
-	Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
+    /**
+     * Get a read-write pointer to pixel (x, y).
+     */
+    Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
 
-	// For debugging use
-	Q_INT32 numTiles() const;
+    /**
+     * write the specified data to x, y. There is no checking on pixelSize!
+     */
+    void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data);
+
+
+    /**
+     * Copy the bytes in the specified rect to a vector. The caller is responsible
+     * for managing the vector.
+     */
+    void readBytes(Q_UINT8 * bytes,
+               Q_INT32 x, Q_INT32 y,
+               Q_INT32 w, Q_INT32 h);
+    /**
+     * Copy the bytes in the vector to the specified rect. If there are bytes left
+     * in the vector after filling the rect, they will be ignored. If there are
+     * not enough bytes, the rest of the rect will be filled with the default value
+     * given (by default, 0);
+     */
+    void writeBytes(const Q_UINT8 * bytes,
+            Q_INT32 x, Q_INT32 y,
+            Q_INT32 w, Q_INT32 h);
+
+    /// Get the number of contiguous columns starting at x, valid for all values
+    /// of y between minY and maxY.
+    Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
+
+    /// Get the number of contiguous rows starting at y, valid for all values
+    /// of x between minX and maxX.
+    Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
+
+    /// Get the row stride at pixel (x, y). This is the number of bytes to add to a
+    /// pointer to pixel (x, y) to access (x, y + 1).
+    Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
+
+    // For debugging use
+    Q_INT32 numTiles() const;
 
 private:
 
-	Q_UINT32 m_pixelSize;
-	Q_UINT32 m_numTiles;
-	KisTile *m_defaultTile;
-	KisTile **m_hashTable;
-	KisMementoSP m_currentMemento;
-	Q_INT32 m_extentMinX;
-	Q_INT32 m_extentMinY;
-	Q_INT32 m_extentMaxX;
-	Q_INT32 m_extentMaxY;
-	Q_UINT8 *m_defPixel;
-	
+    Q_UINT32 m_pixelSize;
+    Q_UINT32 m_numTiles;
+    KisTile *m_defaultTile;
+    KisTile **m_hashTable;
+    KisMementoSP m_currentMemento;
+    Q_INT32 m_extentMinX;
+    Q_INT32 m_extentMinY;
+    Q_INT32 m_extentMaxX;
+    Q_INT32 m_extentMaxY;
+    Q_UINT8 *m_defPixel;
+    
 private:
 
-	void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);
-	KisTile *getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def);
-	KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
-	Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
-	void updateExtent(Q_INT32 col, Q_INT32 row);
-	Q_UINT32 xToCol(Q_UINT32 x) const;
-	Q_UINT32 yToRow(Q_UINT32 y) const;
-	void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
-	Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
+    void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);
+    KisTile *getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def);
+    KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
+    Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
+    void updateExtent(Q_INT32 col, Q_INT32 row);
+    Q_UINT32 xToCol(Q_UINT32 x) const;
+    Q_UINT32 yToRow(Q_UINT32 y) const;
+    void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
+    Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
 };
 
 
 inline Q_UINT32 KisTiledDataManager::pixelSize()
 {
-	return m_pixelSize;
+    return m_pixelSize;
 }
 
 inline Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x) const
 {
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
+    // The hack with 16384 is to avoid negative division which is undefined in C++ and the most
+    // common result is not like what is desired.
+    // however the hack is not perfect either since for coords lower it gives the wrong result
+    return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
 }
 
 inline Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y) const
 {
-	// The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-	// common result is not like what is desired.
-	// however the hack is not perfect either since for coords lower it gives the wrong result
-	return (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
+    // The hack with 16384 is to avoid negative division which is undefined in C++ and the most
+    // common result is not like what is desired.
+    // however the hack is not perfect either since for coords lower it gives the wrong result
+    return (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
 }
 
 // during development the following line helps to check the interface is correct

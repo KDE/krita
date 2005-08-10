@@ -39,56 +39,56 @@ using namespace std;
 
 
 DlgShearImage::DlgShearImage( QWidget *  parent,
-			    const char * name)
-	: super (parent, name, true, i18n("Shear Image"), Ok | Cancel, Ok)
+                const char * name)
+    : super (parent, name, true, i18n("Shear Image"), Ok | Cancel, Ok)
 {
-	m_lock = false;
+    m_lock = false;
 
-	m_page = new WdgShearImage(this, "shear_image");
-	Q_CHECK_PTR(m_page);
+    m_page = new WdgShearImage(this, "shear_image");
+    Q_CHECK_PTR(m_page);
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
 
 }
 
 DlgShearImage::~DlgShearImage()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void DlgShearImage::setAngleX(Q_UINT32 angle) 
 {
-	m_page -> shearAngleX -> setValue(angle);
-	m_oldAngle = angle;
+    m_page -> shearAngleX -> setValue(angle);
+    m_oldAngle = angle;
 
 }
 
 void DlgShearImage::setAngleY(Q_UINT32 angle) 
 {
-	m_page -> shearAngleY -> setValue(angle);
-	m_oldAngle = angle;
+    m_page -> shearAngleY -> setValue(angle);
+    m_oldAngle = angle;
 
 }
 
 Q_INT32 DlgShearImage::angleX()
 {
-	return (Q_INT32)qRound(m_page -> shearAngleX -> value());
+    return (Q_INT32)qRound(m_page -> shearAngleX -> value());
 }
 
 Q_INT32 DlgShearImage::angleY()
 {
-	return (Q_INT32)qRound(m_page -> shearAngleY -> value());
+    return (Q_INT32)qRound(m_page -> shearAngleY -> value());
 }
 
 // SLOTS
 
 void DlgShearImage::okClicked()
 {
-	accept();
+    accept();
 }
 
 #include "dlg_shearimage.moc"

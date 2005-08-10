@@ -25,37 +25,37 @@
 
 class KisEvent {
 public:
-	enum enumEventType {
-		UnknownEvent,
-		MoveEvent,
-		ButtonPressEvent,
-		ButtonReleaseEvent,
-		DoubleClickEvent
-	};
+    enum enumEventType {
+        UnknownEvent,
+        MoveEvent,
+        ButtonPressEvent,
+        ButtonReleaseEvent,
+        DoubleClickEvent
+    };
 
-	KisEvent() : m_type(UnknownEvent), m_device(INPUT_DEVICE_UNKNOWN) {}
-	KisEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), m_xTilt(xTilt), m_yTilt(yTilt), m_state(state) {}
+    KisEvent() : m_type(UnknownEvent), m_device(INPUT_DEVICE_UNKNOWN) {}
+    KisEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), m_xTilt(xTilt), m_yTilt(yTilt), m_state(state) {}
 
-	enumEventType type() const { return m_type; }
-	enumInputDevice device() const { return m_device; }
-	KisPoint pos() const { return m_pos; }
-	double x() const { return m_pos.x(); }
-	double y() const { return m_pos.y(); }
-	KisPoint globalPos() const { return m_globalPos; }
-	double pressure() const { return m_pressure; }
-	double xTilt() const { return m_xTilt; }
-	double yTilt() const { return m_yTilt; }
-	Qt::ButtonState state() const { return m_state; }
+    enumEventType type() const { return m_type; }
+    enumInputDevice device() const { return m_device; }
+    KisPoint pos() const { return m_pos; }
+    double x() const { return m_pos.x(); }
+    double y() const { return m_pos.y(); }
+    KisPoint globalPos() const { return m_globalPos; }
+    double pressure() const { return m_pressure; }
+    double xTilt() const { return m_xTilt; }
+    double yTilt() const { return m_yTilt; }
+    Qt::ButtonState state() const { return m_state; }
 
 protected:
-	enumEventType m_type;
-	enumInputDevice m_device;
-	KisPoint m_pos;
-	KisPoint m_globalPos;
-	double m_pressure;
-	double m_xTilt;
-	double m_yTilt;
-	Qt::ButtonState m_state;
+    enumEventType m_type;
+    enumInputDevice m_device;
+    KisPoint m_pos;
+    KisPoint m_globalPos;
+    double m_pressure;
+    double m_xTilt;
+    double m_yTilt;
+    Qt::ButtonState m_state;
 };
 
 #endif // KIS_EVENT_H_

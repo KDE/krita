@@ -22,18 +22,18 @@
 #include "ksharedptr.h"
 
 enum enumChannelType {
-	COLOR, // The channel represents a color
-	ALPHA, // The channel represents the opacity of a pixel
-	SUBSTANCE, // The channel represents a real-world substance like pigments or medium
-	SUBSTRATE // The channel represents a real-world painting substrate like a canvas
+    COLOR, // The channel represents a color
+    ALPHA, // The channel represents the opacity of a pixel
+    SUBSTANCE, // The channel represents a real-world substance like pigments or medium
+    SUBSTRATE // The channel represents a real-world painting substrate like a canvas
 };
 
 
 enum enumChannelFlags {
-	FLAG_COLOR = 1,
-	FLAG_ALPHA = (1 << 1),
-	FLAG_SUBSTANCE = (1 << 2),
-	FLAG_SUBSTRATE = (1 << 3)
+    FLAG_COLOR = 1,
+    FLAG_ALPHA = (1 << 1),
+    FLAG_SUBSTANCE = (1 << 2),
+    FLAG_SUBSTRATE = (1 << 3)
 };
 
 
@@ -44,35 +44,35 @@ enum enumChannelFlags {
  */
 class KisChannelInfo : public KShared {
 public:
-	KisChannelInfo() { };
-	KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, Q_INT32 size = 1)
-		: m_name (name), m_pos (npos), m_channelType(channelType), m_size(size) { };
+    KisChannelInfo() { };
+    KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, Q_INT32 size = 1)
+        : m_name (name), m_pos (npos), m_channelType(channelType), m_size(size) { };
 public:
-	/**
-	 * User-friendly name for this channel for presentation purposes in the gui
-	 */
-	inline QString name() const { return m_name; };
-	
-	/** 
-	 * returns the position of the first byte of the channel in the pixel
-	 */
-	inline Q_INT32 pos() const { return m_pos; };
-	
-	/**
-	 * returns the number of bytes this channel takes
-	 */
-	inline Q_INT32 size() const { return m_size; };
+    /**
+     * User-friendly name for this channel for presentation purposes in the gui
+     */
+    inline QString name() const { return m_name; };
+    
+    /** 
+     * returns the position of the first byte of the channel in the pixel
+     */
+    inline Q_INT32 pos() const { return m_pos; };
+    
+    /**
+     * returns the number of bytes this channel takes
+     */
+    inline Q_INT32 size() const { return m_size; };
 
-	/**
-	 * returns the type of the channel
-	 */
-	inline enumChannelType channelType() const { return m_channelType; };
-	
+    /**
+     * returns the type of the channel
+     */
+    inline enumChannelType channelType() const { return m_channelType; };
+    
 private:
-	QString m_name;
-	Q_INT32 m_pos;
-	enumChannelType m_channelType;
-	Q_INT32 m_size;
+    QString m_name;
+    Q_INT32 m_pos;
+    enumChannelType m_channelType;
+    Q_INT32 m_size;
 };
 
 #endif // KIS_CHANNELINFO_H_

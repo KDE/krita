@@ -20,8 +20,8 @@
 
 KisResource::KisResource(const QString& filename)
 {
-	m_filename = filename;
-	m_valid = false;
+    m_filename = filename;
+    m_valid = false;
 }
 
 KisResource::~KisResource()
@@ -30,32 +30,32 @@ KisResource::~KisResource()
 
 QString KisResource::filename() const
 {
-	return m_filename;
+    return m_filename;
 }
 
 void KisResource::setFilename(const QString& filename)
 {
-	m_filename = filename;
+    m_filename = filename;
 }
 
 QString KisResource::name() const
 {
-	return m_name;
+    return m_name;
 }
 
 void KisResource::setName(const QString& name)
 {
-	m_name = name;
+    m_name = name;
 }
 
 bool KisResource::valid() const
 {
-	return m_valid;
+    return m_valid;
 }
 
 void KisResource::setValid(bool valid)
 {
-	m_valid = valid;
+    m_valid = valid;
 }
 
 #include "kis_resource.moc"

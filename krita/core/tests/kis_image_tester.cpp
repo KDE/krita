@@ -36,17 +36,17 @@ KUNITTEST_MODULE_REGISTER_TESTER(KisImageTester);
 
 void KisImageTester::allTests()
 {
-	if (qApp != 0) {
+    if (qApp != 0) {
 
-		// We need this so that the colour profile loading can operate without crashing.
-		KisFactory *factory = new KisFactory();
+        // We need this so that the colour profile loading can operate without crashing.
+        KisFactory *factory = new KisFactory();
 
-		mergeTests();
+        mergeTests();
 
-		delete factory;
-	} else {
-		SKIP("Skipping KisImage tests because we are being run from the command line. KisImage contains a QPixmap which requires a gui to be available. Use kunittestguimodrunner.");
-	}
+        delete factory;
+    } else {
+        SKIP("Skipping KisImage tests because we are being run from the command line. KisImage contains a QPixmap which requires a gui to be available. Use kunittestguimodrunner.");
+    }
 }
 
 #define IMAGE_WIDTH 1
@@ -54,44 +54,44 @@ void KisImageTester::allTests()
 
 void KisImageTester::mergeTests()
 {
-	KisAbstractColorSpace * colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+    KisAbstractColorSpace * colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 
-	KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
+    KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 
-	KisColor mergedPixel = image -> mergedPixel(0, 0);
+    KisColor mergedPixel = image -> mergedPixel(0, 0);
 
-	QColor colour;
-	QUANTUM opacity;
+    QColor colour;
+    QUANTUM opacity;
 
-	mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel.toQColor(&colour, &opacity);
 
-	CHECK(opacity, OPACITY_TRANSPARENT);
+    CHECK(opacity, OPACITY_TRANSPARENT);
 
-	KisLayerSP layer = new KisLayer(image, "layer 1", OPACITY_OPAQUE);
-	image -> add(layer, 0);
+    KisLayerSP layer = new KisLayer(image, "layer 1", OPACITY_OPAQUE);
+    image -> add(layer, 0);
 
-	layer -> setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
+    layer -> setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
 
-	mergedPixel = image -> mergedPixel(0, 0);
-	mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel = image -> mergedPixel(0, 0);
+    mergedPixel.toQColor(&colour, &opacity);
 
-	CHECK(opacity, OPACITY_OPAQUE);
-	CHECK(colour.red(), 255);
-	CHECK(colour.green(), 128);
-	CHECK(colour.blue(), 64);
+    CHECK(opacity, OPACITY_OPAQUE);
+    CHECK(colour.red(), 255);
+    CHECK(colour.green(), 128);
+    CHECK(colour.blue(), 64);
 
-	layer = new KisLayer(image, "layer 2", OPACITY_OPAQUE / 2);
-	image -> add(layer, 0);
+    layer = new KisLayer(image, "layer 2", OPACITY_OPAQUE / 2);
+    image -> add(layer, 0);
 
-	layer -> setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
+    layer -> setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
 
-	mergedPixel = image -> mergedPixel(0, 0);
-	mergedPixel.toQColor(&colour, &opacity);
+    mergedPixel = image -> mergedPixel(0, 0);
+    mergedPixel.toQColor(&colour, &opacity);
 
-	CHECK(opacity, OPACITY_OPAQUE);
-	CHECK(colour.red(), 255);
-	CHECK(colour.green(), 128 + ((255 - 128) / 2));
-	CHECK(colour.blue(), 64 + ((255 - 64) / 2));
+    CHECK(opacity, OPACITY_OPAQUE);
+    CHECK(colour.red(), 255);
+    CHECK(colour.green(), 128 + ((255 - 128) / 2));
+    CHECK(colour.blue(), 64 + ((255 - 64) / 2));
 }
 
 

@@ -33,113 +33,113 @@
 
 KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {
-	m_subject = 0;
+    m_subject = 0;
 
-	m_ColorButton = new KDualColorButton(this);
-	Q_CHECK_PTR(m_ColorButton);
+    m_ColorButton = new KDualColorButton(this);
+    Q_CHECK_PTR(m_ColorButton);
 
-	m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-	QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
+    m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
+    QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
 
-	/* setup color sliders */
-	mSlider = new KoColorSlider(this);
-	mSlider->setMaximumHeight(20);
-	mSlider->slotSetRange(0, 255);
-	mSlider->slotSetColor1(QColor(255, 255, 255));
-	mSlider->slotSetColor2(QColor(0, 0, 0));
+    /* setup color sliders */
+    mSlider = new KoColorSlider(this);
+    mSlider->setMaximumHeight(20);
+    mSlider->slotSetRange(0, 255);
+    mSlider->slotSetColor1(QColor(255, 255, 255));
+    mSlider->slotSetColor2(QColor(0, 0, 0));
 
-	/* setup slider labels */
-	mLabel = new QLabel("K", this);
-	mLabel->setFixedWidth(12);
-	mLabel->setFixedHeight(20);
+    /* setup slider labels */
+    mLabel = new QLabel("K", this);
+    mLabel->setFixedWidth(12);
+    mLabel->setFixedHeight(20);
 
-	/* setup spin box */
-	mIn = new QSpinBox(0, 255, 1, this);
-	mIn->setFixedWidth(50);
-	mIn->setFixedHeight(20);
+    /* setup spin box */
+    mIn = new QSpinBox(0, 255, 1, this);
+    mIn->setFixedWidth(50);
+    mIn->setFixedHeight(20);
 
-	mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
-	mGrid->addWidget(mLabel, 0, 1);
-	mGrid->addMultiCellWidget(mSlider, 0, 0, 2, 3);
-	mGrid->addWidget(mIn, 0, 4);
+    mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
+    mGrid->addWidget(mLabel, 0, 1);
+    mGrid->addMultiCellWidget(mSlider, 0, 0, 2, 3);
+    mGrid->addWidget(mIn, 0, 4);
 
-	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
-	/* connect color slider */
-	connect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    /* connect color slider */
+    connect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 
-	/* connect spin box */
-	connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    /* connect spin box */
+    connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 }
 
 void KisGrayWidget::slotChanged(int v)
 {
-	v = 255 - v;
+    v = 255 - v;
 
-	if (m_ColorButton->current() == KDualColorButton::Foreground){
-		m_fgColor.setRgb(v, v, v);
-		m_ColorButton->setCurrent(KDualColorButton::Foreground);
-		if(m_subject)
-			m_subject->setFGColor(KisColor(m_fgColor));
-	}
-	else{
-		m_bgColor.setRgb(v, v, v);
-		m_ColorButton->setCurrent(KDualColorButton::Background);
-		if(m_subject)
-			m_subject->setBGColor(m_bgColor);
-	}
+    if (m_ColorButton->current() == KDualColorButton::Foreground){
+        m_fgColor.setRgb(v, v, v);
+        m_ColorButton->setCurrent(KDualColorButton::Foreground);
+        if(m_subject)
+            m_subject->setFGColor(KisColor(m_fgColor));
+    }
+    else{
+        m_bgColor.setRgb(v, v, v);
+        m_ColorButton->setCurrent(KDualColorButton::Background);
+        if(m_subject)
+            m_subject->setBGColor(m_bgColor);
+    }
 }
 
 void KisGrayWidget::update(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	m_fgColor = subject->fgColor().toQColor();
-	m_bgColor = subject->bgColor().toQColor();
+    m_subject = subject;
+    m_fgColor = subject->fgColor().toQColor();
+    m_bgColor = subject->bgColor().toQColor();
 
-	QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
+    QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
-	disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-	disconnect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-	disconnect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-	m_ColorButton->setForeground( m_fgColor );
-	m_ColorButton->setBackground( m_bgColor );
+    disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    disconnect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    disconnect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    m_ColorButton->setForeground( m_fgColor );
+    m_ColorButton->setBackground( m_bgColor );
 
-	mIn->blockSignals(true);
-	mSlider->blockSignals(true);
-	double v = color.red() + color.green() + color.blue();
-	v /= 3.0;
-	v = 255.0 - v;
-	mIn->setValue(static_cast<int>(v));
-	mSlider->slotSetValue(static_cast<int>(v));
-	mIn->blockSignals(false);
-	mSlider->blockSignals(false);
+    mIn->blockSignals(true);
+    mSlider->blockSignals(true);
+    double v = color.red() + color.green() + color.blue();
+    v /= 3.0;
+    v = 255.0 - v;
+    mIn->setValue(static_cast<int>(v));
+    mSlider->slotSetValue(static_cast<int>(v));
+    mIn->blockSignals(false);
+    mSlider->blockSignals(false);
 
-	connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-	connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-	connect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-	connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    connect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 }
 
 void KisGrayWidget::slotFGColorSelected(const QColor& c)
 {
-	m_fgColor = c;
-	if(m_subject)
-	{
-		QColor bgColor = m_ColorButton -> background();
-		m_subject->setFGColor(m_fgColor);
-		//Background signal could be blocked so do that manually 
-		//see bug 106919
-		m_subject->setBGColor(bgColor);
-	}
+    m_fgColor = c;
+    if(m_subject)
+    {
+        QColor bgColor = m_ColorButton -> background();
+        m_subject->setFGColor(m_fgColor);
+        //Background signal could be blocked so do that manually 
+        //see bug 106919
+        m_subject->setBGColor(bgColor);
+    }
 }
 
 void KisGrayWidget::slotBGColorSelected(const QColor& c)
 {
-	m_bgColor = c;
-	if(m_subject)
-		m_subject->setBGColor(m_bgColor);
+    m_bgColor = c;
+    if(m_subject)
+        m_subject->setBGColor(m_bgColor);
 }
 
 #include "kis_gray_widget.moc"

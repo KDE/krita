@@ -30,24 +30,24 @@
 class KIntNumInput;
 
 struct KisBoolWidgetParam {
-	KRITA_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString nname  );
-	bool initvalue;
-	QString name;
+    KRITA_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString nname  );
+    bool initvalue;
+    QString name;
 };
 
 typedef std::vector<KisBoolWidgetParam> vKisBoolWidgetParam;
 
 class KRITA_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KisMultiBoolFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisBoolWidgetParam iwparam);
 public:
-	inline Q_INT32 nbValues() { return m_nbboolWidgets; };
-	inline Q_INT32 valueAt( Q_INT32 i ) { return m_boolWidgets[i]->isChecked(); };
+    inline Q_INT32 nbValues() { return m_nbboolWidgets; };
+    inline Q_INT32 valueAt( Q_INT32 i ) { return m_boolWidgets[i]->isChecked(); };
 private:
-	QCheckBox** m_boolWidgets;
-	Q_INT32 m_nbboolWidgets;
+    QCheckBox** m_boolWidgets;
+    Q_INT32 m_nbboolWidgets;
 };
 
 #endif

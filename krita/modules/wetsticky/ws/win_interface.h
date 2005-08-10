@@ -20,8 +20,8 @@ extern void ClearWindow();
 extern void CreateWindows(/* int *argc, char *argv[], int width, int height*/);
 extern void StartWindows(); /* enter infinite loop */
 extern void StartVolumeWindow(/*int width, int height*/); 
-					/* display attribute window */
+                    /* display attribute window */
 extern void StartDrynessWindow(/*int width, int height*/); 
-					/* display attribute window */
+                    /* display attribute window */
 
 

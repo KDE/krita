@@ -47,74 +47,74 @@ class QCheckBox;
 
 class KisToolGradient : public KisToolPaint {
 
-	Q_OBJECT
-	typedef KisToolPaint super;
+    Q_OBJECT
+    typedef KisToolPaint super;
 
 public:
-	KisToolGradient();
-	virtual ~KisToolGradient();
+    KisToolGradient();
+    virtual ~KisToolGradient();
 
-	virtual void setup(KActionCollection *collection);
+    virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_FILL; }
 
-	virtual void update(KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
 
-	virtual void buttonPress(KisButtonPressEvent *event);
-	virtual void move(KisMoveEvent *event);
-	virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void move(KisMoveEvent *event);
+    virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-	virtual void paint(QPainter& gc);
-	virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(QPainter& gc);
+    virtual void paint(QPainter& gc, const QRect& rc);
 
-	QWidget* createOptionWidget(QWidget* parent);
+    QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
-	void slotSetShape(int);
-	void slotSetRepeat(int);
-	void slotSetReverse(bool);
-	void slotSetAntiAliasThreshold(double);
+    void slotSetShape(int);
+    void slotSetRepeat(int);
+    void slotSetReverse(bool);
+    void slotSetAntiAliasThreshold(double);
 
 private:
-	void paintLine();
-	void paintLine(QPainter& gc);
+    void paintLine();
+    void paintLine(QPainter& gc);
 
-	KisPoint straightLine(KisPoint point);
+    KisPoint straightLine(KisPoint point);
 
-	bool m_dragging;
+    bool m_dragging;
 
-	KisPoint m_startPos;
-	KisPoint m_endPos;
+    KisPoint m_startPos;
+    KisPoint m_endPos;
 
-	KisCanvasSubject *m_subject;
+    KisCanvasSubject *m_subject;
 
-	KisGradientPainter::enumGradientShape m_shape;
-	KisGradientPainter::enumGradientRepeat m_repeat;
+    KisGradientPainter::enumGradientShape m_shape;
+    KisGradientPainter::enumGradientRepeat m_repeat;
 
-	bool m_reverse;
-	double m_antiAliasThreshold;
+    bool m_reverse;
+    double m_antiAliasThreshold;
 
-	QLabel *m_lbShape;
-	QLabel *m_lbRepeat;
-	QCheckBox *m_ckReverse;
-	QComboBox *m_cmbShape;
-	QComboBox *m_cmbRepeat;
-	QLabel *m_lbAntiAliasThreshold;
-	KDoubleNumInput *m_slAntiAliasThreshold;
+    QLabel *m_lbShape;
+    QLabel *m_lbRepeat;
+    QCheckBox *m_ckReverse;
+    QComboBox *m_cmbShape;
+    QComboBox *m_cmbRepeat;
+    QLabel *m_lbAntiAliasThreshold;
+    KDoubleNumInput *m_slAntiAliasThreshold;
 };
 
 class KisToolGradientFactory : public KisToolFactory {
-	typedef KisToolFactory super;
+    typedef KisToolFactory super;
 public:
-	KisToolGradientFactory() : super() {};
-	virtual ~KisToolGradientFactory(){};
-	
-	virtual KisTool * createTool(KActionCollection * ac) { 
-		KisTool * t =  new KisToolGradient(); 
-		Q_CHECK_PTR(t);
-		t -> setup(ac); 
-		return t; 
-	}
-	virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
+    KisToolGradientFactory() : super() {};
+    virtual ~KisToolGradientFactory(){};
+    
+    virtual KisTool * createTool(KActionCollection * ac) { 
+        KisTool * t =  new KisToolGradient(); 
+        Q_CHECK_PTR(t);
+        t -> setup(ac); 
+        return t; 
+    }
+    virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
 };
 
 

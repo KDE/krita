@@ -1,8 +1,8 @@
 /*
-	FILE:		engine.h
-	PURPOSE:	Defines the routines for the Paint Engine.
-	AUTHOR:		Kevin Waite 
-	VERSION:	1.00  (10-May-91)
+    FILE:        engine.h
+    PURPOSE:    Defines the routines for the Paint Engine.
+    AUTHOR:        Kevin Waite 
+    VERSION:    1.00  (10-May-91)
 
 Copyright 1991, 1992, 2002, 2003 Tunde Cockshott, Kevin Waite, David England. 
 

@@ -28,111 +28,111 @@
 #include "kis_selection.h"
 
 struct All {
-	const bool operator()(const KisPaintDeviceSP) const
-	{
-		return true;
-	}
+    const bool operator()(const KisPaintDeviceSP) const
+    {
+        return true;
+    }
 };
 
 struct isVisible {
-	const bool operator()(const KisPaintDeviceSP dev) const
-	{
-		return dev -> visible();
-	}
+    const bool operator()(const KisPaintDeviceSP dev) const
+    {
+        return dev -> visible();
+    }
 };
 
 struct isLinked {
-	const bool operator()(const KisPaintDeviceSP dev) const
-	{
-		const KisLayer *layer = dynamic_cast<const KisLayer*>(dev.data());
+    const bool operator()(const KisPaintDeviceSP dev) const
+    {
+        const KisLayer *layer = dynamic_cast<const KisLayer*>(dev.data());
 
-		return layer && layer -> linked();
-	}
+        return layer && layer -> linked();
+    }
 };
 
 template <typename merge_cond_t, typename remove_cond_t>
 class KisMerge : public KisPaintDeviceVisitor {
 public:
-	KisMerge(KisImageSP img)
-	{
-		m_img = img;
-		m_insertMergedAboveLayer = 0;
-		m_haveFoundInsertionPlace = false;
-	}
+    KisMerge(KisImageSP img)
+    {
+        m_img = img;
+        m_insertMergedAboveLayer = 0;
+        m_haveFoundInsertionPlace = false;
+    }
 
 public:
-	virtual bool visit(KisPainter&, KisPaintDeviceSP)
-	{
-		return false;
-	}
+    virtual bool visit(KisPainter&, KisPaintDeviceSP)
+    {
+        return false;
+    }
 
-	virtual bool visit(KisPainter&, vKisPaintDeviceSP&)
-	{
-		return false;
-	}
+    virtual bool visit(KisPainter&, vKisPaintDeviceSP&)
+    {
+        return false;
+    }
 
-	virtual bool visit(KisPainter& gc, vKisLayerSP& layers)
-	{
- 		for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
-			KisLayerSP& layer = layers[i];
-			visit(gc, layer);
-		}
+    virtual bool visit(KisPainter& gc, vKisLayerSP& layers)
+    {
+         for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
+            KisLayerSP& layer = layers[i];
+            visit(gc, layer);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	virtual bool visit(KisPainter& gc, KisLayerSP layer)
-	{
-		if (m_img -> index(layer) < 0)
-			return false;
+    virtual bool visit(KisPainter& gc, KisLayerSP layer)
+    {
+        if (m_img -> index(layer) < 0)
+            return false;
 
-		if (m_mergeTest(layer.data())) {
-			Q_INT32 sx, sy, dx, dy, w, h;
+        if (m_mergeTest(layer.data())) {
+            Q_INT32 sx, sy, dx, dy, w, h;
 
-			layer -> extent(sx,sy,w,h);
-			dx = sx;
-			dy = sy;
-			
-			gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
+            layer -> extent(sx,sy,w,h);
+            dx = sx;
+            dy = sy;
+            
+            gc.bitBlt(dx, dy, layer -> compositeOp() , layer.data(), layer -> opacity(), sx, sy, w, h);
 
-			if (!m_haveFoundInsertionPlace) {
+            if (!m_haveFoundInsertionPlace) {
 
-				if (m_img -> index(layer) != m_img -> nlayers() - 1) {
-					m_insertMergedAboveLayer = m_img -> layer(m_img -> index(layer) + 1);
-				}
-				else {
-					m_insertMergedAboveLayer = 0;
-				}
+                if (m_img -> index(layer) != m_img -> nlayers() - 1) {
+                    m_insertMergedAboveLayer = m_img -> layer(m_img -> index(layer) + 1);
+                }
+                else {
+                    m_insertMergedAboveLayer = 0;
+                }
 
-				m_haveFoundInsertionPlace = true;
-			}
-		}
+                m_haveFoundInsertionPlace = true;
+            }
+        }
 
-		if (m_removeTest(layer.data())) {
-			m_img -> rm(layer);
-		}
+        if (m_removeTest(layer.data())) {
+            m_img -> rm(layer);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 
 
-	virtual bool visit(KisPainter&, KisSelectionSP)
-	{
-		return false;
-	}
+    virtual bool visit(KisPainter&, KisSelectionSP)
+    {
+        return false;
+    }
 
-	// The layer the merged layer should be inserted above, or 0 if
-	// the merged layer should go to the bottom of the stack.
-	KisLayerSP insertMergedAboveLayer() const { return m_insertMergedAboveLayer; }
+    // The layer the merged layer should be inserted above, or 0 if
+    // the merged layer should go to the bottom of the stack.
+    KisLayerSP insertMergedAboveLayer() const { return m_insertMergedAboveLayer; }
 
 private:
-	KisImageSP m_img;
-	merge_cond_t m_mergeTest;
-	remove_cond_t m_removeTest;
-	QRect m_rc;
-	KisLayerSP m_insertMergedAboveLayer;
-	bool m_haveFoundInsertionPlace;
+    KisImageSP m_img;
+    merge_cond_t m_mergeTest;
+    remove_cond_t m_removeTest;
+    QRect m_rc;
+    KisLayerSP m_insertMergedAboveLayer;
+    bool m_haveFoundInsertionPlace;
 };
 
 #endif // KIS_MERGE_H_

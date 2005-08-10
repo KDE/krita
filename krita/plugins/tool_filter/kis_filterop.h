@@ -32,38 +32,38 @@ class KisFilterConfiguration;
 class KisFilterOpFactory  : public KisPaintOpFactory  {
 
 public:
-	KisFilterOpFactory() {}
-	virtual ~KisFilterOpFactory() {}
+    KisFilterOpFactory() {}
+    virtual ~KisFilterOpFactory() {}
 
-	virtual KisPaintOp * createOp(KisPainter * painter);
-	virtual KisID id() { return KisID(("filter"), i18n("filter")); }
-	virtual bool userVisible() { return false; }
+    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisID id() { return KisID(("filter"), i18n("filter")); }
+    virtual bool userVisible() { return false; }
 };
 
 
 
 class KRITAPAINT_EXPORT KisFilterOp : public KisPaintOp {
 
-	typedef KisPaintOp super;
+    typedef KisPaintOp super;
 
 public:
 
-	KisFilterOp(KisPainter * painter);
-	virtual ~KisFilterOp();
+    KisFilterOp(KisPainter * painter);
+    virtual ~KisFilterOp();
 
-	void paintAt(const KisPoint &pos,
-		     const double pressure,
-		     const double /*xTilt*/,
-		     const double /*yTilt*/);
+    void paintAt(const KisPoint &pos,
+             const double pressure,
+             const double /*xTilt*/,
+             const double /*yTilt*/);
 public:
-	void setFilterConfiguration(KisFilterConfiguration*);
+    void setFilterConfiguration(KisFilterConfiguration*);
 private:
-	KisFilterConfiguration* m_filterConfiguration;
+    KisFilterConfiguration* m_filterConfiguration;
 };
 
 inline void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)
 {
-	m_filterConfiguration = filterConfiguration;
+    m_filterConfiguration = filterConfiguration;
 }
 
 #endif // KIS_FILTEROP_H_

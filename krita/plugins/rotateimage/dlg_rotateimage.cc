@@ -40,19 +40,19 @@ using namespace std;
 
 
 DlgRotateImage::DlgRotateImage( QWidget *  parent,
-			    const char * name)
-	: super (parent, name, true, i18n("Rotate Image"), Ok | Cancel, Ok)
+                const char * name)
+    : super (parent, name, true, i18n("Rotate Image"), Ok | Cancel, Ok)
 {
-	m_lock = false;
+    m_lock = false;
 
-	m_page = new WdgRotateImage(this, "rotate_image");
-	Q_CHECK_PTR(m_page);
+    m_page = new WdgRotateImage(this, "rotate_image");
+    Q_CHECK_PTR(m_page);
 
-	setMainWidget(m_page);
-	resize(m_page -> sizeHint());
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
 
-	connect(this, SIGNAL(okClicked()),
-		this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
         connect( m_page -> intCustom, SIGNAL( valueChanged ( int ) ),
                  this, SLOT( slotAngleValueChanged( int ) ) );
 
@@ -60,7 +60,7 @@ DlgRotateImage::DlgRotateImage( QWidget *  parent,
 
 DlgRotateImage::~DlgRotateImage()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void DlgRotateImage::slotAngleValueChanged( int )
@@ -70,78 +70,78 @@ void DlgRotateImage::slotAngleValueChanged( int )
 
 void DlgRotateImage::setAngle(Q_UINT32 angle)
 {
-	if (angle == 90) {
-		m_page -> radio90 -> setChecked(true);
-	}
-	else if (angle == 180) {
-		m_page -> radio180 -> setChecked(true);
-	}
-	else if (angle == 270) {
-		m_page -> radio270 -> setChecked(true);
-	}
-	else {
-		m_page -> radioCustom -> setChecked(true);
-		m_page -> intCustom -> setValue(angle);
-	}
+    if (angle == 90) {
+        m_page -> radio90 -> setChecked(true);
+    }
+    else if (angle == 180) {
+        m_page -> radio180 -> setChecked(true);
+    }
+    else if (angle == 270) {
+        m_page -> radio270 -> setChecked(true);
+    }
+    else {
+        m_page -> radioCustom -> setChecked(true);
+        m_page -> intCustom -> setValue(angle);
+    }
 
-	if (m_oldAngle != angle)
-		resetPreview();
+    if (m_oldAngle != angle)
+        resetPreview();
 
-	m_oldAngle = angle;
+    m_oldAngle = angle;
 
 }
 
 Q_INT32 DlgRotateImage::angle()
 {
-	double angle = 0;
-	if (m_page -> radio90 -> isChecked()) {
-		angle = 90;
-	}
-	else if (m_page -> radio180 -> isChecked()) {
-		angle = 180;
-	}
-	else if (m_page -> radio270 -> isChecked()) {
-		angle = 270;
-	}
-	else {
-		angle = qRound(m_page -> intCustom -> value());
-	}
-	if (m_page -> radioCW -> isChecked()) {
-		return angle;
-	}
-	else {
-		return -angle;
-	}
+    double angle = 0;
+    if (m_page -> radio90 -> isChecked()) {
+        angle = 90;
+    }
+    else if (m_page -> radio180 -> isChecked()) {
+        angle = 180;
+    }
+    else if (m_page -> radio270 -> isChecked()) {
+        angle = 270;
+    }
+    else {
+        angle = qRound(m_page -> intCustom -> value());
+    }
+    if (m_page -> radioCW -> isChecked()) {
+        return angle;
+    }
+    else {
+        return -angle;
+    }
 }
 
 void DlgRotateImage::setDirection (enumRotationDirection direction)
 {
-	if (direction == CLOCKWISE) {
-		m_page -> radioCW -> setChecked(true);
-	}
-	else if (direction== COUNTERCLOCKWISE) {
-		m_page -> radioCCW -> setChecked(true);
-	}
+    if (direction == CLOCKWISE) {
+        m_page -> radioCW -> setChecked(true);
+    }
+    else if (direction== COUNTERCLOCKWISE) {
+        m_page -> radioCCW -> setChecked(true);
+    }
 }
 
 enumRotationDirection DlgRotateImage::direction()
 {
-	if (m_page -> radioCCW -> isChecked()) {
-		return COUNTERCLOCKWISE;
-	}
-	else {
-		return CLOCKWISE;
-	}
+    if (m_page -> radioCCW -> isChecked()) {
+        return COUNTERCLOCKWISE;
+    }
+    else {
+        return CLOCKWISE;
+    }
 }
 
 void DlgRotateImage::okClicked()
 {
-	accept();
+    accept();
 }
 
 void DlgRotateImage::resetPreview()
 {
-	// Code to update preview here.
+    // Code to update preview here.
 }
 
 #include "dlg_rotateimage.moc"

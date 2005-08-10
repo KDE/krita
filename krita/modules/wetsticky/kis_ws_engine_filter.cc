@@ -67,115 +67,115 @@ KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", "&Wet & Sticky pain
  */
 QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
 {
-	kdDebug(DBG_AREA_FILTERS) << "W " << width << ", H " << height << "\n";
+    kdDebug(DBG_AREA_FILTERS) << "W " << width << ", H " << height << "\n";
 
-	return QPoint(random() * width,  random() * height);
+    return QPoint(random() * width,  random() * height);
 }
 
 void single_step(KisAbstractColorSpace * cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rect, bool native)
 {
-	using namespace WetAndSticky;
+    using namespace WetAndSticky;
 
 
-	QPoint p = next_cell( rect.width(),  rect.height() );
+    QPoint p = next_cell( rect.width(),  rect.height() );
 
-	// XXX: We could optimize by randomly doing lines of 64 pixels
-	// -- maybe that would be enough to avoid the windscreen wiper
-	// effect.
-	KisHLineIterator iter = src -> createHLineIterator(p.x(), p.y(), 1,  false);
+    // XXX: We could optimize by randomly doing lines of 64 pixels
+    // -- maybe that would be enough to avoid the windscreen wiper
+    // effect.
+    KisHLineIterator iter = src -> createHLineIterator(p.x(), p.y(), 1,  false);
 
-	Q_UINT8 *orig = iter.rawData();
-	Q_UINT8 *pix = orig;
+    Q_UINT8 *orig = iter.rawData();
+    Q_UINT8 *pix = orig;
 
- 	if (!orig) return;
+     if (!orig) return;
 
-	if (!native ) {
-		QColor c;
-		QUANTUM opacity;
+    if (!native ) {
+        QColor c;
+        QUANTUM opacity;
 
-		src -> colorStrategy() -> toQColor(pix, &c, &opacity);
-		Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
-		Q_CHECK_PTR(pix);
+        src -> colorStrategy() -> toQColor(pix, &c, &opacity);
+        Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
+        Q_CHECK_PTR(pix);
 
-		cs -> nativeColor(c, opacity, pix);
-	}
+        cs -> nativeColor(c, opacity, pix);
+    }
 
-	// Process
+    // Process
 
-	CELL_PTR c = ( CELL_PTR )pix;
+    CELL_PTR c = ( CELL_PTR )pix;
 
 
-	if ( !native ) {
-		// Set RGBA back
-	}
+    if ( !native ) {
+        // Set RGBA back
+    }
 
 }
 
 void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
-	m_src = src;
-	m_dst = dst;
-	m_cfg = ( KisWSEngineFilterConfiguration * )configuration;
-	m_rect = rect;
+    m_src = src;
+    m_dst = dst;
+    m_cfg = ( KisWSEngineFilterConfiguration * )configuration;
+    m_rect = rect;
 
 
-	kdDebug(DBG_AREA_FILTERS) << "WSEnginefilter called!\n";
-	QTime t;
-	t.restart();
+    kdDebug(DBG_AREA_FILTERS) << "WSEnginefilter called!\n";
+    QTime t;
+    t.restart();
 
-	// Two possibilities: we have our own, cool w&s pixel, and
-	// then we have real data to mess with, or we're filtering a
-	// boring shoup-model paint device and we can only work by
-	// synthesizing w&s pixels.
-	bool native = false;
-	// XXX: We need a better way to ID color strategies
-	if ( src -> colorStrategy() -> id() == KisID("W&S","") ) native = true;
+    // Two possibilities: we have our own, cool w&s pixel, and
+    // then we have real data to mess with, or we're filtering a
+    // boring shoup-model paint device and we can only work by
+    // synthesizing w&s pixels.
+    bool native = false;
+    // XXX: We need a better way to ID color strategies
+    if ( src -> colorStrategy() -> id() == KisID("W&S","") ) native = true;
 
-	// XXX: We need a better way to ID color strategies
-	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
+    // XXX: We need a better way to ID color strategies
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
 
-	Q_UINT32 pixels = 400; //m_cfg -> pixels();
+    Q_UINT32 pixels = 400; //m_cfg -> pixels();
 
-	kdDebug(DBG_AREA_FILTERS) << "Going to singlestep " << pixels << " pixels.\n";
+    kdDebug(DBG_AREA_FILTERS) << "Going to singlestep " << pixels << " pixels.\n";
 
-	// Determine whether we want an infinite loop
-	if ( pixels == 0 ) {
-		while ( true )
-			single_step (cs, src, dst, rect, native);
-	}
-	// Or not.
-	else {
-		for ( Q_UINT32 i = 0; i < pixels; ++i ) {
-			single_step (cs, src, dst, rect, native);
-		}
-	}
-	kdDebug(DBG_AREA_FILTERS) << "Done in " << t.elapsed() << " ms\n";
+    // Determine whether we want an infinite loop
+    if ( pixels == 0 ) {
+        while ( true )
+            single_step (cs, src, dst, rect, native);
+    }
+    // Or not.
+    else {
+        for ( Q_UINT32 i = 0; i < pixels; ++i ) {
+            single_step (cs, src, dst, rect, native);
+        }
+    }
+    kdDebug(DBG_AREA_FILTERS) << "Done in " << t.elapsed() << " ms\n";
 
 }
 
 KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-// 	KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
-// 	kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
-// 	return kefcw  ;
-	return 0;
+//     KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
+//     kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
+//     return kefcw  ;
+    return 0;
 }
 
 KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-// 	KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
+//     KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
 
-// 	if( widget == 0 )
-// 	{
-// 		return new KisWSEngineFilterConfiguration(30);
-// 	} else {
+//     if( widget == 0 )
+//     {
+//         return new KisWSEngineFilterConfiguration(30);
+//     } else {
 //                 Q_UINT32 depth = widget -> baseWidget() -> depthSpinBox -> value();
 
 //                 return new KisWSEngineFilterConfiguration(depth);
 //         }
 
 
-	return new KisWSEngineFilterConfiguration( m_rect.height() * m_rect.width() );
+    return new KisWSEngineFilterConfiguration( m_rect.height() * m_rect.width() );
 }
 

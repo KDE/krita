@@ -53,38 +53,38 @@ public:
         virtual ~KisLayerBox();
 
         void insertItem(const QString& name, bool visible = true, bool linked = false, bool locked = false);
-	int getCurrentItem() const;
+    int getCurrentItem() const;
         void setTopItem(int n);
         void clear();
         void setSelected(int index);
-	void setUpdatesAndSignalsEnabled(bool enable);
-	void updateAll();
+    void setUpdatesAndSignalsEnabled(bool enable);
+    void updateAll();
 
 public slots:
 
-	void slotSetCurrentItem(int n);
-	void setCompositeOp(const KisCompositeOp& compositeOp);
-	void setOpacity(int opacity);
-	void setColorStrategy(const KisAbstractColorSpace * colorSpace);
+    void slotSetCurrentItem(int n);
+    void setCompositeOp(const KisCompositeOp& compositeOp);
+    void setOpacity(int opacity);
+    void setColorStrategy(const KisAbstractColorSpace * colorSpace);
 
 signals:
         void itemToggleVisible();
         void itemSelected(int n);
         void itemToggleLinked();
-	void itemToggleLocked();
+    void itemToggleLocked();
         void itemProperties();
         void itemAdd();
         void itemRemove();
         void itemAddMask(int n);
         void itemRmMask(int n);
-	void itemLockMask(int n);
+    void itemLockMask(int n);
         void itemRaise();
         void itemLower();
         void itemFront();
         void itemBack();
         void itemLevel(int n);
-	void opacityChanged(int opacity);
-	void itemComposite(const KisCompositeOp&);
+    void opacityChanged(int opacity);
+    void itemComposite(const KisCompositeOp&);
 
 private slots:
         void slotMenuAction(int mnuId);
@@ -119,20 +119,20 @@ public:
 
         bool visible();
         bool linked();
-	bool locked();
+    bool locked();
 
         void toggleVisible();
         void toggleLinked();
-	void toggleLocked();
+    void toggleLocked();
 
         void setVisible(bool v);
         void setLinked(bool v);
-	void setLocked(bool v);
+    void setLocked(bool v);
 
         bool intersectVisibleRect(const QPoint& pos, int yOffset) const;
         bool intersectLinkedRect(const QPoint& pos, int yOffset) const;
         bool intersectPreviewRect(const QPoint& pos, int yOffset) const;
-	bool intersectLockedRect(const QPoint& pos, int yOffset) const;
+    bool intersectLockedRect(const QPoint& pos, int yOffset) const;
 
 private:
         void init(const QString& label, QListBox *parent, KisLayerBox::flags f);
@@ -148,18 +148,18 @@ private:
         QPixmap m_invisiblePix;
         QPixmap m_linkedPix;
         QPixmap m_unlinkedPix;
-	QPixmap m_lockedPix;
-	QPixmap m_unlockedPix;
+    QPixmap m_lockedPix;
+    QPixmap m_unlockedPix;
 
         QPixmap m_preview;
         QRect m_visibleRect;
         QRect m_linkedRect;
-	QRect m_lockedRect;
+    QRect m_lockedRect;
         QRect m_previewRect;
         QWidget *m_parent;
         bool m_visible;
         bool m_linked;
-	bool m_locked;
+    bool m_locked;
         KisLayerBox::flags m_flags;
 };
 
@@ -178,7 +178,7 @@ bool KisLayerBoxItem::linked()
 inline
 bool KisLayerBoxItem::locked()
 {
-	return m_locked;
+    return m_locked;
 }
 
 inline

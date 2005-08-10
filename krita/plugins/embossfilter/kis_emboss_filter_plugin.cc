@@ -35,10 +35,10 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, 
                 << "\n";
         KisView * view;
 
-	if ( parent->inherits("KisFactory") )
-	{
-		KisFilterRegistry::instance()->add(new KisEmbossFilter());
-	}
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisEmbossFilter());
+    }
 }
 
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()

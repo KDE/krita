@@ -30,53 +30,53 @@
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
 class KisResource : public QObject {
-	typedef QObject super;
-	Q_OBJECT
+    typedef QObject super;
+    Q_OBJECT
 
 public:
 
-	/**
-	 * Creates a new KisResource object using @p filename.  No file is opened
-	 * in the constructor, you have to call load.
-	 *
-	 * @param filename the file name to save and load from.
-	 */
-	KisResource(const QString& filename);
-	virtual ~KisResource();
+    /**
+     * Creates a new KisResource object using @p filename.  No file is opened
+     * in the constructor, you have to call load.
+     *
+     * @param filename the file name to save and load from.
+     */
+    KisResource(const QString& filename);
+    virtual ~KisResource();
 
 public:
-	/**
-	 * Load this resource.
-	 */
-	virtual bool load() = 0;
+    /**
+     * Load this resource.
+     */
+    virtual bool load() = 0;
 
-	/**
-	 * Save this resource asynchronously.  The signal saveComplete is emitted when
-	 * the resource has been saved.
-	 */
-	virtual bool save() = 0;
+    /**
+     * Save this resource asynchronously.  The signal saveComplete is emitted when
+     * the resource has been saved.
+     */
+    virtual bool save() = 0;
 
-	/**
-	 * Returns a QImage representing this resource.  This image could be null.
-	 */
-	virtual QImage img() = 0;
+    /**
+     * Returns a QImage representing this resource.  This image could be null.
+     */
+    virtual QImage img() = 0;
 
 public:
-	QString filename() const;
-	void setFilename(const QString& filename);
-	QString name() const;
-	void setName(const QString& name);
-	bool valid() const;
-	void setValid(bool valid);
+    QString filename() const;
+    void setFilename(const QString& filename);
+    QString name() const;
+    void setName(const QString& name);
+    bool valid() const;
+    void setValid(bool valid);
 
 private:
-	KisResource(const KisResource&);
-	KisResource& operator=(const KisResource&);
+    KisResource(const KisResource&);
+    KisResource& operator=(const KisResource&);
 
 private:
-	QString m_name;
-	QString m_filename;
-	bool m_valid;
+    QString m_name;
+    QString m_filename;
+    bool m_valid;
 };
 
 #endif // KIS_RESOURCE_H_

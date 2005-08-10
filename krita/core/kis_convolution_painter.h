@@ -46,54 +46,54 @@
 #include "koffice_export.h"
 
 enum KisConvolutionBorderOp {
-	BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
-	                         // the rect we are convolving.
-	BORDER_WRAP = 1, // Use the pixel on the opposite side to make up for the missing pixels on the border. XXX: Not implemented yet
-	BORDER_REPEAT = 2, // Use the border for the missing pixels, too. XXX: Not implemented yet.
-	BORDER_AVOID = 3 // Skip convolving the border pixels at all.
+    BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
+                             // the rect we are convolving.
+    BORDER_WRAP = 1, // Use the pixel on the opposite side to make up for the missing pixels on the border. XXX: Not implemented yet
+    BORDER_REPEAT = 2, // Use the border for the missing pixels, too. XXX: Not implemented yet.
+    BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
 
 struct KisKernel {
-	Q_UINT32 width;
-	Q_UINT32 height;
-	Q_INT32 offset;
-	Q_INT32 factor;
-	Q_INT32 * data;
+    Q_UINT32 width;
+    Q_UINT32 height;
+    Q_INT32 offset;
+    Q_INT32 factor;
+    Q_INT32 * data;
 };
 
 class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
-	typedef KisPainter super;
+    typedef KisPainter super;
 
 public:
 
         KisConvolutionPainter();
         KisConvolutionPainter(KisPaintDeviceSP device);
 
-	/**
-	 * Convolve all channels in the current paint device using the specified matrix. Only the first matrix of the array is
-	 * used.
-	 */
-	void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    /**
+     * Convolve all channels in the current paint device using the specified matrix. Only the first matrix of the array is
+     * used.
+     */
+    void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-	/**
-	 * Convolve all channels in src using the specified kernel; there is only one kernel for all
-	 * channels possible. By default the the border pixels are not convolved, that is, convolving
-	 * starts with at (x + kernel.width/2, y + kernel.height) and stops at w - (kernel.width/2)
-	 * and h - (kernel.width/2)
-	 *
-	 * The border op decides what to do with pixels too close to the edge of the rect as defined above.
-	 *
-	 * The channels flag determines which set out of color channels, alpha channels, substance or substrate
-	 * channels we convolve.
-	 *
-	 * Note that we do not (currently) support different kernels for different channels _or_ channel types.
-	 */
-	void applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
-		KisConvolutionBorderOp borderOp = BORDER_AVOID,
-		enumChannelFlags channelFlags = FLAG_COLOR);
+    /**
+     * Convolve all channels in src using the specified kernel; there is only one kernel for all
+     * channels possible. By default the the border pixels are not convolved, that is, convolving
+     * starts with at (x + kernel.width/2, y + kernel.height) and stops at w - (kernel.width/2)
+     * and h - (kernel.width/2)
+     *
+     * The border op decides what to do with pixels too close to the edge of the rect as defined above.
+     *
+     * The channels flag determines which set out of color channels, alpha channels, substance or substrate
+     * channels we convolve.
+     *
+     * Note that we do not (currently) support different kernels for different channels _or_ channel types.
+     */
+    void applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+        KisConvolutionBorderOp borderOp = BORDER_AVOID,
+        enumChannelFlags channelFlags = FLAG_COLOR);
 
 
 

@@ -29,74 +29,74 @@
 class KisCmykColorSpace : public KisAbstractColorSpace {
 
 public:
-	KisCmykColorSpace();
-	virtual ~KisCmykColorSpace();
+    KisCmykColorSpace();
+    virtual ~KisCmykColorSpace();
 
 public:
 
-	virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-	virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-	virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-	virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
-	virtual void toQColor(const Q_UINT8 *src, QColor *color, KisProfileSP profile = 0);
-	virtual void toQColor(const Q_UINT8 *src, QColor *color, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *color, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *color, QUANTUM *opacity, KisProfileSP profile = 0);
 
-	virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
-		{ return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
-	virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
-		{ return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
+        { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
+        { return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 
-	virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-	
-	virtual vKisChannelInfoSP channels() const;
-	virtual bool hasAlpha() const;
-	virtual Q_INT32 nChannels() const;
-	virtual Q_INT32 nColorChannels() const;
-	virtual Q_INT32 pixelSize() const;
+    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    
+    virtual vKisChannelInfoSP channels() const;
+    virtual bool hasAlpha() const;
+    virtual Q_INT32 nChannels() const;
+    virtual Q_INT32 nColorChannels() const;
+    virtual Q_INT32 pixelSize() const;
 
-	virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-	virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
-	virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-				       KisProfileSP srcProfile, KisProfileSP dstProfile,
-				       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-				       float exposure = 0.0f);
+    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+                       KisProfileSP srcProfile, KisProfileSP dstProfile,
+                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                       float exposure = 0.0f);
 
-	virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
+    virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
 
 virtual void bitBlt(Q_UINT8 *dst,
-		    Q_INT32 dstRowSize,
-		    const Q_UINT8 *src,
-		    Q_INT32 srcRowStride,
-		    const Q_UINT8 *srcAlphaMask,
-		    Q_INT32 maskRowStride,
-		    QUANTUM opacity,
-		    Q_INT32 rows,
-		    Q_INT32 cols,
-		    const KisCompositeOp& op);
+            Q_INT32 dstRowSize,
+            const Q_UINT8 *src,
+            Q_INT32 srcRowStride,
+            const Q_UINT8 *srcAlphaMask,
+            Q_INT32 maskRowStride,
+            QUANTUM opacity,
+            Q_INT32 rows,
+            Q_INT32 cols,
+            const KisCompositeOp& op);
 
-	virtual bool valid() { return getDefaultProfile() != 0; }
+    virtual bool valid() { return getDefaultProfile() != 0; }
 
-	KisCompositeOpList userVisiblecompositeOps() const;
+    KisCompositeOpList userVisiblecompositeOps() const;
 protected:
 
-	void compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity);
+    void compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity);
 
 private:
-	vKisChannelInfoSP m_channels;
+    vKisChannelInfoSP m_channels;
 
-	cmsHTRANSFORM m_defaultToRGB;
-	cmsHTRANSFORM m_defaultFromRGB;
-	Q_UINT8 * m_qcolordata;
+    cmsHTRANSFORM m_defaultToRGB;
+    cmsHTRANSFORM m_defaultFromRGB;
+    Q_UINT8 * m_qcolordata;
 
-	static const Q_UINT8 PIXEL_CYAN = 0;
-	static const Q_UINT8 PIXEL_MAGENTA = 1;
-	static const Q_UINT8 PIXEL_YELLOW = 2;
-	static const Q_UINT8 PIXEL_BLACK = 3;
-	static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
+    static const Q_UINT8 PIXEL_CYAN = 0;
+    static const Q_UINT8 PIXEL_MAGENTA = 1;
+    static const Q_UINT8 PIXEL_YELLOW = 2;
+    static const Q_UINT8 PIXEL_BLACK = 3;
+    static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

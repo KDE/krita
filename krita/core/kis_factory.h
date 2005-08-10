@@ -33,27 +33,27 @@ typedef KisGenericRegistry<KisResourceServerBase*> KisResourceServerRegistry;
 
 class KRITACORE_EXPORT KisFactory : public KoFactory
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KisFactory( QObject* parent = 0, const char* name = 0 );
-	~KisFactory();
+    KisFactory( QObject* parent = 0, const char* name = 0 );
+    ~KisFactory();
 
-	virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,
-					       const char *widgetName = 0,
-					       QObject *parent = 0,
-					       const char *name = 0,
-					       const char *classname = "KoDocument",
-					       const QStringList &args = QStringList() );
+    virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,
+                           const char *widgetName = 0,
+                           QObject *parent = 0,
+                           const char *name = 0,
+                           const char *classname = "KoDocument",
+                           const QStringList &args = QStringList() );
 
-	static KAboutData        *aboutData();
-	static KInstance         *global();
-	static KisResourceServerRegistry *rServerRegistry();
+    static KAboutData        *aboutData();
+    static KInstance         *global();
+    static KisResourceServerRegistry *rServerRegistry();
 
 private:
-	static KInstance           *s_global;
-	static KAboutData          *s_aboutData;
-	static KisResourceServerRegistry *s_rserverRegistry;
+    static KInstance           *s_global;
+    static KAboutData          *s_aboutData;
+    static KisResourceServerRegistry *s_rserverRegistry;
 };
 
 #endif

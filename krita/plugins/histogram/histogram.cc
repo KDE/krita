@@ -53,25 +53,25 @@ typedef KGenericFactory<Histogram> HistogramFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
 
 Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-	setInstance(HistogramFactory::instance());
+    setInstance(HistogramFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Histogram plugin. Class: " 
- 		  << className() 
- 		  << ", Parent: " 
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Histogram plugin. Class: " 
+           << className() 
+           << ", Parent: " 
+           << parent -> className()
+           << "\n";
 
 
-	(void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
-	
-	if ( !parent->inherits("KisView") )
-	{
-		m_view = 0;
-	} else {
-		m_view = (KisView*) parent;
-	}
+    (void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
+    
+    if ( !parent->inherits("KisView") )
+    {
+        m_view = 0;
+    } else {
+        m_view = (KisView*) parent;
+    }
 }
 
 Histogram::~Histogram()
@@ -80,16 +80,16 @@ Histogram::~Histogram()
 
 void Histogram::slotActivated()
 {
-	DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
-	Q_CHECK_PTR(dlgHistogram);
+    DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
+    Q_CHECK_PTR(dlgHistogram);
 
-	KisLayerSP layer = m_view -> currentImg() -> activeLayer();
-	dlgHistogram -> setLayer(layer);
+    KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+    dlgHistogram -> setLayer(layer);
 
-	if (dlgHistogram -> exec() == QDialog::Accepted) {
-		// Do nothing; this is an informational dialog
-	}
-	delete dlgHistogram;
+    if (dlgHistogram -> exec() == QDialog::Accepted) {
+        // Do nothing; this is an informational dialog
+    }
+    delete dlgHistogram;
 }
 
 #include "histogram.moc"

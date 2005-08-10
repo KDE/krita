@@ -30,47 +30,47 @@ class KisTiledIterator;
  */
 class KisTile  {
 public:
-	KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel);
-	KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row);
-	KisTile(KisTile& rhs);
-	~KisTile();
+    KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel);
+    KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row);
+    KisTile(KisTile& rhs);
+    ~KisTile();
 
 public:
-	void release();
-	void allocate();
-	Q_UINT8 *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0);
-	Q_INT32 refCount() const;
-	void ref();
-	Q_INT32 getRow() {return m_row;};
-	Q_INT32 getCol() {return m_col;};
-	void setNext(KisTile *);
-	KisTile *getNext();
-	void setData(Q_UINT8 *pixel);
-	
-	/// Functions that are needed for locking the tiles into memory for caching
-	void addReader();
-	void removeReader();
-	Q_INT32 readers() { return m_nReadlock; }
+    void release();
+    void allocate();
+    Q_UINT8 *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0);
+    Q_INT32 refCount() const;
+    void ref();
+    Q_INT32 getRow() {return m_row;};
+    Q_INT32 getCol() {return m_col;};
+    void setNext(KisTile *);
+    KisTile *getNext();
+    void setData(Q_UINT8 *pixel);
+    
+    /// Functions that are needed for locking the tiles into memory for caching
+    void addReader();
+    void removeReader();
+    Q_INT32 readers() { return m_nReadlock; }
 
-	friend class KisTiledIterator;
-	friend class KisTiledDataManager;
-	friend class KisMemento;
-	friend class KisTileManager;
+    friend class KisTiledIterator;
+    friend class KisTiledDataManager;
+    friend class KisMemento;
+    friend class KisTileManager;
 private:
-	KisTile& operator=(const KisTile&);
+    KisTile& operator=(const KisTile&);
 
 private:
-	Q_UINT8 *m_data;
-	Q_INT32 m_nReadlock;
-	bool m_writeLock;
-	Q_INT32 m_row;
-	Q_INT32 m_col;
-	Q_INT32 m_pixelSize;
-	KisTile *m_nextTile;
+    Q_UINT8 *m_data;
+    Q_INT32 m_nReadlock;
+    bool m_writeLock;
+    Q_INT32 m_row;
+    Q_INT32 m_col;
+    Q_INT32 m_pixelSize;
+    KisTile *m_nextTile;
 
 public:
-	static const Q_INT32 WIDTH;
-	static const Q_INT32 HEIGHT;
+    static const Q_INT32 WIDTH;
+    static const Q_INT32 HEIGHT;
 };
 
 #endif // KIS_TILE_H_

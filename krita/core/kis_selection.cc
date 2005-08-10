@@ -33,15 +33,15 @@
 #include "kis_integer_maths.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
- 	: super(
-		layer -> image(), 
- 		new KisAlphaColorSpace(), // Note that the alpha color
-					  // model has _state_, so we
-					  // create a new one, instead
-		name)
+     : super(
+        layer -> image(), 
+         new KisAlphaColorSpace(), // Note that the alpha color
+                      // model has _state_, so we
+                      // create a new one, instead
+        name)
 {
-	m_parentLayer = layer;
-	m_alpha = KisAlphaColorSpaceSP(dynamic_cast<KisAlphaColorSpace*> (colorStrategy()));
+    m_parentLayer = layer;
+    m_alpha = KisAlphaColorSpaceSP(dynamic_cast<KisAlphaColorSpace*> (colorStrategy()));
 }
 
 
@@ -51,20 +51,20 @@ KisSelection::~KisSelection()
 
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
-	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-	
-	Q_UINT8 *pix = iter.rawData();
-	
-	return *pix;
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
+    
+    Q_UINT8 *pix = iter.rawData();
+    
+    return *pix;
 }
 
 void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
-	KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-	
-	Q_UINT8 *pix = iter.rawData();
-	
-	*pix = s;
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+    
+    Q_UINT8 *pix = iter.rawData();
+    
+    *pix = s;
 }
 
 QImage KisSelection::maskImage()
@@ -88,117 +88,117 @@ QImage KisSelection::maskImage()
 }
 void KisSelection::select(QRect r)
 {
-	KisFillPainter painter(this);
-	painter.fillRect(r, KisColor(Qt::white), MAX_SELECTED);
-	Q_INT32 x, y, w, h;
-	extent(x, y, w, h);
-	kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+    KisFillPainter painter(this);
+    painter.fillRect(r, KisColor(Qt::white), MAX_SELECTED);
+    Q_INT32 x, y, w, h;
+    extent(x, y, w, h);
+    kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 }
 
 void KisSelection::clear(QRect r)
 {
-	KisFillPainter painter(this);
-	painter.fillRect(r, KisColor(Qt::white), MIN_SELECTED);
+    KisFillPainter painter(this);
+    painter.fillRect(r, KisColor(Qt::white), MIN_SELECTED);
 }
 
 void KisSelection::clear()
 {
-	Q_UINT8 defPixel = MIN_SELECTED;
-	m_datamanager -> setDefaultPixel(&defPixel);
-	m_datamanager -> clear();
+    Q_UINT8 defPixel = MIN_SELECTED;
+    m_datamanager -> setDefaultPixel(&defPixel);
+    m_datamanager -> clear();
 }
 
 void KisSelection::invert()
 {
-	Q_INT32 x,y,w,h;
+    Q_INT32 x,y,w,h;
 
-	extent(x, y, w, h);
-	KisRectIterator it = createRectIterator(x, y, w, h, true);
-	while ( ! it.isDone() )
-	{
-		// CBR this is wrong only first byte is inverted
-		// BSAR: But we have always only one byte in this color model :-).
-		*(it.rawData()) = MAX_SELECTED - *(it.rawData());
-		++it;
-	}
-	Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
-	m_datamanager -> setDefaultPixel(&defPixel);
+    extent(x, y, w, h);
+    KisRectIterator it = createRectIterator(x, y, w, h, true);
+    while ( ! it.isDone() )
+    {
+        // CBR this is wrong only first byte is inverted
+        // BSAR: But we have always only one byte in this color model :-).
+        *(it.rawData()) = MAX_SELECTED - *(it.rawData());
+        ++it;
+    }
+    Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
+    m_datamanager -> setDefaultPixel(&defPixel);
 }
 
 bool KisSelection::isTotallyUnselected(QRect r)
 {
-	if(*(m_datamanager -> defaultPixel()) != MIN_SELECTED)
-		return false;
-	
-	return ! r.intersects(extent());
+    if(*(m_datamanager -> defaultPixel()) != MIN_SELECTED)
+        return false;
+    
+    return ! r.intersects(extent());
 }
 
 QRect KisSelection::selectedRect()
 {
-	if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
-		return extent();
-	else
-		return extent().unite(m_parentLayer->extent());
+    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
+        return extent();
+    else
+        return extent().unite(m_parentLayer->extent());
 }
 
 QRect KisSelection::selectedExactRect()
 {
-	if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
-		return exactBounds();
-	else
-		return exactBounds().unite(m_parentLayer->exactBounds());
+    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
+        return exactBounds();
+    else
+        return exactBounds().unite(m_parentLayer->exactBounds());
 }
 
 void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-	Q_INT32 x2;
-	uchar *j = img.bits();
+    Q_INT32 x2;
+    uchar *j = img.bits();
 
-	for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
-		KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
-		Q_UINT8 preS = *(it.rawData());
-		++it;
-		x2 = 0;
-		KisHLineIteratorPixel prevLineIt = createHLineIterator(x, y2-1, w, false);
-		KisHLineIteratorPixel nextLineIt = createHLineIterator(x, y2+1, w, false);
-		while (!it.isDone() && x2<w) {
-			Q_UINT8 s = *(it.rawData());
-			++it;
-			if(s!=MAX_SELECTED)
-			{
-				Q_UINT8 invs = MAX_SELECTED - s;
-				
-				Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+    for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+        KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
+        Q_UINT8 preS = *(it.rawData());
+        ++it;
+        x2 = 0;
+        KisHLineIteratorPixel prevLineIt = createHLineIterator(x, y2-1, w, false);
+        KisHLineIteratorPixel nextLineIt = createHLineIterator(x, y2+1, w, false);
+        while (!it.isDone() && x2<w) {
+            Q_UINT8 s = *(it.rawData());
+            ++it;
+            if(s!=MAX_SELECTED)
+            {
+                Q_UINT8 invs = MAX_SELECTED - s;
+                
+                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
 
-				if(s==MIN_SELECTED)
-				{
-					*(j+0) = 165+g ;
-					*(j+1) = 128+g;
-					*(j+2) = 128+g;
-					
-					// now for a simple outline based on 4-connectivity
-					if(preS != MIN_SELECTED
-						|| *(it.rawData()) != MIN_SELECTED
-						|| *(prevLineIt.rawData()) != MIN_SELECTED
-						|| *(nextLineIt.rawData()) != MIN_SELECTED)
-					{
-						*(j+0) = 0;
-						*(j+1) = 0;
-						*(j+2) = 255;
-					}
-				}
-				else
-				{
-					*(j+0) = UINT8_BLEND(*(j+0), g+165, s);
-					*(j+1) = UINT8_BLEND(*(j+1), g+128, s);
-					*(j+2) = UINT8_BLEND(*(j+2), g+128, s);
-				}
-			}
-			j+=4;
-			++x2;
-			preS=s;
-			++prevLineIt;
-			++nextLineIt;
-		}
-	}
+                if(s==MIN_SELECTED)
+                {
+                    *(j+0) = 165+g ;
+                    *(j+1) = 128+g;
+                    *(j+2) = 128+g;
+                    
+                    // now for a simple outline based on 4-connectivity
+                    if(preS != MIN_SELECTED
+                        || *(it.rawData()) != MIN_SELECTED
+                        || *(prevLineIt.rawData()) != MIN_SELECTED
+                        || *(nextLineIt.rawData()) != MIN_SELECTED)
+                    {
+                        *(j+0) = 0;
+                        *(j+1) = 0;
+                        *(j+2) = 255;
+                    }
+                }
+                else
+                {
+                    *(j+0) = UINT8_BLEND(*(j+0), g+165, s);
+                    *(j+1) = UINT8_BLEND(*(j+1), g+128, s);
+                    *(j+2) = UINT8_BLEND(*(j+2), g+128, s);
+                }
+            }
+            j+=4;
+            ++x2;
+            preS=s;
+            ++prevLineIt;
+            ++nextLineIt;
+        }
+    }
 }

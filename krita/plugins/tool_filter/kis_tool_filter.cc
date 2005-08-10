@@ -48,11 +48,11 @@
 #include "kis_tool_filter.h"
 
 KisToolFilter::KisToolFilter()
-	: super(i18n("Filter tool")), m_filterConfigurationWidget(0)
+    : super(i18n("Filter tool")), m_filterConfigurationWidget(0)
 {
-	setName("tool_filter");
-	m_subject = 0;
-	setCursor(KisCursor::penCursor());
+    setName("tool_filter");
+    m_subject = 0;
+    setCursor(KisCursor::penCursor());
 }
 
 KisToolFilter::~KisToolFilter()
@@ -61,91 +61,91 @@ KisToolFilter::~KisToolFilter()
 
 void KisToolFilter::setup(KActionCollection *collection)
 {
-	m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
-	if (m_action == 0) {
-		m_action = new KRadioAction(i18n("&Filter brush"),
-					    "filter", 0, this,
-					    SLOT(activate()), collection,
-					    name());
-		Q_CHECK_PTR(m_action);
-		m_action -> setToolTip(i18n("Paint with filters"));
-		m_action -> setExclusiveGroup("tools");
-		m_ownAction = true;
-	}
+    if (m_action == 0) {
+        m_action = new KRadioAction(i18n("&Filter brush"),
+                        "filter", 0, this,
+                        SLOT(activate()), collection,
+                        name());
+        Q_CHECK_PTR(m_action);
+        m_action -> setToolTip(i18n("Paint with filters"));
+        m_action -> setExclusiveGroup("tools");
+        m_ownAction = true;
+    }
 }
 
 void KisToolFilter::initPaint(KisEvent *e)
 {
-	// Some filters want to paint directly on the current state of
-	// the canvas, others cannot handle that and need a temporary layer
-	// so they can work on the old data before painting started.
-	setUseTempLayer( !m_filter -> supportsIncrementalPainting() );
-	
-	super::initPaint(e);
-	KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
-	op -> setSource ( m_source );
-	painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
-	painter() -> setFilter( m_filter );
+    // Some filters want to paint directly on the current state of
+    // the canvas, others cannot handle that and need a temporary layer
+    // so they can work on the old data before painting started.
+    setUseTempLayer( !m_filter -> supportsIncrementalPainting() );
+    
+    super::initPaint(e);
+    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
+    op -> setSource ( m_source );
+    painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+    painter() -> setFilter( m_filter );
 
-	// XXX: Isn't there a better way to set the config? The filter config widget needs to
-	// to go into the tool options widget, and just the data carried over to the filter.
-	// I've got a bit of a problem with core classes having too much GUI about them.
-	// BSAR.
-	dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget, m_source ) );
+    // XXX: Isn't there a better way to set the config? The filter config widget needs to
+    // to go into the tool options widget, and just the data carried over to the filter.
+    // I've got a bit of a problem with core classes having too much GUI about them.
+    // BSAR.
+    dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget, m_source ) );
 }
 
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 {
-	QWidget *widget = super::createOptionWidget(parent);
+    QWidget *widget = super::createOptionWidget(parent);
 
-	m_cbFilter = new KisCmbIDList(widget);
-	Q_CHECK_PTR(m_cbFilter);
+    m_cbFilter = new KisCmbIDList(widget);
+    Q_CHECK_PTR(m_cbFilter);
 
-	QLabel* lbFilter = new QLabel(i18n("Filter:"), widget);
-	Q_CHECK_PTR(lbFilter);
+    QLabel* lbFilter = new QLabel(i18n("Filter:"), widget);
+    Q_CHECK_PTR(lbFilter);
 
-	// Check which filters support painting
-	KisIDList l = KisFilterRegistry::instance()->listKeys();
-	KisIDList l2;
-	KisIDList::iterator it;
-	for (it = l.begin(); it !=  l.end(); ++it) {
-		KisFilterSP f = KisFilterRegistry::instance()->get(*it);
-		if (f -> supportsPainting()) {
-			l2.push_back(*it);
-		}
-	}
-	m_cbFilter ->setIDList( l2 );
+    // Check which filters support painting
+    KisIDList l = KisFilterRegistry::instance()->listKeys();
+    KisIDList l2;
+    KisIDList::iterator it;
+    for (it = l.begin(); it !=  l.end(); ++it) {
+        KisFilterSP f = KisFilterRegistry::instance()->get(*it);
+        if (f -> supportsPainting()) {
+            l2.push_back(*it);
+        }
+    }
+    m_cbFilter ->setIDList( l2 );
 
-	m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
-	Q_CHECK_PTR(m_optionLayout);
+    m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
+    Q_CHECK_PTR(m_optionLayout);
 
-	super::addOptionWidgetLayout(m_optionLayout);
+    super::addOptionWidgetLayout(m_optionLayout);
 
- 	m_optionLayout -> addWidget(lbFilter, 0, 0);
- 	m_optionLayout -> addWidget(m_cbFilter, 0, 1);
+     m_optionLayout -> addWidget(lbFilter, 0, 0);
+     m_optionLayout -> addWidget(m_cbFilter, 0, 1);
 
-	connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
-	changeFilter( m_cbFilter->currentItem () );
+    connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
+    changeFilter( m_cbFilter->currentItem () );
 
-	return widget;
+    return widget;
 }
 
 void KisToolFilter::changeFilter( const KisID & id)
 {
-	m_filter =  KisFilterRegistry::instance()->get( id );
-	Q_ASSERT(m_filter != 0);
-	if( m_filterConfigurationWidget != 0 )
-	{
-		m_optionLayout -> remove ( m_filterConfigurationWidget );
-		delete m_filterConfigurationWidget;
-	}
-	m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget(), m_source );
-	if( m_filterConfigurationWidget != 0 )
-	{
-		m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
-		m_filterConfigurationWidget->show();
-	}
+    m_filter =  KisFilterRegistry::instance()->get( id );
+    Q_ASSERT(m_filter != 0);
+    if( m_filterConfigurationWidget != 0 )
+    {
+        m_optionLayout -> remove ( m_filterConfigurationWidget );
+        delete m_filterConfigurationWidget;
+    }
+    m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget(), m_source );
+    if( m_filterConfigurationWidget != 0 )
+    {
+        m_optionLayout -> addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
+        m_filterConfigurationWidget->show();
+    }
 }
 
 #include "kis_tool_filter.moc"

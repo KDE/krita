@@ -33,269 +33,269 @@ static int numLayers = 0;
 
 namespace {
 
-	class KisLayerCommand : public KNamedCommand {
-		typedef KNamedCommand super;
+    class KisLayerCommand : public KNamedCommand {
+        typedef KNamedCommand super;
 
-	public:
-		KisLayerCommand(const QString& name, KisLayerSP layer);
-		virtual ~KisLayerCommand() {}
+    public:
+        KisLayerCommand(const QString& name, KisLayerSP layer);
+        virtual ~KisLayerCommand() {}
 
-		virtual void execute() = 0;
-		virtual void unexecute() = 0;
+        virtual void execute() = 0;
+        virtual void unexecute() = 0;
 
-	protected:
-		void setUndo(bool undo);
-		void notifyPropertyChanged();
+    protected:
+        void setUndo(bool undo);
+        void notifyPropertyChanged();
 
-		KisLayerSP m_layer;
-	};
+        KisLayerSP m_layer;
+    };
 
-	KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-		super(name), m_layer(layer)
-	{
-	}
+    KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
+        super(name), m_layer(layer)
+    {
+    }
 
-	void KisLayerCommand::setUndo(bool undo)
-	{
-		if (m_layer -> undoAdapter()) {
-			m_layer -> undoAdapter() -> setUndo(undo);
-		}
-	}
+    void KisLayerCommand::setUndo(bool undo)
+    {
+        if (m_layer -> undoAdapter()) {
+            m_layer -> undoAdapter() -> setUndo(undo);
+        }
+    }
 
-	void KisLayerCommand::notifyPropertyChanged()
-	{
-		if (m_layer -> image()) {
-			m_layer -> image() -> notifyLayersChanged();
-		}
-	}
+    void KisLayerCommand::notifyPropertyChanged()
+    {
+        if (m_layer -> image()) {
+            m_layer -> image() -> notifyLayersChanged();
+        }
+    }
 
-	class KisLayerLinkedCommand : public KisLayerCommand {
-		typedef KisLayerCommand super;
+    class KisLayerLinkedCommand : public KisLayerCommand {
+        typedef KisLayerCommand super;
 
-	public:
-		KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked);
+    public:
+        KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked);
 
-		virtual void execute();
-		virtual void unexecute();
+        virtual void execute();
+        virtual void unexecute();
 
-	private:
-		bool m_oldLinked;
-		bool m_newLinked;
-	};
+    private:
+        bool m_oldLinked;
+        bool m_newLinked;
+    };
 
-	KisLayerLinkedCommand::KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked) :
-		super(i18n("Link Layer"), layer)
-	{
-		m_oldLinked = oldLinked;
-		m_newLinked = newLinked;
-	}
+    KisLayerLinkedCommand::KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked) :
+        super(i18n("Link Layer"), layer)
+    {
+        m_oldLinked = oldLinked;
+        m_newLinked = newLinked;
+    }
 
-	void KisLayerLinkedCommand::execute()
-	{
-		setUndo(false);
-		m_layer -> setLinked(m_newLinked);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerLinkedCommand::execute()
+    {
+        setUndo(false);
+        m_layer -> setLinked(m_newLinked);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
-	void KisLayerLinkedCommand::unexecute()
-	{
-		setUndo(false);
-		m_layer -> setLinked(m_oldLinked);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerLinkedCommand::unexecute()
+    {
+        setUndo(false);
+        m_layer -> setLinked(m_oldLinked);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
-	class KisLayerLockedCommand : public KisLayerCommand {
-		typedef KisLayerCommand super;
+    class KisLayerLockedCommand : public KisLayerCommand {
+        typedef KisLayerCommand super;
 
-	public:
-		KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked);
+    public:
+        KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked);
 
-		virtual void execute();
-		virtual void unexecute();
+        virtual void execute();
+        virtual void unexecute();
 
-	private:
-		bool m_oldLocked;
-		bool m_newLocked;
-	};
+    private:
+        bool m_oldLocked;
+        bool m_newLocked;
+    };
 
-	KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked) :
-		super(i18n("Lock Layer"), layer)
-	{
-		m_oldLocked = oldLocked;
-		m_newLocked = newLocked;
-	}
+    KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked) :
+        super(i18n("Lock Layer"), layer)
+    {
+        m_oldLocked = oldLocked;
+        m_newLocked = newLocked;
+    }
 
-	void KisLayerLockedCommand::execute()
-	{
-		setUndo(false);
-		m_layer -> setLocked(m_newLocked);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerLockedCommand::execute()
+    {
+        setUndo(false);
+        m_layer -> setLocked(m_newLocked);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
-	void KisLayerLockedCommand::unexecute()
-	{
-		setUndo(false);
-		m_layer -> setLocked(m_oldLocked);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerLockedCommand::unexecute()
+    {
+        setUndo(false);
+        m_layer -> setLocked(m_oldLocked);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
-	class KisLayerOpacityCommand : public KisLayerCommand {
-		typedef KisLayerCommand super;
+    class KisLayerOpacityCommand : public KisLayerCommand {
+        typedef KisLayerCommand super;
 
-	public:
-		KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity);
+    public:
+        KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity);
 
-		virtual void execute();
-		virtual void unexecute();
+        virtual void execute();
+        virtual void unexecute();
 
-	private:
-		QUANTUM m_oldOpacity;
-		QUANTUM m_newOpacity;
-	};
+    private:
+        QUANTUM m_oldOpacity;
+        QUANTUM m_newOpacity;
+    };
 
-	KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity) :
-		super(i18n("Layer Opacity"), layer)
-	{
-		m_oldOpacity = oldOpacity;
-		m_newOpacity = newOpacity;
-	}
+    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity) :
+        super(i18n("Layer Opacity"), layer)
+    {
+        m_oldOpacity = oldOpacity;
+        m_newOpacity = newOpacity;
+    }
 
-	void KisLayerOpacityCommand::execute()
-	{
-		setUndo(false);
-		m_layer -> setOpacity(m_newOpacity);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerOpacityCommand::execute()
+    {
+        setUndo(false);
+        m_layer -> setOpacity(m_newOpacity);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
-	void KisLayerOpacityCommand::unexecute()
-	{
-		setUndo(false);
-		m_layer -> setOpacity(m_oldOpacity);
-		notifyPropertyChanged();
-		setUndo(true);
-	}
+    void KisLayerOpacityCommand::unexecute()
+    {
+        setUndo(false);
+        m_layer -> setOpacity(m_oldOpacity);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
 
 }
 
 KisLayer::KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name)
-	: super(colorStrategy, name),
-	  m_opacity(OPACITY_OPAQUE),
-	  m_linked(false),
-	  m_locked(false)
+    : super(colorStrategy, name),
+      m_opacity(OPACITY_OPAQUE),
+      m_linked(false),
+      m_locked(false)
 {
 #if DEBUG_LAYERS
-	numLayers++;
-	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+    numLayers++;
+    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
 KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
-	: super(img, img -> colorStrategy(), name),
-	  m_opacity(opacity),
-	  m_linked(false),
-	  m_locked(false)
+    : super(img, img -> colorStrategy(), name),
+      m_opacity(opacity),
+      m_linked(false),
+      m_locked(false)
 {
 #if DEBUG_LAYERS
-	numLayers++;
-	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+    numLayers++;
+    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
 KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorStrategy)
-	: super(img, colorStrategy, name),
-	  m_opacity(opacity),
-	  m_linked(false),
-	  m_locked(false)
+    : super(img, colorStrategy, name),
+      m_opacity(opacity),
+      m_linked(false),
+      m_locked(false)
 {
 #if DEBUG_LAYERS
-	numLayers++;
-	kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
+    numLayers++;
+    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
 #endif
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
 {
 #if DEBUG_LAYERS
-	numLayers++;
-	kdDebug(DBG_AREA_CORE) << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
+    numLayers++;
+    kdDebug(DBG_AREA_CORE) << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
 #endif
-	if (this != &rhs) {
-		m_opacity = rhs.m_opacity;
-		//m_preserveTransparency = rhs.m_preserveTransparency;
-		//m_initial = rhs.m_initial;
-		m_linked = rhs.m_linked;
-		m_locked = rhs.m_locked;
-/*		if (rhs.m_mask)
-			m_mask = new KisMask(*rhs.m_mask);*/
-	}
+    if (this != &rhs) {
+        m_opacity = rhs.m_opacity;
+        //m_preserveTransparency = rhs.m_preserveTransparency;
+        //m_initial = rhs.m_initial;
+        m_linked = rhs.m_linked;
+        m_locked = rhs.m_locked;
+/*        if (rhs.m_mask)
+            m_mask = new KisMask(*rhs.m_mask);*/
+    }
 }
 
 KisLayer::~KisLayer()
 {
 #if DEBUG_LAYERS
-	numLayers--;
-	kdDebug(DBG_AREA_CORE) << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
+    numLayers--;
+    kdDebug(DBG_AREA_CORE) << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
 #endif
 }
 
 QUANTUM KisLayer::opacity() const
 {
-	return m_opacity;
+    return m_opacity;
 }
 
 void KisLayer::setOpacity(QUANTUM val)
 {
-	m_opacity = val;
+    m_opacity = val;
 }
 
 KNamedCommand *KisLayer::setOpacityCommand(QUANTUM newOpacity)
 {
-	return new KisLayerOpacityCommand(this, opacity(), newOpacity);
+    return new KisLayerOpacityCommand(this, opacity(), newOpacity);
 }
 
 bool KisLayer::linked() const
 {
-	return m_linked;
+    return m_linked;
 }
 
 void KisLayer::setLinked(bool l)
 {
-	m_linked = l;
+    m_linked = l;
 }
 
 KNamedCommand *KisLayer::setLinkedCommand(bool newLinked)
 {
-	return new KisLayerLinkedCommand(this, linked(), newLinked);
+    return new KisLayerLinkedCommand(this, linked(), newLinked);
 }
 
 const bool KisLayer::visible() const
 {
-	return super::visible() && m_opacity != OPACITY_TRANSPARENT;
+    return super::visible() && m_opacity != OPACITY_TRANSPARENT;
 }
 
 void KisLayer::setVisible(bool v)
 {
-	super::setVisible(v);
+    super::setVisible(v);
 }
 
 bool KisLayer::locked() const
 {
-	return m_locked;
+    return m_locked;
 }
 
 void KisLayer::setLocked(bool l)
 {
-	m_locked = l;
+    m_locked = l;
 }
 
 KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
 {
-	return new KisLayerLockedCommand(this, locked(), newLocked);
+    return new KisLayerLockedCommand(this, locked(), newLocked);
 }
 
 

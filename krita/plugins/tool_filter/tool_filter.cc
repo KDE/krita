@@ -47,25 +47,25 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolfilter, ToolFilterFactory( "krita" ) )
 
 
 ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+    : KParts::Plugin(parent, name)
 {
-       	setInstance(ToolFilterFactory::instance());
+           setInstance(ToolFilterFactory::instance());
 
- 	kdDebug(DBG_AREA_PLUGINS) << "Filter tool plugin. Class: "
- 		  << className()
- 		  << ", Parent: "
- 		  << parent -> className()
- 		  << "\n";
+     kdDebug(DBG_AREA_PLUGINS) << "Filter tool plugin. Class: "
+           << className()
+           << ", Parent: "
+           << parent -> className()
+           << "\n";
 
-	if ( parent -> inherits( "KisFactory" ) ) {
+    if ( parent -> inherits( "KisFactory" ) ) {
 
-		KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
-		pr -> add( new KisFilterOpFactory );
+        KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
+        pr -> add( new KisFilterOpFactory );
 
-		KisToolRegistry * tr = KisToolRegistry::instance();
-		tr -> add( new KisToolFilterFactory());
+        KisToolRegistry * tr = KisToolRegistry::instance();
+        tr -> add( new KisToolFilterFactory());
 
- 	}
+     }
 }
 
 ToolFilter::~ToolFilter()

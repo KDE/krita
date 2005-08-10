@@ -64,16 +64,16 @@ namespace {
 }
 
 KisFillPainter::KisFillPainter()
-	: super()
+    : super()
 {
     m_width = m_height = -1;
-	m_sampleMerged = false;
+    m_sampleMerged = false;
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 {
     m_width = m_height = -1;
-	m_sampleMerged = false;
+    m_sampleMerged = false;
 }
 
 // 'regular' filling
@@ -83,133 +83,133 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, QUANTUM opacity)
 {
 
-	// Make sure we're in the right colorspace  
-	
-	KisColor kc2(kc); // get rid of const
-	kc2.convertTo(m_device->colorStrategy(), m_device->profile());
-	Q_UINT8 * data = kc2.data();
+    // Make sure we're in the right colorspace  
+    
+    KisColor kc2(kc); // get rid of const
+    kc2.convertTo(m_device->colorStrategy(), m_device->profile());
+    Q_UINT8 * data = kc2.data();
 
-	Q_INT32 y;
-	Q_UINT32 depth = m_device->pixelSize();
-	m_device->colorStrategy()->setAlpha(data, opacity, 1);
+    Q_INT32 y;
+    Q_UINT32 depth = m_device->pixelSize();
+    m_device->colorStrategy()->setAlpha(data, opacity, 1);
 
 
-	for (y = y1; y < y1 + h; y++)
-	{
-		KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
-		while( ! hiter.isDone())
-		{
-			memcpy(hiter.rawData(), data, depth);
-			++hiter;
-		}
-	}
+    for (y = y1; y < y1 + h; y++)
+    {
+        KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
+        while( ! hiter.isDone())
+        {
+            memcpy(hiter.rawData(), data, depth);
+            ++hiter;
+        }
+    }
 }
 
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {
-	if (!pattern) return;
-	if (!pattern -> valid()) return;
-	if (!m_device) return;
+    if (!pattern) return;
+    if (!pattern -> valid()) return;
+    if (!m_device) return;
 
 
-	KisLayerSP patternLayer = pattern -> image(m_device->colorStrategy());
+    KisLayerSP patternLayer = pattern -> image(m_device->colorStrategy());
 
-	int sx, sy, sw, sh;
+    int sx, sy, sw, sh;
 
-	int y = y1;
+    int y = y1;
 
-	if (y >= 0) {
-		sy = y % pattern -> height();
-	} else {
-		sy = pattern -> height() - (((-y - 1) % pattern -> height()) + 1);
-	}
+    if (y >= 0) {
+        sy = y % pattern -> height();
+    } else {
+        sy = pattern -> height() - (((-y - 1) % pattern -> height()) + 1);
+    }
 
-	while (y < y1 + h) {
-		sh = QMIN((y1 + h) - y, pattern -> height() - sy);
+    while (y < y1 + h) {
+        sh = QMIN((y1 + h) - y, pattern -> height() - sy);
 
-		int x = x1;
+        int x = x1;
 
-		if (x >= 0) {
-			sx = x % pattern -> width();
-		} else {
-			sx = pattern -> width() - (((-x - 1) % pattern -> width()) + 1);
-		}
+        if (x >= 0) {
+            sx = x % pattern -> width();
+        } else {
+            sx = pattern -> width() - (((-x - 1) % pattern -> width()) + 1);
+        }
 
-		while (x < x1 + w) {
-			sw = QMIN((x1 + w) - x, pattern -> width() - sx);
+        while (x < x1 + w) {
+            sw = QMIN((x1 + w) - x, pattern -> width() - sx);
 
-			bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
-			x += sw; sx = 0;
-		}
+            bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
+            x += sw; sx = 0;
+        }
 
-		y+=sh; sy = 0;
-	}
+        y+=sh; sy = 0;
+    }
 }
 
 // flood filling
 
 void KisFillPainter::fillColor(int startX, int startY) {
-	genericFillStart(startX, startY);
+    genericFillStart(startX, startY);
 
-	// Now create a layer and fill it
-	KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
-	Q_CHECK_PTR(filled);
-	KisFillPainter painter(filled.data());
-	painter.fillRect(0, 0, m_width, m_height, m_paintColor);
-	painter.end();
+    // Now create a layer and fill it
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+    Q_CHECK_PTR(filled);
+    KisFillPainter painter(filled.data());
+    painter.fillRect(0, 0, m_width, m_height, m_paintColor);
+    painter.end();
 
-	genericFillEnd(filled);
+    genericFillEnd(filled);
 }
 
 void KisFillPainter::fillPattern(int startX, int startY) {
-	genericFillStart(startX, startY);
+    genericFillStart(startX, startY);
 
-	// Now create a layer and fill it
-	KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
-	Q_CHECK_PTR(filled);
-	KisFillPainter painter(filled.data());
-	painter.fillRect(0, 0, m_width, m_height, m_pattern);
-	painter.end();
+    // Now create a layer and fill it
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+    Q_CHECK_PTR(filled);
+    KisFillPainter painter(filled.data());
+    painter.fillRect(0, 0, m_width, m_height, m_pattern);
+    painter.end();
 
-	genericFillEnd(filled);
+    genericFillEnd(filled);
 }
 
 void KisFillPainter::genericFillStart(int startX, int startY) {
-	m_cancelRequested = false;
+    m_cancelRequested = false;
 
-	if (m_width < 0 || m_height < 0) {
-		if (m_device->image()) {
-			m_width = m_device->image()->width();
-			m_height = m_device->image()->height();
-		} else {
-			kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
-					<< endl;
-			m_width = m_height = 500;
-		}
-	}
+    if (m_width < 0 || m_height < 0) {
+        if (m_device->image()) {
+            m_width = m_device->image()->width();
+            m_height = m_device->image()->height();
+        } else {
+            kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
+                    << endl;
+            m_width = m_height = 500;
+        }
+    }
 
-	m_size = m_width * m_height;
+    m_size = m_width * m_height;
 
-	if (m_device -> hasSelection()) {
-		m_selection = m_device -> selection();
-	} else {
-		// Create a selection from the surrounding area
-		m_selection = createFloodSelection(startX, startY);
-	}
+    if (m_device -> hasSelection()) {
+        m_selection = m_device -> selection();
+    } else {
+        // Create a selection from the surrounding area
+        m_selection = createFloodSelection(startX, startY);
+    }
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     if (m_cancelRequested) {
         m_width = m_height = -1;
-		return;
+        return;
     }
 
-	if (! m_device -> hasSelection() ) {
-		bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
-					 0, 0, m_width, m_height);
-	} else {
-		bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
-					 0, 0, m_width, m_height);
-	}
+    if (! m_device -> hasSelection() ) {
+        bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
+                     0, 0, m_width, m_height);
+    } else {
+        bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
+                     0, 0, m_width, m_height);
+    }
 
     emit notifyProgressDone(this);
 
@@ -217,183 +217,183 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
 }
 
 struct FillSegment {
-	FillSegment(int x, int y/*, FillSegment* parent*/) : x(x), y(y)/*, parent(parent)*/ {}
-	int x;
-	int y;
-//	FillSegment* parent;
+    FillSegment(int x, int y/*, FillSegment* parent*/) : x(x), y(y)/*, parent(parent)*/ {}
+    int x;
+    int y;
+//    FillSegment* parent;
 };
 
 typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
-	if (m_width < 0 || m_height < 0) {
-		if (m_device->image()) {
-			m_width = m_device->image()->width();
-			m_height = m_device->image()->height();
-		} else {
-			kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
-					<< endl;
-			m_width = m_height = 500;
-		}
-	}
+    if (m_width < 0 || m_height < 0) {
+        if (m_device->image()) {
+            m_width = m_device->image()->width();
+            m_height = m_device->image()->height();
+        } else {
+            kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
+                    << endl;
+            m_width = m_height = 500;
+        }
+    }
 
-	// Don't try to fill if we start outside the borders, just return an empty 'fill'
-	if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-		return new KisSelection(m_device, "Fill Temporary Selection");
+    // Don't try to fill if we start outside the borders, just return an empty 'fill'
+    if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
+        return new KisSelection(m_device, "Fill Temporary Selection");
 
-	KisPaintDeviceSP sourceDevice = 0;
+    KisPaintDeviceSP sourceDevice = 0;
 
-	// sample merged?
-	if (m_sampleMerged) {
-		if (!m_device -> image()) {
-			kdDebug(DBG_AREA_CORE) << "No image to sample merged from associated with the device" << endl;
-			return new KisSelection(m_device, "Fill Temporary Selection");
-		}
-		sourceDevice = m_device -> image() -> mergedImage();
-	} else {
-		sourceDevice = m_device;
-	}
+    // sample merged?
+    if (m_sampleMerged) {
+        if (!m_device -> image()) {
+            kdDebug(DBG_AREA_CORE) << "No image to sample merged from associated with the device" << endl;
+            return new KisSelection(m_device, "Fill Temporary Selection");
+        }
+        sourceDevice = m_device -> image() -> mergedImage();
+    } else {
+        sourceDevice = m_device;
+    }
 
-	m_size = m_width * m_height;
+    m_size = m_width * m_height;
 
-	KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
-	KisAbstractColorSpace * colorStrategy = selection -> colorStrategy();
-	KisAbstractColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
-	
-	QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
-	KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
-	KisPixel pixel = pixelIt.rawData();
+    KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
+    KisAbstractColorSpace * colorStrategy = selection -> colorStrategy();
+    KisAbstractColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
+    
+    QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
+    KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
+    KisPixel pixel = pixelIt.rawData();
 
-	for (int i = 0; i < sourceDevice -> pixelSize(); i++) {
-		source[i] = pixel[i];
-	}
-	
-	std::stack<FillSegment*> stack;
+    for (int i = 0; i < sourceDevice -> pixelSize(); i++) {
+        source[i] = pixel[i];
+    }
+    
+    std::stack<FillSegment*> stack;
 
-	stack.push(new FillSegment(startX, startY/*, 0*/));
+    stack.push(new FillSegment(startX, startY/*, 0*/));
 
-	Status* map = new Status[m_size];
+    Status* map = new Status[m_size];
 
-	memset(map, None, m_size * sizeof(Status));
+    memset(map, None, m_size * sizeof(Status));
 
-	int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
-	emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
+    int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
+    emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
 
-	while(!stack.empty()) {
-		FillSegment* segment = stack.top();
-		stack.pop();
-		if (map[m_width * segment->y + segment->x] == Checked) {
-			delete segment;
-			continue;
-		}
-		map[m_width * segment->y + segment->x] = Checked;
-		
-		int x = segment->x;
-		int y = segment->y;
+    while(!stack.empty()) {
+        FillSegment* segment = stack.top();
+        stack.pop();
+        if (map[m_width * segment->y + segment->x] == Checked) {
+            delete segment;
+            continue;
+        }
+        map[m_width * segment->y + segment->x] = Checked;
+        
+        int x = segment->x;
+        int y = segment->y;
 
-		/* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
-		it is needed to start the iterator at the first position, and then skip to (x,y). */
-		pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
-		pixelIt += x;
-		QUANTUM diff = devColorStrategy -> difference(source, pixelIt.rawData());
+        /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
+        it is needed to start the iterator at the first position, and then skip to (x,y). */
+        pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
+        pixelIt += x;
+        QUANTUM diff = devColorStrategy -> difference(source, pixelIt.rawData());
 
-		if (diff >= m_threshold) {
-			delete segment;
-			continue;
-		}
+        if (diff >= m_threshold) {
+            delete segment;
+            continue;
+        }
 
-		// Here as well: start the iterator at (0,y)
-		KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
-		selIt += x;
-		colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
+        // Here as well: start the iterator at (0,y)
+        KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
+        selIt += x;
+        colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
 
-		if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-			map[m_width * (y - 1) + x] = Added;
-			stack.push(new FillSegment(x, y-1));
-		}
-		if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-			map[m_width * (y + 1) + x] = Added;
-			stack.push(new FillSegment(x, y+1));
-		}
+        if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
+            map[m_width * (y - 1) + x] = Added;
+            stack.push(new FillSegment(x, y-1));
+        }
+        if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
+            map[m_width * (y + 1) + x] = Added;
+            stack.push(new FillSegment(x, y+1));
+        }
 
-		++pixelsDone;
-		
-		bool stop = false;
+        ++pixelsDone;
+        
+        bool stop = false;
 
-		--pixelIt;
-		--selIt;
-		--x;
+        --pixelIt;
+        --selIt;
+        --x;
 
-		// go to the left
-		while(!stop && x >= 0 && (map[m_width * y + x] != Checked) ) { // FIXME optimizeable?
-			map[m_width * y + x] = Checked;
-			diff = devColorStrategy -> difference(source, pixelIt.rawData());
-			if (diff >= m_threshold) {
-				stop = true;
-				continue;
-			}
-			colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
-			if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-				map[m_width * (y - 1) + x] = Added;
-				stack.push(new FillSegment(x, y-1));
-			}
-			if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-				map[m_width * (y + 1) + x] = Added;
-				stack.push(new FillSegment(x, y+1));
-			}
-			++pixelsDone;
-			--pixelIt;
-			--selIt;
-			--x;
-		}
+        // go to the left
+        while(!stop && x >= 0 && (map[m_width * y + x] != Checked) ) { // FIXME optimizeable?
+            map[m_width * y + x] = Checked;
+            diff = devColorStrategy -> difference(source, pixelIt.rawData());
+            if (diff >= m_threshold) {
+                stop = true;
+                continue;
+            }
+            colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
+            if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
+                map[m_width * (y - 1) + x] = Added;
+                stack.push(new FillSegment(x, y-1));
+            }
+            if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
+                map[m_width * (y + 1) + x] = Added;
+                stack.push(new FillSegment(x, y+1));
+            }
+            ++pixelsDone;
+            --pixelIt;
+            --selIt;
+            --x;
+        }
 
-		x = segment -> x + 1;
-		delete segment;
+        x = segment -> x + 1;
+        delete segment;
 
-		if (map[m_width * y + x] == Checked)
-			continue;
+        if (map[m_width * y + x] == Checked)
+            continue;
 
-		// and go to the right
-		pixelIt = sourceDevice -> createHLineIterator(x, y, m_width, false);
-		selIt = selection -> createHLineIterator(x, y, m_width, true);
+        // and go to the right
+        pixelIt = sourceDevice -> createHLineIterator(x, y, m_width, false);
+        selIt = selection -> createHLineIterator(x, y, m_width, true);
 
-		stop = false;
-		while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {
-			diff = devColorStrategy -> difference(source, pixelIt.rawData());
-			map[m_width * y + x] = Checked;
+        stop = false;
+        while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {
+            diff = devColorStrategy -> difference(source, pixelIt.rawData());
+            map[m_width * y + x] = Checked;
 
-			if (diff >= m_threshold) {
-				stop = true;
-				continue;
-			}
+            if (diff >= m_threshold) {
+                stop = true;
+                continue;
+            }
 
-			colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
-			if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-				map[m_width * (y - 1) + x] = Added;
-				stack.push(new FillSegment(x, y-1));
-			}
-			if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-				map[m_width * (y + 1) + x] = Added;
-				stack.push(new FillSegment(x, y+1));
-			}
-			++pixelsDone;
-			++pixelIt;
-			++selIt;
-			++x;
-		}
-		
-		if (m_size > 0) {
-			progressPercent = (pixelsDone * 100) / m_size;
-			if (progressPercent > currentPercent) {
-				emit notifyProgress(this, progressPercent);
-				currentPercent = progressPercent;
-			}
-		}
-	}
+            colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
+            if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
+                map[m_width * (y - 1) + x] = Added;
+                stack.push(new FillSegment(x, y-1));
+            }
+            if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
+                map[m_width * (y + 1) + x] = Added;
+                stack.push(new FillSegment(x, y+1));
+            }
+            ++pixelsDone;
+            ++pixelIt;
+            ++selIt;
+            ++x;
+        }
+        
+        if (m_size > 0) {
+            progressPercent = (pixelsDone * 100) / m_size;
+            if (progressPercent > currentPercent) {
+                emit notifyProgress(this, progressPercent);
+                currentPercent = progressPercent;
+            }
+        }
+    }
 
 
-	delete[] map;
-	delete[] source;
+    delete[] map;
+    delete[] source;
 
-	return selection;
+    return selection;
 }

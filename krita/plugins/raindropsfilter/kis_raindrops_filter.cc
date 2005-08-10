@@ -58,15 +58,15 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", "&Raindro
 void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
-	Q_UNUSED(dst);
+    Q_UNUSED(dst);
 
-	//read the filter configuration values from the KisFilterConfiguration object
-	Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
-	Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
-	Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
+    //read the filter configuration values from the KisFilterConfiguration object
+    Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
+    Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
+    Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
 
 
-	rainDrops(src, rect, dropSize, number, fishEyes);
+    rainDrops(src, rect, dropSize, number, fishEyes);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -90,15 +90,15 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
 
 void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff)
 {
-	setProgressTotalSteps(Amount);
-	setProgressStage(i18n("Applying oilpaint filter..."),0);
+    setProgressTotalSteps(Amount);
+    setProgressStage(i18n("Applying oilpaint filter..."),0);
 
         if (Coeff <= 0) Coeff = 1;
 
         if (Coeff > 100) Coeff = 100;
 
-	int Width = rect.width();
-	int Height = rect.height();
+    int Width = rect.width();
+    int Height = rect.height();
 
         bool** BoolMatrix = CreateBoolArray (Width, Height);
 
@@ -120,7 +120,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
 
         bool      FindAnother = false;              // To search for good coordinates
 
-	KisAbstractColorSpace * cs = src -> colorStrategy();
+    KisAbstractColorSpace * cs = src -> colorStrategy();
 
         QDateTime dt = QDateTime::currentDateTime();
         QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
@@ -135,7 +135,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
                 {
                         BoolMatrix[i][j] = false;
                 }
-	}
+    }
 
         for (int NumBlurs = 0 ; !cancelRequested() && (NumBlurs <= Amount) ; ++NumBlurs)
         {
@@ -163,185 +163,185 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
 
                         Counter++;
                 }
-		while (!cancelRequested() && (FindAnother && (Counter < 10000)) );
+        while (!cancelRequested() && (FindAnother && (Counter < 10000)) );
 
-		if (Counter >= 10000)
-		{
-			NumBlurs = Amount;
-			break;
-		}
+        if (Counter >= 10000)
+        {
+            NumBlurs = Amount;
+            break;
+        }
 
-		for (i = -1 * halfSize ; !cancelRequested() && (i < NewSize - halfSize) ; i++)
-		{
-			for (j = -1 * halfSize ; !cancelRequested() && (j < NewSize - halfSize) ; j++)
-			{
-				r = sqrt (i * i + j * j);
-				a = atan2 (i, j);
+        for (i = -1 * halfSize ; !cancelRequested() && (i < NewSize - halfSize) ; i++)
+        {
+            for (j = -1 * halfSize ; !cancelRequested() && (j < NewSize - halfSize) ; j++)
+            {
+                r = sqrt (i * i + j * j);
+                a = atan2 (i, j);
 
-				if (r <= Radius)
-				{
-					OldRadius = r;
-					r = (exp (r / s) - 1) / NewCoeff;
+                if (r <= Radius)
+                {
+                    OldRadius = r;
+                    r = (exp (r / s) - 1) / NewCoeff;
 
-					k = x + (int)(r * sin (a));
-					l = y + (int)(r * cos (a));
+                    k = x + (int)(r * sin (a));
+                    l = y + (int)(r * cos (a));
 
-					m = x + i;
-					n = y + j;
+                    m = x + i;
+                    n = y + j;
 
-					if ((k >= 0) && (k < Height) && (l >= 0) && (l < Width))
-					{
-						if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-						{
-							Bright = 0;
+                    if ((k >= 0) && (k < Height) && (l >= 0) && (l < Width))
+                    {
+                        if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                        {
+                            Bright = 0;
 
-							if (OldRadius >= 0.9 * Radius)
-							{
-								if ((a <= 0) && (a > -2.25))
-									Bright = -80;
-								else if ((a <= -2.25) && (a > -2.5))
-									Bright = -40;
-								else if ((a <= 0.25) && (a > 0))
-									Bright = -40;
-							}
+                            if (OldRadius >= 0.9 * Radius)
+                            {
+                                if ((a <= 0) && (a > -2.25))
+                                    Bright = -80;
+                                else if ((a <= -2.25) && (a > -2.5))
+                                    Bright = -40;
+                                else if ((a <= 0.25) && (a > 0))
+                                    Bright = -40;
+                            }
 
-							else if (OldRadius >= 0.8 * Radius)
-							{
-								if ((a <= -0.75) && (a > -1.50))
-									Bright = -40;
-								else if ((a <= 0.10) && (a > -0.75))
-									Bright = -30;
-								else if ((a <= -1.50) && (a > -2.35))
-									Bright = -30;
-							}
+                            else if (OldRadius >= 0.8 * Radius)
+                            {
+                                if ((a <= -0.75) && (a > -1.50))
+                                    Bright = -40;
+                                else if ((a <= 0.10) && (a > -0.75))
+                                    Bright = -30;
+                                else if ((a <= -1.50) && (a > -2.35))
+                                    Bright = -30;
+                            }
 
-							else if (OldRadius >= 0.7 * Radius)
-							{
-								if ((a <= -0.10) && (a > -2.0))
-									Bright = -20;
-								else if ((a <= 2.50) && (a > 1.90))
-									Bright = 60;
-							}
+                            else if (OldRadius >= 0.7 * Radius)
+                            {
+                                if ((a <= -0.10) && (a > -2.0))
+                                    Bright = -20;
+                                else if ((a <= 2.50) && (a > 1.90))
+                                    Bright = 60;
+                            }
 
-							else if (OldRadius >= 0.6 * Radius)
-							{
-								if ((a <= -0.50) && (a > -1.75))
-									Bright = -20;
-								else if ((a <= 0) && (a > -0.25))
-									Bright = 20;
-								else if ((a <= -2.0) && (a > -2.25))
-									Bright = 20;
-							}
+                            else if (OldRadius >= 0.6 * Radius)
+                            {
+                                if ((a <= -0.50) && (a > -1.75))
+                                    Bright = -20;
+                                else if ((a <= 0) && (a > -0.25))
+                                    Bright = 20;
+                                else if ((a <= -2.0) && (a > -2.25))
+                                    Bright = 20;
+                            }
 
-							else if (OldRadius >= 0.5 * Radius)
-							{
-								if ((a <= -0.25) && (a > -0.50))
-									Bright = 30;
-								else if ((a <= -1.75 ) && (a > -2.0))
-									Bright = 30;
-							}
+                            else if (OldRadius >= 0.5 * Radius)
+                            {
+                                if ((a <= -0.25) && (a > -0.50))
+                                    Bright = 30;
+                                else if ((a <= -1.75 ) && (a > -2.0))
+                                    Bright = 30;
+                            }
 
-							else if (OldRadius >= 0.4 * Radius)
-							{
-								if ((a <= -0.5) && (a > -1.75))
-									Bright = 40;
-							}
+                            else if (OldRadius >= 0.4 * Radius)
+                            {
+                                if ((a <= -0.5) && (a > -1.75))
+                                    Bright = 40;
+                            }
 
-							else if (OldRadius >= 0.3 * Radius)
-							{
-								if ((a <= 0) && (a > -2.25))
-									Bright = 30;
-							}
+                            else if (OldRadius >= 0.3 * Radius)
+                            {
+                                if ((a <= 0) && (a > -2.25))
+                                    Bright = 30;
+                            }
 
-							else if (OldRadius >= 0.2 * Radius)
-							{
-								if ((a <= -0.5) && (a > -1.75))
-									Bright = 20;
-							}
+                            else if (OldRadius >= 0.2 * Radius)
+                            {
+                                if ((a <= -0.5) && (a > -1.75))
+                                    Bright = 20;
+                            }
 
-							BoolMatrix[n][m] = true;
+                            BoolMatrix[n][m] = true;
 
-							QColor originalColor;
+                            QColor originalColor;
 
-							KisHLineIterator oldIt = src -> createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
-							cs -> toQColor(oldIt.oldRawData(), &originalColor);
+                            KisHLineIterator oldIt = src -> createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
+                            cs -> toQColor(oldIt.oldRawData(), &originalColor);
 
-							int newRed = CLAMP(originalColor.red() + Bright, 0, QUANTUM_MAX);
-							int newGreen = CLAMP(originalColor.green() + Bright, 0, QUANTUM_MAX);
-							int newBlue = CLAMP(originalColor.blue() + Bright, 0, QUANTUM_MAX);
+                            int newRed = CLAMP(originalColor.red() + Bright, 0, QUANTUM_MAX);
+                            int newGreen = CLAMP(originalColor.green() + Bright, 0, QUANTUM_MAX);
+                            int newBlue = CLAMP(originalColor.blue() + Bright, 0, QUANTUM_MAX);
 
-							QColor newColor;
-							newColor.setRgb(newRed, newGreen, newBlue);
+                            QColor newColor;
+                            newColor.setRgb(newRed, newGreen, newBlue);
 
-							cs -> nativeColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
-						}
-					}
-				}
-			}
-		}
+                            cs -> nativeColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
+                        }
+                    }
+                }
+            }
+        }
 
-		BlurRadius = NewSize / 25 + 1;
+        BlurRadius = NewSize / 25 + 1;
 
-		for (i = -1 * halfSize - BlurRadius ; !cancelRequested() && (i < NewSize - halfSize + BlurRadius) ; i++)
-		{
-			for (j = -1 * halfSize - BlurRadius ; !cancelRequested() && (j < NewSize - halfSize + BlurRadius) ; j++)
-			{
-				r = sqrt (i * i + j * j);
+        for (i = -1 * halfSize - BlurRadius ; !cancelRequested() && (i < NewSize - halfSize + BlurRadius) ; i++)
+        {
+            for (j = -1 * halfSize - BlurRadius ; !cancelRequested() && (j < NewSize - halfSize + BlurRadius) ; j++)
+            {
+                r = sqrt (i * i + j * j);
 
-				if (r <= Radius * 1.1)
-				{
-					R = G = B = 0;
-					BlurPixels = 0;
+                if (r <= Radius * 1.1)
+                {
+                    R = G = B = 0;
+                    BlurPixels = 0;
 
-					for (k = -1 * BlurRadius; k < BlurRadius + 1; k++)
-						for (l = -1 * BlurRadius; l < BlurRadius + 1; l++)
-						{
-							m = x + i + k;
-							n = y + j + l;
+                    for (k = -1 * BlurRadius; k < BlurRadius + 1; k++)
+                        for (l = -1 * BlurRadius; l < BlurRadius + 1; l++)
+                        {
+                            m = x + i + k;
+                            n = y + j + l;
 
-							if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-							{
-								QColor color;
-								cs -> toQColor(src -> pixel(rect.x() + n, rect.y() + m),
-												   &color);
+                            if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                            {
+                                QColor color;
+                                cs -> toQColor(src -> pixel(rect.x() + n, rect.y() + m),
+                                                   &color);
 
-								R += color.red();
-								G += color.green();
-								B += color.blue();
-								BlurPixels++;
-							}
-						}
+                                R += color.red();
+                                G += color.green();
+                                B += color.blue();
+                                BlurPixels++;
+                            }
+                        }
 
                                         m = x + i;
                                         n = y + j;
 
                                         if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                                         {
-						QColor color;
+                        QColor color;
 
-						color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-						cs -> nativeColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
+                        color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
+                        cs -> nativeColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
                                         }
                                 }
                         }
                 }
 
-		setProgress(NumBlurs);
+        setProgress(NumBlurs);
         }
 
-	KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+    KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
-	while (!it.isDone()) {
+    while (!it.isDone()) {
 
-		if (!it.isSelected()) {
-			memcpy(it.rawData(), it.oldRawData(), src -> pixelSize());
-		}
-		++it;
-	}
+        if (!it.isSelected()) {
+            memcpy(it.rawData(), it.oldRawData(), src -> pixelSize());
+        }
+        ++it;
+    }
 
         FreeBoolArray (BoolMatrix, Width);
 
-	setProgressDone();
+    setProgressDone();
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -412,20 +412,20 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
 
 KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
-	vKisIntegerWidgetParam param;
-	param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
-	param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
-	param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
-	return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    vKisIntegerWidgetParam param;
+    param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
+    param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
+    param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
+    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
 KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
 {
-	KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
-	if( widget == 0 )
-	{
-		return new KisRainDropsFilterConfiguration( 30, 80, 20);
-	} else {
-		return new KisRainDropsFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ) );
-	}
+    KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+    if( widget == 0 )
+    {
+        return new KisRainDropsFilterConfiguration( 30, 80, 20);
+    } else {
+        return new KisRainDropsFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ) );
+    }
 }

@@ -32,22 +32,22 @@
  * into layers: one layer for each color channel.
  */
 class DlgSeparate: public KDialogBase {
-	typedef KDialogBase super;
-	Q_OBJECT
+    typedef KDialogBase super;
+    Q_OBJECT
 
 public:
 
-	DlgSeparate(QWidget * parent = 0,
-			 const char* name = 0);
-	~DlgSeparate();
+    DlgSeparate(QWidget * parent = 0,
+             const char* name = 0);
+    ~DlgSeparate();
 
 private slots:
 
-	void okClicked();
+    void okClicked();
 
 private:
 
-	WdgSeparations * m_page;
+    WdgSeparations * m_page;
 
 };
 

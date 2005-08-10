@@ -31,71 +31,71 @@
 #include "kis_undo_adapter.h"
 
 namespace {
-	class MoveCommand : public KNamedCommand {
-		typedef KNamedCommand super;
+    class MoveCommand : public KNamedCommand {
+        typedef KNamedCommand super;
 
-	public:
-		MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
-		virtual ~MoveCommand();
+    public:
+        MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+        virtual ~MoveCommand();
 
-		virtual void execute();
-		virtual void unexecute();
+        virtual void execute();
+        virtual void unexecute();
 
-	private:
-		void moveTo(const QPoint& pos);
+    private:
+        void moveTo(const QPoint& pos);
 
-	private:
-		KisCanvasControllerInterface *m_controller;
-		KisPaintDeviceSP m_device;
-		QPoint m_oldPos;
-		QPoint m_newPos;
-		KisImageSP m_img;
-	};
+    private:
+        KisCanvasControllerInterface *m_controller;
+        KisPaintDeviceSP m_device;
+        QPoint m_oldPos;
+        QPoint m_newPos;
+        KisImageSP m_img;
+    };
 
-	MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
-		super(i18n("Moved Painting Device"))
-	{
-		m_controller = controller;
-		m_img = img;
-		m_device = device;
-		m_oldPos = oldpos;
-		m_newPos = newpos;
-	}
+    MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
+        super(i18n("Moved Painting Device"))
+    {
+        m_controller = controller;
+        m_img = img;
+        m_device = device;
+        m_oldPos = oldpos;
+        m_newPos = newpos;
+    }
 
-	MoveCommand::~MoveCommand()
-	{
-	}
+    MoveCommand::~MoveCommand()
+    {
+    }
 
-	void MoveCommand::execute()
-	{
-		moveTo(m_newPos);
-	}
+    void MoveCommand::execute()
+    {
+        moveTo(m_newPos);
+    }
 
-	void MoveCommand::unexecute()
-	{
-		moveTo(m_oldPos);
-	}
+    void MoveCommand::unexecute()
+    {
+        moveTo(m_oldPos);
+    }
 
-	void MoveCommand::moveTo(const QPoint& pos)
-	{
-//		QRect rc;
+    void MoveCommand::moveTo(const QPoint& pos)
+    {
+//        QRect rc;
 
-//		rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
-		m_device -> move(pos.x(), pos.y());
-//		rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
-//		m_img -> invalidate(); //rc);
-		m_controller -> updateCanvas(); //rc);
-	}
+//        rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+        m_device -> move(pos.x(), pos.y());
+//        rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
+//        m_img -> invalidate(); //rc);
+        m_controller -> updateCanvas(); //rc);
+    }
 }
 
 KisStrategyMove::KisStrategyMove()
 {
-	reset(0);
+    reset(0);
 }
 
 KisStrategyMove::KisStrategyMove(KisCanvasSubject *subject)
 {
-	reset(subject);
+    reset(subject);
 }
 
 KisStrategyMove::~KisStrategyMove()
@@ -104,109 +104,109 @@ KisStrategyMove::~KisStrategyMove()
 
 void KisStrategyMove::reset(KisCanvasSubject *subject)
 {
-	m_subject = subject;
-	m_dragging = false;
+    m_subject = subject;
+    m_dragging = false;
 
-	if (m_subject) {
-		m_doc = subject -> document();
-		m_controller = subject -> canvasController();
-	} else {
-		m_doc = 0;
-		m_controller = 0;
-	}
+    if (m_subject) {
+        m_doc = subject -> document();
+        m_controller = subject -> canvasController();
+    } else {
+        m_doc = 0;
+        m_controller = 0;
+    }
 }
 
 void KisStrategyMove::startDrag(const QPoint& pos)
 {
-	// pos is the user chosen handle point
-	
-	if (m_subject) {
-		KisImageSP img;
-		KisPaintDeviceSP dev;
+    // pos is the user chosen handle point
+    
+    if (m_subject) {
+        KisImageSP img;
+        KisPaintDeviceSP dev;
 
-		if (!(img = m_subject -> currentImg()))
-			return;
+        if (!(img = m_subject -> currentImg()))
+            return;
 
-		dev = img -> activeDevice();
+        dev = img -> activeDevice();
 
-		if (!dev || !dev -> visible())
-			return;
+        if (!dev || !dev -> visible())
+            return;
 
-		m_dragging = true;
-		m_doc -> setModified(true);
-		m_dragStart.setX(pos.x());
-		m_dragStart.setY(pos.y());
-		m_layerStart.setX(dev -> getX());
-		m_layerStart.setY(dev -> getY());
-		m_layerPosition = m_layerStart;
-	}
+        m_dragging = true;
+        m_doc -> setModified(true);
+        m_dragStart.setX(pos.x());
+        m_dragStart.setY(pos.y());
+        m_layerStart.setX(dev -> getX());
+        m_layerStart.setY(dev -> getY());
+        m_layerPosition = m_layerStart;
+    }
 }
 
 void KisStrategyMove::drag(const QPoint& original)
 {
-	// original is the position of the user chosen handle point
-	
-	if (m_subject && m_dragging) {
-		KisImageSP img = m_subject -> currentImg();
-		KisPaintDeviceSP dev;
+    // original is the position of the user chosen handle point
+    
+    if (m_subject && m_dragging) {
+        KisImageSP img = m_subject -> currentImg();
+        KisPaintDeviceSP dev;
 
-		if (img && (dev = img -> activeDevice())) {
-			QPoint pos = original;
-			QRect rc;
+        if (img && (dev = img -> activeDevice())) {
+            QPoint pos = original;
+            QRect rc;
 
-			if (pos.x() >= img -> width() || pos.y() >= img -> height())
-				return;
+            if (pos.x() >= img -> width() || pos.y() >= img -> height())
+                return;
 
-			pos -= m_dragStart; // convert to delta
-			rc = dev -> extent();
-			dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
-			rc = rc.unite(dev->extent());
-			
-			m_layerPosition = QPoint(dev ->getX(), dev ->getY());
- 			m_dragStart = original;
+            pos -= m_dragStart; // convert to delta
+            rc = dev -> extent();
+            dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
+            rc = rc.unite(dev->extent());
+            
+            m_layerPosition = QPoint(dev ->getX(), dev ->getY());
+             m_dragStart = original;
 #if 0
-			rc.setX(static_cast<Q_INT32>(rc.x() * m_subject -> zoom()));
-			rc.setY(static_cast<Q_INT32>(rc.y() * m_subject -> zoom()));
-			rc.setWidth(static_cast<Q_INT32>(rc.width() * m_subject -> zoom()));
-			rc.setHeight(static_cast<Q_INT32>(rc.height() * m_subject -> zoom()));
+            rc.setX(static_cast<Q_INT32>(rc.x() * m_subject -> zoom()));
+            rc.setY(static_cast<Q_INT32>(rc.y() * m_subject -> zoom()));
+            rc.setWidth(static_cast<Q_INT32>(rc.width() * m_subject -> zoom()));
+            rc.setHeight(static_cast<Q_INT32>(rc.height() * m_subject -> zoom()));
 #endif
-			m_controller -> updateCanvas(rc);
-		}
-	}
+            m_controller -> updateCanvas(rc);
+        }
+    }
 }
 
 void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
-	if (m_subject && m_dragging) {
-		KisImageSP img = m_subject -> currentImg();
-		KisPaintDeviceSP dev;
+    if (m_subject && m_dragging) {
+        KisImageSP img = m_subject -> currentImg();
+        KisPaintDeviceSP dev;
 
-		if (img && (dev = img -> activeDevice())) {
-			drag(pos);
-			m_dragging = false;
+        if (img && (dev = img -> activeDevice())) {
+            drag(pos);
+            m_dragging = false;
 
-			if (undo) {
-				KCommand *cmd = new MoveCommand(m_controller, img, img -> activeDevice(), m_layerStart, m_layerPosition);
-				Q_CHECK_PTR(cmd);
-				KisUndoAdapter *adapter = img -> undoAdapter();
+            if (undo) {
+                KCommand *cmd = new MoveCommand(m_controller, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+                Q_CHECK_PTR(cmd);
+                KisUndoAdapter *adapter = img -> undoAdapter();
 
-				if (adapter)
-					adapter -> addCommand(cmd);
-			}
+                if (adapter)
+                    adapter -> addCommand(cmd);
+            }
 
-		}
-	}
+        }
+    }
 }
 
 void KisStrategyMove::simpleMove(const QPoint& pt1, const QPoint& pt2)
 {
-	startDrag(pt1);
-	endDrag(pt2);
+    startDrag(pt1);
+    endDrag(pt2);
 }
 
 void KisStrategyMove::simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2)
 {
-	startDrag(QPoint(x1, y1));
-	endDrag(QPoint(x2, y2));
+    startDrag(QPoint(x1, y1));
+    endDrag(QPoint(x2, y2));
 }
 

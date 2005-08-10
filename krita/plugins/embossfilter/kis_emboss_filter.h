@@ -28,30 +28,30 @@
 class KisEmbossFilterConfiguration : public KisFilterConfiguration
 {
 public:
-	KisEmbossFilterConfiguration(Q_UINT32 depth) : m_depth(depth) {};
+    KisEmbossFilterConfiguration(Q_UINT32 depth) : m_depth(depth) {};
 public:
-	inline Q_UINT32 depth() { return m_depth; };
+    inline Q_UINT32 depth() { return m_depth; };
 private:
-	Q_UINT32 m_depth;
+    Q_UINT32 m_depth;
 };
 
 class KisEmbossFilter : public KisFilter
 {
 public:
-	KisEmbossFilter();
+    KisEmbossFilter();
 public:
-	virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-	static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
-	virtual bool supportsPainting() { return false; }
-	virtual bool supportsPreview() { return true; }
-	virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
-	{ std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
-	public:
-	virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-	virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
+    virtual bool supportsPainting() { return false; }
+    virtual bool supportsPreview() { return true; }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
+    public:
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 private:
-	void Emboss(KisPaintDeviceSP src, const QRect& rect, int d);
-	inline int Lim_Max (int Now, int Up, int Max);
+    void Emboss(KisPaintDeviceSP src, const QRect& rect, int d);
+    inline int Lim_Max (int Now, int Up, int Max);
 };
 
 #endif

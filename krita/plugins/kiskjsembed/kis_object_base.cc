@@ -30,23 +30,23 @@ namespace Bindings {
 
 ObjectFactoryBase::ObjectFactoryBase(KJS::Object parent, QString name, KJSEmbed::KJSEmbedPart *part) : JSProxyImp(part->globalExec()), m_part(part)
 {
-	parent.put( part->globalExec() , KJS::Identifier(name), KJS::Object(this) );
-	setName( KJS::Identifier( name ) );
+    parent.put( part->globalExec() , KJS::Identifier(name), KJS::Object(this) );
+    setName( KJS::Identifier( name ) );
 }
 
 void ObjectFactoryBase::bind( KJS::Object obj)
 {
-	if( m_functionsList.empty() )
-	{
-		createBindings();
-	}
-	FunctionsList_it i = m_functionsList.begin();
-	while (i != m_functionsList.end())
-	{
-		FunctionBase* fb = *i;
-		obj.put( part()->globalExec() , KJS::Identifier(fb->name()), KJS::Object(fb) );
-		++i;
-	}
+    if( m_functionsList.empty() )
+    {
+        createBindings();
+    }
+    FunctionsList_it i = m_functionsList.begin();
+    while (i != m_functionsList.end())
+    {
+        FunctionBase* fb = *i;
+        obj.put( part()->globalExec() , KJS::Identifier(fb->name()), KJS::Object(fb) );
+        ++i;
+    }
 }
 
 }; }; }; };

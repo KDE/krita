@@ -26,40 +26,40 @@
 class KisQuantum {
 
 public:
-	//XXX: Have removed the KisQuantumOperation mechanism since only Linear was used, which is 
-	// simple assignment, and it appears to be the source of hard to track bugs. It's also
-	// needlessly decreasing peformance. AP
-		
-	inline KisQuantum(QUANTUM* q) :	m_quantum(q) {};
-	
+    //XXX: Have removed the KisQuantumOperation mechanism since only Linear was used, which is 
+    // simple assignment, and it appears to be the source of hard to track bugs. It's also
+    // needlessly decreasing peformance. AP
+        
+    inline KisQuantum(QUANTUM* q) :    m_quantum(q) {};
+    
 public:
-	inline operator QUANTUM() const { return *m_quantum; };
+    inline operator QUANTUM() const { return *m_quantum; };
 
-	
-	inline QUANTUM operator=(QUANTUM q)
-		{
-			return *m_quantum = q;
-		};
+    
+    inline QUANTUM operator=(QUANTUM q)
+        {
+            return *m_quantum = q;
+        };
 
-	inline QUANTUM operator-=(QUANTUM q)
-		{
-			return (*this = *this - q);
-		}
+    inline QUANTUM operator-=(QUANTUM q)
+        {
+            return (*this = *this - q);
+        }
 
-	inline QUANTUM operator+=(QUANTUM q)
-		{
-			return (*this = *this + q);
-		}
+    inline QUANTUM operator+=(QUANTUM q)
+        {
+            return (*this = *this + q);
+        }
 
-	/** 
-	 * This operator allow to acces to a neighbour quantum, it's mean to be used
-	 * inside a pixel
-	 */
-	KisQuantum operator[](int index) const {
-		return KisQuantum( m_quantum + index );
-	}
+    /** 
+     * This operator allow to acces to a neighbour quantum, it's mean to be used
+     * inside a pixel
+     */
+    KisQuantum operator[](int index) const {
+        return KisQuantum( m_quantum + index );
+    }
 private:
-	QUANTUM* m_quantum;
+    QUANTUM* m_quantum;
 };
 
 

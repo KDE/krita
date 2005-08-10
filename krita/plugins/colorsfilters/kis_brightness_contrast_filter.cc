@@ -25,7 +25,7 @@
 
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "tiles/kis_iterator.h"

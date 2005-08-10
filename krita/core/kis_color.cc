@@ -21,7 +21,7 @@
 #include "kis_pixel.h"
 #include "kis_color.h"
 #include "kis_profile.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_colorspace_registry.h"
 
 KisColor::KisColor()
@@ -47,7 +47,7 @@ KisColor::KisColor(const QColor & color)
 	m_profile = 0;
 }
 
-KisColor::KisColor(const QColor & color, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 	: m_colorStrategy(colorStrategy),
 	  m_profile(profile)
 {
@@ -59,7 +59,7 @@ KisColor::KisColor(const QColor & color, KisStrategyColorSpace * colorStrategy, 
 }
 
 
-KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 	: m_colorStrategy(colorStrategy),
 	  m_profile(profile)
 {
@@ -71,7 +71,7 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisStrategyColorSpace * 
 	m_colorStrategy->nativeColor(color, alpha, m_data, profile);
 }
 
-KisColor::KisColor(const Q_UINT8 * data, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 	: m_colorStrategy(colorStrategy),
 	  m_profile(profile)
 {
@@ -82,7 +82,7 @@ KisColor::KisColor(const Q_UINT8 * data, KisStrategyColorSpace * colorStrategy, 
 }
 
 
-KisColor::KisColor(const KisColor &src, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+KisColor::KisColor(const KisColor &src, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 	: m_colorStrategy(colorStrategy),
 	  m_profile(profile)
 {
@@ -123,7 +123,7 @@ KisColor & KisColor::operator=(const KisColor & rhs)
 	return * this;
 }
 
-void KisColor::convertTo(KisStrategyColorSpace * cs, KisProfileSP profile)
+void KisColor::convertTo(KisAbstractColorSpace * cs, KisProfileSP profile)
 {
 	kdDebug(DBG_AREA_CMS) << "Our colormodel: " << m_colorStrategy->id().name()
 		  << ", new colormodel: " << cs->id().name() << "\n";
@@ -144,7 +144,7 @@ void KisColor::convertTo(KisStrategyColorSpace * cs, KisProfileSP profile)
 }
 
 
-void KisColor::setColor(Q_UINT8 * data, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+void KisColor::setColor(Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 {
 	delete [] m_data;
 	m_data = new Q_UINT8[colorStrategy->pixelSize()];
@@ -158,7 +158,7 @@ void KisColor::toQColor(QColor *c) const
 {
 	if (m_colorStrategy && m_data) {
 		// XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-		KisStrategyColorSpace * cs(const_cast<KisStrategyColorSpace*>(m_colorStrategy));
+		KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorStrategy));
 	
 		cs->toQColor(m_data, c, m_profile);
 	}
@@ -168,7 +168,7 @@ void KisColor::toQColor(QColor *c, QUANTUM *opacity) const
 {
 	if (m_colorStrategy && m_data) {
 		// XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-		KisStrategyColorSpace * cs(const_cast<KisStrategyColorSpace*>(m_colorStrategy));
+		KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorStrategy));
 		cs->toQColor(m_data, c, opacity, m_profile);
 	}
 }

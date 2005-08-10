@@ -26,7 +26,7 @@
 #include "kis_paintop.h"
 #include "kis_alpha_mask.h"
 #include "kis_point.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color.h"
@@ -57,7 +57,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
 	KisProfileSP profile = m_painter -> device() -> profile();
 	KisColor kc = m_painter -> paintColor();
 	
-	KisStrategyColorSpace * colorStrategy = dab -> colorStrategy();
+	KisAbstractColorSpace * colorStrategy = dab -> colorStrategy();
 
 	Q_INT32 pixelSize = colorStrategy->pixelSize();
 	

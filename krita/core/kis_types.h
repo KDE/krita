@@ -101,8 +101,8 @@ typedef KSharedPtr<KisGuide> KisGuideSP;
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
-class KisColorSpaceAlpha;
-typedef KSharedPtr<KisColorSpaceAlpha> KisColorSpaceAlphaSP;
+class KisAlphaColorSpace;
+typedef KSharedPtr<KisAlphaColorSpace> KisAlphaColorSpaceSP;
 
 
 class KisFilter;
@@ -135,5 +135,5 @@ typedef vKisFileFormatSP::const_iterator vKisFileFormatSP_cit;
 class KisMemento;
 typedef KSharedPtr<KisMemento> KisMementoSP;
 
-class KisStrategyColorSpace;
+class KisAbstractColorSpace;
 #endif // KISTYPES_H_

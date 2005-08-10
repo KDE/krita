@@ -234,8 +234,8 @@ namespace {
 
 	public:
 		KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
-				       KisDataManagerSP beforeData, KisStrategyColorSpace * beforeColorSpace, KisProfileSP beforeProfile,
-				       KisDataManagerSP afterData, KisStrategyColorSpace * afterColorSpace, KisProfileSP afterProfile
+				       KisDataManagerSP beforeData, KisAbstractColorSpace * beforeColorSpace, KisProfileSP beforeProfile,
+				       KisDataManagerSP afterData, KisAbstractColorSpace * afterColorSpace, KisProfileSP afterProfile
 				       ) : super(i18n("Convert Layer Type"))
 			{
 				m_adapter = adapter;
@@ -285,17 +285,17 @@ namespace {
 		KisPaintDeviceSP m_paintDevice;
 
 		KisDataManagerSP m_beforeData;
-		KisStrategyColorSpace * m_beforeColorSpace;
+		KisAbstractColorSpace * m_beforeColorSpace;
 		KisProfileSP m_beforeProfile;
 
 		KisDataManagerSP m_afterData;
-		KisStrategyColorSpace * m_afterColorSpace;
+		KisAbstractColorSpace * m_afterColorSpace;
 		KisProfileSP m_afterProfile;
 	};
 
 }
 
-KisPaintDevice::KisPaintDevice(KisStrategyColorSpace * colorStrategy, const QString& name) :
+KisPaintDevice::KisPaintDevice(KisAbstractColorSpace * colorStrategy, const QString& name) :
 	KShared()
 {
 	m_dcop = 0;
@@ -330,7 +330,7 @@ KisPaintDevice::KisPaintDevice(KisStrategyColorSpace * colorStrategy, const QStr
 	m_profile = 0;
 }
 
-KisPaintDevice::KisPaintDevice(KisImage *img, KisStrategyColorSpace * colorStrategy, const QString& name) :
+KisPaintDevice::KisPaintDevice(KisImage *img, KisAbstractColorSpace * colorStrategy, const QString& name) :
 	KShared()
 {
 	m_dcop = 0;
@@ -662,7 +662,7 @@ bool KisPaintDevice::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDevice::convertTo(KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
 	if (profile() == 0) setProfile(m_owner -> profile());
 
@@ -715,7 +715,7 @@ void KisPaintDevice::convertTo(KisStrategyColorSpace * dstColorStrategy, KisProf
 	setData(dst.m_datamanager, dstColorStrategy, dstProfile);
 }
 
-void KisPaintDevice::setData(KisDataManagerSP data, KisStrategyColorSpace * colorStrategy, KisProfileSP profile)
+void KisPaintDevice::setData(KisDataManagerSP data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
 {
 	m_datamanager = data;
 	m_colorStrategy = colorStrategy;

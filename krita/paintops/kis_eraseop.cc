@@ -31,7 +31,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 
 #include "kis_eraseop.h"
 
@@ -108,7 +108,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 		dab -> setOpacity(OPACITY_OPAQUE);
 		KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
 		KisProfileSP profile = dab -> profile();
-		KisStrategyColorSpace* cs = dab -> colorStrategy();
+		KisAbstractColorSpace* cs = dab -> colorStrategy();
 		while (!it.isDone()) {
 			// the color doesn't matter, since we only composite the alpha
 			cs -> nativeColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),

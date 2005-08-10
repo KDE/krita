@@ -141,7 +141,7 @@ void KisDlgImageProperties::okClicked()
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 	vKisProfileSP profileList = cs -> profiles();

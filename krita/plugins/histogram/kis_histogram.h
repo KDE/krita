@@ -21,7 +21,7 @@
 #include <qvaluevector.h>
 
 #include "kis_types.h"
-#include "color_strategy/kis_strategy_colorspace.h"
+#include "color_strategy/kis_abstract_colorspace.h"
 /**
  * The histogram class computes the histogram data from the specified layer
  * for the specified channel.

@@ -182,7 +182,7 @@ namespace {
 
 }
 
-KisLayer::KisLayer(KisStrategyColorSpace * colorStrategy, const QString& name)
+KisLayer::KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name)
 	: super(colorStrategy, name),
 	  m_opacity(OPACITY_OPAQUE),
 	  m_linked(false),
@@ -206,7 +206,7 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 #endif
 }
 
-KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisStrategyColorSpace * colorStrategy)
+KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorStrategy)
 	: super(img, colorStrategy, name),
 	  m_opacity(opacity),
 	  m_linked(false),

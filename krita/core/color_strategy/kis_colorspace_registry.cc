@@ -20,7 +20,7 @@
 
 #include "kis_types.h"
 #include "kis_colorspace_registry.h"
-#include "kis_colorspace_xyz.h"
+#include "kis_xyz_colorspace.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
@@ -40,7 +40,7 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 	{
 		KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
 		Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
-		m_singleton->add(new KisColorspaceXYZ());
+		m_singleton->add(new KisXyzColorSpace());
 	}
 	return KisColorSpaceRegistry::m_singleton;
 }

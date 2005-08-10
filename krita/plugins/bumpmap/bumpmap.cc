@@ -89,7 +89,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
 namespace {
 	void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
 	{
-		KisStrategyColorSpace * csOrig = orig->colorStrategy();
+		KisAbstractColorSpace * csOrig = orig->colorStrategy();
 
 		KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
 		for (int i = 0; i < w; ++i) {
@@ -227,7 +227,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 	// ---------------------- Load initial three bumpmap scanlines
 	
-	KisStrategyColorSpace * srcCs = src->colorStrategy();
+	KisAbstractColorSpace * srcCs = src->colorStrategy();
 	vKisChannelInfoSP channels = srcCs->channels();
 
 	// One byte per pixel, converted from the bumpmap layer.

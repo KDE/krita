@@ -94,8 +94,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 
 	// Load extension modules and plugins
-//  	KisToolRegistry::instance();
-
+  	KisToolRegistry::instance();
 	KisPaintOpRegistry::instance();
 	KisFilterRegistry::instance();
 	KisColorSpaceRegistry::instance();

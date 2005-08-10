@@ -46,7 +46,7 @@
 
 #include "histogram.h"
 #include "dlg_histogram.h"
-#include "color_strategy/kis_strategy_colorspace.h"
+#include "color_strategy/kis_abstract_colorspace.h"
 #include "kis_histogram.h"
 
 typedef KGenericFactory<Histogram> HistogramFactory;

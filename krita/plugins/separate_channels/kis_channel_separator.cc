@@ -44,7 +44,7 @@
 #include <kis_types.h>
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
-#include <kis_strategy_colorspace.h>
+#include <kis_abstract_colorspace.h>
 #include <kis_colorspace_registry.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
@@ -76,7 +76,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
 	}
 
 	Q_UINT32 numberOfChannels = src -> nChannels();
-	KisStrategyColorSpace * colorStrategy = src -> colorStrategy();
+	KisAbstractColorSpace * colorStrategy = src -> colorStrategy();
 	vKisChannelInfoSP channels = colorStrategy -> channels();
 
 	vKisLayerSP layers;

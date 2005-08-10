@@ -102,7 +102,7 @@ public:
 	 * Create a new image that has this document as a parent and
 	 * replace the current image with this image.
 	 */
-	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpace * colorstrategy);
+	KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy);
 
 	void renameImage(const QString& oldName, const QString& newName);
 

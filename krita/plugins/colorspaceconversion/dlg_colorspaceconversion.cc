@@ -30,13 +30,13 @@
 
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include <kis_id.h>
 
 #include "dlg_colorspaceconversion.h"
 #include "wdgconvertcolorspace.h"
 
-DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
+DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
 						  const char * name)
 	: super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
 {
@@ -62,37 +62,37 @@ DlgColorspaceConversion::DlgColorspaceConversion( QWidget *  parent,
 
 }
 
-DlgColorspaceConversion::~DlgColorspaceConversion()
+DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {
 	delete m_page;
 }
 
 // SLOTS
 
-void DlgColorspaceConversion::okClicked()
+void DlgColorSpaceConversion::okClicked()
 {
 	accept();
 }
 
 
-void DlgColorspaceConversion::fillCmbDestProfile(const KisID & s)
+void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
 	fillCmbProfile(m_page -> cmbDestProfile, s);
 	
 }
 
-void DlgColorspaceConversion::fillCmbSrcProfile(const KisID & s)
+void DlgColorSpaceConversion::fillCmbSrcProfile(const KisID & s)
 {
 	fillCmbProfile(m_page -> cmbSourceProfile, s);
 
 }
 
-void DlgColorspaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
+void DlgColorSpaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
 {
 	cmb -> clear();
 	cmb -> insertItem(i18n("None"));
 
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 
 	vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;

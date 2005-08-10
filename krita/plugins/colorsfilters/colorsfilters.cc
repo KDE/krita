@@ -43,7 +43,7 @@
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
 #include <kis_pixel.h>
-#include <kis_strategy_colorspace.h>
+#include <kis_abstract_colorspace.h>
 
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
@@ -284,7 +284,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 	KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 	KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 	
-	KisStrategyColorSpace * scs = src -> colorStrategy();
+	KisAbstractColorSpace * scs = src -> colorStrategy();
 	KisProfileSP profile = src -> profile();
 
 	setProgressTotalSteps(rect.width() * rect.height());

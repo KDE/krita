@@ -39,7 +39,7 @@ public:
 			    const QPoint& pos,
 			    Q_INT32 opacity,
 			    const KisCompositeOp& compositeOp,
-			    const KisStrategyColorSpace * colorSpace,
+			    const KisAbstractColorSpace * colorSpace,
 			    QWidget *parent = 0, const char *name = 0, WFlags f = 0);
 	virtual ~KisPaintPropertyDlg();
 

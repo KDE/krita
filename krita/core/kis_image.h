@@ -52,7 +52,7 @@ class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 
 public:
 	KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,
-		 KisStrategyColorSpace * colorStrategy, const QString& name);
+		 KisAbstractColorSpace * colorStrategy, const QString& name);
 	KisImage(const KisImage& rhs);
 	virtual ~KisImage();
 	virtual DCOPObject *dcopObject();
@@ -88,7 +88,7 @@ public:
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
-	void convertTo(KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+	void convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	// Get the profile associated with this image
 	KisProfileSP profile() const;
@@ -99,8 +99,8 @@ public:
 
 	void enableUndo(KoCommandHistory *history);
 
-	KisStrategyColorSpace * colorStrategy() const;
-	void setColorStrategy(KisStrategyColorSpace * colorStrategy);
+	KisAbstractColorSpace * colorStrategy() const;
+	void setColorStrategy(KisAbstractColorSpace * colorStrategy);
 
 	KURL uri() const;
 	void uri(const KURL& uri);
@@ -134,7 +134,7 @@ public:
 	KisPaintDeviceSP activeDevice();
 
 	KisLayerSP layerAdd(const QString& name, QUANTUM devOpacity);
-	KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisStrategyColorSpace * colorstrategy);
+	KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisAbstractColorSpace * colorstrategy);
 	KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
 	
 	void layerRemove(KisLayerSP layer);
@@ -233,7 +233,7 @@ public slots:
 
 private:
 	KisImage& operator=(const KisImage& rhs);
-	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisStrategyColorSpace * colorStrategy, const QString& name);
+	void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorStrategy, const QString& name);
 
 private:
 	KisDoc *m_doc;
@@ -252,7 +252,7 @@ private:
 
 	KoUnit::Unit m_unit;
 
-	KisStrategyColorSpace * m_colorStrategy;
+	KisAbstractColorSpace * m_colorStrategy;
 
 	bool m_dirty;
 	QRect m_dirtyRect;

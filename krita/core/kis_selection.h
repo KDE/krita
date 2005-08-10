@@ -81,7 +81,7 @@ public:
 	
 private:
 	KisPaintDeviceSP m_parentLayer;
-	KisColorSpaceAlphaSP m_alpha;
+	KisAlphaColorSpaceSP m_alpha;
 };
 
 #endif // KIS_SELECTION_H_

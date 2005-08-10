@@ -32,15 +32,15 @@ class QComboBox;
 /**
  * XXX
  */
-class DlgColorspaceConversion: public KDialogBase {
+class DlgColorSpaceConversion: public KDialogBase {
 	typedef KDialogBase super;
 	Q_OBJECT
 
 public:
 
-	DlgColorspaceConversion(QWidget * parent = 0,
+	DlgColorSpaceConversion(QWidget * parent = 0,
 			 const char* name = 0);
-	~DlgColorspaceConversion();
+	~DlgColorSpaceConversion();
 
 	WdgConvertColorSpace * m_page;
 

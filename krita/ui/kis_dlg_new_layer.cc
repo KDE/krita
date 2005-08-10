@@ -32,7 +32,7 @@
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_paint_properties.h"
 #include "kis_colorspace_registry.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 			       const QString & deviceName,
@@ -120,7 +120,7 @@ QString NewLayerDialog::layerName() const
 
 void NewLayerDialog::slotSetColorStrategy(const KisID &colorStrategyId)
 {
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
 	if (cs) {
 		m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
 	}

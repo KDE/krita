@@ -38,7 +38,7 @@
 #include "kis_dlg_create_img.h"
 #include "wdgnewimage.h"
 #include "kis_profile.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_factory.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
@@ -131,7 +131,7 @@ QString KisDlgCreateImg::imgDescription() const
 
 KisProfileSP KisDlgCreateImg::profile() const
 {
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
 	if (!cs) return 0;
 
 	vKisProfileSP resourceslist = cs -> profiles();
@@ -155,7 +155,7 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 	if (cs == 0) return;
 
 	vKisProfileSP profileList = cs -> profiles();

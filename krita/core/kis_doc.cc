@@ -65,7 +65,7 @@
 #include "kis_fill_painter.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
 #include "kis_id.h"
@@ -398,7 +398,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 			colorspacename = "RGBA";
 		}
 		
-		KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+		KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
 		if (cs == 0) {
 			// return 0;
 			if (colorspacename  == "Grayscale + Alpha")
@@ -548,13 +548,13 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 	kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
 	
 	QString colorspacename = element.attribute("colorspacename");
-	KisStrategyColorSpace * colorSpace = img -> colorStrategy();
+	KisAbstractColorSpace * colorSpace = img -> colorStrategy();
 	
-	kdDebug() << "Colorspace name in layer: " << colorspacename << "\n";
+	kdDebug() << "ColorSpace name in layer: " << colorspacename << "\n";
 	if (!colorspacename.isNull()) {
 		colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
 	}
-	kdDebug(DBG_AREA_FILE) << "Colorspace: " << colorspacename << "\n";
+	kdDebug(DBG_AREA_FILE) << "ColorSpace: " << colorspacename << "\n";
 	
 	if (colorSpace == 0) {
 		kdDebug() << "Could not get colorspace: aborting\n";
@@ -770,7 +770,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisStrategyColorSpace * colorstrategy)
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy)
 {
 	KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
 	Q_CHECK_PTR(img);
@@ -806,7 +806,7 @@ bool KisDoc::slotNewImage()
 		KisImageSP img;
 		KisLayerSP layer;
 
-		KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
+		KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
 
 		if (!cs) return false;
 

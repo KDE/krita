@@ -49,7 +49,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -257,8 +257,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 	m_size = m_width * m_height;
 
 	KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
-	KisStrategyColorSpace * colorStrategy = selection -> colorStrategy();
-	KisStrategyColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
+	KisAbstractColorSpace * colorStrategy = selection -> colorStrategy();
+	KisAbstractColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
 	
 	QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
 	KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);

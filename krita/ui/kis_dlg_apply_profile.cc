@@ -23,7 +23,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_types.h"
 #include "kis_profile.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
 #include "kis_id.h"
@@ -66,7 +66,7 @@ KisProfileSP KisDlgApplyProfile::profile() const
 	}
 	// XXX: This is bad -- hardcoded for one color model. This dialog ought to be part
 	// of the rgba color strategy.
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 	return cs -> getProfileByName(profileName);
 }
 
@@ -80,7 +80,7 @@ int KisDlgApplyProfile::renderIntent() const
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
 
-	KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+	KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 	m_page -> cmbProfile -> clear();
 	m_page -> cmbProfile -> insertItem(i18n("None"));
 	vKisProfileSP profileList = cs -> profiles();

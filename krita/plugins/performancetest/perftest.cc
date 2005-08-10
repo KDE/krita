@@ -55,7 +55,7 @@
 #include <kis_view.h>
 #include <kis_selection.h>
 #include <kis_colorspace_registry.h>
-#include <kis_strategy_colorspace.h>
+#include <kis_abstract_colorspace.h>
 #include <kis_painter.h>
 #include <kis_fill_painter.h>
 #include <kis_id.h>

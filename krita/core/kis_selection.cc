@@ -28,20 +28,20 @@
 #include "kis_types.h"
 #include "kis_colorspace_registry.h"
 #include "kis_fill_painter.h"
-#include "kis_colorspace_alpha.h"
+#include "kis_alpha_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
  	: super(
 		layer -> image(), 
- 		new KisColorSpaceAlpha(), // Note that the alpha color
+ 		new KisAlphaColorSpace(), // Note that the alpha color
 					  // model has _state_, so we
 					  // create a new one, instead
 		name)
 {
 	m_parentLayer = layer;
-	m_alpha = KisColorSpaceAlphaSP(dynamic_cast<KisColorSpaceAlpha*> (colorStrategy()));
+	m_alpha = KisAlphaColorSpaceSP(dynamic_cast<KisAlphaColorSpace*> (colorStrategy()));
 }
 
 

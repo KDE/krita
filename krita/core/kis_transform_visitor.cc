@@ -207,7 +207,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, 
 	Q_UINT8 *data;
 	Q_UINT8 pixelSize = src->pixelSize();
 	KisSelectionSP dstSelection;
-	KisStrategyColorSpace * cs = src->colorStrategy();
+	KisAbstractColorSpace * cs = src->colorStrategy();
 	Q_INT32 scale;
 	Q_INT32 scaleDenom;
 	

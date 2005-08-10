@@ -95,7 +95,7 @@ void KisClipboard::clipboardDataChanged()
 		QImage qimg = cb -> image();
 
 		if (!qimg.isNull()) {
-			KisStrategyColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
+			KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
 
 			m_clip =
 				new KisPaintDevice(cs,

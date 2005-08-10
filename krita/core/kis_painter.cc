@@ -52,7 +52,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -192,7 +192,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 	sw = srcRect.width();
 	sh = srcRect.height();
 
-	KisStrategyColorSpace * srcCs = srcdev -> colorStrategy();
+	KisAbstractColorSpace * srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
 	Q_INT32 dstY = dy;
@@ -287,7 +287,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 	sw = srcRect.width();
 	sh = srcRect.height();
 
-	KisStrategyColorSpace * srcCs = srcdev -> colorStrategy();
+	KisAbstractColorSpace * srcCs = srcdev -> colorStrategy();
 	KisProfileSP srcProfile = srcdev -> profile();
 
 	Q_INT32 dstY = dy;

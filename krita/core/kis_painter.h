@@ -342,7 +342,7 @@ protected:
 	double m_pressure;
 	bool m_cancelRequested;
 	Q_INT32 m_pixelSize;
-	KisStrategyColorSpace * m_colorStrategy;
+	KisAbstractColorSpace * m_colorStrategy;
 	KisProfileSP m_profile;
 	KisPaintDeviceSP m_dab;
 

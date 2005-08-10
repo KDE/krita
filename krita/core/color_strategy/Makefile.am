@@ -6,11 +6,11 @@ INCLUDES  = -I$(srcdir)/.. \
 
 noinst_LTLIBRARIES = libkiscolor_strategy.la
 
-libkiscolor_strategy_la_SOURCES = kis_strategy_colorspace.cc \
+libkiscolor_strategy_la_SOURCES = kis_abstract_colorspace.cc \
 	kis_colorspace_registry.cc \
-	kis_colorspace_alpha.cc \
+	kis_alpha_colorspace.cc \
 	kis_color_conversions.cc \
-	kis_colorspace_xyz.cc
+	kis_xyz_colorspace.cc
 
 libkiscolor_strategy_la_METASOURCES = AUTO
 

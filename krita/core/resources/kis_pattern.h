@@ -45,10 +45,10 @@ public:
 	virtual QImage img();
 
 	/**
-	 * returns a KisLayerSP made with colorSpace as the Colorspace strategy
+	 * returns a KisLayerSP made with colorSpace as the ColorSpace strategy
 	 * for use in the fill painter.
 	 **/
-	KisLayerSP image(KisStrategyColorSpace * colorSpace);
+	KisLayerSP image(KisAbstractColorSpace * colorSpace);
 
 	Q_INT32 width() const;
 	Q_INT32 height() const;

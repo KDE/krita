@@ -30,7 +30,7 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "tiles/kis_datamanager.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
@@ -59,11 +59,11 @@ class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
         Q_OBJECT
 
 public:
-	KisPaintDevice(KisStrategyColorSpace * colorStrategy,
+	KisPaintDevice(KisAbstractColorSpace * colorStrategy,
 			const QString& name);
 	
 	KisPaintDevice(KisImage *img,
-			KisStrategyColorSpace * colorStrategy,
+			KisAbstractColorSpace * colorStrategy,
 			const QString& name);
 
 	KisPaintDevice(const KisPaintDevice& rhs);
@@ -169,7 +169,7 @@ public:
 	/**
 	 *   Converts the paint device to a different colorspace
 	 */
-	virtual void convertTo(KisStrategyColorSpace * dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+	virtual void convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
 	/**
 	 * Fill this paint device with the data from img;
@@ -246,7 +246,7 @@ public:
 
         bool hasAlpha() const;
 
-	KisStrategyColorSpace * colorStrategy() const;
+	KisAbstractColorSpace * colorStrategy() const;
 
 	/**
 	 * Return the icm profile associated with this layer, or
@@ -268,7 +268,7 @@ public:
 	/**
 	 * Replace the pixel data, color strategy, and profile.
 	 */
-	void setData(KisDataManagerSP data, KisStrategyColorSpace * colorStrategy, KisProfileSP profile);
+	void setData(KisDataManagerSP data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile);
 
 	KisCompositeOp compositeOp() { return m_compositeOp; }
 	void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
@@ -388,7 +388,7 @@ private:
 	QString m_name;
 	// Operation used to composite this layer with the layers _under_ this layer
 	KisCompositeOp m_compositeOp;
-	KisStrategyColorSpace * m_colorStrategy;
+	KisAbstractColorSpace * m_colorStrategy;
 	// Cached for quick access
 	Q_INT32 m_pixelSize;
 	Q_INT32 m_nChannels;
@@ -421,7 +421,7 @@ inline Q_INT32 KisPaintDevice::nChannels() const
 ;
 }
 
-inline KisStrategyColorSpace * KisPaintDevice::colorStrategy() const
+inline KisAbstractColorSpace * KisPaintDevice::colorStrategy() const
 {
 	Q_ASSERT(m_colorStrategy != 0);
         return m_colorStrategy;

@@ -48,7 +48,7 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <kis_view.h>
-#include <kis_strategy_colorspace.h>
+#include <kis_abstract_colorspace.h>
 #include <kis_profile.h>
 #include "kis_color_conversions.h"
 #include "kis_selected_transaction.h"
@@ -291,7 +291,7 @@ void DlgColorRange::slotSelectClicked()
 	// XXX: Multithread this!
 	Q_INT32 x, y, w, h;
 	m_layer -> exactBounds(x, y, w, h);
-	KisStrategyColorSpace * cs = m_layer -> colorStrategy();
+	KisAbstractColorSpace * cs = m_layer -> colorStrategy();
 	KisProfileSP profile = m_layer -> profile();
 	QUANTUM opacity;
 	for (int y2 = y; y2 < h - y; ++y2) {

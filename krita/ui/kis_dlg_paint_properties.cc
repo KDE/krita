@@ -29,13 +29,13 @@
 #include "kis_dlg_paint_properties.h"
 #include "kis_dlg_paint_properties.moc"
 #include "kis_cmb_composite.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 
 KisPaintPropertyDlg::KisPaintPropertyDlg(const QString& deviceName,
 					 const QPoint& pos,
 					 Q_INT32 opacity,
 					 const KisCompositeOp& compositeOp,
-					 const KisStrategyColorSpace * colorSpace,
+					 const KisAbstractColorSpace * colorSpace,
 					 QWidget *parent, const char *name, WFlags f)
 	: super(parent, name, f, name, Ok | Cancel)
 {

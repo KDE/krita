@@ -28,17 +28,17 @@ class KisView;
 /**
  * Dialog for converting between color models.
  */
-class ColorspaceConversion : public KParts::Plugin
+class ColorSpaceConversion : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	ColorspaceConversion(QObject *parent, const char *name, const QStringList &);
-	virtual ~ColorspaceConversion();
+	ColorSpaceConversion(QObject *parent, const char *name, const QStringList &);
+	virtual ~ColorSpaceConversion();
 	
 private slots:
 
-	void slotImgColorspaceConversion();
-	void slotLayerColorspaceConversion();
+	void slotImgColorSpaceConversion();
+	void slotLayerColorSpaceConversion();
 
 private:
 

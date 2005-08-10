@@ -47,7 +47,7 @@
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_strategy_colorspace.h"
+#include "kis_abstract_colorspace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
@@ -603,7 +603,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 	if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
 		emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
-		KisStrategyColorSpace * cs = layer->colorStrategy();
+		KisAbstractColorSpace * cs = layer->colorStrategy();
 		for (int y = starty; y <= endy; y++) {
 			KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
 			for (int x = startx; x <= endx; x++) {

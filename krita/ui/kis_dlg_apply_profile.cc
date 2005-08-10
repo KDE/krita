@@ -64,10 +64,8 @@ KisProfileSP KisDlgApplyProfile::profile() const
     } else {
         profileName = m_page -> cmbProfile -> currentText();
     }
-    // XXX: This is bad -- hardcoded for one color model. This dialog ought to be part
-    // of the rgba color strategy.
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
-    return cs -> getProfileByName(profileName);
+    
+    return KisColorSpaceRegistry::instance()->getProfileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const

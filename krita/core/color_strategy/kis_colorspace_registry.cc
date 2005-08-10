@@ -16,8 +16,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kdebug.h"
 
+#include <qdir.h>
+
+#include "kdebug.h"
+#include <kstandarddirs.h>
+#include <kinstance.h>
+
+#include "kis_factory.h"
 #include "kis_types.h"
 #include "kis_colorspace_registry.h"
 #include "kis_xyz_colorspace.h"
@@ -41,17 +47,65 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
         KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
         Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
         m_singleton->add(new KisXyzColorSpace());
+        m_singleton->resetProfiles();
     }
     return KisColorSpaceRegistry::m_singleton;
 }
 
-KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name) const
+KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name)
 {
-    KisProfileSP profile = 0;
-    KisIDList keys = listKeys();
-    for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
-        profile = get(*it) -> getProfileByName(name);
-        if (profile != 0) return profile;
+    if (m_profileMap.find(name) == m_profileMap.end()) {
+        return 0;
     }
-    return profile;
+
+    return m_profileMap[name];
+}
+
+vKisProfileSP KisColorSpaceRegistry::profilesFor(KisAbstractColorSpace * cs)
+{
+    vKisProfileSP profiles;
+    
+    QMap<QString, KisProfileSP>::Iterator it;
+    for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
+        KisProfileSP profile = it.data();
+        if (profile->colorSpaceSignature() == cs->colorSpaceSignature()) {
+            profile->setColorType(cs->colorSpaceType());
+            profiles.push_back(profile);
+        }
+    }
+    return profiles;
+}
+
+void KisColorSpaceRegistry::resetProfiles()
+{
+    // XXX: Should find a way to make sure not all profiles are read for all color strategies
+
+    QStringList profileFilenames;
+    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icc");
+    
+    QDir d("/usr/share/color/icc/", "*.icc");
+    profileFilenames += d.entryList();
+    
+    d.setCurrent("/usr/share/color/icc/");
+    d.setNameFilter("*.icm");
+    
+    profileFilenames += d.entryList();
+    
+    if (!profileFilenames.empty()) {
+        KisProfile * profile = 0;
+        for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
+
+            profile = new KisProfile(*it);
+            Q_CHECK_PTR(profile);
+
+            profile -> load();
+            if (profile -> valid()) {
+                m_profileMap[profile->productName()] = profile;
+            }
+        }
+    }
+
 }

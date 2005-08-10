@@ -28,14 +28,13 @@ K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory(
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(KisPixelizeFilterPluginFactory::instance());
+    setInstance(KisPixelizeFilterPluginFactory::instance());
 
-        kdDebug(DBG_AREA_PLUGINS) << "PixelizeFilter plugin. Class: "
+    kdDebug(DBG_AREA_PLUGINS) << "PixelizeFilter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
 
     if ( parent->inherits("KisFactory") )
     {

@@ -166,23 +166,14 @@ public:
     /**
      * Get a list of profiles that apply to this color space
      */
-    vKisProfileSP profiles() { return m_profiles; }
+    vKisProfileSP profiles();
 
-    /**
-     * Reload the profiles from disk
-     */
-    void resetProfiles();
 
     /**
      * Return the number of profiles available for this color space
      */
-    Q_INT32 profileCount() const { return m_profiles.count(); }
+    Q_INT32 profileCount();
 
-    /**
-     * Return the profile associated with the given product name,
-     * or 0.
-     */
-    KisProfileSP getProfileByName(const QString & name);
 
 
 //================= Conversion functions ==================================//
@@ -277,6 +268,18 @@ public:
      */
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
+
+    /**
+     * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this.
+     */
+    virtual void applyAphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    /**
+     * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this.
+     */
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
@@ -398,8 +401,8 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    vKisProfileSP m_profiles;
-    
+    Q_UINT32 m_cachesize;
+    Q_UINT8 * m_conversionCache;
 
 };
 

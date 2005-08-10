@@ -885,21 +885,16 @@ void KisPaintDevice::clearSelection()
 
     QRect r = m_selection -> selectedRect();
     r = r.normalize();
-
+    
     for (Q_INT32 y = 0; y < r.height(); y++) {
         KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
         KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
         while (!devIt.isDone()) {
-            KisPixel p = toPixel(devIt.rawData());
-            KisPixel s = m_selection -> toPixel(selectionIt.rawData());
-            // XXX: Why Q_UIN16 here? Doesn't that clash with UINT8_MULT later on?
-            Q_UINT16 p_alpha, s_alpha;
-            p_alpha = p.alpha();
-            s_alpha = MAX_SELECTED - s.alpha();
-            // XXX: Move to colorspace
-            p.alpha() = UINT8_MULT(p_alpha, s_alpha);
-
+            // XXX: Optimize by using stretches
+            
+            m_colorStrategy->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
+            
             ++devIt;
             ++selectionIt;
         }
@@ -917,11 +912,8 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
         KisHLineIterator maskIt = mask -> createHLineIterator(r.x(), y, r.width(), false);
 
         while (!pixelIt.isDone()) {
-
-            KisPixel pixel = toPixel(pixelIt.rawData());
-            KisPixel maskValue = mask -> toPixel(maskIt.rawData());
-            // XXX: Move to colorspace
-            pixel.alpha() = (pixel.alpha() * maskValue.alpha()) / MAX_SELECTED;
+            // XXX: Optimize by using stretches
+            m_colorStrategy->applyAphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
 
             ++pixelIt;
             ++maskIt;

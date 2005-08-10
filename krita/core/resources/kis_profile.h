@@ -47,7 +47,7 @@ class KisProfile : public KisResource, public KShared {
 public:
     KisProfile(Q_UINT32 colorType);
     KisProfile(QByteArray rawData, Q_UINT32 colorType);
-    KisProfile(const QString& file, Q_UINT32 colorType);
+    KisProfile(const QString& file);
     KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
 
     // Create a profile from a cms profile handle; this profile does not have associated
@@ -67,8 +67,9 @@ public:
     QString productDescription() const { return m_productDescription; }
     QString productInfo() const { return m_productInfo; }
     QString manufacturer() const { return m_manufacturer; }
-    cmsHPROFILE profile() const { return m_profile; }
-    Q_UINT32 colorType() { return m_lcmsColorType; }
+    cmsHPROFILE profile();
+    DWORD colorType() { return m_lcmsColorType; }
+    void setColorType(DWORD colorType) { m_lcmsColorType = colorType; }
     KisAnnotationSP annotation() const;
 
 public:
@@ -85,7 +86,7 @@ private:
     QString m_productDescription;
     QString m_productInfo;
     QString m_manufacturer;
-    Q_UINT32 m_lcmsColorType;
+    DWORD m_lcmsColorType;
 
     QByteArray m_rawData;
 };

@@ -100,9 +100,9 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
         KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         // XXX: Should we actually set the profile here?
-        image -> setProfile(image -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        image -> setProfile(KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
         image -> convertTo(cs,
-                   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                   KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
                    dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
     }
     delete dlgColorSpaceConversion;
@@ -131,9 +131,9 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
         KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
-        dev -> setProfile(dev -> colorStrategy() -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText());
         dev -> convertTo(cs,
-                   cs -> getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                   KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
                    dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         image -> notify();
         image -> notifyLayersChanged();

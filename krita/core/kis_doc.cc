@@ -411,7 +411,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
             profile = 0;
         }
         else {
-            profile = cs -> getProfileByName(profileProductName);
+            profile = KisColorSpaceRegistry::instance()->getProfileByName(profileProductName);
         }
 
         img = new KisImage(this, width, height, cs, name);
@@ -565,7 +565,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     KisProfileSP profile = 0;
 
     if (!profileProductName.isNull()) {
-        profile = colorSpace -> getProfileByName(profileProductName);
+        profile = KisColorSpaceRegistry::instance()->getProfileByName(profileProductName);
     }
 
     layer = new KisLayer(img, name, opacity, colorSpace);

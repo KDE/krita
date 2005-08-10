@@ -54,7 +54,7 @@ KisCmykColorSpace::KisCmykColorSpace() :
         return;
     }
 
-    setDefaultProfile(  getProfileByName("Adobe CMYK") ); // XXX: Do not i18n -- this is from a data file
+    setDefaultProfile( KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK") ); // XXX: Do not i18n -- this is from a data file
     if (getDefaultProfile() == 0) {
         kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
         if (profileCount() != 0) {

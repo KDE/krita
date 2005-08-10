@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>424</width>
-            <height>343</height>
+            <width>555</width>
+            <height>420</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,102 +19,174 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>grpAlpha</cstring>
-            </property>
-            <property name="title">
-                <string>Alphachannel </string>
+                <cstring>layout2</cstring>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>radio</cstring>
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QButtonGroup" row="1" column="1">
+                            <property name="name">
+                                <cstring>grpOutput</cstring>
+                            </property>
+                            <property name="title">
+                                <string>Output options</string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioLayers</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>To layers</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioImages</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>To images</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>grpAlpha</cstring>
+                            </property>
+                            <property name="title">
+                                <string>Alpha channel </string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radio</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Apply alpha channel before separation</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioButton2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Copy alpha channel to each separated channel as an alpha channel</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioButton3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Discard alpha channel</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioButton4</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Copy alpha channel to a its own separation</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QButtonGroup" row="1" column="0">
+                            <property name="name">
+                                <cstring>grpSource</cstring>
+                            </property>
+                            <property name="title">
+                                <string>Image Source</string>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>radioButton5</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>All layers.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="2" column="0">
+                                    <property name="name">
+                                        <cstring>radioButton7</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Flatten all visible layers before separation</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>radioButton6</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Current layer</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>checkBox2</cstring>
                     </property>
                     <property name="text">
-                        <string>Apply Alphachannel before separation</string>
+                        <string>Downscale to 8-bit before separating</string>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>radioButton2</cstring>
+                        <cstring>checkBox3</cstring>
                     </property>
                     <property name="text">
-                        <string>Copy Alphachannel to separation image</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioButton3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Discard Alphachannel</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioButton4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Separate Alphachannel into each own image</string>
+                        <string>Output to color, not grayscale</string>
                     </property>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>grpSource</cstring>
+                <cstring>textLabel2</cstring>
             </property>
-            <property name="title">
-                <string>Image Source</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>radioButton5</cstring>
-                    </property>
-                    <property name="text">
-                        <string>All layers.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>radioButton7</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Flatten all visible layers</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>radioButton6</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Current layer</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>checkBox2</cstring>
+            <property name="frameShape">
+                <enum>Panel</enum>
             </property>
             <property name="text">
-                <string>Downscale to 8-bit before separating</string>
+                <string>&lt;b&gt;Separations&lt;/b&gt;. Create separate layers or images from the color channels of the current image or layer. Note that if you want to separate an image to CMYK separations, you should first convert the image to CMYK before separation.</string>
             </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>checkBox3</cstring>
-            </property>
-            <property name="text">
-                <string>Output on color layers, not grayscale.</string>
+            <property name="alignment">
+                <set>WordBreak|AlignTop|AlignLeft</set>
             </property>
         </widget>
         <spacer>
@@ -130,11 +202,18 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>41</height>
+                    <height>30</height>
                 </size>
             </property>
         </spacer>
     </vbox>
 </widget>
+<tabstops>
+    <tabstop>radioButton3</tabstop>
+    <tabstop>radioButton6</tabstop>
+    <tabstop>radioLayers</tabstop>
+    <tabstop>checkBox2</tabstop>
+    <tabstop>checkBox3</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -23,6 +23,7 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include "koffice_export.h"
+#include "kis_abstract_colorspace.h"
 
 class QStringList;
 
@@ -39,9 +40,27 @@ class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisAbst
 public:
     virtual ~KisColorSpaceRegistry();
 
+    /**
+     * Get the singleton instance of this registry
+     */
     static KisColorSpaceRegistry* instance();
+    
+    /**
+     * Reload the profiles from disk
+     */
+    void resetProfiles();
 
-    KisProfileSP getProfileByName(const QString & name) const;
+    /**
+     * Return the profile associated with the given product name,
+     * or 0.
+     */
+    KisProfileSP getProfileByName(const QString & name);
+
+    /**
+     * Return the vector of profiles for this colorspace
+     */
+    vKisProfileSP profilesFor(KisAbstractColorSpace * cs);
+
     
 private:
     KisColorSpaceRegistry();
@@ -50,7 +69,7 @@ private:
 
 private:
     static KisColorSpaceRegistry *m_singleton;
-
+    QMap<QString, KisProfileSP> m_profileMap;
 };
 
 #endif // KIS_COLORSPACE_REGISTRY_H_

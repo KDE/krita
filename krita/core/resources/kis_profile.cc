@@ -57,9 +57,8 @@ KisProfile::KisProfile(QByteArray rawData, Q_UINT32 colorType)
     init();
 }
 
-KisProfile::KisProfile(const QString& file, Q_UINT32 colorType) 
-    : super(file),
-      m_lcmsColorType(colorType)
+KisProfile::KisProfile(const QString& file) 
+    : super(file)
 {
 }
 
@@ -88,10 +87,6 @@ KisProfile::~KisProfile()
 
 bool KisProfile::load()
 {
-    //cmsErrorAction(LCMS_ERROR_IGNORE);
-
-     //m_profile = cmsOpenProfileFromFile(filename().ascii(), "r");
-    // XXX this should be more efficient: we load the file twice
     QFile file(filename());
     file.open(IO_ReadOnly);
     m_rawData = file.readAll();
@@ -111,9 +106,31 @@ bool KisProfile::init()
         m_productDescription = cmsTakeProductDesc(m_profile);
         m_productInfo = cmsTakeProductInfo(m_profile);
         setValid(true);
+#if 0
+    // XX: It wasn't that easy to save a little memory: thsi gives an lcms error
+        // Okay, we know enough. Free the memory; we'll load it again if needed.
+
+        cmsCloseProfile(m_profile);
+        m_profile = 0;
+        
+#endif
         return true;
     }
     return false;
+}
+
+cmsHPROFILE KisProfile::profile()
+{
+#if 0
+	if (m_profile = 0) {
+	    QFile file(filename());
+	    file.open(IO_ReadOnly);
+	    m_rawData = file.readAll();
+	    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
+        file.close();
+	}
+#endif   
+	return m_profile;
 }
 
 bool KisProfile::save()

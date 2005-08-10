@@ -325,14 +325,14 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 
 void KisSelectionManager::cut()
 {
-        copy();
-        clear();
+    copy();
+    clear();
 }
 
 void KisSelectionManager::copy()
 {
-        KisImageSP img = m_parent -> currentImg();
-        if (!img) return;
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
 
     KisLayerSP layer = img -> activeLayer();
     if (!layer) return;
@@ -356,6 +356,8 @@ void KisSelectionManager::copy()
     clip -> setCompositeOp(COMPOSITE_OVER);
     clip -> setProfile(layer -> profile());
 
+    KisAbstractColorSpace * cs = clip->colorStrategy();
+
     // TODO if the source is linked... copy from all linked layers?!?
 
     // Copy image data
@@ -371,13 +373,9 @@ void KisSelectionManager::copy()
         KisHLineIterator selectionIt = selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
         while (!layerIt.isDone()) {
-            KisPixel p = clip -> toPixel(layerIt.rawData());
-            KisPixel s = selection -> toPixel(selectionIt.rawData());
-            Q_UINT16 p_alpha, s_alpha;
-            p_alpha = p.alpha();
-            s_alpha = s.alpha();
-
-            p.alpha() = UINT8_MULT(p_alpha, s_alpha);
+            
+            cs->applyAphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
+            
 
             ++layerIt;
             ++selectionIt;

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter
+Name[es]=Filtro de inversión
+Name[ga]=Scagaire Inbhéartaithe
 Comment=Invert the colors of an image
+Comment[es]=Invierte los colores de una imagen
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaexample

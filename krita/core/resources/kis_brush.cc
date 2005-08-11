@@ -218,7 +218,15 @@ bool KisBrush::init()
     if (m_ownData) {
         m_data.resize(0); // Save some memory, we're using enough of it as it is.
     }
-    setValid(true);
+
+
+    if (m_img.width() == 0 || m_img.height() == 0)
+        setValid(false);
+    else
+        setValid(true);
+
+	
+
     return true;
 }
 
@@ -425,6 +433,7 @@ void KisBrush::createScaledBrushes() const
     QImage scaledImage;
 
     while (true) {
+
         if (width >= m_img.width() && height >= m_img.height()) {
             scaledImage = scaleImage(m_img, width, height);
         }
@@ -449,7 +458,9 @@ void KisBrush::createScaledBrushes() const
         // Round up so that we never have to scale an image by less than 1/2.
         width = (width + 1) / 2;
         height = (height + 1) / 2;
+
     }
+
 }
 
 double KisBrush::xSpacing(double pressure) const

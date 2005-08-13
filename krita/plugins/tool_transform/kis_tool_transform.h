@@ -23,9 +23,10 @@
 #define KIS_TOOL_TRANSFORM_H_
 
 #include <qpoint.h>
-#include <kis_tool.h>
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
+
+#include <kis_tool.h>
 
 class KisTransaction;
 class WdgToolTransform;
@@ -49,8 +50,8 @@ public:
     virtual QWidget* optionWidget();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_CANVAS; }
-
+    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
+    virtual Q_UINT32 priority() { return 0; }
     virtual void clear();
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);

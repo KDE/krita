@@ -22,6 +22,7 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_pixel.h"
 #include "koffice_export.h"
 const Q_UINT8 PIXEL_BLUE = 0;
@@ -29,7 +30,7 @@ const Q_UINT8 PIXEL_GREEN = 1;
 const Q_UINT8 PIXEL_RED = 2;
 const Q_UINT8 PIXEL_ALPHA = 3;
 
-class KRITATOOL_EXPORT KisRgbColorSpace : public KisAbstractColorSpace {
+class KRITATOOL_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace {
 public:
     KisRgbColorSpace();
     virtual ~KisRgbColorSpace();

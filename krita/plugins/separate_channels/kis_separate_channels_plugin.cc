@@ -31,6 +31,7 @@
 #include <kis_types.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <kis_layer.h>
 
 #include "kis_separate_channels_plugin.h"
 #include "kis_channel_separator.h"
@@ -68,15 +69,28 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisImageSP image = m_view->currentImg();
     if (!image) return;
 
+    KisLayerSP l = image->activeLayer();
+    if (!l) return;
+
     DlgSeparate * dlgSeparate = new DlgSeparate(m_view, "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));
 
+    // If we're 8-bits, disable the downscale option
+    if (l->pixelSize() == l->nChannels()) {
+	dlgSeparate->enableDownscale(false);
+    }
+
     if (dlgSeparate->exec() == QDialog::Accepted) {
         
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->progressDisplay());
+        separator.separate(m_view->progressDisplay(), 
+                           dlgSeparate->getAlphaOptions(), 
+                           dlgSeparate->getSource(),
+                           dlgSeparate->getOutput(),
+                           dlgSeparate->getDownscale(),
+                           dlgSeparate->getToColor());
         
     }
 

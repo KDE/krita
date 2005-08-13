@@ -26,6 +26,25 @@
 class KisView;
 class KisProgressDisplayInterface;
 
+
+enum enumSepAlphaOptions {
+    COPY_ALPHA_TO_SEPARATIONS = 0,
+    DISCARD_ALPHA = 1,
+    CREATE_ALPHA_SEPARATION = 2
+};
+
+
+enum enumSepSource {
+    CURRENT_LAYER = 0,
+    ALL_LAYERS = 1,
+    VISIBLE_LAYERS = 2
+};
+
+enum enumSepOutput {
+    TO_LAYERS = 0,
+    TO_IMAGES = 1
+};
+
 class KisChannelSeparator : public KisProgressSubject {
 
     Q_OBJECT
@@ -35,7 +54,7 @@ public:
     KisChannelSeparator(KisView * view);
     virtual ~KisChannelSeparator() {};
 
-    void separate(KisProgressDisplayInterface * progress);
+    void separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }

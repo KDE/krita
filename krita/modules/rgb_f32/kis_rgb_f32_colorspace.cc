@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include "kis_image.h"
+#include "kis_f32_base_colorspace.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
@@ -63,7 +64,7 @@ inline float FLOAT_BLEND(float a, float b, float alpha)
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 KisF32RgbColorSpace::KisF32RgbColorSpace() :
-    KisAbstractColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData)
+    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));

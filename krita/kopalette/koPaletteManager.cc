@@ -96,8 +96,6 @@ void KoPaletteManager::addWidget(QWidget * widget,
                  enumKoPaletteStyle style)
 {
     
-    Q_ASSERT(widget);
-
     if (!widget) return;
     
     QWidget * w = m_widgets->find(name);

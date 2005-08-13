@@ -8,52 +8,26 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>189</width>
+            <width>228</width>
             <height>264</height>
         </rect>
     </property>
     <property name="caption">
         <string>Color Picker</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox" row="2" column="0">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>cbNormaliseValues</cstring>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>cbSampleMerged</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Sample Merged</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>cbUpdateCurrentColour</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Update Current Color</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>cbNormaliseValues</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Normalize Integer Values</string>
-                    </property>
-                </widget>
-            </vbox>
+            <property name="text">
+                <string>Normalize Integer Values</string>
+            </property>
         </widget>
-        <widget class="QListView">
+        <widget class="QListView" row="3" column="0">
             <column>
                 <property name="text">
                     <string>Channel</string>
@@ -86,7 +60,45 @@
                 <enum>NoSelection</enum>
             </property>
         </widget>
-    </vbox>
+        <widget class="QCheckBox" row="1" column="0">
+            <property name="name">
+                <cstring>cbUpdateCurrentColour</cstring>
+            </property>
+            <property name="text">
+                <string>Update Current Color</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="0">
+            <item>
+                <property name="text">
+                    <string>Sample all visible layers</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbSources</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>200</width>
+                    <height>32767</height>
+                </size>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -23,6 +23,7 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qbutton.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -31,8 +32,6 @@
 #include "dlg_separate.h"
 #include "wdg_separations.h"
 
-// XXX: I'm really real bad at arithmetic, let alone math. Here
-// be rounding errors. (Boudewijn)
 DlgSeparate::DlgSeparate( QWidget *  parent,
               const char * name)
     : super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok)
@@ -42,6 +41,7 @@ DlgSeparate::DlgSeparate( QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
+    connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
@@ -52,6 +52,34 @@ DlgSeparate::~DlgSeparate()
     delete m_page;
 }
 
+
+
+enumSepAlphaOptions DlgSeparate::getAlphaOptions()
+{
+    return (enumSepAlphaOptions)m_page->grpAlpha->selectedId();
+}
+
+enumSepSource DlgSeparate::getSource()
+{
+    return (enumSepSource)m_page->grpSource->selectedId();
+}
+
+enumSepOutput DlgSeparate::getOutput()
+{
+    return (enumSepOutput)m_page->grpOutput->selectedId();
+}
+
+
+bool DlgSeparate::getDownscale()
+{
+    return m_page->chkDownscale->isChecked();
+}
+
+bool DlgSeparate::getToColor()
+{
+    return m_page->chkColors->isChecked();
+}
+
 // SLOTS
 
 void DlgSeparate::okClicked()
@@ -59,5 +87,7 @@ void DlgSeparate::okClicked()
     accept();
 }
 
-
+void DlgSeparate::enableDownscale(bool enable) {
+    m_page->chkDownscale->setEnabled(enable);
+}
 #include "dlg_separate.moc"

@@ -58,7 +58,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwid
     }
 }
 
-std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
+std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
 {
 //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;

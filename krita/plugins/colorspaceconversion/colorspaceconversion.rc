@@ -2,9 +2,7 @@
 <kpartgui library="kritacolorspaceconversion" version="1">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
-	    <Menu name="Mode"><text>&amp;Mode</text>
 		<Action name="imgcolorspaceconversion"/>
-    	    </Menu>
     </Menu>
     <Menu name="Layer"><text>Layer</text>
 	    <Menu name="Mode"><text>&amp;Mode</text>

@@ -41,18 +41,17 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
-    virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual Q_UINT32 priority() { return 4; }
 
 public slots:
     void slotSetUpdateColor(bool);
-    void slotSetSampleMerged(bool);
     void slotSetNormaliseValues(bool);
 
 private:
     void displayPickedColor();
 
     bool m_updateColor;
-    bool m_sampleMerged;
     bool m_normaliseValues;
     KisColor m_pickedColor;
 

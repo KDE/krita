@@ -21,7 +21,7 @@
 #include <map>
 #include <qvaluelist.h>
 
-#include "kis_global.h"
+//#include "kis_global.h"
 #include "kis_id.h"
 #include "koffice_export.h"
 enum CompositeOp {

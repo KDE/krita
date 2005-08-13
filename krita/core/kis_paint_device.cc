@@ -301,7 +301,6 @@ KisPaintDevice::KisPaintDevice(KisAbstractColorSpace * colorStrategy, const QStr
     m_dcop = 0;
     Q_ASSERT(colorStrategy != 0);
     Q_ASSERT(name.isEmpty() == false);
-    if (name.isEmpty()) kdDebug(DBG_AREA_CORE) << "Empty name \n";
     m_x = 0;
     m_y = 0;
 
@@ -488,7 +487,6 @@ QRect KisPaintDevice::exactBounds()
     Q_INT32 x, y, w, h, boundX, boundY, boundW, boundH;
     extent(x, y, w, h);
 
-    kdDebug(DBG_AREA_CORE) << "Extent: " << x << ", " << y << ", " << w << ", " << h << "\n";
     extent(boundX, boundY, boundW, boundH);
     Q_UINT8 * emptyPixel = new Q_UINT8[m_pixelSize];
     Q_CHECK_PTR(emptyPixel);
@@ -556,7 +554,6 @@ QRect KisPaintDevice::exactBounds()
     }
 
     delete [] emptyPixel;
-    kdDebug(DBG_AREA_CORE) << "Bounds: " << boundX << ", " << boundY << ", " << boundW << ", " << boundH << "\n";
     return QRect(boundX, boundY, boundW, boundH);
 }
 
@@ -672,7 +669,6 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
          && dstProfile
          && (profile() -> profile() == dstProfile -> profile()) )
     {
-        kdDebug(DBG_AREA_CORE) << "NOT GOING TO CONVERT!\n";
         return;
     }
 
@@ -706,13 +702,13 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
             columnsRemaining -= columns;
         }
     }
-
     if (undoAdapter() && undoAdapter() -> undo()) {
         undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorStrategy, m_profile,
                                        dst.m_datamanager, dstColorStrategy, dstProfile));
     }
 
     setData(dst.m_datamanager, dstColorStrategy, dstProfile);
+
 }
 
 void KisPaintDevice::setData(KisDataManagerSP data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
@@ -721,7 +717,7 @@ void KisPaintDevice::setData(KisDataManagerSP data, KisAbstractColorSpace * colo
     m_colorStrategy = colorStrategy;
     m_pixelSize = m_colorStrategy -> pixelSize();
     m_nChannels = m_colorStrategy -> nChannels();
-    m_profile = profile;
+    setProfile(profile);
 }
 
 KisUndoAdapter *KisPaintDevice::undoAdapter() const
@@ -748,7 +744,9 @@ void KisPaintDevice::convertFromImage(const QImage& img)
 
 void KisPaintDevice::setProfile(KisProfileSP profile)
 {
+
     if (profile && profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
+
         m_profile = profile;
     }
     else {
@@ -790,7 +788,6 @@ QImage KisPaintDevice::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_IN
     Q_CHECK_PTR(data);
 
     m_datamanager -> readBytes(data, x1, y1, w, h);
-      kdDebug(DBG_AREA_CMS) << m_name << ": convertToQImage. My profile: " << m_profile << ", destination profile: " << dstProfile << "\n";
     QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile, INTENT_PERCEPTUAL, exposure);
     delete[] data;
 

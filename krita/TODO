@@ -1,8 +1,3 @@
-Toolbox
-
-	* crash when opening second view
-	* crash when using wacom pad
-	
 Bugs
 
 	* On opening a second image after loading first image but not changing it,
@@ -121,9 +116,8 @@ User Interface
         * Create templates for often-used image formats. Add save-as-template
 	* Make rotate actions consistent between layer and image
 	* Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
-	* Fix crop tool: always use guide points (also on sides, not just corners) to resize the crop rectangle;
-	  move the crop rectangle by dragging in the middle, when pressing shift, keep aspect ratio, implement
-	  gray mask. (Michael Thaler)
+	* Fix crop tool: when pressing shift, keep aspect ratio, implement gray mask.
+	  (Michael Thaler)
 	* Allow shape tools to be filled with gradients
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker

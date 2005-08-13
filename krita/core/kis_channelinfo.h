@@ -28,14 +28,12 @@ enum enumChannelType {
     SUBSTRATE // The channel represents a real-world painting substrate like a canvas
 };
 
-
 enum enumChannelFlags {
     FLAG_COLOR = 1,
     FLAG_ALPHA = (1 << 1),
     FLAG_SUBSTANCE = (1 << 2),
     FLAG_SUBSTRATE = (1 << 3)
 };
-
 
 /** 
  * This class gives some basic information about a channel,
@@ -67,12 +65,14 @@ public:
      * returns the type of the channel
      */
     inline enumChannelType channelType() const { return m_channelType; };
-    
+
 private:
+
     QString m_name;
     Q_INT32 m_pos;
     enumChannelType m_channelType;
     Q_INT32 m_size;
+
 };
 
 #endif // KIS_CHANNELINFO_H_

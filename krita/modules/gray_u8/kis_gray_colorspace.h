@@ -22,9 +22,10 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_pixel.h"
 
-class KisGrayColorSpace : public KisAbstractColorSpace {
+class KisGrayColorSpace : public KisU8BaseColorSpace {
 public:
     KisGrayColorSpace();
     virtual ~KisGrayColorSpace();

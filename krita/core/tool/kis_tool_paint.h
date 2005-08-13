@@ -93,7 +93,7 @@ private:
 protected:
     KisCanvasSubject *m_subject;
     QRect m_dirtyRect;
-    QUANTUM m_opacity;
+    Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
 
 private:

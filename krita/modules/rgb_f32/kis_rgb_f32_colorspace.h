@@ -24,11 +24,12 @@
 #include <koffice_export.h>
 
 #include "kis_global.h"
+#include "kis_f32_base_colorspace.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
 
 
-class KRITATOOL_EXPORT KisF32RgbColorSpace : public KisAbstractColorSpace {
+class KRITATOOL_EXPORT KisF32RgbColorSpace : public KisF32BaseColorSpace {
 public:
     KisF32RgbColorSpace();
     virtual ~KisF32RgbColorSpace();

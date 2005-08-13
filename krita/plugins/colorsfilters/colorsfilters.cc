@@ -104,6 +104,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
             KisPixel dstData = dstIt.pixel();
             for( int i = 0; i < depth; i++)
             {
+		// XXX: Move to colorspace -- not independent
                 KisQuantum d = srcIt[ configPC->channel( i ) ];
                 Q_INT32 s = configPC->valueFor( i );
                 if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
@@ -145,6 +146,7 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
         if (srcIt.isSelected()) {
             for( int i = 0; i < depth; i++)
             {
+		// XXX: Move to colorspace -- not independent
                 QUANTUM sd = srcIt.oldRawData()[ configPC->channel( i ) ];
                 KisQuantum dd = dstIt[ configPC->channel( i ) ];
                 dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
@@ -208,6 +210,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             }
 
             for (int i = 0; i < depth; i++) {
+		// XXX: Move to colorspace -- not independent
                 QUANTUM index = srcIt.rawData()[i];
                 if( index > maxvalues[i])
                     maxvalues[i] = index;
@@ -307,6 +310,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 //                     + QMIN(QMIN(c.red(), c.green()), c.blue()) ) / 2;
 
             // XXX: BSAR: Doesn't this doe the same but better?
+		// XXX: Move to colorspace -- not independent
             Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
             scs -> nativeColor(QColor(lightness, lightness, lightness), dstIt.rawData(), profile);
         }

@@ -20,6 +20,7 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qlistview.h>
 
 #include <kaction.h>
@@ -38,6 +39,11 @@
 #include "kis_color.h"
 #include "wdgcolorpicker.h"
 
+namespace {
+    // The location of the sample all visible layers in the combobox
+    const int SAMPLE_MERGED = 0;
+}
+
 KisToolColorPicker::KisToolColorPicker()
 {
     setName("tool_colorpicker");
@@ -45,7 +51,6 @@ KisToolColorPicker::KisToolColorPicker()
     m_optionsWidget = 0;
     m_subject = 0;
     m_updateColor = true;
-    m_sampleMerged = true;
     m_normaliseValues = true;
     m_pickedColor = KisColor();
 }
@@ -73,7 +78,12 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
         KisPaintDeviceSP dev = img -> activeDevice();
 
-        if (!m_sampleMerged) {
+        bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
+        if (!sampleMerged) {
+            // Find layer
+            QString layerName = m_optionsWidget->cmbSources->currentText();
+            KisPaintDeviceSP dev = img->findLayer(layerName).data();
+
             if (!dev ) {
                 return;
             }
@@ -89,7 +99,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             return;
         }
 
-        if (m_sampleMerged) {
+        if (sampleMerged) {
             m_pickedColor = img -> mergedPixel(pos.x(), pos.y());
         } else {
             m_pickedColor = dev -> colorAt(pos.x(), pos.y());
@@ -146,13 +156,24 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
     
     m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
-    m_optionsWidget -> cbSampleMerged -> setChecked(m_sampleMerged);
+    m_optionsWidget -> cmbSources -> setCurrentItem(0);
     m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
 
     m_optionsWidget -> listViewChannels -> setSorting(-1);
 
+    const KisImageSP img = m_subject->currentImg();
+    if (img) {
+        vKisLayerSP layers = img->layers();
+        
+        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
+            const KisLayerSP& layer = *it;
+            if (layer->visible()) {
+                m_optionsWidget->cmbSources->insertItem(layer->name());
+            }
+        }
+    }
+
     connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
-    connect(m_optionsWidget -> cbSampleMerged, SIGNAL(toggled(bool)), SLOT(slotSetSampleMerged(bool)));
     connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
 
     return m_optionsWidget;
@@ -168,10 +189,6 @@ void KisToolColorPicker::slotSetUpdateColor(bool state)
     m_updateColor = state;
 }
 
-void KisToolColorPicker::slotSetSampleMerged(bool state)
-{
-    m_sampleMerged = state;
-}
 
 void KisToolColorPicker::slotSetNormaliseValues(bool state)
 {

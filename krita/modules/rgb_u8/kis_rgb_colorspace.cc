@@ -29,6 +29,7 @@
 
 #include "kis_image.h"
 #include "kis_rgb_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
@@ -44,7 +45,7 @@ namespace {
 }
 
 KisRgbColorSpace::KisRgbColorSpace() :
-    KisAbstractColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData)
+    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR));

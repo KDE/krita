@@ -44,7 +44,7 @@ public:
     virtual ~KisToolFilter();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_FREEHAND; }
+    virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:

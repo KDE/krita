@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include "kis_abstract_colorspace.h"
+#include "kis_u16_base_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_xyz_colorspace.h"
@@ -44,15 +45,11 @@ namespace xyz {
 }
 
 
-const Q_UINT16 KisXyzColorSpace::U16_OPACITY_OPAQUE;
-const Q_UINT16 KisXyzColorSpace::U16_OPACITY_TRANSPARENT;
-
-
 // XXX: Maybe use TYPE_XYZ_DBL for an extra stimulating performance hit? People shouldn't depend
 //      on this fallback...
 
 KisXyzColorSpace::KisXyzColorSpace() :
-    KisAbstractColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), TYPE_XYZ_16, icSigCmykData)
+    KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), TYPE_XYZ_16, icSigCmykData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("X"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Y"), 0, COLOR));

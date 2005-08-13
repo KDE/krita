@@ -24,9 +24,10 @@
 #include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_types.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_abstract_colorspace.h"
 
-class KisCmykColorSpace : public KisAbstractColorSpace {
+class KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
     KisCmykColorSpace();

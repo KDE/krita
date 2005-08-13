@@ -31,6 +31,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_alpha_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_channelinfo.h"
 #include "kis_types.h"
 #include "kis_id.h"
@@ -41,7 +42,7 @@ namespace {
 }
 
 KisAlphaColorSpace::KisAlphaColorSpace() :
-    KisAbstractColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
+    KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
 }

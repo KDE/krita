@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include "kis_abstract_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_gray_colorspace.h"
@@ -45,7 +46,7 @@ namespace {
 }
 
 KisGrayColorSpace::KisGrayColorSpace() :
-    KisAbstractColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
+    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));

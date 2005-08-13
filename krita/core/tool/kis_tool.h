@@ -45,12 +45,13 @@ class KisDoubleClickEvent;
 class KisMoveEvent;
 
 enum enumToolType {
-    TOOL_FREEHAND = 0, // Freehand drawing tools
+    TOOL_CANVAS = 0,   // Tools that affect the canvas: pan, zoom, etc.
     TOOL_SHAPE = 1,   // Geometric shapes like ellipses and lines
-    TOOL_TRANFORM = 2, // Tools that transform the layer
-    TOOL_FILL = 3, // Tools that fill parts of the canvas
-    TOOL_SELECT = 4, // Selection tools
-    TOOL_CANVAS = 5   // Tools that affect the canvas: pan, zoom, etc.
+    TOOL_FREEHAND = 2, // Freehand drawing tools
+    TOOL_TRANSFORM = 3, // Tools that transform the layer
+    TOOL_FILL = 4, // Tools that fill parts of the canvas
+    TOOL_SELECT = 5, // Selection tools
+
 };
 
 const Q_UINT8 NUMBER_OF_TOOLTYPES = 6;

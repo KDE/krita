@@ -25,8 +25,8 @@
 
 #include "kis_factory.h"
 #include "kis_types.h"
-#include "kis_colorspace_registry.h"
 #include "kis_xyz_colorspace.h"
+#include "kis_colorspace_registry.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 

@@ -81,6 +81,8 @@ private:
 
     KisTool * m_oldTool;
     KisTool * m_dummyTool;
+
+    bool m_tools_disabled;
 };
 
 

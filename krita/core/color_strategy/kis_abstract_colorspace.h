@@ -117,6 +117,16 @@ public:
     virtual bool hasAlpha() const = 0;
 
     /**
+     * Gives the position of the first byte of alpha in the pixel
+     */
+    virtual Q_INT32 alphaPos() { return m_alphaPos; }
+
+    /**
+     * Gives the length in bytes of the alphachannel
+     */
+    virtual Q_INT32 alphaSize() { return m_alphaSize; }
+
+    /**
      * Return a string with the channel's value suitable for display in the gui.
      */
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
@@ -179,7 +189,7 @@ public:
 //================= Conversion functions ==================================//
 
 
-        /**
+    /**
      * The nativeColor methods take a given color defined as an RGB QColor
      * and fills a byte array with the corresponding color in the
      * the colorspace managed by this strategy.
@@ -190,8 +200,8 @@ public:
      *
      * XXX: We actually do not use the display yet, nor the paint device profile
      */
-    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
-    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
+    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -201,8 +211,8 @@ public:
      * XXX: We actually do not use the display yet, nor the paint device profile
      *
      */
-     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 ) = 0;
-     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
+     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 );
+     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
     /**
      * Get the alpha value of the given pixel.
@@ -212,7 +222,6 @@ public:
 
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile) = 0;
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile) = 0;
-
 
     /**
      * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
@@ -249,6 +258,19 @@ public:
                      Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
                      Q_UINT32 numPixels,
                      Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+
+    /**
+     * Convert the value of the channel at the specified position into
+     * an 8-bit value.
+     */
+    //Q_UINT8 scaleU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+
+    /**
+     * Convert the value of the channel at the specified position into
+     * a 16-bit value. This may be upscaling or downscaling, depending
+     * on the defined value of the channel
+     */
+    //Q_UINT8 scaleU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0; 
 
 //============================== Manipulation fucntions ==========================//
 // 

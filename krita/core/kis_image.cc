@@ -437,10 +437,6 @@ namespace {
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorStrategy, const QString& name)
 {
-#if DEBUG_IMAGES
-    numImages++;
-    kdDebug(DBG_AREA_CORE) << "IMAGE " << name << " CREATED total now = " << numImages << endl;
-#endif
     init(doc, width, height, colorStrategy, name);
     setName(name);
         m_dcop = 0L;
@@ -449,10 +445,6 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColor
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
-#if DEBUG_IMAGES
-    numImages++;
-    kdDebug(DBG_AREA_CORE) << "IMAGE " << rhs.m_name << " copy CREATED total now = " << numImages << endl;
-#endif
     m_dcop = 0L;
     if (this != &rhs) {
         m_doc = rhs.m_doc;
@@ -511,10 +503,6 @@ DCOPObject *KisImage::dcopObject()
 
 KisImage::~KisImage()
 {
-#if DEBUG_IMAGES
-    numImages--;
-    kdDebug(DBG_AREA_CORE) << "IMAGE " << name() << " DESTROYED total now = " << numImages << endl;
-#endif
     delete m_nserver;
     delete m_dcop;
 }
@@ -587,16 +575,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColo
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 {
-    kdDebug(DBG_AREA_CORE) << "KisImage::resize. From: ("
-           << width()
-           << ", "
-           << height()
-           << ") to ("
-           << w
-           << ", "
-           << h
-           << ")\n";
-
     if (w != width() || h != height()) {
         if (m_adapter && m_adapter -> undo()) {
             m_adapter -> beginMacro("Resize image");
@@ -639,12 +617,6 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
-     kdDebug(DBG_AREA_CORE) << "KisImage::scale. SX: "
-           << sx
-           << ", SY:"
-           << sy
-           << "\n";
-
     if (m_layers.empty()) return; // Nothing to scale
 
     // New image size. XXX: Pass along to discourage rounding errors?
@@ -837,6 +809,11 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
     for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
         (*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
     }
+
+    setProfile(dstProfile);
+
+    m_projection->convertTo(dstColorStrategy, dstProfile, renderingIntent);
+    m_bkg->convertTo(dstColorStrategy, dstProfile, renderingIntent);
     
     if (undoAdapter() && m_adapter->undo()) {
         
@@ -845,8 +822,9 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
         m_adapter->endMacro();
     }
 
+    
     setColorStrategy(dstColorStrategy);
-    setProfile(dstProfile);
+
     notify();
     notifyLayersChanged();
     
@@ -1580,7 +1558,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                    Q_INT32 x2,
                    Q_INT32 y2,
                    QPainter &painter,
-                   KisProfileSP profile,
+                   KisProfileSP monitorProfile,
                    float exposure)
 {
     Q_INT32 x;
@@ -1598,8 +1576,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
             
 
             renderToProjection(x, y, w, h);
-
-            QImage img = m_projection -> convertToQImage(profile, x, y, w, h, exposure);
+            QImage img = m_projection -> convertToQImage(monitorProfile, x, y, w, h, exposure);
 
             if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
                 m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
@@ -1693,14 +1670,14 @@ KisGuideMgr *KisImage::guides() const
 
 void KisImage::slotSelectionChanged()
 {
-     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
+    kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
     notify();
     emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
 {
-     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
+    kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
     
     notify(r2);

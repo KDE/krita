@@ -27,6 +27,9 @@
 #include "kis_filter_strategy.h"
 #include "wdg_separations.h"
 
+#include "kis_channel_separator.h"
+
+
 /**
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
@@ -40,6 +43,18 @@ public:
     DlgSeparate(QWidget * parent = 0,
              const char* name = 0);
     ~DlgSeparate();
+
+public:
+
+    enumSepAlphaOptions getAlphaOptions();
+    enumSepSource getSource();
+    enumSepOutput getOutput();
+
+    bool getDownscale();
+    void enableDownscale(bool enable);;
+
+    bool getToColor();
+    
 
 private slots:
 

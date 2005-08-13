@@ -100,7 +100,7 @@ void KisToolBrush::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Brush"),
-                        "paintbrush", 0, this,
+                        "tool_freehand", 0, this,
                         SLOT(activate()), collection,
                         name());
         m_action -> setToolTip(i18n("Draw freehand"));

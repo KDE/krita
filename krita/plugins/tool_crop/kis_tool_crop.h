@@ -23,10 +23,10 @@
 
 #include <qpoint.h>
 #include <qregion.h>
-
-#include <kis_tool.h>
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
+
+#include <kis_tool.h>
 
 class QRect;
 class QCursor;
@@ -54,7 +54,8 @@ public:
     virtual QWidget* optionWidget();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual enumToolType toolType() { return TOOL_TRANSFORM; }
+    virtual Q_UINT32 priority() { return 1; }
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);

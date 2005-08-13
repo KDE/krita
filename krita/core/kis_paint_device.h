@@ -60,33 +60,33 @@ class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
 
 public:
     KisPaintDevice(KisAbstractColorSpace * colorStrategy,
-            const QString& name);
+    const QString& name);
     
     KisPaintDevice(KisImage *img,
-            KisAbstractColorSpace * colorStrategy,
-            const QString& name);
+    KisAbstractColorSpace * colorStrategy,
+    const QString& name);
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
     virtual DCOPObject *dcopObject();
 
 public:
-        // Implement KisRenderInterface
-        virtual bool write(KoStore *store);
-        virtual bool read(KoStore *store);
+    // Implement KisRenderInterface
+    virtual bool write(KoStore *store);
+    virtual bool read(KoStore *store);
 
 public:
 
-        virtual void move(Q_INT32 x, Q_INT32 y);
-        virtual void move(const QPoint& pt);
+    virtual void move(Q_INT32 x, Q_INT32 y);
+    virtual void move(const QPoint& pt);
     virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
     
     virtual const bool visible() const;
-        virtual void setVisible(bool v);
+    virtual void setVisible(bool v);
     KNamedCommand *setVisibleCommand(bool visible);
 
-        bool contains(Q_INT32 x, Q_INT32 y) const;
-        bool contains(const QPoint& pt) const;
+    bool contains(Q_INT32 x, Q_INT32 y) const;
+    bool contains(const QPoint& pt) const;
 
     /**
      * Retrieve the bounds of the paint device. The size is not exact,
@@ -200,8 +200,8 @@ public:
      */
     virtual QImage convertToQImage(KisProfileSP dstProfile, float exposure = 0.0f);
 
-        virtual QString name() const;
-        virtual void setName(const QString& name);
+    virtual QString name() const;
+    virtual void setName(const QString& name);
 
 
         /**
@@ -211,7 +211,7 @@ public:
      *
      * @return true if the operation was succesful.
      */
-        bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
+     bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
     bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
 
     /**
@@ -219,11 +219,11 @@ public:
      */
     KisColor colorAt(Q_INT32 x, Q_INT32 y);
     
-        /**
+    /**
      * Set the specified pixel to the specified color. Note that this
-         * bypasses KisPainter. the PaintDevice is here used as an equivalent
-         * to QImage, not QPixmap. This means that this is not undoable; also,
-         * there is no compositing with an existing value at this location.
+     * bypasses KisPainter. the PaintDevice is here used as an equivalent
+     * to QImage, not QPixmap. This means that this is not undoable; also,
+     * there is no compositing with an existing value at this location.
      *
      * The color values will be transformed from the display profile to
      * the paint device profile.
@@ -234,7 +234,7 @@ public:
      * @return true if the operation was succesful
      *
      */
-        bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
+    bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
     bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
     
     /**
@@ -244,7 +244,7 @@ public:
     KisPixel toPixel(Q_UINT8 * bytes);
     KisPixelRO toPixelRO(const Q_UINT8 * bytes);
 
-        bool hasAlpha() const;
+    bool hasAlpha() const;
 
     KisAbstractColorSpace * colorStrategy() const;
 
@@ -275,10 +275,25 @@ public:
 
     KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
 
+    /**
+     * The X offset of the paint device
+     */
     Q_INT32 getX();
+
+    /**
+     * The Y offset of the paint device
+     */
     Q_INT32 getY();
-        void setX(Q_INT32 x);
-        void setY(Q_INT32 y);
+
+    /**
+     * Return the X offset of the paint device
+     */
+    void setX(Q_INT32 x);
+
+    /**
+     * Return the Y offset of the paint device
+     */
+    void setY(Q_INT32 y);
 
 
     /**

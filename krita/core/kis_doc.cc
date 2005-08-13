@@ -861,7 +861,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transpare
     
 }
 
-void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile, float exposure)
+void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP monitorProfile, float exposure)
 {
     Q_INT32 x1;
     Q_INT32 y1;
@@ -873,7 +873,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP pro
     x2 = CLAMP(rect.x() + rect.width() - 1, 0, m_currentImage -> width() - 1);
     y2 = CLAMP(rect.y() + rect.height() - 1, 0, m_currentImage -> height() - 1);
 
-    m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, profile, exposure);
+    m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, monitorProfile, exposure);
 }
 
 void KisDoc::slotImageUpdated()

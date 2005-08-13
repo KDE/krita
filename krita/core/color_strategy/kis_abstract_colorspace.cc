@@ -33,6 +33,7 @@
 #include "kis_integer_maths.h"
 #include "kis_color_conversions.h"
 #include "kis_colorspace_registry.h"
+#include "kis_channelinfo.h"
 
 namespace {
 
@@ -76,7 +77,6 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
         }
     m_transforms.clear();
 }
-
 
 void KisAbstractColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
@@ -125,7 +125,6 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opa
         *opacity = src[4];
 }
 
-
 bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent)
 {
     return convertPixelsTo(src.channels(), src.profile(),
@@ -138,6 +137,10 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
                         Q_UINT32 numPixels,
                         Q_INT32 renderingIntent)
 {
+
+//     kdDebug() << "src space: " << id().name() << ", src profile " << srcProfile->productName()
+//             << ", dst spcae: " << dstColorStrategy->id().name() << ", dst profile " << dstProfile->productName() << "\n";
+
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();
@@ -197,7 +200,6 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
         return true;
     }
     
-
     // Couldn't get a profile. Use QColor -- this is okay here, because even if we were to use KisColor,
     // we still wouldn't be able to get a transform. That's why we're here...
     while (numPixels > 0) {

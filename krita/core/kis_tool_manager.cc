@@ -36,6 +36,7 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
     m_dummyTool = 0;
     m_paletteManager = 0;
     m_actionCollection = 0;
+    m_tools_disabled = false;
 }
 
 KisToolManager::~KisToolManager()
@@ -90,23 +91,33 @@ void KisToolManager::updateGUI()
     }
 
     m_toolBox->enableTools( enable );
-    if (!enable) {
+
+    KisTool * current = currentTool();
+
+    // XXX: Fix this properly: changing the visibility of a layer causes this cause to be executed twice!
+    if (!enable && current != m_dummyTool) {
+        kdDebug() << "Disable! " << m_oldTool << "\n";
         // Store the current tool
         m_oldTool = currentTool();
         // Set the dummy tool
         if (!m_dummyTool) {
-                    m_dummyTool = KisToolDummyFactory().createTool(m_actionCollection);
+            m_dummyTool = KisToolDummyFactory().createTool(m_actionCollection);
         }
         setCurrentTool(m_dummyTool);
+        m_tools_disabled = true;
     }
-    else if (enable && m_oldTool) {
-        // retstore the old current tool
-        setCurrentTool(m_oldTool);
-        m_oldTool = 0;
-    }
-    else {
-        m_oldTool = 0;
-        setCurrentTool(findTool("tool_brush"));
+    else if (enable && m_tools_disabled) {
+        kdDebug() << "Enable! " << m_oldTool << "\n";
+        m_tools_disabled = false;
+        if (m_oldTool) {
+            // restore the old current tool
+            setCurrentTool(m_oldTool);
+            m_oldTool = 0;
+        }
+        else {
+            m_oldTool = 0;
+            setCurrentTool(findTool("tool_brush"));
+        }
     }
 }
 

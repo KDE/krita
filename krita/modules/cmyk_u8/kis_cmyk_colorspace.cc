@@ -28,6 +28,7 @@
 #include "kis_config.h"
 #include "kis_image.h"
 #include "kis_cmyk_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
 
@@ -41,7 +42,7 @@ namespace cmyk {
 }
 
 KisCmykColorSpace::KisCmykColorSpace() :
-    KisAbstractColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK_8, icSigCmykData)
+    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK_8, icSigCmykData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));
@@ -192,6 +193,7 @@ QImage KisCmykColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_
                     &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
      }
      else {
+        kdDebug() << "Display conversion: " << srcProfile->productName() << ", " << dstProfile->productName() << "\n"; 
          // Do a nice calibrated conversion
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)

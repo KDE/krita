@@ -24,13 +24,14 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
+#include "kis_u8_base_colorspace.h"
 #include "kis_pixel.h"
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a colour common to the mask. The default color is white.
  */
-class KisAlphaColorSpace : public KisAbstractColorSpace {
+class KisAlphaColorSpace : public KisU8BaseColorSpace {
 public:
     KisAlphaColorSpace();
     virtual ~KisAlphaColorSpace();

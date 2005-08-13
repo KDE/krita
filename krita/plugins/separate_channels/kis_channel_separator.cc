@@ -48,6 +48,7 @@
 #include <kis_colorspace_registry.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
+#include <kis_channelinfo.h>
 
 #include "kis_channel_separator.h"
 
@@ -56,7 +57,7 @@ KisChannelSeparator::KisChannelSeparator(KisView * view)
 {
 }
 
-void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
+void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
     KisImageSP image = m_view->currentImg();
     if (!image) return;
@@ -75,9 +76,30 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
         t = new KisTransaction(i18n("Separate Image"), src.data());
     }
 
-    Q_UINT32 numberOfChannels = src -> nChannels();
-    KisAbstractColorSpace * colorStrategy = src -> colorStrategy();
-    vKisChannelInfoSP channels = colorStrategy -> channels();
+
+    KisAbstractColorSpace * dstCs = 0;
+
+    Q_UINT32 numberOfChannels = src->nChannels();
+    KisAbstractColorSpace * srcCs  = src->colorStrategy();
+    vKisChannelInfoSP channels = srcCs->channels();
+    Q_INT32 srcAlphaPos = srcCs->alphaPos();
+    Q_INT32 srcAlphaSize = srcCs->alphaSize();
+
+    // Flatten the image first, if required
+    switch(sourceOps) {
+
+        case(ALL_LAYERS):
+            image->flatten();
+            break;
+        case(VISIBLE_LAYERS):
+            image->mergeVisibleLayers();
+            break;
+        default:
+            break;
+    }
+
+    // We're working on this layer, flattened, merged or original
+    src = image->activeLayer();
 
     vKisLayerSP layers;
 
@@ -85,7 +107,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
     vKisChannelInfoSP_cit end = channels.end();
 
 
-    QRect rect = image->bounds();
+    QRect rect = src->exactBounds();
 
     int i = 0;
     for (vKisChannelInfoSP_cit it = begin; it != end; ++it)
@@ -93,22 +115,93 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
 
         KisChannelInfoSP ch = (*it);
 
-        KisLayerSP dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA" ), ch->name());
+        if (ch->channelType() == ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
+            // Don't make an separate separaation of the alpha channel if the user didn't ask for it.
+            continue;
+        }
+        
+        Q_INT32 channelSize = ch->size();
+        Q_INT32 channelPos = ch->pos();
+        Q_INT32 destSize = 1;
+
+        KisLayerSP dev;
+        if (toColor) {
+            // We don't downscale if we separate to color channels
+            dev = new KisLayer(srcCs, ch->name());
+        }
+        else {
+            if (channelSize == 1 || downscale) {
+                dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA" ), ch->name());
+            }
+            else {
+                dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA16" ), ch->name());
+                destSize = 2;
+            }
+        }
+
+        dstCs = dev->colorStrategy();
+        Q_INT32 dstAlphaPos = dstCs->alphaPos();
+        Q_INT32 dstAlphaSize = dstCs->alphaSize();
+
         layers.push_back(dev);
 
-        KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-        // XXX: Casper is going to make sure that these iterators align!
-        KisRectIteratorPixel dstIt = dev->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+        for (Q_INT32 row = 0; row < rect.height(); ++row) {
 
-        while( ! srcIt.isDone() )
-        {
-            if(srcIt.isSelected())
+            KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y() + row, rect.width(), false);
+            KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width(), true);
+
+            while( ! srcIt.isDone() )
             {
-                dstIt.rawData()[0] = srcIt.oldRawData()[i];
-                dstIt.rawData()[1] = OPACITY_OPAQUE;
+                if (srcIt.isSelected())
+                {
+                    if (toColor) {
+                        // Copy the complete channel. We know we are using the same color strategy
+                        memcpy(dstIt.rawData() + channelPos, srcIt.rawData() + channelPos, channelSize);
+
+                        if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
+                            memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, dstAlphaSize);
+                        }
+                        else {
+                            memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+                        }
+                    }
+                    else {
+                        // Decide wether we need downscaling
+                        if (channelSize == 1 && destSize == 1) {
+                            // Both 8-bit channels
+                            memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 1);
+
+                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
+                                memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, 1);
+                            }
+                            else {
+                                memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+                            }                            
+                        }
+                        else if (channelSize == 2 && destSize == 2) {
+                            // Both 16-bit
+                            memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 2);
+
+                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
+                                memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, 2);
+                            }
+                            else {
+                                memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+                            }
+                        }
+                        else if (channelSize > 1 && destSize == 1) {
+                            // XXX: We need a downscale method in every big colorspace
+                            // cs->downscale8();
+                            
+                        }
+                        else if (channelSize > 2 && destSize == 2) {
+                            // cs->downscale16();
+                        }
+                    }
+                }
+                ++dstIt;
+                ++srcIt;
             }
-            ++dstIt;
-            ++srcIt;
         }
         ++i;
 
@@ -121,9 +214,20 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress)
     vKisLayerSP_it it;
 
     if (!m_cancelRequested) {
+    
         for ( it = layers.begin(); it != layers.end(); ++it ) {
             KisLayerSP layer = (*it);
-            image->add( layer, -1);
+            
+            if (outputOps == TO_LAYERS) {
+                image->add( layer, -1);
+            }
+            else {
+                // To images
+                // create a document
+                // create an image
+                // add layer to image
+                // show document in new view
+            }
         }
         if (undo) undo -> addCommand(t);
 

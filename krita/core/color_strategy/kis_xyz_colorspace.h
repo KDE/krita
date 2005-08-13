@@ -21,15 +21,14 @@
 #include <qcolor.h>
 
 #include "kis_global.h"
+#include "kis_integer_maths.h"
+#include "kis_u16_base_colorspace.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
-#include "kis_integer_maths.h"
 
-class KisXyzColorSpace : public KisAbstractColorSpace {
+class KisXyzColorSpace : public KisU16BaseColorSpace {
+
 public:
-
-    static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;
-    static const Q_UINT16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
 
     struct Pixel {
         Q_UINT16 X;

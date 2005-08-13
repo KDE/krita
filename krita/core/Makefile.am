@@ -52,7 +52,7 @@ noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
 	kis_iteratorpixeltrait.h kis_iterators_pixel.h kis_view_iface.h kis_doc_iface.h kis_image_iface.h \
 	kis_matrix.h kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h \
 	kis_filter.h kis_filter_registry.h kis_composite_op.h kis_part_layer.h \
-	kis_filter_manager.h kis_tool_manager.h
+	kis_filter_manager.h kis_tool_manager.h \
 	kis_paint_device_iface.h
 
 

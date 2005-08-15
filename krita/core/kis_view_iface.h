@@ -34,7 +34,7 @@ class KisViewIface : public KoViewIface
     K_DCOP
 public:
     KisViewIface( KisView *view_ );
-    k_dcop:
+k_dcop:
     void copy();
     void cut();
     void removeSelection();

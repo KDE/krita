@@ -43,7 +43,7 @@ class KisMatrix
             */
         void dump()
         {
-             kdDebug(DBG_AREA_MATH) << "KisMatrixT::dump()" << endl;
+            kdDebug(DBG_AREA_MATH) << "KisMatrixT::dump()" << endl;
             for(int i = 0; i < _H; i++)
             {
                 for(int j = 0; j < _W; j++)

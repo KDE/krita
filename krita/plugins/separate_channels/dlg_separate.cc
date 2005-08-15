@@ -32,15 +32,22 @@
 #include "dlg_separate.h"
 #include "wdg_separations.h"
 
-DlgSeparate::DlgSeparate( QWidget *  parent,
-              const char * name)
-    : super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok)
+DlgSeparate::DlgSeparate( const QString & imageCS,
+                          const QString & layerCS,
+                          QWidget *  parent,
+                          const char * name)
+    : super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok),
+      m_imageCS(imageCS),
+      m_layerCS(layerCS)
 {
     m_page = new WdgSeparations(this, "separate_image");
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
+    m_page->lblColormodel->setText(layerCS);
+
+    connect(m_page->grpSource, SIGNAL(clicked(int)), this, SIGNAL(slotSetColorSpaceLabed(int)));
     connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(okClicked()),
@@ -87,7 +94,17 @@ void DlgSeparate::okClicked()
     accept();
 }
 
+void DlgSeparate::slotSetColorSpaceLabel(int buttonid)
+{
+    if (buttonid == 0) {
+        m_page->lblColormodel->setText(m_layerCS);
+    }
+    else {
+        m_page->lblColormodel->setText(m_imageCS);
+    }
+}
 void DlgSeparate::enableDownscale(bool enable) {
     m_page->chkDownscale->setEnabled(enable);
 }
+
 #include "dlg_separate.moc"

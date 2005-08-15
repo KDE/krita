@@ -14,9 +14,9 @@ INCLUDES  = -I$(srcdir)/../../core \
 
 kde_module_LTLIBRARIES = kritaseparatechannels.la
 
-kritaseparatechannels_la_SOURCES = wdg_separations.ui\
-	kis_separate_channels_plugin.cc \
-	kis_channel_separator.cc dlg_separate.cc 
+kritaseparatechannels_la_SOURCES = wdg_separations.ui \
+	kis_channel_separator.cc dlg_separate.cc  \
+	kis_separate_channels_plugin.cc
 
 noinst_HEADERS = wdg_separations.h kis_separate_channels_plugin.h \
 		kis_channel_separator.h dlg_separate.h

@@ -270,12 +270,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
                         xofs1 = CLAMP (xofs2 - 1, 0, bm_w - 1);
                         xofs3 = CLAMP (xofs2 + 1, 0, bm_w - 1);
                     }
-                    #if 0
-                    kdDebug() << "x: " << x
-                        << ", x offset 1: " << xofs1
-                        << ", x offset 2: " << xofs2
-                        << ", x offset 3: " << xofs3 << "\n";
-                    #endif
 
                     nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
                         bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);

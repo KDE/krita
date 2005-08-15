@@ -20,6 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <limits.h>
 
 #include <stdlib.h>
 #include <vector>
@@ -159,10 +160,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                         memcpy(dstIt.rawData() + channelPos, srcIt.rawData() + channelPos, channelSize);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                            memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, dstAlphaSize);
+			    dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                         }
                         else {
-                            memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+			    dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                         }
                     }
                     else {
@@ -172,10 +173,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 1);
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                                memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, 1);
+				dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                             }
                             else {
-                                memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+                                dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                             }                            
                         }
                         else if (channelSize == 2 && destSize == 2) {
@@ -183,10 +184,12 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 2);
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                                memcpy(dstIt.rawData() + dstAlphaPos, srcIt.rawData() + srcAlphaPos, 2);
+				memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
+				// XXX: This is wrong! The alpha channel will have 2 bytes, too.
+				// dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                             }
                             else {
-                                memset(dstIt.rawData() + dstAlphaPos, UCHAR_MAX, dstAlphaSize);
+                                dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                             }
                         }
                         else if (channelSize > 1 && destSize == 1) {

@@ -320,9 +320,6 @@ void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b
     *g = (Q_UINT8)(hue_value(m1, m2, h) * 255 + 0.5);
     *b = (Q_UINT8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
 
-    kdDebug() << " Converted hls (" << h << ", " << l << ", " << s << ")"
-          << ") to rgb (" << *r << ", " << *g << ", " << *b << ")\n";
-
 };
 
 void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s)

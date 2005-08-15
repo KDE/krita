@@ -150,7 +150,6 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
                     KisCanvasControllerInterface *controller = m_subject -> canvasController();
                     m_mouseOnHandleType = mouseOnHandle(controller ->windowToView(e -> pos().floorQPoint()));
                     m_dragStart = e -> pos().floorQPoint();
-                    kdDebug() << "dragStart: " << m_dragStart << endl;
                 }
 
                 setOptionWidgetStartX(m_startPos.x());

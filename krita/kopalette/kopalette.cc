@@ -34,7 +34,7 @@
 #include <kaccelmanager.h>
 #include <koView.h>
 
-#include "koPalette.h"
+#include "kopalette.h"
 
 
 static const unsigned char img_shadebutton [] = {
@@ -186,4 +186,4 @@ void KoPalette::slotPlaceChanged(QDockWindow::Place p)
     }
 }
 
-#include "koPalette.moc"
+#include "kopalette.moc"

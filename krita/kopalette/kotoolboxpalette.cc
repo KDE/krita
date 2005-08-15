@@ -20,9 +20,9 @@
 #include <qdockwindow.h>
 #include <qtoolbox.h>
 
-#include <koPalette.h>
-#include <koPaletteManager.h>
-#include <koToolBoxPalette.h>
+#include <kopalette.h>
+#include <kopalettemanager.h>
+#include <kotoolboxpalette.h>
 
 KoToolBoxPalette::KoToolBoxPalette(KoView * parent, const char * name)
     : KoPalette(parent, name)
@@ -98,4 +98,4 @@ void KoToolBoxPalette::togglePageHidden(QWidget *w)
 
 }
 
-#include "koToolBoxPalette.moc"
+#include "kotoolboxpalette.moc"

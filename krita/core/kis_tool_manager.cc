@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "koPaletteManager.h"
+#include "kopalettemanager.h"
 
 #include "kis_tool_manager.h"
 #include "kis_tool_registry.h"

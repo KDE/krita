@@ -120,7 +120,7 @@
 
 // Action managers
 #include "kis_selection_manager.h"
-#include "koPaletteManager.h"
+#include "kopalettemanager.h"
 #include "kis_filter_manager.h"
 
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)

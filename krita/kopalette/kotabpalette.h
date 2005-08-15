@@ -21,7 +21,7 @@
 
 #include <qdockwindow.h>
 
-#include "koPalette.h"
+#include "kopalette.h"
 
 class KoView;
 class QWidget;

@@ -8,15 +8,15 @@ INCLUDES  = -I$(srcdir) \
 noinst_LTLIBRARIES = libkopalette.la
 
 libkopalette_la_SOURCES = \
-	koPalette.cc \
-	koPaletteManager.cc \
-	koToolBoxPalette.cc \
-	koTabPalette.cc
+	kopalette.cc \
+	kopalettemanager.cc \
+	kotoolboxpalette.cc \
+	kotabpalette.cc
 
 noinst_HEADERS =  \
-	koPalette.h \
-	koTabPalette.h \
-	koToolBoxPalette.h
+	kopalette.h \
+	kotabpalette.h \
+	kotoolboxpalette.h
 
 libkopalette_la_METASOURCES = AUTO
 libkopalette_la_LDFLAGS = $(all_libraries)

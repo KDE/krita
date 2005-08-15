@@ -121,8 +121,6 @@ private:
     };
 };
 
-typedef KSharedPtr<KisF32RgbColorSpace> KisF32RgbColorSpaceSP;
-
 #define F32_OPACITY_OPAQUE 1.0f
 #define F32_OPACITY_TRANSPARENT 0.0f
 

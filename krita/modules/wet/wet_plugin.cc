@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <koPaletteManager.h>
+#include <kopalettemanager.h>
 #include <koMainWindow.h>
 
 #include <kis_factory.h>

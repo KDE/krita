@@ -263,14 +263,14 @@ public:
      * Convert the value of the channel at the specified position into
      * an 8-bit value.
      */
-    //Q_UINT8 scaleU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+    Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
     /**
      * Convert the value of the channel at the specified position into
      * a 16-bit value. This may be upscaling or downscaling, depending
      * on the defined value of the channel
      */
-    //Q_UINT8 scaleU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0; 
+    Q_UINT8 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
 //============================== Manipulation fucntions ==========================//
 // 

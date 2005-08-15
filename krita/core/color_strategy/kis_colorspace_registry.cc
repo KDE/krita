@@ -109,3 +109,5 @@ void KisColorSpaceRegistry::resetProfiles()
     }
 
 }
+
+    

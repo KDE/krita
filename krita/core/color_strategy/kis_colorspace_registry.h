@@ -25,15 +25,14 @@
 #include "koffice_export.h"
 #include "kis_abstract_colorspace.h"
 
+class KisPixelOp;
 class QStringList;
 
 
 /**
- * This class will contain:
- *      - a registry of singleton color strategies
- *    - a mapping of ImageMagick color model identifiers to color strategies
- *      - a mapping of lcms color model identifiers to color strategies
- *     -  a mapping of icm color model identifiers to color stratiegs
+ * This class contains:
+ *      - a registry of singleton color strategies.
+ *      - a registry of icc profiles
  */
 class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisAbstractColorSpace *> {
 
@@ -44,7 +43,7 @@ public:
      * Get the singleton instance of this registry
      */
     static KisColorSpaceRegistry* instance();
-    
+
     /**
      * Reload the profiles from disk
      */
@@ -61,7 +60,6 @@ public:
      */
     vKisProfileSP profilesFor(KisAbstractColorSpace * cs);
 
-    
 private:
     KisColorSpaceRegistry();
     KisColorSpaceRegistry(const KisColorSpaceRegistry&);

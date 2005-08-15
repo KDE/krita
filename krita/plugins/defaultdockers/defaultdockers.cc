@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <ktoolbar.h>
-#include <koPaletteManager.h>
+#include <kopalettemanager.h>
 
 #include <kis_toolbox.h>
 #include <kis_config.h>

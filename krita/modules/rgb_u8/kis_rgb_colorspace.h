@@ -25,6 +25,7 @@
 #include "kis_u8_base_colorspace.h"
 #include "kis_pixel.h"
 #include "koffice_export.h"
+
 const Q_UINT8 PIXEL_BLUE = 0;
 const Q_UINT8 PIXEL_GREEN = 1;
 const Q_UINT8 PIXEL_RED = 2;

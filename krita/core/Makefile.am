@@ -32,7 +32,7 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	tool/libkistool.la \
 	$(LIB_KOPAINTER)
 
-libkritacore_la_SOURCES = kis_color.cc kis_paint_device.cc kis_layer.cc \
+libkritacore_la_SOURCES = kis_color.cc kis_paint_device.cc kis_layer.cc kis_pixel_op.cc \
 	kis_image.cc kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc \
 	kis_painter.cc kis_fill_painter.cc kis_gradient_painter.cc \
 	kis_convolution_painter.cc kis_cursor.cc kis_selection.cc kis_command.cc kis_background.cc \
@@ -52,7 +52,7 @@ noinst_HEADERS = kis_paint_device.h kis_layer.h kis_image.h kis_doc.h \
 	kis_iteratorpixeltrait.h kis_iterators_pixel.h kis_view_iface.h kis_doc_iface.h kis_image_iface.h \
 	kis_matrix.h kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h \
 	kis_filter.h kis_filter_registry.h kis_composite_op.h kis_part_layer.h \
-	kis_filter_manager.h kis_tool_manager.h \
+	kis_filter_manager.h kis_tool_manager.h kis_pixel_op.h \
 	kis_paint_device_iface.h
 
 

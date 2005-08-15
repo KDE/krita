@@ -25,8 +25,8 @@
 
 #include <koView.h>
 
-#include <koPalette.h>
-#include <koTabPalette.h>
+#include <kopalette.h>
+#include <kotabpalette.h>
 
 KoTabPalette::KoTabPalette(KoView * parent, const char * name)
     : KoPalette(parent, name)
@@ -111,4 +111,4 @@ void KoTabPalette::togglePageHidden(QWidget *w)
     } 
 }
 
-#include "koTabPalette.moc"
+#include "kotabpalette.moc"

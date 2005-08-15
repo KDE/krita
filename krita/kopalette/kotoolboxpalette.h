@@ -22,7 +22,7 @@
 #include <qdockwindow.h>
 #include <qtoolbox.h>
 
-#include <koPaletteManager.h>
+#include <kopalettemanager.h>
 
 /**
  * A palette based on a toolbox widget. This does not support drag and drop

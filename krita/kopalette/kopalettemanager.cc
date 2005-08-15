@@ -31,11 +31,11 @@
 #include <koView.h>
 #include <koMainWindow.h>
 
-#include <koPalette.h>
-#include <koTabPalette.h>
-#include <koToolBoxPalette.h>
+#include <kopalette.h>
+#include <kotabpalette.h>
+#include <kotoolboxpalette.h>
 
-#include <koPaletteManager.h>
+#include <kopalettemanager.h>
 
 
 KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const char * name)
@@ -332,4 +332,4 @@ void KoPaletteManager::slotToggleAllPalettes()
     }
 }
 
-#include "koPaletteManager.moc"
+#include "kopalettemanager.moc"

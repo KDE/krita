@@ -54,6 +54,8 @@ KisRgbU16ColorSpace::KisRgbU16ColorSpace() :
     
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_16) );
+
+    m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 }
 
 KisRgbU16ColorSpace::~KisRgbU16ColorSpace()

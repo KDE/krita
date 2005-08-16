@@ -58,6 +58,7 @@ KisGrayColorSpace::KisGrayColorSpace() :
 
     setDefaultProfile( new KisProfile(hProfile, TYPE_GRAYA_8) );
 
+    m_alphaPos = PIXEL_GRAY_ALPHA;
 }
 
 

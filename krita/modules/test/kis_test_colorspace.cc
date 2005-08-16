@@ -45,10 +45,13 @@ struct testcspixel
 KisTestColorSpace::KisTestColorSpace() :
     KisAbstractColorSpace(KisID("test", i18n("TestCS/Alpha")), 0, icMaxEnumData)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
+
     m_channels.push_back(new KisChannelInfo(i18n("blue+green"), 0, COLOR, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("green"), 1, COLOR));
+    m_channels.push_back(new KisChannelInfo(i18n("red"), 2, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("alpha"), 3, ALPHA));
+
+    m_alphaPos = 3;
 }
 
 KisTestColorSpace::~KisTestColorSpace()

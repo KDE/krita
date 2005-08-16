@@ -248,14 +248,21 @@ void KisAbstractColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nP
     }
 }
 
-void KisAbstractColorSpace::applyAphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+KisPixelOp * KisAbstractColorSpace::getPixelOp(const KisID & id)
+{
+    return 0;
+}
+
+
+
+void KisAbstractColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
 {
     Q_INT32 psize = pixelSize();
     
     while (nPixels--) {
     
         // XXX: Take care -- in u16 or higher, we should upcast the alpha value!
-        UINT8_MULT(*(pixels + m_alphaPos), *alpha);
+        pixels[m_alphaPos] = UINT8_MULT(*(pixels + m_alphaPos) , *alpha);
         
         pixels += psize;
         ++alpha;
@@ -269,11 +276,14 @@ void KisAbstractColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * 
     while(--nPixels) {
     
             Q_UINT16 p_alpha, s_alpha;
-            p_alpha = *pixels + m_alphaPos;
+
+            p_alpha = *(pixels + m_alphaPos);
             s_alpha = MAX_SELECTED - *alpha;
 
+	    kdDebug() << "p_alpha: " << p_alpha << ", s_alpha " << s_alpha << "\n";
+
             // XXX: Take care -- in u16 or higher, we should upcast the alpha value!
-            *(pixels + m_alphaPos) = UINT8_MULT(p_alpha, MAX_SELECTED - s_alpha);
+            pixels[m_alphaPos] = UINT8_MULT(p_alpha, s_alpha);
 
             pixels += psize;
             ++alpha;

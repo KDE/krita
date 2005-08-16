@@ -32,11 +32,13 @@
 #include "kis_profile.h"
 #include "kis_id.h"
 #include "kis_composite_op.h"
+
 #include "koffice_export.h"
 
 class QPainter;
 class KisIteratorPixel;
 class KisPixel;
+class KisPixelOp;
 class KisPixelRO;
 
 
@@ -273,10 +275,15 @@ public:
     Q_UINT8 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
 //============================== Manipulation fucntions ==========================//
+
+    KisPixelOp * getPixelOp(const KisID & id);
+
 // 
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
+
+
 
 
     /**
@@ -295,7 +302,7 @@ public:
      * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
      * as many alpha values as pixels but we do not check this.
      */
-    virtual void applyAphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
 
     /**
      * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just

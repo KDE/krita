@@ -33,6 +33,7 @@ class QStringList;
  * This class contains:
  *      - a registry of singleton color strategies.
  *      - a registry of icc profiles
+ *      - a registry of default pixel operations
  */
 class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisAbstractColorSpace *> {
 
@@ -60,6 +61,21 @@ public:
      */
     vKisProfileSP profilesFor(KisAbstractColorSpace * cs);
 
+
+    /**
+     * Add a new pixel op to the relevant color strategy.
+     * @param pixelop the pixel operation
+     * @param cs color model. If empty, then the pixel op will be added to the list of default pixel ops
+     */
+    void addFallbackPixelOp(KisPixelOp * pixelop);
+
+    /**
+     * Return a pixel from the list of default pixelops. If
+     * the specified pixelop doesn't exist, then 0 will be
+     * returned.
+     */
+    KisPixelOp * getFallbackPixelOp(KisID pixelop);
+    
 private:
     KisColorSpaceRegistry();
     KisColorSpaceRegistry(const KisColorSpaceRegistry&);
@@ -68,6 +84,7 @@ private:
 private:
     static KisColorSpaceRegistry *m_singleton;
     QMap<QString, KisProfileSP> m_profileMap;
+    QMap<KisID, KisPixelOp*> m_defaultPixelOps;
 };
 
 #endif // KIS_COLORSPACE_REGISTRY_H_

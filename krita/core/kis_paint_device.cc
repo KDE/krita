@@ -900,6 +900,7 @@ void KisPaintDevice::clearSelection()
 
 void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 {
+    kdDebug() << "KisPaintDevice::applySelectionMask: " << m_name << "\n";
     QRect r = mask -> extent();
     crop(r);
 
@@ -910,7 +911,8 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 
         while (!pixelIt.isDone()) {
             // XXX: Optimize by using stretches
-            m_colorStrategy->applyAphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
+
+            m_colorStrategy->applyAlphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
 
             ++pixelIt;
             ++maskIt;

@@ -374,7 +374,7 @@ void KisSelectionManager::copy()
 
         while (!layerIt.isDone()) {
             
-            cs->applyAphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
+            cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
             
 
             ++layerIt;

@@ -74,6 +74,8 @@ KisF32RgbColorSpace::KisF32RgbColorSpace() :
     
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
+
+    m_alphaPos = PIXEL_ALPHA * sizeof(float);
 }
 
 KisF32RgbColorSpace::~KisF32RgbColorSpace()

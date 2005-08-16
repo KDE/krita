@@ -27,6 +27,7 @@
 #include "kis_types.h"
 #include "kis_xyz_colorspace.h"
 #include "kis_colorspace_registry.h"
+#include "kis_pixel_op.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
 
@@ -110,4 +111,27 @@ void KisColorSpaceRegistry::resetProfiles()
 
 }
 
+void KisColorSpaceRegistry::addFallbackPixelOp(KisPixelOp * pixelop)
+{
+    if (!pixelop) {
+        return;
+    }
     
+    if (!pixelop->isValid()) {
+        kdDebug() << "Cannot add invalid pixel operation " << pixelop->id().id() << "\n";
+        return;
+    }
+    
+    m_defaultPixelOps[pixelop->id()] = pixelop;
+    
+    
+}
+
+KisPixelOp * KisColorSpaceRegistry::getFallbackPixelOp(KisID pixelop)
+{
+    if (m_defaultPixelOps.find(pixelop) != m_defaultPixelOps.end()) {
+        return m_defaultPixelOps[pixelop];
+    }
+
+    return 0;
+}

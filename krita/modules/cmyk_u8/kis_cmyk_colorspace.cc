@@ -87,6 +87,7 @@ KisCmykColorSpace::KisCmykColorSpace() :
     m_qcolordata = new Q_UINT8[3];
     Q_CHECK_PTR(m_qcolordata);
 
+    m_alphaPos = PIXEL_CMYK_ALPHA;
 }
 
 KisCmykColorSpace::~KisCmykColorSpace()

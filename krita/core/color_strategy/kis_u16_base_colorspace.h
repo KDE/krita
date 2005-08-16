@@ -38,7 +38,10 @@ public:
 public:
 
     KisU16BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature) {};
+	: KisAbstractColorSpace(id, cmType, colorSpaceSignature)
+    {
+	m_alphaSize = sizeof(Q_UINT16);
+    };
 
 
 };

@@ -65,7 +65,6 @@ public:
     /**
      * Add a new pixel op to the relevant color strategy.
      * @param pixelop the pixel operation
-     * @param cs color model. If empty, then the pixel op will be added to the list of default pixel ops
      */
     void addFallbackPixelOp(KisPixelOp * pixelop);
 

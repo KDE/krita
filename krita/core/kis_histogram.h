@@ -47,16 +47,7 @@ public:
 
     void computeHistogramFor(const KisChannelInfo & channel);
 
-    /**
-     * Returns an iterator over the values comprising this histogram
-     */
-    vBins::iterator begin() { return m_values.begin();}
-    /**
-     * Returns an iterator that shows where the values comprising
-     * this histogram end.
-     */
-    vBins::iterator end() { return m_values.end();}
-
+    Q_UINT32 getValue(Q_UINT8 i) { return m_values[i]; }
     QUANTUM getMax() { return m_max; }
     QUANTUM getMin() { return m_min; }
     Q_UINT32 getHighest() { return m_high; }
@@ -79,8 +70,8 @@ private:
 
     enumHistogramType m_type;
     
-    vBins m_values;
-    QUANTUM m_max, m_min;
+    Q_UINT32 m_values[256];
+    Q_UINT8 m_max, m_min;
     Q_UINT32 m_high, m_low;
     double m_mean, m_median, m_stddev;
     Q_UINT32 m_pixels, m_count;

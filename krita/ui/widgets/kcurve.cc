@@ -49,6 +49,7 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
     m_readOnlyMode   = false;
     m_guideVisible   = false;
     m_dragging = false;
+    m_pix = NULL;
     
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
@@ -64,6 +65,8 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
 
 KCurve::~KCurve()
 {
+    if(m_pix)
+        delete m_pix;
 }
 
 void KCurve::reset(void)
@@ -77,6 +80,12 @@ void KCurve::setCurveGuide(QColor color)
 {
     m_guideVisible = true;
     m_colorGuide   = color;
+    repaint(false);
+}
+
+void KCurve::setPixmap(QPixmap pix)
+{
+    m_pix = new QPixmap(pix);
     repaint(false);
 }
 
@@ -109,7 +118,14 @@ void KCurve::paintEvent(QPaintEvent *)
     p1.begin(&pm, this);
     
     //  draw background
-    pm.fill();
+    if(m_pix)
+    {
+        p1.scale(1.0*wWidth/m_pix->width(), 1.0*wHeight/m_pix->height());
+        p1.drawPixmap(0, 0, *m_pix);
+        p1.resetXForm();
+    }
+    else
+        pm.fill();
     
     // Draw grid separators.
     p1.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));

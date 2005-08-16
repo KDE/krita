@@ -55,29 +55,25 @@ void KisHistogramWidget::setHistogram(KisHistogramSP histogram)
     Q_UINT32 height = pixHistogram -> height();
     m_histogram = histogram;
     // XXX should the width be resisable?
-    m_pix = QPixmap(QUANTUM_MAX + 1, height);
+    m_pix = QPixmap(256, height);
     m_pix.fill();
-      QPainter p(&m_pix);
+    QPainter p(&m_pix);
     p.setBrush(Qt::black);
     
-    vBins::iterator it;
     Q_UINT32 i = 0;
 
     
     if (m_histogram -> getHistogramType() == LINEAR) {
         double factor = (double)height / (double)m_histogram -> getHighest();
-        for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-            p.drawLine(i, height, i, height - static_cast<Q_INT32>((double)(*it) * factor));
-            i++;
+        for( i=0; i<256; ++i ) {
+            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
         }
     } else {
         double factor = (double)height / (double)log(m_histogram -> getHighest());
-        for( it = m_histogram -> begin(); it != m_histogram -> end(); ++it ) {
-            p.drawLine(i, height, i, height - static_cast<Q_INT32>(log((double)*it) * factor));
-            i++;
+        for( i = 0; i < 256; ++i ) {
+            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
         }
     }
-
 
     pixHistogram -> setPixmap(m_pix);
 

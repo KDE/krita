@@ -22,6 +22,9 @@
 #include <klocale.h>
 
 #include <qlayout.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qlabel.h>
 
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
@@ -100,13 +103,59 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
+    int i;
+    int height;
     m_page = new WdgBrightnessContrast(this);
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l -> add(m_page);
-
+    height = 256;
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+
+    // Create the horizontal gradient label
+    QPixmap hgradientpix(256, 1);
+    QPainter hgp(&hgradientpix);
+    hgp.setPen(QPen::QPen(QColor(0,0,0),1, Qt::SolidLine));
+    for( i=0; i<256; ++i )
+    {
+        hgp.setPen(QColor(i,i,i));
+        hgp.drawPoint(i, 0);
+    }
+    m_page->hgradient->setPixmap(hgradientpix);
+    
+    // Create the vertical gradient label
+    QPixmap vgradientpix(1, 256);
+    QPainter vgp(&vgradientpix);
+    vgp.setPen(QPen::QPen(QColor(0,0,0),1, Qt::SolidLine));
+    for( i=0; i<256; ++i )
+    {
+        vgp.setPen(QColor(i,i,i));
+        vgp.drawPoint(0, 255-i);
+    }
+    m_page->vgradient->setPixmap(vgradientpix);
+    
+    QPixmap pix(256, height);
+    pix.fill();
+    QPainter p(&pix);
+    p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
+    for( i=0; i<256; ++i )
+        p.drawLine(i, height, i, height - i * height/256);
+/*
+    if (true){ //m_histogram -> getHistogramType() == LINEAR) {
+        double factor = (double)height / (double)m_histogram -> getHighest();
+        for( i=0; i<256; ++i ) {
+            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
+        }
+    } else {
+        double factor = (double)height / (double)log(m_histogram -> getHighest());
+        for( i = 0; i < 256; ++i ) {
+            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+        }
+    }
+*/
+    m_page->kCurve->setPixmap(pix);
+
 }
 
 KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::config()

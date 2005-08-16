@@ -36,7 +36,8 @@ public:
 
     void reset(void);
     void setCurveGuide(QColor color);
-    
+    void setPixmap(QPixmap pix);
+
 
 signals:
     
@@ -71,6 +72,7 @@ private:
     bool m_guideVisible;
     QColor m_colorGuide;
     QSortedList<dpoint> m_points;
+    QPixmap *m_pix;
 };
 
 

@@ -37,7 +37,7 @@
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
 
-K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) );
+K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) )
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)

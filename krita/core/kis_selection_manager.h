@@ -35,7 +35,7 @@ class KisClipboard;
  */
 class KRITACORE_EXPORT KisSelectionManager : public QObject {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

@@ -287,7 +287,7 @@ void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * l
     *hue = h * 360;
     *saturation = s;
     *lightness = l;
-};
+}
 
 float hue_value(float n1, float n2, float hue)
 {
@@ -302,7 +302,7 @@ float hue_value(float n1, float n2, float hue)
     else if (hue < 240 )
         return n1 + (((n2 - n1) * (240 - hue)) / 60);
     else return n1;
-};
+}
 
 
 void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b)
@@ -320,7 +320,7 @@ void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b
     *g = (Q_UINT8)(hue_value(m1, m2, h) * 255 + 0.5);
     *b = (Q_UINT8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
 
-};
+}
 
 void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s)
 {

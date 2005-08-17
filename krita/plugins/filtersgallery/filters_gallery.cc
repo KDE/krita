@@ -72,8 +72,8 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
     }
 }
 
-};
-};
-};
+}
+}
+}
 
 #include "filters_gallery.moc"

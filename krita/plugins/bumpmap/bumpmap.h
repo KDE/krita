@@ -38,7 +38,7 @@ namespace krita {
         SINUSOIDAL = 2
     };
 
-};
+}
 
 using namespace krita;
 

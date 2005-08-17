@@ -44,7 +44,7 @@ class KisPreviewDialog;
  */
 class KRITACORE_EXPORT KisFilterManager : public QObject {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

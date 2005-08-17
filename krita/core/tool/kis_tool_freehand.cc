@@ -232,7 +232,7 @@ KisImageSP KisToolFreehand::currentImage()
 
 void KisToolFreehand::setUseTempLayer(bool u) {
     m_useTempLayer = u;
-};
+}
 
 #include "kis_tool_freehand.moc"
 

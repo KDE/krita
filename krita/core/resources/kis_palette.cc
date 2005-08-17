@@ -51,7 +51,7 @@ namespace {
         FORMAT_ACT // Photoshop binary color palette
     };
 
-};
+}
 
 
 KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name)

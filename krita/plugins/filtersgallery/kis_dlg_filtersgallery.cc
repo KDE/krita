@@ -100,8 +100,8 @@ void KisDlgFiltersGallery::refreshPreview( )
     m_previewWidget->slotUpdate();
 }
 
-};
-};
-};
+}
+}
+}
 
 #include "kis_dlg_filtersgallery.moc"

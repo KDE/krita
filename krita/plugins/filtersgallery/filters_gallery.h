@@ -43,9 +43,9 @@ namespace FiltersGallery {
     
     };
 
-};
-};
-};
+}
+}
+}
 
 
 

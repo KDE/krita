@@ -29,7 +29,7 @@ class KisAutogradient : public KisWdgAutogradient
     Q_OBJECT
 
     public:
-        KisAutogradient(QWidget *parent, const char* name, const QString& caption);;
+        KisAutogradient(QWidget *parent, const char* name, const QString& caption);
         void activate();
     signals:
         void activatedResource(KisResource *r);

@@ -60,7 +60,7 @@ namespace FiltersGallery {
             KisLayerSP m_thumb;
     };
 
-};
-};
-};
+}
+}
+}
 #endif

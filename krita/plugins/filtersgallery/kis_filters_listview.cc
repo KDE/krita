@@ -81,6 +81,6 @@ void KisFiltersListView::buildPreview()
 // KisLayerSP KisFiltersListView::layer() { return m_thumb; }
 
 
-};
-};
-};
+}
+}
+}

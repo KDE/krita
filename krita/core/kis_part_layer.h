@@ -69,7 +69,7 @@ protected:
 class KisPartLayer : public KisLayer {
 
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

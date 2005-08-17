@@ -58,7 +58,7 @@ KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
     m_khsSelector->show();
     m_valueSelector->show();
 
-};
+}
 
 KisColorCup::KisColorCup(QWidget * parent, const char * name)
     : QPushButton(parent, name)

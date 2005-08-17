@@ -52,7 +52,7 @@ public:
 
     void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
 
-    QImage KisSelection::maskImage();
+    QImage maskImage();
 
     void select(QRect r);
 

@@ -57,8 +57,8 @@ class KisDlgFiltersGallery : public KDialogBase
         QHBoxLayout* m_hlayout;
 };
 
-};
-};
-};
+}
+}
+}
 
 #endif

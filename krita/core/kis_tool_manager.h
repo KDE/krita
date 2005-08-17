@@ -40,7 +40,7 @@ class KisToolBox;
  */
 class KisToolManager : public QObject, public KisToolControllerInterface {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

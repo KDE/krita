@@ -41,7 +41,7 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh
         m_xfadecoef ( (m_fh == 0) ? 1 : ( 1.0 / m_fh)),
         m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
 {
-};
+}
 Q_INT8 KisAutobrushCircleShape::valueAt(Q_INT32 x, Q_INT32 y)
 {
     double xr = (x - m_xcentre);

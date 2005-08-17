@@ -33,7 +33,7 @@ class KValueSelector;
 
 class KisColorPopup : public QFrame {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

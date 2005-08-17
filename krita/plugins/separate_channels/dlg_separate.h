@@ -51,7 +51,7 @@ public:
     enumSepOutput getOutput();
 
     bool getDownscale();
-    void enableDownscale(bool enable);;
+    void enableDownscale(bool enable);
 
     bool getToColor();
     

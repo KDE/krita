@@ -27,7 +27,7 @@ class QPushButton;
 class KisView;
 class KisCustomGradientDialog : public KDialogBase {
 
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
 

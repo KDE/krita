@@ -25,6 +25,7 @@ Name[sr@Latn]=RGB model boja
 Name[sv]=RGB-färgmodell
 Name[ta]=RGB வண்ண மாதிரி
 Name[tr]=RGB Renk Modeli
+Name[uk]=Модель кольору RGB
 Name[xx]=xxRGB Color Modelxx
 Name[zh_CN]=RGB 色彩模型
 Comment=Color model for 8-bit/channel RGB images

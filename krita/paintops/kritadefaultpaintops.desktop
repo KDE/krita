@@ -39,6 +39,7 @@ Comment[sr]=Подразумеване сликарске операције
 Comment[sr@Latn]=Podrazumevane slikarske operacije
 Comment[sv]=Förvalda ritåtgärder
 Comment[tr]=Varsayılan boyama işlemleri
+Comment[uk]=Типові дії малювання
 Comment[zh_CN]=默认绘图操作
 ServiceTypes=Krita/CoreModule
 Type=Service

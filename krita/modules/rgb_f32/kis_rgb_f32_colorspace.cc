@@ -72,8 +72,11 @@ KisF32RgbColorSpace::KisF32RgbColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), ALPHA, sizeof(float)));
 
     
-    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
+    //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
+    //setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
+
+    // XXX: Prevent use of lcms transforms until they're ready to work.
+    setDefaultProfile(0);
 
     m_alphaPos = PIXEL_ALPHA * sizeof(float);
 }

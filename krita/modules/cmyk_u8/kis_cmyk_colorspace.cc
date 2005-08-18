@@ -194,7 +194,6 @@ QImage KisCmykColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_
                     &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
      }
      else {
-        kdDebug() << "Display conversion: " << srcProfile->productName() << ", " << dstProfile->productName() << "\n"; 
          // Do a nice calibrated conversion
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)

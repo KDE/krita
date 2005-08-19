@@ -48,6 +48,8 @@
 #include "kis_pattern.h"
 #include "kis_palette.h"
 
+#include <kogradientmanager.h>
+
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
 KisResourceServerRegistry* KisFactory::s_rserverRegistry = 0;
@@ -81,7 +83,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     s_rserverRegistry -> add( KisID( "PatternServer", ""), patternServer );
 
     fileExtensions.clear();
-    fileExtensions << "*.ggr";
+    fileExtensions = KoGradientManager::filters();
     KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients", fileExtensions);
     Q_CHECK_PTR(gradientServer);
     s_rserverRegistry -> add( KisID( "GradientServer", ""), gradientServer );

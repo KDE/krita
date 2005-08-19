@@ -30,6 +30,7 @@
 #include <qfile.h>
 
 #include <koColor.h>
+#include <kogradientmanager.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -63,10 +64,6 @@ KisGradient::~KisGradient()
 
 bool KisGradient::load()
 {
-    QFile file(filename());
-    file.open(IO_ReadOnly);
-    m_data = file.readAll();
-    file.close();
     return init();
 }
 
@@ -82,90 +79,48 @@ QImage KisGradient::img()
 
 bool KisGradient::init()
 {
-    // Gimp gradient files are UTF-8 text files.
-    QTextIStream fileContent(m_data);
-    fileContent.setEncoding(QTextStream::UnicodeUTF8);
+    KoGradientManager gradLoader;
+    KoGradient* grad = gradLoader.loadGradient(filename());
 
-    QString header = fileContent.readLine();
-
-    if (header != "GIMP Gradient") {
+    if( !grad )
         return false;
-    }
 
-    QString nameDefinition = fileContent.readLine();
-    QString numSegmentsText;
+    m_segments.clear();
 
-    if (nameDefinition.startsWith("Name: ")) {
-        QString nameText = nameDefinition.right(nameDefinition.length() - 6);
-        setName(i18n(nameText.ascii()));
+    if( grad->colorStops.count() > 1 ) {
+        KoColorStop *colstop;
+        for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next()) {
+            KoColorStop *colstopNext = grad->colorStops.next();
 
-        numSegmentsText = fileContent.readLine();
-    }
-    else {
-        // Older format without name.
+            if(colstopNext) {
+                KoColor leftRgb((int)(colstop->color1 * 255 + 0.5), (int)(colstop->color2 * 255 + 0.5), (int)(colstop->color3 * 255 + 0.5));
+                KoColor rightRgb((int)(colstopNext->color1 * 255 + 0.5), (int)(colstopNext->color2 * 255 + 0.5), (int)(colstopNext->color3 * 255 + 0.5));
 
-        numSegmentsText = nameDefinition;
-    }
+                double midp = colstop->midpoint;
+                midp = colstop->offset + ((colstopNext->offset - colstop->offset) * midp);
 
-    kdDebug(DBG_AREA_FILE) << "Loading gradient: " << name() << endl;
+                Color leftColor(leftRgb.color(), colstop->opacity);
+                Color rightColor(rightRgb.color(), colstopNext->opacity);
 
-    int numSegments;
-    bool ok;
+                KisGradientSegment *segment = new KisGradientSegment(colstop->interpolation, colstop->colorType, colstop->offset, midp, colstopNext->offset, leftColor, rightColor);
+                Q_CHECK_PTR(segment);
 
-    numSegments = numSegmentsText.toInt(&ok);
+                if ( !segment -> isValid() ) {
+                    delete segment;
+                    return false;
+                }
 
-    if (!ok || numSegments < 1) {
-        return false;
-    }
-
-    kdDebug(DBG_AREA_FILE) << "Number of segments = " << numSegments << endl;
-
-    for (int i = 0; i < numSegments; i++) {
-
-        QString segmentText = fileContent.readLine();
-        QTextIStream segmentFields(&segmentText);
-
-        double leftOffset;
-        double middleOffset;
-        double rightOffset;
-
-        segmentFields >> leftOffset >> middleOffset >> rightOffset;
-
-        double leftRed;
-        double leftGreen;
-        double leftBlue;
-        double leftAlpha;
-
-        segmentFields >> leftRed >> leftGreen >> leftBlue >> leftAlpha;
-
-        double rightRed;
-        double rightGreen;
-        double rightBlue;
-        double rightAlpha;
-
-        segmentFields >> rightRed >> rightGreen >> rightBlue >> rightAlpha;
-
-        int interpolationType;
-        int colorInterpolationType;
-
-        segmentFields >> interpolationType >> colorInterpolationType;
-
-        KoColor leftRgb((int)(leftRed * 255 + 0.5), (int)(leftGreen * 255 + 0.5), (int)(leftBlue * 255 + 0.5));
-        KoColor rightRgb((int)(rightRed * 255 + 0.5), (int)(rightGreen * 255 + 0.5), (int)(rightBlue * 255 + 0.5));
-
-        Color leftColor(leftRgb.color(), leftAlpha);
-        Color rightColor(rightRgb.color(), rightAlpha);
-
-        KisGradientSegment *segment = new KisGradientSegment(interpolationType, colorInterpolationType, leftOffset, middleOffset, rightOffset, leftColor, rightColor);
-        Q_CHECK_PTR(segment);
-
-        if ( !segment -> isValid() ) {
-            delete segment;
-            return false;
+                m_segments.push_back(segment);
+                grad->colorStops.prev();
+            }
+            else {
+                grad->colorStops.prev();
+                break;
+            }
         }
-
-        m_segments.push_back(segment);
     }
+    else
+        return false;
 
     if (!m_segments.isEmpty()) {
         m_img = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);

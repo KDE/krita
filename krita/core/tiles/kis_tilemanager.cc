@@ -132,7 +132,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
         freeInfo -> size = info -> fsize;
         int pixelSize = (info -> size / m_tileSize);
         if (m_freeLists.capacity() <= pixelSize)
-            m_freeLists.resize(pixelSize);
+            m_freeLists.resize(pixelSize + 1);
         m_freeLists[pixelSize].push_back(freeInfo);
 
         madvise(info -> tile -> m_data, info -> fsize, MADV_DONTNEED);

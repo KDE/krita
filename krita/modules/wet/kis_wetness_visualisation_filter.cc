@@ -73,3 +73,5 @@ void WetnessVisualisationFilter::slotTimeout() {
     if (m_view -> currentImg())
         m_view -> currentImg() -> notify();
 }
+
+#include "kis_wetness_visualisation_filter.moc"

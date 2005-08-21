@@ -50,3 +50,5 @@ void TextureFilter::slotActivated() {
     painter.end();
     m_view -> currentImg() -> notify();
 }
+
+#include "kis_texture_filter.moc"

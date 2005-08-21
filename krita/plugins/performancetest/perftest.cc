@@ -401,7 +401,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 
 
         t.restart();
-        for (Q_UINT32 i = 0; i < testCount; ++i, Qt::blue) {
+        for (Q_UINT32 i = 0; i < testCount; ++i) {
             p.fillRect(-50, -50, 1100, 1100, Qt::lightGray);
         }
         report = report.append(QString("    Opaque fill rect bigger than layer %1 times: %2\n").arg(testCount).arg(t.elapsed()));

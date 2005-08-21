@@ -98,7 +98,7 @@ public:
     virtual bool visit(KisPainter& gc, KisLayerSP layer)
     {
         visit(gc, layer.data(), layer -> opacity());
-        return true; 
+        return true;
     }
 
     virtual bool visit(KisPainter& gc, KisSelectionSP selection)
@@ -107,12 +107,13 @@ public:
                    // selection mas. make an option.
 
         visit(gc, selection.data(), OPACITY);
-        return true; 
+        return true;
     }
 
 private:
     void visit(KisPainter& gc, KisPaintDeviceSP dev, Q_INT32 opacity)
     {
+//         kdDebug() << "\tpainting device " << dev->name() << ", " << dev->colorStrategy()->id().name() << "\n";
         Q_INT32 w = m_rc.width();
         Q_INT32 h = m_rc.height();
         Q_INT32 dx = m_rc.x();

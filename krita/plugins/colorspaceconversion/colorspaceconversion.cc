@@ -102,8 +102,8 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         // XXX: Should we actually set the profile here?
         image -> setProfile(KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
         image -> convertTo(cs,
-                   KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-                   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+                           KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                           dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
     }
     delete dlgColorSpaceConversion;
 }
@@ -133,8 +133,8 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText());
         dev -> convertTo(cs,
-                   KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-                   dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+                         KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
+                         dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         image -> notify();
         image -> notifyLayersChanged();
     }

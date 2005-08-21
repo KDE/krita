@@ -41,8 +41,9 @@ namespace {
     const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_OPAQUE;
-const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
+// XXX: already defined is superclass?
+//const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_OPAQUE;
+//const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
 KisRgbU16ColorSpace::KisRgbU16ColorSpace() :
     KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData)
@@ -56,6 +57,8 @@ KisRgbU16ColorSpace::KisRgbU16ColorSpace() :
     setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_16) );
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
+
+    init();
 }
 
 KisRgbU16ColorSpace::~KisRgbU16ColorSpace()
@@ -89,6 +92,7 @@ void KisRgbU16ColorSpace::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfil
     dst -> red = UINT8_TO_UINT16(c.red());
     dst -> green = UINT8_TO_UINT16(c.green());
     dst -> blue = UINT8_TO_UINT16(c.blue());
+    dst -> alpha = U16_OPACITY_OPAQUE;
 }
 
 void KisRgbU16ColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)

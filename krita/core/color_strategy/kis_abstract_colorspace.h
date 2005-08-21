@@ -38,7 +38,6 @@
 class QPainter;
 class KisIteratorPixel;
 class KisPixel;
-class KisPixelOp;
 class KisPixelRO;
 
 
@@ -76,6 +75,14 @@ public:
      * @param colorSpaceSignature The icc signature for the colorspace we are.
      */
     KisAbstractColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature);
+
+    /**
+     * After creating the default profile, call init to setup the default
+     * colortransforms from and to rgb and xyz -- if your colorspace needs
+     * the fallback to the default transforms for the qcolor conversion
+     * and the default pixel ops.
+     */
+    void init();
 
     virtual ~KisAbstractColorSpace();
 
@@ -213,8 +220,8 @@ public:
      * XXX: We actually do not use the display yet, nor the paint device profile
      *
      */
-     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 );
-     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 );
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
     /**
      * Get the alpha value of the given pixel.
@@ -263,7 +270,8 @@ public:
 
     /**
      * Convert the value of the channel at the specified position into
-     * an 8-bit value.
+     * an 8-bit value. The position is not the number of bytes, but
+     * the position of the channel as defined in the channel info list.
      */
     Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
@@ -276,15 +284,11 @@ public:
 
 //============================== Manipulation fucntions ==========================//
 
-    KisPixelOp * getPixelOp(const KisID & id);
 
 // 
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
-
-
-
 
     /**
      * Set the alpha channel to the given value.
@@ -416,6 +420,14 @@ protected:
 
     cmsHTRANSFORM m_defaultToRGB;
     cmsHTRANSFORM m_defaultFromRGB;
+    cmsHTRANSFORM m_defaultToXYZ;
+    cmsHTRANSFORM m_defaultFromXYZ;
+
+    KisProfileSP m_lastUsedSrcProfile;
+    KisProfileSP m_lastUsedDstProfile;
+    cmsHTRANSFORM m_lastUsedTransform;
+
+
 
 private:
 
@@ -430,9 +442,8 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    Q_UINT32 m_cachesize;
     Q_UINT8 * m_conversionCache;
-
+    Q_UINT32 m_conversionCacheSize;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

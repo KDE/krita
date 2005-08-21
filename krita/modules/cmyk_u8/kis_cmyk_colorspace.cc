@@ -68,56 +68,15 @@ KisCmykColorSpace::KisCmykColorSpace() :
         return;
     }
 
-    // Create the default transforms from and to a QColor. Use the
-    // display profile if there's one, otherwise a generic sRGB profile
-    // XXX: For now, always use the generic sRGB profile.
-
-    cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
-    cmsHPROFILE hsCMYK = getDefaultProfile()->profile();
-
-    m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
-                          hsCMYK, TYPE_CMYK_8,
-                          INTENT_PERCEPTUAL, 0);
-
-    m_defaultToRGB =  cmsCreateTransform(hsCMYK, TYPE_CMYK_8,
-                         hsRGB, TYPE_BGR_8,
-                         INTENT_PERCEPTUAL, 0);
-
-    // Default pixel buffer for QColor conversion
-    m_qcolordata = new Q_UINT8[3];
-    Q_CHECK_PTR(m_qcolordata);
-
     m_alphaPos = PIXEL_CMYK_ALPHA;
+
+    init();
 }
 
 KisCmykColorSpace::~KisCmykColorSpace()
 {
-    // XXX: These deletes cause a crash, but since the color strategy is a singleton
-    //      that's only deleted at application close, it's no big deal.
-    // delete [] m_qcolordata;
-    //cmsDeleteTransform(m_defaultToRGB);
-    //cmsDeleteTransform(m_defaultFromRGB);
 }
 
-void KisCmykColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP profile)
-{
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[4] = OPACITY_OPAQUE;
-}
-
-void KisCmykColorSpace::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
-{
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[4] = opacity;
-}
 
 void KisCmykColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
 {
@@ -131,20 +90,6 @@ void KisCmykColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels
         --nPixels;
         pixels += cmyk::MAX_CHANNEL_CMYKA;
     }
-}
-
-void KisCmykColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
-{
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-}
-
-void KisCmykColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
-{
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-
-     *opacity = src[4];
 }
 
 void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
@@ -186,22 +131,23 @@ QImage KisCmykColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_
     KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
 
-     if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
+
+    if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                  cmsDoTransform(m_defaultToRGB,
-                    const_cast<Q_UINT8 *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
-                    &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
-     }
-     else {
-         // Do a nice calibrated conversion
+                                const_cast<Q_UINT8 *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
+                                &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
+    }
+    else {
+        // Do a nice calibrated conversion
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 convertPixelsTo(const_cast<Q_UINT8 *>
-                        (&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
-                        srcProfile,
-                        &(img.scanLine(i)[j*img.bytesPerLine()/width]),
-                        dstCS, dstProfile, 1, renderingIntent);
+                                (&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
+                                srcProfile,
+                                &(img.scanLine(i)[j*img.bytesPerLine()/width]),
+                                dstCS, dstProfile, 1, renderingIntent);
      }
 
     return img;
@@ -262,9 +208,9 @@ void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,
 
 // XXX: Cut & Paste from colorspace_rgb
 
-void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, 
-                         const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, 
-                         Q_INT32 rows, Q_INT32 numColumns, 
+void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
+                         const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
+                         Q_INT32 rows, Q_INT32 numColumns,
                          QUANTUM opacity)
 {
     while (rows > 0) {
@@ -326,7 +272,7 @@ void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
                 memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
 
             } else {
-                
+
                 dst[PIXEL_CYAN] = UINT8_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], opacity);
                 dst[PIXEL_MAGENTA] = UINT8_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], opacity);
                 dst[PIXEL_YELLOW] = UINT8_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], opacity);

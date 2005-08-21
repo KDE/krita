@@ -173,13 +173,13 @@ namespace {
 
 
     // -------------------------------------------------------
-    
+
     class KisConvertImageTypeCmd : public KNamedCommand {
         typedef KNamedCommand super;
 
     public:
-        KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img, 
-                       KisAbstractColorSpace * beforeColorSpace, KisProfileSP beforeProfile, 
+        KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
+                       KisAbstractColorSpace * beforeColorSpace, KisProfileSP beforeProfile,
                        KisAbstractColorSpace * afterColorSpace, KisProfileSP afterProfile
                        ) : super(i18n("Convert Image Type"))
             {
@@ -478,7 +478,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
             m_layerStack.push_back(layer);
             m_activeLayer = layer;
         }
-        
+
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
 
@@ -699,7 +699,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
         }
 
         //XXX: This is very ugly.
-        KNamedCommand *moveCommand = layer -> moveCommand(layer -> getX() + oldCentreToNewCentreXOffset, 
+        KNamedCommand *moveCommand = layer -> moveCommand(layer -> getX() + oldCentreToNewCentreXOffset,
                                   layer -> getY() + oldCentreToNewCentreYOffset);
         if (undoAdapter() && m_adapter->undo()) {
             m_adapter->addCommand(moveCommand);
@@ -793,11 +793,11 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
 {
     // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
     if ( (m_colorStrategy -> id() == dstColorStrategy -> id())
-         && profile() 
-         && dstProfile 
-         && (profile() -> profile() == dstProfile -> profile()) )
+         && profile()
+         && dstProfile
+         && (profile() == dstProfile) )
     {
-        kdDebug(DBG_AREA_CORE) << "KisImage: NOT GOING TO CONVERT\n";
+//         kdDebug(DBG_AREA_CORE) << "KisImage: NOT GOING TO CONVERT\n";
         return;
     }
 
@@ -807,6 +807,9 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
 
     vKisLayerSP_it it;
     for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
+//         kdDebug() << "Converting layer " << ( *it )->name() << " from " << ( *it )->colorStrategy()->id().name()
+//                   << " to " << dstColorStrategy->id().name() << "\n";
+
         (*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
     }
 
@@ -814,20 +817,20 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
 
     m_projection->convertTo(dstColorStrategy, dstProfile, renderingIntent);
     m_bkg->convertTo(dstColorStrategy, dstProfile, renderingIntent);
-    
+
     if (undoAdapter() && m_adapter->undo()) {
-        
+
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
                 m_colorStrategy, m_profile,  dstColorStrategy, dstProfile));
         m_adapter->endMacro();
     }
 
-    
+
     setColorStrategy(dstColorStrategy);
 
     notify();
     notifyLayersChanged();
-    
+
 }
 
 KisProfileSP KisImage::profile() const
@@ -954,7 +957,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& composi
 
     layer -> setOpacity(opacity);
     layer -> setCompositeOp(compositeOp);
-    
+
     if (layer && add(layer, -1)) {
         layer = activate(layer);
 
@@ -983,7 +986,7 @@ KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
 
     if (m_adapter->undo())
         m_adapter->addCommand(new LayerAddCmd(m_adapter, this, l));
-        
+
     l -> setVisible(true);
     emit layersUpdated(this);
 
@@ -1539,6 +1542,7 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     KisPainter gc;
 
+//     kdDebug () << "Rendering onto projection " << m_projection->colorStrategy()->id().name() << "\n";
     gc.begin(m_projection.data());
 
     gc.bitBlt(x, y, COMPOSITE_COPY, m_bkg.data(), x, y, w, h);
@@ -1573,14 +1577,14 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
             Q_INT32 w = QMIN(x2 - x + 1, RENDER_WIDTH);
 
-            
+
 
             renderToProjection(x, y, w, h);
             QImage img = m_projection -> convertToQImage(monitorProfile, x, y, w, h, exposure);
 
             if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
                 m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
-            
+
             if (!img.isNull()) {
                 m_pixmap.convertFromImage(img);
                 painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
@@ -1606,7 +1610,7 @@ KisPaintDeviceSP KisImage::mergedImage()
     }
 
     gc.end();
-    
+
     return dev;
 }
 
@@ -1670,16 +1674,16 @@ KisGuideMgr *KisImage::guides() const
 
 void KisImage::slotSelectionChanged()
 {
-    kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
+//     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
     notify();
     emit activeSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
 {
-    kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
+//     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
-    
+
     notify(r2);
     emit activeSelectionChanged(KisImageSP(this));
 }

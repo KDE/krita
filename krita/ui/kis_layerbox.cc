@@ -256,7 +256,7 @@ void KisLayerBox::slotSetCurrentItem(int n)
 
     }
     m_lst -> bnRaise -> setEnabled(n > 0);
-    m_lst -> bnLower -> setEnabled(n < m_lst -> listLayers -> count() - 1);
+    m_lst -> bnLower -> setEnabled((Q_UINT32)n < m_lst -> listLayers -> count() - 1);
 }
 
 void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)

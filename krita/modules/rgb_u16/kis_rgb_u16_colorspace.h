@@ -32,8 +32,6 @@
 
 class KRITATOOL_EXPORT KisRgbU16ColorSpace : public KisU16BaseColorSpace {
 public:
-    static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;
-    static const Q_UINT16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
 
     struct Pixel {
         Q_UINT16 blue;
@@ -41,6 +39,7 @@ public:
         Q_UINT16 red;
         Q_UINT16 alpha;
     };
+
 public:
     KisRgbU16ColorSpace();
     virtual ~KisRgbU16ColorSpace();

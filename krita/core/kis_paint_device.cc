@@ -135,7 +135,7 @@ namespace {
         KisCompositeOp m_newCompositeOp;
     };
 
-    KisPaintDeviceCompositeOpCommand::KisPaintDeviceCompositeOpCommand(KisPaintDeviceSP paintDevice, const KisCompositeOp& oldCompositeOp, 
+    KisPaintDeviceCompositeOpCommand::KisPaintDeviceCompositeOpCommand(KisPaintDeviceSP paintDevice, const KisCompositeOp& oldCompositeOp,
                                        const KisCompositeOp& newCompositeOp) :
         super(i18n("Layer Composite Mode"), paintDevice)
     {
@@ -663,7 +663,6 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
 {
     if (profile() == 0) setProfile(m_owner -> profile());
 
-    // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
     if ( (colorStrategy() -> id() == dstColorStrategy -> id())
          && profile()
          && dstProfile
@@ -682,6 +681,17 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
 
     for (Q_INT32 row = y; row < y + h; ++row) {
 
+#if 0
+
+        KisHLineIterator srcIt = createHLineIterator( x, row, w, false );
+        KisHLineIterator dstIt = dst.createHLineIterator( x, row, w, true );
+        while ( !srcIt.isDone() ) {
+            m_colorStrategy->convertPixelsTo( srcIt.rawData(), m_profile, dstIt.rawData(), dstColorStrategy, dstProfile, 1, renderingIntent );
+            ++srcIt;
+            ++dstIt;
+        }
+
+#else
         Q_INT32 column = x;
         Q_INT32 columnsRemaining = w;
 
@@ -701,7 +711,10 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
             column += columns;
             columnsRemaining -= columns;
         }
+#endif
+
     }
+
     if (undoAdapter() && undoAdapter() -> undo()) {
         undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorStrategy, m_profile,
                                        dst.m_datamanager, dstColorStrategy, dstProfile));
@@ -841,7 +854,7 @@ KisSelectionSP KisPaintDevice::selection(){
     }
 
     m_hasSelection = true;
-    
+
     return m_selection;
 }
 
@@ -877,21 +890,21 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 
 void KisPaintDevice::clearSelection()
 {
-    
+
     if (!hasSelection()) return;
 
     QRect r = m_selection -> selectedRect();
     r = r.normalize();
-    
+
     for (Q_INT32 y = 0; y < r.height(); y++) {
         KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
         KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
         while (!devIt.isDone()) {
             // XXX: Optimize by using stretches
-            
+
             m_colorStrategy->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
-            
+
             ++devIt;
             ++selectionIt;
         }
@@ -900,7 +913,6 @@ void KisPaintDevice::clearSelection()
 
 void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 {
-    kdDebug() << "KisPaintDevice::applySelectionMask: " << m_name << "\n";
     QRect r = mask -> extent();
     crop(r);
 
@@ -923,13 +935,13 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-    
+
     Q_UINT8 *pix = iter.rawData();
-    
+
     if (!pix) return false;
- 
+
     colorStrategy() -> toQColor(pix, c, opacity, m_profile);
-    
+
     return true;
 }
 
@@ -937,16 +949,16 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
 bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-    
+
     Q_UINT8 *pix = iter.rawData();
-    
+
     if (!pix) return false;
 
     kc->setColor(pix, m_colorStrategy, m_profile);
 
     return true;
 }
-    
+
 KisColor KisPaintDevice::colorAt(Q_INT32 x, Q_INT32 y)
 {
     return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorStrategy, m_profile);
@@ -977,7 +989,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
 
     return true;
 }
-    
+
 
 Q_INT32 KisPaintDevice::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
 {

@@ -55,6 +55,8 @@ KisRgbColorSpace::KisRgbColorSpace() :
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_8) );
     m_alphaPos = PIXEL_ALPHA;
+
+    init();
 }
 
 struct KisColorAdjustment

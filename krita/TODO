@@ -56,7 +56,7 @@ Colorspace independence (found with the test colorstrategy)
 Core
 
 	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
-	* Histogram computations. (CBR)
+	* Histogram computations. Make histogram widget zoomable for 16-bit channel/images
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
 	  image date, except for an occasional mask) These should work on object

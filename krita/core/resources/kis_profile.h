@@ -38,7 +38,7 @@
 
 
 //XXX: Profiles should be loaded by the color strategies
-//     and be available only through the color strategy 
+//     and be available only through the color strategy
 //     that matches the profile's color model
 class KisProfile : public KisResource, public KShared {
     typedef KisResource super;
@@ -54,7 +54,7 @@ public:
     // raw data, so we cannot save it as an annotation, unless we implement the code
     // in lcms testbed TestSaveToMem -- XXX.
     KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
-    
+
     virtual ~KisProfile();
 
     virtual bool load();
@@ -72,13 +72,15 @@ public:
     void setColorType(DWORD colorType) { m_lcmsColorType = colorType; }
     KisAnnotationSP annotation() const;
 
+    friend inline bool operator==( const KisProfile &,  const KisProfile & );
+
 public:
 
     static KisProfileSP getScreenProfile(int screen = -1);
 
 private:
     bool init();
-    
+
     cmsHPROFILE m_profile;
     icColorSpaceSignature m_colorSpaceSignature;
     icProfileClassSignature m_deviceClass;
@@ -90,6 +92,11 @@ private:
 
     QByteArray m_rawData;
 };
+
+inline bool operator==( const KisProfile & p1,  const KisProfile & p2 )
+{
+    return p1.m_profile == p2.m_profile;
+}
 
 
 

@@ -35,14 +35,8 @@ public:
 
 public:
 
-    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
-
     virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
-    virtual void toQColor(const Q_UINT8 *src, QColor *color, KisProfileSP profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *color, QUANTUM *opacity, KisProfileSP profile = 0);
 
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
         { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
@@ -50,7 +44,7 @@ public:
         { return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-    
+
     virtual vKisChannelInfoSP channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
@@ -89,8 +83,6 @@ protected:
 private:
     vKisChannelInfoSP m_channels;
 
-    cmsHTRANSFORM m_defaultToRGB;
-    cmsHTRANSFORM m_defaultFromRGB;
     Q_UINT8 * m_qcolordata;
 
     static const Q_UINT8 PIXEL_CYAN = 0;

@@ -60,22 +60,7 @@ KisXyzColorSpace::KisXyzColorSpace() :
 
     setDefaultProfile( new KisProfile(hProfile, TYPE_XYZ_16) );
 
-    // For conversions from default rgb
-    cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
-    
-    m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
-                          hProfile, TYPE_XYZ_16,
-                          INTENT_PERCEPTUAL, 0);
-
-    m_defaultToRGB =  cmsCreateTransform(hProfile, TYPE_XYZ_16,
-                         hsRGB, TYPE_BGR_8,
-                         INTENT_PERCEPTUAL, 0);
-
-
-    // Default pixel buffer for QColor conversion
-    m_qcolordata = new Q_UINT8[3];
-    Q_CHECK_PTR(m_qcolordata);
-
+    init();
 }
 
 
@@ -85,13 +70,16 @@ KisXyzColorSpace::~KisXyzColorSpace()
 
 void KisXyzColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
+    
     m_qcolordata[2] = color.red();
     m_qcolordata[1] = color.green();
     m_qcolordata[0] = color.blue();
 
     // XXX: Use proper conversion from RGB with profiles
     cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[4] = OPACITY_OPAQUE;
+
+    Pixel *p = reinterpret_cast<Pixel *>(dst);
+    p-> alpha = U16_OPACITY_OPAQUE;
 
 }
 
@@ -104,7 +92,9 @@ void KisXyzColorSpace::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8
 
     // XXX: Use proper conversion from RGB with profiles
     cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[4] = opacity;
+
+    Pixel *p= reinterpret_cast<Pixel *>(dst);
+    p -> alpha = UINT8_TO_UINT16(opacity);
 }
 
 void KisXyzColorSpace::getAlpha(const Q_UINT8 *U8_pixel, Q_UINT8 *alpha)
@@ -136,17 +126,11 @@ void KisXyzColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity,
     // XXX: Properly convert using the rgb colorspace and the profile
     cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-
-     *opacity = src[4];
+    
+    const Pixel *p = reinterpret_cast<const Pixel *>(src);
+    *opacity = UINT16_TO_UINT8(p -> alpha);
 }
 
-Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
-{
-}
-
-void KisXyzColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
-{
-}
 
 vKisChannelInfoSP KisXyzColorSpace::channels() const
 {
@@ -204,8 +188,47 @@ QImage KisXyzColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     return img;
 }
 
+void KisXyzColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+void KisXyzColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+KisColorAdjustment * KisXyzColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
+{
+    return 0;
+}
+
+void KisXyzColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels)
+{
+}
+
+Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
+{
+    return 0;
+}
+
+void KisXyzColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+{
+}
+
+void KisXyzColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const
+{
+}
+
+void KisXyzColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+{
+}
+
 void KisXyzColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
+}
+
+Q_UINT8 KisXyzColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    return 0;
 }
 
 void KisXyzColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)

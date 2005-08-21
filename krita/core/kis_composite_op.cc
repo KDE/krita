@@ -132,6 +132,6 @@ void KisCompositeOp::fillMap()
     s_idOpMap[KisID("copyyellow",     i18n("Copy Yellow"))] =        COMPOSITE_COPY_YELLOW;        
     s_idOpMap[KisID("copyblack",     i18n("Copy Black"))] =        COMPOSITE_COPY_BLACK;         
     s_idOpMap[KisID("erase",     i18n("Erase"))] =        COMPOSITE_ERASE;              
-    s_idOpMap[KisID("undefined",     i18n(""))] =            COMPOSITE_UNDEF;              
+    s_idOpMap[KisID("undefined",     i18n("Undefined"))] =            COMPOSITE_UNDEF;              
 }
                  

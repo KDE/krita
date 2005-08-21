@@ -681,7 +681,7 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
 
     for (Q_INT32 row = y; row < y + h; ++row) {
 
-#if 0
+#if 1
 
         KisHLineIterator srcIt = createHLineIterator( x, row, w, false );
         KisHLineIterator dstIt = dst.createHLineIterator( x, row, w, true );

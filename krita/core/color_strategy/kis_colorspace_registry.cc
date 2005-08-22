@@ -26,6 +26,7 @@
 #include "kis_factory.h"
 #include "kis_types.h"
 #include "kis_xyz_colorspace.h"
+#include "kis_alpha_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_pixel_op.h"
 
@@ -48,6 +49,7 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
         KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
         Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
         m_singleton->add(new KisXyzColorSpace());
+        m_singleton->add(new KisAlphaColorSpace());
         m_singleton->resetProfiles();
     }
     return KisColorSpaceRegistry::m_singleton;

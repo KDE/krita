@@ -5,9 +5,7 @@
 		<Action name="imgcolorspaceconversion"/>
     </Menu>
     <Menu name="Layer"><text>Layer</text>
-	    <Menu name="Mode"><text>&amp;Mode</text>
 		<Action name="layercolorspaceconversion"/>
-    	    </Menu>
     </Menu>
 </MenuBar>
 </kpartgui>

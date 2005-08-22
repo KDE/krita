@@ -51,12 +51,12 @@ KisAlphaColorSpace::~KisAlphaColorSpace()
 {
 }
 
-void KisAlphaColorSpace::nativeColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisAlphaColorSpace::nativeColor(const QColor& /*c*/, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -155,7 +155,7 @@ bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcP
 
     while ( i < numPixels ) {
 
-        dstColorStrategy -> nativeColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
+        dstColorStrategy -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
         i += 1;
         j += size;

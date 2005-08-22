@@ -41,11 +41,27 @@ KisColor::KisColor(const QColor & color)
     Q_ASSERT(color.isValid());
     
     m_colorStrategy = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
+    if (!m_colorStrategy) return;
+    
     m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
     memset(m_data, 0, m_colorStrategy->pixelSize());
-    m_colorStrategy->nativeColor(color, OPACITY_OPAQUE, m_data);
+    m_colorStrategy->fromQColor(color, OPACITY_OPAQUE, m_data);
     m_profile = 0;
 }
+
+KisColor::KisColor(const QColor & color, Q_UINT8 opacity)
+{
+    Q_ASSERT(color.isValid());
+    
+    m_colorStrategy = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
+    if (!m_colorStrategy) return;
+    
+    m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
+    memset(m_data, 0, m_colorStrategy->pixelSize());
+    m_colorStrategy->fromQColor(color, opacity, m_data);
+    m_profile = 0;
+}
+
 
 KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
     : m_colorStrategy(colorStrategy),
@@ -55,7 +71,7 @@ KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, 
     
     m_data = new Q_UINT8[colorStrategy->pixelSize()];
     memset(m_data, 0, m_colorStrategy->pixelSize());
-    m_colorStrategy->nativeColor(color, OPACITY_OPAQUE, m_data, profile);
+    m_colorStrategy->fromQColor(color, OPACITY_OPAQUE, m_data, profile);
 }
 
 
@@ -68,7 +84,7 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * 
     m_data = new Q_UINT8[colorStrategy->pixelSize()];
     memset(m_data, 0, m_colorStrategy->pixelSize());
     
-    m_colorStrategy->nativeColor(color, alpha, m_data, profile);
+    m_colorStrategy->fromQColor(color, alpha, m_data, profile);
 }
 
 KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)

@@ -35,8 +35,8 @@ public:
     void setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const;
     void getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *alpha) const;
 
-    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
     virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);

@@ -37,7 +37,7 @@ Integration
 
 Colorspace independence (found with the test colorstrategy)
 
-	* tool gradient uses wrong colors
+	* tool gradient uses wrong colors; gradient still uses qcolor everywhere.
 	* brightness/contrast and the like don't work.
 	* Map colorspace transforms using the full set of discriminating features:
 		source color space (not null) // KisStrategyColorspace descendant
@@ -49,10 +49,11 @@ Colorspace independence (found with the test colorstrategy)
 							BYTES_SH(1) | EXTRA_SH(1)) for cmyka
 		dst lcms color type (may be 0)
 		rendering intent
-	* Make sure it's possible to, as in OpenEXR, be able to set the lighting stops.
 	* get rid of QUANTUM
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
+    * Merge grayscale layers back into one color image.
+    
 Core
 
 	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
@@ -202,7 +203,6 @@ Modules
 
 Printing
 
-	* No CMYK separation for printing
 	* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
 	* Use gutenprint or something better for image printing.
 

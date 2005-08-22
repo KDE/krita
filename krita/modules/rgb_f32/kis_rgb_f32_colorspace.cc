@@ -105,7 +105,7 @@ void KisF32RgbColorSpace::getPixel(const Q_UINT8 *src, float *red, float *green,
     *alpha = srcPixel -> alpha;
 }
 
-void KisF32RgbColorSpace::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -114,7 +114,7 @@ void KisF32RgbColorSpace::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfil
     dst -> blue = UINT8_TO_FLOAT(c.blue());
 }
 
-void KisF32RgbColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 

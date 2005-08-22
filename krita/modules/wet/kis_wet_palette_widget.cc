@@ -193,7 +193,7 @@ void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 
     WetPack pack;
     Q_UINT8* data = reinterpret_cast<Q_UINT8*>(&pack);
-    cs -> nativeColor(c, data, 0);
+    cs -> fromQColor(c, data, 0);
     pack.paint.w = 15 * m_wetness -> value();
     // upscale from double to uint16:
     pack.paint.h = static_cast<Q_UINT16>(m_strength -> value() * (double)(0xffff/2));

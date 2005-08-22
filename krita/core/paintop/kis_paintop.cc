@@ -76,7 +76,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
             // XXX: Set mask
             colorStrategy->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
             memcpy(hiter.rawData(), kc.data(), pixelSize);
-//             colorStrategy -> nativeColor(c,
+//             colorStrategy -> fromQColor(c,
 //                              mask -> alphaAt(x++, y),
 //                              hiter.rawData(),
 //                              profile);

@@ -68,7 +68,7 @@ KisXyzColorSpace::~KisXyzColorSpace()
 {
 }
 
-void KisXyzColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisXyzColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     
     m_qcolordata[2] = color.red();
@@ -83,7 +83,7 @@ void KisXyzColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfile
 
 }
 
-void KisXyzColorSpace::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisXyzColorSpace::fromQColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
 
     m_qcolordata[2] = color.red();

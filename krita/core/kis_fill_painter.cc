@@ -306,7 +306,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         // Here as well: start the iterator at (0,y)
         KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
         selIt += x;
-        colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
+        colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
@@ -333,7 +333,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
                 stop = true;
                 continue;
             }
-            colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
+            colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));
@@ -368,7 +368,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
                 continue;
             }
 
-            colorStrategy -> nativeColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
+            colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));

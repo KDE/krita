@@ -97,7 +97,7 @@ void single_step(KisAbstractColorSpace * cs, KisPaintDeviceSP src,  KisPaintDevi
         Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
         Q_CHECK_PTR(pix);
 
-        cs -> nativeColor(c, opacity, pix);
+        cs -> fromQColor(c, opacity, pix);
     }
 
     // Process

@@ -116,7 +116,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, const QRect& rect, int d)
 
                 Gray = CLAMP((R + G + B) / 3, 0, QUANTUM_MAX);
 
-                src -> colorStrategy() -> nativeColor(QColor(Gray, Gray, Gray), it.rawData());
+                src -> colorStrategy() -> fromQColor(QColor(Gray, Gray, Gray), it.rawData());
             }
         }
 

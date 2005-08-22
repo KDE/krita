@@ -578,7 +578,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             QUANTUM opacity;
 
             m_gradient -> colorAt(t, &color, &opacity);
-            layer -> colorStrategy() -> nativeColor( color, opacity, iter.rawData());
+            layer -> colorStrategy() -> fromQColor( color, opacity, iter.rawData());
 
             pixelsProcessed++;
 
@@ -686,7 +686,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                     QColor color(red, green,  blue);
 
-                    cs-> nativeColor( color, opacity, iter.rawData());
+                    cs-> fromQColor( color, opacity, iter.rawData());
                 }
 
                 pixelsProcessed++;

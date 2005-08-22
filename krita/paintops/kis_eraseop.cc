@@ -111,7 +111,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
         KisAbstractColorSpace* cs = dab -> colorStrategy();
         while (!it.isDone()) {
             // the color doesn't matter, since we only composite the alpha
-            cs -> nativeColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),
+            cs -> fromQColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),
                               it.rawData(), profile);
             ++it;
         }

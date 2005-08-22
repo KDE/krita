@@ -308,7 +308,7 @@ KisPaintDevice::KisPaintDevice(KisAbstractColorSpace * colorStrategy, const QStr
     m_nChannels = colorStrategy -> nChannels();
 
     Q_UINT8* defPixel = new Q_UINT8 [ m_pixelSize ];
-    colorStrategy -> nativeColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+    colorStrategy -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
         delete [] defPixel;
@@ -363,7 +363,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisAbstractColorSpace * colorStrat
     m_nChannels = m_colorStrategy -> nChannels();
 
     Q_UINT8* defPixel = new Q_UINT8[ m_pixelSize ];
-    colorStrategy -> nativeColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+    colorStrategy -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
         delete [] defPixel;
@@ -681,7 +681,7 @@ void KisPaintDevice::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProf
 
     for (Q_INT32 row = y; row < y + h; ++row) {
 
-#if 1
+#if 0
 
         KisHLineIterator srcIt = createHLineIterator( x, row, w, false );
         KisHLineIterator dstIt = dst.createHLineIterator( x, row, w, true );
@@ -968,7 +968,7 @@ bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  op
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-    colorStrategy() -> nativeColor(c, opacity, iter.rawData(), m_profile);
+    colorStrategy() -> fromQColor(c, opacity, iter.rawData(), m_profile);
 
     return true;
 }

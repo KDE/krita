@@ -165,7 +165,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
                 QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
 
-                cs -> nativeColor(color, it.rawData());
+                cs -> fromQColor(color, it.rawData());
             }
 
             ++it;

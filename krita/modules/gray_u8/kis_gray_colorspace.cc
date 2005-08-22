@@ -80,13 +80,13 @@ void KisGrayColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *a
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
-void KisGrayColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     // Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
     dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 }
 
-void KisGrayColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisGrayColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
     dst[PIXEL_GRAY_ALPHA] = opacity;

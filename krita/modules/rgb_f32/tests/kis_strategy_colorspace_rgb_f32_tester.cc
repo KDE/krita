@@ -116,39 +116,39 @@ void KisF32RgbColorSpaceTester::testBasics()
 
     float pixel[NUM_CHANNELS];
 
-    cs -> nativeColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
            
-    cs -> nativeColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MIN_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MIN_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MIN_CHANNEL_VALUE);
 
-    cs -> nativeColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], UINT8_TO_FLOAT(128));
     CHECK(pixel[PIXEL_GREEN], UINT8_TO_FLOAT(64));
     CHECK(pixel[PIXEL_BLUE], UINT8_TO_FLOAT(192));
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_ALPHA], MAX_CHANNEL_VALUE);
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_ALPHA], F32_OPACITY_TRANSPARENT);
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);

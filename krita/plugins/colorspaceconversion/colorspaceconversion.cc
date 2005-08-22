@@ -24,6 +24,8 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qbuttongroup.h>
+#include <qapplication.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -36,6 +38,7 @@
 
 #include <kis_doc.h>
 #include <kis_config.h>
+#include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
@@ -101,9 +104,11 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         // XXX: Should we actually set the profile here?
         image -> setProfile(KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
         image -> convertTo(cs,
                            KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
                            dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
 }
@@ -132,9 +137,11 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
         KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText());
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs,
                          KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
                          dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        QApplication::restoreOverrideCursor();
         image -> notify();
         image -> notifyLayersChanged();
     }

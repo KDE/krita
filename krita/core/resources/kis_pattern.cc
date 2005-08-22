@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_color.h"
 #include "kis_pattern.h"
 #include "kis_layer.h"
 #include "kis_colorspace_registry.h"
@@ -205,10 +206,12 @@ bool KisPattern::init()
 }
 
 KisLayerSP KisPattern::image(KisAbstractColorSpace * colorSpace) {
-    // XXX: What does this do? (bsar)
+    // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
     if (it != m_colorspaces.end())
         return (*it);
+
+    // If not, create one
     Q_INT32 width = m_img.width();
     Q_INT32 height = m_img.height();
     KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
@@ -221,11 +224,12 @@ KisLayerSP KisPattern::image(KisAbstractColorSpace * colorSpace) {
             int green = qGreen(pixel);
             int blue = qBlue(pixel);
             int alpha = qAlpha(pixel);
-
-            QColor colour = QColor(red, green, blue);
-            QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
-
-            layer -> setPixel(x, y, colour, a);
+            
+            Q_UINT8 a = (alpha * OPACITY_OPAQUE) / 255;
+            
+            KisColor color = KisColor(QColor(red, green, blue), a, colorSpace);
+            
+            layer -> setPixel(x, y, color);
         }
     }
     m_colorspaces[colorSpace->id().id()] = layer;

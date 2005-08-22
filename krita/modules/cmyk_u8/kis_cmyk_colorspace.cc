@@ -42,7 +42,7 @@ namespace cmyk {
 }
 
 KisCmykColorSpace::KisCmykColorSpace() :
-    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK_8, icSigCmykData)
+    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));

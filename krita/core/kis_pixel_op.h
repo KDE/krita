@@ -74,7 +74,7 @@
  *
  * If a plugin wants to add a new pixelop, it can create one or more implementations for one or more
  * colormodels and register them with the colormodels. You can also implement a generic op that converts
- * pixel data using toQColor and nativeColor, for instance, or through XYZ, applies the operation and
+ * pixel data using toQColor and fromQColor, for instance, or through XYZ, applies the operation and
  * then converts it back.
  */
  

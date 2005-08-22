@@ -312,7 +312,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
             // XXX: BSAR: Doesn't this doe the same but better?
 		// XXX: Move to colorspace -- not independent
             Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
-            scs -> nativeColor(QColor(lightness, lightness, lightness), dstIt.rawData(), profile);
+            scs -> fromQColor(QColor(lightness, lightness, lightness), dstIt.rawData(), profile);
         }
         ++srcIt;
         ++dstIt;

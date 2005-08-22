@@ -106,7 +106,7 @@ KisWetStickyColorSpace::~KisWetStickyColorSpace()
 {
 }
 
-void KisWetStickyColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     Q_UINT8 r, g, b;
@@ -145,7 +145,7 @@ void KisWetStickyColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfi
 #endif
 }
 
-void KisWetStickyColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     Q_UINT8 r, g, b;
@@ -318,7 +318,7 @@ bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /
              cp -> green,
              cp -> blue);
 
-        dstColorStrategy -> nativeColor(c, cp -> alpha, (dst + j), dstProfile);
+        dstColorStrategy -> fromQColor(c, cp -> alpha, (dst + j), dstProfile);
 
         i += sSize;
         j += dSize;

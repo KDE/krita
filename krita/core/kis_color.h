@@ -44,6 +44,10 @@ public:
     // and the monitor profile for the source.
     KisColor(const QColor & color);
 
+    // Create a KisColor on the basis of a QColor, assuming an sRGB profile for the result
+    // and the monitor profile for the source.
+    KisColor(const QColor & color, Q_UINT8 opacity);
+
     // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
     // is assumed to have the current monitor profile.
     KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, KisProfileSP profile = 0);

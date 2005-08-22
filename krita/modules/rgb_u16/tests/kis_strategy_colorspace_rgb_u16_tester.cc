@@ -105,39 +105,39 @@ void KisRgbU16ColorSpaceTester::testBasics()
 
     Q_UINT16 pixel[NUM_CHANNELS];
 
-    cs -> nativeColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
            
-    cs -> nativeColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MIN_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MIN_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MIN_CHANNEL_VALUE);
 
-    cs -> nativeColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], (uint)UINT8_TO_UINT16(128));
     CHECK((uint)pixel[PIXEL_GREEN], (uint)UINT8_TO_UINT16(64));
     CHECK((uint)pixel[PIXEL_BLUE], (uint)UINT8_TO_UINT16(192));
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_ALPHA], MAX_CHANNEL_VALUE);
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_ALPHA], MIN_CHANNEL_VALUE);
 
-    cs -> nativeColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);

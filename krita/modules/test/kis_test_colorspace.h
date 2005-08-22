@@ -31,8 +31,8 @@ public:
     virtual ~KisTestColorSpace();
 
 public:
-    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
     virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
 

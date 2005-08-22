@@ -357,7 +357,7 @@ KisLayerSP KisBrush::image(KisAbstractColorSpace * colorSpace, double pressure, 
             QColor colour = QColor(red, green, blue);
             QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
 
-            layer -> colorStrategy() -> nativeColor(colour, a, iter.rawData(), 0); // XXX: Do we need a profile here?
+            layer -> colorStrategy() -> fromQColor(colour, a, iter.rawData(), 0); // XXX: Do we need a profile here?
             ++iter;
         }
     }

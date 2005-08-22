@@ -273,7 +273,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            cs -> nativeColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
+                            cs -> fromQColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
                         }
                     }
                 }
@@ -320,7 +320,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int 
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-                        cs -> nativeColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
+                        cs -> fromQColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
                                         }
                                 }
                         }

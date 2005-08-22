@@ -58,7 +58,7 @@ KisTestColorSpace::~KisTestColorSpace()
 {
 }
 
-void KisTestColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
     
@@ -67,7 +67,7 @@ void KisTestColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP 
     pix->bmg = c.blue()*16 + c.green();
 }
 
-void KisTestColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisTestColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
     

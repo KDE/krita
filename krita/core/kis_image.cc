@@ -26,6 +26,7 @@
 #include <qpixmap.h>
 #include <qsize.h>
 #include <qtl.h>
+#include <qapplication.h>
 
 #include <kcommand.h>
 #include <kocommandhistory.h>
@@ -1570,7 +1571,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     // Flatten the layers onto the projection layer of the current image
     for (y = y1; y <= y2; ) {
-
+        
         Q_INT32 h = QMIN(y2 - y + 1, RENDER_HEIGHT);
 
         for (x = x1; x <= x2; ) {

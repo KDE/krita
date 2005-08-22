@@ -91,17 +91,17 @@ void KisRgbColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *gre
     *alpha = pixel[PIXEL_ALPHA];
 }
 
-void KisRgbColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-     //kdDebug(DBG_AREA_CMS) << "nativeColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
+     //kdDebug(DBG_AREA_CMS) << "fromQColor called: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
     dst[PIXEL_RED] = upscale(c.red());
     dst[PIXEL_GREEN] = upscale(c.green());
     dst[PIXEL_BLUE] = upscale(c.blue());
 }
 
-void KisRgbColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisRgbColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-     //kdDebug(DBG_AREA_CMS) << "nativeColor called with opacity: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
+     //kdDebug(DBG_AREA_CMS) << "fromQColor called with opacity: " << c.red() << ", " << c.green() << ", " << c.blue() << "\n";
     dst[PIXEL_RED] = upscale(c.red());
     dst[PIXEL_GREEN] = upscale(c.green());
     dst[PIXEL_BLUE] = upscale(c.blue());

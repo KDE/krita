@@ -113,7 +113,7 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
     cmsDeleteTransform(m_defaultFromXYZ);
 }
 
-void KisAbstractColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     if (!m_defaultFromRGB) return;
 
@@ -127,7 +127,7 @@ void KisAbstractColorSpace::nativeColor(const QColor& color, Q_UINT8 *dst, KisPr
 
 }
 
-void KisAbstractColorSpace::nativeColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAbstractColorSpace::fromQColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     if (!m_defaultFromRGB) return;
 
@@ -250,7 +250,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
         QUANTUM opacity;
 
         toQColor(src, &color, &opacity);
-        dstColorStrategy -> nativeColor(color, opacity, dst);
+        dstColorStrategy -> fromQColor(color, opacity, dst);
 
         src += srcPixelSize;
         dst += dstPixelSize;
@@ -395,7 +395,7 @@ void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
     Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
     Q_ASSERT(dstBlue <= 255);
 
-    const_cast<KisAbstractColorSpace *>(this) -> nativeColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
+    const_cast<KisAbstractColorSpace *>(this) -> fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
 void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
@@ -426,14 +426,14 @@ void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelVal
 
 
     if (channelFlags & FLAG_COLOR) {
-        const_cast<KisAbstractColorSpace *>(this)->nativeColor(QColor(CLAMP((totalRed / factor) + offset, 0, QUANTUM_MAX),
+        const_cast<KisAbstractColorSpace *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, QUANTUM_MAX),
                                         CLAMP((totalGreen / factor) + offset, 0, QUANTUM_MAX),
                                         CLAMP((totalBlue / factor) + offset, 0, QUANTUM_MAX)),
             dstOpacity,
             dst);
     }
     if (channelFlags & FLAG_ALPHA) {
-        const_cast<KisAbstractColorSpace *>(this)->nativeColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX), dst);
+        const_cast<KisAbstractColorSpace *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX), dst);
     }
 
 }
@@ -460,7 +460,7 @@ void KisAbstractColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
         }
         c.setRgb(r, g, b);
 
-        const_cast<KisAbstractColorSpace *>(this)->nativeColor( c, dst  + (i * psize));
+        const_cast<KisAbstractColorSpace *>(this)->fromQColor( c, dst  + (i * psize));
     }
 }
 

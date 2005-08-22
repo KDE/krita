@@ -144,16 +144,22 @@ public:
      */
     void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-    // Get the number of contiguous columns starting at x, valid for all values
-    // of y between minY and maxY.
+    /**
+     * Get the number of contiguous columns starting at x, valid for all values
+     * of y between minY and maxY.
+     */
     Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
 
-    // Get the number of contiguous rows starting at y, valid for all values
-    // of x between minX and maxX.
+    /**
+     * Get the number of contiguous rows starting at y, valid for all values
+     * of x between minX and maxX.
+     */
     Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
 
-    // Get the row stride at pixel (x, y). This is the number of bytes to add to a
-    // pointer to pixel (x, y) to access (x, y + 1).
+    /**
+     * Get the row stride at pixel (x, y). This is the number of bytes to add to a
+     * pointer to pixel (x, y) to access (x, y + 1).
+     */
     Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
 
     /**
@@ -203,22 +209,24 @@ public:
     virtual QString name() const;
     virtual void setName(const QString& name);
 
-
-        /**
+    /**
      * Fill c and opacity with the values found at x and y.
+     *
      * The color values will be transformed from the profile of
-     *  this paint device to the display profile.
+     * this paint device to the display profile.
      *
      * @return true if the operation was succesful.
      */
-     bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
+
+    bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
+
     bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
 
     /**
      * Return the KisColor of the pixel at x,y.
      */
     KisColor colorAt(Q_INT32 x, Q_INT32 y);
-    
+
     /**
      * Set the specified pixel to the specified color. Note that this
      * bypasses KisPainter. the PaintDevice is here used as an equivalent
@@ -235,6 +243,7 @@ public:
      *
      */
     bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
+
     bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
     
     /**

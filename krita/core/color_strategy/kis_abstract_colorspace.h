@@ -199,7 +199,7 @@ public:
 
 
     /**
-     * The nativeColor methods take a given color defined as an RGB QColor
+     * The fromQColor methods take a given color defined as an RGB QColor
      * and fills a byte array with the corresponding color in the
      * the colorspace managed by this strategy.
      *
@@ -209,8 +209,8 @@ public:
      *
      * XXX: We actually do not use the display yet, nor the paint device profile
      */
-    virtual void nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long

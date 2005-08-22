@@ -101,7 +101,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int 
             if (it.isSelected()) {
 
                 uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-                src -> colorStrategy() -> nativeColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
+                src -> colorStrategy() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
             }
 
             ++it;

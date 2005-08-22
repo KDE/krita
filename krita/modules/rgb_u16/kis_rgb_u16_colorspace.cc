@@ -85,7 +85,7 @@ void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbU16ColorSpace::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -95,7 +95,7 @@ void KisRgbU16ColorSpace::nativeColor(const QColor& c, Q_UINT8 *dstU8, KisProfil
     dst -> alpha = U16_OPACITY_OPAQUE;
 }
 
-void KisRgbU16ColorSpace::nativeColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 

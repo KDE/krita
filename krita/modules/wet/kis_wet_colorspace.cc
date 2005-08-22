@@ -183,7 +183,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -202,9 +202,9 @@ void KisWetColorSpace::nativeColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /
     // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisWetColorSpace::nativeColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
-    nativeColor(c, dst);
+    fromQColor(c, dst);
 }
 
 void KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/, Q_UINT8 *alpha)

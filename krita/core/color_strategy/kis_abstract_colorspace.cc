@@ -101,16 +101,16 @@ void KisAbstractColorSpace::init()
 
 KisAbstractColorSpace::~KisAbstractColorSpace()
 {
-    TransformMap::iterator it;
-    for ( it = m_transforms.begin(); it != m_transforms.end(); ++it ) {
-        cmsDeleteTransform(it.data());
-    }
-    m_transforms.clear();
-    delete[] m_conversionCache;
-    cmsDeleteTransform(m_defaultToRGB);
-    cmsDeleteTransform(m_defaultFromRGB);
-    cmsDeleteTransform(m_defaultToXYZ);
-    cmsDeleteTransform(m_defaultFromXYZ);
+//    TransformMap::iterator it;
+//    for ( it = m_transforms.begin(); it != m_transforms.end(); ++it ) {
+//        cmsDeleteTransform(it.data());
+//    }
+//    m_transforms.clear();
+//    delete[] m_conversionCache;
+//   cmsDeleteTransform(m_defaultToRGB);
+//    cmsDeleteTransform(m_defaultFromRGB);
+//    cmsDeleteTransform(m_defaultToXYZ);
+//    cmsDeleteTransform(m_defaultFromXYZ);
 }
 
 void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)

@@ -35,13 +35,10 @@
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
      : super(
         layer -> image(), 
-         new KisAlphaColorSpace(), // Note that the alpha color
-                      // model has _state_, so we
-                      // create a new one, instead
+        new KisAlphaColorSpace(),
         name)
 {
     m_parentLayer = layer;
-    m_alpha = KisAlphaColorSpaceSP(dynamic_cast<KisAlphaColorSpace*> (colorStrategy()));
 }
 
 

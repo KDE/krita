@@ -60,6 +60,7 @@ public:
 protected slots:
 
     void slotApply();
+    void slotConfigChanged();
     void slotApplyFilter(int);
     void refreshPreview();
 

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2001 John Califf  <jwcaliff@compuzone.net>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,69 +51,18 @@ KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
       m_pos(QPoint(0,0)), m_zoom(1.0)
 {
     m_moving = false;
-    updateView(m_pos);
 }
 
-KisLayerSP KisPreviewView::getSourceLayer()
+void KisPreviewView::setDisplayImage(KisImageSP i)
 {
-    return m_sourcelayer;
+    m_image = i;
+    updatedPreview();
 }
 
-KisLayerSP KisPreviewView::getPreviewLayer()
-{
-    return m_clippedview;
-}
-
-void KisPreviewView::updateView()
-{
-    updateView(m_pos);
-}
-
-void KisPreviewView::updateView(QPoint delta)
-{
-    if (!m_clippedview || !m_sourcelayer) return;
-
-    KisPainter gc;
-    KisPaintDeviceSP pd(m_sourcelayer.data());
-
-    gc.begin(m_clippedview.data());
-    //gc.bitBlt(0, 0, COMPOSITE_COPY, pd, delta.x(), delta.y(), m_image->width(), m_image->height());
-    gc.bltSelection(0, 0, COMPOSITE_COPY, pd, OPACITY_OPAQUE, delta.x(), delta.y(), m_image->width(), m_image->height());
-    gc.end();
-}
-
-void KisPreviewView::setSourceLayer(KisLayerSP lay)
-{
-    Q_ASSERT(lay);
-    if (!lay) return;
-
-    m_sourcelayer = lay;
-    KisPainter gc;
-    KisPaintDeviceSP pd(m_sourcelayer.data());
-
-    Q_INT32 w = static_cast<Q_INT32>(ceil(size().width() / m_zoom));
-    Q_INT32 h = static_cast<Q_INT32>(ceil(size().height() / m_zoom));
-
-    m_image = new KisImage(0, w, h, lay->colorStrategy(), "preview");
-    Q_CHECK_PTR(m_image);
-
-    m_image -> setProfile(lay -> profile());
-    m_clippedview = new KisLayer(m_image, m_image -> nextLayerName(), OPACITY_OPAQUE);
-    Q_CHECK_PTR(m_clippedview);
-
-    gc.begin(m_clippedview.data());
-
-    gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_pos.x(), m_pos.y(), -1, -1);
-    gc.end();
-    m_image -> add(m_clippedview, -1);
-    updateView();
-    repaint(false);
-    emit updated();
-}
 
 void KisPreviewView::setZoom(double zoom) {
     m_zoom = zoom;
-    setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
+    emit updated();
 }
 
 void KisPreviewView::zoomIn() {
@@ -159,10 +109,9 @@ void KisPreviewView::slotStartMoving(QPoint startDrag)
 
 void KisPreviewView::slotMoving(QPoint zoomedPos)
 {
-    QPoint delta = m_pos - (zoomedPos - m_startDrag);
-    m_moving = true;
-    updateView(delta);
-    repaint(false);
+	QPoint delta = m_pos - (zoomedPos - m_startDrag);
+	m_moving = true;
+	repaint(false);
 }
 
 void KisPreviewView::slotMoved(QPoint zoomedPos)
@@ -207,7 +156,7 @@ void KisPreviewView::mouseReleaseEvent(QMouseEvent * e)
 }
 
 void KisPreviewView::resizeEvent(QResizeEvent *) {
-    setSourceLayer(m_sourcelayer); // so that it automatically resizes m_clippedview
+    emit updated();
 }
 
 #include "kis_previewview.moc"

@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2001 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,6 +82,11 @@ public slots:
     /** Enables or disables the automatically updating of the preview */
     void slotSetAutoUpdate(bool set);
 
+    /** Toggle the automatically update of the preview */
+    void toggleAutoUpdate();
+    
+    /** Toggle between display preview and display original */
+    void toggleImageDisplayed();
 signals:
     /** This is emitted when the position or zoom factor of the widget has changed */
     void updated();
@@ -88,9 +94,12 @@ signals:
 private slots:
 
     void redirectUpdated();
-
+    void forceUpdate();
 private:
-    bool m_autoupdate;
+    bool m_autoupdate, m_previewisdiplayed;
+
+	KisLayerSP m_sourceLayer, m_previewLayer;
+	KisImageSP m_sourceImage, m_previewImage;
 };
 
 #endif

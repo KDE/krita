@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2001 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,12 +39,13 @@ class KisPreviewView : public QWidget
 
 public:
         KisPreviewView(QWidget* parent = 0, const char * name = 0, WFlags f = 0);
-        void setSourceLayer(KisLayerSP s);
-        KisLayerSP getSourceLayer();
-        KisLayerSP getPreviewLayer();
+//         void setSourceLayer(KisLayerSP s);
+        void setDisplayImage(KisImageSP i);
+//         KisLayerSP getSourceLayer();
+//         KisLayerSP getPreviewLayer();
         double getZoom() { return m_zoom; }
         QPoint getPos() { return m_pos; }
-        void updateView();
+//         void updateView();
 
 public slots:
     void setZoom(double zoom);
@@ -71,9 +73,9 @@ protected:
         virtual void resizeEvent(QResizeEvent *e);
 private:
         void render(QPainter &painter, KisImageSP image);
-        void updateView(QPoint delta);
+//         void updateView(QPoint delta);
 
-        KisLayerSP m_sourcelayer, m_clippedview;
+//         KisLayerSP m_sourcelayer, m_clippedview;
         KisImageSP m_image;
         QPoint m_startDrag, m_pos;
         double m_zoom;

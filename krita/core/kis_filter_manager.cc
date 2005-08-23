@@ -237,7 +237,7 @@ void KisFilterManager::slotApplyFilter(int i)
     
     if( m_lastWidget != 0)
     {
-        connect(m_lastWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(refreshPreview()));
+        connect(m_lastWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
     
         m_lastDialog->previewWidget()->slotSetLayer( layer );
 
@@ -269,11 +269,20 @@ void KisFilterManager::slotApplyFilter(int i)
 
 }
 
+void KisFilterManager::slotConfigChanged()
+{
+    if( m_lastDialog == 0 )
+        return;
+    if(m_lastDialog->previewWidget()->getAutoUpdate())
+        refreshPreview();
+}
+
 
 void KisFilterManager::refreshPreview( )
 {
     if( m_lastDialog == 0 )
         return;
+    
     m_lastDialog -> previewWidget() -> slotRenewLayer();
     
     KisLayerSP layer = m_lastDialog -> previewWidget()->getLayer();

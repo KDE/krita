@@ -33,5 +33,6 @@ krita_gray_u16_plugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?
 
 
-SUBDIRS = . $(TESTSDIR)
+SUBDIRS = .
+#$(TESTSDIR)
 

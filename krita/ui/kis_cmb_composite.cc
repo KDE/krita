@@ -25,7 +25,7 @@
 
 #include "kis_cmb_composite.h"
 
-KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name) 
+KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
     : super( false, parent, name )
 {
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
@@ -71,14 +71,14 @@ void KisCmbComposite::setCurrentText(const QString & s)
 
 void KisCmbComposite::slotOpActivated(int i)
 {
-    if (i > m_list.count()) return;
+    if ((Q_UINT32)i > m_list.count()) return;
 
     emit activated(m_list[i]);
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
-    if (i > m_list.count()) return;
+    if ((Q_UINT32)i > m_list.count()) return;
 
     emit highlighted(m_list[i]);
 }

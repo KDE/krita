@@ -28,17 +28,15 @@ KisDocIface::KisDocIface( KisDoc *doc_ )
     m_doc = doc_;
 }
 
-
-DCOPRef KisDocIface::currentImage()
+DCOPRef  KisDocIface::currentImage()
 {
     KisImage *img = m_doc->currentImage();
     if( !img )
         return DCOPRef();
     else
         return DCOPRef( kapp->dcopClient()->appId(),
-                img->dcopObject()->objId(),
-                "KisImageIface");
-
+                        img->dcopObject()->objId(),
+                        "KisImageIface");
 }
 
 int KisDocIface::undoLimit () const

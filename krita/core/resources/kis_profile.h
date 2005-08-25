@@ -35,8 +35,6 @@
 #include "kis_types.h"
 
 
-
-
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy
 //     that matches the profile's color model
@@ -68,8 +66,12 @@ public:
     QString productInfo() const { return m_productInfo; }
     QString manufacturer() const { return m_manufacturer; }
     cmsHPROFILE profile();
+private:
+    // XXX: When I'm sure this isn't needed anywhere, remove it.
     DWORD colorType() { return m_lcmsColorType; }
+public:
     void setColorType(DWORD colorType) { m_lcmsColorType = colorType; }
+
     KisAnnotationSP annotation() const;
 
     friend inline bool operator==( const KisProfile &,  const KisProfile & );

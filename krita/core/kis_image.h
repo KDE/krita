@@ -46,6 +46,7 @@ class KCommand;
 class KisCompositeOp;
 class KisColor;
 class KisFilterStrategy;
+class KisImageIface;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
@@ -55,7 +56,7 @@ public:
          KisAbstractColorSpace * colorStrategy, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
-    virtual DCOPObject *dcopObject();
+    virtual KisImageIface *dcopObject();
 
 public:
     // Composite the specified tile onto the projection layer.
@@ -120,7 +121,7 @@ public:
 
     vKisLayerSP layers();
     const vKisLayerSP& layers() const;
-    
+
     /** returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image) */
     KisPaintDeviceSP mergedImage();
@@ -136,7 +137,7 @@ public:
     KisLayerSP layerAdd(const QString& name, QUANTUM devOpacity);
     KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisAbstractColorSpace * colorstrategy);
     KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
-    
+
     void layerRemove(KisLayerSP layer);
     void layerNext(KisLayerSP layer);
     void layerPrev(KisLayerSP layer);
@@ -145,20 +146,20 @@ public:
 
     KisLayerSP activeLayer();
     const KisLayerSP activeLayer() const;
-    
+
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP activateLayer(Q_INT32 n);
-    
+
     KisLayerSP layer(Q_INT32 n);
     KisLayerSP findLayer(const QString & name);
-    
+
     Q_INT32 index(const KisLayerSP &layer);
 
     KisLayerSP layer(const QString& name);
     KisLayerSP layer(Q_UINT32 npos);
 
     bool add(KisLayerSP layer, Q_INT32 position);
-    
+
     void rm(KisLayerSP layer);
 
     bool raise(KisLayerSP layer);
@@ -225,7 +226,7 @@ signals:
     void imageUpdated(KisImageSP img);
     void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
     void profileChanged(KisProfileSP profile);
-    
+
 
 public slots:
     void slotSelectionChanged();
@@ -272,12 +273,15 @@ private:
     KisUndoAdapter *m_adapter;
     KisGuideMgr m_guides;
 
-    DCOPObject *m_dcop;
+    KisImageIface *m_dcop;
 
     QPixmap m_pixmap;
 
     vKisAnnotationSP m_annotations;
 
+#ifdef __BIG_ENDIAN__
+    cmsHTRANSFORM m_bigEndianTransform;
+#endif
 };
 
 #endif // KIS_IMAGE_H_

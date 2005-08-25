@@ -24,6 +24,7 @@
 
 #include <dcopref.h>
 #include <qstring.h>
+#include <kis_image_iface.h>
 
 class KisDoc;
 

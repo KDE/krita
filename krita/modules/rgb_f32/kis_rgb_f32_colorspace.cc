@@ -51,6 +51,13 @@ inline uint FLOAT_TO_UINT8(float c)
     return QMIN(static_cast<uint>(c * UINT8_MAX + 0.5), UINT8_MAX);
 }
 
+
+inline uint FLOAT_TO_UINT16(float c)
+{
+return QMIN(static_cast<uint>(c * UINT16_MAX + 0.5), UINT16_MAX);
+}
+
+
 inline float FLOAT_BLEND(float a, float b, float alpha)
 {
     return (a - b) * alpha + b;
@@ -71,7 +78,7 @@ KisF32RgbColorSpace::KisF32RgbColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), ALPHA, sizeof(float)));
 
-    
+
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     //setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
 
@@ -124,10 +131,10 @@ void KisF32RgbColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *
     dst -> alpha = UINT8_TO_FLOAT(opacity);
 }
 
-void KisF32RgbColorSpace::getAlpha(const Q_UINT8 *U8_pixel, Q_UINT8 *alpha)
+Q_UINT8 KisF32RgbColorSpace::getAlpha(const Q_UINT8 *U8_pixel)
 {
     const Pixel *pixel = reinterpret_cast<const Pixel *>(U8_pixel);
-    *alpha = FLOAT_TO_UINT8(pixel -> alpha);
+    return FLOAT_TO_UINT8(pixel -> alpha);
 }
 
 void KisF32RgbColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
@@ -140,6 +147,41 @@ void KisF32RgbColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixe
         ++pixel;
     }
 }
+
+void KisF32RgbColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8, Q_INT32 nPixels)
+{
+    Q_INT32 psize = pixelSize();
+
+    float *pixels = reinterpret_cast<float *>(U8_pixel);
+
+    while (nPixels--) {
+        float alphaf = UINT8_TO_FLOAT(*alpha8);
+
+        pixels[m_alphaPos] = *(pixels + m_alphaPos) * alphaf;
+
+        ++alpha8;
+        pixels += psize;
+
+    }
+
+}
+
+void KisF32RgbColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+Q_UINT8 KisF32RgbColorSpace::scaleToU8(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
+{
+    const float *pixel = reinterpret_cast<const float *>(U8_pixel);
+    return FLOAT_TO_UINT8(pixel[channelPos]);
+}
+
+Q_UINT16 KisF32RgbColorSpace::scaleToU16(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
+{
+    const float *pixel = reinterpret_cast<const float *>(U8_pixel);
+    return FLOAT_TO_UINT16(pixel[channelPos]);
+}
+
 
 void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfileSP /*profile*/)
 {
@@ -169,7 +211,7 @@ Q_INT8 KisF32RgbColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src
 void KisF32RgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     float totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
-    
+
     while (nColors--)
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
@@ -287,39 +329,6 @@ QImage KisF32RgbColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width
     return img;
 }
 
-void KisF32RgbColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
-{
-    /*
-    static cmsHPROFILE profiles[3];
-    static cmsHTRANSFORM transform=0;
-    static Q_INT8 oldb=0;
-    static Q_INT8 oldc=0;
-    
-    if((oldb != brightness || oldc != contrast) && transform!=0)
-    {
-        cmsDeleteTransform(transform);
-        cmsCloseProfile(profiles[0]);
-        cmsCloseProfile(profiles[1]);
-        cmsCloseProfile(profiles[2]);
-        transform=0;
-    }
-
-    if(transform==0)
-    {
-        double a,b;
-        a=contrast/100.0+1.0;
-        a *= a;
-        b= 50 -50*a + brightness;
-        profiles[0] = cmsCreate_sRGBProfile();
-        profiles[1] = cmsCreateBCHSWabstractProfile(30, b, a, 0, 0, 6504, 6504);
-        profiles[2] = cmsCreate_sRGBProfile();
-        transform  = cmsCreateMultiprofileTransform(profiles, 3, TYPE_BGRA_8, TYPE_BGRA_8, INTENT_PERCEPTUAL, 0);
-        oldb=brightness;
-        oldc=contrast;
-    }
-    cmsDoTransform(transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
-    */
-}
 
 void KisF32RgbColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, float opacity)
 {
@@ -343,7 +352,7 @@ void KisF32RgbColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStri
                 }
                 mask++;
             }
-            
+
             if (srcAlpha > F32_OPACITY_TRANSPARENT + EPSILON) {
 
                 if (opacity < F32_OPACITY_OPAQUE - EPSILON) {
@@ -769,14 +778,14 @@ void KisF32RgbColorSpace::compositeColor(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisF32RgbColorSpace::compositeErase(Q_UINT8 *dst, 
+void KisF32RgbColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 dstRowSize,
-            const Q_UINT8 *src, 
+            const Q_UINT8 *src,
             Q_INT32 srcRowSize,
             const Q_UINT8 *srcAlphaMask,
             Q_INT32 maskRowStride,
-            Q_INT32 rows, 
-            Q_INT32 cols, 
+            Q_INT32 rows,
+            Q_INT32 cols,
             float /*opacity*/)
 {
     while (rows-- > 0)
@@ -809,7 +818,7 @@ void KisF32RgbColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-void KisF32RgbColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, 
+void KisF32RgbColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
                         const Q_UINT8 */*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, float /*opacity*/)
 {
     while (rows > 0) {

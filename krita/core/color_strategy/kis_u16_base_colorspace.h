@@ -24,9 +24,9 @@
 #include "kis_integer_maths.h"
 
 /**
- * This is the base class for 16-bit/channel colorspaces. It defines
- * a number of common methods, like handling 16-bit alpha and up-
- * and down-scaling of channels.
+ * This is the base class for 16-bit/channel colorspaces with 16-bit alpha
+ * channels. It defines a number of common methods, like handling 16-bit alpha
+ * and up- and down-scaling of channels.
  */
 class KisU16BaseColorSpace : public KisAbstractColorSpace {
 
@@ -40,9 +40,26 @@ public:
     KisU16BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
 	: KisAbstractColorSpace(id, cmType, colorSpaceSignature)
     {
-	m_alphaSize = sizeof(Q_UINT16);
+	    m_alphaSize = sizeof(Q_UINT16);
     };
 
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
 };
 #endif // KIS_U16_BASE_COLORSPACE_H_

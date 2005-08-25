@@ -45,37 +45,20 @@ public:
 
     // Conversion functions
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
-
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
-
     //XXX: KisPixel(RO) does not work with this colorspace as it only handles 8-bit channels.
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
         { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
+
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
         { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
 
-
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
-                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-                       float exposure = 0.0f);
-
     // Pixel manipulation
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
     virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const;
     virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
     // Information about the colorstrategy
@@ -84,10 +67,6 @@ public:
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
-
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-
 
 
     // Composition
@@ -120,15 +99,10 @@ protected:
 
 private:
 
-    vKisChannelInfoSP m_channels;
-
-    cmsHTRANSFORM m_defaultToRGB;
-    cmsHTRANSFORM m_defaultFromRGB;
-
     static const Q_UINT8 PIXEL_X = 0;
-    static const Q_UINT8 PIXEL_Y = 2;
-    static const Q_UINT8 PIXEL_Z = 3;
-    static const Q_UINT8 PIXEL_ALPHA = 4;
+    static const Q_UINT8 PIXEL_Y = 1;
+    static const Q_UINT8 PIXEL_Z = 2;
+    static const Q_UINT8 PIXEL_ALPHA = 3;
 
     Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
 

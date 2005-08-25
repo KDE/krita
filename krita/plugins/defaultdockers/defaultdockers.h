@@ -59,13 +59,12 @@ private:
 
     KisControlFrame * m_controlWidget;
 
-        KisBirdEyeBox * m_birdEyeBox;
+    KisBirdEyeBox * m_birdEyeBox;
 
-        KisHSVWidget *m_hsvwidget;
-        KisRGBWidget *m_rgbwidget;
-        KisGrayWidget *m_graywidget;
-        KisPaletteWidget *m_palettewidget;
-
+    KisHSVWidget *m_hsvwidget;
+    KisRGBWidget *m_rgbwidget;
+    KisGrayWidget *m_graywidget;
+    KisPaletteWidget *m_palettewidget;
 
 };
 

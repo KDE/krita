@@ -155,7 +155,7 @@ KisWetColorSpace::KisWetColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, SUBSTANCE));
     m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, SUBSTANCE));
-    
+
 
     // we store the conversion in an QRgb (equivalent to unsigned int)
     // since QColor does not provide an operator<
@@ -173,7 +173,7 @@ KisWetColorSpace::KisWetColorSpace() :
     m_conversionMap[qRgb(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
     m_conversionMap[qRgb(254, 254, 254)] = m_paintbox[12]; // Titanium White
     m_conversionMap[qRgb(64, 64, 74)] = m_paintbox[13]; // Ivory Black
-    
+
     m_paintwetness = false;
     phasebig = 0;
 }
@@ -207,10 +207,33 @@ void KisWetColorSpace::fromQColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT8
     fromQColor(c, dst);
 }
 
-void KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/, Q_UINT8 *alpha)
+Q_UINT8 KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/)
 {
-    *alpha = OPACITY_OPAQUE;
+    return OPACITY_OPAQUE;
 }
+
+void KisWetColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+}
+
+void KisWetColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+void KisWetColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+Q_UINT8 KisWetColorSpace::scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+{
+    return 0;
+}
+
+Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+{
+    return 0;
+}
+
 
 void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
 {
@@ -222,7 +245,7 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*pr
     // Composite the two layers in each pixelSize
 
     WetPack * wp = (WetPack*)src;
-    
+
     // First the adsorption layers
     wet_composite(rgb, &wp -> adsorb);
 
@@ -304,11 +327,11 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
         // Then the paint layer (which comes first in our double-packed pixel)
         wet_composite(rgb, &(wp -> paint));
-        
+
         // XXX pay attention to this comment!!
         // Display the wet stripes -- this only works if we have at least three scanlines in height,
         // because otherwise the phase trick won't work.
-        
+
         // Because we work in a stateless thing, and we can't just draw this wetness
         // indication AFTER this (e.g. like the selection), we have to do un nice things:
         // Because we (hopefully atm!) don't use the height of the paint wetpix, we abuse
@@ -324,12 +347,6 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
     return img;
 }
-
-void KisWetColorSpace::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
-{
-    //XXX does nothing for now
-}
-
 
 void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
                   Q_INT32 dstRowSize,
@@ -347,7 +364,7 @@ void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
 
     Q_UINT8 *d;
     const Q_UINT8 *s;
-    
+
     // Just copy the src onto the dst, we don't do fancy things here,
     // we do those in the paint op, because we need pressure to determine
     // paint deposition.
@@ -403,7 +420,7 @@ void KisWetColorSpace::wet_composite(Q_UINT8 *rgb, WetPix * wet)
     wa = (w * (ab >> 16) + 0x80) >> 8;
     r = wa + (((r - wa) * (ab & 0xffff) + 0x4000) >> 15);
     rgb[0] = r;
-    
+
     g = rgb[1];
     w = wet[0].gw >> 4;
     d = wet[0].gd >> 4;
@@ -412,7 +429,7 @@ void KisWetColorSpace::wet_composite(Q_UINT8 *rgb, WetPix * wet)
     wa = (w * (ab >> 16) + 0x80) >> 8;
     g = wa + (((g - wa) * (ab & 0xffff) + 0x4000) >> 15);
     rgb[1] = g;
-    
+
     b = rgb[2];
     w = wet[0].bw >> 4;
     d = wet[0].bd >> 4;

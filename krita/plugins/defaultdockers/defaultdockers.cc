@@ -48,17 +48,10 @@
 #include "kis_icon_item.h"
 #include "kis_palette_widget.h"
 #include "kis_rgb_widget.h"
-#include "kis_autobrush.h"
-#include "kis_autogradient.h"
 #include "kis_birdeye_box.h"
 #include "kis_color.h"
 #include "kis_controlframe.h"
 #include "kis_factory.h"
-#include "kis_pattern.h"
-
-//#include "kis_brush_chooser.h"
-#include "kis_pattern_chooser.h"
-#include "kis_gradient_chooser.h"
 
 #include "defaultdockers.h"
 
@@ -88,7 +81,7 @@ KritaDefaultDockers::KritaDefaultDockers(QObject *parent, const char *name, cons
     Q_ASSERT(m_paletteManager);
 
      createBirdEyeBox(m_view);
-    
+
     createHSVWidget(m_view);
     createRGBWidget(m_view);
     createGrayWidget(m_view);
@@ -105,13 +98,13 @@ KritaDefaultDockers::~KritaDefaultDockers()
 {
 }
 
-void KritaDefaultDockers::createControlFrame(KisView * view) 
+void KritaDefaultDockers::createControlFrame(KisView * view)
 {
     m_controlWidget = new KisControlFrame(view, view, "control frame");
-    m_controlWidget->setCaption(i18n("Current stuff"));
-    //m_paletteManager->addWidget( m_controlWidget, "controlwidget", krita::CONTROL_PALETTE);
+    m_controlWidget->setCaption(i18n("Brushes and stuff"));
+    m_paletteManager->addWidget( m_controlWidget, i18n("Brushes and stuff"), krita::PAINTBOX );
 }
-    
+
 
 void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 {

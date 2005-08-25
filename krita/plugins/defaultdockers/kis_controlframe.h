@@ -46,6 +46,7 @@ class KisGradientChooser;
 class KisItemChooser;
 class KisPattern;
 class KisResourceMediator;
+class KisPaintopBox;
 class KisView;
 
 class KisPopupFrame : public QPopupMenu {
@@ -88,7 +89,7 @@ public slots:
     void slotGradientChanged(KisGradient * gradient);
 
 private:
-    
+
     void createBrushesChooser(KisView * view);
     void createPatternsChooser(KisView * view);
     void createGradientsChooser(KisView * view);
@@ -96,6 +97,7 @@ private:
 
 private:
     QFont m_font;
+    KisView * m_view;
 
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
@@ -112,12 +114,12 @@ private:
     KisResourceMediator *m_patternMediator;
     KisResourceMediator *m_gradientMediator;
 
-    KisView * m_view;
-    KToolBar * m_toolbar;
 
     KisAutobrush * m_autobrush;
     KisBrushChooser * m_brushChooser;
     KisGradientChooser * m_gradientChooser;
+
+    KisPaintopBox * m_paintopBox;
 };
 
 #endif

@@ -59,17 +59,12 @@ public:
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-
-
+#if 0
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfileSP srcProfile, KisProfileSP dstProfile,
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
-
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
-
+#endif
     virtual void bitBlt(Q_UINT8 *dst,
                 Q_INT32 dststride,
                 const Q_UINT8 *src,
@@ -97,8 +92,6 @@ protected:
 
 private:
     friend class KisGrayColorSpaceTester;
-
-    vKisChannelInfoSP m_channels;
 
     static const Q_UINT8 PIXEL_GRAY = 0;
     static const Q_UINT8 PIXEL_GRAY_ALPHA = 1;

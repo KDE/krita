@@ -26,10 +26,10 @@
 #include "kis_paint_device_iface.h"
 #include <dcopclient.h>
 
-KisImageIface::KisImageIface( KisImage *img_ )
-    : DCOPObject()
+KisImageIface::KisImageIface( KisImage * img )
+    : DCOPObject(img->name().utf8())
 {
-    m_img = img_;
+    m_img = img;
 }
 
 QString KisImageIface::name()const

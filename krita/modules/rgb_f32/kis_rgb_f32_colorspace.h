@@ -41,9 +41,6 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
     virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-    virtual void setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -52,6 +49,15 @@ public:
         { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
         { return KisPixel (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
+
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -71,8 +77,7 @@ public:
                        float exposure = 0.0f);
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-    
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
+
 
 protected:
 
@@ -105,8 +110,6 @@ protected:
 
 private:
     friend class KisF32RgbColorSpaceTester;
-
-    vKisChannelInfoSP m_channels;
 
     static const Q_UINT8 PIXEL_BLUE = 0;
     static const Q_UINT8 PIXEL_GREEN = 1;

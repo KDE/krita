@@ -35,9 +35,6 @@ public:
 
 public:
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
         { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
@@ -50,14 +47,6 @@ public:
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
-
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
-                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-                       float exposure = 0.0f);
 
     virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 
@@ -81,7 +70,6 @@ protected:
     void compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity);
 
 private:
-    vKisChannelInfoSP m_channels;
 
     Q_UINT8 * m_qcolordata;
 

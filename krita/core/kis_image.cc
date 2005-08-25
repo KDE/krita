@@ -440,7 +440,7 @@ KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColor
 {
     init(doc, width, height, colorStrategy, name);
     setName(name);
-        m_dcop = 0L;
+    m_dcop = 0L;
     m_profile = 0;
 }
 
@@ -493,7 +493,8 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 }
 
 
-DCOPObject *KisImage::dcopObject()
+
+KisImageIface *KisImage::dcopObject()
 {
     if (!m_dcop) {
         m_dcop = new KisImageIface(this);
@@ -572,6 +573,17 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColo
     m_undoHistory = 0;
     m_width = width;
     m_height = height;
+
+#ifdef __BIG_ENDIAN__
+    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
+    m_bigEndianTransform = cmsCreateTransform(hProfile ,
+                                              TYPE_BGRA_8,
+                                              hProfile ,
+                                              TYPE_ARGB_8,
+                                              INTENT_PERCEPTUAL,
+                                              0);
+#endif
+
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
@@ -1571,7 +1583,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     // Flatten the layers onto the projection layer of the current image
     for (y = y1; y <= y2; ) {
-        
+
         Q_INT32 h = QMIN(y2 - y + 1, RENDER_HEIGHT);
 
         for (x = x1; x <= x2; ) {
@@ -1587,6 +1599,10 @@ void KisImage::renderToPainter(Q_INT32 x1,
                 m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
 
             if (!img.isNull()) {
+
+#ifdef __BIG_ENDIAN__
+                cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+#endif
                 m_pixmap.convertFromImage(img);
                 painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
             }

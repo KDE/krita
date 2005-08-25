@@ -34,8 +34,8 @@
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
     m_id(id),
     m_category(category),
-    m_entry(entry),
-    m_progressDisplay(0)
+    m_progressDisplay(0),
+    m_entry(entry)
 {
 }
 
@@ -82,7 +82,7 @@ void KisFilter::setProgress(Q_INT32 progress)
 
         Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
         m_progressSteps = progress;
-        
+
         if (progressPerCent != m_lastProgressPerCent) {
 
             m_lastProgressPerCent = progressPerCent;
@@ -94,7 +94,7 @@ void KisFilter::setProgress(Q_INT32 progress)
 void KisFilter::incProgress()
 {
     setProgress(++m_progressSteps);
-    
+
 }
 
 void KisFilter::setProgressStage(const QString& stage, Q_INT32 progress)

@@ -43,9 +43,6 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
     virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -64,21 +61,17 @@ public:
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-
-
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfileSP srcProfile, KisProfileSP dstProfile,
                        Q_INT32 renderingIntent,
                        float exposure = 0.0f);
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-    
+
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 
-    
+
 
     /**
      * Darken all color channels with the given amount. If compensate is true,
@@ -119,8 +112,6 @@ protected:
     void compositeColor(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
     void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
-private:
-    vKisChannelInfoSP m_channels;
 
 
 };

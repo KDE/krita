@@ -27,7 +27,7 @@
 #include "kis_pixel.h"
 
 /**
- * This class is the base for all 8-bit/channel colorspaces
+ * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels
  */
 class KisU8BaseColorSpace : public KisAbstractColorSpace {
 
@@ -39,6 +39,25 @@ public:
 	m_alphaSize = sizeof(Q_UINT8);
     };
 
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+
 };
+
 
 #endif // KIS_U8_BASE_COLORSPACE_H_

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,43 +20,35 @@
 
 #include <kdialogbase.h>
 
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_composite_op.h"
-
 class QWidget;
-class KIntSpinBox;
-class KLineEdit;
-class KIntNumInput;
-class KisCmbComposite;
+class WdgLayerProperties;
+class KisCompositeOp;
+class KisAbstractColorSpace;
 
-class KisPaintPropertyDlg : public KDialogBase {
+class KisDlgLayerProperties : public KDialogBase {
     typedef KDialogBase super;
     Q_OBJECT
 
 public:
-    KisPaintPropertyDlg(const QString& deviceName,
-                const QPoint& pos,
-                Q_INT32 opacity,
-                const KisCompositeOp& compositeOp,
-                const KisAbstractColorSpace * colorSpace,
-                QWidget *parent = 0, const char *name = 0, WFlags f = 0);
-    virtual ~KisPaintPropertyDlg();
+    KisDlgLayerProperties(const QString& deviceName,
+                        const QPoint& pos,
+                        Q_INT32 opacity,
+                        const KisCompositeOp& compositeOp,
+                        const KisAbstractColorSpace * colorSpace,
+                        QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+
+    virtual ~KisDlgLayerProperties();
 
     QString getName() const;
     Q_INT32 getOpacity() const;
     KisCompositeOp getCompositeOp() const;
     QPoint getPosition() const;
+
 protected slots:
     void slotNameChanged( const QString & );
 
-
 private:
-    KLineEdit *m_name;
-    KIntNumInput *m_opacity;
-    KIntSpinBox *m_x;
-    KIntSpinBox *m_y;
-    KisCmbComposite *m_cmbComposite;
+    WdgLayerProperties * m_page;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

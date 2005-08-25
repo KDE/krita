@@ -61,7 +61,7 @@ KisTestColorSpace::~KisTestColorSpace()
 void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
-    
+
     pix->r = c.red();
     pix->g = c.green();
     pix->bmg = c.blue()*16 + c.green();
@@ -70,7 +70,7 @@ void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /
 void KisTestColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
-    
+
     pix->r = c.red();
     pix->g = c.green();
     pix->bmg = c.blue()*16 + c.green();
@@ -107,7 +107,7 @@ Q_INT8 KisTestColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 void KisTestColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 red=0, green=0, blue=0;
-    
+
     while(nColors--)
     {
         testcspixel *pix = (testcspixel *)colors;
@@ -117,7 +117,7 @@ void KisTestColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
         weights++;
         colors++;
     }
-    
+
     // Now downscale to 8 bit
     red += 0x80;
     *dst++ = ((red >> 8) + red) >> 8;
@@ -214,23 +214,6 @@ QImage KisTestColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_
     return img;
 }
 
-void KisTestColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
-{
-    testcspixel *spix = (testcspixel *)src;
-    testcspixel *dpix = (testcspixel *)dst;
-    
-    Q_INT32 nd = spix->r + brightness;
-    dpix->r = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-    
-    nd = spix->g + brightness;
-    dpix->g = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-    
-    nd = (spix->bmg - spix->g)/16 + brightness;
-    dpix->bmg = QMAX( 0, QMIN( UINT8_MAX, nd ) );
-
-    dpix->bmg = dpix->bmg*16 + dpix->g;
-}
-
 void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
 {
     while (rows > 0) {
@@ -244,7 +227,7 @@ void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
             testcspixel *pix = (testcspixel *)src;
             testcspixel *dstpix = (testcspixel *)dst;
             Q_UINT16 srcAlpha = pix->alpha;
-            
+
             // apply the alphamask
             if(mask != 0)
             {
@@ -289,7 +272,7 @@ void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
                     }
                 }
             }
-            
+
             columns--;
             src += sizeof(struct testcspixel);
             dst += sizeof(struct testcspixel);
@@ -303,19 +286,19 @@ void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
     }
 }
 
-void KisTestColorSpace::compositeErase(Q_UINT8 *dst, 
+void KisTestColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 dstRowSize,
-            const Q_UINT8 *src, 
+            const Q_UINT8 *src,
             Q_INT32 srcRowSize,
             const Q_UINT8 *srcAlphaMask,
             Q_INT32 maskRowStride,
-            Q_INT32 rows, 
-            Q_INT32 cols, 
+            Q_INT32 rows,
+            Q_INT32 cols,
             QUANTUM /*opacity*/)
 {
     Q_INT32 i;
     Q_UINT8 srcAlpha;
-    
+
     while (rows-- > 0)
     {
         testcspixel *pix = (testcspixel *)src;
@@ -342,14 +325,14 @@ void KisTestColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-void KisTestColorSpace::compositeCopy(Q_UINT8 *dst, 
+void KisTestColorSpace::compositeCopy(Q_UINT8 *dst,
            Q_INT32 dstRowStride,
-           const Q_UINT8 *src, 
+           const Q_UINT8 *src,
            Q_INT32 srcRowStride,
            const Q_UINT8 *srcAlphaMask,
            Q_INT32 maskRowStride,
-           Q_INT32 rows, 
-           Q_INT32 cols, 
+           Q_INT32 rows,
+           Q_INT32 cols,
            QUANTUM /*opacity*/)
 {
     Q_INT32 linesize = pixelSize() * cols;
@@ -358,7 +341,7 @@ void KisTestColorSpace::compositeCopy(Q_UINT8 *dst,
     d = dst;
     s = src;
     mask = srcAlphaMask;
-    
+
     if(srcAlphaMask==0)
     {
         while (rows-- > 0) {

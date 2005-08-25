@@ -209,8 +209,8 @@ public:
      *
      * XXX: We actually do not use the display yet, nor the paint device profile
      */
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -220,14 +220,9 @@ public:
      * XXX: We actually do not use the display yet, nor the paint device profile
      *
      */
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 );
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 ) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
 
-    /**
-     * Get the alpha value of the given pixel.
-     * XXX: Change to float/int to match setAlpha() when that changes.
-     */
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) = 0;
 
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile) = 0;
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile) = 0;
@@ -240,7 +235,10 @@ public:
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
-     * The pixels are supposed to be encoded in this color model.
+     * The pixels are supposed to be encoded in this color model. The default implementation
+     * will convert the pixels using either the profiles or the default profiles for the
+     * current colorstrategy and the RGBA colorstrategy. If that is not what you want,
+     * or if you think you can do better than lcms, reimplement this methods.
      *
      * @param data A pointer to a contiguous memory region containing width * height pixels
      * @param width in pixels
@@ -251,9 +249,9 @@ public:
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
-                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-                       float exposure = 0.0f) = 0;
+                                   KisProfileSP srcProfile, KisProfileSP dstProfile,
+                                   Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                                   float exposure = 0.0f);
 
 
 
@@ -264,55 +262,61 @@ public:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-                     Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
-                     Q_UINT32 numPixels,
-                     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+                                 Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                                 Q_UINT32 numPixels,
+                                 Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Convert the value of the channel at the specified position into
      * an 8-bit value. The position is not the number of bytes, but
      * the position of the channel as defined in the channel info list.
      */
-    Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
     /**
      * Convert the value of the channel at the specified position into
      * a 16-bit value. This may be upscaling or downscaling, depending
      * on the defined value of the channel
      */
-    Q_UINT8 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
 //============================== Manipulation fucntions ==========================//
 
 
-// 
+//
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
 
     /**
-     * Set the alpha channel to the given value.
+    * Get the alpha value of the given pixel, downscaled to an 8-bit value.
+    */
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) = 0;
+
+    /**
+     * Set the alpha channel of the given run of pixels to the given value.
      *
      * pixels -- a pointer to the pixels that will have their alpha set to this value
-     * alpha --  XXX: This must become int or float
+     * alpha --  a downscaled 8-bit value for opacity
      * nPixels -- the number of pixels
      *
      * XXX: Also add a function that modifies the current alpha with the given alpha, i.e., premultiply them?
      */
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) = 0;
 
     /**
      * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
-     * as many alpha values as pixels but we do not check this.
+     * as many alpha values as pixels but we do not check this; the alpha values
+     * are assumed to be 8-bits.
      */
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels) = 0;
 
     /**
      * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
-     * as many alpha values as pixels but we do not check this.
+     * as many alpha values as pixels but we do not check this; the alpha values
+     * are assumed to be 8-bits.
      */
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels) = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast
@@ -320,13 +324,13 @@ public:
      */
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
 
-    
+
     /**
      * Apply the adjustment created with onr of the other functions
      */
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 
-    
+
     // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
     /**
      * Get the difference between 2 colors, normalized in the range (0,255)
@@ -356,7 +360,7 @@ public:
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
     */
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
-    
+
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same colour model, the source pixels will be
@@ -375,6 +379,14 @@ public:
                 const KisCompositeOp& op,
                 KisProfileSP srcProfile = 0,
                 KisProfileSP dstProfile = 0);
+
+
+
+    /**
+     * Return the default profile for this colorspace. This may be 0.
+     */
+    KisProfileSP  getDefaultProfile() { return m_defaultProfile; };
+    void setDefaultProfile(KisProfileSP profile) { m_defaultProfile = profile; };
 
 //========================== END of Public API ========================================//
 
@@ -402,21 +414,14 @@ protected:
                           Q_INT32 renderingIntent);
 
 
-    /**
-     * Return the default profile for this colorspace. This may be 0,
-     * if it's the kind of colorstrategy, like CMYK, that doesn't have
-     * a default profile.
-     */
-    KisProfileSP  getDefaultProfile() { return m_defaultProfile; };
-    void setDefaultProfile(KisProfileSP profile) { m_defaultProfile = profile; };
 
 protected:
 
     QStringList m_profileFilenames;
     KisProfileSP m_defaultProfile;
     Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
-    Q_INT32 m_alphaPos;
-    Q_INT32 m_alphaSize;
+    Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
     cmsHTRANSFORM m_defaultToRGB;
     cmsHTRANSFORM m_defaultFromRGB;
@@ -427,7 +432,7 @@ protected:
     KisProfileSP m_lastUsedDstProfile;
     cmsHTRANSFORM m_lastUsedTransform;
 
-
+    vKisChannelInfoSP m_channels;
 
 private:
 
@@ -438,12 +443,10 @@ private:
     typedef QMap<KisProfilePair, cmsHTRANSFORM>  TransformMap;
     TransformMap m_transforms; // Cache for existing transforms
 
-
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    Q_UINT8 * m_conversionCache;
-    Q_UINT32 m_conversionCacheSize;
+    QMemArray<Q_UINT8> m_conversionCache;
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

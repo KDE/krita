@@ -30,7 +30,6 @@
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
 #include "kis_dlg_new_layer.h"
-#include "kis_dlg_paint_properties.h"
 #include "kis_colorspace_registry.h"
 #include "kis_abstract_colorspace.h"
 

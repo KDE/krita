@@ -39,7 +39,7 @@ namespace WetAndSticky {
         DOWN,
         LEFT,
         RIGHT
-    };    
+    };
 
     /**
      * Defines the contents and attributes of a cell on the canvas.
@@ -60,10 +60,10 @@ namespace WetAndSticky {
 
         enumDirection direction;
         Q_UINT8 strength;
-        
+
         Q_UINT8  absorbancy;  /* How much paint can this cell hold? */
         Q_UINT8  volume;      /* The volume of paint. */
-        
+
     } CELL, *CELL_PTR;
 
 
@@ -83,8 +83,6 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
     virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -92,6 +90,14 @@ public:
 
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0);
 
+    virtual Q_UINT8 getAlpha(const Q_UINT8 *pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
     virtual vKisChannelInfoSP channels() const;
     virtual bool hasAlpha() const;
@@ -109,12 +115,8 @@ public:
                        float exposure = 0.0f);
 
 
-    virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const {};
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-    
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
@@ -143,8 +145,6 @@ private:
     void compositeClear(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
     void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity);
 
-private:
-    vKisChannelInfoSP m_channels;
 };
 
 #endif // KIS_COLORSPACE_WET_STICKY_H_

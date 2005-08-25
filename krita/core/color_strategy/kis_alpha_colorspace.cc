@@ -104,7 +104,7 @@ bool KisAlphaColorSpace::hasAlpha() const
 {
     return true; // Of course!
 }
-
+#if 0
 // XXX: We convert the alpha space to create a mask for display in selection previews
 // etc. No need to actually use the profiles here to create a mask image -- they don't
 // need to be true color.
@@ -141,6 +141,7 @@ QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
     }
     return img;
 }
+#endif
 
 bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
                      Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
@@ -165,10 +166,6 @@ bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcP
 
 }
 
-void KisAlphaColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
-{
-    //XXX does nothing for now
-}
 
 //XXX bitblt of ColorSpaceAlpha does not take mask into consideration as this is probably not
 // used ever
@@ -319,14 +316,14 @@ void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues
     while (nColors--)
     {
         Q_INT32 weight = *kernelValues;
-        
+
         if (weight != 0) {
             totalAlpha += (*colors)[PIXEL_MASK] * weight;
         }
         colors++;
         kernelValues++;
     }
-    
+
     if (channelFlags & FLAG_ALPHA) {
         dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
     }

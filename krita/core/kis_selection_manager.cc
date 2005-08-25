@@ -92,80 +92,67 @@ void KisSelectionManager::setup(KActionCollection * collection)
 {
     // XXX: setup shortcuts!
 
-        m_cut =
-        KStdAction::cut(this,
-                SLOT(cut()),
+    m_cut = KStdAction::cut(this,
+            SLOT(cut()),
+            collection,
+            "cut");
+
+    m_copy = KStdAction::copy(this,
+                SLOT(copy()),
                 collection,
-                "cut");
+                "copy");
 
-        m_copy =
-        KStdAction::copy(this,
-                 SLOT(copy()),
-                 collection,
-                 "copy");
+    m_paste = KStdAction::paste(this,
+                SLOT(paste()),
+                collection,
+                "paste");
 
-        m_paste =
-        KStdAction::paste(this,
-                  SLOT(paste()),
-                  collection,
-                  "paste");
-
-    m_pasteNew =
-        new KAction(i18n("Paste into &New Image"),
+    m_pasteNew = new KAction(i18n("Paste into &New Image"),
                 0, 0,
                 this, SLOT(pasteNew()),
                 collection,
                 "paste_new");
 
 
-        m_selectAll =
-        KStdAction::selectAll(this,
-                      SLOT(selectAll()),
-                      collection,
-                      "select_all");
+    m_selectAll = KStdAction::selectAll(this,
+                    SLOT(selectAll()),
+                    collection,
+                    "select_all");
 
-        m_deselect =
-        KStdAction::deselect(this,
-                     SLOT(deselect()),
-                     collection,
-                     "deselect");
+    m_deselect = KStdAction::deselect(this,
+                    SLOT(deselect()),
+                    collection,
+                    "deselect");
 
 
-        m_clear =
-        KStdAction::clear(this,
-                  SLOT(clear()),
-                  collection,
-                  "clear");
-    
-    m_reselect =
-        new KAction(i18n("&Reselect"),
+    m_clear = KStdAction::clear(this,
+                SLOT(clear()),
+                collection,
+                "clear");
+
+    m_reselect = new KAction(i18n("&Reselect"),
                 0, "Ctrl+Shift+D",
                 this, SLOT(reselect()),
                 collection, "reselect");
-    
-    m_invert =
-        new KAction(i18n("&Invert"),
-                0, "Ctrl+I", 
+
+    m_invert = new KAction(i18n("&Invert"),
+                0, "Ctrl+I",
                 this, SLOT(invert()),
                 collection, "invert");
 
 
-        m_toNewLayer =
-        new KAction(i18n("Copy Selection to New Layer"),
+    m_toNewLayer = new KAction(i18n("Copy Selection to New Layer"),
                 0, "Ctrl+J",
                 this, SLOT(copySelectionToNewLayer()),
                 collection, "copy_selection_to_new_layer");
 
 
-    m_cutToNewLayer =
-        new KAction(i18n("Cut Selection to New Layer"),
+    m_cutToNewLayer = new KAction(i18n("Cut Selection to New Layer"),
             0, "Ctrl+Shift+J",
             this, SLOT(cutToNewLayer()),
             collection, "cut_selection_to_new_layer");
 
-
-    m_feather =
-        new KAction(i18n("Feather..."),
+    m_feather = new KAction(i18n("Feather..."),
                 0, "Ctrl+Alt+D",
                 this, SLOT(feather()),
                 collection, "feather");
@@ -263,14 +250,14 @@ void KisSelectionManager::updateGUI()
 
     KisImageSP img = m_parent -> currentImg();
     KisLayerSP l = 0;
-    
+
     bool enable = false;
     if (img) {
         l = img -> activeLayer();
 
         enable = l && l -> hasSelection() && !l -> locked() && l -> visible();
     }
-    
+
     m_cut -> setEnabled(enable);
     m_cutToNewLayer->setEnabled(enable);
     m_selectAll -> setEnabled(img != 0);
@@ -304,12 +291,12 @@ void KisSelectionManager::updateGUI()
     if (img && l ) {
         enable = img && img->activeLayer() && l->hasSelection() && l->visible();
     }
-    
+
     m_copy -> setEnabled(enable);
     m_paste -> setEnabled(img != 0 && m_clipboard -> hasClip());
     m_pasteNew -> setEnabled(img != 0 && m_clipboard -> hasClip());
     m_toNewLayer -> setEnabled(enable);
-    
+
     m_parent -> updateStatusBarSelectionLabel();
 
 }
@@ -340,9 +327,9 @@ void KisSelectionManager::copy()
     if (!layer -> hasSelection()) return;
 
     KisSelectionSP selection = layer -> selection();
-    
+
     QRect r = selection -> selectedExactRect();
-    
+
     kdDebug(DBG_AREA_CORE) << "Selection rect: "
           << r.x() << ", "
           << r.y() << ", "
@@ -373,9 +360,9 @@ void KisSelectionManager::copy()
         KisHLineIterator selectionIt = selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
         while (!layerIt.isDone()) {
-            
+
             cs->applyAlphaU8Mask( layerIt.rawData(), selectionIt.rawData(), 1 );
-            
+
 
             ++layerIt;
             ++selectionIt;
@@ -438,7 +425,7 @@ KisLayerSP KisSelectionManager::paste()
 void KisSelectionManager::pasteNew()
 {
     kdDebug() << "Paste new!\n";
-    
+
         KisPaintDeviceSP clip = m_clipboard -> clip();
     if (!clip) return;
 
@@ -458,7 +445,7 @@ void KisSelectionManager::pasteNew()
     p.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p.end();
     img->add(layer,0);
-    
+
     doc->setCurrentImage( img );
     KoMainWindow *win = new KoMainWindow( doc->instance() );
     win->show();
@@ -481,7 +468,7 @@ void KisSelectionManager::selectAll()
 
     layer -> selection() -> clear();
     layer -> selection() -> invert();
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
     layer -> emitSelectionChanged();
@@ -498,9 +485,9 @@ void KisSelectionManager::deselect()
 
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Deselect"), layer.data());
     Q_CHECK_PTR(t);
-    
+
     layer -> deselect();
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 
@@ -510,8 +497,8 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::clear()
 {
-        KisImageSP img = m_parent -> currentImg();
-        if (!img) return;
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
 
     KisLayerSP layer = img -> activeLayer();
     if (!layer) return;
@@ -527,7 +514,7 @@ void KisSelectionManager::clear()
     }
 
     layer -> clearSelection();
-    
+
     if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
     layer -> deselect();
     layer->emitSelectionChanged();
@@ -545,9 +532,9 @@ void KisSelectionManager::reselect()
 
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Reselect"), layer.data());
     Q_CHECK_PTR(t);
-    
+
     layer -> selection(); // sets hasSelection=true
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 
@@ -565,7 +552,7 @@ void KisSelectionManager::invert()
 
     if (layer -> hasSelection()) {
         KisSelectionSP s = layer -> selection();
-    
+
         KisTransaction * t = 0;
         if (img -> undoAdapter())
         {
@@ -574,11 +561,11 @@ void KisSelectionManager::invert()
         }
 
         s -> invert();
-    
+
         if (img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
     }
-    
+
     layer -> emitSelectionChanged();
 }
 
@@ -615,7 +602,7 @@ void KisSelectionManager::feather()
     if (!img) return;
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) {
         // activate it, but don't do anything with it
         dev -> selection();
@@ -630,9 +617,9 @@ void KisSelectionManager::feather()
 
     // XXX: we should let gaussian blur & others influence alpha channels as well
     // (on demand of the caller)
-    
+
     KisConvolutionPainter painter(selection.data());
-    
+
     KisKernel k;
     k.width = 3;
     k.height = 3;
@@ -648,18 +635,18 @@ void KisSelectionManager::feather()
     k.data[6] = 1;
     k.data[7] = 2;
     k.data[8] = 1;
-    
+
     QRect rect = selection -> extent();
     // Make sure we've got enough space around the edges.
     rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
     rect &= QRect(0, 0, img -> width(), img -> height());
-    
+
     painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
     painter.end();
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
-        
+
     delete[] k.data;
 
     dev -> emitSelectionChanged();

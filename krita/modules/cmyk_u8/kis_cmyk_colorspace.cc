@@ -77,21 +77,6 @@ KisCmykColorSpace::~KisCmykColorSpace()
 {
 }
 
-
-void KisCmykColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
-{
-    *alpha = pixel[4];
-}
-
-void KisCmykColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
-{
-    while (nPixels > 0) {
-        pixels[4] = alpha;
-        --nPixels;
-        pixels += cmyk::MAX_CHANNEL_CMYKA;
-    }
-}
-
 void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
 }
@@ -121,37 +106,6 @@ Q_INT32 KisCmykColorSpace::pixelSize() const
     return cmyk::MAX_CHANNEL_CMYKA;
 }
 
-QImage KisCmykColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                          KisProfileSP srcProfile, KisProfileSP dstProfile,
-                          Q_INT32 renderingIntent, float /*exposure*/)
-
-{
-    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-    memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
-    KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
-
-
-
-    if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                 cmsDoTransform(m_defaultToRGB,
-                                const_cast<Q_UINT8 *>(&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
-                                &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
-    }
-    else {
-        // Do a nice calibrated conversion
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                convertPixelsTo(const_cast<Q_UINT8 *>
-                                (&(data[cmyk::MAX_CHANNEL_CMYKA*(i*width+j)])),
-                                srcProfile,
-                                &(img.scanLine(i)[j*img.bytesPerLine()/width]),
-                                dstCS, dstProfile, 1, renderingIntent);
-     }
-
-    return img;
-}
 
 void KisCmykColorSpace::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
 {
@@ -300,20 +254,3 @@ KisCompositeOpList KisCmykColorSpace::userVisiblecompositeOps() const
 
     return list;
 }
-
-QString KisCmykColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
-{
-    Q_ASSERT(channelIndex < nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
-
-    return QString().setNum(pixel[channelPosition]);
-}
-
-QString KisCmykColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
-{
-    Q_ASSERT(channelIndex < nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
-
-    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
-}
-

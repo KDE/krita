@@ -233,10 +233,13 @@ void ColorSettingsTab::setDefault()
 void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 {
     KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+
     m_page -> cmbMonitorProfile -> clear();
     m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
+
     if ( !cs )
-        return;
+    return;
+
     vKisProfileSP profileList = cs -> profiles();
         vKisProfileSP::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
@@ -316,7 +319,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
     vbox = addVBoxPage( i18n( "Color Settings"), i18n( "Color Settings"), BarIcon( "colorize", KIcon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
-    
+
     vbox = addVBoxPage( i18n( "Performance Settings"), i18n( "Performance Settings"), BarIcon( "fork", KIcon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
 }

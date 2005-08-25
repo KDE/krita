@@ -62,7 +62,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     KisAbstractColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
     Q_INT32 pos = 0;
-    
+
     // Basic representational definition
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), pos, COLOR, 1));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), ++pos, COLOR, 1));
@@ -73,7 +73,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Hue"), ++pos, COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
-    
+
     m_channels.push_back(new KisChannelInfo(i18n("Liquid Content"), pos+=sizeof(float), SUBSTANCE, 1));
     m_channels.push_back(new KisChannelInfo(i18n("Drying Rate"), ++pos, SUBSTANCE, 1));
     m_channels.push_back(new KisChannelInfo(i18n("Miscibility"), ++pos, SUBSTANCE, 1));
@@ -81,7 +81,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     // Substrate definition
     m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
     m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
-    
+
     m_channels.push_back(new KisChannelInfo(i18n("Absorbancy"), ++pos, SUBSTRATE, 1));
     m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
@@ -180,7 +180,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT
         << ", hls: (" << p->hue << ", "
                       << p->lightness << ", "
                       << p->saturation << ")\n";
-#endif    
+#endif
 }
 
 void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
@@ -205,7 +205,7 @@ void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
             p -> blue);
 
     *opacity = p -> alpha;
-#ifdef WSDEBUG    
+#ifdef WSDEBUG
     kdDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 #endif
 }
@@ -226,15 +226,38 @@ void KisWetStickyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *we
 {
 }
 
-void KisWetStickyColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+Q_UINT8 KisWetStickyColorSpace::getAlpha(const Q_UINT8 *pixel)
 {
-    *alpha = ((CELL_PTR)pixel)->alpha;
+    return ((CELL_PTR)pixel)->alpha;
 }
 
 void KisWetStickyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
 {
-    ((CELL_PTR)pixels)->alpha = alpha;
+    while (nPixels > 0) {
+        ((CELL_PTR)pixels)->alpha = alpha;
+        --nPixels;
+        pixels+=pixelSize();
+    }
 }
+
+void KisWetStickyColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+void KisWetStickyColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+{
+}
+
+Q_UINT8 KisWetStickyColorSpace::scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+{
+    return 0;
+}
+
+Q_UINT16 KisWetStickyColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+{
+    return 0;
+}
+
 
 vKisChannelInfoSP KisWetStickyColorSpace::channels() const
 {
@@ -328,12 +351,6 @@ bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /
 
 }
 
-void KisWetStickyColorSpace::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
-{
-    //XXX does nothing for now
-}
-
-
 void KisWetStickyColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 dstRowStride,
                       const Q_UINT8 *src,
@@ -365,8 +382,8 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 {
     // XXX: This is basically the same as with rgb and used to composite layers for  Composition for
     //      painting works differently
-    
-    
+
+
     while (rows > 0) {
 
         const Q_UINT8 *src = srcRowStart;
@@ -376,7 +393,7 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
         Q_INT32 columns = numColumns;
 
         while (columns > 0) {
-        
+
             CELL_PTR dstCell = (CELL_PTR) dst;
             CELL_PTR srcCell = (CELL_PTR) src;
 
@@ -399,7 +416,7 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
                     srcAlpha = UINT8_MULT(srcAlpha, *mask);
                 mask++;
             }
-            
+
             if (srcAlpha != OPACITY_TRANSPARENT) {
 
                 if (opacity != OPACITY_OPAQUE) {
@@ -442,7 +459,7 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
         rows--;
         srcRowStart += srcRowStride;
         dstRowStart += dstRowStride;
-        
+
         if(maskRowStart)
             maskRowStart += maskRowStride;
     }
@@ -456,7 +473,7 @@ void KisWetStickyColorSpace::compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, c
     const Q_UINT8 *s;
     d = dst;
     s = src;
-    
+
     while (rows-- > 0) {
         memcpy(d, s, linesize);
         d += dstRowStride;

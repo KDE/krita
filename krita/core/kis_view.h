@@ -72,7 +72,6 @@ class KisGradient;
 class KisLabelProgress;
 class KisLayerBox;
 class KisMoveEvent;
-class KisPaintopBox;
 class KisPattern;
 class KisPoint;
 class KisRect;
@@ -163,9 +162,9 @@ signals:
     void gradientChanged(KisGradient * gradient);
     void patternChanged(KisPattern * pattern);
     void paintopChanged(KisID paintop);
-    
+
     void currentLayerChanged(int layer);
-    
+
     void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
     void cursorEnter();
     void cursorLeave();
@@ -195,14 +194,14 @@ public slots:
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double angle);
     void shearLayer(double angleX, double angleY);
-    
+
     /// Crop the current layer to the specified dimensions, do not move it the image origin.
     void cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-    
+
     void preferences();
-    
+
     void layerCompositeOp(const KisCompositeOp& compositeOp);
-    
+
     void layerOpacity(int opacity);
     void setHDRExposure(float exposure);
 
@@ -218,25 +217,25 @@ private:
     virtual void attach(KisCanvasObserver *observer);
     virtual void detach(KisCanvasObserver *observer);
     virtual void notify();
-    
+
     virtual KisColor bgColor() const;
     virtual void setBGColor(const KisColor& c);
 
     virtual KisColor fgColor() const;
     virtual void setFGColor(const KisColor& c);
-    
+
     virtual KisBrush *currentBrush() const;
     virtual KisPattern *currentPattern() const;
     virtual KisGradient *currentGradient() const;
     virtual KisID currentPaintop() const;
-    
+
     virtual double zoomFactor() const;
-    
+
     virtual KisUndoAdapter *undoAdapter() const;
-    
+
     virtual KisCanvasControllerInterface *canvasController() const;
     virtual KisToolControllerInterface *toolController() const;
-    
+
     virtual KoDocument *document() const;
 
 
@@ -285,7 +284,6 @@ private:
 
     void layerUpdateGUI(bool enable);
     void createLayerBox();
-    void createPaintopBox();
     void createToolBox();
 
     void paintView(const KisRect& rc);
@@ -328,24 +326,24 @@ public slots:
     void mergeLayer();
     void mergeLinkedLayers();
     void saveLayerAsImage();
-    
+
     void imageUpdated(KisImageSP img);
-    
+
     void brushActivated(KisResource *brush);
     void patternActivated(KisResource *pattern);
     void gradientActivated(KisResource *gradient);
     void paintopActivated(const KisID & paintop);
-    
+
     void scrollH(int value);
     void scrollV(int value);
-    
+
     void slotInsertImageAsLayer();
-    
+
     void imgUpdated(KisImageSP img, const QRect& rc);
     void imgUpdated(KisImageSP img);
-    
+
     void profileChanged(KisProfileSP profile);
-    
+
     void slotZoomIn();
     void slotZoomOut();
     void slotActualPixels();
@@ -376,7 +374,7 @@ private slots:
     void layersUpdated(KisImageSP img);
 
     QPoint mapToScreen(const QPoint& pt);
-    
+
 private:
     KisDoc *m_doc;
     KisCanvas *m_canvas;
@@ -385,7 +383,7 @@ private:
     KisFilterManager * m_filterManager;
     KoPaletteManager * m_paletteManager;
     KisToolManager * m_toolManager;
-    
+
         // Fringe benefits
     KisRuler *m_hRuler;
     KisRuler *m_vRuler;
@@ -398,7 +396,7 @@ private:
     KAction *m_imgRename;
     KAction *m_imgResizeToLayer;
     KAction *m_imgScan;
-    
+
     KoPartSelectAction * m_actionPartLayer;
     KAction *m_layerAdd;
     KAction *m_layerBottom;
@@ -438,10 +436,9 @@ private:
     QLabel *m_statusBarProfileLabel;
     KisLabelProgress *m_progress;
 
-        KisLayerBox *m_layerBox;
-        KisPaintopBox *m_paintopBox;
+    KisLayerBox *m_layerBox;
     KisToolBox *m_toolBox;
-    
+
     // Current colours, brushes, patterns etc.
 
     KisColor m_fg;

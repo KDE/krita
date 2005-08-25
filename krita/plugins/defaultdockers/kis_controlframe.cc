@@ -35,7 +35,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktoolbar.h>
 #include <koFrameButton.h>
 
 #include "kis_factory.h"
@@ -54,6 +53,7 @@
 #include "kis_toolbox.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
+#include "kis_paintop_box.h"
 
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
     : QPopupMenu(parent, name)
@@ -76,6 +76,7 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 
 KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* name )
     : QFrame( parent, name )
+    , m_view(view)
     , m_brushWidget(0)
     , m_patternWidget(0)
     , m_gradientWidget(0)
@@ -83,9 +84,9 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     , m_patternChooserPopup(0)
     , m_gradientChooserPopup(0)
     , m_brushMediator(0)
-        , m_patternMediator(0)
-        , m_gradientMediator(0)
-    , m_view(view)
+    , m_patternMediator(0)
+    , m_gradientMediator(0)
+    , m_paintopBox(0)
 {
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
@@ -94,25 +95,37 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     float ps = m_font.pointSize() * 0.8;
     m_font.setPointSize((int)ps);
 
-    m_toolbar = new KToolBar(m_view->mainWindow(), Qt::DockLeft, false, "resources", false, true);
-    m_toolbar->setBarPos(KToolBar::Left);
-    m_toolbar->setName("resources");
-
-    m_brushWidget = new KisIconWidget(m_toolbar, "brushes");
+    m_brushWidget = new KisIconWidget(this, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush shapes") );
     m_brushWidget->show();
-    
-    m_patternWidget = new KisIconWidget(m_toolbar, "patterns");
+
+    m_patternWidget = new KisIconWidget(this, "patterns");
     m_patternWidget->setTextLabel( i18n("Fill patterns") );
     m_patternWidget->show();
 
-    m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
+    m_gradientWidget = new KisIconWidget(this, "gradients");
     m_gradientWidget->setTextLabel( i18n("Gradients") );
     m_gradientWidget->show();
+
+    m_paintopBox = new KisPaintopBox( m_view, this, "paintopbox" );
+
+    QVBoxLayout * vl = new QVBoxLayout( this, 1, 2, "controldocker main layout" );
+    QHBoxLayout * hl = new QHBoxLayout( this, 0, 2, "controldocher button frame layout" );
+    //hl->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding));
+    hl->addWidget( m_brushWidget );
+    hl->addWidget( m_patternWidget );
+    hl->addWidget( m_gradientWidget );
+    hl->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding));
+    vl->addLayout( hl );
+    vl->addWidget( m_paintopBox );
+    vl->addItem( new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     m_brushWidget -> setFixedSize( 32, 32 );
     m_patternWidget -> setFixedSize( 32, 32 );
     m_gradientWidget -> setFixedSize( 32, 32 );
+
+
+
 
     createBrushesChooser(m_view);
     createPatternsChooser(m_view);
@@ -195,20 +208,20 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_brushesTab->setFocusPolicy(QWidget::NoFocus);
     m_brushesTab->setFont(m_font);
     m_brushesTab->setMargin(1);
-    
+
     l->add(m_brushesTab);
-    
+
     KisBrushChooser * m_brushChooser = new KisBrushChooser(m_brushesTab, "brush_chooser");
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
-    
+
     KisAutobrush * m_autobrush = new KisAutobrush(m_brushesTab, "autobrush", i18n("Autobrush"));
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
     connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
-    
+
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
-    
+
     KisResourceServerBase* rServer;
     rServer = KisFactory::rServerRegistry() -> get("ImagePipeBrushServer");
     m_brushMediator -> connectServer(rServer);
@@ -245,7 +258,7 @@ void KisControlFrame::createPatternsChooser(KisView * view)
     KisResourceServerBase* rServer;
     rServer = KisFactory::rServerRegistry() -> get("PatternServer");
     m_patternMediator -> connectServer(rServer);
-    
+
     KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
     chooser->setCurrent( 0 );
     m_patternMediator->setActiveItem( chooser->currentItem() );
@@ -263,7 +276,7 @@ void KisControlFrame::createGradientsChooser(KisView * view)
     m_gradientTab->setFocusPolicy(QWidget::NoFocus);
     m_gradientTab->setFont(m_font);
     m_gradientTab->setMargin(1);
-    
+
     l2->add( m_gradientTab);
 
     KisGradientChooser * m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");

@@ -17,7 +17,7 @@ libkisui_la_SOURCES = \
     kis_dlg_create_img.cc \
     kis_dlg_image_properties.cc \
     kis_dlg_new_layer.cc \
-    kis_dlg_paint_properties.cc \
+    kis_dlg_layer_properties.cc \
     kis_dlg_transform.cc \
     kis_gray_widget.cc \
     kis_icon_item.cc \
@@ -40,6 +40,7 @@ libkisui_la_SOURCES = \
     kis_color_cup.cc \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
+    wdglayerproperties.ui \
     wdgselectionoptions.ui \
     wdgshapeoptions.ui \
     wdgnewimage.ui \
@@ -55,7 +56,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_layerbox.h \
     kis_dlg_create_img.h \
     kis_dlg_new_layer.h \
-    kis_dlg_paint_properties.h \
+    kis_dlg_layer_properties.h \
     kis_dlg_image_properties.h \
     kis_dlg_transform.h \
     kis_gray_widget.h \
@@ -80,6 +81,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
     wdglayerbox.h \
+    wdglayerproperties.h \
     wdgperformancesettings.h
 
 

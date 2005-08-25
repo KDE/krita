@@ -47,7 +47,7 @@ public:
 
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixelRO (src, src, this, profile); }
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0) { return KisPixel (src, src, this, profile); }
-    
+
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
@@ -60,13 +60,12 @@ public:
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
+#if 0
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfileSP srcProfile, KisProfileSP dstProfile,
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
-
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
-
+#endif
     virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
 
 protected:
@@ -97,8 +96,6 @@ protected:
 
     KisCompositeOpList userVisiblecompositeOps() const;
 
-private:
-    vKisChannelInfoSP m_channels;
 };
 
 #endif // KIS_COLORSPACE_ALPHA_H_

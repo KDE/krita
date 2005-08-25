@@ -89,7 +89,6 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
-#include "kis_paintop_box.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
 #include "kis_profile.h"
@@ -113,7 +112,7 @@
 // Dialog boxes
 #include "kis_dlg_progress.h"
 #include "kis_dlg_new_layer.h"
-#include "kis_dlg_paint_properties.h"
+#include "kis_dlg_layer_properties.h"
 #include "kis_dlg_transform.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_image_properties.h"
@@ -141,15 +140,15 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     Q_CHECK_PTR(m_paletteManager);
     Q_ASSERT(m_paletteManager);
-    
-    m_paletteManager->createPalette( krita::CONTROL_PALETTE , i18n("Control box"));
+
     m_paletteManager->createPalette( krita::PAINTBOX, i18n("Brushes and stuff"));
+    m_paletteManager->createPalette( krita::CONTROL_PALETTE , i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
-    
+
     m_selectionManager = new KisSelectionManager(this, doc);
     Q_CHECK_PTR(m_selectionManager);
-    
+
     m_filterManager = new KisFilterManager(this, doc);
     Q_CHECK_PTR(m_filterManager);
 
@@ -196,7 +195,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_brush = 0;
     m_pattern = 0;
     m_gradient = 0;
-    
+
     m_currentGuide = 0;
 
     m_progress = 0;
@@ -208,9 +207,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     createToolBox();
 
     createLayerBox();
-    
-    createPaintopBox();
-    
+
     // Now the view plugins will be loaded.
     setInstance(KisFactory::global());
 
@@ -218,7 +215,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     setupRulers();
     setupScrollBars();
     setupStatusBar();
-    
+
     setupActions();
     dcopObject();
 
@@ -228,9 +225,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
     resetMonitorProfile();
-    
+
     layersUpdated();
-    
+
     qApp -> installEventFilter(this);
     m_tabletEventTimer.start();
 
@@ -287,14 +284,6 @@ void KisView::createLayerBox()
 
 }
 
-void KisView::createPaintopBox()
-{
-    m_paintopBox = new KisPaintopBox(this, "paintopbox");
-    m_paintopBox->setCaption(i18n("Brushes and stuff"));
-    paletteManager()->addWidget(m_paintopBox, i18n("Brushes and tools"), krita::PAINTBOX );
-}
-
-
 void KisView::createToolBox()
 {
     m_toolBox = new KisToolBox(mainWindow(), "toolbox");
@@ -331,7 +320,7 @@ void KisView::setupScrollBars()
 void KisView::setupRulers()
 {
     m_hRuler = new KisRuler(Qt::Horizontal, this);
-    Q_CHECK_PTR(m_hRuler);  
+    Q_CHECK_PTR(m_hRuler);
 
     m_vRuler = new KisRuler(Qt::Vertical, this);
     Q_CHECK_PTR(m_vRuler);
@@ -408,13 +397,13 @@ KisProfileSP KisView::monitorProfile()
 void KisView::resetMonitorProfile()
 {
     m_monitorProfile = KisProfile::getScreenProfile();
-    
+
     if (m_monitorProfile == 0) {
         KisConfig cfg;
         QString monitorProfileName = cfg.monitorProfile();
         m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
     }
-    
+
 }
 
 void KisView::setupStatusBar()
@@ -460,14 +449,14 @@ void KisView::setupActions()
 
     m_selectionManager->setup(actionCollection());
     m_filterManager->setup(actionCollection());
-    
+
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
     m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
     m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
     m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
-    
+
     // view actions
     m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
     m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
@@ -477,11 +466,11 @@ void KisView::setupActions()
 
     // layer actions
     m_layerAdd = new KAction(i18n("&Add Layer..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
-    
+
     m_actionPartLayer = new KoPartSelectAction( i18n( "&Object layer" ), "frame_query",
                                                     this, SLOT( addPartLayer() ),
                                                     actionCollection(), "insert_part_layer" );
-    
+
     m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
     m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
     m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
@@ -824,7 +813,7 @@ void KisView::layerUpdateGUI(bool enable)
     m_selectionManager->updateGUI();
     m_filterManager->updateGUI();
     m_toolManager->updateGUI();
-    
+
     imgUpdateGUI();
 }
 
@@ -1491,11 +1480,11 @@ void KisView::gradientActivated(KisResource *gradient)
 
 void KisView::paintopActivated(const KisID & paintop)
 {
-    
+
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
     }
-    
+
     m_paintop = paintop;
     emit paintopChanged(m_paintop);
     notify();
@@ -1901,12 +1890,12 @@ void KisView::layerProperties()
         KisLayerSP layer = img -> activeLayer();
 
         if (layer) {
-            KisPaintPropertyDlg dlg(layer -> name(),
-                        QPoint(layer->getX(),
-                               layer->getY()),
-                        layer->opacity(),
-                        layer->compositeOp(),
-                        layer->colorStrategy());
+            KisDlgLayerProperties dlg(layer -> name(),
+                                     QPoint(layer->getX(),
+                                     layer->getY()),
+                                     layer->opacity(),
+                                     layer->compositeOp(),
+                                     layer->colorStrategy());
 
             if (dlg.exec() == QDialog::Accepted) {
                 QPoint pt = dlg.getPosition();
@@ -1963,24 +1952,24 @@ void KisView::addPartLayer()
 {
     KisImageSP img = currentImg();
     if (!img) return;
-    
+
     KoDocumentEntry  e = m_actionPartLayer->documentEntry();
-    
+
     KoDocument* doc = e.createDoc(m_doc);
     if ( !doc )
         return;
-        
+
     if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
     KisChildDoc * childDoc = m_doc->createChildDoc(img->bounds(), doc);
-    
+
     KisPartLayer * partLayer = new KisPartLayer(img, childDoc);
     img->layerAdd(partLayer, 0);
-    
+
     m_doc->setModified(true);
 
-    
+
 }
 
 
@@ -2215,7 +2204,7 @@ void KisView::scrollV(int value)
     if (m_canvas -> isUpdatesEnabled()) {
         if (yShift > 0) {
             bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
-    
+
             KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
             paintView(viewToWindow(drawRect));
             m_canvas -> repaint();
@@ -2223,7 +2212,7 @@ void KisView::scrollV(int value)
         else
             if (yShift < 0) {
                 bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
-    
+
                 KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
                 paintView(viewToWindow(drawRect));
                 m_canvas -> repaint();
@@ -2260,7 +2249,7 @@ void KisView::connectCurrentImg() const
 {
     if (m_current) {
         connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
-        
+
         connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));
 

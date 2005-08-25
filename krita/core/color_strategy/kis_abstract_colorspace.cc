@@ -35,17 +35,6 @@
 #include "kis_colorspace_registry.h"
 #include "kis_channelinfo.h"
 
-namespace {
-
-    int simpleAdjust(int channel, int brightness, double contrast) {
-
-        int nd = channel + brightness;
-        nd = (int)(((nd - QUANTUM_MAX / 2 ) * contrast) + QUANTUM_MAX / 2);
-        return QMAX( 0, QMIN( QUANTUM_MAX, nd ) );
-
-    }
-
-}
 
 KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
     : m_id(id),
@@ -55,8 +44,10 @@ KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id, DWORD cmType, icCo
     m_alphaPos = -1;
     m_alphaSize = -1;
     m_qcolordata = 0;
-    m_conversionCache = new Q_UINT8[16];
-    m_conversionCacheSize = 16;
+    m_lastUsedDstProfile = 0;
+    m_lastUsedSrcProfile = 0;
+    m_lastUsedTransform = 0;
+
 }
 
 void KisAbstractColorSpace::init()
@@ -72,35 +63,36 @@ void KisAbstractColorSpace::init()
     cmsHPROFILE hProfile = m_defaultProfile->profile();
 
     if (m_cmType != TYPE_BGR_8) {
-	// For conversions from default rgb
-	cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
+        // For conversions from default rgb
+        cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
 
-	m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
-					      hProfile, m_cmType,
-					      INTENT_PERCEPTUAL, 0);
+        m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
+                                              hProfile, m_cmType,
+                                              INTENT_PERCEPTUAL, 0);
 
-	m_defaultToRGB =  cmsCreateTransform(hProfile, m_cmType,
-					     hsRGB, TYPE_BGR_8,
-					     INTENT_PERCEPTUAL, 0);
+        m_defaultToRGB =  cmsCreateTransform(hProfile, m_cmType,
+                                             hsRGB, TYPE_BGR_8,
+                                             INTENT_PERCEPTUAL, 0);
     }
 
     if (m_cmType != TYPE_XYZ_16) {
-	// For conversion from default 16 bit xyz for default pixel ops
-	cmsHPROFILE hsXYZ = cmsCreateXYZProfile();
+    	// For conversion from default 16 bit xyz for default pixel ops
+    	cmsHPROFILE hsXYZ = cmsCreateXYZProfile();
 
-	m_defaultFromXYZ = cmsCreateTransform(hsXYZ, TYPE_XYZ_16,
-					      hProfile, m_cmType,
-					      INTENT_PERCEPTUAL, 0);
+	    m_defaultFromXYZ = cmsCreateTransform(hsXYZ, TYPE_XYZ_16,
+		    	                		      hProfile, m_cmType,
+                			    		      INTENT_PERCEPTUAL, 0);
 
-	m_defaultToXYZ = cmsCreateTransform(hProfile, m_cmType,
-					    hsXYZ, TYPE_XYZ_16,
-					    INTENT_PERCEPTUAL, 0);
+      	m_defaultToXYZ = cmsCreateTransform(hProfile, m_cmType,
+	                    				    hsXYZ, TYPE_XYZ_16,
+					                        INTENT_PERCEPTUAL, 0);
 
     }
 }
 
 KisAbstractColorSpace::~KisAbstractColorSpace()
 {
+// XXX: Don't know why this crashes when uncommented
 //    TransformMap::iterator it;
 //    for ( it = m_transforms.begin(); it != m_transforms.end(); ++it ) {
 //        cmsDeleteTransform(it.data());
@@ -113,54 +105,6 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
 //    cmsDeleteTransform(m_defaultFromXYZ);
 }
 
-void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
-{
-    if (!m_defaultFromRGB) return;
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[4] = OPACITY_OPAQUE;
-
-}
-
-void KisAbstractColorSpace::fromQColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
-{
-    if (!m_defaultFromRGB) return;
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    // XXX: assume 8-bit alpha
-    dst[m_alphaPos] = opacity;
-}
-
-void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
-{
-    if (!m_defaultToRGB) return;
-
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-}
-
-void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
-{
-    if (!m_defaultToRGB) return;
-
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-
-    // XXX: assume 8-bit alpha!
-    *opacity = src[m_alphaPos];
-}
 
 bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent)
 {
@@ -188,8 +132,9 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
         dstProfile = dstColorStrategy->getDefaultProfile();
     }
 
-//     kdDebug() << "src space: " << id().name() << ", src profile " << srcProfile->productName()
-//               << ", dst space: " << dstColorStrategy->id().name() << ", dst profile " << dstProfile->productName() << "\n";
+//    kdDebug() << "src space: " << id().name() << ", src profile " << srcProfile->productName()
+//              << ", dst space: " << dstColorStrategy->id().name() << ", dst profile " << dstProfile->productName()
+//              << ", number of pixels: " << numPixels << "\n";
 
     if (m_lastUsedTransform != 0) {
         if (dstProfile == m_lastUsedDstProfile && srcProfile == m_lastUsedSrcProfile)
@@ -230,8 +175,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
         {
             // Lcms does nothing to the destination alpha channel so we must convert that manually.
             while (numPixels > 0) {
-                Q_UINT8 alpha;
-                getAlpha(src, &alpha);
+                Q_UINT8 alpha = getAlpha(src);
                 dstColorStrategy -> setAlpha(dst, alpha, 1);
 
                 src += srcPixelSize;
@@ -260,70 +204,6 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
     return true;
 }
 
-
-void KisAbstractColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
-{
-
-    Q_INT32 psize = pixelSize();
-
-    if (m_alphaSize == -1 && m_alphaPos == -1) {
-        m_alphaPos = 0;
-        m_alphaSize = -1;
-
-        vKisChannelInfoSP_cit it;
-        for (it = channels().begin(); it != channels().end(); ++it) {
-            if ((*it)->channelType() == ALPHA) {
-                m_alphaSize = (*it)->size();
-                break;
-            }
-            ++m_alphaPos;
-        }
-    }
-
-    if (m_alphaSize == -1) {
-        m_alphaPos = -1;
-        return;
-    }
-
-    for (Q_INT32 i = 0; i < nPixels; ++i) {
-        // XXX: Downscale for now.
-        pixels[(i * psize) + m_alphaPos] = alpha;
-    }
-}
-
-
-void KisAbstractColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
-{
-    Q_INT32 psize = pixelSize();
-
-    while (nPixels--) {
-
-        // XXX: Take care -- in u16 or higher, we should upcast the alpha value!
-        pixels[m_alphaPos] = UINT8_MULT(*(pixels + m_alphaPos) , *alpha);
-
-        pixels += psize;
-        ++alpha;
-    }
-}
-
-void KisAbstractColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
-{
-    Q_INT32 psize = pixelSize();
-
-    while(--nPixels) {
-
-            Q_UINT16 p_alpha, s_alpha;
-
-            p_alpha = *(pixels + m_alphaPos);
-            s_alpha = MAX_SELECTED - *alpha;
-
-            // XXX: Take care -- in u16 or higher, we should upcast the alpha value!
-            pixels[m_alphaPos] = UINT8_MULT(p_alpha, s_alpha);
-
-            pixels += psize;
-            ++alpha;
-    }
-}
 
 KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_UINT16 */*transferValues*/)
 {
@@ -498,24 +378,23 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
         if ( !dstProfile ) dstProfile = getDefaultProfile();
 
         // If our conversion cache is too small, extend it.
-        if (len > m_conversionCacheSize) {
-            delete [] m_conversionCache;
-            m_conversionCache = new Q_UINT8[len];
-            memset( m_conversionCache,  0,  len );
-            m_conversionCacheSize = len;
+        if (!m_conversionCache.resize( len, QGArray::SpeedOptim )) {
+            kdDebug() << "Could not allocate enough memory for the conversion!\n";
+            // XXX: We should do a slow, pixel by pixel bitblt here...
+            return;
         }
 
         if (srcProfile && dstProfile) {
             for (Q_INT32 row = 0; row < rows; row++) {
                 srcSpace -> convertPixelsTo(src + row * srcRowStride, srcProfile,
-                                            m_conversionCache + row * cols * pixelSize(), this, dstProfile,
+                                            m_conversionCache.data() + row * cols * pixelSize(), this, dstProfile,
                                             cols);
             }
         }
         else {
             for (Q_INT32 row = 0; row < rows; row++) {
                 srcSpace -> convertPixelsTo(src + row * srcRowStride, 0,
-                                            m_conversionCache + row * cols * pixelSize(), this, 0,
+                                            m_conversionCache.data() + row * cols * pixelSize(), this, 0,
                                             cols);
             }
         }
@@ -526,7 +405,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
 
         bitBlt(dst,
                dststride,
-               m_conversionCache,
+               m_conversionCache.data(),
                srcRowStride,
                srcAlphaMask,
                maskRowStride,
@@ -558,6 +437,28 @@ vKisProfileSP KisAbstractColorSpace::profiles()
 Q_INT32 KisAbstractColorSpace::profileCount()
 {
     return KisColorSpaceRegistry::instance()->profilesFor( this ).size();
+}
+
+QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+                                              KisProfileSP srcProfile, KisProfileSP dstProfile,
+                                              Q_INT32 renderingIntent, float /*exposure*/)
+
+{
+    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
+    img.setAlphaBuffer( true );
+
+    KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+
+    if (! srcProfile && ! dstProfile) {
+        srcProfile = getDefaultProfile();
+        dstProfile = dstCS->getDefaultProfile();
+    }
+
+    convertPixelsTo(const_cast<Q_UINT8 *>(data), srcProfile,
+                    img.bits(), dstCS, dstProfile,
+                    width * height, renderingIntent);
+
+    return img;
 }
 
 

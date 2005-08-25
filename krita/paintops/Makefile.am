@@ -2,7 +2,7 @@ kritaimagesdir = $(prefix)/share/apps/krita/images
 
 kritaimages_DATA = \
 	airbrush.png \
-	brush.png \
+	paintbrush.png \
 	eraser.png \
 	pencil.png
 

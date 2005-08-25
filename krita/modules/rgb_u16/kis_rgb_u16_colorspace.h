@@ -51,9 +51,6 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
     virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-    virtual void setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
 
@@ -72,17 +69,8 @@ public:
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
-                       Q_INT32 renderingIntent,
-                       float exposure = 0.0f);
-
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-    
-    virtual void adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const;
+
 
 protected:
 
@@ -115,8 +103,6 @@ protected:
 
 private:
     friend class KisRgbU16ColorSpaceTester;
-
-    vKisChannelInfoSP m_channels;
 
     static const Q_UINT8 PIXEL_BLUE = 0;
     static const Q_UINT8 PIXEL_GREEN = 1;

@@ -298,6 +298,11 @@ namespace {
 KisPaintDevice::KisPaintDevice(KisAbstractColorSpace * colorStrategy, const QString& name) :
     KShared()
 {
+    if (colorStrategy == 0) {
+        kdDebug() << "Cannot create paint device without colorstrategy!\n";
+        return;
+    }
+
     m_dcop = 0;
     Q_ASSERT(colorStrategy != 0);
     Q_ASSERT(name.isEmpty() == false);
@@ -890,13 +895,13 @@ void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
 
 void KisPaintDevice::clearSelection()
 {
-
     if (!hasSelection()) return;
 
     QRect r = m_selection -> selectedRect();
     r = r.normalize();
 
     for (Q_INT32 y = 0; y < r.height(); y++) {
+
         KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
         KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 

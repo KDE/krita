@@ -102,19 +102,26 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
     virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
-
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
         { return 0; };
 
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
         { return 0; };
-    
+
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-    
+
     virtual vKisChannelInfoSP channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
@@ -130,12 +137,9 @@ public:
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-    virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
-
-    virtual void adjustBrightnessContrast(const Q_UINT8*, Q_UINT8*, Q_INT8, Q_INT8, Q_INT32) const { /* XXX implement? */}
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-    
+
     void setPaintWetness(bool b) { m_paintwetness = b; } // XXX this needs better design!
     bool paintWetness() { return m_paintwetness; }
     void resetPhase() { phase = phasebig++; phasebig &= 3; }
@@ -162,12 +166,11 @@ private:
     void wet_render_wetness(Q_UINT8 * rgb, WetPack * pack);
 
 private:
-    vKisChannelInfoSP m_channels;
     Q_UINT32 * wet_render_tab;
 
     QStringList m_paintNames;
     QMap<QRgb, WetPix> m_conversionMap;
-    
+
     bool m_paintwetness;
     int phase, phasebig;
 

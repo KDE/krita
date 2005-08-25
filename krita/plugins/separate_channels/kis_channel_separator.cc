@@ -65,7 +65,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     KisLayerSP src = image->activeLayer();
     if (!src) return;
-        
+
     m_cancelRequested = false;
     if ( progress )
         progress -> setSubject(this, true, true);
@@ -141,8 +141,6 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
 
         dstCs = dev->colorStrategy();
-        Q_INT32 dstAlphaPos = dstCs->alphaPos();
-        Q_INT32 dstAlphaSize = dstCs->alphaSize();
 
         layers.push_back(dev);
 
@@ -160,45 +158,57 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                         memcpy(dstIt.rawData() + channelPos, srcIt.rawData() + channelPos, channelSize);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-			    dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                            dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                         }
                         else {
-			    dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                         }
                     }
                     else {
+
+                        // To grayscale
+
                         // Decide wether we need downscaling
                         if (channelSize == 1 && destSize == 1) {
+
                             // Both 8-bit channels
+
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 1);
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-				dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                                dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
-                            }                            
+                            }
                         }
                         else if (channelSize == 2 && destSize == 2) {
+
                             // Both 16-bit
+
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 2);
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-				memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
-				// XXX: This is wrong! The alpha channel will have 2 bytes, too.
-				// dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                                memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                             }
                         }
-                        else if (channelSize > 1 && destSize == 1) {
-                            // XXX: We need a downscale method in every big colorspace
-                            // cs->downscale8();
-                            
+                        else if (channelSize != 1 && destSize == 1) {
+                            // Downscale
+                            memset(dstIt.rawData(), srcCs->scaleToU8(srcIt.rawData(), channelPos), 1);
+
+                            // XXX: Do alpha
+                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                         }
-                        else if (channelSize > 2 && destSize == 2) {
-                            // cs->downscale16();
+                        else if (channelSize != 2 && destSize == 2) {
+                            // Upscale
+                            dstIt.rawData()[0] = srcCs->scaleToU8(srcIt.rawData(), channelPos);
+
+                            // XXX: Do alpha
+                            dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
+
                         }
                     }
                 }
@@ -217,10 +227,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     vKisLayerSP_it it;
 
     if (!m_cancelRequested) {
-    
+
         for ( it = layers.begin(); it != layers.end(); ++it ) {
             KisLayerSP layer = (*it);
-            
+
             if (outputOps == TO_LAYERS) {
                 image->add( layer, -1);
             }
@@ -239,7 +249,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     }
 
     emit notifyProgressDone(this);
-    
+
 }
 
 #include "kis_channel_separator.moc"

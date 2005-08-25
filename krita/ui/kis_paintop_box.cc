@@ -32,9 +32,9 @@
 
 #include "kis_paintop_box.h"
 
-KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
-    : super (parent, name, f),
-      m_view(parent)
+KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name)
+    : super (parent, name),
+      m_view(view)
 {
     setCaption(i18n("Painter's Toolchest"));
     m_paintops = new QValueList<KisID>();
@@ -52,7 +52,7 @@ KisPaintopBox::KisPaintopBox (KisView * parent, const char * name, WFlags f)
     setCurrentItem( m_paintops->findIndex(KisID("paintbrush","")));
 
 }
-    
+
 KisPaintopBox::~KisPaintopBox()
 {
     delete m_paintops;
@@ -63,12 +63,14 @@ void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
     m_paintops->append(paintop);
     QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(paintop);
     if (pm.isNull()) {
-        insertItem(paintop.name());
+        QPixmap p = QPixmap( 16, 16 );
+        p.fill();
+        insertItem(p,  paintop.name());
     }
     else {
-        insertItem(pm);
+        insertItem(pm, paintop.name());
     }
-    
+
 }
 
 void KisPaintopBox::slotItemSelected(int index)

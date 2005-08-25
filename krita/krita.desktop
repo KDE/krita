@@ -15,7 +15,6 @@ GenericName[tr]=Boyama ve Resim Düzenleme Programı
 MimeType=application/x-krita
 Type=Application
 Icon=krita
-line:
 Categories=Qt;KDE;Office;Graphics;
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true

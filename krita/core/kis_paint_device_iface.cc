@@ -26,7 +26,7 @@
 #include <dcopclient.h>
 
 KisPaintDeviceIface::KisPaintDeviceIface( KisPaintDevice * parent )
-    : DCOPObject()
+    : DCOPObject(parent->name().utf8())
 {
     m_parent = parent;
 }

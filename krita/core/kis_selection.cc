@@ -34,7 +34,7 @@
 
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
      : super(
-        layer -> image(), 
+        layer -> image(),
         KisColorSpaceRegistry::instance()->get("ALPHA"),
         name)
 {
@@ -49,18 +49,18 @@ KisSelection::~KisSelection()
 QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
-    
+
     Q_UINT8 *pix = iter.rawData();
-    
+
     return *pix;
 }
 
 void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-    
+
     Q_UINT8 *pix = iter.rawData();
-    
+
     *pix = s;
 }
 
@@ -126,7 +126,7 @@ bool KisSelection::isTotallyUnselected(QRect r)
 {
     if(*(m_datamanager -> defaultPixel()) != MIN_SELECTED)
         return false;
-    
+
     return ! r.intersects(extent());
 }
 
@@ -163,8 +163,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
             ++it;
             if(s!=MAX_SELECTED)
             {
-                Q_UINT8 invs = MAX_SELECTED - s;
-                
+
                 Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
 
                 if(s==MIN_SELECTED)
@@ -172,7 +171,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
                     *(j+0) = 165+g ;
                     *(j+1) = 128+g;
                     *(j+2) = 128+g;
-                    
+
                     // now for a simple outline based on 4-connectivity
                     if(preS != MIN_SELECTED
                         || *(it.rawData()) != MIN_SELECTED

@@ -79,7 +79,7 @@ public:
     // same as the original colorspace, do nothing. Returns the converted KisColor.
     void convertTo(KisAbstractColorSpace * cs, KisProfileSP profile = 0);
 
-    // Replace the existing color data with the specified data.
+    // Replace the existing color data, colorspace and color model with the specified data. 
     void setColor(Q_UINT8 * data, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0);
 
     // To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile

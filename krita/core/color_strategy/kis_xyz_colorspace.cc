@@ -49,16 +49,17 @@ namespace xyz {
 //      on this fallback...
 
 KisXyzColorSpace::KisXyzColorSpace() :
-    KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), TYPE_XYZ_16, icSigCmykData)
+    KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData)
 {
     m_channels.push_back(new KisChannelInfo(i18n("X"), 0, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Y"), 0, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Z"), 0, COLOR));
+    m_channels.push_back(new KisChannelInfo(i18n("Y"), 1, COLOR));
+    m_channels.push_back(new KisChannelInfo(i18n("Z"), 2, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA));
 
     cmsHPROFILE hProfile = cmsCreateXYZProfile();
 
-    setDefaultProfile( new KisProfile(hProfile, TYPE_XYZ_16) );
+    setDefaultProfile( new KisProfile(hProfile, (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))) );
+    m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
     init();
 }
@@ -66,69 +67,6 @@ KisXyzColorSpace::KisXyzColorSpace() :
 
 KisXyzColorSpace::~KisXyzColorSpace()
 {
-}
-
-void KisXyzColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfileSP /*profile*/)
-{
-    
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-
-    Pixel *p = reinterpret_cast<Pixel *>(dst);
-    p-> alpha = U16_OPACITY_OPAQUE;
-
-}
-
-void KisXyzColorSpace::fromQColor(const QColor& color, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
-{
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-
-    Pixel *p= reinterpret_cast<Pixel *>(dst);
-    p -> alpha = UINT8_TO_UINT16(opacity);
-}
-
-void KisXyzColorSpace::getAlpha(const Q_UINT8 *U8_pixel, Q_UINT8 *alpha)
-{
-    const Pixel *pixel = reinterpret_cast<const Pixel *>(U8_pixel);
-    *alpha = UINT16_TO_UINT8(pixel -> alpha);
-}
-
-void KisXyzColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
-{
-    Pixel *pixel = reinterpret_cast<Pixel *>(pixels);
-
-    while (nPixels > 0) {
-        pixel -> alpha = UINT8_TO_UINT16(alpha);
-        --nPixels;
-        ++pixel;
-    }
-}
-
-void KisXyzColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
-{
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-}
-
-void KisXyzColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
-{
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-    
-    const Pixel *p = reinterpret_cast<const Pixel *>(src);
-    *opacity = UINT16_TO_UINT8(p -> alpha);
 }
 
 
@@ -157,45 +95,6 @@ Q_INT32 KisXyzColorSpace::pixelSize() const
     return xyz::MAX_CHANNEL_XYZA * sizeof(Q_UINT16);
 }
 
-
-QImage KisXyzColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                     KisProfileSP srcProfile, KisProfileSP dstProfile,
-                     Q_INT32 renderingIntent, float /*exposure*/)
-{
-    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-    memset(img.bits(), 255, width * height * sizeof(Q_UINT32));
-    KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
-
-
-     if (srcProfile == 0 || dstProfile == 0 || dstCS == 0) {
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                 cmsDoTransform(m_defaultToRGB,
-                    const_cast<Q_UINT8 *>(&(data[xyz::MAX_CHANNEL_XYZA*(i*width+j)])),
-                    &(img.scanLine(i)[j*img.bytesPerLine()/width]), 1);
-     }
-     else {
-         // Do a nice calibrated conversion
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                convertPixelsTo(const_cast<Q_UINT8 *>
-                        (&(data[xyz::MAX_CHANNEL_XYZA*(i*width+j)])),
-                        srcProfile,
-                        &(img.scanLine(i)[j*img.bytesPerLine()/width]),
-                        dstCS, dstProfile, 1, renderingIntent);
-     }
-
-    return img;
-}
-
-void KisXyzColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
-{
-}
-
-void KisXyzColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
-{
-}
-
 KisColorAdjustment * KisXyzColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
     return 0;
@@ -219,10 +118,6 @@ void KisXyzColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, e
 }
 
 void KisXyzColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
-{
-}
-
-void KisXyzColorSpace::adjustBrightnessContrast(const Q_UINT8 *src, Q_UINT8 *dst, Q_INT8 brightness, Q_INT8 contrast, Q_INT32 nPixels) const
 {
 }
 
@@ -253,7 +148,7 @@ void KisXyzColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                 }
                 mask++;
             }
-            
+
             if (srcAlpha != U16_OPACITY_TRANSPARENT) {
 
                 if (opacity != U16_OPACITY_OPAQUE) {
@@ -370,26 +265,16 @@ void KisXyzColorSpace::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
-        Q_UINT16 srcColor = src[PIXEL_X];
-        Q_UINT16 dstColor = dst[PIXEL_X];
 
-        srcColor = UINT16_MULT(srcColor, dstColor);
+        for (int channel = 0; channel < xyz::MAX_CHANNEL_XYZ; channel++) {
+            Q_UINT16 srcColor = src[channel];
+            Q_UINT16 dstColor = dst[channel];
 
-        dst[PIXEL_X] = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            srcColor = UINT16_MULT(srcColor, dstColor);
 
-        srcColor = src[PIXEL_Y];
-        dstColor = dst[PIXEL_Y];
+            dst[channel] = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
-        srcColor = UINT16_MULT(srcColor, dstColor);
-
-        dst[PIXEL_Y] = UINT16_BLEND(srcColor, dstColor, srcBlend);
-
-        srcColor = src[PIXEL_Z];
-        dstColor = dst[PIXEL_Z];
-
-        srcColor = UINT16_MULT(srcColor, dstColor);
-
-        dst[PIXEL_Z] = UINT16_BLEND(srcColor, dstColor, srcBlend);
+        }
     }
 
     COMMON_COMPOSITE_OP_EPILOG();
@@ -547,12 +432,12 @@ void KisXyzColorSpace::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStri
 
 void KisXyzColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 dstRowSize,
-            const Q_UINT8 *src, 
+            const Q_UINT8 *src,
             Q_INT32 srcRowSize,
             const Q_UINT8 *srcAlphaMask,
             Q_INT32 maskRowStride,
-            Q_INT32 rows, 
-            Q_INT32 cols, 
+            Q_INT32 rows,
+            Q_INT32 cols,
             Q_UINT16 /*opacity*/)
 {
     while (rows-- > 0)
@@ -747,21 +632,4 @@ KisCompositeOpList KisXyzColorSpace::userVisiblecompositeOps() const
     return list;
 }
 
-QString KisXyzColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
-{
-    Q_ASSERT(channelIndex < nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
-
-    return QString().setNum(pixel[channelPosition]);
-}
-
-QString KisXyzColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
-{
-    Q_ASSERT(channelIndex < nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
-
-    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
-}
 

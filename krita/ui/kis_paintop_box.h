@@ -21,7 +21,7 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
-#include <qlistbox.h>
+#include <qcombobox.h>
 #include <qvaluelist.h>
 
 #include <kis_view.h>
@@ -39,15 +39,15 @@ class QString;
  *
  * XXX: instead of text, use pretty pictures.
  */
-class KisPaintopBox : public QListBox {
+class KisPaintopBox : public QComboBox {
 
     Q_OBJECT
 
-    typedef QListBox super;
-    
+    typedef QComboBox super;
+
 public:
-    KisPaintopBox (KisView * parent, const char * name = 0, WFlags f = 0);
-    
+    KisPaintopBox (KisView * view,  QWidget * parent, const char * name = 0);
+
     ~KisPaintopBox();
 
 public slots:
@@ -55,11 +55,11 @@ public slots:
     void addItem(const KisID & paintop, const QString & category = "");
 
 signals:
-    
+
     void selected(const KisID & id);
 
 private slots:
-    
+
     void slotItemSelected(int index);
 
 private:

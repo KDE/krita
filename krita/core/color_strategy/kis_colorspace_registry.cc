@@ -31,6 +31,9 @@
 #include "kis_pixel_op.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
+KisAbstractColorSpace * KisColorSpaceRegistry::m_rgb = 0;
+KisAbstractColorSpace * KisColorSpaceRegistry::m_alpha = 0;
+KisAbstractColorSpace * KisColorSpaceRegistry::m_xyz = 0;
 
 KisColorSpaceRegistry::KisColorSpaceRegistry()
 {
@@ -48,12 +51,46 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
     {
         KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
         Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
-        m_singleton->add(new KisXyzColorSpace());
-        m_singleton->add(new KisAlphaColorSpace());
+        if ( !m_xyz ) {
+            m_xyz = new KisXyzColorSpace();
+            m_singleton->add(m_xyz);
+        }
+
+        if ( !m_alpha ) {
+            m_alpha = new KisAlphaColorSpace();
+        }
+
         m_singleton->resetProfiles();
     }
     return KisColorSpaceRegistry::m_singleton;
 }
+
+
+KisAbstractColorSpace * KisColorSpaceRegistry::getRGB8()
+{
+    if ( m_rgb == 0 ) {
+        m_rgb = m_singleton->get( "RGBA" );
+    }
+    return m_rgb;
+}
+
+KisAbstractColorSpace * KisColorSpaceRegistry::getAlpha8()
+{
+    if ( m_alpha == 0 ) {
+        m_alpha = new KisAlphaColorSpace();
+    }
+    return m_alpha;
+}
+
+KisAbstractColorSpace * KisColorSpaceRegistry::getXYZ16()
+{
+    if ( m_xyz == 0 ) {
+        m_xyz = new KisXyzColorSpace();
+        m_singleton->add( m_xyz );
+    }
+    return m_xyz;
+}
+
 
 KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name)
 {
@@ -67,7 +104,7 @@ KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name)
 vKisProfileSP KisColorSpaceRegistry::profilesFor(KisAbstractColorSpace * cs)
 {
     vKisProfileSP profiles;
-    
+
     QMap<QString, KisProfileSP>::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
         KisProfileSP profile = it.data();
@@ -88,15 +125,15 @@ void KisColorSpaceRegistry::resetProfiles()
     profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
     profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
     profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icc");
-    
+
     QDir d("/usr/share/color/icc/", "*.icc");
     profileFilenames += d.entryList();
-    
+
     d.setCurrent("/usr/share/color/icc/");
     d.setNameFilter("*.icm");
-    
+
     profileFilenames += d.entryList();
-    
+
     if (!profileFilenames.empty()) {
         KisProfile * profile = 0;
         for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
@@ -118,15 +155,15 @@ void KisColorSpaceRegistry::addFallbackPixelOp(KisPixelOp * pixelop)
     if (!pixelop) {
         return;
     }
-    
+
     if (!pixelop->isValid()) {
         kdDebug() << "Cannot add invalid pixel operation " << pixelop->id().id() << "\n";
         return;
     }
-    
+
     m_defaultPixelOps[pixelop->id()] = pixelop;
-    
-    
+
+
 }
 
 KisPixelOp * KisColorSpaceRegistry::getFallbackPixelOp(KisID pixelop)
@@ -137,3 +174,4 @@ KisPixelOp * KisColorSpaceRegistry::getFallbackPixelOp(KisID pixelop)
 
     return 0;
 }
+

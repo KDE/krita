@@ -47,7 +47,8 @@ libkisui_la_SOURCES = \
     wdgcolorsettings.ui \
     wdgapplyprofile.ui \
     wdglayerbox.ui \
-    wdgperformancesettings.ui
+    wdgperformancesettings.ui \
+    wdgpressuresettings.ui
 
 
 noinst_HEADERS = kis_dlg_preferences.h \
@@ -82,7 +83,8 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgapplyprofile.h \
     wdglayerbox.h \
     wdglayerproperties.h \
-    wdgperformancesettings.h
+    wdgperformancesettings.h \
+    wdgpressuresettings.h
 
 
 libkisui_la_METASOURCES = AUTO

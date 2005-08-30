@@ -4,10 +4,10 @@ kritapics_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         rectangle.png ellipse.png \
         visible.png novisible.png linked.png unlinked.png \
         tool_pan.png \
-	tool_freehand.png tool_text.png \
-        tool_star.png tool_screenshot.png \
+        tool_freehand.png tool_text.png \
+        tool_star.png tool_screenshot.png tablet.png \
         openhand_cursor.xpm \
-	closedhand_cursor.xpm locked.png unlocked.png rotate_cursor.xpm
+        closedhand_cursor.xpm locked.png unlocked.png rotate_cursor.xpm
 
 # directory for pixmaps
 kritapicsdir = $(kde_datadir)/krita/pics

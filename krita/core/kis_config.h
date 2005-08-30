@@ -85,6 +85,9 @@ public:
     Q_INT32 swappiness() const;
     void setSwappiness(Q_INT32 swappiness);
 
+    Q_INT32 getPressureCorrection();
+    void setPressureCorrection( Q_INT32 correction);
+    Q_INT32 getDefaultPressureCorrection();
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

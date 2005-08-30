@@ -104,9 +104,12 @@ void KisXyzColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColo
 {
 }
 
-Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
+Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
-    return 0;
+    const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
+    const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
+
+    return QMAX(QABS(src1->X - src2->X), QMAX(QABS(src1->Y - src2->Y), QABS(src1->Z - src2->Z)));
 }
 
 void KisXyzColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const

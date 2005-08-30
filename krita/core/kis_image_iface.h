@@ -35,7 +35,7 @@ class KisImageIface : virtual public DCOPObject
 public:
     KisImageIface( KisImage *img_ );
 k_dcop:
-    QString name()const;
+
     int height() const;
     int width() const;
     bool empty() const;
@@ -46,7 +46,7 @@ k_dcop:
      * Get the active painting device.
      */
     DCOPRef activeDevice();
-    
+
 
 private:
 

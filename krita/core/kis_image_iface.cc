@@ -32,11 +32,6 @@ KisImageIface::KisImageIface( KisImage * img )
     m_img = img;
 }
 
-QString KisImageIface::name()const
-{
-    return m_img->name();
-}
-
 int KisImageIface::height() const
 {
     return m_img->height();
@@ -65,7 +60,7 @@ DCOPRef KisImageIface::activeDevice()
         return DCOPRef();
     else
         return DCOPRef( kapp->dcopClient()->appId(),
-                dev->dcopObject()->objId(),
-                "KisPaintDeviceIface");
+                        dev->dcopObject()->objId(),
+                        "KisPaintDeviceIface");
 
 }

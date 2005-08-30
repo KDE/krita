@@ -24,8 +24,6 @@
 #include <qstringlist.h>
 #include <qpair.h>
 
-#include <ksharedptr.h>
-
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_channelinfo.h"

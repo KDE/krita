@@ -35,7 +35,7 @@
 KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
      : super(
         layer -> image(),
-        KisColorSpaceRegistry::instance()->get("ALPHA"),
+        KisColorSpaceRegistry::getAlpha8(),
         name)
 {
     m_parentLayer = layer;

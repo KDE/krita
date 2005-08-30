@@ -27,6 +27,8 @@
 
 #include "kis_global.h"
 
+#include "wdgpressuresettings.h"
+
 class QLineEdit;
 class QCheckBox;
 class KURLRequester;
@@ -131,6 +133,26 @@ public:
 
 //=======================
 
+
+/**
+ *  pressure settings tab for preferences dialog
+ */
+class PressureSettingsTab : public WdgPressureSettings
+{
+Q_OBJECT
+
+public:
+    PressureSettingsTab( QWidget *parent = 0, const char *name = 0 );
+
+public:
+    void setDefault();
+    WdgPressureSettings * m_page;
+};
+
+//=======================
+
+
+
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
@@ -155,6 +177,7 @@ protected:
     UndoRedoTab* m_undoRedo;
     ColorSettingsTab* m_colorSettings;
     PerformanceTab* m_performanceSettings;
+    PressureSettingsTab * m_pressureSettings;
 
 protected slots:
 

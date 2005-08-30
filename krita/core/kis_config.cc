@@ -36,6 +36,7 @@ namespace {
     const Q_INT32 DEFAULT_MAX_THREADS = 4;
     const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
     const Q_INT32 DEFAULT_SWAPPINESS = 100;
+    const Q_INT32 DEFAULT_PRESSURE_CORRECTION = 50;
 }
 
 KisConfig::KisConfig()
@@ -252,4 +253,19 @@ Q_INT32 KisConfig::swappiness() const
 void KisConfig::setSwappiness(Q_INT32 swappiness)
 {
     m_cfg -> writeEntry("swappiness", swappiness);
+}
+
+Q_INT32 KisConfig::getPressureCorrection()
+{
+    return m_cfg->readNumEntry( "pressurecorrection", DEFAULT_PRESSURE_CORRECTION );
+}
+
+void KisConfig::setPressureCorrection( Q_INT32 correction )
+{
+    m_cfg->writeEntry( "pressurecorrection",  correction );
+}
+
+Q_INT32 KisConfig::getDefaultPressureCorrection()
+{
+    return DEFAULT_PRESSURE_CORRECTION;
 }

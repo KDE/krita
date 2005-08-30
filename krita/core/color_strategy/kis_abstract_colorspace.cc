@@ -219,15 +219,31 @@ void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 */*src*/, Q_UINT8 */*d
 // BC: should this default be HSV-based?
 Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
-    QColor color1, color2;
-    toQColor(src1, &color1);
-    toQColor(src2, &color2);
+    if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
+        Q_INT32 psize = pixelSize();
 
-    int h1, s1, v1, h2, s2, v2;
-    rgb_to_hsv(color1.red(), color1.green(), color1.blue(), &h1, &s1, &v1);
-    rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
 
-    return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
+        if ( m_conversionCache.size() < 2 * psize ) {
+            m_conversionCache.resize( 2 * psize, QGArray::SpeedOptim );
+        }
+
+        cmsDoTransform( m_defaultToXYZ, const_cast<Q_UINT8*>( src1 ), m_conversionCache.data(), 1);
+        cmsDoTransform( m_defaultToXYZ, const_cast<Q_UINT8*>( src2 ), m_conversionCache.data() + psize, 1);
+
+        return KisColorSpaceRegistry::getXYZ16()->difference( m_conversionCache.data(), m_conversionCache.data() + psize );
+
+    }
+    else {
+        QColor color1, color2;
+        toQColor(src1, &color1);
+        toQColor(src2, &color2);
+
+        int h1, s1, v1, h2, s2, v2;
+        rgb_to_hsv(color1.red(), color1.green(), color1.blue(), &h1, &s1, &v1);
+        rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
+
+        return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
+    }
 }
 
 void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const

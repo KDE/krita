@@ -46,6 +46,21 @@ public:
     static KisColorSpaceRegistry* instance();
 
     /**
+     * Convenience method to get the often used rgb8 colorspace
+     */
+    static KisAbstractColorSpace * getRGB8();
+
+    /**
+     * Convenience method to get the often used alpha colorspace
+     */
+    static KisAbstractColorSpace * getAlpha8();
+
+    /**
+     * Convenience method to get the often used xyz16 colorspace
+     */
+    static KisAbstractColorSpace * getXYZ16();
+
+    /**
      * Reload the profiles from disk
      */
     void resetProfiles();
@@ -74,7 +89,7 @@ public:
      * returned.
      */
     KisPixelOp * getFallbackPixelOp(KisID pixelop);
-    
+
 private:
     KisColorSpaceRegistry();
     KisColorSpaceRegistry(const KisColorSpaceRegistry&);
@@ -82,6 +97,10 @@ private:
 
 private:
     static KisColorSpaceRegistry *m_singleton;
+    static KisAbstractColorSpace * m_rgb;
+    static KisAbstractColorSpace * m_alpha;
+    static KisAbstractColorSpace * m_xyz;
+
     QMap<QString, KisProfileSP> m_profileMap;
     QMap<KisID, KisPixelOp*> m_defaultPixelOps;
 };

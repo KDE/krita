@@ -45,7 +45,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
     aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
     aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
-        aboutData->addAuthor("Danny Allen", 0 , "danny@dannyallen.co.uk");
+    aboutData->addAuthor("Danny Allen", 0 , "danny@dannyallen.co.uk");
     aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
     aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");
@@ -57,6 +57,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor("Sven Langkamp", 0, "longamp@reallygood.de");
     aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
+    aboutData->addAuthor("Sander Koning", 0, "sanderkoning@kde.nl");
     return aboutData;
 }
 

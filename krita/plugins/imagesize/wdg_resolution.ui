@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgResolution</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>487</width>
-            <height>382</height>
+            <height>265</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,32 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>lblMetric</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Metric system:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>cmbMetrics</cstring>
-            </property>
-        </widget>
-        <widget class="QComboBox" row="2" column="1">
-            <item>
-                <property name="text">
-                    <string>Dots per Inch</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Dots per Centimeter</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>cmbMetrics</cstring>
-            </property>
-        </widget>
         <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>grpSize</cstring>
@@ -80,17 +54,6 @@
                 <widget class="KIntNumInput" row="1" column="1">
                     <property name="name">
                         <cstring>intHeight</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>lblWarning</cstring>
-                    </property>
-                    <property name="text">
-                        <string>The print size of an image is determined by the size in pixels and the image resolution shown above. Most images do not have a resolution set by default. Changing width and height here will change the resolution, not the number of pixels.</string>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
                     </property>
                 </widget>
             </grid>

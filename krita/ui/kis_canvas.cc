@@ -17,12 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
 
- The X11-specific event handling code is based upon code from 
+ The X11-specific event handling code is based upon code from
  src/kernel/qapplication_x11.cpp from the Qt GUI Toolkit and is subject
  to the following license and copyright:
 
  ****************************************************************************
-** 
+**
 **
 ** Implementation of X11 startup routines and event handling
 **
@@ -64,6 +64,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_double_click_event.h"
+#include "kis_config.h"
 
 #ifdef Q_WS_X11
 
@@ -88,6 +89,47 @@ std::map<XID, KisCanvas::X11TabletDevice> KisCanvas::X11TabletDeviceMap;
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
 #endif // Q_WS_X11
+
+
+namespace {
+
+    static Q_INT32 correctPressureScale( Q_INT32 inPressure )
+    {
+        KisConfig cfg;
+        Q_INT32 correction = cfg.getPressureCorrection();
+
+        Q_INT32 x1, y1, x2, y2;
+
+        if ( correction == 0 ) {
+            x1 = 20;
+            y1 = 0;
+            x2 = 80;
+            y2 = 100;
+        } else if ( correction < 50 ) {
+            x1 = 20 - ( correction / 50 * 20 );
+            y1 = 0;
+            x2 = 80 + ( correction / 50 * 20 );
+            y2 = 100;
+        } else if ( correction == 50 ) {
+            x1 = 0;
+            y1 = 0;
+            x2 = 100;
+            y2 = 100;
+        } else if ( correction > 50 && correction < 100 ){
+            x1 = 0;
+            y1 = correction / 50 * 20;
+            x2 = 100;
+            y2 = 100 - ( correction / 50 * 20 );
+        } else {
+            x1 = 0;
+            y1 = 20;
+            x2 = 100;
+            y2 = 80;
+        }
+
+        return inPressure;
+    }
+}
 
 KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -167,7 +209,7 @@ void KisCanvas::tabletEvent(QTabletEvent *e)
         break;
     }
 
-    double pressure = e -> pressure() / 255.0;
+    double pressure = correctPressureScale( e -> pressure() ) / 255.0;
 
     if (e -> type() == QEvent::TabletPress) {
         KisButtonPressEvent ke(device, e -> pos(), e -> globalPos(), pressure, e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::NoButton);
@@ -183,18 +225,18 @@ void KisCanvas::tabletEvent(QTabletEvent *e)
         translateTabletEvent(&ke);
 #ifdef Q_WS_X11
         // Fix the problem that when you change from using a tablet device to the mouse,
-        // the first mouse button event is not recognised. This is because we handle 
+        // the first mouse button event is not recognised. This is because we handle
         // X11 core mouse move events directly so Qt does not get to see them. This breaks
         // the tablet event accept/ignore mechanism, causing Qt to consume the first
         // mouse button event it sees, instead of a mouse move. 'Ignoring' tablet move events
-        // stops Qt from stealing the next mouse button event. This does not affect the 
+        // stops Qt from stealing the next mouse button event. This does not affect the
         // tablet aware tools as they do not care about mouse moves while the tablet device is
         // drawing.
         e -> ignore();
 #endif
     }
 }
-  
+
 void KisCanvas::enterEvent(QEvent *e)
 {
     emit gotEnterEvent(e);
@@ -624,7 +666,7 @@ bool KisCanvas::x11Event(XEvent *event)
             buttonState = translateX11ButtonState(buttonReleased -> state);
 
             XEvent mouseEvent;
-            
+
             // Look for an accompanying core event.
             if (XCheckTypedWindowEvent(x11Display(), winId(), ButtonRelease, &mouseEvent)) {
                 if (buttonReleased -> time == mouseEvent.xbutton.time) {

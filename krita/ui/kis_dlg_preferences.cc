@@ -189,9 +189,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     refillPrintProfiles(KisID(cfg.printerColorSpace(), ""));
     refillImportProfiles(KisID(cfg.workingColorSpace(), ""));
 
-     m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
-     m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
-     m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
+    m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
+    m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
+    m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
     m_page -> chkBlackpoint -> setChecked(cfg.useBlackPointCompensation());
     m_page -> chkDither8Bit -> setChecked(cfg.dither8Bit());
     m_page -> chkAskOpen -> setChecked(cfg.askProfileOnOpen());
@@ -200,13 +200,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     m_page -> grpIntent -> setButton(cfg.renderIntent());
 
     connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
-        this, SLOT(refillMonitorProfiles(const KisID &)));
+            this, SLOT(refillMonitorProfiles(const KisID &)));
 
     connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
-        this, SLOT(refillImportProfiles(const KisID &)));
+            this, SLOT(refillImportProfiles(const KisID &)));
 
     connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
-        this, SLOT(refillPrintProfiles(const KisID &)));
+            this, SLOT(refillPrintProfiles(const KisID &)));
 
 
 }
@@ -303,6 +303,23 @@ void PerformanceTab::setDefault()
     m_page -> m_maxTiles -> setValue(500);
 }
 
+
+PressureSettingsTab::PressureSettingsTab( QWidget *parent, const char *name)
+    : WdgPressureSettings( parent, name )
+{
+    KisConfig cfg;
+    slPressure->setValue( cfg.getPressureCorrection() );
+}
+
+void PressureSettingsTab::setDefault()
+{
+    KisConfig cfg;
+    slPressure->setValue(cfg.getDefaultPressureCorrection());
+}
+
+
+
+
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
 {
@@ -322,6 +339,10 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
     vbox = addVBoxPage( i18n( "Performance Settings"), i18n( "Performance Settings"), BarIcon( "fork", KIcon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
+
+    vbox = addVBoxPage ( i18n( "Pressure Settings" ), i18n( "Pressure Settings" ), BarIcon( "tablet", KIcon::SizeMedium ));
+    m_pressureSettings = new PressureSettingsTab( vbox );
+
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -366,6 +387,9 @@ bool PreferencesDialog::editPreferences()
         cfg.setMaxTilesInMem(dialog -> m_performanceSettings -> m_page -> m_maxTiles -> value());
         // let the tile manager know
         KisTileManager::instance() -> configChanged();
+
+        // Pressure sensitivity setting == between 0 and 99
+        cfg.setPressureCorrection( dialog->m_pressureSettings->slPressure->value() );
     }
         delete dialog;
         return baccept;

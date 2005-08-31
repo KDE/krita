@@ -25,7 +25,7 @@ class QSpinBox;
 class QWidget;
 class KIntSpinBox;
 class KLineEdit;
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 class KIntNumInput;
 class KisCmbComposite;
 class KisCmbImageType;

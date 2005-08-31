@@ -26,7 +26,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_strategy_move.h"
 #include "kis_undo_adapter.h"
 
@@ -35,7 +35,7 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
+        MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos);
         virtual ~MoveCommand();
 
         virtual void execute();
@@ -46,13 +46,13 @@ namespace {
 
     private:
         KisCanvasControllerInterface *m_controller;
-        KisPaintDeviceSP m_device;
+        KisPaintDeviceImplSP m_device;
         QPoint m_oldPos;
         QPoint m_newPos;
         KisImageSP m_img;
     };
 
-    MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
+    MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
         super(i18n("Moved Painting Device"))
     {
         m_controller = controller;
@@ -122,7 +122,7 @@ void KisStrategyMove::startDrag(const QPoint& pos)
     
     if (m_subject) {
         KisImageSP img;
-        KisPaintDeviceSP dev;
+        KisPaintDeviceImplSP dev;
 
         if (!(img = m_subject -> currentImg()))
             return;
@@ -148,7 +148,7 @@ void KisStrategyMove::drag(const QPoint& original)
     
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject -> currentImg();
-        KisPaintDeviceSP dev;
+        KisPaintDeviceImplSP dev;
 
         if (img && (dev = img -> activeDevice())) {
             QPoint pos = original;
@@ -179,7 +179,7 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject -> currentImg();
-        KisPaintDeviceSP dev;
+        KisPaintDeviceImplSP dev;
 
         if (img && (dev = img -> activeDevice())) {
             drag(pos);

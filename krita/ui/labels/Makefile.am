@@ -1,4 +1,8 @@
-INCLUDES = -I$(srcdir)/../../core/ -I$(srcdir)/../ -I.. $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES = \
+	-I$(srcdir)/../../core/\
+	-I$(srcdir)/../../sdk \
+	-I$(srcdir)/../ \
+	-I.. $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkislabel.la
 

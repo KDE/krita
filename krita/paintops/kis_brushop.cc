@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
@@ -73,7 +73,7 @@ void KisBrushOp::paintAt(const KisPoint &pos,
     Q_ASSERT(brush);
     if (!brush) return;
     
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceImplSP device = m_painter -> device();
 
     KisPoint hotSpot = brush -> hotSpot(pressure);
     KisPoint pt = pos - hotSpot;

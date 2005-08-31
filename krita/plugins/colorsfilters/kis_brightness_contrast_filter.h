@@ -46,13 +46,13 @@ public:
 
 public:
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget *, KisPaintDeviceSP dev);
-    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget *, KisPaintDeviceImplSP dev);
+    virtual void process(KisPaintDeviceImplSP, KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
 
 };
 

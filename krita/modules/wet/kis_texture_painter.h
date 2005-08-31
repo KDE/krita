@@ -37,7 +37,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
@@ -51,7 +51,7 @@ class KisTexturePainter : public KisPainter
 public:
 
     KisTexturePainter();
-    KisTexturePainter(KisPaintDeviceSP device);
+    KisTexturePainter(KisPaintDeviceImplSP device);
 
     void createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     

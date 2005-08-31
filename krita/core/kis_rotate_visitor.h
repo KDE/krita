@@ -22,7 +22,7 @@
 #include "kis_progress_subject.h"
 
 class QRect;
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 class KisProgressDisplayInterface;
 
 class KisRotateVisitor : public KisProgressSubject {
@@ -34,14 +34,14 @@ public:
         KisRotateVisitor();
         ~KisRotateVisitor();
 
-        void visitKisPaintDevice(KisPaintDevice* dev);
+        void visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev);
 
     
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 
 private:
-        KisPaintDeviceSP m_dev;
+        KisPaintDeviceImplSP m_dev;
 
     // Implement KisProgressSubject
     bool m_cancelRequested;
@@ -56,13 +56,13 @@ private:
     Q_INT32 m_progressTotalSteps;
     Q_INT32 m_lastProgressPerCent;
 
-    KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotate180(KisPaintDeviceSP src);
-    KisPaintDeviceSP rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation);
+    KisPaintDeviceImplSP rotateRight90(KisPaintDeviceImplSP src);
+    KisPaintDeviceImplSP rotateLeft90(KisPaintDeviceImplSP src);
+    KisPaintDeviceImplSP rotate180(KisPaintDeviceImplSP src);
+    KisPaintDeviceImplSP rotate(KisPaintDeviceImplSP src, double angle, KisPoint centreOfRotation);
 
-    KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX);
-    KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY);
+    KisPaintDeviceImplSP xShear(KisPaintDeviceImplSP src, double shearX);
+    KisPaintDeviceImplSP yShear(KisPaintDeviceImplSP src, double shearY);
 
 };
 
@@ -74,7 +74,7 @@ inline KisRotateVisitor::~KisRotateVisitor()
 {
 }
 
-inline void KisRotateVisitor::visitKisPaintDevice(KisPaintDevice* dev)
+inline void KisRotateVisitor::visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev)
 {
         m_dev = dev;
 }

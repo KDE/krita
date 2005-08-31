@@ -39,7 +39,7 @@
 #include "kis_types.h"
 #include "kis_guide.h"
 #include "kis_image.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
@@ -928,7 +928,7 @@ const vKisLayerSP& KisImage::layers() const
     return m_layers;
 }
 
-KisPaintDeviceSP KisImage::activeDevice()
+KisPaintDeviceImplSP KisImage::activeDevice()
 {
     if (m_activeLayer) {
         return m_activeLayer.data();
@@ -1612,9 +1612,9 @@ void KisImage::renderToPainter(Q_INT32 x1,
     }
 }
 
-KisPaintDeviceSP KisImage::mergedImage()
+KisPaintDeviceImplSP KisImage::mergedImage()
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(colorStrategy(), "merged image");
+    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorStrategy(), "merged image");
     dev -> setProfile(profile());
 
     KisPainter gc;
@@ -1633,7 +1633,7 @@ KisPaintDeviceSP KisImage::mergedImage()
 
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(colorStrategy(), "merged pixel");
+    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorStrategy(), "merged pixel");
     dev -> setProfile(profile());
 
     KisPainter gc;

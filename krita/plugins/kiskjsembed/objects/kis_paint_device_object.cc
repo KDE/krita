@@ -32,7 +32,7 @@
 
 
 // Krita
-#include "core/kis_paint_device.h"
+#include "core/kis_paint_device_impl.h"
 #include "core/color_strategy/kis_colorspace_registry.h"
 
 namespace Krita {
@@ -43,7 +43,7 @@ namespace Objects {
 
 using namespace Functions::PaintDevice;
 
-PaintDeviceFactory::PaintDeviceFactory(KJS::Object parent,KJSEmbed::KJSEmbedPart *part) : ObjectFactoryBase( parent, QString("KisPaintDevice"),part)
+PaintDeviceFactory::PaintDeviceFactory(KJS::Object parent,KJSEmbed::KJSEmbedPart *part) : ObjectFactoryBase( parent, QString("KisPaintDeviceImpl"),part)
 {
 
 }
@@ -83,7 +83,7 @@ void PaintDeviceFactory::createBindings()
 
 PaintDeviceObject::PaintDeviceObject()
 {
-    m_paintDevice = new KisPaintDevice(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
+    m_paintDevice = new KisPaintDeviceImpl(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
 }
 
 };

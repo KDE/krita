@@ -18,14 +18,14 @@
 #ifndef KIS_LAYER_H_
 #define KIS_LAYER_H_
 
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_types.h"
 #include <koffice_export.h>
 
 class KNamedCommand;
 
-class KRITACORE_EXPORT KisLayer : public KisPaintDevice {
-    typedef KisPaintDevice super;
+class KRITACORE_EXPORT KisLayer : public KisPaintDeviceImpl {
+    typedef KisPaintDeviceImpl super;
 
     Q_OBJECT
 

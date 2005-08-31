@@ -87,7 +87,7 @@ KisColorAdjustmentFilter::KisColorAdjustmentFilter() :
 /**
  * XXX: This filter should write to dst, too!
  */
-void KisColorAdjustmentFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisColorAdjustmentFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisIntegerPerChannelFilterConfiguration* configPC = (KisIntegerPerChannelFilterConfiguration*) config;
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
@@ -131,7 +131,7 @@ KisGammaCorrectionFilter::KisGammaCorrectionFilter()
 }
 
 // XXX: This filter should write to dst, too!
-void KisGammaCorrectionFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisGammaCorrectionFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisDoublePerChannelFilterConfiguration* configPC = (KisDoublePerChannelFilterConfiguration*) config;
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
@@ -170,7 +170,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", "&Auto Contrast")
 }
 
 // XXX: This filter should write to dst, too!
-void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
+void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     setProgressTotalSteps(rect.width() * rect.height() * 2);
     Q_INT32 pixelsProcessed = 0;
@@ -282,7 +282,7 @@ KisDesaturateFilter::KisDesaturateFilter()
 }
 
 //XXX: This filter should write to dst, too!
-void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);

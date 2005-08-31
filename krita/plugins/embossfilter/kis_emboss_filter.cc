@@ -54,7 +54,7 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", "&Emboss with Var
 {
 }
 
-void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisEmbossFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_UNUSED(dst);
 
@@ -82,7 +82,7 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
  *                     increase it. After this, get the gray tone
  */
 
-void KisEmbossFilter::Emboss(KisPaintDeviceSP src, const QRect& rect, int d)
+void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
 {
         float Depth = d / 10.0;
         int    R = 0, G = 0, B = 0;
@@ -151,7 +151,7 @@ int KisEmbossFilter::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth") ) );
@@ -160,7 +160,7 @@ KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* pare
     return w;
 }
 
-KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

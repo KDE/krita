@@ -1,5 +1,6 @@
 AM_CPPFLAGS = -I$(srcdir)/../ \
 	-I$(srcdir)/../.. \
+	-I$(srcdir)/../../../sdk \
 	$(all_includes)
 
 # The check_ target makes sure we don't install the modules,

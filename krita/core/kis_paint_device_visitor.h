@@ -20,66 +20,66 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 
-class KisPaintDeviceVisitor {
+class KisPaintDeviceImplVisitor {
 public:
-    KisPaintDeviceVisitor();
-    virtual ~KisPaintDeviceVisitor();
+    KisPaintDeviceImplVisitor();
+    virtual ~KisPaintDeviceImplVisitor();
 
 public:
-    virtual bool visit(KisPainter& gc, vKisPaintDeviceSP& devs) = 0;
-    virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev) = 0;
+    virtual bool visit(KisPainter& gc, vKisPaintDeviceImplSP& devs) = 0;
+    virtual bool visit(KisPainter& gc, KisPaintDeviceImplSP dev) = 0;
     virtual bool visit(KisPainter& gc, vKisLayerSP& layers) = 0;
     virtual bool visit(KisPainter& gc, KisLayerSP layer) = 0;
     virtual bool visit(KisPainter& gc, KisSelectionSP selection) = 0;
 
 public:
-    bool operator()(KisPainter& gc, vKisPaintDeviceSP& devs);
-    bool operator()(KisPainter& gc, KisPaintDeviceSP dev);
+    bool operator()(KisPainter& gc, vKisPaintDeviceImplSP& devs);
+    bool operator()(KisPainter& gc, KisPaintDeviceImplSP dev);
     bool operator()(KisPainter& gc, vKisLayerSP& layers);
     bool operator()(KisPainter& gc, KisLayerSP layer);
     bool operator()(KisPainter& gc, KisSelectionSP selection);
 };
 
 inline
-KisPaintDeviceVisitor::KisPaintDeviceVisitor()
+KisPaintDeviceImplVisitor::KisPaintDeviceImplVisitor()
 {
 }
 
 inline
-KisPaintDeviceVisitor::~KisPaintDeviceVisitor()
+KisPaintDeviceImplVisitor::~KisPaintDeviceImplVisitor()
 {
 }
 
 inline
-bool KisPaintDeviceVisitor::operator()(KisPainter& gc, vKisPaintDeviceSP& devs)
+bool KisPaintDeviceImplVisitor::operator()(KisPainter& gc, vKisPaintDeviceImplSP& devs)
 {
     return visit(gc, devs);
 }
 
 inline
-bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisPaintDeviceSP dev)
+bool KisPaintDeviceImplVisitor::operator()(KisPainter& gc, KisPaintDeviceImplSP dev)
 {
     return visit(gc, dev);
 }
 
 inline
-bool KisPaintDeviceVisitor::operator()(KisPainter& gc, vKisLayerSP& layers)
+bool KisPaintDeviceImplVisitor::operator()(KisPainter& gc, vKisLayerSP& layers)
 {
     return visit(gc, layers);
 }
 
 inline
-bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisLayerSP layer)
+bool KisPaintDeviceImplVisitor::operator()(KisPainter& gc, KisLayerSP layer)
 {
     return visit(gc, layer);
 }
 
 inline
-bool KisPaintDeviceVisitor::operator()(KisPainter& gc, KisSelectionSP selection)
+bool KisPaintDeviceImplVisitor::operator()(KisPainter& gc, KisSelectionSP selection)
 {
     return visit(gc, selection);
 }

@@ -1,6 +1,7 @@
 kde_services_DATA = kritaraindropsfilter.desktop
 
 INCLUDES  = \
+	-I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \

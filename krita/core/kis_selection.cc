@@ -32,7 +32,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 
-KisSelection::KisSelection(KisPaintDeviceSP layer, const QString& name)
+KisSelection::KisSelection(KisPaintDeviceImplSP layer, const QString& name)
      : super(
         layer -> image(),
         KisColorSpaceRegistry::getAlpha8(),

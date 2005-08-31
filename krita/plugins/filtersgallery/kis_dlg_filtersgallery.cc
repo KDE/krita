@@ -24,7 +24,7 @@
 
 #include "kis_filters_listview.h"
 #include "kis_filter.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_view.h"
@@ -75,7 +75,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     }
     KisImageSP img = m_view->currentImg();
     KisLayerSP activeLayer = img->activeLayer();
-    m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),(KisPaintDeviceSP)activeLayer);
+    m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),(KisPaintDeviceImplSP)activeLayer);
     if(m_currentConfigWidget != 0)
     {
         m_hlayout->insertWidget(1, m_currentConfigWidget);
@@ -96,7 +96,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());
     
     QRect rect = layer -> extent();
-    m_currentFilter->process((KisPaintDeviceSP) layer, (KisPaintDeviceSP) layer, config, rect);
+    m_currentFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
     m_previewWidget->slotUpdate();
 }
 

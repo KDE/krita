@@ -25,7 +25,7 @@
 #include "kis_function_base.h"
 #include <kjs/object.h>
 
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 
 namespace Krita {
     namespace Plugins {
@@ -45,17 +45,17 @@ namespace Krita {
 
                     };
                     /**
-                     * This class is a proxy for a KisPaintDevice
+                     * This class is a proxy for a KisPaintDeviceImpl
                      */
                     class PaintDeviceObject : public KJS::ObjectImp {
                         public:
                             PaintDeviceObject();
                         public:
-                            inline KisPaintDevice* paintDevice() { return m_paintDevice; };
+                            inline KisPaintDeviceImpl* paintDevice() { return m_paintDevice; };
                         public:
                             static PaintDeviceObject* toPaintDeviceObject(KJS::ObjectImp* imp) { return dynamic_cast<PaintDeviceObject*>(imp); }
                         private:
-                            KisPaintDevice* m_paintDevice;
+                            KisPaintDeviceImpl* m_paintDevice;
                     };
                 };
                 namespace Functions {

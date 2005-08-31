@@ -1,6 +1,8 @@
 KDE_OPTIONS = nofinal
 
-INCLUDES = -I$(srcdir)/../core/filters -I$(srcdir)/../core \
+INCLUDES = -I$(srcdir)/../core/filters \
+	-I$(srcdir)/../sdk \
+	-I$(srcdir)/../core \
 	-I$(srcdir)/../core/resources/ -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles \
 	-I$(srcdir)/../core/tool -I$(srcdir)/../core/paintop $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	$(all_includes)

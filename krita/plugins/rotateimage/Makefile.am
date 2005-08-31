@@ -4,7 +4,8 @@ kritarc_DATA = rotateimage.rc
 EXTRA_DIST = $(kritarc_DATA)
 
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/tiles \

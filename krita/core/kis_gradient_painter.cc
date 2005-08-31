@@ -44,7 +44,7 @@
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
 #include "kis_abstract_colorspace.h"
@@ -475,7 +475,7 @@ KisGradientPainter::KisGradientPainter()
     m_gradient = 0; 
 }
 
-KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : super(device), m_gradient(0) 
+KisGradientPainter::KisGradientPainter(KisPaintDeviceImplSP device) : super(device), m_gradient(0) 
 {
 }
 

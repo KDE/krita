@@ -60,10 +60,10 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter(const KisID& id, const QString & category, const QString & name, Type min, Type max, Type initvalue );
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
 private:
     Type m_min;
     Type m_max;
@@ -109,7 +109,7 @@ KisPerChannelFilter<Type, ParamType, WidgetClass>::KisPerChannelFilter(const Kis
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     std::vector<ParamType> param;
 
@@ -128,7 +128,7 @@ KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::creat
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     WidgetClass* widget = (WidgetClass*)nwidget;
     KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , dev->colorStrategy()->channels() );
@@ -150,7 +150,7 @@ KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::confi
 }
 
 template <typename Type, class ParamType, class WidgetClass>
-        std::list<KisFilterConfiguration*> KisPerChannelFilter<Type, ParamType, WidgetClass>::listOfExamplesConfiguration(KisPaintDeviceSP dev)
+        std::list<KisFilterConfiguration*> KisPerChannelFilter<Type, ParamType, WidgetClass>::listOfExamplesConfiguration(KisPaintDeviceImplSP dev)
 {
     std::list<KisFilterConfiguration*> list;
     for(int i = 0; i < dev->colorStrategy()->nColorChannels(); i++)

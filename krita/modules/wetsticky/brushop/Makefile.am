@@ -4,15 +4,16 @@ kritaimagesdir = $(prefix)/share/apps/krita/images
 kritaimages_DATA = wetpaintbrush.png
 
 # all_includes must remain last!
-INCLUDES = -I$(srcdir)/../../..//core \
-	-I$(srcdir)/../../..//core/color_strategy/ \
-	-I$(srcdir)/../../..//core/resources/ \
-	-I$(srcdir)/../../..//core/tiles \
-	-I$(srcdir)/../../..//core/tool \
-	-I$(srcdir)/../../..//core/paintop \
-	-I$(srcdir)/../../..//ui \
-	-I$(srcdir)/../../..//ui/dialogs \
-	-I$(srcdir)/../../..//ui/widgets \
+INCLUDES =  -I$(srcdir)/../../../sdk \
+	 -I$(srcdir)/../../../core \
+	-I$(srcdir)/../../../core/color_strategy/ \
+	-I$(srcdir)/../../../core/resources/ \
+	-I$(srcdir)/../../../core/tiles \
+	-I$(srcdir)/../../../core/tool \
+	-I$(srcdir)/../../../core/paintop \
+	-I$(srcdir)/../../../ui \
+	-I$(srcdir)/../../../ui/dialogs \
+	-I$(srcdir)/../../../ui/widgets \
 	-I../../..//ui/dialogs \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../..//core/strategy/ $(all_includes)
 

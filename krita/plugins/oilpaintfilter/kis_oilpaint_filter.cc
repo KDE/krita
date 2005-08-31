@@ -54,7 +54,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", "&Oilpaint.
 {
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisOilPaintFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
     Q_UNUSED(dst);
@@ -85,7 +85,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, int x, int y, int w, int h, int BrushSize, int Smoothness)
 {
     setProgressTotalSteps(h);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -129,7 +129,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, int x, int y, int w, int 
  *                     the center of this matrix and find the most frequenty color
  */
 
-uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
+uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceImplSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
 {
         uint color;
     uint I;
@@ -221,7 +221,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 }
 
 
-KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
@@ -229,7 +229,7 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )
@@ -240,7 +240,7 @@ KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPa
     }
 }
 
-std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
+std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceImplSP )
 {
     std::list<KisFilterConfiguration*> list;
     list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));

@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
         -I$(srcdir)/../../ui \
+	-I$(srcdir)/../../sdk \
 	-I../../ui/ \
         -I$(srcdir)/../tiles \
         -I$(srcdir)/../paintop \

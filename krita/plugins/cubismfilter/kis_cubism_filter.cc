@@ -62,7 +62,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), "artistic", "&Cubism...")
 {
 }
 
-void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
@@ -164,7 +164,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
         }
 }
 
-void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest)
+void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest)
 {
         Q_INT32         val;
         Q_INT32         alpha;
@@ -326,7 +326,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         */
 }
 
-void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)
+void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)
 {
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
@@ -392,7 +392,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         }
 }
 
-KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );
@@ -400,7 +400,7 @@ KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

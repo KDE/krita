@@ -34,19 +34,19 @@
 #include <kis_selection_manager.h>
 #include <kis_canvas_subject.h>
 #include <kis_image.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_button_press_event.h>
 #include <kis_canvas_subject.h>
 #include <kis_selection_options.h>
 #include <kis_selection.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selected_transaction.h>
 #include <kis_undo_adapter.h>
 
 #include "kis_tool_selectsimilar.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8 * c, int fuzziness, enumSelectionMode mode)
+void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_UINT8 * c, int fuzziness, enumSelectionMode mode)
 {
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
@@ -131,7 +131,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
     if (m_subject) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KisImageSP img;
-        KisPaintDeviceSP dev;
+        KisPaintDeviceImplSP dev;
         QPoint pos;
         QUANTUM opacity = OPACITY_OPAQUE;
 

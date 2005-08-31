@@ -22,7 +22,7 @@
 #include "kdebug.h"
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_config.h"
 #include "kis_colorspace_registry.h"
 
@@ -58,7 +58,7 @@ KisClipboard* KisClipboard::instance()
     return KisClipboard::m_singleton;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP selection)
+void KisClipboard::setClip(KisPaintDeviceImplSP selection)
 {
     m_clip = selection;
 
@@ -83,7 +83,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     }
 }
 
-KisPaintDeviceSP KisClipboard::clip()
+KisPaintDeviceImplSP KisClipboard::clip()
 {
     return m_clip;
 }
@@ -98,7 +98,7 @@ void KisClipboard::clipboardDataChanged()
             KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
 
             m_clip =
-                new KisPaintDevice(cs,
+                new KisPaintDeviceImpl(cs,
                            "KisClipboard created clipboard selection");
             Q_CHECK_PTR(m_clip);
             m_clip -> convertFromImage(qimg);

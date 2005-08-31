@@ -45,7 +45,7 @@
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
@@ -70,7 +70,7 @@ KisFillPainter::KisFillPainter()
     m_sampleMerged = false;
 }
 
-KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
+KisFillPainter::KisFillPainter(KisPaintDeviceImplSP device) : super(device)
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
@@ -151,7 +151,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorStrategy(), "Fill Temporary Layer");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -164,7 +164,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorStrategy(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorStrategy(), "Fill Temporary Layer");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
@@ -197,7 +197,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
     }
 }
 
-void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
+void KisFillPainter::genericFillEnd(KisPaintDeviceImplSP filled) {
     if (m_cancelRequested) {
         m_width = m_height = -1;
         return;
@@ -241,7 +241,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
         return new KisSelection(m_device, "Fill Temporary Selection");
 
-    KisPaintDeviceSP sourceDevice = 0;
+    KisPaintDeviceImplSP sourceDevice = 0;
 
     // sample merged?
     if (m_sampleMerged) {

@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/../ \
 	-I$(srcdir)/../../core/ \
+	-I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/filters \

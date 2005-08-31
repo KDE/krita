@@ -30,7 +30,7 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 
 KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject)
     : super(parent),

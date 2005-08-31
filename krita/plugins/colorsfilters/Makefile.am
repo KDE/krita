@@ -1,6 +1,7 @@
 kde_services_DATA = kritacolorsfilter.desktop
 
-INCLUDES  = -I$(srcdir)/../../core/color_strategy \
+INCLUDES  =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/resources \

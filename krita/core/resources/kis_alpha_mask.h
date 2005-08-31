@@ -30,7 +30,7 @@
 /**
  * KisAlphaMask is intended to create alpha values from a QImage for use
  * in brush creation. It is not a generic alpha mask that can be used with
- * KisPaintDevices: use a KisSelection for that.
+ * KisPaintDeviceImpls: use a KisSelection for that.
  */
 class KRITACORE_EXPORT KisAlphaMask : public KShared {
     

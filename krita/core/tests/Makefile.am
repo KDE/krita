@@ -6,6 +6,7 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../paintop \
 	-I$(srcdir)/../tiles \
 	-I$(srcdir)/../../ui \
+	-I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../kopalette \
 	-I../../ui \
 	-I../../kopalette \

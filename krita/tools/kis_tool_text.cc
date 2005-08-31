@@ -40,7 +40,7 @@
 #include "kis_layer.h"
 #include "kis_cursor.h"
 #include "kis_tool_text.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_canvas_subject.h"
 #include "kis_button_release_event.h"
 #include "kis_color.h"
@@ -67,7 +67,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
         KisImageSP img = m_subject->currentImg();
-        KisPaintDeviceSP dev;
+        KisPaintDeviceImplSP dev;
 
         if (!img || !(dev = img->activeDevice()))
             return;

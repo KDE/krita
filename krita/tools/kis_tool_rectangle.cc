@@ -117,7 +117,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_currentImage)
             return;
 
-        KisPaintDeviceSP device = m_currentImage->activeDevice ();
+        KisPaintDeviceImplSP device = m_currentImage->activeDevice ();
         KisPainter painter (device);
         painter.beginTransaction (i18n ("Rectangle"));
         

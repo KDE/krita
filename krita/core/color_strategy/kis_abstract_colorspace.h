@@ -444,7 +444,7 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    QMemArray<Q_UINT8> m_conversionCache;
+    QMemArray<Q_UINT8> m_conversionCache; // XXX: :This will be a bad problem when we have threading.
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

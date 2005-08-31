@@ -37,7 +37,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
@@ -70,7 +70,7 @@ class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 public:
 
         KisConvolutionPainter();
-        KisConvolutionPainter(KisPaintDeviceSP device);
+        KisConvolutionPainter(KisPaintDeviceImplSP device);
 
     /**
      * Convolve all channels in the current paint device using the specified matrix. Only the first matrix of the array is

@@ -138,7 +138,7 @@ signals:
 protected:
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent, const char *name);
-    virtual bool saveChildren( KoStore * store ) { return true; };
+    virtual bool saveChildren( KoStore * ) { return true; };
     
 private slots:
     void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);

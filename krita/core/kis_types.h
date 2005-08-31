@@ -39,11 +39,11 @@ typedef KisSharedPtrVector<KisImage> vKisImageSP;
 typedef vKisImageSP::iterator vKisImageSP_it;
 typedef vKisImageSP::const_iterator vKisImageSP_cit;
 
-class KisPaintDevice;
-typedef KSharedPtr<KisPaintDevice> KisPaintDeviceSP;
-typedef KisSharedPtrVector<KisPaintDevice> vKisPaintDeviceSP;
-typedef vKisPaintDeviceSP::iterator vKisPaintDeviceSP_it;
-typedef vKisPaintDeviceSP::const_iterator vKisPaintDeviceSP_cit;
+class KisPaintDeviceImpl;
+typedef KSharedPtr<KisPaintDeviceImpl> KisPaintDeviceImplSP;
+typedef KisSharedPtrVector<KisPaintDeviceImpl> vKisPaintDeviceImplSP;
+typedef vKisPaintDeviceImplSP::iterator vKisPaintDeviceImplSP_it;
+typedef vKisPaintDeviceImplSP::const_iterator vKisPaintDeviceImplSP_cit;
 
 class KisLayer;
 typedef KSharedPtr<KisLayer> KisLayerSP;

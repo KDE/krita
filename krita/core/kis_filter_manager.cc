@@ -187,7 +187,7 @@ bool KisFilterManager::apply()
     
     KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), layer.data());
     Q_CHECK_PTR(cmd);
-    m_lastFilter->process((KisPaintDeviceSP)layer, (KisPaintDeviceSP)layer, m_lastFilterConfig, rect);
+    m_lastFilter->process((KisPaintDeviceImplSP)layer, (KisPaintDeviceImplSP)layer, m_lastFilterConfig, rect);
 
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
@@ -290,7 +290,7 @@ void KisFilterManager::refreshPreview( )
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget, layer.data());
     
     QRect rect = layer -> extent();
-    m_lastFilter->process((KisPaintDeviceSP) layer, (KisPaintDeviceSP) layer, config, rect);
+    m_lastFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
     m_lastDialog->previewWidget() -> slotUpdate();
 }
 

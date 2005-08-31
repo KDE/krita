@@ -23,7 +23,7 @@
 #include "kis_transaction.h"
 #include "kis_memento.h"
 
-KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
+KisTransaction::KisTransaction(const QString& name, KisPaintDeviceImplSP device)
 {
     m_name = name;
     m_device = device;

@@ -23,7 +23,7 @@
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 
@@ -38,7 +38,7 @@ KisTexturePainter::KisTexturePainter()
     m_blurh = 0.7;
 }
 
-KisTexturePainter::KisTexturePainter(KisPaintDeviceSP device) : super(device)
+KisTexturePainter::KisTexturePainter(KisPaintDeviceImplSP device) : super(device)
 {
     m_height = 1;
     m_blurh = 0.7;

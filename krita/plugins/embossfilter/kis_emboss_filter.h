@@ -40,17 +40,17 @@ class KisEmbossFilter : public KisFilter
 public:
     KisEmbossFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("emboss", i18n("Emboss")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
     public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 private:
-    void Emboss(KisPaintDeviceSP src, const QRect& rect, int d);
+    void Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d);
     inline int Lim_Max (int Now, int Up, int Max);
 };
 

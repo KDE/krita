@@ -57,7 +57,7 @@ void KisFiltersListView::buildPreview()
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         
         if (f -> supportsPreview()) {
-            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceSP)m_thumb);
+            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb);
             // apply the filter
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
@@ -66,7 +66,7 @@ void KisFiltersListView::buildPreview()
                 KisLayerSP thumbPreview = new KisLayer(*m_thumb/*imgthumbPreview,"",50*/);
                 imgthumbPreview->add(thumbPreview,0);
                 f->disableProgress();
-                f->process((KisPaintDeviceSP)m_thumb, (KisPaintDeviceSP)thumbPreview,*itc, imgthumbPreview->bounds());
+                f->process((KisPaintDeviceImplSP)m_thumb, (KisPaintDeviceImplSP)thumbPreview,*itc, imgthumbPreview->bounds());
                 QImage qimg =  thumbPreview->convertToQImage(thumbPreview->profile());
                 new KisFiltersIconViewItem( this, (*it).name(),
                                                                         QPixmap(qimg), *it, f, *itc );

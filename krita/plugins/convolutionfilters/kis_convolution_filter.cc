@@ -33,8 +33,8 @@ KisConvolutionFilter::KisConvolutionFilter(const KisID& id, const QString & cate
 
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP src,
-                   KisPaintDeviceSP dst,
+void KisConvolutionFilter::process(KisPaintDeviceImplSP src,
+                   KisPaintDeviceImplSP dst,
                    KisFilterConfiguration* configuration,
                    const QRect& rect)
 {
@@ -57,7 +57,7 @@ KisConvolutionConstFilter::~KisConvolutionConstFilter()
 {
 }
 
-KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*, KisPaintDeviceSP /*dev*/)
+KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*, KisPaintDeviceImplSP /*dev*/)
 {
     return new KisConvolutionConfiguration( m_matrixes );
 }

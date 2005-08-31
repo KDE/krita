@@ -59,7 +59,7 @@ namespace {
         typedef KisSelectedTransaction super;
 
     public:
-        TransformCmd(KisPaintDeviceSP device);
+        TransformCmd(KisPaintDeviceImplSP device);
         virtual ~TransformCmd();
 
     public:
@@ -67,7 +67,7 @@ namespace {
         virtual void unexecute();
     };
 
-    TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device)
+    TransformCmd::TransformCmd(KisPaintDeviceImplSP device) : super(i18n("Transform"), device)
     {
     }
 

@@ -21,39 +21,39 @@
 
 #include "kis_paint_device_iface.h"
 
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 
 #include <dcopclient.h>
 
-KisPaintDeviceIface::KisPaintDeviceIface( KisPaintDevice * parent )
+KisPaintDeviceImplIface::KisPaintDeviceImplIface( KisPaintDeviceImpl * parent )
     : DCOPObject(parent->name().utf8())
 {
     m_parent = parent;
 }
 
 
-QString KisPaintDeviceIface::name() const
+QString KisPaintDeviceImplIface::name() const
 {
     return m_parent->name();
 }
 
-void KisPaintDeviceIface::setName(const QString& name)
+void KisPaintDeviceImplIface::setName(const QString& name)
 {
     m_parent->setName(name);
 }
 
-Q_INT32 KisPaintDeviceIface::pixelSize() const
+Q_INT32 KisPaintDeviceImplIface::pixelSize() const
 {
     return m_parent->pixelSize();
 }
 
-Q_INT32 KisPaintDeviceIface::nChannels() const
+Q_INT32 KisPaintDeviceImplIface::nChannels() const
 {
     return m_parent->nChannels();
 }
 
 
-QByteArray KisPaintDeviceIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     QByteArray b (w * h * m_parent->pixelSize());
     
@@ -61,7 +61,7 @@ QByteArray KisPaintDeviceIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT
     return b;
 }
 
-void KisPaintDeviceIface::writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisPaintDeviceImplIface::writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_parent->writeBytes((Q_UINT8*)bytes.data(), x, y, w, h);
 }

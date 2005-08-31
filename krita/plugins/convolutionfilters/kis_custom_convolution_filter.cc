@@ -33,14 +33,14 @@ KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(
 {
 
 }
-KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP)
 {
     KisCustomConvolutionFilterConfigurationWidget* ccfcw = new KisCustomConvolutionFilterConfigurationWidget(this,parent, "custom convolution config widget");
     Q_CHECK_PTR(ccfcw);
     return ccfcw;
 }
 
-KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
     Q_INT32 imgdepth = dev->colorStrategy()->nChannels();

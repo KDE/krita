@@ -1,7 +1,8 @@
 kde_services_DATA = kritaoilpaintfilter.desktop
 
 INCLUDES  = \
-	-I$(srcdir)/../../core/color_strategy \
+	 -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/resources \

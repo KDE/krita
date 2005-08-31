@@ -40,7 +40,7 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_colorspace_registry.h>
 
 #include "kis_ws_engine_filter.h"
@@ -72,7 +72,7 @@ QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
     return QPoint(random() * width,  random() * height);
 }
 
-void single_step(KisAbstractColorSpace * cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rect, bool native)
+void single_step(KisAbstractColorSpace * cs, KisPaintDeviceImplSP src,  KisPaintDeviceImplSP dst, const QRect & rect, bool native)
 {
     using namespace WetAndSticky;
 
@@ -111,7 +111,7 @@ void single_step(KisAbstractColorSpace * cs, KisPaintDeviceSP src,  KisPaintDevi
 
 }
 
-void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisWSEngineFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
     m_src = src;
@@ -154,7 +154,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 
 }
 
-KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
 //     KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
 //     kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
@@ -162,7 +162,7 @@ KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* pa
     return 0;
 }
 
-KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
 //     KisWSEngineFilterConfigurationWidget* widget = (KisWSEngineFilterConfigurationWidget*) nwidget;
 

@@ -20,7 +20,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_selection.h"
 #include "kis_transform_visitor.h"
 #include "kis_progress_display_interface.h"
@@ -43,7 +43,7 @@ KisTransformVisitor::KisTransformVisitor(double xscale, double yscale,
     m_filter = filter;
 }
 
-void KisTransformVisitor::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -80,7 +80,7 @@ void KisTransformVisitor::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP d
     }
 }
 
-void KisTransformVisitor::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+void KisTransformVisitor::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -121,7 +121,7 @@ void KisTransformVisitor::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP ds
     }
 }
 
-void KisTransformVisitor::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+void KisTransformVisitor::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -159,24 +159,24 @@ void KisTransformVisitor::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     }
 }
 
-template <class iter> iter createIterator(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
+template <class iter> iter createIterator(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
 
 template <> KisHLineIteratorPixel createIterator <KisHLineIteratorPixel>
-(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
 {
     return dev->createHLineIterator(start, lineNum, len, true);
 }
 
 template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
-(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
 {
     return dev->createVLineIterator(lineNum, start, len, true);
 }
 
-template <class iter> void calcDimensions (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines);
+template <class iter> void calcDimensions (KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines);
 
 template <> void calcDimensions <KisHLineIteratorPixel>
-(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
+(KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
     if(dev->hasSelection())
     {
@@ -188,7 +188,7 @@ template <> void calcDimensions <KisHLineIteratorPixel>
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
-(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
+(KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
     if(dev->hasSelection())
     {
@@ -200,7 +200,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
 }
 
 
-template <class T> void KisTransformVisitor::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
+template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
 {
     Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;    /* filter calculation variables */
@@ -357,7 +357,7 @@ printf(" )=%d\n",sum);
     delete [] weight;
 }
 
-bool KisTransformVisitor::visit(KisPainter &gc, KisPaintDevice *dev)
+bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
 {
         //progress info
         m_cancelRequested = false;
@@ -370,9 +370,9 @@ bool KisTransformVisitor::visit(KisPainter &gc, KisPaintDevice *dev)
     else
         r = dev->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(dev->colorStrategy(),"temporary");;
-    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(dev->colorStrategy(),"temporary");;
-    KisPaintDeviceSP srcdev = dev;
+    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorStrategy(),"temporary");;
+    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorStrategy(),"temporary");;
+    KisPaintDeviceImplSP srcdev = dev;
 
     double xscale = m_xscale;
     double yscale = m_yscale;

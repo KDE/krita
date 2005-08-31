@@ -24,13 +24,13 @@
 #include <qstring.h>
 #include <kcommand.h>
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 
 class QRect;
 
 class KisTransaction : public KCommand {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceSP device);
+    KisTransaction(const QString& name, KisPaintDeviceImplSP device);
     virtual ~KisTransaction();
 
 public:
@@ -42,7 +42,7 @@ public:
 
 private:
     QString m_name;
-    KisPaintDeviceSP m_device;
+    KisPaintDeviceImplSP m_device;
     KisMementoSP m_memento;
 };
 

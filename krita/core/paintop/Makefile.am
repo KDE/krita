@@ -1,4 +1,5 @@
 INCLUDES  = -I$(srcdir)/.. \
+	-I$(srcdir)/../../sdk \
         -I$(srcdir)/../tiles \
         -I$(srcdir)/../tool \
         -I$(srcdir)/../filters \

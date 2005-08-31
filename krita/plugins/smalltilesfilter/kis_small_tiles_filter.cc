@@ -46,7 +46,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_progress_display_interface.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_filter_strategy.h>
 
 #include "kis_multi_integer_filter_widget.h"
@@ -59,7 +59,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", "&Small tile
 {
 }
 
-void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisSmallTilesFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
@@ -71,10 +71,10 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
+void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
     Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
-    KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
+    KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl( *(src.data()) );
 
     tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );
     QRect tmpRect = tmp -> exactBounds();
@@ -107,14 +107,14 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of Tiles") ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

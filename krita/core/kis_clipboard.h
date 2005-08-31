@@ -44,12 +44,12 @@ public:
      * set the system clipboard to a QImage representation of the specified 
      * paint device.
      */
-    void setClip(KisPaintDeviceSP layer);
+    void setClip(KisPaintDeviceImplSP layer);
     
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip();
+    KisPaintDeviceImplSP clip();
 
     bool hasClip();
 
@@ -64,7 +64,7 @@ private:
 
     static KisClipboard * m_singleton;
 
-    KisPaintDeviceSP m_clip;
+    KisPaintDeviceImplSP m_clip;
 
     bool m_pushedClipboard;
 

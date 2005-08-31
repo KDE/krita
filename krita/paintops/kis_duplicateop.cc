@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
@@ -58,7 +58,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 {
     if (!m_painter) return;
     
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceImplSP device = m_painter -> device();
     if (m_source) device = m_source;
     if (!device) return;
 
@@ -80,7 +80,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    KisPaintDeviceSP dab = 0;
+    KisPaintDeviceImplSP dab = 0;
 
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
@@ -106,7 +106,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceSP srcdev = new KisPaintDevice(dab.data() -> colorStrategy(), "duplicate srcdev");
+    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab.data() -> colorStrategy(), "duplicate srcdev");
     Q_CHECK_PTR(srcdev);
     int srcY = 0;
 

@@ -59,7 +59,7 @@
 #include <kis_painter.h>
 #include <kis_fill_painter.h>
 #include <kis_id.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_iterators_pixel.h>
 #include "kis_factory.h"
 #include "perftest.h"

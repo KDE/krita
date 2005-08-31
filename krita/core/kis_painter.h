@@ -39,7 +39,7 @@
 #include "kis_color.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_filter.h"
@@ -56,7 +56,7 @@ class KisPattern;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
- * KisPaintDevice. This is the same kind of abstraction as used in Qt
+ * KisPaintDeviceImpl. This is the same kind of abstraction as used in Qt
  * itself, where you have QPainter and QPaintDevice.
  *
  * However, KisPainter works on a tiled image and supports different
@@ -70,7 +70,7 @@ class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
 
 public:
         KisPainter();
-        KisPainter(KisPaintDeviceSP device);
+        KisPainter(KisPaintDeviceImplSP device);
     KisPainter(KisLayerSP device);
         virtual ~KisPainter();
 
@@ -82,7 +82,7 @@ public:
         /**
      * Start painting on the specified device. Not undoable.
      */
-        void begin(KisPaintDeviceSP device);
+        void begin(KisPaintDeviceImplSP device);
 
         /**
      * Finish painting on the current device
@@ -103,7 +103,7 @@ public:
 
 
         // The current paint device.
-        KisPaintDeviceSP device() const { return m_device; } 
+        KisPaintDeviceImplSP device() const { return m_device; } 
 
 
     // ------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ public:
      */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, 
             const KisCompositeOp& op, 
-            KisPaintDeviceSP src,
+            KisPaintDeviceImplSP src,
                     Q_INT32 sx, Q_INT32 sy, 
             Q_INT32 sw, Q_INT32 sh)
     {
@@ -128,7 +128,7 @@ public:
      */
         void bitBlt(Q_INT32 dx, Q_INT32 dy, 
             const KisCompositeOp& op, 
-            KisPaintDeviceSP src,
+            KisPaintDeviceImplSP src,
                     QUANTUM opacity,
                     Q_INT32 sx, Q_INT32 sy, 
             Q_INT32 sw, Q_INT32 sh);
@@ -139,7 +139,7 @@ public:
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
               const KisCompositeOp &op,
-              KisPaintDeviceSP src,
+              KisPaintDeviceImplSP src,
               KisSelectionSP selMask,
               QUANTUM opacity,
               Q_INT32 sx, Q_INT32 sy,
@@ -153,7 +153,7 @@ public:
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
               const KisCompositeOp &op, 
-              KisPaintDeviceSP src,
+              KisPaintDeviceImplSP src,
               QUANTUM opacity,
               Q_INT32 sx, Q_INT32 sy, 
               Q_INT32 sw, Q_INT32 sh);
@@ -306,8 +306,8 @@ public:
     void setPaintOp(KisPaintOp * paintOp) { m_paintOp = paintOp; }
     KisPaintOp * paintOp() const { return m_paintOp; }
 
-    void setDab(KisPaintDeviceSP dab) { m_dab = dab; }
-    KisPaintDeviceSP dab() const { return m_dab; }
+    void setDab(KisPaintDeviceImplSP dab) { m_dab = dab; }
+    KisPaintDeviceImplSP dab() const { return m_dab; }
 
     bool cancelRequested() const { return m_cancelRequested; }
 
@@ -322,7 +322,7 @@ protected:
     void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
 
 protected:
-        KisPaintDeviceSP m_device;
+        KisPaintDeviceImplSP m_device;
         KisTransaction  *m_transaction;
 
     QRect m_dirtyRect;
@@ -344,7 +344,7 @@ protected:
     Q_INT32 m_pixelSize;
     KisAbstractColorSpace * m_colorStrategy;
     KisProfileSP m_profile;
-    KisPaintDeviceSP m_dab;
+    KisPaintDeviceImplSP m_dab;
 
 };
 

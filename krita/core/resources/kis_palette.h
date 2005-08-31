@@ -37,7 +37,7 @@
 
 class QPoint;
 class QPixmap;
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 
 struct KisPaletteEntry {
     QColor color;
@@ -62,7 +62,7 @@ public:
     /**
      * Create a palette from the colours in a paint device
      */
-    KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QString & name);
+    KisPalette(const KisPaintDeviceImplSP device, Q_INT32 nColors, const QString & name);
 
     /**
      * Create a palette from the colours in a gradient

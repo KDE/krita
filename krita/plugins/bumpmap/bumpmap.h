@@ -26,7 +26,7 @@
 #include <kparts/plugin.h>
 
 #include <kis_filter.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 
 #include "wdgbumpmap.h"
 
@@ -65,14 +65,14 @@ class KisFilterBumpmap : public KisFilter
 public:
     KisFilterBumpmap();
 public:
-    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
     static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
     virtual bool supportsIncrementalPainting() { return false; }
 
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-        virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+        virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 
 };
 
@@ -103,7 +103,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
+    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceImplSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {};
 
     KisBumpmapConfiguration * config();
@@ -113,7 +113,7 @@ public:
 private:
 
     KisFilter * m_filter;
-    KisPaintDeviceSP m_device;
+    KisPaintDeviceImplSP m_device;
 
 };
 

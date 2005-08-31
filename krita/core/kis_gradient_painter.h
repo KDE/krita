@@ -37,7 +37,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
@@ -55,7 +55,7 @@ class KRITACORE_EXPORT KisGradientPainter : public KisPainter
 public:
 
         KisGradientPainter();
-        KisGradientPainter(KisPaintDeviceSP device);
+        KisGradientPainter(KisPaintDeviceImplSP device);
 
 
     enum enumGradientShape {

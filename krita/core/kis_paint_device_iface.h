@@ -24,13 +24,13 @@
 
 #include <qstring.h>
 
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 
-class KisPaintDeviceIface : virtual public DCOPObject
+class KisPaintDeviceImplIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KisPaintDeviceIface( KisPaintDevice * parent );
+    KisPaintDeviceImplIface( KisPaintDeviceImpl * parent );
 k_dcop:
 
         virtual QString name() const;
@@ -71,7 +71,7 @@ k_dcop:
 
 private:
 
-    KisPaintDevice *m_parent;
+    KisPaintDeviceImpl *m_parent;
 };
 
 #endif

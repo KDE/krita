@@ -86,7 +86,7 @@
 #include "kis_layerbox.h"
 #include "kis_layer.h"
 #include "kis_move_event.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
@@ -496,12 +496,11 @@ void KisView::setupActions()
 
     m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), "Ctrl+R", this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
     m_RulerAction->setChecked(cfg.showRulers());
-        m_RulerAction->setCheckedState(i18n("Hide Rulers"));
-        m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
-        m_RulerAction->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
-                                          "document. The rulers show the position and width of pages and of frames and can "
-                                          "be used to position tabulators among others.<p>Uncheck this to disable "
-                                          "the rulers from being displayed." ) );
+    m_RulerAction->setCheckedState(i18n("Hide Rulers"));
+    m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
+    m_RulerAction->setWhatsThis( i18n("The rulers show the position and width of pages and of frames and can "
+                                      "be used to position tabulators among others.<p>Uncheck this to disable "
+                                      "the rulers from being displayed." ) );
     showRuler();
 
 }
@@ -1076,6 +1075,7 @@ void KisView::saveLayerAsImage()
     KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
     if (!layer) return;
 
+    kdDebug() << "Exporting layer to colorspace " << layer->colorStrategy()->id().name() << ", image: " << dst->colorStrategy()->id().name() << "\n";
     KisPainter p(layer);
     p.bitBlt(0, 0, COMPOSITE_COPY, l.data(), r.x(), r.y(), r.width(), r.height());
     p.end();

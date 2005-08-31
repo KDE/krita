@@ -20,7 +20,7 @@
 
 #include <qrect.h>
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_image.h"
@@ -28,21 +28,21 @@
 #include "kis_selection.h"
 
 struct All {
-    const bool operator()(const KisPaintDeviceSP) const
+    const bool operator()(const KisPaintDeviceImplSP) const
     {
         return true;
     }
 };
 
 struct isVisible {
-    const bool operator()(const KisPaintDeviceSP dev) const
+    const bool operator()(const KisPaintDeviceImplSP dev) const
     {
         return dev -> visible();
     }
 };
 
 struct isLinked {
-    const bool operator()(const KisPaintDeviceSP dev) const
+    const bool operator()(const KisPaintDeviceImplSP dev) const
     {
         const KisLayer *layer = dynamic_cast<const KisLayer*>(dev.data());
 
@@ -51,7 +51,7 @@ struct isLinked {
 };
 
 template <typename merge_cond_t, typename remove_cond_t>
-class KisMerge : public KisPaintDeviceVisitor {
+class KisMerge : public KisPaintDeviceImplVisitor {
 public:
     KisMerge(KisImageSP img)
     {
@@ -61,12 +61,12 @@ public:
     }
 
 public:
-    virtual bool visit(KisPainter&, KisPaintDeviceSP)
+    virtual bool visit(KisPainter&, KisPaintDeviceImplSP)
     {
         return false;
     }
 
-    virtual bool visit(KisPainter&, vKisPaintDeviceSP&)
+    virtual bool visit(KisPainter&, vKisPaintDeviceImplSP&)
     {
         return false;
     }

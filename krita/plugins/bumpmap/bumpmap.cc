@@ -86,7 +86,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
 }
 
 namespace {
-    void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
+    void convertRow(KisPaintDeviceImplSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
     {
         KisAbstractColorSpace * csOrig = orig->colorStrategy();
 
@@ -102,7 +102,7 @@ namespace {
     
 }
 
-void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rect)
+void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* cfg, const QRect& rect)
 {
     if (!src) return;
     if (!dst) return;
@@ -177,11 +177,11 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     // Crate a grayscale layer from the bumpmap layer.
     QRect bmRect;
-    KisPaintDeviceSP bumpmap;
+    KisPaintDeviceImplSP bumpmap;
 
 
      if (!config->bumpmap.isNull()) {
-         KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).data();
+         KisPaintDeviceImplSP bumplayer = src->image()->findLayer(config->bumpmap).data();
          if (bumplayer) {
             bmRect = bumplayer->exactBounds();
             bumpmap = bumplayer;
@@ -341,7 +341,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
 
@@ -349,7 +349,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
     return w;
 }
 
-KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceSP) 
+KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceImplSP) 
 {
 
     KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
@@ -380,7 +380,7 @@ KisBumpmapConfiguration::KisBumpmapConfiguration()
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceImplSP dev, QWidget * parent, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f),
       m_filter(filter),
       m_device(dev)

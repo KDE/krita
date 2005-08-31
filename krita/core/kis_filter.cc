@@ -33,18 +33,18 @@
 
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
     m_id(id),
-    m_category(category),
     m_progressDisplay(0),
+    m_category(category),
     m_entry(entry)
 {
 }
 
-KisFilterConfiguration * KisFilter::configuration(QWidget*, KisPaintDeviceSP)
+KisFilterConfiguration * KisFilter::configuration(QWidget*, KisPaintDeviceImplSP)
 {
     return 0;
 }
 
-KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceSP)
+KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceImplSP)
 {
     return 0;
 }

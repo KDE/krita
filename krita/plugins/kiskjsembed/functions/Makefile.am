@@ -1,6 +1,8 @@
-INCLUDES  = -I$(srcdir)/../ \
+INCLUDES  =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../ \
 	-I$(srcdir)/../../../ \
 	-I$(srcdir)/../../../core/ \
+	-I$(srcdir)/../../../sdk/ \
 	-I$(srcdir)/../../../core/color_strategy \
 	-I$(srcdir)/../../../core/resources \
 	-I$(srcdir)/../../../core/compositeop \

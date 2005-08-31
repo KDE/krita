@@ -4,7 +4,8 @@ EXTRA_DIST = $(kritarc_DATA)
 
 kde_services_DATA = kritatoolselectsimilar.desktop
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/tiles \

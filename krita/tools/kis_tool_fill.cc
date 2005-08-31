@@ -76,7 +76,7 @@ KisToolFill::~KisToolFill()
 
 bool KisToolFill::flood(int startX, int startY)
 {
-    KisPaintDeviceSP device = m_currentImage->activeDevice();
+    KisPaintDeviceImplSP device = m_currentImage->activeDevice();
 
     KisFillPainter painter(device);
     painter.beginTransaction(i18n("Floodfill"));

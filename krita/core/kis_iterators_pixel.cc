@@ -20,9 +20,9 @@
 
 #include "kis_iterators_pixel.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 
-KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
+KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
     KisHLineIterator(dm, x - offsetx, y - offsety, w, writable),
     KisIteratorPixelTrait <KisHLineIterator> ( ndevice, this ),
     m_offsetx(offsetx), m_offsety(offsety)
@@ -34,7 +34,7 @@ KisHLineIteratorPixel::KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
     }
 }
 
-KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
+KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
     KisVLineIterator(dm, x - offsetx, y - offsety, h, writable),
     KisIteratorPixelTrait <KisVLineIterator> ( ndevice, this ),
     m_offsetx(offsetx), m_offsety(offsety)
@@ -46,7 +46,7 @@ KisVLineIteratorPixel::KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataMa
     }
 }
 
-KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
+KisRectIteratorPixel::KisRectIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable) :
     KisRectIterator(dm, x - offsetx, y - offsety, w, h, writable),
     KisIteratorPixelTrait <KisRectIterator> ( ndevice, this ),
     m_offsetx(offsetx), m_offsety(offsety)

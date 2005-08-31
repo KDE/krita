@@ -32,7 +32,7 @@
 #include "kis_id.h"
 #include "koffice_export.h"
 #include "kis_progress_subject.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
@@ -73,10 +73,10 @@ public:
 
     virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
     
-    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
+    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 
     /**
          * If true, this filter can be used in painting tools as a paint operation
@@ -90,7 +90,7 @@ public:
          * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
     
     // Can this filter work incrementally when painting, or do we need to work
@@ -127,7 +127,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceImplSP dev);
 
     virtual void cancel() { m_cancelRequested = true; }
 
@@ -154,8 +154,8 @@ protected:
     Q_INT32 m_lastProgressPerCent;
     Q_INT32 m_progressSteps;
     
-    KisProgressDisplayInterface * m_progressDisplay;
     KisID m_id;
+    KisProgressDisplayInterface * m_progressDisplay;
     QString m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text
     

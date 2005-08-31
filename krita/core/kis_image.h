@@ -124,7 +124,7 @@ public:
 
     /** returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image) */
-    KisPaintDeviceSP mergedImage();
+    KisPaintDeviceImplSP mergedImage();
 
     /*
      * Returns the colour of the merged image at pixel (x, y).
@@ -132,7 +132,7 @@ public:
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
     // Get the active painting device
-    KisPaintDeviceSP activeDevice();
+    KisPaintDeviceImplSP activeDevice();
 
     KisLayerSP layerAdd(const QString& name, QUANTUM devOpacity);
     KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisAbstractColorSpace * colorstrategy);

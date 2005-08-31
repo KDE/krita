@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
 
@@ -45,10 +45,10 @@ class KisScaleVisitor : public KisProgressSubject {
 public:
         KisScaleVisitor();
         ~KisScaleVisitor();
-        void visitKisPaintDevice(KisPaintDevice* dev);
+        void visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev);
         void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
 private:
-        KisPaintDevice* m_dev;
+        KisPaintDeviceImpl* m_dev;
         Q_INT32 m_pixelSize;    
         
         /**
@@ -78,7 +78,7 @@ inline KisScaleVisitor::~KisScaleVisitor()
 {
 }
 
-inline void KisScaleVisitor::visitKisPaintDevice(KisPaintDevice* dev)
+inline void KisScaleVisitor::visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev)
 {
         m_dev=dev;
 }

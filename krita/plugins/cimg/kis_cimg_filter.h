@@ -52,13 +52,13 @@ class KisCImgFilter : public KisFilter
 public:
     KisCImgFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 
 private:
 

@@ -46,7 +46,7 @@ class WetPhysicsFilter: public KisFilter
 public:
     WetPhysicsFilter();
 public:
-    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect& r);
+    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect& r);
 
     static inline KisID id() { return KisID("wetphysics", i18n("Watercolor physics simulation filter")); };
 
@@ -55,11 +55,11 @@ public:
 
 private:
 
-    void flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
-    void dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
+    void flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r);
+    void dry(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r);
 
     // Move stuff from the upperlayer to the lower layer. This is filter-level stuff.
-    void adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
+    void adsorb(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r);
 
     // NOTE: this does not set the height fields
     void combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2);

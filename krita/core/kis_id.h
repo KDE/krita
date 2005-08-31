@@ -63,12 +63,12 @@ public:
 
     KisID() : m_id(QString::null), m_name(QString::null) {}
 
-    KisID(const QString & id, const QString & name)
+    KisID(const QString & id, const QString & name = QString::null)
         : m_id(id),
           m_name(name) {};
 
     QString id() const { return m_id; };
-        QString name() const { return m_name; };
+    QString name() const { return m_name; };
 
     friend inline bool operator==(const KisID &, const KisID &);
     friend inline bool operator!=(const KisID &, const KisID &);

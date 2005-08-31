@@ -3,7 +3,8 @@ kritarcdir = $(kde_datadir)/krita/kpartplugins
 kde_services_DATA = kritaimagenhancement.desktop
 
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  = -I$(srcdir)/../../sdk \
+	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core/tiles \

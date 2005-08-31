@@ -47,7 +47,7 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
 
     m_page->lblColormodel->setText(layerCS);
 
-    connect(m_page->grpSource, SIGNAL(clicked(int)), this, SIGNAL(slotSetColorSpaceLabed(int)));
+    connect(m_page->grpSource, SIGNAL(clicked(int)), this, SIGNAL(slotSetColorSpaceLabel(int)));
     connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(okClicked()),

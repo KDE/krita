@@ -22,7 +22,7 @@
 
 #include <kis_brush.h>
 #include <kis_global.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
@@ -54,7 +54,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
     if (!m_painter) return;
 
     if (!m_painter -> device()) return;
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceImplSP device = m_painter -> device();
 
     int x = pos.floorX(); // XXX subpixel positioning?
     int y = pos.floorY();

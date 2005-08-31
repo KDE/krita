@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_in
 lib_LTLIBRARIES = libkritacommon.la
 libkritacommon_la_SOURCES = dummycommon.cc
 libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
-libkritacommon_la_LIBADD = core/libkritacore.la ui/libkisui.la kopalette/libkopalette.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_XINPUTEXT)
+libkritacommon_la_LIBADD = sdk/libkissdk.la core/libkritacore.la ui/libkisui.la kopalette/libkopalette.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_XINPUTEXT)
 
 ## The part
 kde_module_LTLIBRARIES = libkritapart.la

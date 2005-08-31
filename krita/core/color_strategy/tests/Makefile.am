@@ -1,4 +1,5 @@
 AM_CPPFLAGS = \
+	-I$(srcdir)/../../../sdk \
 	-I$(srcdir)/../ \
 	$(all_includes)
 

@@ -55,7 +55,7 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "blur", "&Pixelize...")
 {
 }
 
-void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisPixelizeFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
@@ -68,7 +68,7 @@ void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
         pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 }
 
-void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
+void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
 {
         Q_INT32 pixelSize = src -> pixelSize();
         QMemArray<Q_INT32> average(  pixelSize );
@@ -190,7 +190,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixelwidth") ) );
@@ -198,7 +198,7 @@ KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

@@ -27,7 +27,7 @@
 
 #include "kis_types.h"
 #include "kis_gradient_painter.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_colorspace_registry.h"
 
 #include "kis_autogradient_resource.h"

@@ -25,7 +25,7 @@
 
 #include "kis_types.h"
 #include "kis_filter_registry.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_filter.h"
 #include "kis_view.h"
 

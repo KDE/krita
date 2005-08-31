@@ -48,7 +48,7 @@
 #include <kis_abstract_colorspace.h>
 #include <kis_colorspace_registry.h>
 #include <kis_view.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_channelinfo.h>
 
 #include "kis_channel_separator.h"

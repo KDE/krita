@@ -41,7 +41,7 @@
 #include <kis_id.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_pattern.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>

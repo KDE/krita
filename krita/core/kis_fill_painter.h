@@ -40,7 +40,7 @@
 #include "kis_color.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_point.h"
 #include "kis_matrix.h"
 #include "kis_progress_subject.h"
@@ -59,7 +59,7 @@ class KRITACORE_EXPORT KisFillPainter : public KisPainter
 public:
 
         KisFillPainter();
-        KisFillPainter(KisPaintDeviceSP device);
+        KisFillPainter(KisPaintDeviceImplSP device);
 
 
     /**
@@ -126,7 +126,7 @@ private:
      * returned when anti-aliasing is off
      **/
     void genericFillStart(int startX, int startY);
-    void genericFillEnd(KisPaintDeviceSP filled);
+    void genericFillEnd(KisPaintDeviceImplSP filled);
 
     KisSelectionSP m_selection;
 

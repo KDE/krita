@@ -41,7 +41,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_layer.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_channelinfo.h"
 #include "kis_colorspace_registry.h"
 #include "kis_dlg_apply_profile.h"
@@ -336,7 +336,7 @@ void KisSelectionManager::copy()
           << r.width() << ", "
           << r.height() << "\n";
 
-    KisPaintDeviceSP clip = new KisPaintDevice(img -> activeDevice() -> colorStrategy(),
+    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(img -> activeDevice() -> colorStrategy(),
                            "Copy from " + img -> activeDevice() -> name() );
     Q_CHECK_PTR(clip);
 
@@ -386,7 +386,7 @@ KisLayerSP KisSelectionManager::paste()
         KisImageSP img = m_parent -> currentImg();
         if (!img) return 0;
 
-    KisPaintDeviceSP clip = m_clipboard -> clip();
+    KisPaintDeviceImplSP clip = m_clipboard -> clip();
 
     if (clip) {
         KisLayerSP layer = new KisLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
@@ -426,7 +426,7 @@ void KisSelectionManager::pasteNew()
 {
     kdDebug() << "Paste new!\n";
 
-        KisPaintDeviceSP clip = m_clipboard -> clip();
+        KisPaintDeviceImplSP clip = m_clipboard -> clip();
     if (!clip) return;
 
     QRect r = clip->exactBounds();
@@ -600,7 +600,7 @@ void KisSelectionManager::feather()
 {
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
-    KisPaintDeviceSP dev = img -> activeDevice();
+    KisPaintDeviceImplSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) {

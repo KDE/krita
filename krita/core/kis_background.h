@@ -19,7 +19,7 @@
 #define KIS_BACKGROUND_H_
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_layer.h"
 
 class KisBackground : public KisLayer {

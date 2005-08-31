@@ -9,7 +9,9 @@ kde_services_DATA = krita_rgb_f32_plugin.desktop
 
 #EXTRA_DIST = $(kritarc_DATA)
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  = \
+	-I$(srcdir)/../../core \
+	-I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/resources \

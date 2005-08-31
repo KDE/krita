@@ -27,7 +27,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_tool_move.h"
 #include "kis_tool_move.moc"
 #include "kis_button_press_event.h"

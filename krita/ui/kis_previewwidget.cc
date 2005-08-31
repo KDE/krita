@@ -96,7 +96,7 @@ void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
     Q_CHECK_PTR(m_previewImage);
     
     KisPainter gc;
-    KisPaintDeviceSP pd(m_sourceLayer.data());
+    KisPaintDeviceImplSP pd(m_sourceLayer.data());
     gc.begin(m_previewLayer.data());
     
     gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_preview->getPos().x(), m_preview->getPos().y(), -1, -1);
@@ -111,7 +111,7 @@ void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
 void KisPreviewWidget::slotRenewLayer() {
     if (!m_previewLayer || !m_sourceLayer) return;
 
-    KisPaintDeviceSP pd(m_sourceLayer.data());
+    KisPaintDeviceImplSP pd(m_sourceLayer.data());
     KisPainter gc;
     QPoint delta = m_preview->getPos();
     gc.begin(m_previewLayer.data());

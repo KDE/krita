@@ -22,13 +22,13 @@
 
 #include "tiles/kis_iterator.h"
 #include "kis_pixel.h"
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 
 template< typename _iTp> 
 class KisIteratorPixelTrait
 {
 public:
-    KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
+    KisIteratorPixelTrait(KisPaintDeviceImpl * ndevice, _iTp *underlyingIterator)
     :    m_device(ndevice),
         m_underlyingIterator(underlyingIterator)
     {
@@ -113,7 +113,7 @@ public:
                     
     
 protected:
-    KisPaintDevice *m_device;
+    KisPaintDeviceImpl *m_device;
 
     //KisAbstractColorSpace * m_colorSpace;
 

@@ -44,7 +44,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 #include <kis_colorspace_registry.h>
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"
@@ -119,7 +119,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisImageSP image = m_view -> currentImg();
     if (!image) return;
 
-    KisPaintDeviceSP dev = image -> activeDevice();
+    KisPaintDeviceImplSP dev = image -> activeDevice();
     if (!dev) return;
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");

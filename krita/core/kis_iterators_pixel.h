@@ -35,7 +35,7 @@
 class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>
 {
 public:
-    KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
+    KisHLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
     KisHLineIteratorPixel(const KisHLineIteratorPixel& rhs) : KisHLineIterator(rhs), KisIteratorPixelTrait<KisHLineIterator>(rhs)
         { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
     KisHLineIteratorPixel& operator=(const KisHLineIteratorPixel& rhs)
@@ -59,7 +59,7 @@ protected:
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
-    KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
+    KisVLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
     KisVLineIteratorPixel(const KisVLineIteratorPixel& rhs) : KisVLineIterator(rhs), KisIteratorPixelTrait<KisVLineIterator>(rhs)
         { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
     KisVLineIteratorPixel& operator=(const KisVLineIteratorPixel& rhs)
@@ -80,7 +80,7 @@ protected:
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
-    KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
+    KisRectIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety, bool writable);
     KisRectIteratorPixel(const KisRectIteratorPixel& rhs) : KisRectIterator(rhs), KisIteratorPixelTrait<KisRectIterator>(rhs)
         { m_offsetx = rhs.m_offsetx;  m_offsety = rhs.m_offsety; }
     KisRectIteratorPixel& operator=(const KisRectIteratorPixel& rhs)

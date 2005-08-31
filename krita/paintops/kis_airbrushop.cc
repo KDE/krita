@@ -27,7 +27,7 @@
 #include "kis_vec.h"
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
@@ -91,14 +91,14 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
 
     if (!m_painter) return;
 
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceImplSP device = m_painter -> device();
 
     // For now: use the current brush shape -- it beats calculating
     // ellipes and cones, and it shows the working of the timer.
     if (!device) return;
 
     KisBrush * brush = m_painter -> brush();
-    KisPaintDeviceSP dab = m_painter -> dab();
+    KisPaintDeviceImplSP dab = m_painter -> dab();
 
     KisPoint hotSpot = brush -> hotSpot(pressure);
     KisPoint pt = pos - hotSpot;

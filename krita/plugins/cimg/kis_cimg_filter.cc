@@ -106,7 +106,7 @@ KisCImgFilter::KisCImgFilter()
 }
 
 
-void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisCImgFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_UNUSED(dst);
 
@@ -583,12 +583,12 @@ bool KisCImgFilter::process()
         return true;
 }
 
-KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     return new KisCImgconfigWidget(this, parent);
 }
 
-KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisCImgconfigWidget * widget = (KisCImgconfigWidget *) nwidget;
     if( widget == 0 )

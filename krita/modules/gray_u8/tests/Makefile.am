@@ -1,5 +1,6 @@
 AM_CPPFLAGS = -I$(srcdir)/.. \
-	-I$(srcdir)/../../../core \
+	 -I$(srcdir)/../../../sdk \
+	 -I$(srcdir)/../../../core \
 	-I$(srcdir)/../../../core/resources \
 	-I$(srcdir)/../../../core/color_strategy \
 	$(all_includes)

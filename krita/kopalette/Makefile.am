@@ -2,7 +2,7 @@
 INCLUDES  = -I$(srcdir) \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
-	
+
 #CXXFLAGS = -shared -fPIC
 
 noinst_LTLIBRARIES = libkopalette.la

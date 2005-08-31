@@ -4,7 +4,8 @@ kde_services_DATA = kritacmykplugin.desktop
 
 #EXTRA_DIST = $(kritarc_DATA)
 
-INCLUDES  = -I$(srcdir)/../../core \
+INCLUDES  = -I$(srcdir)/../../sdk \
+	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tiles \
 	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/tool \

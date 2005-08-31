@@ -46,18 +46,18 @@ class KisSobelFilter : public KisFilter
 public:
     KisSobelFilter();
 public:
-    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("sobel", i18n("Sobel")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 private:
-    void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-    void sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);
+    void prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+    void sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);
 };
 
 #endif

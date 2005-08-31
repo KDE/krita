@@ -29,7 +29,7 @@
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_iterators_pixel.h"
 #include "tiles/kis_iterator.h"
 #include "kcurve.h"
@@ -44,12 +44,12 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceImplSP)
 {
     return new KisBrightnessContrastConfigWidget(parent);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceSP)
+KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceImplSP)
 {
     KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
     
@@ -61,7 +61,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwid
     }
 }
 
-std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
+std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceImplSP /*dev*/)
 {
 //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
@@ -70,7 +70,7 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
 }
 
 
-void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 

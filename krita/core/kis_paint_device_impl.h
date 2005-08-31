@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the free software
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
-#ifndef KIS_PAINT_DEVICE_H_
-#define KIS_PAINT_DEVICE_H_
+#ifndef KIS_PAINT_DEVICE_IMPL_H_
+#define KIS_PAINT_DEVICE_IMPL_H_
 
 #include <qcolor.h>
 #include <qobject.h>
@@ -35,6 +35,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
 #include <koffice_export.h>
+#include "kis_paint_device.h"
 
 class DCOPObject;
 
@@ -52,26 +53,29 @@ class KisRotateVisitor;
 class KisScaleVisitor;
 class KisFilterStrategy;
 
+
 /**
  * Class modelled on QPaintDevice.
  */
-class KRITACORE_EXPORT KisPaintDevice : public QObject, public KShared {
+class KRITACORE_EXPORT KisPaintDeviceImpl
+    : public QObject
+    , public KisPaintDevice
+    , public KShared
+{
+
         Q_OBJECT
 
 public:
-    KisPaintDevice(KisAbstractColorSpace * colorStrategy,
-    const QString& name);
-    
-    KisPaintDevice(KisImage *img,
-    KisAbstractColorSpace * colorStrategy,
-    const QString& name);
+    KisPaintDeviceImpl(KisAbstractColorSpace * colorStrategy, const QString& name);
 
-    KisPaintDevice(const KisPaintDevice& rhs);
-    virtual ~KisPaintDevice();
+    KisPaintDeviceImpl(KisImage *img,  KisAbstractColorSpace * colorStrategy, const QString& name);
+
+    KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
+    virtual ~KisPaintDeviceImpl();
     virtual DCOPObject *dcopObject();
 
 public:
-    // Implement KisRenderInterface
+
     virtual bool write(KoStore *store);
     virtual bool read(KoStore *store);
 
@@ -95,7 +99,7 @@ public:
      * multiple of 64.
      */
     void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
-    QRect extent() const;
+    virtual QRect extent() const;
 
     /**
      * XXX: This should be a temporay hack, awaiting a proper fix.
@@ -111,8 +115,8 @@ public:
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-     void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h);
-     QRect exactBounds();
+    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h);
+    virtual QRect exactBounds();
         
     void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x - m_x, y - m_y, w, h); };
     void crop(QRect r) { r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r); };
@@ -120,7 +124,7 @@ public:
     /**
      * Complete erase the current paint device. Its size will become 0.
      */
-    void clear() { m_datamanager -> clear(); };
+    virtual void clear() { m_datamanager -> clear(); };
     
     /**
      * Read the bytes representing the rectangle described by x, y, w, h into
@@ -132,7 +136,7 @@ public:
      * Reading from areas not previously initialized will read the default
      * pixel value into data.
      */
-    void readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If there
@@ -142,7 +146,7 @@ public:
      * If the data is written to areas of the paint device not previously initialized,
      * the paint device will grow.
      */
-    void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values
@@ -308,12 +312,12 @@ public:
     /**
      * Return the number of bytes a pixel takes.
      */
-    Q_INT32 pixelSize() const;
+    virtual Q_INT32 pixelSize() const;
 
     /**
      * Return the number of channels a pixel takes
      */
-    Q_INT32 nChannels() const;
+    virtual Q_INT32 nChannels() const;
 
     KisImage *image();
         const KisImage *image() const;
@@ -385,13 +389,13 @@ public:
 
 signals:
 
-        void visibilityChanged(KisPaintDeviceSP device);
-        void positionChanged(KisPaintDeviceSP device);
+        void visibilityChanged(KisPaintDeviceImplSP device);
+        void positionChanged(KisPaintDeviceImplSP device);
         void ioProgress(Q_INT8 percentage);
     void profileChanged(KisProfileSP profile);
 
 private:
-    KisPaintDevice& operator=(const KisPaintDevice&);
+    KisPaintDeviceImpl& operator=(const KisPaintDeviceImpl&);
 
 protected:
     KisDataManagerSP m_datamanager;
@@ -432,42 +436,42 @@ private:
 
 };
 
-inline Q_INT32 KisPaintDevice::pixelSize() const
+inline Q_INT32 KisPaintDeviceImpl::pixelSize() const
 {
     Q_ASSERT(m_pixelSize > 0);
     return m_pixelSize;
 }
 
-inline Q_INT32 KisPaintDevice::nChannels() const
+inline Q_INT32 KisPaintDeviceImpl::nChannels() const
 {
     Q_ASSERT(m_nChannels > 0);
     return m_nChannels;
 ;
 }
 
-inline KisAbstractColorSpace * KisPaintDevice::colorStrategy() const
+inline KisAbstractColorSpace * KisPaintDeviceImpl::colorStrategy() const
 {
     Q_ASSERT(m_colorStrategy != 0);
         return m_colorStrategy;
 }
 
 
-inline Q_INT32 KisPaintDevice::getX()
+inline Q_INT32 KisPaintDeviceImpl::getX()
 {
     return m_x;
 }
 
-inline Q_INT32 KisPaintDevice::getY()
+inline Q_INT32 KisPaintDeviceImpl::getY()
 {
     return m_y;
 }
 
-inline const bool KisPaintDevice::visible() const
+inline const bool KisPaintDeviceImpl::visible() const
 {
         return m_visible;
 }
 
-inline void KisPaintDevice::setVisible(bool v)
+inline void KisPaintDeviceImpl::setVisible(bool v)
 {
         if (m_visible != v) {
                 m_visible = v;
@@ -476,52 +480,52 @@ inline void KisPaintDevice::setVisible(bool v)
 }
 
 
-inline KisImage *KisPaintDevice::image()
+inline KisImage *KisPaintDeviceImpl::image()
 {
         return m_owner;
 }
 
-inline const KisImage *KisPaintDevice::image() const
+inline const KisImage *KisPaintDeviceImpl::image() const
 {
         return m_owner;
 }
 
-inline void KisPaintDevice::setImage(KisImage *image)
+inline void KisPaintDeviceImpl::setImage(KisImage *image)
 {
         m_owner = image;
 }
 
-inline bool KisPaintDevice::hasAlpha() const
+inline bool KisPaintDeviceImpl::hasAlpha() const
 {
         return colorStrategy() -> hasAlpha();
 }
 
-inline KisPixel KisPaintDevice::toPixel(Q_UINT8 * bytes)
+inline KisPixel KisPaintDeviceImpl::toPixel(Q_UINT8 * bytes)
 {
     return m_colorStrategy -> toKisPixel(bytes, m_profile);
 }
 
-inline KisPixelRO KisPaintDevice::toPixelRO(const Q_UINT8 * bytes)
+inline KisPixelRO KisPaintDeviceImpl::toPixelRO(const Q_UINT8 * bytes)
 {
     return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
 }
 
-inline void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_datamanager -> readBytes(data, x - m_x, y - m_y, w, h);
 }
 
-inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDeviceImpl::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }
 
-inline KisProfileSP KisPaintDevice::profile() const
+inline KisProfileSP KisPaintDeviceImpl::profile() const
 {
     return m_profile;
 }
 
 
 
-#endif // KIS_PAINT_DEVICE_H_
+#endif // KIS_PAINT_DEVICE_IMPL_H_
 

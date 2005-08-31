@@ -4,6 +4,7 @@ INCLUDES  = -I$(srcdir)/.. \
 	-I$(srcdir)/../tiles/ \
 	-I$(srcdir)/../resources/ \
 	-I$(srcdir)/../../ui/ \
+	-I$(srcdir)/../../sdk/ \
 	$(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libkisstrategy.la

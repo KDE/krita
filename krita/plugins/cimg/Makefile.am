@@ -3,7 +3,8 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 kde_services_DATA = kritacimg.desktop
 
 # all_includes must remain last!
-INCLUDES = -I$(srcdir)/../../core \
+INCLUDES =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
 	-I$(srcdir)/../../core/resources/ \
 	-I$(srcdir)/../../core/tiles \

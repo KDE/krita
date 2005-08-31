@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
@@ -79,7 +79,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 
     if (!m_painter) return;
     
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceImplSP device = m_painter -> device();
     if (!device) return;
 
     KisBrush *brush = m_painter -> brush();

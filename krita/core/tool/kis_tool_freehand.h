@@ -85,8 +85,8 @@ protected:
     double m_dragDist;
 
     bool m_useTempLayer;
-    KisPaintDeviceSP m_target;
-    KisPaintDeviceSP m_source;
+    KisPaintDeviceImplSP m_target;
+    KisPaintDeviceImplSP m_source;
 
     QString m_transactionText;
     enumBrushMode m_mode;

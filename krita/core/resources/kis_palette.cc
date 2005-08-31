@@ -65,7 +65,7 @@ KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name
 
 }
 
-KisPalette::KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QString & name)
+KisPalette::KisPalette(const KisPaintDeviceImplSP device, Q_INT32 nColors, const QString & name)
     : super(QString("")),
       m_name(name)
 {

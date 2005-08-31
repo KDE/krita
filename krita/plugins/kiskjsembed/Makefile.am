@@ -5,7 +5,8 @@ SUBDIRS = functions objects
 
 EXTRA_DIST = $(kritarc_DATA)
 
-INCLUDES  = -I$(srcdir)/../../ \
+INCLUDES  =  -I$(srcdir)/../../sdk \
+	 -I$(srcdir)/../../ \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/compositeop \

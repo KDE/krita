@@ -23,28 +23,28 @@
 #include <kdebug.h>
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
 
 struct flattenAll {
-    const bool operator()(const KisPaintDeviceSP) const
+    const bool operator()(const KisPaintDeviceImplSP) const
     {
         return true;
     }
 };
 
 struct flattenAllVisible {
-    const bool operator()(const KisPaintDeviceSP dev) const
+    const bool operator()(const KisPaintDeviceImplSP dev) const
     {
         return dev -> visible();
     }
 };
 
 struct flattenAllLinked {
-    const bool operator()(const KisPaintDeviceSP dev) const
+    const bool operator()(const KisPaintDeviceImplSP dev) const
     {
         const KisLayer *layer = dynamic_cast<const KisLayer*>(dev.data());
 
@@ -53,7 +53,7 @@ struct flattenAllLinked {
 };
 
 template <typename cond_t>
-class KisFlatten : public KisPaintDeviceVisitor {
+class KisFlatten : public KisPaintDeviceImplVisitor {
 public:
     KisFlatten(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
     {
@@ -70,13 +70,13 @@ public:
     }
 
 public:
-    virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev)
+    virtual bool visit(KisPainter& gc, KisPaintDeviceImplSP dev)
     {
         visit(gc, dev, OPACITY_OPAQUE);
         return true;
     }
 
-    virtual bool visit(KisPainter& gc, vKisPaintDeviceSP& devs)
+    virtual bool visit(KisPainter& gc, vKisPaintDeviceImplSP& devs)
     {
         for (Q_INT32 i = devs.size() - 1; i >= 0; i--)
             visit(gc, devs[i], OPACITY_OPAQUE);
@@ -111,7 +111,7 @@ public:
     }
 
 private:
-    void visit(KisPainter& gc, KisPaintDeviceSP dev, Q_INT32 opacity)
+    void visit(KisPainter& gc, KisPaintDeviceImplSP dev, Q_INT32 opacity)
     {
 //         kdDebug() << "\tpainting device " << dev->name() << ", " << dev->colorStrategy()->id().name() << "\n";
         Q_INT32 w = m_rc.width();

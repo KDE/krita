@@ -26,7 +26,7 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_paint_device.h>
+#include <kis_paint_device_impl.h>
 
 #include "wetphysicsfilter.h"
 
@@ -37,7 +37,7 @@ WetPhysicsFilter::WetPhysicsFilter()
     m_adsorbCount = 0;
 }
 
-void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void WetPhysicsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     // XXX: It would be nice be able to interleave this, instead of having the same loop over
     //      our pixels three times.
@@ -58,7 +58,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 }
 
 
-void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
+void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r)
 {
     /* XXX: Is this like a convolution operation? BSAR */
     int x, y;
@@ -236,7 +236,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
     delete[] outflow;
 }
 
-void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
+void WetPhysicsFilter::dry(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r)
 {
     for (Q_INT32 y = 0; y < r.height(); y++) {
         KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
@@ -264,7 +264,7 @@ void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRe
     }
 }
 
-void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
+void WetPhysicsFilter::adsorb(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect & r)
 {
     kdDebug(DBG_AREA_CMS) << "adsorbing" << endl;
     for (Q_INT32 y = 0; y < r.height(); y++) {

@@ -22,7 +22,7 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include <koffice_export.h>
 
 class QColor;
@@ -38,12 +38,12 @@ enum enumSelectionMode {
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
  */
-class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
+class KRITACORE_EXPORT KisSelection : public KisPaintDeviceImpl {
 
-    typedef KisPaintDevice super;
+    typedef KisPaintDeviceImpl super;
 
 public:
-    KisSelection(KisPaintDeviceSP layer, const QString& name);
+    KisSelection(KisPaintDeviceImplSP layer, const QString& name);
 
     virtual ~KisSelection();
 
@@ -80,7 +80,7 @@ public:
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     
 private:
-    KisPaintDeviceSP m_parentLayer;
+    KisPaintDeviceImplSP m_parentLayer;
 };
 
 #endif // KIS_SELECTION_H_

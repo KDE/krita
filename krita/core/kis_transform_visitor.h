@@ -24,13 +24,13 @@
 #include "kis_progress_subject.h"
 #include "kis_paint_device_visitor.h"
 
-class KisPaintDevice;
+class KisPaintDeviceImpl;
 class KisProgressDisplayInterface;
 class KisHLineIteratorPixel;
 class KisVLineIteratorPixel;
 class KisFilterStrategy;
 
-class KisTransformVisitor : public KisProgressSubject, KisPaintDeviceVisitor {
+class KisTransformVisitor : public KisProgressSubject, KisPaintDeviceImplVisitor {
     typedef KisProgressSubject super;
 
 public:
@@ -41,14 +41,14 @@ public:
     ~KisTransformVisitor();
 
 public:
-    virtual bool visit(KisPainter& gc, KisPaintDeviceSP dev)
+    virtual bool visit(KisPainter& gc, KisPaintDeviceImplSP dev)
     {
         visit(gc, dev);
         
         return true;
     }
 
-    virtual bool visit(KisPainter& gc, vKisPaintDeviceSP& devs)
+    virtual bool visit(KisPainter& gc, vKisPaintDeviceImplSP& devs)
     {
         for (Q_INT32 i = devs.size() - 1; i >= 0; i--)
             visit(gc, devs[i]);
@@ -81,14 +81,14 @@ public:
     
 	bool isCanceled() { return m_cancelRequested;};
 private:
-    bool visit(KisPainter& gc, KisPaintDevice *dev);
+    bool visit(KisPainter& gc, KisPaintDeviceImpl *dev);
     
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-    template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
+    template <class T> void transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
     
-    void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
-    void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    void rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
+    void rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
+    void rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
 
 private:
     double  m_xscale, m_yscale;

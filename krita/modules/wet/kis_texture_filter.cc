@@ -36,7 +36,7 @@ void TextureFilter::slotActivated() {
     if (!m_view -> currentImg() -> activeDevice())
         return;
 
-    KisPaintDeviceSP device = m_view -> currentImg() -> activeDevice();
+    KisPaintDeviceImplSP device = m_view -> currentImg() -> activeDevice();
     KisAbstractColorSpace * cs = device -> colorStrategy();
 
     if (cs -> id() != KisID("WET","")) {

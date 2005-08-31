@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
@@ -93,7 +93,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
     Q_INT32 maskHeight = mask -> height();
 
     // Create a temporary paint device
-    KisPaintDeviceSP tmpDev = new KisPaintDevice(colorStrategy, "temp");
+    KisPaintDeviceImplSP tmpDev = new KisPaintDeviceImpl(colorStrategy, "temp");
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device

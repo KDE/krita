@@ -16,13 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_canvas_observer.h"
+#ifndef KIS_CANVAS_OBSERVER_H_
+#define KIS_CANVAS_OBSERVER_H_
 
-KisCanvasObserver::KisCanvasObserver()
-{
-}
+class KisCanvasSubject;
 
-KisCanvasObserver::~KisCanvasObserver()
-{
-}
+class KisCanvasObserver {
+public:
+    KisCanvasObserver() {};
+    virtual ~KisCanvasObserver() {};
+
+public:
+    virtual void update(KisCanvasSubject *subject) = 0;
+
+private:
+    KisCanvasObserver(const KisCanvasObserver&);
+    KisCanvasObserver& operator=(const KisCanvasObserver&);
+};
+
+#endif // KIS_CANVAS_OBSERVER_H_
 

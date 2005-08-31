@@ -55,7 +55,7 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), "artistic", "&Raindro
 {
 }
 
-void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisRainDropsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
     Q_UNUSED(dst);
@@ -88,7 +88,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
  *                     and after this, a blur function will finish the effect.
  */
 
-void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, const QRect& rect, int DropSize, int Amount, int Coeff)
+void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, int DropSize, int Amount, int Coeff)
 {
     setProgressTotalSteps(Amount);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -410,7 +410,7 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
         return ((uchar) ColorValue);
 }
 
-KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
@@ -419,7 +419,7 @@ KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* p
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget, KisPaintDeviceSP dev)
+KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

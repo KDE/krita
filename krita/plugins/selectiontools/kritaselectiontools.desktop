@@ -22,6 +22,7 @@ Name[sr]=Алати за избор
 Name[sr@Latn]=Alati za izbor
 Name[sv]=Markeringsverktyg
 Name[tr]=Seçim Araçları
+Name[xx]=xxSelection Toolsxx
 Name[zh_CN]=选择工具
 ServiceTypes=Krita/CoreModule
 Type=Service

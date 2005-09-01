@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Select Similar Colors Tool
 Name[es]=Herramienta de selección de colores similares
 Name[et]=Sarnase värvi valimise tööriist
+Name[xx]=xxSelect Similar Colors Toolxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorrange

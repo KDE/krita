@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
 Name[es]=Modelo de color CMYK (entero de 16 bits)
+Name[xx]=xxCMYK Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel CMYK images
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes CMYK
+Comment[xx]=xxColor model for 16-bit integer per channel CMYK imagesxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin

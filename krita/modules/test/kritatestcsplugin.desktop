@@ -8,6 +8,7 @@ Name[et]=Testvärvimudel
 Name[ru]=Тестовая цветовая модель
 Name[sv]=Testfärgmodell
 Name[tr]=Renk Modeli test
+Name[xx]=xxtest Color Modelxx
 Comment=Color model for 8-bit/channel RGB images
 Comment[bg]=Цветови модел за 8 битови RGB изображения
 Comment[cy]=Model lliw ar gyfer delweddau RGB 8-did/sianel

@@ -8,6 +8,7 @@ Name[ga]=Uirlis Trasfhoirmithe
 Name[ru]=Преобразование
 Name[sv]=Transformeringsverktyg
 Name[tr]=Dönüşüm Aracı
+Name[xx]=xxTransform Toolxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatooltransform

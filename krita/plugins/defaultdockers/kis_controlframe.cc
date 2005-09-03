@@ -110,7 +110,7 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     m_paintopBox = new KisPaintopBox( m_view, this, "paintopbox" );
 
     QVBoxLayout * vl = new QVBoxLayout( this, 1, 2, "controldocker main layout" );
-    QHBoxLayout * hl = new QHBoxLayout( v1, 0, 2, "controldocker button frame layout" );
+    QHBoxLayout * hl = new QHBoxLayout( vl, 2, "controldocker button frame layout" );
     //hl->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding));
     hl->addWidget( m_brushWidget );
     hl->addWidget( m_patternWidget );

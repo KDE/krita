@@ -4,6 +4,7 @@ Name=Sobel filter
 Name[es]=Filtro Sobel
 Name[et]=Sobeli filter
 Name[ga]=Scagaire Sobel
+Name[sv]=Sobelfilter
 Name[xx]=xxSobel filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service

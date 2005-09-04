@@ -15,5 +15,6 @@ X-KDE-NativeMimeType=application/x-krita
 GenericName=Image Object
 GenericName[es]=Objeto de imagen
 GenericName[ga]=Réad Íomhá
+GenericName[sv]=Bildobjekt
 GenericName[xx]=xxImage Objectxx
 Icon=krita

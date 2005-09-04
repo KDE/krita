@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Name=Enhancement Filters
 Name[es]=Filtros de realce
+Name[sv]=Förbättringsfilter
 Name[xx]=xxEnhancement Filtersxx
 Comment=Enhance the quality of an image
 Comment[es]=Realza la calidad de una imagen
+Comment[sv]=Förbättra kvaliteten hos en bild
 Comment[xx]=xxEnhance the quality of an imagexx
 ServiceTypes=Krita/CoreModule
 Type=Service

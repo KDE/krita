@@ -45,6 +45,7 @@
 #include "kis_alpha_mask.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
+#include "kis_boundary.h"
 
 
 namespace {
@@ -1119,6 +1120,49 @@ void KisBrush::setHeight(Q_INT32 h)
 {
     m_height = h;
 }
+
+QImage KisBrush::outline(double pressure) {
+    KisLayerSP layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), pressure);
+    KisBoundary bounds(layer.data());
+    int w = maskWidth(pressure);
+    int h = maskHeight(pressure);
+
+    bounds.generateBoundary(w, h);
+    QPixmap pix(bounds.pixmap(w, h));
+    QImage result;
+    result = pix;
+    return result;
+}
+
+KisBoundary KisBrush::boundary() {
+    KisLayerSP layer;
+    int w = maskWidth(PRESSURE_DEFAULT);
+    int h = maskHeight(PRESSURE_DEFAULT);
+
+    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+        layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), PRESSURE_DEFAULT);
+    } else {
+        KisAlphaMaskSP amask = mask();
+        KisAbstractColorSpace* cs = KisColorSpaceRegistry::instance()->get("RGBA");
+        layer = new KisLayer(cs, "temp");
+        for (int y = 0; y < h; y++) {
+            KisHLineIteratorPixel it = layer -> createHLineIterator(0, y, w, true);
+            int x = 0;
+
+            while(!it.isDone()) {
+                cs -> setAlpha(it.rawData(), amask -> alphaAt(x++, y), 1);
+                ++it;
+            }
+        }
+    }
+
+    KisBoundary bounds(layer.data());
+    
+    bounds.generateBoundary(w, h);
+    return bounds;
+}
+
+
 
 #include "kis_brush.moc"
 

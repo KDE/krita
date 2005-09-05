@@ -23,6 +23,8 @@
 #include <qwidget.h>
 #include <qtimer.h>
 #include <qpushbutton.h>
+#include <qpainter.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -37,6 +39,8 @@
 #include "kis_painter.h"
 #include "kis_tool_brush.h"
 #include "kis_canvas_subject.h"
+#include "kis_boundary.h"
+#include "kis_move_event.h"
 
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
@@ -107,6 +111,45 @@ void KisToolBrush::setup(KActionCollection *collection)
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
     }
+}
+
+void KisToolBrush::move(KisMoveEvent *e) {
+    KisToolFreehand::move(e);
+
+    if (m_mode != PAINT)
+        paintOutline(e -> pos());
+}
+
+void KisToolBrush::paintOutline(const KisPoint& point) {
+    if (!m_subject) {
+        return;
+    }
+
+    if (currentImage() &&
+        ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {
+        return;
+    }
+
+    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    //controller -> canvas() -> update();
+
+    QWidget *canvas = controller -> canvas();
+    canvas -> repaint();
+
+    QPainter gc(canvas);    
+    QPen pen(Qt::SolidLine);
+    KisBrush *brush = m_subject -> currentBrush();
+    KisPoint hotSpot = brush -> hotSpot();
+
+    gc.setRasterOp(Qt::NotROP);
+    gc.setPen(pen);
+    gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
+                   static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
+    gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
+                    (- controller -> vertValue()) / m_subject -> zoomFactor());
+    gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
+
+    brush -> boundary().paint(gc);
 }
 
 

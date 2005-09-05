@@ -36,6 +36,7 @@
 
 class QPoint;
 class QPixmap;
+class KisBoundary;
 enum enumBrushType {
         INVALID,
     MASK,
@@ -88,6 +89,9 @@ public:
     Q_INT32 height() const;
 
     virtual enumBrushType brushType() const;
+
+    QImage outline(double pressure = PRESSURE_DEFAULT);
+    KisBoundary boundary();
 
 protected:
     void setWidth(Q_INT32 w);

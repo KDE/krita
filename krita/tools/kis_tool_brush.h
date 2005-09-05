@@ -28,6 +28,8 @@
 class QTimer;
 class KisPoint;
 class QHBoxLayout;
+class QPainter;
+class QRect;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
     Q_OBJECT
@@ -46,6 +48,9 @@ protected:
     
     virtual void initPaint(KisEvent *e);
     virtual void endPaint();
+    virtual void move(KisMoveEvent *e);
+
+    void paintOutline(const KisPoint& point);
 
 private slots:
 

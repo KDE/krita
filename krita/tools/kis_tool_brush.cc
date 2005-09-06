@@ -136,20 +136,23 @@ void KisToolBrush::paintOutline(const KisPoint& point) {
     QWidget *canvas = controller -> canvas();
     canvas -> repaint();
 
-    QPainter gc(canvas);    
-    QPen pen(Qt::SolidLine);
     KisBrush *brush = m_subject -> currentBrush();
-    KisPoint hotSpot = brush -> hotSpot();
+    // There may not be a brush present, and we shouldn't crash in that case
+    if (brush) {
+        QPainter gc(canvas);    
+        QPen pen(Qt::SolidLine);
+    
+        KisPoint hotSpot = brush -> hotSpot();
 
-    gc.setRasterOp(Qt::NotROP);
-    gc.setPen(pen);
-    gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
-                   static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
-    gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
-                    (- controller -> vertValue()) / m_subject -> zoomFactor());
-    gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
-
-    brush -> boundary().paint(gc);
+        gc.setRasterOp(Qt::NotROP);
+        gc.setPen(pen);
+        gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
+                       static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
+        gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
+                        (- controller -> vertValue()) / m_subject -> zoomFactor());
+        gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
+        brush -> boundary().paint(gc);
+    }
 }
 
 

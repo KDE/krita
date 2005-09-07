@@ -262,7 +262,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", KIcon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
 
-    vbox = addVBoxPage ( i18n( "Pressure" ), i18n( "PressureO" ), BarIcon( "tablet", KIcon::SizeMedium ));
+    vbox = addVBoxPage ( i18n( "Pressure" ), i18n( "Pressure" ), BarIcon( "tablet", KIcon::SizeMedium ));
     m_pressureSettings = new PressureSettingsTab( vbox );
 
 }

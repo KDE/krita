@@ -76,6 +76,11 @@ public:
     void setGradient(KisGradient& gradient) { m_gradient = &gradient; }
     void setGradient(KisGradient* gradient) { m_gradient = gradient; }
 
+    /**
+     * Paint a gradient in the rect between startx, starty, width and height.
+     * XXX: What does the returned bool mean?
+     * XXX: Make cs-independent
+     */
     bool paintGradient(const KisPoint& gradientVectorStart,
                const KisPoint& gradientVectorEnd,
                enumGradientShape shape,

@@ -493,6 +493,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 {
     m_cancelRequested = false;
 
+    if (!m_gradient) return false;
+    
     GradientShapeStrategy *shapeStrategy = 0;
 
     switch (shape) {
@@ -576,7 +578,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
             QColor color;
             QUANTUM opacity;
-
+            
             m_gradient -> colorAt(t, &color, &opacity);
             layer -> colorStrategy() -> fromQColor( color, opacity, iter.rawData());
 

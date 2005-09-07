@@ -63,9 +63,9 @@ KisFilterManager::KisFilterManager(KisView * view, KisDoc * doc)
 
 KisFilterManager::~KisFilterManager()
 {
-    delete m_reapplyAction;
-    delete m_lastFilterConfig;
-    delete m_filterMapper;
+    //delete m_reapplyAction;
+    //delete m_lastFilterConfig;
+    //delete m_filterMapper;
 }
 
 void KisFilterManager::setup(KActionCollection * ac)

@@ -149,6 +149,8 @@ KisAnnotationSP KisProfile::annotation() const
     // XXX productName(), or just "ICC Profile"?
     if (!m_rawData.isEmpty())
         return new KisAnnotation("icc", productName(), m_rawData);
+    else
+        return 0;
 }
 
 KisProfileSP KisProfile::getScreenProfile (int screen)

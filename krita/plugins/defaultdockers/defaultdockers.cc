@@ -109,7 +109,7 @@ void KritaDefaultDockers::createControlFrame(KisView * view)
 void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 {
     m_birdEyeBox = new KisBirdEyeBox(view);
-        m_birdEyeBox -> setCaption(i18n("Overview"));
+    m_birdEyeBox -> setCaption(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
     connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), view, SLOT(setHDRExposure(float)));
 }
@@ -118,16 +118,16 @@ void KritaDefaultDockers::createBirdEyeBox(KisView * view)
 void KritaDefaultDockers::createHSVWidget(KisView * view)
 {
     m_hsvwidget = new KisHSVWidget(view, "hsv");
-        m_hsvwidget -> setCaption(i18n("HSV"));
+    m_hsvwidget -> setCaption(i18n("HSV"));
     m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
-        view->getCanvasSubject()->attach(m_hsvwidget);
+    view->getCanvasSubject()->attach(m_hsvwidget);
 
 }
 
 void KritaDefaultDockers::createRGBWidget(KisView * view)
 {
     m_rgbwidget = new KisRGBWidget(view, "rgb");
-        m_rgbwidget -> setCaption(i18n("RGB"));
+    m_rgbwidget -> setCaption(i18n("RGB"));
     m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
     view->getCanvasSubject()->attach(m_rgbwidget);
 }

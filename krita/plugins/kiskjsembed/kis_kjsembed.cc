@@ -37,10 +37,6 @@
 // Krita
 #include "core/kis_view.h"
 
-// KOffice
-#include "kotooldockmanager.h"
-#include "kotooldockbase.h"
-
 // KisKJSEmbed
 #include "kis_script.h"
 #include "functions/kis_functions_factory.h"

@@ -205,5 +205,11 @@ bool KisImagePipeBrush::hasColor() const
         return false;
     }
 }
+
+KisBoundary KisImagePipeBrush::boundary() {
+    Q_ASSERT(!m_brushes.isEmpty());
+    return m_brushes.at(0) -> boundary();
+}
+        
 #include "kis_imagepipe_brush.moc"
 

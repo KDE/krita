@@ -45,7 +45,6 @@
 #include "kis_alpha_mask.h"
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_boundary.h"
 
 
 namespace {
@@ -80,6 +79,7 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
     m_useColorAsMask = false;
     m_hasColor = false;
     m_spacing = DEFAULT_SPACING;
+    m_boundary = 0;
 }
 
 KisBrush::KisBrush(const QString& filename,
@@ -91,6 +91,7 @@ KisBrush::KisBrush(const QString& filename,
     m_useColorAsMask = false;
     m_hasColor = false;
     m_spacing = DEFAULT_SPACING;
+    m_boundary = 0;
 
     m_data.setRawData(data.data() + dataPos, data.size() - dataPos);
     init();
@@ -102,6 +103,7 @@ KisBrush::KisBrush(const QString& filename,
 KisBrush::~KisBrush()
 {
     m_scaledBrushes.clear();
+    delete m_boundary;
 }
 
 bool KisBrush::load()
@@ -225,8 +227,6 @@ bool KisBrush::init()
         setValid(false);
     else
         setValid(true);
-
-	
 
     return true;
 }
@@ -1134,7 +1134,7 @@ QImage KisBrush::outline(double pressure) {
     return result;
 }
 
-KisBoundary KisBrush::boundary() {
+void KisBrush::generateBoundary() {
     KisLayerSP layer;
     int w = maskWidth(PRESSURE_DEFAULT);
     int h = maskHeight(PRESSURE_DEFAULT);
@@ -1156,13 +1156,15 @@ KisBoundary KisBrush::boundary() {
         }
     }
 
-    KisBoundary bounds(layer.data());
-    
-    bounds.generateBoundary(w, h);
-    return bounds;
+    m_boundary = new KisBoundary(layer.data());
+    m_boundary -> generateBoundary(w, h);
 }
 
-
+KisBoundary KisBrush::boundary() {
+    if (!m_boundary)
+        generateBoundary();
+    return *m_boundary;
+}
 
 #include "kis_brush.moc"
 

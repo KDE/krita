@@ -33,6 +33,7 @@
 #include "kis_point.h"
 #include "kis_alpha_mask.h"
 #include "koffice_export.h"
+#include "kis_boundary.h"
 
 class QPoint;
 class QPixmap;
@@ -91,7 +92,7 @@ public:
     virtual enumBrushType brushType() const;
 
     QImage outline(double pressure = PRESSURE_DEFAULT);
-    KisBoundary boundary();
+    virtual KisBoundary boundary();
 
 protected:
     void setWidth(Q_INT32 w);
@@ -135,6 +136,9 @@ private:
 
     // Find the scaled brush(es) nearest to the given scale.
     void findScaledBrushes(double scale, const ScaledBrush **aboveBrush, const ScaledBrush **belowBrush) const;
+    
+    // Initialize our boundary
+    void generateBoundary();
 
     QByteArray m_data;
     bool m_ownData;
@@ -154,6 +158,8 @@ private:
     Q_UINT32 m_magic_number; /*  GIMP brush magic number  */
 
     enumBrushType m_brushType;
+    
+    KisBoundary* m_boundary;
 
 };
 #endif // KIS_BRUSH_

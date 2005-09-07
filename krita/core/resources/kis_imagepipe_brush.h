@@ -59,6 +59,8 @@ public:
     virtual bool hasColor() const;
 
     virtual enumBrushType brushType() const;
+    
+    virtual KisBoundary boundary();
 
 private:
     bool init();

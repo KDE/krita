@@ -63,23 +63,6 @@
                 <enum>NoMarks</enum>
             </property>
         </widget>
-        <spacer row="0" column="3">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>MinimumExpanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>141</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

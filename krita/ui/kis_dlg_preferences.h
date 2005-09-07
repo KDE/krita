@@ -28,12 +28,12 @@
 #include "kis_global.h"
 
 #include "wdgpressuresettings.h"
+#include "wdgperformancesettings.h"
 
 class QLineEdit;
 class QCheckBox;
 class KURLRequester;
 class WdgColorSettings;
-class WdgPerformanceSettings;
 class KisCmbIDList;
 class KisID;
 
@@ -56,42 +56,6 @@ private:
 
     QCheckBox *m_saveOnExit;
     QComboBox *m_cmbCursorShape;
-};
-
-
-//=======================
-
-/**
- *  "Directories"-tab for preferences dialog
- */
-class DirectoriesTab : public QWidget
-{
-    Q_OBJECT
-
-public:
-
-    DirectoriesTab( QWidget *parent = 0, const char *name = 0 );
-
-private slots:
-
-        void slotRequesterClicked( KURLRequester * );
-
-private:
-    void setDefault();
-
-    KURLRequester *m_pLineEdit, *m_pGimpGradients;
-};
-
-//=======================
-
-class UndoRedoTab : public QWidget
-{
-    Q_OBJECT
-
-public:
-        void setDefault();
-
-    UndoRedoTab( QWidget *parent = 0, const char *name = 0 );
 };
 
 //=======================
@@ -119,7 +83,7 @@ public:
 /**
  *  "Directories"-tab for preferences dialog
  */
-class PerformanceTab : public QWidget
+class PerformanceTab : public WdgPerformanceSettings
 {
 Q_OBJECT
 
@@ -128,7 +92,6 @@ public:
 
 public:
     void setDefault();
-    WdgPerformanceSettings * m_page;
 };
 
 //=======================
@@ -146,7 +109,6 @@ public:
 
 public:
     void setDefault();
-    WdgPressureSettings * m_page;
 };
 
 //=======================
@@ -173,8 +135,6 @@ protected:
 protected:
 
     GeneralTab* m_general;
-    DirectoriesTab* m_directories;
-    UndoRedoTab* m_undoRedo;
     ColorSettingsTab* m_colorSettings;
     PerformanceTab* m_performanceSettings;
     PressureSettingsTab * m_pressureSettings;

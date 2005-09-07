@@ -98,75 +98,6 @@ enumCursorStyle GeneralTab::cursorStyle()
 }
 
 
-DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
-    : QWidget( _parent, _name )
-{
-    QLabel* label;
-
-    // Layout
-    QGridLayout* grid = new QGridLayout( this, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
-
-    // Inputline
-    m_pLineEdit = new KURLRequester( this, "tempDir" );
-    connect( m_pLineEdit, SIGNAL( openFileDialog( KURLRequester * )),
-         SLOT( slotRequesterClicked( KURLRequester * )));
-    grid->addWidget( m_pLineEdit, 1, 0 );
-
-    // Label
-    label = new QLabel( this, i18n( "Directory for temporary files:" ) , this );
-    grid->addWidget( label, 0, 0 );
-
-    // Inputline
-    m_pGimpGradients = new KURLRequester( this, "gimpGradientDir" );
-    connect( m_pLineEdit, SIGNAL( openFileDialog( KURLRequester * )),
-         SLOT( slotRequesterClicked( KURLRequester * )));
-    grid->addWidget( m_pGimpGradients, 3, 0 );
-
-    // Label
-    label = new QLabel( this, i18n( "Directory of GIMP gradients:" ) , this );
-    grid->addWidget( label, 2, 0 );
-
-    grid->setRowStretch( 4, 1 );
-}
-
-void DirectoriesTab::setDefault()
-{
-    //TODO
-}
-
-
-// delayed KURLRequester configuration to avoid reading directories right
-// on dialog construction
-void DirectoriesTab::slotRequesterClicked( KURLRequester *requester )
-{
-    // currently, all KURLRequesters are in directory mode
-    requester->fileDialog()->setMode(KFile::Directory);
-}
-
-
-UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
-    : QWidget( _parent, _name )
-{
-    // Layout
-    QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
-
-    QLabel *label;
-
-    label = new QLabel( i18n( "Undo depth totally:" ), this );
-    grid->addWidget( label, 0, 0 );
-
-    label = new QLabel( i18n( "Undo depth in memory:" ), this );
-    grid->addWidget( label, 1, 0 );
-
-    grid->setRowStretch( 2, 1 );
-}
-
-void UndoRedoTab::setDefault()
-{
-    //TODO
-}
-
-
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     : QWidget(parent, name)
 {
@@ -174,6 +105,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     // are shown in the profile combos
 
     QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l -> addWidget( m_page, 0, 0);
 
@@ -281,26 +213,22 @@ void ColorSettingsTab::refillImportProfiles(const KisID & s)
 }
 
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
-    : QWidget(parent, name)
+    : WdgPerformanceSettings(parent, name)
 {
     // XXX: Make sure only profiles that fit the specified color model
     // are shown in the profile combos
 
-    QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
-    m_page = new WdgPerformanceSettings(this);
-    l -> addWidget(m_page, 0, 0);
-
     KisConfig cfg;
 
     // it's scaled from 0 - 6, but the config is in 0 - 300
-    m_page -> m_swappiness -> setValue(cfg.swappiness() / 50);
-    m_page -> m_maxTiles -> setValue(cfg.maxTilesInMem());
+    m_swappiness -> setValue(cfg.swappiness() / 50);
+    m_maxTiles -> setValue(cfg.maxTilesInMem());
 }
 
 void PerformanceTab::setDefault()
 {
-    m_page -> m_swappiness -> setValue(3);
-    m_page -> m_maxTiles -> setValue(500);
+    m_swappiness -> setValue(3);
+    m_maxTiles -> setValue(500);
 }
 
 
@@ -328,19 +256,13 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", KIcon::SizeMedium ));
     m_general = new GeneralTab( vbox );
 
-//     vbox = addVBoxPage( i18n( "Directories") );
-//     m_directories = new DirectoriesTab( vbox );
-
-//     vbox = addVBoxPage( i18n( "Undo/Redo") );
-//     m_undoRedo = new UndoRedoTab( vbox );
-
-    vbox = addVBoxPage( i18n( "Color Settings"), i18n( "Color Settings"), BarIcon( "colorize", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "Colormanagement"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
 
-    vbox = addVBoxPage( i18n( "Performance Settings"), i18n( "Performance Settings"), BarIcon( "fork", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", KIcon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
 
-    vbox = addVBoxPage ( i18n( "Pressure Settings" ), i18n( "Pressure Settings" ), BarIcon( "tablet", KIcon::SizeMedium ));
+    vbox = addVBoxPage ( i18n( "Pressure" ), i18n( "PressureO" ), BarIcon( "tablet", KIcon::SizeMedium ));
     m_pressureSettings = new PressureSettingsTab( vbox );
 
 }
@@ -383,8 +305,8 @@ bool PreferencesDialog::editPreferences()
         cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
 
         // it's scaled from 0 - 6, but the config is in 0 - 300
-        cfg.setSwappiness(dialog -> m_performanceSettings -> m_page -> m_swappiness -> value() * 50);
-        cfg.setMaxTilesInMem(dialog -> m_performanceSettings -> m_page -> m_maxTiles -> value());
+        cfg.setSwappiness(dialog -> m_performanceSettings -> m_swappiness -> value() * 50);
+        cfg.setMaxTilesInMem(dialog -> m_performanceSettings -> m_maxTiles -> value());
         // let the tile manager know
         KisTileManager::instance() -> configChanged();
 

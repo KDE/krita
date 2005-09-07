@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>373</width>
-            <height>232</height>
+            <height>220</height>
         </rect>
     </property>
     <property name="caption">
@@ -127,7 +127,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>21</height>
+                    <height>139</height>
                 </size>
             </property>
         </spacer>

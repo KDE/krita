@@ -236,13 +236,15 @@ PressureSettingsTab::PressureSettingsTab( QWidget *parent, const char *name)
     : WdgPressureSettings( parent, name )
 {
     KisConfig cfg;
-    slPressure->setValue( cfg.getPressureCorrection() );
+    // XXX: Bad me -- hard-coded constant.
+    slPressure->setValue( 100 - cfg.getPressureCorrection() );
 }
 
 void PressureSettingsTab::setDefault()
 {
     KisConfig cfg;
-    slPressure->setValue(cfg.getDefaultPressureCorrection());
+    // XXX: Bad me -- hard-coded constant.
+    slPressure->setValue(100 - cfg.getDefaultPressureCorrection());
 }
 
 
@@ -311,7 +313,7 @@ bool PreferencesDialog::editPreferences()
         KisTileManager::instance() -> configChanged();
 
         // Pressure sensitivity setting == between 0 and 99
-        cfg.setPressureCorrection( dialog->m_pressureSettings->slPressure->value() );
+        cfg.setPressureCorrection( 100 - dialog->m_pressureSettings->slPressure->value() );
     }
         delete dialog;
         return baccept;

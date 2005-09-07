@@ -8,52 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>341</width>
-            <height>143</height>
+            <width>510</width>
+            <height>87</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Firmer</string>
-                    </property>
-                </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>slPressure</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Softer</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <spacer>
+        <spacer row="1" column="1">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -66,11 +32,55 @@
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>181</height>
+                    <height>89</height>
                 </size>
             </property>
         </spacer>
-    </vbox>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Softer</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="2">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Firmer</string>
+            </property>
+        </widget>
+        <widget class="QSlider" row="0" column="1">
+            <property name="name">
+                <cstring>slPressure</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>NoMarks</enum>
+            </property>
+        </widget>
+        <spacer row="0" column="3">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>141</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

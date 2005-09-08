@@ -93,7 +93,7 @@ void single_step(KisAbstractColorSpace * cs, KisPaintDeviceImplSP src,  KisPaint
         QColor c;
         QUANTUM opacity;
 
-        src -> colorStrategy() -> toQColor(pix, &c, &opacity);
+        src -> colorSpace() -> toQColor(pix, &c, &opacity);
         Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
         Q_CHECK_PTR(pix);
 
@@ -130,7 +130,7 @@ void KisWSEngineFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
     // synthesizing w&s pixels.
     bool native = false;
     // XXX: We need a better way to ID color strategies
-    if ( src -> colorStrategy() -> id() == KisID("W&S","") ) native = true;
+    if ( src -> colorSpace() -> id() == KisID("W&S","") ) native = true;
 
     // XXX: We need a better way to ID color strategies
     KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");

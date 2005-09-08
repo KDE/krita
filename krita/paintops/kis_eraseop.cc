@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
 
     KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
 
-    KisLayerSP dab = new KisLayer(device -> colorStrategy(), "eraser_dab");
+    KisLayerSP dab = new KisLayer(device -> colorSpace(), "eraser_dab");
     Q_CHECK_PTR(dab);
 
     Q_INT32 maskWidth = mask -> width();
@@ -108,7 +108,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
         dab -> setOpacity(OPACITY_OPAQUE);
         KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
         KisProfileSP profile = dab -> profile();
-        KisAbstractColorSpace* cs = dab -> colorStrategy();
+        KisAbstractColorSpace* cs = dab -> colorSpace();
         while (!it.isDone()) {
             // the color doesn't matter, since we only composite the alpha
             cs -> fromQColor(Qt::black, QUANTUM_MAX - mask->alphaAt(it.x(), it.y()),

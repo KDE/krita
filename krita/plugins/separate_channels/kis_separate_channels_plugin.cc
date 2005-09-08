@@ -72,7 +72,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisLayerSP l = image->activeLayer();
     if (!l) return;
 
-    DlgSeparate * dlgSeparate = new DlgSeparate(l->colorStrategy()->id().name(), image->colorStrategy()->id().name(), m_view, "Separate");
+    DlgSeparate * dlgSeparate = new DlgSeparate(l->colorSpace()->id().name(), image->colorSpace()->id().name(), m_view, "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));

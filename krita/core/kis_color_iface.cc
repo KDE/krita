@@ -36,15 +36,15 @@ KisColorIface::KisColorIface( KisColor * parent )
 QByteArray KisColorIface::data()
 {
     QByteArray b;
-    b.resize(m_parent->colorStrategy().pixelSize());
+    b.resize(m_parent->colorSpace().pixelSize());
     memcpy(b.data(), m_parent->data(), b.size());
     return b;
 }
 
-DCOPRef KisColorIface::colorStrategy()
+DCOPRef KisColorIface::colorSpace()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-                    m_parent->colorStrategy()->dcopObject()->objId(),
+                    m_parent->colorSpace()->dcopObject()->objId(),
                     "KisAbstractColorSpaceIface" );
 }
 

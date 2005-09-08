@@ -324,7 +324,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("mime", "application/x-kra");
     image.setAttribute("width", img -> width());
     image.setAttribute("height", img -> height());
-    image.setAttribute("colorspacename", img -> colorStrategy() -> id().id());
+    image.setAttribute("colorspacename", img -> colorSpace() -> id().id());
     image.setAttribute("description", img -> description());
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img -> profile() && img -> profile()-> valid())
@@ -462,7 +462,7 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
     layerElement.setAttribute("visible", layer -> visible());
     layerElement.setAttribute("linked", layer -> linked());
     layerElement.setAttribute("locked", layer -> locked());
-    layerElement.setAttribute("colorspacename", layer -> colorStrategy() -> id().id());
+    layerElement.setAttribute("colorspacename", layer -> colorSpace() -> id().id());
     // XXX: Save profile as blob inside the layer, instead of the product name.
     if (layer -> profile() && layer -> profile() -> valid()) {
         layerElement.setAttribute("profile", layer -> profile() -> productName());
@@ -548,7 +548,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
     
     QString colorspacename = element.attribute("colorspacename");
-    KisAbstractColorSpace * colorSpace = img -> colorStrategy();
+    KisAbstractColorSpace * colorSpace = img -> colorSpace();
     
     kdDebug() << "ColorSpace name in layer: " << colorspacename << "\n";
     if (!colorspacename.isNull()) {
@@ -720,7 +720,7 @@ bool KisDoc::completeLoading(KoStore *store)
             data = store -> read(store -> size());
             store -> close();
             (*it2) -> setProfile(new KisProfile(data,
-                (*it2) -> colorStrategy() -> colorSpaceType()));
+                (*it2) -> colorSpace() -> colorSpaceType()));
             kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 
@@ -749,7 +749,7 @@ bool KisDoc::completeLoading(KoStore *store)
         data = store -> read(store -> size());
         store -> close();
         (m_currentImage) -> setProfile(new KisProfile(data,
-            (m_currentImage) -> colorStrategy() -> colorSpaceType()));
+            (m_currentImage) -> colorSpace() -> colorSpaceType()));
         kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
     }
 
@@ -806,7 +806,7 @@ bool KisDoc::slotNewImage()
         KisImageSP img;
         KisLayerSP layer;
 
-        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorStrategyID());
+        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorSpaceID());
 
         if (!cs) return false;
 

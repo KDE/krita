@@ -81,7 +81,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     KisAbstractColorSpace * dstCs = 0;
 
     Q_UINT32 numberOfChannels = src->nChannels();
-    KisAbstractColorSpace * srcCs  = src->colorStrategy();
+    KisAbstractColorSpace * srcCs  = src->colorSpace();
     vKisChannelInfoSP channels = srcCs->channels();
     Q_INT32 srcAlphaPos = srcCs->alphaPos();
     Q_INT32 srcAlphaSize = srcCs->alphaSize();
@@ -140,7 +140,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             }
         }
 
-        dstCs = dev->colorStrategy();
+        dstCs = dev->colorSpace();
 
         layers.push_back(dev);
 

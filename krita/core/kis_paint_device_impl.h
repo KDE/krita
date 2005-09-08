@@ -66,9 +66,9 @@ class KRITACORE_EXPORT KisPaintDeviceImpl
         Q_OBJECT
 
 public:
-    KisPaintDeviceImpl(KisAbstractColorSpace * colorStrategy, const QString& name);
+    KisPaintDeviceImpl(KisAbstractColorSpace * colorSpace, const QString& name);
 
-    KisPaintDeviceImpl(KisImage *img,  KisAbstractColorSpace * colorStrategy, const QString& name);
+    KisPaintDeviceImpl(KisImage *img,  KisAbstractColorSpace * colorSpace, const QString& name);
 
     KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
     virtual ~KisPaintDeviceImpl();
@@ -179,7 +179,7 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual void convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Fill this paint device with the data from img;
@@ -259,7 +259,7 @@ public:
 
     bool hasAlpha() const;
 
-    KisAbstractColorSpace * colorStrategy() const;
+    KisAbstractColorSpace * colorSpace() const;
 
     /**
      * Return the icm profile associated with this layer, or
@@ -281,7 +281,7 @@ public:
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setData(KisDataManagerSP data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile);
+    void setData(KisDataManagerSP data, KisAbstractColorSpace * colorSpace, KisProfileSP profile);
 
     KisCompositeOp compositeOp() { return m_compositeOp; }
     void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
@@ -416,7 +416,7 @@ private:
     QString m_name;
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;
-    KisAbstractColorSpace * m_colorStrategy;
+    KisAbstractColorSpace * m_colorSpace;
     // Cached for quick access
     Q_INT32 m_pixelSize;
     Q_INT32 m_nChannels;
@@ -449,10 +449,10 @@ inline Q_INT32 KisPaintDeviceImpl::nChannels() const
 ;
 }
 
-inline KisAbstractColorSpace * KisPaintDeviceImpl::colorStrategy() const
+inline KisAbstractColorSpace * KisPaintDeviceImpl::colorSpace() const
 {
-    Q_ASSERT(m_colorStrategy != 0);
-        return m_colorStrategy;
+    Q_ASSERT(m_colorSpace != 0);
+        return m_colorSpace;
 }
 
 
@@ -497,17 +497,17 @@ inline void KisPaintDeviceImpl::setImage(KisImage *image)
 
 inline bool KisPaintDeviceImpl::hasAlpha() const
 {
-        return colorStrategy() -> hasAlpha();
+        return colorSpace() -> hasAlpha();
 }
 
 inline KisPixel KisPaintDeviceImpl::toPixel(Q_UINT8 * bytes)
 {
-    return m_colorStrategy -> toKisPixel(bytes, m_profile);
+    return m_colorSpace -> toKisPixel(bytes, m_profile);
 }
 
 inline KisPixelRO KisPaintDeviceImpl::toPixelRO(const Q_UINT8 * bytes)
 {
-    return m_colorStrategy -> toKisPixelRO(bytes, m_profile);
+    return m_colorSpace -> toKisPixelRO(bytes, m_profile);
 }
 
 inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

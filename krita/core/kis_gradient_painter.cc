@@ -534,7 +534,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
     Q_ASSERT(repeatStrategy != 0);
 
-    KisLayerSP layer = new KisLayer( m_device -> colorStrategy(), "gradient");
+    KisLayerSP layer = new KisLayer( m_device -> colorSpace(), "gradient");
     Q_CHECK_PTR(layer);
 
     KisPainter painter(layer);
@@ -580,7 +580,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             QUANTUM opacity;
             
             m_gradient -> colorAt(t, &color, &opacity);
-            layer -> colorStrategy() -> fromQColor( color, opacity, iter.rawData());
+            layer -> colorSpace() -> fromQColor( color, opacity, iter.rawData());
 
             pixelsProcessed++;
 
@@ -605,7 +605,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
         emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
-        KisAbstractColorSpace * cs = layer->colorStrategy();
+        KisAbstractColorSpace * cs = layer->colorSpace();
         for (int y = starty; y <= endy; y++) {
             KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
             for (int x = startx; x <= endx; x++) {

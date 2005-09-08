@@ -45,7 +45,7 @@
 
 KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
                  Q_INT32 maxHeight, Q_INT32 defHeight, 
-                 QString colorStrategyName, QString imageName,
+                 QString colorSpaceName, QString imageName,
                  QWidget *parent, const char *name)
     : super(parent, name, true, "", Ok | Cancel)
 {
@@ -66,13 +66,13 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
     m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
 
     m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
-    m_page -> cmbColorSpaces -> setCurrentText(colorStrategyName);
+    m_page -> cmbColorSpaces -> setCurrentText(colorSpaceName);
 
     connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
         this, SLOT(fillCmbProfiles(const KisID &)));
 
     // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
-    fillCmbProfiles(KisID(colorStrategyName, ""));
+    fillCmbProfiles(KisID(colorSpaceName, ""));
 
 }
 
@@ -91,7 +91,7 @@ Q_INT32 KisDlgCreateImg::imgHeight() const
     return m_page -> intHeight -> value();
 }
 
-KisID KisDlgCreateImg::colorStrategyID() const
+KisID KisDlgCreateImg::colorSpaceID() const
 {
     return m_page -> cmbColorSpaces -> currentItem();
 }

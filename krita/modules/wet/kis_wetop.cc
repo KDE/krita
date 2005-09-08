@@ -61,7 +61,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
     int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
     kdDebug(DBG_AREA_CMS) << pressure << endl;
 
-    KisAbstractColorSpace * cs = device -> colorStrategy();
+    KisAbstractColorSpace * cs = device -> colorSpace();
 
     if (cs -> id() != KisID("WET","")) {
         kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";

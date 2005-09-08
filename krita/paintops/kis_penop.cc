@@ -83,7 +83,7 @@ void KisPenOp::paintAt(const KisPoint &pos,
     KisPaintDeviceImplSP dab = 0;
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorStrategy(), pressure);
+        dab = brush -> image(device -> colorSpace(), pressure);
     }
     else {
         // Compute mask without sub-pixel positioning

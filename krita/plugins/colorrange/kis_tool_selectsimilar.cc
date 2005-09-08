@@ -54,15 +54,15 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
     QUANTUM opacity = OPACITY_OPAQUE;
     dev -> exactBounds(x, y, w, h);
 
-    KisAbstractColorSpace * cs = dev -> colorStrategy();
+    KisAbstractColorSpace * cs = dev -> colorSpace();
     KisProfileSP profile = dev -> profile();
 
     for (int y2 = y; y2 < h - y; ++y2) {
         KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
         KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
-            if (dev -> colorStrategy() -> hasAlpha())
-                opacity = dev -> colorStrategy() -> getAlpha(hiter.rawData());
+            if (dev -> colorSpace() -> hasAlpha())
+                opacity = dev -> colorSpace() -> getAlpha(hiter.rawData());
 
             // XXX: Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
             if (opacity > OPACITY_TRANSPARENT) {
@@ -152,8 +152,8 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
         KisColor c = dev->colorAt(pos.x(), pos.y());
-        if (dev -> colorStrategy() -> hasAlpha())
-            opacity = dev -> colorStrategy() -> getAlpha(c.data());
+        if (dev -> colorSpace() -> hasAlpha())
+            opacity = dev -> colorSpace() -> getAlpha(c.data());
 
         if (opacity > OPACITY_TRANSPARENT)
             selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);

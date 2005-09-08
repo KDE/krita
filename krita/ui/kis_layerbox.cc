@@ -266,7 +266,7 @@ void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
     m_lst -> cmbComposite -> blockSignals(false);
 }
 
-void KisLayerBox::setColorStrategy(const KisAbstractColorSpace * colorSpace)
+void KisLayerBox::setColorSpace(const KisAbstractColorSpace * colorSpace)
 {
     m_lst -> cmbComposite -> blockSignals(true);
     m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());

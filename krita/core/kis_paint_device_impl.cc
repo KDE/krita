@@ -297,25 +297,25 @@ namespace {
 
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisAbstractColorSpace * colorStrategy, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisAbstractColorSpace * colorSpace, const QString& name) :
     KShared()
 {
-    if (colorStrategy == 0) {
+    if (colorSpace == 0) {
         kdDebug() << "Cannot create paint device without colorstrategy!\n";
         return;
     }
 
     m_dcop = 0;
-    Q_ASSERT(colorStrategy != 0);
+    Q_ASSERT(colorSpace != 0);
     Q_ASSERT(name.isEmpty() == false);
     m_x = 0;
     m_y = 0;
 
-    m_pixelSize = colorStrategy -> pixelSize();
-    m_nChannels = colorStrategy -> nChannels();
+    m_pixelSize = colorSpace -> pixelSize();
+    m_nChannels = colorSpace -> nChannels();
 
     Q_UINT8* defPixel = new Q_UINT8 [ m_pixelSize ];
-    colorStrategy -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+    colorSpace -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
         delete [] defPixel;
@@ -329,14 +329,14 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisAbstractColorSpace * colorStrategy, co
 
     m_compositeOp = COMPOSITE_OVER;
 
-    m_colorStrategy = colorStrategy;
+    m_colorSpace = colorSpace;
 
     m_hasSelection = false;
     m_selection = 0;
     m_profile = 0;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisAbstractColorSpace * colorStrategy, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisAbstractColorSpace * colorSpace, const QString& name) :
     KShared()
 {
     m_dcop = 0;
@@ -355,22 +355,22 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisAbstractColorSpace * co
 
     m_owner = img;
 
-    if (img != 0 && colorStrategy == 0) {
-        m_colorStrategy = img -> colorStrategy();
+    if (img != 0 && colorSpace == 0) {
+        m_colorSpace = img -> colorSpace();
     }
     else {
-        m_colorStrategy = colorStrategy;
+        m_colorSpace = colorSpace;
     }
 
-    if (img != 0 && m_colorStrategy == img -> colorStrategy()) {
+    if (img != 0 && m_colorSpace == img -> colorSpace()) {
             m_profile = m_owner -> profile();
     }
 
-    m_pixelSize = m_colorStrategy -> pixelSize();
-    m_nChannels = m_colorStrategy -> nChannels();
+    m_pixelSize = m_colorSpace -> pixelSize();
+    m_nChannels = m_colorSpace -> nChannels();
 
     Q_UINT8* defPixel = new Q_UINT8[ m_pixelSize ];
-    colorStrategy -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+    colorSpace -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
         delete [] defPixel;
@@ -393,7 +393,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(
                 m_y = rhs.m_y;
                 m_name = rhs.m_name;
                 m_compositeOp = rhs.m_compositeOp;
-        m_colorStrategy = rhs.m_colorStrategy;
+        m_colorSpace = rhs.m_colorSpace;
         m_hasSelection = false;
         m_selection = 0;
         m_profile = rhs.m_profile;
@@ -666,11 +666,11 @@ bool KisPaintDeviceImpl::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
     if (profile() == 0) setProfile(m_owner -> profile());
 
-    if ( (colorStrategy() -> id() == dstColorStrategy -> id())
+    if ( (colorSpace() -> id() == dstColorSpace -> id())
          && profile()
          && dstProfile
          && (profile() -> profile() == dstProfile -> profile()) )
@@ -678,7 +678,7 @@ void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorStrategy, Kis
         return;
     }
 
-    KisPaintDeviceImpl dst(dstColorStrategy, name());
+    KisPaintDeviceImpl dst(dstColorSpace, name());
     dst.setProfile(dstProfile);
     dst.setX(getX());
     dst.setY(getY());
@@ -693,7 +693,7 @@ void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorStrategy, Kis
         KisHLineIterator srcIt = createHLineIterator( x, row, w, false );
         KisHLineIterator dstIt = dst.createHLineIterator( x, row, w, true );
         while ( !srcIt.isDone() ) {
-            m_colorStrategy->convertPixelsTo( srcIt.rawData(), m_profile, dstIt.rawData(), dstColorStrategy, dstProfile, 1, renderingIntent );
+            m_colorSpace->convertPixelsTo( srcIt.rawData(), m_profile, dstIt.rawData(), dstColorSpace, dstProfile, 1, renderingIntent );
             ++srcIt;
             ++dstIt;
         }
@@ -713,7 +713,7 @@ void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorStrategy, Kis
             const Q_UINT8 *srcData = pixel(column, row);
             Q_UINT8 *dstData = dst.writablePixel(column, row);
 
-            m_colorStrategy -> convertPixelsTo(srcData, m_profile, dstData, dstColorStrategy, dstProfile, columns, renderingIntent);
+            m_colorSpace -> convertPixelsTo(srcData, m_profile, dstData, dstColorSpace, dstProfile, columns, renderingIntent);
 
             column += columns;
             columnsRemaining -= columns;
@@ -723,20 +723,20 @@ void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorStrategy, Kis
     }
 
     if (undoAdapter() && undoAdapter() -> undo()) {
-        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorStrategy, m_profile,
-                                       dst.m_datamanager, dstColorStrategy, dstProfile));
+        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorSpace, m_profile,
+                                       dst.m_datamanager, dstColorSpace, dstProfile));
     }
 
-    setData(dst.m_datamanager, dstColorStrategy, dstProfile);
+    setData(dst.m_datamanager, dstColorSpace, dstProfile);
 
 }
 
-void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
+void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
 {
     m_datamanager = data;
-    m_colorStrategy = colorStrategy;
-    m_pixelSize = m_colorStrategy -> pixelSize();
-    m_nChannels = m_colorStrategy -> nChannels();
+    m_colorSpace = colorSpace;
+    m_pixelSize = m_colorSpace -> pixelSize();
+    m_nChannels = m_colorSpace -> nChannels();
     setProfile(profile);
 }
 
@@ -751,12 +751,12 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
 void KisPaintDeviceImpl::convertFromImage(const QImage& img)
 {
     // XXX: Apply import profile
-    if (colorStrategy() == KisColorSpaceRegistry::instance()->get("RGBA")) {
+    if (colorSpace() == KisColorSpaceRegistry::instance()->get("RGBA")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
-        KisColorSpaceRegistry::instance()->get("RGBA")->convertPixelsTo(img.bits(), 0, dstData, colorStrategy(), 0, img.width() * img.height());
+        KisColorSpaceRegistry::instance()->get("RGBA")->convertPixelsTo(img.bits(), 0, dstData, colorSpace(), 0, img.width() * img.height());
         writeBytes(dstData, 0, 0, img.width(), img.height());
     }
 }
@@ -765,7 +765,7 @@ void KisPaintDeviceImpl::convertFromImage(const QImage& img)
 void KisPaintDeviceImpl::setProfile(KisProfileSP profile)
 {
 
-    if (profile && profile -> colorSpaceSignature() == colorStrategy() -> colorSpaceSignature() && profile -> valid()) {
+    if (profile && profile -> colorSpaceSignature() == colorSpace() -> colorSpaceSignature() && profile -> valid()) {
 
         m_profile = profile;
     }
@@ -808,7 +808,7 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, 
     Q_CHECK_PTR(data);
 
     m_datamanager -> readBytes(data, x1, y1, w, h);
-    QImage image = colorStrategy() -> convertToQImage(data, w, h, m_profile, dstProfile, INTENT_PERCEPTUAL, exposure);
+    QImage image = colorSpace() -> convertToQImage(data, w, h, m_profile, dstProfile, INTENT_PERCEPTUAL, exposure);
     delete[] data;
 
     return image;
@@ -910,7 +910,7 @@ void KisPaintDeviceImpl::clearSelection()
         while (!devIt.isDone()) {
             // XXX: Optimize by using stretches
 
-            m_colorStrategy->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
+            m_colorSpace->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
 
             ++devIt;
             ++selectionIt;
@@ -931,7 +931,7 @@ void KisPaintDeviceImpl::applySelectionMask(KisSelectionSP mask)
         while (!pixelIt.isDone()) {
             // XXX: Optimize by using stretches
 
-            m_colorStrategy->applyAlphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
+            m_colorSpace->applyAlphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
 
             ++pixelIt;
             ++maskIt;
@@ -947,7 +947,7 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity
 
     if (!pix) return false;
 
-    colorStrategy() -> toQColor(pix, c, opacity, m_profile);
+    colorSpace() -> toQColor(pix, c, opacity, m_profile);
 
     return true;
 }
@@ -961,21 +961,21 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 
     if (!pix) return false;
 
-    kc->setColor(pix, m_colorStrategy, m_profile);
+    kc->setColor(pix, m_colorSpace, m_profile);
 
     return true;
 }
 
 KisColor KisPaintDeviceImpl::colorAt(Q_INT32 x, Q_INT32 y)
 {
-    return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorStrategy, m_profile);
+    return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorSpace, m_profile);
 }
 
 bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-    colorStrategy() -> fromQColor(c, opacity, iter.rawData(), m_profile);
+    colorSpace() -> fromQColor(c, opacity, iter.rawData(), m_profile);
 
     return true;
 }
@@ -983,8 +983,8 @@ bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8
 bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
 {
     Q_UINT8 * pix;
-    if (kc.colorStrategy() != m_colorStrategy) {
-        KisColor kc2 (kc, m_colorStrategy, m_profile);
+    if (kc.colorSpace() != m_colorSpace) {
+        KisColor kc2 (kc, m_colorSpace, m_profile);
         pix = kc2.data();
     }
     else {
@@ -992,7 +992,7 @@ bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
     }
 
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-    memcpy(iter.rawData(), pix, m_colorStrategy->pixelSize());
+    memcpy(iter.rawData(), pix, m_colorSpace->pixelSize());
 
     return true;
 }

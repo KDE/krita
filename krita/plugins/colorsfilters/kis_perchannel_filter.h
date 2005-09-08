@@ -113,11 +113,11 @@ KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::creat
 {
     std::vector<ParamType> param;
 
-    m_nbchannels = dev->colorStrategy()->nColorChannels();
+    m_nbchannels = dev->colorSpace()->nColorChannels();
 
     for(Q_INT32 i = 0; i < m_nbchannels; i++)
     {
-        KisChannelInfoSP cI = dev->colorStrategy() -> channels()[i];
+        KisChannelInfoSP cI = dev->colorSpace() -> channels()[i];
         param.push_back( ParamType( m_min, m_max, m_initvalue, cI->name() ) );
     }
 
@@ -131,7 +131,7 @@ template <typename Type, class ParamType, class WidgetClass>
 KisFilterConfiguration* KisPerChannelFilter<Type, ParamType, WidgetClass>::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     WidgetClass* widget = (WidgetClass*)nwidget;
-    KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , dev->colorStrategy()->channels() );
+    KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( m_nbchannels , dev->colorSpace()->channels() );
     Q_CHECK_PTR(co);
 
     if( widget == 0 )
@@ -153,12 +153,12 @@ template <typename Type, class ParamType, class WidgetClass>
         std::list<KisFilterConfiguration*> KisPerChannelFilter<Type, ParamType, WidgetClass>::listOfExamplesConfiguration(KisPaintDeviceImplSP dev)
 {
     std::list<KisFilterConfiguration*> list;
-    for(int i = 0; i < dev->colorStrategy()->nColorChannels(); i++)
+    for(int i = 0; i < dev->colorSpace()->nColorChannels(); i++)
     {
-        KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( dev->colorStrategy()->nColorChannels() , dev->colorStrategy()->channels() );
+        KisPerChannelFilterConfiguration<Type>* co = new KisPerChannelFilterConfiguration<Type>( dev->colorSpace()->nColorChannels() , dev->colorSpace()->channels() );
         co->valueFor( i ) = m_max;
         list.insert(list.begin(), co);
-        KisPerChannelFilterConfiguration<Type>* co2 = new KisPerChannelFilterConfiguration<Type>( dev->colorStrategy()->nColorChannels() , dev->colorStrategy()->channels() );
+        KisPerChannelFilterConfiguration<Type>* co2 = new KisPerChannelFilterConfiguration<Type>( dev->colorSpace()->nColorChannels() , dev->colorSpace()->channels() );
         co->valueFor( i ) = m_min;
         list.insert(list.begin(), co2);
     }

@@ -84,7 +84,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
     }
     else {
         KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
@@ -106,7 +106,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab.data() -> colorStrategy(), "duplicate srcdev");
+    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab.data() -> colorSpace(), "duplicate srcdev");
     Q_CHECK_PTR(srcdev);
     int srcY = 0;
 
@@ -121,19 +121,19 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
             KisPixel srcP= srcLit.pixel();
             KisPixel dabP = dabLit.pixel();
             KisPixel devP = devLit.pixel();
-            for( Q_INT32 i = 0; i < device -> colorStrategy() -> nColorChannels(); i++) {
+            for( Q_INT32 i = 0; i < device -> colorSpace() -> nColorChannels(); i++) {
                 QUANTUM devQ = (QUANTUM) devP[ i ];
                 QUANTUM dabQ = (QUANTUM) dabP[ i ];
                 srcP[ i ] = (QUANTUM) (((QUANTUM_MAX - dabQ) * (devQ) ) / QUANTUM_MAX);
             }
-            for( Q_INT32 i = device -> colorStrategy() -> nColorChannels(); i < device -> colorStrategy() -> nChannels(); i++) {
+            for( Q_INT32 i = device -> colorSpace() -> nColorChannels(); i < device -> colorSpace() -> nChannels(); i++) {
                 QUANTUM devQ = (QUANTUM) devP[ i ];
                 QUANTUM dabQ = (QUANTUM) dabP[ i ];
                 srcP[ i ] = (QUANTUM) ((dabQ * devQ) / QUANTUM_MAX);
             }
             
             // XXX: Fix this when alpha is set in KisPixel
-            //device -> colorStrategy() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
+            //device -> colorSpace() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
             /*
             for (int i = 0; i < depth; ++i) {
                 dstPR[i] = ( (QUANTUM_MAX - dabPR[i]) * (srcPR[i) ) / QUANTUM_MAX;

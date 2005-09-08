@@ -39,7 +39,7 @@
  *
     // The cast is necessary because we need to be able to call the sepcialized process method which may have any
     // amount and type of parameters. No need for genericity here, because we _know_ what we want :-).
-    KisApplyAdjustmentOp * adjustop = dynamic_cast<KisApplyAdjustmentOp*>(dev->colorStrategy()->getOp("applyAdjustment");
+    KisApplyAdjustmentOp * adjustop = dynamic_cast<KisApplyAdjustmentOp*>(dev->colorSpace()->getOp("applyAdjustment");
     if (!adjustop) {
         
     }
@@ -48,7 +48,7 @@
     }
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
-    KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(configBC->transfer);
+    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
         
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -88,7 +88,7 @@ public:
 
     bool isValid() const { return m_valid; }
     virtual bool isNative() const { return false; }
-    KisAbstractColorSpace * colorStrategy() { return m_cs; }
+    KisAbstractColorSpace * colorSpace() { return m_cs; }
 //     
 private:
 

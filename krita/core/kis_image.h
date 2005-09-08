@@ -53,7 +53,7 @@ class KRITACORE_EXPORT KisImage : public QObject, public KShared {
 
 public:
     KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,
-         KisAbstractColorSpace * colorStrategy, const QString& name);
+         KisAbstractColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
@@ -89,7 +89,7 @@ public:
         void rotate(double angle, KisProgressDisplayInterface *m_progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
-    void convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
     KisProfileSP profile() const;
@@ -100,8 +100,8 @@ public:
 
     void enableUndo(KoCommandHistory *history);
 
-    KisAbstractColorSpace * colorStrategy() const;
-    void setColorStrategy(KisAbstractColorSpace * colorStrategy);
+    KisAbstractColorSpace * colorSpace() const;
+    void setColorSpace(KisAbstractColorSpace * colorSpace);
 
     KURL uri() const;
     void uri(const KURL& uri);
@@ -234,7 +234,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorStrategy, const QString& name);
+    void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name);
 
 private:
     KisDoc *m_doc;
@@ -253,7 +253,7 @@ private:
 
     KoUnit::Unit m_unit;
 
-    KisAbstractColorSpace * m_colorStrategy;
+    KisAbstractColorSpace * m_colorSpace;
 
     bool m_dirty;
     QRect m_dirtyRect;

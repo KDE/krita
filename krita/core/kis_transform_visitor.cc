@@ -207,7 +207,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
     Q_UINT8 *data;
     Q_UINT8 pixelSize = src->pixelSize();
     KisSelectionSP dstSelection;
-    KisAbstractColorSpace * cs = src->colorStrategy();
+    KisAbstractColorSpace * cs = src->colorSpace();
     Q_INT32 scale;
     Q_INT32 scaleDenom;
     
@@ -370,8 +370,8 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
     else
         r = dev->exactBounds();
 
-    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorStrategy(),"temporary");;
-    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorStrategy(),"temporary");;
+    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorSpace(),"temporary");;
+    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorSpace(),"temporary");;
     KisPaintDeviceImplSP srcdev = dev;
 
     double xscale = m_xscale;

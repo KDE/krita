@@ -36,7 +36,7 @@ void KisBoundary::generateBoundary(int w, int h) {
     if (!m_device)
         return;
 
-    KisAbstractColorSpace* cs = m_device -> colorStrategy();
+    KisAbstractColorSpace* cs = m_device -> colorSpace();
 
     // Horizontal
     for (int currentY = - 1; currentY < h; currentY++) {

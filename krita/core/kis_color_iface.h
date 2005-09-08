@@ -48,7 +48,7 @@ k_dcop:
      *
      * @returns the colormodel
      */
-    DCOPRef colorStrategy();
+    DCOPRef colorSpace();
     
     /**
      * @returns the icc profile of tthis color

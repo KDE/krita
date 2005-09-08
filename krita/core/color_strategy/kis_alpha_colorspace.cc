@@ -144,19 +144,19 @@ QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
 #endif
 
 bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
-                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
                      Q_UINT32 numPixels,
                      Q_INT32 /*renderingIntent*/)
 {
     // No lcms trickery here, we are a QColor + opacity channel
-    Q_INT32 size = dstColorStrategy -> pixelSize();
+    Q_INT32 size = dstColorSpace -> pixelSize();
 
     Q_UINT32 j = 0;
     Q_UINT32 i = 0;
 
     while ( i < numPixels ) {
 
-        dstColorStrategy -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
+        dstColorSpace -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
 
         i += 1;
         j += size;

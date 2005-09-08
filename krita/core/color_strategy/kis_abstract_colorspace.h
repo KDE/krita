@@ -260,7 +260,7 @@ public:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-                                 Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                                 Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -406,7 +406,7 @@ protected:
                 Q_INT32 cols,
                 const KisCompositeOp& op) = 0;
 
-    virtual cmsHTRANSFORM createTransform(KisAbstractColorSpace * dstColorStrategy,
+    virtual cmsHTRANSFORM createTransform(KisAbstractColorSpace * dstColorSpace,
                           KisProfileSP srcProfile,
                           KisProfileSP dstProfile,
                           Q_INT32 renderingIntent);

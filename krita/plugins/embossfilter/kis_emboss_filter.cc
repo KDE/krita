@@ -104,7 +104,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
 // XXX: COLORSPACE_INDEPENDENCE
                 
                 QColor color1;
-                src -> colorStrategy() -> toQColor(it.rawData(), &color1);
+                src -> colorSpace() -> toQColor(it.rawData(), &color1);
 
                 QColor color2;
                 QUANTUM opacity2;
@@ -116,7 +116,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
 
                 Gray = CLAMP((R + G + B) / 3, 0, QUANTUM_MAX);
 
-                src -> colorStrategy() -> fromQColor(QColor(Gray, Gray, Gray), it.rawData());
+                src -> colorSpace() -> fromQColor(QColor(Gray, Gray, Gray), it.rawData());
             }
         }
 

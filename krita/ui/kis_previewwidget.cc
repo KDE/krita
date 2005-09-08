@@ -82,14 +82,14 @@ void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
     Q_INT32 w = static_cast<Q_INT32>(ceil(size().width() / m_preview->getZoom()));
     Q_INT32 h = static_cast<Q_INT32>(ceil(size().height() / m_preview->getZoom()));
     
-    m_sourceImage = new KisImage(0, w, h, lay->colorStrategy(), "preview");
+    m_sourceImage = new KisImage(0, w, h, lay->colorSpace(), "preview");
     Q_CHECK_PTR(m_sourceImage);
     m_sourceImage->setProfile(lay -> profile());
     m_sourceLayer = new KisLayer( *lay );
     m_sourceLayer->setImage(m_sourceImage);
     m_sourceImage->add(m_sourceLayer, -1);
     
-    m_previewImage = new KisImage(0, w, h, lay->colorStrategy(), "preview");
+    m_previewImage = new KisImage(0, w, h, lay->colorSpace(), "preview");
     Q_CHECK_PTR(m_previewImage);
     m_previewImage -> setProfile(lay -> profile());
     m_previewLayer = new KisLayer(m_previewImage, m_previewImage -> nextLayerName(), OPACITY_OPAQUE);

@@ -49,10 +49,10 @@ public:
     KisCompositeOp compositeOp() const;
     Q_INT32 opacity() const;
     QPoint position() const;
-    KisID colorStrategyID() const;
+    KisID colorSpaceID() const;
 
 private slots:
-    void slotSetColorStrategy(const KisID &colorStrategyId);
+    void slotSetColorSpace(const KisID &colorSpaceId);
 
 protected slots:
     void slotNameChanged( const QString & );

@@ -79,10 +79,10 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
     grid -> addWidget(lbl, 3, 0);
     grid -> addWidget(m_cmbImageType, 3, 1);
 
-    slotSetColorStrategy(colorSpaceID);
+    slotSetColorSpace(colorSpaceID);
 
         connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
-    connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorStrategy(const KisID &)));
+    connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorSpace(const KisID &)));
         slotNameChanged( m_name->text() );
 }
 
@@ -107,7 +107,7 @@ KisCompositeOp NewLayerDialog::compositeOp() const
     return m_cmbComposite -> currentItem();
 }
 
-KisID NewLayerDialog::colorStrategyID() const
+KisID NewLayerDialog::colorSpaceID() const
 {
     return m_cmbImageType -> currentItem();
 }
@@ -117,9 +117,9 @@ QString NewLayerDialog::layerName() const
     return m_name -> text();
 }
 
-void NewLayerDialog::slotSetColorStrategy(const KisID &colorStrategyId)
+void NewLayerDialog::slotSetColorSpace(const KisID &colorSpaceId)
 {
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorStrategyId);
+    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorSpaceId);
     if (cs) {
         m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
     }

@@ -43,7 +43,7 @@ KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QW
 KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
 {
     KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
-    Q_INT32 imgdepth = dev->colorStrategy()->nChannels();
+    Q_INT32 imgdepth = dev->colorSpace()->nChannels();
     if ( widget == 0 )
     {
         // Create the identity matrices:

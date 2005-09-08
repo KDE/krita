@@ -67,7 +67,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
     KisBrush * brush = m_painter -> brush();
     if (!brush) return;
 
-    KisAbstractColorSpace * colorStrategy = m_source -> colorStrategy();
+    KisAbstractColorSpace * colorSpace = m_source -> colorSpace();
 
     KisPoint hotSpot = brush -> hotSpot(pressure);
     KisPoint pt = pos - hotSpot;
@@ -93,7 +93,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
     Q_INT32 maskHeight = mask -> height();
 
     // Create a temporary paint device
-    KisPaintDeviceImplSP tmpDev = new KisPaintDeviceImpl(colorStrategy, "temp");
+    KisPaintDeviceImplSP tmpDev = new KisPaintDeviceImpl(colorSpace, "temp");
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device
@@ -116,7 +116,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
         {
             // XXX: QUANTUM should be Q_UINT8
             QUANTUM alpha = mask -> alphaAt( x++, y );
-            KisPixel p = colorStrategy -> toKisPixel( hiter.rawData(), 0);
+            KisPixel p = colorSpace -> toKisPixel( hiter.rawData(), 0);
             p.alpha() = alpha;
 
             ++hiter;

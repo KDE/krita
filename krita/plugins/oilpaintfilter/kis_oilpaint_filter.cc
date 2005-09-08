@@ -101,7 +101,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, int x, int y, int w, 
             if (it.isSelected()) {
 
                 uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-                src -> colorStrategy() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
+                src -> colorSpace() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
             }
 
             ++it;
@@ -157,7 +157,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceImplSP src, const QRect
 // XXX: COLORSPACE_INDEPENDENCE
 
             QColor c;
-            src -> colorStrategy() -> toQColor(it.rawData(), &c);
+            src -> colorSpace() -> toQColor(it.rawData(), &c);
 
             // Swapping red and blue here is done because that gives the same
             // output as digikam, even though it might be interpreted as a bug

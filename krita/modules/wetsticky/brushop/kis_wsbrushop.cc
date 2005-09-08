@@ -88,7 +88,7 @@ void KisWSBrushOp::paintAt(const KisPoint &pos,
     KisLayerSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
     }
     else {
         KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);

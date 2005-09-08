@@ -113,7 +113,7 @@ void KisPainter::begin(KisPaintDeviceImplSP device)
                 delete m_transaction;
 
         m_device = device;
-    m_colorStrategy = device -> colorStrategy();
+    m_colorSpace = device -> colorSpace();
     m_pixelSize = device -> pixelSize();
     m_profile = device -> profile();
 }
@@ -192,7 +192,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    KisAbstractColorSpace * srcCs = srcdev -> colorStrategy();
+    KisAbstractColorSpace * srcCs = srcdev -> colorSpace();
     KisProfileSP srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
@@ -225,7 +225,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
             Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
             
 
-            m_colorStrategy -> bitBlt(dstData,
+            m_colorSpace -> bitBlt(dstData,
                           dstRowStride,
                           srcCs,
                           srcData,
@@ -287,7 +287,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    KisAbstractColorSpace * srcCs = srcdev -> colorStrategy();
+    KisAbstractColorSpace * srcCs = srcdev -> colorSpace();
     KisProfileSP srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
@@ -326,7 +326,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
             Q_UINT8 *selData = seldev -> writablePixel(dstX, dstY);
             Q_INT32 selRowStride = seldev -> rowStride(dstX, dstY);
 
-            m_colorStrategy -> bitBlt(dstData,
+            m_colorSpace -> bitBlt(dstData,
                           dstRowStride,
                           srcCs,
                           srcData,
@@ -789,7 +789,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceImplSP polygon = new KisPaintDeviceImpl(m_device -> colorStrategy(), "polygon");
+    KisPaintDeviceImplSP polygon = new KisPaintDeviceImpl(m_device -> colorSpace(), "polygon");
     Q_CHECK_PTR(polygon);
     polygon -> setX(m_device -> getX());
     polygon -> setY(m_device -> getY());

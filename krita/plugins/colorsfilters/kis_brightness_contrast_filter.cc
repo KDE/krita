@@ -74,7 +74,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
 {
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
-    KisColorAdjustment *adj = src->colorStrategy()->createBrightnessContrastAdjustment(configBC->transfer);
+    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
         
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -88,7 +88,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
         npix = srcIt.nConseqPixels();
         
         // change the brightness and contrast
-        src->colorStrategy()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
+        src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
                     
         srcIt+=npix;
         dstIt+=npix;

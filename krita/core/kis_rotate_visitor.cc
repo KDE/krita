@@ -81,7 +81,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
     KisPaintDeviceImplSP sheared;
 
     if (m_dev -> hasSelection()) {
-        sheared = new KisPaintDeviceImpl(m_dev -> colorStrategy(), "shear");
+        sheared = new KisPaintDeviceImpl(m_dev -> colorSpace(), "shear");
         KisPainter p1(sheared);
         p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
         p1.end();
@@ -111,7 +111,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 
 KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -139,7 +139,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
 
 KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -169,7 +169,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
 
 KisPaintDeviceImplSP KisRotateVisitor::rotate180(KisPaintDeviceImplSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -273,7 +273,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
     QRect dstR = dst -> exactBounds();
     KisPoint dstTopLeft(dstCentre.x() - (dstR.width() / 2.0), dstCentre.y() - (dstR.height() / 2.0));
 
-    KisPaintDeviceImplSP rotatedSrc = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP rotatedSrc = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     rotatedSrc -> setX(src -> getX());
     rotatedSrc -> setY(src -> getY());
 
@@ -289,7 +289,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
 
 KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double shearX)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -327,7 +327,7 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
             pixelPtrs[0] = leftSrcIt.rawData();
             pixelPtrs[1] = srcIt.rawData();
 
-            src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            src -> colorSpace() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
             ++srcIt;
             ++leftSrcIt;
@@ -341,7 +341,7 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
 
 KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double shearY)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorStrategy(), "temporary");
+    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -379,7 +379,7 @@ KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double s
             pixelPtrs[0] = leftSrcIt.rawData();
             pixelPtrs[1] = srcIt.rawData();
 
-            src -> colorStrategy() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
+            src -> colorSpace() -> mixColors(pixelPtrs, pixelWeights, 2, dstIt.rawData());
 
             ++srcIt;
             ++leftSrcIt;

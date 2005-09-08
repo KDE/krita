@@ -27,7 +27,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
         Q_UINT8* src = new Q_UINT8[pixelSize()];
     Q_UINT32 d = pixelSize();
 
-    Q_ASSERT( colorStrategy() != 0 );
+    Q_ASSERT( colorSpace() != 0 );
 
     for (y = 0; y < 64; y++)
     {
@@ -40,7 +40,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
         {
             QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
             QColor c(v,v,v);
-            colorStrategy() -> fromQColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
+            colorSpace() -> fromQColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
 
             // We cold-bloodedly copy our check pattern bang over the default tile data.
             // Now the default tile is checkered. This begs the questions -- should we add

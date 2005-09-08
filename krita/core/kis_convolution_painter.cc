@@ -116,7 +116,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     int lastProgressPercent = 0;
     emit notifyProgress(this, 0);
 
-    KisAbstractColorSpace * cs = m_device->colorStrategy();
+    KisAbstractColorSpace * cs = m_device->colorSpace();
     
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {

@@ -74,10 +74,10 @@ class QColor;
 class KisPixelRO {
 public:
 
-        KisPixelRO(const QUANTUM * channels = 0, const QUANTUM* alpha = 0, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0)
+        KisPixelRO(const QUANTUM * channels = 0, const QUANTUM* alpha = 0, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0)
                 : m_channels(channels),
                   m_alpha(alpha),
-                  m_colorStrategy(colorStrategy),
+                  m_colorSpace(colorSpace),
                   m_profile(profile) {};
 
     virtual ~KisPixelRO() {}
@@ -89,7 +89,7 @@ public:
 
     QUANTUM alpha() const { return m_alpha[0]; }
 
-    KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; }
+    KisAbstractColorSpace * colorSpace() const { return m_colorSpace; }
 
     void setProfile(KisProfileSP profile) { m_profile = profile; }
 
@@ -98,7 +98,7 @@ public:
 private:
     const QUANTUM* m_channels;
     const QUANTUM* m_alpha;
-    KisAbstractColorSpace * m_colorStrategy;
+    KisAbstractColorSpace * m_colorSpace;
     KisProfileSP m_profile;
 };
 
@@ -116,20 +116,20 @@ public:
     /**
      * Create a new pixel with the specified number of channels and alpha channels.
      */
-    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0) 
+    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0) 
 
         : m_channels(new QUANTUM(nbChannels)), 
           m_alpha(new QUANTUM(nbAlphaChannels)), 
-          m_colorStrategy(colorStrategy), 
+          m_colorSpace(colorSpace), 
           m_profile(profile) { };
 
         /**
          * Create a read/write pixel for existing channel data.
          */
-        KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0)
+        KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0)
                   : m_channels(channels),
                     m_alpha(alpha),
-                    m_colorStrategy(colorStrategy),
+                    m_colorSpace(colorSpace),
                     m_profile(profile) {};
 
 
@@ -141,7 +141,7 @@ public:
 
     KisQuantum alpha() const { return KisQuantum(m_alpha); };
 
-    KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; };
+    KisAbstractColorSpace * colorSpace() const { return m_colorSpace; };
 
     void setProfile(KisProfileSP profile) { m_profile = profile; }
 
@@ -153,7 +153,7 @@ public:
 private:
     QUANTUM* m_channels;
     QUANTUM* m_alpha;
-    KisAbstractColorSpace * m_colorStrategy;
+    KisAbstractColorSpace * m_colorSpace;
     KisProfileSP m_profile;
 };
 

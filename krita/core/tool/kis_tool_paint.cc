@@ -211,7 +211,7 @@ void KisToolPaint::updateCompositeOpComboBox()
             KisPaintDeviceImplSP device = img -> activeDevice();
 
             if (device) {
-                KisCompositeOpList compositeOps = device -> colorStrategy() -> userVisiblecompositeOps();
+                KisCompositeOpList compositeOps = device -> colorSpace() -> userVisiblecompositeOps();
                 m_cmbComposite -> setCompositeOpList(compositeOps);
 
                 if (compositeOps.find(m_compositeOp) == compositeOps.end()) {

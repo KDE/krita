@@ -68,10 +68,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
 
     m_page -> cmbColorSpaces -> hide();
-    m_page -> lblColorSpaces -> setText(image->colorStrategy()->id().name());
+    m_page -> lblColorSpaces -> setText(image->colorSpace()->id().name());
 
 
-    fillCmbProfiles(image -> colorStrategy() -> id());
+    fillCmbProfiles(image -> colorSpace() -> id());
     
     if (image -> profile()) {
         m_page -> cmbProfile -> setCurrentText(image -> profile() -> productName());
@@ -124,7 +124,7 @@ void KisDlgImageProperties::okClicked()
                  m_page -> doubleResolution -> value());
     m_image -> setDescription(m_page -> txtDescription -> text());
 
-    vKisProfileSP profileList = m_image -> colorStrategy() -> profiles();
+    vKisProfileSP profileList = m_image -> colorSpace() -> profiles();
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
 
     if (profileList.count() == 0 || 

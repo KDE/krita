@@ -134,7 +134,7 @@ protected:
 
 
     virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-                     Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                     Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
                      Q_UINT32 numPixels,
                      Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 

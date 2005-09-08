@@ -86,12 +86,12 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
     // Make sure we're in the right colorspace  
     
     KisColor kc2(kc); // get rid of const
-    kc2.convertTo(m_device->colorStrategy(), m_device->profile());
+    kc2.convertTo(m_device->colorSpace(), m_device->profile());
     Q_UINT8 * data = kc2.data();
 
     Q_INT32 y;
     Q_UINT32 depth = m_device->pixelSize();
-    m_device->colorStrategy()->setAlpha(data, opacity, 1);
+    m_device->colorSpace()->setAlpha(data, opacity, 1);
 
 
     for (y = y1; y < y1 + h; y++)
@@ -111,7 +111,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
     if (!m_device) return;
 
 
-    KisLayerSP patternLayer = pattern -> image(m_device->colorStrategy());
+    KisLayerSP patternLayer = pattern -> image(m_device->colorSpace());
 
     int sx, sy, sw, sh;
 
@@ -151,7 +151,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorStrategy(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace(), "Fill Temporary Layer");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -164,7 +164,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorStrategy(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace(), "Fill Temporary Layer");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
@@ -257,8 +257,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     m_size = m_width * m_height;
 
     KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
-    KisAbstractColorSpace * colorStrategy = selection -> colorStrategy();
-    KisAbstractColorSpace * devColorStrategy = sourceDevice -> colorStrategy();
+    KisAbstractColorSpace * colorSpace = selection -> colorSpace();
+    KisAbstractColorSpace * devColorSpace = sourceDevice -> colorSpace();
     
     QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
@@ -296,7 +296,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
         pixelIt += x;
-        QUANTUM diff = devColorStrategy -> difference(source, pixelIt.rawData());
+        QUANTUM diff = devColorSpace -> difference(source, pixelIt.rawData());
 
         if (diff >= m_threshold) {
             delete segment;
@@ -306,7 +306,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         // Here as well: start the iterator at (0,y)
         KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
         selIt += x;
-        colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
+        colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
@@ -328,12 +328,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         // go to the left
         while(!stop && x >= 0 && (map[m_width * y + x] != Checked) ) { // FIXME optimizeable?
             map[m_width * y + x] = Checked;
-            diff = devColorStrategy -> difference(source, pixelIt.rawData());
+            diff = devColorSpace -> difference(source, pixelIt.rawData());
             if (diff >= m_threshold) {
                 stop = true;
                 continue;
             }
-            colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
+            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));
@@ -360,7 +360,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
         stop = false;
         while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {
-            diff = devColorStrategy -> difference(source, pixelIt.rawData());
+            diff = devColorSpace -> difference(source, pixelIt.rawData());
             map[m_width * y + x] = Checked;
 
             if (diff >= m_threshold) {
@@ -368,7 +368,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
                 continue;
             }
 
-            colorStrategy -> fromQColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
+            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));

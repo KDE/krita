@@ -66,7 +66,7 @@ public slots:
     void slotSetCurrentItem(int n);
     void setCompositeOp(const KisCompositeOp& compositeOp);
     void setOpacity(int opacity);
-    void setColorStrategy(const KisAbstractColorSpace * colorSpace);
+    void setColorSpace(const KisAbstractColorSpace * colorSpace);
 
 signals:
     void itemToggleVisible();

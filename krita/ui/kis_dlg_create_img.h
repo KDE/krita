@@ -38,7 +38,7 @@ class KisDlgCreateImg : public KDialogBase {
 public:
     KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
             Q_INT32 maxHeight, Q_INT32 defHeight, 
-            QString colorStrategyName, 
+            QString colorSpaceName, 
             QString imageName,
             QWidget *parent = 0, const char *name = 0);
     virtual ~KisDlgCreateImg();
@@ -46,7 +46,7 @@ public:
 public:
     QColor backgroundColor() const;
     QUANTUM backgroundOpacity() const;
-    KisID colorStrategyID() const;
+    KisID colorSpaceID() const;
     Q_INT32 imgWidth() const;
     Q_INT32 imgHeight() const;
     QString imgName() const;

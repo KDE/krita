@@ -98,12 +98,12 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
 bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent)
 {
     return convertPixelsTo(src.channels(), src.profile(),
-			   dst.channels(), dst.colorStrategy(), dst.profile(),
+			   dst.channels(), dst.colorSpace(), dst.profile(),
 			   renderingIntent);
 }
 
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-					    Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+					    Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
@@ -111,18 +111,18 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();
-    Q_INT32 dstPixelSize = dstColorStrategy -> pixelSize();
+    Q_INT32 dstPixelSize = dstColorSpace -> pixelSize();
 
     if (!srcProfile) {
         srcProfile = getDefaultProfile();
     }
 
     if (!dstProfile) {
-        dstProfile = dstColorStrategy->getDefaultProfile();
+        dstProfile = dstColorSpace->getDefaultProfile();
     }
 
 //    kdDebug() << "src space: " << id().name() << ", src profile " << srcProfile->productName()
-//              << ", dst space: " << dstColorStrategy->id().name() << ", dst profile " << dstProfile->productName()
+//              << ", dst space: " << dstColorSpace->id().name() << ", dst profile " << dstProfile->productName()
 //              << ", number of pixels: " << numPixels << "\n";
 
     if (m_lastUsedTransform != 0) {
@@ -133,7 +133,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
     if (!tf && srcProfile && dstProfile) {
 
         if (!m_transforms.contains(KisProfilePair(srcProfile, dstProfile))) {
-            tf = createTransform(dstColorStrategy,
+            tf = createTransform(dstColorSpace,
                          srcProfile,
                          dstProfile,
                          renderingIntent);
@@ -160,12 +160,12 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
 
         cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
 
-        if (dstColorStrategy -> hasAlpha())
+        if (dstColorSpace -> hasAlpha())
         {
             // Lcms does nothing to the destination alpha channel so we must convert that manually.
             while (numPixels > 0) {
                 Q_UINT8 alpha = getAlpha(src);
-                dstColorStrategy -> setAlpha(dst, alpha, 1);
+                dstColorSpace -> setAlpha(dst, alpha, 1);
 
                 src += srcPixelSize;
                 dst += dstPixelSize;
@@ -183,7 +183,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
         QUANTUM opacity;
 
         toQColor(src, &color, &opacity);
-        dstColorStrategy -> fromQColor(color, opacity, dst);
+        dstColorSpace -> fromQColor(color, opacity, dst);
 
         src += srcPixelSize;
         dst += dstPixelSize;
@@ -467,7 +467,7 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 }
 
 
-cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisAbstractColorSpace * dstColorStrategy,
+cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisAbstractColorSpace * dstColorSpace,
                              KisProfileSP srcProfile,
                              KisProfileSP dstProfile,
                              Q_INT32 renderingIntent)
@@ -483,7 +483,7 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisAbstractColorSpace * dst
         cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
                               colorSpaceType(),
                               dstProfile -> profile(),
-                              dstColorStrategy -> colorSpaceType(),
+                              dstColorSpace -> colorSpaceType(),
                               renderingIntent,
                               flags);
 

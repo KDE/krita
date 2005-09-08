@@ -330,7 +330,7 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
 {
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-        Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+        Q_INT32 depth = src -> colorSpace() -> nColorChannels();
 
         while( ! dstIt.isDone() )
         {

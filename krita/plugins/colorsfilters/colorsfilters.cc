@@ -179,7 +179,7 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
     // Number of channels in this device except alpha
-     Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
 
 
     // initialize
@@ -201,10 +201,10 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
             QUANTUM opacity;
 
             QColor color;
-            src -> colorStrategy() -> toQColor(srcIt.rawData(), &color, &opacity);
+            src -> colorSpace() -> toQColor(srcIt.rawData(), &color, &opacity);
 
             // skip non-opaque pixels
-            if (src -> colorStrategy() -> hasAlpha() && opacity != OPACITY_OPAQUE) {
+            if (src -> colorSpace() -> hasAlpha() && opacity != OPACITY_OPAQUE) {
                 ++srcIt;
                 continue;
             }
@@ -287,7 +287,7 @@ void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     
-    KisAbstractColorSpace * scs = src -> colorStrategy();
+    KisAbstractColorSpace * scs = src -> colorSpace();
     KisProfileSP profile = src -> profile();
 
     setProgressTotalSteps(rect.width() * rect.height());

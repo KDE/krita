@@ -50,17 +50,17 @@ public:
 
     // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
     // is assumed to have the current monitor profile.
-    KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, KisProfileSP profile = 0);
+    KisColor(const QColor & color, KisAbstractColorSpace * colorSpace, KisProfileSP profile = 0);
     
     // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
     // is assumed to have the current monitor profile.    
-    KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorStrategy, KisProfileSP profile = 0);
+    KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorSpace, KisProfileSP profile = 0);
     
     // Create a KisColor using a native color strategy. The data is copied.
-    KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile = 0);
+    KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorSpace, KisProfileSP profile = 0);
 
     // Create a KisColor by converting src into another colorspace
-    KisColor(const KisColor &src, KisAbstractColorSpace * colorStrategy, KisProfileSP profile = 0);
+    KisColor(const KisColor &src, KisAbstractColorSpace * colorSpace, KisProfileSP profile = 0);
 
     // Copy constructor -- deep copies the colors.
     KisColor(const KisColor & rhs);
@@ -71,7 +71,7 @@ public:
     // For easy memcpy'ing etc.
     Q_UINT8 * data() const { return m_data; }
     
-    KisAbstractColorSpace * colorStrategy() const { return m_colorStrategy; }
+    KisAbstractColorSpace * colorSpace() const { return m_colorSpace; }
     
     KisProfileSP profile() const { return m_profile; } 
 
@@ -80,9 +80,9 @@ public:
     void convertTo(KisAbstractColorSpace * cs, KisProfileSP profile = 0);
 
     // Replace the existing color data, colorspace and color model with the specified data. 
-    void setColor(Q_UINT8 * data, KisAbstractColorSpace * colorStrategy = 0, KisProfileSP profile = 0);
+    void setColor(Q_UINT8 * data, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0);
 
-    // To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
+    // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile
     void toQColor(QColor *c) const;
     void toQColor(QColor *c, QUANTUM *opacity) const;
 
@@ -98,7 +98,7 @@ private:
 
     Q_UINT8 * m_data;
     
-    KisAbstractColorSpace * m_colorStrategy;
+    KisAbstractColorSpace * m_colorSpace;
     KisProfileSP m_profile;
 };
 

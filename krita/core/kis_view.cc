@@ -1070,12 +1070,12 @@ void KisView::saveLayerAsImage()
     KisDoc d;
     d.prepareForImport();
 
-    KisImageSP dst = new KisImage(&d, r.width(), r.height(), l->colorStrategy(), l->name());
+    KisImageSP dst = new KisImage(&d, r.width(), r.height(), l->colorSpace(), l->name());
     d.setCurrentImage( dst );
-    KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorStrategy());
+    KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorSpace());
     if (!layer) return;
 
-    kdDebug() << "Exporting layer to colorspace " << layer->colorStrategy()->id().name() << ", image: " << dst->colorStrategy()->id().name() << "\n";
+    kdDebug() << "Exporting layer to colorspace " << layer->colorSpace()->id().name() << ", image: " << dst->colorSpace()->id().name() << "\n";
     KisPainter p(layer);
     p.bitBlt(0, 0, COMPOSITE_COPY, l.data(), r.x(), r.y(), r.width(), r.height());
     p.end();
@@ -1895,7 +1895,7 @@ void KisView::layerProperties()
                                      layer->getY()),
                                      layer->opacity(),
                                      layer->compositeOp(),
-                                     layer->colorStrategy());
+                                     layer->colorSpace());
 
             if (dlg.exec() == QDialog::Accepted) {
                 QPoint pt = dlg.getPosition();
@@ -1933,10 +1933,10 @@ void KisView::layerAdd()
 
     if (img) {
         KisConfig cfg;
-        NewLayerDialog dlg(img->colorStrategy()->id(), img->nextLayerName(), this);
+        NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceRegistry::instance() -> get(dlg.colorStrategyID()));
+            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceRegistry::instance() -> get(dlg.colorSpaceID()));
             if (layer) {
                 emit currentLayerChanged(img -> index(layer));
                 resizeEvent(0);
@@ -2161,7 +2161,7 @@ void KisView::layerSelected(int n)
                 opacity++;
 
         m_layerBox -> setOpacity(opacity);
-        m_layerBox -> setColorStrategy(l -> colorStrategy());
+        m_layerBox -> setColorSpace(l -> colorSpace());
         m_layerBox -> setCompositeOp(l -> compositeOp());
     m_layerBox -> slotSetCurrentItem(n);
 

@@ -336,14 +336,14 @@ void KisSelectionManager::copy()
           << r.width() << ", "
           << r.height() << "\n";
 
-    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(img -> activeDevice() -> colorStrategy(),
+    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(img -> activeDevice() -> colorSpace(),
                            "Copy from " + img -> activeDevice() -> name() );
     Q_CHECK_PTR(clip);
 
     clip -> setCompositeOp(COMPOSITE_OVER);
     clip -> setProfile(layer -> profile());
 
-    KisAbstractColorSpace * cs = clip->colorStrategy();
+    KisAbstractColorSpace * cs = clip->colorSpace();
 
     // TODO if the source is linked... copy from all linked layers?!?
 
@@ -407,7 +407,7 @@ KisLayerSP KisSelectionManager::paste()
                 KisProfileSP profile = dlg -> profile();
                 if (profile != img -> profile()) {
                     layer -> setProfile(profile);
-                    layer -> convertTo(img -> colorStrategy(), img -> profile(), dlg -> renderIntent());
+                    layer -> convertTo(img -> colorSpace(), img -> profile(), dlg -> renderIntent());
                 }
             }
         }
@@ -439,8 +439,8 @@ void KisSelectionManager::pasteNew()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
     KisDoc * doc = (KisDoc*) entry.createDoc();
 
-    KisImageSP img = new KisImage(doc, r.width(), r.height(), clip->colorStrategy(), "Pasted");
-    KisLayerSP layer = new KisLayer(img, clip->name(), OPACITY_OPAQUE, clip->colorStrategy());
+    KisImageSP img = new KisImage(doc, r.width(), r.height(), clip->colorSpace(), "Pasted");
+    KisLayerSP layer = new KisLayer(img, clip->name(), OPACITY_OPAQUE, clip->colorSpace());
     KisPainter p(layer);
     p.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p.end();

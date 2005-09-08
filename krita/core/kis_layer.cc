@@ -182,8 +182,8 @@ namespace {
 
 }
 
-KisLayer::KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name)
-    : super(colorStrategy, name),
+KisLayer::KisLayer(KisAbstractColorSpace * colorSpace, const QString& name)
+    : super(colorSpace, name),
       m_opacity(OPACITY_OPAQUE),
       m_linked(false),
       m_locked(false)
@@ -195,7 +195,7 @@ KisLayer::KisLayer(KisAbstractColorSpace * colorStrategy, const QString& name)
 }
 
 KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
-    : super(img, img -> colorStrategy(), name),
+    : super(img, img -> colorSpace(), name),
       m_opacity(opacity),
       m_linked(false),
       m_locked(false)
@@ -206,8 +206,8 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 #endif
 }
 
-KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorStrategy)
-    : super(img, colorStrategy, name),
+KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorSpace)
+    : super(img, colorSpace, name),
       m_opacity(opacity),
       m_linked(false),
       m_locked(false)

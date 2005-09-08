@@ -323,11 +323,11 @@ QImage KisWetStickyColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
 }
 
 bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*srcProfile*/,
-                         Q_UINT8 * dst, KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile,
+                         Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
                          Q_UINT32 numPixels,
                          Q_INT32 /*renderingIntent*/)
 {
-    Q_INT32 dSize = dstColorStrategy -> pixelSize();
+    Q_INT32 dSize = dstColorSpace -> pixelSize();
     Q_INT32 sSize = pixelSize();
 
     Q_UINT32 j = 0;
@@ -341,7 +341,7 @@ bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /
              cp -> green,
              cp -> blue);
 
-        dstColorStrategy -> fromQColor(c, cp -> alpha, (dst + j), dstProfile);
+        dstColorSpace -> fromQColor(c, cp -> alpha, (dst + j), dstProfile);
 
         i += sSize;
         j += dSize;

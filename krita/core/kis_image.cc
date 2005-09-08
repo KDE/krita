@@ -201,7 +201,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                m_img -> setColorStrategy(m_afterColorSpace);
+                m_img -> setColorSpace(m_afterColorSpace);
                 m_img -> setProfile(m_afterProfile);
 
                 m_adapter -> setUndo(true);
@@ -213,7 +213,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                m_img -> setColorStrategy(m_beforeColorSpace);
+                m_img -> setColorSpace(m_beforeColorSpace);
                 m_img -> setProfile(m_beforeProfile);
 
                 m_adapter -> setUndo(true);
@@ -436,9 +436,9 @@ namespace {
 
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorStrategy, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name)
 {
-    init(doc, width, height, colorStrategy, name);
+    init(doc, width, height, colorSpace, name);
     setName(name);
     m_dcop = 0L;
     m_profile = 0;
@@ -457,7 +457,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_xres = rhs.m_xres;
         m_yres = rhs.m_yres;
         m_unit = rhs.m_unit;
-        m_colorStrategy = rhs.m_colorStrategy;
+        m_colorSpace = rhs.m_colorSpace;
         m_dirty = rhs.m_dirty;
         m_adapter = rhs.m_adapter;
         m_profile = rhs.m_profile;
@@ -542,9 +542,9 @@ QString KisImage::nextLayerName() const
     return m_nserver -> name();
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorStrategy, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name)
 {
-    Q_ASSERT(colorStrategy != 0);
+    Q_ASSERT(colorSpace != 0);
 
     m_doc = doc;
 
@@ -559,7 +559,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColo
     Q_CHECK_PTR(m_nserver);
     m_name = name;
 
-    m_colorStrategy = colorStrategy;
+    m_colorSpace = colorSpace;
     m_bkg = new KisBackground(this, width, height);
     Q_CHECK_PTR(m_bkg);
 
@@ -802,10 +802,10 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
     }
 }
 
-void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisImage::convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent)
 {
     // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-    if ( (m_colorStrategy -> id() == dstColorStrategy -> id())
+    if ( (m_colorSpace -> id() == dstColorSpace -> id())
          && profile()
          && dstProfile
          && (profile() == dstProfile) )
@@ -820,26 +820,26 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorStrategy, KisProfileSP 
 
     vKisLayerSP_it it;
     for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-//         kdDebug() << "Converting layer " << ( *it )->name() << " from " << ( *it )->colorStrategy()->id().name()
-//                   << " to " << dstColorStrategy->id().name() << "\n";
+//         kdDebug() << "Converting layer " << ( *it )->name() << " from " << ( *it )->colorSpace()->id().name()
+//                   << " to " << dstColorSpace->id().name() << "\n";
 
-        (*it) -> convertTo(dstColorStrategy, dstProfile, renderingIntent);
+        (*it) -> convertTo(dstColorSpace, dstProfile, renderingIntent);
     }
 
     setProfile(dstProfile);
 
-    m_projection->convertTo(dstColorStrategy, dstProfile, renderingIntent);
-    m_bkg->convertTo(dstColorStrategy, dstProfile, renderingIntent);
+    m_projection->convertTo(dstColorSpace, dstProfile, renderingIntent);
+    m_bkg->convertTo(dstColorSpace, dstProfile, renderingIntent);
 
     if (undoAdapter() && m_adapter->undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
-                m_colorStrategy, m_profile,  dstColorStrategy, dstProfile));
+                m_colorSpace, m_profile,  dstColorSpace, dstProfile));
         m_adapter->endMacro();
     }
 
 
-    setColorStrategy(dstColorStrategy);
+    setColorSpace(dstColorSpace);
 
     notify();
     notifyLayersChanged();
@@ -1555,7 +1555,7 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     KisPainter gc;
 
-//     kdDebug () << "Rendering onto projection " << m_projection->colorStrategy()->id().name() << "\n";
+//     kdDebug () << "Rendering onto projection " << m_projection->colorSpace()->id().name() << "\n";
     gc.begin(m_projection.data());
 
     gc.bitBlt(x, y, COMPOSITE_COPY, m_bkg.data(), x, y, w, h);
@@ -1614,7 +1614,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
 KisPaintDeviceImplSP KisImage::mergedImage()
 {
-    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorStrategy(), "merged image");
+    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged image");
     dev -> setProfile(profile());
 
     KisPainter gc;
@@ -1633,7 +1633,7 @@ KisPaintDeviceImplSP KisImage::mergedImage()
 
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
-    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorStrategy(), "merged pixel");
+    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged pixel");
     dev -> setProfile(profile());
 
     KisPainter gc;
@@ -1705,14 +1705,14 @@ void KisImage::slotSelectionChanged(const QRect& r)
     emit activeSelectionChanged(KisImageSP(this));
 }
 
-KisAbstractColorSpace * KisImage::colorStrategy() const
+KisAbstractColorSpace * KisImage::colorSpace() const
 {
-    return m_colorStrategy;
+    return m_colorSpace;
 }
 
-void KisImage::setColorStrategy(KisAbstractColorSpace * colorStrategy)
+void KisImage::setColorSpace(KisAbstractColorSpace * colorSpace)
 {
-    m_colorStrategy = colorStrategy;
+    m_colorSpace = colorSpace;
 
     m_bkg = new KisBackground(this, m_width, m_height);
     Q_CHECK_PTR(m_bkg);

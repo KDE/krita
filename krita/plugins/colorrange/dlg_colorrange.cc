@@ -291,7 +291,7 @@ void DlgColorRange::slotSelectClicked()
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
     m_layer -> exactBounds(x, y, w, h);
-    KisAbstractColorSpace * cs = m_layer -> colorStrategy();
+    KisAbstractColorSpace * cs = m_layer -> colorSpace();
     KisProfileSP profile = m_layer -> profile();
     QUANTUM opacity;
     for (int y2 = y; y2 < h - y; ++y2) {

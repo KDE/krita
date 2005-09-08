@@ -112,7 +112,7 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
     splitCoordinate(pt.y(), &y, &yFraction);
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorStrategy(), pressure, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
     }
     else {
         KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);

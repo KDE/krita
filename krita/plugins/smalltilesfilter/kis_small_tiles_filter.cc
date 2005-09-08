@@ -73,7 +73,7 @@ void KisSmallTilesFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
-    Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+    Q_INT32 depth = src -> colorSpace() -> nColorChannels();
     KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl( *(src.data()) );
 
     tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );

@@ -44,7 +44,7 @@ void KisFiltersListView::buildPreview()
     KisImageSP img = m_view->currentImg();
     KisLayerSP activeLayer = img->activeLayer();
     m_thumb = new KisLayer(*activeLayer);
-    m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->colorStrategy(), "thumbnail");
+    m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->colorSpace(), "thumbnail");
     m_imgthumb->add(m_thumb,0);
     double sx = 100./m_thumb->exactBounds().width();
     double sy = 100./m_thumb->exactBounds().height();
@@ -62,7 +62,7 @@ void KisFiltersListView::buildPreview()
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
             {
-                KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorStrategy(), "preview");
+                KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorSpace(), "preview");
                 KisLayerSP thumbPreview = new KisLayer(*m_thumb/*imgthumbPreview,"",50*/);
                 imgthumbPreview->add(thumbPreview,0);
                 f->disableProgress();

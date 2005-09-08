@@ -120,16 +120,16 @@ void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
-        vKisChannelInfoSP channels = m_pickedColor.colorStrategy() -> channels();
+        vKisChannelInfoSP channels = m_pickedColor.colorSpace() -> channels();
         m_optionsWidget -> listViewChannels -> clear();
 
         for (int i = channels.count() - 1; i >= 0 ; --i) {
             QString channelValueText;
 
             if (m_normaliseValues) {
-                channelValueText = m_pickedColor.colorStrategy() -> normalisedChannelValueText(m_pickedColor.data(), i);
+                channelValueText = m_pickedColor.colorSpace() -> normalisedChannelValueText(m_pickedColor.data(), i);
             } else {
-                channelValueText = m_pickedColor.colorStrategy() -> channelValueText(m_pickedColor.data(), i);
+                channelValueText = m_pickedColor.colorSpace() -> channelValueText(m_pickedColor.data(), i);
             }
 
             m_optionsWidget -> listViewChannels -> insertItem(new QListViewItem(m_optionsWidget -> listViewChannels,

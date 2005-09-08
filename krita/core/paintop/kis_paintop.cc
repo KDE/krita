@@ -50,22 +50,22 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisLayerSP dab = new KisLayer(m_painter -> device() -> colorStrategy(), "dab");
+    KisLayerSP dab = new KisLayer(m_painter -> device() -> colorSpace(), "dab");
     Q_CHECK_PTR(dab);
 
     // XXX: Quick hack: we should use the correct color instead of going via QColor
     KisProfileSP profile = m_painter -> device() -> profile();
     KisColor kc = m_painter -> paintColor();
     
-    KisAbstractColorSpace * colorStrategy = dab -> colorStrategy();
+    KisAbstractColorSpace * colorSpace = dab -> colorSpace();
 
-    Q_INT32 pixelSize = colorStrategy->pixelSize();
+    Q_INT32 pixelSize = colorSpace->pixelSize();
     
     Q_INT32 maskWidth = mask -> width();
     Q_INT32 maskHeight = mask -> height();
     
     // Convert the kiscolor to the right colorspace.
-    kc.convertTo(colorStrategy, profile);
+    kc.convertTo(colorSpace, profile);
 
     for (int y = 0; y < maskHeight; y++)
     {
@@ -74,9 +74,9 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
         while(! hiter.isDone())
         {
             // XXX: Set mask
-            colorStrategy->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
+            colorSpace->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
             memcpy(hiter.rawData(), kc.data(), pixelSize);
-//             colorStrategy -> fromQColor(c,
+//             colorSpace -> fromQColor(c,
 //                              mask -> alphaAt(x++, y),
 //                              hiter.rawData(),
 //                              profile);

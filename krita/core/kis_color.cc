@@ -27,7 +27,7 @@
 KisColor::KisColor()
 {
     m_data = 0;
-    m_colorStrategy = 0;
+    m_colorSpace = 0;
     m_profile = 0;
 }
 
@@ -40,12 +40,12 @@ KisColor::KisColor(const QColor & color)
 {
     Q_ASSERT(color.isValid());
     
-    m_colorStrategy = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
-    if (!m_colorStrategy) return;
+    m_colorSpace = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
+    if (!m_colorSpace) return;
     
-    m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
-    m_colorStrategy->fromQColor(color, OPACITY_OPAQUE, m_data);
+    m_data = new Q_UINT8[m_colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+    m_colorSpace->fromQColor(color, OPACITY_OPAQUE, m_data);
     m_profile = 0;
 }
 
@@ -53,63 +53,63 @@ KisColor::KisColor(const QColor & color, Q_UINT8 opacity)
 {
     Q_ASSERT(color.isValid());
     
-    m_colorStrategy = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
-    if (!m_colorStrategy) return;
+    m_colorSpace = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
+    if (!m_colorSpace) return;
     
-    m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
-    m_colorStrategy->fromQColor(color, opacity, m_data);
+    m_data = new Q_UINT8[m_colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+    m_colorSpace->fromQColor(color, opacity, m_data);
     m_profile = 0;
 }
 
 
-KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
-    : m_colorStrategy(colorStrategy),
+KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+    : m_colorSpace(colorSpace),
       m_profile(profile)
 {
     Q_ASSERT(color.isValid());
     
-    m_data = new Q_UINT8[colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
-    m_colorStrategy->fromQColor(color, OPACITY_OPAQUE, m_data, profile);
+    m_data = new Q_UINT8[colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+    m_colorSpace->fromQColor(color, OPACITY_OPAQUE, m_data, profile);
 }
 
 
-KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
-    : m_colorStrategy(colorStrategy),
+KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+    : m_colorSpace(colorSpace),
       m_profile(profile)
 {
     Q_ASSERT(color.isValid());
     
-    m_data = new Q_UINT8[colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
+    m_data = new Q_UINT8[colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
     
-    m_colorStrategy->fromQColor(color, alpha, m_data, profile);
+    m_colorSpace->fromQColor(color, alpha, m_data, profile);
 }
 
-KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
-    : m_colorStrategy(colorStrategy),
+KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+    : m_colorSpace(colorSpace),
       m_profile(profile)
 {
 
-    m_data = new Q_UINT8[colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
-    memmove(m_data, data, colorStrategy->pixelSize());
+    m_data = new Q_UINT8[colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+    memmove(m_data, data, colorSpace->pixelSize());
 }
 
 
-KisColor::KisColor(const KisColor &src, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
-    : m_colorStrategy(colorStrategy),
+KisColor::KisColor(const KisColor &src, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+    : m_colorSpace(colorSpace),
       m_profile(profile)
 {
-    m_data = new Q_UINT8[colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
+    m_data = new Q_UINT8[colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
     // XXX: We shouldn't use KisPixel as an intermediary.
     // XXX: the position of the alpha channel is wrong, of course, but that doesn't hurt for the
     //      conversion and it's too costly to determine at the moment.
-    KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorStrategy(), src.profile());
-    KisPixel dstPixel = KisPixel(m_data, m_data, colorStrategy, profile);
-    src.colorStrategy()->convertTo(srcPixel, dstPixel);
+    KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorSpace(), src.profile());
+    KisPixel dstPixel = KisPixel(m_data, m_data, colorSpace, profile);
+    src.colorSpace()->convertTo(srcPixel, dstPixel);
     
 }
 
@@ -117,10 +117,10 @@ KisColor::KisColor(const KisColor & rhs)
 {
     if (this == &rhs) return;
     
-    m_colorStrategy = rhs.colorStrategy();
-    m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
-    memset(m_data, 0, m_colorStrategy->pixelSize());
-    memcpy(m_data, rhs.data(), m_colorStrategy->pixelSize());
+    m_colorSpace = rhs.colorSpace();
+    m_data = new Q_UINT8[m_colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
+    memcpy(m_data, rhs.data(), m_colorSpace->pixelSize());
     m_profile = rhs.profile();
     
 }
@@ -129,52 +129,52 @@ KisColor & KisColor::operator=(const KisColor & rhs)
 {
     delete [] m_data;
     m_data = 0;
-    m_colorStrategy = rhs.colorStrategy();
+    m_colorSpace = rhs.colorSpace();
     m_profile = rhs.profile();
 
-    if (rhs.m_colorStrategy && rhs.m_data) {
-        m_data = new Q_UINT8[m_colorStrategy->pixelSize()];
-        memcpy(m_data, rhs.m_data, m_colorStrategy->pixelSize());
+    if (rhs.m_colorSpace && rhs.m_data) {
+        m_data = new Q_UINT8[m_colorSpace->pixelSize()];
+        memcpy(m_data, rhs.m_data, m_colorSpace->pixelSize());
     }
     return * this;
 }
 
 void KisColor::convertTo(KisAbstractColorSpace * cs, KisProfileSP profile)
 {
-    kdDebug(DBG_AREA_CMS) << "Our colormodel: " << m_colorStrategy->id().name()
+    kdDebug(DBG_AREA_CMS) << "Our colormodel: " << m_colorSpace->id().name()
           << ", new colormodel: " << cs->id().name() << "\n";
           
-    if (m_colorStrategy == cs && m_profile == profile) 
+    if (m_colorSpace == cs && m_profile == profile) 
         return;
 
     Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
     memset(m_data2, 0, cs->pixelSize());
 
-    m_colorStrategy->convertPixelsTo(m_data, m_profile, m_data2, cs, profile, 1);
+    m_colorSpace->convertPixelsTo(m_data, m_profile, m_data2, cs, profile, 1);
 
     delete [] m_data;
     m_data = m_data2;
-    m_colorStrategy = cs;
+    m_colorSpace = cs;
     m_profile = profile;
 
 }
 
 
-void KisColor::setColor(Q_UINT8 * data, KisAbstractColorSpace * colorStrategy, KisProfileSP profile)
+void KisColor::setColor(Q_UINT8 * data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
 {
     delete [] m_data;
-    m_data = new Q_UINT8[colorStrategy->pixelSize()];
-    memcpy(m_data, data, colorStrategy->pixelSize());
-    m_colorStrategy = colorStrategy;
+    m_data = new Q_UINT8[colorSpace->pixelSize()];
+    memcpy(m_data, data, colorSpace->pixelSize());
+    m_colorSpace = colorSpace;
     m_profile = profile;
 }
 
-// To save the user the trouble of doing color->colorStrategy()->toQColor(color->data(), &c, &a, profile
+// To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile
 void KisColor::toQColor(QColor *c) const
 {
-    if (m_colorStrategy && m_data) {
+    if (m_colorSpace && m_data) {
         // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorStrategy));
+        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorSpace));
     
         cs->toQColor(m_data, c, m_profile);
     }
@@ -182,9 +182,9 @@ void KisColor::toQColor(QColor *c) const
 
 void KisColor::toQColor(QColor *c, QUANTUM *opacity) const
 {
-    if (m_colorStrategy && m_data) {
+    if (m_colorSpace && m_data) {
         // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorStrategy));
+        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorSpace));
         cs->toQColor(m_data, c, opacity, m_profile);
     }
 }
@@ -199,8 +199,8 @@ QColor KisColor::toQColor() const
 void KisColor::dump() const
 {
     
-    kdDebug(DBG_AREA_CMS) << "KisColor (" << this << "), " << m_colorStrategy->id().name() << "\n";
-    vKisChannelInfoSP channels = m_colorStrategy->channels();
+    kdDebug(DBG_AREA_CMS) << "KisColor (" << this << "), " << m_colorSpace->id().name() << "\n";
+    vKisChannelInfoSP channels = m_colorSpace->channels();
         
     vKisChannelInfoSP_cit begin = channels.begin();
     vKisChannelInfoSP_cit end = channels.end();

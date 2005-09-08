@@ -90,9 +90,9 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorStrategy() -> id().name());
+    dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorSpace() -> id().name());
 
-    dlgColorSpaceConversion -> fillCmbSrcProfile(image -> colorStrategy() -> id());
+    dlgColorSpaceConversion -> fillCmbSrcProfile(image -> colorSpace() -> id());
 
     if (image -> profile()) {
         dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
@@ -125,8 +125,8 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorStrategy() -> id().name());
-    dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorStrategy() -> id());
+    dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorSpace() -> id().name());
+    dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorSpace() -> id());
 
     KisProfileSP p = dev -> profile();
     if ( p ) {

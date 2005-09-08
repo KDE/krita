@@ -69,7 +69,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
     }
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    Q_INT32 depth = src -> colorStrategy() -> nColorChannels();
+    Q_INT32 depth = src -> colorSpace() -> nColorChannels();
     QRect extends = src->extent();
     int lastx = extends.width() - windowsize;
     int lasty = extends.height() - windowsize;

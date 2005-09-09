@@ -683,12 +683,13 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 {
-        const double pi=3.1415926535897932385;
+    const double pi=3.1415926535897932385;
 
     if (m_layers.empty()) return; // Nothing to scale
-        Q_INT32 w, h;
-        w = (Q_INT32)(width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 0.5);
-        h = (Q_INT32)(height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 0.5);
+    
+    Q_INT32 w, h;
+    w = (Q_INT32)(width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 0.5);
+    h = (Q_INT32)(height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 0.5);
 
     Q_INT32 oldCentreToNewCentreXOffset = (w - width()) / 2;
     Q_INT32 oldCentreToNewCentreYOffset = (h - height()) / 2;

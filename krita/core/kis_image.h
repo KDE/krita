@@ -52,8 +52,7 @@ class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
-    KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,
-         KisAbstractColorSpace * colorSpace, const QString& name);
+    KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
@@ -86,8 +85,8 @@ public:
     void resize(const QRect& rc, bool cropLayers = false);
 
     void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
-        void rotate(double angle, KisProgressDisplayInterface *m_progress);
-        void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
+    void rotate(double angle, KisProgressDisplayInterface *m_progress);
+    void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
     void convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 

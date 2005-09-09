@@ -55,7 +55,7 @@ void KisRgbU16ColorSpaceTester::allTests()
     testBasics();
     testToQImage();
     testCompositeOps();
-        testMixColors();
+    testMixColors();
 
     delete factory;
 }

@@ -654,7 +654,7 @@ bool KisDoc::completeSaving(KoStore *store)
             store -> close();
         }
     }
-#if 0 // Composite rendition of the entire image for easier kimgio loading and to speed up loading the image into Krita: show the composite png first, then load the layers
+#if 1 // Composite rendition of the entire image for easier kimgio loading and to speed up loading the image into Krita: show the composite png first, then load the layers
     if (store -> open("composite.png")) {
 
         QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());

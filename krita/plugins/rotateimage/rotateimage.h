@@ -34,6 +34,9 @@ public:
 private slots:
 
     void slotRotateImage();
+    void slotRotateImage90(); 
+    void slotRotateImage180(); 
+    void slotRotateImage270();
     void slotRotateLayer();
 
 private:

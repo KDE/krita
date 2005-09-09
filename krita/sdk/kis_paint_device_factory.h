@@ -35,7 +35,7 @@ public:
 
 public:
 
-    virtual KisPaintDevice * createPaintDevice(KisAbstractColorSpace * colorSpace, const QString& name) = 0;
+    virtual KisPaintDevice * createPaintDevice(KisBaseColorSpace * colorSpace, const QString& name) = 0;
     virtual KisPaintDevice * createPaintDevice(KisImage * image, const QString& name) = 0;
 
 private:

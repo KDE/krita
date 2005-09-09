@@ -38,7 +38,6 @@ Integration
 Colorspace independence (found with the test colorstrategy)
 
 	* tool gradient uses wrong colors; gradient still uses qcolor everywhere.
-	* brightness/contrast and the like don't work.
 	* Map colorspace transforms using the full set of discriminating features:
 		source color space (not null) // KisStrategyColorspace descendant
 		destination color space (not null) // KisStrategyColorspace descendant
@@ -120,6 +119,7 @@ User Interface
 	* Fix crop tool: when pressing shift, keep aspect ratio, implement gray mask.
 	  (Michael Thaler)
 	* Allow shape tools to be filled with gradients
+
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker
 		  windows, create new docker if tab dropped outside existing
@@ -128,9 +128,9 @@ User Interface
 		* Add action (macro) docker
 		* Add navigation/zoom docker
 		* Add history docker
-                * Convert the layer & channel box to a qlistbox; enable the channel box.
+        * Convert the layer & channel box to a qlistbox; enable the channel box.
 
-        * Use OpenGL if available to composite checkerboard with image so
+   * Use OpenGL if available to composite checkerboard with image so
           while scrolling the checks can stay in place, and the partially
           transparent image move. This maybe needs Qt 4. OpenGL can also be
   	  used to bumpmap images on a height-field canvas.
@@ -139,11 +139,6 @@ User Interface
 	  it onto a background image -- or not, if another KOffice app wants it
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
-	* Put rotateimage, not rotatelayer in the toolbar
-	* In the Layers popup-menu the 'level' talks about formost and hindmost,
-	  since the dialog is about stacking vertically instead of horizontally, I'd use 'top
-	  most' and 'bottom most'
-
 
 Selections
 
@@ -181,7 +176,7 @@ Tools
 	            - calligraphic pen tool
          
 	* Pressure sensivitize all relevant tools (e.g. line tool)
-        * Add resize slider to freehand tools that resizes the mean brush size.
+    * Add resize slider to freehand tools that resizes the mean brush size.
 	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
@@ -192,12 +187,10 @@ Plugins
 	* As many filters as possible :-)
 	* What's the difference between gamma correction and colour
 	  adjustment? -> explained by Cyrille's mail, put this in handbook.
-	* Improve brightness/contrast with curve manipulation and a nice GUI
-
 
 Modules
 
-	* Add color models for LAB, XYZ, HSV etc.
+	* Add color models for LAB, HSV, YUV etc.
 	* Add Wet & Sticky model (in progress already)
 	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
 	* The composite ops in RGB -> composite.h do not take mask into account

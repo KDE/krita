@@ -69,6 +69,9 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
     } else {
         m_view = (KisView*) parent;
         (void) new KAction(i18n("&Rotate Image..."), 0, 0, this, SLOT(slotRotateImage()), actionCollection(), "rotateimage");
+        (void) new KAction(i18n("&Rotate Image &90"), "rotate_cw", 0, this, SLOT(slotRotateImage90()), actionCollection(), "rotateImageLeft90");
+        (void) new KAction(i18n("&Rotate Image &180"), 0, 0, this, SLOT(slotRotateImage180()), actionCollection(), "rotateImage180");
+        (void) new KAction(i18n("&Rotate Image &270"), "rotate_ccw", 0, this, SLOT(slotRotateImage270()), actionCollection(), "rotateImageRight90");
         
         (void) new KAction(i18n("&Rotate Layer..."), 0, 0, this, SLOT(slotRotateLayer()), actionCollection(), "rotatelayer");
         
@@ -96,9 +99,25 @@ void RotateImage::slotRotateImage()
 
         if (dlgRotateImage -> exec() == QDialog::Accepted) {
         Q_INT32 angle = dlgRotateImage -> angle();
-                m_view -> rotateCurrentImage(angle);
+        m_view -> rotateCurrentImage(angle);
     }
-        delete dlgRotateImage;
+    delete dlgRotateImage;
+}
+
+void RotateImage::slotRotateImage90()
+{
+    m_view->rotateCurrentImage( 90 );
+}
+
+void RotateImage::slotRotateImage180()
+{
+    m_view->rotateCurrentImage( 180 );
+}
+
+
+void RotateImage::slotRotateImage270()
+{
+    m_view->rotateCurrentImage( 270 );
 }
 
 void RotateImage::slotRotateLayer()

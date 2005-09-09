@@ -2,13 +2,16 @@
 <kpartgui library="kritarotateimage" version="6">
 <MenuBar>
 	<Menu name="Image"><text>Image</text>
-		<Separator/>
-	<Action name="rotateimage"/>
+        <Menu name="Rotate"><text>&amp;Rotate</text>
+	       <Action name="rotateimage"/>
+           <Action name="rotateImageRight90"/>
+           <Action name="rotateImage180"/>
+           <Action name="rotateImageLeft90"/>
+       </Menu>
 	</Menu>
 
 	<Menu name="Layer">
-		<Separator/>
-		<Menu name="Rotate"><text>&amp;Rotate Layer</text>
+		<Menu name="Rotate"><text>&amp;Rotate</text>
 		<Action name="rotateLayerRight90"/>
 		<Action name="rotateLayer180"/>
 		<Action name="rotateLayerLeft90"/>
@@ -18,8 +21,8 @@
 </MenuBar>
 
 <ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
-	<Action name="rotateLayerLeft90"/>
-	<Action name="rotateLayerRight90"/>
+	<Action name="rotateImageLeft90"/>
+	<Action name="rotateImageRight90"/>
 </ToolBar>
 
 </kpartgui>

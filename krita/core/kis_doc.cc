@@ -839,7 +839,7 @@ bool KisDoc::slotNewImage()
 
         return true;
     }
-    return false;
+    return initDoc( KoDocument::InitDocAppStarting);
 }
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)

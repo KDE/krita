@@ -44,14 +44,10 @@ public:
              const char* name = 0);
     ~DlgHistogram();
 
-    void setHistogram(KisHistogramSP histogram);
     void setLayer(KisLayerSP layer);
 
 private slots:
-
     void okClicked();
-    void slotChannelSelected(const QString & channelName);
-    void slotTypeSwitched(int id);
 
 private:
 

@@ -17,18 +17,21 @@
  */
 
 #include <kdebug.h>
+#include <qdatetime.h> // ### Debug
 
 #include "kis_histogram.h"
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
+#include "kis_abstract_colorspace.h"
 
 KisHistogram::KisHistogram(KisLayerSP layer,
-               const KisChannelInfo & initialChannel,
+               KisHistogramProducerSP producer,
                const enumHistogramType type)
 {
     m_layer = layer;
     m_type = type;
+    m_producer = producer;
 
     m_max = 0;
     m_min = QUANTUM_MAX;
@@ -41,54 +44,52 @@ KisHistogram::KisHistogram(KisLayerSP layer,
     m_low = QUANTUM_MAX;
     m_percentile = 100;
     m_pixels = 1; // AUTOLAYER: should use layer extends.
+    m_channel = 0;
 
-    computeHistogramFor(initialChannel);
+    updateHistogram();
 }
 
 KisHistogram::~KisHistogram()
 {
 }
 
-void KisHistogram::computeHistogramFor(const KisChannelInfo & channel)
+void KisHistogram::updateHistogram()
 {
-    Q_UINT32 total = 0;
-    m_count = 0;
-    m_high = 0;
-    m_low = 255;
-
     Q_INT32 x,y,w,h;
     m_layer->exactBounds(x,y,w,h);
-    KisRectIteratorPixel srcIt = m_layer->createRectIterator(x,y,w,h, false);
+    KisRectIteratorPixel srcIt = m_layer -> createRectIterator(x,y,w,h, false);
+    KisAbstractColorSpace* cs = m_layer -> colorSpace();
 
-    // clear bins
-    for( int i=0; i<256; ++i )
-        m_values[i] = 0;
-        
-    Q_INT32 channels = m_layer -> nChannels();
-    bool alpha = m_layer -> hasAlpha();
-    while( ! srcIt.isDone() )
-    {
-        if (  !srcIt.isSelected()
-            || (alpha && ((QUANTUM)srcIt[channels - 1] == OPACITY_TRANSPARENT)) ) {
-            ++srcIt;
-            continue;
+    QTime t;
+    t.start();
+
+    // Let the producer do it's work
+    m_producer -> clear();
+    m_producer -> addRegionToBin(srcIt, cs);
+
+    kdDebug() << t.elapsed() << "ms for histogram (new version)" << endl;
+
+    computeHistogram();
+}
+
+void KisHistogram::computeHistogram()
+{
+    m_high = 0;
+    m_low = (Q_UINT32) -1;
+
+    m_count = m_producer -> count();
+    if (m_count > 0) {
+        Q_INT32 bins = m_producer -> numberOfBins();
+        Q_UINT32 current;
+        for (Q_INT32 i = 0; i < bins; i++) {
+            current = m_producer -> getBinAt(m_channel, i);
+            if (current > m_high)
+                m_high = current;
+            if (current < m_low)
+                m_low = current;
         }
-        QUANTUM datum = (QUANTUM)srcIt[channel.pos()];
-        m_values[datum]++;
-        if (datum > m_max) m_max = datum;
-        if (datum < m_min) m_min = datum;
-        if (m_values[datum] > m_high)
-            m_high = m_values[datum];
-        if (m_values[datum] < m_low)
-            m_low = m_values[datum];
-        total += datum;
-        m_count++;
-        ++srcIt;
     }
-    if (m_count > 0)
-        m_mean = total / m_count;
-    else
-        m_mean = 0;
+
 #if 0
     dump();
 #endif

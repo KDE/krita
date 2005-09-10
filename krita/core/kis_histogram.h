@@ -18,10 +18,10 @@
 #ifndef KIS_HISTOGRAM_
 #define KIS_HISTOGRAM_
 
-#include <qvaluevector.h>
-
 #include "kis_types.h"
 #include "color_strategy/kis_abstract_colorspace.h"
+#include "kis_histogram_producer.h"
+
 /**
  * The histogram class computes the histogram data from the specified layer
  * for the specified channel.
@@ -34,32 +34,40 @@ enum enumHistogramType {
     LOGARITHMIC
 };
 
-typedef QValueVector<Q_UINT32> vBins;
-
 class KisHistogram : public KShared {
 
 public:
     KisHistogram(KisLayerSP layer, 
-             const KisChannelInfo & initialChannel, 
+             KisHistogramProducerSP producer,
              const enumHistogramType type);
 
     virtual ~KisHistogram();
 
-    void computeHistogramFor(const KisChannelInfo & channel);
+    /** Updates the information in the producer */
+    void updateHistogram();
+    /**
+     * Recomputes the mathematical information from the information currently in the producer.
+     * Needed when you changed the current channel.
+     **/
+    void computeHistogram();
 
-    Q_UINT32 getValue(Q_UINT8 i) { return m_values[i]; }
-    QUANTUM getMax() { return m_max; }
-    QUANTUM getMin() { return m_min; }
+    Q_UINT32 getValue(Q_UINT8 i) { return m_producer -> getBinAt(m_channel, i); }
+//    QUANTUM getMax() { return m_max; }
+//    QUANTUM getMin() { return m_min; }
     Q_UINT32 getHighest() { return m_high; }
     Q_UINT32 getLowest() { return m_low; }
-    double getMean() { return m_mean; }
-    double getMedian() { return m_median; }
-    double getStandardDeviation() { return m_stddev; }
-    Q_UINT32 getPixels () { return m_pixels; }
+//    double getMean() { return m_mean; }
+//    double getMedian() { return m_median; }
+//    double getStandardDeviation() { return m_stddev; }
+//    Q_UINT32 getPixels () { return m_pixels; }
     Q_UINT32 getCount() { return m_count; }
     Q_UINT8 getPercentile() { return m_percentile; }
     enumHistogramType getHistogramType() { return m_type; }
     void setHistogramType(enumHistogramType type) { m_type = type; }
+    void setProducer(KisHistogramProducerSP producer) { m_producer = producer; }
+    void setChannel(Q_INT32 channel) { m_channel = channel; }
+    KisHistogramProducerSP producer() { return m_producer; }
+    Q_INT32 channel() { return m_channel; }
 
 
 private:
@@ -67,6 +75,7 @@ private:
     void dump(); 
 
     KisLayerSP m_layer;
+    KisHistogramProducerSP m_producer;
 
     enumHistogramType m_type;
     
@@ -76,6 +85,7 @@ private:
     double m_mean, m_median, m_stddev;
     Q_UINT32 m_pixels, m_count;
     Q_UINT8 m_percentile;
+    Q_INT32 m_channel;
 
 };
 

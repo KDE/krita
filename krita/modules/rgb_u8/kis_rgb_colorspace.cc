@@ -47,9 +47,9 @@ namespace {
 KisRgbColorSpace::KisRgbColorSpace() :
     KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR));
+    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, 1, QColor(255,0,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, 1, QColor(0,255,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR, 1, QColor(0,0,255)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA));
 
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();

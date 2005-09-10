@@ -33,6 +33,7 @@
 
 #include <kis_colorspace_registry.h>
 #include <kis_factory.h>
+#include <kis_basic_histogram_producers.h>
 
 #include "rgb_plugin.h"
 
@@ -58,6 +59,9 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
         m_ColorSpaceRGBA = new KisRgbColorSpace();
         Q_CHECK_PTR(m_ColorSpaceRGBA);
         KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBA);
+        KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
+                (KisID("RGB8HISTO", i18n("RGB8 Histogram")), m_ColorSpaceRGBA) );
     }
 
 }

@@ -29,6 +29,7 @@
 
 #include "rgb_u16_plugin.h"
 #include "kis_rgb_u16_colorspace.h"
+#include "kis_basic_histogram_producers.h"
 
 typedef KGenericFactory<RGBU16Plugin> RGBU16PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_rgb_u16_plugin, RGBU16PluginFactory( "krita" ) )
@@ -50,6 +51,10 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList 
         m_ColorSpaceRGBU16 = new KisRgbU16ColorSpace();
         Q_CHECK_PTR(m_ColorSpaceRGBU16);
         KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBU16);
+
+        KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
+                (KisID("RGB16HISTO", i18n("RGB16 Histogram")), m_ColorSpaceRGBU16) );
     }
 
 }

@@ -28,6 +28,7 @@
 
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
+#include <kis_basic_histogram_producers.h>
 
 #include "gray_plugin.h"
 
@@ -54,6 +55,9 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
         m_ColorSpaceGrayA = new KisGrayColorSpace();
         Q_CHECK_PTR(m_ColorSpaceGrayA);
         KisColorSpaceRegistry::instance() -> add(m_ColorSpaceGrayA);
+        KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
+                (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), m_ColorSpaceGrayA) );
     }
 
 }

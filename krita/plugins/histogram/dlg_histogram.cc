@@ -34,6 +34,7 @@
 #include "kis_histogram.h"
 #include "kis_layer.h"
 #include "kis_paint_device_impl.h"
+#include "kis_histogram_producer.h"
 
 #include "dlg_histogram.h"
 #include "kis_histogram_widget.h"
@@ -55,62 +56,14 @@ DlgHistogram::~DlgHistogram()
     delete m_page;
 }
 
-void DlgHistogram::setHistogram(KisHistogramSP histogram) 
-{
-    m_histogram = histogram;
-    m_page -> setHistogram(histogram);
-}
-
 void DlgHistogram::setLayer(KisLayerSP layer)
 {
-    m_layer = layer;
-
-    // XXX: depth() - 1: compensate for the alpha channel which isn't in channels info.
-    // We need to rationalize Krita here: the typeWithAlpha, typeWithoutAlpha, ChannelsWithAlpha
-    // and WithoutAlpha are very confusing.
-    m_page -> setChannels(layer -> colorSpace() -> channels(), layer -> colorSpace() -> nColorChannels());
-    KisChannelInfo* channel = layer -> colorSpace() -> channels()[0];
-    KisHistogramSP histogram = new KisHistogram(layer, *channel, LINEAR);
-    setHistogram(histogram);
-
-    connect(m_page -> grpType, SIGNAL(clicked(int)), SLOT(slotTypeSwitched(int)));
-    connect(m_page -> cmbChannel,
-        SIGNAL(activated(const QString &)),
-        this,
-        SLOT(slotChannelSelected(const QString &)));
+    m_page -> setLayer(layer);
 }
 
 void DlgHistogram::okClicked()
 {
     accept();
-}
-
-void DlgHistogram::slotChannelSelected(const QString & channelName)
-{
-    vKisChannelInfoSP channels = m_layer -> colorSpace() -> channels();
-    for (int i = 0; i < m_layer -> colorSpace() -> nColorChannels(); i++) {
-        KisChannelInfo* channel = channels[i];
-        if (channel -> name() == channelName) {
-            KisHistogramSP histogram;
-            
-            if (m_page -> grpType -> selectedId() == LINEAR)
-                histogram = new KisHistogram(m_layer, *channel, LINEAR);
-            else
-                histogram = new KisHistogram(m_layer, *channel, LOGARITHMIC);
-            
-            setHistogram(histogram);
-            return;
-        }
-    }
-}
-
-void DlgHistogram::slotTypeSwitched(int id)
-{
-    if (id == LINEAR)
-        m_histogram -> setHistogramType(LINEAR);
-    else if (id == LOGARITHMIC)
-        m_histogram -> setHistogramType(LOGARITHMIC);
-    m_page -> setHistogram(m_histogram);
 }
 
 #include "dlg_histogram.moc"

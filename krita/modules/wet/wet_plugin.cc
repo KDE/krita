@@ -50,6 +50,7 @@
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_subject.h>
+#include <kis_basic_histogram_producers.h>
 
 #include "wet_plugin.h"
 #include "kis_wet_palette_widget.h"
@@ -81,6 +82,10 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         Q_CHECK_PTR(m_colorSpaceWet);
         // colorspace
         KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
+        // histogram producer
+        KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
+                (KisID("WETHISTO", i18n("Wet Histogram")), m_colorSpaceWet) );
         // wet brush op
         KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 

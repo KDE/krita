@@ -30,7 +30,7 @@
 
 #include <ksharedptr.h>
 #include <kio/job.h>
-
+#include <koffice_export.h>
 #include "kis_resource.h"
 #include "kis_types.h"
 
@@ -38,7 +38,7 @@
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy
 //     that matches the profile's color model
-class KisProfile : public KisResource, public KShared {
+class KRITACORE_EXPORT KisProfile : public KisResource, public KShared {
     typedef KisResource super;
     Q_OBJECT
 

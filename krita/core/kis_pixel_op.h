@@ -84,6 +84,7 @@ public:
 
     KisPixelOp();
     KisPixelOp(KisAbstractColorSpace * cs);
+	virtual ~KisPixelOp(){}
     KisID id() const { return m_id; }
 
     bool isValid() const { return m_valid; }

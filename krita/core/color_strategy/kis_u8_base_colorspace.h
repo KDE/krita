@@ -21,7 +21,7 @@
 #include <qcolor.h>
 
 #include <qcolor.h>
-
+#include <koffice_export.h>
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
@@ -29,7 +29,7 @@
 /**
  * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels
  */
-class KisU8BaseColorSpace : public KisAbstractColorSpace {
+class KRITACORE_EXPORT KisU8BaseColorSpace : public KisAbstractColorSpace {
 
 public:
 

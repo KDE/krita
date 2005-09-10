@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
+#include <koffice_export.h>
 
 class KActionCollection;
 class KisCanvasSubject;
@@ -32,7 +33,7 @@ class QStringList;
  * in contrast to the paintop and colormodel registries, creates
  * a vector containing instances of all registered tools.
  */
-class KisToolRegistry : public KisGenericRegistry<KisToolFactorySP> {
+class KRITACORE_EXPORT KisToolRegistry : public KisGenericRegistry<KisToolFactorySP> {
 
 public:
     virtual ~KisToolRegistry();

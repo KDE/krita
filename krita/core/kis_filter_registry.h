@@ -27,12 +27,12 @@
 #include "kis_generic_registry.h"
 #include "kaction.h"
 #include "kis_filter.h"
-
+#include <koffice_export.h>
 class QString;
 class KisView;
 class QStringList;
 
-class KisFilterRegistry : public KisGenericRegistry<KisFilterSP>,  public KShared
+class KRITACORE_EXPORT KisFilterRegistry : public KisGenericRegistry<KisFilterSP>,  public KShared
 {
 
 public:

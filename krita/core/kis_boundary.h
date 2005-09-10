@@ -20,7 +20,7 @@
 
 #include <qvaluelist.h>
 #include <qpair.h>
-
+#include <koffice_export.h>
 #include "kis_paint_device_impl.h"
 #include "kis_point.h"
 
@@ -36,7 +36,7 @@ class QPainter;
  * you can use the paint method to let it paint the outline, or get a pixmap with the specified
  * width and height.
  **/
-class KisBoundary {
+class KRITACORE_EXPORT KisBoundary {
 public:
     KisBoundary(KisPaintDeviceImpl* dev);
     void generateBoundary(int w, int h);

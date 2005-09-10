@@ -44,7 +44,7 @@ class KisProgressDisplayInterface;
 class KisFilterConfiguration {
 };
 
-class KisFilterConfigWidget : public QWidget {
+class KRITACORE_EXPORT KisFilterConfigWidget : public QWidget {
 
     Q_OBJECT
 

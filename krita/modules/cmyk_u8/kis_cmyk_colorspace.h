@@ -20,14 +20,14 @@
 
 #include <qcolor.h>
 #include <qmap.h>
-
+#include <koffice_export.h>
 #include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_abstract_colorspace.h"
 
-class KisCmykColorSpace : public KisU8BaseColorSpace {
+class KRITACORE_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
     KisCmykColorSpace();

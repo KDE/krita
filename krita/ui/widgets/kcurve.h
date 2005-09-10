@@ -24,8 +24,8 @@
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qsortedlist.h>
-
-class KCurve : public QWidget
+#include <koffice_export.h>
+class KRITAUI_EXPORT KCurve : public QWidget
 {
 Q_OBJECT
 

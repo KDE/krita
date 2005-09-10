@@ -52,7 +52,7 @@ private:
     QColor m_color;
 };
 
-class KisColorCup : public QPushButton {
+class KRITAUI_EXPORT KisColorCup : public QPushButton {
 
     Q_OBJECT
 

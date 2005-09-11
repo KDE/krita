@@ -17,10 +17,13 @@
  */
 
 #include <qstring.h>
+#include <klocale.h>
 
 #include "kis_basic_histogram_producers.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
+#include "kis_channelinfo.h"
+#include "kis_abstract_colorspace.h"
 
 KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channels,
         int nrOfBins, KisAbstractColorSpace *cs)
@@ -181,6 +184,57 @@ void KisBasicF32HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
             else
                 m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
         }
+
+        m_count++;
+        ++it;
+    }
+}
+
+// ------------ Generic RGB ---------------------
+KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
+    : KisBasicHistogramProducer(KisID("GENRGBHISTO", "Generic RGB Histogram"),
+                                3, 256, 0) {
+    /* we set 0 as colorspece, becausre we are not based on a specific colorspace. This
+      is no problem for the superclass since we override channels() */
+    m_channelsList.append(new KisChannelInfo(i18n("R"), 0, COLOR, 1, QColor(255,0,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("G"), 1, COLOR, 1, QColor(0,255,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("B"), 2, COLOR, 1, QColor(0,0,255)));
+}
+
+vKisChannelInfoSP KisGenericRGBHistogramProducer::channels() {
+    return m_channelsList;
+}
+
+QString KisGenericRGBHistogramProducer::positionToString(double pos) const {
+        return QString("%1").arg(static_cast<Q_UINT8>(pos * UINT8_MAX));
+}
+
+double KisGenericRGBHistogramProducer::maximalZoom() const {
+    return 1.0;
+}
+
+
+void KisGenericRGBHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
+         KisAbstractColorSpace *cs) {
+    for (int i = 0; i < m_channels; i++) {
+        m_outRight.at(i) = 0;
+        m_outLeft.at(i) = 0;
+    }
+
+    QColor c;
+
+    while (!it.isDone()) {
+        Q_UINT8* pixel = it.rawData();
+        if (   (m_skipUnselected && !it.isSelected())
+            || (m_skipTransparent && cs -> getAlpha(pixel) == OPACITY_TRANSPARENT) ) {
+            ++it;
+            continue;
+        }
+
+        cs -> toQColor(pixel, &c);
+        m_bins.at(0).at(c.red())++;
+        m_bins.at(1).at(c.green())++;
+        m_bins.at(2).at(c.blue())++;
 
         m_count++;
         ++it;

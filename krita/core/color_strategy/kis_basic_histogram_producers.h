@@ -23,6 +23,7 @@
 
 #include "kis_histogram_producer.h"
 #include "kis_abstract_colorspace.h"
+#include "kis_id.h"
 
 class KisBasicHistogramProducer : public KisHistogramProducer {
 public:
@@ -96,4 +97,30 @@ protected:
     KisAbstractColorSpace *m_cs;
 };
 
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to RGB8 with toQColor, and then does its counting on RGB. This is NOT registered with the
+ * Registry, because it isCompatibleWith all colorspaces, and should only be used in extreme
+ * cases (like no other producer being available
+ **/
+class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisGenericRGBHistogramProducer();
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+    virtual vKisChannelInfoSP channels();
+protected:
+    vKisChannelInfoSP m_channelsList;
+};
+
+/** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
+public:
+    KisGenericRGBHistogramProducerFactory()
+        : KisHistogramProducerFactory(KisID("GENRGBHISTO", "")) {}
+    virtual ~KisGenericRGBHistogramProducerFactory() {}
+    virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
+    virtual bool isCompatibleWith(KisAbstractColorSpace*) const { return true; }
+};
 #endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

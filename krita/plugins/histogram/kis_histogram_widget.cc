@@ -17,8 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <math.h>
-
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qlabel.h>
@@ -36,48 +34,17 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_abstract_colorspace.h"
+#include "widgets/kis_histogram_view.h"
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
     : super(parent, name)
 {
+    m_from = 0.0;
+    m_width = 0.0;
 }
 
 KisHistogramWidget::~KisHistogramWidget()
 {
-}
-
-void KisHistogramWidget::setChannels()
-{
-    m_comboInfo.clear();
-    KisIDList list = KisHistogramProducerFactoryRegistry::instance()
-            -> listKeysCompatibleWith(m_cs);
-
-    for (uint i = 0; i < list.count(); i++) {
-        ComboboxInfo info;
-        info.isProducer = true;
-        KisID id(*(list.at(i)));
-        info.producer = KisHistogramProducerFactoryRegistry::instance()
-                -> get(id) -> generate();
-        // channel not used for a producer
-        vKisChannelInfoSP channels = info.producer -> channels();
-        int count = channels.count();
-        m_comboInfo.append(info);
-        cmbChannel -> insertItem(id . name());
-        for (int j = 0; j < count; j++) {
-            info.isProducer = false;
-            info.channel = channels.at(j);
-            m_comboInfo.append(info);
-            cmbChannel -> insertItem(QString(" ").append(info.channel -> name()));
-        }
-    }
-
-    m_currentProducer = m_comboInfo.at(0).producer;
-    cmbChannel -> setCurrentItem(1);
-    m_color = false;
-    m_channels.clear();
-    m_channels.append(m_comboInfo.at(1).channel);
-    m_channelToOffset.clear();
-    m_channelToOffset.append(0);
 }
 
 void KisHistogramWidget::setLayer(KisLayerSP layer) 
@@ -85,26 +52,22 @@ void KisHistogramWidget::setLayer(KisLayerSP layer)
     grpType -> disconnect(this);
     cmbChannel -> disconnect(this);
 
-    m_cs = layer -> colorSpace();
+    m_histogramView -> setLayer(layer);
+    setActiveChannel(0); // So we have the colored one if there are colors
 
-    setChannels(); // Sets m_currentProducer to the first in the list
-    kdDebug() << "Histogram using the Histogram Producer "
-            << m_currentProducer -> id().name() << endl;
+    // The channels
+    cmbChannel -> clear();
+    cmbChannel -> insertStringList(m_histogramView -> channelStrings());
+    cmbChannel -> setCurrentItem(0);
 
     // View display
     currentView -> setMinValue(0);
     currentView -> setMaxValue(100);
-    if (m_currentProducer -> maximalZoom() < 1.0) {
-        currentView -> setEnabled(true);
-    } else {
-        currentView -> setEnabled(false);
-    }
-    m_from = m_currentProducer -> viewFrom();
-    m_width = m_currentProducer -> viewWidth();
 
-    m_histogram = new KisHistogram(layer, m_currentProducer, LINEAR);
+    updateEnabled();
 
-    updateHistogram();
+    m_from = m_histogramView -> currentProducer() -> viewFrom();
+    m_width = m_histogramView -> currentProducer() -> viewWidth();
 
     connect(grpType, SIGNAL(clicked(int)), this, SLOT(slotTypeSwitched(int)));
     connect(cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
@@ -115,47 +78,15 @@ void KisHistogramWidget::setLayer(KisLayerSP layer)
 
 void KisHistogramWidget::setActiveChannel(int channel)
 {
-    ComboboxInfo info = m_comboInfo.at(channel);
-    if (info.producer.data() != m_currentProducer.data()) {
-        m_currentProducer = info.producer;
-        m_currentProducer -> setView(m_from, m_width);
-        m_histogram -> setProducer(m_currentProducer);
-        m_histogram -> updateHistogram();
-    }
-
-    m_channels.clear();
-    m_channelToOffset.clear();
-
-    if (info.isProducer) {
-        m_color = true;
-        m_channels = m_currentProducer -> channels();
-        for (uint i = 0; i < m_channels.count(); i++)
-            m_channelToOffset.append(i);
-        m_histogram -> setChannel(0); // Set a default channel, just being nice
-    } else {
-        m_color = false;
-        vKisChannelInfoSP channels = m_currentProducer -> channels();
-        for (uint i = 0; i < channels.count(); i++) {
-            KisChannelInfo* channel = channels.at(i);
-            if (channel -> name() == info.channel -> name()) {
-                m_channels.append(channel);
-                m_channelToOffset.append(i);
-                break;
-            }
-        }
-    }
-
-    updateHistogram();
+    m_histogramView -> setActiveChannel(channel);
 }
 
 void KisHistogramWidget::slotTypeSwitched(int id)
 {
     if (id == LINEAR)
-        m_histogram -> setHistogramType(LINEAR);
+        m_histogramView -> setHistogramType(LINEAR);
     else if (id == LOGARITHMIC)
-        m_histogram -> setHistogramType(LOGARITHMIC);
-
-    updateHistogram();
+        m_histogramView -> setHistogramType(LOGARITHMIC);
 }
 
 void KisHistogramWidget::setView(double from, double size)
@@ -164,13 +95,32 @@ void KisHistogramWidget::setView(double from, double size)
     m_width = size;
     if (m_from + m_width > 1.0)
         m_from = 1.0 - m_width;
-    m_histogram -> producer() -> setView(m_from, m_width);
+    m_histogramView -> setView(m_from, m_width);
+    updateEnabled();
+}
 
-    m_histogram -> updateHistogram();
-    updateHistogram();
+void KisHistogramWidget::slotZoomIn() {
+    if ((m_width / 2) >= m_histogramView -> currentProducer() -> maximalZoom()) {
+        setView(m_from, m_width / 2);
+    }
+}
 
-    if (m_currentProducer -> maximalZoom() < 1.0) {
-        if ((m_width / 2) >= m_currentProducer -> maximalZoom()) {
+void KisHistogramWidget::slotZoomOut() {
+    if (m_width * 2 <= 1.0) {
+        setView(m_from, m_width * 2);
+    }
+}
+
+void KisHistogramWidget::slide(int val) {
+    kdDebug() << "slided to " << val << " viewing from: "
+            << ((static_cast<double>(val) / 100.0) * (1.0 - m_width)) << endl;
+    // Beware: at the END (e.g. 100), we want to still view m_width:
+    setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
+}
+
+void KisHistogramWidget::updateEnabled() {
+    if (m_histogramView -> currentProducer() -> maximalZoom() < 1.0) {
+        if ((m_width / 2) >= m_histogramView -> currentProducer() -> maximalZoom()) {
             zoomIn -> setEnabled(true);
         } else {
             zoomIn -> setEnabled(false);
@@ -184,60 +134,11 @@ void KisHistogramWidget::setView(double from, double size)
             currentView -> setEnabled(true);
         else
             currentView -> setEnabled(false);
+    } else {
+        zoomIn -> setEnabled(false);
+        zoomOut -> setEnabled(false);
+        currentView -> setEnabled(false);
     }
-}
-
-void KisHistogramWidget::updateHistogram() 
-{
-    Q_UINT32 height = pixHistogram -> height();
-    Q_INT32 bins = m_histogram -> producer() -> numberOfBins();
-    m_pix = QPixmap(bins, height);
-    m_pix.fill();
-    QPainter p(&m_pix);
-    p.setBrush(Qt::black);
-    
-    Q_INT32 i = 0;
-    
-    for (uint chan = 0; chan < m_channels.count(); chan++) {
-        m_histogram -> setChannel(m_channelToOffset.at(chan));
-        m_histogram -> computeHistogram(); // We changed the channel, recompute
-
-        if(m_color)
-            p.setPen(m_channels.at(chan) -> color());
-
-        if (m_histogram -> getHistogramType() == LINEAR) {
-            double factor = (double)height / (double)m_histogram -> getHighest();
-            for( i=0; i<bins; ++i ) {
-                p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
-            }
-        } else {
-            double factor = (double)height / (double)log(m_histogram -> getHighest());
-            for( i = 0; i < bins; ++i ) {
-                p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
-            }
-        }
-    }
-
-    pixHistogram -> setPixmap(m_pix);
-}
-
-void KisHistogramWidget::slotZoomIn() {
-    if ((m_width / 2) >= m_currentProducer -> maximalZoom()) {
-        setView(m_currentProducer -> viewFrom(), m_width / 2);
-    }
-}
-
-void KisHistogramWidget::slotZoomOut() {
-    if (m_width * 2 <= 1.0) {
-        setView(m_currentProducer -> viewFrom(), m_width * 2);
-    }
-}
-
-void KisHistogramWidget::slide(int val) {
-    kdDebug() << "slided to " << val << " viewing from: "
-            << ((static_cast<double>(val) / 100.0) * (1.0 - m_width)) << endl;
-    // Beware: at the END (e.g. 100), we want to still view m_width:
-    setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
 }
 
 #include "kis_histogram_widget.moc"

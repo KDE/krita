@@ -92,7 +92,7 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 
     QString pname = f->pixmap();
     
-    if (pname.isEmpty() || pname.isNull() || pname == "") {
+    if (pname.isEmpty() /*|| pname.isNull() || pname == ""*/) {
         return QPixmap();
     }
     

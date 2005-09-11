@@ -60,7 +60,7 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
     m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
         
     vKisTool tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
-    for (vKisTool_it it = tools.begin(); it != tools.end(); it++) {
+    for (vKisTool_it it = tools.begin(); it != tools.end(); ++it) {
         KisTool * t = *it;
         if (!t) continue;
         toolbox->registerTool( t->action(), t->toolType(), t->priority() );
@@ -182,7 +182,7 @@ void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputD
 
     if (vit != m_inputDeviceToolSetMap.end()) {
         vKisTool& oldTools = (*vit).second;
-        for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); it++) {
+        for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); ++it) {
             KisTool *tool = *it;
             KAction *toolAction = tool -> action();
             toolAction -> disconnect(SIGNAL(activated()), tool, SLOT(activate()));
@@ -202,7 +202,7 @@ void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputD
 
     vKisTool& tools = (*vit).second;
 
-    for (vKisTool::iterator it = tools.begin(); it != tools.end(); it++) {
+    for (vKisTool::iterator it = tools.begin(); it != tools.end(); ++it) {
         KisTool *tool = *it;
         KAction *toolAction = tool -> action();
         connect(toolAction, SIGNAL(activated()), tool, SLOT(activate()));
@@ -231,7 +231,7 @@ KisTool * KisToolManager::findTool(const QString &toolName, enumInputDevice inpu
 
     const vKisTool& tools = (*vit).second;
 
-    for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); it++) {
+    for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); ++it) {
         KisTool *t = *it;
         if (t -> name() == toolName) {
             tool = t;

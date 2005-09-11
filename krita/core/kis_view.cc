@@ -1102,7 +1102,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 
     KisImageSP img;
 
-    for (KURL::List::iterator it = urls.begin(); it != urls.end(); it++) {
+    for (KURL::List::iterator it = urls.begin(); it != urls.end(); ++it) {
         KURL url = *it;
         KisDoc d;
         d.import(url);
@@ -1115,7 +1115,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
             rc += v.size();
             current -> activeLayer() -> deselect();
 
-            for (vKisLayerSP_it it = v.begin(); it != v.end(); it++) {
+            for (vKisLayerSP_it it = v.begin(); it != v.end(); ++it) {
                 KisLayerSP layer = *it;
 
                 layer -> setImage(current);
@@ -1825,7 +1825,7 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
             int actionId = popup.exec(QCursor::pos());
 
             if (actionId >= 0 && actionId != cancelId) {
-                for (KURL::List::ConstIterator it = urls.begin (); it != urls.end (); it++) {
+                for (KURL::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
                     KURL url = *it;
 
                     switch (actionId) {
@@ -2098,7 +2098,7 @@ void KisView::layersUpdated()
         if (img) {
                 vKisLayerSP l = img -> layers();
 
-                for (vKisLayerSP_it it = l.begin(); it != l.end(); it++)
+                for (vKisLayerSP_it it = l.begin(); it != l.end(); ++it)
                         m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
         }
 
@@ -2609,7 +2609,7 @@ void KisView::detach(KisCanvasObserver *observer)
 
 void KisView::notify()
 {
-    for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); it++) {
+    for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); ++it) {
         (*it) -> update(this);
     }
 }

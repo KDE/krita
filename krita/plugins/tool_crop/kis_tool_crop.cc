@@ -387,7 +387,7 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
                 gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
                 gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller -> canvas() -> width(), starty);
                 QMemArray <QRect> rects = m_handlesRegion.rects (); 
-                for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); it++)
+                for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
                 {
                         gc.fillRect (*it, Qt::black);
                 }

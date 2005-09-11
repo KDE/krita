@@ -110,7 +110,7 @@ void KisGuideMgr::resizeLinesPixmap(const QSize& size, QPixmap *vLine, QPixmap *
 
 void KisGuideMgr::resize()
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> orientation() == Qt::Vertical)
@@ -127,7 +127,7 @@ void KisGuideMgr::erase(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT
     Q_INT32 x;
     Q_INT32 y;
 
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> hasBuffer) {
@@ -163,7 +163,7 @@ void KisGuideMgr::paint(QPaintDevice *device, QWidget *w, Q_INT32 xOffset, Q_INT
     if (yOffset < 0)
         dy += d;
 
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> orientation() == Qt::Vertical) {
@@ -210,7 +210,7 @@ void KisGuideMgr::remove(KisGuideSP gd)
 
 KisGuideSP KisGuideMgr::find(double x, double y, double d)
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> orientation() == Qt::Horizontal && QABS(g -> position() - y) < d)
@@ -225,7 +225,7 @@ KisGuideSP KisGuideMgr::find(double x, double y, double d)
 
 KisGuideSP KisGuideMgr::findHorizontal(double y, double d)
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> orientation() == Qt::Horizontal && QABS(g -> position() - y) < d)
@@ -237,7 +237,7 @@ KisGuideSP KisGuideMgr::findHorizontal(double y, double d)
 
 KisGuideSP KisGuideMgr::findVertical(double x, double d)
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> orientation() == Qt::Vertical && QABS(g -> position() - x) < d)
@@ -275,7 +275,7 @@ void KisGuideMgr::unselectAll()
 
 void KisGuideMgr::selectAll()
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++)
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it)
         select(*it);
 }
 
@@ -286,7 +286,7 @@ bool KisGuideMgr::hasSelected() const
 
 void KisGuideMgr::moveSelectedByX(double d)
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> isSelected() && g -> orientation() == Qt::Vertical)
@@ -296,7 +296,7 @@ void KisGuideMgr::moveSelectedByX(double d)
 
 void KisGuideMgr::moveSelectedByY(double d)
 {
-    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); it++) {
+    for (vKisGuideSP_it it = m_lines.begin(); it != m_lines.end(); ++it) {
         KisGuideSP g = *it;
 
         if (g -> isSelected() && g -> orientation() == Qt::Horizontal)
@@ -313,7 +313,7 @@ void KisGuideMgr::removeSelected()
 {
     vKisGuideSP_it rm_it;
 
-    for (vKisGuideSP_it it = m_slines.begin(); it != m_slines.end(); it++) {
+    for (vKisGuideSP_it it = m_slines.begin(); it != m_slines.end(); ++it) {
         rm_it = m_lines.find(*it);
 
         if (rm_it != m_lines.end())
@@ -325,7 +325,7 @@ void KisGuideMgr::removeSelected()
 
 void KisGuideMgr::save(QDomElement& element)
 {
-    for (vKisGuideSP_it it = m_slines.begin(); it != m_slines.end(); it++) {
+    for (vKisGuideSP_it it = m_slines.begin(); it != m_slines.end(); ++it) {
         KisGuideSP g = *it;
         QDomElement e = element.ownerDocument().createElement("Guideline");
 

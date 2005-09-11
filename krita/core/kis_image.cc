@@ -135,11 +135,11 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); it++) {
+                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); ++it) {
                     m_img -> rm(*it);
                 }
 
-                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); it++) {
+                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); ++it) {
                     m_img -> add(*it, -1);
                 }
 
@@ -152,11 +152,11 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); it++) {
+                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); ++it) {
                     m_img -> rm(*it);
                 }
 
-                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); it++) {
+                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); ++it) {
                     m_img -> add(*it, -1);
                 }
 
@@ -470,7 +470,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
         m_layers.reserve(rhs.m_layers.size());
 
-        for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); it++) {
+        for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); ++it) {
             KisLayerSP layer = new KisLayer(**it);
             Q_CHECK_PTR(layer);
 
@@ -1204,7 +1204,7 @@ Q_INT32 KisImage::index(const KisLayerSP &layer)
 
 KisLayerSP KisImage::layer(const QString& name)
 {
-    for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); it++) {
+    for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it) {
         if ((*it) -> name() == name)
             return *it;
     }
@@ -1401,7 +1401,7 @@ Q_INT32 KisImage::nHiddenLayers() const
 {
     Q_INT32 n = 0;
 
-    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); it++) {
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it) {
         const KisLayerSP& layer = *it;
 
         if (!layer -> visible()) {
@@ -1416,7 +1416,7 @@ Q_INT32 KisImage::nLinkedLayers() const
 {
     Q_INT32 n = 0;
 
-    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); it++) {
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it) {
         const KisLayerSP& layer = *it;
 
         if (layer -> linked()) {

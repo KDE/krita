@@ -339,7 +339,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 
         image.appendChild(elem);
 
-        for (vKisLayerSP_it it = layers.begin(); it != layers.end(); it++)
+        for (vKisLayerSP_it it = layers.begin(); it != layers.end(); ++it)
             elem.appendChild(saveLayer(doc, *it));
     }
 
@@ -601,7 +601,7 @@ bool KisDoc::completeSaving(KoStore *store)
 
     vKisLayerSP layers = (img) -> layers();
 
-    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
+    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
         connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
         location = external ? QString::null : uri;
         location += (img) -> name() + "/layers/" + (*it2) -> name();
@@ -694,7 +694,7 @@ bool KisDoc::completeLoading(KoStore *store)
 
     vKisLayerSP layers = (m_currentImage) -> layers();
 
-    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); it2++) {
+    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
         connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
         location = external ? QString::null : uri;
         location += (m_currentImage) -> name() + "/layers/" + (*it2) -> name();

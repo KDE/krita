@@ -165,7 +165,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     if (img) {
         vKisLayerSP layers = img->layers();
         
-        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
+        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
             const KisLayerSP& layer = *it;
             if (layer->visible()) {
                 m_optionsWidget->cmbSources->insertItem(layer->name());

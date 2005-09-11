@@ -400,7 +400,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     if (img) {
         vKisLayerSP layers = img->layers();
         
-        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); it++) {
+        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
             const KisLayerSP& layer = *it;
             m_page->cmbLayer->insertItem(layer->name());
         }

@@ -50,7 +50,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_emboss_filter.h"
 
-KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", "&Emboss with Variable Depth...")
+KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), "emboss", i18n("&Emboss with Variable Depth..."))
 {
 }
 

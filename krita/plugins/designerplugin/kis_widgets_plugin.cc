@@ -30,7 +30,7 @@ KisWidgetInfo::KisWidgetInfo(QString nincludeFile, QString ntoolTip, QString nwh
     whatsThis (nwhatsThis),
     isContainer (nisContainer)
 {
-};
+}
 
 KisWidgetsPlugin::KisWidgetsPlugin()
 {

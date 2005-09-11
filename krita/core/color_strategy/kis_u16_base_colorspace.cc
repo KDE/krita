@@ -112,7 +112,7 @@ void KisU16BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8
         // and cast to short.
 
         Q_UINT16 *pixel = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
-	pixel[0] = UINT16_MULT(*(pixel + m_alphaPos), UINT8_TO_UINT16(*alpha8));
+	pixel[0] = UINT8_MULT(*(pixel + m_alphaPos), *alpha8);
 
 	++alpha8;
         U8_pixel += psize;

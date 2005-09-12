@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt
+ *            (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,23 +30,25 @@ KisHistogram::KisHistogram(KisLayerSP layer,
                KisHistogramProducerSP producer,
                const enumHistogramType type)
 {
-    m_layer = layer;
+    m_dev = layer.data();
     m_type = type;
     m_producer = producer;
-
-    m_max = 0;
-    m_min = QUANTUM_MAX;
-    m_mean = QUANTUM_MAX / 2;
-    m_median = QUANTUM_MAX / 2;
-    m_stddev = QUANTUM_MAX / 2;
-    m_pixels = 0;
-    m_count = 0;
-    m_high = 0;
-    m_low = QUANTUM_MAX;
-    m_percentile = 100;
-    m_pixels = 1; // AUTOLAYER: should use layer extends.
+    m_selection = false;
     m_channel = 0;
+    
+    updateHistogram();
+}
 
+KisHistogram::KisHistogram(KisPaintDeviceImplSP paintdev,
+                           KisHistogramProducerSP producer,
+                           const enumHistogramType type)
+{
+    m_dev = paintdev;
+    m_type = type;
+    m_producer = producer;
+    m_selection = false;
+    m_channel = 0;
+    
     updateHistogram();
 }
 
@@ -56,9 +59,9 @@ KisHistogram::~KisHistogram()
 void KisHistogram::updateHistogram()
 {
     Q_INT32 x,y,w,h;
-    m_layer->exactBounds(x,y,w,h);
-    KisRectIteratorPixel srcIt = m_layer -> createRectIterator(x,y,w,h, false);
-    KisAbstractColorSpace* cs = m_layer -> colorSpace();
+    m_dev -> exactBounds(x,y,w,h);
+    KisRectIteratorPixel srcIt = m_dev -> createRectIterator(x,y,w,h, false);
+    KisAbstractColorSpace* cs = m_dev -> colorSpace();
 
     QTime t;
     t.start();
@@ -74,25 +77,98 @@ void KisHistogram::updateHistogram()
 
 void KisHistogram::computeHistogram()
 {
-    m_high = 0;
-    m_low = (Q_UINT32) -1;
+    m_completeCalculations = calculateForRange(m_producer -> viewFrom(),
+            m_producer -> viewFrom() + m_producer -> viewWidth());
 
-    m_count = m_producer -> count();
-    if (m_count > 0) {
-        Q_INT32 bins = m_producer -> numberOfBins();
-        Q_UINT32 current;
-        for (Q_INT32 i = 0; i < bins; i++) {
-            current = m_producer -> getBinAt(m_channel, i);
-            if (current > m_high)
-                m_high = current;
-            if (current < m_low)
-                m_low = current;
-        }
+    if (m_selection) {
+        m_selectionCalculations = calculateForRange(m_selFrom, m_selTo);
+    } else {
+        m_selectionCalculations.clear();
     }
 
-#if 0
+#if 1
     dump();
 #endif
+}
+
+KisHistogram::Calculations KisHistogram::calculations() {
+    return m_completeCalculations.at(m_channel);
+}
+
+KisHistogram::Calculations KisHistogram::selectionCalculations() {
+    return m_selectionCalculations.at(m_channel);
+}
+
+QValueVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
+    QValueVector<Calculations> calculations;
+    uint count = m_producer -> channels().count();
+
+    for (uint i = 0; i < count; i++) {
+        calculations.append(calculateSingleRange(i, from, to));
+    }
+
+    return calculations;
+}
+
+KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, double from, double to) {
+    Calculations c;
+
+    // XXX If from == to, we only want a specific bin, handle that properly!
+
+    double max = from, min = to, total = 0.0, mean = 0.0, median = 0.0, stddev = 0.0;
+    Q_UINT32 high = 0, low = (Q_UINT32) -1, count = 0;
+    
+
+    if (m_producer -> count() == 0) {
+        // We won't get anything, even if a range is specified
+        // XXX make sure all initial '0' values are correct here!
+        return c;
+    }
+
+    Q_INT32 totbins = m_producer -> numberOfBins();
+    Q_UINT32 current;
+
+    // convert the double range into actual bins:
+    double factor = static_cast<double>(totbins) / m_producer -> viewWidth();
+
+    Q_INT32 fromBin = static_cast<Q_INT32>((from - m_producer -> viewFrom()) * factor);
+    Q_INT32 toBin = fromBin + static_cast<Q_INT32>((to - from) * factor);
+
+    kdDebug(DBG_AREA_MATH) << "calculating from " << from << " to " << to
+                           << ", means from bin " << fromBin << " to bin " << toBin << endl;
+
+    // Min, max, count, low, high
+    for (Q_INT32 i = fromBin; i < toBin; i++) {
+        current = m_producer -> getBinAt(channel, i);
+        double pos = static_cast<double>(i) / factor + from;
+        if (current > high)
+            high = current;
+        if (current < low)
+            low = current;
+        if (current > 0) {
+            if (pos < min)
+                min = pos;
+            if (pos > max)
+                max = pos;
+        }
+        // We do the count here as well.
+        // we can't use m_producer -> count() for this, because of the range
+        count += current;
+        total += current * pos;
+    }
+
+    if (count > 0)
+        mean = total / count;
+
+    c.m_high = high;
+    c.m_low = low;
+    c.m_count = count;
+    c.m_min = min;
+    c.m_max = max;
+    c.m_mean = mean;
+    c.m_total = total;
+
+    return c;
 }
 
 
@@ -106,27 +182,28 @@ void KisHistogram::dump() {
     case LOGARITHMIC:
         kdDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
     }
+    
+    kdDebug(DBG_AREA_MATH) << "Dumping channel " << m_channel << endl;
+    Calculations c = calculations();
 
-        for( int i = 0; i <256; ++i ) {
+/*        for( int i = 0; i <256; ++i ) {
         kdDebug(DBG_AREA_MATH) << "Value "
               << QString().setNum(i)
               << ": "
               <<  QString().setNum(m_values[i])
               << "\n";
-    }
+        }*/
     kdDebug(DBG_AREA_MATH) << "\n";
 
-    kdDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(m_max) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(m_min) << "\n";
-    kdDebug(DBG_AREA_MATH) << "High: " << QString().setNum(m_high) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(m_low) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Mean: " << QString().setNum(m_mean) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
-    kdDebug(DBG_AREA_MATH) << "pixels: " << QString().setNum(m_pixels) << "\n";
-    kdDebug(DBG_AREA_MATH) << "count: " << QString().setNum(m_count) << "\n";
-    kdDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(c.getMax()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(c.getMin()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "High: " << QString().setNum(c.getHighest()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(c.getLowest()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Mean: " << m_producer -> positionToString(c.getMean()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Total: " << QString().setNum(c.getTotal()) << "\n";
+//    kdDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
+//    kdDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
+//    kdDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
 
     kdDebug(DBG_AREA_MATH) << "\n";
-
 }

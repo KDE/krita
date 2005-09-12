@@ -42,10 +42,22 @@ public:
 
     virtual Q_INT32 count() { return m_count; }
     virtual Q_INT32 getBinAt(int channel, int position)
-        { return m_bins.at(channel).at(position); }
-    virtual Q_INT32 outOfViewLeft(int channel) { return m_outLeft.at(channel); }
-    virtual Q_INT32 outOfViewRight(int channel) { return m_outRight.at(channel); }
+        { return m_bins.at(externalToInternal(channel)).at(position); }
+    virtual Q_INT32 outOfViewLeft(int channel)
+        { return m_outLeft.at(externalToInternal(channel)); }
+    virtual Q_INT32 outOfViewRight(int channel)
+        { return m_outRight.at(externalToInternal(channel)); }
 protected:
+    /**
+     * The order in which channels() returns is not the same as the internal representation,
+     * that of the pixel internally. This method converts external usage to internal usage.
+     * This method uses some basic assumtpions about the layout of the pixel, so _extremely_
+     * exotic spaces might want to override this (see makeExternalToInternal source for
+     * those assumptions)
+     **/
+    virtual int externalToInternal(int ext) { return m_external.at(ext); }
+    // not virtual since that is useless: we call it from constructor
+    void makeExternalToInternal();
     typedef QValueVector<Q_UINT32> vBins;
     QValueVector<vBins> m_bins;
     vBins m_outLeft, m_outRight;
@@ -54,6 +66,7 @@ protected:
     int m_channels, m_nrOfBins;
     KisAbstractColorSpace *m_colorSpace;
     KisID m_id;
+    QValueVector<Q_INT32> m_external;
 };
 
 class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {

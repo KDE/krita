@@ -41,6 +41,10 @@ class QString;
  * calculate what part of a channel will fall in a bin. This gives us an interface to 
  * that the views that is not dependent of the actual colorspace of the histogram.
  * The 'size' value is the size, again from 0.0 to 1.0 of the displayed range.
+ * 
+ * For comfort of the GUI, and because it is logical, channels are accessed in the order
+ * in which they are found in the channels() method. This is potentially different from
+ * the order in which they are internally ordered!
  **/
 class KisHistogramProducer : public KShared {
 public:

@@ -40,6 +40,9 @@ KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channe
     m_count = 0;
     m_from = 0.0;
     m_width = 1.0;
+
+    // Set up our external to internal translation table
+    makeExternalToInternal();
 }
 
 void KisBasicHistogramProducer::clear() {
@@ -48,6 +51,25 @@ void KisBasicHistogramProducer::clear() {
         for (int j = 0; j < m_nrOfBins; j++) {
             m_bins.at(i).at(j) = 0;
         }
+    }
+}
+
+void KisBasicHistogramProducer::makeExternalToInternal() {
+    // This function assumes that the pixel is has no 'gaps'. That is to say: if we start
+    // at byte 0, we can get to the end of the pixel by adding consecutive size()s of
+    // the channels
+    vKisChannelInfoSP c = channels();
+    uint count = c.count();
+    int currentPos = 0;
+
+    for (uint i = 0; i < count; i++) {
+        for (uint j = 0; j < count; j++) {
+            if (c.at(j) -> pos() == currentPos) {
+                m_external.append(j);
+                break;
+            }
+        }
+        currentPos += c.at(m_external.at(m_external.count() - 1)) -> size();
     }
 }
 

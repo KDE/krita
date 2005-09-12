@@ -238,6 +238,7 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
 void KisHistogramView::updateHistogram() 
 {
     Q_UINT32 height = this -> height();
+    int selFrom, selTo; // from - to in bins
     
     if (!m_currentProducer) { // Something's very wrong
         kdDebug() << "No producer for this colorspace to update histogram with!!" << endl;
@@ -250,35 +251,64 @@ void KisHistogramView::updateHistogram()
     QPainter p(&m_pix);
     p.setBrush(Qt::black);
 
+    // Draw the box of the selection, if any
+    if (m_histogram -> hasSelection()) {
+        double width = m_histogram -> selectionTo() - m_histogram -> selectionFrom();
+        double factor = static_cast<double>(bins) / m_histogram -> producer() -> viewWidth();
+        selFrom = static_cast<int>(m_histogram -> selectionFrom() * factor);
+        selTo = selFrom + static_cast<int>(width * factor);
+        p.drawRect(selFrom, 0, selTo - selFrom, height);
+    } else {
+        // We don't want the drawing to think we're in a selected area
+        selFrom = -1;
+        selTo = 2;
+    }
+
     Q_INT32 i = 0;
     double highest = 0;
+    bool blackOnBlack = false;
 
-    // XXX ###
     // First we iterate once, so that we have the overall maximum. This is a bit inefficient,
-    // so this needs to be done better. Preferably we let the KisHistogram do all calculations
-    // once, and then just pick the right cached calculation each time (and extremum)
+    // but not too much since the histogram caches the calculations
     for (uint chan = 0; chan < m_channels.count(); chan++) {
         m_histogram -> setChannel(m_channelToOffset.at(chan));
-        m_histogram -> computeHistogram(); // We changed the channel, recompute
-        if ((double)m_histogram -> getHighest() > highest)
-            highest = (double)m_histogram -> getHighest();
+        if ((double)m_histogram -> calculations().getHighest() > highest)
+            highest = (double)m_histogram -> calculations().getHighest();
     }
 
     for (uint chan = 0; chan < m_channels.count(); chan++) {
+        QColor color;
         m_histogram -> setChannel(m_channelToOffset.at(chan));
-        m_histogram -> computeHistogram(); // We changed the channel, recompute
 
-        if(m_color)
-            p.setPen(m_channels.at(chan) -> color());
+        if (m_color) {
+            color = m_channels.at(chan) -> color();
+            p.setPen(color);
+        } else {
+            color = Qt::black;
+        }
+        blackOnBlack = (color == Qt::black);
 
         if (m_histogram -> getHistogramType() == LINEAR) {
             double factor = (double)height / highest;
             for( i=0; i<bins; ++i ) {
+                // So that we get a good view even with a selection box with
+                // black colors on background of black selection
+                if (i >= selFrom && i < selTo && blackOnBlack) {
+                    p.setPen(Qt::white);
+                } else {
+                    p.setPen(color);
+                }
                 p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
             }
         } else {
             double factor = (double)height / (double)log(highest);
             for( i = 0; i < bins; ++i ) {
+                // Same as above
+                if (i >= selFrom && i < selTo && blackOnBlack) {
+                    p.setPen(Qt::white);
+                } else {
+                    p.setPen(color);
+                }
                 p.drawLine(i, height, i,
                            height - int(log((double)m_histogram->getValue(i)) * factor));
             }

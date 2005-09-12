@@ -97,35 +97,29 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
 
     m_brushWidget = new KisIconWidget(this, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush shapes") );
-    m_brushWidget->show();
+    //m_brushWidget->show();
 
     m_patternWidget = new KisIconWidget(this, "patterns");
     m_patternWidget->setTextLabel( i18n("Fill patterns") );
-    m_patternWidget->show();
+    //m_patternWidget->show();
 
     m_gradientWidget = new KisIconWidget(this, "gradients");
     m_gradientWidget->setTextLabel( i18n("Gradients") );
-    m_gradientWidget->show();
+    //m_gradientWidget->show();
 
     m_paintopBox = new KisPaintopBox( m_view, this, "paintopbox" );
 
-    QVBoxLayout * vl = new QVBoxLayout( this, 1, 2, "controldocker main layout" );
-    QHBoxLayout * hl = new QHBoxLayout( vl, 2, "controldocker button frame layout" );
-    //hl->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding));
-    hl->addWidget( m_brushWidget );
-    hl->addWidget( m_patternWidget );
-    hl->addWidget( m_gradientWidget );
-    hl->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding));
-    vl->addLayout( hl );
-    vl->addWidget( m_paintopBox );
-    vl->addItem( new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
-
+    QGridLayout * g = new QGridLayout( this, 3, 5, 0, 0, "controldocker grid layout");
+    g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 0);
+    g->addWidget( m_brushWidget, 0, 1);
+    g->addWidget( m_patternWidget, 0, 2 );
+    g->addWidget( m_gradientWidget, 0, 3 );
+    g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 4);
+    g->addMultiCellWidget( m_paintopBox, 1, 1, 0, 4 );
+    
     m_brushWidget -> setFixedSize( 32, 32 );
     m_patternWidget -> setFixedSize( 32, 32 );
     m_gradientWidget -> setFixedSize( 32, 32 );
-
-
-
 
     createBrushesChooser(m_view);
     createPatternsChooser(m_view);

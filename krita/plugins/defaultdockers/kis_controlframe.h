@@ -77,7 +77,8 @@ class KisControlFrame : public QFrame {
 
 public:
     KisControlFrame(KisView * view, QWidget *parent = 0, const char *name = 0 );
-
+    virtual ~KisControlFrame() {};
+    
 public slots:
 
     void slotSetBrush(KoIconItem *item);

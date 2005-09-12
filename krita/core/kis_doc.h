@@ -62,7 +62,7 @@ public:
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
-    virtual bool loadChildren( KoStore* store) { return true; };
+    virtual bool loadChildren( KoStore* /*store*/) { return true; };
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QCString mimeType() const;
 

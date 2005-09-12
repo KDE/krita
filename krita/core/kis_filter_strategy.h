@@ -33,7 +33,7 @@ class KisFilterStrategy
         virtual ~KisFilterStrategy() {}
 
         KisID id() {return m_id;};
-        virtual double valueAt(double t) const {return 0;};
+        virtual double valueAt(double /*t*/) const {return 0;};
         virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(t/256.0));};
         double support() { return supportVal;};
         Q_UINT32 intSupport() { return intSupportVal;};

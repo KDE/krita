@@ -85,7 +85,7 @@ void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -95,7 +95,7 @@ void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile
     dst -> alpha = U16_OPACITY_OPAQUE;
 }
 
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -106,14 +106,14 @@ void KisRgbU16ColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *
 }
 
 
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(UINT16_TO_UINT8(src -> red), UINT16_TO_UINT8(src -> green), UINT16_TO_UINT8(src -> blue));
 }
 
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -168,7 +168,7 @@ void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     dstPixel -> blue = totalBlue;
 }
 
-vKisChannelInfoSP KisRgbU16ColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisRgbU16ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -720,7 +720,7 @@ void KisRgbU16ColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *mask,
                       Q_INT32 maskRowStride,
-                      QUANTUM U8_opacity,
+                      Q_UINT8 U8_opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)

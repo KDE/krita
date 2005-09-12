@@ -236,8 +236,8 @@ namespace {
 
     public:
         KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceImplSP paintDevice,
-                       KisDataManagerSP beforeData, KisAbstractColorSpace * beforeColorSpace, KisProfileSP beforeProfile,
-                       KisDataManagerSP afterData, KisAbstractColorSpace * afterColorSpace, KisProfileSP afterProfile
+                       KisDataManagerSP beforeData, KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
+                       KisDataManagerSP afterData, KisColorSpace * afterColorSpace, KisProfile *  afterProfile
                        ) : super(i18n("Convert Layer Type"))
             {
                 m_adapter = adapter;
@@ -287,17 +287,17 @@ namespace {
         KisPaintDeviceImplSP m_paintDevice;
 
         KisDataManagerSP m_beforeData;
-        KisAbstractColorSpace * m_beforeColorSpace;
-        KisProfileSP m_beforeProfile;
+        KisColorSpace * m_beforeColorSpace;
+        KisProfile *  m_beforeProfile;
 
         KisDataManagerSP m_afterData;
-        KisAbstractColorSpace * m_afterColorSpace;
-        KisProfileSP m_afterProfile;
+        KisColorSpace * m_afterColorSpace;
+        KisProfile *  m_afterProfile;
     };
 
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisAbstractColorSpace * colorSpace, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString& name) :
     KShared()
 {
     if (colorSpace == 0) {
@@ -336,7 +336,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisAbstractColorSpace * colorSpace, const
     m_profile = 0;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisAbstractColorSpace * colorSpace, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace, const QString& name) :
     KShared()
 {
     m_dcop = 0;
@@ -378,7 +378,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisAbstractColorSpace * co
     m_extentIsValid = true;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KShared(rhs), KisPaintDevice()
+KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KisPaintDevice(), KShared(rhs)
 {
         if (this != &rhs) {
                 m_owner = 0;
@@ -666,7 +666,7 @@ bool KisPaintDeviceImpl::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent)
 {
     if (profile() == 0) setProfile(m_owner -> profile());
 
@@ -731,7 +731,7 @@ void KisPaintDeviceImpl::convertTo(KisAbstractColorSpace * dstColorSpace, KisPro
 
 }
 
-void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisColorSpace * colorSpace, KisProfile *  profile)
 {
     m_datamanager = data;
     m_colorSpace = colorSpace;
@@ -762,7 +762,7 @@ void KisPaintDeviceImpl::convertFromImage(const QImage& img)
 }
 
 
-void KisPaintDeviceImpl::setProfile(KisProfileSP profile)
+void KisPaintDeviceImpl::setProfile(KisProfile *  profile)
 {
 
     if (profile && profile -> colorSpaceSignature() == colorSpace() -> colorSpaceSignature() && profile -> valid()) {
@@ -775,7 +775,7 @@ void KisPaintDeviceImpl::setProfile(KisProfileSP profile)
     emit(profileChanged(m_profile));
 }
 
-QImage KisPaintDeviceImpl::convertToQImage(KisProfileSP dstProfile, float exposure)
+QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, float exposure)
 {
     Q_INT32 x1;
     Q_INT32 y1;
@@ -796,7 +796,7 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfileSP dstProfile, float exposu
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
-QImage KisPaintDeviceImpl::convertToQImage(KisProfileSP dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
+QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
 {
     if (w < 0)
         w = 0;

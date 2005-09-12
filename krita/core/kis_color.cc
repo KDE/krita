@@ -21,7 +21,7 @@
 #include "kis_pixel.h"
 #include "kis_color.h"
 #include "kis_profile.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_colorspace_registry.h"
 
 KisColor::KisColor()
@@ -39,10 +39,10 @@ KisColor::~KisColor()
 KisColor::KisColor(const QColor & color)
 {
     Q_ASSERT(color.isValid());
-    
+
     m_colorSpace = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
     if (!m_colorSpace) return;
-    
+
     m_data = new Q_UINT8[m_colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
     m_colorSpace->fromQColor(color, OPACITY_OPAQUE, m_data);
@@ -52,10 +52,10 @@ KisColor::KisColor(const QColor & color)
 KisColor::KisColor(const QColor & color, Q_UINT8 opacity)
 {
     Q_ASSERT(color.isValid());
-    
+
     m_colorSpace = KisColorSpaceRegistry::instance()->get( KisID("RGBA", ""));
     if (!m_colorSpace) return;
-    
+
     m_data = new Q_UINT8[m_colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
     m_colorSpace->fromQColor(color, opacity, m_data);
@@ -63,31 +63,31 @@ KisColor::KisColor(const QColor & color, Q_UINT8 opacity)
 }
 
 
-KisColor::KisColor(const QColor & color, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+KisColor::KisColor(const QColor & color, KisColorSpace * colorSpace, KisProfile *  profile)
     : m_colorSpace(colorSpace),
       m_profile(profile)
 {
     Q_ASSERT(color.isValid());
-    
+
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
     m_colorSpace->fromQColor(color, OPACITY_OPAQUE, m_data, profile);
 }
 
 
-KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisColorSpace * colorSpace, KisProfile *  profile)
     : m_colorSpace(colorSpace),
       m_profile(profile)
 {
     Q_ASSERT(color.isValid());
-    
+
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
-    
+
     m_colorSpace->fromQColor(color, alpha, m_data, profile);
 }
 
-KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+KisColor::KisColor(const Q_UINT8 * data, KisColorSpace * colorSpace, KisProfile *  profile)
     : m_colorSpace(colorSpace),
       m_profile(profile)
 {
@@ -98,7 +98,7 @@ KisColor::KisColor(const Q_UINT8 * data, KisAbstractColorSpace * colorSpace, Kis
 }
 
 
-KisColor::KisColor(const KisColor &src, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+KisColor::KisColor(const KisColor &src, KisColorSpace * colorSpace, KisProfile *  profile)
     : m_colorSpace(colorSpace),
       m_profile(profile)
 {
@@ -110,19 +110,19 @@ KisColor::KisColor(const KisColor &src, KisAbstractColorSpace * colorSpace, KisP
     KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorSpace(), src.profile());
     KisPixel dstPixel = KisPixel(m_data, m_data, colorSpace, profile);
     src.colorSpace()->convertTo(srcPixel, dstPixel);
-    
+
 }
 
 KisColor::KisColor(const KisColor & rhs)
 {
     if (this == &rhs) return;
-    
+
     m_colorSpace = rhs.colorSpace();
     m_data = new Q_UINT8[m_colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
     memcpy(m_data, rhs.data(), m_colorSpace->pixelSize());
     m_profile = rhs.profile();
-    
+
 }
 
 KisColor & KisColor::operator=(const KisColor & rhs)
@@ -139,12 +139,12 @@ KisColor & KisColor::operator=(const KisColor & rhs)
     return * this;
 }
 
-void KisColor::convertTo(KisAbstractColorSpace * cs, KisProfileSP profile)
+void KisColor::convertTo(KisColorSpace * cs, KisProfile *  profile)
 {
     kdDebug(DBG_AREA_CMS) << "Our colormodel: " << m_colorSpace->id().name()
           << ", new colormodel: " << cs->id().name() << "\n";
-          
-    if (m_colorSpace == cs && m_profile == profile) 
+
+    if (m_colorSpace == cs && m_profile == profile)
         return;
 
     Q_UINT8 * m_data2 = new Q_UINT8[cs->pixelSize()];
@@ -160,7 +160,7 @@ void KisColor::convertTo(KisAbstractColorSpace * cs, KisProfileSP profile)
 }
 
 
-void KisColor::setColor(Q_UINT8 * data, KisAbstractColorSpace * colorSpace, KisProfileSP profile)
+void KisColor::setColor(Q_UINT8 * data, KisColorSpace * colorSpace, KisProfile *  profile)
 {
     delete [] m_data;
     m_data = new Q_UINT8[colorSpace->pixelSize()];
@@ -174,17 +174,17 @@ void KisColor::toQColor(QColor *c) const
 {
     if (m_colorSpace && m_data) {
         // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorSpace));
-    
+        KisColorSpace * cs(const_cast<KisColorSpace*>(m_colorSpace));
+
         cs->toQColor(m_data, c, m_profile);
     }
 }
 
-void KisColor::toQColor(QColor *c, QUANTUM *opacity) const
+void KisColor::toQColor(QColor *c, Q_UINT8 *opacity) const
 {
     if (m_colorSpace && m_data) {
         // XXX (bsar): There must be a better way, but I'm getting hopelessly confused about constness by now
-        KisAbstractColorSpace * cs(const_cast<KisAbstractColorSpace*>(m_colorSpace));
+        KisColorSpace * cs(const_cast<KisColorSpace*>(m_colorSpace));
         cs->toQColor(m_data, c, opacity, m_profile);
     }
 }
@@ -198,16 +198,16 @@ QColor KisColor::toQColor() const
 
 void KisColor::dump() const
 {
-    
+
     kdDebug(DBG_AREA_CMS) << "KisColor (" << this << "), " << m_colorSpace->id().name() << "\n";
-    vKisChannelInfoSP channels = m_colorSpace->channels();
-        
-    vKisChannelInfoSP_cit begin = channels.begin();
-    vKisChannelInfoSP_cit end = channels.end();
-    
-    for (vKisChannelInfoSP_cit it = begin; it != end; ++it)
+    QValueVector<KisChannelInfo *> channels = m_colorSpace->channels();
+
+    QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
+    QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
+
+    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
     {
-        KisChannelInfoSP ch = (*it);
+        KisChannelInfo * ch = (*it);
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(Q_UINT8)) {
             // Byte
@@ -222,5 +222,5 @@ void KisColor::dump() const
             kdDebug(DBG_AREA_CMS) << "Channel (int): " << ch->name() << ": " << QString().setNum(*((const Q_UINT32 *)(m_data+ch->pos())))  << "\n";
         }
     }
-    
+
 }

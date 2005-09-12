@@ -102,7 +102,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);
                  // use the 'blackness' as alpha :)
-                QUANTUM alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
+                Q_UINT8 alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
                 QColor c = m_subject->fgColor().toQColor();
                 layer->setPixel(x, y, c, alpha);
             }

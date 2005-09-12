@@ -88,11 +88,11 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_alphaPos = 3;
 
 #ifdef WSDEBUG
-    vKisChannelInfoSP_it it;
+    QValueVector<KisChannelInfo *>_it it;
     int i = 0;
     for (it = m_channels.begin(); it != m_channels.end(); ++it)
     {
-        KisChannelInfoSP ch = (*it);
+        KisChannelInfo * ch = (*it);
         kdDebug(DBG_AREA_CMS) << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
         ++i;
     }
@@ -106,7 +106,7 @@ KisWetStickyColorSpace::~KisWetStickyColorSpace()
 {
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     Q_UINT8 r, g, b;
@@ -145,7 +145,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfil
 #endif
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     Q_UINT8 r, g, b;
@@ -183,7 +183,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile)
+void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) src;
 
@@ -195,7 +195,7 @@ void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileS
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile)
+void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile)
 {
 
     CELL_PTR p = (CELL_PTR) src;
@@ -212,12 +212,12 @@ void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *op
 
 
 
-KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile)
+KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile)
 {
     return KisPixelRO (src, src, this, profile);
 }
 
-KisPixel KisWetStickyColorSpace::toKisPixel(Q_UINT8 *src, KisProfileSP profile)
+KisPixel KisWetStickyColorSpace::toKisPixel(Q_UINT8 *src, KisProfile *  profile)
 {
     return KisPixel (src, src, this, profile);
 }
@@ -259,7 +259,7 @@ Q_UINT16 KisWetStickyColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 ch
 }
 
 
-vKisChannelInfoSP KisWetStickyColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisWetStickyColorSpace::channels() const
 {
     return m_channels;
 }
@@ -292,7 +292,7 @@ Q_INT32 KisWetStickyColorSpace::pixelSize() const
 
 
 QImage KisWetStickyColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                           KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
+                           KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
                            Q_INT32 /*renderingIntent*/, float /*exposure*/)
 {
 
@@ -322,8 +322,8 @@ QImage KisWetStickyColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
     return img;
 }
 
-bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP /*srcProfile*/,
-                         Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
+bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfile *  /*srcProfile*/,
+                         Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
                          Q_UINT32 numPixels,
                          Q_INT32 /*renderingIntent*/)
 {
@@ -357,7 +357,7 @@ void KisWetStickyColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *mask,
                       Q_INT32 maskRowStride,
-                      QUANTUM opacity,
+                      Q_UINT8 opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)
@@ -378,7 +378,7 @@ void KisWetStickyColorSpace::bitBlt(Q_UINT8 *dst,
 }
 
 
-void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     // XXX: This is basically the same as with rgb and used to composite layers for  Composition for
     //      painting works differently
@@ -466,7 +466,7 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 
 }
 
-void KisWetStickyColorSpace::compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, QUANTUM opacity)
+void KisWetStickyColorSpace::compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity)
 {
     Q_INT32 linesize = sizeof(CELL) * columns;
     Q_UINT8 *d;

@@ -31,7 +31,7 @@
 #include "kis_cmb_idlist.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_colorspace_registry.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
                    const QString & deviceName,
@@ -119,7 +119,7 @@ QString NewLayerDialog::layerName() const
 
 void NewLayerDialog::slotSetColorSpace(const KisID &colorSpaceId)
 {
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorSpaceId);
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorSpaceId);
     if (cs) {
         m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
     }

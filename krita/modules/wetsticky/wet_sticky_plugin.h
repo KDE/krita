@@ -21,10 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-class KisView;
-
 /**
  * A plugin wrapper around the Wet & Sticky colour space strategy.
  *
@@ -39,11 +35,7 @@ class WetStickyPlugin : public KParts::Plugin
 public:
     WetStickyPlugin(QObject *parent, const char *name, const QStringList &);
     virtual ~WetStickyPlugin();
-    
-private:
 
-    KisView* m_view;
-    KisAbstractColorSpace * m_ColorSpaceWS;
 };
 
 #endif // WET_STICKY_PLUGIN_H_

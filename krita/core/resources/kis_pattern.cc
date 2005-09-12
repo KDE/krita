@@ -205,7 +205,7 @@ bool KisPattern::init()
     return true;
 }
 
-KisLayerSP KisPattern::image(KisAbstractColorSpace * colorSpace) {
+KisLayerSP KisPattern::image(KisColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
     if (it != m_colorspaces.end())

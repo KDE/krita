@@ -48,9 +48,9 @@ public:
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates
-    QUANTUM selected(Q_INT32 x, Q_INT32 y);
+    Q_UINT8 selected(Q_INT32 x, Q_INT32 y);
 
-    void setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s);
+    void setSelected(Q_INT32 x, Q_INT32 y, Q_UINT8 s);
 
     QImage maskImage();
 

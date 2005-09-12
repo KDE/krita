@@ -54,14 +54,14 @@ void KisImageTester::allTests()
 
 void KisImageTester::mergeTests()
 {
-    KisAbstractColorSpace * colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
+    KisColorSpace * colorSpace = KisColorSpaceRegistry::instance() -> get(KisID("RGBA", ""));
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 
     KisColor mergedPixel = image -> mergedPixel(0, 0);
 
     QColor colour;
-    QUANTUM opacity;
+    Q_UINT8 opacity;
 
     mergedPixel.toQColor(&colour, &opacity);
 

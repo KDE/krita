@@ -22,6 +22,7 @@
 #define _KIS_CUSTOM_CONVOLUTION_FILTER_H_
 
 #include "kis_convolution_filter.h"
+#include "kis_filter_config_widget.h"
 
 class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
 public:

@@ -101,7 +101,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
+        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         // XXX: Should we actually set the profile here?
         image -> setProfile(KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
         QApplication::setOverrideCursor(KisCursor::waitCursor());
@@ -128,14 +128,14 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorSpace() -> id().name());
     dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorSpace() -> id());
 
-    KisProfileSP p = dev -> profile();
+    KisProfile *  p = dev -> profile();
     if ( p ) {
         dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
     }
 
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
+        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
         KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText());
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs,

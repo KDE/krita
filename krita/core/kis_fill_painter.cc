@@ -49,7 +49,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -80,7 +80,7 @@ KisFillPainter::KisFillPainter(KisPaintDeviceImplSP device) : super(device)
 // XXX: This needs to be optimized.
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, QUANTUM opacity)
+void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, Q_UINT8 opacity)
 {
 
     // Make sure we're in the right colorspace  
@@ -257,10 +257,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     m_size = m_width * m_height;
 
     KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
-    KisAbstractColorSpace * colorSpace = selection -> colorSpace();
-    KisAbstractColorSpace * devColorSpace = sourceDevice -> colorSpace();
+    KisColorSpace * colorSpace = selection -> colorSpace();
+    KisColorSpace * devColorSpace = sourceDevice -> colorSpace();
     
-    QUANTUM* source = new QUANTUM[sourceDevice->pixelSize()];
+    Q_UINT8* source = new Q_UINT8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
     KisPixel pixel = pixelIt.rawData();
 
@@ -296,7 +296,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
         pixelIt += x;
-        QUANTUM diff = devColorSpace -> difference(source, pixelIt.rawData());
+        Q_UINT8 diff = devColorSpace -> difference(source, pixelIt.rawData());
 
         if (diff >= m_threshold) {
             delete segment;

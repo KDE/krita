@@ -22,7 +22,9 @@
 #include <qglobal.h>
 #include <ksharedptr.h>
 
-#include "kis_types.h"
+#include <kis_channelinfo.h>
+#include <kis_colorspace.h>
+
 #include "kis_global.h"
 #include "kis_generic_registry.h"
 
@@ -32,16 +34,16 @@ class QString;
 /**
  * This class is an interface used in the generation of a histogram. It is a container of
  * data, all mathematically interesting things will calculated by a KisHistogram.
- * 
+ *
  * The default view will be the entire range each color can be in. And don't let the
  * numberOfBins return anything else then 256 unless you have a very good reason for it.
- * 
+ *
  * About the views: a view is a zoom combined with a start level: the entire
  * range of a channel is 0.0 - 1.0: this is the position. Combined with a zoom, we can
- * calculate what part of a channel will fall in a bin. This gives us an interface to 
+ * calculate what part of a channel will fall in a bin. This gives us an interface to
  * that the views that is not dependent of the actual colorspace of the histogram.
  * The 'size' value is the size, again from 0.0 to 1.0 of the displayed range.
- * 
+ *
  * For comfort of the GUI, and because it is logical, channels are accessed in the order
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
@@ -58,7 +60,7 @@ public:
      * Iterates over the rectangle specified by the iterator, on a piece with the colorspace.
      * The producer may only read the iterator, it may safely be constructed with write = false
      **/
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(double from, double width) = 0;
@@ -67,7 +69,7 @@ public:
 
     // Methods with general information about this specific producer
     virtual const KisID& id() const = 0;
-    virtual vKisChannelInfoSP channels() = 0;
+    virtual QValueVector<KisChannelInfo *> channels() = 0;
     virtual Q_INT32 numberOfBins() = 0;
     virtual QString positionToString(double pos) const = 0;
     virtual double viewFrom() const = 0;
@@ -91,7 +93,7 @@ public:
     KisHistogramProducerFactory(const KisID& id) : m_id(id) {}
     virtual ~KisHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() = 0;
-    virtual bool isCompatibleWith(KisAbstractColorSpace* colorSpace) const = 0;
+    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const = 0;
     virtual const KisID& id() const { return m_id; }
 protected:
     KisID m_id;
@@ -102,7 +104,7 @@ class KisHistogramProducerFactoryRegistry
 public:
     virtual ~KisHistogramProducerFactoryRegistry();
     static KisHistogramProducerFactoryRegistry* instance();
-    KisIDList listKeysCompatibleWith(KisAbstractColorSpace* colorSpace) const;
+    KisIDList listKeysCompatibleWith(KisColorSpace* colorSpace) const;
 
 private:
    KisHistogramProducerFactoryRegistry();

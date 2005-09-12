@@ -295,7 +295,7 @@ KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixel
     return outputMask;
 }
 
-KisLayerSP KisBrush::image(KisAbstractColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
+KisLayerSP KisBrush::image(KisColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -356,7 +356,7 @@ KisLayerSP KisBrush::image(KisAbstractColorSpace * colorSpace, double pressure, 
             }
 
             QColor colour = QColor(red, green, blue);
-            QUANTUM a = (alpha * OPACITY_OPAQUE) / 255;
+            Q_UINT8 a = (alpha * OPACITY_OPAQUE) / 255;
 
             layer -> colorSpace() -> fromQColor(colour, a, iter.rawData(), 0); // XXX: Do we need a profile here?
             ++iter;
@@ -544,10 +544,10 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
 
             double yInterp = srcY - topY;
 
-            QUANTUM topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
-            QUANTUM bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
-            QUANTUM topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
-            QUANTUM bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
+            Q_UINT8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
+            Q_UINT8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;
@@ -566,7 +566,7 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
                 d = OPACITY_OPAQUE;
             }
 
-            dstMask -> setAlphaAt(dstX, dstY, static_cast<QUANTUM>(d));
+            dstMask -> setAlphaAt(dstX, dstY, static_cast<Q_UINT8>(d));
         }
     }
 
@@ -852,7 +852,7 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     }
 }
 
-KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, QUANTUM maskValue, double subPixelX, double subPixelY)
+KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, Q_UINT8 maskValue, double subPixelX, double subPixelY)
 {
     int srcWidth = 1;
     int srcHeight = 1;
@@ -867,10 +867,10 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, QUANTUM maskValue, d
     for (int y = 0; y < dstHeight; y++) {
         for (int x = 0; x < dstWidth; x++) {
 
-            QUANTUM topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            QUANTUM bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
-            QUANTUM topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            QUANTUM bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
+            Q_UINT8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
+            Q_UINT8 topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
 
             // Bi-linear interpolation
             int d = static_cast<int>(a * b * topLeft
@@ -890,7 +890,7 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, QUANTUM maskValue, d
                 d = OPACITY_OPAQUE;
             }
 
-            outputMask -> setAlphaAt(x, y, static_cast<QUANTUM>(d));
+            outputMask -> setAlphaAt(x, y, static_cast<Q_UINT8>(d));
         }
     }
 
@@ -1143,7 +1143,7 @@ void KisBrush::generateBoundary() {
         layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), PRESSURE_DEFAULT);
     } else {
         KisAlphaMaskSP amask = mask();
-        KisAbstractColorSpace* cs = KisColorSpaceRegistry::instance()->get("RGBA");
+        KisColorSpace* cs = KisColorSpaceRegistry::instance()->get("RGBA");
         layer = new KisLayer(cs, "temp");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = layer -> createHLineIterator(0, y, w, true);

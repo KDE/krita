@@ -63,7 +63,7 @@ private:
     int m_threshold;
     Q_INT32 m_depth;
     KisLayerSP m_lay;
-    QUANTUM* m_oldColor, *m_color;
+    Q_UINT8* m_oldColor, *m_color;
     KisPainter *m_painter;
     KisCanvasSubject *m_subject;
     KisImageSP m_currentImage;

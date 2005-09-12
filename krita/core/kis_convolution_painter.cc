@@ -49,7 +49,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
@@ -116,7 +116,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     int lastProgressPercent = 0;
     emit notifyProgress(this, 0);
 
-    KisAbstractColorSpace * cs = m_device->colorSpace();
+    KisColorSpace * cs = m_device->colorSpace();
     
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {

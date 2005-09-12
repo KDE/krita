@@ -67,6 +67,7 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
     QVBoxLayout *layout = new QVBoxLayout( this );
 
     combo = new QComboBox( false, this );
+    combo->setFocusPolicy( QWidget::ClickFocus );
     layout->addWidget(combo);
 
     sv = new QScrollView( this );
@@ -188,7 +189,7 @@ void KisPaletteWidget::slotColorCellDoubleClicked( int col )
 void KisPaletteWidget::slotAddPalette(KisResource * palette)
 {
     KisPalette * p = dynamic_cast<KisPalette*>(palette);
-    
+
     m_namedPaletteMap.insert(palette -> name(), p);
 
     combo -> insertItem(palette -> name());

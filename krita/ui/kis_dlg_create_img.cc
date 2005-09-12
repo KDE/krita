@@ -38,8 +38,7 @@
 #include "kis_dlg_create_img.h"
 #include "wdgnewimage.h"
 #include "kis_profile.h"
-#include "kis_abstract_colorspace.h"
-#include "kis_factory.h"
+#include "kis_colorspace.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
 
@@ -101,7 +100,7 @@ QColor KisDlgCreateImg::backgroundColor() const
     return QColor(m_page -> cmbColor -> color());
 }
 
-QUANTUM KisDlgCreateImg::backgroundOpacity() const
+Q_UINT8 KisDlgCreateImg::backgroundOpacity() const
 {
     // XXX: This widget is sizeof quantum dependent. Scale
     // to selected bit depth.
@@ -129,12 +128,12 @@ QString KisDlgCreateImg::imgDescription() const
     return m_page -> txtDescription -> text();
 }
 
-KisProfileSP KisDlgCreateImg::profile() const
+KisProfile *  KisDlgCreateImg::profile() const
 {
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
     if (!cs) return 0;
 
-    vKisProfileSP resourceslist = cs -> profiles();
+    QValueVector<KisProfile *>  resourceslist = cs -> profiles();
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
     
     if (resourceslist.count() == 0 || 
@@ -155,11 +154,11 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
     m_page -> cmbProfile -> clear();
     m_page -> cmbProfile -> insertItem(i18n("None"));
 
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
     if (cs == 0) return;
 
-    vKisProfileSP profileList = cs -> profiles();
-        vKisProfileSP::iterator it;
+    QValueVector<KisProfile *>  profileList = cs -> profiles();
+        QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page -> cmbProfile -> insertItem((*it) -> productName());
     }

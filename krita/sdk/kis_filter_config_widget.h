@@ -15,26 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef _KIS_FILTER_CONFIG_WIDGET_H_
+#define _KIS_FILTER_CONFIG_WIDGET_H_
 
-#ifndef _KIS_CUSTOM_CONVOLUTION_FILTER_CONFIGURATION_WIDGET_H_
-#define _KIS_CUSTOM_CONVOLUTION_FILTER_CONFIGURATION_WIDGET_H_
-
-#include <vector>
 #include <qwidget.h>
-#include <kis_filter.h>
-#include "kis_filter_config_widget.h"
-class KisCustomConvolutionFilterConfigurationBaseWidget;
-class KisMatrixWidget;
-class KisFilter;
 
-class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigWidget
-{
+class KisFilterConfigWidget : public QWidget {
+
     Q_OBJECT
-    public:
-        KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name);
-        inline KisCustomConvolutionFilterConfigurationBaseWidget* matrixWidget() { return m_ccfcws; };
-    private:
-        KisCustomConvolutionFilterConfigurationBaseWidget* m_ccfcws;
+
+public:
+
+    KisFilterConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
+    virtual ~KisFilterConfigWidget();
+signals:
+    void sigPleaseUpdatePreview();
 };
 
 #endif

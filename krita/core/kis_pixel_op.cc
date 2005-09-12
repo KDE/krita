@@ -24,7 +24,7 @@ KisPixelOp::KisPixelOp()
     m_valid = false;
 }
 
-KisPixelOp::KisPixelOp(KisAbstractColorSpace * cs)
+KisPixelOp::KisPixelOp(KisColorSpace * cs)
     : m_cs(cs)
 {
     m_valid = false;

@@ -69,7 +69,7 @@ public:
     */
     virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisLayerSP image(KisAbstractColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisLayerSP image(KisColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(KisPoint);
     KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;
@@ -131,7 +131,7 @@ private:
     static QImage scaleImage(const QImage& srcImage, int width, int height);
     static QImage interpolate(const QImage& image1, const QImage& image2, double t);
 
-    static KisAlphaMaskSP scaleSinglePixelMask(double scale, QUANTUM maskValue, double subPixelX, double subPixelY);
+    static KisAlphaMaskSP scaleSinglePixelMask(double scale, Q_UINT8 maskValue, double subPixelX, double subPixelY);
     static QImage scaleSinglePixelImage(double scale, QRgb pixel, double subPixelX, double subPixelY);
 
     // Find the scaled brush(es) nearest to the given scale.

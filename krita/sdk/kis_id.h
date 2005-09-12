@@ -21,8 +21,6 @@
 #ifndef _KIS_ID_H_
 #define _KIS_ID_H_
 
-#include <ksharedptr.h>
-
 #include <qvaluelist.h>
 #include <qstring.h>
 
@@ -56,7 +54,7 @@
  * That last bit has not been solved yet.
  *
  */
-class KisID : public KShared {
+class KisID {
 
 
 public:

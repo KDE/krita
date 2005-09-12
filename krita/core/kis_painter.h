@@ -129,7 +129,7 @@ public:
         void bitBlt(Q_INT32 dx, Q_INT32 dy, 
             const KisCompositeOp& op, 
             KisPaintDeviceImplSP src,
-                    QUANTUM opacity,
+                    Q_UINT8 opacity,
                     Q_INT32 sx, Q_INT32 sy, 
             Q_INT32 sw, Q_INT32 sh);
 
@@ -141,7 +141,7 @@ public:
               const KisCompositeOp &op,
               KisPaintDeviceImplSP src,
               KisSelectionSP selMask,
-              QUANTUM opacity,
+              Q_UINT8 opacity,
               Q_INT32 sx, Q_INT32 sy,
               Q_INT32 sw, Q_INT32 sh);
  
@@ -154,7 +154,7 @@ public:
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
               const KisCompositeOp &op, 
               KisPaintDeviceImplSP src,
-              QUANTUM opacity,
+              Q_UINT8 opacity,
               Q_INT32 sx, Q_INT32 sy, 
               Q_INT32 sw, Q_INT32 sh);
 
@@ -288,8 +288,8 @@ public:
     void setStrokeStyle(StrokeStyle strokeStyle) { m_strokeStyle = strokeStyle; }
     StrokeStyle strokeStyle() const { return m_strokeStyle; }
 
-    void setOpacity(QUANTUM opacity) { m_opacity = opacity; }
-    QUANTUM opacity() const { return m_opacity; }
+    void setOpacity(Q_UINT8 opacity) { m_opacity = opacity; }
+    Q_UINT8 opacity() const { return m_opacity; }
 
     void setCompositeOp(const KisCompositeOp& op) { m_compositeOp = op; }
     KisCompositeOp compositeOp() const { return m_compositeOp; }
@@ -335,15 +335,15 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
-    QUANTUM m_opacity;
+    Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
     KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;
     bool m_cancelRequested;
     Q_INT32 m_pixelSize;
-    KisAbstractColorSpace * m_colorSpace;
-    KisProfileSP m_profile;
+    KisColorSpace * m_colorSpace;
+    KisProfile *  m_profile;
     KisPaintDeviceImplSP m_dab;
 
 };

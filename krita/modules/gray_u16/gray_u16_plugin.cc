@@ -48,12 +48,12 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringLis
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceGRAYU16 = new KisGrayU16ColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceGRAYU16);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceGRAYU16);
+        KisColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace();
+        Q_CHECK_PTR(colorSpaceGRAYU16);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceGRAYU16);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), m_ColorSpaceGRAYU16) );
+                (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
     }
 
 }

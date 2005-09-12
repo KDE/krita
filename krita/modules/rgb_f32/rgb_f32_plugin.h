@@ -33,10 +33,7 @@ class RGBF32Plugin : public KParts::Plugin
 public:
     RGBF32Plugin(QObject *parent, const char *name, const QStringList &);
     virtual ~RGBF32Plugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceRGBF32;
 };
 
 

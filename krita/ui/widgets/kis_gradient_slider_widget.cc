@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include "kis_gradient_slider_widget.h"
 
 #include <qpainter.h>
@@ -25,18 +25,13 @@
 #include <kpopupmenu.h>
 #include <klocale.h>
 
-#include "kis_types.h"
-#include "kis_gradient_painter.h"
-#include "kis_paint_device_impl.h"
-#include "kis_colorspace_registry.h"
-
 #include "kis_autogradient_resource.h"
 
 #define MARGIN 5
 #define HANDLE_SIZE 10
 
 KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, WFlags f )
-    : QWidget( parent, name, f), 
+    : QWidget( parent, name, f),
     m_currentSegment(0),
     m_selectedSegment(0),
     m_drag(0)
@@ -74,17 +69,17 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             m_pixmapIO.putImage(&pixmap, 0, 0, &img);
             painter.drawPixmap( MARGIN + 1, MARGIN + 1, pixmap, 0, 0, pixmap.width(), pixmap.height());
         }
-    
+
         painter.fillRect( MARGIN + 1, height()- MARGIN - HANDLE_SIZE, width() - 2 * MARGIN, HANDLE_SIZE, QBrush( Qt::white ) );
         if( m_selectedSegment )
         {
             QRect selection( qRound( m_selectedSegment -> startOffset()*(double)(width()- 2 * MARGIN - 2) ) + 6,
-                    height()- HANDLE_SIZE - MARGIN, 
+                    height()- HANDLE_SIZE - MARGIN,
                     qRound( ( m_selectedSegment -> endOffset() - m_selectedSegment -> startOffset() )*(double)(width()-12) ),
                     HANDLE_SIZE );
             painter.fillRect( selection, QBrush( colorGroup().highlight() ) );
         }
-    
+
         QPointArray triangle(3);
         QValueVector<double> handlePositions = m_autogradientResource -> getHandlePositions();
         int position;
@@ -122,15 +117,15 @@ void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )
     if(segment != 0)
     {
         m_currentSegment = segment;
-        QRect leftHandle( qRound(m_currentSegment -> startOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 - 1 )), 
+        QRect leftHandle( qRound(m_currentSegment -> startOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 - 1 )),
                     height() - HANDLE_SIZE,
                     HANDLE_SIZE - 1,
                     HANDLE_SIZE);
-        QRect middleHandle( qRound(m_currentSegment -> middleOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 -2) ), 
+        QRect middleHandle( qRound(m_currentSegment -> middleOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 -2) ),
                     height() - HANDLE_SIZE - MARGIN,
                     HANDLE_SIZE - 1,
                     HANDLE_SIZE);
-        QRect rightHandle( qRound(m_currentSegment -> endOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 - 1 )), 
+        QRect rightHandle( qRound(m_currentSegment -> endOffset() * (double)(width()-2*MARGIN-2)+ MARGIN - (HANDLE_SIZE/2 - 1 )),
                     height() - HANDLE_SIZE,
                     HANDLE_SIZE - 1,
                     HANDLE_SIZE);

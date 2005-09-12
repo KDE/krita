@@ -120,7 +120,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
 
         bool      FindAnother = false;              // To search for good coordinates
 
-    KisAbstractColorSpace * cs = src -> colorSpace();
+    KisColorSpace * cs = src -> colorSpace();
 
         QDateTime dt = QDateTime::currentDateTime();
         QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
@@ -266,9 +266,9 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
                             KisHLineIterator oldIt = src -> createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
                             cs -> toQColor(oldIt.oldRawData(), &originalColor);
 
-                            int newRed = CLAMP(originalColor.red() + Bright, 0, QUANTUM_MAX);
-                            int newGreen = CLAMP(originalColor.green() + Bright, 0, QUANTUM_MAX);
-                            int newBlue = CLAMP(originalColor.blue() + Bright, 0, QUANTUM_MAX);
+                            int newRed = CLAMP(originalColor.red() + Bright, 0, Q_UINT8_MAX);
+                            int newGreen = CLAMP(originalColor.green() + Bright, 0, Q_UINT8_MAX);
+                            int newBlue = CLAMP(originalColor.blue() + Bright, 0, Q_UINT8_MAX);
 
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);

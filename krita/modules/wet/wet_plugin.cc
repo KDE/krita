@@ -78,14 +78,14 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
-        m_colorSpaceWet = new KisWetColorSpace();
-        Q_CHECK_PTR(m_colorSpaceWet);
+        KisColorSpace * colorSpaceWet = new KisWetColorSpace();
+        Q_CHECK_PTR(colorSpaceWet);
         // colorspace
-        KisColorSpaceRegistry::instance() -> add(m_colorSpaceWet);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceWet);
         // histogram producer
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("WETHISTO", i18n("Wet Histogram")), m_colorSpaceWet) );
+                (KisID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
         // wet brush op
         KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 
@@ -105,7 +105,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         // Texture filter
         (void) new KAction(i18n("Initialize Texture"), 0, 0, new TextureFilter(m_view),
                         SLOT(slotActivated()), actionCollection(), "texturefilter");
-        
+
 
         // Create the wet palette
         KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
@@ -115,7 +115,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
         m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
         m_view->paletteManager()->showWidget("hsvwidget");
-        
+
         m_view->getCanvasSubject() -> attach(w);
     }
 

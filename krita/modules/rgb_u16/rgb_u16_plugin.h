@@ -33,10 +33,6 @@ class RGBU16Plugin : public KParts::Plugin
 public:
     RGBU16Plugin(QObject *parent, const char *name, const QStringList &);
     virtual ~RGBU16Plugin();
-    
-private:
-
-    KisAbstractColorSpace * m_ColorSpaceRGBU16;
 };
 
 

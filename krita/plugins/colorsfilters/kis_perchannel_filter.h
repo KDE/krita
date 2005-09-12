@@ -23,7 +23,8 @@
 
 #include "kis_types.h"
 #include "kis_filter.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_filter_config_widget.h"
+#include "kis_colorspace.h"
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_multi_double_filter_widget.h"
 
@@ -34,7 +35,7 @@ class KisPerChannelFilterConfiguration
     : public KisFilterConfiguration
 {
 public:
-    KisPerChannelFilterConfiguration(Q_INT32 nbchannels, vKisChannelInfoSP ci);
+    KisPerChannelFilterConfiguration(Q_INT32 nbchannels, QValueVector<KisChannelInfo *> ci);
 
 public:
 
@@ -51,7 +52,7 @@ private:
 
 
 /**
- * This class is generic for filters that affect channel separately 
+ * This class is generic for filters that affect channel separately
  */
 template <typename Type, class ParamType, class WidgetClass>
 class KisPerChannelFilter
@@ -82,7 +83,7 @@ typedef KisPerChannelFilter<double, KisDoubleWidgetParam, KisMultiDoubleFilterWi
 // Implementation of the templatized functions
 
 template <typename Type>
-KisPerChannelFilterConfiguration<Type>::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, vKisChannelInfoSP ci)
+KisPerChannelFilterConfiguration<Type>::KisPerChannelFilterConfiguration(Q_INT32 nbintegers, QValueVector<KisChannelInfo *> ci)
 {
     m_values = new Type[ nbintegers ];
     Q_CHECK_PTR(m_values);
@@ -117,7 +118,7 @@ KisFilterConfigWidget * KisPerChannelFilter<Type, ParamType, WidgetClass>::creat
 
     for(Q_INT32 i = 0; i < m_nbchannels; i++)
     {
-        KisChannelInfoSP cI = dev->colorSpace() -> channels()[i];
+        KisChannelInfo * cI = dev->colorSpace() -> channels()[i];
         param.push_back( ParamType( m_min, m_max, m_initvalue, cI->name() ) );
     }
 

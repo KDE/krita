@@ -33,7 +33,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_histogram_view.h"
 #include "kis_basic_histogram_producers.h"
 
@@ -98,7 +98,7 @@ KisIDList KisHistogramView::listProducers()
     return KisHistogramProducerFactoryRegistry::instance() -> listKeysCompatibleWith(m_cs);
 }
 
-void KisHistogramView::setCurrentChannels(const KisID& producerID, vKisChannelInfoSP channels)
+void KisHistogramView::setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels)
 {
     m_currentProducer = KisHistogramProducerFactoryRegistry::instance()
             -> get(producerID) -> generate();
@@ -115,7 +115,7 @@ void KisHistogramView::setCurrentChannels(const KisID& producerID, vKisChannelIn
         return;
     }
 
-    vKisChannelInfoSP producerChannels = m_currentProducer -> channels();
+    QValueVector<KisChannelInfo *> producerChannels = m_currentProducer -> channels();
 
     for (uint i = 0; i < channels.count(); i++) {
         // Also makes sure the channel is actually in the producer's list
@@ -169,7 +169,7 @@ void KisHistogramView::setActiveChannel(int channel)
         m_histogram -> setChannel(0); // Set a default channel, just being nice
     } else {
         m_color = false;
-        vKisChannelInfoSP channels = m_currentProducer -> channels();
+        QValueVector<KisChannelInfo *> channels = m_currentProducer -> channels();
         for (uint i = 0; i < channels.count(); i++) {
             KisChannelInfo* channel = channels.at(i);
             if (channel -> name() == info.channel -> name()) {
@@ -223,7 +223,7 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
         info.isProducer = true;
         info.producer = producer;
         // channel not used for a producer
-        vKisChannelInfoSP channels = info.producer -> channels();
+        QValueVector<KisChannelInfo *> channels = info.producer -> channels();
         int count = channels.count();
         m_comboInfo.append(info);
         m_channelStrings.append(producer -> id() . name());

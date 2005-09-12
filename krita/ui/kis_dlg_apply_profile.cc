@@ -23,7 +23,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_types.h"
 #include "kis_profile.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
 #include "kis_id.h"
@@ -53,7 +53,7 @@ KisDlgApplyProfile::~KisDlgApplyProfile()
 }
 
 
-KisProfileSP KisDlgApplyProfile::profile() const
+KisProfile *  KisDlgApplyProfile::profile() const
 {
     QString profileName;
 
@@ -78,11 +78,11 @@ int KisDlgApplyProfile::renderIntent() const
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
 
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
     m_page -> cmbProfile -> clear();
     m_page -> cmbProfile -> insertItem(i18n("None"));
-    vKisProfileSP profileList = cs -> profiles();
-        vKisProfileSP::iterator it;
+    QValueVector<KisProfile *>  profileList = cs -> profiles();
+        QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());
     }

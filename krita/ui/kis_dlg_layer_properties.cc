@@ -29,13 +29,13 @@
 #include "wdglayerproperties.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_cmb_composite.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      const QPoint& pos,
                      Q_INT32 opacity,
                      const KisCompositeOp& compositeOp,
-                     const KisAbstractColorSpace * colorSpace,
+                     const KisColorSpace * colorSpace,
                      QWidget *parent, const char *name, WFlags f)
     : super(parent, name, f, name, Ok | Cancel)
 {

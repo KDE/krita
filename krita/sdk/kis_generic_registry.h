@@ -22,11 +22,9 @@
 #include <map>
 
 #include <qstring.h>
-#include <qstringlist.h>
 #include <kdebug.h>
 
-#include "kis_global.h"
-#include "kis_id.h"
+#include <kis_id.h>
 
 template<typename _T>
 class KisGenericRegistry {

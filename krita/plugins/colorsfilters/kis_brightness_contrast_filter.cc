@@ -26,9 +26,10 @@
 #include <qpainter.h>
 #include <qlabel.h>
 
+#include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_paint_device_impl.h"
 #include "kis_iterators_pixel.h"
 #include "tiles/kis_iterator.h"
@@ -37,7 +38,7 @@
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
 {
 }
- 
+
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     : KisFilter( id(), "adjust", "&Brightness/contrast...")
 {
@@ -52,7 +53,7 @@ KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(Q
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceImplSP)
 {
     KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
-    
+
     if ( widget == 0 )
     {
         return new KisBrightnessContrastFilterConfiguration();
@@ -75,7 +76,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
     KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
-        
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
@@ -86,10 +87,10 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
     {
         Q_UINT32 npix;
         npix = srcIt.nConseqPixels();
-        
+
         // change the brightness and contrast
         src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
-                    
+
         srcIt+=npix;
         dstIt+=npix;
 
@@ -123,7 +124,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
         hgp.drawPoint(i, 0);
     }
     m_page->hgradient->setPixmap(hgradientpix);
-    
+
     // Create the vertical gradient label
     QPixmap vgradientpix(1, 256);
     QPainter vgp(&vgradientpix);
@@ -134,7 +135,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
         vgp.drawPoint(0, 255-i);
     }
     m_page->vgradient->setPixmap(vgradientpix);
-    
+
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
@@ -170,9 +171,9 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
             val=0xFFFF;
         if(val <0)
             val = 0;
-            
+
         cfg->transfer[i] = val;
     }
-    
+
     return cfg;
 }

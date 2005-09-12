@@ -23,7 +23,6 @@
 #include "kis_global.h"
 #include "kis_integer_maths.h"
 #include "kis_u16_base_colorspace.h"
-#include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
 
 class KisXyzColorSpace : public KisU16BaseColorSpace {
@@ -46,10 +45,10 @@ public:
     // Conversion functions
 
     //XXX: KisPixel(RO) does not work with this colorspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
         { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
 
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
         { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
 
     // Pixel manipulation
@@ -62,7 +61,7 @@ public:
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
     // Information about the colorstrategy
-    virtual vKisChannelInfoSP channels() const;
+    virtual QValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
@@ -77,7 +76,7 @@ public:
                 Q_INT32 srcRowStride,
                 const Q_UINT8 *srcAlphaMask,
                 Q_INT32 maskRowStride,
-                QUANTUM opacity,
+                Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op);

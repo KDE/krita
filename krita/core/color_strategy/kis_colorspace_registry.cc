@@ -25,15 +25,16 @@
 
 #include "kis_factory.h"
 #include "kis_types.h"
+#include "kis_colorspace.h"
 #include "kis_xyz_colorspace.h"
 #include "kis_alpha_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_pixel_op.h"
 
 KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
-KisAbstractColorSpace * KisColorSpaceRegistry::m_rgb = 0;
-KisAbstractColorSpace * KisColorSpaceRegistry::m_alpha = 0;
-KisAbstractColorSpace * KisColorSpaceRegistry::m_xyz = 0;
+KisColorSpace * KisColorSpaceRegistry::m_rgb = 0;
+KisColorSpace * KisColorSpaceRegistry::m_alpha = 0;
+KisColorSpace * KisColorSpaceRegistry::m_xyz = 0;
 
 KisColorSpaceRegistry::KisColorSpaceRegistry()
 {
@@ -66,7 +67,7 @@ KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
 }
 
 
-KisAbstractColorSpace * KisColorSpaceRegistry::getRGB8()
+KisColorSpace * KisColorSpaceRegistry::getRGB8()
 {
     if ( m_rgb == 0 ) {
         m_rgb = m_singleton->get( "RGBA" );
@@ -74,7 +75,7 @@ KisAbstractColorSpace * KisColorSpaceRegistry::getRGB8()
     return m_rgb;
 }
 
-KisAbstractColorSpace * KisColorSpaceRegistry::getAlpha8()
+KisColorSpace * KisColorSpaceRegistry::getAlpha8()
 {
     if ( m_alpha == 0 ) {
         m_alpha = new KisAlphaColorSpace();
@@ -82,7 +83,7 @@ KisAbstractColorSpace * KisColorSpaceRegistry::getAlpha8()
     return m_alpha;
 }
 
-KisAbstractColorSpace * KisColorSpaceRegistry::getXYZ16()
+KisColorSpace * KisColorSpaceRegistry::getXYZ16()
 {
     if ( m_xyz == 0 ) {
         m_xyz = new KisXyzColorSpace();
@@ -92,7 +93,7 @@ KisAbstractColorSpace * KisColorSpaceRegistry::getXYZ16()
 }
 
 
-KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name)
+KisProfile *  KisColorSpaceRegistry::getProfileByName(const QString & name)
 {
     if (m_profileMap.find(name) == m_profileMap.end()) {
         return 0;
@@ -101,13 +102,13 @@ KisProfileSP KisColorSpaceRegistry::getProfileByName(const QString & name)
     return m_profileMap[name];
 }
 
-vKisProfileSP KisColorSpaceRegistry::profilesFor(KisAbstractColorSpace * cs)
+QValueVector<KisProfile *>  KisColorSpaceRegistry::profilesFor(KisColorSpace * cs)
 {
-    vKisProfileSP profiles;
+    QValueVector<KisProfile *>  profiles;
 
-    QMap<QString, KisProfileSP>::Iterator it;
+    QMap<QString, KisProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
-        KisProfileSP profile = it.data();
+        KisProfile *  profile = it.data();
         if (profile->colorSpaceSignature() == cs->colorSpaceSignature()) {
             profile->setColorType(cs->colorSpaceType());
             profiles.push_back(profile);

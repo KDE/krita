@@ -81,7 +81,7 @@ void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
 {
 }
 
-vKisChannelInfoSP KisCmykColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisCmykColorSpace::channels() const
 {
     return m_channels;
 }
@@ -120,7 +120,7 @@ void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,
             Q_INT32 srcRowStride,
             const Q_UINT8 *srcAlphaMask,
             Q_INT32 maskRowStride,
-            QUANTUM opacity,
+            Q_UINT8 opacity,
             Q_INT32 rows,
             Q_INT32 cols,
             const KisCompositeOp& op)
@@ -165,7 +165,7 @@ void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,
 void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                          const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
                          Q_INT32 rows, Q_INT32 numColumns,
-                         QUANTUM opacity)
+                         Q_UINT8 opacity)
 {
     while (rows > 0) {
 

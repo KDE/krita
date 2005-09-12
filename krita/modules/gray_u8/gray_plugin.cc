@@ -52,12 +52,12 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceGrayA = new KisGrayColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceGrayA);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceGrayA);
+        KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace();
+        Q_CHECK_PTR(colorSpaceGrayA);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceGrayA);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), m_ColorSpaceGrayA) );
+                (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
     }
 
 }

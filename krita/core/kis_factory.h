@@ -22,12 +22,15 @@
 #define __kis_factory_h__
 
 #include <koFactory.h>
-#include <koffice_export.h>
 #include "kis_generic_registry.h"
+
+#include <koffice_export.h>
+
 
 class KInstance;
 class KisResourceServerBase;
 class KAboutData;
+
 
 typedef KisGenericRegistry<KisResourceServerBase*> KisResourceServerRegistry;
 

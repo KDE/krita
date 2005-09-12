@@ -122,23 +122,23 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
             KisPixel dabP = dabLit.pixel();
             KisPixel devP = devLit.pixel();
             for( Q_INT32 i = 0; i < device -> colorSpace() -> nColorChannels(); i++) {
-                QUANTUM devQ = (QUANTUM) devP[ i ];
-                QUANTUM dabQ = (QUANTUM) dabP[ i ];
-                srcP[ i ] = (QUANTUM) (((QUANTUM_MAX - dabQ) * (devQ) ) / QUANTUM_MAX);
+                Q_UINT8 devQ = (Q_UINT8) devP[ i ];
+                Q_UINT8 dabQ = (Q_UINT8) dabP[ i ];
+                srcP[ i ] = (Q_UINT8) (((Q_UINT8_MAX - dabQ) * (devQ) ) / Q_UINT8_MAX);
             }
             for( Q_INT32 i = device -> colorSpace() -> nColorChannels(); i < device -> colorSpace() -> nChannels(); i++) {
-                QUANTUM devQ = (QUANTUM) devP[ i ];
-                QUANTUM dabQ = (QUANTUM) dabP[ i ];
-                srcP[ i ] = (QUANTUM) ((dabQ * devQ) / QUANTUM_MAX);
+                Q_UINT8 devQ = (Q_UINT8) devP[ i ];
+                Q_UINT8 dabQ = (Q_UINT8) dabP[ i ];
+                srcP[ i ] = (Q_UINT8) ((dabQ * devQ) / Q_UINT8_MAX);
             }
             
             // XXX: Fix this when alpha is set in KisPixel
             //device -> colorSpace() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
             /*
             for (int i = 0; i < depth; ++i) {
-                dstPR[i] = ( (QUANTUM_MAX - dabPR[i]) * (srcPR[i) ) / QUANTUM_MAX;
+                dstPR[i] = ( (Q_UINT8_MAX - dabPR[i]) * (srcPR[i) ) / Q_UINT8_MAX;
             }
-            dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / QUANTUM_MAX;
+            dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / Q_UINT8_MAX;
             */
             ++srcLit; ++dabLit; ++devLit;
         }

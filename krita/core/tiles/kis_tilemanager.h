@@ -53,7 +53,7 @@ public:
 
 private:
     KisTileManager();
-    KisTileManager(KisTileManager& rhs) {}
+    KisTileManager(KisTileManager&) {}
     KisTileManager operator=(const KisTileManager&);
 
 private:

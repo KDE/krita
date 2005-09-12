@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <klistbox.h>
 
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 class WdgLayerBox;
 class QButton;
@@ -66,7 +66,7 @@ public slots:
     void slotSetCurrentItem(int n);
     void setCompositeOp(const KisCompositeOp& compositeOp);
     void setOpacity(int opacity);
-    void setColorSpace(const KisAbstractColorSpace * colorSpace);
+    void setColorSpace(const KisColorSpace * colorSpace);
 
 signals:
     void itemToggleVisible();

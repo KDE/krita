@@ -47,7 +47,7 @@
 #include "kis_paint_device_impl.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
@@ -577,7 +577,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             }
 
             QColor color;
-            QUANTUM opacity;
+            Q_UINT8 opacity;
             
             m_gradient -> colorAt(t, &color, &opacity);
             layer -> colorSpace() -> fromQColor( color, opacity, iter.rawData());
@@ -605,7 +605,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
         emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
-        KisAbstractColorSpace * cs = layer->colorSpace();
+        KisColorSpace * cs = layer->colorSpace();
         for (int y = starty; y <= endy; y++) {
             KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
             for (int x = startx; x <= endx; x++) {
@@ -613,7 +613,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                 double maxDistance = 0;
 
                 QColor thisPixel;
-                QUANTUM thisPixelOpacity;
+                Q_UINT8 thisPixelOpacity;
 
                 cs->toQColor(iter.rawData(), &thisPixel, &thisPixelOpacity);
 
@@ -626,7 +626,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                             if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
                                 QColor color;
-                                QUANTUM opacity;
+                                Q_UINT8 opacity;
 
                                 layer -> pixel(sampleX, sampleY, &color, &opacity);
 
@@ -670,7 +670,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             }
 
                             QColor color;
-                            QUANTUM opacity;
+                            Q_UINT8 opacity;
 
                             m_gradient -> colorAt(t, &color, &opacity);
 

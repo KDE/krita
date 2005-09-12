@@ -24,7 +24,7 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 KisHistogram::KisHistogram(KisLayerSP layer,
                KisHistogramProducerSP producer,
@@ -35,7 +35,7 @@ KisHistogram::KisHistogram(KisLayerSP layer,
     m_producer = producer;
     m_selection = false;
     m_channel = 0;
-    
+
     updateHistogram();
 }
 
@@ -48,7 +48,7 @@ KisHistogram::KisHistogram(KisPaintDeviceImplSP paintdev,
     m_producer = producer;
     m_selection = false;
     m_channel = 0;
-    
+
     updateHistogram();
 }
 
@@ -61,7 +61,7 @@ void KisHistogram::updateHistogram()
     Q_INT32 x,y,w,h;
     m_dev -> exactBounds(x,y,w,h);
     KisRectIteratorPixel srcIt = m_dev -> createRectIterator(x,y,w,h, false);
-    KisAbstractColorSpace* cs = m_dev -> colorSpace();
+    KisColorSpace* cs = m_dev -> colorSpace();
 
     QTime t;
     t.start();
@@ -115,9 +115,9 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
 
     // XXX If from == to, we only want a specific bin, handle that properly!
 
-    double max = from, min = to, total = 0.0, mean = 0.0, median = 0.0, stddev = 0.0;
+    double max = from, min = to, total = 0.0, mean = 0.0; //, median = 0.0, stddev = 0.0;
     Q_UINT32 high = 0, low = (Q_UINT32) -1, count = 0;
-    
+
 
     if (m_producer -> count() == 0) {
         // We won't get anything, even if a range is specified
@@ -182,7 +182,7 @@ void KisHistogram::dump() {
     case LOGARITHMIC:
         kdDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
     }
-    
+
     kdDebug(DBG_AREA_MATH) << "Dumping channel " << m_channel << endl;
     Calculations c = calculations();
 

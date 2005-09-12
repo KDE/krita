@@ -27,6 +27,7 @@
 #include "kis_global.h"
 #include "wdgnewimage.h"
 
+class KisProfile;
 class KisID;
 class QButtonGroup;
 
@@ -36,23 +37,23 @@ class KisDlgCreateImg : public KDialogBase {
     Q_OBJECT
 
 public:
-    KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
-            Q_INT32 maxHeight, Q_INT32 defHeight, 
-            QString colorSpaceName, 
+    KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
+            Q_INT32 maxHeight, Q_INT32 defHeight,
+            QString colorSpaceName,
             QString imageName,
             QWidget *parent = 0, const char *name = 0);
     virtual ~KisDlgCreateImg();
 
 public:
     QColor backgroundColor() const;
-    QUANTUM backgroundOpacity() const;
+    Q_UINT8 backgroundOpacity() const;
     KisID colorSpaceID() const;
     Q_INT32 imgWidth() const;
     Q_INT32 imgHeight() const;
     QString imgName() const;
     double imgResolution() const;
     QString imgDescription() const;
-    KisProfileSP profile() const;
+    KisProfile *  profile() const;
 
 private slots:
 

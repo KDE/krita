@@ -152,7 +152,7 @@ KisAlphaMaskSP KisImagePipeBrush::mask(double pressure, double subPixelX, double
     return m_brushes.at(m_currentBrush - 1) -> mask(pressure, subPixelX, subPixelY);
 }
 
-KisLayerSP KisImagePipeBrush::image(KisAbstractColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
+KisLayerSP KisImagePipeBrush::image(KisColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
     // XXX: This does not follow the instructions in the 'parasite'

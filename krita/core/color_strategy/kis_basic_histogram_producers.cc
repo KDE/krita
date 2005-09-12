@@ -23,10 +23,10 @@
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 #include "kis_channelinfo.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channels,
-        int nrOfBins, KisAbstractColorSpace *cs)
+        int nrOfBins, KisColorSpace *cs)
     : m_channels(channels),
       m_nrOfBins(nrOfBins),
       m_colorSpace(cs),
@@ -58,7 +58,7 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
     // This function assumes that the pixel is has no 'gaps'. That is to say: if we start
     // at byte 0, we can get to the end of the pixel by adding consecutive size()s of
     // the channels
-    vKisChannelInfoSP c = channels();
+    QValueVector<KisChannelInfo *> c = channels();
     uint count = c.count();
     int currentPos = 0;
 
@@ -76,7 +76,7 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
 // ------------ U8 ---------------------
 
 KisBasicU8HistogramProducer::KisBasicU8HistogramProducer(const KisID& id,
-        KisAbstractColorSpace *cs)
+        KisColorSpace *cs)
     : KisBasicHistogramProducer(id, cs -> nChannels(), 256, cs) {
 }
 
@@ -85,7 +85,7 @@ QString KisBasicU8HistogramProducer::positionToString(double pos) const {
 }
 
 void KisBasicU8HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
-         KisAbstractColorSpace *cs) {
+         KisColorSpace *cs) {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
         m_outLeft.at(i) = 0;
@@ -110,7 +110,7 @@ void KisBasicU8HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
 // ------------ U16 ---------------------
 
 KisBasicU16HistogramProducer::KisBasicU16HistogramProducer(const KisID& id,
-        KisAbstractColorSpace *cs)
+        KisColorSpace *cs)
     : KisBasicHistogramProducer(id, cs -> nChannels(), 256, cs) {
 }
 
@@ -123,7 +123,7 @@ double KisBasicU16HistogramProducer::maximalZoom() const {
 }
 
 void KisBasicU16HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
-         KisAbstractColorSpace *cs) {
+         KisColorSpace *cs) {
     // The view
     Q_UINT16 from = static_cast<Q_UINT16>(m_from * UINT16_MAX);
     Q_UINT16 width = static_cast<Q_UINT16>(m_width * UINT16_MAX + 0.5); // We include the end
@@ -161,7 +161,7 @@ void KisBasicU16HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
 
 // ------------ Float32 ---------------------
 KisBasicF32HistogramProducer::KisBasicF32HistogramProducer(const KisID& id,
-        KisAbstractColorSpace *cs)
+        KisColorSpace *cs)
     : KisBasicHistogramProducer(id, cs -> nChannels(), 256, cs) {
 }
 
@@ -175,7 +175,7 @@ double KisBasicF32HistogramProducer::maximalZoom() const {
 }
 
 void KisBasicF32HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
-        KisAbstractColorSpace *cs) {
+        KisColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -223,7 +223,7 @@ KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
     m_channelsList.append(new KisChannelInfo(i18n("B"), 2, COLOR, 1, QColor(0,0,255)));
 }
 
-vKisChannelInfoSP KisGenericRGBHistogramProducer::channels() {
+QValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
     return m_channelsList;
 }
 
@@ -237,7 +237,7 @@ double KisGenericRGBHistogramProducer::maximalZoom() const {
 
 
 void KisGenericRGBHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
-         KisAbstractColorSpace *cs) {
+         KisColorSpace *cs) {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
         m_outLeft.at(i) = 0;

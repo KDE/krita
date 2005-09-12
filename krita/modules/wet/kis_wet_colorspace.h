@@ -99,11 +99,11 @@ public:
     // Semi-clever: we have only fifteen wet paint colors that are mapped to the
     // qcolors that are put in the painter by the special wet paint palette. Other
     // QColors are mapped to plain water...
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
@@ -114,15 +114,15 @@ public:
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
         { return 0; };
 
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
         { return 0; };
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    virtual vKisChannelInfoSP channels() const;
+    virtual QValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
@@ -133,7 +133,7 @@ public:
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
+                       KisProfile *  srcProfile, KisProfile *  dstProfile,
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
@@ -150,7 +150,7 @@ protected:
             Q_INT32 srcRowStride,
             const Q_UINT8 *srcAlphaMask,
             Q_INT32 maskRowStride,
-            QUANTUM opacity,
+            Q_UINT8 opacity,
             Q_INT32 rows,
             Q_INT32 cols,
             const KisCompositeOp& op);

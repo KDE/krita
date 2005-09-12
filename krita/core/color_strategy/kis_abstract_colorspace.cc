@@ -26,7 +26,6 @@
 #include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
 #include "kis_global.h"
-#include "kis_factory.h"
 #include "kis_profile.h"
 #include "kis_config.h"
 #include "kis_id.h"
@@ -102,8 +101,8 @@ bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 			   renderingIntent);
 }
 
-bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-					    Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
+bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfile *  srcProfile,
+					    Q_UINT8 * dst, KisColorSpace * dstColorSpace, KisProfile *  dstProfile,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
@@ -180,7 +179,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfileSP sr
     // we still wouldn't be able to get a transform. That's why we're here...
     while (numPixels > 0) {
         QColor color;
-        QUANTUM opacity;
+        Q_UINT8 opacity;
 
         toQColor(src, &color, &opacity);
         dstColorSpace -> fromQColor(color, opacity, dst);
@@ -311,14 +310,14 @@ void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelVal
 
 
     if (channelFlags & FLAG_COLOR) {
-        const_cast<KisAbstractColorSpace *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, QUANTUM_MAX),
-                                        CLAMP((totalGreen / factor) + offset, 0, QUANTUM_MAX),
-                                        CLAMP((totalBlue / factor) + offset, 0, QUANTUM_MAX)),
+        const_cast<KisAbstractColorSpace *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, Q_UINT8_MAX),
+                                        CLAMP((totalGreen / factor) + offset, 0, Q_UINT8_MAX),
+                                        CLAMP((totalBlue / factor) + offset, 0, Q_UINT8_MAX)),
             dstOpacity,
             dst);
     }
     if (channelFlags & FLAG_ALPHA) {
-        const_cast<KisAbstractColorSpace *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX), dst);
+        const_cast<KisAbstractColorSpace *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX), dst);
     }
 
 }
@@ -352,7 +351,7 @@ void KisAbstractColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
 Q_UINT8 KisAbstractColorSpace::intensity8(const Q_UINT8 * src) const
 {
     QColor c;
-        QUANTUM opacity;
+        Q_UINT8 opacity;
         const_cast<KisAbstractColorSpace *>(this)->toQColor(src, &c, &opacity);
         return (Q_UINT8)((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
 
@@ -361,17 +360,17 @@ Q_UINT8 KisAbstractColorSpace::intensity8(const Q_UINT8 * src) const
 
 void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
                    Q_INT32 dststride,
-                   KisAbstractColorSpace * srcSpace,
+                   KisColorSpace * srcSpace,
                    const Q_UINT8 *src,
                    Q_INT32 srcRowStride,
                    const Q_UINT8 *srcAlphaMask,
                    Q_INT32 maskRowStride,
-                   QUANTUM opacity,
+                   Q_UINT8 opacity,
                    Q_INT32 rows,
                    Q_INT32 cols,
                    const KisCompositeOp& op,
-                   KisProfileSP srcProfile,
-                   KisProfileSP dstProfile)
+                   KisProfile *  srcProfile,
+                   KisProfile *  dstProfile)
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -434,7 +433,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
     }
 }
 
-vKisProfileSP KisAbstractColorSpace::profiles()
+QValueVector<KisProfile *>  KisAbstractColorSpace::profiles()
 {
     return KisColorSpaceRegistry::instance()->profilesFor( this );
 }
@@ -445,14 +444,14 @@ Q_INT32 KisAbstractColorSpace::profileCount()
 }
 
 QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                                              KisProfileSP srcProfile, KisProfileSP dstProfile,
+                                              KisProfile *  srcProfile, KisProfile *  dstProfile,
                                               Q_INT32 renderingIntent, float /*exposure*/)
 
 {
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
     img.setAlphaBuffer( true );
 
-    KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
+    KisColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
 
     if (! srcProfile && ! dstProfile) {
         srcProfile = getDefaultProfile();
@@ -467,9 +466,9 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 }
 
 
-cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisAbstractColorSpace * dstColorSpace,
-                             KisProfileSP srcProfile,
-                             KisProfileSP dstProfile,
+cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpace,
+                             KisProfile *  srcProfile,
+                             KisProfile *  dstProfile,
                              Q_INT32 renderingIntent)
 {
     KisConfig cfg;

@@ -48,13 +48,13 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList 
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceRGBU16 = new KisRgbU16ColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceRGBU16);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBU16);
+        KisColorSpace * colorSpaceRGBU16 = new KisRgbU16ColorSpace();
+        Q_CHECK_PTR(colorSpaceRGBU16);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceRGBU16);
 
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("RGB16HISTO", i18n("RGB16 Histogram")), m_ColorSpaceRGBU16) );
+                (KisID("RGB16HISTO", i18n("RGB16 Histogram")), colorSpaceRGBU16) );
     }
 
 }

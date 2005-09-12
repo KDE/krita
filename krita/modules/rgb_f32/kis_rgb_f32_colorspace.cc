@@ -112,7 +112,7 @@ void KisF32RgbColorSpace::getPixel(const Q_UINT8 *src, float *red, float *green,
     *alpha = srcPixel -> alpha;
 }
 
-void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -121,7 +121,7 @@ void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile
     dst -> blue = UINT8_TO_FLOAT(c.blue());
 }
 
-void KisF32RgbColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dstU8, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -183,14 +183,14 @@ Q_UINT16 KisF32RgbColorSpace::scaleToU16(const Q_UINT8 * U8_pixel, Q_INT32 chann
 }
 
 
-void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(FLOAT_TO_UINT8(src -> red), FLOAT_TO_UINT8(src -> green), FLOAT_TO_UINT8(src -> blue));
 }
 
-void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -245,7 +245,7 @@ void KisF32RgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     dstPixel -> blue = totalBlue;
 }
 
-vKisChannelInfoSP KisF32RgbColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisF32RgbColorSpace::channels() const
 {
     return m_channels;
 }
@@ -287,7 +287,7 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisF32RgbColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
-                         KisProfileSP srcProfile, KisProfileSP dstProfile,
+                         KisProfile *  srcProfile, KisProfile *  dstProfile,
                          Q_INT32 renderingIntent, float exposure)
 
 {
@@ -835,7 +835,7 @@ void KisF32RgbColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *mask,
                       Q_INT32 maskRowStride,
-                      QUANTUM U8_opacity,
+                      Q_UINT8 U8_opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)

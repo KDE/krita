@@ -43,7 +43,7 @@
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
 #include <kis_pixel.h>
-#include <kis_abstract_colorspace.h>
+#include <kis_colorspace.h>
 
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
@@ -108,7 +108,7 @@ void KisColorAdjustmentFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceI
                 KisQuantum d = srcIt[ configPC->channel( i ) ];
                 Q_INT32 s = configPC->valueFor( i );
                 if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
-                else if( d > QUANTUM_MAX - s) dstData[ configPC->channel( i ) ] = QUANTUM_MAX;
+                else if( d > Q_UINT8_MAX - s) dstData[ configPC->channel( i ) ] = Q_UINT8_MAX;
                 else dstData[ configPC->channel( i ) ] = d + s;
             }
         }
@@ -147,9 +147,9 @@ void KisGammaCorrectionFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceI
             for( int i = 0; i < depth; i++)
             {
 		// XXX: Move to colorspace -- not independent
-                QUANTUM sd = srcIt.oldRawData()[ configPC->channel( i ) ];
+                Q_UINT8 sd = srcIt.oldRawData()[ configPC->channel( i ) ];
                 KisQuantum dd = dstIt[ configPC->channel( i ) ];
-                dd = (QUANTUM)( QUANTUM_MAX * pow( ((float)sd)/QUANTUM_MAX, 1.0 / configPC->valueFor( i ) ) );
+                dd = (Q_UINT8)( Q_UINT8_MAX * pow( ((float)sd)/Q_UINT8_MAX, 1.0 / configPC->valueFor( i ) ) );
             }
         }
         ++dstIt;
@@ -183,22 +183,22 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 
 
     // initialize
-    QUANTUM* maxvalues = new QUANTUM[depth];
-    QUANTUM* minvalues = new QUANTUM[depth];
-    memset(maxvalues, 0, depth * sizeof(QUANTUM));
-    memset(minvalues, OPACITY_OPAQUE, depth * sizeof(QUANTUM));
+    Q_UINT8* maxvalues = new Q_UINT8[depth];
+    Q_UINT8* minvalues = new Q_UINT8[depth];
+    memset(maxvalues, 0, depth * sizeof(Q_UINT8));
+    memset(minvalues, OPACITY_OPAQUE, depth * sizeof(Q_UINT8));
     
-    QUANTUM** lut = new QUANTUM*[depth];
+    Q_UINT8** lut = new Q_UINT8*[depth];
 
     for (int i = 0; i < depth; i++) {
-        lut[i] = new QUANTUM[QUANTUM_MAX+1];
-        memset(lut[i], 0, (QUANTUM_MAX+1) * sizeof(QUANTUM));
+        lut[i] = new Q_UINT8[Q_UINT8_MAX+1];
+        memset(lut[i], 0, (Q_UINT8_MAX+1) * sizeof(Q_UINT8));
     }
 
     while (!srcIt.isDone() && !cancelRequested())
     {
         if (srcIt.isSelected()) {
-            QUANTUM opacity;
+            Q_UINT8 opacity;
 
             QColor color;
             src -> colorSpace() -> toQColor(srcIt.rawData(), &color, &opacity);
@@ -211,7 +211,7 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 
             for (int i = 0; i < depth; i++) {
 		// XXX: Move to colorspace -- not independent
-                QUANTUM index = srcIt.rawData()[i];
+                Q_UINT8 index = srcIt.rawData()[i];
                 if( index > maxvalues[i])
                     maxvalues[i] = index;
                 if( index < minvalues[i])
@@ -231,10 +231,10 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
     
     // build the LUT
     for (int i = 0; i < depth; i++) {
-        QUANTUM diff = maxvalues[i] - minvalues[i];
+        Q_UINT8 diff = maxvalues[i] - minvalues[i];
         if (diff != 0) {
             for (int j = minvalues[i]; j <= maxvalues[i]; j++) {
-                lut[i][j] = QUANTUM_MAX * (j - minvalues[i]) / diff;
+                lut[i][j] = Q_UINT8_MAX * (j - minvalues[i]) / diff;
             }
         } else {
             lut[i][minvalues[i]] = minvalues[i];
@@ -247,8 +247,8 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 
     while (!srcIt.isDone()  && !cancelRequested()) {
         if (srcIt.isSelected()) {
-            QUANTUM* dstData = dstIt.rawData();
-            QUANTUM* srcData = srcIt.rawData();
+            Q_UINT8* dstData = dstIt.rawData();
+            Q_UINT8* srcData = srcIt.rawData();
 
             // Iterate through all channels except alpha
             for (int i = 0; i < depth; ++i) {
@@ -287,8 +287,8 @@ void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     
-    KisAbstractColorSpace * scs = src -> colorSpace();
-    KisProfileSP profile = src -> profile();
+    KisColorSpace * scs = src -> colorSpace();
+    KisProfile *  profile = src -> profile();
 
     setProgressTotalSteps(rect.width() * rect.height());
     Q_INT32 pixelsProcessed = 0;

@@ -73,7 +73,7 @@ Q_INT32 KisAlphaMask::height() const
     return m_height;
 }
 
-QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
+Q_UINT8 KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
         return m_data[(y * m_width) + x];
@@ -83,7 +83,7 @@ QUANTUM KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
     }
 }
 
-void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha)
+void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha)
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
         m_data[(y * m_width) + x] = alpha;
@@ -95,7 +95,7 @@ void KisAlphaMask::copyAlpha(const QImage& img)
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {
                         QRgb c = img.pixel(x,y);
-                        QUANTUM a = (qGray(c) * qAlpha(c)) / 255;
+                        Q_UINT8 a = (qGray(c) * qAlpha(c)) / 255;
             m_data.push_back(a);
 
         }
@@ -131,7 +131,7 @@ KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP ma
 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            QUANTUM d = static_cast<QUANTUM>((1 - t) * mask1 -> alphaAt(x, y) + t * mask2 -> alphaAt(x, y));
+            Q_UINT8 d = static_cast<Q_UINT8>((1 - t) * mask1 -> alphaAt(x, y) + t * mask2 -> alphaAt(x, y));
             outputMask -> setAlphaAt(x, y, d);
         }
     }

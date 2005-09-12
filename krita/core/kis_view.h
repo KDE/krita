@@ -144,7 +144,7 @@ public: // Plugin access API. XXX: This needs redesign.
      * Get the profile that this view uses to display itself on
      * he monitor.
      */
-    KisProfileSP monitorProfile();
+    KisProfile *  monitorProfile();
 
     // The exposure setting to use for rendering previews of high dynamic range images.
     float HDRExposure() const;
@@ -342,7 +342,7 @@ public slots:
     void imgUpdated(KisImageSP img, const QRect& rc);
     void imgUpdated(KisImageSP img);
 
-    void profileChanged(KisProfileSP profile);
+    void profileChanged(KisProfile *  profile);
 
     void slotZoomIn();
     void slotZoomOut();
@@ -455,7 +455,7 @@ private:
     QPixmap m_canvasPixmap;
 
     // Monitorprofile for this view
-    KisProfileSP m_monitorProfile;
+    KisProfile *  m_monitorProfile;
 
     float m_HDRExposure;
 

@@ -52,7 +52,7 @@ public:
        @return the next mask in the pipe.
     */
     virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
-    virtual KisLayerSP image(KisAbstractColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisLayerSP image(KisColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);

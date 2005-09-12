@@ -37,7 +37,7 @@ KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::instan
 }
 
 KisIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
-        KisAbstractColorSpace* colorSpace) const
+        KisColorSpace* colorSpace) const
 {
     KisIDList list;
     storageMap::const_iterator it = m_storage.begin();

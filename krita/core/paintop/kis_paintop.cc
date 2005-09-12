@@ -26,7 +26,7 @@
 #include "kis_paintop.h"
 #include "kis_alpha_mask.h"
 #include "kis_point.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color.h"
@@ -54,10 +54,10 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask)
     Q_CHECK_PTR(dab);
 
     // XXX: Quick hack: we should use the correct color instead of going via QColor
-    KisProfileSP profile = m_painter -> device() -> profile();
+    KisProfile *  profile = m_painter -> device() -> profile();
     KisColor kc = m_painter -> paintColor();
     
-    KisAbstractColorSpace * colorSpace = dab -> colorSpace();
+    KisColorSpace * colorSpace = dab -> colorSpace();
 
     Q_INT32 pixelSize = colorSpace->pixelSize();
     

@@ -57,7 +57,7 @@ KisProfile::KisProfile(QByteArray rawData, Q_UINT32 colorType)
     init();
 }
 
-KisProfile::KisProfile(const QString& file) 
+KisProfile::KisProfile(const QString& file)
     : super(file)
 {
 }
@@ -97,7 +97,7 @@ bool KisProfile::load()
 
 }
 
-bool KisProfile::init() 
+bool KisProfile::init()
 {
     if (m_profile) {
         m_colorSpaceSignature = cmsGetColorSpace(m_profile);
@@ -107,12 +107,12 @@ bool KisProfile::init()
         m_productInfo = cmsTakeProductInfo(m_profile);
         setValid(true);
 #if 0
-    // XX: It wasn't that easy to save a little memory: thsi gives an lcms error
+    // XXX: It wasn't that easy to save a little memory: thsi gives an lcms error
         // Okay, we know enough. Free the memory; we'll load it again if needed.
 
         cmsCloseProfile(m_profile);
         m_profile = 0;
-        
+
 #endif
         return true;
     }
@@ -129,7 +129,7 @@ cmsHPROFILE KisProfile::profile()
 	    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
         file.close();
 	}
-#endif   
+#endif
 	return m_profile;
 }
 
@@ -153,7 +153,7 @@ KisAnnotationSP KisProfile::annotation() const
         return 0;
 }
 
-KisProfileSP KisProfile::getScreenProfile (int screen)
+KisProfile *  KisProfile::getScreenProfile (int screen)
 {
 
 #ifdef Q_WS_X11
@@ -163,7 +163,7 @@ KisProfileSP KisProfile::getScreenProfile (int screen)
     unsigned long nitems;
     unsigned long bytes_after;
     Q_UINT8 * str;
-    
+
     cmsHPROFILE profile = NULL;
 
     static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
@@ -185,10 +185,10 @@ KisProfileSP KisProfile::getScreenProfile (int screen)
              profile =
                 cmsOpenProfileFromMem(&str,
                             nitems * sizeof(long));
-        
+
         QByteArray bytes (nitems);
         bytes.assign((char*)str, (Q_UINT32)nitems);
-        
+
         return new KisProfile(profile, bytes, TYPE_BGRA_8);
     } else {
         kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
@@ -196,7 +196,7 @@ KisProfileSP KisProfile::getScreenProfile (int screen)
     }
 #else
     return NULL;
-    
+
 #endif
 }
 

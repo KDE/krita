@@ -115,7 +115,7 @@ public:
 protected:
     KisPaintDeviceImpl *m_device;
 
-    //KisAbstractColorSpace * m_colorSpace;
+    //KisColorSpace * m_colorSpace;
 
     // XXX: Is this fix correct? BSAR
     //inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};

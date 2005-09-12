@@ -22,6 +22,7 @@
 #define _KIS_CUBISM_FILTER_H_
 
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
 #include <kdebug.h>
 
 class KisPolygon;
@@ -61,7 +62,7 @@ private:
         void convertSegment(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
         void fillPolyColor(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest);
         void cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation);
-        
+
 };
 
 #endif

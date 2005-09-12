@@ -81,14 +81,14 @@
      (double)117.0 * (pixel[PIXEL_BLUE)) \
     / 1024.0))
 
-#define PixelIntensityToQuantum(pixel) ((QUANTUM)PixelIntensity(pixel))
+#define PixelIntensityToQuantum(pixel) ((Q_UINT8)PixelIntensity(pixel))
 
 #define PixelIntensityToDouble(pixel) ((double)PixelIntensity(pixel))
 
-#define RoundSignedToQuantum(value) ((QUANTUM) (value < 0 ? 0 : \
-  (value > QUANTUM_MAX) ? QUANTUM_MAX : value + 0.5))
+#define RoundSignedToQuantum(value) ((Q_UINT8) (value < 0 ? 0 : \
+  (value > Q_UINT8_MAX) ? Q_UINT8_MAX : value + 0.5))
 
-#define RoundToQuantum(value) ((QUANTUM) (value > QUANTUM_MAX ? QUANTUM_MAX : \
+#define RoundToQuantum(value) ((Q_UINT8) (value > Q_UINT8_MAX ? Q_UINT8_MAX : \
   value + 0.5))
 
 // And from studio.h
@@ -101,7 +101,7 @@ void compositeIn(Q_INT32 pixelSize,
          Q_INT32 srcRowSize,
          Q_INT32 rows, 
          Q_INT32 cols, 
-         QUANTUM opacity = OPACITY_OPAQUE)
+         Q_UINT8 opacity = OPACITY_OPAQUE)
 {
 
     if (opacity == OPACITY_TRANSPARENT) 
@@ -154,7 +154,7 @@ void compositeOut(Q_INT32 pixelSize,
            Q_INT32 srcRowSize,
            Q_INT32 rows, 
            Q_INT32 cols, 
-           QUANTUM opacity = OPACITY_OPAQUE)
+           Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -203,7 +203,7 @@ void compositeAtop(Q_INT32 pixelSize,
            Q_INT32 srcRowSize,
            Q_INT32 rows, 
            Q_INT32 cols, 
-           QUANTUM opacity = OPACITY_OPAQUE)
+           Q_UINT8 opacity = OPACITY_OPAQUE)
 {
 
     if (opacity == OPACITY_TRANSPARENT) 
@@ -254,7 +254,7 @@ void compositeXor(Q_INT32 pixelSize,
           Q_INT32 srcRowSize,
           Q_INT32 rows, 
           Q_INT32 cols, 
-          QUANTUM opacity = OPACITY_OPAQUE)
+          Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -305,7 +305,7 @@ void compositePlus(Q_INT32 pixelSize,
            Q_INT32 srcRowSize,
            Q_INT32 rows, 
            Q_INT32 cols, 
-           QUANTUM opacity = OPACITY_OPAQUE)
+           Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -352,7 +352,7 @@ void compositeMinus(Q_INT32 pixelSize,
             Q_INT32 srcRowSize,
             Q_INT32 rows, 
             Q_INT32 cols,
-            QUANTUM opacity = OPACITY_OPAQUE)
+            Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -399,7 +399,7 @@ void compositeAdd(Q_INT32 pixelSize,
           Q_INT32 srcRowSize,
           Q_INT32 rows, 
           Q_INT32 cols, 
-          QUANTUM opacity = OPACITY_OPAQUE)
+          Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -443,7 +443,7 @@ void compositeSubtract(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -485,7 +485,7 @@ void compositeDiff(Q_INT32 pixelSize,
            Q_INT32 srcRowSize,
            Q_INT32 rows, 
            Q_INT32 cols, 
-           QUANTUM opacity = OPACITY_OPAQUE)
+           Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -527,7 +527,7 @@ void compositeBumpmap(Q_INT32 pixelSize,
               Q_INT32 srcRowSize,
               Q_INT32 rows, 
               Q_INT32 cols, 
-              QUANTUM opacity = OPACITY_OPAQUE)
+              Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -576,7 +576,7 @@ void compositeCopy(Q_INT32 pixelSize,
            Q_INT32 srcRowSize,
            Q_INT32 rows, 
            Q_INT32 cols, 
-           QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+           Q_UINT8 /*opacity*/ = OPACITY_OPAQUE)
 {
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;
@@ -599,7 +599,7 @@ void compositeCopyChannel(Q_UINT8 pixel,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-              QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+              Q_UINT8 /*opacity*/ = OPACITY_OPAQUE)
 {
     Q_UINT8 *d;
     const Q_UINT8 *s;
@@ -638,7 +638,7 @@ void compositeCopyGreen(Q_INT32 pixelSize,
             Q_INT32 srcRowSize,
             Q_INT32 rows, 
             Q_INT32 cols, 
-            QUANTUM opacity = OPACITY_OPAQUE)
+            Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_GREEN, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 }
@@ -650,7 +650,7 @@ void compositeCopyBlue(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_BLUE, pixelSize, dst, dstRowSize, src, srcRowSize, rows, cols, opacity);
 }
@@ -663,7 +663,7 @@ void compositeCopyOpacity(Q_INT32 pixelSize,
               Q_INT32 srcRowSize,
               Q_INT32 rows, 
               Q_INT32 cols, 
-              QUANTUM opacity = OPACITY_OPAQUE)
+              Q_UINT8 opacity = OPACITY_OPAQUE)
 {
 
     // XXX: mess with intensity if there isn't an alpha channel, according to GM.
@@ -679,7 +679,7 @@ void compositeClear(Q_INT32 pixelSize,
             Q_INT32 /*srcRowSize*/,
             Q_INT32 rows, 
             Q_INT32 cols,
-            QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+            Q_UINT8 /*opacity*/ = OPACITY_OPAQUE)
 {
 
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
@@ -704,7 +704,7 @@ void compositeDissolve(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -748,7 +748,7 @@ void compositeDisplace(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM /*opacity*/ = OPACITY_OPAQUE)
+               Q_UINT8 /*opacity*/ = OPACITY_OPAQUE)
 {
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;
@@ -772,7 +772,7 @@ void compositeModulate(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     if (opacity == OPACITY_TRANSPARENT) 
         return;
@@ -827,7 +827,7 @@ void compositeThreshold(Q_INT32 pixelSize,
             Q_INT32 srcRowSize,
             Q_INT32 rows, 
             Q_INT32 cols, 
-            QUANTUM opacity = OPACITY_OPAQUE)
+            Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;
@@ -847,7 +847,7 @@ void compositeColorize(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;
@@ -867,7 +867,7 @@ void compositeLuminize(Q_INT32 pixelSize,
                Q_INT32 srcRowSize,
                Q_INT32 rows, 
                Q_INT32 cols, 
-               QUANTUM opacity = OPACITY_OPAQUE)
+               Q_UINT8 opacity = OPACITY_OPAQUE)
 {
     Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;

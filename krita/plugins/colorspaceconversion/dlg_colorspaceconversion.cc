@@ -30,7 +30,8 @@
 
 #include <kis_factory.h>
 #include <kis_colorspace_registry.h>
-#include "kis_abstract_colorspace.h"
+#include "kis_profile.h"
+#include "kis_colorspace.h"
 #include <kis_id.h>
 
 #include "dlg_colorspaceconversion.h"
@@ -53,7 +54,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     // XXX: Until we have implemented high bit depth images
     m_page -> cmbDepth -> setEnabled(false);
 
-    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbDestProfile(const KisID &)));
 
 
@@ -78,7 +79,7 @@ void DlgColorSpaceConversion::okClicked()
 void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
     fillCmbProfile(m_page -> cmbDestProfile, s);
-    
+
 }
 
 void DlgColorSpaceConversion::fillCmbSrcProfile(const KisID & s)
@@ -92,10 +93,10 @@ void DlgColorSpaceConversion::fillCmbProfile(QComboBox * cmb, const KisID& s)
     cmb -> clear();
     cmb -> insertItem(i18n("None"));
 
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
 
-    vKisProfileSP profileList = cs -> profiles();
-        vKisProfileSP::iterator it;
+    QValueVector<KisProfile *>  profileList = cs -> profiles();
+        QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         cmb -> insertItem((*it) -> productName());
 

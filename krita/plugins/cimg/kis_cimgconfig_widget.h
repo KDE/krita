@@ -25,6 +25,7 @@
 #include "wdg_cimg.h"
 #include "kis_cimg_filter.h"
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
 
 class KisCImgconfigWidget : public KisFilterConfigWidget {
 

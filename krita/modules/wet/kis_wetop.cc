@@ -61,7 +61,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
     int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
     kdDebug(DBG_AREA_CMS) << pressure << endl;
 
-    KisAbstractColorSpace * cs = device -> colorSpace();
+    KisColorSpace * cs = device -> colorSpace();
 
     if (cs -> id() != KisID("WET","")) {
         kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
@@ -76,7 +76,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
 
     WetPack* paintPack = reinterpret_cast<WetPack*>(paintColor.data());
     WetPix paint = paintPack -> paint;
-    
+
     // Get the paint info (we store the strength in the otherwise unused (?) height field of
     // the paint
     double wetness = paint.w;
@@ -149,6 +149,6 @@ void KisWetOp::paintAt(const KisPoint &pos,
             }
         }
     }
-    
+
     m_painter -> addDirtyRect(QRect(x0, y0, x1 - x0, y1 - y0));
 }

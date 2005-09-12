@@ -46,7 +46,7 @@
 
 #include "histogram.h"
 #include "dlg_histogram.h"
-#include "color_strategy/kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_histogram.h"
 
 typedef KGenericFactory<Histogram> HistogramFactory;
@@ -57,15 +57,15 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(HistogramFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "Histogram plugin. Class: " 
-           << className() 
-           << ", Parent: " 
+     kdDebug(DBG_AREA_PLUGINS) << "Histogram plugin. Class: "
+           << className()
+           << ", Parent: "
            << parent -> className()
            << "\n";
 
 
     (void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
-    
+
     if ( !parent->inherits("KisView") )
     {
         m_view = 0;

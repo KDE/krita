@@ -25,7 +25,7 @@
 #include "kis_types.h"
 #include "kis_profile.h"
 #include "kis_quantum.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 class QColor;
 
@@ -35,7 +35,7 @@ class QColor;
 /**
  * KisPixel and KisPixelRO are the primary classes to access individual pixel data.
  * A pixel consists of channels of a certain size. At the moment, all channels must
- * be of the same size, and that size is one byte, or QUANTUM. In the future
+ * be of the same size, and that size is one byte, or Q_UINT8. In the future
  * pixels with heteregenous channels and larger (or smaller?) channels will be
  * possible, too.
  *
@@ -74,7 +74,7 @@ class QColor;
 class KisPixelRO {
 public:
 
-        KisPixelRO(const QUANTUM * channels = 0, const QUANTUM* alpha = 0, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0)
+        KisPixelRO(const Q_UINT8 * channels = 0, const Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0)
                 : m_channels(channels),
                   m_alpha(alpha),
                   m_colorSpace(colorSpace),
@@ -85,21 +85,21 @@ public:
     
 public:
 
-    QUANTUM operator[](int index) const { return m_channels[index]; }
+    Q_UINT8 operator[](int index) const { return m_channels[index]; }
 
-    QUANTUM alpha() const { return m_alpha[0]; }
+    Q_UINT8 alpha() const { return m_alpha[0]; }
 
-    KisAbstractColorSpace * colorSpace() const { return m_colorSpace; }
+    KisColorSpace * colorSpace() const { return m_colorSpace; }
 
-    void setProfile(KisProfileSP profile) { m_profile = profile; }
+    void setProfile(KisProfile *  profile) { m_profile = profile; }
 
-    KisProfileSP profile() const { return m_profile; }
+    KisProfile *  profile() const { return m_profile; }
 
 private:
-    const QUANTUM* m_channels;
-    const QUANTUM* m_alpha;
-    KisAbstractColorSpace * m_colorSpace;
-    KisProfileSP m_profile;
+    const Q_UINT8* m_channels;
+    const Q_UINT8* m_alpha;
+    KisColorSpace * m_colorSpace;
+    KisProfile *  m_profile;
 };
 
 
@@ -116,17 +116,17 @@ public:
     /**
      * Create a new pixel with the specified number of channels and alpha channels.
      */
-    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0) 
+    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0) 
 
-        : m_channels(new QUANTUM(nbChannels)), 
-          m_alpha(new QUANTUM(nbAlphaChannels)), 
+        : m_channels(new Q_UINT8(nbChannels)), 
+          m_alpha(new Q_UINT8(nbAlphaChannels)), 
           m_colorSpace(colorSpace), 
           m_profile(profile) { };
 
         /**
          * Create a read/write pixel for existing channel data.
          */
-        KisPixel(QUANTUM * channels, QUANTUM* alpha = 0, KisAbstractColorSpace * colorSpace = 0, KisProfileSP profile = 0)
+        KisPixel(Q_UINT8 * channels, Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0)
                   : m_channels(channels),
                     m_alpha(alpha),
                     m_colorSpace(colorSpace),
@@ -141,20 +141,20 @@ public:
 
     KisQuantum alpha() const { return KisQuantum(m_alpha); };
 
-    KisAbstractColorSpace * colorSpace() const { return m_colorSpace; };
+    KisColorSpace * colorSpace() const { return m_colorSpace; };
 
-    void setProfile(KisProfileSP profile) { m_profile = profile; }
+    void setProfile(KisProfile *  profile) { m_profile = profile; }
 
-    KisProfileSP profile() const { return m_profile; }
+    KisProfile *  profile() const { return m_profile; }
 
-    QUANTUM* channels() const { return m_channels; }
+    Q_UINT8* channels() const { return m_channels; }
  
 
 private:
-    QUANTUM* m_channels;
-    QUANTUM* m_alpha;
-    KisAbstractColorSpace * m_colorSpace;
-    KisProfileSP m_profile;
+    Q_UINT8* m_channels;
+    Q_UINT8* m_alpha;
+    KisColorSpace * m_colorSpace;
+    KisProfile *  m_profile;
 };
 
 #endif

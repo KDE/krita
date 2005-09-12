@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 1999 Matthias Elter (me@kde.org)
@@ -45,14 +45,17 @@ KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, na
     mRSlider = new KoColorSlider(this);
     mRSlider->setMaximumHeight(20);
     mRSlider->slotSetRange(0, 255);
+    mRSlider->setFocusPolicy( QWidget::ClickFocus );
 
     mGSlider = new KoColorSlider(this);
     mGSlider->setMaximumHeight(20);
     mGSlider->slotSetRange(0, 255);
+    mGSlider->setFocusPolicy( QWidget::ClickFocus );
 
     mBSlider = new KoColorSlider(this);
     mBSlider->setMaximumHeight(20);
     mBSlider->slotSetRange(0, 255);
+    mBSlider->setFocusPolicy( QWidget::ClickFocus );
 
     /* setup slider labels */
     mRLabel = new QLabel("R", this);
@@ -69,12 +72,17 @@ KisRGBWidget::KisRGBWidget(QWidget *parent, const char *name) : super(parent, na
     mRIn = new QSpinBox(0, 255, 1, this);
     mRIn->setFixedWidth(50);
     mRIn->setFixedHeight(20);
+    mRIn->setFocusPolicy( QWidget::ClickFocus );
+
     mGIn = new QSpinBox(0, 255, 1, this);
     mGIn->setFixedWidth(50);
     mGIn->setFixedHeight(20);
+    mGIn->setFocusPolicy( QWidget::ClickFocus );
+
     mBIn = new QSpinBox(0, 255, 1, this);
     mBIn->setFixedWidth(50);
     mBIn->setFixedHeight(20);
+    mBIn->setFocusPolicy( QWidget::ClickFocus );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mRLabel, 0, 1);
@@ -176,7 +184,7 @@ void KisRGBWidget::update(KisCanvasSubject *subject)
     mGIn->blockSignals(true);
     mBSlider->blockSignals(true);
     mBIn->blockSignals(true);
-    
+
     mRSlider->slotSetColor1(QColor(0, g, b));
     mRSlider->slotSetColor2(QColor(255, g, b));
     mRSlider->slotSetValue(r);
@@ -191,7 +199,7 @@ void KisRGBWidget::update(KisCanvasSubject *subject)
     mBSlider->slotSetColor2(QColor(r, g, 255));
     mBSlider->slotSetValue(b);
     mBIn->setValue(b);
-    
+
     mRSlider->blockSignals(false);
     mRIn->blockSignals(false);
     mGSlider->blockSignals(false);
@@ -207,7 +215,7 @@ void KisRGBWidget::slotFGColorSelected(const QColor& c)
     {
         QColor bgColor = m_ColorButton -> background();
         m_subject->setFGColor(m_fgColor);
-        //Background signal could be blocked so do that manually 
+        //Background signal could be blocked so do that manually
         //see bug 106919
         m_subject->setBGColor(bgColor);
     }

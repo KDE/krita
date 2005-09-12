@@ -30,7 +30,7 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "tiles/kis_datamanager.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
@@ -66,9 +66,9 @@ class KRITACORE_EXPORT KisPaintDeviceImpl
         Q_OBJECT
 
 public:
-    KisPaintDeviceImpl(KisAbstractColorSpace * colorSpace, const QString& name);
+    KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString& name);
 
-    KisPaintDeviceImpl(KisImage *img,  KisAbstractColorSpace * colorSpace, const QString& name);
+    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace, const QString& name);
 
     KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
     virtual ~KisPaintDeviceImpl();
@@ -179,7 +179,7 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual void convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Fill this paint device with the data from img;
@@ -198,7 +198,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KisProfileSP dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, float exposure = 0.0f);
+    virtual QImage convertToQImage(KisProfile *  dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, float exposure = 0.0f);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
@@ -208,7 +208,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KisProfileSP dstProfile, float exposure = 0.0f);
+    virtual QImage convertToQImage(KisProfile *  dstProfile, float exposure = 0.0f);
 
     virtual QString name() const;
     virtual void setName(const QString& name);
@@ -259,7 +259,7 @@ public:
 
     bool hasAlpha() const;
 
-    KisAbstractColorSpace * colorSpace() const;
+    KisColorSpace * colorSpace() const;
 
     /**
      * Return the icm profile associated with this layer, or
@@ -267,21 +267,21 @@ public:
      * this layer is the same as the color space of the image,
      * or 0.
      */
-    KisProfileSP profile() const;
+    KisProfile *  profile() const;
 
     /**
      * Set the profile associated with this layer to the specified profile
      * or reset to 0 if the profile does not have the same colorspace signature
      * as the color model associated with this paint device.
      */
-    void setProfile(KisProfileSP profile);
+    void setProfile(KisProfile *  profile);
 
     KisDataManagerSP dataManager() const { return m_datamanager; }
 
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setData(KisDataManagerSP data, KisAbstractColorSpace * colorSpace, KisProfileSP profile);
+    void setData(KisDataManagerSP data, KisColorSpace * colorSpace, KisProfile *  profile);
 
     KisCompositeOp compositeOp() { return m_compositeOp; }
     void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
@@ -392,7 +392,7 @@ signals:
         void visibilityChanged(KisPaintDeviceImplSP device);
         void positionChanged(KisPaintDeviceImplSP device);
         void ioProgress(Q_INT8 percentage);
-    void profileChanged(KisProfileSP profile);
+    void profileChanged(KisProfile *  profile);
 
 private:
     KisPaintDeviceImpl& operator=(const KisPaintDeviceImpl&);
@@ -416,12 +416,12 @@ private:
     QString m_name;
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;
-    KisAbstractColorSpace * m_colorSpace;
+    KisColorSpace * m_colorSpace;
     // Cached for quick access
     Q_INT32 m_pixelSize;
     Q_INT32 m_nChannels;
 
-    KisProfileSP m_profile;
+    KisProfile *  m_profile;
 
     void accept(KisScaleVisitor &);
     void accept(KisRotateVisitor &);
@@ -449,7 +449,7 @@ inline Q_INT32 KisPaintDeviceImpl::nChannels() const
 ;
 }
 
-inline KisAbstractColorSpace * KisPaintDeviceImpl::colorSpace() const
+inline KisColorSpace * KisPaintDeviceImpl::colorSpace() const
 {
     Q_ASSERT(m_colorSpace != 0);
         return m_colorSpace;
@@ -520,7 +520,7 @@ inline void KisPaintDeviceImpl::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_IN
     m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }
 
-inline KisProfileSP KisPaintDeviceImpl::profile() const
+inline KisProfile *  KisPaintDeviceImpl::profile() const
 {
     return m_profile;
 }

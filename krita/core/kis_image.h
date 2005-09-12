@@ -52,7 +52,7 @@ class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
-    KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorSpace, const QString& name);
+    KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, KisColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
@@ -68,7 +68,7 @@ public:
                      Q_INT32 x2,
                      Q_INT32 y2,
                      QPainter &painter,
-                     KisProfileSP profile,
+                     KisProfile *  profile,
                      float exposure = 0.0f);
 
 
@@ -88,19 +88,19 @@ public:
     void rotate(double angle, KisProgressDisplayInterface *m_progress);
     void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
-    void convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
-    KisProfileSP profile() const;
+    KisProfile *  profile() const;
 
     // Set the profile associated with this image
-    void setProfile(const KisProfileSP& profile);
+    void setProfile(const KisProfile * profile);
 
 
     void enableUndo(KoCommandHistory *history);
 
-    KisAbstractColorSpace * colorSpace() const;
-    void setColorSpace(KisAbstractColorSpace * colorSpace);
+    KisColorSpace * colorSpace() const;
+    void setColorSpace(KisColorSpace * colorSpace);
 
     KURL uri() const;
     void uri(const KURL& uri);
@@ -133,15 +133,15 @@ public:
     // Get the active painting device
     KisPaintDeviceImplSP activeDevice();
 
-    KisLayerSP layerAdd(const QString& name, QUANTUM devOpacity);
-    KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  QUANTUM opacity,  KisAbstractColorSpace * colorstrategy);
+    KisLayerSP layerAdd(const QString& name, Q_UINT8 devOpacity);
+    KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  Q_UINT8 opacity,  KisColorSpace * colorstrategy);
     KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
 
     void layerRemove(KisLayerSP layer);
     void layerNext(KisLayerSP layer);
     void layerPrev(KisLayerSP layer);
 
-    void setLayerProperties(KisLayerSP layer, QUANTUM opacity, const KisCompositeOp& compositeOp, const QString& name);
+    void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
     KisLayerSP activeLayer();
     const KisLayerSP activeLayer() const;
@@ -224,7 +224,7 @@ signals:
     void layersUpdated(KisImageSP image);
     void imageUpdated(KisImageSP img);
     void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
-    void profileChanged(KisProfileSP profile);
+    void profileChanged(KisProfile *  profile);
 
 
 public slots:
@@ -233,7 +233,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name);
+    void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
 
 private:
     KisDoc *m_doc;
@@ -242,7 +242,7 @@ private:
     QString m_name;
     QString m_description;
 
-    KisProfileSP m_profile;
+    KisProfile *  m_profile;
 
     Q_INT32 m_width;
     Q_INT32 m_height;
@@ -252,7 +252,7 @@ private:
 
     KoUnit::Unit m_unit;
 
-    KisAbstractColorSpace * m_colorSpace;
+    KisColorSpace * m_colorSpace;
 
     bool m_dirty;
     QRect m_dirtyRect;

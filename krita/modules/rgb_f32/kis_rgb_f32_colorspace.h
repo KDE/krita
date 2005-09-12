@@ -25,7 +25,6 @@
 
 #include "kis_global.h"
 #include "kis_f32_base_colorspace.h"
-#include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
 
 
@@ -38,16 +37,16 @@ public:
     void setPixel(Q_UINT8 *pixel, float red, float green, float blue, float alpha) const;
     void getPixel(const Q_UINT8 *pixel, float *red, float *green, float *blue, float *alpha) const;
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
 
     //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
         { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile = 0)
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
         { return KisPixel (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
@@ -62,7 +61,7 @@ public:
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    virtual vKisChannelInfoSP channels() const;
+    virtual QValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
@@ -72,7 +71,7 @@ public:
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP srcProfile, KisProfileSP dstProfile,
+                       KisProfile *  srcProfile, KisProfile *  dstProfile,
                        Q_INT32 renderingIntent,
                        float exposure = 0.0f);
 
@@ -87,7 +86,7 @@ protected:
                 Q_INT32 srcRowStride,
                 const Q_UINT8 *srcAlphaMask,
                 Q_INT32 maskRowStride,
-                QUANTUM opacity,
+                Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op);

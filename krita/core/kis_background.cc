@@ -38,7 +38,7 @@ KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*
         KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);
         while( ! hiter.isDone())
         {
-            QUANTUM v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
+            Q_UINT8 v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
             QColor c(v,v,v);
             colorSpace() -> fromQColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
 

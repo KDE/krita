@@ -72,7 +72,7 @@ QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
     return QPoint(random() * width,  random() * height);
 }
 
-void single_step(KisAbstractColorSpace * cs, KisPaintDeviceImplSP src,  KisPaintDeviceImplSP dst, const QRect & rect, bool native)
+void single_step(KisColorSpace * cs, KisPaintDeviceImplSP src,  KisPaintDeviceImplSP dst, const QRect & rect, bool native)
 {
     using namespace WetAndSticky;
 
@@ -91,7 +91,7 @@ void single_step(KisAbstractColorSpace * cs, KisPaintDeviceImplSP src,  KisPaint
 
     if (!native ) {
         QColor c;
-        QUANTUM opacity;
+        Q_UINT8 opacity;
 
         src -> colorSpace() -> toQColor(pix, &c, &opacity);
         Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
@@ -133,7 +133,7 @@ void KisWSEngineFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
     if ( src -> colorSpace() -> id() == KisID("W&S","") ) native = true;
 
     // XXX: We need a better way to ID color strategies
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
+    KisColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
 
     Q_UINT32 pixels = 400; //m_cfg -> pixels();
 

@@ -343,7 +343,7 @@ void KisSelectionManager::copy()
     clip -> setCompositeOp(COMPOSITE_OVER);
     clip -> setProfile(layer -> profile());
 
-    KisAbstractColorSpace * cs = clip->colorSpace();
+    KisColorSpace * cs = clip->colorSpace();
 
     // TODO if the source is linked... copy from all linked layers?!?
 
@@ -404,7 +404,7 @@ KisLayerSP KisSelectionManager::paste()
             Q_CHECK_PTR(dlg);
 
             if (dlg -> exec() == QDialog::Accepted) {
-                KisProfileSP profile = dlg -> profile();
+                KisProfile *  profile = dlg -> profile();
                 if (profile != img -> profile()) {
                     layer -> setProfile(profile);
                     layer -> convertTo(img -> colorSpace(), img -> profile(), dlg -> renderIntent());

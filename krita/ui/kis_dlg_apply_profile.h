@@ -41,7 +41,7 @@ public:
     virtual ~KisDlgApplyProfile();
 
 
-    KisProfileSP profile() const;
+    KisProfile *  profile() const;
     int renderIntent() const;
 
     void fillCmbProfiles(const KisID & s);

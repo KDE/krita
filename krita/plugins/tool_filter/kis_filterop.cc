@@ -67,7 +67,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
     KisBrush * brush = m_painter -> brush();
     if (!brush) return;
 
-    KisAbstractColorSpace * colorSpace = m_source -> colorSpace();
+    KisColorSpace * colorSpace = m_source -> colorSpace();
 
     KisPoint hotSpot = brush -> hotSpot(pressure);
     KisPoint pt = pos - hotSpot;
@@ -114,8 +114,8 @@ void KisFilterOp::paintAt(const KisPoint &pos,
         int x=0;
         while(! hiter.isDone())
         {
-            // XXX: QUANTUM should be Q_UINT8
-            QUANTUM alpha = mask -> alphaAt( x++, y );
+            // XXX: Q_UINT8 should be Q_UINT8
+            Q_UINT8 alpha = mask -> alphaAt( x++, y );
             KisPixel p = colorSpace -> toKisPixel( hiter.rawData(), 0);
             p.alpha() = alpha;
 

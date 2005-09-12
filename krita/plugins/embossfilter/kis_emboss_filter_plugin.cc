@@ -33,8 +33,6 @@ KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, 
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
-
     if ( parent->inherits("KisFactory") )
     {
         KisFilterRegistry::instance()->add(new KisEmbossFilter());

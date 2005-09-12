@@ -44,7 +44,7 @@
 #include <kis_paintop_registry.h>
 #include <kis_id.h>
 #include <kis_cmb_idlist.h>
-
+#include "kis_filter_config_widget.h"
 #include "kis_tool_filter.h"
 
 KisToolFilter::KisToolFilter()
@@ -81,7 +81,7 @@ void KisToolFilter::initPaint(KisEvent *e)
     // the canvas, others cannot handle that and need a temporary layer
     // so they can work on the old data before painting started.
     setUseTempLayer( !m_filter -> supportsIncrementalPainting() );
-    
+
     super::initPaint(e);
     KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
     op -> setSource ( m_source );

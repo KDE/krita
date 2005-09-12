@@ -20,7 +20,7 @@
 #define KIS_HISTOGRAM_
 
 #include "kis_types.h"
-#include "color_strategy/kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_histogram_producer.h"
 
 enum enumHistogramType {

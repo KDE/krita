@@ -54,7 +54,7 @@ public:
     /** Lists all producers currently available */
     KisIDList listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KisID& producerID, vKisChannelInfoSP channels);
+    void setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels);
     bool hasColor();
     void setColor(bool set);
 
@@ -68,14 +68,14 @@ private:
     typedef struct {
         bool isProducer;
         KisHistogramProducerSP producer;
-        KisChannelInfoSP channel;
+        KisChannelInfo * channel;
     } ComboboxInfo;
     QValueVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
-    KisAbstractColorSpace* m_cs;
+    KisColorSpace* m_cs;
     KisHistogramProducerSP m_currentProducer;
-    vKisChannelInfoSP m_channels;
+    QValueVector<KisChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer -> channels()
     QValueVector<Q_INT32> m_channelToOffset;
     QStringList m_channelStrings;

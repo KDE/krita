@@ -28,7 +28,7 @@
 #include "wdghistogram.h"
 #include "kis_histogram_producer.h"
 
-class KisAbstractColorSpace;
+class KisColorSpace;
 
 /**
  * The histogram widget takes a paint device or an image and

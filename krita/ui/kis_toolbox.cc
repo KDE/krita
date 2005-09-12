@@ -36,7 +36,6 @@
 #include <koMainWindow.h>
 
 #include "kis_factory.h"
-
 #include "kis_toolbox.h"
 
 #ifdef HAVE_CONFIG_H

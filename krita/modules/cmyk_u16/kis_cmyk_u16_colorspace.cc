@@ -49,7 +49,7 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4 * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));
 
 
-    KisProfileSP profile = KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK");
+    KisProfile *  profile = KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK");
     if ( profile == 0 )
     if (getDefaultProfile() == 0) {
         kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
@@ -127,7 +127,7 @@ void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     dstPixel -> black = totalBlack;
 }
 
-vKisChannelInfoSP KisCmykU16ColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisCmykU16ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -514,7 +514,7 @@ void KisCmykU16ColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *mask,
                       Q_INT32 maskRowStride,
-                      QUANTUM U8_opacity,
+                      Q_UINT8 U8_opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)

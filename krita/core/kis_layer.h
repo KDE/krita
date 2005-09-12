@@ -30,9 +30,9 @@ class KRITACORE_EXPORT KisLayer : public KisPaintDeviceImpl {
     Q_OBJECT
 
 public:
-    KisLayer(KisAbstractColorSpace * colorSpace, const QString& name);
-    KisLayer(KisImage *img, const QString& name, QUANTUM opacity);
-    KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorSpace);
+    KisLayer(KisColorSpace * colorSpace, const QString& name);
+    KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity);
+    KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
@@ -48,9 +48,9 @@ public:
     virtual const bool visible() const;
     virtual void setVisible(bool v);
     
-    QUANTUM opacity() const;
-    void setOpacity(QUANTUM val);
-    KNamedCommand *setOpacityCommand(QUANTUM val);
+    Q_UINT8 opacity() const;
+    void setOpacity(Q_UINT8 val);
+    KNamedCommand *setOpacityCommand(Q_UINT8 val);
 
     bool linked() const;
     void setLinked(bool l);
@@ -62,7 +62,7 @@ public:
 
 
 private:
-    QUANTUM m_opacity;
+    Q_UINT8 m_opacity;
     //bool m_preserveTransparency;
     //bool m_initial;
     bool m_linked;

@@ -77,8 +77,8 @@ public:
     /**
          * Fill a rectangle with a certain color and opacity.
      */
-        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, QUANTUM opacity);
-        void fillRect(const QRect& rc, const KisColor& c, QUANTUM opacity);
+        void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, Q_UINT8 opacity);
+        void fillRect(const QRect& rc, const KisColor& c, Q_UINT8 opacity);
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -165,7 +165,7 @@ void KisFillPainter::eraseRect(const QRect& rc)
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, QUANTUM opacity)
+void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, Q_UINT8 opacity)
 {
         fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }

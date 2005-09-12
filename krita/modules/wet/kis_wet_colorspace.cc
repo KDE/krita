@@ -183,7 +183,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -202,7 +202,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*
     // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, QUANTUM  /*opacity*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     fromQColor(c, dst);
 }
@@ -235,7 +235,7 @@ Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelP
 }
 
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
 {
     Q_UINT8 * rgb = new Q_UINT8[3];
     Q_CHECK_PTR(rgb);
@@ -257,7 +257,7 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*pr
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
 {
     toQColor(src, c);
 }
@@ -266,7 +266,7 @@ void KisWetColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
 {
 }
 
-vKisChannelInfoSP KisWetColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
 {
     return m_channels;
 }
@@ -304,7 +304,7 @@ Q_INT32 KisWetColorSpace::pixelSize() const
 
 // XXX: use profiles to display correctly on calibrated displays.
 QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                         KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
+                         KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
                          Q_INT32 /*renderingIntent*/, float /*exposure*/)
 {
 
@@ -354,7 +354,7 @@ void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
                   Q_INT32 srcRowStride,
                   const Q_UINT8 */*srcAlphaMask*/,
                   Q_INT32 /*maskRowStride*/,
-                  QUANTUM /*opacity*/,
+                  Q_UINT8 /*opacity*/,
                   Q_INT32 rows,
                   Q_INT32 cols,
                   const KisCompositeOp& /*op*/)

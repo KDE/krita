@@ -37,7 +37,7 @@
 #include "kis_integer_maths.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
-#define upscale(value)  (value) // ((QUANTUM) (257UL*(value)))
+#define upscale(value)  (value) // ((Q_UINT8) (257UL*(value)))
 
 namespace xyz {
     const Q_INT32 MAX_CHANNEL_XYZ = 3;
@@ -70,7 +70,7 @@ KisXyzColorSpace::~KisXyzColorSpace()
 }
 
 
-vKisChannelInfoSP KisXyzColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisXyzColorSpace::channels() const
 {
     return m_channels;
 }
@@ -490,7 +490,7 @@ void KisXyzColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *mask,
                       Q_INT32 maskRowStride,
-                      QUANTUM U8_opacity,
+                      Q_UINT8 U8_opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)

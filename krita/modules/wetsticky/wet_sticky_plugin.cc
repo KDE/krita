@@ -51,9 +51,9 @@ WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStrin
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceWS = new KisWetStickyColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceWS);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceWS);
+        KisColorSpace * colorSpaceWS = new KisWetStickyColorSpace();
+        Q_CHECK_PTR(colorSpaceWS);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceWS);
         KisFilterRegistry::instance()->add(new KisWSEngineFilter());
     }
 

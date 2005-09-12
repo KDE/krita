@@ -1,0 +1,10 @@
+Krita SDK
+
+The Krita SDK is in development. Basically, plugins and extensions should
+not include anything from krita/core, but only the headers from krita/sdk.
+
+Problem: creating new paint devices, layers and images. You cannot, obviously,
+instantiate an interface, and we should not, equally obvious, code against 
+implementations. The solution is a factory class that is made available to
+the plugin when it is created -- i.e, the parent class of a plugin should
+implement the various factory interfaces for paint devices, images and layers.

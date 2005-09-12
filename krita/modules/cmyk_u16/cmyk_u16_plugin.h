@@ -33,10 +33,7 @@ class CMYKU16Plugin : public KParts::Plugin
 public:
     CMYKU16Plugin(QObject *parent, const char *name, const QStringList &);
     virtual ~CMYKU16Plugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceCMYKU16;
 };
 
 

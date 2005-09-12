@@ -78,7 +78,7 @@ public:
     /**
      * Called by KisView to repaint the specified rect.
      */
-    virtual void paintContent(QPainter& painter, const QRect& rect, KisProfileSP profile, float exposure = 0.0f);
+    virtual void paintContent(QPainter& painter, const QRect& rect, KisProfile *  profile, float exposure = 0.0f);
     virtual QDomDocument saveXML();
 
 private: // Undo adapter
@@ -102,7 +102,7 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy);
+    KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy);
 
     void renameImage(const QString& oldName, const QString& newName);
 

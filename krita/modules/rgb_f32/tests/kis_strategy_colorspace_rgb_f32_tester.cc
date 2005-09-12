@@ -81,7 +81,7 @@ void KisF32RgbColorSpaceTester::testBasics()
     CHECK(cs -> nColorChannels(), NUM_COLOUR_CHANNELS);
     CHECK(cs -> pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 
-    vKisChannelInfoSP channels = cs -> channels();
+    QValueVector<KisChannelInfo *> channels = cs -> channels();
 
     // Red
     CHECK(channels[0] -> pos(), PIXEL_RED * CHANNEL_SIZE);
@@ -192,7 +192,7 @@ void KisF32RgbColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MAX_CHANNEL_VALUE;
     pixel[PIXEL_ALPHA] = MAX_CHANNEL_VALUE;
 
-    QUANTUM opacity;
+    Q_UINT8 opacity;
 
     cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
 

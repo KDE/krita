@@ -152,7 +152,4 @@
 <ToolBar name="krita" position="left"><Text>Krita</Text>
 </ToolBar>
 
-<ToolBar name="resources"  position="left"><Text>Paint Tool Options</Text>
-</ToolBar>
-
 </kpartgui>

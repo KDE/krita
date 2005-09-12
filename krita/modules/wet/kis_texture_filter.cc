@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include <kdebug.h>
 #include <kis_view.h>
 #include <kis_image.h>
@@ -37,7 +37,7 @@ void TextureFilter::slotActivated() {
         return;
 
     KisPaintDeviceImplSP device = m_view -> currentImg() -> activeDevice();
-    KisAbstractColorSpace * cs = device -> colorSpace();
+    KisColorSpace * cs = device -> colorSpace();
 
     if (cs -> id() != KisID("WET","")) {
         kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";

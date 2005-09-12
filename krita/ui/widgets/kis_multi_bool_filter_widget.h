@@ -19,13 +19,12 @@
 #ifndef _KIS_MULTI_BOOL_FILTER_WIDGET_H_
 #define _KIS_MULTI_BOOL_FILTER_WIDGET_H_
 
-#include <vector> 
+#include <vector>
 
 #include <qcheckbox.h>
 
 #include "koffice_export.h"
-
-#include "kis_filter.h"
+#include <kis_filter_config_widget.h>
 
 class KIntNumInput;
 

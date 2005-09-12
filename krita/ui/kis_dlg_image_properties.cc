@@ -124,7 +124,7 @@ void KisDlgImageProperties::okClicked()
                  m_page -> doubleResolution -> value());
     m_image -> setDescription(m_page -> txtDescription -> text());
 
-    vKisProfileSP profileList = m_image -> colorSpace() -> profiles();
+    QValueVector<KisProfile *>  profileList = m_image -> colorSpace() -> profiles();
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
 
     if (profileList.count() == 0 || 
@@ -141,11 +141,11 @@ void KisDlgImageProperties::okClicked()
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
-    KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
     m_page -> cmbProfile -> clear();
     m_page -> cmbProfile -> insertItem(i18n("None"));
-    vKisProfileSP profileList = cs -> profiles();
-        vKisProfileSP::iterator it;
+    QValueVector<KisProfile *>  profileList = cs -> profiles();
+        QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());
     }

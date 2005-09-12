@@ -68,19 +68,19 @@ class KRITACORE_EXPORT KisAlphaMask : public KShared {
     /**
        @return the alpha value at the specified position.
 
-       Returns QUANTUM OPACITY_TRANSPARENT if the value is
+       Returns Q_UINT8 OPACITY_TRANSPARENT if the value is
        outside the bounds of the mask.
 
        XXX: this is, of course, not the best way of masking.
        Better would be to let KisAlphaMask fill a chunk of memory
        with the alpha values at the right position, something like
-       void applyMask(QUANTUM *pixeldata, Q_INT32 pixelWidth,
+       void applyMask(Q_UINT8 *pixeldata, Q_INT32 pixelWidth,
        Q_INT32 alphaPos). That would be fastest, or we could
        provide an iterator over the mask, that would be nice, too.
     */
-    QUANTUM alphaAt(Q_INT32 x, Q_INT32 y) const;
+    Q_UINT8 alphaAt(Q_INT32 x, Q_INT32 y) const;
 
-    void setAlphaAt(Q_INT32 x, Q_INT32 y, QUANTUM alpha);
+    void setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha);
 
     // Create a new mask by interpolating between mask1 and mask2 as t
     // goes from 0 to 1.
@@ -90,7 +90,7 @@ private:
     void computeAlpha(const QImage& img);
     void copyAlpha(const QImage& img);
 
-    QValueVector<QUANTUM> m_data;
+    QValueVector<Q_UINT8> m_data;
     Q_INT32 m_width;
     Q_INT32 m_height;
 };

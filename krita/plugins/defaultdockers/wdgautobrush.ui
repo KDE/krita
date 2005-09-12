@@ -83,6 +83,9 @@
                                     <property name="name">
                                         <cstring>spinBoxWidth</cstring>
                                     </property>
+                                    <property name="focusPolicy">
+                                        <enum>ClickFocus</enum>
+                                    </property>
                                     <property name="value">
                                         <number>30</number>
                                     </property>
@@ -101,6 +104,9 @@
                                 <widget class="QSpinBox" row="1" column="1">
                                     <property name="name">
                                         <cstring>spinBoxHeigth</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>ClickFocus</enum>
                                     </property>
                                     <property name="value">
                                         <number>30</number>
@@ -184,6 +190,9 @@
                                     <property name="name">
                                         <cstring>spinBoxHorizontal</cstring>
                                     </property>
+                                    <property name="focusPolicy">
+                                        <enum>ClickFocus</enum>
+                                    </property>
                                     <property name="value">
                                         <number>5</number>
                                     </property>
@@ -202,6 +211,9 @@
                                 <widget class="QSpinBox" row="1" column="1">
                                     <property name="name">
                                         <cstring>spinBoxVertical</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>ClickFocus</enum>
                                     </property>
                                     <property name="value">
                                         <number>5</number>
@@ -314,6 +326,9 @@
                     <property name="name">
                         <cstring>comboBoxShape</cstring>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>ClickFocus</enum>
+                    </property>
                 </widget>
                 <spacer>
                     <property name="name">
@@ -338,10 +353,10 @@
 </widget>
 <images>
     <image name="image0">
-        <data format="PNG" length="236">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b349444154789cdd963112c420084581d97acdfd4f29b9005b3913135050d722bf54f0018223e6ccf06f7db4c594be4d27e63304a190f525885e20154433f646ea050d6512d516887af10075c922f5d7e4ca24da4d439059f803721c4946a1962f798c6641d4da5c05421101445c06b82a6746804d73822202cc67956289a0c89a937b77596790b638abfb59d4da5c017840664196aff97679deab62d39bfcf73cf5ef8160ef4bb4e2e7627657e4909eb694eb071e3b4da907fa94f50000000049454e44ae426082</data>
+        <data format="PNG" length="236">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b3494441544889dd963112c420084581d97acdfd4f29b9005b3913135050d722bf54f0018223e6ccf06f7db4c594be4d27e63304a190f525885e20154433f646ea050d6512d516887af10075c922f5d7e4ca24da4d439059f803721c4946a1962f798c6641d4da5c05421101445c06b82a6746804d73822202cc67956289a0c89a937b77596790b638abfb59d4da5c017840664196aff97679deab62d39bfcf73cf5ef8160ef4bb4e2e7627657e4909eb694eb071e3b4da9ba4f1ddb0000000049454e44ae426082</data>
     </image>
     <image name="image1">
-        <data format="PNG" length="242">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b949444154789cdd95410ec4200845b1e9ba78ff538a176056260c5181569bccfca590ff2a204da510ecd601008078ed8778953372cec8db20d23c0a72417aa611900999997941a795500a256d2acf7a434354bf212d4927ebc488a417518d4dd75d0dcbb5f2ed983d59f101af94eb7f20d39e3c1963136299f7e2b361f89d9e8c6ed16efc4ee3892a205ecb9adc24fdcc176ffd4b9839e9b896592eb9d623b1106464e605b821da340200086e61afb91ea2a377e89577e57f00357f504575ba6e170000000049454e44ae426082</data>
+        <data format="PNG" length="242">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b9494441544889dd95410ec4200845b1e9ba78ff538a176056260c5181569bccfca590ff2a204da510ecd601008078ed8778953372cec8db20d23c0a72417aa611900999997941a795500a256d2acf7a434354bf212d4927ebc488a417518d4dd75d0dcbb5f2ed983d59f101af94eb7f20d39e3c1963136299f7e2b361f89d9e8c6ed16efc4ee3892a205ecb9adc24fdcc176ffd4b9839e9b896592eb9d623b1106464e605b821da340200086e61afb91ea2a377e89577e57f00357f504513c00b590000000049454e44ae426082</data>
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>

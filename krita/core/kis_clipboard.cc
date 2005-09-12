@@ -70,7 +70,7 @@ void KisClipboard::setClip(KisPaintDeviceImplSP selection)
             // XXX: Is this a performance problem?
             KisConfig cfg;
             QString monitorProfileName = cfg.monitorProfile();
-            KisProfileSP monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+            KisProfile *  monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
             qimg = selection -> convertToQImage(monitorProfile);
         }
         else {
@@ -95,7 +95,7 @@ void KisClipboard::clipboardDataChanged()
         QImage qimg = cb -> image();
 
         if (!qimg.isNull()) {
-            KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
+            KisColorSpace * cs = KisColorSpaceRegistry::instance()->get(KisID("RGBA",""));
 
             m_clip =
                 new KisPaintDeviceImpl(cs,

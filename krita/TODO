@@ -1,8 +1,7 @@
 Bugs
-    * Save separations as grayscale -> save is not at all colorspace aware!
-	* On opening a second image after loading first image but not changing it,
-	  the second image should be loaded in a second view and not replace the 
-	  first image in the first view.
+    * On opening a second image after loading first image but not changing it,
+      the second image should be loaded in a second view and not replace the 
+      first image in the first view.
 
 Transform tool (CBR)
 
@@ -31,7 +30,8 @@ Integration
 	
 	* There is currently no kimgio module for Krita images: implement one by
 	  saving a rendered png image into the krita file and extracting that from
-	  kimgio.
+	  kimgio. (Saving of a png image in .kra files is done; now we just need to 
+          add the kimgio file)
         
 	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 
@@ -51,7 +51,7 @@ Colorspace independence (found with the test colorstrategy)
 	* get rid of QUANTUM
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
-    * Merge grayscale layers back into one color image.
+	* Merge grayscale layers back into one color image.
     
 Core
 
@@ -75,7 +75,6 @@ Core
 	* On copying paint devices, do not actually copy the tiles, but only create
 	  new tiles when there is change. Also create a memory pool for creating new tiles (BART)
 
-
 File Format:
 
 	* Save & load all annotations in .kra files
@@ -85,40 +84,36 @@ File Format:
 Import/Export
 
         * Fix gimp XCF PSD and import/export (ImageMagick hacking...)
-	* Fix imports to import metadata and image files in non-rgb encodings -> move import
-	  export code to color strategies.
-
+	* Fix imports to import metadata.
 
 User Interface
     * Add a good crosshair cursor and a crosshair cursor that extends to the rulers.
     * Add a cheatsheet widget that integrates with knewstuff to have tutorials that people
       can download and follow from Krita.
-	* Add opacity widget (One that grows more white or transparent (showing those gray blocks) based on the
+    * Add opacity widget (One that grows more white or transparent (showing those gray blocks) based on the
 	  input)
-	* Add out-of-gamut selection
-	* Fix crash with tablet because of tool refactoring.
-	* Fix layout problems in tool option widgets.
-	* Disable dragging the toolbox from dock position to dock position (see Karbon)
-	* Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
-	* Add link check to new image dialog to sync width and height
-	* Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
-	* The description field in color settings is empty
-	* Create brush-shape outline cursor
-	* Implement the following dialogs / widgets:
+    * Add out-of-gamut selection
+    * Fix crash with tablet because of tool refactoring.
+    * Fix layout problems in tool option widgets.
+    * Disable dragging the toolbox from dock position to dock position (see Karbon)
+    * Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
+    * Add link check to new image dialog to sync width and height
+    * Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
+    * The description field in color settings is empty
+    * Implement the following dialogs / widgets:
 		    - Variations (#Boudewijn)
 		    - Gradient: remove the autogradient dialog and make into a proper
 				gradient dialog, and allow saving gradients.
-	* Improve the preview widget - see "doc/the preview widget"
-	* Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
-	* Allow guides to be disabled. Allow diagonal guides (useful
-	  for perspective drawings) Bug #108398 
-        * Allow snapping to guides.
-        * Create templates for often-used image formats. Add save-as-template
-	* Make rotate actions consistent between layer and image
-	* Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
-	* Fix crop tool: when pressing shift, keep aspect ratio, implement gray mask.
+    * Improve the preview widget - see "doc/the preview widget"
+    * Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
+    * Allow guides to be disabled. Allow diagonal guides (useful
+      for perspective drawings) Bug #108398 
+    * Allow snapping to guides.
+    * Create templates for often-used image formats. Add save-as-template
+    * Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
+    * Fix crop tool: when pressing shift, keep aspect ratio, implement gray mask.
 	  (Michael Thaler)
-	* Allow shape tools to be filled with gradients
+    * Allow shape tools to be filled with gradients
 
 	Dockers
 		* Tabs in dockers drag-and-droppable (vector of docker

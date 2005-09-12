@@ -48,12 +48,12 @@ CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const char *name, const QStringLis
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceCMYKU16 = new KisCmykU16ColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceCMYKU16);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceCMYKU16);
+        KisColorSpace * colorSpaceCMYKU16 = new KisCmykU16ColorSpace();
+        Q_CHECK_PTR(colorSpaceCMYKU16);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceCMYKU16);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("CMYK16HISTO", i18n("CMYK16 Histogram")), m_ColorSpaceCMYKU16) );
+                (KisID("CMYK16HISTO", i18n("CMYK16 Histogram")), colorSpaceCMYKU16) );
     }
 
 }

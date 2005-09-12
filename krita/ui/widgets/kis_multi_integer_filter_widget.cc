@@ -24,8 +24,6 @@
 #include <knuminput.h>
 #include <klocale.h>
 
-#include "kis_filter.h"
-
 KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname) :
     min(nmin),
     max(nmax),

@@ -22,12 +22,12 @@
 #include <qvaluevector.h>
 
 #include "kis_histogram_producer.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_id.h"
 
 class KisBasicHistogramProducer : public KisHistogramProducer {
 public:
-    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisAbstractColorSpace *cs);
+    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs);
     virtual ~KisBasicHistogramProducer() {}
 
     virtual void clear();
@@ -35,7 +35,7 @@ public:
     virtual void setView(double from, double size) { m_from = from; m_width = size; }
 
     virtual const KisID& id() const { return m_id; }
-    virtual vKisChannelInfoSP channels() { return m_colorSpace -> channels(); }
+    virtual QValueVector<KisChannelInfo *> channels() { return m_colorSpace -> channels(); }
     virtual Q_INT32 numberOfBins() { return m_nrOfBins; }
     virtual double viewFrom() const { return m_from; }
     virtual double viewWidth() const { return m_width; }
@@ -64,31 +64,31 @@ protected:
     double m_from, m_width;
     Q_INT32 m_count;
     int m_channels, m_nrOfBins;
-    KisAbstractColorSpace *m_colorSpace;
+    KisColorSpace *m_colorSpace;
     KisID m_id;
     QValueVector<Q_INT32> m_external;
 };
 
 class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU8HistogramProducer(const KisID& id, KisAbstractColorSpace *cs);
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace *cs);
+    KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const { return 1.0; }
 };
 
 class KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU16HistogramProducer(const KisID& id, KisAbstractColorSpace *cs);
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace *cs);
+    KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
 
 class KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicF32HistogramProducer(const KisID& id, KisAbstractColorSpace *cs);
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace *cs);
+    KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -101,13 +101,13 @@ public:
  */
 template<class T> class KisBasicHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
-    KisBasicHistogramProducerFactory(const KisID& id, KisAbstractColorSpace *cs)
+    KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *cs)
         : KisHistogramProducerFactory(id), m_cs(cs) {}
     virtual ~KisBasicHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
-    virtual bool isCompatibleWith(KisAbstractColorSpace* cs) const { return cs == m_cs; }
+    virtual bool isCompatibleWith(KisColorSpace* cs) const { return cs == m_cs; }
 protected:
-    KisAbstractColorSpace *m_cs;
+    KisColorSpace *m_cs;
 };
 
 /**
@@ -119,12 +119,12 @@ protected:
 class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericRGBHistogramProducer();
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisAbstractColorSpace *cs);
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
-    virtual vKisChannelInfoSP channels();
+    virtual QValueVector<KisChannelInfo *> channels();
 protected:
-    vKisChannelInfoSP m_channelsList;
+    QValueVector<KisChannelInfo *> m_channelsList;
 };
 
 /** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
@@ -134,6 +134,6 @@ public:
         : KisHistogramProducerFactory(KisID("GENRGBHISTO", "")) {}
     virtual ~KisGenericRGBHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
-    virtual bool isCompatibleWith(KisAbstractColorSpace*) const { return true; }
+    virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
 };
 #endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

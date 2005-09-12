@@ -78,7 +78,7 @@ public:
 
 public:
 
-    static KisProfileSP getScreenProfile(int screen = -1);
+    static KisProfile *  getScreenProfile(int screen = -1);
 
 private:
     bool init();

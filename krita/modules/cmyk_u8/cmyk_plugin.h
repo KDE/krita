@@ -34,11 +34,8 @@ class CMYKPlugin : public KParts::Plugin
 public:
     CMYKPlugin(QObject *parent, const char *name, const QStringList &);
     virtual ~CMYKPlugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceCMYKA;
-    KisAbstractColorSpace * m_ColorSpaceCMYK;
+
 };
 
 #endif // CMYK_PLUGIN_H_

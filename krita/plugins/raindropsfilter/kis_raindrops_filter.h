@@ -22,6 +22,7 @@
 #define _KIS_RAINDROPS_FILTER_H_
 
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
 #include "kis_view.h"
 #include <kdebug.h>
 

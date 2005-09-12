@@ -25,8 +25,6 @@
 
 #include <kdialogbase.h>
 
-#include "kis_global.h"
-
 #include "wdgpressuresettings.h"
 #include "wdgperformancesettings.h"
 

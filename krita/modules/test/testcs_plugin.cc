@@ -56,9 +56,9 @@ TestCSPlugin::TestCSPlugin(QObject *parent, const char *name, const QStringList 
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceTestCS = new KisTestColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceTestCS);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceTestCS);
+        KisColorSpace * colorSpaceTestCS = new KisTestColorSpace();
+        Q_CHECK_PTR(colorSpaceTestCS);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceTestCS);
     }
 
 }

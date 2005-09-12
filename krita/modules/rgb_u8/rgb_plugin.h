@@ -33,10 +33,7 @@ class RGBPlugin : public KParts::Plugin
 public:
     RGBPlugin(QObject *parent, const char *name, const QStringList &);
     virtual ~RGBPlugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceRGBA;
 };
 
 

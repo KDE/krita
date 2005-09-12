@@ -23,7 +23,7 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include "koffice_export.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 class KisPixelOp;
 class QStringList;
@@ -35,7 +35,7 @@ class QStringList;
  *      - a registry of icc profiles
  *      - a registry of default pixel operations
  */
-class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisAbstractColorSpace *> {
+class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisColorSpace *> {
 
 public:
     virtual ~KisColorSpaceRegistry();
@@ -48,17 +48,17 @@ public:
     /**
      * Convenience method to get the often used rgb8 colorspace
      */
-    static KisAbstractColorSpace * getRGB8();
+    static KisColorSpace * getRGB8();
 
     /**
      * Convenience method to get the often used alpha colorspace
      */
-    static KisAbstractColorSpace * getAlpha8();
+    static KisColorSpace * getAlpha8();
 
     /**
      * Convenience method to get the often used xyz16 colorspace
      */
-    static KisAbstractColorSpace * getXYZ16();
+    static KisColorSpace * getXYZ16();
 
     /**
      * Reload the profiles from disk
@@ -69,12 +69,12 @@ public:
      * Return the profile associated with the given product name,
      * or 0.
      */
-    KisProfileSP getProfileByName(const QString & name);
+    KisProfile *  getProfileByName(const QString & name);
 
     /**
      * Return the vector of profiles for this colorspace
      */
-    vKisProfileSP profilesFor(KisAbstractColorSpace * cs);
+    QValueVector<KisProfile *>  profilesFor(KisColorSpace * cs);
 
 
     /**
@@ -97,11 +97,11 @@ private:
 
 private:
     static KisColorSpaceRegistry *m_singleton;
-    static KisAbstractColorSpace * m_rgb;
-    static KisAbstractColorSpace * m_alpha;
-    static KisAbstractColorSpace * m_xyz;
+    static KisColorSpace * m_rgb;
+    static KisColorSpace * m_alpha;
+    static KisColorSpace * m_xyz;
 
-    QMap<QString, KisProfileSP> m_profileMap;
+    QMap<QString, KisProfile * > m_profileMap;
     QMap<KisID, KisPixelOp*> m_defaultPixelOps;
 };
 

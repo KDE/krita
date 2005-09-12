@@ -46,7 +46,7 @@ KisSelection::~KisSelection()
 {
 }
 
-QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
+Q_UINT8 KisSelection::selected(Q_INT32 x, Q_INT32 y)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
@@ -55,7 +55,7 @@ QUANTUM KisSelection::selected(Q_INT32 x, Q_INT32 y)
     return *pix;
 }
 
-void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, QUANTUM s)
+void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, Q_UINT8 s)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 

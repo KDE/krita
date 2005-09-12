@@ -52,14 +52,14 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceCMYK = new KisCmykColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceCMYK);
+        KisColorSpace * colorSpaceCMYK = new KisCmykColorSpace();
+        Q_CHECK_PTR(colorSpaceCMYK);
 
-        if (m_ColorSpaceCMYK -> valid()) {
-             KisColorSpaceRegistry::instance() -> add(m_ColorSpaceCMYK);
+        if (colorSpaceCMYK -> valid()) {
+             KisColorSpaceRegistry::instance() -> add(colorSpaceCMYK);
              KisHistogramProducerFactoryRegistry::instance() -> add(
                      new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                     (KisID("CMYKHISTO", i18n("CMYK Histogram")), m_ColorSpaceCMYK) );
+                     (KisID("CMYKHISTO", i18n("CMYK Histogram")), colorSpaceCMYK) );
         }
     }
 

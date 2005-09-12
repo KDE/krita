@@ -180,8 +180,8 @@ namespace {
 
     public:
         KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
-                       KisAbstractColorSpace * beforeColorSpace, KisProfileSP beforeProfile,
-                       KisAbstractColorSpace * afterColorSpace, KisProfileSP afterProfile
+                       KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
+                       KisColorSpace * afterColorSpace, KisProfile *  afterProfile
                        ) : super(i18n("Convert Image Type"))
             {
                 m_adapter = adapter;
@@ -224,10 +224,10 @@ namespace {
     private:
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
-        KisAbstractColorSpace * m_beforeColorSpace;
-        KisAbstractColorSpace * m_afterColorSpace;
-        KisProfileSP m_beforeProfile;
-        KisProfileSP m_afterProfile;
+        KisColorSpace * m_beforeColorSpace;
+        KisColorSpace * m_afterColorSpace;
+        KisProfile *  m_beforeProfile;
+        KisProfile *  m_afterProfile;
     };
 
 
@@ -436,7 +436,7 @@ namespace {
 
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
     init(doc, width, height, colorSpace, name);
     setName(name);
@@ -542,7 +542,7 @@ QString KisImage::nextLayerName() const
     return m_nserver -> name();
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisAbstractColorSpace * colorSpace, const QString& name)
+void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
     Q_ASSERT(colorSpace != 0);
 
@@ -686,7 +686,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
     const double pi=3.1415926535897932385;
 
     if (m_layers.empty()) return; // Nothing to scale
-    
+
     Q_INT32 w, h;
     w = (Q_INT32)(width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 0.5);
     h = (Q_INT32)(height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 0.5);
@@ -803,7 +803,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
     }
 }
 
-void KisImage::convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile, Q_INT32 renderingIntent)
+void KisImage::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent)
 {
     // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
     if ( (m_colorSpace -> id() == dstColorSpace -> id())
@@ -847,16 +847,16 @@ void KisImage::convertTo(KisAbstractColorSpace * dstColorSpace, KisProfileSP dst
 
 }
 
-KisProfileSP KisImage::profile() const
+KisProfile *  KisImage::profile() const
 {
     return m_profile;
 }
 
-void KisImage::setProfile(const KisProfileSP& profile)
+void KisImage::setProfile(const KisProfile * profile)
 {
     if (profile && profile -> valid()) {
-        m_profile = profile;
-        m_projection -> setProfile(profile);
+        m_profile = const_cast<KisProfile *>( profile );
+        m_projection -> setProfile(const_cast<KisProfile *>( profile ));
     }
     else {
         m_profile = 0;
@@ -938,7 +938,7 @@ KisPaintDeviceImplSP KisImage::activeDevice()
     return 0;
 }
 
-KisLayerSP KisImage::layerAdd(const QString& name, QUANTUM devOpacity)
+KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
 {
     KisLayerSP layer;
     layer = new KisLayer(this, name, devOpacity);
@@ -963,7 +963,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, QUANTUM devOpacity)
     return layer;
 }
 
-KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, QUANTUM opacity, KisAbstractColorSpace * colorstrategy)
+KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy)
 {
     KisLayerSP layer;
     layer = new KisLayer(colorstrategy, name);
@@ -1098,7 +1098,7 @@ void KisImage::layerPrev(KisLayerSP l)
     }
 }
 
-void KisImage::setLayerProperties(KisLayerSP layer, QUANTUM opacity, const KisCompositeOp& compositeOp,    const QString& name)
+void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp,    const QString& name)
 {
     if (layer) {
         if (m_adapter->undo()) {
@@ -1576,7 +1576,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                    Q_INT32 x2,
                    Q_INT32 y2,
                    QPainter &painter,
-                   KisProfileSP monitorProfile,
+                   KisProfile *  monitorProfile,
                    float exposure)
 {
     Q_INT32 x;
@@ -1706,12 +1706,12 @@ void KisImage::slotSelectionChanged(const QRect& r)
     emit activeSelectionChanged(KisImageSP(this));
 }
 
-KisAbstractColorSpace * KisImage::colorSpace() const
+KisColorSpace * KisImage::colorSpace() const
 {
     return m_colorSpace;
 }
 
-void KisImage::setColorSpace(KisAbstractColorSpace * colorSpace)
+void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
 

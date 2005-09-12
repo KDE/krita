@@ -65,7 +65,7 @@
 #include "kis_fill_painter.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
 #include "kis_id.h"
@@ -252,7 +252,7 @@ QDomDocument KisDoc::saveXML()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("depth", sizeof(QUANTUM));
+    root.setAttribute("depth", sizeof(Q_UINT8));
     root.setAttribute("syntaxVersion", "1");
 
     root.appendChild(saveImage(doc, m_currentImage));
@@ -364,7 +364,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     double xres;
     double yres;
     QString colorspacename;
-    KisProfileSP profile;
+    KisProfile *  profile;
     
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
@@ -398,7 +398,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
             colorspacename = "RGBA";
         }
         
-        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
+        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
         if (cs == 0) {
             // return 0;
             if (colorspacename  == "Grayscale + Alpha")
@@ -510,7 +510,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if ((attr = element.attribute("opacity")).isNull())
         return 0;
 
-    if ((opacity = attr.toInt()) < 0 || opacity > QUANTUM_MAX)
+    if ((opacity = attr.toInt()) < 0 || opacity > Q_UINT8_MAX)
         opacity = OPACITY_OPAQUE;
 
     kdDebug(DBG_AREA_FILE) << "Opacity: " << opacity << "\n";
@@ -548,7 +548,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
     
     QString colorspacename = element.attribute("colorspacename");
-    KisAbstractColorSpace * colorSpace = img -> colorSpace();
+    KisColorSpace * colorSpace = img -> colorSpace();
     
     kdDebug() << "ColorSpace name in layer: " << colorspacename << "\n";
     if (!colorspacename.isNull()) {
@@ -562,7 +562,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     }
 
     QString profileProductName = element.attribute("profile");
-    KisProfileSP profile = 0;
+    KisProfile *  profile = 0;
 
     if (!profileProductName.isNull()) {
         profile = KisColorSpaceRegistry::instance()->getProfileByName(profileProductName);
@@ -770,7 +770,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisAbstractColorSpace * colorstrategy)
+KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy)
 {
     KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
     Q_CHECK_PTR(img);
@@ -801,12 +801,12 @@ bool KisDoc::slotNewImage()
     if (dlg.exec() == QDialog::Accepted) {
         qApp -> restoreOverrideCursor();
         QString name;
-        QUANTUM opacity = dlg.backgroundOpacity();
+        Q_UINT8 opacity = dlg.backgroundOpacity();
         QColor c = dlg.backgroundColor();
         KisImageSP img;
         KisLayerSP layer;
 
-        KisAbstractColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorSpaceID());
+        KisColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorSpaceID());
 
         if (!cs) return false;
 
@@ -855,13 +855,13 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transpare
     // XXX: Use transparent flag to forego the background layer
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfileSP profile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+    KisProfile *  profile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     paintContent(painter, rect, profile);
     
 }
 
-void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfileSP monitorProfile, float exposure)
+void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfile *  monitorProfile, float exposure)
 {
     Q_INT32 x1;
     Q_INT32 y1;

@@ -58,7 +58,7 @@ KisTestColorSpace::~KisTestColorSpace()
 {
 }
 
-void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
 
@@ -67,7 +67,7 @@ void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP /
     pix->bmg = c.blue()*16 + c.green();
 }
 
-void KisTestColorSpace::fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisTestColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     testcspixel *pix = (testcspixel *)dst;
 
@@ -83,13 +83,13 @@ void KisTestColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
     *alpha = pix -> alpha;
 }
 
-void KisTestColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP /*profile*/)
+void KisTestColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
 {
     testcspixel *pix = (testcspixel *)src;
     c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
 }
 
-void KisTestColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisTestColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
 {
     testcspixel *pix = (testcspixel *)src;
     c -> setRgb(pix->r, pix->g, (pix->bmg - pix->g)/16);
@@ -127,7 +127,7 @@ void KisTestColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
     *dst++ = ((blue >> 8) + blue) >> 8;
 }
 
-vKisChannelInfoSP KisTestColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisTestColorSpace::channels() const
 {
     return m_channels;
 }
@@ -153,7 +153,7 @@ Q_INT32 KisTestColorSpace::pixelSize() const
 }
 
 QImage KisTestColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                         KisProfileSP srcProfile, KisProfileSP dstProfile,
+                         KisProfile *  srcProfile, KisProfile *  dstProfile,
                          Q_INT32 renderingIntent, float /*exposure*/)
 
 {
@@ -214,7 +214,7 @@ QImage KisTestColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_
     return img;
 }
 
-void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, QUANTUM opacity)
+void KisTestColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     while (rows > 0) {
 
@@ -294,7 +294,7 @@ void KisTestColorSpace::compositeErase(Q_UINT8 *dst,
             Q_INT32 maskRowStride,
             Q_INT32 rows,
             Q_INT32 cols,
-            QUANTUM /*opacity*/)
+            Q_UINT8 /*opacity*/)
 {
     Q_INT32 i;
     Q_UINT8 srcAlpha;
@@ -333,7 +333,7 @@ void KisTestColorSpace::compositeCopy(Q_UINT8 *dst,
            Q_INT32 maskRowStride,
            Q_INT32 rows,
            Q_INT32 cols,
-           QUANTUM /*opacity*/)
+           Q_UINT8 /*opacity*/)
 {
     Q_INT32 linesize = pixelSize() * cols;
     Q_UINT8 *d;
@@ -381,7 +381,7 @@ void KisTestColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 srcRowStride,
                       const Q_UINT8 *srcAlphaMask,
                       Q_INT32 maskRowStride,
-                      QUANTUM opacity,
+                      Q_UINT8 opacity,
                       Q_INT32 rows,
                       Q_INT32 cols,
                       const KisCompositeOp& op)

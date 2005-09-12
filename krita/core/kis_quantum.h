@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_QUANTUM_H_
-#define KIS_QUANTUM_H_
+#ifndef KIS_Q_UINT8_H_
+#define KIS_Q_UINT8_H_
 
 #include "kis_global.h"
 /**
@@ -30,23 +30,23 @@ public:
     // simple assignment, and it appears to be the source of hard to track bugs. It's also
     // needlessly decreasing peformance. AP
         
-    inline KisQuantum(QUANTUM* q) :    m_quantum(q) {};
+    inline KisQuantum(Q_UINT8* q) :    m_quantum(q) {};
     
 public:
-    inline operator QUANTUM() const { return *m_quantum; };
+    inline operator Q_UINT8() const { return *m_quantum; };
 
     
-    inline QUANTUM operator=(QUANTUM q)
+    inline Q_UINT8 operator=(Q_UINT8 q)
         {
             return *m_quantum = q;
         };
 
-    inline QUANTUM operator-=(QUANTUM q)
+    inline Q_UINT8 operator-=(Q_UINT8 q)
         {
             return (*this = *this - q);
         }
 
-    inline QUANTUM operator+=(QUANTUM q)
+    inline Q_UINT8 operator+=(Q_UINT8 q)
         {
             return (*this = *this + q);
         }
@@ -59,7 +59,7 @@ public:
         return KisQuantum( m_quantum + index );
     }
 private:
-    QUANTUM* m_quantum;
+    Q_UINT8* m_quantum;
 };
 
 

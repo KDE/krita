@@ -120,7 +120,7 @@ void KisCImgFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
     img = CImg<>(width, height, 1, 3);
     
     KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    KisAbstractColorSpace * cs = src -> colorSpace();
+    KisColorSpace * cs = src -> colorSpace();
 
     while (!it.isDone()) {
 

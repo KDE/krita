@@ -33,7 +33,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "widgets/kis_histogram_view.h"
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 

@@ -48,7 +48,7 @@ public:
      * returns a KisLayerSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisLayerSP image(KisAbstractColorSpace * colorSpace);
+    KisLayerSP image(KisColorSpace * colorSpace);
 
     Q_INT32 width() const;
     Q_INT32 height() const;

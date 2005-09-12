@@ -19,7 +19,7 @@
 #ifndef KIS_PAINT_DEVICE_FACTORY_H_
 #define KIS_PAINT_DEVICE_FACTORY_H_
 
-class KisAbstractColorSpace;
+class KisColorSpace;
 class QString;
 class KisImage;
 

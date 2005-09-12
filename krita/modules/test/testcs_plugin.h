@@ -33,10 +33,7 @@ class TestCSPlugin : public KParts::Plugin
 public:
     TestCSPlugin(QObject *parent, const char *name, const QStringList &);
     virtual ~TestCSPlugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceTestCS;
 };
 
 

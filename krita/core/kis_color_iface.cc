@@ -22,7 +22,7 @@
 
 #include "kis_color_iface.h"
 
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_color.h"
 
 #include <dcopclient.h>
@@ -45,7 +45,7 @@ DCOPRef KisColorIface::colorSpace()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
                     m_parent->colorSpace()->dcopObject()->objId(),
-                    "KisAbstractColorSpaceIface" );
+                    "KisColorSpaceIface" );
 }
 
 DCOPref KisColorIface::profile()

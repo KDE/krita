@@ -43,11 +43,11 @@ public:
 	    m_alphaSize = sizeof(Q_UINT16);
     };
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0);
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);

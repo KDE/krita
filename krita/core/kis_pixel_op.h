@@ -22,7 +22,7 @@
 #include <qvaluelist.h>
 
 #include "kis_id.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "koffice_export.h"
 
 
@@ -83,13 +83,13 @@ class KRITACORE_EXPORT KisPixelOp {
 public:
 
     KisPixelOp();
-    KisPixelOp(KisAbstractColorSpace * cs);
+    KisPixelOp(KisColorSpace * cs);
 	virtual ~KisPixelOp(){}
     KisID id() const { return m_id; }
 
     bool isValid() const { return m_valid; }
     virtual bool isNative() const { return false; }
-    KisAbstractColorSpace * colorSpace() { return m_cs; }
+    KisColorSpace * colorSpace() { return m_cs; }
 //     
 private:
 
@@ -100,7 +100,7 @@ private:
 private:
     KisID m_id;
     bool m_valid;
-    KisAbstractColorSpace * m_cs;
+    KisColorSpace * m_cs;
 };
 
 #endif // KIS_PIXEL_OP_H

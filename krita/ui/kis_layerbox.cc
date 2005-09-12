@@ -48,7 +48,7 @@
 #include "kis_layerbox.h"
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 const int HEIGHT = 32;
 
@@ -266,7 +266,7 @@ void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
     m_lst -> cmbComposite -> blockSignals(false);
 }
 
-void KisLayerBox::setColorSpace(const KisAbstractColorSpace * colorSpace)
+void KisLayerBox::setColorSpace(const KisColorSpace * colorSpace)
 {
     m_lst -> cmbComposite -> blockSignals(true);
     m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());

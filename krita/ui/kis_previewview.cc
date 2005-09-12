@@ -41,7 +41,7 @@
 #include "kis_colorspace_registry.h"
 #include "kis_profile.h"
 
-#include "color_strategy/kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 #include "kis_previewview.h"
 
@@ -96,7 +96,7 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
 
-    KisProfileSP monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+    KisProfile *  monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
 
     image -> renderToPainter(0, 0, image -> width(), image -> height(), painter, monitorProfile);
 

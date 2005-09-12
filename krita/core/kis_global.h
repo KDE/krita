@@ -58,11 +58,10 @@
 #define NATIVE_MIMETYPE "application/x-kra"
 
 
-typedef Q_UINT8 QUANTUM;
-const QUANTUM QUANTUM_MAX = UCHAR_MAX;
+const Q_UINT8 Q_UINT8_MAX = UCHAR_MAX;
 
-const QUANTUM OPACITY_TRANSPARENT = 0;
-const QUANTUM OPACITY_OPAQUE = UCHAR_MAX;
+const Q_UINT8 OPACITY_TRANSPARENT = 0;
+const Q_UINT8 OPACITY_OPAQUE = UCHAR_MAX;
 
 const Q_UINT8 MAX_SELECTED = UCHAR_MAX;
 const Q_UINT8 MIN_SELECTED = 0;
@@ -101,7 +100,7 @@ namespace krita {
 
     // String constants for palettes and palette widgets
     const QString TOOL_OPTION_WIDGET ("tooloptions");
-    
+
     const QString CONTROL_PALETTE ("controlpalette");
     const QString PAINTBOX ("paintbox");
     const QString COLORBOX ("colorbox");

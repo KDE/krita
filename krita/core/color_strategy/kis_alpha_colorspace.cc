@@ -51,12 +51,12 @@ KisAlphaColorSpace::~KisAlphaColorSpace()
 {
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -66,12 +66,12 @@ void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
     *alpha = *pixel;
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfile *  /*profile*/)
 {
     c -> setRgb(255, 255, 255);
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP /*profile*/)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
 {
     c -> setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
@@ -96,7 +96,7 @@ void KisAlphaColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weight
     }
 }
 
-vKisChannelInfoSP KisAlphaColorSpace::channels() const
+QValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
 {
     return m_channels;
 }
@@ -109,7 +109,7 @@ bool KisAlphaColorSpace::hasAlpha() const
 // etc. No need to actually use the profiles here to create a mask image -- they don't
 // need to be true color.
 QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfileSP /*srcProfile*/, KisProfileSP /*dstProfile*/,
+                       KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
                        Q_INT32 /*renderingIntent*/, float /*exposure*/)
 {
 
@@ -143,8 +143,8 @@ QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
 }
 #endif
 
-bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfileSP /*srcProfile*/,
-                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
+bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfile *  /*srcProfile*/,
+                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
                      Q_UINT32 numPixels,
                      Q_INT32 /*renderingIntent*/)
 {
@@ -175,7 +175,7 @@ void KisAlphaColorSpace::bitBlt(Q_UINT8 *dst,
                 Q_INT32 srcRowStride,
                 const Q_UINT8 *srcAlphaMask,
                 Q_INT32 maskRowStride,
-                QUANTUM opacity,
+                Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op)
@@ -325,6 +325,6 @@ void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues
     }
 
     if (channelFlags & FLAG_ALPHA) {
-        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, QUANTUM_MAX);
+        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
     }
 }

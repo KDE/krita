@@ -33,10 +33,7 @@ class GRAYU16Plugin : public KParts::Plugin
 public:
     GRAYU16Plugin(QObject *parent, const char *name, const QStringList &);
     virtual ~GRAYU16Plugin();
-    
-private:
 
-    KisAbstractColorSpace * m_ColorSpaceGRAYU16;
 };
 
 

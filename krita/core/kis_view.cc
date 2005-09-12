@@ -132,6 +132,9 @@
 
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
+
+    setFocusPolicy( QWidget::StrongFocus );
+
     if (!doc -> isReadWrite())
         setXMLFile("krita_readonly.rc");
     else
@@ -385,7 +388,7 @@ void KisView::updateStatusBarProfileLabel()
 }
 
 
-KisProfileSP KisView::monitorProfile()
+KisProfile *  KisView::monitorProfile()
 {
     if (m_monitorProfile == 0) {
         resetMonitorProfile();
@@ -1544,7 +1547,7 @@ void KisView::print(KPrinter& printer)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KisProfileSP printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
+    KisProfile *  printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
 
     if (printerProfile != 0)
         kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
@@ -2231,7 +2234,7 @@ void KisView::scrollV(int value)
 void KisView::setupCanvas()
 {
     m_canvas = new KisCanvas(this, "kis_canvas");
-
+    m_canvas->setFocusPolicy( QWidget::StrongFocus );
     QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
     QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
     QObject::connect(m_canvas, SIGNAL(gotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));
@@ -2260,7 +2263,7 @@ void KisView::connectCurrentImg() const
         connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));
 
-        connect(m_current, SIGNAL(profileChanged(KisProfileSP)), SLOT(profileChanged(KisProfileSP)));
+        connect(m_current, SIGNAL(profileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
         connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
         connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         connect(m_current, SIGNAL(sizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
@@ -2285,7 +2288,7 @@ void KisView::imgUpdated(KisImageSP img)
     imgUpdated(img, QRect(img -> bounds()));
 }
 
-void KisView::profileChanged(KisProfileSP /*profile*/)
+void KisView::profileChanged(KisProfile *  /*profile*/)
 {
     updateStatusBarProfileLabel();
 }

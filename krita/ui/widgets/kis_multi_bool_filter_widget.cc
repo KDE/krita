@@ -24,8 +24,6 @@
 
 #include <klocale.h>
 
-#include "kis_filter.h"
-
 KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nname) :
     initvalue(ninitvalue),
     name(nname)

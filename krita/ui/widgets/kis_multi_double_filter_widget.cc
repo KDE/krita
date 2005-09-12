@@ -22,9 +22,8 @@
 #include <qlayout.h>
 
 #include <knuminput.h>
+#include <kis_filter_config_widget.h>
 #include <klocale.h>
-
-#include "kis_filter.h"
 
 KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nname) :
     min(nmin),
@@ -35,7 +34,7 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 
 }
 
-KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam) 
+KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam)
     : KisFilterConfigWidget( parent, name )
 {
     Q_INT32 m_nbdoubleWidgets = dwparam.size();
@@ -50,7 +49,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
     for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
     {
         m_doubleWidgets[i] = new KDoubleNumInput(this, dwparam[i].name.ascii());
-        m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max ); 
+        m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max );
         m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
 
         connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));

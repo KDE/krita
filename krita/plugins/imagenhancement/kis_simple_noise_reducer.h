@@ -19,7 +19,7 @@
 #define KISSIMPLENOISEREDUCER_H
 
 #include <kis_filter.h>
-
+#include "kis_filter_config_widget.h"
 /**
 @author Cyrille Berger
 */

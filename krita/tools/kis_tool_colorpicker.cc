@@ -120,7 +120,7 @@ void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
-        vKisChannelInfoSP channels = m_pickedColor.colorSpace() -> channels();
+        QValueVector<KisChannelInfo *> channels = m_pickedColor.colorSpace() -> channels();
         m_optionsWidget -> listViewChannels -> clear();
 
         for (int i = channels.count() - 1; i >= 0 ; --i) {

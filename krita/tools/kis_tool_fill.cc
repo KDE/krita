@@ -38,7 +38,7 @@
 #include "kis_tool_brush.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
-#include "color_strategy/kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
@@ -48,7 +48,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_canvas_subject.h"
 
-KisToolFill::KisToolFill() 
+KisToolFill::KisToolFill()
     : super(i18n("Fill"))
 {
     setName("tool_fill");
@@ -70,7 +70,7 @@ void KisToolFill::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-KisToolFill::~KisToolFill() 
+KisToolFill::~KisToolFill()
 {
 }
 
@@ -86,7 +86,7 @@ bool KisToolFill::flood(int startX, int startY)
     painter.setCompositeOp(m_compositeOp);
     painter.setPattern(m_subject -> currentPattern());
     painter.setSampleMerged(m_sampleMerged);
-    
+
     KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
     if (progress) {
         progress -> setSubject(&painter, true, true);
@@ -129,7 +129,7 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KIntNumInput( widget, "int_widget");
-    m_slThreshold -> setRange( 0, 255); 
+    m_slThreshold -> setRange( 0, 255);
     m_slThreshold -> setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
@@ -177,10 +177,10 @@ void KisToolFill::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Fill"), 
+        m_action = new KRadioAction(i18n("&Fill"),
                         "color_fill",
-                        Qt::Key_F, 
-                        this, 
+                        Qt::Key_F,
+                        this,
                         SLOT(activate()),
                         collection,
                         name());

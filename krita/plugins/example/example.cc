@@ -86,7 +86,7 @@ void KisFilterInvert::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
         {
             for( int i = 0; i < depth; i++)
             {
-                dstIt.rawData()[i] = QUANTUM_MAX - srcIt.oldRawData()[i];
+                dstIt.rawData()[i] = Q_UINT8_MAX - srcIt.oldRawData()[i];
             }
         }
         setProgress(++pixelsProcessed);

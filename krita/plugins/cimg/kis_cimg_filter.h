@@ -22,7 +22,7 @@
 #define _KIS_CIMG_FILTER_H_
 
 #include "kis_filter.h"
-
+#include "kis_filter_config_widget.h"
 #include "CImg.h"
 
 class KisCImgFilterConfiguration : public KisFilterConfiguration
@@ -114,7 +114,7 @@ private:
         cimg_library::CImgl<> eigen;
         cimg_library::CImg<unsigned char> mask;
 
-    
+
 
 };
 

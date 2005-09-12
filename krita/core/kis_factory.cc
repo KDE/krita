@@ -50,6 +50,7 @@
 
 #include <kogradientmanager.h>
 
+
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_global = 0;
 KisResourceServerRegistry* KisFactory::s_rserverRegistry = 0;

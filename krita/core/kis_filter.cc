@@ -30,6 +30,7 @@
 #include "kis_doc.h"
 #include "kis_progress_display_interface.h"
 #include "kis_types.h"
+#include "kis_filter_config_widget.h"
 
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
     m_id(id),

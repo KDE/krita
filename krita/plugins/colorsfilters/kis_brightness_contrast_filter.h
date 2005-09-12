@@ -24,6 +24,7 @@
 #include <qwidget.h>
 
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
 #include <kdebug.h>
 #include "wdg_brightness_contrast.h"
 
@@ -34,7 +35,7 @@ public:
     Q_UINT16 transfer[256];
 };
 
-/** 
+/**
  * This class is generic for filters that affect channel separately
  */
 class KisBrightnessContrastFilter : public KisFilter

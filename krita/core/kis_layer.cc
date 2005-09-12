@@ -147,17 +147,17 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity);
+        KisLayerOpacityCommand(KisLayerSP layer, Q_UINT8 oldOpacity, Q_UINT8 newOpacity);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        QUANTUM m_oldOpacity;
-        QUANTUM m_newOpacity;
+        Q_UINT8 m_oldOpacity;
+        Q_UINT8 m_newOpacity;
     };
 
-    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, QUANTUM oldOpacity, QUANTUM newOpacity) :
+    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, Q_UINT8 oldOpacity, Q_UINT8 newOpacity) :
         super(i18n("Layer Opacity"), layer)
     {
         m_oldOpacity = oldOpacity;
@@ -182,7 +182,7 @@ namespace {
 
 }
 
-KisLayer::KisLayer(KisAbstractColorSpace * colorSpace, const QString& name)
+KisLayer::KisLayer(KisColorSpace * colorSpace, const QString& name)
     : super(colorSpace, name),
       m_opacity(OPACITY_OPAQUE),
       m_linked(false),
@@ -194,7 +194,7 @@ KisLayer::KisLayer(KisAbstractColorSpace * colorSpace, const QString& name)
 #endif
 }
 
-KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
+KisLayer::KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity)
     : super(img, img -> colorSpace(), name),
       m_opacity(opacity),
       m_linked(false),
@@ -206,7 +206,7 @@ KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity)
 #endif
 }
 
-KisLayer::KisLayer(KisImage *img, const QString& name, QUANTUM opacity, KisAbstractColorSpace * colorSpace)
+KisLayer::KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
     : super(img, colorSpace, name),
       m_opacity(opacity),
       m_linked(false),
@@ -243,17 +243,17 @@ KisLayer::~KisLayer()
 #endif
 }
 
-QUANTUM KisLayer::opacity() const
+Q_UINT8 KisLayer::opacity() const
 {
     return m_opacity;
 }
 
-void KisLayer::setOpacity(QUANTUM val)
+void KisLayer::setOpacity(Q_UINT8 val)
 {
     m_opacity = val;
 }
 
-KNamedCommand *KisLayer::setOpacityCommand(QUANTUM newOpacity)
+KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
 {
     return new KisLayerOpacityCommand(this, opacity(), newOpacity);
 }

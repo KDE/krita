@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 1999 Matthias Elter (me@kde.org)
@@ -47,6 +47,7 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
     m_VSelector = new KValueSelector(Qt::Vertical, this);
     m_VSelector-> setFixedSize( 30, 120);
 
+
     /* setup slider labels */
     mHLabel = new QLabel("H", this);
     mHLabel->setFixedSize(12, 20);
@@ -58,10 +59,15 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
     /* setup spin box */
     mHIn = new QSpinBox(0, 359, 1, this);
     mHIn->setFixedSize(50, 20);
+    mHIn->setFocusPolicy( QWidget::ClickFocus );
+
     mSIn = new QSpinBox(0, 255, 1, this);
     mSIn->setFixedSize(50, 20);
+    mSIn->setFocusPolicy( QWidget::ClickFocus );
+
     mVIn = new QSpinBox(0, 255, 1, this);
     mVIn->setFixedSize(50, 20);
+    mVIn->setFocusPolicy( QWidget::ClickFocus );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
 
@@ -220,7 +226,7 @@ void KisHSVWidget::slotFGColorSelected(const QColor& c)
     {
         QColor bgColor = m_ColorButton -> background();
         m_subject->setFGColor(m_fgColor.color());
-        //Background signal could be blocked so do that manually 
+        //Background signal could be blocked so do that manually
         //see bug 106919
         m_subject->setBGColor(bgColor);
     }

@@ -24,6 +24,7 @@
 
 #include "kis_filters_listview.h"
 #include "kis_filter.h"
+#include "kis_filter_config_widget.h"
 #include "kis_paint_device_impl.h"
 #include "kis_layer.h"
 #include "kis_types.h"
@@ -43,7 +44,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     QFrame* frame = makeMainWidget();
     m_hlayout = new QHBoxLayout(frame);
 
-    
+
     m_kflw = new KisFiltersListView(m_view, frame  );
     m_hlayout->addWidget(m_kflw);
     connect(m_kflw, SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
@@ -52,7 +53,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     m_hlayout->addWidget(m_previewWidget);
     m_previewWidget->slotSetLayer( m_view->currentImg()->activeLayer() );
     connect(m_previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
-    
+
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
 
 }
@@ -90,11 +91,11 @@ void KisDlgFiltersGallery::refreshPreview( )
     if(m_currentFilter == 0)
         return;
     m_previewWidget->slotRenewLayer();
-    
+
     KisLayerSP layer = m_previewWidget->getLayer();
 
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());
-    
+
     QRect rect = layer -> extent();
     m_currentFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
     m_previewWidget->slotUpdate();

@@ -22,7 +22,7 @@
 #include "tiles/kis_iterator.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_pixel.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 
 /**

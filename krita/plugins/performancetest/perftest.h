@@ -60,7 +60,7 @@ private:
 
     QString doBlit(const KisCompositeOp& op, 
                KisID cspace,
-               QUANTUM opacity,
+               Q_UINT8 opacity,
                Q_UINT32 testCount,
                KisImageSP img);
 

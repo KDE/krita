@@ -34,11 +34,7 @@ class GrayPlugin : public KParts::Plugin
 public:
     GrayPlugin(QObject *parent, const char *name, const QStringList &);
     virtual ~GrayPlugin();
-    
-private:
 
-    KisView* m_view;
-    KisAbstractColorSpace * m_ColorSpaceGrayA;
 };
 
 #endif // GRAY_PLUGIN_H_

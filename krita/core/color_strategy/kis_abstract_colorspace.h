@@ -30,6 +30,7 @@
 #include "kis_profile.h"
 #include "kis_id.h"
 #include "kis_composite_op.h"
+#include "kis_colorspace.h"
 
 #include "koffice_export.h"
 
@@ -43,7 +44,7 @@ class KisPixelRO;
 // need something that combines the two profiles + the rendering
 // intent + the lcms colortype -- a certain profile can be used with
 // many varieties of, e.g. RGB(a).
-typedef QPair<KisProfileSP, KisProfileSP> KisProfilePair;
+typedef QPair<KisProfile * , KisProfile * > KisProfilePair;
 
 // This would be better, I guess.
 struct transform {
@@ -54,13 +55,12 @@ struct transform {
     Q_UINT32 renderIntent;
 };
 
-struct KisColorAdjustment;
 
 /**
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
  */
-class KRITACORE_EXPORT KisAbstractColorSpace : public KShared {
+class KRITACORE_EXPORT KisAbstractColorSpace : public KisColorSpace {
 
 
 public:
@@ -93,7 +93,7 @@ public:
     //========== Channels =====================================================//
 
     // Return a vector describing all the channels this color model has.
-    virtual vKisChannelInfoSP channels() const = 0;
+    virtual QValueVector<KisChannelInfo *> channels() const = 0;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -150,7 +150,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    inline KisID id() const { return m_id; }
+    virtual KisID id() const { return m_id; }
 
     /**
      * lcms colorspace type definition.
@@ -158,12 +158,7 @@ public:
     void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
     Q_UINT32 colorSpaceType() { return m_cmType; }
 
-    /**
-     * icc profile files colorspace id
-     */
-    void setColorSpaceSignature(icColorSpaceSignature signature) { m_colorSpaceSignature = signature; }
-    icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
-
+    virtual icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
 
     //========== Capabilities =================================================//
 
@@ -174,7 +169,6 @@ public:
      */
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
-
     virtual bool valid() { return true; }
 
 
@@ -183,7 +177,7 @@ public:
     /**
      * Get a list of profiles that apply to this color space
      */
-    vKisProfileSP profiles();
+    QValueVector<KisProfile *>  profiles();
 
 
     /**
@@ -207,8 +201,8 @@ public:
      *
      * XXX: We actually do not use the display yet, nor the paint device profile
      */
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
-    virtual void fromQColor(const QColor& c, QUANTUM opacity, Q_UINT8 *dst, KisProfileSP profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -218,12 +212,12 @@ public:
      * XXX: We actually do not use the display yet, nor the paint device profile
      *
      */
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfileSP profile= 0 ) = 0;
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, QUANTUM *opacity, KisProfileSP profile = 0) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile= 0 ) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0) = 0;
 
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfileSP profile) = 0;
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfileSP profile) = 0;
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile) = 0;
+    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile) = 0;
 
     /**
      * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
@@ -247,7 +241,7 @@ public:
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                                   KisProfileSP srcProfile, KisProfileSP dstProfile,
+                                   KisProfile *  srcProfile, KisProfile *  dstProfile,
                                    Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
@@ -259,8 +253,8 @@ public:
      *
      * Returns false if the conversion failed, true if it succeeded
      */
-    virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfileSP srcProfile,
-                                 Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfileSP dstProfile,
+    virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfile *  srcProfile,
+                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace, KisProfile *  dstProfile,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -366,25 +360,25 @@ public:
      */
     virtual void bitBlt(Q_UINT8 *dst,
                 Q_INT32 dststride,
-                KisAbstractColorSpace * srcSpace,
+                KisColorSpace * srcSpace,
                 const Q_UINT8 *src,
                 Q_INT32 srcRowStride,
                 const Q_UINT8 *srcAlphaMask,
                 Q_INT32 maskRowStride,
-                QUANTUM opacity,
+                Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op,
-                KisProfileSP srcProfile = 0,
-                KisProfileSP dstProfile = 0);
+                KisProfile *  srcProfile = 0,
+                KisProfile *  dstProfile = 0);
 
 
 
     /**
      * Return the default profile for this colorspace. This may be 0.
      */
-    KisProfileSP  getDefaultProfile() { return m_defaultProfile; };
-    void setDefaultProfile(KisProfileSP profile) { m_defaultProfile = profile; };
+    virtual KisProfile *   getDefaultProfile() { return m_defaultProfile; };
+    void setDefaultProfile(KisProfile *  profile) { m_defaultProfile = profile; };
 
 //========================== END of Public API ========================================//
 
@@ -401,14 +395,14 @@ protected:
                 Q_INT32 srcRowStride,
                 const Q_UINT8 *srcAlphaMask,
                 Q_INT32 maskRowStride,
-                QUANTUM opacity,
+                Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op) = 0;
 
-    virtual cmsHTRANSFORM createTransform(KisAbstractColorSpace * dstColorSpace,
-                          KisProfileSP srcProfile,
-                          KisProfileSP dstProfile,
+    virtual cmsHTRANSFORM createTransform(KisColorSpace * dstColorSpace,
+                          KisProfile *  srcProfile,
+                          KisProfile *  dstProfile,
                           Q_INT32 renderingIntent);
 
 
@@ -416,7 +410,7 @@ protected:
 protected:
 
     QStringList m_profileFilenames;
-    KisProfileSP m_defaultProfile;
+    KisProfile *  m_defaultProfile;
     Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
     Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
     Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
@@ -426,11 +420,11 @@ protected:
     cmsHTRANSFORM m_defaultToXYZ;
     cmsHTRANSFORM m_defaultFromXYZ;
 
-    KisProfileSP m_lastUsedSrcProfile;
-    KisProfileSP m_lastUsedDstProfile;
+    KisProfile *  m_lastUsedSrcProfile;
+    KisProfile *  m_lastUsedDstProfile;
     cmsHTRANSFORM m_lastUsedTransform;
 
-    vKisChannelInfoSP m_channels;
+    QValueVector<KisChannelInfo *> m_channels;
 
 private:
 

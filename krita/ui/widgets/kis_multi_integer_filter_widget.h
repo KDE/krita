@@ -19,13 +19,11 @@
 #ifndef _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 #define _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 
-#include <vector> 
+#include <vector>
 
 #include <knuminput.h>
-
+#include <kis_filter_config_widget.h>
 #include "koffice_export.h"
-
-#include "kis_filter.h"
 
 class KIntNumInput;
 

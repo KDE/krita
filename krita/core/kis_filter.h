@@ -36,24 +36,13 @@
 
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
+class KisFilterConfigWidget;
 
 /**
  * Empty interface for passing filter configuration data
  * from the configuration widget to the filter.
  */
 class KisFilterConfiguration {
-};
-
-class KRITACORE_EXPORT KisFilterConfigWidget : public QWidget {
-
-    Q_OBJECT
-
-public:
-
-    KisFilterConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 ) : QWidget(parent, name, f) {};
-    virtual ~KisFilterConfigWidget() {};
-signals:
-    void sigPleaseUpdatePreview();
 };
 
 /**

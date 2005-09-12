@@ -45,7 +45,7 @@
 #include <kis_types.h>
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
-#include <kis_abstract_colorspace.h>
+#include <kis_colorspace.h>
 #include <kis_colorspace_registry.h>
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
@@ -78,13 +78,12 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     }
 
 
-    KisAbstractColorSpace * dstCs = 0;
+    KisColorSpace * dstCs = 0;
 
     Q_UINT32 numberOfChannels = src->nChannels();
-    KisAbstractColorSpace * srcCs  = src->colorSpace();
-    vKisChannelInfoSP channels = srcCs->channels();
+    KisColorSpace * srcCs  = src->colorSpace();
+    QValueVector<KisChannelInfo *> channels = srcCs->channels();
     Q_INT32 srcAlphaPos = srcCs->alphaPos();
-    Q_INT32 srcAlphaSize = srcCs->alphaSize();
 
     // Flatten the image first, if required
     switch(sourceOps) {
@@ -104,17 +103,17 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     vKisLayerSP layers;
 
-    vKisChannelInfoSP_cit begin = channels.begin();
-    vKisChannelInfoSP_cit end = channels.end();
+    QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
+    QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
 
 
     QRect rect = src->exactBounds();
 
     int i = 0;
-    for (vKisChannelInfoSP_cit it = begin; it != end; ++it)
+    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
     {
 
-        KisChannelInfoSP ch = (*it);
+        KisChannelInfo * ch = (*it);
 
         if (ch->channelType() == ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             // Don't make an separate separation of the alpha channel if the user didn't ask for it.

@@ -48,12 +48,12 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList 
 
     if ( parent->inherits("KisFactory") )
     {
-        m_ColorSpaceRGBF32 = new KisF32RgbColorSpace();
-        Q_CHECK_PTR(m_ColorSpaceRGBF32);
-        KisColorSpaceRegistry::instance() -> add(m_ColorSpaceRGBF32);
+        KisColorSpace * colorSpaceRGBF32  = new KisF32RgbColorSpace();
+        Q_CHECK_PTR(colorSpaceRGBF32);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceRGBF32);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
-                (KisID("RGBF32HISTO", i18n("Float32 Histogram")), m_ColorSpaceRGBF32) );
+                (KisID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
     }
 
 }

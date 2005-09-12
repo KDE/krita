@@ -43,6 +43,7 @@ KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, 
 
     /* setup color sliders */
     mSlider = new KoColorSlider(this);
+    mSlider->setFocusPolicy( QWidget::ClickFocus );
     mSlider->setMaximumHeight(20);
     mSlider->slotSetRange(0, 255);
     mSlider->slotSetColor1(QColor(255, 255, 255));
@@ -57,6 +58,7 @@ KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, 
     mIn = new QSpinBox(0, 255, 1, this);
     mIn->setFixedWidth(50);
     mIn->setFixedHeight(20);
+    mIn->setFocusPolicy( QWidget::ClickFocus );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mLabel, 0, 1);
@@ -129,7 +131,7 @@ void KisGrayWidget::slotFGColorSelected(const QColor& c)
     {
         QColor bgColor = m_ColorButton -> background();
         m_subject->setFGColor(m_fgColor);
-        //Background signal could be blocked so do that manually 
+        //Background signal could be blocked so do that manually
         //see bug 106919
         m_subject->setBGColor(bgColor);
     }

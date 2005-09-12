@@ -52,7 +52,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -156,7 +156,7 @@ QRect KisPainter::dirtyRect() {
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
             const KisCompositeOp& op,
                         KisPaintDeviceImplSP srcdev,
-                        QUANTUM opacity,
+                        Q_UINT8 opacity,
             Q_INT32 sx, Q_INT32 sy,
             Q_INT32 sw, Q_INT32 sh)
 {
@@ -192,8 +192,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    KisAbstractColorSpace * srcCs = srcdev -> colorSpace();
-    KisProfileSP srcProfile = srcdev -> profile();
+    KisColorSpace * srcCs = srcdev -> colorSpace();
+    KisProfile *  srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -254,7 +254,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   const KisCompositeOp &op, 
                   KisPaintDeviceImplSP srcdev,
                   KisSelectionSP seldev,
-                  QUANTUM opacity,
+                  Q_UINT8 opacity,
                   Q_INT32 sx, Q_INT32 sy, 
                   Q_INT32 sw, Q_INT32 sh)
 {
@@ -287,8 +287,8 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
     sw = srcRect.width();
     sh = srcRect.height();
 
-    KisAbstractColorSpace * srcCs = srcdev -> colorSpace();
-    KisProfileSP srcProfile = srcdev -> profile();
+    KisColorSpace * srcCs = srcdev -> colorSpace();
+    KisProfile *  srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -355,7 +355,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   const KisCompositeOp& op, 
                   KisPaintDeviceImplSP srcdev,
-                  QUANTUM opacity,
+                  Q_UINT8 opacity,
                   Q_INT32 sx, Q_INT32 sy, 
                   Q_INT32 sw, Q_INT32 sh)
 {

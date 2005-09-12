@@ -51,11 +51,11 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
 
-    QUANTUM opacity = OPACITY_OPAQUE;
+    Q_UINT8 opacity = OPACITY_OPAQUE;
     dev -> exactBounds(x, y, w, h);
 
-    KisAbstractColorSpace * cs = dev -> colorSpace();
-    KisProfileSP profile = dev -> profile();
+    KisColorSpace * cs = dev -> colorSpace();
+    KisProfile *  profile = dev -> profile();
 
     for (int y2 = y; y2 < h - y; ++y2) {
         KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
@@ -133,7 +133,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         KisImageSP img;
         KisPaintDeviceImplSP dev;
         QPoint pos;
-        QUANTUM opacity = OPACITY_OPAQUE;
+        Q_UINT8 opacity = OPACITY_OPAQUE;
 
         if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
             return;

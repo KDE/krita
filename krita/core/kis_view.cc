@@ -124,6 +124,7 @@
 
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
 {
+        setFocusPolicy( QWidget::StrongFocus );
 	// XXX Temporary re-instatement of old way to load filters and tools
 	m_toolRegistry = new KisToolRegistry();
 	Q_CHECK_PTR(m_toolRegistry);
@@ -441,7 +442,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
 	drawH = height() - rulerThickness;
 	drawW = width() - rulerThickness;
-	
+
 	if (drawH < docH) {
 		// Will need vert scrollbar
 		drawW -= scrollBarExtent;
@@ -526,7 +527,9 @@ void KisView::resizeEvent(QResizeEvent *)
 	}
 
 	m_vScroll -> setPageStep(drawH);
+	m_vScroll -> setLineStep(drawH/4);
 	m_hScroll -> setPageStep(drawW);
+	m_hScroll -> setLineStep(drawW/4);
 
 	if (m_vScroll -> isVisible())
 		m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
@@ -802,7 +805,7 @@ void KisView::layerUpdateGUI(bool enable)
 	m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
 	m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
 	m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-	
+
 	// XXX thes should be named layer instead of img
 	m_imgFlatten -> setEnabled(nlayers > 1);
 
@@ -1561,7 +1564,7 @@ void KisView::print(KPrinter& printer)
 
 	if (printerProfile != 0)
 		kdDebug() << "Printer profile: " << printerProfile -> productName() << "\n";
-	
+
 	QRect r = img -> bounds();
 	img -> renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
 }
@@ -2165,7 +2168,7 @@ void KisView::scrollV(int value)
 void KisView::setupCanvas()
 {
 	m_canvas = new KisCanvas(this, "kis_canvas");
-
+        m_canvas->setFocusPolicy( QWidget::StrongFocus );
 	QObject::connect(m_canvas, SIGNAL(gotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
 	QObject::connect(m_canvas, SIGNAL(gotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));

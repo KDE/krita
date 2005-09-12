@@ -124,7 +124,7 @@ void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDoc
 			d -> plug(tab);
 		}
 		else {
-			KisDockFrameDocker * d = new KisDockFrameDocker(m_view);
+			KisDockFrameDocker * d = new KisDockFrameDocker(m_view->mainWindow());
 			d -> setCaption(docker.name());
 			m_dockWindows -> add(docker, d);
 			d -> plug(tab);
@@ -136,7 +136,7 @@ void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDoc
 			 d -> plug(tab);
 		}
 		else {
-			KoTabbedToolDock * d = new KoTabbedToolDock(m_view);
+			KoTabbedToolDock * d = new KoTabbedToolDock(m_view->mainWindow());
 			d -> setCaption(docker.name());
 			m_sliders -> add(docker, d);
 			d -> plug(tab);
@@ -148,7 +148,7 @@ void KisDockerManager::addDockerTab(QWidget * tab, const KisID & docker, enumDoc
 			d -> plug(tab);
 		}
 		else {
-			KisPaintBox * d = new KisPaintBox(m_view);
+			KisPaintBox * d = new KisPaintBox(m_view->mainWindow());
 			d -> setCaption(docker.name());
 			m_toolBoxes -> add(docker, d);
 			d -> plug(tab);
@@ -215,7 +215,7 @@ void KisDockerManager::setupDockers()
 	KisConfig cfg;
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
 
-		m_toolDockManager = new KoToolDockManager(m_view);
+		m_toolDockManager = new KoToolDockManager(m_view->mainWindow());
 
 		// Tools
 		m_toolcontrolslider = m_toolDockManager -> createTabbedToolDock("info");
@@ -258,10 +258,10 @@ void KisDockerManager::setupDockers()
 
 	if ( cfg.dockerStyle() == DOCKER_DOCKER ) {
 
-		m_shapesdocker = new KisDockFrameDocker(m_view);
+		m_shapesdocker = new KisDockFrameDocker(m_view->mainWindow());
 		m_shapesdocker -> setCaption(i18n("Brush Shapes"));
 
-		m_fillsdocker = new KisDockFrameDocker(m_view);
+		m_fillsdocker = new KisDockFrameDocker(m_view->mainWindow());
 		m_fillsdocker -> setCaption(i18n("Fills"));
 
 		(void)new KAction(i18n( "Hide &Shapes" ), 0, this, SLOT( viewShapesDocker() ), m_ac, "view_shapes_docker" );
@@ -270,10 +270,10 @@ void KisDockerManager::setupDockers()
 	}
 	if ( cfg.dockerStyle() == DOCKER_DOCKER || cfg.dockerStyle() == DOCKER_TOOLBOX ) {
 
-		m_toolcontroldocker = new KisDockFrameDocker(m_view);
+		m_toolcontroldocker = new KisDockFrameDocker(m_view->mainWindow());
 		m_toolcontroldocker -> setCaption(i18n("General") + "/" + i18n( "Tools" ));
 
-		m_colordocker = new KisDockFrameDocker(m_view);
+		m_colordocker = new KisDockFrameDocker(m_view->mainWindow());
 		m_colordocker -> setCaption(i18n("Color Manager"));
 
 		(void)new KAction(i18n( "Hide &Color Manager" ), 0, this, SLOT( viewColorDocker() ), m_ac, "view_color_docker" );
@@ -282,7 +282,7 @@ void KisDockerManager::setupDockers()
 	}
 
 	// No matter what the docker style, we always have a paint box
-	m_paintboxdocker = new KisPaintBox( m_view );
+	m_paintboxdocker = new KisPaintBox( m_view->mainWindow() );
 	m_paintboxdocker -> setCaption( i18n( "Tools" ) );
 	(void)new KAction(i18n( "Hide &Tools" ), 0, this, SLOT( viewPaintBoxDocker() ), m_ac, "view_paintop_docker" );
 
@@ -461,7 +461,7 @@ void KisDockerManager::setupDockers()
 	// Colors
 
 
-	m_hsvwidget = new KisHSVWidget(m_view, "hsv");
+	m_hsvwidget = new KisHSVWidget(m_view->mainWindow(), "hsv");
 	m_hsvwidget -> setCaption(i18n("HSV"));
 	if ( cfg.dockerStyle() == DOCKER_SLIDER ) {
 		m_colorslider -> plug( m_hsvwidget );
@@ -491,7 +491,7 @@ void KisDockerManager::setupDockers()
 	}
 	m_view -> attach(m_graywidget);
 
-	m_palettewidget = new KisPaletteWidget(m_view);
+	m_palettewidget = new KisPaletteWidget(m_view -> mainWindow());
 	m_palettewidget -> setCaption(i18n("Palettes"));
 
 	connect(rserver, SIGNAL(loadedPalette(KisResource*)), m_palettewidget, SLOT(slotAddPalette(KisResource*)));

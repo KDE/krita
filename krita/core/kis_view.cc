@@ -552,9 +552,11 @@ void KisView::updateReadWrite(bool readwrite)
 
 void KisView::clearCanvas(const QRect& rc)
 {
-	QPainter gc(&m_canvasPixmap);
+	QPainter gc;
 
-	gc.fillRect(rc, backgroundColor());
+	if (gc.begin(&m_canvasPixmap)) {
+		gc.fillRect(rc, backgroundColor());
+	}
 }
 
 void KisView::setCurrentTool(KisTool *tool)
@@ -698,37 +700,39 @@ void KisView::paintView(const KisRect& r)
 
 		if (!vr.isNull()) {
 
-			QPainter gc(&m_canvasPixmap);
-			QRect wr = viewToWindow(vr).qRect();
+			QPainter gc;
 
-			if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
-				// Erase areas outside document
-				QRegion rg(vr.qRect());
-				rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
+			if (gc.begin(&m_canvasPixmap)) {
+				QRect wr = viewToWindow(vr).qRect();
 
-				QMemArray<QRect> rects = rg.rects();
+				if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
+					// Erase areas outside document
+					QRegion rg(vr.qRect());
+					rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
 
-				for (unsigned int i = 0; i < rects.count(); i++) {
-					QRect er = rects[i];
-					if (er.isValid())
-						gc.fillRect(er, backgroundColor());
+					QMemArray<QRect> rects = rg.rects();
+
+					for (unsigned int i = 0; i < rects.count(); i++) {
+						QRect er = rects[i];
+						if (er.isValid())
+							gc.fillRect(er, backgroundColor());
+					}
+
+					wr &= QRect(0, 0, img -> width(), img -> height());
 				}
 
-				wr &= QRect(0, 0, img -> width(), img -> height());
-			}
+				if (!wr.isNull()) {
 
-			if (!wr.isNull()) {
+					if (zoom() < 1.0 || zoom() > 1.0) {
+						gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
+					}
+					gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-				if (zoom() < 1.0 || zoom() > 1.0) {
-					gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
+					m_doc -> setCurrentImage(img);
+					m_doc -> paintContent(gc, wr, monitorProfile());
+					m_doc -> setCurrentImage(0);
 				}
-				gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
-
-				m_doc -> setCurrentImage(img);
-				m_doc -> paintContent(gc, wr, monitorProfile());
-				m_doc -> setCurrentImage(0);
 			}
-
 
 			m_canvas -> update(vr.qRect());
 		}

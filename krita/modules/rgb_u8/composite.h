@@ -578,14 +578,14 @@ void compositeCopy(Q_INT32 pixelSize,
            Q_INT32 cols, 
            Q_UINT8 /*opacity*/ = OPACITY_OPAQUE)
 {
-    Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
     Q_UINT8 *d;
     const Q_UINT8 *s;
     d = dst;
     s = src;
+    Q_UINT32 len = cols * pixelSize;
     
     while (rows-- > 0) {
-        memcpy(d, s, linesize);
+        memcpy(d, s, len);
         d += dstRowSize;
         s += srcRowSize;
     }

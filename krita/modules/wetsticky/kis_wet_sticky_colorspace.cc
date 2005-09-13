@@ -86,7 +86,8 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
     m_alphaPos = 3;
-
+    setDefaultProfile( 0 );
+    
 #ifdef WSDEBUG
     QValueVector<KisChannelInfo *>_it it;
     int i = 0;

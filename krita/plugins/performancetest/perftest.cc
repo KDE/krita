@@ -120,53 +120,102 @@ void PerfTest::slotPerfTest()
         if (dlgPerfTest -> exec() == QDialog::Accepted) {
 
         Q_INT32 testCount = (Q_INT32)qRound(dlgPerfTest -> page() -> intTestCount -> value());
+        
         if (dlgPerfTest -> page() -> chkBitBlt -> isChecked()) {
-            report = report.append(bltTest(testCount));
+            kdDebug() << "bltTest:\n";
+            QString s = bltTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkFill -> isChecked()) {
-            report = report.append(fillTest(testCount));
+            kdDebug() << "Filltest\n";
+            QString s= fillTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkGradient -> isChecked()) {
-            report = report.append(gradientTest(testCount));
+            kdDebug() << "Gradienttest\n";
+            QString s = gradientTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkPixel -> isChecked()) {
-            report = report.append(pixelTest(testCount));
+            kdDebug() << "Pixeltest\n";
+            QString s = pixelTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkShape -> isChecked()) {
-            report = report.append(shapeTest(testCount));
+            kdDebug() << "Shapetest\n";
+            QString s = shapeTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkLayer -> isChecked()) {
-            report = report.append(layerTest(testCount));
+            kdDebug() << "LayerTest\n";
+            QString s = layerTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkScale -> isChecked()) {
-            report = report.append(scaleTest(testCount));
+            kdDebug() << "Scaletest\n";
+            QString s = scaleTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkRotate -> isChecked()) {
-            report = report.append(rotateTest(testCount));
+            kdDebug() << "Rotatetest\n";
+            QString s = rotateTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkRender -> isChecked()) {
-            report = report.append(renderTest(testCount));
+            kdDebug() << "Rendertest\n";
+            QString s = renderTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkSelection -> isChecked()) {
-            report = report.append(selectionTest(testCount));
+            kdDebug() << "Selectiontest\n";
+            QString s = selectionTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkColorConversion -> isChecked()) {
-            report = report.append(colorConversionTest(testCount));
+            kdDebug() << "Colorconversiontest\n";
+            QString s = colorConversionTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkFilter-> isChecked()) {
-            report = report.append(filterTest(testCount));
+            kdDebug() << "filtertest\n";
+            QString s = filterTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkReadBytes -> isChecked()) {
-            report = report.append(readBytesTest(testCount));
+            kdDebug() << "Readbytes test\n";
+            QString s = readBytesTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkWriteBytes-> isChecked()) {
-            report = report.append(writeBytesTest(testCount));
+            kdDebug() << "Writebytes test\n";
+            QString s = writeBytesTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkIterators -> isChecked()) {
-            report = report.append(iteratorTest(testCount));
+            kdDebug() << "Iterators test\n";
+            QString s = iteratorTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         if (dlgPerfTest -> page() -> chkPaintView -> isChecked()) {
-            report = report.append(paintViewTest(testCount));
+            kdDebug() << "paintview test\n";
+            QString s = paintViewTest(testCount);
+            report = report.append(s);
+            kdDebug() << s << "\n";
         }
         KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
         Q_CHECK_PTR(d);
@@ -193,11 +242,14 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
     KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+                    
+        kdDebug() << "Image -> " << (*it).name() << "\n";
+
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
-         KisImage * img = doc -> newImage("blt-" + (*it).name(), 1000, 1000,
+         KisImageSP img = doc -> newImage("blt-" + (*it).name(), 1000, 1000,
                 KisColorSpaceRegistry::instance() -> get(*it));
-
+        
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
         report = report.append( "\n");
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE / 2, testCount, img));
@@ -206,9 +258,6 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
         report = report.append( "\n");
         report = report.append(doBlit(COMPOSITE_COPY, *it, OPACITY_OPAQUE / 2, testCount, img));
         report = report.append( "\n");
-
-        delete img;
-
     }
 
     return report;
@@ -218,10 +267,10 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 
 
 QString PerfTest::doBlit(const KisCompositeOp& op,
-             KisID cspace,
-             Q_UINT8 opacity,
-             Q_UINT32 testCount,
-             KisImageSP img)
+                         KisID cspace,
+                         Q_UINT8 opacity,
+                         Q_UINT32 testCount,
+                         KisImageSP img)
 {
 
     QTime t;
@@ -234,7 +283,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     Q_CHECK_PTR(small);
 
     KisFillPainter pf(small.data()) ;
-    pf.fillRect(0, 0, 64/2, 64/2, Qt::black);
+    pf.fillRect(0, 0, 32, 32, Qt::black);
     pf.end();
 
     t.restart();
@@ -355,11 +404,12 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
     KisDoc * doc = m_view -> getDocument();
     KisIDList l = KisColorSpaceRegistry::instance() -> listKeys();
 
-
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+        kdDebug() << "Filltest on " << (*it).name() + "\n";
+        
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
-         KisImage * img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+        KisImageSP img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
         KisLayerSP l = img -> activeLayer();
 
         // Rect fill
@@ -459,7 +509,6 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
         report = report.append(QString("    Opaque patternfill  of whole circle (incl. erase and painting of circle) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
 
-        delete img;
 
     }
 
@@ -485,7 +534,7 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing pixel/setpixel on " + (*it).name() + "\n");
 
-         KisImage * img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+         KisImageSP img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
 
         KisLayerSP l = img -> activeLayer();
 
@@ -513,10 +562,6 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
             }
          }
         report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
-
-        delete img;
-
-
 
     }
 
@@ -575,7 +620,7 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing filtering on " + (*it).name() + "\n");
 
-         KisImage * img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
+         KisImageSP img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisColorSpaceRegistry::instance() -> get(*it));
         KisLayerSP l = img -> activeLayer();
 
         QTime t;
@@ -590,8 +635,6 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
 
         }
 
-        delete img;
-
     }
     return report;
 
@@ -603,7 +646,7 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
 
     // On default tiles
     KisDoc * doc = m_view -> getDocument();
-    KisImage * img = doc -> newImage("Readbytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA","")));
+    KisImageSP img = doc -> newImage("Readbytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA","")));
     KisLayerSP l = img -> activeLayer();
 
     QTime t;
@@ -635,7 +678,6 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
 
     report = report.append(QString("    read 1000 x 1000 pixels %1 times from filled image: %2\n").arg(testCount).arg(t.elapsed()));
 
-    delete img;
     return report;
 }
 
@@ -646,7 +688,7 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 
     // On default tiles
     KisDoc * doc = m_view -> getDocument();
-    KisImage * img = doc -> newImage("Writebytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("Writebytes ", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, Qt::blue);
@@ -665,7 +707,6 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
         l -> writeBytes(data, 0, 0, 1000, 1000);
     }
     delete[] data;
-    delete img;
     report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
     return report;
 
@@ -677,7 +718,7 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 
 QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 ;
     int pixelSize = l -> pixelSize();
@@ -701,7 +742,6 @@ QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    hline iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 
 
@@ -709,7 +749,7 @@ QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -736,14 +776,13 @@ QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    hline iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -766,14 +805,13 @@ QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    hline iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -800,7 +838,6 @@ QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    hline iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
@@ -808,7 +845,7 @@ QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
 
 QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -828,14 +865,13 @@ QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    vline iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -860,14 +896,13 @@ QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    vline iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -888,14 +923,13 @@ QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    vline iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 }
 
 QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
 {
 
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -919,14 +953,13 @@ QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
 
     }
 
-    delete img;
     return QString("    vline iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 ;
     int pixelSize = l -> pixelSize();
@@ -942,7 +975,6 @@ QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
         }
     }
 
-    delete img;
     return QString("    rect iterated read-only 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 
 
@@ -950,7 +982,7 @@ QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString rectRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -970,7 +1002,6 @@ QString rectRO(KisDoc * doc, Q_UINT32 testCount)
         }
     }
 
-    delete img;
     return QString("    rect iterated read-only 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
@@ -979,7 +1010,7 @@ QString rectWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
 
 
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
 
     int pixelSize = l -> pixelSize();
@@ -995,14 +1026,13 @@ QString rectWRDefault(KisDoc * doc, Q_UINT32 testCount)
         }
     }
 
-    delete img;
     return QString("    rect iterated writable 1000 x 1000 pixels %1 times over default tile: %2\n").arg(testCount).arg(t.elapsed());
 
 }
 
 QString rectWR(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImage * img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
+    KisImageSP img = doc -> newImage("", 1000, 1000, KisColorSpaceRegistry::instance() -> get(KisID("RGBA", "")));
     KisLayerSP l = img -> activeLayer();
  ;
     int pixelSize = l -> pixelSize();
@@ -1025,7 +1055,6 @@ QString rectWR(KisDoc * doc, Q_UINT32 testCount)
     }
 
 
-    delete img;
     return QString("    rect iterated writable 1000 x 1000 pixels %1 times over existing tile: %2\n").arg(testCount).arg(t.elapsed());
 
 
@@ -1061,7 +1090,10 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
     QString report = QString("* paintView test\n\n");
 
     KisDoc * doc = m_view -> getDocument();
-    KisImage * img = doc -> newImage("paintView ", 512, 512, KisColorSpaceRegistry::instance() -> get(KisID("RGBA","")));
+    
+    KisImageSP img = doc->currentImage();
+    img->resize(512,512);
+    
 
     KisLayerSP l = img -> activeLayer();
 
@@ -1106,7 +1138,6 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 
     report = report.append(QString("    painted a 512 x 512 image with 3 layers %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
 
-    delete img;
     return report;
 }
 

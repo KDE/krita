@@ -46,7 +46,7 @@ KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id, DWORD cmType, icCo
     m_lastUsedDstProfile = 0;
     m_lastUsedSrcProfile = 0;
     m_lastUsedTransform = 0;
-
+    m_defaultProfile = 0;
 }
 
 void KisAbstractColorSpace::init()

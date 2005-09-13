@@ -154,11 +154,11 @@ QRect KisPainter::dirtyRect() {
 }
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
-            const KisCompositeOp& op,
+                        const KisCompositeOp& op,
                         KisPaintDeviceImplSP srcdev,
                         Q_UINT8 opacity,
-            Q_INT32 sx, Q_INT32 sy,
-            Q_INT32 sw, Q_INT32 sh)
+                        Q_INT32 sx, Q_INT32 sy,
+                        Q_INT32 sw, Q_INT32 sh)
 {
     if (srcdev == 0) {
         return;
@@ -174,6 +174,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 //               << " layer: " << srcdev -> name()
 //               << " onto: " << m_device -> name()
 //               << "\n";
+
     QRect srcRect = QRect(sx, sy, sw, sh);
 
     if (srcdev -> extentIsValid()) {

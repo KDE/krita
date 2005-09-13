@@ -384,11 +384,11 @@ private:
     KoPaletteManager * m_paletteManager;
     KisToolManager * m_toolManager;
 
-        // Fringe benefits
+    // Fringe benefits
     KisRuler *m_hRuler;
     KisRuler *m_vRuler;
 
-        // Actions
+    // Actions
     KAction *m_imgFlatten;
     KAction *m_imgMergeLinked;
     KAction *m_imgMergeVisible;
@@ -422,7 +422,7 @@ private:
 
     DCOPObject *m_dcop;
 
-        // Widgets
+    // Widgets
     QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs
     QScrollBar *m_vScroll; // is not right yet.
     int m_scrollX;

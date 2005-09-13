@@ -130,7 +130,61 @@
 // sent to a receiver if it does not accept the tablet event.
 #define MOUSE_CHANGE_EVENT_DELAY 100
 
-KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) : super(doc, parent, name)
+KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) 
+    : super(doc, parent, name)
+    , m_doc( doc )
+    , m_canvas( 0 )
+    , m_selectionManager( 0 )
+    , m_filterManager( 0 )
+    , m_paletteManager( 0 )
+    , m_toolManager( 0 )
+    , m_hRuler( 0 )
+    , m_vRuler( 0 )
+    , m_imgFlatten( 0 )
+    , m_imgMergeLinked( 0 )
+    , m_imgMergeVisible( 0 )
+    , m_imgMergeLayer( 0 )
+    , m_imgRename( 0 )
+    , m_imgResizeToLayer( 0 )
+    , m_imgScan( 0 )
+    , m_actionPartLayer( 0 )
+    , m_layerAdd( 0 )
+    , m_layerBottom( 0 )
+    , m_layerDup( 0 )
+    , m_layerHide( 0 )
+    , m_layerLink( 0 )
+    , m_layerLower( 0 )
+    , m_layerProperties( 0 )
+    , m_layerRaise( 0 )
+    , m_layerRm( 0 )
+    , m_layerSaveAs( 0 )
+    , m_layerTop( 0 )
+    , m_zoomIn( 0 )
+    , m_zoomOut( 0 )
+    , m_actualPixels( 0 )
+    , m_actualSize( 0 )
+    , m_fullScreen( 0 )
+    , m_imgProperties( 0 )
+    , m_RulerAction( 0 )
+    , m_dcop( 0 )
+    , m_hScroll( 0 )
+    , m_vScroll( 0 )
+    , m_scrollX( 0 )
+    , m_scrollY( 0 )
+    , m_currentGuide( 0 )
+    , m_adapter( adapter )
+    , m_statusBarZoomLabel( 0 )
+    , m_statusBarSelectionLabel( 0 )
+    , m_statusBarProfileLabel( 0 )
+    , m_progress( 0 )
+    , m_layerBox( 0 )
+    , m_toolBox( 0 )
+    , m_brush( 0 )
+    , m_pattern( 0 )
+    , m_gradient( 0 )
+    , m_monitorProfile( 0 )
+    , m_HDRExposure( 0 )
+    , m_inputDevice ( INPUT_DEVICE_MOUSE )
 {
 
     setFocusPolicy( QWidget::StrongFocus );
@@ -141,74 +195,19 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         setXMLFile("krita.rc");
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
-    Q_CHECK_PTR(m_paletteManager);
-    Q_ASSERT(m_paletteManager);
-
     m_paletteManager->createPalette( krita::PAINTBOX, i18n("Brushes and stuff"));
     m_paletteManager->createPalette( krita::CONTROL_PALETTE , i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
 
     m_selectionManager = new KisSelectionManager(this, doc);
-    Q_CHECK_PTR(m_selectionManager);
-
     m_filterManager = new KisFilterManager(this, doc);
-    Q_CHECK_PTR(m_filterManager);
-
     m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
-    Q_CHECK_PTR(m_toolManager);
-
-    m_doc = doc;
-    m_adapter = adapter;
-    m_canvas = 0;
-    m_hRuler = 0;
-    m_vRuler = 0;
-    m_zoomIn = 0;
-    m_zoomOut = 0;
-    m_actualPixels = 0;
-    m_actualSize = 0;
-
-    m_layerAdd = 0;
-    m_layerRm = 0;
-    m_layerDup = 0;
-    m_layerLink = 0;
-    m_layerHide = 0;
-    m_layerProperties = 0;
-    m_layerSaveAs = 0;
-    m_layerRaise = 0;
-    m_layerLower = 0;
-    m_layerTop = 0;
-    m_layerBottom = 0;
-
-    m_imgScan = 0;
-    m_imgResizeToLayer = 0;
-    m_imgFlatten = 0;
-    m_imgMergeVisible = 0;
-    m_imgMergeLinked = 0;
-    m_imgMergeLayer = 0;
-
-    m_hScroll = 0;
-    m_vScroll = 0;
-
-    m_dcop = 0;
 
     m_fg = KisColor(Qt::black);
     m_bg = KisColor(Qt::white);
 
-    m_brush = 0;
-    m_pattern = 0;
-    m_gradient = 0;
-
-    m_currentGuide = 0;
-
-    m_progress = 0;
-    m_statusBarZoomLabel = 0;
-    m_statusBarSelectionLabel = 0;
-    m_statusBarProfileLabel = 0;
-    m_HDRExposure = 0;
-
     createToolBox();
-
     createLayerBox();
 
     // Now the view plugins will be loaded.
@@ -222,9 +221,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     setupActions();
     dcopObject();
 
-
-    m_inputDevice = INPUT_DEVICE_MOUSE;
-
     connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
 
     resetMonitorProfile();
@@ -234,6 +230,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     qApp -> installEventFilter(this);
     m_tabletEventTimer.start();
 
+    // XXX: Remember this
     m_toolBox->setBarPos(KToolBar::Left);
 
     m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());

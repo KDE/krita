@@ -61,8 +61,8 @@ public:
     virtual Q_INT32 pixelSize() const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfile *  srcProfile, KisProfile *  dstProfile,
-                       Q_INT32 renderingIntent,
+                       KisProfile *  srcProfile = 0, KisProfile *  dstProfile = 0,
+                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;

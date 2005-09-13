@@ -264,10 +264,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
     KisPixel pixel = pixelIt.rawData();
 
-    // XXX: Isn't this just a copy? I.e., memcpy(source, pixelIt.rawData(), pixelSize());
-    for (int i = 0; i < sourceDevice -> pixelSize(); i++) {
-        source[i] = pixel[i];
-    }
+    memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
     
     std::stack<FillSegment*> stack;
 

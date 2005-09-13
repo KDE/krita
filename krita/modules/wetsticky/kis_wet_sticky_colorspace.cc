@@ -86,6 +86,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
     m_alphaPos = 3;
+    m_alphaSize = 1;
     setDefaultProfile( 0 );
     
 #ifdef WSDEBUG

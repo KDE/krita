@@ -87,6 +87,7 @@ Import/Export
 	* Fix imports to import metadata.
 
 User Interface
+    * Add an explanatory textframe to the scaling filter combobox.
     * Add a good crosshair cursor and a crosshair cursor that extends to the rulers.
     * Add a cheatsheet widget that integrates with knewstuff to have tutorials that people
       can download and follow from Krita.

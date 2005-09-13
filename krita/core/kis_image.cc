@@ -438,10 +438,10 @@ namespace {
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
+    m_profile = 0;
     init(doc, width, height, colorSpace, name);
     setName(name);
     m_dcop = 0L;
-    m_profile = 0;
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)

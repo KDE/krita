@@ -111,10 +111,10 @@ void KisU16BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8
         // Go to the alpha position (which is given in bytes from the start of the pixel,
         // and cast to short.
 
-        Q_UINT16 *pixel = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
-	pixel[0] = UINT8_MULT(*(pixel + m_alphaPos), *alpha8);
+        Q_UINT16 *pixelAlpha = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
+        *pixelAlpha = UINT8_MULT(*pixelAlpha, *alpha8);
 
-	++alpha8;
+        ++alpha8;
         U8_pixel += psize;
 
     }

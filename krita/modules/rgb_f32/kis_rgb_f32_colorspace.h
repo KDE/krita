@@ -49,15 +49,6 @@ public:
     virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
         { return KisPixel (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
@@ -66,9 +57,6 @@ public:
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
-
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfile *  srcProfile, KisProfile *  dstProfile,
@@ -122,9 +110,6 @@ private:
         float alpha;
     };
 };
-
-#define F32_OPACITY_OPAQUE 1.0f
-#define F32_OPACITY_TRANSPARENT 0.0f
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_F32_H_
 

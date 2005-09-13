@@ -29,7 +29,6 @@
 #include <klocale.h>
 
 #include "kis_image.h"
-#include "kis_f32_base_colorspace.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
@@ -40,28 +39,6 @@ namespace {
 }
 
 #include "kis_integer_maths.h"
-
-inline float UINT8_TO_FLOAT(uint c)
-{
-    return static_cast<float>(c) / UINT8_MAX;
-}
-
-inline uint FLOAT_TO_UINT8(float c)
-{
-    return QMIN(static_cast<uint>(c * UINT8_MAX + 0.5), UINT8_MAX);
-}
-
-
-inline uint FLOAT_TO_UINT16(float c)
-{
-return QMIN(static_cast<uint>(c * UINT16_MAX + 0.5), UINT16_MAX);
-}
-
-
-inline float FLOAT_BLEND(float a, float b, float alpha)
-{
-    return (a - b) * alpha + b;
-}
 
 #define FLOAT_MAX 1.0f //temp
 
@@ -77,7 +54,6 @@ KisF32RgbColorSpace::KisF32RgbColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), ALPHA, sizeof(float)));
-
 
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     //setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
@@ -130,58 +106,6 @@ void KisF32RgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *
     dst -> blue = UINT8_TO_FLOAT(c.blue());
     dst -> alpha = UINT8_TO_FLOAT(opacity);
 }
-
-Q_UINT8 KisF32RgbColorSpace::getAlpha(const Q_UINT8 *U8_pixel)
-{
-    const Pixel *pixel = reinterpret_cast<const Pixel *>(U8_pixel);
-    return FLOAT_TO_UINT8(pixel -> alpha);
-}
-
-void KisF32RgbColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
-{
-    Pixel *pixel = reinterpret_cast<Pixel *>(pixels);
-
-    while (nPixels > 0) {
-        pixel -> alpha = UINT8_TO_FLOAT(alpha);
-        --nPixels;
-        ++pixel;
-    }
-}
-
-void KisF32RgbColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8, Q_INT32 nPixels)
-{
-    Q_INT32 psize = pixelSize();
-
-    float *pixels = reinterpret_cast<float *>(U8_pixel);
-
-    while (nPixels--) {
-        float alphaf = UINT8_TO_FLOAT(*alpha8);
-
-        pixels[m_alphaPos] = *(pixels + m_alphaPos) * alphaf;
-
-        ++alpha8;
-        pixels += psize;
-
-    }
-
-}
-
-void KisF32RgbColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
-{
-}
-
-Q_UINT8 KisF32RgbColorSpace::scaleToU8(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
-{
-    const float *pixel = reinterpret_cast<const float *>(U8_pixel);
-    return FLOAT_TO_UINT8(pixel[channelPos]);
-}
-
-Q_UINT16 KisF32RgbColorSpace::scaleToU16(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
-{
-    const float *pixel = reinterpret_cast<const float *>(U8_pixel);
-    return FLOAT_TO_UINT16(pixel[channelPos]);
-}
-
 
 void KisF32RgbColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
 {
@@ -982,19 +906,5 @@ KisCompositeOpList KisF32RgbColorSpace::userVisiblecompositeOps() const
     list.append(KisCompositeOp(COMPOSITE_COLOR));
 
     return list;
-}
-
-QString KisF32RgbColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
-{
-    Q_ASSERT(channelIndex < nChannels());
-    const float *pixel = reinterpret_cast<const float *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(float);
-
-    return QString().setNum(pixel[channelPosition]);
-}
-
-QString KisF32RgbColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
-{
-    return channelValueText(U8_pixel, channelIndex);
 }
 

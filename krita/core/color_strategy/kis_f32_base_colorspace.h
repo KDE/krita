@@ -20,15 +20,40 @@
 
 #include <qcolor.h>
 
-#include <qcolor.h>
-
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_pixel.h"
+#include "kis_integer_maths.h"
 
 /**
  * This class is the base for all 32-bit float colorspaces.
  */
+
+inline float UINT8_TO_FLOAT(uint c)
+{
+    return static_cast<float>(c) / UINT8_MAX;
+}
+
+inline uint FLOAT_TO_UINT8(float c)
+{
+    return QMIN(static_cast<uint>(c * UINT8_MAX + 0.5), UINT8_MAX);
+}
+
+
+inline uint FLOAT_TO_UINT16(float c)
+{
+    return QMIN(static_cast<uint>(c * UINT16_MAX + 0.5), UINT16_MAX);
+}
+
+
+inline float FLOAT_BLEND(float a, float b, float alpha)
+{
+    return (a - b) * alpha + b;
+}
+
+#define F32_OPACITY_OPAQUE 1.0f
+#define F32_OPACITY_TRANSPARENT 0.0f
+
 class KisF32BaseColorSpace : public KisAbstractColorSpace {
 
 public:
@@ -39,6 +64,17 @@ public:
 	m_alphaSize = sizeof(float);
     };
 
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+
+    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+
+    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
 };
 

@@ -12,9 +12,6 @@
             <height>203</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgLayerBox</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>

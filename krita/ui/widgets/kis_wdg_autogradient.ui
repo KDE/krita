@@ -12,9 +12,6 @@
             <height>184</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KisWdgAutogradient</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

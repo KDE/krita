@@ -52,10 +52,10 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defP
         m_hashTable [i] = 0;
     m_numTiles = 0;
     m_currentMemento = 0;
-    m_extentMinX = LONG_MAX;
-    m_extentMinY = LONG_MAX;
-    m_extentMaxX = LONG_MIN;
-    m_extentMaxY = LONG_MIN;
+    m_extentMinX = Q_INT32_MAX;
+    m_extentMinY = Q_INT32_MAX;
+    m_extentMaxX = Q_INT32_MIN;
+    m_extentMaxY = Q_INT32_MIN;
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
@@ -332,10 +332,10 @@ void KisTiledDataManager::clear()
     m_numTiles = 0;
     
     // Set the extent correctly
-    m_extentMinX = LONG_MAX;
-    m_extentMinY = LONG_MAX;
-    m_extentMaxX = LONG_MIN;
-    m_extentMaxY = LONG_MIN;
+    m_extentMinX = Q_INT32_MAX;
+    m_extentMinY = Q_INT32_MAX;
+    m_extentMaxX = Q_INT32_MIN;
+    m_extentMaxY = Q_INT32_MIN;
 }
 
 void KisTiledDataManager::paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,

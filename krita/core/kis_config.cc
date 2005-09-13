@@ -43,10 +43,15 @@ KisConfig::KisConfig()
 {
     KApplication *app = KApplication::kApplication();
 
-    Q_ASSERT(app);
+    //Q_ASSERT(app);
 
-    m_cfg = app -> config();
-
+    if (app) {
+        m_cfg = app -> config();
+    } else {
+        // Allow unit tests to test parts of the code without having to run the
+        // full application.
+        m_cfg = new KConfig();
+    }
 }
 
 KisConfig::~KisConfig()

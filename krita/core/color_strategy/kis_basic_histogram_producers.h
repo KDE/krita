@@ -21,6 +21,8 @@
 
 #include <qvaluevector.h>
 
+#include "config.h"
+
 #include "kis_histogram_producer.h"
 #include "kis_colorspace.h"
 #include "kis_id.h"
@@ -92,6 +94,16 @@ public:
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
+
+#if HAVE_OPENEXR
+class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+};
+#endif
 
 /**
  * Parametrized on a specific KisHistogramProducer. Its generated producers

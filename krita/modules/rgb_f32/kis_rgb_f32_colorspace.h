@@ -28,10 +28,10 @@
 #include "kis_pixel.h"
 
 
-class KRITATOOL_EXPORT KisF32RgbColorSpace : public KisF32BaseColorSpace {
+class KRITATOOL_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
 public:
-    KisF32RgbColorSpace();
-    virtual ~KisF32RgbColorSpace();
+    KisRgbF32ColorSpace();
+    virtual ~KisRgbF32ColorSpace();
 
 public:
     void setPixel(Q_UINT8 *pixel, float red, float green, float blue, float alpha) const;
@@ -96,7 +96,7 @@ protected:
     void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
 
 private:
-    friend class KisF32RgbColorSpaceTester;
+    friend class KisRgbF32ColorSpaceTester;
 
     static const Q_UINT8 PIXEL_BLUE = 0;
     static const Q_UINT8 PIXEL_GREEN = 1;

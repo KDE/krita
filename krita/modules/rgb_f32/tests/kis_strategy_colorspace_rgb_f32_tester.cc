@@ -28,7 +28,7 @@
 using namespace KUnitTest;
 
 KUNITTEST_MODULE( kunittest_kis_strategy_colorspace_rgb_f32_tester, "RGBA 32-bit float colorspace tester" );
-KUNITTEST_MODULE_REGISTER_TESTER( KisF32RgbColorSpaceTester );
+KUNITTEST_MODULE_REGISTER_TESTER( KisRgbF32ColorSpaceTester );
 
 #define PIXEL_BLUE 0
 #define PIXEL_GREEN 1
@@ -48,17 +48,7 @@ KUNITTEST_MODULE_REGISTER_TESTER( KisF32RgbColorSpaceTester );
 #define MIN_CHANNEL_VALUE 0.0f
 
 
-inline float UINT8_TO_FLOAT(uint c)
-{
-    return static_cast<float>(c) / UINT8_MAX;
-}
-
-inline uint FLOAT_TO_UINT8(float c)
-{
-    return QMIN(static_cast<uint>(c * UINT8_MAX + 0.5),  UINT8_MAX);
-}
-
-void KisF32RgbColorSpaceTester::allTests()
+void KisRgbF32ColorSpaceTester::allTests()
 {
     // We need this so that the colour profile loading can operate without crashing.
     KisFactory *factory = new KisFactory();
@@ -71,9 +61,9 @@ void KisF32RgbColorSpaceTester::allTests()
     delete factory;
 }
 
-void KisF32RgbColorSpaceTester::testBasics()
+void KisRgbF32ColorSpaceTester::testBasics()
 {
-    KisF32RgbColorSpace *cs = new KisF32RgbColorSpace();
+    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace();
     KisAbstractColorSpace * csSP = cs;
 
     CHECK(cs -> hasAlpha(), true);
@@ -105,7 +95,7 @@ void KisF32RgbColorSpaceTester::testBasics()
 
     KisPaintDeviceImplSP pd = new KisPaintDeviceImpl(cs, "test");
 
-    KisF32RgbColorSpace::Pixel defaultPixel;
+    KisRgbF32ColorSpace::Pixel defaultPixel;
 
     memcpy(&defaultPixel, pd -> dataManager() -> defaultPixel(), sizeof(defaultPixel));
 
@@ -236,7 +226,7 @@ void KisF32RgbColorSpaceTester::testBasics()
 
     #define NUM_PIXELS 4
 
-    KisF32RgbColorSpace::Pixel pixels[NUM_PIXELS] = {
+    KisRgbF32ColorSpace::Pixel pixels[NUM_PIXELS] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
         {MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},
@@ -310,11 +300,23 @@ void KisF32RgbColorSpaceTester::testBasics()
     CHECK(green, 0.192f);
     CHECK(blue, 0.64f);
     CHECK(alpha, 0.99f);
+
+    CHECK(FLOAT_TO_UINT8(-0.5), 0u);
+    CHECK(FLOAT_TO_UINT8(0), 0u);
+    CHECK_TOLERANCE(FLOAT_TO_UINT8(0.5), UINT8_MAX / 2, 1u);
+    CHECK(FLOAT_TO_UINT8(1), UINT8_MAX);
+    CHECK(FLOAT_TO_UINT8(1.5), UINT8_MAX);
+
+    CHECK(FLOAT_TO_UINT16(-0.5), 0u);
+    CHECK(FLOAT_TO_UINT16(0), 0u);
+    CHECK_TOLERANCE(FLOAT_TO_UINT16(0.5), UINT16_MAX / 2, 1u);
+    CHECK(FLOAT_TO_UINT16(1), UINT16_MAX);
+    CHECK(FLOAT_TO_UINT16(1.5), UINT16_MAX);
 }
 
-void KisF32RgbColorSpaceTester::testMixColors()
+void KisRgbF32ColorSpaceTester::testMixColors()
 {
-    KisAbstractColorSpace * cs = new KisF32RgbColorSpace();
+    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace();
 
     // Test mixColors.
     float pixel1[NUM_CHANNELS];
@@ -413,11 +415,11 @@ void KisF32RgbColorSpaceTester::testMixColors()
 #define PIXELS_WIDTH 2
 #define PIXELS_HEIGHT 2
 
-void KisF32RgbColorSpaceTester::testToQImage()
+void KisRgbF32ColorSpaceTester::testToQImage()
 {
-    KisAbstractColorSpace * cs = new KisF32RgbColorSpace();
+    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace();
 
-    KisF32RgbColorSpace::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
+    KisRgbF32ColorSpace::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
         {MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},
@@ -472,12 +474,12 @@ void KisF32RgbColorSpaceTester::testToQImage()
 
 */
 
-void  KisF32RgbColorSpaceTester::testCompositeOps()
+void KisRgbF32ColorSpaceTester::testCompositeOps()
 {
-    KisF32RgbColorSpace *cs = new KisF32RgbColorSpace();
+    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace();
 
-    KisF32RgbColorSpace::Pixel srcPixel;
-    KisF32RgbColorSpace::Pixel dstPixel;
+    KisRgbF32ColorSpace::Pixel srcPixel;
+    KisRgbF32ColorSpace::Pixel dstPixel;
 
     srcPixel.red = UINT8_TO_FLOAT(102);
     srcPixel.green = UINT8_TO_FLOAT(170);
@@ -492,7 +494,7 @@ void  KisF32RgbColorSpaceTester::testCompositeOps()
     CHECK(dstPixel.red, (Q_UINT16)UINT8_TO_UINT16(253));
     CHECK(dstPixel.green, (Q_UINT16)UINT8_TO_UINT16(254));
     CHECK(dstPixel.blue, (Q_UINT16)UINT8_TO_UINT16(254));
-    CHECK(dstPixel.alpha, KisF32RgbColorSpace::F32_OPACITY_OPAQUE);
+    CHECK(dstPixel.alpha, KisRgbF32ColorSpace::F32_OPACITY_OPAQUE);
 
     Q_UINT16 srcColor = 43690;
     Q_UINT16 dstColor = 43690;
@@ -507,14 +509,14 @@ void  KisF32RgbColorSpaceTester::testCompositeOps()
     */
 
     /*
-    KisF32RgbColorSpace::Pixel srcPixels[NUM_ROWS * NUM_COLUMNS] = {
+    KisRgbF32ColorSpace::Pixel srcPixels[NUM_ROWS * NUM_COLUMNS] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
         {MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    KisF32RgbColorSpace::Pixel dstPixels[NUM_ROWS * NUM_COLUMNS] = {
+    KisRgbF32ColorSpace::Pixel dstPixels[NUM_ROWS * NUM_COLUMNS] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
         {MAX_CHANNEL_VALUE / 4, MAX_CHANNEL_VALUE / 2, MAX_CHANNEL_VALUE / 3, MAX_CHANNEL_VALUE / 2},
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MIN_CHANNEL_VALUE},

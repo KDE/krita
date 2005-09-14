@@ -28,19 +28,19 @@
 #include <kis_factory.h>
 #include <kis_basic_histogram_producers.h>
 
-#include "rgb_f32_plugin.h"
-#include "kis_rgb_f32_colorspace.h"
+#include "rgb_f16half_plugin.h"
+#include "kis_rgb_f16half_colorspace.h"
 
-typedef KGenericFactory<RGBF32Plugin> RGBF32PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "krita" ) )
+typedef KGenericFactory<RGBF16HalfPlugin> RGBF16HalfPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( krita_rgb_f16half_plugin, RGBF16HalfPluginFactory( "krita" ) )
 
 
-RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList &)
+RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(RGBF32PluginFactory::instance());
+    setInstance(RGBF16HalfPluginFactory::instance());
 
-    kdDebug(DBG_AREA_PLUGINS) << "32-bit float RGB Color model plugin. Class: "
+    kdDebug(DBG_AREA_PLUGINS) << "16-bit float 'half' RGB Color model plugin. Class: "
         << className()
         << ", Parent: "
         << parent -> className()
@@ -48,18 +48,19 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList 
 
     if ( parent->inherits("KisFactory") )
     {
-        KisColorSpace * colorSpaceRGBF32  = new KisRgbF32ColorSpace();
-        Q_CHECK_PTR(colorSpaceRGBF32);
-        KisColorSpaceRegistry::instance() -> add(colorSpaceRGBF32);
+        KisColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HalfColorSpace();
+        Q_CHECK_PTR(colorSpaceRGBF16Half);
+        KisColorSpaceRegistry::instance() -> add(colorSpaceRGBF16Half);
         KisHistogramProducerFactoryRegistry::instance() -> add(
-                new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
-                (KisID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
+                new KisBasicHistogramProducerFactory<KisBasicF16HalfHistogramProducer>
+                (KisID("RGBF16HALFHISTO", i18n("Float16 half Histogram")), colorSpaceRGBF16Half) );
     }
 
 }
 
-RGBF32Plugin::~RGBF32Plugin()
+RGBF16HalfPlugin::~RGBF16HalfPlugin()
 {
 }
 
-#include "rgb_f32_plugin.moc"
+#include "rgb_f16half_plugin.moc"
+

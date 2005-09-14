@@ -15,10 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_F32_BASE_COLORSPACE_H_
-#define KIS_F32_BASE_COLORSPACE_H_
+#ifndef KIS_F16HALF_BASE_COLORSPACE_H_
+#define KIS_F16HALF_BASE_COLORSPACE_H_
 
 #include <qcolor.h>
+
+#include <half.h>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
@@ -26,43 +28,45 @@
 #include "kis_integer_maths.h"
 
 /**
- * This class is the base for all 32-bit float colorspaces.
+ * This class is the base for all 16-bit float colorspaces using the
+ * OpenEXR half format. This format can be used with the OpenGL
+ * extensions GL_NV_half_float and GL_ARB_half_float_pixel.
  */
 
-inline float UINT8_TO_FLOAT(uint c)
+inline half UINT8_TO_HALF(uint c)
 {
-    return static_cast<float>(c) / UINT8_MAX;
+    return static_cast<half>(c) / UINT8_MAX;
 }
 
-inline uint FLOAT_TO_UINT8(float c)
+inline uint HALF_TO_UINT8(half c)
 {
     return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT8_MAX) + 0.5), 
                                    static_cast<int>(UINT8_MIN), static_cast<int>(UINT8_MAX)));
 }
 
 
-inline uint FLOAT_TO_UINT16(float c)
+inline uint HALF_TO_UINT16(half c)
 {
     return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT16_MAX) + 0.5), 
                                    static_cast<int>(UINT16_MIN), static_cast<int>(UINT16_MAX)));
 }
 
-inline float FLOAT_BLEND(float a, float b, float alpha)
+inline half HALF_BLEND(half a, half b, half alpha)
 {
     return (a - b) * alpha + b;
 }
 
-#define F32_OPACITY_OPAQUE 1.0f
-#define F32_OPACITY_TRANSPARENT 0.0f
+#define F16HALF_OPACITY_OPAQUE ((half)1.0f)
+#define F16HALF_OPACITY_TRANSPARENT ((half)0.0f)
 
-class KisF32BaseColorSpace : public KisAbstractColorSpace {
+class KisF16HalfBaseColorSpace : public KisAbstractColorSpace {
 
 public:
 
-    KisF32BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
+    KisF16HalfBaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
 	: KisAbstractColorSpace(id, cmType, colorSpaceSignature)
     {
-	m_alphaSize = sizeof(float);
+        m_alphaSize = sizeof(half);
     };
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
@@ -79,4 +83,4 @@ public:
 
 };
 
-#endif // KIS_F32_BASE_COLORSPACE_H_
+#endif // KIS_F16HALF_BASE_COLORSPACE_H_

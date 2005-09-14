@@ -19,7 +19,7 @@ AM_CPPFLAGS = \
 	$(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/../strategy \
 	-I$(srcdir)/../color_strategy \
-	-I$(srcdir)/../../modules/colorspace_rgb \
+	-I$(srcdir)/../../modules/rgb_u8 \
 	$(all_includes)
 
 # The check_ target makes sure we don't install the modules,

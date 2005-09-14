@@ -17,8 +17,8 @@
  */
 
 
-#ifndef KIS_STRATEGY_COLORSPACE_RGB_F32_TESTER_H
-#define KIS_STRATEGY_COLORSPACE_RGB_F32_TESTER_H
+#ifndef KIS_RGB_F16HALF_COLORSPACE_TESTER_H
+#define KIS_RGB_F16HALF_COLORSPACE_TESTER_H
 
 #include <kunittest/tester.h>
 
@@ -32,10 +32,10 @@ else \
     failure(QString(__FILE__) + "[" + QString::number(__LINE__) + QString("]: failed ") + #x + "\n Expected " + #y + ", Actual result " + QString::number(x)); \
 } \
 
-class KisRgbF32ColorSpaceTester : public KUnitTest::Tester
+class KisRgbF16HalfColorSpaceTester : public KUnitTest::Tester
 {
 public:
-        void allTests();
+    void allTests();
     void testBasics();
     void testMixColors();
     void testToQImage();

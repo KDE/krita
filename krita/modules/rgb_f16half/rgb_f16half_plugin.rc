@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="krita_rgb_f16half_plugin" version="1">
+<Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Mode"><text>&amp;Mode</text>
+            <Action name="convert to RGB(A) (16-bit float 'half')"/>
+    </Menu>
+</Menu>
+
+</kpartgui>

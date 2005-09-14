@@ -19,6 +19,12 @@
 #include <qstring.h>
 #include <klocale.h>
 
+#include "config.h"
+
+#if HAVE_OPENEXR
+#include <half.h>
+#endif
+
 #include "kis_basic_histogram_producers.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
@@ -211,6 +217,61 @@ void KisBasicF32HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
         ++it;
     }
 }
+
+#if HAVE_OPENEXR
+// ------------ Float16 Half ---------------------
+KisBasicF16HalfHistogramProducer::KisBasicF16HalfHistogramProducer(const KisID& id,
+        KisColorSpace *cs)
+    : KisBasicHistogramProducer(id, cs -> nChannels(), 256, cs) {
+}
+
+QString KisBasicF16HalfHistogramProducer::positionToString(double pos) const {
+    return QString("%1").arg(static_cast<float>(pos)); // XXX I doubt this is correct!
+}
+
+double KisBasicF16HalfHistogramProducer::maximalZoom() const {
+    // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
+    return 1.0 / 255.0;
+}
+
+void KisBasicF16HalfHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
+        KisColorSpace *cs) {
+    // The view
+    float from = static_cast<float>(m_from);
+    float width = static_cast<float>(m_width);
+    float to = from + width;
+    float factor = 255.0 / width;
+    kdDebug() << "from: " << from << "; to: " << to << endl;
+
+    m_outRight.clear();
+    m_outRight.resize(m_channels);
+    m_outLeft.clear();
+    m_outLeft.resize(m_channels);
+
+    while (!it.isDone()) {
+        Q_UINT8* pixelRaw = it.rawData();
+        half* pixel = reinterpret_cast<half*>(pixelRaw);
+        if (   (m_skipUnselected && !it.isSelected())
+                || (m_skipTransparent && cs -> getAlpha(pixelRaw) == OPACITY_TRANSPARENT) ) {
+            ++it;
+            continue;
+        }
+
+        for (int i = 0; i < m_channels; i++) {
+            float value = pixel[i];
+            if (value > to)
+                m_outRight.at(i)++;
+            else if (value < from)
+                m_outLeft.at(i)++;
+            else
+                m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+        }
+
+        m_count++;
+        ++it;
+    }
+}
+#endif
 
 // ------------ Generic RGB ---------------------
 KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()

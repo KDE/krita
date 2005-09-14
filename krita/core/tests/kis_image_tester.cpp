@@ -24,7 +24,7 @@
 #include "kis_image_tester.h"
 #include "kis_image.h"
 #include "kis_factory.h"
-#include "kis_strategy_colorspace_rgb.h"
+#include "kis_rgb_colorspace.h"
 #include "kis_colorspace_registry.h"
 #include "kis_color.h"
 #include "kis_layer.h"

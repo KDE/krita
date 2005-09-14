@@ -426,7 +426,7 @@ void KisRgbU16ColorSpaceTester::testToQImage()
 
     CHECK(qRed(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 3));
     CHECK(qGreen(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 2));
-    CHECK(qBlue(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 4));
+    CHECK_TOLERANCE(qBlue(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 4), 1u);
     CHECK(qAlpha(c), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 2));
 
     c = image.pixel(0, 1);

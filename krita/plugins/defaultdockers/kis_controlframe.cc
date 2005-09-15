@@ -30,6 +30,7 @@
 #include <qevent.h>
 #include <qtimer.h>
 
+#include <ktoolbar.h>
 #include <kmainwindow.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
@@ -95,20 +96,49 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     float ps = m_font.pointSize() * 0.8;
     m_font.setPointSize((int)ps);
 
-    m_brushWidget = new KisIconWidget(this, "brushes");
+    m_toolbar = new KToolBar(m_view->mainWindow(), Qt::DockTop, false, "resources", false, true);       
+    m_toolbar->setBarPos(KToolBar::Left);   
+    m_toolbar->setName("brushes and stuff");   
+    m_toolbar->setLabel(i18n("Brushes and stuff"));
+    m_toolbar->setMargin(3);
+    
+    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
+    QWidget * w1 = new QWidget(m_toolbar);
+    w1->setFixedWidth(10);
+
+    
+    m_brushWidget = new KisIconWidget(m_toolbar, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush shapes") );
-    //m_brushWidget->show();
+    m_brushWidget->show();
 
-    m_patternWidget = new KisIconWidget(this, "patterns");
+    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
+    QWidget * w2 = new QWidget(m_toolbar);
+    w2->setFixedWidth(10);
+
+
+    m_patternWidget = new KisIconWidget(m_toolbar, "patterns");
     m_patternWidget->setTextLabel( i18n("Fill patterns") );
-    //m_patternWidget->show();
+    m_patternWidget->show();
 
-    m_gradientWidget = new KisIconWidget(this, "gradients");
+    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
+    QWidget * w3 = new QWidget(m_toolbar);
+    w3->setFixedWidth(10);
+
+    m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
     m_gradientWidget->setTextLabel( i18n("Gradients") );
-    //m_gradientWidget->show();
+    m_gradientWidget->show();
 
-    m_paintopBox = new KisPaintopBox( m_view, this, "paintopbox" );
+    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
+    QWidget * w4 = new QWidget(m_toolbar);
+    w4->setFixedWidth(10);
 
+
+    m_paintopBox = new KisPaintopBox( m_view, m_toolbar, "paintopbox" );
+    
+    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
+    QWidget * w5 = new QWidget(m_toolbar);
+    w5->setFixedWidth(10);
+/*
     QGridLayout * g = new QGridLayout( this, 3, 5, 0, 0, "controldocker grid layout");
     g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 0);
     g->addWidget( m_brushWidget, 0, 1);
@@ -116,7 +146,7 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     g->addWidget( m_gradientWidget, 0, 3 );
     g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 4);
     g->addMultiCellWidget( m_paintopBox, 1, 1, 0, 4 );
-    
+*/
     m_brushWidget -> setFixedSize( 32, 32 );
     m_patternWidget -> setFixedSize( 32, 32 );
     m_gradientWidget -> setFixedSize( 32, 32 );

@@ -102,7 +102,7 @@ void KritaDefaultDockers::createControlFrame(KisView * view)
 {
     m_controlWidget = new KisControlFrame(view, view, "control frame");
     m_controlWidget->setCaption(i18n("Brushes and stuff"));
-    m_paletteManager->addWidget( m_controlWidget, i18n("Brushes and stuff"), krita::PAINTBOX );
+    //m_paletteManager->addWidget( m_controlWidget, i18n("Brushes and stuff"), krita::PAINTBOX );
 }
 
 

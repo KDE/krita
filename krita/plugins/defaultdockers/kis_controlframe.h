@@ -99,7 +99,7 @@ private:
 private:
     QFont m_font;
     KisView * m_view;
-
+    KToolBar * m_toolbar;
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
 

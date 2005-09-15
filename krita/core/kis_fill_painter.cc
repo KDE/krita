@@ -68,12 +68,14 @@ KisFillPainter::KisFillPainter()
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
+    m_careForSelection = false;
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceImplSP device) : super(device)
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
+    m_careForSelection = false;
 }
 
 // 'regular' filling
@@ -189,12 +191,8 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
 
     m_size = m_width * m_height;
 
-    if (m_device -> hasSelection()) {
-        m_selection = m_device -> selection();
-    } else {
-        // Create a selection from the surrounding area
-        m_selection = createFloodSelection(startX, startY);
-    }
+    // Create a selection from the surrounding area
+    m_selection = createFloodSelection(startX, startY);
 }
 
 void KisFillPainter::genericFillEnd(KisPaintDeviceImplSP filled) {
@@ -203,13 +201,8 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceImplSP filled) {
         return;
     }
 
-    if (! m_device -> hasSelection() ) {
-        bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
-                     0, 0, m_width, m_height);
-    } else {
-        bltSelection(0, 0, m_compositeOp, filled.data(), m_opacity,
-                     0, 0, m_width, m_height);
-    }
+    bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
+                 0, 0, m_width, m_height);
 
     emit notifyProgressDone(this);
 
@@ -227,7 +220,12 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (m_width < 0 || m_height < 0) {
-        if (m_device->image()) {
+        if (m_device -> hasSelection() && m_careForSelection) {
+            Q_INT32 x,y,w,h;
+            m_device -> selection() -> extent(x,y,w,h);
+            m_width = w - (startX - x);
+            m_height = h - (startY - y);
+        } else if (m_device -> image()) {
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
         } else {
@@ -276,6 +274,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
     emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
+    
+    Q_UINT8 selected;
+    bool hasSelection = m_careForSelection && sourceDevice -> hasSelection();
+    KisSelectionSP srcSel = 0;
+    if (hasSelection)
+        srcSel = sourceDevice -> selection();
 
     while(!stack.empty()) {
         FillSegment* segment = stack.top();
@@ -295,7 +299,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         pixelIt += x;
         Q_UINT8 diff = devColorSpace -> difference(source, pixelIt.rawData());
 
-        if (diff >= m_threshold) {
+        if (diff >= m_threshold
+            || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
             delete segment;
             continue;
         }
@@ -326,7 +331,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         while(!stop && x >= 0 && (map[m_width * y + x] != Checked) ) { // FIXME optimizeable?
             map[m_width * y + x] = Checked;
             diff = devColorSpace -> difference(source, pixelIt.rawData());
-            if (diff >= m_threshold) {
+            if (diff >= m_threshold
+                || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
                 stop = true;
                 continue;
             }
@@ -360,7 +366,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             diff = devColorSpace -> difference(source, pixelIt.rawData());
             map[m_width * y + x] = Checked;
 
-            if (diff >= m_threshold) {
+            if (diff >= m_threshold
+                || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED) ) {
                 stop = true;
                 continue;
             }

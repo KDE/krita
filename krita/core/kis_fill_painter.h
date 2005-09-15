@@ -117,6 +117,10 @@ public:
 
     bool sampleMerged() { return m_sampleMerged; }
     void setSampleMerged(bool set) { m_sampleMerged = set; }
+    
+    /** If true, floodfill doesn't fill outside the selected area of a layer */
+    bool careForSelection() { return m_careForSelection; }
+    void setCareForSelection(bool set) { m_careForSelection = set; }
 
 private:
     // for floodfill
@@ -135,6 +139,7 @@ private:
     int m_width, m_height;
     QRect m_rect;
     bool m_sampleMerged;
+    bool m_careForSelection;
 };
 
 

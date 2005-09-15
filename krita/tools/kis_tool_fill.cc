@@ -57,6 +57,7 @@ KisToolFill::KisToolFill()
     m_threshold = 15;
     m_usePattern = false;
     m_sampleMerged = false;
+    m_fillOnlySelection = false;
 
     // set custom cursor.
     setCursor(KisCursor::fillerCursor());
@@ -78,6 +79,32 @@ bool KisToolFill::flood(int startX, int startY)
 {
     KisPaintDeviceImplSP device = m_currentImage->activeDevice();
 
+    if (m_fillOnlySelection) {
+        KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(device -> colorSpace(), "Temp");
+        KisFillPainter painter(filled);
+        if (m_usePattern)
+            painter.fillRect(0, 0, m_currentImage -> width(), m_currentImage -> height(),
+                             m_subject -> currentPattern());
+        else
+            painter.fillRect(0, 0, m_currentImage -> width(), m_currentImage -> height(),
+                             m_subject -> fgColor(), m_opacity); 
+        painter.end();
+        KisPainter painter2(device);
+        painter2.beginTransaction(i18n("Fill"));
+        painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
+                              0, 0, m_currentImage -> width(), m_currentImage -> height());
+        // XXX Shouldn't the painter update this himself??
+        painter2.addDirtyRect(QRect(0, 0, m_currentImage -> width(), m_currentImage -> height()));
+        m_currentImage -> notify();
+        notifyModified();
+
+        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+        if (adapter) {
+            adapter -> addCommand(painter2.endTransaction());
+        }
+        return true;
+    }
+
     KisFillPainter painter(device);
     painter.beginTransaction(i18n("Floodfill"));
     painter.setPaintColor(m_subject -> fgColor());
@@ -86,6 +113,7 @@ bool KisToolFill::flood(int startX, int startY)
     painter.setCompositeOp(m_compositeOp);
     painter.setPattern(m_subject -> currentPattern());
     painter.setSampleMerged(m_sampleMerged);
+    painter.setCareForSelection(true);
 
     KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
     if (progress) {
@@ -141,7 +169,11 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     m_checkSampleMerged->setChecked(m_sampleMerged);
     connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
 
-    QGridLayout *optionLayout = new QGridLayout(widget, 4, 3);
+    m_checkFillSelection = new QCheckBox(i18n("Fill Entire Selection"), widget);
+    m_checkFillSelection -> setChecked(m_fillOnlySelection);
+    connect(m_checkFillSelection, SIGNAL(stateChanged(int)), this, SLOT(slotSetFillSelection(int)));
+
+    QGridLayout *optionLayout = new QGridLayout(widget, 5, 3);
     super::addOptionWidgetLayout(optionLayout);
 
     optionLayout -> addWidget(m_lbThreshold, 1, 0);
@@ -149,6 +181,7 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 
     optionLayout -> addMultiCellWidget(m_checkUsePattern, 2, 2, 0, 2);
     optionLayout -> addMultiCellWidget(m_checkSampleMerged, 3, 3, 0, 2);
+    optionLayout -> addMultiCellWidget(m_checkFillSelection, 4, 4, 0, 2);
 
     return widget;
 }
@@ -170,6 +203,13 @@ void KisToolFill::slotSetSampleMerged(int state)
     if (state == QButton::NoChange)
         return;
     m_sampleMerged = (state == QButton::On);
+}
+
+void KisToolFill::slotSetFillSelection(int state)
+{
+    if (state == QButton::NoChange)
+        return;
+    m_fillOnlySelection = (state == QButton::On);
 }
 
 void KisToolFill::setup(KActionCollection *collection)

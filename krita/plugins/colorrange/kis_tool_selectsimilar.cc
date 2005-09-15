@@ -61,26 +61,22 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
         KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
         KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
-            if (dev -> colorSpace() -> hasAlpha())
-                opacity = dev -> colorSpace() -> getAlpha(hiter.rawData());
+            //if (dev -> colorSpace() -> hasAlpha())
+            //    opacity = dev -> colorSpace() -> getAlpha(hiter.rawData());
 
-            // XXX: Don't try to select transparent pixels. The Gimp has an option to match transparent pixels; we don't, for the moment.
-            if (opacity > OPACITY_TRANSPARENT) {
+            Q_UINT8 match = cs->difference(c, hiter.rawData());
 
-                Q_UINT8 match = cs->difference(c, hiter.rawData());
-
-                if (mode == SELECTION_ADD) {
-                    if (match <= fuzziness) {
-                        *(selIter.rawData()) = MAX_SELECTED;
-                    }
+            if (mode == SELECTION_ADD) {
+                if (match <= fuzziness) {
+                    *(selIter.rawData()) = MAX_SELECTED;
                 }
-                else if (mode == SELECTION_SUBTRACT) {
-                    if (match <= fuzziness) {
-                        *(selIter.rawData()) = MIN_SELECTED;
-                    }
-                    else {
-                        *(selIter.rawData()) = 0;
-                    }
+            }
+            else if (mode == SELECTION_SUBTRACT) {
+                if (match <= fuzziness) {
+                    *(selIter.rawData()) = MIN_SELECTED;
+                }
+                else {
+                    *(selIter.rawData()) = 0;
                 }
             }
             ++hiter;
@@ -155,10 +151,9 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         if (dev -> colorSpace() -> hasAlpha())
             opacity = dev -> colorSpace() -> getAlpha(c.data());
 
-        if (opacity > OPACITY_TRANSPARENT)
-            selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);
-        else
-            m_subject -> selectionManager() -> selectAll();
+        // XXX we should make this configurable: "allow to select transparent"
+        // if (opacity > OPACITY_TRANSPARENT)
+        selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);
 
         if(img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);

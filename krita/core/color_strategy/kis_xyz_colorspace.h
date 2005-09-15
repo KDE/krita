@@ -25,6 +25,14 @@
 #include "kis_u16_base_colorspace.h"
 #include "kis_pixel.h"
 
+
+namespace xyz {
+    const Q_INT32 MAX_CHANNEL_XYZ = 3;
+    const Q_INT32 MAX_CHANNEL_XYZA = 4;
+}
+
+
+
 class KisXyzColorSpace : public KisU16BaseColorSpace {
 
 public:

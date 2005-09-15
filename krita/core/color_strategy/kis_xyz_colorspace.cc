@@ -39,12 +39,6 @@
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((Q_UINT8) (257UL*(value)))
 
-namespace xyz {
-    const Q_INT32 MAX_CHANNEL_XYZ = 3;
-    const Q_INT32 MAX_CHANNEL_XYZA = 4;
-}
-
-
 // XXX: Maybe use TYPE_XYZ_DBL for an extra stimulating performance hit? People shouldn't depend
 //      on this fallback...
 

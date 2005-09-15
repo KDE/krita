@@ -33,7 +33,7 @@
 #include "kis_color_conversions.h"
 #include "kis_colorspace_registry.h"
 #include "kis_channelinfo.h"
-
+#include "kis_xyz_colorspace.h"
 
 KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
     : m_id(id),
@@ -208,7 +208,7 @@ void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 */*src*/, Q_UINT8 */*d
 Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
     if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
-        Q_INT32 psize = pixelSize();
+        Q_INT32 psize = xyz::MAX_CHANNEL_XYZA * sizeof(Q_UINT16);
 
 
         if ( m_conversionCache.size() < 2 * psize ) {

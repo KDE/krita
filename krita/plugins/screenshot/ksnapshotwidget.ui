@@ -332,7 +332,4 @@ If &lt;i&gt;no delay&lt;/i&gt; is set, the program will wait for a mouse click b
 <pixmapfunction>SmallIconSet</pixmapfunction>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-<includehints>
-    <includehint>ksnapshotthumb.h</includehint>
-</includehints>
 </UI>

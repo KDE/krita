@@ -201,8 +201,4 @@
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kispreviewview.h</includehint>
-    <includehint>kispreviewview.h</includehint>
-</includehints>
 </UI>

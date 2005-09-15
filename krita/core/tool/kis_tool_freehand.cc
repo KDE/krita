@@ -63,13 +63,13 @@ void KisToolFreehand::update(KisCanvasSubject *subject)
 
 void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 {
-        if (!m_subject) return;
+    if (!m_subject) return;
 
-        if (!m_subject -> currentBrush()) return;
+    if (!m_subject -> currentBrush()) return;
 
     if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
-        if (e -> button() == QMouseEvent::LeftButton) {
+    if (e -> button() == QMouseEvent::LeftButton) {
 
         initPaint(e);
 
@@ -85,14 +85,14 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
              m_dirtyRect = r;
              m_currentImage -> notify(r);
          }
-         }
+    }
 }
 
 void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
 {
     if (e -> button() == QMouseEvent::LeftButton && m_mode == PAINT) {
         endPaint();
-        }
+    }
 }
 
 void KisToolFreehand::move(KisMoveEvent *e)
@@ -105,8 +105,8 @@ void KisToolFreehand::move(KisMoveEvent *e)
         m_prevXTilt = e -> xTilt();
         m_prevYTilt = e -> yTilt();
 
-         QRect r = m_painter -> dirtyRect();
-         m_dirtyRect |= r;
+        QRect r = m_painter -> dirtyRect();
+        m_dirtyRect |= r;
         m_currentImage -> notify(r);
     }
 }

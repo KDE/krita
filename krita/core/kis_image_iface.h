@@ -42,6 +42,10 @@ k_dcop:
 
     void setName(const QString& name);
 
+    void rotateCCW();
+    void rotateCW();
+    void rotate180();
+    void rotate(double angle); 
     /**
      * Get the active painting device.
      */

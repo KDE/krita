@@ -98,8 +98,8 @@ private slots:
 private:
     bool m_autoupdate, m_previewisdiplayed;
 
-	KisLayerSP m_sourceLayer, m_previewLayer;
-	KisImageSP m_sourceImage, m_previewImage;
+    KisLayerSP m_sourceLayer, m_previewLayer;
+    KisImageSP m_sourceImage, m_previewImage;
 };
 
 #endif

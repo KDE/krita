@@ -20,44 +20,24 @@
 #ifndef KIS_BIRDEYE_BOX_H
 #define KIS_BIRDEYE_BOX_H
 
-#include "wdgbirdeye.h"
+#include "qwidget.h"
 
-class QPixmap;
-
+class KoBirdEyePanel;
+class KisDoubleWidget;
 class KisView;
-class KisDoc;
-class KisImage;
-class KAction;
-class KoZoomHandler;
 
-class KisBirdEyeBox : public WdgBirdEye
+
+class KisBirdEyeBox : public QWidget
 { 
     Q_OBJECT
 
 public:
 
-    KisBirdEyeBox(QWidget* parent=0, const char* name=0);
+    KisBirdEyeBox(KisView * view, QWidget * parent = 0, const char* name=0);
     ~KisBirdEyeBox();
-
-    bool eventFilter(QObject*, QEvent*);
-
-public slots:
-
-    void show();
-
-    void zoomChanged(int);
-    void zoomMinus();
-    void zoomPlus();
 
 protected slots:
 
-
-    void updateVisibleArea();
-    void canvasZoomChanged();
-/*     void slotUpdateView(KivioPage*); */
-    void togglePageBorder(bool);
-    void doAutoResizeMin();
-    void doAutoResizeMax();
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
@@ -65,31 +45,10 @@ protected slots:
 signals:
     void exposureChanged(float exposure);
 
-protected:
-
-    void updateView();
-    void handleMouseMove(QPoint);
-    void handleMouseMoveAction(QPoint);
-    void handleMousePress(QPoint);
-
 private:
-    KisView* m_view;
-    KisDoc* m_doc;
-
-    KAction* m_zoomIn;
-    KAction* m_zoomOut;
-    QPixmap* m_buffer;
-
-    bool m_showPageBorders;
-
-    QSize m_minSize;
-    QSize m_maxSize;
-
-    QRect m_area;
-    AlignmentFlags m_apos;
-    bool m_handlePress;
-    QPoint m_lastPos;
-
+    KoBirdEyePanel * m_birdEyePanel;
+    KisDoubleWidget * m_exposureDoubleWidget;
+    
     bool m_draggingExposureSlider;
 };
 

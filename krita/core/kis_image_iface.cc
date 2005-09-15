@@ -52,6 +52,30 @@ void KisImageIface::setName(const QString& name)
     m_img->setName( name );
 }
 
+void KisImageIface::rotateCCW()
+{
+    // XXX: Add progress display if there is a view
+    m_img->rotate(270, 0);
+}
+
+void KisImageIface::rotateCW()
+{
+    // XXX: Add progressdisplay if there is a view
+    m_img->rotate(90, 0);
+}
+
+void KisImageIface::rotate180()
+{
+    // XXX: Add progressdisplay if there is a view
+    m_img->rotate(180, 0);
+}
+
+void KisImageIface::rotate(double angle)
+{
+    // XXX: Add progressdisplay if there is a view
+    m_img->rotate(angle, 0);
+}
+
 DCOPRef KisImageIface::activeDevice()
 {
     KisPaintDeviceImplSP dev = m_img->activeDevice();

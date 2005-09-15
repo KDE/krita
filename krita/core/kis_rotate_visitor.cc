@@ -32,7 +32,7 @@
 
 void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress) 
 {
-        KisPoint centreOfRotation;
+    KisPoint centreOfRotation;
 
     if (rotateAboutImageCentre) {
         centreOfRotation = KisPoint(m_dev -> image() -> width() / 2.0,  m_dev -> image() -> height() / 2.0);
@@ -393,17 +393,22 @@ KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double s
 
 void KisRotateVisitor::initProgress(Q_INT32 totalSteps)
 {
+    if (!m_progress) return;
+    
     m_progressTotalSteps = totalSteps;
     m_progressStep = 0;
     m_lastProgressPerCent = 0;
 
-    Q_ASSERT(m_progress != 0);
+    
     m_progress -> setSubject(this, true, false);
     emit notifyProgress(this, 0);
+
 }
 
 void KisRotateVisitor::incrementProgress()
 {
+    if (!m_progress) return;
+    
     m_progressStep++;
     Q_INT32 progressPerCent = (m_progressStep * 100) / m_progressTotalSteps;
 
@@ -415,6 +420,8 @@ void KisRotateVisitor::incrementProgress()
 
 void KisRotateVisitor::setProgressDone()
 {
+    if (!m_progress) return;
+    
     emit notifyProgressDone(this);
 }
 

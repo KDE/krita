@@ -706,7 +706,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
             Q_CHECK_PTR(t);
         }
 
-                layer -> rotate(angle, true, m_progress);
+        layer -> rotate(angle, true, m_progress);
 
         if (t) {
             m_adapter->addCommand(t);

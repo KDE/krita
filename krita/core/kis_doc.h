@@ -79,6 +79,7 @@ public:
      * Called by KisView to repaint the specified rect.
      */
     virtual void paintContent(QPainter& painter, const QRect& rect, KisProfile *  profile, float exposure = 0.0f);
+    
     virtual QDomDocument saveXML();
 
 private: // Undo adapter

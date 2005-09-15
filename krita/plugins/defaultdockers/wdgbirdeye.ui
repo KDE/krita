@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>314</width>
-            <height>217</height>
+            <width>177</width>
+            <height>146</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -27,7 +27,7 @@
     </property>
     <property name="layoutSpacing" stdset="0">
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -37,139 +37,66 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="KToolBar">
             <property name="name">
-                <cstring>layout14</cstring>
+                <cstring>toolbar</cstring>
             </property>
-            <grid>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>view</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>100</width>
+                    <height>100</height>
+                </size>
+            </property>
+            <property name="mouseTracking">
+                <bool>true</bool>
+            </property>
+            <property name="frameShape">
+                <enum>Box</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="1" column="1">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout12</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout11</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSlider">
-                                    <property name="name">
-                                        <cstring>slider</cstring>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>5</number>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>500</number>
-                                    </property>
-                                    <property name="lineStep">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="pageStep">
-                                        <number>10</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>100</number>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="tickmarks">
-                                        <enum>NoMarks</enum>
-                                    </property>
-                                    <property name="tickInterval">
-                                        <number>10</number>
-                                    </property>
-                                </widget>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>zoomBox</cstring>
-                                    </property>
-                                    <property name="suffix">
-                                        <string>%</string>
-                                    </property>
-                                    <property name="buttonSymbols">
-                                        <enum>PlusMinus</enum>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>10000</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>5</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>100</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="KisDoubleWidget">
-                            <property name="name">
-                                <cstring>exposureDoubleWidget</cstring>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QFrame" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>canvas</cstring>
-                    </property>
-                    <property name="mouseTracking">
-                        <bool>true</bool>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Box</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
+                    <property name="text">
+                        <string>Zoom:</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="0">
+                <widget class="KIntNumInput">
                     <property name="name">
-                        <cstring>layout13</cstring>
+                        <cstring>zoom</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Zoom:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Exposure:</string>
-                            </property>
-                        </widget>
-                    </vbox>
+                    <property name="label">
+                        <string></string>
+                    </property>
                 </widget>
-            </grid>
+            </hbox>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KisDoubleWidget</class>
-        <header location="local">kis_double_widget.h</header>
+        <class>KToolBar</class>
+        <header location="local">ktoolbar.h</header>
         <sizehint>
-            <width>1</width>
-            <height>24</height>
+            <width>-1</width>
+            <height>-1</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
@@ -183,23 +110,9 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="PNG" length="1125">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000042c49444154789cb5954f6c14551cc73fefcd7476b65bdaae4bb78bb5502a14d404e4801c88182d1c4c2c693da847400f9c24c68b878684238660e2b1e01f12c19493012ef2478c814412d354a46017a8a564bb6da5bbedccee767776e63d0ffb073751d483bfe49799974c3eeffb7ebf37df9fd05a530b2184040cc0042420aaf9a4d0d554800f045a6b256ae0e1e1e1d6bebebe838ee31c48a7d39b5cd7fd075e251cc7617272f2ded8d8d819cff33e0316819259537aead4a9839d5dd6d1784f91f55b0a94830242088404d304292bef68a89f520802a598fecddaa04f1a876f5c250c7c0a64cdeac686e33807e23d45e6b297c8b877f1831542614550b6599835c83c2a81b6786a75134faf2f1169f12997350881d9021d0903e06de0745d3160a6d3e94dbd5b0a64dcbb94b5831d0e3375ab892b1772dcf9790528543f8dd0d367b36768153b5e31503a0f1aecb004580b44ffac58baae8b1714f0833c7638cc8dab303a320f4822ab4c7a37c69196203de3319d5ce1c4d13c733331dedc67a129a154fd128401ab0616d55a130ac3d42d93d1913940d13fd0c9ee0183685c60da01c5421bd72f7a8c8efccef9afd374267ad93d642365be0636a0d28ec7600941d9e6f23917f0e97f23ce5bef35d19ec863da0ed9059b2be70bec196c66dfa10ec0e49b338f7017258651bf95021035c595429bb0903248fe52a2b5b595dd7b4d945cc2340cdca536be389ee3f67886c5798f773fe8e0dac508c989659277a2180da4ca4ff07821058b8b251445d63d6b13ed1098a6417e39cac85197dbe31962ab9bd9f1f22a226d45366f6d0620fdb08c900d281af6110284b20085b414861d905d88f2e52739ee8cbb8022143259d3dd84691730aa2d52da441a8de0c6958068870022a41e9629ad3473fd3b8fdbe319dadb9b4924da994d2d716c7896fbe35152f78b48245d6b2da4507faf582be8eaf159b721cc837b05ae7debb1f79d08cb8b515edad942a22bc4b1c33eb3d34b1c797f06af90a72d16e2f96d9a74aa11dca8586b222d01af0fb60070f6c402d72f15d97f28c6f6d7027a5f5ce6c3233dc4e2ede496b278be4fff608cee8d3e1add806aeca51094cbb06397c1ecc328e746537c7e3ccdb5cb1136bf60635882d4d41c6ec6836ab37efa214f72208ed9f4d7cdd38ee310280542e38b1c43fb6de26b3672e1ec3cc99bcb246f66a938a3241ab3e91f7c861fbf77710b1e5e49915bae974203ba0e9e9c9cbc373d6d6d305a040a89c2a77f50b27d5782bbbf7acccf28349235dd16cf6dd374f7295e1de8a45c02d37499182b01cc0201a085d61a2144d8b2ac8fb6ed340e77240c4261890e04c250185262546d534a032154b59e0ad394e41c98182bf268ce6721ed9f064e0253356f6da2e24c1f030f783c15fe6da680af8021602bd051532ca9b8521488559f61aa86c29343578fbf0264a94c906c7d3409214c20043457a116ff6de6795578012889ff6b98fe016ea0ce1c203e47720000000049454e44ae426082</data>
+        <data format="PNG" length="741">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002ac49444154388db5d53d4c13611cc7f12fbd83ca3561c0232a03e2408b2c242e24482204582531a1c1c4059cdab8100712572663620823918e0eb8a0a2042160085638a824d4817a5a7931a4b4e5d52b5c5fae75406bc1a654a2bfe42e4ffec9f379eeff24cf73056eb79bd3525f5f9f3a5973bbdd05b9e698ce82e6aa67ae0c90fad78ff86b81e59901c22bb3c4a37b9844f3698d1c4b9124634435d6bd2e6e3f3caaa5e1f0ca2c6b4b2e92b91bcc1a4180022061fcaea5e178748f640aee3cfa7b1860e8c13952e87fc299ed87c361c442112da2e15df2323232c2cece0e0dd71b282f2f4792248a2dc5acaeade21a74313931c905db2dd63f3efd13cecce0e0209ba14d66dfcfa2cc29b4dbdbe9efef473e2f03a0eb3a33ef66585d5925b819ccda4156b8a7a7273d3689263c1e0f034f06b8db7917df271fbdbdbd2c7a16d9dada4292a4fc6100abd58ac3e9402c142993cbb0d96c949494a07e5269bcd148576717cf5f3c677f7f9fd157a3f9c18e7b0eda6eb6d1dadc4a3c11c75c64261a8b62124cc46231eaeaea68696ec16ab3e2f7fbb3c2594f9e20081849032da261321d61a150888383035455657c629cefda772a2f57120e85f3df8ad72f5f2397ca5455552197ca08824020184092242c160bcbbe65865f0eb3f8619179cf7c5638eb176f7cdb20140ea1691a878787e8873a5393530c3d1bc2e7f3b1a02c100c04b1dbed545babf387f5988efa59c5ffd58f7fc54f2c1ea3a9a909d5a7b2e059a0e24a05814000c330703a9df96f85288a28730a35576bb0b7db8944225cba7889eefbddd45eab65eccd18cabc82a228747474e4868b241941381a27120976b777e97bdc47dfe3beac137f65faed340066a98ccc6b260d1b518d028ecefc05dbad9cd8c998a532b4ed2f64ca6978ddeb2261400afdd899cf27a99faf6432a3f8bf2efa537f4d67cd7f837f00a0a6494d8d22e5ed0000000049454e44ae426082</data>
     </image>
 </images>
-<connections>
-    <connection>
-        <sender>slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>WdgBirdEye</receiver>
-        <slot>zoomChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>zoomBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>WdgBirdEye</receiver>
-        <slot>zoomChanged(int)</slot>
-    </connection>
-</connections>
 <includes>
     <include location="local" impldecl="in declaration">kiconloader.h</include>
 </includes>
@@ -211,6 +124,7 @@
 <pixmapfunction>BarIcon</pixmapfunction>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kisdoublewidget.h</includehint>
+    <includehint>ktoolbar.h</includehint>
+    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

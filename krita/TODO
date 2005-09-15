@@ -170,9 +170,9 @@ Tools
 		    - Text tool (use kotext with a transparent background here?)
 		    - Measure tool
 	            - calligraphic pen tool
-         
+ 
 	* Pressure sensivitize all relevant tools (e.g. line tool)
-    * Add resize slider to freehand tools that resizes the mean brush size.
+        * Add resize slider to freehand tools that resizes the mean brush size.
 	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)

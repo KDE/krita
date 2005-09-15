@@ -57,10 +57,11 @@ public:
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
 
-public:
+private:
     // Composite the specified tile onto the projection layer.
     virtual void renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+public:
     /// Paint the specified rect onto the painter, adjusting the colors using the
     /// given profile. The exposure setting is used if the image has a high dynamic range.
     virtual void renderToPainter(Q_INT32 x1,
@@ -109,7 +110,7 @@ public:
     void unit(const KoUnit::Unit& u);
 
     // Resolution of the image == XXX: per inch?
-        double xRes();
+    double xRes();
     double yRes();
     void setResolution(double xres, double yres);
 

@@ -26,6 +26,7 @@ kritadefaultdockers_la_SOURCES = defaultdockers.cc \
 	kis_pattern_chooser.cc \
 	kis_resource_mediator.cc \
 	kis_controlframe.cc \
+	kobirdeyepanel.cpp \
 	wdgautobrush.ui \
 	wdgautogradient.ui \
 	wdgbirdeye.ui

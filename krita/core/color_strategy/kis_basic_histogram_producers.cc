@@ -46,9 +46,6 @@ KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channe
     m_count = 0;
     m_from = 0.0;
     m_width = 1.0;
-
-    // Set up our external to internal translation table
-    makeExternalToInternal();
 }
 
 void KisBasicHistogramProducer::clear() {

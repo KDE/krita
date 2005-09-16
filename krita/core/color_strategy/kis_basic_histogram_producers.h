@@ -57,7 +57,11 @@ protected:
      * exotic spaces might want to override this (see makeExternalToInternal source for
      * those assumptions)
      **/
-    virtual int externalToInternal(int ext) { return m_external.at(ext); }
+    virtual int externalToInternal(int ext) {
+        if (channels().count() > 0 && m_external.count() == 0) // Set up the translation table
+            makeExternalToInternal();
+        return m_external.at(ext);
+    }
     // not virtual since that is useless: we call it from constructor
     void makeExternalToInternal();
     typedef QValueVector<Q_UINT32> vBins;

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *            (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,21 +33,85 @@
 #include <qpoint.h>
 #include <qvaluevector.h>
 #include <qfile.h>
+#include <qregexp.h>
+#include <qstringlist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 #include "kis_global.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
 
+KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
+{
+    QRegExp basicSplitter(" ", true);
+    QRegExp parasiteSplitter(":", true);
+    QStringList parasites = QStringList::split(basicSplitter, source);
+    for (uint i = 0; i < parasites.count(); i++) {
+        QStringList splitted = QStringList::split(parasiteSplitter, *parasites.at(i));
+        if (splitted.count() != 2) {
+            kdDebug() << "Wrong count for this parasite key/value:" << *parasites.at(i) << endl;
+            continue;
+        }
+        QString index = *splitted.at(0);
+        if (index == "dim") {
+            dim = (*splitted.at(1)).toInt();
+            if (dim < 1 || dim > MaxDim) {
+                kdDebug() << "dim out of range: " << dim << endl;
+                dim = 1;
+            }
+        } else if (index.startsWith("sel")) {
+            int selIndex = index.mid(strlen("sel")).toInt();
+            if (selIndex >= 0 && selIndex < dim) {
+                QString selectionMode = *splitted.at(1);
+                if (selectionMode == "incremental")
+                    selection[selIndex] = Incremental;
+                else if (selectionMode == "angular")
+                    selection[selIndex] = Angular;
+                else if (selectionMode == "random")
+                    selection[selIndex] = Random;
+                else if (selectionMode == "pressure")
+                    selection[selIndex] = Pressure;
+                else if (selectionMode == "xtilt")
+                    selection[selIndex] = TiltX;
+                else if (selectionMode == "ytilt")
+                    selection[selIndex] = TiltY;
+                else
+                    selection[selIndex] = Constant;
+            } else {
+                kdDebug()<< "Sel: wrong index: " << selIndex << "(dim = " << dim << ")" << endl;
+            }
+        } else if (index.startsWith("rank")) {
+            int rankIndex = index.mid(strlen("rank")).toInt();
+            if (rankIndex < 0 && rankIndex > dim) {
+                kdDebug() << "Rankindex out of range: " << rankIndex << endl;
+                continue;
+            }
+            rank[rankIndex] = (*splitted.at(1)).toInt();
+        } else if (index == "ncells") {
+            ncells = (*splitted.at(1)).toInt();
+            if (ncells < 1 ) {
+                kdDebug() << "ncells out of range: " << ncells << endl;
+                ncells = 1;
+            }
+        }
+    }
+    
+    // I assume ncells is correct. If it isn't, complain to the parasite header.
+    brushesCount[0] = ncells / rank[0];
+    for (int i = 1; i < dim; i++) {
+        brushesCount[i] = brushesCount[i-1] / rank[i];
+    }
+}
+
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 {
     m_brushType = INVALID;
     m_numOfBrushes = 0;
     m_currentBrush = 0;
-
 }
 
 KisImagePipeBrush::~KisImagePipeBrush()
@@ -94,7 +159,6 @@ bool KisImagePipeBrush::init()
     QString paramline = QString::fromUtf8((&line2[0]), line2.size());
     Q_UINT32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
     m_parasite = paramline.mid(paramline.find(' ') + 1);
-    
     i++; // Skip past the second newline
 
      Q_UINT32 numOfBrushes = 0;
@@ -144,28 +208,21 @@ QImage KisImagePipeBrush::img()
 KisAlphaMaskSP KisImagePipeBrush::mask(double pressure, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
-    // XXX: This does not follow the instructions in the 'parasite'
-    if (m_currentBrush == m_brushes.count()) {
-        m_currentBrush = 0;
-    }
-    m_currentBrush++;
-    return m_brushes.at(m_currentBrush - 1) -> mask(pressure, subPixelX, subPixelY);
+    selectNextBrush(pressure);
+    return m_brushes.at(m_currentBrush) -> mask(pressure, subPixelX, subPixelY);
 }
 
 KisLayerSP KisImagePipeBrush::image(KisColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
-    // XXX: This does not follow the instructions in the 'parasite'
-    if (m_currentBrush == m_brushes.count()) {
-        m_currentBrush = 0;
-    }
-    m_currentBrush++;
-    return m_brushes.at(m_currentBrush - 1) -> image(colorSpace, pressure, subPixelX, subPixelY);
+    selectNextBrush(pressure);
+    return m_brushes.at(m_currentBrush) -> image(colorSpace, pressure, subPixelX, subPixelY);
 }
 
-void KisImagePipeBrush::setParasite(const QString& parasite)
+void KisImagePipeBrush::setParasiteString(const QString& parasite)
 {
-    m_parasite = parasite;
+    m_parasiteString = parasite;
+    m_parasite = KisPipeBrushParasite(parasite);
 }
 
 
@@ -209,6 +266,29 @@ bool KisImagePipeBrush::hasColor() const
 KisBoundary KisImagePipeBrush::boundary() {
     Q_ASSERT(!m_brushes.isEmpty());
     return m_brushes.at(0) -> boundary();
+}
+
+void KisImagePipeBrush::selectNextBrush(double pressure) const {
+    m_currentBrush = 0;
+    for (int i = 0; i < m_parasite.dim; i++) {
+        int index = m_parasite.index[i];
+        switch (m_parasite.selection[i]) {
+            case KisPipeBrushParasite::Constant: break;
+            case KisPipeBrushParasite::Incremental:
+                index = (index + 1) % m_parasite.rank[i]; break;
+            case KisPipeBrushParasite::Random:
+                index = int(float(m_parasite.rank[i])*KApplication::random() / RAND_MAX); break;
+            case KisPipeBrushParasite::Pressure:
+                index = static_cast<int>(pressure * (m_parasite.rank[i] - 1) + 0.5); break;
+            default:
+                kdDebug() << "This parasite selectionMode has not been implemented. Reselecting"
+                        << " to Incremental" << endl;
+                m_parasite.selection[i] = KisPipeBrushParasite::Incremental;
+                index = 0;
+        }
+        m_parasite.index[i] = index;
+        m_currentBrush += m_parasite.brushesCount[i] * index;
+    }
 }
         
 #include "kis_imagepipe_brush.moc"

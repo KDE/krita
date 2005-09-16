@@ -310,7 +310,6 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
             }
         }
     }
-
     return true;
 }
 
@@ -654,6 +653,7 @@ bool KisDoc::completeSaving(KoStore *store)
             store -> close();
         }
     }
+
     // Composite rendition of the entire image for easier kimgio loading 
     // and to speed up loading the image into Krita: show the composite png first, 
     // then load the layers. 
@@ -661,6 +661,7 @@ bool KisDoc::completeSaving(KoStore *store)
 
         QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
         QPainter gc(pix);
+        //m_currentImage->notify();
         m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> profile());
         gc.end();
         QImage composite = pix -> convertToImage();
@@ -782,12 +783,13 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
     KisFillPainter painter;
 
-     painter.begin(layer.data());
-     painter.fillRect(0, 0, width, height, Qt::white, OPACITY_OPAQUE);
-     painter.end();
+    painter.begin(layer.data());
+    painter.fillRect(0, 0, width, height, Qt::white, OPACITY_OPAQUE);
+    painter.end();
 
     img -> add(layer, -1);
-
+    img->notify();
+    
     m_currentImage = img;
     return img;
 }
@@ -827,13 +829,13 @@ bool KisDoc::slotNewImage()
         Q_CHECK_PTR(layer);
 
         KisFillPainter painter;
-         painter.begin(layer.data());
-         painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
-         painter.end();
-         
+        painter.begin(layer.data());
+        painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
+        painter.end();
         
         img -> add(layer, -1);
-
+        img -> notify();
+        
         m_currentImage = img;
 
         cfg.defImgWidth(dlg.imgWidth());

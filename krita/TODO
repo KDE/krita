@@ -59,7 +59,7 @@ Core
 	* Histogram computations. Make histogram widget zoomable for 16-bit channel/images
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
-	  image date, except for an occasional mask) These should work on object
+	  image data, except for an occasional mask) These should work on object
           layers (embedded KOFfice objects), too. (BSAR)
 	* Mask layers (mask layers created from selection -- vv) (BSAR)
 	* Layer groups or even better: a hierachy of collapsable folders with layers (with d&d) 

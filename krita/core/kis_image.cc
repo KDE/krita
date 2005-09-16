@@ -72,11 +72,11 @@ namespace {
 
     public:
         KisResizeImageCmd(KisUndoAdapter *adapter,
-                  KisImageSP img,
-                  Q_INT32 width,
-                  Q_INT32 height,
-                  Q_INT32 oldWidth,
-                  Q_INT32 oldHeight) : super(i18n("Resize Image"))
+                          KisImageSP img,
+                          Q_INT32 width,
+                          Q_INT32 height,
+                          Q_INT32 oldWidth,
+                          Q_INT32 oldHeight) : super(i18n("Resize Image"))
             {
                 m_adapter = adapter;
                 m_img = img;
@@ -180,9 +180,9 @@ namespace {
 
     public:
         KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
-                       KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
-                       KisColorSpace * afterColorSpace, KisProfile *  afterProfile
-                       ) : super(i18n("Convert Image Type"))
+                               KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
+                               KisColorSpace * afterColorSpace, KisProfile *  afterProfile
+            ) : super(i18n("Convert Image Type"))
             {
                 m_adapter = adapter;
                 m_img = img;
@@ -382,11 +382,11 @@ namespace {
 
     public:
         LayerPropsCmd(KisLayerSP layer,
-                  KisImageSP img,
-                  KisUndoAdapter *adapter,
-                  const QString& name,
-                  Q_INT32 opacity,
-                  const KisCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
+                      KisImageSP img,
+                      KisUndoAdapter *adapter,
+                      const QString& name,
+                      Q_INT32 opacity,
+                      const KisCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
             {
                 m_layer = layer;
                 m_img = img;
@@ -409,9 +409,9 @@ namespace {
 
                 m_adapter -> setUndo(false);
                 m_img -> setLayerProperties(m_layer,
-                                m_opacity,
-                                m_compositeOp,
-                                m_name);
+                                            m_opacity,
+                                            m_compositeOp,
+                                            m_name);
                 m_adapter -> setUndo(true);
                 m_name = name;
                 m_opacity = opacity;
@@ -487,7 +487,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         Q_CHECK_PTR(m_nserver);
 
         m_guides = rhs.m_guides;
-        m_pixmap = rhs.m_pixmap;
+
     }
 
 }
@@ -564,6 +564,8 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace *
     Q_CHECK_PTR(m_bkg);
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+
+
     Q_CHECK_PTR(m_projection);
 
     m_xres = 1.0;
@@ -583,7 +585,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace *
                                               INTENT_PERCEPTUAL,
                                               0);
 #endif
-
+    m_paintInit = true;
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
@@ -600,7 +602,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
         m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
         Q_CHECK_PTR(m_projection);
 
-         m_bkg = new KisBackground(this, w, h);
+        m_bkg = new KisBackground(this, w, h);
         Q_CHECK_PTR(m_bkg);
 
         if (cropLayers) {
@@ -610,7 +612,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
                 KisTransaction * t = new KisTransaction("crop", layer.data());
                 Q_CHECK_PTR(t);
                 layer -> crop(0, 0, w, h);
-                 if (m_adapter && m_adapter -> undo())
+                if (m_adapter && m_adapter -> undo())
                     m_adapter->addCommand(t);
             }
         }
@@ -620,6 +622,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
         }
 
         emit sizeChanged(KisImageSP(this), w, h);
+        notify();
     }
 }
 
@@ -640,7 +643,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
     if (w != width() || h != height()) {
 
         if (m_adapter && m_adapter -> undo()) {
-    m_adapter->beginMacro("Scale image");
+            m_adapter->beginMacro("Scale image");
         }
 
         vKisLayerSP_it it;
@@ -676,8 +679,9 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
-
+        notify();
         emit sizeChanged(KisImageSP(this), w, h);
+
     }
 }
 
@@ -714,7 +718,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
         //XXX: This is very ugly.
         KNamedCommand *moveCommand = layer -> moveCommand(layer -> getX() + oldCentreToNewCentreXOffset,
-                                  layer -> getY() + oldCentreToNewCentreYOffset);
+                                                          layer -> getY() + oldCentreToNewCentreYOffset);
         if (undoAdapter() && m_adapter->undo()) {
             m_adapter->addCommand(moveCommand);
         } else {
@@ -736,33 +740,34 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
     undoAdapter()->endMacro();
 
     emit sizeChanged(KisImageSP(this), w, h);
+    notify();
 }
 
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
     const double pi=3.1415926535897932385;
 
-        if (m_layers.empty()) return; // Nothing to scale
+    if (m_layers.empty()) return; // Nothing to scale
 
-        //new image size
+    //new image size
     Q_INT32 w=width();
-        Q_INT32 h=height();
+    Q_INT32 h=height();
 
 
-        if(angleX != 0 || angleY != 0){
-                double deltaY=height()*QABS(tan(angleX*pi/180)*tan(angleY*pi/180));
-                w = (Q_INT32) ( width() + QABS(height()*tan(angleX*pi/180)) );
-                //ugly fix for the problem of having two extra pixels if only a shear along one
-                //axis is done. This has to be fixed in the cropping code in KisRotateVisitor!
-                if (angleX == 0 || angleY == 0)
-                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
-                else if (angleX > 0 && angleY > 0)
-                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
-                else if (angleX < 0 && angleY < 0)
-                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
-                else
-                        h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
-        }
+    if(angleX != 0 || angleY != 0){
+        double deltaY=height()*QABS(tan(angleX*pi/180)*tan(angleY*pi/180));
+        w = (Q_INT32) ( width() + QABS(height()*tan(angleX*pi/180)) );
+        //ugly fix for the problem of having two extra pixels if only a shear along one
+        //axis is done. This has to be fixed in the cropping code in KisRotateVisitor!
+        if (angleX == 0 || angleY == 0)
+            h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
+        else if (angleX > 0 && angleY > 0)
+            h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
+        else if (angleX < 0 && angleY < 0)
+            h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180))- 2 * deltaY + 2 );
+        else
+            h = (Q_INT32) ( height() + QABS(w*tan(angleY*pi/180)) );
+    }
 
     if (w != width() || h != height()) {
 
@@ -800,6 +805,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         undoAdapter()->endMacro();
 
         emit sizeChanged(KisImageSP(this), w, h);
+        notify();
     }
 }
 
@@ -835,7 +841,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile
     if (undoAdapter() && m_adapter->undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
-                m_colorSpace, m_profile,  dstColorSpace, dstProfile));
+                                                         m_colorSpace, m_profile,  dstColorSpace, dstProfile));
         m_adapter->endMacro();
     }
 
@@ -1005,7 +1011,7 @@ KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
     emit layersUpdated(this);
 
     if (!m_adapter->undo())
-  emit imageUpdated(this);
+        emit imageUpdated(this);
 
     return l;
 }
@@ -1184,10 +1190,10 @@ KisLayerSP KisImage::layer(Q_INT32 n)
 
 KisLayerSP KisImage::findLayer(const QString & name)
 {
-        for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
-                if (m_layers[i]->name() == name)
-                        return m_layers[i];
-        }
+    for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
+        if (m_layers[i]->name() == name)
+            return m_layers[i];
+    }
     return 0;
 }
 
@@ -1556,7 +1562,6 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     KisPainter gc;
 
-//     kdDebug () << "Rendering onto projection " << m_projection->colorSpace()->id().name() << "\n";
     gc.begin(m_projection.data());
 
     gc.bitBlt(x, y, COMPOSITE_COPY, m_bkg.data(), x, y, w, h);
@@ -1572,45 +1577,40 @@ void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 }
 
 void KisImage::renderToPainter(Q_INT32 x1,
-                   Q_INT32 y1,
-                   Q_INT32 x2,
-                   Q_INT32 y2,
-                   QPainter &painter,
-                   KisProfile *  monitorProfile,
-                   float exposure)
+                               Q_INT32 y1,
+                               Q_INT32 x2,
+                               Q_INT32 y2,
+                               QPainter &painter,
+                               KisProfile *  monitorProfile,
+                               float exposure)
 {
-    Q_INT32 x;
-    Q_INT32 y;
 
-    // Flatten the layers onto the projection layer of the current image
-    for (y = y1; y <= y2; ) {
+//    QRect r = m_projection->extent();
+//    kdDebug() << "projection extent: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "...\n";
 
-        Q_INT32 h = QMIN(y2 - y + 1, RENDER_HEIGHT);
+    Q_INT32 w = x2 - x1 + 1;
+    Q_INT32 h = y2 - y1 + 1;
 
-        for (x = x1; x <= x2; ) {
+//    if (m_paintInit) {
+    renderToProjection(x1, y1, w, h);
+//        m_paintInit = false;
+//    }
 
-            Q_INT32 w = QMIN(x2 - x + 1, RENDER_WIDTH);
+    QImage img = m_projection->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
+    if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
+        m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+    }
 
-
-            renderToProjection(x, y, w, h);
-            QImage img = m_projection -> convertToQImage(monitorProfile, x, y, w, h, exposure);
-
-            if (m_activeLayer != 0 && m_activeLayer -> hasSelection())
-                m_activeLayer -> selection()->paintSelection(img, x, y, w, h);
-
-            if (!img.isNull()) {
+    if (!img.isNull()) {
 
 #ifdef __BIG_ENDIAN__
-                cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
 #endif
-                m_pixmap.convertFromImage(img);
-                painter.drawPixmap(x, y, m_pixmap, 0, 0, w, h);
-            }
-            x += w;
-        }
-        y += h;
+        painter.drawImage(x1, y1, img, 0, 0, w, h);
     }
+
+
 }
 
 KisPaintDeviceImplSP KisImage::mergedImage()
@@ -1664,6 +1664,8 @@ void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
 
 void KisImage::notify(const QRect& rc)
 {
+    //renderToProjection(rc.x(), rc.y(), rc.width(), rc.height());
+
     if (rc.isValid()) {
         emit update(KisImageSP(this), rc);
     }

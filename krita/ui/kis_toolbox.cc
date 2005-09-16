@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 
+#include <kparts/event.h>
 #include <klocale.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
@@ -34,7 +35,6 @@
 #include <kactionclasses.h>
 
 #include <koMainWindow.h>
-
 #include "kis_factory.h"
 #include "kis_toolbox.h"
 
@@ -45,6 +45,7 @@
 KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
     : KToolBar( mainWin, Qt::DockLeft, false, name, true, true)
 {
+    
     setLabel(i18n("Krita"));
     setName("krita");
     setFullSize( false );
@@ -64,9 +65,6 @@ KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
 
 KisToolBox::~KisToolBox()
 {
-    // Delete the lists owned; the owned lists do not delete their tools,
-    // since those are owned by the tool controller
-    // m_tools.setAutoDelete(true);
 }
 
 
@@ -127,6 +125,7 @@ void KisToolBox::setupTools()
             if(! tool)
                 continue;
             QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->toolTip());
+            // XXX: Find out how to switch buttons on action activate
             tools->add(bn);
             m_buttonGroup->insert( bn, id++ );
             m_idToActionMap.append( tool );
@@ -175,7 +174,6 @@ void KisToolBox::enableTools(bool enable)
         m_buttonGroup->find( i )->setEnabled( enable );
     }
 }
-
 
 
 ToolArea::ToolArea(QWidget *parent)

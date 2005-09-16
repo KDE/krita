@@ -25,8 +25,11 @@
 #include <qframe.h>
 #include <qtabwidget.h>
 #include <qdockwindow.h>
-#include <koFrameButton.h>
 #include <qpopupmenu.h>
+
+#include <ktoolbar.h>
+
+#include <koFrameButton.h>
 
 class QWidget;
 class QTimer;
@@ -72,11 +75,12 @@ private:
  *   Control Frame - status display with access to
  *   color selector, brushes, patterns, and preview
  */
-class KisControlFrame : public QFrame {
+class KisControlFrame : public QObject  //: public KToolBar 
+{
     Q_OBJECT
 
 public:
-    KisControlFrame(KisView * view, QWidget *parent = 0, const char *name = 0 );
+    KisControlFrame(KMainWindow * window, KisView * view, const char *name = 0 );
     virtual ~KisControlFrame() {};
     
 public slots:
@@ -99,7 +103,7 @@ private:
 private:
     QFont m_font;
     KisView * m_view;
-    KToolBar * m_toolbar;
+    
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
 

@@ -37,6 +37,7 @@ KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInt
     m_paletteManager = 0;
     m_actionCollection = 0;
     m_tools_disabled = false;
+    setup = false;
 }
 
 KisToolManager::~KisToolManager()
@@ -46,6 +47,11 @@ KisToolManager::~KisToolManager()
 
 void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
+    if (setup) {
+        resetToolBox( toolbox );
+        return;
+    }
+    
     m_toolBox = toolbox;
     m_paletteManager = paletteManager;
     m_actionCollection = actionCollection;
@@ -59,8 +65,8 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
     m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
     m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
         
-    vKisTool tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
-    for (vKisTool_it it = tools.begin(); it != tools.end(); ++it) {
+    m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
+    for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisTool * t = *it;
         if (!t) continue;
         toolbox->registerTool( t->action(), t->toolType(), t->priority() );
@@ -68,7 +74,40 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
 
     toolbox->setupTools();
 
-    setCurrentTool(findTool("tool_brush"));
+    KisTool * t = findTool("tool_brush");
+    kdDebug() << "found " << t << " when looking for brush tool.\n";
+    setCurrentTool(t);
+    
+    setup = true;
+}
+
+
+    
+void KisToolManager::youAintGotNoToolBox()
+{
+    m_toolBox = 0;
+    m_oldTool = currentTool();
+}
+    
+void KisToolManager::resetToolBox(KisToolBox * toolbox)
+{
+    m_toolBox = toolbox;
+    
+    m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
+    for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
+        KisTool * t = *it;
+        if (!t) continue;
+        m_toolBox->registerTool( t->action(), t->toolType(), t->priority() );
+    }
+
+    toolbox->setupTools();
+    
+    if (m_oldTool) {
+         // restore the old current tool
+         setCurrentTool(m_oldTool);
+         m_oldTool = 0;
+    }
+
 }
 
 void KisToolManager::updateGUI()
@@ -116,7 +155,9 @@ void KisToolManager::updateGUI()
         }
         else {
             m_oldTool = 0;
-            setCurrentTool(findTool("tool_brush"));
+            KisTool * t = findTool("tool_brush");
+            kdDebug() << "found " << t << " when looking for brush tool.\n";
+            setCurrentTool(t);
         }
     }
 }
@@ -151,6 +192,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
         m_subject->notify();
         
         tool->action()->setChecked( true );
+        tool->action()->activate();
 
     } else {
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;

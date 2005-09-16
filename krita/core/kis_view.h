@@ -28,8 +28,10 @@
 #include <qstringlist.h>
 #include <list>
 
-#include <koView.h>
 #include <kdebug.h>
+#include <kxmlguibuilder.h>
+
+#include <koView.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
@@ -53,40 +55,50 @@ class KAction;
 class KActionMenu;
 class KPrinter;
 class KToggleAction;
+class KToolBar;
 
 class KoPartSelectAction;
 class KoIconItem;
 class KoTabBar;
+class KoPaletteManager;
 
+class KisBirdEyeBox;
 class KisBrush;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisCanvas;
 class KisCanvasObserver;
 class KisCompositeOp;
+class KisControlFrame;
 class KisDoc;
 class KisDoubleClickEvent;
 class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
+class KisGrayWidget;
+class KisHSVWidget;
 class KisLabelProgress;
 class KisLayerBox;
 class KisMoveEvent;
+class KisPaletteWidget;
 class KisPattern;
 class KisPoint;
 class KisRect;
 class KisResource;
+class KisResourceMediator;
+class KisRGBWidget;
 class KisRuler;
 class KisSelectionManager;
 class KisToolBox;
 class KisToolControllerInterface;
 class KisToolManager;
 class KisUndoAdapter;
-class KoPaletteManager;
+
 
 class KRITA_EXPORT KisView
     : public KoView,
       public KisCanvasSubject,
+      public KXMLGUIBuilder,
       private KisCanvasControllerInterface
 {
 
@@ -101,6 +113,11 @@ class KRITA_EXPORT KisView
 public:
     KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
     virtual ~KisView();
+
+public: // KXMLGUIBuilder implementation
+
+    virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
+    virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
 
 
 public: // KoView implementation
@@ -179,11 +196,11 @@ public slots:
     // image action slots
     // XXX: Rename to make all names consistent with slotDoX() pattern
     void slotImageProperties();
-        void imgResizeToActiveLayer();
+    void imgResizeToActiveLayer();
     void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
-        void rotateCurrentImage(double angle);
-        void shearCurrentImage(double angleX, double angleY);
+    void rotateCurrentImage(double angle);
+    void shearCurrentImage(double angleX, double angleY);
 
     // Layer action slots
     void rotateLayer180();
@@ -238,8 +255,6 @@ private:
 
     virtual KoDocument *document() const;
 
-
-
 public:
 
     KisCanvasControllerInterface * getCanvasController() { return this; };
@@ -284,8 +299,8 @@ private:
 
     void layerUpdateGUI(bool enable);
     void createLayerBox();
-    void createToolBox();
-
+    void createDockers();
+    
     void paintView(const KisRect& rc);
 
     /**
@@ -437,8 +452,9 @@ private:
     KisLabelProgress *m_progress;
 
     KisLayerBox *m_layerBox;
-    KisToolBox *m_toolBox;
-
+    KisToolBox * m_toolBox;
+    KisControlFrame * m_brushesAndStuffToolBar;
+    
     // Current colours, brushes, patterns etc.
 
     KisColor m_fg;
@@ -461,6 +477,12 @@ private:
 
     // Currently active input device (mouse, stylus, eraser...)
     enumInputDevice m_inputDevice;
+
+    KisBirdEyeBox * m_birdEyeBox;
+    KisHSVWidget *m_hsvwidget;
+    KisRGBWidget *m_rgbwidget;
+    KisGrayWidget *m_graywidget;
+    KisPaletteWidget *m_palettewidget;
 
 private:
     mutable KisImageSP m_current;

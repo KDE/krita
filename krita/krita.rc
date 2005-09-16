@@ -149,7 +149,17 @@
 	<Action name="mirrorLayerY"/>
 </ToolBar>
 
-<ToolBar name="krita" position="left"><Text>Krita</Text>
+<ToolBar name="ToolBox" position="left">
+    <Text>Toolbox</Text>
+</ToolBar>
+
+<ToolBar name="BrushesAndStuff" position="top">
+     <Text>Brushes and stuff</Text>
+     <Action name="brushes"/>
+     <Action name="gradients"/>
+     <Action name="patterns"/>
+     <Separator/>
+     <Action name="paintops"/>
 </ToolBar>
 
 </kpartgui>

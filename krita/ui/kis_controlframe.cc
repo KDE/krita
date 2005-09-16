@@ -75,8 +75,9 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 }
 
 
-KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* name )
-    : QFrame( parent, name )
+KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const char* name ) 
+    : QObject(view, name)
+    //: KToolBar ( window, Qt::DockTop, false, name, true, true )
     , m_view(view)
     , m_brushWidget(0)
     , m_patternWidget(0)
@@ -89,67 +90,55 @@ KisControlFrame::KisControlFrame( KisView * view, QWidget* parent, const char* n
     , m_gradientMediator(0)
     , m_paintopBox(0)
 {
-    setFrameStyle(Panel | Raised);
-    setLineWidth(1);
 
     m_font  = KGlobalSettings::generalFont();
     float ps = m_font.pointSize() * 0.8;
     m_font.setPointSize((int)ps);
 
-    m_toolbar = new KToolBar(m_view->mainWindow(), Qt::DockTop, false, "resources", false, true);       
-    m_toolbar->setBarPos(KToolBar::Left);   
-    m_toolbar->setName("brushes and stuff");   
-    m_toolbar->setLabel(i18n("Brushes and stuff"));
-    m_toolbar->setMargin(3);
-    
-    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
-    QWidget * w1 = new QWidget(m_toolbar);
-    w1->setFixedWidth(10);
-
-    
-    m_brushWidget = new KisIconWidget(m_toolbar, "brushes");
+    m_brushWidget = new KisIconWidget(view, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush shapes") );
-    m_brushWidget->show();
+    // XXX: An action without a slot -- that's silly, what kind of action could we use here?
+    KAction * action = new KWidgetAction(m_brushWidget,
+                                         i18n("&Brush"),
+                                         0,
+                                         view,
+                                         0, 
+                                         view->actionCollection(),
+                                         "brushes");
 
-    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
-    QWidget * w2 = new QWidget(m_toolbar);
-    w2->setFixedWidth(10);
 
-
-    m_patternWidget = new KisIconWidget(m_toolbar, "patterns");
+    m_patternWidget = new KisIconWidget(view, "patterns");
     m_patternWidget->setTextLabel( i18n("Fill patterns") );
-    m_patternWidget->show();
+    action = new KWidgetAction(m_patternWidget,
+                               i18n("&Patterns"),
+                               0,
+                               view,
+                               0, 
+                               view->actionCollection(),
+                               "patterns");
 
-    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
-    QWidget * w3 = new QWidget(m_toolbar);
-    w3->setFixedWidth(10);
-
-    m_gradientWidget = new KisIconWidget(m_toolbar, "gradients");
+    m_gradientWidget = new KisIconWidget(view, "gradients");
     m_gradientWidget->setTextLabel( i18n("Gradients") );
-    m_gradientWidget->show();
+    action = new KWidgetAction(m_gradientWidget,
+                               i18n("&Gradients"),
+                               0,
+                               view,
+                               0, 
+                               view->actionCollection(),
+                               "gradients");
 
-    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
-    QWidget * w4 = new QWidget(m_toolbar);
-    w4->setFixedWidth(10);
+    m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
+    action = new KWidgetAction(m_paintopBox,
+                               i18n("&Painter's tools"),
+                               0,
+                               view,
+                               0, 
+                               view->actionCollection(),
+                               "paintops");
 
-
-    m_paintopBox = new KisPaintopBox( m_view, m_toolbar, "paintopbox" );
-    
-    // XXX: Okay... So what's the right way to add some spacing to a toolbar?
-    QWidget * w5 = new QWidget(m_toolbar);
-    w5->setFixedWidth(10);
-/*
-    QGridLayout * g = new QGridLayout( this, 3, 5, 0, 0, "controldocker grid layout");
-    g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 0);
-    g->addWidget( m_brushWidget, 0, 1);
-    g->addWidget( m_patternWidget, 0, 2 );
-    g->addWidget( m_gradientWidget, 0, 3 );
-    g->addItem( new QSpacerItem(10, 0, QSizePolicy::Expanding), 0, 4);
-    g->addMultiCellWidget( m_paintopBox, 1, 1, 0, 4 );
-*/
-    m_brushWidget -> setFixedSize( 32, 32 );
-    m_patternWidget -> setFixedSize( 32, 32 );
-    m_gradientWidget -> setFixedSize( 32, 32 );
+    m_brushWidget -> setMinimumSize( 24, 24 );
+    m_patternWidget -> setMinimumSize( 24, 24 );
+    m_gradientWidget -> setMinimumSize( 24, 24 );
 
     createBrushesChooser(m_view);
     createPatternsChooser(m_view);

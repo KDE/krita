@@ -60,6 +60,7 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <ksharedptr.h>
+#include <ktoolbar.h>
 
 // KOffice
 #include <koPartSelectAction.h>
@@ -76,13 +77,13 @@
 #include "kis_color.h"
 #include "kis_colorspace_registry.h"
 #include "kis_config.h"
+#include "kis_controlframe.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
 #include "kis_double_click_event.h"
 #include "kis_factory.h"
 #include "kis_gradient.h"
 #include "kis_guide.h"
-#include "kis_imagepipe_brush.h"
 #include "kis_layerbox.h"
 #include "kis_layer.h"
 #include "kis_move_event.h"
@@ -91,12 +92,14 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
+#include "kis_pattern.h"
 #include "kis_profile.h"
 #include "kis_rect.h"
+#include "kis_resource.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
-#include "kis_tool.h"
 #include "kis_toolbox.h"
+#include "kis_tool.h"
 #include "kis_tool_manager.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
@@ -106,8 +109,19 @@
 #include "labels/kis_label_cursor_pos.h"
 #include "labels/kis_label_progress.h"
 #include "strategy/kis_strategy_move.h"
-#include "kis_resource.h"
-#include "kis_pattern.h"
+
+
+#include <kis_resourceserver.h>
+#include <kis_resource_mediator.h>
+
+#include "kis_gray_widget.h"
+#include "kis_hsv_widget.h"
+#include "kis_icon_item.h"
+#include "kis_palette_widget.h"
+#include "kis_rgb_widget.h"
+#include "kis_birdeye_box.h"
+#include "kis_color.h"
+#include "kis_factory.h"
 
 // Dialog boxes
 #include "kis_dlg_progress.h"
@@ -132,6 +146,7 @@
 
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) 
     : super(doc, parent, name)
+    , KXMLGUIBuilder( shell() )
     , m_doc( doc )
     , m_canvas( 0 )
     , m_selectionManager( 0 )
@@ -187,16 +202,19 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_inputDevice ( INPUT_DEVICE_MOUSE )
 {
 
+    kdDebug() << "Creating the view\n";
+    
     setFocusPolicy( QWidget::StrongFocus );
 
+    setClientBuilder( this );
+    
     if (!doc -> isReadWrite())
         setXMLFile("krita_readonly.rc");
     else
         setXMLFile("krita.rc");
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
-    m_paletteManager->createPalette( krita::PAINTBOX, i18n("Brushes and stuff"));
-    m_paletteManager->createPalette( krita::CONTROL_PALETTE , i18n("Control box"));
+    m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
 
@@ -204,10 +222,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_filterManager = new KisFilterManager(this, doc);
     m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
 
+    createDockers();
+    
     m_fg = KisColor(Qt::black);
     m_bg = KisColor(Qt::white);
 
-    createToolBox();
     createLayerBox();
 
     // Now the view plugins will be loaded.
@@ -229,13 +248,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     qApp -> installEventFilter(this);
     m_tabletEventTimer.start();
-
-    // XXX: Remember this
-    m_toolBox->setBarPos(KToolBar::Left);
-
-    m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
+    
+    m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
+    
 }
-
 
 KisView::~KisView()
 {
@@ -247,6 +263,32 @@ KisView::~KisView()
     delete m_selectionManager;
     delete m_filterManager;
     delete m_toolManager;
+
+}
+
+QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
+{
+    if( element.attribute( "name" ) == "ToolBox" )
+    {
+        m_toolBox = new KisToolBox(mainWindow(), "toolbox");
+        m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
+        return m_toolBox;
+    }
+
+    return KXMLGUIBuilder::createContainer( parent, index, element, id );
+
+}
+
+void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id )
+{
+    if( shell() && container == m_toolBox )
+    {
+        delete m_toolBox;
+        m_toolManager->youAintGotNoToolBox();
+    }
+    else {
+        KXMLGUIBuilder::removeContainer( container, parent, element, id );
+    }
 }
 
 KoPaletteManager * KisView::paletteManager()
@@ -284,11 +326,6 @@ void KisView::createLayerBox()
 
 }
 
-void KisView::createToolBox()
-{
-    m_toolBox = new KisToolBox(mainWindow(), "toolbox");
-    m_toolBox->setBarPos(KToolBar::Left);
-}
 
 DCOPObject* KisView::dcopObject()
 {
@@ -2728,6 +2765,49 @@ void KisView::setHDRExposure(float exposure)
         m_HDRExposure = exposure;
         updateCanvas();
     }
+}
+
+void KisView::createDockers()
+{
+
+    m_birdEyeBox = new KisBirdEyeBox(this);
+    m_birdEyeBox -> setCaption(i18n("Overview"));
+    m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
+    connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), this, SLOT(setHDRExposure(float)));
+
+    m_hsvwidget = new KisHSVWidget(this, "hsv");
+    m_hsvwidget -> setCaption(i18n("HSV"));
+    m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
+    attach(m_hsvwidget);
+
+    m_rgbwidget = new KisRGBWidget(this, "rgb");
+    m_rgbwidget -> setCaption(i18n("RGB"));
+    m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
+    attach(m_rgbwidget);
+
+    m_graywidget = new KisGrayWidget(this, "gray");
+    m_graywidget -> setCaption(i18n("Gray"));
+    m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
+    attach(m_graywidget);
+
+    m_palettewidget = new KisPaletteWidget(this);
+    m_palettewidget -> setCaption(i18n("Palettes"));
+
+    KisResourceServerBase* rServer;
+    rServer = KisFactory::rServerRegistry() -> get("PaletteServer");
+    QValueList<KisResource*> resources = rServer->resources();
+    QValueList<KisResource*>::iterator it;
+    for ( it = resources.begin(); it != resources.end(); ++it ) {
+        m_palettewidget -> slotAddPalette( *it );
+    }
+    connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
+    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
+
+    m_paletteManager->showWidget("hsvwidget");
+    m_paletteManager->showWidget("layerbox");
+    m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
+
+
 }
 
 #include "kis_view.moc"

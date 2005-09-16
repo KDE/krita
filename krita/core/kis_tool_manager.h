@@ -26,6 +26,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
+class KoView;
 class KisCanvasSubject;
 class KisView;
 class KisTool;
@@ -50,6 +51,10 @@ public:
 public:
 
     void setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
+    
+    // Called when the toolbox is deleted because the view was made inactive in favour of another view
+    void youAintGotNoToolBox();
+    
     void updateGUI();
 
     virtual void setCurrentTool(KisTool *tool);
@@ -62,6 +67,10 @@ public:
     KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
 
     void activateCurrentTool();
+
+private:
+    
+    void resetToolBox(KisToolBox * toolbox);
     
 private:
 
@@ -81,8 +90,11 @@ private:
 
     KisTool * m_oldTool;
     KisTool * m_dummyTool;
+    
+    vKisTool m_tools;
 
     bool m_tools_disabled;
+    bool setup;
 };
 
 

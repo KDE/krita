@@ -3,6 +3,8 @@ KDE_OPTIONS = nofinal
 INCLUDES = -I$(srcdir)/../core/filters \
 	-I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/widgets \
+	-I./widgets \
 	-I$(srcdir)/../core/resources/ -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles \
 	-I$(srcdir)/../core/tool -I$(srcdir)/../core/paintop $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	$(all_includes)
@@ -40,6 +42,19 @@ libkisui_la_SOURCES = \
     kis_paintop_box.cc \
     kis_toolbox.cc \
     kis_color_cup.cc \
+    kis_autogradient.cc \
+    kis_gradient_chooser.cc \
+    kobirdeyepanel.cpp \
+    kis_birdeye_box.cc \
+    kis_pattern_chooser.cc \
+    kis_palette_widget.cc \
+    kis_brush_chooser.cc \
+    kis_resource_mediator.cc \
+    kis_autobrush.cc \
+    kis_controlframe.cc \
+    wdgbirdeye.ui \
+    wdgautogradient.ui \
+    wdgautobrush.ui \
     wdgmatrix.ui \
     kis_previewwidgetbase.ui \
     wdglayerproperties.ui \
@@ -80,13 +95,25 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_previewwidgetbase.h \
     kis_previewdialog.h \
     kis_color_cup.h \
+    kis_autogradient.h \
+    kobirdeyepanel.h \
+    kis_birdeye_box.h \
+    kis_pattern_chooser.h \
+    kis_palette_widget.h \
+    kis_brush_chooser.h \
+    kis_resource_mediator.h \
+    kis_autobrush.h \
+    kis_gradient_chooser.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
     wdglayerbox.h \
     wdglayerproperties.h \
     wdgperformancesettings.h \
-    wdgpressuresettings.h
+    wdgpressuresettings.h \
+    wdgbirdeye.h \
+    wdgautogradient.h \
+    wdgautobrush.h
 
 
 libkisui_la_METASOURCES = AUTO

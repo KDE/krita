@@ -275,10 +275,8 @@ private:
 
     KisImageIface *m_dcop;
 
-    QPixmap m_pixmap;
-
     vKisAnnotationSP m_annotations;
-
+    bool m_paintInit;
 #ifdef __BIG_ENDIAN__
     cmsHTRANSFORM m_bigEndianTransform;
 #endif

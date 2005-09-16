@@ -135,7 +135,7 @@ void KritaDefaultDockers::createRGBWidget(KisView * view)
 void KritaDefaultDockers::createGrayWidget(KisView * view)
 {
     m_graywidget = new KisGrayWidget(view, "gray");
-        m_graywidget -> setCaption(i18n("Gray"));
+    m_graywidget -> setCaption(i18n("Gray"));
     m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
         view->getCanvasSubject()->attach(m_graywidget);
 }
@@ -143,7 +143,7 @@ void KritaDefaultDockers::createGrayWidget(KisView * view)
 void KritaDefaultDockers::createPaletteWidget(KisView * view)
 {
     m_palettewidget = new KisPaletteWidget(view);
-        m_palettewidget -> setCaption(i18n("Palettes"));
+    m_palettewidget -> setCaption(i18n("Palettes"));
 
     KisResourceServerBase* rServer;
     rServer = KisFactory::rServerRegistry() -> get("PaletteServer");

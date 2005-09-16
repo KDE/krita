@@ -56,6 +56,7 @@ public:
 
     // Called when all tools have been added by the tool controller
     void setupTools();
+    
 public slots:
     
     virtual void setOrientation ( Orientation o );
@@ -65,11 +66,11 @@ public slots:
     // Enables or disables all buttons and the corresponding actions.
     void enableTools(bool enable);
     
-
     
 private:
 
     QToolButton * createButton(QWidget * parent, const char* iconName, QString tooltip);
+
     
 private:
     Q_UINT32 m_numberOfButtons;

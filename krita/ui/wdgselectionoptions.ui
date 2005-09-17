@@ -12,9 +12,6 @@
             <height>31</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgSelectionOptions</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>

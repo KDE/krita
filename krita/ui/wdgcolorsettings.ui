@@ -174,9 +174,6 @@
                     <property name="text">
                         <string>&amp;Saturation</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Best for graphs and charts</string>
                     </property>
@@ -357,8 +354,4 @@ result in neutral grays. Intended for images.</string>
 <tabstops>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kiscmbidlist.h</includehint>
-    <includehint>kiscmbidlist.h</includehint>
-</includehints>
 </UI>

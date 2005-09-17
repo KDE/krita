@@ -12,9 +12,6 @@
             <height>236</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -155,7 +152,6 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kiscmbcomposite.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

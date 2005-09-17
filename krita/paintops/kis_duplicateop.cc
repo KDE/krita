@@ -51,10 +51,7 @@ KisDuplicateOp::~KisDuplicateOp()
 {
 }
 
-void KisDuplicateOp::paintAt(const KisPoint &pos,
-                 const double pressure,
-                 const double /*xTilt*/,
-                 const double /*yTilt*/)
+void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
     
@@ -64,8 +61,10 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 
     KisBrush * brush = m_painter->brush();
     if (!brush) return;
+    if (! brush -> canPaintFor(info) )
+        return;
 
-    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -84,14 +83,14 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
 
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), info);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+        KisAlphaMaskSP mask = brush -> mask(info);
         dab = computeDab(mask);
     }
     
-    m_painter -> setPressure(pressure);
+    m_painter -> setPressure(info.pressure);
 
     QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter -> duplicateOffset().x()),
                              y - static_cast<Q_INT32>(m_painter -> duplicateOffset().y()));
@@ -145,7 +144,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos,
         srcY++;
     }
 
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device -> image();

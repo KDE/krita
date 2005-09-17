@@ -30,6 +30,7 @@
 
 #include "kis_types.h"
 #include "kis_id.h"
+#include "kis_vec.h"
 
 #include <koffice_export.h>
 
@@ -37,6 +38,22 @@ class KisPoint;
 class KisAlphaMask;
 class KisPainter;
 class KisPaintBox;
+
+/**
+ * This class keeps information that can be used in the painting process, for example by
+ * bruses.
+ **/
+class KRITACORE_EXPORT KisPaintInformation {
+public:
+    KisPaintInformation(double pressure = PRESSURE_DEFAULT,
+                        double xTilt = 0.0, double yTilt = 0.0,
+                        KisVector2D movement = KisVector2D())
+        : pressure(pressure), xTilt(xTilt), yTilt(yTilt), movement(movement) {}
+    double pressure;
+    double xTilt;
+    double yTilt;
+    KisVector2D movement;
+};
 
 class KRITACORE_EXPORT KisPaintOp : public KShared
 {
@@ -46,10 +63,7 @@ public:
         KisPaintOp(KisPainter * painter);
     virtual ~KisPaintOp();
 
-    virtual void paintAt(const KisPoint &pos,
-                 const double pressure,
-                 const double /*xTilt*/,
-                 const double /*yTilt*/) = 0;
+    virtual void paintAt(const KisPoint &pos, const KisPaintInformation& info) = 0;
     void setSource(KisPaintDeviceImplSP p);
 
     /**

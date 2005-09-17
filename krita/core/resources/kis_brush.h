@@ -34,6 +34,7 @@
 #include "kis_alpha_mask.h"
 #include "koffice_export.h"
 #include "kis_boundary.h"
+#include "paintop/kis_paintop.h"
 
 class QPoint;
 class QPixmap;
@@ -67,12 +68,14 @@ public:
        @return a mask computed from the grey-level values of the
        pixels in the brush.
     */
-    virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
+                                double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisLayerSP image(KisColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisLayerSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+                             double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(KisPoint);
-    KisPoint hotSpot(double pressure = PRESSURE_DEFAULT) const;
+    KisPoint hotSpot(const KisPaintInformation& info = KisPaintInformation()) const;
 
     void setSpacing(double s) { m_spacing = s; }
     double spacing() const { return m_spacing; }
@@ -80,8 +83,8 @@ public:
     double ySpacing(double pressure = PRESSURE_DEFAULT) const;
 
     // Dimensions in pixels of the mask/image at a given pressure.
-    Q_INT32 maskWidth(double pressure) const;
-    Q_INT32 maskHeight(double pressure) const;
+    Q_INT32 maskWidth(const KisPaintInformation& info) const;
+    Q_INT32 maskHeight(const KisPaintInformation& info) const;
 
     virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
     virtual bool useColorAsMask() const { return m_useColorAsMask; }
@@ -93,6 +96,12 @@ public:
 
     QImage outline(double pressure = PRESSURE_DEFAULT);
     virtual KisBoundary boundary();
+    
+    /**
+     * Returns true if this brush can return something useful for the info. This is used
+     * by Pipe Brushes that can't paint sometimes
+     **/
+    virtual bool canPaintFor(const KisPaintInformation& /*info*/) { return true; }
 
 protected:
     void setWidth(Q_INT32 w);

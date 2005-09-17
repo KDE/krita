@@ -51,10 +51,7 @@ KisAirbrushOp::~KisAirbrushOp()
 {
 }
 
-void KisAirbrushOp::paintAt(const KisPoint &pos,
-                const double pressure,
-                const double /*xTilt*/,
-                const double /*yTilt*/)
+void KisAirbrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
 // See: http://www.sysf.physto.se/~klere/airbrush/ for information
 // about _real_ airbrushes.
@@ -98,9 +95,11 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
     if (!device) return;
 
     KisBrush * brush = m_painter -> brush();
+    if (! brush -> canPaintFor(info) )
+        return;
     KisPaintDeviceImplSP dab = m_painter -> dab();
 
-    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     Q_INT32 x;
@@ -112,17 +111,17 @@ void KisAirbrushOp::paintAt(const KisPoint &pos,
     splitCoordinate(pt.y(), &y, &yFraction);
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), pressure, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), info);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+        KisAlphaMaskSP mask = brush -> mask(info);
         dab = computeDab(mask);
     }
 
     m_painter -> setDab(dab); // Cache dab for future paints in the painter.
-    m_painter -> setPressure(pressure); // Cache pressure in the current painter.
+    m_painter -> setPressure(info.pressure); // Cache pressure in the current painter.
 
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device -> image();

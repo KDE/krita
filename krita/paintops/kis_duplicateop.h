@@ -51,10 +51,7 @@ public:
     virtual ~KisDuplicateOp();
 
 
-    void paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/);
+    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
 };
 

@@ -384,9 +384,14 @@ double KisPainter::paintLine(const KisPoint & pos1,
     if (!m_brush) return 0;
     
     double savedDist = inSavedDist;
+    KisVector2D end(pos2);
+    KisVector2D start(pos1);
+
+    KisVector2D dragVec = end - start;
+    KisVector2D movement = dragVec;
 
     if (savedDist < 0) {
-        m_paintOp -> paintAt(pos1, pressure1, xTilt1, yTilt1);
+        m_paintOp -> paintAt(pos1, KisPaintInformation(pressure1, xTilt1, yTilt1, movement));
         savedDist = 0;
     }
 
@@ -417,11 +422,6 @@ double KisPainter::paintLine(const KisPoint & pos1,
         xScale = ySpacing / xSpacing;
         spacing = ySpacing;
     }
-
-    KisVector2D end(pos2);
-    KisVector2D start(pos1);
-
-    KisVector2D dragVec = end - start;
 
     dragVec.setX(dragVec.x() * xScale);
     dragVec.setY(dragVec.y() * yScale);
@@ -459,7 +459,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
         double xTilt = (1 - t) * xTilt1 + t * xTilt2;
         double yTilt = (1 - t) * yTilt1 + t * yTilt2;
 
-        m_paintOp -> paintAt(p, pressure, xTilt, yTilt);
+        m_paintOp -> paintAt(p, KisPaintInformation(pressure, xTilt, yTilt, movement));
         dist -= spacing;
     }
 
@@ -643,7 +643,7 @@ void KisPainter::paintAt(const KisPoint & pos,
                          const double yTilt)
 {
     if (!m_paintOp) return;
-    m_paintOp -> paintAt(pos, pressure, xTilt, yTilt);
+    m_paintOp -> paintAt(pos, KisPaintInformation(pressure, xTilt, yTilt, KisVector2D()));
 }
 
 double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)

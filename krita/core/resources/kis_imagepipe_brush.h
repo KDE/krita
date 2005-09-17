@@ -77,6 +77,8 @@ public:
     Q_INT32 brushesCount[MaxDim];
     /// The current index in each dimension, so that the selection modes know where to start
     Q_INT32 index[MaxDim];
+    /// If true, the brush won't be painted when there is no motion
+    bool needsMovement;
 };
 
 
@@ -99,8 +101,10 @@ public:
     /**
        @return the next mask in the pipe.
     */
-    virtual KisAlphaMaskSP mask(double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
-    virtual KisLayerSP image(KisColorSpace * colorSpace, double pressure = PRESSURE_DEFAULT, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
+                                double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisLayerSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+                             double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);
@@ -111,11 +115,13 @@ public:
     virtual KisBoundary boundary();
     
     KisPipeBrushParasite parasite() { return m_parasite; }
+    
+    virtual bool canPaintFor(const KisPaintInformation& info);
 
 private:
     bool init();
     void setParasiteString(const QString& parasite);
-    void selectNextBrush(double pressure) const;
+    void selectNextBrush(const KisPaintInformation& info) const;
 
     QString m_name;
     QString m_parasiteString; // Contains instructions on how to use the brush

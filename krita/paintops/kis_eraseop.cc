@@ -52,10 +52,7 @@ KisEraseOp::~KisEraseOp()
 {
 }
 
-void KisEraseOp::paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/)
+void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
 // Erasing is traditionally in paint applications one of two things:
 // either it is painting in the 'background' color, or it is replacing
@@ -83,7 +80,9 @@ void KisEraseOp::paintAt(const KisPoint &pos,
     if (!device) return;
 
     KisBrush *brush = m_painter -> brush();
-    KisPoint hotSpot = brush -> hotSpot(pressure);
+    if (! brush -> canPaintFor(info) )
+        return;
+    KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     Q_INT32 destX;
@@ -94,7 +93,7 @@ void KisEraseOp::paintAt(const KisPoint &pos,
     splitCoordinate(pt.x(), &destX, &xFraction);
     splitCoordinate(pt.y(), &destY, &yFraction);
 
-    KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+    KisAlphaMaskSP mask = brush -> mask(info);
 
     KisLayerSP dab = new KisLayer(device -> colorSpace(), "eraser_dab");
     Q_CHECK_PTR(dab);

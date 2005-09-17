@@ -52,10 +52,7 @@ KisFilterOp::~KisFilterOp()
 {
 }
 
-void KisFilterOp::paintAt(const KisPoint &pos,
-              const double pressure,
-              const double /*xTilt*/,
-              const double /*yTilt*/)
+void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -69,7 +66,7 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 
     KisColorSpace * colorSpace = m_source -> colorSpace();
 
-    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -85,9 +82,9 @@ void KisFilterOp::paintAt(const KisPoint &pos,
 
     // Filters always work with a mask, never with an image; that
     // wouldn't be useful at all.
-    KisAlphaMaskSP mask = brush -> mask(pressure, xFraction, yFraction);
+    KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
 
-    m_painter -> setPressure(pressure);
+    m_painter -> setPressure(info.pressure);
 
     Q_INT32 maskWidth = mask -> width();
     Q_INT32 maskHeight = mask -> height();

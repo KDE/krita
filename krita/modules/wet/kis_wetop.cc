@@ -46,10 +46,7 @@ KisWetOp::~KisWetOp()
 {
 }
 
-void KisWetOp::paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/)
+void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
@@ -59,7 +56,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
     int x = pos.floorX(); // XXX subpixel positioning?
     int y = pos.floorY();
     int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
-    kdDebug(DBG_AREA_CMS) << pressure << endl;
+    kdDebug(DBG_AREA_CMS) << info.pressure << endl;
 
     KisColorSpace * cs = device -> colorSpace();
 
@@ -82,7 +79,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
     double wetness = paint.w;
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
-    strength  = strength * (strength + pressure) * 0.5;
+    strength  = strength * (strength + info.pressure) * 0.5;
 
     // Maybe it wouldn't be a bad idea to use a KisBrush in some way here
     double r_fringe;
@@ -115,7 +112,7 @@ void KisWetOp::paintAt(const KisPoint &pos,
             xx *= xx;
             rr = yy + xx;
             if (rr < r * r) {
-                press = pressure * 0.25;
+                press = info.pressure * 0.25;
             } else {
                 press = -1;
             }

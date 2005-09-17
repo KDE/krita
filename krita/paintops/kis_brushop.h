@@ -25,6 +25,7 @@
 
 #include "kis_paintop.h"
 #include "kis_types.h"
+#include "kis_vec.h"
 
 class KisPoint;
 class KisPainter;
@@ -51,10 +52,7 @@ public:
     KisBrushOp(KisPainter * painter);
     virtual ~KisBrushOp();
 
-    void paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/);
+    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
 };
 

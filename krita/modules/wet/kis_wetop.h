@@ -45,10 +45,7 @@ public:
     KisWetOp(KisPainter * painter);
     virtual ~KisWetOp();
 
-    void paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/);
+    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
 };
 

@@ -54,19 +54,17 @@ KisPenOp::~KisPenOp()
 {
 }
 
-void KisPenOp::paintAt(const KisPoint &pos,
-               const double pressure,
-               const double /*xTilt*/,
-               const double /*yTilt*/)
+void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
     KisPaintDeviceImplSP device = m_painter -> device();
     if (!device) return;
     KisBrush * brush = m_painter -> brush();
     if (!brush) return;
+    if (! brush -> canPaintFor(info) )
+        return;
 
-
-    KisPoint hotSpot = brush -> hotSpot(pressure);
+    KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -83,16 +81,16 @@ void KisPenOp::paintAt(const KisPoint &pos,
     KisPaintDeviceImplSP dab = 0;
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), pressure);
+        dab = brush -> image(device -> colorSpace(), info);
     }
     else {
         // Compute mask without sub-pixel positioning
-        KisAlphaMaskSP mask = brush -> mask(pressure);
+        KisAlphaMaskSP mask = brush -> mask(info);
         dab = computeDab(mask);
     }
 
-    m_painter -> setPressure(pressure);
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(pressure), brush -> maskHeight(pressure));
+    m_painter -> setPressure(info.pressure);
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device -> image();

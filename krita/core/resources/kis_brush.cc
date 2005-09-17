@@ -256,13 +256,13 @@ QImage KisBrush::img()
     return image;
 }
 
-KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixelY) const
+KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
 
-    double scale = scaleForPressure(pressure);
+    double scale = scaleForPressure(info.pressure);
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -295,13 +295,13 @@ KisAlphaMaskSP KisBrush::mask(double pressure, double subPixelX, double subPixel
     return outputMask;
 }
 
-KisLayerSP KisBrush::image(KisColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
+KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
     }
 
-    double scale = scaleForPressure(pressure);
+    double scale = scaleForPressure(info.pressure);
 
     const ScaledBrush *aboveBrush = 0;
     const ScaledBrush *belowBrush = 0;
@@ -384,9 +384,9 @@ void KisBrush::setHotSpot(KisPoint pt)
     m_hotSpot = KisPoint(x, y);
 }
 
-KisPoint KisBrush::hotSpot(double pressure) const
+KisPoint KisBrush::hotSpot(const KisPaintInformation& info) const
 {
-    double scale = scaleForPressure(pressure);
+    double scale = scaleForPressure(info.pressure);
     double w = width() * scale;
     double h = height() * scale;
 
@@ -489,16 +489,16 @@ double KisBrush::scaleForPressure(double pressure)
     return scale;
 }
 
-Q_INT32 KisBrush::maskWidth(double pressure) const
+Q_INT32 KisBrush::maskWidth(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<Q_INT32>(ceil(width() * scaleForPressure(pressure)) + 1);
+    return static_cast<Q_INT32>(ceil(width() * scaleForPressure(info.pressure)) + 1);
 }
 
-Q_INT32 KisBrush::maskHeight(double pressure) const
+Q_INT32 KisBrush::maskHeight(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<Q_INT32>(ceil(height() * scaleForPressure(pressure)) + 1);
+    return static_cast<Q_INT32>(ceil(height() * scaleForPressure(info.pressure)) + 1);
 }
 
 KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
@@ -1122,7 +1122,8 @@ void KisBrush::setHeight(Q_INT32 h)
 }
 
 QImage KisBrush::outline(double pressure) {
-    KisLayerSP layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), pressure);
+    KisLayerSP layer = image(KisColorSpaceRegistry::instance()->get("RGBA"),
+                             KisPaintInformation(pressure));
     KisBoundary bounds(layer.data());
     int w = maskWidth(pressure);
     int h = maskHeight(pressure);
@@ -1136,13 +1137,13 @@ QImage KisBrush::outline(double pressure) {
 
 void KisBrush::generateBoundary() {
     KisLayerSP layer;
-    int w = maskWidth(PRESSURE_DEFAULT);
-    int h = maskHeight(PRESSURE_DEFAULT);
+    int w = maskWidth(KisPaintInformation());
+    int h = maskHeight(KisPaintInformation());
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), PRESSURE_DEFAULT);
+        layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), KisPaintInformation());
     } else {
-        KisAlphaMaskSP amask = mask();
+        KisAlphaMaskSP amask = mask(KisPaintInformation());
         KisColorSpace* cs = KisColorSpaceRegistry::instance()->get("RGBA");
         layer = new KisLayer(cs, "temp");
         for (int y = 0; y < h; y++) {

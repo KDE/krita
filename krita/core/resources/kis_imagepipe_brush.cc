@@ -25,6 +25,8 @@
 #include <sys/types.h>
 #endif
 
+#include <math.h>
+
 #include <netinet/in.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -47,6 +49,7 @@
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
+    needsMovement = false;
     QRegExp basicSplitter(" ", true);
     QRegExp parasiteSplitter(":", true);
     QStringList parasites = QStringList::split(basicSplitter, source);
@@ -69,9 +72,10 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 QString selectionMode = *splitted.at(1);
                 if (selectionMode == "incremental")
                     selection[selIndex] = Incremental;
-                else if (selectionMode == "angular")
+                else if (selectionMode == "angular") {
                     selection[selIndex] = Angular;
-                else if (selectionMode == "random")
+                    needsMovement = true;
+                } else if (selectionMode == "random")
                     selection[selIndex] = Random;
                 else if (selectionMode == "pressure")
                     selection[selIndex] = Pressure;
@@ -205,18 +209,18 @@ QImage KisImagePipeBrush::img()
     }
 }
 
-KisAlphaMaskSP KisImagePipeBrush::mask(double pressure, double subPixelX, double subPixelY) const
+KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
-    selectNextBrush(pressure);
-    return m_brushes.at(m_currentBrush) -> mask(pressure, subPixelX, subPixelY);
+    selectNextBrush(info);
+    return m_brushes.at(m_currentBrush) -> mask(info, subPixelX, subPixelY);
 }
 
-KisLayerSP KisImagePipeBrush::image(KisColorSpace * colorSpace, double pressure, double subPixelX, double subPixelY) const
+KisLayerSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
-    selectNextBrush(pressure);
-    return m_brushes.at(m_currentBrush) -> image(colorSpace, pressure, subPixelX, subPixelY);
+    selectNextBrush(info);
+    return m_brushes.at(m_currentBrush) -> image(colorSpace, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
@@ -268,8 +272,9 @@ KisBoundary KisImagePipeBrush::boundary() {
     return m_brushes.at(0) -> boundary();
 }
 
-void KisImagePipeBrush::selectNextBrush(double pressure) const {
+void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
     m_currentBrush = 0;
+    double angle;
     for (int i = 0; i < m_parasite.dim; i++) {
         int index = m_parasite.index[i];
         switch (m_parasite.selection[i]) {
@@ -279,7 +284,17 @@ void KisImagePipeBrush::selectNextBrush(double pressure) const {
             case KisPipeBrushParasite::Random:
                 index = int(float(m_parasite.rank[i])*KApplication::random() / RAND_MAX); break;
             case KisPipeBrushParasite::Pressure:
-                index = static_cast<int>(pressure * (m_parasite.rank[i] - 1) + 0.5); break;
+                index = static_cast<int>(info.pressure * (m_parasite.rank[i] - 1) + 0.5); break;
+            case KisPipeBrushParasite::Angular:
+                // + M_PI_2 to be compatible with the gimp
+                angle = atan2(info.movement.y(), info.movement.x()) + M_PI_2;
+                // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
+                if (angle < 0)
+                    angle += 2.0 * M_PI;
+                else if (angle > 2.0 * M_PI)
+                    angle -= 2.0 * M_PI;
+                index = static_cast<int>(angle / (2.0 * M_PI) * m_parasite.rank[i]);
+                break;
             default:
                 kdDebug() << "This parasite selectionMode has not been implemented. Reselecting"
                         << " to Incremental" << endl;
@@ -290,6 +305,12 @@ void KisImagePipeBrush::selectNextBrush(double pressure) const {
         m_currentBrush += m_parasite.brushesCount[i] * index;
     }
 }
-        
+
+bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
+    if (info.movement.isNull() && m_parasite.needsMovement)
+        return false;
+    return true;
+}
+
 #include "kis_imagepipe_brush.moc"
 

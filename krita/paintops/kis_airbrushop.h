@@ -54,10 +54,7 @@ public:
     // We want to spray even when the pointer doesn't move.
     virtual bool incremental() { return true; }
 
-    void paintAt(const KisPoint &pos,
-             const double pressure,
-             const double /*xTilt*/,
-             const double /*yTilt*/);
+    void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
 };
 

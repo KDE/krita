@@ -152,4 +152,30 @@ public:
     virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
 };
+
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to LAB, and then does its counting on the L channel also known as lightnessRGB.
+ * It isCompatibleWith all colorspaces
+ **/
+class KisGenericLightnessHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisGenericLightnessHistogramProducer();
+    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+    virtual QValueVector<KisChannelInfo *> channels();
+protected:
+    QValueVector<KisChannelInfo *> m_channelsList;
+};
+
+/** KisGenericLightnessHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericLightnessHistogramProducerFactory : public KisHistogramProducerFactory {
+public:
+    KisGenericLightnessHistogramProducerFactory()
+        : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", "")) {}
+    virtual ~KisGenericLightnessHistogramProducerFactory() {}
+    virtual KisHistogramProducerSP generate() { return new KisGenericLightnessHistogramProducer(); }
+    virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+};
 #endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

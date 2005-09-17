@@ -17,12 +17,12 @@
  */
 
 #include "kis_histogram_producer.h"
+#include "color_strategy/kis_basic_histogram_producers.h"
 
 KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::m_singleton = 0;
 
 KisHistogramProducerFactoryRegistry::KisHistogramProducerFactoryRegistry() {
     Q_ASSERT(KisHistogramProducerFactoryRegistry::m_singleton == 0);
-    KisHistogramProducerFactoryRegistry::m_singleton = this;
 }
 
 KisHistogramProducerFactoryRegistry::~KisHistogramProducerFactoryRegistry() {
@@ -32,6 +32,7 @@ KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::instan
     if(KisHistogramProducerFactoryRegistry::m_singleton == 0) {
         KisHistogramProducerFactoryRegistry::m_singleton
                 = new KisHistogramProducerFactoryRegistry();
+        m_singleton->add( new KisGenericLightnessHistogramProducerFactory() );
     }
     return KisHistogramProducerFactoryRegistry::m_singleton;
 }

@@ -32,6 +32,8 @@ Integration
 	  saving a rendered png image into the krita file and extracting that from
 	  kimgio. (Saving of a png image in .kra files is done; now we just need to 
           add the kimgio file)
+        * There is now easy way to get back from editing an embedded document (if the image is larger
+          than the window)
         
 	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 

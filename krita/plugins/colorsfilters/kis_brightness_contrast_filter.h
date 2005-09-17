@@ -60,7 +60,7 @@ public:
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name = 0, WFlags f = 0 );
     virtual ~KisBrightnessContrastConfigWidget() {};
 
     KisBrightnessContrastFilterConfiguration * config();

@@ -274,7 +274,7 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
 KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
     : KisBasicHistogramProducer(KisID("GENRGBHISTO", "Generic RGB Histogram"),
                                 3, 256, 0) {
-    /* we set 0 as colorspece, becausre we are not based on a specific colorspace. This
+    /* we set 0 as colorspece, because we are not based on a specific colorspace. This
       is no problem for the superclass since we override channels() */
     m_channelsList.append(new KisChannelInfo(i18n("R"), 0, COLOR, 1, QColor(255,0,0)));
     m_channelsList.append(new KisChannelInfo(i18n("G"), 1, COLOR, 1, QColor(0,255,0)));
@@ -315,6 +315,52 @@ void KisGenericRGBHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
         m_bins.at(0).at(c.red())++;
         m_bins.at(1).at(c.green())++;
         m_bins.at(2).at(c.blue())++;
+
+        m_count++;
+        ++it;
+    }
+}
+
+// ------------ Generic RGB ---------------------
+KisGenericLightnessHistogramProducer::KisGenericLightnessHistogramProducer()
+    : KisBasicHistogramProducer(KisID("GENLIGHTHISTO", "Generic Lab Lightness Histogram"), 1, 256, 0) {
+    /* we set 0 as colorspece, because we are not based on a specific colorspace. This
+      is no problem for the superclass since we override channels() */
+    m_channelsList.append(new KisChannelInfo(i18n("L"), 0, COLOR));
+}
+
+QValueVector<KisChannelInfo *> KisGenericLightnessHistogramProducer::channels() {
+    return m_channelsList;
+}
+
+QString KisGenericLightnessHistogramProducer::positionToString(double pos) const {
+        return QString("%1").arg(static_cast<Q_UINT16>(pos * UINT16_MAX));
+}
+
+double KisGenericLightnessHistogramProducer::maximalZoom() const {
+    return 1.0;
+}
+
+
+void KisGenericLightnessHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
+         KisColorSpace *cs) {
+    for (int i = 0; i < m_channels; i++) {
+        m_outRight.at(i) = 0;
+        m_outLeft.at(i) = 0;
+    }
+
+    QColor c;
+
+    while (!it.isDone()) {
+        Q_UINT8* pixel = it.rawData();
+        if (   (m_skipUnselected && !it.isSelected())
+            || (m_skipTransparent && cs -> getAlpha(pixel) == OPACITY_TRANSPARENT) ) {
+            ++it;
+            continue;
+        }
+
+        cs -> toQColor(pixel, &c);
+        m_bins.at(0).at(c.red())++;
 
         m_count++;
         ++it;

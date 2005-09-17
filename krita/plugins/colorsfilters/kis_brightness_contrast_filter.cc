@@ -19,6 +19,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <math.h>
+
 #include <klocale.h>
 
 #include <qlayout.h>
@@ -34,6 +36,8 @@
 #include "kis_iterators_pixel.h"
 #include "tiles/kis_iterator.h"
 #include "kcurve.h"
+#include "kis_histogram.h"
+#include "kis_basic_histogram_producers.h"
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
 {
@@ -45,9 +49,9 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceImplSP)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceImplSP dev)
 {
-    return new KisBrightnessContrastConfigWidget(parent);
+    return new KisBrightnessContrastConfigWidget(parent, dev);
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceImplSP)
@@ -101,7 +105,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
     setProgressDone();
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, const char * name, WFlags f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     int i;
@@ -136,25 +140,28 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
+    KisHistogramProducerSP producer = new KisGenericLightnessHistogramProducer();
+    KisHistogram histogram(dev, producer, LINEAR);
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
     p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
-    for( i=0; i<256; ++i )
-        p.drawLine(i, height, i, height - i * height/256);
-/*
-    if (true){ //m_histogram -> getHistogramType() == LINEAR) {
-        double factor = (double)height / (double)m_histogram -> getHighest();
-        for( i=0; i<256; ++i ) {
-            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
+
+    double highest = (double)histogram.calculations().getHighest();
+    Q_INT32 bins = histogram.producer() -> numberOfBins();
+
+    if (histogram.getHistogramType() == LINEAR) {
+        double factor = (double)height / highest;
+        for( i=0; i<bins; ++i ) {
+            p.drawLine(i, height, i, height - int(histogram.getValue(i) * factor));
         }
     } else {
-        double factor = (double)height / (double)log(m_histogram -> getHighest());
-        for( i = 0; i < 256; ++i ) {
-            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+        double factor = (double)height / (double)log(highest);
+        for( i = 0; i < bins; ++i ) {
+            p.drawLine(i, height, i, height - int(log((double)histogram.getValue(i)) * factor));
         }
     }
-*/
+
     m_page->kCurve->setPixmap(pix);
 
 }

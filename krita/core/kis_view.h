@@ -89,7 +89,7 @@ class KisResourceMediator;
 class KisRGBWidget;
 class KisRuler;
 class KisSelectionManager;
-class KisToolBox;
+class KoToolBox;
 class KisToolControllerInterface;
 class KisToolManager;
 class KisUndoAdapter;
@@ -169,7 +169,7 @@ public: // Plugin access API. XXX: This needs redesign.
     /**
      * Get the main toolbox for this view.
      */
-    KisToolBox * toolBox() { return m_toolBox; };
+    KoToolBox * toolBox() { return m_toolBox; };
 
 signals:
     void bgColorChanged(const KisColor& c);
@@ -452,7 +452,7 @@ private:
     KisLabelProgress *m_progress;
 
     KisLayerBox *m_layerBox;
-    KisToolBox * m_toolBox;
+    KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
     
     // Current colours, brushes, patterns etc.

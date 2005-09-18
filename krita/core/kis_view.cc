@@ -98,7 +98,7 @@
 #include "kis_resource.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
-#include "kis_toolbox.h"
+#include "kotoolbox.h"
 #include "kis_tool.h"
 #include "kis_tool_manager.h"
 #include "kis_transaction.h"
@@ -144,7 +144,7 @@
 // sent to a receiver if it does not accept the tablet event.
 #define MOUSE_CHANGE_EVENT_DELAY 100
 
-KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name) 
+KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name)
     : super(doc, parent, name)
     , KXMLGUIBuilder( shell() )
     , m_doc( doc )
@@ -203,11 +203,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 {
 
     kdDebug() << "Creating the view\n";
-    
+
     setFocusPolicy( QWidget::StrongFocus );
 
     setClientBuilder( this );
-    
+
     if (!doc -> isReadWrite())
         setXMLFile("krita_readonly.rc");
     else
@@ -223,7 +223,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
 
     createDockers();
-    
+
     m_fg = KisColor(Qt::black);
     m_bg = KisColor(Qt::white);
 
@@ -248,9 +248,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     qApp -> installEventFilter(this);
     m_tabletEventTimer.start();
-    
+
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
-    
+
 }
 
 KisView::~KisView()
@@ -270,7 +270,7 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 {
     if( element.attribute( "name" ) == "ToolBox" )
     {
-        m_toolBox = new KisToolBox(mainWindow(), "toolbox", KisFactory::global(), NUMBER_OF_TOOLTYPES);
+        m_toolBox = new KoToolBox(mainWindow(), "toolbox", KisFactory::global(), NUMBER_OF_TOOLTYPES);
         m_toolBox -> setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
         return m_toolBox;

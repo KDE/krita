@@ -40,7 +40,6 @@ libkisui_la_SOURCES = \
     kis_selection_options.cc \
     kis_guide.cc \
     kis_paintop_box.cc \
-    kis_toolbox.cc \
     kis_color_cup.cc \
     kis_autogradient.cc \
     kis_gradient_chooser.cc \

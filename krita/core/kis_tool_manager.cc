@@ -25,7 +25,7 @@
 #include "kis_view.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
-#include "kis_toolbox.h"
+#include "kotoolbox.h"
 
 KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInterface * controller)
     : m_subject(parent),
@@ -45,26 +45,26 @@ KisToolManager::~KisToolManager()
     delete m_dummyTool;
 }
 
-void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
+void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
     if (setup) {
         resetToolBox( toolbox );
         return;
     }
-    
+
     m_toolBox = toolbox;
     m_paletteManager = paletteManager;
     m_actionCollection = actionCollection;
-    
+
     // Dummy tool for when the layer is locked or invisible
     if (!m_dummyTool)
         m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
-    
+
     m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
     m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
     m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
     m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
-        
+
     m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisTool * t = *it;
@@ -77,22 +77,22 @@ void KisToolManager::setUp(KisToolBox * toolbox, KoPaletteManager * paletteManag
     KisTool * t = findTool("tool_brush");
     kdDebug() << "found " << t << " when looking for brush tool.\n";
     setCurrentTool(t);
-    
+
     setup = true;
 }
 
 
-    
+
 void KisToolManager::youAintGotNoToolBox()
 {
     m_toolBox = 0;
     m_oldTool = currentTool();
 }
-    
-void KisToolManager::resetToolBox(KisToolBox * toolbox)
+
+void KisToolManager::resetToolBox(KoToolBox * toolbox)
 {
     m_toolBox = toolbox;
-    
+
     m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisTool * t = *it;
@@ -101,10 +101,10 @@ void KisToolManager::resetToolBox(KisToolBox * toolbox)
     }
 
     toolbox->setupTools();
-    
+
 #if 0 //  Because I cannot find out how to reset the toolbox so the button is depressed, we reset the tool to brush
     setCurrentTool(findTool("tool_brush"));
-#else    
+#else
     if (m_oldTool) {
          // restore the old current tool
          setCurrentTool(m_oldTool);
@@ -126,7 +126,7 @@ void KisToolManager::updateGUI()
 
     KisImageSP img = m_subject->currentImg();
     KisLayerSP l = 0;
-    
+
     bool enable = false;
     if (img) {
         l = img -> activeLayer();
@@ -170,31 +170,31 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 {
     KisTool *oldTool = currentTool();
     KisCanvas * canvas = (KisCanvas*)m_controller->canvas();
-    
+
 
     if (oldTool)
     {
         oldTool -> clear();
         oldTool -> action() -> setChecked( false );
-        
+
         m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
     }
 
     if (tool) {
-    
+
         if (!tool->optionWidget()) {
             tool->createOptionWidget(0);
         }
-    
+
         m_paletteManager->addWidget(tool->optionWidget(), krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
         m_controller->setCanvasCursor(tool->cursor());
-        
+
         canvas->enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
 
         m_subject->notify();
-        
+
         tool->action()->setChecked( true );
         tool->action()->activate();
 
@@ -242,7 +242,7 @@ void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputD
         oldTool -> clear();
     }
 
-    
+
     vit = m_inputDeviceToolSetMap.find(newDevice);
 
     Q_ASSERT(vit != m_inputDeviceToolSetMap.end());

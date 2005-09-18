@@ -60,6 +60,9 @@ public slots:
     void selectAll();
     void deselect();
     void clear();
+    void fillForegroundColor();
+    void fillBackgroundColor();
+    void fillPattern();
     void reselect();
     void invert();
     void copySelectionToNewLayer();
@@ -75,6 +78,7 @@ public slots:
     void save();
 
 private:
+    void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
 
     KisView * m_parent;
     KisDoc * m_doc;
@@ -102,6 +106,9 @@ private:
     KAction *m_transform;
     KAction *m_load;
     KAction *m_save;
+    KAction *m_fillForegroundColor;
+    KAction *m_fillBackgroundColor;
+    KAction *m_fillPattern;
 
     QPtrList<KAction> m_pluginActions;
 

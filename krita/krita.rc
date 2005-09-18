@@ -11,6 +11,9 @@
   <Action name="paste"/>
   <Action name="paste_new"/>
   <Action name="clear"/>
+  <Action name="fill_selection_foreground_color"/>
+  <Action name="fill_selection_background_color"/>
+  <Action name="fill_selection_pattern"/>
   <Separator/>
   <Action name="revert"/>
  </Menu>

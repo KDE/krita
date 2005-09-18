@@ -52,6 +52,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_convolution_painter.h"
 #include "kis_integer_maths.h"
+#include "kis_fill_painter.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
     : m_parent(parent),
@@ -76,7 +77,10 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
       m_similar(0),
       m_transform(0),
       m_load(0),
-      m_save(0)
+      m_save(0),
+      m_fillForegroundColor(0),
+      m_fillBackgroundColor(0),
+      m_fillPattern(0)
 {
     m_pluginActions.setAutoDelete(true);
     m_clipboard = KisClipboard::instance();
@@ -156,6 +160,22 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 0, "Ctrl+Alt+D",
                 this, SLOT(feather()),
                 collection, "feather");
+
+    m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"), 
+                                             "Alt+backspace", this, 
+                                             SLOT(fillForegroundColor()), 
+                                             collection, 
+                                             "fill_selection_foreground_color");
+    m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"), 
+                                             "backspace", this, 
+                                             SLOT(fillBackgroundColor()), 
+                                             collection,
+                                             "fill_selection_background_color");
+    m_fillPattern = new KAction(i18n("Fill with Pattern"), 
+                                             0, this, 
+                                             SLOT(fillPattern()), 
+                                             collection,
+                                             "fill_selection_pattern");
 
 #if 0 // Not implemented yet
     m_border =
@@ -263,6 +283,9 @@ void KisSelectionManager::updateGUI()
     m_selectAll -> setEnabled(img != 0);
     m_deselect -> setEnabled(enable);
     m_clear -> setEnabled(enable);
+    m_fillForegroundColor -> setEnabled(enable);
+    m_fillBackgroundColor -> setEnabled(enable);
+    m_fillPattern -> setEnabled(enable);
     m_reselect -> setEnabled( ! enable);
     m_invert -> setEnabled(enable);
 
@@ -312,8 +335,31 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 
 void KisSelectionManager::cut()
 {
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
+
+    KisLayerSP layer = img -> activeLayer();
+    if (!layer) return;
+
+    if (!layer -> hasSelection()) return;
+
     copy();
-    clear();
+
+    KisSelectedTransaction *t = 0;
+
+    if (img -> undoAdapter()) {
+        t = new KisSelectedTransaction(i18n("Cut"), layer.data());
+        Q_CHECK_PTR(t);
+    }
+
+    layer -> clearSelection();
+    layer -> deselect();
+
+    if (img -> undoAdapter()) {
+        img -> undoAdapter() -> addCommand(t);
+    }
+
+    layer -> emitSelectionChanged();
 }
 
 void KisSelectionManager::copy()
@@ -505,22 +551,69 @@ void KisSelectionManager::clear()
 
     if (!layer -> hasSelection()) return;
 
-    KisSelectionSP selection = layer -> selection();
-
     KisTransaction * t = 0;
+
     if (img -> undoAdapter()) {
-        t = new KisTransaction("Cut", layer.data());
+        t = new KisTransaction(i18n("Clear"), layer.data());
         Q_CHECK_PTR(t);
     }
 
     layer -> clearSelection();
+    img -> notify();
 
     if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
-    layer -> deselect();
-    layer->emitSelectionChanged();
 }
 
+void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, const QString& transactionText)
+{
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
 
+    KisLayerSP layer = img -> activeLayer();
+    if (!layer) return;
+
+    if (!layer -> hasSelection()) return;
+
+    KisSelectionSP selection = layer -> selection();
+
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(layer -> colorSpace(), "Temp");
+    KisFillPainter painter(filled);
+
+    if (fillWithPattern) {
+        painter.fillRect(0, 0, img -> width(), img -> height(),
+                         m_parent -> currentPattern());
+    } else {
+        painter.fillRect(0, 0, img -> width(), img -> height(), color); 
+    }
+
+    painter.end();
+
+    KisPainter painter2(layer);
+
+    painter2.beginTransaction(transactionText);
+    painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
+                          0, 0, img -> width(), img -> height());
+    img -> notify();
+
+    if (img -> undoAdapter()) {
+        img -> undoAdapter() -> addCommand(painter2.endTransaction());
+    }
+}
+
+void KisSelectionManager::fillForegroundColor()
+{
+    fill(m_parent -> fgColor(), false, i18n("Fill with Foreground Color"));
+}
+
+void KisSelectionManager::fillBackgroundColor()
+{
+    fill(m_parent -> bgColor(), false, i18n("Fill with Background Color"));
+}
+
+void KisSelectionManager::fillPattern()
+{
+    fill(KisColor(), true, i18n("Fill with Pattern"));
+}
 
 void KisSelectionManager::reselect()
 {

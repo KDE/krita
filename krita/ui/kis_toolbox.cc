@@ -121,7 +121,6 @@ void KisToolBox::setupTools()
             if(! tool)
                 continue;
             QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->toolTip());
-            // XXX: Find out how to switch buttons on action activate
             tools->add(bn);
             m_buttonGroup->insert( bn, id++ );
             m_idToActionMap.append( tool );
@@ -158,7 +157,6 @@ void KisToolBox::enableTools(bool enable)
         ToolList * tl = m_tools.at(i);
     
         if (!tl) continue;
-
         
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
@@ -171,6 +169,17 @@ void KisToolBox::enableTools(bool enable)
     }
 }
 
+void KisToolBox::slotSetTool(const QString & toolname)
+{
+    for (uint i = 0; i < m_idToActionMap.count(); ++i) {
+        KAction * a = m_idToActionMap.at(i);
+        if (!a || a->name() != toolname) continue;
+        
+        m_buttonGroup->setButton(i);
+        return;
+
+    }
+}
 
 ToolArea::ToolArea(QWidget *parent)
     : QWidget(parent), m_left(true)

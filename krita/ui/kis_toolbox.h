@@ -65,6 +65,7 @@ public slots:
     // Enables or disables all buttons and the corresponding actions.
     void enableTools(bool enable);
     
+    void slotSetTool(const QString & toolname);
     
 private:
 

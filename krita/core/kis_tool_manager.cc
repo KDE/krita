@@ -102,11 +102,15 @@ void KisToolManager::resetToolBox(KisToolBox * toolbox)
 
     toolbox->setupTools();
     
+#if 0 //  Because I cannot find out how to reset the toolbox so the button is depressed, we reset the tool to brush
+    setCurrentTool(findTool("tool_brush"));
+#else    
     if (m_oldTool) {
          // restore the old current tool
          setCurrentTool(m_oldTool);
          m_oldTool = 0;
     }
+#endif
 
 }
 
@@ -198,12 +202,13 @@ void KisToolManager::setCurrentTool(KisTool *tool)
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
         m_controller->setCanvasCursor(KisCursor::arrowCursor());
     }
-
+    m_toolBox->slotSetTool(tool->name());
 }
 
-void KisToolManager::setCurrentTool( const QString & toolName)
+void KisToolManager::setCurrentTool( const QString & toolName )
 {
     setCurrentTool(findTool(toolName));
+    m_toolBox->slotSetTool(toolName);
 }
 
 KisTool * KisToolManager::currentTool() const

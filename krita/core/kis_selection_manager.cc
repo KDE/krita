@@ -200,8 +200,31 @@ void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 
 void KisSelectionManager::cut()
 {
-        copy();
-        clear();
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
+
+    KisLayerSP layer = img -> activeLayer();
+    if (!layer) return;
+
+    if (!layer -> hasSelection()) return;
+
+    copy();
+
+    KisSelectedTransaction *t = 0;
+
+    if (img -> undoAdapter()) {
+        t = new KisSelectedTransaction(i18n("Cut"), layer.data());
+        Q_CHECK_PTR(t);
+    }
+
+    layer -> clearSelection();
+    layer -> deselect();
+
+    if (img -> undoAdapter()) {
+        img -> undoAdapter() -> addCommand(t);
+    }
+
+    layer -> emitSelectionChanged();
 }
 
 void KisSelectionManager::copy()
@@ -365,21 +388,18 @@ void KisSelectionManager::clear()
 
 	if (!layer -> hasSelection()) return;
 
-	KisSelectionSP selection = layer -> selection();
+    KisTransaction * t = 0;
 
-	KisTransaction * t = 0;
-	if (img -> undoAdapter()) {
-		t = new KisTransaction("Cut", layer.data());
-		Q_CHECK_PTR(t);
-	}
+    if (img -> undoAdapter()) {
+        t = new KisTransaction(i18n("Clear"), layer.data());
+        Q_CHECK_PTR(t);
+    }
 
-	layer -> clearSelection();
-	
-	if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
-	layer -> deselect();
+    layer -> clearSelection();
+    img -> notify();
+
+    if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 }
-
-
 
 void KisSelectionManager::reselect()
 {

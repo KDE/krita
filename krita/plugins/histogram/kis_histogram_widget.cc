@@ -79,6 +79,7 @@ void KisHistogramWidget::setLayer(KisLayerSP layer)
 void KisHistogramWidget::setActiveChannel(int channel)
 {
     m_histogramView -> setActiveChannel(channel);
+    updateEnabled();
 }
 
 void KisHistogramWidget::slotTypeSwitched(int id)

@@ -270,7 +270,8 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 {
     if( element.attribute( "name" ) == "ToolBox" )
     {
-        m_toolBox = new KisToolBox(mainWindow(), "toolbox");
+        m_toolBox = new KisToolBox(mainWindow(), "toolbox", KisFactory::global(), NUMBER_OF_TOOLTYPES);
+        m_toolBox -> setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
         return m_toolBox;
     }

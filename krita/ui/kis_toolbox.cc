@@ -35,19 +35,15 @@
 #include <kactionclasses.h>
 
 #include <koMainWindow.h>
-#include "kis_factory.h"
 #include "kis_toolbox.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
-    : KToolBar( mainWin, Qt::DockLeft, false, name, true, true)
+KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
+    : KToolBar( mainWin, Qt::DockLeft, false, name, true, true), m_instance(instance)
 {
-    
-    setLabel(i18n("Krita"));
-    setName("krita");
     setFullSize( false );
     setMargin(3);
 
@@ -56,7 +52,7 @@ KisToolBox::KisToolBox( KMainWindow *mainWin, const char* name )
     connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 
     // Create separate lists for the various sorts of tools
-    for (int i = 0; i < NUMBER_OF_TOOLTYPES ; ++i) {
+    for (int i = 0; i < numberOfTooltypes ; ++i) {
         ToolList * tl = new ToolList();
         m_tools.append(tl);
     }
@@ -83,7 +79,7 @@ void KisToolBox::slotButtonPressed( int id )
 
 }
 
-void KisToolBox::registerTool( KAction *tool, enumToolType toolType, Q_UINT32 priority )
+void KisToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
 {
     uint prio = priority;
     ToolList * tl = m_tools.at(toolType);
@@ -96,7 +92,7 @@ QToolButton *KisToolBox::createButton(QWidget * parent,  const char* iconName, Q
     QToolButton *button = new QToolButton(parent);
 
     if ( iconName != "" ) {
-        QPixmap pixmap = BarIcon( iconName, KisFactory::global() );
+        QPixmap pixmap = BarIcon( iconName, m_instance );
         button->setPixmap( pixmap );
         button->setToggleButton( true );
     }
@@ -186,7 +182,7 @@ ToolArea::ToolArea(QWidget *parent)
     QGridLayout *grid = new QGridLayout(w, 2, 2);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
-    m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 0, 0, 0);
+    m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 0, 1, 0);
 
     w = new QWidget(this);
     m_layout->addWidget(w);
@@ -194,7 +190,7 @@ ToolArea::ToolArea(QWidget *parent)
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
 
-    m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 0, 0, 0);
+    m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 0, 1, 0);
 }
 
 void ToolArea::add(QWidget *button)

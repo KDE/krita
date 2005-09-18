@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <koFrameButton.h>
+#include <kactioncollection.h>
 
 #include "kis_factory.h"
 #include "kis_controlframe.h"
@@ -51,7 +52,6 @@
 #include "kis_gradient.h"
 #include "kis_brush_chooser.h"
 #include "kis_view.h"
-#include "kis_toolbox.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
 #include "kis_paintop_box.h"

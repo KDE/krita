@@ -22,7 +22,6 @@
 #include <qptrvector.h>
 
 #include <ktoolbar.h>
-#include <kis_tool.h>
 
 class QWidget;
 class KAction;
@@ -45,14 +44,14 @@ class KisToolBox : public KToolBar {
 
 public:
     
-    KisToolBox( KMainWindow *mainWin, const char* name = 0L );
+    KisToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes);
     virtual ~KisToolBox();
 
     // Called by the toolcontroller for each tool. For every category,
     // there is a separate list, and the tool is categorized correctly.
     // The tool is not yet added to the widgets; call setupTools()
     // to do that. We don't store the tool.
-    void registerTool(KAction * tool, enumToolType toolType, Q_UINT32 priority);
+    void registerTool(KAction * tool, int toolType, Q_UINT32 priority);
 
     // Called when all tools have been added by the tool controller
     void setupTools();
@@ -83,7 +82,7 @@ private:
         
     QPtrList<ToolList> m_tools;
     QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
-
+    KInstance* m_instance;
 };
 
 class ToolArea : public QWidget {

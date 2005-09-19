@@ -66,3 +66,4 @@ Icon=krita
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Office;Graphics;

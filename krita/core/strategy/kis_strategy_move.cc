@@ -170,7 +170,8 @@ void KisStrategyMove::drag(const QPoint& original)
             rc.setWidth(static_cast<Q_INT32>(rc.width() * m_subject -> zoom()));
             rc.setHeight(static_cast<Q_INT32>(rc.height() * m_subject -> zoom()));
 #endif
-            m_controller -> updateCanvas(rc);
+            //m_controller -> updateCanvas(rc);
+            img->notify(rc);
         }
     }
 }
@@ -193,7 +194,6 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
                 if (adapter)
                     adapter -> addCommand(cmd);
             }
-
         }
     }
 }

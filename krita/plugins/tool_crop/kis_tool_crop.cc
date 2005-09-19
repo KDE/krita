@@ -59,8 +59,8 @@ KisToolCrop::KisToolCrop()
     m_selecting = false;
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);
-        m_handleSize = 13;
-        m_haveCropSelection = false;
+    m_handleSize = 13;
+    m_haveCropSelection = false;
     m_optWidget = 0;
 }
 
@@ -114,7 +114,7 @@ void KisToolCrop::clearRect()
         Q_ASSERT(controller);
 
         controller -> canvas() -> update();
-        
+
         m_startPos = QPoint(0, 0);
         m_endPos = QPoint(0, 0);
 
@@ -157,18 +157,18 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
                 setOptionWidgetEndX(m_endPos.x());
                 setOptionWidgetEndY(m_endPos.y());
             }
-                }
         }
+    }
 }
 
 void KisToolCrop::move(KisMoveEvent *e)
 {
-        if ( m_subject && m_subject -> currentImg())
+    if ( m_subject && m_subject -> currentImg())
+    {
+        if( m_selecting ) //if the user selects
         {
-                if( m_selecting ) //if the user selects
-                {
-                        if( !m_haveCropSelection ) //if the cropSelection is not yet set
-                        {
+            if( !m_haveCropSelection ) //if the cropSelection is not yet set
+            {
                 paintOutlineWithHandles();
 
                 m_endPos = e -> pos().floorQPoint();
@@ -178,10 +178,10 @@ void KisToolCrop::move(KisMoveEvent *e)
                 m_endPos.setX(CLAMP(m_endPos.x(), 0, image -> width()));
                 m_endPos.setY(CLAMP(m_endPos.y(), 0, image -> height()));
 
-                                paintOutlineWithHandles();
-                        }
-                        else //if the crop selection is set
-                        {
+                paintOutlineWithHandles();
+            }
+            else //if the crop selection is set
+            {
                 m_dragStop = e -> pos().floorQPoint();
                 if (m_mouseOnHandleType != None && m_dragStart != m_dragStop ) {
 
@@ -196,40 +196,40 @@ void KisToolCrop::move(KisMoveEvent *e)
 
                     switch (m_mouseOnHandleType)
                     {
-                        case (UpperLeft):
-                            m_startPos.setX( pos.x() + m_dx );
-                            m_startPos.setY( pos.y() + m_dy );
-                            break;
-                        case (LowerRight):
-                            m_endPos.setX( pos.x() + m_dx );
-                            m_endPos.setY( pos.y() + m_dy );
-                            break;
-                        case (UpperRight):
-                            m_endPos.setX( pos.x() + m_dx );
-                            m_startPos.setY( pos.y() + m_dy );
-                            break;
-                        case (LowerLeft):
-                            m_startPos.setX( pos.x() + m_dx );
-                            m_endPos.setY( pos.y() + m_dy );
-                            break;
-                        case (Upper):
-                            m_startPos.setY( pos.y() + m_dy );
-                            break;
-                        case (Lower):
-                            m_endPos.setY( pos.y() + m_dy );
-                            break;
-                        case (Left):
-                            m_startPos.setX( pos.x() + m_dx );
-                            break;
-                        case (Right):
-                            m_endPos.setX( pos.x() + m_dx );
-                            break;
-                        case (Inside):
-                            m_startPos.setX( m_startPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
-                            m_endPos.setX( m_endPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
-                            m_startPos.setY( m_startPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
-                            m_endPos.setY( m_endPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
-                            break;
+                    case (UpperLeft):
+                        m_startPos.setX( pos.x() + m_dx );
+                        m_startPos.setY( pos.y() + m_dy );
+                        break;
+                    case (LowerRight):
+                        m_endPos.setX( pos.x() + m_dx );
+                        m_endPos.setY( pos.y() + m_dy );
+                        break;
+                    case (UpperRight):
+                        m_endPos.setX( pos.x() + m_dx );
+                        m_startPos.setY( pos.y() + m_dy );
+                        break;
+                    case (LowerLeft):
+                        m_startPos.setX( pos.x() + m_dx );
+                        m_endPos.setY( pos.y() + m_dy );
+                        break;
+                    case (Upper):
+                        m_startPos.setY( pos.y() + m_dy );
+                        break;
+                    case (Lower):
+                        m_endPos.setY( pos.y() + m_dy );
+                        break;
+                    case (Left):
+                        m_startPos.setX( pos.x() + m_dx );
+                        break;
+                    case (Right):
+                        m_endPos.setX( pos.x() + m_dx );
+                        break;
+                    case (Inside):
+                        m_startPos.setX( m_startPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
+                        m_endPos.setX( m_endPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
+                        m_startPos.setY( m_startPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
+                        m_endPos.setY( m_endPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
+                        break;
                     }
 
 
@@ -240,24 +240,24 @@ void KisToolCrop::move(KisMoveEvent *e)
                     m_dragStart = e -> pos().floorQPoint();
                     paintOutlineWithHandles();
                 }
-                        }
+            }
 
             setOptionWidgetStartX(QMIN(m_startPos.x(), m_endPos.x()));
             setOptionWidgetStartY(QMIN(m_startPos.y(), m_endPos.y()));
             setOptionWidgetEndX(QMAX(m_startPos.x(), m_endPos.x()));
             setOptionWidgetEndY(QMAX(m_startPos.y(), m_endPos.y()));
-                }
-                else //if we are not selecting
-                {
-                        if ( m_haveCropSelection )  //if the crop selection is set
-                        {
-                KisCanvasControllerInterface *controller = m_subject -> canvasController();
-                                Q_INT32 type = mouseOnHandle(controller -> windowToView(e -> pos().floorQPoint()));
-                                //set resize cursor if we are on one of the handles
-                                setMoveResizeCursor(type);
-                        } 
-                }
         }
+        else //if we are not selecting
+        {
+            if ( m_haveCropSelection )  //if the crop selection is set
+            {
+                KisCanvasControllerInterface *controller = m_subject -> canvasController();
+                Q_INT32 type = mouseOnHandle(controller -> windowToView(e -> pos().floorQPoint()));
+                //set resize cursor if we are on one of the handles
+                setMoveResizeCursor(type);
+            }
+        }
+    }
 }
 
 void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
@@ -340,36 +340,36 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
         end = controller -> windowToView(m_endPos);
 
         gc.setRasterOp(Qt::NotROP);
-                gc.setPen(pen);
-                //draw handles
-                m_handlesRegion = handles(QRect(start, end));
+        gc.setPen(pen);
+        //draw handles
+        m_handlesRegion = handles(QRect(start, end));
 
-                Q_INT32 startx;
-                Q_INT32 starty;
-                Q_INT32 endx;
-                Q_INT32 endy;
-                if(start.x()<=end.x())
-                {
-                        startx=start.x();
-                        endx=end.x();
-                }
-                else
-                {
-                        startx=end.x();
-                        endx=start.x();
-                }
-                if(start.y()<=end.y())
-                {
-                        starty=start.y();
-                        endy=end.y();
-                }
-                else
-                {
-                        starty=end.y();
-                        endy=start.y();
-                }
+        Q_INT32 startx;
+        Q_INT32 starty;
+        Q_INT32 endx;
+        Q_INT32 endy;
+        if(start.x()<=end.x())
+        {
+            startx=start.x();
+            endx=end.x();
+        }
+        else
+        {
+            startx=end.x();
+            endx=start.x();
+        }
+        if(start.y()<=end.y())
+        {
+            starty=start.y();
+            endy=end.y();
+        }
+        else
+        {
+            starty=end.y();
+            endy=start.y();
+        }
         //draw upper line of selection
-                gc.drawLine(startx + m_handleSize / 2 + 1, starty, startx + (endx - startx - m_handleSize) / 2 + 1, starty);
+        gc.drawLine(startx + m_handleSize / 2 + 1, starty, startx + (endx - startx - m_handleSize) / 2 + 1, starty);
         gc.drawLine(startx + (endx - startx + m_handleSize) / 2 + 1, starty, endx - m_handleSize / 2, starty);
         //draw lower line of selection
         gc.drawLine(startx + m_handleSize / 2 + 1, endy, startx + (endx - startx - m_handleSize) / 2 + 1, endy);
@@ -383,17 +383,17 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 
         //draw guides
         gc.drawLine(0,endy,startx - m_handleSize / 2,endy);
-                gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller -> canvas() -> height());
-                gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
-                gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller -> canvas() -> width(), starty);
-                QMemArray <QRect> rects = m_handlesRegion.rects (); 
-                for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
-                {
-                        gc.fillRect (*it, Qt::black);
-                }
+        gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller -> canvas() -> height());
+        gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
+        gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller -> canvas() -> width(), starty);
+        QMemArray <QRect> rects = m_handlesRegion.rects ();
+        for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
+        {
+            gc.fillRect (*it, Qt::black);
+        }
 
 
-                gc.setRasterOp(op);
+        gc.setRasterOp(op);
         gc.setPen(old);
     }
 }
@@ -401,35 +401,35 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 void KisToolCrop::crop() {
     // XXX: Should cropping be part of KisImage/KisPaintDeviceImpl's API?
 
-        m_haveCropSelection = false;
+    m_haveCropSelection = false;
 
     KisImageSP img = m_subject -> currentImg();
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> beginMacro(i18n("Crop"));
-    
+
     if (!img)
         return;
 
     if (m_endPos.y() < 0)
         m_endPos.setY(0);
-    
+
     if (m_endPos.y() > img -> height())
         m_endPos.setY(img -> height());
-    
+
     if (m_endPos.x() < 0)
         m_endPos.setX(0);
-    
+
     if (m_endPos.x() > img -> width())
-                m_endPos.setX(img -> width());
-    
+        m_endPos.setX(img -> width());
+
     QRect rc(m_startPos, m_endPos);
     rc = rc.normalize();
 
     // We don't want the border of the 'rectangle' to be included in our selection
     rc.setSize(rc.size() - QSize(1,1));
-    
-    
+
+
     if (m_optWidget -> cmbType -> currentItem() == 0) {
         KisLayerSP layer = img -> activeLayer();
         cropLayer(layer, rc);
@@ -463,7 +463,7 @@ void KisToolCrop::crop() {
 }
 
 void KisToolCrop::setStartX(int x)
-{ 
+{
     if (x <= m_endPos.x() || m_startPos.x() == m_endPos.x()) {
 
         if (!m_haveCropSelection) {
@@ -487,7 +487,7 @@ void KisToolCrop::setStartX(int x)
 }
 
 void KisToolCrop::setStartY(int y)
-{ 
+{
     if (y <= m_endPos.y() || m_startPos.y() == m_endPos.y()) {
 
         if (!m_haveCropSelection) {
@@ -535,7 +535,7 @@ void KisToolCrop::setEndX(int x)
 }
 
 void KisToolCrop::setEndY(int y)
-{ 
+{
     if (y >= m_startPos.y() || m_startPos.y() == m_endPos.y()) {
 
         if (!m_haveCropSelection) {
@@ -588,22 +588,22 @@ void KisToolCrop::setOptionWidgetEndY(Q_INT32 y)
     m_optWidget -> intEndY -> blockSignals(false);
 }
 
-void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc) 
+void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
 {
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), layer.data());
     Q_CHECK_PTR(t);
-    
+
     layer -> crop(rc);
 
     m_subject -> undoAdapter() -> addCommand(t);
-    
+
 }
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new WdgToolCrop(parent);
     Q_CHECK_PTR(m_optWidget);
-                      
+
     connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
     connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
@@ -625,12 +625,12 @@ void KisToolCrop::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Crop"),
-                        "crop", 
-                        0, 
-                        this,
-                        SLOT(activate()), 
-                        collection, 
-                        name());
+                                    "crop",
+                                    0,
+                                    this,
+                                    SLOT(activate()),
+                                    collection,
+                                    name());
         Q_CHECK_PTR(m_action);
 
         m_action -> setToolTip(i18n("Crop an area"));
@@ -642,16 +642,16 @@ void KisToolCrop::setup(KActionCollection *collection)
 
 QRegion KisToolCrop::handles(QRect rect)
 {
-        QRegion handlesRegion;
+    QRegion handlesRegion;
 
-        //add handle at the lower right corner
-        handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0, QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
-        //add handle at the upper right corner
-        handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
-        //add rectangle at the lower left corner
-        handlesRegion += QRect( 0 - m_handleSize / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
-        //add rectangle at the upper left corner
-        handlesRegion += QRect( 0 - m_handleSize / 2.0, 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    //add handle at the lower right corner
+    handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0, QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    //add handle at the upper right corner
+    handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    //add rectangle at the lower left corner
+    handlesRegion += QRect( 0 - m_handleSize / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    //add rectangle at the upper left corner
+    handlesRegion += QRect( 0 - m_handleSize / 2.0, 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the lower edge of the rectangle
     handlesRegion += QRect( ( QABS( rect.width() ) - m_handleSize ) / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the right edge of the rectangle
@@ -661,159 +661,159 @@ QRegion KisToolCrop::handles(QRect rect)
     //add handle at the left edge of the rectangle
     handlesRegion += QRect( 0 - m_handleSize / 2.0, ( QABS( rect.height() ) - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
 
-        //move the handles to the correct position
-        if( rect.width() >= 0 && rect.height() >= 0)
-        {
-                handlesRegion.translate ( rect.x(), rect.y() );
-        }
-        else if( rect.width() < 0 && rect.height() >= 0)
-        {
-                handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() );
-        }
-        else if( rect.width() >= 0 && rect.height() < 0)
-        {
-                handlesRegion.translate ( rect.x(), rect.y() - QABS( rect.height() ) );
-        }
-        else if( rect.width() < 0 && rect.height() < 0)
-        {
-                handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() - QABS( rect.height() ) );
-        }
-        return handlesRegion;
+    //move the handles to the correct position
+    if( rect.width() >= 0 && rect.height() >= 0)
+    {
+        handlesRegion.translate ( rect.x(), rect.y() );
+    }
+    else if( rect.width() < 0 && rect.height() >= 0)
+    {
+        handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() );
+    }
+    else if( rect.width() >= 0 && rect.height() < 0)
+    {
+        handlesRegion.translate ( rect.x(), rect.y() - QABS( rect.height() ) );
+    }
+    else if( rect.width() < 0 && rect.height() < 0)
+    {
+        handlesRegion.translate ( rect.x() - QABS( rect.width() ), rect.y() - QABS( rect.height() ) );
+    }
+    return handlesRegion;
 }
 
 Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
 {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
-        Q_ASSERT(controller);
-        QPoint start = controller -> windowToView(m_startPos);
-        QPoint end = controller -> windowToView(m_endPos);
+    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    Q_ASSERT(controller);
+    QPoint start = controller -> windowToView(m_startPos);
+    QPoint end = controller -> windowToView(m_endPos);
 
-        Q_INT32 startx;
-                Q_INT32 starty;
-                Q_INT32 endx;
-                Q_INT32 endy;
-                if(start.x()<=end.x())
-                {
-                        startx=start.x();
-                        endx=end.x();
-                }
-                else
-                {
-                        startx=end.x();
-                        endx=start.x();
-                }
-                if(start.y()<=end.y())
-                {
-                        starty=start.y();
-                        endy=end.y();
-                }
-                else
-                {
-                        starty=end.y();
-                        endy=start.y();
-                }
+    Q_INT32 startx;
+    Q_INT32 starty;
+    Q_INT32 endx;
+    Q_INT32 endy;
+    if(start.x()<=end.x())
+    {
+        startx=start.x();
+        endx=end.x();
+    }
+    else
+    {
+        startx=end.x();
+        endx=start.x();
+    }
+    if(start.y()<=end.y())
+    {
+        starty=start.y();
+        endy=end.y();
+    }
+    else
+    {
+        starty=end.y();
+        endy=start.y();
+    }
 
-        if ( QRect ( startx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    if ( QRect ( startx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx= startx-currentViewPoint.x();
-                        m_dy = starty - currentViewPoint.y();
-                }
-                return UpperLeft;
+            m_dx= startx-currentViewPoint.x();
+            m_dy = starty - currentViewPoint.y();
         }
-        else if ( QRect ( startx - m_handleSize / 2.0, endy -  m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        return UpperLeft;
+    }
+    else if ( QRect ( startx - m_handleSize / 2.0, endy -  m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx = startx-currentViewPoint.x();
-                        m_dy = endy-currentViewPoint.y();
-                }
-                return LowerLeft;
+            m_dx = startx-currentViewPoint.x();
+            m_dy = endy-currentViewPoint.y();
         }
-        else if ( QRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        return LowerLeft;
+    }
+    else if ( QRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx = endx - currentViewPoint.x();
-                        m_dy = starty - currentViewPoint.y() ;
-                }
-                return UpperRight;
+            m_dx = endx - currentViewPoint.x();
+            m_dy = starty - currentViewPoint.y() ;
         }
-        else if ( QRect ( endx - m_handleSize / 2.0, endy - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+        return UpperRight;
+    }
+    else if ( QRect ( endx - m_handleSize / 2.0, endy - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx = endx - currentViewPoint.x();
-                        m_dy= endy - currentViewPoint.y();
-                }
-                return LowerRight;
+            m_dx = endx - currentViewPoint.x();
+            m_dy= endy - currentViewPoint.y();
         }
+        return LowerRight;
+    }
     else if ( QRect ( startx + ( endx - startx - m_handleSize ) / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dy = starty - currentViewPoint.y() ;
-                }
-                return Upper;
+            m_dy = starty - currentViewPoint.y() ;
         }
+        return Upper;
+    }
     else if ( QRect ( startx + ( endx - startx - m_handleSize ) / 2.0, endy - m_handleSize / 2, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dy = endy - currentViewPoint.y();
-                }
-                return Lower;
+            m_dy = endy - currentViewPoint.y();
         }
+        return Lower;
+    }
     else if ( QRect ( startx - m_handleSize / 2.0, starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx = startx - currentViewPoint.x() ;
-                }
-                return Left;
+            m_dx = startx - currentViewPoint.x() ;
         }
+        return Left;
+    }
     else if ( QRect ( endx - m_handleSize / 2.0 , starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    {
+        if( !m_selecting )
         {
-                if( !m_selecting )
-                {
-                        m_dx = endx-currentViewPoint.x();
-                }
-                return Right;
+            m_dx = endx-currentViewPoint.x();
         }
+        return Right;
+    }
     else if ( QRect ( m_startPos.x() , m_startPos.y(), m_endPos.x() - m_startPos.x() , m_endPos.y() - m_startPos.y() ).contains( currentViewPoint ) )
-        {
-                return Inside;
-        }
+    {
+        return Inside;
+    }
     else return None;
 }
 
 void KisToolCrop::setMoveResizeCursor (Q_INT32 handle)
 {
-        switch (handle)
-        {
-        case (UpperLeft):
+    switch (handle)
+    {
+    case (UpperLeft):
     case (LowerRight):
-                m_subject->canvasController()->setCanvasCursor(KisCursor::sizeFDiagCursor());
-                return;
-        case (LowerLeft):
-        case (UpperRight):
-                m_subject->canvasController()->setCanvasCursor(KisCursor::sizeBDiagCursor());
-                return;
+        m_subject->canvasController()->setCanvasCursor(KisCursor::sizeFDiagCursor());
+        return;
+    case (LowerLeft):
+    case (UpperRight):
+        m_subject->canvasController()->setCanvasCursor(KisCursor::sizeBDiagCursor());
+        return;
     case (Upper):
     case (Lower):
         m_subject->canvasController()->setCanvasCursor(KisCursor::sizeVerCursor());
-                return;
+        return;
     case (Left):
     case (Right):
         m_subject->canvasController()->setCanvasCursor(KisCursor::sizeHorCursor());
-                return;
+        return;
     case (Inside):
         m_subject->canvasController()->setCanvasCursor(KisCursor::sizeAllCursor());
         return;
-    }    
-        m_subject->canvasController()->setCanvasCursor(KisCursor::selectCursor());
-        return;
+    }
+    m_subject->canvasController()->setCanvasCursor(KisCursor::selectCursor());
+    return;
 }
 
 

@@ -57,7 +57,7 @@ public:
     virtual void attach(KisCanvasObserver *observer) = 0;
     virtual void detach(KisCanvasObserver *observer) = 0;
     
-    virtual void notify() = 0;
+    virtual void notifyObservers() = 0;
     
     virtual KisImageSP currentImg() const = 0;
     

@@ -56,7 +56,7 @@ KoIconItem* KisItemChooser::currentItem()
 void KisItemChooser::slotItemSelected(KoIconItem *item)
 {
     update(item);
-    notify();
+    emit selected(currentItem());
 }
 
 void KisItemChooser::addItem(KoIconItem *item)
@@ -75,11 +75,6 @@ void KisItemChooser::addItems(const vKoIconItem& items)
 QWidget *KisItemChooser::chooserWidget() const
 {
     return m_chooser;
-}
-
-void KisItemChooser::notify()
-{
-    emit selected(currentItem());
 }
 
 #include "kis_itemchooser.moc"

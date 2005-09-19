@@ -199,20 +199,20 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         setEmpty();
         setModified(true);//XXX:hack
         ok = true;
-        
+
     } else if (ret == KoTemplateChooseDia::File) {
-        
+
         KURL url( file );
         kdDebug() << "KisDoc::initDoc opening URL " << url.prettyURL() << endl;
         ok = openURL(url);
-        
+
     } else if (ret == KoTemplateChooseDia::Empty) {
-    
+
         if ((ok = slotNewImage())) {
             emit imageListUpdated();
             setEmpty();
         }
-        
+
     }
 
     setModified(false);
@@ -296,7 +296,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
         // No children == empty file == show create dialog
         return slotNewImage();
     }
-    
+
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         kdDebug(DBG_AREA_FILE) << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
         if (node.isElement()) {
@@ -349,7 +349,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 
 KisImageSP KisDoc::loadImage(const QDomElement& element)
 {
-    
+
     KisConfig cfg;
     QString attr;
     QDomNode node;
@@ -364,7 +364,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     double yres;
     QString colorspacename;
     KisProfile *  profile;
-    
+
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
         if ((name = element.attribute("name")).isNull())
@@ -378,7 +378,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
             return 0;
         description = element.attribute("description");
-        
+
         if ((attr = element.attribute("x-res")).isNull())
             xres = 100.0;
         else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
@@ -391,18 +391,18 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
         {
-            // And old file: take a reasonable default. 
+            // And old file: take a reasonable default.
             // Krita didn't support anything else in those
             // days anyway.
             colorspacename = "RGBA";
         }
-        
+
         KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
         if (cs == 0) {
             // return 0;
             if (colorspacename  == "Grayscale + Alpha")
                 cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
-            else 
+            else
                 cs = KisColorSpaceRegistry::instance() -> get("RGBA");
         }
 
@@ -477,7 +477,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     // present in the layer definition: this helps a LOT with backward
     // compatibilty.
     kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
-    
+
     KisConfig cfg;
     QString attr;
     QDomNode node;
@@ -494,12 +494,12 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if ((name = element.attribute("name")).isNull())
         return 0;
     kdDebug(DBG_AREA_FILE) << "Loading layer " << name << "\n";
-    
+
     if ((attr = element.attribute("x")).isNull())
         return 0;
     x = attr.toInt();
     kdDebug(DBG_AREA_FILE) << "X: " << x << "\n";
-    
+
     if ((attr = element.attribute("y")).isNull())
         return 0;
 
@@ -513,7 +513,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
         opacity = OPACITY_OPAQUE;
 
     kdDebug(DBG_AREA_FILE) << "Opacity: " << opacity << "\n";
-        
+
     QString compositeOpName = element.attribute("compositeop");
     KisCompositeOp compositeOp;
 
@@ -527,34 +527,34 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
         return 0;
     }
     kdDebug(DBG_AREA_FILE) << "CompositeOp: " << compositeOpName << "\n";
-    
+
     if ((attr = element.attribute("visible")).isNull())
         attr = "1";
 
     visible = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Visible: " << visible << "\n";
-    
+
     if ((attr = element.attribute("linked")).isNull())
         attr = "0";
 
     linked = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Linked: " << linked << "\n";
-    
+
     if ((attr = element.attribute("locked")).isNull())
         attr = "0";
 
     locked = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
-    
+
     QString colorspacename = element.attribute("colorspacename");
     KisColorSpace * colorSpace = img -> colorSpace();
-    
+
     kdDebug() << "ColorSpace name in layer: " << colorspacename << "\n";
     if (!colorspacename.isNull()) {
         colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
     }
     kdDebug(DBG_AREA_FILE) << "ColorSpace: " << colorspacename << "\n";
-    
+
     if (colorSpace == 0) {
         kdDebug() << "Could not get colorspace: aborting\n";
         return 0;
@@ -616,12 +616,12 @@ bool KisDoc::completeSaving(KoStore *store)
 
             store -> close();
         }
-            
+
         if ((*it2) -> profile()) {
             // save layer profile
             location = external ? QString::null : uri;
             location += (img) -> name() + "/layers/" + (*it2) -> name() + ".icc";
-                
+
             if (store -> open(location)) {
                 store -> write((*it2) -> profile() -> annotation() -> annotation());
                 store -> close();
@@ -631,7 +631,7 @@ bool KisDoc::completeSaving(KoStore *store)
         IOCompletedStep();
         (*it2) -> disconnect();
     }
-        
+
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
@@ -654,14 +654,13 @@ bool KisDoc::completeSaving(KoStore *store)
         }
     }
 
-    // Composite rendition of the entire image for easier kimgio loading 
-    // and to speed up loading the image into Krita: show the composite png first, 
-    // then load the layers. 
+    // Composite rendition of the entire image for easier kimgio loading
+    // and to speed up loading the image into Krita: show the composite png first,
+    // then load the layers.
     if (store -> open("composite.png")) {
 
         QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
         QPainter gc(pix);
-        //m_currentImage->notify();
         m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> profile());
         gc.end();
         QImage composite = pix -> convertToImage();
@@ -713,7 +712,7 @@ bool KisDoc::completeLoading(KoStore *store)
 
             store -> close();
         }
-            
+
         // icc profile
         location = external ? QString::null : uri;
         location += (m_currentImage) -> name() + "/layers/" + (*it2) -> name() + ".icc";
@@ -730,7 +729,7 @@ bool KisDoc::completeLoading(KoStore *store)
         IOCompletedStep();
         (*it2) -> disconnect();
     }
-        
+
     // annotations
     // exif
     location = external ? QString::null : uri;
@@ -757,7 +756,7 @@ bool KisDoc::completeLoading(KoStore *store)
     }
 
     IODone();
-    
+
     setModified( false );
     return true;
 }
@@ -789,7 +788,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
     img -> add(layer, -1);
     img->notify();
-    
+
     m_currentImage = img;
     return img;
 }
@@ -832,10 +831,10 @@ bool KisDoc::slotNewImage()
         painter.begin(layer.data());
         painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
         painter.end();
-        
+
         img -> add(layer, -1);
         img -> notify();
-        
+
         m_currentImage = img;
 
         cfg.defImgWidth(dlg.imgWidth());
@@ -862,7 +861,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transpare
     KisProfile *  profile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     paintContent(painter, rect, profile);
-    
+
 }
 
 void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfile *  monitorProfile, float exposure)

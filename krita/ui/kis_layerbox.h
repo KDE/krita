@@ -47,7 +47,7 @@ class KisLayerBox : public QFrame {
 
 public:
     // XXX: Use a list of KAction for these, possibly wrapped with some extra flags for visible in a column number
-    enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LEVEL, LOCKING};
+    enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LOCKING};
     enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
 
     KisLayerBox(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
@@ -83,7 +83,6 @@ signals:
     void itemLower();
     void itemFront();
     void itemBack();
-    void itemLevel(int n);
     void opacityChanged(int opacity);
     void itemComposite(const KisCompositeOp&);
 

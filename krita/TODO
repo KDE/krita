@@ -1,3 +1,28 @@
+Code organization
+
+    * Separate all interfaces from the implementations and place them in krita/sdk. Use these interfaces for DCOP.
+      Problem: what to do when it is useful for plugins to derive from a base class with some default functionality. Composition
+      with delegation here? Go through patterns book.
+    * Separate the core Krita image library from the part; place the former in krita/libkrita and the latter in krita/kritapart
+    * Reorganize plugin directories as follows:
+        plugins/
+                tools/
+                    /defaultools
+                    /selectiontools
+                    /...
+                filters/
+                    /...
+                colorspaces/
+                    /rgbu8
+                    /rgbu16
+                    /...
+                paintops/
+                    /...
+                extensions
+                    /imagesize
+                    /...
+                
+
 Bugs
     * On opening a second image after loading first image but not changing it,
       the second image should be loaded in a second view and not replace the 
@@ -57,8 +82,9 @@ Colorspace independence (found with the test colorstrategy)
     
 Core
 
+        * The fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
+          tool should use that rect to blit and notify the image, instead of notifying the complete image.s
 	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
-	* Histogram computations. Make histogram widget zoomable for 16-bit channel/images
 	* Adjustment layers (Layers that dynamically apply a filter to
 	  the layer they are linked to, these do not store actual
 	  image data, except for an occasional mask) These should work on object
@@ -66,8 +92,7 @@ Core
 	* Mask layers (mask layers created from selection -- vv) (BSAR)
 	* Layer groups or even better: a hierachy of collapsable folders with layers (with d&d) 
 	* Loading and saving of selections 
-	* Anti-aliased filling (requires some simple colorspace
-	  function to merge 2 Pixels)
+	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
 	* Link/unlink layer sets a nice icon. but doesn't actually link the
           layer to anything. Linking should: link a group of layers together. move, transform,

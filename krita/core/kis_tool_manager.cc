@@ -75,7 +75,6 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
     toolbox->setupTools();
 
     KisTool * t = findTool("tool_brush");
-    kdDebug() << "found " << t << " when looking for brush tool.\n";
     setCurrentTool(t);
 
     setup = true;
@@ -139,7 +138,6 @@ void KisToolManager::updateGUI()
 
     // XXX: Fix this properly: changing the visibility of a layer causes this cause to be executed twice!
     if (!enable && current != m_dummyTool) {
-        kdDebug() << "Disable! " << m_oldTool << "\n";
         // Store the current tool
         m_oldTool = currentTool();
         // Set the dummy tool
@@ -150,7 +148,6 @@ void KisToolManager::updateGUI()
         m_tools_disabled = true;
     }
     else if (enable && m_tools_disabled) {
-        kdDebug() << "Enable! " << m_oldTool << "\n";
         m_tools_disabled = false;
         if (m_oldTool) {
             // restore the old current tool
@@ -160,7 +157,6 @@ void KisToolManager::updateGUI()
         else {
             m_oldTool = 0;
             KisTool * t = findTool("tool_brush");
-            kdDebug() << "found " << t << " when looking for brush tool.\n";
             setCurrentTool(t);
         }
     }
@@ -193,7 +189,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 
         canvas->enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
 
-        m_subject->notify();
+        m_subject->notifyObservers();
 
         tool->action()->setChecked( true );
         tool->action()->activate();

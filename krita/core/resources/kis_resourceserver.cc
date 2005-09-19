@@ -20,6 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qstringlist.h>
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -43,25 +44,35 @@ KisResourceServerBase::~KisResourceServerBase()
 void KisResourceServerBase::loadResources()
 {
     QStringList filenames;
-
+    QStringList uniqueFiles;
+    
     QStringList::Iterator it;
     for ( it = m_fileExtensions.begin(); it != m_fileExtensions.end(); ++it ) 
         filenames += KisFactory::global() -> dirs() -> findAllResources(m_type.ascii(), (*it));
     
     while( !filenames.empty() )
     {
+        
         QString front = *filenames.begin();
         filenames.pop_front();
 
-        KisResource *resource;
-        resource = createResource(front);
-        if(resource -> load() && resource -> valid())
-        {
-            m_resources.append(resource);
-            Q_CHECK_PTR(resource);
+        QString fname = QFileInfo(front).fileName();
+        // XXX: Don't load resources with the same filename. Actually, we should look inside
+        //      the resource to find out whether they are really the same, but for now this
+        //      will prevent the same brush etc. showing up twice.
+        if (uniqueFiles.empty() || uniqueFiles.find(fname) == uniqueFiles.end()) {
+            uniqueFiles.append(fname);
+            KisResource *resource;
+            resource = createResource(front);
+            if(resource -> load() && resource -> valid())
+            {
+                m_resources.append(resource);
+                Q_CHECK_PTR(resource);
+            }
+            else {
+                delete resource;
+            }
         }
-        else
-            delete resource;
     }
     m_loaded = true;
 }

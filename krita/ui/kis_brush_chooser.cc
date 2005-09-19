@@ -78,9 +78,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
         KisBrush *brush = static_cast<KisBrush *>(item -> resource());
         brush -> setUseColorAsMask(useColorAsMask);
         item -> updatePixmaps();
-        // The item's pixmaps may have changed so get observers to update
-        // their display.
-        notify();
+        emit selected(currentItem());
     }
 }
 

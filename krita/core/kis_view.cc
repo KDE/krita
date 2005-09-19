@@ -318,7 +318,6 @@ void KisView::createLayerBox()
         connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
         connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
         connect(m_layerBox, SIGNAL(itemBack()), this, SLOT(layerBack()));
-        connect(m_layerBox, SIGNAL(itemLevel(int)), this, SLOT(layerLevel(int)));
         connect(m_layerBox, SIGNAL(opacityChanged(int)), this, SLOT(layerOpacity(int)));
         connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
         connect(this, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
@@ -798,6 +797,7 @@ void KisView::updateCanvas()
     updateCanvas(wr);
 }
 
+
 void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     KisRect rc(x, y, w, h);
@@ -813,6 +813,14 @@ void KisView::updateCanvas(const QRect& rc)
 void KisView::updateCanvas(const KisRect& rc)
 {
     paintView(rc);
+}
+
+void KisView::canvasRefresh()
+{
+    KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
+
+    paintView(viewToWindow(rc));
+    m_canvas -> repaint();
 }
 
 void KisView::layerUpdateGUI(bool enable)
@@ -1498,7 +1506,7 @@ void KisView::brushActivated(KisResource *brush)
     if (m_brush )
     {
         emit brushChanged(m_brush);
-        notify();
+        notifyObservers();
     }
 }
 
@@ -1508,7 +1516,7 @@ void KisView::patternActivated(KisResource *pattern)
 
     if (m_pattern) {
         emit patternChanged(m_pattern);
-        notify();
+        notifyObservers();
     }
 }
 
@@ -1519,7 +1527,7 @@ void KisView::gradientActivated(KisResource *gradient)
 
     if (m_gradient) {
         emit gradientChanged(m_gradient);
-        notify();
+        notifyObservers();
     }
 }
 
@@ -1532,21 +1540,21 @@ void KisView::paintopActivated(const KisID & paintop)
 
     m_paintop = paintop;
     emit paintopChanged(m_paintop);
-    notify();
+    notifyObservers();
 }
 
 void KisView::setBGColor(const KisColor& c)
 {
     emit bgColorChanged(c);
     m_bg = c;
-    notify();
+    notifyObservers();
 }
 
 void KisView::setFGColor(const KisColor& c)
 {
     emit fgColorChanged(c);
     m_fg = c;
-    notify();
+    notifyObservers();
 }
 
 void KisView::slotSetFGColor(const KisColor& c)
@@ -1889,15 +1897,6 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
     }
 }
 
-void KisView::canvasRefresh()
-{
-    KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
-
-    paintView(viewToWindow(rc));
-    m_canvas -> repaint();
-}
-
-
 void KisView::docImageListUpdate()
 {
     disconnectCurrentImg();
@@ -2124,10 +2123,6 @@ void KisView::layerBack()
     }
 }
 
-void KisView::layerLevel(int /*n*/)
-{
-}
-
 void KisView::layersUpdated()
 {
     KisImageSP img = currentImg();
@@ -2138,16 +2133,13 @@ void KisView::layersUpdated()
     layerUpdateGUI(img && layer);
 
     m_layerBox -> setUpdatesAndSignalsEnabled(false);
-        m_layerBox -> clear();
-
-        if (img) {
-                vKisLayerSP l = img -> layers();
-
-                for (vKisLayerSP_it it = l.begin(); it != l.end(); ++it)
-                        m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
-        }
+    m_layerBox -> clear();
 
     if (img) {
+         vKisLayerSP l = img -> layers();
+         for (vKisLayerSP_it it = l.begin(); it != l.end(); ++it)
+              m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
+        
         layerSelected( img -> index(layer) );
         m_layerBox -> slotSetCurrentItem(img -> index(layer));
     }
@@ -2155,7 +2147,7 @@ void KisView::layersUpdated()
     m_layerBox -> setUpdatesAndSignalsEnabled(true);
     m_layerBox -> updateAll();
 
-    notify();
+    notifyObservers();
 }
 
 void KisView::layersUpdated(KisImageSP img)
@@ -2174,6 +2166,7 @@ void KisView::layerToggleVisible()
 
     KNamedCommand *cmd = layer -> setVisibleCommand(!layer -> visible());
     cmd -> execute();
+    img->notify(); // We have changed the visual appearance of the image here, so notify.
     undoAdapter() -> addCommand(cmd);
 }
 
@@ -2193,24 +2186,25 @@ void KisView::layerToggleLocked()
 void KisView::layerSelected(int n)
 {
     KisImageSP img = currentImg();
-        if (!img) return;
-        KisLayerSP l = img -> layer(n);
-        if (!l) return;
+    if (!img) return;
+    
+    KisLayerSP l = img -> layer(n);
+    if (!l) return;
 
     layerUpdateGUI(img -> activateLayer(n));
-    notify();
+    notifyObservers();
 
-        Q_INT32 opacity = l -> opacity();
-        opacity = opacity * 100 / 255;
-        if (opacity)
-                opacity++;
+    Q_INT32 opacity = l -> opacity();
+    opacity = opacity * 100 / 255;
+    if (opacity)
+        opacity++;
 
-        m_layerBox -> setOpacity(opacity);
-        m_layerBox -> setColorSpace(l -> colorSpace());
-        m_layerBox -> setCompositeOp(l -> compositeOp());
+    m_layerBox -> setOpacity(opacity);
+    m_layerBox -> setColorSpace(l -> colorSpace());
+    m_layerBox -> setCompositeOp(l -> compositeOp());
     m_layerBox -> slotSetCurrentItem(n);
 
-        updateCanvas();
+    updateCanvas();
 }
 
 void KisView::scrollH(int value)
@@ -2284,24 +2278,18 @@ void KisView::setupCanvas()
     QObject::connect(m_canvas, SIGNAL(gotDropEvent(QDropEvent*)), this, SLOT(canvasGotDropEvent(QDropEvent*)));
 }
 
-void KisView::imageUpdated(KisImageSP img)
-{
-    if (img == currentImg())
-        canvasRefresh();
-}
-
 void KisView::connectCurrentImg() const
 {
     if (m_current) {
-        connect(m_current, SIGNAL(activeSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+        connect(m_current, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
-        connect(m_current, SIGNAL(layersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-        connect(m_current, SIGNAL(imageUpdated(KisImageSP)), SLOT(imageUpdated(KisImageSP)));
-
-        connect(m_current, SIGNAL(profileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
-        connect(m_current, SIGNAL(update(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
-        connect(m_current, SIGNAL(layersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
-        connect(m_current, SIGNAL(sizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+        connect(m_current, SIGNAL(sigLayersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+        connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
+        
+        connect(m_current, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
+    
+        connect(m_current, SIGNAL(sigLayersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+        connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
     }
 }
 
@@ -2316,11 +2304,6 @@ void KisView::imgUpdated(KisImageSP img, const QRect& rc)
     if (img == currentImg()) {
         updateCanvas(rc);
     }
-}
-
-void KisView::imgUpdated(KisImageSP img)
-{
-    imgUpdated(img, QRect(img -> bounds()));
 }
 
 void KisView::profileChanged(KisProfile *  /*profile*/)
@@ -2652,7 +2635,7 @@ void KisView::detach(KisCanvasObserver *observer)
         m_observers.erase(it);
 }
 
-void KisView::notify()
+void KisView::notifyObservers()
 {
     for (vKisCanvasObserver_it it = m_observers.begin(); it != m_observers.end(); ++it) {
         (*it) -> update(this);
@@ -2661,9 +2644,10 @@ void KisView::notify()
 
 KisImageSP KisView::currentImg() const
 {
-    if(m_current != m_doc -> currentImage())
+    if (m_current != m_doc -> currentImage())
     {
         m_current = m_doc -> currentImage();
+        m_current->notify();
         connectCurrentImg();
     }
 

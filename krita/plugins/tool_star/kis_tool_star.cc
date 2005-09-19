@@ -19,8 +19,8 @@
  */
 
 
-#include <math.h> 
- 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -45,9 +45,9 @@
 #include "wdg_tool_star.h"
 
 KisToolStar::KisToolStar()
-        : super(i18n("Star")),
-          m_dragging (false),
-          m_currentImage (0)
+    : super(i18n("Star")),
+      m_dragging (false),
+      m_currentImage (0)
 {
     setName("tool_star");
     // initialize ellipse tool settings
@@ -64,9 +64,9 @@ KisToolStar::~KisToolStar()
 
 void KisToolStar::update (KisCanvasSubject *subject)
 {
-        super::update (subject);
-        if (m_subject)
-            m_currentImage = m_subject->currentImg ();
+    super::update (subject);
+    if (m_subject)
+        m_currentImage = m_subject->currentImg ();
 }
 
 void KisToolStar::buttonPress(KisButtonPressEvent *event)
@@ -75,9 +75,9 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
         m_dragging = true;
         m_dragStart = event -> pos();
         m_dragEnd = event -> pos();
-                m_vertices = ((WdgToolStar*)m_optWidget) -> verticesSpinBox -> value();
-                m_innerOuterRatio = ((WdgToolStar*)m_optWidget) -> ratioSpinBox -> value();
-        }
+        m_vertices = ((WdgToolStar*)m_optWidget) -> verticesSpinBox -> value();
+        m_innerOuterRatio = ((WdgToolStar*)m_optWidget) -> ratioSpinBox -> value();
+    }
 }
 
 void KisToolStar::move(KisMoveEvent *event)
@@ -100,65 +100,65 @@ void KisToolStar::move(KisMoveEvent *event)
 
 void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 {
-        if (!m_subject || !m_currentImage)
-            return;
+    if (!m_subject || !m_currentImage)
+        return;
 
     if (m_dragging && event -> button() == LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
 
-                if (m_dragStart == m_dragEnd)
-                        return;
+        if (m_dragStart == m_dragEnd)
+            return;
 
-                if (!m_currentImage)
-                        return;
+        if (!m_currentImage)
+            return;
 
-                KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
-                KisPainter painter (device);
-                painter.beginTransaction (i18n("Star"));
+        KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
+        KisPainter painter (device);
+        painter.beginTransaction (i18n("Star"));
 
-                painter.setPaintColor(m_subject -> fgColor());
+        painter.setPaintColor(m_subject -> fgColor());
         painter.setBackgroundColor(m_subject -> bgColor());
         painter.setFillStyle(fillStyle());
         painter.setBrush(m_subject -> currentBrush());
         painter.setPattern(m_subject -> currentPattern());
-                painter.setOpacity(m_opacity);
-                painter.setCompositeOp(m_compositeOp);
+        painter.setOpacity(m_opacity);
+        painter.setCompositeOp(m_compositeOp);
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
-                //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
-                vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
+        //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+        vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
         painter.paintPolygon(coord);
         //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
-                m_currentImage -> notify( painter.dirtyRect() );
+        m_currentImage -> notify( painter.dirtyRect() );
         notifyModified();
 
-                KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-                if (adapter) {
-                        adapter -> addCommand(painter.endTransaction());
-                }
+        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+        if (adapter) {
+            adapter -> addCommand(painter.endTransaction());
         }
+    }
 }
 
 void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 {
-        if (!m_subject || !m_currentImage)
-            return;
+    if (!m_subject || !m_currentImage)
+        return;
 
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
-        QWidget *canvas = controller->canvas ();    
-        QPainter p (canvas);
-        QPen pen(Qt::SolidLine);
+    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    QWidget *canvas = controller->canvas ();
+    QPainter p (canvas);
+    QPen pen(Qt::SolidLine);
 
-        KisPoint startPos;
-        KisPoint endPos;    
-        startPos = controller -> windowToView(start);
-        endPos = controller -> windowToView(end);
+    KisPoint startPos;
+    KisPoint endPos;
+    startPos = controller -> windowToView(start);
+    endPos = controller -> windowToView(end);
 
-        p.setRasterOp(Qt::NotROP);
+    p.setRasterOp(Qt::NotROP);
 
     vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 
@@ -167,61 +167,61 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
     }
     p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
 
-        p.end ();
+    p.end ();
 }
 
 void KisToolStar::setup(KActionCollection *collection)
 {
-        m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
         shortcut.append(KShortcut(Qt::Key_F8));
         m_action = new KRadioAction(i18n("&Star"),
-                        "tool_star",
-                        shortcut,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+                                    "tool_star",
+                                    shortcut,
+                                    this,
+                                    SLOT(activate()),
+                                    collection,
+                                    name());
         Q_CHECK_PTR(m_action);
 
         m_action -> setToolTip(i18n("Draw a star"));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
-            m_innerOuterRatio=40;
-                m_vertices=5;
-        }
+        m_innerOuterRatio=40;
+        m_vertices=5;
+    }
 }
 
 vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
-        double R=0, r=0;
+    double R=0, r=0;
     Q_INT32 n=0;
-        double angle;
-        
-        vKisPoint starCoordinatesArray(2*N);
-        
-        // the radius of the outer edges
-        R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
-        
-        // the radius of the inner edges 
-        r=R*m_innerOuterRatio/100.0;
-        
-        // the angle
-        angle=-atan2((x-mx),(y-my));
-        
-        //set outer edges
-        for(n=0;n<N;n++){
-                starCoordinatesArray[2*n] = KisPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));  
-        }
-        
-        //set inner edges
-        for(n=0;n<N;n++){
-                starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle)); 
-        }
-        
-        return starCoordinatesArray;
+    double angle;
+
+    vKisPoint starCoordinatesArray(2*N);
+
+    // the radius of the outer edges
+    R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
+
+    // the radius of the inner edges
+    r=R*m_innerOuterRatio/100.0;
+
+    // the angle
+    angle=-atan2((x-mx),(y-my));
+
+    //set outer edges
+    for(n=0;n<N;n++){
+        starCoordinatesArray[2*n] = KisPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
+    }
+
+    //set inner edges
+    for(n=0;n<N;n++){
+        starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
+    }
+
+    return starCoordinatesArray;
 }
 
 QWidget* KisToolStar::createOptionWidget(QWidget* parent)

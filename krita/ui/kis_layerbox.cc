@@ -90,7 +90,6 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
         m_contextMnu -> insertItem(i18n("Visible" ), VISIBLE);
 
     m_contextMnu -> insertItem(i18n("Selection"), SELECTION);
-    m_contextMnu -> insertItem(i18n("Level"), mnu, LEVEL);
 
     if (f & SHOWLINKED)
         m_contextMnu -> insertItem(i18n("Linked"), LINKING);
@@ -181,9 +180,6 @@ void KisLayerBox::slotMenuAction(int mnuId)
     case BACK:
         emit itemBack();
         break;
-    case LEVEL:
-        emit itemLevel(n);
-        break;
     case LOCKING:
         emit itemToggleLocked();
     }
@@ -203,7 +199,6 @@ void KisLayerBox::slotAboutToShow()
 
     m_contextMnu -> setItemEnabled(VISIBLE, enabled);
     m_contextMnu -> setItemEnabled(SELECTION, enabled);
-    m_contextMnu -> setItemEnabled(LEVEL, m_lst -> listLayers -> count() > 1);
     m_contextMnu -> setItemEnabled(LINKING, enabled);
     m_contextMnu -> setItemEnabled(LOCKING, enabled);
     m_contextMnu -> setItemEnabled(PROPERTIES, enabled);

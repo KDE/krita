@@ -54,7 +54,6 @@ signals:
 protected:
     virtual void update(KoIconItem *item) = 0;
     QWidget *chooserWidget() const;
-    void notify();
 
 private slots:
     void slotItemSelected(KoIconItem *item);

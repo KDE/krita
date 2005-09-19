@@ -57,10 +57,6 @@ public:
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
 
-private:
-    // Composite the specified tile onto the projection layer.
-    virtual void renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-
 public:
     /// Paint the specified rect onto the painter, adjusting the colors using the
     /// given profile. The exposure setting is used if the image has a high dynamic range.
@@ -102,12 +98,6 @@ public:
 
     KisColorSpace * colorSpace() const;
     void setColorSpace(KisColorSpace * colorSpace);
-
-    KURL uri() const;
-    void uri(const KURL& uri);
-
-    KoUnit::Unit unit() const;
-    void unit(const KoUnit::Unit& u);
 
     // Resolution of the image == XXX: per inch?
     double xRes();
@@ -178,7 +168,6 @@ public:
     KCommand *topLayerCommand(KisLayerSP layer);
     KCommand *bottomLayerCommand(KisLayerSP layer);
 
-
     // Merge all visible layers and discard hidden ones.
     void flatten();
 
@@ -194,7 +183,6 @@ public:
     QRect bounds() const;
 
     void notify();
-    void notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height);
     void notify(const QRect& rc);
 
     void notifyLayersChanged();
@@ -208,24 +196,38 @@ public:
      * If the annotation already exists, overwrite it with this one.
      */
     void addAnnotation(KisAnnotationSP annotation);
+
     /** get the annotation with the given type, can return 0 */
     KisAnnotationSP annotation(QString type);
+
     /** delete the annotation, if the image contains it */
     void removeAnnotation(QString type);
+
     /** start of an iteration over the annotations of this image (including the ICC Profile) */
     vKisAnnotationSP_it beginAnnotations();
+
     /** end of an iteration over the annotations of this image */
     vKisAnnotationSP_it endAnnotations();
 
 signals:
-    void activeSelectionChanged(KisImageSP image);
-    void selectionChanged(KisImageSP image);
-    void update(KisImageSP image, const QRect& rc);
-    void layersChanged(KisImageSP image);
-    void layersUpdated(KisImageSP image);
-    void imageUpdated(KisImageSP img);
-    void sizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
-    void profileChanged(KisProfile *  profile);
+    void sigActiveSelectionChanged(KisImageSP image);
+    void sigSelectionChanged(KisImageSP image);
+    void sigLayersChanged(KisImageSP image);
+    void sigLayersUpdated(KisImageSP image);
+
+    /**
+     * Emitted whenever an action has caused the image to be recomposited. This happens
+     * after calls to notify().
+     *
+     * @param image this image (useful in case something has more than one image, but that
+     *               hasn't happened in a year, because we no longer have more than one image
+     *               in a doc
+     * @param rc The rect that has been recomposited.
+     */
+    void sigImageUpdated(KisImageSP image, const QRect& rc);
+
+    void sigSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
+    void sigProfileChanged(KisProfile *  profile);
 
 
 public slots:
@@ -276,7 +278,7 @@ private:
     KisImageIface *m_dcop;
 
     vKisAnnotationSP m_annotations;
-    bool m_paintInit;
+
 #ifdef __BIG_ENDIAN__
     cmsHTRANSFORM m_bigEndianTransform;
 #endif

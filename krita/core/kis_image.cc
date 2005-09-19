@@ -94,7 +94,7 @@ namespace {
                 m_adapter -> setUndo(false);
                 m_img -> resize(m_after.width(), m_after.height());
                 m_adapter -> setUndo(true);
-                m_img -> notify(0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height()));
+                m_img -> notify(QRect( 0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height())) );
             }
 
         virtual void unexecute()
@@ -102,7 +102,7 @@ namespace {
                 m_adapter -> setUndo(false);
                 m_img -> resize(m_before.width(), m_before.height());
                 m_adapter -> setUndo(true);
-                m_img -> notify(0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height()));
+                m_img -> notify(QRect( 0, 0, QMAX(m_before.width(), m_after.width()), QMAX(m_before.height(), m_after.height())) );
             }
 
     private:
@@ -564,8 +564,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace *
     Q_CHECK_PTR(m_bkg);
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
-
-
     Q_CHECK_PTR(m_projection);
 
     m_xres = 1.0;
@@ -585,7 +583,6 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace *
                                               INTENT_PERCEPTUAL,
                                               0);
 #endif
-    m_paintInit = true;
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
@@ -621,7 +618,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
             m_adapter -> endMacro();
         }
 
-        emit sizeChanged(KisImageSP(this), w, h);
+        emit sigSizeChanged(KisImageSP(this), w, h);
         notify();
     }
 }
@@ -680,7 +677,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
             m_adapter->endMacro();
         }
         notify();
-        emit sizeChanged(KisImageSP(this), w, h);
+        emit sigSizeChanged(KisImageSP(this), w, h);
 
     }
 }
@@ -739,7 +736,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
     undoAdapter()->endMacro();
 
-    emit sizeChanged(KisImageSP(this), w, h);
+    emit sigSizeChanged(KisImageSP(this), w, h);
     notify();
 }
 
@@ -804,7 +801,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         undoAdapter()->endMacro();
 
-        emit sizeChanged(KisImageSP(this), w, h);
+        emit sigSizeChanged(KisImageSP(this), w, h);
         notify();
     }
 }
@@ -850,7 +847,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile
 
     notify();
     notifyLayersChanged();
-
 }
 
 KisProfile *  KisImage::profile() const
@@ -860,6 +856,7 @@ KisProfile *  KisImage::profile() const
 
 void KisImage::setProfile(const KisProfile * profile)
 {
+    // XXX: When we set a new profile, we should do a transform!
     if (profile && profile -> valid()) {
         m_profile = const_cast<KisProfile *>( profile );
         m_projection -> setProfile(const_cast<KisProfile *>( profile ));
@@ -869,28 +866,7 @@ void KisImage::setProfile(const KisProfile * profile)
         m_projection -> setProfile(m_profile);
     }
     notify();
-    emit(profileChanged(m_profile));
-}
-
-KURL KisImage::uri() const
-{
-    return m_uri;
-}
-
-void KisImage::uri(const KURL& uri)
-{
-    if (uri.isValid())
-        m_uri = uri;
-}
-
-KoUnit::Unit KisImage::unit() const
-{
-    return m_unit;
-}
-
-void KisImage::unit(const KoUnit::Unit& u)
-{
-    m_unit = u;
+    emit(sigProfileChanged(m_profile));
 }
 
 double KisImage::xRes()
@@ -962,7 +938,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
                 m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
             m_doc->setModified(true);
             layer -> setVisible(true);
-            emit layersUpdated(this);
+            emit sigLayersUpdated(this);
         }
     }
 
@@ -988,7 +964,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& composi
                 m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
             m_doc->setModified(true);
             layer -> setVisible(true);
-            emit layersUpdated(this);
+            emit sigLayersUpdated(this);
         }
     }
 
@@ -1008,10 +984,7 @@ KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
         m_adapter->addCommand(new LayerAddCmd(m_adapter, this, l));
 
     l -> setVisible(true);
-    emit layersUpdated(this);
-
-    if (!m_adapter->undo())
-        emit imageUpdated(this);
+    emit sigLayersUpdated(this);
 
     return l;
 }
@@ -1025,10 +998,7 @@ void KisImage::layerRemove(KisLayerSP layer)
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer));
 
         rm(layer);
-        emit layersUpdated(this);
-
-        if (!m_adapter->undo())
-            emit imageUpdated(this);
+        emit sigLayersUpdated(this);
     }
 }
 
@@ -1064,7 +1034,7 @@ void KisImage::layerNext(KisLayerSP l)
         }
 
         m_doc->setModified(true);
-        emit layersUpdated(this);
+        emit sigLayersUpdated(this);
     }
 }
 
@@ -1100,7 +1070,7 @@ void KisImage::layerPrev(KisLayerSP l)
         }
 
         m_doc->setModified(true);
-        emit layersUpdated(this);
+        emit sigLayersUpdated(this);
     }
 }
 
@@ -1122,8 +1092,9 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
         }
 
         m_doc->setModified(true);
-        emit layersUpdated(this);
-        emit imageUpdated(this);
+        emit sigLayersUpdated(this);
+
+        notify();
     }
 }
 
@@ -1558,24 +1529,6 @@ void KisImage::enableUndo(KoCommandHistory *history)
     m_undoHistory = history;
 }
 
-void KisImage::renderToProjection(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-    KisPainter gc;
-
-    gc.begin(m_projection.data());
-
-    gc.bitBlt(x, y, COMPOSITE_COPY, m_bkg.data(), x, y, w, h);
-
-    if (!m_layers.empty()) {
-        KisFlatten<flattenAllVisible> visitor(x, y, w, h);
-
-        visitor(gc, m_layers);
-
-    }
-
-    gc.end();
-}
-
 void KisImage::renderToPainter(Q_INT32 x1,
                                Q_INT32 y1,
                                Q_INT32 x2,
@@ -1590,11 +1543,6 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
-
-//    if (m_paintInit) {
-    renderToProjection(x1, y1, w, h);
-//        m_paintInit = false;
-//    }
 
     QImage img = m_projection->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
@@ -1654,27 +1602,35 @@ KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 
 void KisImage::notify()
 {
-    notify(0, 0, width(), height());
-}
-
-void KisImage::notify(Q_INT32 x, Q_INT32 y, Q_INT32 width, Q_INT32 height)
-{
-    notify(QRect(x, y, width, height));
+    notify(QRect(0, 0, width(), height()));
 }
 
 void KisImage::notify(const QRect& rc)
 {
-    //renderToProjection(rc.x(), rc.y(), rc.width(), rc.height());
+    // Composite the image
+    KisPainter gc;
+
+    gc.begin(m_projection.data());
+
+    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_bkg.data(), rc.x(), rc.y(), rc.width(), rc.height());
+
+    if (!m_layers.empty()) {
+        KisFlatten<flattenAllVisible> visitor(rc.x(), rc.y(), rc.width(), rc.height());
+        visitor(gc, m_layers);
+    }
+
+    gc.end();
+
 
     if (rc.isValid()) {
-        emit update(KisImageSP(this), rc);
+        emit sigImageUpdated(KisImageSP(this), rc);
     }
 
 }
 
 void KisImage::notifyLayersChanged()
 {
-    emit layersChanged(KisImageSP(this));
+    emit sigLayersChanged(KisImageSP(this));
 }
 
 QRect KisImage::bounds() const
@@ -1696,7 +1652,7 @@ void KisImage::slotSelectionChanged()
 {
 //     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
     notify();
-    emit activeSelectionChanged(KisImageSP(this));
+    emit sigActiveSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
@@ -1705,7 +1661,7 @@ void KisImage::slotSelectionChanged(const QRect& r)
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
     notify(r2);
-    emit activeSelectionChanged(KisImageSP(this));
+    emit sigActiveSelectionChanged(KisImageSP(this));
 }
 
 KisColorSpace * KisImage::colorSpace() const

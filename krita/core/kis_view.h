@@ -233,7 +233,7 @@ private:
     // Implement KisCanvasSubject
     virtual void attach(KisCanvasObserver *observer);
     virtual void detach(KisCanvasObserver *observer);
-    virtual void notify();
+    virtual void notifyObservers();
 
     virtual KisColor bgColor() const;
     virtual void setBGColor(const KisColor& c);
@@ -335,14 +335,11 @@ public slots:
     void layerLower();
     void layerFront();
     void layerBack();
-    void layerLevel(int n);
     void flattenImage();
     void mergeVisibleLayers();
     void mergeLayer();
     void mergeLinkedLayers();
     void saveLayerAsImage();
-
-    void imageUpdated(KisImageSP img);
 
     void brushActivated(KisResource *brush);
     void patternActivated(KisResource *pattern);
@@ -353,9 +350,6 @@ public slots:
     void scrollV(int value);
 
     void slotInsertImageAsLayer();
-
-    void imgUpdated(KisImageSP img, const QRect& rc);
-    void imgUpdated(KisImageSP img);
 
     void profileChanged(KisProfile *  profile);
 
@@ -371,6 +365,9 @@ public slots:
 
 private slots:
 
+    // Connected to KisImage::sigImageUpdated
+    void imgUpdated(KisImageSP img, const QRect& rc);
+    
     void canvasGotMoveEvent(KisMoveEvent *e);
     void canvasGotButtonPressEvent(KisButtonPressEvent *e);
     void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);

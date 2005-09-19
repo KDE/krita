@@ -66,7 +66,7 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
         tools.push_back(tool);
     }
 
-    subject -> notify();
+    subject -> notifyObservers();
 
     return tools;
 }

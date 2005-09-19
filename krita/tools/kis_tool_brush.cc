@@ -49,6 +49,7 @@ KisToolBrush::KisToolBrush()
     setCursor(KisCursor::brushCursor());
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
+    m_paintedOutline = false;
     Q_CHECK_PTR(m_timer);
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
@@ -81,6 +82,8 @@ void KisToolBrush::initPaint(KisEvent *e)
     super::initPaint(e);
 
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
+    
+    m_subject -> canvasController() -> canvas() -> update(); // remove the outline
 
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
     
@@ -120,18 +123,25 @@ void KisToolBrush::move(KisMoveEvent *e) {
         paintOutline(e -> pos());
 }
 
+void KisToolBrush::leave(QEvent *e) {
+    m_subject -> canvasController() -> canvas() -> update(); // remove the outline
+}
+
 void KisToolBrush::paintOutline(const KisPoint& point) {
     if (!m_subject) {
         return;
     }
 
+    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+
     if (currentImage() &&
         ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {
+        if (m_paintedOutline) {
+            controller -> canvas() -> update();
+            m_paintedOutline = false;
+        }
         return;
     }
-
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
-    //controller -> canvas() -> update();
 
     QWidget *canvas = controller -> canvas();
     canvas -> repaint();
@@ -152,6 +162,7 @@ void KisToolBrush::paintOutline(const KisPoint& point) {
                         (- controller -> vertValue()) / m_subject -> zoomFactor());
         gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
         brush -> boundary().paint(gc);
+        m_paintedOutline = true;
     }
 }
 

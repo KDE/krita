@@ -49,6 +49,7 @@ protected:
     virtual void initPaint(KisEvent *e);
     virtual void endPaint();
     virtual void move(KisMoveEvent *e);
+    virtual void leave(QEvent *e);
 
     void paintOutline(const KisPoint& point);
 
@@ -59,6 +60,7 @@ private slots:
 private:
     Q_INT32 m_rate;
     QTimer * m_timer;
+    bool m_paintedOutline;
 
 
 };

@@ -23,6 +23,8 @@
 #include <qpainter.h>
 #include <qframe.h>
 
+#include <kdebug.h>
+#include <kglobalsettings.h>
 #include <kaction.h>
 #include <ktoolbar.h>
 #include <knuminput.h>
@@ -65,13 +67,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomListener * zoomListener,
     m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
 
     
-    QRect r = thumbnailProvider->pixelSize();
-    QImage img =  thumbnailProvider->image(r);
-    img = img.smoothScale(m_page->view->width(), m_page->view->height(), QImage::ScaleMin);
-    m_buffer = QPixmap(img);
-    QPainter p(m_page->view);
-    p.drawImage(0, 0, img);
-    p.end();
+
     
     l->addWidget(m_page);
 }
@@ -116,9 +112,23 @@ void KoBirdEyePanel::updateVisibleArea()
     int w = visibleRect.width();
     int h = visibleRect.height();
     
-    QPainter painter(m_page->view, m_page->view);
+    QRect r = m_thumbnailProvider->pixelSize();
+    QImage img = m_thumbnailProvider->image(r);
+    img = img.smoothScale(m_page->view->width(), m_page->view->height(), QImage::ScaleMin);
+    
+    QPainter painter(m_page->view);
+    
+    painter.fillRect(0, 0, m_page->view->width(), m_page->view->height(), KGlobalSettings::baseColor());
+    
+    int imgx = 0;
+    int imgy = 0;
+    if (img.width() < 150) imgx = (150 - img.width()) / 2;
+    if (img.height() < 150) imgy = (150 - img.height()) / 2;
+
+    kdDebug() << "Image: " << img.width() << ", " << img.height() << ", x: " << imgx << ", y: " << imgy << "\n";
+    painter.drawImage(imgx, imgy, img, 0, 0, img.width(), img.height());
+
     painter.setPen(red);
-    painter.drawPixmap(QPoint(0, 0), m_buffer);
     painter.drawRect(x, y, w, h);
     painter.setPen(red.light());
     painter.drawRect(x-1, y-1, w+2, h+2);

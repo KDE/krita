@@ -31,7 +31,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     : super(parent, name)
 {
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
-    m_slSpacing = new KisDoubleWidget(0.3, 10, this, "double_widget");
+    m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
     m_slSpacing -> setTickmarks(QSlider::Below);
     m_slSpacing -> setTickInterval(1);
     QObject::connect(m_slSpacing, SIGNAL(valueChanged(double)), this, SLOT(slotSetItemSpacing(double)));

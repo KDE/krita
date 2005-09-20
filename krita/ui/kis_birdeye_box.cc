@@ -124,21 +124,23 @@ KisBirdEyeBox::KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget* parent, 
     , m_canvasSubject(canvasSubject)
 {
     QVBoxLayout * l = new QVBoxLayout(this);
-    
+
     KoZoomListener * kzl = new ViewZoomListener(canvasSubject->canvasController());
     KoThumbnailProvider * ktp = new ImageThumbnailProvider(canvasSubject->currentImg(), canvasSubject);
     KoPixelCanvas * kpc = new ViewCanvas(m_canvasSubject);
-    
+
     m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, kpc, this);
     l->addWidget(m_birdEyePanel);
-    
+
     QHBoxLayout * hl = new QHBoxLayout(l);
 
     hl->addWidget(new QLabel(i18n("Exposure:"), this));
-    
+
     m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, this);
     hl->addWidget(m_exposureDoubleWidget);
-    
+
+    l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
+
     m_exposureDoubleWidget -> setPrecision(1);
     m_exposureDoubleWidget -> setValue(0);
     m_exposureDoubleWidget -> setLineStep(0.1);
@@ -147,7 +149,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget* parent, 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
-    
+
     m_draggingExposureSlider = false;
 }
 

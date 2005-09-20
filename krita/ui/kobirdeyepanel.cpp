@@ -67,7 +67,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomListener * zoomListener,
     
     QRect r = thumbnailProvider->pixelSize();
     QImage img =  thumbnailProvider->image(r);
-    img.smoothScale(m_page->view->width(), m_page->view->height(), QImage::ScaleMin);
+    img = img.smoothScale(m_page->view->width(), m_page->view->height(), QImage::ScaleMin);
     m_buffer = QPixmap(img);
     QPainter p(m_page->view);
     p.drawImage(0, 0, img);

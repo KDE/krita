@@ -50,7 +50,7 @@ void KisToolPan::update(KisCanvasSubject *subject)
 void KisToolPan::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         m_origScrollX = controller -> horzValue();
         m_origScrollY = controller -> vertValue();
@@ -63,7 +63,7 @@ void KisToolPan::buttonPress(KisButtonPressEvent *e)
 void KisToolPan::move(KisMoveEvent *e)
 {
     if (m_subject && m_dragging) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         KisPoint currPos = controller -> windowToView(e -> pos());
         KisPoint delta = currPos - m_dragPos;
@@ -74,7 +74,7 @@ void KisToolPan::move(KisMoveEvent *e)
 void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         setCursor(m_openHandCursor);
         m_dragging = false;
     }

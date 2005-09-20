@@ -92,7 +92,7 @@ void KisToolSelectRectangular::paint(QPainter& gc, const QRect& rc)
 void KisToolSelectRectangular::clearSelection()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisImageSP img = m_subject -> currentImg();
 
         Q_ASSERT(controller);
@@ -230,7 +230,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 void KisToolSelectRectangular::paintOutline()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -242,7 +242,7 @@ void KisToolSelectRectangular::paintOutline()
 void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::DotLine);

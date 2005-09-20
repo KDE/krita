@@ -21,12 +21,40 @@
 #ifndef KO_BIRD_EYE_PANEL
 #define KO_BIRD_EYE_PANEL
 
+#include <qrect.h>
 #include <qwidget.h>
 
-class QPixmap;
-class KoDocument;
+#include <koPoint.h>
 
+class QPixmap;
+class KAction;
+class KoDocument;
 class WdgBirdEye;
+
+
+class KoPixelCanvas {
+
+public:
+    
+    KoPixelCanvas();
+    virtual ~KoPixelCanvas();
+
+    /**
+     * Returns the area of the document that is visible, in pixels
+     */
+    virtual QRect visibleArea() = 0;
+    
+    /**
+     * Returns the total area of the document in pixels. Use KoPageLayout and KoZoomhandler
+     * to take care of zoom, points and whatnot when computing this.
+     */
+    virtual QRect size() = 0;
+    
+    /**
+     * Show pt in the center of the view
+     */
+    virtual void setViewCenterPoint(Q_INT32 x, Q_INT32 y) = 0;
+};
 
 /**
  * The zoom listener interface defines methods that the bird eye
@@ -35,15 +63,15 @@ class WdgBirdEye;
  */
 class KoZoomListener {
 
-    public:
+public:
 
     KoZoomListener();
     virtual ~KoZoomListener();
 
     /**
-     * Set the zoom level to the specified percentage.
+     * Zoom to the specified factor around the point x and y
      */
-    virtual void zoomTo(int) = 0;
+    virtual void zoomTo(Q_INT32 x, Q_INT32 y, double factor ) = 0;
     
     /**
      * Zoom one step in.
@@ -56,14 +84,14 @@ class KoZoomListener {
     virtual void zoomOut() = 0;
     
     /**
-     * Get the minimum zoom percentage that this listener supports.
+     * Get the minimum zoom factor that this listener supports.
      */
-    virtual int getMinZoom() = 0;
+    virtual double getMinZoom() = 0;
 
     /**
-     * Get the maximum zoom percentage that this listener supports.
+     * Get the maximum zoom factor that this listener supports.
      */
-    virtual int getMaxZoom() = 0;
+    virtual double getMaxZoom() = 0;
 
 };
 
@@ -87,11 +115,11 @@ class KoThumbnailProvider
         
         /**
          * Returns the specified rectangle as a QImage. The image should zoomed
-         * to 100%; the bird eye widget takes care of zoom levels.
+         * to 100%; the bird eye widget takes care of fitting it into the frame.
          *
          * @param r the rect that is to be rendered onto the QImage
          */
-        virtual QPixmap image(QRect r) = 0;
+        virtual QImage image(QRect r) = 0;
 };
 
 /**
@@ -116,11 +144,14 @@ public:
      */
     KoBirdEyePanel( KoZoomListener * zoomListener, 
                     KoThumbnailProvider * thumbnailProvider,
+                    KoPixelCanvas * canvas,
                     QWidget * parent,
                     const char * name = 0,
                     WFlags f = 0 );
 
     virtual ~KoBirdEyePanel();
+
+    bool eventFilter(QObject*, QEvent*);
 
 public slots:
 
@@ -134,6 +165,9 @@ public slots:
      */
     void slotCanvasZoomChanged(int);
     
+    void zoomMinus();
+    void zoomPlus();
+
     /**
      * Connect to this slot if a (rectangular) area of your document is changed.
      * 
@@ -142,15 +176,35 @@ public slots:
      * @param docrect The boundaries of the entire document we thumbnail 
      */
     void slotUpdate(const QRect & r, const QImage & img, const QRect & docrect);
+
+protected slots:
+
+    void updateVisibleArea();
+
+protected:
     
+    void updateView();
+    void handleMouseMove(QPoint);
+    void handleMouseMoveAction(QPoint);
+    void handleMousePress(QPoint);
+
 private:
     
     WdgBirdEye * m_page;
     
     KoZoomListener * m_zoomListener;
     KoThumbnailProvider * m_thumbnailProvider;
+    KoPixelCanvas * m_canvas;
     
-    QPixmap * m_pixmap;
+    KAction* m_zoomIn;
+    KAction* m_zoomOut;
+    QPixmap m_buffer;
+
+    QRect m_visibleArea;
+    AlignmentFlags m_aPos;
+    bool m_handlePress;
+    QPoint m_lastPos;
+
 };
 
 #endif

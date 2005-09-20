@@ -132,7 +132,7 @@ void KisToolBrush::paintOutline(const KisPoint& point) {
         return;
     }
 
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject -> canvasController();
 
     if (currentImage() &&
         ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {

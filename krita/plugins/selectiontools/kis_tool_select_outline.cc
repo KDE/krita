@@ -175,7 +175,7 @@ void KisToolSelectOutline::paint(QPainter& gc, const QRect&)
 void KisToolSelectOutline::draw()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
 
@@ -194,7 +194,7 @@ void KisToolSelectOutline::draw(QPainter& gc)
         gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
 
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisPoint start, end;
         QPoint startPos;
         QPoint endPos;
@@ -208,7 +208,7 @@ void KisToolSelectOutline::draw(QPainter& gc)
 void KisToolSelectOutline::clear()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
 

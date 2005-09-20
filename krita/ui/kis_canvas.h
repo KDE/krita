@@ -88,7 +88,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
-        virtual void tabletEvent(QTabletEvent *event);
+    virtual void tabletEvent(QTabletEvent *event);
     virtual void enterEvent(QEvent *event );
     virtual void leaveEvent(QEvent *event);
     virtual void wheelEvent(QWheelEvent *event);

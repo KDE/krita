@@ -24,8 +24,7 @@
 
 class KoBirdEyePanel;
 class KisDoubleWidget;
-class KisView;
-
+class KisCanvasSubject;
 
 class KisBirdEyeBox : public QWidget
 { 
@@ -33,7 +32,7 @@ class KisBirdEyeBox : public QWidget
 
 public:
 
-    KisBirdEyeBox(KisView * view, QWidget * parent = 0, const char* name=0);
+    KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget * parent = 0, const char* name=0);
     ~KisBirdEyeBox();
 
 protected slots:
@@ -42,13 +41,10 @@ protected slots:
     void exposureSliderPressed();
     void exposureSliderReleased();
 
-signals:
-    void exposureChanged(float exposure);
-
 private:
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;
-    
+    KisCanvasSubject * m_canvasSubject;
     bool m_draggingExposureSlider;
 };
 

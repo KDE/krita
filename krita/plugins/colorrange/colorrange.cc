@@ -73,7 +73,7 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
     } else if (parent -> inherits("KisView")) {
         m_view = dynamic_cast<KisView*>(parent);
 
-        m_view -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
+        m_view -> getCanvasSubject() -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
     }
 }
@@ -84,7 +84,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+    KisLayerSP layer = m_view -> getCanvasSubject() -> currentImg() -> activeLayer();
     if (!layer) return;
 
     DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");

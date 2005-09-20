@@ -31,7 +31,7 @@ class KisCanvasSubject;
 class KisView;
 class KisTool;
 class KisToolRegistry;
-class KisCanvasControllerInterface;
+class KisCanvasController;
 class KoPaletteManager;
 class KoToolBox;
 
@@ -45,7 +45,7 @@ class KisToolManager : public QObject, public KisToolControllerInterface {
 
 public:
 
-    KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInterface * controller);
+    KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller);
     ~KisToolManager();
 
 public:
@@ -81,7 +81,7 @@ private:
     InputDeviceToolSetMap m_inputDeviceToolSetMap;
     
     KisCanvasSubject * m_subject;
-    KisCanvasControllerInterface * m_controller;
+    KisCanvasController * m_controller;
 
     KoPaletteManager * m_paletteManager;
     KActionCollection * m_actionCollection;

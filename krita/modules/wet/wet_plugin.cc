@@ -113,8 +113,8 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
         w -> setCaption(i18n("Watercolors"));
 
-        m_view->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
-        m_view->paletteManager()->showWidget("hsvwidget");
+        m_view->getCanvasSubject()->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
+        m_view->getCanvasSubject()->paletteManager()->showWidget("hsvwidget");
 
         m_view->getCanvasSubject() -> attach(w);
     }

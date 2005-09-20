@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include "kis_doc.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"

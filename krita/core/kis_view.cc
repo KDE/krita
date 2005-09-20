@@ -305,23 +305,22 @@ KoPaletteManager * KisView::paletteManager()
 void KisView::createLayerBox()
 {
     m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, this);
-        m_layerBox -> setCaption(i18n("Layers"));
+    m_layerBox -> setCaption(i18n("Layers"));
 
-        connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
-        connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
-        connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
-        connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
-        connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
-        connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
-        connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
-        connect(m_layerBox, SIGNAL(itemRaise()), this, SLOT(layerRaise()));
-        connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
-        connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
-        connect(m_layerBox, SIGNAL(itemBack()), this, SLOT(layerBack()));
-        connect(m_layerBox, SIGNAL(opacityChanged(int)), this, SLOT(layerOpacity(int)));
-        connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
-        connect(this, SIGNAL(currentLayerChanged(int)), m_layerBox, SLOT(slotSetCurrentItem(int)));
-
+    connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
+    connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
+    connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
+    connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
+    connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
+    connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
+    connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
+    connect(m_layerBox, SIGNAL(itemRaise()), this, SLOT(layerRaise()));
+    connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
+    connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
+    connect(m_layerBox, SIGNAL(itemBack()), this, SLOT(layerBack()));
+    connect(m_layerBox, SIGNAL(opacityChanged(int)), this, SLOT(layerOpacity(int)));
+    connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
+    
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 
 }
@@ -452,8 +451,6 @@ void KisView::setupStatusBar()
 
         lbl = new KisLabelCursorPos(sb);
         connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
-        connect(this, SIGNAL(cursorEnter()), lbl, SLOT(enter()));
-        connect(this, SIGNAL(cursorLeave()), lbl, SLOT(leave()));
         addStatusBarItem(lbl, 0);
 
         m_statusBarZoomLabel = new QLabel(sb);
@@ -879,7 +876,7 @@ void KisView::imgUpdateGUI()
     updateStatusBarProfileLabel();
 }
 
-void KisView::zoomUpdateGUI(Q_INT32 x, Q_INT32 y, double zf)
+void KisView::zoomAroundPoint(Q_INT32 x, Q_INT32 y, double zf)
 {
     // Disable updates while we change the scrollbar settings.
     m_canvas -> setUpdatesEnabled(false);
@@ -968,7 +965,7 @@ void KisView::zoomTo(const KisRect& r)
         Q_INT32 cx = qRound(r.center().x());
         Q_INT32 cy = qRound(r.center().y());
 
-        zoomUpdateGUI(cx, cy, zf);
+        zoomAroundPoint(cx, cy, zf);
     }
 }
 
@@ -985,13 +982,13 @@ void KisView::zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
     if (zoom() <= KISVIEW_MAX_ZOOM)
-        zoomUpdateGUI(x, y, zoom() * 2);
+        zoomAroundPoint(x, y, zoom() * 2);
 }
 
 void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 {
     if (zoom() >= KISVIEW_MIN_ZOOM)
-        zoomUpdateGUI(x, y, zoom() / 2);
+        zoomAroundPoint(x, y, zoom() / 2);
 }
 
 void KisView::zoomIn()
@@ -1007,60 +1004,25 @@ void KisView::zoomOut()
 void KisView::slotZoomIn()
 {
     if (zoom() <= KISVIEW_MAX_ZOOM)
-        zoomUpdateGUI(-1, -1, zoom() * 2);
+        zoomAroundPoint(-1, -1, zoom() * 2);
 }
 
 void KisView::slotZoomOut()
 {
     if (zoom() >= KISVIEW_MIN_ZOOM)
-        zoomUpdateGUI(-1, -1, zoom() / 2);
+        zoomAroundPoint(-1, -1, zoom() / 2);
 }
 
 void KisView::slotActualPixels()
 {
-    zoomUpdateGUI(-1, -1, 1.0);
+    zoomAroundPoint(-1, -1, 1.0);
 }
 
 void KisView::slotActualSize()
 {
     //XXX later this should be update to take screen res and image res into consideration
-    zoomUpdateGUI(-1, -1, 1.0);
+    zoomAroundPoint(-1, -1, 1.0);
 }
-
-void KisView::next_layer()
-{
-    KisImageSP img = currentImg();
-    KisLayerSP layer;
-
-    if (!img)
-        return;
-
-    layer = img -> activeLayer();
-
-    if (layer) {
-        img->layerNext(layer);
-        resizeEvent(0);
-        updateCanvas();
-    }
-}
-
-void KisView::previous_layer()
-{
-    KisImageSP img = currentImg();
-    KisLayerSP layer;
-
-    if (!img)
-        return;
-
-    layer = img -> activeLayer();
-
-    if (layer) {
-        img->layerPrev(layer);
-        resizeEvent(0);
-        updateCanvas();
-    }
-}
-
 
 void KisView::imgResizeToActiveLayer()
 {
@@ -1174,7 +1136,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 layer -> setImage(current);
                 layer -> setName(current -> nextLayerName());
                 current->layerAdd(layer, 0);
-                emit currentLayerChanged(img -> index(layer));
+                m_layerBox->slotSetCurrentItem(img -> index(layer));
             }
             resizeEvent(0);
             updateCanvas();
@@ -1319,32 +1281,6 @@ void KisView::shearLayer(double angleX, double angleY)
     resizeEvent(0);
     updateCanvas();
     canvasRefresh();
-}
-
-void KisView::cropLayer(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-    if (!currentImg()) return;
-
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
-
-    KisUndoAdapter * undo = 0;
-    KisTransaction * t = 0;
-    if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
-        Q_CHECK_PTR(t);
-    }
-
-    if (undo) undo -> addCommand(t);
-
-    layer -> crop(x, y, w, h);
-
-    m_doc -> setModified(true);
-    layersUpdated();
-    resizeEvent(0);
-    updateCanvas();
-    canvasRefresh();
-
 }
 
 void KisView::flattenImage()
@@ -1545,14 +1481,12 @@ void KisView::paintopActivated(const KisID & paintop)
 
 void KisView::setBGColor(const KisColor& c)
 {
-    emit bgColorChanged(c);
     m_bg = c;
     notifyObservers();
 }
 
 void KisView::setFGColor(const KisColor& c)
 {
-    emit fgColorChanged(c);
     m_fg = c;
     notifyObservers();
 }
@@ -1901,7 +1835,7 @@ void KisView::docImageListUpdate()
 {
     disconnectCurrentImg();
     m_current = 0;
-    zoomUpdateGUI(0, 0, 1.0);
+    zoomAroundPoint(0, 0, 1.0);
     resizeEvent(0);
     updateCanvas();
 
@@ -1982,7 +1916,7 @@ void KisView::layerAdd()
         if (dlg.exec() == QDialog::Accepted) {
             KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceRegistry::instance() -> get(dlg.colorSpaceID()));
             if (layer) {
-                emit currentLayerChanged(img -> index(layer));
+                m_layerBox->slotSetCurrentItem(img -> index(layer));
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2029,7 +1963,7 @@ void KisView::layerRemove()
             Q_INT32 n = img -> index(layer);
 
             img->layerRemove(layer);
-            emit currentLayerChanged(n - 1);
+            m_layerBox->slotSetCurrentItem(n - 1);
             resizeEvent(0);
             updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2055,7 +1989,7 @@ void KisView::layerDuplicate()
     KisLayerSP layer = img->layerAdd(dup, index);
 
     if (layer) {
-        emit currentLayerChanged(img -> index(layer));
+        m_layerBox->slotSetCurrentItem(img -> index(layer));
         resizeEvent(0);
         updateCanvas(0, 0, img -> width(), img -> height());
     } else {
@@ -2146,7 +2080,7 @@ void KisView::layersUpdated()
 
     m_layerBox -> setUpdatesAndSignalsEnabled(true);
     m_layerBox -> updateAll();
-
+    img->notify();
     notifyObservers();
 }
 
@@ -2694,9 +2628,9 @@ KisUndoAdapter *KisView::undoAdapter() const
     return m_adapter;
 }
 
-KisCanvasControllerInterface *KisView::canvasController() const
+KisCanvasController *KisView::canvasController() const
 {
-    return const_cast<KisCanvasControllerInterface*>(static_cast<const KisCanvasControllerInterface*>(this));
+    return const_cast<KisCanvasController*>(static_cast<const KisCanvasController*>(this));
 }
 
 KisToolControllerInterface *KisView::toolController() const
@@ -2704,9 +2638,9 @@ KisToolControllerInterface *KisView::toolController() const
     return const_cast<KisToolControllerInterface*>(static_cast<const KisToolControllerInterface*>(m_toolManager));
 }
 
-KoDocument *KisView::document() const
+KisDoc *KisView::document() const
 {
-    return koDocument();
+    return m_doc;
 }
 
 KisProgressDisplayInterface *KisView::progressDisplay() const
@@ -2758,7 +2692,6 @@ void KisView::createDockers()
     m_birdEyeBox = new KisBirdEyeBox(this);
     m_birdEyeBox -> setCaption(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
-    connect(m_birdEyeBox, SIGNAL(exposureChanged(float)), this, SLOT(setHDRExposure(float)));
 
     m_hsvwidget = new KisHSVWidget(this, "hsv");
     m_hsvwidget -> setCaption(i18n("HSV"));

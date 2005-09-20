@@ -24,8 +24,7 @@
 #include <qcombobox.h>
 #include <qvaluelist.h>
 
-#include <kis_view.h>
-
+class KisView;
 class KisID;
 class QString;
 

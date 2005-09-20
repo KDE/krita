@@ -43,14 +43,7 @@ k_dcop:
     void selectAll();
     void unSelectAll();
 
-    // layer action slots
-    void next_layer();
-    void previous_layer();
-
     void slotImportImage();
-
-    // settings action slots
-    void preferences();
 
     void rotateLayer180();
     void rotateLayerLeft90();

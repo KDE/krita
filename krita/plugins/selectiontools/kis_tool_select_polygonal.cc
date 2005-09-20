@@ -191,7 +191,7 @@ void KisToolSelectPolygonal::paint(QPainter& gc, const QRect&)
 void KisToolSelectPolygonal::draw()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
 
@@ -209,7 +209,7 @@ void KisToolSelectPolygonal::draw(QPainter& gc)
     gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
 
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject -> canvasController();
     KisPoint start, end;
     QPoint startPos;
     QPoint endPos;

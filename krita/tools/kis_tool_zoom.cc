@@ -71,7 +71,7 @@ void KisToolZoom::buttonPress(KisButtonPressEvent *e)
         }
         else if (e -> button() == Qt::RightButton) {
 
-            KisCanvasControllerInterface *controller = m_subject -> canvasController();
+            KisCanvasController *controller = m_subject -> canvasController();
             controller -> zoomOut(e -> pos().floorX(), e -> pos().floorY());
         }
     }
@@ -92,7 +92,7 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
 
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         m_endPos = e -> pos().floorQPoint();
         m_dragging = false;
 
@@ -109,7 +109,7 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
 void KisToolZoom::paintOutline()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -121,7 +121,7 @@ void KisToolZoom::paintOutline()
 void KisToolZoom::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::DotLine);

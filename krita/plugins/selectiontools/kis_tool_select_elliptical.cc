@@ -91,7 +91,7 @@ void KisToolSelectElliptical::paint(QPainter& gc, const QRect& rc)
 void KisToolSelectElliptical::clearSelection()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisImageSP img = m_subject -> currentImg();
 
         Q_ASSERT(controller);
@@ -235,7 +235,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 void KisToolSelectElliptical::paintOutline()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -247,7 +247,7 @@ void KisToolSelectElliptical::paintOutline()
 void KisToolSelectElliptical::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::DotLine);

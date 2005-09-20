@@ -108,7 +108,7 @@ void KisToolCrop::paint(QPainter& gc, const QRect& rc)
 void KisToolCrop::clearRect()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisImageSP img = m_subject -> currentImg();
 
         Q_ASSERT(controller);
@@ -147,7 +147,7 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
                 }
                 else
                 {
-                    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+                    KisCanvasController *controller = m_subject -> canvasController();
                     m_mouseOnHandleType = mouseOnHandle(controller ->windowToView(e -> pos().floorQPoint()));
                     m_dragStart = e -> pos().floorQPoint();
                 }
@@ -251,7 +251,7 @@ void KisToolCrop::move(KisMoveEvent *e)
         {
             if ( m_haveCropSelection )  //if the crop selection is set
             {
-                KisCanvasControllerInterface *controller = m_subject -> canvasController();
+                KisCanvasController *controller = m_subject -> canvasController();
                 Q_INT32 type = mouseOnHandle(controller -> windowToView(e -> pos().floorQPoint()));
                 //set resize cursor if we are on one of the handles
                 setMoveResizeCursor(type);
@@ -315,7 +315,7 @@ void KisToolCrop::validateSelection(void)
 void KisToolCrop::paintOutlineWithHandles()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -327,7 +327,7 @@ void KisToolCrop::paintOutlineWithHandles()
 void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
 {
     if (m_subject && (m_selecting || m_haveCropSelection)) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
@@ -683,7 +683,7 @@ QRegion KisToolCrop::handles(QRect rect)
 
 Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
 {
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject -> canvasController();
     Q_ASSERT(controller);
     QPoint start = controller -> windowToView(m_startPos);
     QPoint end = controller -> windowToView(m_endPos);

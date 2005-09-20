@@ -158,7 +158,7 @@ void KisToolPolygon::paint(QPainter& gc, const QRect&)
 void KisToolPolygon::draw()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
 
@@ -176,7 +176,7 @@ void KisToolPolygon::draw(QPainter& gc)
     gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
 
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject -> canvasController();
     KisPoint start, end;
     QPoint startPos;
     QPoint endPos;

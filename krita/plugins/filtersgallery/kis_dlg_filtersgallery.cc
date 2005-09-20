@@ -51,7 +51,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 
     m_previewWidget = new KisPreviewWidget(frame);
     m_hlayout->addWidget(m_previewWidget);
-    m_previewWidget->slotSetLayer( m_view->currentImg()->activeLayer() );
+    m_previewWidget->slotSetLayer( m_view->getCanvasSubject()->currentImg()->activeLayer() );
     connect(m_previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
 
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
@@ -74,7 +74,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
     }
-    KisImageSP img = m_view->currentImg();
+    KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisLayerSP activeLayer = img->activeLayer();
     m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),(KisPaintDeviceImplSP)activeLayer);
     if(m_currentConfigWidget != 0)

@@ -59,8 +59,8 @@ void WetnessVisualisationFilter::slotActivated() {
         m_timer.start(500);
         cs -> setPaintWetness(true);
     }
-    if (m_view -> currentImg())
-        m_view -> currentImg() -> notify();
+    if (m_view -> getCanvasSubject()->currentImg())
+        m_view -> getCanvasSubject()->currentImg() -> notify();
 }
 
 void WetnessVisualisationFilter::slotTimeout() {
@@ -70,8 +70,8 @@ void WetnessVisualisationFilter::slotTimeout() {
     Q_ASSERT(cs);
     cs -> resetPhase();
 
-    if (m_view -> currentImg())
-        m_view -> currentImg() -> notify();
+    if (m_view -> getCanvasSubject()->currentImg())
+        m_view -> getCanvasSubject()->currentImg() -> notify();
 }
 
 #include "kis_wetness_visualisation_filter.moc"

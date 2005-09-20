@@ -20,11 +20,12 @@
 #define KIS_STRATEGY_MOVE_H_
 
 #include <qpoint.h>
+#include <qrect.h>
 #include "kis_types.h"
 #include <koffice_export.h>
 
 class KoDocument;
-class KisCanvasControllerInterface;
+class KisCanvasController;
 class KisCanvasSubject;
 
 class KRITAUI_EXPORT KisStrategyMove {
@@ -47,8 +48,9 @@ private:
 
 private:
     KoDocument *m_doc; 
-    KisCanvasControllerInterface *m_controller; 
+    KisCanvasController *m_controller; 
     KisCanvasSubject *m_subject;
+    QRect m_deviceBounds;
     QPoint m_dragStart;
     QPoint m_layerStart;
     QPoint m_layerPosition;

@@ -41,7 +41,7 @@ KisFiltersListView::KisFiltersListView(KisView* view, QWidget* parent) : KIconVi
 void KisFiltersListView::buildPreview()
 {
     // Check which filters support painting
-    KisImageSP img = m_view->currentImg();
+    KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisLayerSP activeLayer = img->activeLayer();
     m_thumb = new KisLayer(*activeLayer);
     m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->colorSpace(), "thumbnail");

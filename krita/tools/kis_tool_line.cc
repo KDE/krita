@@ -83,7 +83,7 @@ void KisToolLine::buttonPress(KisButtonPressEvent *e)
 
     if (e -> button() == QMouseEvent::LeftButton) {
         m_dragging = true;
-        //KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        //KisCanvasController *controller = m_subject -> canvasController();
         m_startPos = e -> pos(); //controller -> windowToView(e -> pos());
         m_endPos = e -> pos(); //controller -> windowToView(e -> pos());
     }
@@ -94,7 +94,7 @@ void KisToolLine::move(KisMoveEvent *e)
     if (m_dragging) {
         if (m_startPos != m_endPos)
             paintLine();
-        //KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        //KisCanvasController *controller = m_subject -> canvasController();
 
         if (e -> state() & Qt::AltButton) {
             KisPoint trans = e -> pos() - m_endPos;
@@ -112,7 +112,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
         m_dragging = false;
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisImageSP img = m_subject -> currentImg();
 
         if (m_startPos == m_endPos) {
@@ -184,7 +184,7 @@ KisPoint KisToolLine::straightLine(KisPoint point)
 void KisToolLine::paintLine()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -196,7 +196,7 @@ void KisToolLine::paintLine()
 void KisToolLine::paintLine(QPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);

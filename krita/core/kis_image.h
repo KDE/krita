@@ -67,8 +67,18 @@ public:
                      QPainter &painter,
                      KisProfile *  profile,
                      float exposure = 0.0f);
-
-
+    
+    /**
+     * Render the projection onto a QImage. In contrast with the above method, the
+     * selection is not rendered.
+     */
+     virtual QImage convertToQImage(Q_INT32 x1,
+                                    Q_INT32 y1,
+                                    Q_INT32 x2,
+                                    Q_INT32 y2,
+                                    KisProfile * profile, 
+                                    float exposure = 0.0f);
+    
 public:
     QString name() const;
     void setName(const QString& name);
@@ -92,7 +102,6 @@ public:
 
     // Set the profile associated with this image
     void setProfile(const KisProfile * profile);
-
 
     void enableUndo(KoCommandHistory *history);
 
@@ -124,6 +133,7 @@ public:
     // Get the active painting device
     KisPaintDeviceImplSP activeDevice();
 
+    // Add layers and emit sigLayersUpdated
     KisLayerSP layerAdd(const QString& name, Q_UINT8 devOpacity);
     KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  Q_UINT8 opacity,  KisColorSpace * colorstrategy);
     KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
@@ -148,10 +158,9 @@ public:
     KisLayerSP layer(const QString& name);
     KisLayerSP layer(Q_UINT32 npos);
 
+    // add a layer and don't emit the sigLayersUpdate -- these probably should be private and used by friend kis_view.
     bool add(KisLayerSP layer, Q_INT32 position);
-
     void rm(KisLayerSP layer);
-
     bool raise(KisLayerSP layer);
     bool lower(KisLayerSP layer);
     bool top(KisLayerSP layer);

@@ -27,14 +27,14 @@ K_EXPORT_COMPONENT_FACTORY( kritaoilpaintfilter, KisOilPaintFilterPluginFactory(
 
 KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
 {
-        setInstance(KisOilPaintFilterPluginFactory::instance());
+    setInstance(KisOilPaintFilterPluginFactory::instance());
 
-        kdDebug(DBG_AREA_PLUGINS) << "OilPaintFilter plugin. Class: "
+    kdDebug(DBG_AREA_PLUGINS) << "OilPaintFilter plugin. Class: "
                 << className()
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
+
 
     if ( parent->inherits("KisFactory") )
     {

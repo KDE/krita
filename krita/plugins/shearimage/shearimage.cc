@@ -80,7 +80,7 @@ ShearImage::~ShearImage()
 
 void ShearImage::slotShearImage()
 {
-    KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> getCanvasSubject() -> currentImg();
 
     if (!image) return;
 
@@ -99,7 +99,7 @@ void ShearImage::slotShearImage()
 
 void ShearImage::slotShearLayer()
 {
-    KisImageSP image = m_view -> currentImg();
+    KisImageSP image = m_view -> getCanvasSubject() -> currentImg();
 
     if (!image) return;
 

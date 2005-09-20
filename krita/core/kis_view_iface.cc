@@ -66,25 +66,11 @@ void KisViewIface::unSelectAll()
 }
 
 
-void KisViewIface::next_layer()
-{
-    m_view->next_layer();
-}
-
-void KisViewIface::previous_layer()
-{
-    m_view->previous_layer();
-}
 
 void KisViewIface::slotImportImage()
 {
 }
 
-
-void KisViewIface::preferences()
-{
-    m_view->preferences();
-}
 
 void KisViewIface::rotateLayer180()
 {

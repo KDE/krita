@@ -18,18 +18,9 @@
 #ifndef KIS_DLG_IMAGE_PROPERTIES_H_
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
-#include <qspinbox.h>
-
 #include <kdialogbase.h>
 
-#include <qcolor.h>
-
-#include "kis_global.h"
-#include "wdgnewimage.h"
-
-#include "kis_types.h"
-#include "kis_image.h"
-
+class WdgNewImage;
 class KisView;
 class QButtonGroup;
 class KisID;
@@ -40,8 +31,8 @@ class KisDlgImageProperties : public KDialogBase {
 
 public:
     KisDlgImageProperties(KisImageSP image,
-                  QWidget *parent = 0, 
-                  const char *name = 0);
+                          QWidget *parent = 0, 
+                          const char *name = 0);
     virtual ~KisDlgImageProperties();
 
 private slots:
@@ -49,7 +40,6 @@ private slots:
     void okClicked();
 
     void fillCmbProfiles(const KisID &);
-
 
 private:
     

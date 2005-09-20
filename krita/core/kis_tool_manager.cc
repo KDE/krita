@@ -27,7 +27,7 @@
 #include "kis_cursor.h"
 #include "kotoolbox.h"
 
-KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasControllerInterface * controller)
+KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller)
     : m_subject(parent),
       m_controller(controller)
 {

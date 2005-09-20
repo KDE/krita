@@ -83,7 +83,7 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisLayerSP layer = m_view -> currentImg() -> activeLayer();
+    KisLayerSP layer = m_view -> getCanvasSubject() -> currentImg() -> activeLayer();
     dlgHistogram -> setLayer(layer);
 
     if (dlgHistogram -> exec() == QDialog::Accepted) {

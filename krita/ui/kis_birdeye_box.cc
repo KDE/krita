@@ -26,38 +26,74 @@
 
 #include "kobirdeyepanel.h"
 
-#include "kis_view.h"
+#include "kis_canvas_subject.h"
+#include "kis_canvas_controller.h"
 #include "kis_image.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"
 
 namespace {
 
+    class ViewCanvas : public KoPixelCanvas {
+    
+    public:
+        ViewCanvas(KisCanvasSubject * canvasSubject) : KoPixelCanvas(), m_canvasSubject(canvasSubject) {};
+        virtual ~ViewCanvas() {};
+        
+    public:
+    
+        virtual QRect visibleArea() 
+            { 
+                return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
+            };
+            
+        virtual QRect size() 
+            { 
+                return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
+            };
+            
+        virtual void setViewCenterPoint(Q_INT32 x, Q_INT32 y) 
+            { 
+                m_canvasSubject->canvasController()->zoomAroundPoint(x, y, m_canvasSubject->zoomFactor());
+            };
+            
+    private:
+    
+        KisCanvasSubject * m_canvasSubject;
+    
+    };
+
     class ViewZoomListener : public KoZoomListener {
 
         public:
 
-            ViewZoomListener(KisView * view) : KoZoomListener(), m_view(view) {};
+            ViewZoomListener(KisCanvasController * canvasController) 
+                : KoZoomListener()
+                , m_canvasController(canvasController) {};
             virtual ~ViewZoomListener() {};
 
         public:
 
-            void zoomTo(int ) {}
-            void zoomIn() { m_view->slotZoomIn(); }
-            void zoomOut() { m_view->slotZoomOut(); }
-            int getMinZoom() { return 10; }
-            int getMaxZoom() { return 1600; }
+            void zoomTo( Q_INT32 x, Q_INT32 y, double factor ) { m_canvasController->zoomAroundPoint(x, y, factor); }
+            void zoomIn() { m_canvasController->zoomIn(); }
+            void zoomOut() { m_canvasController->zoomOut(); }
+            double getMinZoom() { return (1.0 / 16.0); }
+            double getMaxZoom() { return 16.0; }
 
         private:
 
-            KisView * m_view;
+            KisCanvasController * m_canvasController;
 
     };
 
     class ImageThumbnailProvider : public KoThumbnailProvider {
     
         public:
-            ImageThumbnailProvider(KisImageSP image, KisView * view) : KoThumbnailProvider(), m_image(image), m_view(view) {};
+            ImageThumbnailProvider(KisImageSP image, KisCanvasSubject* canvasSubject)
+                : KoThumbnailProvider()
+                , m_image(image)
+                , m_canvasSubject(canvasSubject) {};
+                
             virtual ~ImageThumbnailProvider() {};
             
         public:
@@ -67,32 +103,33 @@ namespace {
                     return QRect (0, 0, m_image->width(), m_image->height());
                 }
                 
-            virtual QPixmap image(QRect r)
+            virtual QImage image(QRect r)
                 {
-                    QPixmap px (r.width(), r.height());
-                    QPainter p(&px);
-                    m_image->renderToPainter(r.x(), r.y(), r.width(), r.height(), p, m_view->monitorProfile(), m_view->HDRExposure());
-                    return px;
+                    return m_image->convertToQImage(r.x(), r.y(), r.x() + r.width(), r.y() + r.height(), 
+                                                    m_canvasSubject->monitorProfile(), 
+                                                    m_canvasSubject->HDRExposure());
                 }
 
         private:
         
             KisImageSP m_image;
-            KisView * m_view;
+            KisCanvasSubject * m_canvasSubject;
     
     };
 
 }
 
-KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
+KisBirdEyeBox::KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget* parent, const char* name)
     : QWidget(parent, name)
+    , m_canvasSubject(canvasSubject)
 {
     QVBoxLayout * l = new QVBoxLayout(this);
     
-    KoZoomListener * kzl = new ViewZoomListener(view);
-    KoThumbnailProvider * ktp = new ImageThumbnailProvider(view->currentImg(), view);
+    KoZoomListener * kzl = new ViewZoomListener(canvasSubject->canvasController());
+    KoThumbnailProvider * ktp = new ImageThumbnailProvider(canvasSubject->currentImg(), canvasSubject);
+    KoPixelCanvas * kpc = new ViewCanvas(m_canvasSubject);
     
-    m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, this);
+    m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, kpc, this);
     l->addWidget(m_birdEyePanel);
     
     QHBoxLayout * hl = new QHBoxLayout(l);
@@ -121,7 +158,7 @@ KisBirdEyeBox::~KisBirdEyeBox()
 void KisBirdEyeBox::exposureValueChanged(double exposure)
 {
     if (!m_draggingExposureSlider) {
-        emit exposureChanged(static_cast<float>(exposure));
+        m_canvasSubject->setHDRExposure(exposure);
     }
 }
 

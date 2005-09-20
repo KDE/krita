@@ -48,7 +48,7 @@ void KisToolDummy::update(KisCanvasSubject *subject)
 void KisToolDummy::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         m_origScrollX = controller -> horzValue();
         m_origScrollY = controller -> vertValue();
@@ -60,7 +60,7 @@ void KisToolDummy::buttonPress(KisButtonPressEvent *e)
 void KisToolDummy::move(KisMoveEvent *e)
 {
     if (m_subject && m_dragging) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         KisPoint currPos = controller -> windowToView(e -> pos());
         KisPoint delta = currPos - m_dragPos;

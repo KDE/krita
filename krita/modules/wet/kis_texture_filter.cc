@@ -31,12 +31,12 @@ TextureFilter::TextureFilter(KisView* view)
 }
 
 void TextureFilter::slotActivated() {
-    if (!m_view -> currentImg())
+    if (!m_view -> getCanvasSubject()->currentImg())
         return;
-    if (!m_view -> currentImg() -> activeDevice())
+    if (!m_view -> getCanvasSubject()->currentImg() -> activeDevice())
         return;
 
-    KisPaintDeviceImplSP device = m_view -> currentImg() -> activeDevice();
+    KisPaintDeviceImplSP device = m_view -> getCanvasSubject()->currentImg() -> activeDevice();
     KisColorSpace * cs = device -> colorSpace();
 
     if (cs -> id() != KisID("WET","")) {
@@ -46,9 +46,9 @@ void TextureFilter::slotActivated() {
 
     // XXX if params of the painter get configurable, make them here configurable as well?
     KisTexturePainter painter(device);
-    painter.createTexture(0, 0, m_view -> currentImg() -> width(), m_view -> currentImg() -> height());
+    painter.createTexture(0, 0, m_view -> getCanvasSubject()->currentImg() -> width(), m_view -> getCanvasSubject()->currentImg() -> height());
     painter.end();
-    m_view -> currentImg() -> notify();
+    m_view -> getCanvasSubject()->currentImg() -> notify();
 }
 
 #include "kis_texture_filter.moc"

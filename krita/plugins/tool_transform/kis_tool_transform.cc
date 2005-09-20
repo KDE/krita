@@ -285,7 +285,7 @@ void KisToolTransform::setFunctionalCursor()
 void KisToolTransform::move(KisMoveEvent *e)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         Q_ASSERT(controller);
         QPoint topleft = m_topleft;
@@ -557,7 +557,7 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 void KisToolTransform::paintOutline()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
         QRect rc;
@@ -593,7 +593,7 @@ void KisToolTransform::recalcOutline()
 void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);

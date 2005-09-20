@@ -118,7 +118,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
 
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         KisImageSP img = m_subject -> currentImg();
 
         m_dragging = false;
@@ -201,7 +201,7 @@ KisPoint KisToolGradient::straightLine(KisPoint point)
 void KisToolGradient::paintLine()
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
         QWidget *canvas = controller -> canvas();
         QPainter gc(canvas);
 
@@ -212,7 +212,7 @@ void KisToolGradient::paintLine()
 void KisToolGradient::paintLine(QPainter& gc)
 {
     if (m_subject) {
-        KisCanvasControllerInterface *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject -> canvasController();
 
         KisPoint start = controller -> windowToView(m_startPos);
         KisPoint end = controller -> windowToView(m_endPos);

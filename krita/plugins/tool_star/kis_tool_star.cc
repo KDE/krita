@@ -148,7 +148,7 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
     if (!m_subject || !m_currentImage)
         return;
 
-    KisCanvasControllerInterface *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject -> canvasController();
     QWidget *canvas = controller->canvas ();
     QPainter p (canvas);
     QPen pen(Qt::SolidLine);

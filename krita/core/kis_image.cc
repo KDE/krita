@@ -626,6 +626,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 void KisImage::resize(const QRect& rc, bool cropLayers)
 {
     resize(rc.width(), rc.height(), cropLayers);
+    notify();
 }
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
@@ -1557,8 +1558,33 @@ void KisImage::renderToPainter(Q_INT32 x1,
 #endif
         painter.drawImage(x1, y1, img, 0, 0, w, h);
     }
+}
 
+QImage KisImage::convertToQImage(Q_INT32 x1,
+                                 Q_INT32 y1,
+                                 Q_INT32 x2,
+                                 Q_INT32 y2,
+                                 KisProfile * profile,
+                                 float exposure)
+{
+    Q_INT32 w = x2 - x1 + 1;
+    Q_INT32 h = y2 - y1 + 1;
 
+    QImage img = m_projection->convertToQImage(profile, x1, y1, w, h, exposure);
+
+    if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
+        m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+    }
+
+    if (!img.isNull()) {
+
+#ifdef __BIG_ENDIAN__
+        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+#endif
+        return img;
+    }
+    
+    return QImage();
 }
 
 KisPaintDeviceImplSP KisImage::mergedImage()

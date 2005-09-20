@@ -23,9 +23,9 @@
 #include "kis_types.h"
 #include "kis_id.h"
 
-class KoDocument;
+class KisDoc;
 class KisBrush;
-class KisCanvasControllerInterface;
+class KisCanvasController;
 class KisCanvasObserver;
 class KisGradient;
 class KisPattern;
@@ -37,12 +37,15 @@ class KisSelectionManager;
 class QWidget;
 class QCursor;
 class KisColor;
+class KoPaletteManager;
+class KisProfile;
 
 /**
  * The canvas subject is the interface implemented by classes that perform the
  * "controller" role in the model-view-controller paradigm.
  */
 class KisCanvasSubject {
+
 public:
     KisCanvasSubject() {};
     virtual ~KisCanvasSubject() {};
@@ -67,6 +70,9 @@ public:
     virtual KisColor fgColor() const = 0;
     virtual void setFGColor(const KisColor& c) = 0;
     
+    virtual float HDRExposure() const = 0;
+    virtual void setHDRExposure(float exposure) = 0;
+    
     virtual KisBrush *currentBrush() const = 0;
 
     virtual KisPattern *currentPattern() const = 0;
@@ -79,15 +85,24 @@ public:
     
     virtual KisUndoAdapter *undoAdapter() const = 0;
     
-    virtual KisCanvasControllerInterface *canvasController() const = 0;
+    virtual KisCanvasController *canvasController() const = 0;
     
     virtual KisToolControllerInterface *toolController() const = 0;
     
-    virtual KoDocument *document() const = 0;
+    virtual KisDoc * document() const = 0;
     
     virtual KisProgressDisplayInterface *progressDisplay() const = 0;
     
     virtual KisSelectionManager * selectionManager() = 0;
+
+    virtual KoPaletteManager * paletteManager() = 0;
+
+    /**
+     * Get the profile that this view uses to display itself on
+     * he monitor.
+     */
+    virtual KisProfile *  monitorProfile() = 0;
+
 
 private:
     KisCanvasSubject(const KisCanvasSubject&);

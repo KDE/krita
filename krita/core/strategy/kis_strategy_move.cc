@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <qcolor.h>
 #include <koDocument.h>
+#include <kis_doc.h>
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
@@ -35,7 +36,7 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos);
+        MoveCommand(KisCanvasController *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos);
         virtual ~MoveCommand();
 
         virtual void execute();
@@ -45,14 +46,15 @@ namespace {
         void moveTo(const QPoint& pos);
 
     private:
-        KisCanvasControllerInterface *m_controller;
+        KisCanvasController *m_controller;
         KisPaintDeviceImplSP m_device;
+        QRect m_deviceBounds;
         QPoint m_oldPos;
         QPoint m_newPos;
         KisImageSP m_img;
     };
 
-    MoveCommand::MoveCommand(KisCanvasControllerInterface *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
+    MoveCommand::MoveCommand(KisCanvasController *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
         super(i18n("Moved Painting Device"))
     {
         m_controller = controller;
@@ -60,6 +62,7 @@ namespace {
         m_device = device;
         m_oldPos = oldpos;
         m_newPos = newpos;
+        m_deviceBounds = m_device->exactBounds();
     }
 
     MoveCommand::~MoveCommand()
@@ -77,14 +80,10 @@ namespace {
     }
 
     void MoveCommand::moveTo(const QPoint& pos)
-    {
-//        QRect rc;
-
-//        rc.setRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
-        m_device -> move(pos.x(), pos.y());
-//        rc |= QRect(m_device -> x(), m_device -> y(), m_device -> width(), m_device -> height());
-//        m_img -> invalidate(); //rc);
-        m_controller -> updateCanvas(); //rc);
+    { 
+       m_device -> move(pos.x(), pos.y());
+       m_controller -> updateCanvas(m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height()));
+       m_deviceBounds.setRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
     }
 }
 
@@ -164,13 +163,7 @@ void KisStrategyMove::drag(const QPoint& original)
             
             m_layerPosition = QPoint(dev ->getX(), dev ->getY());
              m_dragStart = original;
-#if 0
-            rc.setX(static_cast<Q_INT32>(rc.x() * m_subject -> zoom()));
-            rc.setY(static_cast<Q_INT32>(rc.y() * m_subject -> zoom()));
-            rc.setWidth(static_cast<Q_INT32>(rc.width() * m_subject -> zoom()));
-            rc.setHeight(static_cast<Q_INT32>(rc.height() * m_subject -> zoom()));
-#endif
-            //m_controller -> updateCanvas(rc);
+
             img->notify(rc);
         }
     }

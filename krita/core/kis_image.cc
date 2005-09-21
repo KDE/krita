@@ -1544,6 +1544,21 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
+#if 0
+    KisPainter gc;
+    QRect rc (x1, y1, w, h);
+    gc.begin(m_projection.data());
+
+    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_bkg.data(), rc.x(), rc.y(), rc.width(), rc.height());
+
+    if (!m_layers.empty()) {
+        KisFlatten<flattenAllVisible> visitor(rc.x(), rc.y(), rc.width(), rc.height());
+        visitor(gc, m_layers);
+    }
+
+    gc.end();
+#endif 
+
 
     QImage img = m_projection->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
@@ -1633,6 +1648,7 @@ void KisImage::notify()
 
 void KisImage::notify(const QRect& rc)
 {
+#if 1
     // Composite the image
     KisPainter gc;
 
@@ -1646,7 +1662,7 @@ void KisImage::notify(const QRect& rc)
     }
 
     gc.end();
-
+#endif
 
     if (rc.isValid()) {
         emit sigImageUpdated(KisImageSP(this), rc);

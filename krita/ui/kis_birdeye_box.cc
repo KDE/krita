@@ -43,12 +43,14 @@ namespace {
     public:
     
         virtual QRect visibleArea() 
-            { 
+            {
+                if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
                 return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
             };
             
         virtual QRect size() 
-            { 
+            {
+                if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
                 return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
             };
             
@@ -100,11 +102,14 @@ namespace {
         
             virtual QRect pixelSize()
                 {
+                    if (!m_image) return QRect(0,0,0,0);
                     return QRect (0, 0, m_image->width(), m_image->height());
                 }
                 
             virtual QImage image(QRect r)
                 {
+                    if (!m_image) return QImage();
+                    
                     return m_image->convertToQImage(r.x(), r.y(), r.x() + r.width(), r.y() + r.height(), 
                                                     m_canvasSubject->monitorProfile(), 
                                                     m_canvasSubject->HDRExposure());

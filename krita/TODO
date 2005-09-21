@@ -166,7 +166,9 @@ User Interface
 Selections
 
 	* On shearing, the whole image is mirrored, not the selected
-	  bits. 
+	  bits.
+        * Add opacity slider to selection painting tools so you can
+          select something 50%.
 
 Profiles
 

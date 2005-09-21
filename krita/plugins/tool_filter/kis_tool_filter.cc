@@ -140,6 +140,9 @@ void KisToolFilter::changeFilter( const KisID & id)
         m_optionLayout -> remove ( m_filterConfigurationWidget );
         delete m_filterConfigurationWidget;
     }
+
+    m_source = m_currentImage->activeDevice();
+
     m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget(), m_source );
     if( m_filterConfigurationWidget != 0 )
     {

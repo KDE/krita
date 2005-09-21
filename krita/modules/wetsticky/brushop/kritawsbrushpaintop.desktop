@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Wet & Sticky paintbrush paintop
+Name[eo]=Humid-kaj-gluec-penika pentrad-operacio
 Name[es]=Brocha paintop mojada y pegajosa
 Name[et]=Märja lõuendi joonistus
 Name[ru]=Кисть с параметрами влажности и прилипания
@@ -8,6 +9,7 @@ Name[sv]=Målningsoperation med våt och klibbig målarpensel
 Name[tr]=Işlak ve Yapışkan boya fırçası 
 Name[xx]=xxWet & Sticky paintbrush paintopxx
 Comment=Wet & Sticky paintbrush
+Comment[eo]=Humida kaj glueca peniko
 Comment[es]=Brocha mojada y pegajosa
 Comment[et]=Märjale lõuendile maalimine
 Comment[pt_BR]=Modelo de cores de tela Molhada & Pegajosa

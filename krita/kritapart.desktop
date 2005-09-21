@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Painting and Image Editor Component
+Name[eo]=Komponanto de Koffice por pentrado kaj bildkreado
 Name[es]=Componente de pintura y de edición de imágenes de KOffice
 Name[et]=KOffice'i joonistamise ja pilditöötluse komponent
 Name[ru]=Компонент рисования и редактирования изображений KOffice
@@ -13,6 +14,7 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krita
 GenericName=Image Object
+GenericName[eo]=Bildobjekto
 GenericName[es]=Objeto de imagen
 GenericName[ga]=Réad Íomhá
 GenericName[sv]=Bildobjekt

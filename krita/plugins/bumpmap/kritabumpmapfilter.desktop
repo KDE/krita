@@ -1,12 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap filter
+Name[eo]=Bumpmap-filtrilo
 Name[es]=Filtro de mapa de colisiones
 Name[et]=Kühmukaardi filter
 Name[ga]=Scagaire Bumpmap
 Name[sv]=Bulkartefilter
 Name[xx]=xxBumpmap filterxx
 Comment=Bumpmap filter
+Comment[eo]=Bumpmap-filtrilo
 Comment[es]=Filtro de mapa de colisiones
 Comment[et]=Kühmukaardi filter
 Comment[ga]=Scagaire Bumpmap

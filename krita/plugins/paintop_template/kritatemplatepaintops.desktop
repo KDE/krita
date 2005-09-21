@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Template Paint Operations
 Name[da]=Skabelon for maleoperationer
+Name[eo]=Ŝablono de pentrad-operacioj
 Name[es]=Operaciones de plantilla de pintura
 Name[et]=Malljoonistamisoperatsioonid
 Name[ru]=Операции рисования с шаблонами
@@ -10,6 +11,7 @@ Name[tr]=Boyama İşlemleri Şablonu
 Name[xx]=xxTemplate Paint Operationsxx
 Comment=Template paint operations
 Comment[da]=Skabelon for maleoperationer
+Comment[eo]=Ŝablono de pentrad-operacioj
 Comment[es]=Operaciones de plantilla de pintura
 Comment[et]=Malljoonistamisoperatsioonid
 Comment[ru]=Операции рисования с шаблонами

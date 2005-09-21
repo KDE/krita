@@ -1,13 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
-Name[es]=Modelo de color RGB (decimal de 32 bits)
-Name[et]=RGB värvimudel (32-bitine)
-Name[sv]=RGB-färgmodell (32-bitars heltal)
-Name[xx]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder
 Comment[en_GB]=Colour model for 16-bit integer per channel RGB images
+Comment[eo]=Kolormodelo por 16-bitaj entjeraj perĉen-RGB-aj bildoj 
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes RGB
 Comment[et]=16 bitti kanali kohta RGB piltide värvimudel
 Comment[ru]=Цветовая модель для изображений в RGB (красный, зелёный, синий) 16-бит/канал RGB

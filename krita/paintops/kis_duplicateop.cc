@@ -83,10 +83,10 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), info);
+        dab = brush -> image(device -> colorSpace(), info, xFraction, yFraction);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(info);
+        KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
         dab = computeDab(mask);
     }
     

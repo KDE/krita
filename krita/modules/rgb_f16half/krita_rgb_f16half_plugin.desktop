@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
+Name[es]=Modelo de color RGB (decimal «medio» de 16 bits)
 Name[sv]=RGB-färgmodell (16-bitars flyttal 'halva')
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder

@@ -48,7 +48,7 @@ namespace {
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisProfile *p) :
-    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData,p)
+    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData,0) // disable the lcms handling by setting profile=0
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));

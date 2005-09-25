@@ -96,8 +96,7 @@ bool KisToolFill::flood(int startX, int startY)
         painter2.beginTransaction(i18n("Fill"));
         painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
                               0, 0, m_currentImage -> width(), m_currentImage -> height());
-        // XXX Shouldn't the painter update this himself??
-        painter2.addDirtyRect(QRect(0, 0, m_currentImage -> width(), m_currentImage -> height()));
+
         m_currentImage -> notify();
         notifyModified();
 

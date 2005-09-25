@@ -30,24 +30,24 @@
 
 class KRITATOOL_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
 public:
-    KisRgbF32ColorSpace();
+    KisRgbF32ColorSpace(KisProfile *p);
     virtual ~KisRgbF32ColorSpace();
 
 public:
     void setPixel(Q_UINT8 *pixel, float red, float green, float blue, float alpha) const;
     void getPixel(const Q_UINT8 *pixel, float *red, float *green, float *blue, float *alpha) const;
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
 
     //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(float), this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(float), this); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(float), this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -59,7 +59,7 @@ public:
     virtual Q_INT32 pixelSize() const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfile *  srcProfile, KisProfile *  dstProfile,
+                       KisProfile *  dstProfile,
                        Q_INT32 renderingIntent,
                        float exposure = 0.0f);
 
@@ -109,6 +109,30 @@ private:
         float red;
         float alpha;
     };
+};
+
+// FIXME: lcms doesn't support 32-bit float
+#define F32_LCMS_TYPE TYPE_BGRA_16
+
+class KisRgbF32ColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return F32_LCMS_TYPE; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbF32ColorSpace(p); };
+
+    virtual QString defaultProfile() { return "sRGB"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_F32_H_

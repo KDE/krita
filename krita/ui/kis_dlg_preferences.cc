@@ -41,7 +41,7 @@
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_colorspace.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
@@ -110,10 +110,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
     KisConfig cfg;
 
-    m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
     m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
 
-    m_page -> cmbPrintingColorSpace -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_page -> cmbPrintingColorSpace -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
     m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
     refillMonitorProfiles(KisID(cfg.workingColorSpace(), ""));
@@ -163,15 +163,15 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 {
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
 
     m_page -> cmbMonitorProfile -> clear();
     m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
 
-    if ( !cs )
+    if ( !csf )
     return;
 
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigDisplayClass)
@@ -182,12 +182,12 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 
 void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 {
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
     m_page -> cmbPrintProfile -> clear();
     m_page -> cmbPrintProfile -> insertItem(i18n("None"));
-    if ( !cs )
+    if ( !csf )
         return;
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigOutputClass)
@@ -198,12 +198,12 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 
 void ColorSettingsTab::refillImportProfiles(const KisID & s)
 {
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
     m_page -> cmbImportProfile -> clear();
     m_page -> cmbImportProfile -> insertItem(i18n("None"));
-    if ( !cs )
+    if ( !csf )
         return;
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigInputClass)

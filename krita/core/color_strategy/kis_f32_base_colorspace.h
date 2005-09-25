@@ -59,8 +59,8 @@ class KisF32BaseColorSpace : public KisAbstractColorSpace {
 
 public:
 
-    KisF32BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature)
+    KisF32BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature, KisProfile *p)
+	: KisAbstractColorSpace(id, cmType, colorSpaceSignature, p)
     {
 	m_alphaSize = sizeof(float);
     };

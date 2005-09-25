@@ -28,7 +28,7 @@
 #include <kdebug.h>
 
 #include "kis_abstract_colorspace.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_image.h"
 #include "kis_wet_colorspace.h"
 #include "kis_iterators_pixel.h"
@@ -117,8 +117,8 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
 
 }
 
-KisWetColorSpace::KisWetColorSpace() :
-    KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData)
+KisWetColorSpace::KisWetColorSpace(KisProfile *p) :
+    KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData, p)
 {
     wet_init_render_tab();
 
@@ -183,7 +183,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -202,7 +202,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /
     // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst)
 {
     fromQColor(c, dst);
 }
@@ -235,7 +235,7 @@ Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelP
 }
 
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
 {
     Q_UINT8 * rgb = new Q_UINT8[3];
     Q_CHECK_PTR(rgb);
@@ -257,7 +257,7 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*p
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
 {
     toQColor(src, c);
 }
@@ -304,7 +304,7 @@ Q_INT32 KisWetColorSpace::pixelSize() const
 
 // XXX: use profiles to display correctly on calibrated displays.
 QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
+                         KisProfile *  /*dstProfile*/,
                          Q_INT32 /*renderingIntent*/, float /*exposure*/)
 {
 

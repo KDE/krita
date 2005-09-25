@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include <kis_global.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_factory.h>
 #include <kis_basic_histogram_producers.h>
 
@@ -48,9 +48,10 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringLis
 
     if ( parent->inherits("KisFactory") )
     {
-        KisColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace();
+        KisColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(0);
+        KisColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceGRAYU16);
-        KisColorSpaceRegistry::instance() -> add(colorSpaceGRAYU16);
+        KisColorSpaceFactoryRegistry::instance() -> add(csf);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );

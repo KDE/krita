@@ -12,7 +12,7 @@ OPENEXR_SOURCES=kis_f16half_base_colorspace.cc
 endif
 
 libkiscolor_strategy_la_SOURCES = kis_abstract_colorspace.cc \
-	kis_colorspace_registry.cc \
+	kis_colorspace_factory_registry.cc \
 	kis_alpha_colorspace.cc \
 	kis_color_conversions.cc \
 	kis_xyz_colorspace.cc \

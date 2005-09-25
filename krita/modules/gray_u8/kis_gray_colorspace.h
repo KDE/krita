@@ -27,7 +27,7 @@
 
 class KRITACORE_EXPORT KisGrayColorSpace : public KisU8BaseColorSpace {
 public:
-    KisGrayColorSpace();
+    KisGrayColorSpace(KisProfile *p);
     virtual ~KisGrayColorSpace();
 
 public:
@@ -35,20 +35,20 @@ public:
     void setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const;
     void getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *alpha) const;
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
 
     virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_GRAY_ALPHA, this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_GRAY_ALPHA, this); }
 
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_GRAY_ALPHA, this, profile); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_GRAY_ALPHA, this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -95,6 +95,27 @@ private:
 
     static const Q_UINT8 PIXEL_GRAY = 0;
     static const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
+};
+
+class KisGrayColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("GRAYA", i18n("Grayscale/Alpha")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return TYPE_GRAYA_8; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisGrayColorSpace(p); };
+
+    virtual QString defaultProfile() { return "sRGB"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

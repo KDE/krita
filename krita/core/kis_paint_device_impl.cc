@@ -42,7 +42,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 
 #include "kis_paint_device.h"
 #include "kis_paint_device_iface.h"
@@ -236,18 +236,16 @@ namespace {
 
     public:
         KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceImplSP paintDevice,
-                       KisDataManagerSP beforeData, KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
-                       KisDataManagerSP afterData, KisColorSpace * afterColorSpace, KisProfile *  afterProfile
-                       ) : super(i18n("Convert Layer Type"))
+                       KisDataManagerSP beforeData, KisColorSpace * beforeColorSpace,
+                       KisDataManagerSP afterData, KisColorSpace * afterColorSpace
+                ) : super(i18n("Convert Layer Type"))
             {
                 m_adapter = adapter;
                 m_paintDevice = paintDevice;
                 m_beforeData = beforeData;
                 m_beforeColorSpace = beforeColorSpace;
-                m_beforeProfile = beforeProfile;
                 m_afterData = afterData;
                 m_afterColorSpace = afterColorSpace;
-                m_afterProfile = afterProfile;
             }
 
         virtual ~KisConvertLayerTypeCmd()
@@ -259,7 +257,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                m_paintDevice -> setData(m_afterData, m_afterColorSpace, m_afterProfile);
+                m_paintDevice -> setData(m_afterData, m_afterColorSpace);
 
                 m_adapter -> setUndo(true);
                 if (m_paintDevice -> image()) {
@@ -272,7 +270,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                m_paintDevice -> setData(m_beforeData, m_beforeColorSpace, m_beforeProfile);
+                m_paintDevice -> setData(m_beforeData, m_beforeColorSpace);
 
                 m_adapter -> setUndo(true);
                 if (m_paintDevice -> image()) {
@@ -288,11 +286,9 @@ namespace {
 
         KisDataManagerSP m_beforeData;
         KisColorSpace * m_beforeColorSpace;
-        KisProfile *  m_beforeProfile;
 
         KisDataManagerSP m_afterData;
         KisColorSpace * m_afterColorSpace;
-        KisProfile *  m_afterProfile;
     };
 
 }
@@ -333,7 +329,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
 
     m_hasSelection = false;
     m_selection = 0;
-    m_profile = 0;
 }
 
 KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace, const QString& name) :
@@ -351,7 +346,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     m_compositeOp = COMPOSITE_OVER;
     m_hasSelection = false;
     m_selection = 0;
-    m_profile = 0;
 
     m_owner = img;
 
@@ -360,10 +354,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     }
     else {
         m_colorSpace = colorSpace;
-    }
-
-    if (img != 0 && m_colorSpace == img -> colorSpace()) {
-            m_profile = m_owner -> profile();
     }
 
     m_pixelSize = m_colorSpace -> pixelSize();
@@ -396,7 +386,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(
         m_colorSpace = rhs.m_colorSpace;
         m_hasSelection = false;
         m_selection = 0;
-        m_profile = rhs.m_profile;
         m_pixelSize = rhs.m_pixelSize;
         m_nChannels = rhs.m_nChannels;
         }
@@ -666,20 +655,14 @@ bool KisPaintDeviceImpl::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent)
+void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 {
-    if (profile() == 0) setProfile(m_owner -> profile());
-
-    if ( (colorSpace() -> id() == dstColorSpace -> id())
-         && profile()
-         && dstProfile
-         && (profile() -> profile() == dstProfile -> profile()) )
+    if ( (colorSpace() -> id() == dstColorSpace -> id()) )
     {
         return;
     }
 
     KisPaintDeviceImpl dst(dstColorSpace, name());
-    dst.setProfile(dstProfile);
     dst.setX(getX());
     dst.setY(getY());
 
@@ -713,7 +696,7 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, KisProfile *  
             const Q_UINT8 *srcData = pixel(column, row);
             Q_UINT8 *dstData = dst.writablePixel(column, row);
 
-            m_colorSpace -> convertPixelsTo(srcData, m_profile, dstData, dstColorSpace, dstProfile, columns, renderingIntent);
+            m_colorSpace -> convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
 
             column += columns;
             columnsRemaining -= columns;
@@ -723,21 +706,19 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, KisProfile *  
     }
 
     if (undoAdapter() && undoAdapter() -> undo()) {
-        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorSpace, m_profile,
-                                       dst.m_datamanager, dstColorSpace, dstProfile));
+        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorSpace,  dst.m_datamanager, dstColorSpace));
     }
 
-    setData(dst.m_datamanager, dstColorSpace, dstProfile);
+    setData(dst.m_datamanager, dstColorSpace);
 
 }
 
-void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisColorSpace * colorSpace, KisProfile *  profile)
+void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
 {
     m_datamanager = data;
     m_colorSpace = colorSpace;
     m_pixelSize = m_colorSpace -> pixelSize();
     m_nChannels = m_colorSpace -> nChannels();
-    setProfile(profile);
 }
 
 KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
@@ -751,28 +732,14 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
 void KisPaintDeviceImpl::convertFromImage(const QImage& img)
 {
     // XXX: Apply import profile
-    if (colorSpace() == KisColorSpaceRegistry::instance()->get("RGBA")) {
+    if (colorSpace() == KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
-        KisColorSpaceRegistry::instance()->get("RGBA")->convertPixelsTo(img.bits(), 0, dstData, colorSpace(), 0, img.width() * img.height());
+        KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"")->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, 0, 0, img.width(), img.height());
     }
-}
-
-
-void KisPaintDeviceImpl::setProfile(KisProfile *  profile)
-{
-
-    if (profile && profile -> colorSpaceSignature() == colorSpace() -> colorSpaceSignature() && profile -> valid()) {
-
-        m_profile = profile;
-    }
-    else {
-        m_profile = 0;
-    }
-    emit(profileChanged(m_profile));
 }
 
 QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, float exposure)
@@ -808,7 +775,7 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1,
     Q_CHECK_PTR(data);
 
     m_datamanager -> readBytes(data, x1, y1, w, h);
-    QImage image = colorSpace() -> convertToQImage(data, w, h, m_profile, dstProfile, INTENT_PERCEPTUAL, exposure);
+    QImage image = colorSpace() -> convertToQImage(data, w, h, dstProfile, INTENT_PERCEPTUAL, exposure);
     delete[] data;
 
     return image;
@@ -947,7 +914,7 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity
 
     if (!pix) return false;
 
-    colorSpace() -> toQColor(pix, c, opacity, m_profile);
+    colorSpace() -> toQColor(pix, c, opacity);
 
     return true;
 }
@@ -961,21 +928,21 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 
     if (!pix) return false;
 
-    kc->setColor(pix, m_colorSpace, m_profile);
+    kc->setColor(pix, m_colorSpace);
 
     return true;
 }
 
 KisColor KisPaintDeviceImpl::colorAt(Q_INT32 x, Q_INT32 y)
 {
-    return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorSpace, m_profile);
+    return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorSpace);
 }
 
 bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-    colorSpace() -> fromQColor(c, opacity, iter.rawData(), m_profile);
+    colorSpace() -> fromQColor(c, opacity, iter.rawData());
 
     return true;
 }
@@ -984,7 +951,7 @@ bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
 {
     Q_UINT8 * pix;
     if (kc.colorSpace() != m_colorSpace) {
-        KisColor kc2 (kc, m_colorSpace, m_profile);
+        KisColor kc2 (kc, m_colorSpace);
         pix = kc2.data();
     }
     else {

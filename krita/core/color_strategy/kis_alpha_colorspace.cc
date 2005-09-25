@@ -28,7 +28,6 @@
 
 #include LCMS_HEADER
 
-#include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_alpha_colorspace.h"
 #include "kis_u8_base_colorspace.h"
@@ -41,24 +40,23 @@ namespace {
     const Q_UINT8 PIXEL_MASK = 0;
 }
 
-KisAlphaColorSpace::KisAlphaColorSpace() :
-    KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData)
+KisAlphaColorSpace::KisAlphaColorSpace(KisProfile *p) :
+    KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
     m_alphaPos = 0;
-    m_defaultProfile = 0;
 }
 
 KisAlphaColorSpace::~KisAlphaColorSpace()
 {
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst)
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT8 *dst)
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -68,12 +66,12 @@ void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
     *alpha = *pixel;
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfile *  /*profile*/)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c)
 {
     c -> setRgb(255, 255, 255);
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
 {
     c -> setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
@@ -145,12 +143,12 @@ QImage KisAlphaColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q
 }
 #endif
 
-bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfile *  /*srcProfile*/,
-                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
+bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src,
+                     Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace,
                      Q_UINT32 numPixels,
                      Q_INT32 /*renderingIntent*/)
 {
-    // No lcms trickery here, we are a QColor + opacity channel
+    // No lcms trickery here, we are only a opacity channel
     Q_INT32 size = dstColorSpace -> pixelSize();
 
     Q_UINT32 j = 0;
@@ -158,7 +156,7 @@ bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src, KisProfile *  /*src
 
     while ( i < numPixels ) {
 
-        dstColorSpace -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j), dstProfile);
+        dstColorSpace -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j));
 
         i += 1;
         j += size;

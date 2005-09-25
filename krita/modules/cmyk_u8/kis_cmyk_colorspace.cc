@@ -29,7 +29,7 @@
 #include "kis_image.h"
 #include "kis_cmyk_colorspace.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 
 #include "kis_factory.h"
@@ -41,32 +41,14 @@ namespace cmyk {
     const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykColorSpace::KisCmykColorSpace() :
-    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData)
+KisCmykColorSpace::KisCmykColorSpace(KisProfile *p) :
+    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA));
-
-    if (profileCount() == 0) {
-        kdDebug(DBG_AREA_CMS) << "No profiles loaded!\n";
-        return;
-    }
-
-    setDefaultProfile( KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK") ); // XXX: Do not i18n -- this is from a data file
-    if (getDefaultProfile() == 0) {
-        kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
-        if (profileCount() != 0) {
-            setDefaultProfile(  profiles()[0] );
-        }
-    }
-
-    if (getDefaultProfile() == 0) {
-        kdDebug(DBG_AREA_CMS) << "No default CMYK profile; CMYK will not work!\n";
-        return;
-    }
 
     m_alphaPos = PIXEL_CMYK_ALPHA;
 

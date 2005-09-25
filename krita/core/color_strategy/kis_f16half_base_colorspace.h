@@ -63,8 +63,8 @@ class KisF16HalfBaseColorSpace : public KisAbstractColorSpace {
 
 public:
 
-    KisF16HalfBaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature)
+    KisF16HalfBaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature, KisProfile *p)
+	: KisAbstractColorSpace(id, cmType, colorSpaceSignature, p)
     {
         m_alphaSize = sizeof(half);
     };

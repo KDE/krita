@@ -288,7 +288,6 @@ void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     
     KisColorSpace * scs = src -> colorSpace();
-    KisProfile *  profile = src -> profile();
 
     setProgressTotalSteps(rect.width() * rect.height());
     Q_INT32 pixelsProcessed = 0;
@@ -300,7 +299,7 @@ void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
 
             const Q_UINT8 * srcData = srcIt.oldRawData();
             // Try to be colorspace independent
-            scs -> toQColor(srcData, &c, profile);
+            scs -> toQColor(srcData, &c);
             ;
             /* I thought of using the HSV model, but GIMP seems to use
                 HSL for desaturating. Better use the gimp model for now
@@ -312,7 +311,7 @@ void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
             // XXX: BSAR: Doesn't this doe the same but better?
 		// XXX: Move to colorspace -- not independent
             Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
-            scs -> fromQColor(QColor(lightness, lightness, lightness), dstIt.rawData(), profile);
+            scs -> fromQColor(QColor(lightness, lightness, lightness), dstIt.rawData());
         }
         ++srcIt;
         ++dstIt;

@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLORSPACE_REGISTRY_H_
-#define KIS_COLORSPACE_REGISTRY_H_
+#ifndef KIS_COLORSPACE_FACTORY_REGISTRY_H_
+#define KIS_COLORSPACE_FACTORY_REGISTRY_H_
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
@@ -35,30 +35,15 @@ class QStringList;
  *      - a registry of icc profiles
  *      - a registry of default pixel operations
  */
-class KRITACORE_EXPORT KisColorSpaceRegistry : public KisGenericRegistry<KisColorSpace *> {
+class KRITACORE_EXPORT KisColorSpaceFactoryRegistry : public KisGenericRegistry<KisColorSpaceFactory *> {
 
 public:
-    virtual ~KisColorSpaceRegistry();
+    virtual ~KisColorSpaceFactoryRegistry();
 
     /**
      * Get the singleton instance of this registry
      */
-    static KisColorSpaceRegistry* instance();
-
-    /**
-     * Convenience method to get the often used rgb8 colorspace
-     */
-    static KisColorSpace * getRGB8();
-
-    /**
-     * Convenience method to get the often used alpha colorspace
-     */
-    static KisColorSpace * getAlpha8();
-
-    /**
-     * Convenience method to get the often used xyz16 colorspace
-     */
-    static KisColorSpace * getXYZ16();
+    static KisColorSpaceFactoryRegistry* instance();
 
     /**
      * Reload the profiles from disk
@@ -72,38 +57,40 @@ public:
     KisProfile *  getProfileByName(const QString & name);
 
     /**
-     * Return the vector of profiles for this colorspace
+     * Return the vector of profiles for this colorspacefactory
      */
-    QValueVector<KisProfile *>  profilesFor(KisColorSpace * cs);
+    QValueVector<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
 
+    QValueVector<KisProfile *>  profilesFor(KisID id);
 
     /**
-     * Add a new pixel op to the relevant color strategy.
-     * @param pixelop the pixel operation
+     * Return the colorspace + profile as named, or NULL if impossible combination.
      */
-    void addFallbackPixelOp(KisPixelOp * pixelop);
+    KisColorSpace *  getColorSpace(const KisID & csID, const QString & profileName);
 
     /**
-     * Return a pixel from the list of default pixelops. If
-     * the specified pixelop doesn't exist, then 0 will be
-     * returned.
+     * Convenience method to get the often used xyz16 colorspace
      */
-    KisPixelOp * getFallbackPixelOp(KisID pixelop);
+    static KisColorSpace * getXYZ16();
+
+    /**
+     * Convenience method to get the often used alpha colorspace
+     */
+    static KisColorSpace * getAlpha8();
 
 private:
-    KisColorSpaceRegistry();
-    KisColorSpaceRegistry(const KisColorSpaceRegistry&);
-    KisColorSpaceRegistry operator=(const KisColorSpaceRegistry&);
+    KisColorSpaceFactoryRegistry();
+    KisColorSpaceFactoryRegistry(const KisColorSpaceFactoryRegistry&);
+    KisColorSpaceFactoryRegistry operator=(const KisColorSpaceFactoryRegistry&);
 
 private:
-    static KisColorSpaceRegistry *m_singleton;
-    static KisColorSpace * m_rgb;
-    static KisColorSpace * m_alpha;
-    static KisColorSpace * m_xyz;
+    static KisColorSpaceFactoryRegistry *m_singleton;
 
     QMap<QString, KisProfile * > m_profileMap;
-    QMap<KisID, KisPixelOp*> m_defaultPixelOps;
+    QMap<QString, KisColorSpace * > m_csMap;
+    KisColorSpace *m_xyzCs;
+    KisColorSpace *m_alphaCs;
 };
 
-#endif // KIS_COLORSPACE_REGISTRY_H_
+#endif // KIS_COLORSPACE_FACTORY_REGISTRY_H_
 

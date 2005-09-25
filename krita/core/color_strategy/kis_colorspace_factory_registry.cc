@@ -26,74 +26,39 @@
 #include "kis_factory.h"
 #include "kis_types.h"
 #include "kis_colorspace.h"
+#include "kis_profile.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_xyz_colorspace.h"
 #include "kis_alpha_colorspace.h"
-#include "kis_colorspace_registry.h"
-#include "kis_pixel_op.h"
 
-KisColorSpaceRegistry *KisColorSpaceRegistry::m_singleton = 0;
-KisColorSpace * KisColorSpaceRegistry::m_rgb = 0;
-KisColorSpace * KisColorSpaceRegistry::m_alpha = 0;
-KisColorSpace * KisColorSpaceRegistry::m_xyz = 0;
+KisColorSpaceFactoryRegistry *KisColorSpaceFactoryRegistry::m_singleton = 0;
 
-KisColorSpaceRegistry::KisColorSpaceRegistry()
+KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry()
 {
-    Q_ASSERT(KisColorSpaceRegistry::m_singleton == 0);
-    KisColorSpaceRegistry::m_singleton = this;
+    Q_ASSERT(KisColorSpaceFactoryRegistry::m_singleton == 0);
+    KisColorSpaceFactoryRegistry::m_singleton = this;
 }
 
-KisColorSpaceRegistry::~KisColorSpaceRegistry()
+KisColorSpaceFactoryRegistry::~KisColorSpaceFactoryRegistry()
 {
 }
 
-KisColorSpaceRegistry* KisColorSpaceRegistry::instance()
+KisColorSpaceFactoryRegistry* KisColorSpaceFactoryRegistry::instance()
 {
-    if(KisColorSpaceRegistry::m_singleton == 0)
+    if(KisColorSpaceFactoryRegistry::m_singleton == 0)
     {
-        KisColorSpaceRegistry::m_singleton = new KisColorSpaceRegistry();
-        Q_CHECK_PTR(KisColorSpaceRegistry::m_singleton);
-        if ( !m_xyz ) {
-            m_xyz = new KisXyzColorSpace();
-            m_singleton->add(m_xyz);
-        }
-
-        if ( !m_alpha ) {
-            m_alpha = new KisAlphaColorSpace();
-        }
-
+        KisColorSpaceFactoryRegistry::m_singleton = new KisColorSpaceFactoryRegistry();
+        Q_CHECK_PTR(KisColorSpaceFactoryRegistry::m_singleton);
         m_singleton->resetProfiles();
+
+        KisColorSpaceFactoryRegistry::m_singleton->m_xyzCs = new KisXyzColorSpace(0);
+//        m_singleton->m_csMap[cs->id().id()] = cs; //XXX should this be user visible
+        KisColorSpaceFactoryRegistry::m_singleton->m_alphaCs = new KisAlphaColorSpace(0);
     }
-    return KisColorSpaceRegistry::m_singleton;
+    return KisColorSpaceFactoryRegistry::m_singleton;
 }
 
-
-KisColorSpace * KisColorSpaceRegistry::getRGB8()
-{
-    if ( m_rgb == 0 ) {
-        m_rgb = m_singleton->get( "RGBA" );
-    }
-    return m_rgb;
-}
-
-KisColorSpace * KisColorSpaceRegistry::getAlpha8()
-{
-    if ( m_alpha == 0 ) {
-        m_alpha = new KisAlphaColorSpace();
-    }
-    return m_alpha;
-}
-
-KisColorSpace * KisColorSpaceRegistry::getXYZ16()
-{
-    if ( m_xyz == 0 ) {
-        m_xyz = new KisXyzColorSpace();
-        m_singleton->add( m_xyz );
-    }
-    return m_xyz;
-}
-
-
-KisProfile *  KisColorSpaceRegistry::getProfileByName(const QString & name)
+KisProfile *  KisColorSpaceFactoryRegistry::getProfileByName(const QString & name)
 {
     if (m_profileMap.find(name) == m_profileMap.end()) {
         return 0;
@@ -102,22 +67,26 @@ KisProfile *  KisColorSpaceRegistry::getProfileByName(const QString & name)
     return m_profileMap[name];
 }
 
-QValueVector<KisProfile *>  KisColorSpaceRegistry::profilesFor(KisColorSpace * cs)
+QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
+{
+    return profilesFor(get(id));
+}
+
+QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
 {
     QValueVector<KisProfile *>  profiles;
 
     QMap<QString, KisProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
         KisProfile *  profile = it.data();
-        if (profile->colorSpaceSignature() == cs->colorSpaceSignature()) {
-            profile->setColorType(cs->colorSpaceType());
+        if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
         }
     }
     return profiles;
 }
 
-void KisColorSpaceRegistry::resetProfiles()
+void KisColorSpaceFactoryRegistry::resetProfiles()
 {
     // XXX: Should find a way to make sure not all profiles are read for all color strategies
 
@@ -151,28 +120,46 @@ void KisColorSpaceRegistry::resetProfiles()
 
 }
 
-void KisColorSpaceRegistry::addFallbackPixelOp(KisPixelOp * pixelop)
+KisColorSpace *  KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID,
+const QString & pName)
 {
-    if (!pixelop) {
-        return;
+    QString profileName = pName;
+
+    if(profileName == "")
+    {
+        KisColorSpaceFactory *csf = get(csID);
+
+        if(!csf)
+            return 0;
+
+        profileName = csf->defaultProfile();
     }
 
-    if (!pixelop->isValid()) {
-        kdDebug() << "Cannot add invalid pixel operation " << pixelop->id().id() << "\n";
-        return;
+    QString name = csID.id() + "<comb>" + profileName;
+
+    if (m_csMap.find(name) == m_csMap.end()) {
+        KisColorSpaceFactory *csf = get(csID);
+        if(!csf)
+            return 0;
+
+        KisProfile *p = getProfileByName(profileName);
+
+        KisColorSpace *cs = csf -> createColorSpace(p);
+        if(!cs)
+            return 0;
+
+        m_csMap[name] = cs;
     }
 
-    m_defaultPixelOps[pixelop->id()] = pixelop;
-
-
+    return m_csMap[name];
 }
 
-KisPixelOp * KisColorSpaceRegistry::getFallbackPixelOp(KisID pixelop)
+KisColorSpace * KisColorSpaceFactoryRegistry::getXYZ16()
 {
-    if (m_defaultPixelOps.find(pixelop) != m_defaultPixelOps.end()) {
-        return m_defaultPixelOps[pixelop];
-    }
-
-    return 0;
+   return KisColorSpaceFactoryRegistry::instance()->m_xyzCs;
 }
 
+KisColorSpace * KisColorSpaceFactoryRegistry::getAlpha8()
+{
+   return KisColorSpaceFactoryRegistry::instance()->m_alphaCs;
+}

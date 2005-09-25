@@ -37,7 +37,7 @@
 #include <koFrameButton.h>
 
 #include <kis_canvas_subject.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_color.h>
 #include <kis_color_cup.h>
 
@@ -188,12 +188,12 @@ void KisWetPaletteWidget::update(KisCanvasSubject *subject)
 void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 {
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
 
     WetPack pack;
     Q_UINT8* data = reinterpret_cast<Q_UINT8*>(&pack);
-    cs -> fromQColor(c, data, 0);
+    cs -> fromQColor(c, data);
     pack.paint.w = 15 * m_wetness -> value();
     // upscale from double to uint16:
     pack.paint.h = static_cast<Q_UINT16>(m_strength -> value() * (double)(0xffff/2));
@@ -209,7 +209,7 @@ void KisWetPaletteWidget::slotWetnessChanged(int n)
         return;
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
     
     KisColor color = m_subject -> fgColor();
@@ -227,7 +227,7 @@ void KisWetPaletteWidget::slotStrengthChanged(double n)
         return;
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceRegistry::instance() -> get(KisID("WET", "")) );
+            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
     
     KisColor color = m_subject -> fgColor();

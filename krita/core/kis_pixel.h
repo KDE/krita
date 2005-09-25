@@ -74,11 +74,10 @@ class QColor;
 class KisPixelRO {
 public:
 
-        KisPixelRO(const Q_UINT8 * channels = 0, const Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0)
+        KisPixelRO(const Q_UINT8 * channels = 0, const Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0)
                 : m_channels(channels),
                   m_alpha(alpha),
-                  m_colorSpace(colorSpace),
-                  m_profile(profile) {};
+                  m_colorSpace(colorSpace) {};
 
     virtual ~KisPixelRO() {}
 
@@ -91,15 +90,10 @@ public:
 
     KisColorSpace * colorSpace() const { return m_colorSpace; }
 
-    void setProfile(KisProfile *  profile) { m_profile = profile; }
-
-    KisProfile *  profile() const { return m_profile; }
-
 private:
     const Q_UINT8* m_channels;
     const Q_UINT8* m_alpha;
     KisColorSpace * m_colorSpace;
-    KisProfile *  m_profile;
 };
 
 
@@ -116,21 +110,19 @@ public:
     /**
      * Create a new pixel with the specified number of channels and alpha channels.
      */
-    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0) 
+    KisPixel(int nbChannels, int nbAlphaChannels = 1, KisColorSpace * colorSpace = 0) 
 
         : m_channels(new Q_UINT8(nbChannels)), 
           m_alpha(new Q_UINT8(nbAlphaChannels)), 
-          m_colorSpace(colorSpace), 
-          m_profile(profile) { };
+          m_colorSpace(colorSpace) { };
 
         /**
          * Create a read/write pixel for existing channel data.
          */
-        KisPixel(Q_UINT8 * channels, Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0, KisProfile *  profile = 0)
+        KisPixel(Q_UINT8 * channels, Q_UINT8* alpha = 0, KisColorSpace * colorSpace = 0)
                   : m_channels(channels),
                     m_alpha(alpha),
-                    m_colorSpace(colorSpace),
-                    m_profile(profile) {};
+                    m_colorSpace(colorSpace) {};
 
 
         virtual ~KisPixel() {}

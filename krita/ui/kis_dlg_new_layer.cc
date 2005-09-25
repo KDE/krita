@@ -30,7 +30,7 @@
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
 #include "kis_dlg_new_layer.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_colorspace.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
@@ -73,7 +73,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
     // Layer type
     lbl = new QLabel(i18n("Layer type:"), page);
     m_cmbImageType = new KisCmbIDList(page);
-    m_cmbImageType -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_cmbImageType -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
     m_cmbImageType -> setCurrent(colorSpaceID);
 
     grid -> addWidget(lbl, 3, 0);
@@ -119,7 +119,7 @@ QString NewLayerDialog::layerName() const
 
 void NewLayerDialog::slotSetColorSpace(const KisID &colorSpaceId)
 {
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorSpaceId);
+    KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorSpaceId,"");
     if (cs) {
         m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
     }

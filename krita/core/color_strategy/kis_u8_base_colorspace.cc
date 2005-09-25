@@ -25,7 +25,7 @@
 #include "kis_pixel.h"
 #include "kis_integer_maths.h"
 
-void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst)
 {
     if (!m_defaultFromRGB) return;
 
@@ -39,7 +39,7 @@ void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfi
 
 }
 
-void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst)
 {
     if (!m_defaultFromRGB) return;
 
@@ -53,7 +53,7 @@ void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UIN
     dst[m_alphaPos] = opacity;
 }
 
-void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
+void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
 {
     if (!m_defaultToRGB) return;
 
@@ -62,7 +62,7 @@ void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  
     c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
-void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
 {
     if (!m_defaultToRGB) return;
 

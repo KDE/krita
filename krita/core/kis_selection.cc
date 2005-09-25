@@ -26,7 +26,7 @@
 #include "kis_selection.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_fill_painter.h"
 #include "kis_alpha_colorspace.h"
 #include "kis_iterators_pixel.h"
@@ -35,7 +35,7 @@
 KisSelection::KisSelection(KisPaintDeviceImplSP layer, const QString& name)
      : super(
         layer -> image(),
-        KisColorSpaceRegistry::getAlpha8(),
+        KisColorSpaceFactoryRegistry::getAlpha8(),
         name)
 {
     m_parentLayer = layer;

@@ -46,7 +46,7 @@
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
 #include <kis_colorspace.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
 #include <kis_channelinfo.h>
@@ -131,10 +131,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA" ), ch->name());
+                dev = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("GRAYA",""),"" ), ch->name());
             }
             else {
-                dev = new KisLayer( KisColorSpaceRegistry::instance() -> get( "GRAYA16" ), ch->name());
+                dev = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("GRAYA16",""),"" ), ch->name());
                 destSize = 2;
             }
         }

@@ -95,7 +95,7 @@ public:
     void rotate(double angle, KisProgressDisplayInterface *m_progress);
     void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
-    void convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
     KisProfile *  profile() const;

@@ -54,7 +54,6 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_colorspace_registry.h>
 
 #include "wdgbumpmap.h"
 #include "bumpmap.h"

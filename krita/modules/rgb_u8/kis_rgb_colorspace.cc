@@ -44,18 +44,15 @@ namespace {
     const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisRgbColorSpace::KisRgbColorSpace() :
-    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData)
+KisRgbColorSpace::KisRgbColorSpace(KisProfile *p) :
+    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, 1, QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, 1, QColor(0,255,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR, 1, QColor(0,0,255)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA));
 
-    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_8) );
     m_alphaPos = PIXEL_ALPHA;
-
     init();
 }
 
@@ -91,14 +88,14 @@ void KisRgbColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *gre
     *alpha = pixel[PIXEL_ALPHA];
 }
 
-void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
 {
     dst[PIXEL_RED] = upscale(c.red());
     dst[PIXEL_GREEN] = upscale(c.green());
     dst[PIXEL_BLUE] = upscale(c.blue());
 }
 
-void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst)
 {
     dst[PIXEL_RED] = upscale(c.red());
     dst[PIXEL_GREEN] = upscale(c.green());
@@ -106,12 +103,12 @@ void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst
     dst[PIXEL_ALPHA] = opacity;
 }
 
-void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
+void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
 {
     c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
 }
 
-void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
 {
     c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
     *opacity = src[PIXEL_ALPHA];
@@ -226,7 +223,7 @@ Q_INT32 KisRgbColorSpace::pixelSize() const
 }
 
 QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  srcProfile, KisProfile *  dstProfile,
+                         KisProfile *  dstProfile,
                          Q_INT32 renderingIntent, float /*exposure*/)
 
 {
@@ -237,10 +234,15 @@ QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     // as an optimisation. We're introducing a copy overhead here which could
     // be factored out again if needed.
     img = img.copy();
-
-    if (srcProfile != 0 && dstProfile != 0) {
-        convertPixelsTo(img.bits(), srcProfile,
-                        img.bits(), this, dstProfile,
+printf("profile = %d dstProfile = %d\n",getProfile(),dstProfile);
+if(getProfile())
+    printf("profile = %s\n",getProfile()->productName().ascii());
+if(dstProfile)
+    printf("dstProfile = %s\n",dstProfile->productName().ascii());
+//PROFILEMERGE should use a screen cs
+    if (dstProfile != 0) {
+        convertPixelsTo(img.bits(),
+                        img.bits(), this,
                         width * height, renderingIntent);
     }
 

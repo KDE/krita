@@ -32,15 +32,15 @@
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 
 namespace {
     const Q_INT32 MAX_CHANNEL_CMYK = 4;
     const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykU16ColorSpace::KisCmykU16ColorSpace() :
-    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData)
+KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisProfile *p) :
+    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0 * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1 * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
@@ -48,7 +48,7 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Black"), 3 * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4 * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));
 
-
+/*PROFILEMERGE
     KisProfile *  profile = KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK");
     if ( profile == 0 )
     if (getDefaultProfile() == 0) {
@@ -65,7 +65,7 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace() :
 
     cmsHPROFILE hProfile = profile->profile();
     setDefaultProfile( new KisProfile(hProfile, TYPE_CMYK5_16) );
-
+*/
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
     init();

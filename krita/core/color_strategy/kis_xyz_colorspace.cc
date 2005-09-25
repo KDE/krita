@@ -30,7 +30,6 @@
 
 #include "kis_abstract_colorspace.h"
 #include "kis_u16_base_colorspace.h"
-#include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_xyz_colorspace.h"
 #include "kis_iterators_pixel.h"
@@ -42,17 +41,14 @@
 // XXX: Maybe use TYPE_XYZ_DBL for an extra stimulating performance hit? People shouldn't depend
 //      on this fallback...
 
-KisXyzColorSpace::KisXyzColorSpace() :
-    KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData)
+KisXyzColorSpace::KisXyzColorSpace(KisProfile *p) :
+    KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("X"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Y"), 1, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Z"), 2, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA));
 
-    cmsHPROFILE hProfile = cmsCreateXYZProfile();
-
-    setDefaultProfile( new KisProfile(hProfile, (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))) );
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
     init();

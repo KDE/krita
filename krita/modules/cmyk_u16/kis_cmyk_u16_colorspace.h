@@ -40,17 +40,17 @@ public:
     };
 
 public:
-    KisCmykU16ColorSpace();
+    KisCmykU16ColorSpace(KisProfile *p);
     virtual ~KisCmykU16ColorSpace();
 
 public:
 
 
     //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
 
     virtual QValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
@@ -96,6 +96,27 @@ private:
     static const Q_UINT8 PIXEL_YELLOW = 2;
     static const Q_UINT8 PIXEL_BLACK = 3;
     static const Q_UINT8 PIXEL_ALPHA = 4;
+};
+
+class KisCmykU16ColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return TYPE_CMYK5_16; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisCmykU16ColorSpace(p); };
+
+    virtual QString defaultProfile() { return "sRGB"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_U16_H_

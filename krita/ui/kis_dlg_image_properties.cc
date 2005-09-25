@@ -31,7 +31,7 @@
 
 #include <koUnitWidgets.h>
 
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_dlg_image_properties.h"
 #include "wdgnewimage.h"
 #include "kis_profile.h"
@@ -124,27 +124,19 @@ void KisDlgImageProperties::okClicked()
                  m_page -> doubleResolution -> value());
     m_image -> setDescription(m_page -> txtDescription -> text());
 
-    QValueVector<KisProfile *>  profileList = m_image -> colorSpace() -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( m_image -> colorSpace()->id() );
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
 
-    if (profileList.count() == 0 || 
-        index > profileList.count() || 
-        index == 0) {
-        m_image -> setProfile(0);
-    }
-    else {
-        m_image -> setProfile(profileList.at(index - 1));
-    }
+    m_image -> setProfile(profileList.at(index));
 }
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
     m_page -> cmbProfile -> clear();
-    m_page -> cmbProfile -> insertItem(i18n("None"));
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());

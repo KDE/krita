@@ -43,7 +43,7 @@
 #include "kis_global.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 
 
@@ -358,7 +358,7 @@ KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation
             QColor colour = QColor(red, green, blue);
             Q_UINT8 a = (alpha * OPACITY_OPAQUE) / 255;
 
-            layer -> colorSpace() -> fromQColor(colour, a, iter.rawData(), 0); // XXX: Do we need a profile here?
+            layer -> colorSpace() -> fromQColor(colour, a, iter.rawData());
             ++iter;
         }
     }
@@ -1122,7 +1122,7 @@ void KisBrush::setHeight(Q_INT32 h)
 }
 
 QImage KisBrush::outline(double pressure) {
-    KisLayerSP layer = image(KisColorSpaceRegistry::instance()->get("RGBA"),
+    KisLayerSP layer = image(KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),""),
                              KisPaintInformation(pressure));
     KisBoundary bounds(layer.data());
     int w = maskWidth(pressure);
@@ -1141,10 +1141,10 @@ void KisBrush::generateBoundary() {
     int h = maskHeight(KisPaintInformation());
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        layer = image(KisColorSpaceRegistry::instance()->get("RGBA"), KisPaintInformation());
+        layer = image(KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),""), KisPaintInformation());
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
-        KisColorSpace* cs = KisColorSpaceRegistry::instance()->get("RGBA");
+        KisColorSpace* cs = KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"");
         layer = new KisLayer(cs, "temp");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = layer -> createHLineIterator(0, y, w, true);

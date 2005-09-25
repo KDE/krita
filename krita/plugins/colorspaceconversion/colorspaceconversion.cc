@@ -45,7 +45,7 @@
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"
 
@@ -92,22 +92,14 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 
     dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorSpace() -> id().name());
 
-    dlgColorSpaceConversion -> fillCmbSrcProfile(image -> colorSpace() -> id());
-
-    if (image -> profile()) {
-        dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(image -> profile() -> productName());
-    }
-
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
-        // XXX: Should we actually set the profile here?
-        image -> setProfile(KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText()));
+        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+
+        image -> setProfile(cs->getProfile());
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image -> convertTo(cs,
-                           KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-                           dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        image -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
@@ -126,21 +118,13 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorSpace() -> id().name());
-    dlgColorSpaceConversion -> fillCmbSrcProfile(dev -> colorSpace() -> id());
-
-    KisProfile *  p = dev -> profile();
-    if ( p ) {
-        dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> setCurrentText(p -> productName());
-    }
 
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(cspace);
-        KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbSourceProfile -> currentText());
+        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        dev -> convertTo(cs,
-                         KisColorSpaceRegistry::instance()->getProfileByName(dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()),
-                         dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         QApplication::restoreOverrideCursor();
         image -> notify();
         image -> notifyLayersChanged();

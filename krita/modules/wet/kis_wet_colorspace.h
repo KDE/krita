@@ -91,7 +91,7 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
 class KisWetColorSpace : public KisAbstractColorSpace {
 public:
-    KisWetColorSpace();
+    KisWetColorSpace(KisProfile *p);
     virtual ~KisWetColorSpace();
 
 public:
@@ -99,11 +99,11 @@ public:
     // Semi-clever: we have only fifteen wet paint colors that are mapped to the
     // qcolors that are put in the painter by the special wet paint palette. Other
     // QColors are mapped to plain water...
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
@@ -114,10 +114,10 @@ public:
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 */*src*/)
         { return 0; };
 
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
+    virtual KisPixel toKisPixel(Q_UINT8 */*src*/)
         { return 0; };
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -133,7 +133,7 @@ public:
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfile *  srcProfile, KisProfile *  dstProfile,
+                       KisProfile *  dstProfile,
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
@@ -174,6 +174,27 @@ private:
     bool m_paintwetness;
     int phase, phasebig;
 
+};
+
+class KisWetColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("WET", i18n("Watercolors")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return 0; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisWetColorSpace(p); };
+
+    virtual QString defaultProfile() { return "sRGB"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_WET_H_

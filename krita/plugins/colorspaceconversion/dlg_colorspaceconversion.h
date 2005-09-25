@@ -48,11 +48,6 @@ public slots:
 
     void okClicked();
     void fillCmbDestProfile(const KisID &);
-    void fillCmbSrcProfile(const KisID &);
-
-private:
-
-    void fillCmbProfile(QComboBox * cmb, const KisID &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

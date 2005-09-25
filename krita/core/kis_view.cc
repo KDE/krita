@@ -75,7 +75,7 @@
 #include "kis_button_release_event.h"
 #include "kis_canvas.h"
 #include "kis_color.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_config.h"
 #include "kis_controlframe.h"
 #include "kis_cursor.h"
@@ -437,7 +437,7 @@ void KisView::resetMonitorProfile()
     if (m_monitorProfile == 0) {
         KisConfig cfg;
         QString monitorProfileName = cfg.monitorProfile();
-        m_monitorProfile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+        m_monitorProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
     }
 
 }
@@ -1524,7 +1524,7 @@ void KisView::print(KPrinter& printer)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KisProfile *  printerProfile = KisColorSpaceRegistry::instance() -> getProfileByName(printerProfileName);
+    KisProfile *  printerProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(printerProfileName);
 
     if (printerProfile != 0)
         kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
@@ -1908,13 +1908,12 @@ void KisView::layerProperties()
 void KisView::layerAdd()
 {
     KisImageSP img = currentImg();
-
     if (img) {
         KisConfig cfg;
         NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceRegistry::instance() -> get(dlg.colorSpaceID()));
+            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceFactoryRegistry::instance() -> getColorSpace(dlg.colorSpaceID(),""));
             if (layer) {
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 resizeEvent(0);

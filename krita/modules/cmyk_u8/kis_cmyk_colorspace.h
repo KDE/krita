@@ -29,15 +29,15 @@
 class KRITACORE_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
-    KisCmykColorSpace();
+    KisCmykColorSpace(KisProfile *p);
     virtual ~KisCmykColorSpace();
 
 public:
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_CMYK_ALPHA, this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_CMYK_ALPHA, this); }
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
@@ -61,7 +61,7 @@ virtual void bitBlt(Q_UINT8 *dst,
             Q_INT32 cols,
             const KisCompositeOp& op);
 
-    virtual bool valid() { return getDefaultProfile() != 0; }
+    virtual bool valid() { return true; }
 
     KisCompositeOpList userVisiblecompositeOps() const;
 protected:
@@ -77,6 +77,27 @@ private:
     static const Q_UINT8 PIXEL_YELLOW = 2;
     static const Q_UINT8 PIXEL_BLACK = 3;
     static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
+};
+
+class KisCmykColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("CMYK", i18n("CMYK")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return TYPE_CMYK5_8; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisCmykColorSpace(p); };
+
+    virtual QString defaultProfile() { return "Adobe CMYK"; }; //  Do not i18n -- this is from a data file
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_H_

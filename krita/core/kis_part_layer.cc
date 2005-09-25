@@ -26,7 +26,7 @@
 
 #include "kis_layer.h"
 #include "kis_types.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_part_layer.h"
 
 
@@ -51,7 +51,7 @@ KisChildDoc::~KisChildDoc ()
 
 
 KisPartLayer::KisPartLayer(KisImageSP img, KisChildDoc * doc)
-    : KisLayer(img, "embedded document", OPACITY_OPAQUE, KisColorSpaceRegistry::instance()->get("RGBA"))
+    : KisLayer(img, "embedded document", OPACITY_OPAQUE, KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),""))
     , m_doc(doc)
 {
 }

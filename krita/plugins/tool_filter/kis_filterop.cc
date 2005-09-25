@@ -113,7 +113,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         {
             // XXX: Q_UINT8 should be Q_UINT8
             Q_UINT8 alpha = mask -> alphaAt( x++, y );
-            KisPixel p = colorSpace -> toKisPixel( hiter.rawData(), 0);
+            KisPixel p = colorSpace -> toKisPixel( hiter.rawData());
             p.alpha() = alpha;
 
             ++hiter;

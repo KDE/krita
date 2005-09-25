@@ -114,7 +114,6 @@ public:
     /**
      * lcms colorspace type definition.
      */
-    virtual void setColorSpaceType(Q_UINT32 type) = 0;
     virtual Q_UINT32 colorSpaceType() = 0;
 
     virtual icColorSpaceSignature colorSpaceSignature() = 0;
@@ -135,17 +134,9 @@ public:
     //========== Display profiles =============================================//
 
     /**
-     * Get a list of profiles that apply to this color space
+     * Return the profile of this color space. This may be 0
      */
-    virtual QValueVector<KisProfile *> profiles() = 0;
-
-
-    /**
-     * Return the number of profiles available for this color space
-     */
-    virtual Q_INT32 profileCount() = 0;
-
-
+    virtual KisProfile * getProfile() = 0;
 
 //================= Conversion functions ==================================//
 
@@ -161,8 +152,8 @@ public:
      *
      * XXX: We actually do not use the display yet, nor the paint device profile
      */
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -172,12 +163,12 @@ public:
      * XXX: We actually do not use the display yet, nor the paint device profile
      *
      */
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile= 0 ) = 0;
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
 
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile) = 0;
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile) = 0;
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src) = 0;
+    virtual KisPixel toKisPixel(Q_UINT8 *src) = 0;
 
     /**
      * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
@@ -195,14 +186,12 @@ public:
      * @param data A pointer to a contiguous memory region containing width * height pixels
      * @param width in pixels
      * @param height in pixels
-     * @param srcProfile source profile
      * @param dstProfile destination profile
      * @param renderingIntent the rendering intent
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                                   KisProfile *  srcProfile, KisProfile *  dstProfile,
-                                   Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                                   KisProfile *  dstProfile, Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f) = 0;
 
 
@@ -213,8 +202,8 @@ public:
      *
      * Returns false if the conversion failed, true if it succeeded
      */
-    virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfile *  srcProfile,
-                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace, KisProfile *  dstProfile,
+    virtual bool convertPixelsTo(const Q_UINT8 * src,
+                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
@@ -328,17 +317,33 @@ public:
                 Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
-                const KisCompositeOp& op,
-                KisProfile *  srcProfile = 0,
-                KisProfile *  dstProfile = 0) = 0;
+                const KisCompositeOp& op) = 0;
+};
 
+class KRITACORE_EXPORT KisColorSpaceFactory {
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const = 0;
 
     /**
-     * Returns the default icc profile for use with this colorspace. This may be 0
-     *
-     & @return the default icc profile
+     * lcms colorspace type definition.
      */
-    virtual KisProfile *   getDefaultProfile() = 0;
+    virtual Q_UINT32 colorSpaceType() = 0;
+
+    virtual icColorSpaceSignature colorSpaceSignature() = 0;
+
+    virtual KisColorSpace *createColorSpace(KisProfile *) = 0;
+
+    /**
+     * Returns the default icc profile for use with this colorspace. This may be ""
+     *
+     & @return the default icc profile name
+     */
+    virtual QString defaultProfile() = 0;
+
 };
 
 #endif // KIS_COLORSPACE_H_

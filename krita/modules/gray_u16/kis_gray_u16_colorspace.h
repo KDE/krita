@@ -38,16 +38,16 @@ public:
     };
 
 public:
-    KisGrayU16ColorSpace();
+    KisGrayU16ColorSpace(KisProfile *p);
     virtual ~KisGrayU16ColorSpace();
 
 public:
 
     //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -91,6 +91,27 @@ private:
 
     static const Q_UINT8 PIXEL_GRAY = 0;
     static const Q_UINT8 PIXEL_ALPHA = 1;
+};
+
+class KisGrayU16ColorSpaceFactory : public KisColorSpaceFactory
+{
+public:
+    /**
+     * Krita definition for use in .kra files and internally: unchanging name +
+     * i18n'able description.
+     */
+    virtual KisID id() const { return KisID("GRAYA16", i18n("GRAY/Alpha (16-bit integer/channel)")); };
+
+    /**
+     * lcms colorspace type definition.
+     */
+    virtual Q_UINT32 colorSpaceType() { return TYPE_GRAY_16; };
+
+    virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
+
+    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisGrayU16ColorSpace(p); };
+
+    virtual QString defaultProfile() { return "sRGB"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAY_U16_H_

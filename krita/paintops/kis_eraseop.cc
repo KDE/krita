@@ -106,12 +106,11 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (device -> hasAlpha()) {
         dab -> setOpacity(OPACITY_OPAQUE);
         KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
-        KisProfile *  profile = dab -> profile();
         KisColorSpace* cs = dab -> colorSpace();
         while (!it.isDone()) {
             // the color doesn't matter, since we only composite the alpha
             cs -> fromQColor(Qt::black, Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()),
-                              it.rawData(), profile);
+                              it.rawData());
             ++it;
         }
 

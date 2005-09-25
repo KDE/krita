@@ -109,25 +109,24 @@ KisPainter::~KisPainter()
 
 void KisPainter::begin(KisPaintDeviceImplSP device)
 {
-        if (m_transaction)
-                delete m_transaction;
+    if (m_transaction)
+        delete m_transaction;
 
-        m_device = device;
+    m_device = device;
     m_colorSpace = device -> colorSpace();
     m_pixelSize = device -> pixelSize();
-    m_profile = device -> profile();
 }
 
 KCommand *KisPainter::end()
 {
-        return endTransaction();
+    return endTransaction();
 }
 
 void KisPainter::beginTransaction(const QString& customName)
 {
-        if (m_transaction)
-                delete m_transaction;
-        m_transaction = new KisTransaction(customName, m_device);
+    if (m_transaction)
+        delete m_transaction;
+    m_transaction = new KisTransaction(customName, m_device);
     Q_CHECK_PTR(m_transaction);
 }
 
@@ -196,7 +195,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
     addDirtyRect(QRect(dx, dy, sw, sh));
 
     KisColorSpace * srcCs = srcdev -> colorSpace();
-    KisProfile *  srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -238,9 +236,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
                           opacity,
                           rows,
                           columns,
-                          op,
-                          srcProfile,
-                          m_profile);
+                          op);
 
             srcX += columns;
             dstX += columns;
@@ -293,7 +289,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
     addDirtyRect(QRect(dx, dy, sw, sh));
 
     KisColorSpace * srcCs = srcdev -> colorSpace();
-    KisProfile *  srcProfile = srcdev -> profile();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -341,9 +336,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                           opacity,
                           rows,
                           columns,
-                          op,
-                          srcProfile,
-                          m_profile);
+                          op);
 
             srcX += columns;
             dstX += columns;

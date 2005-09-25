@@ -39,7 +39,6 @@
 #include "kis_color.h"
 #include "kis_pattern.h"
 #include "kis_layer.h"
-#include "kis_colorspace_registry.h"
 
 namespace {
     struct GimpPatternHeader {

@@ -71,12 +71,13 @@ public:
      * @param id The Krita identification of this color model.
      * @param cmType The littlecms colorstrategy type we wrap.
      * @param colorSpaceSignature The icc signature for the colorspace we are.
+     * @param p The KisProfile for the colorspace we are, can be 0.
      */
-    KisAbstractColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature);
+    KisAbstractColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature, KisProfile *p);
 
     /**
-     * After creating the default profile, call init to setup the default
-     * colortransforms from and to rgb and xyz -- if your colorspace needs
+     * Call init to setup the default
+     * colortransforms from and to sRGB and xyz -- if your colorspace needs
      * the fallback to the default transforms for the qcolor conversion
      * and the default pixel ops.
      */
@@ -175,16 +176,9 @@ public:
     //========== Display profiles =============================================//
 
     /**
-     * Get a list of profiles that apply to this color space
+     * Return the profile of this color space. This may be 0
      */
-    QValueVector<KisProfile *>  profiles();
-
-
-    /**
-     * Return the number of profiles available for this color space
-     */
-    Q_INT32 profileCount();
-
+    virtual KisProfile * getProfile() { return m_profile; };
 
 
 //================= Conversion functions ==================================//
@@ -195,29 +189,24 @@ public:
      * and fills a byte array with the corresponding color in the
      * the colorspace managed by this strategy.
      *
-     * The profile parameter is the profile of the paint device; the other profile
-     * is the display profile -- since we are moving from QColor
-     * that have most likely been picked from the display itself.
-     *
-     * XXX: We actually do not use the display yet, nor the paint device profile
+     * XXX: We actually do not use the display profile yet
      */
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
-     * and converts the contents to a QColor, using the given profile as a source
-     * profile and the display profile as a destination profile.
+     * and converts the contents to a QColor, using the display profile as a destination profile.
      *
-     * XXX: We actually do not use the display yet, nor the paint device profile
+     * XXX: We actually do not use the display profile yet
      *
      */
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile= 0 ) = 0;
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
 
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile) = 0;
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile) = 0;
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src) = 0;
+    virtual KisPixel toKisPixel(Q_UINT8 *src) = 0;
 
     /**
      * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
@@ -235,13 +224,12 @@ public:
      * @param data A pointer to a contiguous memory region containing width * height pixels
      * @param width in pixels
      * @param height in pixels
-     * @param srcProfile source profile
      * @param dstProfile destination profile
      * @param renderingIntent the rendering intent
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                                   KisProfile *  srcProfile, KisProfile *  dstProfile,
+                                   KisProfile *  dstProfile,
                                    Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
@@ -253,8 +241,8 @@ public:
      *
      * Returns false if the conversion failed, true if it succeeded
      */
-    virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfile *  srcProfile,
-                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace, KisProfile *  dstProfile,
+    virtual bool convertPixelsTo(const Q_UINT8 * src,
+                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -368,17 +356,8 @@ public:
                 Q_UINT8 opacity,
                 Q_INT32 rows,
                 Q_INT32 cols,
-                const KisCompositeOp& op,
-                KisProfile *  srcProfile = 0,
-                KisProfile *  dstProfile = 0);
+                const KisCompositeOp& op);
 
-
-
-    /**
-     * Return the default profile for this colorspace. This may be 0.
-     */
-    virtual KisProfile *   getDefaultProfile() { return m_defaultProfile; };
-    void setDefaultProfile(KisProfile *  profile) { m_defaultProfile = profile; };
 
 //========================== END of Public API ========================================//
 
@@ -410,7 +389,6 @@ protected:
 protected:
 
     QStringList m_profileFilenames;
-    KisProfile *  m_defaultProfile;
     Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
     Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
     Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
@@ -420,7 +398,7 @@ protected:
     cmsHTRANSFORM m_defaultToXYZ;
     cmsHTRANSFORM m_defaultFromXYZ;
 
-    KisProfile *  m_lastUsedSrcProfile;
+    KisProfile *  m_profile;
     KisProfile *  m_lastUsedDstProfile;
     cmsHTRANSFORM m_lastUsedTransform;
 

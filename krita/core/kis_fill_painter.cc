@@ -88,7 +88,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
     // Make sure we're in the right colorspace  
     
     KisColor kc2(kc); // get rid of const
-    kc2.convertTo(m_device->colorSpace(), m_device->profile());
+    kc2.convertTo(m_device->colorSpace());
     Q_UINT8 * data = kc2.data();
 
     Q_INT32 y;
@@ -279,7 +279,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
     emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
     
-    Q_UINT8 selected;
     bool hasSelection = m_careForSelection && sourceDevice -> hasSelection();
     KisSelectionSP srcSel = 0;
     if (hasSelection)
@@ -312,7 +311,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         // Here as well: start the iterator at (0,y)
         KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
         selIt += x;
-        colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData(), 0); // ### diff for fuzzyness
+        colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* - diff*/ , selIt.rawData()); // ### diff for fuzzyness
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
@@ -340,7 +339,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
                 stop = true;
                 continue;
             }
-            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData(), 0); // Qt::white?? ### diff for fuzzy
+            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /*- diff*/, selIt.rawData()); // Qt::white?? ### diff for fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));
@@ -376,7 +375,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
                 continue;
             }
 
-            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData(), 0); // Qt::white?? ### fuzzy
+            colorSpace -> fromQColor(Qt::white, MAX_SELECTED /* -diff*/, selIt.rawData()); // Qt::white?? ### fuzzy
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
                 stack.push(new FillSegment(x, y-1));

@@ -55,7 +55,6 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
     dev -> exactBounds(x, y, w, h);
 
     KisColorSpace * cs = dev -> colorSpace();
-    KisProfile *  profile = dev -> profile();
 
     for (int y2 = y; y2 < h - y; ++y2) {
         KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);

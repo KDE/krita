@@ -66,7 +66,7 @@
 #include "kis_command.h"
 #include "kis_view.h"
 #include "kis_colorspace.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_profile.h"
 #include "kis_id.h"
 #include "kis_part_layer.h"
@@ -363,7 +363,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     double xres;
     double yres;
     QString colorspacename;
-    KisProfile *  profile;
+    KisColorSpace * cs;
 
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
@@ -391,26 +391,27 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
         {
-            // And old file: take a reasonable default.
+            // An old file: take a reasonable default. 
             // Krita didn't support anything else in those
             // days anyway.
             colorspacename = "RGBA";
         }
 
-        KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(colorspacename);
-        if (cs == 0) {
-            // return 0;
-            if (colorspacename  == "Grayscale + Alpha")
-                cs = KisColorSpaceRegistry::instance() -> get("GRAYA");
-            else
-                cs = KisColorSpaceRegistry::instance() -> get("RGBA");
-        }
+        // A hack for an old colorspacename
+        if (colorspacename  == "Grayscale + Alpha")
+            colorspacename  = "GRAYA";
 
         if ((profileProductName = element.attribute("profile")).isNull()) {
-            profile = 0;
+            // no mention of profile so get default profile
+            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename,"");
         }
         else {
-            profile = KisColorSpaceRegistry::instance()->getProfileByName(profileProductName);
+            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename, profileProductName);
+        }
+
+        if (cs == 0) {
+            kdDebug(DBG_AREA_FILE) << "Could not open colorspace\n";
+            return 0;
         }
 
         img = new KisImage(this, width, height, cs, name);
@@ -418,8 +419,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         img -> setDescription(description);
         img -> setResolution(xres, yres);
-        img -> setProfile(profile);
-
 
         for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             if (node.isElement()) {
@@ -463,8 +462,8 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
     layerElement.setAttribute("locked", layer -> locked());
     layerElement.setAttribute("colorspacename", layer -> colorSpace() -> id().id());
     // XXX: Save profile as blob inside the layer, instead of the product name.
-    if (layer -> profile() && layer -> profile() -> valid()) {
-        layerElement.setAttribute("profile", layer -> profile() -> productName());
+    if (layer -> colorSpace() -> getProfile() && layer -> colorSpace() -> getProfile() -> valid()) {
+        layerElement.setAttribute("profile", layer -> colorSpace() -> getProfile() -> productName());
     }
 
     return layerElement;
@@ -490,6 +489,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     bool linked;
     bool locked;
     KisLayerSP layer;
+    KisColorSpace * cs;
 
     if ((name = element.attribute("name")).isNull())
         return 0;
@@ -546,32 +546,35 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     locked = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
 
-    QString colorspacename = element.attribute("colorspacename");
-    KisColorSpace * colorSpace = img -> colorSpace();
+    QString colorspacename;
+    QString profileProductName;
 
-    kdDebug() << "ColorSpace name in layer: " << colorspacename << "\n";
-    if (!colorspacename.isNull()) {
-        colorSpace = KisColorSpaceRegistry::instance() -> get(KisID(colorspacename, ""));
+    if ((colorspacename = element.attribute("colorspacename")).isNull())
+    {
+        cs = img -> colorSpace();
     }
-    kdDebug(DBG_AREA_FILE) << "ColorSpace: " << colorspacename << "\n";
+    else
+    {
+        if ((profileProductName = element.attribute("profile")).isNull()) {
+            // no mention of profile so get default profile
+            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename,"");
+        }
+        else {
+            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename, profileProductName);
+        }
 
-    if (colorSpace == 0) {
-        kdDebug() << "Could not get colorspace: aborting\n";
-        return 0;
+        if (cs == 0) {
+            kdDebug(DBG_AREA_FILE) << "Could not open ColorSpace of layer " << colorspacename << "\n";
+            return 0;
+
+        kdDebug(DBG_AREA_FILE) << "ColorSpace of layer: " << colorspacename << "\n";
+        }
     }
 
-    QString profileProductName = element.attribute("profile");
-    KisProfile *  profile = 0;
-
-    if (!profileProductName.isNull()) {
-        profile = KisColorSpaceRegistry::instance()->getProfileByName(profileProductName);
-    }
-
-    layer = new KisLayer(img, name, opacity, colorSpace);
+    layer = new KisLayer(img, name, opacity, cs);
     Q_CHECK_PTR(layer);
 
     layer -> setCompositeOp(compositeOp);
-    layer -> setProfile(profile);
     layer -> setLinked(linked);
     layer -> setVisible(visible);
     layer -> move(x, y);
@@ -617,13 +620,13 @@ bool KisDoc::completeSaving(KoStore *store)
             store -> close();
         }
 
-        if ((*it2) -> profile()) {
+        if ((*it2) -> colorSpace() -> getProfile()) {
             // save layer profile
             location = external ? QString::null : uri;
             location += (img) -> name() + "/layers/" + (*it2) -> name() + ".icc";
 
             if (store -> open(location)) {
-                store -> write((*it2) -> profile() -> annotation() -> annotation());
+                store -> write((*it2) -> colorSpace() -> getProfile() -> annotation() -> annotation());
                 store -> close();
             }
         }
@@ -721,9 +724,9 @@ bool KisDoc::completeLoading(KoStore *store)
             store -> open(location);
             data = store -> read(store -> size());
             store -> close();
-            (*it2) -> setProfile(new KisProfile(data,
+/*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
                 (*it2) -> colorSpace() -> colorSpaceType()));
-            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
+*/            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 
         IOCompletedStep();
@@ -750,8 +753,7 @@ bool KisDoc::completeLoading(KoStore *store)
         store -> open(location);
         data = store -> read(store -> size());
         store -> close();
-        (m_currentImage) -> setProfile(new KisProfile(data,
-            (m_currentImage) -> colorSpace() -> colorSpaceType()));
+        (m_currentImage) -> setProfile(new KisProfile(data));
         kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
     }
 
@@ -809,7 +811,7 @@ bool KisDoc::slotNewImage()
         KisImageSP img;
         KisLayerSP layer;
 
-        KisColorSpace * cs = KisColorSpaceRegistry::instance()->get(dlg.colorSpaceID());
+        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance()->getColorSpace(dlg.colorSpaceID(), dlg.profileName());
 
         if (!cs) return false;
 
@@ -821,8 +823,7 @@ bool KisDoc::slotNewImage()
 
         img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
         img -> setDescription(dlg.imgDescription());
-
-        img -> setProfile(dlg.profile());
+        img -> setProfile(cs->getProfile());
 
         layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
         Q_CHECK_PTR(layer);
@@ -858,7 +859,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transpare
     // XXX: Use transparent flag to forego the background layer
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfile *  profile = KisColorSpaceRegistry::instance() -> getProfileByName(monitorProfileName);
+    KisProfile *  profile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     paintContent(painter, rect, profile);
 

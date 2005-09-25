@@ -34,7 +34,6 @@
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_registry.h"
 
 namespace {
     const Q_INT32 MAX_CHANNEL_RGB = 3;
@@ -57,16 +56,13 @@ struct KisColorAdjustment
 //const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_OPAQUE;
 //const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
-KisRgbU16ColorSpace::KisRgbU16ColorSpace() :
-    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData)
+KisRgbU16ColorSpace::KisRgbU16ColorSpace(KisProfile *p) :
+    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16), QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16), QColor(0,255,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16), QColor(0,0,255)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));
-
-    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    setDefaultProfile( new KisProfile(hProfile, TYPE_BGRA_16) );
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
@@ -97,7 +93,7 @@ void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -107,7 +103,7 @@ void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile
     dst -> alpha = U16_OPACITY_OPAQUE;
 }
 
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -118,14 +114,14 @@ void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *
 }
 
 
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
+void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(UINT16_TO_UINT8(src -> red), UINT16_TO_UINT8(src -> green), UINT16_TO_UINT8(src -> blue));
 }
 
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 

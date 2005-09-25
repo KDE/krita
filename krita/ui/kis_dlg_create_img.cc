@@ -34,7 +34,7 @@
 
 #include <koUnitWidgets.h>
 
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_dlg_create_img.h"
 #include "wdgnewimage.h"
 #include "kis_profile.h"
@@ -64,7 +64,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
     m_page -> intHeight -> setMaxValue(maxHeight);
     m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
 
-    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceRegistry::instance() -> listKeys());
+    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
     m_page -> cmbColorSpaces -> setCurrentText(colorSpaceName);
 
     connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
@@ -128,23 +128,9 @@ QString KisDlgCreateImg::imgDescription() const
     return m_page -> txtDescription -> text();
 }
 
-KisProfile *  KisDlgCreateImg::profile() const
+QString KisDlgCreateImg::profileName() const
 {
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(m_page -> cmbColorSpaces -> currentItem());
-    if (!cs) return 0;
-
-    QValueVector<KisProfile *>  resourceslist = cs -> profiles();
-    Q_UINT32 index = m_page -> cmbProfile -> currentItem();
-    
-    if (resourceslist.count() == 0 || 
-        index > resourceslist.count() ||
-        index == 0) { 
-        return 0;
-    }
-    else {
-        return resourceslist.at(index - 1);
-    }
-    
+    return m_page -> cmbProfile -> currentText();
 }
 
 void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
@@ -152,18 +138,15 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 
 
     m_page -> cmbProfile -> clear();
-    m_page -> cmbProfile -> insertItem(i18n("None"));
 
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
-    if (cs == 0) return;
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    if (csf == 0) return;
 
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page -> cmbProfile -> insertItem((*it) -> productName());
     }
-    
-
 }
 
 #include "kis_dlg_create_img.moc"

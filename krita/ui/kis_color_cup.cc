@@ -40,7 +40,6 @@
 #include <koFrameButton.h>
 
 #include <kis_canvas_subject.h>
-#include <kis_colorspace_registry.h>
 #include <kis_color.h>
 #include <kis_color_cup.h>
 

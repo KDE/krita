@@ -67,7 +67,7 @@ void KisFiltersListView::buildPreview()
                 imgthumbPreview->add(thumbPreview,0);
                 f->disableProgress();
                 f->process((KisPaintDeviceImplSP)m_thumb, (KisPaintDeviceImplSP)thumbPreview,*itc, imgthumbPreview->bounds());
-                QImage qimg =  thumbPreview->convertToQImage(thumbPreview->profile());
+                QImage qimg =  thumbPreview->convertToQImage(0);
                 new KisFiltersIconViewItem( this, (*it).name(),
                                                                         QPixmap(qimg), *it, f, *itc );
             }

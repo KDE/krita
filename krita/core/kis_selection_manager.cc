@@ -43,7 +43,6 @@
 #include "kis_layer.h"
 #include "kis_paint_device_impl.h"
 #include "kis_channelinfo.h"
-#include "kis_colorspace_registry.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
 #include "kis_global.h"
@@ -387,7 +386,6 @@ void KisSelectionManager::copy()
     Q_CHECK_PTR(clip);
 
     clip -> setCompositeOp(COMPOSITE_OVER);
-    clip -> setProfile(layer -> profile());
 
     KisColorSpace * cs = clip->colorSpace();
 
@@ -445,15 +443,15 @@ KisLayerSP KisSelectionManager::paste()
         gc.end();
 
         KisConfig cfg;
-        if (cfg.askProfileOnPaste() && clip -> profile() == 0 && img -> profile() != 0) {
+        if (cfg.askProfileOnPaste() && clip -> colorSpace() -> getProfile() == 0 && img -> profile() != 0) {
             KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
             Q_CHECK_PTR(dlg);
 
             if (dlg -> exec() == QDialog::Accepted) {
                 KisProfile *  profile = dlg -> profile();
                 if (profile != img -> profile()) {
-                    layer -> setProfile(profile);
-                    layer -> convertTo(img -> colorSpace(), img -> profile(), dlg -> renderIntent());
+//PROFILEMERGE                    layer -> setProfile(profile);
+                    layer -> convertTo(img -> colorSpace(), dlg -> renderIntent());
                 }
             }
         }

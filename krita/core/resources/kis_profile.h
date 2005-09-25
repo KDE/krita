@@ -43,15 +43,14 @@ class KRITACORE_EXPORT KisProfile : public KisResource, public KShared {
     Q_OBJECT
 
 public:
-    KisProfile(Q_UINT32 colorType);
-    KisProfile(QByteArray rawData, Q_UINT32 colorType);
+    KisProfile(QByteArray rawData);
     KisProfile(const QString& file);
-    KisProfile(const cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType);
+    KisProfile(const cmsHPROFILE profile, QByteArray rawData);
 
     // Create a profile from a cms profile handle; this profile does not have associated
     // raw data, so we cannot save it as an annotation, unless we implement the code
     // in lcms testbed TestSaveToMem -- XXX.
-    KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType);
+    KisProfile(const cmsHPROFILE profile);
 
     virtual ~KisProfile();
 
@@ -66,11 +65,6 @@ public:
     QString productInfo() const { return m_productInfo; }
     QString manufacturer() const { return m_manufacturer; }
     cmsHPROFILE profile();
-private:
-    // XXX: When I'm sure this isn't needed anywhere, remove it.
-    DWORD colorType() { return m_lcmsColorType; }
-public:
-    void setColorType(DWORD colorType) { m_lcmsColorType = colorType; }
 
     KisAnnotationSP annotation() const;
 
@@ -90,7 +84,6 @@ private:
     QString m_productDescription;
     QString m_productInfo;
     QString m_manufacturer;
-    DWORD m_lcmsColorType;
 
     QByteArray m_rawData;
 };

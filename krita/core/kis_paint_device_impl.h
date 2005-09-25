@@ -179,7 +179,7 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile = 0, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Fill this paint device with the data from img;
@@ -261,27 +261,12 @@ public:
 
     KisColorSpace * colorSpace() const;
 
-    /**
-     * Return the icm profile associated with this layer, or
-     * the profile associated with the image if the color space of
-     * this layer is the same as the color space of the image,
-     * or 0.
-     */
-    KisProfile *  profile() const;
-
-    /**
-     * Set the profile associated with this layer to the specified profile
-     * or reset to 0 if the profile does not have the same colorspace signature
-     * as the color model associated with this paint device.
-     */
-    void setProfile(KisProfile *  profile);
-
     KisDataManagerSP dataManager() const { return m_datamanager; }
 
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setData(KisDataManagerSP data, KisColorSpace * colorSpace, KisProfile *  profile);
+    void setData(KisDataManagerSP data, KisColorSpace * colorSpace);
 
     KisCompositeOp compositeOp() { return m_compositeOp; }
     void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
@@ -421,8 +406,6 @@ private:
     Q_INT32 m_pixelSize;
     Q_INT32 m_nChannels;
 
-    KisProfile *  m_profile;
-
     void accept(KisScaleVisitor &);
     void accept(KisRotateVisitor &);
 
@@ -502,12 +485,12 @@ inline bool KisPaintDeviceImpl::hasAlpha() const
 
 inline KisPixel KisPaintDeviceImpl::toPixel(Q_UINT8 * bytes)
 {
-    return m_colorSpace -> toKisPixel(bytes, m_profile);
+    return m_colorSpace -> toKisPixel(bytes);
 }
 
 inline KisPixelRO KisPaintDeviceImpl::toPixelRO(const Q_UINT8 * bytes)
 {
-    return m_colorSpace -> toKisPixelRO(bytes, m_profile);
+    return m_colorSpace -> toKisPixelRO(bytes);
 }
 
 inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
@@ -519,12 +502,6 @@ inline void KisPaintDeviceImpl::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_IN
 {
     m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }
-
-inline KisProfile *  KisPaintDeviceImpl::profile() const
-{
-    return m_profile;
-}
-
 
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_

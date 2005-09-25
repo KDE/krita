@@ -292,7 +292,6 @@ void DlgColorRange::slotSelectClicked()
     Q_INT32 x, y, w, h;
     m_layer -> exactBounds(x, y, w, h);
     KisColorSpace * cs = m_layer -> colorSpace();
-    KisProfile *  profile = m_layer -> profile();
     Q_UINT8 opacity;
     for (int y2 = y; y2 < h - y; ++y2) {
         KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
@@ -300,7 +299,7 @@ void DlgColorRange::slotSelectClicked()
         while (!hiter.isDone()) {
             QColor c;
 
-            cs -> toQColor(hiter.rawData(), &c, &opacity, profile);
+            cs -> toQColor(hiter.rawData(), &c, &opacity);
             // Don't try to select transparent pixels.
             if (opacity > OPACITY_TRANSPARENT) {
                 Q_UINT8 match = matchColors(c, m_currentAction);

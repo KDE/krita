@@ -46,8 +46,8 @@ namespace {
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace() :
-    KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB/Alpha (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData)
+KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisProfile *p) :
+    KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB/Alpha (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), COLOR, sizeof(half)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), COLOR, sizeof(half)));
@@ -56,9 +56,6 @@ KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace() :
 
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     //setDefaultProfile( new KisProfile(hProfile, RGBAF16HALF_LCMS_TYPE) );
-
-    // XXX: Prevent use of lcms transforms until they're ready to work.
-    setDefaultProfile(0);
 
     m_alphaPos = PIXEL_ALPHA * sizeof(half);
 }
@@ -87,7 +84,7 @@ void KisRgbF16HalfColorSpace::getPixel(const Q_UINT8 *src, half *red, half *gree
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -96,7 +93,7 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisPro
     dst -> blue = UINT8_TO_HALF(c.blue());
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -106,14 +103,14 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UIN
     dst -> alpha = UINT8_TO_HALF(opacity);
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
+void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(HALF_TO_UINT8(src -> red), HALF_TO_UINT8(src -> green), HALF_TO_UINT8(src -> blue));
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -210,7 +207,7 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF16HalfColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  srcProfile, KisProfile *  dstProfile,
+                         KisProfile *  dstProfile,
                          Q_INT32 renderingIntent, float exposure)
 
 {

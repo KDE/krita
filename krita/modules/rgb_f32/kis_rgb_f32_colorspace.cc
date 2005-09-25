@@ -47,19 +47,13 @@ namespace {
 // FIXME: lcms doesn't support 32-bit float
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF32ColorSpace::KisRgbF32ColorSpace() :
-    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData)
+KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisProfile *p) :
+    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData,p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), ALPHA, sizeof(float)));
-
-    //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    //setDefaultProfile( new KisProfile(hProfile, F32_LCMS_TYPE) );
-
-    // XXX: Prevent use of lcms transforms until they're ready to work.
-    setDefaultProfile(0);
 
     m_alphaPos = PIXEL_ALPHA * sizeof(float);
 }
@@ -88,7 +82,7 @@ void KisRgbF32ColorSpace::getPixel(const Q_UINT8 *src, float *red, float *green,
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -97,7 +91,7 @@ void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile
     dst -> blue = UINT8_TO_FLOAT(c.blue());
 }
 
-void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *  /*profile*/)
+void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -107,14 +101,14 @@ void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *
     dst -> alpha = UINT8_TO_FLOAT(opacity);
 }
 
-void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *  /*profile*/)
+void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(FLOAT_TO_UINT8(src -> red), FLOAT_TO_UINT8(src -> green), FLOAT_TO_UINT8(src -> blue));
 }
 
-void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -211,7 +205,7 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF32ColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  srcProfile, KisProfile *  dstProfile,
+                         KisProfile *  dstProfile,
                          Q_INT32 renderingIntent, float exposure)
 
 {

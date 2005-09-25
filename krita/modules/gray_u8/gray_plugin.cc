@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 
 #include <kis_factory.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "gray_plugin.h"
@@ -52,9 +52,10 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
-        KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace();
+        KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace(0);
+        KisColorSpaceFactory * csf = new KisGrayColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceGrayA);
-        KisColorSpaceRegistry::instance() -> add(colorSpaceGrayA);
+        KisColorSpaceFactoryRegistry::instance() -> add(csf);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
                 (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );

@@ -41,16 +41,14 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
-
-KisProfile::KisProfile(Q_UINT32 colorType)
-    : super(QString()),
-      m_lcmsColorType(colorType)
+/*
+KisProfile::KisProfile()
+    : super(QString())
 {
 }
-
-KisProfile::KisProfile(QByteArray rawData, Q_UINT32 colorType)
+*/
+KisProfile::KisProfile(QByteArray rawData)
     : super (QString()),
-      m_lcmsColorType(colorType),
       m_rawData(rawData)
 {
     m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
@@ -62,19 +60,17 @@ KisProfile::KisProfile(const QString& file)
 {
 }
 
-KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData, Q_UINT32 colorType)
+KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData)
     : super (QString()),
       m_profile(profile),
-      m_lcmsColorType(colorType),
       m_rawData(rawData)
 {
     init();
 }
 
-KisProfile::KisProfile(const cmsHPROFILE profile, Q_UINT32 colorType)
+KisProfile::KisProfile(const cmsHPROFILE profile)
     : super (QString()),
-      m_profile(profile),
-      m_lcmsColorType(colorType)
+      m_profile(profile)
 {
     init();
 }
@@ -189,7 +185,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
         QByteArray bytes (nitems);
         bytes.assign((char*)str, (Q_UINT32)nitems);
 
-        return new KisProfile(profile, bytes, TYPE_BGRA_8);
+        return new KisProfile(profile, bytes);
     } else {
         kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
         return NULL;

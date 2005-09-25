@@ -31,7 +31,6 @@
 
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_gray_colorspace.h"
 #include "kis_iterators_pixel.h"
@@ -45,19 +44,18 @@ namespace {
     const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-KisGrayColorSpace::KisGrayColorSpace() :
-    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData)
+KisGrayColorSpace::KisGrayColorSpace(KisProfile *p) :
+    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));
-
+/*
     // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
 
-    setDefaultProfile( new KisProfile(hProfile, TYPE_GRAYA_8) );
-
+*/
     m_alphaPos = PIXEL_GRAY_ALPHA;
 
     init();
@@ -80,13 +78,13 @@ void KisGrayColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *a
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
-void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
 {
     // Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
     dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
 }
 
-void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  /*profile*/)
+void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst)
 {
     dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
     dst[PIXEL_GRAY_ALPHA] = opacity;
@@ -106,12 +104,12 @@ void KisGrayColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels
     }
 }
 
-void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  /*profile*/)
+void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
 {
     c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
 }
 
-void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  /*profile*/)
+void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
 {
     c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
     *opacity = src[PIXEL_GRAY_ALPHA];

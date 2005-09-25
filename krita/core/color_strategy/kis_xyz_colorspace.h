@@ -45,7 +45,7 @@ public:
     };
 
 public:
-    KisXyzColorSpace();
+    KisXyzColorSpace(KisProfile *p);
     virtual ~KisXyzColorSpace();
 
 public:
@@ -53,11 +53,11 @@ public:
     // Conversion functions
 
     //XXX: KisPixel(RO) does not work with this colorspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
+    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
+        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
 
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this, profile); }
+    virtual KisPixel toKisPixel(Q_UINT8 *src)
+        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
 
     // Pixel manipulation
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);

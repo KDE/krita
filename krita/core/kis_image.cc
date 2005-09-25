@@ -53,7 +53,6 @@
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
 #include "kis_config.h"
-#include "kis_colorspace_registry.h"
 
 #define DEBUG_IMAGES 0
 const Q_INT32 RENDER_HEIGHT = 128;
@@ -180,16 +179,13 @@ namespace {
 
     public:
         KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
-                               KisColorSpace * beforeColorSpace, KisProfile *  beforeProfile,
-                               KisColorSpace * afterColorSpace, KisProfile *  afterProfile
+                               KisColorSpace * beforeColorSpace, KisColorSpace * afterColorSpace
             ) : super(i18n("Convert Image Type"))
             {
                 m_adapter = adapter;
                 m_img = img;
                 m_beforeColorSpace = beforeColorSpace;
-                m_beforeProfile = beforeProfile;
                 m_afterColorSpace = afterColorSpace;
-                m_afterProfile = afterProfile;
             }
 
         virtual ~KisConvertImageTypeCmd()
@@ -202,7 +198,7 @@ namespace {
                 m_adapter -> setUndo(false);
 
                 m_img -> setColorSpace(m_afterColorSpace);
-                m_img -> setProfile(m_afterProfile);
+                m_img -> setProfile(m_afterColorSpace -> getProfile());
 
                 m_adapter -> setUndo(true);
                 m_img -> notify();
@@ -214,7 +210,7 @@ namespace {
                 m_adapter -> setUndo(false);
 
                 m_img -> setColorSpace(m_beforeColorSpace);
-                m_img -> setProfile(m_beforeProfile);
+                m_img -> setProfile(m_beforeColorSpace -> getProfile());
 
                 m_adapter -> setUndo(true);
                 m_img -> notify();
@@ -226,8 +222,6 @@ namespace {
         KisImageSP m_img;
         KisColorSpace * m_beforeColorSpace;
         KisColorSpace * m_afterColorSpace;
-        KisProfile *  m_beforeProfile;
-        KisProfile *  m_afterProfile;
     };
 
 
@@ -807,13 +801,11 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
     }
 }
 
-void KisImage::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile, Q_INT32 renderingIntent)
+void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 {
     // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
     if ( (m_colorSpace -> id() == dstColorSpace -> id())
-         && profile()
-         && dstProfile
-         && (profile() == dstProfile) )
+         && (m_colorSpace -> getProfile() == dstColorSpace -> getProfile()) )
     {
 //         kdDebug(DBG_AREA_CORE) << "KisImage: NOT GOING TO CONVERT\n";
         return;
@@ -828,18 +820,18 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, KisProfile *  dstProfile
 //         kdDebug() << "Converting layer " << ( *it )->name() << " from " << ( *it )->colorSpace()->id().name()
 //                   << " to " << dstColorSpace->id().name() << "\n";
 
-        (*it) -> convertTo(dstColorSpace, dstProfile, renderingIntent);
+        (*it) -> convertTo(dstColorSpace, renderingIntent);
     }
 
-    setProfile(dstProfile);
+    setProfile(dstColorSpace -> getProfile());
 
-    m_projection->convertTo(dstColorSpace, dstProfile, renderingIntent);
-    m_bkg->convertTo(dstColorSpace, dstProfile, renderingIntent);
+    m_projection->convertTo(dstColorSpace, renderingIntent);
+    m_bkg->convertTo(dstColorSpace, renderingIntent);
 
     if (undoAdapter() && m_adapter->undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
-                                                         m_colorSpace, m_profile,  dstColorSpace, dstProfile));
+                                                         m_colorSpace, dstColorSpace));
         m_adapter->endMacro();
     }
 
@@ -860,11 +852,9 @@ void KisImage::setProfile(const KisProfile * profile)
     // XXX: When we set a new profile, we should do a transform!
     if (profile && profile -> valid()) {
         m_profile = const_cast<KisProfile *>( profile );
-        m_projection -> setProfile(const_cast<KisProfile *>( profile ));
     }
     else {
         m_profile = 0;
-        m_projection -> setProfile(m_profile);
     }
     notify();
     emit(sigProfileChanged(m_profile));
@@ -1605,7 +1595,6 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 KisPaintDeviceImplSP KisImage::mergedImage()
 {
     KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged image");
-    dev -> setProfile(profile());
 
     KisPainter gc;
 
@@ -1624,7 +1613,6 @@ KisPaintDeviceImplSP KisImage::mergedImage()
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
     KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged pixel");
-    dev -> setProfile(profile());
 
     KisPainter gc;
 

@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include <kis_global.h>
-#include <kis_colorspace_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_factory.h>
 
 #include "rgb_u16_plugin.h"
@@ -48,9 +48,10 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList 
 
     if ( parent->inherits("KisFactory") )
     {
-        KisColorSpace * colorSpaceRGBU16 = new KisRgbU16ColorSpace();
+        KisColorSpace * colorSpaceRGBU16 = new KisRgbU16ColorSpace(0);
+        KisColorSpaceFactory * csFactory = new KisRgbU16ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBU16);
-        KisColorSpaceRegistry::instance() -> add(colorSpaceRGBU16);
+        KisColorSpaceFactoryRegistry::instance() -> add(csFactory);
 
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>

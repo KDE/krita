@@ -53,7 +53,7 @@ public:
     QString imgName() const;
     double imgResolution() const;
     QString imgDescription() const;
-    KisProfile *  profile() const;
+    QString profileName() const;
 
 private slots:
 

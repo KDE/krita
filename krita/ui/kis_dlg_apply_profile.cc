@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <qbuttongroup.h>
 
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_types.h"
 #include "kis_profile.h"
 #include "kis_colorspace.h"
@@ -65,7 +65,7 @@ KisProfile *  KisDlgApplyProfile::profile() const
         profileName = m_page -> cmbProfile -> currentText();
     }
     
-    return KisColorSpaceRegistry::instance()->getProfileByName(profileName);
+    return KisColorSpaceFactoryRegistry::instance()->getProfileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
@@ -78,10 +78,10 @@ int KisDlgApplyProfile::renderIntent() const
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
 
-    KisColorSpace * cs = KisColorSpaceRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
     m_page -> cmbProfile -> clear();
     m_page -> cmbProfile -> insertItem(i18n("None"));
-    QValueVector<KisProfile *>  profileList = cs -> profiles();
+    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());

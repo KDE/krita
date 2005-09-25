@@ -36,7 +36,7 @@
 #include "kis_factory.h"
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
-#include "kis_colorspace_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_paintop_registry.h"
 #include "kis_filter_registry.h"
 #include "kis_tool_registry.h"
@@ -100,7 +100,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
       KisToolRegistry::instance();
     KisPaintOpRegistry::instance();
     KisFilterRegistry::instance();
-    KisColorSpaceRegistry::instance();
+    KisColorSpaceFactoryRegistry::instance();
 
     // Load all modules: color models, paintops, filters
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),

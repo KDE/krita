@@ -39,7 +39,6 @@
 
 #include "kis_global.h"
 #include "kis_palette.h"
-#include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
 
 

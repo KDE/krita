@@ -214,8 +214,8 @@ KisColorAdjustment *KisRgbU16ColorSpace::createBrightnessContrastAdjustment(Q_UI
     adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
     cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
-    adj->profiles[0] = cmsCreate_sRGBProfile();
-    adj->profiles[2] = cmsCreate_sRGBProfile();
+    adj->profiles[0] = m_profile->profile();
+    adj->profiles[2] = m_profile->profile();
     adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, TYPE_BGRA_16, TYPE_BGRA_16, INTENT_PERCEPTUAL, 0);
 
     return adj;

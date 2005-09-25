@@ -105,6 +105,8 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
             ++hiter;
         }
     }
+    
+    addDirtyRect(QRect(x1, y1, w, h));
 }
 
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {
@@ -145,6 +147,8 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
 
         y+=sh; sy = 0;
     }
+
+    addDirtyRect(QRect(x1, y1, w, h));
 }
 
 // flood filling

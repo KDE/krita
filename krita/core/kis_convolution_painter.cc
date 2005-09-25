@@ -185,6 +185,8 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
         }        
     
     }
-    
+
+    addDirtyRect(QRect(x, y, w, h));
+
     emit notifyProgressDone(this);
 }

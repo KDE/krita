@@ -33,6 +33,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
+#include "kis_colorspace_factory_registry.h"
 
 #include "composite.h"
 
@@ -240,9 +241,11 @@ if(getProfile())
 if(dstProfile)
     printf("dstProfile = %s\n",dstProfile->productName().ascii());
 //PROFILEMERGE should use a screen cs
+
     if (dstProfile != 0) {
+        KisColorSpace *dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),  dstProfile->productName());
         convertPixelsTo(img.bits(),
-                        img.bits(), this,
+                        img.bits(), dstCS,
                         width * height, renderingIntent);
     }
 

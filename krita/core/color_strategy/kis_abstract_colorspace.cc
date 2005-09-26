@@ -428,7 +428,7 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
     img.setAlphaBuffer( true );
 
-    KisColorSpace * dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),dstProfile->productName());
+    KisColorSpace * dstCS;
 
     if(dstCS->getProfile())
         dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),dstProfile->productName());

@@ -54,6 +54,8 @@ void KisBasicHistogramProducer::clear() {
         for (int j = 0; j < m_nrOfBins; j++) {
             m_bins.at(i).at(j) = 0;
         }
+        m_outRight.at(i) = 0;
+        m_outLeft.at(i) = 0;
     }
 }
 
@@ -89,10 +91,6 @@ QString KisBasicU8HistogramProducer::positionToString(double pos) const {
 
 void KisBasicU8HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
          KisColorSpace *cs) {
-    for (int i = 0; i < m_channels; i++) {
-        m_outRight.at(i) = 0;
-        m_outLeft.at(i) = 0;
-    }
     while (!it.isDone()) {
         Q_UINT8* pixel = it.rawData();
         if (   (m_skipUnselected && !it.isSelected())
@@ -133,10 +131,6 @@ void KisBasicU16HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
     Q_UINT16 to = from + width;
     double factor = 255.0 / width;
     kdDebug() << "from: " << from << "; to: " << to << endl;
-    m_outRight.clear();
-    m_outRight.resize(m_channels);
-    m_outLeft.clear();
-    m_outLeft.resize(m_channels);
 
     while (!it.isDone()) {
         Q_UINT8* pixelRaw = it.rawData();
@@ -186,11 +180,6 @@ void KisBasicF32HistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
     float factor = 255.0 / width;
     kdDebug() << "from: " << from << "; to: " << to << endl;
 
-    m_outRight.clear();
-    m_outRight.resize(m_channels);
-    m_outLeft.clear();
-    m_outLeft.resize(m_channels);
-
     while (!it.isDone()) {
         Q_UINT8* pixelRaw = it.rawData();
         float* pixel = reinterpret_cast<float*>(pixelRaw);
@@ -239,11 +228,6 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
     float to = from + width;
     float factor = 255.0 / width;
     kdDebug() << "from: " << from << "; to: " << to << endl;
-
-    m_outRight.clear();
-    m_outRight.resize(m_channels);
-    m_outLeft.clear();
-    m_outLeft.resize(m_channels);
 
     while (!it.isDone()) {
         Q_UINT8* pixelRaw = it.rawData();

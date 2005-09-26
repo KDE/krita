@@ -71,6 +71,29 @@ void KisHistogramView::setLayer(KisLayerSP layer)
     updateHistogram();
 }
 
+void KisHistogramView::setHistogram(KisHistogramSP histogram)
+{
+    m_cs = 0;
+    m_histogram = histogram;
+    m_currentProducer = m_histogram -> producer();
+    m_from = m_currentProducer -> viewFrom();
+    m_width = m_currentProducer -> viewWidth();
+
+    m_comboInfo.clear();
+    m_channelStrings.clear();
+    m_channels.clear();
+    m_channelToOffset.clear();
+
+    addProducerChannels(m_currentProducer);
+
+    // Set the currently viewed channel:
+    m_color = false;
+    m_channels.append(m_comboInfo.at(1).channel);
+    m_channelToOffset.append(0);
+
+    updateHistogram();
+}
+
 void KisHistogramView::setView(double from, double size)
 {
     m_from = from;
@@ -95,13 +118,21 @@ QStringList KisHistogramView::channelStrings()
 
 KisIDList KisHistogramView::listProducers()
 {
-    return KisHistogramProducerFactoryRegistry::instance() -> listKeysCompatibleWith(m_cs);
+    if (m_cs)
+        return KisHistogramProducerFactoryRegistry::instance() -> listKeysCompatibleWith(m_cs);
+    return KisIDList();
 }
 
 void KisHistogramView::setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels)
 {
-    m_currentProducer = KisHistogramProducerFactoryRegistry::instance()
-            -> get(producerID) -> generate();
+    setCurrentChannels(
+        KisHistogramProducerFactoryRegistry::instance() -> get(producerID) -> generate(),
+        channels);
+}
+
+void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, QValueVector<KisChannelInfo *> channels)
+{
+    m_currentProducer = producer;
     m_currentProducer -> setView(m_from, m_width);
     m_histogram -> setProducer(m_currentProducer);
     m_histogram -> updateHistogram();
@@ -214,6 +245,7 @@ void KisHistogramView::setChannels()
 
     m_currentProducer = m_comboInfo.at(0).producer;
     m_color = false;
+    // The currently displayed channel and its offset
     m_channels.append(m_comboInfo.at(1).channel);
     m_channelToOffset.append(0);
 }
@@ -317,5 +349,13 @@ void KisHistogramView::updateHistogram()
 
     setPixmap(m_pix);
 }
+
+void KisHistogramView::mousePressEvent(QMouseEvent * e) {
+    if (e -> button() == Qt::RightButton)
+        emit rightClicked(e -> globalPos());
+    else
+        QLabel::mousePressEvent(e);
+}
+
 
 #include "kis_histogram_view.moc"

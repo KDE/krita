@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Histogram Docker
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritahistogramdocker

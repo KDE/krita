@@ -34,5 +34,6 @@ SUBDIRS = cimg \
 	smalltilesfilter \
 	imagenhancement \
 	sobelfilter \
-	roundcorners
+	roundcorners \
+        histogram_docker
 

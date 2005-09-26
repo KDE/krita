@@ -33,7 +33,7 @@
 
 // Krita
 #include "core/kis_paint_device_impl.h"
-#include "core/color_strategy/kis_colorspace_registry.h"
+#include "core/color_strategy/kis_colorspace_factory_registry.h"
 
 namespace Krita {
 namespace Plugins {
@@ -83,7 +83,7 @@ void PaintDeviceFactory::createBindings()
 
 PaintDeviceObject::PaintDeviceObject()
 {
-    m_paintDevice = new KisPaintDeviceImpl(KisColorSpaceRegistry::instance()->get("RGBA"), "JSPaintDevice");
+    m_paintDevice = new KisPaintDeviceImpl(KisColorSpaceFactoryRegistry::instance()->getColorSpace( KisID("RGBA", ""), ""), "JSPaintDevice");
 }
 
 };

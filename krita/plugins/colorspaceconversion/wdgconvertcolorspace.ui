@@ -206,7 +206,4 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
     <tabstop>radioPerceptual</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kiscmbidlist.h</includehint>
-</includehints>
 </UI>

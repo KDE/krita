@@ -32,7 +32,6 @@
 #include "kis_colorspace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-                     const QPoint& pos,
                      Q_INT32 opacity,
                      const KisCompositeOp& compositeOp,
                      const KisColorSpace * colorSpace,
@@ -61,16 +60,6 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
     m_page->cmbComposite -> setCurrentItem(compositeOp);
 
-    m_page->intX->setValue( pos.x() );
-    m_page->intX->setMinValue(SHRT_MIN);
-    m_page->intX->setMaxValue(SHRT_MAX);
-    m_page->intX->setLineStep(10);
-
-    m_page->intY->setValue( pos.y() );
-    m_page->intY->setMinValue(SHRT_MIN);
-    m_page->intY->setMaxValue(SHRT_MAX);
-    m_page->intY->setLineStep(10);
-
     slotNameChanged( m_page->editName->text() );
 }
 
@@ -98,12 +87,6 @@ int KisDlgLayerProperties::getOpacity() const
     opacity = opacity * 255 / 100;
     return opacity - 1;
 }
-
-QPoint KisDlgLayerProperties::getPosition() const
-{
-    return QPoint(m_page->intX -> value(), m_page->intY -> value());
-}
-
 
 KisCompositeOp KisDlgLayerProperties::getCompositeOp() const
 {

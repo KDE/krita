@@ -1870,21 +1870,14 @@ void KisView::layerProperties()
 
         if (layer) {
             KisDlgLayerProperties dlg(layer -> name(),
-                                     QPoint(layer->getX(),
-                                     layer->getY()),
                                      layer->opacity(),
                                      layer->compositeOp(),
                                      layer->colorSpace());
 
             if (dlg.exec() == QDialog::Accepted) {
-                QPoint pt = dlg.getPosition();
-
                 bool changed = layer -> name() != dlg.getName()
                            || layer -> opacity() != dlg.getOpacity()
-                           || layer -> compositeOp() != dlg.getCompositeOp()
-                           || pt.x() != layer -> getX()
-                           || pt.y() != layer -> getY();
-
+                           || layer -> compositeOp() != dlg.getCompositeOp();
 
                 if (changed)
                     m_adapter -> beginMacro(i18n("Property changes"));
@@ -1895,9 +1888,6 @@ void KisView::layerProperties()
                 {
                     img->setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
                 }
-
-                if (pt.x() != layer->getX() || pt.y() != layer->getY())
-                    KisStrategyMove(this).simpleMove(QPoint(layer->getX(), layer->getY()), pt);
 
                 if (changed)
                     m_adapter -> endMacro();

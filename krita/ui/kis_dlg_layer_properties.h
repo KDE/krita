@@ -31,7 +31,6 @@ class KisDlgLayerProperties : public KDialogBase {
 
 public:
     KisDlgLayerProperties(const QString& deviceName,
-                        const QPoint& pos,
                         Q_INT32 opacity,
                         const KisCompositeOp& compositeOp,
                         const KisColorSpace * colorSpace,
@@ -42,7 +41,6 @@ public:
     QString getName() const;
     Q_INT32 getOpacity() const;
     KisCompositeOp getCompositeOp() const;
-    QPoint getPosition() const;
 
 protected slots:
     void slotNameChanged( const QString & );

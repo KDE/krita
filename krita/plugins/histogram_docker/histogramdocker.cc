@@ -72,6 +72,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
             KisID id(*(keys.at(i)));
             m_popup . insertItem(id.name(), static_cast<int>(i));
         }
+        m_popup.setItemChecked(m_currentProducerPos, true);
 
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
                 this, SLOT(popupMenu(const QPoint&)));
@@ -101,7 +102,9 @@ void KritaHistogramDocker::producerChanged(int pos)
 {
     delete m_cache;
 
+    m_popup.setItemChecked(m_currentProducerPos, false);
     m_currentProducerPos = pos;
+    m_popup.setItemChecked(m_currentProducerPos, true);
 
     uint count = m_producers . count();
     for (uint i = 0; i < count; i++) {

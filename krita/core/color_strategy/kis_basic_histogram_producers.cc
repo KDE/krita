@@ -256,7 +256,7 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
 
 // ------------ Generic RGB ---------------------
 KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENRGBHISTO", "Generic RGB Histogram"),
+    : KisBasicHistogramProducer(KisID("GENRGBHISTO", i18n("Generic RGB Histogram")),
                                 3, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
       is no problem for the superclass since we override channels() */
@@ -307,7 +307,7 @@ void KisGenericRGBHistogramProducer::addRegionToBin(KisRectIteratorPixel& it,
 
 // ------------ Generic RGB ---------------------
 KisGenericLightnessHistogramProducer::KisGenericLightnessHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENLIGHTHISTO", "Generic Lab Lightness Histogram"), 1, 256, 0) {
+    : KisBasicHistogramProducer(KisID("GENLIGHTHISTO", i18n("Generic Lab Lightness Histogram")), 1, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
       is no problem for the superclass since we override channels() */
     m_channelsList.append(new KisChannelInfo(i18n("L"), 0, COLOR));

@@ -20,6 +20,7 @@
 #define _KIS_BASIC_HISTOGRAM_PRODUCERS_
 
 #include <qvaluevector.h>
+#include <klocale.h>
 
 #include "config.h"
 
@@ -147,7 +148,7 @@ protected:
 class KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
     KisGenericRGBHistogramProducerFactory()
-        : KisHistogramProducerFactory(KisID("GENRGBHISTO", "")) {}
+        : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
     virtual ~KisGenericRGBHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
@@ -173,7 +174,7 @@ protected:
 class KisGenericLightnessHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
     KisGenericLightnessHistogramProducerFactory()
-        : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", "")) {}
+        : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", i18n("Generic Lab Lightness Histogram"))) {}
     virtual ~KisGenericLightnessHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericLightnessHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }

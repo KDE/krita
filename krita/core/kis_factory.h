@@ -50,11 +50,11 @@ public:
                            const QStringList &args = QStringList() );
 
     static KAboutData        *aboutData();
-    static KInstance         *global();
+    static KInstance         *instance();
     static KisResourceServerRegistry *rServerRegistry();
 
 private:
-    static KInstance           *s_global;
+    static KInstance           *s_instance;
     static KAboutData          *s_aboutData;
     static KisResourceServerRegistry *s_rserverRegistry;
 };

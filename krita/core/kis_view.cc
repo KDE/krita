@@ -206,13 +206,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     setFocusPolicy( QWidget::StrongFocus );
 
-    setClientBuilder( this );
-
-    if (!doc -> isReadWrite())
-        setXMLFile("krita_readonly.rc");
-    else
-        setXMLFile("krita.rc");
-
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
@@ -224,13 +217,18 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     createDockers();
 
+    setInstance(KisFactory::instance(), true );
+    setClientBuilder( this );
+
+    if (!doc -> isReadWrite())
+        setXMLFile("krita_readonly.rc");
+    else
+        setXMLFile("krita.rc");
+
     m_fg = KisColor(Qt::black);
     m_bg = KisColor(Qt::white);
 
     createLayerBox();
-
-    // Now the view plugins will be loaded.
-    setInstance(KisFactory::global());
 
     setupCanvas();
     setupRulers();
@@ -268,9 +266,11 @@ KisView::~KisView()
 
 QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
+    kdDebug() << "Create container: " << element.attribute("name") << "\n";
+    
     if( element.attribute( "name" ) == "ToolBox" )
     {
-        m_toolBox = new KoToolBox(mainWindow(), "toolbox", KisFactory::global(), NUMBER_OF_TOOLTYPES);
+        m_toolBox = new KoToolBox(mainWindow(), "toolbox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
         m_toolBox -> setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
         return m_toolBox;
@@ -282,6 +282,7 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 
 void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id )
 {
+    kdDebug() << "remvoe container: " << element.attribute("name") << "\n";
     if( shell() && container == m_toolBox )
     {
         delete m_toolBox;

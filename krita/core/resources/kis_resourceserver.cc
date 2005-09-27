@@ -48,7 +48,7 @@ void KisResourceServerBase::loadResources()
     
     QStringList::Iterator it;
     for ( it = m_fileExtensions.begin(); it != m_fileExtensions.end(); ++it ) 
-        filenames += KisFactory::global() -> dirs() -> findAllResources(m_type.ascii(), (*it));
+        filenames += KisFactory::instance() -> dirs() -> findAllResources(m_type.ascii(), (*it));
     
     while( !filenames.empty() )
     {

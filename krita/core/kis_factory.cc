@@ -52,7 +52,7 @@
 
 
 KAboutData* KisFactory::s_aboutData = 0;
-KInstance* KisFactory::s_global = 0;
+KInstance* KisFactory::s_instance = 0;
 KisResourceServerRegistry* KisFactory::s_rserverRegistry = 0;
 
 
@@ -61,7 +61,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 {
     s_aboutData = newKritaAboutData();
 
-    (void)global();
+    (void)instance();
 
     s_rserverRegistry = new KisResourceServerRegistry();
 
@@ -97,7 +97,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 
     // Load extension modules and plugins
-      KisToolRegistry::instance();
+    KisToolRegistry::instance();
     KisPaintOpRegistry::instance();
     KisFilterRegistry::instance();
     KisColorSpaceFactoryRegistry::instance();
@@ -127,8 +127,8 @@ KisFactory::~KisFactory()
     s_rserverRegistry = 0L;
     delete s_aboutData;
     s_aboutData = 0L;
-    delete s_global;
-    s_global = 0L;
+    delete s_instance;
+    s_instance = 0L;
 }
 
 /**
@@ -150,50 +150,50 @@ KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
     return doc;
 }
 
-KInstance* KisFactory::global()
+KInstance* KisFactory::instance()
 {
-    if ( !s_global )
+    if ( !s_instance )
     {
-        s_global = new KInstance(s_aboutData);
-        Q_CHECK_PTR(s_global);
+        s_instance = new KInstance(s_aboutData);
+        Q_CHECK_PTR(s_instance);
     
-        s_global -> dirs() -> addResourceType("krita_template",
+        s_instance -> dirs() -> addResourceType("krita_template",
                          KStandardDirs::kde_default("data") + "krita/templates");
 
-        s_global -> dirs() -> addResourceType("kis",
+        s_instance -> dirs() -> addResourceType("kis",
                           KStandardDirs::kde_default("data") + "krita/");
 
-        s_global -> dirs() -> addResourceType("kis_images",
+        s_instance -> dirs() -> addResourceType("kis_images",
                           KStandardDirs::kde_default("data") + "krita/images/");
 
-        s_global -> dirs() -> addResourceType("kis_brushes",
+        s_instance -> dirs() -> addResourceType("kis_brushes",
                           KStandardDirs::kde_default("data") + "krita/brushes/");
 
-        s_global -> dirs() -> addResourceType("kis_patterns",
+        s_instance -> dirs() -> addResourceType("kis_patterns",
                           KStandardDirs::kde_default("data") + "krita/patterns/");
 
-        s_global -> dirs() -> addResourceType("kis_gradients",
+        s_instance -> dirs() -> addResourceType("kis_gradients",
                           KStandardDirs::kde_default("data") + "krita/gradients/");
 
-        s_global -> dirs() -> addResourceType("kis_pics",
+        s_instance -> dirs() -> addResourceType("kis_pics",
                           KStandardDirs::kde_default("data") + "krita/pics/");
 
-        s_global -> dirs() -> addResourceType("toolbars",
+        s_instance -> dirs() -> addResourceType("toolbars",
                           KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
-        s_global -> dirs() -> addResourceType("kis_profiles",
+        s_instance -> dirs() -> addResourceType("kis_profiles",
                           KStandardDirs::kde_default("data") + "krita/profiles/");
 
-        s_global -> dirs() -> addResourceDir("kis_profiles", "/usr/share/color/icc/");
+        s_instance -> dirs() -> addResourceDir("kis_profiles", "/usr/share/color/icc/");
 
-        s_global -> dirs() -> addResourceType("kis_palettes",
+        s_instance -> dirs() -> addResourceType("kis_palettes",
                           KStandardDirs::kde_default("data") + "krita/palettes/");
 
         // Tell the iconloader about share/apps/koffice/icons
-        s_global -> iconLoader() -> addAppDir("koffice");
+        s_instance -> iconLoader() -> addAppDir("koffice");
     }
 
-    return s_global;
+    return s_instance;
 }
 
 KAboutData* KisFactory::aboutData()

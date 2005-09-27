@@ -128,7 +128,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     m_ioProgressBase = 0;
     m_ioProgressTotalSteps = 0;
 
-    setInstance( KisFactory::global(), false );
+    setInstance( KisFactory::instance(), false );
 
     if (name)
         dcopObject();
@@ -184,7 +184,7 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     }
 
     KoTemplateChooseDia::ReturnType ret =
-        KoTemplateChooseDia::choose(KisFactory::global(),
+        KoTemplateChooseDia::choose(KisFactory::instance(),
                         file,
                         dlgtype,
                         "krita_template",

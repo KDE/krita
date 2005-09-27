@@ -96,7 +96,7 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
         return QPixmap();
     }
     
-    QString fname = KisFactory::global()->dirs()->findResource("kis_images", pname);
+    QString fname = KisFactory::instance()->dirs()->findResource("kis_images", pname);
     
     return QPixmap(fname);
 }

@@ -91,10 +91,10 @@ void KisColorSpaceFactoryRegistry::resetProfiles()
     // XXX: Should find a way to make sure not all profiles are read for all color strategies
 
     QStringList profileFilenames;
-    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KisFactory::global() -> dirs() -> findAllResources("kis_profiles", "*.icc");
+    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.icc");
 
     QDir d("/usr/share/color/icc/", "*.icc");
     profileFilenames += d.entryList();

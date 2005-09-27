@@ -291,6 +291,8 @@ private:
 #ifdef __BIG_ENDIAN__
     cmsHTRANSFORM m_bigEndianTransform;
 #endif
+
+    bool m_renderinit;
 };
 
 #endif // KIS_IMAGE_H_

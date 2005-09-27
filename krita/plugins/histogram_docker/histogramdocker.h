@@ -34,6 +34,7 @@ class KisAccumulatingHistogramProducer;
 class KisColorSpace;
 class KisHistogramView;
 class KisView;
+class KisColorSpace;
 
 class KritaHistogramDocker : public KParts::Plugin
 {
@@ -44,6 +45,7 @@ public:
 private slots:
     void producerChanged(int pos);
     void popupMenu(const QPoint & pos);
+    void colorSpaceChanged(KisColorSpace* cs);
 private:
     KisHistogramProducerFactory* m_factory;
     KisCachedHistogramObserver::Producers m_producers;

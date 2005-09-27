@@ -1714,6 +1714,9 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
     Q_CHECK_PTR(m_projection);
+
+    emit sigColorSpaceChanged(colorSpace);
+
     notify();
 }
 

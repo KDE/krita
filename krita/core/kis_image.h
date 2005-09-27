@@ -237,6 +237,7 @@ signals:
 
     void sigSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
     void sigProfileChanged(KisProfile *  profile);
+    void sigColorSpaceChanged(KisColorSpace*  cs);
 
 
 public slots:

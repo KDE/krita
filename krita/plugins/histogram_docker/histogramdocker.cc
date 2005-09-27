@@ -52,11 +52,12 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
     if ( parent->inherits("KisView") ) {
         m_view = dynamic_cast<KisView*>(parent);
 
-        m_cs = m_view -> getCanvasSubject() -> currentImg() -> colorSpace();
-
+        KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+        
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged
-        producerChanged(0);
+        colorSpaceChanged(img -> colorSpace()); // calls producerChanged(0)
+
 
         m_hview = new KisHistogramView(m_view);
         m_hview -> setHistogram(m_histogram);
@@ -65,21 +66,15 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         m_hview -> setFixedSize(256, 100); // XXX if not it keeps expanding
         m_hview -> setCaption(i18n("Histogram"));
 
-        KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
-                listKeysCompatibleWith(m_cs);
-
-        for (uint i = 0; i < keys.count(); i++) {
-            KisID id(*(keys.at(i)));
-            m_popup . insertItem(id.name(), static_cast<int>(i));
-        }
-        m_popup.setItemChecked(m_currentProducerPos, true);
 
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
                 this, SLOT(popupMenu(const QPoint&)));
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(m_histogram, m_hview), SLOT(updated()));
         connect(&m_popup, SIGNAL(activated(int)),
-                 this, SLOT(producerChanged(int)));
+                this, SLOT(producerChanged(int)));
+        connect(img, SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
+                this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
         m_view -> getCanvasSubject() -> paletteManager() -> addWidget(
@@ -142,6 +137,25 @@ void KritaHistogramDocker::producerChanged(int pos)
 void KritaHistogramDocker::popupMenu(const QPoint& pos)
 {
     m_popup.popup(pos, m_currentProducerPos);
+}
+
+void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
+{
+    m_cs = cs;
+
+    KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
+            listKeysCompatibleWith(m_cs);
+
+    m_popup.clear();
+
+    for (uint i = 0; i < keys.count(); i++) {
+        KisID id(*(keys.at(i)));
+        m_popup . insertItem(id.name(), static_cast<int>(i));
+    }
+
+    m_popup.setItemChecked(m_currentProducerPos, true);
+
+    producerChanged(0);
 }
 
 #include "histogramdocker.moc"

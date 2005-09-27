@@ -52,6 +52,8 @@ public:
     }
 
 protected:
+    /// source already converts external to internal
+    virtual int externalToInternal(int ext) { return ext; }
     KisCachedHistogramObserver::Producers* m_source;
 };
 

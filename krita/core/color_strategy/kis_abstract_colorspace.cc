@@ -35,6 +35,18 @@
 #include "kis_channelinfo.h"
 #include "kis_xyz_colorspace.h"
 
+struct KisColorAdjustment
+{
+    ~KisColorAdjustment() { cmsDeleteTransform(transform);
+        cmsCloseProfile(profiles[0]);
+        cmsCloseProfile(profiles[1]);
+        cmsCloseProfile(profiles[2]);
+    }
+
+    cmsHPROFILE profiles[3];
+    cmsHTRANSFORM transform;
+};
+
 KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id, DWORD cmType, icColorSpaceSignature colorSpaceSignature, KisProfile *p)
     : m_id(id),
       m_cmType(cmType),
@@ -183,14 +195,30 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 }
 
 
-KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_UINT16 */*transferValues*/)
+KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
-    return NULL;
+    LPGAMMATABLE transferFunctions[3];
+    transferFunctions[0] = cmsBuildGamma(256, 1.0);
+    transferFunctions[1] = cmsBuildGamma(256, 1.0);
+    transferFunctions[2] = cmsBuildGamma(256, 1.0);
+
+    for(int i =0; i < 256; i++)
+        transferFunctions[0]->GammaTable[i] = transferValues[i];
+
+    KisColorAdjustment *adj = new KisColorAdjustment;
+    adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
+    cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
+
+    adj->profiles[0] = m_profile->profile();
+    adj->profiles[2] = m_profile->profile();
+    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+
+    return adj;
 }
 
-void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 */*src*/, Q_UINT8 */*dst*/, KisColorAdjustment */*adj*/, Q_INT32 /*nPixels*/)
+void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
 {
-
+    cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
 

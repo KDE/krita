@@ -67,9 +67,6 @@ public:
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
-    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
-
 
 
     /**

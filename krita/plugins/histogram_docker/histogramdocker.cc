@@ -58,7 +58,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         m_cache = 0; // we try to delete it in producerChanged
         producerChanged(0);
 
-        m_hview = new KisHistogramView();
+        m_hview = new KisHistogramView(m_view);
         m_hview -> setHistogram(m_histogram);
         m_hview -> setColor(true);
         m_hview -> setCurrentChannels(m_producer, m_producer -> channels());

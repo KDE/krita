@@ -2654,7 +2654,7 @@ QCursor KisView::setCanvasCursor(const QCursor & cursor)
 
     KisConfig cfg;
 
-    switch (cfg.defCursorStyle()) {
+    switch (cfg.cursorStyle()) {
     case CURSOR_STYLE_TOOLICON:
         newCursor = cursor;
         break;
@@ -2664,8 +2664,12 @@ QCursor KisView::setCanvasCursor(const QCursor & cursor)
     case CURSOR_STYLE_POINTER:
         newCursor = KisCursor::arrowCursor();
         break;
+    case CURSOR_STYLE_OUTLINE:
+        kdDebug() << "Outline\n";
+        newCursor = cursor;
+        break;
     default:
-        newCursor = KisCursor::crossCursor();
+        newCursor = cursor;
     }
 
     m_canvas -> setCursor(newCursor);

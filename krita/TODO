@@ -133,6 +133,11 @@ User Interface
 		    - Gradient: remove the autogradient dialog and make into a proper
 				gradient dialog, and allow saving gradients.
     * Improve the preview widget - see "doc/the preview widget"
+        Still need to clear away the rect when the image 
+        is smaller than the preview widget and somehow the initial part show of the 
+        image is all we ever see. And there's some horrible flicker here: we'd better 
+        create a QImage and bitBlt it, instead of using the painter interface.
+
     * Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
     * Allow guides to be disabled. Allow diagonal guides (useful
       for perspective drawings) Bug #108398 

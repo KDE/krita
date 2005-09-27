@@ -31,6 +31,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include "kis_config.h"
 #include "kis_brush.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
@@ -46,7 +47,7 @@ KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
 {
     setName("tool_brush");
-    setCursor(KisCursor::brushCursor());
+    setCursor(KisCursor::blankCursor());
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
     m_paintedOutline = false;
@@ -118,8 +119,8 @@ void KisToolBrush::setup(KActionCollection *collection)
 
 void KisToolBrush::move(KisMoveEvent *e) {
     KisToolFreehand::move(e);
-
-    if (m_mode != PAINT)
+    KisConfig cfg;
+    if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
         paintOutline(e -> pos());
 }
 

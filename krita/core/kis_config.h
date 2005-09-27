@@ -34,8 +34,9 @@ public:
     Q_INT32 defImgHeight() const;
     void defImgHeight(Q_INT32 height);
 
-    enumCursorStyle defCursorStyle() const;
-    void defCursorStyle(enumCursorStyle style);
+    enumCursorStyle cursorStyle() const;
+    enumCursorStyle getDefaultCursorStyle() const;
+    void setCursorStyle(enumCursorStyle style);
 
     QString monitorProfile() const;
     void setMonitorProfile(QString monitorProfile);
@@ -88,6 +89,15 @@ public:
     Q_INT32 getPressureCorrection();
     void setPressureCorrection( Q_INT32 correction);
     Q_INT32 getDefaultPressureCorrection();
+
+    Q_INT32 dockability();
+    Q_INT32 getDefaultDockability();
+    void setDockability( Q_INT32 dockability);
+
+    float dockerFontSize();
+    float getDefaultDockerFontSize();
+    void setDockerFontSize(float);
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

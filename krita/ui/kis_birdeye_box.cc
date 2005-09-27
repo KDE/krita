@@ -21,7 +21,6 @@
 #include "qlabel.h"
 #include "qpixmap.h"
 #include "qpainter.h"
-
 #include "klocale.h"
 
 #include "kobirdeyepanel.h"
@@ -34,23 +33,30 @@
 
 namespace {
 
-    class ViewCanvas : public KoPixelCanvas {
+    class CanvasAdapter : public KoCanvasAdapter {
     
     public:
-        ViewCanvas(KisCanvasSubject * canvasSubject) : KoPixelCanvas(), m_canvasSubject(canvasSubject) {};
-        virtual ~ViewCanvas() {};
+        CanvasAdapter(KisCanvasSubject * canvasSubject) : KoCanvasAdapter(), m_canvasSubject(canvasSubject) {};
+        virtual ~CanvasAdapter() {};
         
     public:
     
         virtual QRect visibleArea() 
             {
                 if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
-                return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
+                
+                KisCanvasController * c = m_canvasSubject->canvasController();
+                
+                if (c && c->canvas())
+                    return c->viewToWindow(QRect(0, 0, c->canvas()->width(), c->canvas()->height()));
+                else
+                    return QRect(0,0,0,0);
             };
             
         virtual QRect size() 
             {
                 if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
+                
                 return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
             };
             
@@ -65,18 +71,18 @@ namespace {
     
     };
 
-    class ViewZoomListener : public KoZoomListener {
+    class ZoomListener : public KoZoomAdapter {
 
         public:
 
-            ViewZoomListener(KisCanvasController * canvasController) 
-                : KoZoomListener()
+            ZoomListener(KisCanvasController * canvasController)
+                : KoZoomAdapter()
                 , m_canvasController(canvasController) {};
-            virtual ~ViewZoomListener() {};
+            virtual ~ZoomListener() {};
 
         public:
 
-            void zoomTo( Q_INT32 x, Q_INT32 y, double factor ) { m_canvasController->zoomAroundPoint(x, y, factor); }
+                void zoomTo( Q_INT32 x, Q_INT32 y, double factor ) { m_canvasController->zoomAroundPoint(x, y, factor); }
             void zoomIn() { m_canvasController->zoomIn(); }
             void zoomOut() { m_canvasController->zoomOut(); }
             double getMinZoom() { return (1.0 / 16.0); }
@@ -88,15 +94,15 @@ namespace {
 
     };
 
-    class ImageThumbnailProvider : public KoThumbnailProvider {
+    class ThumbnailProvider : public KoThumbnailAdapter {
     
         public:
-            ImageThumbnailProvider(KisImageSP image, KisCanvasSubject* canvasSubject)
-                : KoThumbnailProvider()
+            ThumbnailProvider(KisImageSP image, KisCanvasSubject* canvasSubject)
+                : KoThumbnailAdapter()
                 , m_image(image)
                 , m_canvasSubject(canvasSubject) {};
                 
-            virtual ~ImageThumbnailProvider() {};
+            virtual ~ThumbnailProvider() {};
             
         public:
         
@@ -130,9 +136,9 @@ KisBirdEyeBox::KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget* parent, 
 {
     QVBoxLayout * l = new QVBoxLayout(this);
 
-    KoZoomListener * kzl = new ViewZoomListener(canvasSubject->canvasController());
-    KoThumbnailProvider * ktp = new ImageThumbnailProvider(canvasSubject->currentImg(), canvasSubject);
-    KoPixelCanvas * kpc = new ViewCanvas(m_canvasSubject);
+    KoZoomAdapter * kzl = new ZoomListener(canvasSubject->canvasController());
+    KoThumbnailAdapter * ktp = new ThumbnailProvider(canvasSubject->currentImg(), canvasSubject);
+    KoCanvasAdapter * kpc = new CanvasAdapter(m_canvasSubject);
 
     m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, kpc, this);
     l->addWidget(m_birdEyePanel);

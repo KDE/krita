@@ -25,6 +25,9 @@
 
 #include <kdialogbase.h>
 
+#include <kopalettemanager.h>
+
+#include "wdggeneralsettings.h"
 #include "wdgpressuresettings.h"
 #include "wdgperformancesettings.h"
 
@@ -38,7 +41,7 @@ class KisID;
 /**
  *  "General"-tab for preferences dialog
  */
-class GeneralTab : public QWidget
+class GeneralTab : public WdgGeneralSettings
 {
     Q_OBJECT
 
@@ -46,14 +49,12 @@ public:
 
     GeneralTab( QWidget *parent = 0, const char *name = 0 );
 
-    bool saveOnExit();
     enumCursorStyle cursorStyle();
+    enumKoDockability dockability();
+    float dockerFontSize();
+    
     void setDefault();
 
-private:
-
-    QCheckBox *m_saveOnExit;
-    QComboBox *m_cmbCursorShape;
 };
 
 //=======================

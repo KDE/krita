@@ -635,7 +635,7 @@ void KisPainter::paintEllipse (const KisPoint &startPoint,
 }
 
 void KisPainter::paintAt(const KisPoint & pos,
-             const double pressure,
+                         const double pressure,
                          const double xTilt,
                          const double yTilt)
 {

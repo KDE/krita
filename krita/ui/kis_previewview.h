@@ -39,13 +39,9 @@ class KisPreviewView : public QWidget
 
 public:
         KisPreviewView(QWidget* parent = 0, const char * name = 0, WFlags f = 0);
-//         void setSourceLayer(KisLayerSP s);
         void setDisplayImage(KisImageSP i);
-//         KisLayerSP getSourceLayer();
-//         KisLayerSP getPreviewLayer();
         double getZoom() { return m_zoom; }
         QPoint getPos() { return m_pos; }
-//         void updateView();
 
 public slots:
     void setZoom(double zoom);
@@ -59,6 +55,7 @@ signals:
         /** The moving/creation of this widget has finished; effects could be applied to it now */
         void updated();
         void startMoving(QPoint);
+
         /**
          * The widget is currently moving its layer.
          * @return the difference (in x and y) between the starting position and the current one
@@ -73,9 +70,13 @@ protected:
         virtual void resizeEvent(QResizeEvent *e);
 private:
         void render(QPainter &painter, KisImageSP image);
-//         void updateView(QPoint delta);
 
-//         KisLayerSP m_sourcelayer, m_clippedview;
+private slots:
+
+        void slotUpdate(KisImageSP, QRect);
+
+private:
+
         KisImageSP m_image;
         QPoint m_startDrag, m_pos;
         double m_zoom;

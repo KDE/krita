@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -188,7 +189,11 @@ void KisToolPaint::activate()
 
         if (controller)
             controller -> setCurrentTool(this);
+            
         updateCompositeOpComboBox();
+
+        KisConfig cfg;
+        m_paintOutline = (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE);
     }
 }
 

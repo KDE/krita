@@ -48,47 +48,30 @@
 #include "kis_profile.h"
 #include "wdgcolorsettings.h"
 #include "wdgperformancesettings.h"
+#include "wdggeneralsettings.h"
 
 // for the performance update
 #include "tiles/kis_tilemanager.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
-    : QWidget( _parent, _name )
+    : WdgGeneralSettings( _parent, _name )
 {
-    // Layout
-    QGridLayout* grid = new QGridLayout( this, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
-
-    QLabel* label;
-    label = new QLabel(this, i18n("Cursor shape:"), this);
-    grid -> addWidget(label, 0, 0);
-
-    m_cmbCursorShape = new QComboBox(this);
-
-// XXX: Why doesn't insertImten with a bitmap work?
-//     m_cmbCursorShape -> insertItem(*KisCursor::brushCursor().bitmap(), "Tool icon");
-//     m_cmbCursorShape -> insertItem(*KisCursor::crossCursor().bitmap(), "Crosshair");
-//     m_cmbCursorShape -> insertItem(*KisCursor::arrowCursor().bitmap(), "Arrow");
-//     m_cmbCursorShape -> insertItem("Brush shape");
-    m_cmbCursorShape -> insertItem(i18n("Tool Icon"));
-    m_cmbCursorShape -> insertItem(i18n("Crosshair"));
-    m_cmbCursorShape -> insertItem(i18n("Arrow"));
 
     KisConfig cfg;
-    m_cmbCursorShape -> setCurrentItem(cfg.defCursorStyle());
-
-    grid -> addWidget(m_cmbCursorShape, 1, 0);
-
-    grid->setRowStretch( 2, 1 );
+    
+    m_cmbCursorShape -> setCurrentItem(cfg.cursorStyle());
+    grpDockability->setButton(cfg.dockability());
+    numDockerFontSize->setValue((int)cfg.getDefaultDockerFontSize());
+    
 }
 
 void GeneralTab::setDefault()
 {
-    m_cmbCursorShape -> setCurrentItem( CURSOR_STYLE_TOOLICON);
-}
-
-bool GeneralTab::saveOnExit()
-{
-    return m_saveOnExit->isChecked();
+    KisConfig cfg;
+    
+    m_cmbCursorShape->setCurrentItem( cfg.getDefaultCursorStyle());
+    grpDockability->setButton(cfg.getDefaultDockability());
+    numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -96,6 +79,17 @@ enumCursorStyle GeneralTab::cursorStyle()
     return (enumCursorStyle)m_cmbCursorShape -> currentItem();
 }
 
+enumKoDockability GeneralTab::dockability()
+{
+    return (enumKoDockability)grpDockability->selectedId();
+}
+
+float GeneralTab::dockerFontSize()
+{
+    return (float)numDockerFontSize->value();
+}
+
+//---------------------------------------------------------------------------------------------------
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     : QWidget(parent, name)
@@ -211,6 +205,8 @@ void ColorSettingsTab::refillImportProfiles(const KisID & s)
     }
 }
 
+//---------------------------------------------------------------------------------------------------
+
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name  )
     : WdgPerformanceSettings(parent, name)
 {
@@ -230,6 +226,7 @@ void PerformanceTab::setDefault()
     m_maxTiles -> setValue(500);
 }
 
+//---------------------------------------------------------------------------------------------------
 
 PressureSettingsTab::PressureSettingsTab( QWidget *parent, const char *name)
     : WdgPressureSettings( parent, name )
@@ -247,7 +244,7 @@ void PressureSettingsTab::setDefault()
 }
 
 
-
+//---------------------------------------------------------------------------------------------------
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
@@ -288,9 +285,11 @@ bool PreferencesDialog::editPreferences()
         bool baccept = ( dialog->exec() == Accepted );
     if( baccept )
     {
-         KisConfig cfg;
-         cfg.defCursorStyle(dialog -> m_general -> cursorStyle());
-
+        KisConfig cfg;
+        cfg.setCursorStyle(dialog -> m_general -> cursorStyle());
+        cfg.setDockability( dialog->m_general->dockability() );
+        cfg.setDockerFontSize( dialog->m_general->dockerFontSize() );
+                
         // Color settings
         cfg.setMonitorProfile( dialog -> m_colorSettings -> m_page -> cmbMonitorProfile -> currentText());
         cfg.setWorkingColorSpace( dialog -> m_colorSettings -> m_page -> cmbWorkingColorSpace -> currentText());

@@ -32,12 +32,12 @@ class KoDocument;
 class WdgBirdEye;
 
 
-class KoPixelCanvas {
+class KoCanvasAdapter {
 
 public:
     
-    KoPixelCanvas();
-    virtual ~KoPixelCanvas();
+    KoCanvasAdapter();
+    virtual ~KoCanvasAdapter();
 
     /**
      * Returns the area of the document that is visible, in pixels
@@ -61,12 +61,12 @@ public:
  * panel will call whenever the zoomlevel is changed through one
  * of the panel actions.
  */
-class KoZoomListener {
+class KoZoomAdapter {
 
 public:
 
-    KoZoomListener();
-    virtual ~KoZoomListener();
+    KoZoomAdapter();
+    virtual ~KoZoomAdapter();
 
     /**
      * Zoom to the specified factor around the point x and y
@@ -96,12 +96,12 @@ public:
 };
 
 
-class KoThumbnailProvider
+class KoThumbnailAdapter
 {
     public:
     
-        KoThumbnailProvider();
-        ~KoThumbnailProvider();
+        KoThumbnailAdapter();
+        ~KoThumbnailAdapter();
         
         /**
          * Returns the size of the document in pixels.
@@ -142,9 +142,9 @@ public:
      * @param name the QObject name of this bird eye widget
      * @param f the widget flags (@see QWidget)
      */
-    KoBirdEyePanel( KoZoomListener * zoomListener, 
-                    KoThumbnailProvider * thumbnailProvider,
-                    KoPixelCanvas * canvas,
+    KoBirdEyePanel( KoZoomAdapter * zoomListener, 
+                    KoThumbnailAdapter * thumbnailProvider,
+                    KoCanvasAdapter * canvas,
                     QWidget * parent,
                     const char * name = 0,
                     WFlags f = 0 );
@@ -155,9 +155,9 @@ public:
 
 public slots:
 
-    void setZoomListener( KoZoomListener * zoomListener) { m_zoomListener = zoomListener; }
+    void setZoomListener( KoZoomAdapter * zoomListener) { m_zoomListener = zoomListener; }
     
-    void setThumbnailProvider( KoThumbnailProvider * thumbnailProvider ) { m_thumbnailProvider = thumbnailProvider; }
+    void setThumbnailProvider( KoThumbnailAdapter * thumbnailProvider ) { m_thumbnailProvider = thumbnailProvider; }
     /**
      * Connect to this slot to inform the bird's eye view of changes in
      * the zoom level of your canvas or view. The value is taken as a percentage,
@@ -192,9 +192,9 @@ private:
     
     WdgBirdEye * m_page;
     
-    KoZoomListener * m_zoomListener;
-    KoThumbnailProvider * m_thumbnailProvider;
-    KoPixelCanvas * m_canvas;
+    KoZoomAdapter * m_zoomListener;
+    KoThumbnailAdapter * m_thumbnailProvider;
+    KoCanvasAdapter * m_canvas;
     
     KAction* m_zoomIn;
     KAction* m_zoomOut;

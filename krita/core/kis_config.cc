@@ -17,8 +17,9 @@
  */
 #include <limits.h>
 
-#include <kapplication.h>
+#include <kglobalsettings.h>
 #include <kconfig.h>
+#include <kglobal.h>
 #include <kdebug.h>
 #include <config.h>
 
@@ -32,26 +33,24 @@ namespace {
     const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
     const Q_INT32 IMG_DEFAULT_WIDTH = 512;
     const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
-    const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+    const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
     const Q_INT32 DEFAULT_MAX_THREADS = 4;
     const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
     const Q_INT32 DEFAULT_SWAPPINESS = 100;
     const Q_INT32 DEFAULT_PRESSURE_CORRECTION = 50;
+    const Q_INT32 DEFAULT_DOCKABILITY = 2;
 }
 
 KisConfig::KisConfig()
 {
-    KApplication *app = KApplication::kApplication();
 
-    //Q_ASSERT(app);
-
-    if (app) {
-        m_cfg = app -> config();
-    } else {
+    m_cfg = KGlobal::config();
+    if (!m_cfg) {
         // Allow unit tests to test parts of the code without having to run the
         // full application.
         m_cfg = new KConfig();
     }
+    m_cfg->setGroup("");
 }
 
 KisConfig::~KisConfig()
@@ -89,12 +88,17 @@ void KisConfig::defImgHeight(Q_INT32 height)
     m_cfg -> writeEntry("imgHeightDef", height);
 }
 
-enumCursorStyle KisConfig::defCursorStyle() const
+enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
 }
 
-void KisConfig::defCursorStyle(enumCursorStyle style)
+enumCursorStyle KisConfig::getDefaultCursorStyle() const
+{
+    return DEFAULT_CURSOR_STYLE;
+}
+
+void KisConfig::setCursorStyle(enumCursorStyle style)
 {
     m_cfg -> writeEntry("cursorStyleDef", style);
 }
@@ -273,4 +277,35 @@ void KisConfig::setPressureCorrection( Q_INT32 correction )
 Q_INT32 KisConfig::getDefaultPressureCorrection()
 {
     return DEFAULT_PRESSURE_CORRECTION;
+}
+
+void KisConfig::setDockability( Q_INT32 dockability )
+{
+    m_cfg->writeEntry( "palettesdockability", dockability );
+}
+
+Q_INT32 KisConfig::dockability()
+{
+    return m_cfg->readNumEntry("palettesdockability", DEFAULT_DOCKABILITY);
+}
+
+Q_INT32 KisConfig::getDefaultDockability()
+{
+    return DEFAULT_DOCKABILITY;
+}
+
+float KisConfig::dockerFontSize()
+{
+    return (float) m_cfg->readNumEntry("palettefontsize", (int)getDefaultDockerFontSize());
+}
+
+float KisConfig::getDefaultDockerFontSize()
+{
+    float ps = KGlobalSettings::generalFont().pointSize() * 0.7;
+    return ps;
+}
+
+void KisConfig::setDockerFontSize(float size)
+{
+    m_cfg->writeEntry("palettefontsize", size);
 }

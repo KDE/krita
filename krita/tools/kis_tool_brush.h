@@ -62,7 +62,6 @@ private:
     QTimer * m_timer;
     bool m_paintedOutline;
 
-
 };
 
 class KisToolBrushFactory : public KisToolFactory {

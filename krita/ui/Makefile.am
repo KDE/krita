@@ -64,6 +64,7 @@ libkisui_la_SOURCES = \
     wdgapplyprofile.ui \
     wdglayerbox.ui \
     wdgperformancesettings.ui \
+    wdggeneralsettings.ui \
     wdgpressuresettings.ui
 
 
@@ -109,6 +110,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdglayerbox.h \
     wdglayerproperties.h \
     wdgperformancesettings.h \
+    wdggeneralsettings.h \
     wdgpressuresettings.h \
     wdgbirdeye.h \
     wdgautogradient.h \

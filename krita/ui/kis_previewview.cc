@@ -30,6 +30,7 @@
 #include <qcolor.h>
 
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 #include "kis_undo_adapter.h"
 #include "kis_global.h"
@@ -55,7 +56,14 @@ KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
 
 void KisPreviewView::setDisplayImage(KisImageSP i)
 {
+    i->notify();
+    if (m_image != 0) {
+        //QObject::disconnect(m_image, SIGNAL(sigImageUpdated(KisImageSP, rc)), this);
+    }
+    connect(m_image, SIGNAL(sigImageUpdated(KisImageSP, QRect)), this, SLOT(slotUpdate(KisImageSP, QRect)));
+
     m_image = i;
+    
     updatedPreview();
 }
 
@@ -97,7 +105,7 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
     QString monitorProfileName = cfg.monitorProfile();
 
     KisProfile *  monitorProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
-
+    painter.fillRect(0, 0, width(), height(), KGlobalSettings::baseColor());
     image -> renderToPainter(0, 0, image -> width(), image -> height(), painter, monitorProfile);
 
 }
@@ -157,6 +165,13 @@ void KisPreviewView::mouseReleaseEvent(QMouseEvent * e)
 
 void KisPreviewView::resizeEvent(QResizeEvent *) {
     emit updated();
+}
+
+void KisPreviewView::slotUpdate(KisImageSP img, QRect r) 
+{
+    kdDebug() << "slotUpdate called with rect: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "\n";
+    // Assume that the preview image is just as big as the image we're previewing.
+    if (m_image) m_image->notify(r);
 }
 
 #include "kis_previewview.moc"

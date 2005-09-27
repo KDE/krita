@@ -95,7 +95,8 @@ protected:
     QRect m_dirtyRect;
     Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
-
+    bool m_paintOutline;
+    
 private:
     QString m_UIName;
 

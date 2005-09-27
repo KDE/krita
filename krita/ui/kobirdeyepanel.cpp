@@ -35,18 +35,18 @@
 #include "wdgbirdeye.h"
 #include "kobirdeyepanel.h"
 
-KoPixelCanvas::KoPixelCanvas() {}
-KoPixelCanvas::~KoPixelCanvas() {}
+KoCanvasAdapter::KoCanvasAdapter() {}
+KoCanvasAdapter::~KoCanvasAdapter() {}
 
-KoZoomListener::KoZoomListener() {}
-KoZoomListener::~KoZoomListener() {}
+KoZoomAdapter::KoZoomAdapter() {}
+KoZoomAdapter::~KoZoomAdapter() {}
 
-KoThumbnailProvider::KoThumbnailProvider() {}
-KoThumbnailProvider::~KoThumbnailProvider() {}
+KoThumbnailAdapter::KoThumbnailAdapter() {}
+KoThumbnailAdapter::~KoThumbnailAdapter() {}
 
-KoBirdEyePanel::KoBirdEyePanel( KoZoomListener * zoomListener, 
-                                KoThumbnailProvider * thumbnailProvider,
-                                KoPixelCanvas * canvas,
+KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener, 
+                                KoThumbnailAdapter * thumbnailProvider,
+                                KoCanvasAdapter * canvas,
                                 QWidget * parent,
                                 const char * name,
                                 WFlags f)
@@ -125,7 +125,6 @@ void KoBirdEyePanel::updateVisibleArea()
     if (img.width() < 150) imgx = (150 - img.width()) / 2;
     if (img.height() < 150) imgy = (150 - img.height()) / 2;
 
-    kdDebug() << "Image: " << img.width() << ", " << img.height() << ", x: " << imgx << ", y: " << imgy << "\n";
     painter.drawImage(imgx, imgy, img, 0, 0, img.width(), img.height());
 
     painter.setPen(red);

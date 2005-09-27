@@ -99,7 +99,8 @@ bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 rend
 }
 
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
-					    Q_UINT8 * dst, KisColorSpace * dstColorSpace,
+					    Q_UINT8 * dst,
+					    KisColorSpace * dstColorSpace,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
@@ -430,7 +431,7 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 
     KisColorSpace * dstCS;
 
-    if(dstCS->getProfile())
+    if (dstProfile)
         dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),dstProfile->productName());
     else
         dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),"");
@@ -438,8 +439,10 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
 printf("profile = %d dstProfile = %d\n",getProfile(),dstProfile);
 if(getProfile())
     printf("profile = %s\n",getProfile()->productName().ascii());
+
 if(dstProfile)
     printf("dstProfile = %s\n",dstProfile->productName().ascii());
+
 if(dstCS->getProfile())
     printf("dstCS->Profile = %s\n",dstCS->getProfile()->productName().ascii());
 

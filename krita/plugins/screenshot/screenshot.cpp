@@ -33,7 +33,8 @@
 
 #include "ksnapshot.h"
 #include <kimageio.h>
-
+#include <kis_view.h>
+#include <kis_image.h>
 #include "screenshot.moc"
 
 typedef KGenericFactory<Screenshot> ScreenshotFactory;
@@ -75,7 +76,8 @@ void Screenshot::slotScreenGrabbed()
     KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
     snapshot -> save(temp.name());
          
-    KoView *view = dynamic_cast<KoView *>(parent());
+    KisView *view = dynamic_cast<KisView *>(parent());
     if(view)
-        view -> koDocument() -> import(temp.name());
+        view->koDocument()->import(temp.name());
+        view->getCanvasSubject()->currentImg()->notify();
 }

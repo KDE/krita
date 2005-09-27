@@ -72,6 +72,9 @@ public:
      * You can get the rectangle of the image that's visible using the 
      * viewToWindow() functions (KisCanvasController). E.g. 
      * viewToWindow(QRect(0, 0, canvasWidth, canvasHeight)).
+     *
+     * Here, the view is the canvas widget in the view widget, and the window
+     * is the window on the image.
      */
     virtual QPoint viewToWindow(const QPoint& pt) = 0;
     virtual KisPoint viewToWindow(const KisPoint& pt) = 0;

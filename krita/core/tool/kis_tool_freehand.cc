@@ -165,8 +165,6 @@ void KisToolFreehand::initPaint(KisEvent *)
         m_painter -> setCompositeOp(m_compositeOp);
     }
 
-    // Set the cursor -- ideally. this should be a mask created from the brush,
-    // now that X11 can handle colored cursors.
 #if 0
     // Setting cursors has no effect until the tool is selected again; this
     // should be fixed.

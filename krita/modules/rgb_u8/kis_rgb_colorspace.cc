@@ -224,8 +224,8 @@ Q_INT32 KisRgbColorSpace::pixelSize() const
 }
 
 QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  dstProfile,
-                         Q_INT32 renderingIntent, float /*exposure*/)
+                                         KisProfile *  dstProfile,
+                                         Q_INT32 renderingIntent, float /*exposure*/)
 
 {
 
@@ -235,11 +235,13 @@ QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     // as an optimisation. We're introducing a copy overhead here which could
     // be factored out again if needed.
     img = img.copy();
+    
 printf("profile = %d dstProfile = %d\n",getProfile(),dstProfile);
 if(getProfile())
     printf("profile = %s\n",getProfile()->productName().ascii());
 if(dstProfile)
     printf("dstProfile = %s\n",dstProfile->productName().ascii());
+    
 //PROFILEMERGE should use a screen cs
 
     if (dstProfile != 0) {

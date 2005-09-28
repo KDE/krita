@@ -29,7 +29,9 @@
 
 #include "kis_imagerasteredcache.h"
 
-KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) {
+KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) 
+    : m_view(view)
+{
     m_rasterSize = 64;
     m_timeOutMSec = 125;
 
@@ -64,14 +66,11 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) {
 
     imageUpdated(img, QRect(0,0, img -> width(), img -> height()));
 
-    connect(img, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)),
-            this, SLOT(imageUpdated(KisImageSP, const QRect&)));
-    connect(&m_timer, SIGNAL(timeout()),
-             this, SLOT(timeOut()));
+    connect(img, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), this, SLOT(imageUpdated(KisImageSP, const QRect&)));
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
-void KisImageRasteredCache::imageUpdated(KisImageSP image, const QRect& rc) {
-    m_dev = image -> mergedImage(); // XXX use img -> projection or so?
+void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) {
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
     r = r.normalize();
@@ -97,8 +96,10 @@ void KisImageRasteredCache::imageUpdated(KisImageSP image, const QRect& rc) {
 }
 
 void KisImageRasteredCache::timeOut() {
+    KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+    KisPaintDeviceImplSP dev = img -> mergedImage(); // XXX use img -> projection or so?
     while(!m_queue.isEmpty()) {
-        m_queue.front() -> observer -> regionUpdated(m_dev);
+        m_queue.front() -> observer -> regionUpdated(dev);
         m_queue.front() -> valid = true;
         m_queue.pop_front();
     }

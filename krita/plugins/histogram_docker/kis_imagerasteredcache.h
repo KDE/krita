@@ -66,7 +66,7 @@ private:
     int m_timeOutMSec;
     int m_rasterSize;
     int m_width, m_height;
-    KisPaintDeviceImplSP m_dev;
+    KisView * m_view;
 };
 
 #endif // _KIS_IMAGE_RASTERED_CACHE_H_

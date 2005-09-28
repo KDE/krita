@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Histogram Docker
+Name[es]=Anclaje del histograma
+Name[sv]=Histogramdockning
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritahistogramdocker

@@ -412,7 +412,6 @@ void KisSelectionManager::copy()
             ++selectionIt;
         }
     }
-
     layer -> deselect();
 
     kdDebug(DBG_AREA_CORE) << "Selection copied: "
@@ -422,6 +421,7 @@ void KisSelectionManager::copy()
                    << r.height() << "\n";
 
 
+     layer -> emitSelectionChanged();
      m_clipboard -> setClip(clip);
      imgSelectionChanged(m_parent -> currentImg());
 }
@@ -438,7 +438,7 @@ KisLayerSP KisSelectionManager::paste()
         KisLayerSP layer = new KisLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
         Q_CHECK_PTR(layer);
 
-        QRect r = clip -> extent();
+        QRect r = clip -> exactBounds();
         KisPainter gc;
         gc.begin(layer.data());
         gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), r.x(), r.y(), r.width(), r.height());
@@ -452,7 +452,6 @@ KisLayerSP KisSelectionManager::paste()
             if (dlg -> exec() == QDialog::Accepted) {
                 KisProfile *  profile = dlg -> profile();
                 if (profile != img -> profile()) {
-//PROFILEMERGE                    layer -> setProfile(profile);
                     layer -> convertTo(img -> colorSpace(), dlg -> renderIntent());
                 }
             }
@@ -460,7 +459,11 @@ KisLayerSP KisSelectionManager::paste()
 
 
         img->layerAdd(layer, img -> index(layer));
-        layer -> move(0,0);
+        //figure out where to position the clip
+        KisCanvasController *cc = m_parent->getCanvasController();
+        QPoint center = cc->viewToWindow(QPoint(cc->canvas()->width()/2, cc->canvas()->height()/2));
+        center -= QPoint(r.width()/2, r.height()/2);
+        layer -> move(center.x(), center.y());
         img -> notify();
 
         return layer;

@@ -391,11 +391,8 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
     if (rows <= 0 || cols <= 0)
         return;
 
-    if (m_id!= srcSpace -> id()) {
+    if (this!= srcSpace) {
         Q_UINT32 len = pixelSize() * rows * cols;
-
-        KisProfile * srcProfile = srcSpace -> getProfile();
-        KisProfile * dstProfile = getProfile();
 
         // If our conversion cache is too small, extend it.
         if (!m_conversionCache.resize( len, QGArray::SpeedOptim )) {
@@ -404,21 +401,11 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
             return;
         }
 
-        if (srcProfile && dstProfile) {
-            for (Q_INT32 row = 0; row < rows; row++) {
-                srcSpace -> convertPixelsTo(src + row * srcRowStride,
-                                            m_conversionCache.data() + row * cols * pixelSize(), this,
-                                            cols);
-            }
+        for (Q_INT32 row = 0; row < rows; row++) {
+            srcSpace -> convertPixelsTo(src + row * srcRowStride,
+                                        m_conversionCache.data() + row * cols * pixelSize(), this,
+                                        cols);
         }
-        else {
-            for (Q_INT32 row = 0; row < rows; row++) {
-                srcSpace -> convertPixelsTo(src + row * srcRowStride,
-                                            m_conversionCache.data() + row * cols * pixelSize(), this,
-                                            cols);
-            }
-        }
-
 
         // The old srcRowStride is no longer valid because we converted to the current cs
         srcRowStride = cols * pixelSize();

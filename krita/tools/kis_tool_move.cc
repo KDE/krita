@@ -65,8 +65,7 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
             return;
 
         if (dev -> hasSelection()) {
-            QRect r = dev -> selection() -> selectedRect();
-
+            QRect r = dev -> selection() -> selectedExactRect();
             if (r.contains(pos)) {
                 // XXX: Put in undo macro
                 m_subject -> selectionManager() -> copy();
@@ -75,6 +74,7 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
                 if (dev) {
                     dev -> move(r.x(), r.y());
                     img -> activate(dev);
+                    img -> notify();
                     m_strategy.startDrag(pos);
                 }
             }

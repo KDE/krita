@@ -69,15 +69,15 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
     } else {
         m_view = (KisView*) parent;
         (void) new KAction(i18n("&Rotate Image..."), 0, 0, this, SLOT(slotRotateImage()), actionCollection(), "rotateimage");
-        (void) new KAction(i18n("&Rotate Image &90"), "rotate_cw", 0, this, SLOT(slotRotateImage90()), actionCollection(), "rotateImageLeft90");
-        (void) new KAction(i18n("&Rotate Image &180"), 0, 0, this, SLOT(slotRotateImage180()), actionCollection(), "rotateImage180");
-        (void) new KAction(i18n("&Rotate Image &270"), "rotate_ccw", 0, this, SLOT(slotRotateImage270()), actionCollection(), "rotateImageRight90");
-        
+        (void) new KAction(i18n("Rotate Image CW"), "rotate_cw", 0, this, SLOT(slotRotateImage90()), actionCollection(), "rotateImageCW90");
+        (void) new KAction(i18n("Rotate Image 1&80"), 0, 0, this, SLOT(slotRotateImage180()), actionCollection(), "rotateImage180");
+        (void) new KAction(i18n("Rotate Image CCW"), "rotate_ccw", 0, this, SLOT(slotRotateImage270()), actionCollection(), "rotateImageCCW90");
+
         (void) new KAction(i18n("&Rotate Layer..."), 0, 0, this, SLOT(slotRotateLayer()), actionCollection(), "rotatelayer");
-        
-        (void)new KAction(i18n("Rotate &180"), 0, m_view, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
-        (void)new KAction(i18n("Rotate &270"), "rotate_ccw", 0, m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerLeft90");
-        (void)new KAction(i18n("Rotate &90"), "rotate_cw", 0, m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerRight90");
+
+        (void)new KAction(i18n("Rotate 1&80"), 0, m_view, SLOT(rotateLayer180()), actionCollection(), "rotateLayer180");
+        (void)new KAction(i18n("Rotate CCW"), "rotate_ccw", 0, m_view, SLOT(rotateLayerLeft90()), actionCollection(), "rotateLayerCCW90");
+        (void)new KAction(i18n("Rotate CW"), "rotate_cw", 0, m_view, SLOT(rotateLayerRight90()), actionCollection(), "rotateLayerCW90");
     }
 }
 

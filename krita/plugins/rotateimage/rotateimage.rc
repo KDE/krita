@@ -1,28 +1,30 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritarotateimage" version="6">
+<kpartgui library="kritarotateimage" version="7">
 <MenuBar>
-	<Menu name="Image"><text>Image</text>
+    <Menu name="Image"><text>Image</text>
         <Menu name="Rotate"><text>&amp;Rotate</text>
-	       <Action name="rotateimage"/>
-           <Action name="rotateImageRight90"/>
+           <Action name="rotateimage"/>
+        <Separator />
+           <Action name="rotateImageCW90"/>
+           <Action name="rotateImageCCW90"/>
            <Action name="rotateImage180"/>
-           <Action name="rotateImageLeft90"/>
        </Menu>
-	</Menu>
+    </Menu>
 
-	<Menu name="Layer">
-		<Menu name="Rotate"><text>&amp;Rotate</text>
-		<Action name="rotateLayerRight90"/>
-		<Action name="rotateLayer180"/>
-		<Action name="rotateLayerLeft90"/>
-		<Action name="rotatelayer"/>
-		</Menu>
-	</Menu>
+    <Menu name="Layer">
+        <Menu name="Rotate"><text>&amp;Rotate</text>
+        <Action name="rotatelayer"/>
+        <Separator />
+        <Action name="rotateLayerCW90"/>
+        <Action name="rotateLayerCCW90"/>
+        <Action name="rotateLayer180"/>
+        </Menu>
+    </Menu>
 </MenuBar>
 
 <ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
-	<Action name="rotateImageLeft90"/>
-	<Action name="rotateImageRight90"/>
+    <Action name="rotateImageCW90"/>
+    <Action name="rotateImageCCW90"/>
 </ToolBar>
 
 </kpartgui>

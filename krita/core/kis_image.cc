@@ -1599,20 +1599,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 
 KisPaintDeviceImplSP KisImage::mergedImage()
 {
-    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged image");
-
-    KisPainter gc;
-
-    gc.begin(dev.data());
-
-    if (!m_layers.empty()) {
-        KisFlatten<flattenAllVisible> visitor(0, 0, width(), height());
-        visitor(gc, m_layers);
-    }
-
-    gc.end();
-
-    return dev;
+    return m_projection.data();
 }
 
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)

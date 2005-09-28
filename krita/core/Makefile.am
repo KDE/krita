@@ -10,10 +10,8 @@ INCLUDES  = \
 	-I$(srcdir)/../kopalette \
 	-I../ui \
 	-I../kopalette \
-	-I$(srcdir)/../ui/dialogs \
-	-I../ui/dialogs \
-	-I$(srcdir)/../ui/widgets \
-	-I../ui/widgets \
+	-I$(srcdir)/../ui/ \
+	-I../ui/ \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) \

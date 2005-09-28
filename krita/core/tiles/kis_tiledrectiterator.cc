@@ -19,7 +19,7 @@
 */
 #include <kdebug.h>
 
-#include "kis_global.h"
+#include "kis_tile_global.h"
 #include "kis_iterator.h"
 
 KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT32 nleft,
@@ -131,10 +131,10 @@ Q_INT32 KisTiledRectIterator::nConseqPixels() const
 KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
 {
     int remainInTile;
-    
+
     remainInTile= (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
     remainInTile += m_rightInTile - m_xInTile + 1;
-    
+
     // This while loop may not bet the fastest, but usually it's not entered more than once.
     while(n >= remainInTile)
     {
@@ -159,7 +159,7 @@ KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
     m_y = m_row * KisTile::HEIGHT + m_yInTile;
     fetchTileData(m_col, m_row);
     m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
-    
+
     return *this;
 }
 

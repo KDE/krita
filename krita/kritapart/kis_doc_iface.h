@@ -1,7 +1,5 @@
-/*
- *  This file is part of the KDE project
- *
- *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
+/* This file is part of the KDE project
+ *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,29 +14,37 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
-#include <kapplication.h>
+ */
 
+#ifndef KIS_DOC_IFACE_H
+#define KIS_DOC_IFACE_H
 
-#include "kis_abstract_colorspace_iface.h"
+#include <KoViewIface.h>
+#include <KoDocumentIface.h>
 
-#include "kis_abstract_colorspace.h"
+#include <dcopref.h>
+#include <qstring.h>
+#include <kis_image_iface.h>
 
-#include <dcopclient.h>
+class KisDoc;
 
-KisAbstractColorSpaceIface::KisAbstractColorSpaceIface( KisAbstractColorSpace * parent )
-	: DCOPObject(parent->id().id().utf8())
+class KisDocIface : virtual public KoDocumentIface
 {
-	m_parent = parent;
-}
+    K_DCOP
+public:
+    KisDocIface( KisDoc *doc_ );
+k_dcop:
+    virtual DCOPRef currentImage();
 
+    virtual int undoLimit () const;
+    virtual void setUndoLimit(int limit);
+    virtual int redoLimit() const;
+    virtual void setRedoLimit(int limit);
 
-QString KisAbstractColorSpaceIface::name()
-{
-    return m_parent->id().name();
-}
+    virtual void renameImage(const QString& oldName, const QString& newName);
 
-QString KisAbstractColorSpaceIface::id()
-{
-    return m_parent->id().id();
-}
+private:
+    KisDoc *m_doc;
+};
+
+#endif

@@ -34,7 +34,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_colorspace.h"
-#include "widgets/kis_histogram_view.h"
+#include "kis_histogram_view.h"
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
     : super(parent, name)

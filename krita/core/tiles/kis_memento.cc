@@ -15,8 +15,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_global.h"
 #include "kis_memento.h"
 #include "kis_tile.h"
+#include "kis_tile_global.h"
 
 KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
 {
@@ -25,7 +27,7 @@ KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
 
     m_redoHashTable = new KisTile * [1024];
     Q_CHECK_PTR(m_redoHashTable);
-    
+
     for(int i = 0; i < 1024; i++)
     {
         m_hashTable [i] = 0;
@@ -48,11 +50,11 @@ KisMemento::~KisMemento()
     }
     delete [] m_hashTable;
     delete [] m_redoHashTable;
-    
+
     // Delete defPixel arrays;
     delete [] m_defPixel;
     delete [] m_redoDefPixel;
-        
+
     // Finally delete the list of deleted tiles
     deleteAll(m_delTilesTable);
 }
@@ -89,7 +91,7 @@ void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
     for(int i = 0; i < 1024; i++)
     {
         KisTile *tile = m_hashTable[i];
-        
+
         while(tile)
         {
             if(x > tile->getCol() * KisTile::WIDTH)
@@ -100,11 +102,11 @@ void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
                 y = tile->getRow() * KisTile::HEIGHT;
             if(maxY < (tile->getRow() +1) * KisTile::HEIGHT - 1)
                 maxY = (tile->getRow() +1) * KisTile::HEIGHT - 1;
-                
+
             tile = tile->getNext();
         }
     }
-    
+
     if(maxX < x)
         w = 0;
     else

@@ -20,10 +20,16 @@
 #define KIS_MEMENTO_H_
 
 #include <qglobal.h>
-#include "kis_types.h"
+
+#include <ksharedptr.h>
 
 class KisTile;
 class KisTiledDataManager;
+
+
+class KisMemento;
+typedef KSharedPtr<KisMemento> KisMementoSP;
+
 
 class KisMemento : public KShared
 {
@@ -46,7 +52,7 @@ public:
 private:
     friend class KisTiledDataManager;
     KisTiledDataManager *originator;
-    KisTile **m_hashTable;    
+    KisTile **m_hashTable;
     Q_UINT32 m_numTiles;
     KisTile **m_redoHashTable;
     struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};

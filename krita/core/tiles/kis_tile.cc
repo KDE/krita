@@ -17,8 +17,8 @@
  */
 #include <assert.h>
 #include <kdebug.h>
-#include "kis_types.h"
-#include "kis_global.h"
+
+#include "kis_tile_global.h"
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tilemanager.h"
@@ -38,7 +38,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
     m_writeLock = false;
 
     allocate();
-    
+
     KisTileManager::instance() -> registerTile(this);
 
     setData(defPixel);
@@ -129,7 +129,7 @@ Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
 void KisTile::setData(Q_UINT8 *pixel)
 {
     Q_UINT8 *dst = m_data;
-    
+
     addReader();
     for(int i=0; i <WIDTH * HEIGHT;i++)
     {

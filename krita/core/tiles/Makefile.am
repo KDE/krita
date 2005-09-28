@@ -5,11 +5,9 @@ endif
 SUBDIRS = . $(TESTSDIR)
 
 INCLUDES  = -I$(srcdir)/../ \
+	-I$(srcdir)/../../sdk \
 	-I$(interfacedir) \
-	$(KOFFICE_INCLUDES) \
-	$(KOPAINTER_INCLUDES) \
-	$(LIBMAGICK_CPPFLAGS) \
-	 $(all_includes)
+	$(all_includes)
 
 noinst_LTLIBRARIES = libkistile.la
 

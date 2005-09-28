@@ -1,16 +1,18 @@
 KDE_OPTIONS = nofinal
 
-INCLUDES = -I$(srcdir)/../core/filters \
+INCLUDES = \
+    -I$(srcdir)/../core/filters \
 	-I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
-	-I$(srcdir)/widgets \
-	-I./widgets \
-	-I$(srcdir)/../core/resources/ -I$(srcdir)/../core/color_strategy -I$(srcdir)/../core/tiles \
-	-I$(srcdir)/../core/tool -I$(srcdir)/../core/paintop $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
+	-I$(srcdir)/../core/resources/ \
+    -I$(srcdir)/../core/color_strategy \
+    -I$(srcdir)/../core/paintop \
+    $(KOFFICE_INCLUDES) \
+    $(KOPAINTER_INCLUDES) \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libkisui.la
-libkisui_la_LIBADD = ./labels/libkislabel.la ./widgets/libkiswidgets.la
+
 libkisui_la_SOURCES = \
     kis_cmb_idlist.cc \
     kis_dlg_preferences.cc \
@@ -51,6 +53,16 @@ libkisui_la_SOURCES = \
     kis_resource_mediator.cc \
     kis_autobrush.cc \
     kis_controlframe.cc \
+    kis_label_cursor_pos.cc \
+    kis_label_progress.cc \
+    kis_label_zoom.cc \
+    kis_multi_integer_filter_widget.cc \
+    kis_multi_double_filter_widget.cc \
+    kis_multi_bool_filter_widget.cc \
+    kis_gradient_slider_widget.cc \
+    kcurve.cc\
+    kis_histogram_view.cc \
+    kis_matrix_widget.ui \
     wdgbirdeye.ui \
     wdgautogradient.ui \
     wdgautobrush.ui \
@@ -104,6 +116,13 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_resource_mediator.h \
     kis_autobrush.h \
     kis_gradient_chooser.h \
+    kis_label_cursor_pos.h \
+    kis_label_progress.h \
+    kis_label_zoom.h\
+    kis_multi_integer_filter_widget.h \
+    kis_multi_bool_filter_widget.h \
+    kis_gradient_slider_widget.h \
+    kis_histogram_view.h \
     wdgnewimage.h \
     wdgcolorsettings.h \
     wdgapplyprofile.h \
@@ -116,8 +135,9 @@ noinst_HEADERS = kis_dlg_preferences.h \
     wdgautogradient.h \
     wdgautobrush.h
 
+#libkisui_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
+#libkisui_la_LIBADD  = $(LIB_KOFFICECORE) ../core/libkritacore.la
 
-libkisui_la_METASOURCES = AUTO
-SUBDIRS = labels widgets
+METASOURCES = AUTO
 
 

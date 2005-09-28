@@ -260,7 +260,7 @@
 <customwidgets>
     <customwidget>
         <class>KCurve</class>
-        <header location="local">../../ui/widgets/kcurve.h</header>
+        <header location="local">kcurve.h</header>
         <sizehint>
             <width>33</width>
             <height>23</height>

@@ -12,7 +12,6 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../ui \
 	-I../../ui \
-	-I$(srcdir)/../../ui/widgets \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 

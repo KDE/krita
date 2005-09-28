@@ -26,7 +26,6 @@
 #include "kis_channelinfo.h"
 #include "kis_layer.h"
 #include "wdghistogram.h"
-#include "kis_histogram_producer.h"
 
 class KisColorSpace;
 

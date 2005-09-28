@@ -34,7 +34,6 @@
 #include "kis_histogram.h"
 #include "kis_layer.h"
 #include "kis_paint_device_impl.h"
-#include "kis_histogram_producer.h"
 
 #include "dlg_histogram.h"
 #include "kis_histogram_widget.h"

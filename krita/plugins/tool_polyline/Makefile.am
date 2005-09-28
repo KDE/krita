@@ -9,10 +9,7 @@ INCLUDES =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core/tool \
 	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../ui/dialogs \
-	-I$(srcdir)/../../ui/widgets \
 	-I$(srcdir)/../../tools \
-        -I../../ui/dialogs \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
 
 kritatoolpolyline_la_SOURCES = \

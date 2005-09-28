@@ -2,7 +2,6 @@ AM_CXXFLAGS = -DQT_PLUGIN
 
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../ui \
-	-I$(srcdir)/../../ui/widgets \
 	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/compositeop \

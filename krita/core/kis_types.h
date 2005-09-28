@@ -90,9 +90,6 @@ typedef KisSharedPtrVector<KisTool> vKisTool;
 typedef vKisTool::iterator vKisTool_it;
 typedef vKisTool::const_iterator vKisTool_cit;
 
-class KisDataManager;
-typedef KSharedPtr<KisDataManager> KisDataManagerSP;
-
 typedef QValueVector<QPoint> vKisSegments;
 
 class KisGuide;
@@ -121,9 +118,6 @@ typedef KSharedPtr<KisFileFormat> KisFileFormatSP;
 typedef KisSharedPtrVector<KisFileFormat> vKisFileFormatSP;
 typedef vKisFileFormatSP::iterator vKisFileFormatSP_it;
 typedef vKisFileFormatSP::const_iterator vKisFileFormatSP_cit;
-
-class KisMemento;
-typedef KSharedPtr<KisMemento> KisMementoSP;
 
 class KisColorSpace;
 #endif // KISTYPES_H_

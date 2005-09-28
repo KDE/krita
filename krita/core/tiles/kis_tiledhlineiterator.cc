@@ -19,7 +19,7 @@
 */
 #include <kdebug.h>
 
-#include "kis_global.h"
+#include "kis_tile_global.h"
 #include "kis_iterator.h"
 
 KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :

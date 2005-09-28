@@ -33,7 +33,7 @@ libkritacore_la_LIBADD = tiles/libkistile.la \
 	tool/libkistool.la \
 	$(LIB_KOPAINTER)
 
-libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc kis_pixel_op.cc \
+libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc \
 	kis_image.cc kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc \
 	kis_painter.cc kis_fill_painter.cc kis_gradient_painter.cc \
 	kis_convolution_painter.cc kis_cursor.cc kis_selection.cc kis_command.cc kis_background.cc \
@@ -49,12 +49,12 @@ libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc kis
 
 noinst_HEADERS = kis_paint_device_impl.h kis_layer.h kis_image.h kis_doc.h \
 	kis_view.h kis_factory.h kis_nameserver.h kis_cursor.h kis_selection.h \
-	kis_command.h kis_background.h kis_global.h kis_config.h  \
+	kis_command.h kis_background.h kis_config.h  \
 	kis_transaction.h kis_vec.h kis_rect.h \
 	kis_iteratorpixeltrait.h kis_iterators_pixel.h kis_view_iface.h kis_doc_iface.h kis_image_iface.h \
 	kis_matrix.h kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h \
 	kis_filter.h kis_filter_registry.h kis_part_layer.h \
-	kis_filter_manager.h kis_tool_manager.h kis_pixel_op.h kis_histogram.h \
+	kis_filter_manager.h kis_tool_manager.h kis_histogram.h \
 	kis_paint_device_iface.h kis_boundary.h kis_histogram_producer.h
 
 

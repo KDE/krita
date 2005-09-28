@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,40 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_DLG_IMAGE_PROPERTIES_H_
-#define KIS_DLG_IMAGE_PROPERTIES_H_
+#ifndef KIS_TILE_GLOBAL_H_
+#define KIS_TILE_GLOBAL_H_
 
-#include <kdialogbase.h>
+#define DBG_AREA_TILES 41000
 
-class WdgNewImage;
-class KisView;
-class QButtonGroup;
-class KisID;
-
-class KisDlgImageProperties : public KDialogBase {
-    typedef KDialogBase super;
-    Q_OBJECT
-
-public:
-    KisDlgImageProperties(KisImageSP image,
-                          QWidget *parent = 0,
-                          const char *name = 0);
-    virtual ~KisDlgImageProperties();
-
-private slots:
-
-    void okClicked();
-
-    void fillCmbProfiles(const KisID &);
-
-private:
-
-    WdgNewImage * m_page;
-    KisImageSP m_image;
-    KisView * m_view;
-};
-
-
-
-#endif // KIS_DLG_IMAGE_PROPERTIES_H_
-
+#endif

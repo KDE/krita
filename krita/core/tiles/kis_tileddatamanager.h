@@ -21,7 +21,9 @@
 #include <qglobal.h>
 #include <qvaluevector.h>
 
-#include "kis_types.h"
+#include <ksharedptr.h>
+
+#include "kis_tile_global.h"
 #include "kis_tile.h"
 #include "kis_memento.h"
 
@@ -29,6 +31,8 @@ class KisTiledDataManager;
 typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
 class KisDataManager;
+typedef KSharedPtr<KisDataManager> KisDataManagerSP;
+
 class KisTiledIterator;
 class KoStore;
 
@@ -66,7 +70,7 @@ protected:
 
     void setDefaultPixel(const Q_UINT8 *defPixel);
     const Q_UINT8 * defaultPixel() { return m_defPixel;};
-    
+
     KisMementoSP getMemento();
     void rollback(KisMementoSP memento);
     void rollforward(KisMementoSP memento);
@@ -141,11 +145,11 @@ protected:
 
     /// Get the number of contiguous columns starting at x, valid for all values
     /// of y between minY and maxY.
-    Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY); 
+    Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY);
 
     /// Get the number of contiguous rows starting at y, valid for all values
     /// of x between minX and maxX.
-    Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX); 
+    Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX);
 
     /// Get the row stride at pixel (x, y). This is the number of bytes to add to a
     /// pointer to pixel (x, y) to access (x, y + 1).
@@ -166,7 +170,7 @@ private:
     Q_INT32 m_extentMaxX;
     Q_INT32 m_extentMaxY;
     Q_UINT8 *m_defPixel;
-    
+
 private:
 
     void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);

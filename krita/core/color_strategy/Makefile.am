@@ -21,7 +21,6 @@ libkiscolor_strategy_la_SOURCES = kis_abstract_colorspace.cc \
     kis_f32_base_colorspace.cc \
     $(OPENEXR_SOURCES) \
     kis_basic_histogram_producers.cc
-    #kis_abstract_colorspace_iface.cc
 
 libkiscolor_strategy_la_LIBADD = $(OPENEXR_LIBS)
 

@@ -22,6 +22,7 @@
 
 #include <koStore.h>
 
+#include "kis_global.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tilediterator.h"
 #include "kis_tile.h"
@@ -41,7 +42,7 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defP
     m_defPixel = new Q_UINT8[m_pixelSize];
     Q_CHECK_PTR(m_defPixel);
     memcpy(m_defPixel, defPixel, m_pixelSize);
-    
+
     m_defaultTile = new KisTile(pixelSize,0,0, m_defPixel);
     Q_CHECK_PTR(m_defaultTile);
 
@@ -66,7 +67,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
     m_defPixel = new Q_UINT8[m_pixelSize];
     Q_CHECK_PTR(m_defPixel);
     memcpy(m_defPixel, dm.m_defPixel, m_pixelSize);
-    
+
     m_defaultTile = new KisTile(*dm.m_defaultTile, dm.m_defaultTile->getCol(), dm.m_defaultTile->getRow());
     Q_CHECK_PTR(m_defaultTile);
 
@@ -124,8 +125,8 @@ KisTiledDataManager::~KisTiledDataManager()
 void KisTiledDataManager::setDefaultPixel(const Q_UINT8 *defPixel)
 {
     memcpy(m_defPixel, defPixel, m_pixelSize);
-    
-    m_defaultTile->setData(m_defPixel);    
+
+    m_defaultTile->setData(m_defPixel);
 }
 
 bool KisTiledDataManager::write(KoStore *store)
@@ -236,14 +237,14 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
     {
         KisTile *tile = m_hashTable[tileHash];
         KisTile *previousTile = 0;
-        
+
         while(tile)
         {
             kdDebug(DBG_AREA_TILES) << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
-            
+
             QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
             //printRect("tileRect", tileRect);
-            
+
             if (newRect.contains(tileRect)) {
                 // Completely inside, do nothing
                 previousTile = tile;
@@ -251,7 +252,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
             }
             else {
                 ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
-            
+
                 if (newRect.intersects(tileRect)) {
                     //kdDebug(DBG_AREA_TILES) << "Partially inside, clear the non-intersecting bits\n";
 
@@ -277,12 +278,12 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                     //kdDebug(DBG_AREA_TILES) << "Completely outside, delete this tile. It had already been mementoed\n";
                     KisTile *deltile = tile;
                     tile = tile->getNext();
-                    
+
                     m_numTiles--;
-                    
+
                     if (previousTile)
                         previousTile -> setNext(tile);
-                    else 
+                    else
                         m_hashTable[tileHash] = tile;
                     delete deltile;
                 }
@@ -316,21 +317,21 @@ void KisTiledDataManager::clear()
     for(int tileHash = 0; tileHash < 1024; tileHash++)
     {
         KisTile *tile = m_hashTable[tileHash];
-        
+
         while(tile)
         {
             ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
-        
+
             KisTile *deltile = tile;
             tile = tile->getNext();
-                
+
             delete deltile;
         }
         m_hashTable[tileHash] = 0;
     }
-    
+
     m_numTiles = 0;
-    
+
     // Set the extent correctly
     m_extentMinX = Q_INT32_MAX;
     m_extentMinY = Q_INT32_MAX;
@@ -357,7 +358,7 @@ KisMementoSP KisTiledDataManager::getMemento()
     Q_CHECK_PTR(m_currentMemento);
 
     memcpy(m_currentMemento->m_defPixel, m_defPixel, m_pixelSize);
-    
+
     return m_currentMemento;
 }
 
@@ -379,13 +380,13 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
         memento->deleteAll(memento->m_redoHashTable[i]);
         memento->m_redoHashTable[i]=0;
     }
-    
+
     // Also clear the table of deleted tiles
     memento->deleteAll(memento->m_delTilesTable);
     memento->m_delTilesTable = 0;
-    
+
     // Now on to the real rollback
-    
+
     memcpy(memento->m_redoDefPixel, m_defPixel, m_pixelSize);
     setDefaultPixel(memento->m_defPixel);
 
@@ -440,7 +441,7 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
             curTile = new KisTile(*tile);
             Q_CHECK_PTR(curTile);
             m_numTiles++;
-            
+
             curTile->setNext(m_hashTable[i]);
             m_hashTable[i] = curTile;
 
@@ -506,7 +507,7 @@ void KisTiledDataManager::rollforward(KisMementoSP memento)
             tile = tile->getNext();
         }
     }
-    
+
     // Roll forward also means re-deleting the tiles that was deleted but restored by the undo
     KisMemento::DeletedTile *d = memento->m_delTilesTable;
     while(d)
@@ -648,11 +649,11 @@ Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 {
     Q_UINT32 row = yToRow(y);
     Q_UINT32 col = xToCol(x);
-    
+
     // calc limits within the tile
     Q_INT32 yInTile = y - row * KisTile::HEIGHT;
     Q_INT32 xInTile = x - col * KisTile::WIDTH;
-    
+
     Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
 
     KisTile *tile = getTile(col, row, writable);
@@ -677,7 +678,7 @@ void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
 }
 
 
-void KisTiledDataManager::readBytes(Q_UINT8 * data, 
+void KisTiledDataManager::readBytes(Q_UINT8 * data,
                     Q_INT32 x, Q_INT32 y,
                     Q_INT32 w, Q_INT32 h)
 {

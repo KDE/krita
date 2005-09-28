@@ -26,8 +26,8 @@
 #include <fcntl.h>
 
 #include <kstaticdeleter.h>
-
-#include "kis_config.h"
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "kis_tileddatamanager.h"
 #include "kis_tile.h"
@@ -40,7 +40,6 @@ KisTileManager* KisTileManager::m_singleton = 0;
 static KStaticDeleter<KisTileManager> staticDeleter;
 
 KisTileManager::KisTileManager() {
-    KisConfig config;
 
     Q_ASSERT(KisTileManager::m_singleton == 0);
     KisTileManager::m_singleton = this;
@@ -49,8 +48,11 @@ KisTileManager::KisTileManager() {
     m_bytesTotal = 0;
 
     m_currentInMem = 0;
-    m_maxInMem = config.maxTilesInMem();
-    m_swappiness = config.swappiness();
+
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
+    m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
     m_freeLists.reserve(8);
@@ -64,7 +66,7 @@ KisTileManager::~KisTileManager() {
     if (!m_freeLists.empty()) { // See if there are any nonempty freelists
         FreeListList::iterator listsIt = m_freeLists.begin();
         FreeListList::iterator listsEnd = m_freeLists.end();
-        
+
         while(listsIt != listsEnd) {
             if ( ! (*listsIt).empty() ) {
                 FreeList::iterator it = (*listsIt).begin();
@@ -155,7 +157,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     delete info;
     m_tileMap.erase(tile);
 
-    
+
     doSwapping();
 }
 
@@ -176,7 +178,7 @@ void KisTileManager::maySwapTile(KisTile* tile) {
     m_swappableList.push_back(info);
     info -> validNode = true;
     info -> node = -- m_swappableList.end();
-    
+
     doSwapping();
 }
 
@@ -281,12 +283,13 @@ void KisTileManager::printInfo() {
 }
 
 void KisTileManager::configChanged() {
-    KisConfig config;
-    m_maxInMem = config.maxTilesInMem();
-    m_swappiness = config.swappiness();
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup("");
+    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
+    m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     kdDebug(DBG_AREA_TILES) << "TileManager has new config: maxinmem: " << m_maxInMem
             << " swappiness: " << m_swappiness << endl;
-    
+
     doSwapping();
 }

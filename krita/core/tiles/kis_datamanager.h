@@ -24,9 +24,12 @@
 
 class KoStore;
 
+
 // Change the following two lines to switch (at compiletime) to another datamanager
 #include "kis_tileddatamanager.h"
 #define ACTUAL_DATAMGR KisTiledDataManager
+
+
 
 
 /**
@@ -54,12 +57,12 @@ public:
      * well be initialised with this pixel
      */
     inline void setDefaultPixel(const Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
-    
+
     /**
      * Gets the default pixel.
      */
      inline const Q_UINT8 *defaultPixel() { return ACTUAL_DATAMGR::defaultPixel(); };
-    
+
     /**
      * Reguests a memento from the data manager. There is only one memento active
      * at any given moment for a given paint device and all and any
@@ -117,7 +120,7 @@ public:
                          { return ACTUAL_DATAMGR::setExtent(x, y, w, h); };
 
     inline void setExtent(const QRect & rect) { setExtent(rect.x(), rect.y(), rect.width(), rect.height()); };
-                         
+
 public:
 
     /**
@@ -170,11 +173,11 @@ public:
 
 
      /**
-      * Copy the bytes in the specified rect to a chunk of memory. 
+      * Copy the bytes in the specified rect to a chunk of memory.
       * The pixelSize in bytes is w * h * pixelSize. XXX: Better
       * use QValueVector?
       */
-     inline void readBytes(Q_UINT8 * data, 
+     inline void readBytes(Q_UINT8 * data,
                Q_INT32 x, Q_INT32 y,
                Q_INT32 w, Q_INT32 h)
         { ACTUAL_DATAMGR::readBytes(data, x, y, w, h);};
@@ -192,7 +195,7 @@ public:
     // of y between minY and maxY.
     inline Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
         { return ACTUAL_DATAMGR::numContiguousColumns(x, minY, maxY); }
-    
+
 
     // Get the number of contiguous rows starting at y, valid for all values
     // of x between minX and maxX.

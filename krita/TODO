@@ -233,4 +233,47 @@ Printing
 
 
 Paintops
-	* The convolution paintop doesn't do anything at all -- but it can be used using paint-by-filters.
+	*core The convolution paintop doesn't do anything at all -- but it can be used using paint-by-filters.
+
+
+------------
+* the screenshot tool wants to close the current document before it can do 
+its work, what about making it snapshot to a new layer?
+
+* changing the title of a layer; I double click on the layer and press OK, 
+apparently the X/Y coordinates are wrong in that dialog since now my 
+layer is repositioned.
+
+* Doing a copy of a selection, but having the wrong layer selected gives 
+me an empty selection (all transparent).  Pressing paste should say so 
+(popup) instead of creating a new useless layer.
+
+* pasting a small selection should make the new image pixels in the center 
+of my screen. Note that this does not always mean center of drawing due 
+to zoom factor and offset of image using the scrollbars. It now always 
+gets pasted at 0,0
+
+* the selection tools should allow pressing shift to go to 'substract' 
+mode without adjusting the combobox for the current tool.  (a different 
+pointer would be nice as well)
+
+* Pressing save for the first time gives me the 'save document as' dialog 
+which is set to 'png' as default file format.
+I suggest to set the default format (in the "save as" dialog) to the krita 
+format for any image that has more then 1 layer.  
+
+* select a part of the image. Use the move tool.
+Note how krita correctly creates a new layer for that copied part, but the 
+offset is set to the same as the original layer, it ignores the offset of 
+the original layer to the selection.  In other words, my selected part is 
+move a lot upwards left, which is kinda unsettling.
+
+* Doing a copy of a selection should IMO remove the selection for that 
+layer, I honestly can't think of a reason why I would come back and reuse 
+that selection.
+
+* Layers toolbar has a pretty annoying problem.  Clicking on the eye to 
+enable/disable a layer only works when the scrollbar is at the top, so if 
+there is some offset in the scrollpane the clicks to disable a layer are 
+ignored.
+Note that double click for edit layer works fine.

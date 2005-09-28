@@ -1,4 +1,4 @@
-    /*
+/*
  * This file is part of the Krita
  *
  * Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
@@ -19,7 +19,7 @@
 */
 #include <kdebug.h>
 
-#include "kis_global.h"
+#include "kis_tile_global.h"
 #include "kis_iterator.h"
 
 KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x,  Q_INT32 y, Q_INT32 h, bool writable) :
@@ -69,7 +69,7 @@ KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineItera
 {
     if (this != &rhs) {
         KisTiledIterator::operator=(rhs);
-        
+
         m_bottom = rhs.m_bottom;
         m_topRow = rhs.m_topRow;
         m_bottomRow = rhs.m_bottomRow;

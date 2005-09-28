@@ -451,16 +451,6 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
     else
         dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),"");
 
-printf("profile = %d dstProfile = %d\n",getProfile(),dstProfile);
-if(getProfile())
-    printf("profile = %s\n",getProfile()->productName().ascii());
-
-if(dstProfile)
-    printf("dstProfile = %s\n",dstProfile->productName().ascii());
-
-if(dstCS->getProfile())
-    printf("dstCS->Profile = %s\n",dstCS->getProfile()->productName().ascii());
-
     convertPixelsTo(const_cast<Q_UINT8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
 
     return img;

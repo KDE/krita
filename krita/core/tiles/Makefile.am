@@ -6,6 +6,7 @@ SUBDIRS = . $(TESTSDIR)
 
 INCLUDES  = -I$(srcdir)/../ \
 	-I$(srcdir)/../../sdk \
+    $(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
 	$(all_includes)
 

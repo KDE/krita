@@ -33,27 +33,6 @@ public:
     virtual bool supportsPreview() { return true; }
 };
 
-class KisGammaCorrectionFilter : public KisDoublePerChannelFilter {
-public:
-    KisGammaCorrectionFilter();
-public:
-    virtual void process(KisPaintDeviceImplSP, KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("gammadjustment", i18n("Gamma Adjustment")); };
-    virtual bool supportsPainting() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
-};
-
-class KisColorAdjustmentFilter : public KisIntegerPerChannelFilter {
-public:
-    KisColorAdjustmentFilter();
-public:
-    virtual void process(KisPaintDeviceImplSP, KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("coloradjustment", i18n("Color Adjustment")); };
-    virtual bool supportsPainting() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
-
-};
-
 class KisAutoContrast : public KisFilter {
 public:
     KisAutoContrast();

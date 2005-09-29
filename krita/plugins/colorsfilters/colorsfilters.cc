@@ -47,6 +47,7 @@
 
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
+#include "kis_perchannel_filter.h"
 
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
@@ -67,8 +68,8 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
     {
         KisFilterRegistry::instance()->add(new KisBrightnessContrastFilter());
         KisFilterRegistry::instance()->add(new KisAutoContrast());
-        KisFilterRegistry::instance()->add(new KisGammaCorrectionFilter());
-        KisFilterRegistry::instance()->add(new KisColorAdjustmentFilter());
+        //KisFilterRegistry::instance()->add(new KisGammaCorrectionFilter());
+        //KisFilterRegistry::instance()->add(new KisPerChannelFilter());
         KisFilterRegistry::instance()->add(new KisDesaturateFilter());
     }
 }
@@ -77,90 +78,6 @@ ColorsFilters::~ColorsFilters()
 {
 }
 
-//==================================================================
-
-KisColorAdjustmentFilter::KisColorAdjustmentFilter() :
-    KisIntegerPerChannelFilter(id(), "adjust", "&Color Adjustment...", -255, 255, 0)
-{
-}
-
-/**
- * XXX: This filter should write to dst, too!
- */
-void KisColorAdjustmentFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
-{
-    KisIntegerPerChannelFilterConfiguration* configPC = (KisIntegerPerChannelFilterConfiguration*) config;
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    Q_INT32 depth = src->nChannels() - 1;
-
-    setProgressTotalSteps(rect.width() * rect.height());
-    Q_INT32 pixelsProcessed = 0;
-
-    while( ! srcIt.isDone() && !cancelRequested())
-    {
-        if (srcIt.isSelected()) {
-            KisPixelRO data = srcIt.oldPixel();
-            KisPixel dstData = dstIt.pixel();
-            for( int i = 0; i < depth; i++)
-            {
-		// XXX: Move to colorspace -- not independent
-                KisQuantum d = srcIt[ configPC->channel( i ) ];
-                Q_INT32 s = configPC->valueFor( i );
-                if( d < -s  ) dstData[ configPC->channel( i ) ] = 0;
-                else if( d > Q_UINT8_MAX - s) dstData[ configPC->channel( i ) ] = Q_UINT8_MAX;
-                else dstData[ configPC->channel( i ) ] = d + s;
-            }
-        }
-        ++dstIt;
-        ++srcIt;
-
-        pixelsProcessed++;
-        setProgress(pixelsProcessed);
-    }
-
-    setProgressDone();
-}
-
-
-//==================================================================
-
-KisGammaCorrectionFilter::KisGammaCorrectionFilter()
-    : KisDoublePerChannelFilter(id(), "adjust", "&Gamma Correction...", 0.1, 6.0, 1.0)
-{
-}
-
-// XXX: This filter should write to dst, too!
-void KisGammaCorrectionFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
-{
-    KisDoublePerChannelFilterConfiguration* configPC = (KisDoublePerChannelFilterConfiguration*) config;
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    Q_INT32 depth = src->nChannels() - 1;
-
-    setProgressTotalSteps(rect.width() * rect.height());
-    Q_INT32 pixelsProcessed = 0;
-
-    while( ! srcIt.isDone() && !cancelRequested())
-    {
-        if (srcIt.isSelected()) {
-            for( int i = 0; i < depth; i++)
-            {
-		// XXX: Move to colorspace -- not independent
-                Q_UINT8 sd = srcIt.oldRawData()[ configPC->channel( i ) ];
-                KisQuantum dd = dstIt[ configPC->channel( i ) ];
-                dd = (Q_UINT8)( Q_UINT8_MAX * pow( ((float)sd)/Q_UINT8_MAX, 1.0 / configPC->valueFor( i ) ) );
-            }
-        }
-        ++dstIt;
-        ++srcIt;
-
-        pixelsProcessed++;
-        setProgress(pixelsProcessed);
-    }
-
-    setProgressDone();
-}
 
 //==================================================================
 

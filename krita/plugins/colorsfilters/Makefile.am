@@ -13,6 +13,7 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 
 kritacolorsfilters_la_SOURCES = colorsfilters.cc \
 	kis_perchannel_filter.cc \
+	wdg_perchannel.ui \
 	wdg_brightness_contrast.ui \
 	kis_brightness_contrast_filter.cc
 

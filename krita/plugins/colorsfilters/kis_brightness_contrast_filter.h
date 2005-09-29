@@ -36,7 +36,7 @@ public:
 };
 
 /**
- * This class is generic for filters that affect channel separately
+ * This class affect Intensity Y of the image
  */
 class KisBrightnessContrastFilter : public KisFilter
 {

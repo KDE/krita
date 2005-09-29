@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=Histogram Docker
 Name[es]=Anclaje del histograma
+Name[pt]=Acoplador de Histogramas
+Name[pt_BR]=Acoplador de Histogramas
 Name[sv]=Histogramdockning
 ServiceTypes=Krita/CoreModule
 Type=Service

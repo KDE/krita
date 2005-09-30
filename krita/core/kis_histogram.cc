@@ -70,7 +70,7 @@ void KisHistogram::updateHistogram()
     m_producer -> clear();
     m_producer -> addRegionToBin(srcIt, cs);
 
-    kdDebug() << t.elapsed() << "ms for histogram (new version)" << endl;
+    //kdDebug() << t.elapsed() << "ms for histogram (new version)" << endl;
 
     computeHistogram();
 }
@@ -134,8 +134,8 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
     Q_INT32 fromBin = static_cast<Q_INT32>((from - m_producer -> viewFrom()) * factor);
     Q_INT32 toBin = fromBin + static_cast<Q_INT32>((to - from) * factor);
 
-    kdDebug(DBG_AREA_MATH) << "calculating from " << from << " to " << to
-                           << ", means from bin " << fromBin << " to bin " << toBin << endl;
+    //kdDebug(DBG_AREA_MATH) << "calculating from " << from << " to " << to
+    //                       << ", means from bin " << fromBin << " to bin " << toBin << endl;
 
     // Min, max, count, low, high
     for (Q_INT32 i = fromBin; i < toBin; i++) {

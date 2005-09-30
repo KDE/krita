@@ -202,8 +202,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_inputDevice ( INPUT_DEVICE_MOUSE )
 {
 
-    kdDebug() << "Creating the view\n";
-
     setFocusPolicy( QWidget::StrongFocus );
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
@@ -266,8 +264,6 @@ KisView::~KisView()
 
 QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
-    kdDebug() << "Create container: " << element.attribute("name") << "\n";
-
     if( element.attribute( "name" ) == "ToolBox" )
     {
         m_toolBox = new KoToolBox(mainWindow(), "toolbox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
@@ -282,7 +278,6 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 
 void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id )
 {
-    kdDebug() << "remvoe container: " << element.attribute("name") << "\n";
     if( shell() && container == m_toolBox )
     {
         delete m_toolBox;
@@ -1091,7 +1086,6 @@ void KisView::saveLayerAsImage()
     KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorSpace());
     if (!layer) return;
 
-    kdDebug() << "Exporting layer to colorspace " << layer->colorSpace()->id().name() << ", image: " << dst->colorSpace()->id().name() << "\n";
     KisPainter p(layer);
     p.bitBlt(0, 0, COMPOSITE_COPY, l.data(), r.x(), r.y(), r.width(), r.height());
     p.end();
@@ -2656,7 +2650,6 @@ QCursor KisView::setCanvasCursor(const QCursor & cursor)
         newCursor = KisCursor::arrowCursor();
         break;
     case CURSOR_STYLE_OUTLINE:
-        kdDebug() << "Outline\n";
         newCursor = cursor;
         break;
     default:

@@ -5,6 +5,7 @@ Name[es]=Modelo de color RGB (decimal «medio» de 16 bits)
 Name[pt]=Modelo de Cor RGB (v. flutuante de 16-bits 'half')
 Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 16-bits 'half')
 Name[sv]=RGB-färgmodell (16-bitars flyttal 'halva')
+Name[xx]=xxRGB Color Model (16-bit float 'half')xx
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder
 Comment[en_GB]=Colour model for 16-bit integer per channel RGB images

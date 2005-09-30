@@ -5,6 +5,7 @@ Name[es]=Anclaje del histograma
 Name[pt]=Acoplador de Histogramas
 Name[pt_BR]=Acoplador de Histogramas
 Name[sv]=Histogramdockning
+Name[xx]=xxHistogram Dockerxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritahistogramdocker

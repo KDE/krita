@@ -121,7 +121,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
 
     for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
         KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
-        KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+        KisVLineIterator vit = dst -> createVLineIterator(-y, r.x(), r.width(), true);
 
             while (!hit.isDone()) {
             if (hit.isSelected())  {
@@ -140,8 +140,6 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
 KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
 {
     KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
-    dst -> setX(src -> getX());
-    dst -> setY(src -> getY());
 
     Q_INT32 pixelSize = src -> pixelSize();
     QRect r = src -> exactBounds();
@@ -150,7 +148,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
         KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), false);
-        KisVLineIterator vit = dst -> createVLineIterator(r.x() + x, r.y(), r.width(), true);
+        KisVLineIterator vit = dst -> createVLineIterator(y, -r.x() - r.width(), r.width(), true);
 
         hit += r.width() - 1;
         while (!vit.isDone()) {
@@ -178,7 +176,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate180(KisPaintDeviceImplSP src)
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
         KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
-        KisHLineIterator dstIt = dst -> createHLineIterator(r.x(), r.y() + r.bottom() - y, r.width(), true);
+        KisHLineIterator dstIt = dst -> createHLineIterator( -r.x() - r.width(), -y, r.width(), true);
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
@@ -213,12 +211,15 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
     KisPaintDeviceImplSP dst;
 
     if (angle == 90) {
+printf("90\n");
         initProgress(fixedRotateSteps);
         dst = rotateRight90(src);
     } else if (angle == 180) {
+printf("180\n");
         initProgress(fixedRotateSteps);
         dst = rotate180(src);
     } else if (angle == 270) {
+printf("270\n");
         initProgress(fixedRotateSteps);
         dst = rotateLeft90(src);
     } else {
@@ -260,31 +261,19 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
         dst = xShear(dst, shearX);
     }
 
-    KisPoint srcCentre(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
-    KisPoint srcCentreRelativeToCentreOfRotation = srcCentre - centreOfRotation;
-
     double sinAngle = sin(angle * pi / 180);
     double cosAngle = cos(angle * pi / 180);
 
-    KisPoint rotatedSrcCentreRelativeToCentreOfRotation(srcCentreRelativeToCentreOfRotation.x() * cosAngle - srcCentreRelativeToCentreOfRotation.y() * sinAngle,
-                                srcCentreRelativeToCentreOfRotation.x() * sinAngle + srcCentreRelativeToCentreOfRotation.y() * cosAngle);
-    KisPoint dstCentre = centreOfRotation + rotatedSrcCentreRelativeToCentreOfRotation;
+    KisPoint rotatedCentreOfRotation(
+                                centreOfRotation.x() * cosAngle - centreOfRotation.y() * sinAngle,
+                                centreOfRotation.x() * sinAngle + centreOfRotation.y() * cosAngle);
 
-    QRect dstR = dst -> exactBounds();
-    KisPoint dstTopLeft(dstCentre.x() - (dstR.width() / 2.0), dstCentre.y() - (dstR.height() / 2.0));
-
-    KisPaintDeviceImplSP rotatedSrc = new KisPaintDeviceImpl(src -> colorSpace(), "temporary");
-    rotatedSrc -> setX(src -> getX());
-    rotatedSrc -> setY(src -> getY());
-
-    KisPainter p(rotatedSrc);
-
-    p.bitBlt(dstTopLeft.floorX(), dstTopLeft.floorY(), COMPOSITE_OVER, dst, OPACITY_OPAQUE, dstR.x(), dstR.y(), dstR.width(), dstR.height());
-    p.end();
+    dst -> setX(dst -> getX() + centreOfRotation.x() - rotatedCentreOfRotation.x());
+    dst -> setY(dst -> getY() + centreOfRotation.y() - rotatedCentreOfRotation.y());
 
     setProgressDone();
 
-    return rotatedSrc;
+    return dst;
 }
 
 KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double shearX)
@@ -307,6 +296,8 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
         } else {
             displacement = (y - r.top()) * QABS(shearX);
         }
+
+        displacement = -y * shearX;
 
         displacementInt = (Q_INT32)(floor(displacement));
         weight = displacement - displacementInt;
@@ -359,6 +350,8 @@ KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double s
         } else {
             displacement = (r.right() - x) * QABS(shearY);
         }
+
+        displacement = x * shearY;
 
         displacementInt = (Q_INT32)(floor(displacement));
         weight = displacement - displacementInt;

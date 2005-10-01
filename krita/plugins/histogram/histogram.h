@@ -24,6 +24,7 @@
 #include <kparts/plugin.h>
 
 class KisView;
+class KAction;
 
 class Histogram : public KParts::Plugin
 {
@@ -34,10 +35,12 @@ class Histogram : public KParts::Plugin
     
     private slots:
         void slotActivated();
+        void slotLayersChanged(KisImageSP img);
 
     private:
         KisView * m_view;
         KisPainter * m_painter;
+        KAction* m_action;
 
 };
 

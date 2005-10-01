@@ -64,18 +64,30 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
            << "\n";
 
 
-    (void) new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
+    m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 
     if ( !parent->inherits("KisView") )
     {
         m_view = 0;
     } else {
         m_view = (KisView*) parent;
+        if (m_view -> getCanvasSubject() -> currentImg()) {
+            connect(m_view -> getCanvasSubject() -> currentImg(),
+                    SIGNAL(sigLayersChanged(KisImageSP)),
+                    this, SLOT(slotLayersChanged(KisImageSP)));
+            connect(m_view -> getCanvasSubject() -> currentImg(),
+                    SIGNAL(sigLayersUpdated(KisImageSP)),
+                    this, SLOT(slotLayersChanged(KisImageSP)));
+        }
     }
 }
 
 Histogram::~Histogram()
 {
+}
+
+void Histogram::slotLayersChanged(KisImageSP img) {
+    m_action -> setEnabled(img && img -> activeLayer() && img -> activeLayer() -> visible());
 }
 
 void Histogram::slotActivated()

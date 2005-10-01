@@ -1628,16 +1628,17 @@ void KisImage::notify()
 
 void KisImage::notify(const QRect& rc)
 {
+   QRect rect = rc & QRect(0, 0, width(), height());
 #if 1
     // Composite the image
     KisPainter gc;
 
     gc.begin(m_projection.data());
 
-    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_bkg.data(), rc.x(), rc.y(), rc.width(), rc.height());
+    gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, m_bkg.data(), rect.x(), rect.y(), rect.width(), rect.height());
 
     if (!m_layers.empty()) {
-        KisFlatten<flattenAllVisible> visitor(rc.x(), rc.y(), rc.width(), rc.height());
+        KisFlatten<flattenAllVisible> visitor(rect.x(), rect.y(), rect.width(), rect.height());
         visitor(gc, m_layers);
     }
 
@@ -1645,8 +1646,8 @@ void KisImage::notify(const QRect& rc)
     m_renderinit = true;
 #endif
 
-    if (rc.isValid()) {
-        emit sigImageUpdated(KisImageSP(this), rc);
+    if (rect.isValid()) {
+        emit sigImageUpdated(KisImageSP(this), rect);
     }
 
 }

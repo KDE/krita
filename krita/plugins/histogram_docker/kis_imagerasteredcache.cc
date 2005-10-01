@@ -30,7 +30,7 @@
 #include "kis_imagerasteredcache.h"
 
 KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) 
-    : m_view(view)
+    : m_observer(o -> createNew(0, 0, 0, 0)), m_view(view)
 {
     m_rasterSize = 64;
     m_timeOutMSec = 125;
@@ -42,32 +42,17 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
         return;
     }
 
-    int h = img -> height();
-    int w = img -> width();
-    m_width = static_cast<int>(ceil(float(w) / float(m_rasterSize)));
-    m_height = static_cast<int>(ceil(float(h) / float(m_rasterSize)));
+    imageSizeChanged(img, img -> width(), img -> height());
 
-    m_raster.resize(m_width);
-
-    int rasterX = 0;
-
-    for (int i = 0; i < m_width *  m_rasterSize; i += m_rasterSize) {
-        int rasterY = 0;
-
-        m_raster.at(rasterX).resize(m_height + 1);
-
-        for (int j = 0; j < m_height * m_rasterSize; j += m_rasterSize) {
-            Element* e = new Element(o -> createNew(i, j, m_rasterSize, m_rasterSize));
-            m_raster.at(rasterX).at(rasterY) = e;
-            rasterY++;
-        }
-        rasterX++;
-    }
-
-    imageUpdated(img, QRect(0,0, img -> width(), img -> height()));
-
-    connect(img, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), this, SLOT(imageUpdated(KisImageSP, const QRect&)));
+    connect(img, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)),
+            this, SLOT(imageUpdated(KisImageSP, const QRect&)));
+    connect(img, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)),
+            this, SLOT(imageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
+}
+
+KisImageRasteredCache::~KisImageRasteredCache() {
+    cleanUpElements();
 }
 
 void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) {
@@ -95,6 +80,32 @@ void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) 
     m_timer.start(m_timeOutMSec, true); // true -> singleshot
 }
 
+void KisImageRasteredCache::imageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h) {
+    cleanUpElements();
+
+    m_width = static_cast<int>(ceil(float(w) / float(m_rasterSize)));
+    m_height = static_cast<int>(ceil(float(h) / float(m_rasterSize)));
+
+    m_raster.resize(m_width);
+
+    int rasterX = 0;
+
+    for (int i = 0; i < m_width *  m_rasterSize; i += m_rasterSize) {
+        int rasterY = 0;
+
+        m_raster.at(rasterX).resize(m_height + 1);
+
+        for (int j = 0; j < m_height * m_rasterSize; j += m_rasterSize) {
+            Element* e = new Element(m_observer -> createNew(i, j, m_rasterSize, m_rasterSize));
+            m_raster.at(rasterX).at(rasterY) = e;
+            rasterY++;
+        }
+        rasterX++;
+    }
+
+    imageUpdated(image, QRect(0,0, image -> width(), image -> height()));
+}
+
 void KisImageRasteredCache::timeOut() {
     KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
     KisPaintDeviceImplSP dev = img -> mergedImage(); // XXX use img -> projection or so?
@@ -105,6 +116,15 @@ void KisImageRasteredCache::timeOut() {
     }
 
     emit cacheUpdated();
+}
+
+void KisImageRasteredCache::cleanUpElements() {
+    for (uint i = 0; i < m_raster.count(); i++) {
+        for (uint j = 0; j < m_raster.at(i).count(); j++) {
+            delete m_raster.at(i).at(j);
+        }
+    }
+    m_queue.clear();
 }
 
 #include "kis_imagerasteredcache.moc"

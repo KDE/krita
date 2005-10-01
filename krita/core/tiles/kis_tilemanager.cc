@@ -47,6 +47,17 @@ KisTileManager::KisTileManager() {
     m_bytesInMem = 0;
     m_bytesTotal = 0;
 
+    // Hardcoded (at the moment only?): 4 pools of 1000 tiles each
+    m_tilesPerPool = 1000;
+    m_pools = new Q_UINT8*[4];
+    m_poolPixelSizes = new Q_INT32[4];
+    m_poolFreeList = new PoolFreeList[4];
+    for (int i = 0; i < 4; i++) {
+        m_pools[i] = 0;
+        m_poolPixelSizes[i] = 0;
+        m_poolFreeList[i] = PoolFreeList();
+    }
+
     m_currentInMem = 0;
 
     KConfig * cfg = KGlobal::config();
@@ -242,7 +253,10 @@ void KisTileManager::toSwap(TileInfo* info) {
         memcpy(data, tile -> m_data, info -> size);
         madvise(data, info -> fsize, MADV_DONTNEED);
 
-        delete[] tile -> m_data;
+        if (isPoolTile(tile -> m_data, tile -> m_pixelSize))
+            reclaimTileToPool(tile -> m_data, tile -> m_pixelSize);
+        else
+            delete[] tile -> m_data;
 
         tile -> m_data = data;
     } else {
@@ -279,7 +293,71 @@ void KisTileManager::printInfo() {
                     << " elements in the freelist for pixelsize " << i << "\n";
         }
     }
+    kdDebug(DBG_AREA_TILES) << "Pool stats (" <<  m_tilesPerPool << " tiles per pool)" << endl;
+    for (int i = 0; i < 4; i++) {
+        if (m_pools[i]) {
+            kdDebug() << "Pool " << i << ": Freelist count: " << m_poolFreeList[i].count()
+                    << ", pixelSize: " << m_poolPixelSizes[i] << endl;
+        }
+    }
     kdDebug(DBG_AREA_TILES) << endl;
+}
+
+Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize) {
+    Q_UINT8* data = findTileFor(pixelSize);
+    if ( data ) {
+        return data;
+    }
+    return new Q_UINT8[m_tileSize * pixelSize];
+}
+
+void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize) {
+    if (isPoolTile(data, pixelSize)) {
+        reclaimTileToPool(data, pixelSize);
+    } else
+        delete[] data;
+}
+
+Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize) {
+    for (int i = 0; i < 4; i++) {
+        if (m_poolPixelSizes[i] == pixelSize) {
+            if (!m_poolFreeList[i].isEmpty()) {
+                Q_UINT8* data = m_poolFreeList[i].front();
+                m_poolFreeList[i].pop_front();
+                return data;
+            }
+        }
+        if (m_pools[i] == 0) {
+            // allocate new pool
+            m_poolPixelSizes[i] = pixelSize;
+            m_pools[i] = new Q_UINT8[pixelSize * m_tileSize * m_tilesPerPool];
+            // j = 1 because we return the first element, so no need to add it to the freelist
+            for (int j = 1; j < m_tilesPerPool; j++)
+                m_poolFreeList[i].append(&m_pools[i][j * pixelSize * m_tileSize]);
+            return m_pools[i];
+        }
+    }
+    return 0;
+}
+
+bool KisTileManager::isPoolTile(Q_UINT8* data, Q_INT32 pixelSize) {
+    if (data == 0)
+        return false;
+    for (int i = 0; i < 4; i++) {
+        if (m_poolPixelSizes[i] == pixelSize)
+            return data >= m_pools[i]
+                    && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool;
+    }
+    return false;
+}
+
+void KisTileManager::reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize) {
+    for (int i = 0; i < 4; i++) {
+        if (m_poolPixelSizes[i] == pixelSize)
+            if (data >= m_pools[i]
+                && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool)
+                m_poolFreeList[i].append(data);
+    }
 }
 
 void KisTileManager::configChanged() {

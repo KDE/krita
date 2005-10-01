@@ -92,7 +92,8 @@ KisTile::~KisTile()
     KisTileManager::instance() -> deregisterTile(this); // goes before the deleting of m_data!
 
     if (m_data) {
-        delete[] m_data;
+//        delete[] m_data;
+        KisTileManager::instance() -> dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
     if (readers()) { kdDebug() << "argh, still " << readers() << endl; m_nReadlock /= 0; }
@@ -105,7 +106,8 @@ void KisTile::allocate()
             kdDebug() << "arghll, still " << readers() << endl;
             m_nReadlock /= 0;
         }
-        m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
+        //m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
+        m_data = KisTileManager::instance() -> requestTileData(m_pixelSize);
         Q_CHECK_PTR(m_data);
     }
 }

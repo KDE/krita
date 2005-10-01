@@ -42,13 +42,17 @@ public:
     ~KisTileManager();
     static KisTileManager* instance();
 
-public:
+public: // Tile management
     void registerTile(KisTile* tile);
     void deregisterTile(KisTile* tile);
     void ensureTileLoaded(KisTile* tile);
     void maySwapTile(KisTile* tile);
 
-public:
+public: // Pool management
+    Q_UINT8* requestTileData(Q_INT32 pixelSize);
+    void dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize);
+
+public: // Configuration
     void configChanged();
 
 private:
@@ -68,6 +72,7 @@ private:
     typedef QValueList<TileInfo*> TileList;
     typedef QValueList<FreeInfo*> FreeList;
     typedef QValueVector<FreeList> FreeListList;
+    typedef QValueList<Q_UINT8*> PoolFreeList;
 
     TileMap m_tileMap;
     TileList m_swappableList;
@@ -79,6 +84,11 @@ private:
     unsigned long m_bytesInMem;
     unsigned long m_bytesTotal;
 
+    Q_UINT8 **m_pools;
+    Q_INT32 *m_poolPixelSizes;
+    Q_INT32 m_tilesPerPool;
+    PoolFreeList *m_poolFreeList;
+
     // debug
     int counter;
 
@@ -87,6 +97,9 @@ private:
     void toSwap(TileInfo* info);
     void doSwapping();
     void printInfo();
+    Q_UINT8* findTileFor(Q_INT32 pixelSize);
+    bool isPoolTile(Q_UINT8* data, Q_INT32 pixelSize);
+    void reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize);
 };
 
 #endif // KIS_TILEMANAGER_H_

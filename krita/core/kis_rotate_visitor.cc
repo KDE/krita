@@ -211,15 +211,12 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
     KisPaintDeviceImplSP dst;
 
     if (angle == 90) {
-printf("90\n");
         initProgress(fixedRotateSteps);
         dst = rotateRight90(src);
     } else if (angle == 180) {
-printf("180\n");
         initProgress(fixedRotateSteps);
         dst = rotate180(src);
     } else if (angle == 270) {
-printf("270\n");
         initProgress(fixedRotateSteps);
         dst = rotateLeft90(src);
     } else {
@@ -291,12 +288,6 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
     for (Q_INT32 y = r.top(); y <= r.bottom(); y++) {
 
         //calculate displacement
-        if (shearX >= 0) {
-            displacement = (r.bottom() - y) * shearX;
-        } else {
-            displacement = (y - r.top()) * QABS(shearX);
-        }
-
         displacement = -y * shearX;
 
         displacementInt = (Q_INT32)(floor(displacement));
@@ -345,12 +336,6 @@ KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double s
     for (Q_INT32 x = r.left(); x <= r.right(); x++) {
 
         //calculate displacement
-        if (shearY >= 0) {
-            displacement = (x - r.left()) * shearY;
-        } else {
-            displacement = (r.right() - x) * QABS(shearY);
-        }
-
         displacement = x * shearY;
 
         displacementInt = (Q_INT32)(floor(displacement));

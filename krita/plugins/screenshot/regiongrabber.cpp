@@ -136,7 +136,7 @@ void RegionGrabber::mouseReleaseEvent( QMouseEvent *e )
 
 void RegionGrabber::keyPressEvent( QKeyEvent *e )
 {
-  if ( e->key() == Key_Escape )
+  if ( e->key() == Qt::Key_Escape )
   {
     releaseMouse();
     emit regionGrabbed( QPixmap() );

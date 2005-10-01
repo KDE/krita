@@ -102,9 +102,9 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     accel->insert(KStdAccel::Print, this, SLOT(slotPrint()));
     accel->insert(KStdAccel::New, this, SLOT(slotGrab()));
 
-    accel->insert( "Print2", Key_P, this, SLOT(slotPrint()));
-    accel->insert( "New2", Key_N, this, SLOT(slotGrab()));
-    accel->insert( "New3", Key_Space, this, SLOT(slotGrab()));
+    accel->insert( "Print2", Qt::Key_P, this, SLOT(slotPrint()));
+    accel->insert( "New2", Qt::Key_N, this, SLOT(slotGrab()));
+    accel->insert( "New3", Qt::Key_Space, this, SLOT(slotGrab()));
 
     mainWidget->btnNew->setFocus();
 }

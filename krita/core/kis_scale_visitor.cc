@@ -31,190 +31,193 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     double fwidth = filterStrategy->support();
 
     QRect rect = m_dev -> exactBounds();
-        Q_INT32 width = rect.width();
-        Q_INT32 height =  rect.height();
-        m_pixelSize=m_dev -> pixelSize();
+    Q_INT32 width = rect.width();
+    Q_INT32 height =  rect.height();
+    m_pixelSize=m_dev -> pixelSize();
 
-        // compute size of target image
-        if ( xscale == 1.0F && yscale == 1.0F ) {
-                return;
-        }
-        Q_INT32 targetW = QABS( qRound( xscale * width ) );
-        Q_INT32 targetH = QABS( qRound( yscale * height ) );
+    // compute size of target image
+    if ( xscale == 1.0F && yscale == 1.0F ) {
+        return;
+    }
+    Q_INT32 targetW = QABS( qRound( xscale * width ) );
+    Q_INT32 targetH = QABS( qRound( yscale * height ) );
     
-        Q_UINT8* newData = new Q_UINT8[targetW * targetH * m_pixelSize ];
+    Q_UINT8* newData = new Q_UINT8[targetW * targetH * m_pixelSize ];
     Q_CHECK_PTR(newData);
 
-        double* weight = new double[ m_pixelSize ];    /* filter calculation variables */
+    double* weight = new double[ m_pixelSize ];    /* filter calculation variables */
 
-        Q_UINT8* pel = new Q_UINT8[ m_pixelSize ];
+    Q_UINT8* pel = new Q_UINT8[ m_pixelSize ];
     Q_CHECK_PTR(pel);
 
-        Q_UINT8 *pel2 = new Q_UINT8[ m_pixelSize ];
+    Q_UINT8 *pel2 = new Q_UINT8[ m_pixelSize ];
     Q_CHECK_PTR(pel2);
 
-        bool* bPelDelta = new bool[ m_pixelSize ];
-        ContribList    *contribX;
-        ContribList    contribY;
-        const Q_INT32 BLACK_PIXEL=0;
-        const Q_INT32 WHITE_PIXEL=255;
+    bool* bPelDelta = new bool[ m_pixelSize ];
+    ContribList    *contribX;
+    ContribList    contribY;
+    const Q_INT32 BLACK_PIXEL=0;
+    const Q_INT32 WHITE_PIXEL=255;
 
 
-        // create intermediate row to hold vertical dst row zoom
-        Q_UINT8 * tmp = new Q_UINT8[ width * m_pixelSize ];
+    // create intermediate row to hold vertical dst row zoom
+    Q_UINT8 * tmp = new Q_UINT8[ width * m_pixelSize ];
     Q_CHECK_PTR(tmp);
 
     //create array of pointers to intermediate rows
     Q_UINT8 **tmpRows = new Q_UINT8*[ height ];
     
-        //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
-        Q_UINT8 **tmpRowsMem;
-        if(yscale < 1.0)
+    //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
+    Q_UINT8 **tmpRowsMem;
+    if(yscale < 1.0)
+    {
+        tmpRowsMem = new Q_UINT8*[ (int)(fwidth / yscale * 2 + 1) ];
+        for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
         {
-                tmpRowsMem = new Q_UINT8*[ (int)(fwidth / yscale * 2 + 1) ];
-                for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
-                {
-                        tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
-                        Q_CHECK_PTR(tmpRowsMem[i]);
-                }
-        } 
-        else 
-        {
-                tmpRowsMem = new Q_UINT8*[ (int)(fwidth * 2 + 1) ];
-                for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
-                {
-                        tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
-                        Q_CHECK_PTR(tmpRowsMem[i]);
-                }
+             tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
+             Q_CHECK_PTR(tmpRowsMem[i]);
         }
-        //progress info
-        m_cancelRequested = false;
+    } 
+    else 
+    {
+        tmpRowsMem = new Q_UINT8*[ (int)(fwidth * 2 + 1) ];
+        for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
+        {
+            tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
+            Q_CHECK_PTR(tmpRowsMem[i]);
+        }
+    }
+    //progress info
+    m_cancelRequested = false;
     if ( progress )
         progress -> setSubject(this, true, true);
     emit notifyProgressStage(this,i18n("Scaling layer..."),0);
         
-        // build x weights
-        contribX = new ContribList[ targetW ];
-        for(int x = 0; x < targetW; x++)
-        {
-                calcContrib(&contribX[x], xscale, fwidth, width, filterStrategy, x);
-        }
+    // build x weights
+    contribX = new ContribList[ targetW ];
+    for(int x = 0; x < targetW; x++)
+    {
+        calcContrib(&contribX[x], xscale, fwidth, width, filterStrategy, x);
+    }
 
     QTime starttime = QTime::currentTime ();
     
-        for(int y = 0; y < targetH; y++)
-        {
-                //progress info
-                emit notifyProgress(this,(y * 100) / targetH);
-                if (m_cancelRequested) {
-                        break;
-                }
+    for(int y = 0; y < targetH; y++)
+    {
+        //progress info
+        emit notifyProgress(this,(y * 100) / targetH);
+        if (m_cancelRequested) {
+                break;
+        }
 
-                // build y weights
-                calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
+        // build y weights
+        calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
                 
         //copy pixel data to temporary arrays
         for(int srcpos = 0; srcpos < contribY.n; srcpos++)
         {
             if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
             {
-                
-                //tmpRows[contribY.p[srcpos].m_pixel] = new Q_UINT8[ width * m_pixelSize * sizeof( Q_UINT8 ) ];
+                //tmpRows[contribY.p[srcpos].m_pixel] = new Q_UINT8[ width * m_pixelSize ];
                 tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
-                m_dev -> readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
+                m_dev ->readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
             }
         }
-        
+    
         /* Apply vert filter to make dst row in tmp. */
-                for(int x = 0; x < width; x++)
-                {
-                        for(int channel = 0; channel < m_pixelSize; channel++){
-                                weight[channel] = 0.0;
-                                bPelDelta[channel] = FALSE;
-                            pel[channel]=tmpRows[contribY.p[0].m_pixel][ x * m_pixelSize + channel ];
+        for(int x = 0; x < width; x++)
+        {
+            for(int channel = 0; channel < m_pixelSize; channel++){
+                weight[channel] = 0.0;
+                bPelDelta[channel] = FALSE;
+                pel[channel]=tmpRows[contribY.p[0].m_pixel][ x * m_pixelSize + channel ];
             }
-                        for(int srcpos = 0; srcpos < contribY.n; srcpos++)
-                        {
+            for(int srcpos = 0; srcpos < contribY.n; srcpos++)
+            {
                 if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height)){
                     for(int channel = 0; channel < m_pixelSize; channel++)
-                                        {
-                                                pel2[channel]=tmpRows[contribY.p[srcpos].m_pixel][ x * m_pixelSize + channel ];
+                    {
+                        pel2[channel]=tmpRows[contribY.p[srcpos].m_pixel][ x * m_pixelSize + channel ];
                         if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                                weight[channel] += pel2[channel] * contribY.p[srcpos].m_weight;
-                                        }
-                                }
-                        }
+                            weight[channel] += pel2[channel] * contribY.p[srcpos].m_weight;
+                    }
+                }
+            }
 
-                        for(int channel = 0; channel < m_pixelSize; channel++){
-                                weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                tmp[ x * m_pixelSize + channel ] = static_cast<Q_UINT8>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
-                        }
-                } /* next row in temp column */
-                delete[] contribY.p;
+            for(int channel = 0; channel < m_pixelSize; channel++){
+                weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
+                        tmp[ x * m_pixelSize + channel ] = static_cast<Q_UINT8>(CLAMP(weight[channel], BLACK_PIXEL, WHITE_PIXEL));
+            }
+        } /* next row in temp column */
+        delete[] contribY.p;
         
-                for(int x = 0; x < targetW; x++)
-                {
-                        for(int channel = 0; channel < m_pixelSize; channel++){
-                                weight[channel] = 0.0;
-                                bPelDelta[channel] = FALSE;
-                                pel[channel] = tmp[ contribX[x].p[0].m_pixel * m_pixelSize + channel ];
-                        }
-                        for(int srcpos = 0; srcpos < contribX[x].n; srcpos++)
-                        {
-                                for(int channel = 0; channel < m_pixelSize; channel++){
-                                        pel2[channel] = tmp[ contribX[x].p[srcpos].m_pixel * m_pixelSize + channel ];
-                                        if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
-                                        weight[channel] += pel2[channel] * contribX[x].p[srcpos].m_weight;
-                                }
-                        }
-                        for(int channel = 0; channel < m_pixelSize; channel++){
-                                weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
-                                int currentPos = (y*targetW+x) * m_pixelSize; // try to be at least a little efficient
-                                if (weight[channel]<0) newData[currentPos + channel] = 0;
-                                else if (weight[channel]>255) newData[currentPos + channel] = 255;
-                                else newData[currentPos + channel] = (uchar)weight[channel];
-                       }
-                } /* next dst row */
-        } /* next dst column */
-        if(!m_cancelRequested){
-                m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
-                m_dev -> crop(0, 0, targetW, targetH);
-        }
-
-        /* free the memory allocated for horizontal filter weights */
         for(int x = 0; x < targetW; x++)
-                delete[] contribX[x].p;
-        delete[] contribX;
+        {
+            for(int channel = 0; channel < m_pixelSize; channel++){
+                weight[channel] = 0.0;
+                bPelDelta[channel] = FALSE;
+                pel[channel] = tmp[ contribX[x].p[0].m_pixel * m_pixelSize + channel ];
+            }
+            for(int srcpos = 0; srcpos < contribX[x].n; srcpos++)
+            {
+                for(int channel = 0; channel < m_pixelSize; channel++){
+                    pel2[channel] = tmp[ contribX[x].p[srcpos].m_pixel * m_pixelSize + channel ];
+                    if(pel2[channel] != pel[channel])
+                        bPelDelta[channel] = TRUE;
+                    weight[channel] += pel2[channel] * contribX[x].p[srcpos].m_weight;
+                }
+            }
+            for(int channel = 0; channel < m_pixelSize; channel++){
+                weight[channel] = bPelDelta[channel] ? static_cast<int>(qRound(weight[channel])) : pel[channel];
+                int currentPos = (y*targetW+x) * m_pixelSize; // try to be at least a little efficient
+                if (weight[channel]<0)
+                    newData[currentPos + channel] = 0;
+                else if (weight[channel]>255)
+                    newData[currentPos + channel] = 255;
+                else
+                    newData[currentPos + channel] = (uchar)weight[channel];
+             }
+        } /* next dst row */
+    } /* next dst column */
+    if(!m_cancelRequested){
+        m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
+        m_dev -> crop(0, 0, targetW, targetH);
+    }
 
-        delete[] newData;
-        delete[] pel;
-        delete[] pel2;
-        delete[] tmp;
-        delete[] weight;
-        delete[] bPelDelta;
+    /* free the memory allocated for horizontal filter weights */
+    for(int x = 0; x < targetW; x++)
+        delete[] contribX[x].p;
+    delete[] contribX;
+
+    delete[] newData;
+    delete[] pel;
+    delete[] pel2;
+    delete[] tmp;
+    delete[] weight;
+    delete[] bPelDelta;
     
-        if(yscale < 1.0)
+    if(yscale < 1.0)
+    {
+        for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
         {
-                for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
-                {
-                        delete[] tmpRowsMem[i];
-                }
-        } 
-        else 
-        {
-                for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
-                {
-                        delete[] tmpRowsMem[i];
-                }
+            delete[] tmpRowsMem[i];
         }
+    } 
+    else 
+    {
+        for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
+        {
+            delete[] tmpRowsMem[i];
+        }
+    }
 
-        //progress info
-        emit notifyProgressDone(this);
+    //progress info
+    emit notifyProgressDone(this);
 
     QTime stoptime = QTime::currentTime ();
     kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl; 
     
-        return;
+    return;
 }
 
 int KisScaleVisitor::calcContrib(ContribList *contrib, double scale, double fwidth, int srcwidth, KisFilterStrategy* filterStrategy, Q_INT32 i)

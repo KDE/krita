@@ -61,9 +61,9 @@
   -------------------------------------------------------------*/
 
 #ifndef cimg_OS
-#if defined(sun)        || defined(__sun)       || defined(linux)       || defined(__linux)    \
- || defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__OPENBSD__) || defined(__MACOSX__) \
- || defined(__APPLE__)  || defined(sgi)         || defined(__sgi)
+#if defined(sun)        || defined(__sun)       || defined(linux)       || defined(__linux)     \
+ || defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__NetBSD__)  || defined(__OPENBSD__) \
+ || defined(__MACOSX__) || defined(__APPLE__)   || defined(sgi)         || defined(__sgi)
 // Unix (Linux,Solaris,BSD,Irix,...)
 #define cimg_OS            1
 #ifndef cimg_display_type

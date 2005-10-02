@@ -79,6 +79,8 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         // Add it to the control palette
         m_view -> getCanvasSubject() -> paletteManager() -> addWidget(
             m_hview, "histodocker", krita::CONTROL_PALETTE);
+    } else {
+        m_cache = 0;
     }
 }
 
@@ -89,15 +91,18 @@ KritaHistogramDocker::~KritaHistogramDocker()
         delete m_producers . at(i);
     }
 
-    delete m_producer;
-    delete m_cache;
+    if (m_cache)
+        m_cache -> deleteLater();
 }
 
 void KritaHistogramDocker::producerChanged(int pos)
 {
-    delete m_cache;
+    if (m_cache)
+        m_cache -> deleteLater();
+    m_cache = 0;
 
-    m_popup.setItemChecked(m_currentProducerPos, false);
+    if (m_currentProducerPos < m_popup.count())
+        m_popup.setItemChecked(m_currentProducerPos, false);
     m_currentProducerPos = pos;
     m_popup.setItemChecked(m_currentProducerPos, true);
 
@@ -147,13 +152,12 @@ void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
             listKeysCompatibleWith(m_cs);
 
     m_popup.clear();
+    m_currentProducerPos = 0;
 
     for (uint i = 0; i < keys.count(); i++) {
         KisID id(*(keys.at(i)));
         m_popup . insertItem(id.name(), static_cast<int>(i));
     }
-
-    m_popup.setItemChecked(m_currentProducerPos, true);
 
     producerChanged(0);
 }

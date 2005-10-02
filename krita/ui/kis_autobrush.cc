@@ -17,6 +17,7 @@
  */
  
 #include "kis_autobrush.h"
+#include <koImageResource.h>
 #include <kdebug.h>
 #include <qspinbox.h>
 #include <qtoolbutton.h>
@@ -24,92 +25,6 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 
-
-namespace {
-    /* XPM -- copyright The Gimp */
-    const char *chain_broken_24[] = {
-    /* columns rows colors chars-per-pixel */
-    "9 24 10 1",
-    "  c black",
-    ". c #020204",
-    "X c #5A5A5C",
-    "o c gray43",
-    "O c #8F8F91",
-    "+ c #9A9A98",
-    "@ c #B5B5B6",
-    "# c #D0D0D1",
-    "$ c #E8E8E9",
-    "% c None",
-    /* pixels */
-    "%%.....%%",
-    "%.o##@X.%",
-    "%.+...$.%",
-    "%.#.%.#.%",
-    "%.#.%.#.%",
-    "%.@.%.#.%",
-    "%.+...#.%",
-    "%.O.o.O.%",
-    "%%..@..%%",
-    "%%%.#.%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%%.#.%%%",
-    "%%..#..%%",
-    "%.o.@.O.%",
-    "%.@...@.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.#...$.%",
-    "%.o$#$@.%",
-    "%%.....%%"
-    };
-    
-    /* XPM  -- copyright The Gimp */
-    const char *chain_24[] = {
-    /* columns rows colors chars-per-pixel */
-    "9 24 10 1",
-    "  c black",
-    ". c #020204",
-    "X c #5A5A5C",
-    "o c gray43",
-    "O c #8F8F91",
-    "+ c #9A9A98",
-    "@ c #B5B5B6",
-    "# c #D0D0D1",
-    "$ c #E8E8E9",
-    "% c None",
-    /* pixels */
-    "%%%%%%%%%",
-    "%%%%%%%%%",
-    "%%.....%%",
-    "%.o##@X.%",
-    "%.+...$.%",
-    "%.#.%.#.%",
-    "%.#.%.#.%",
-    "%.@.%.#.%",
-    "%.+...#.%",
-    "%.O.o.O.%",
-    "%%..@..%%",
-    "%%%.#.%%%",
-    "%%%.#.%%%",
-    "%%..#..%%",
-    "%.o.@.O.%",
-    "%.@...@.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.@.%.$.%",
-    "%.#...$.%",
-    "%.o$#$@.%",
-    "%%.....%%",
-    "%%%%%%%%%",
-    "%%%%%%%%%"
-    };
-
-
-}
 
 KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
@@ -213,11 +128,12 @@ void KisAutobrush::linkSizeToggled(bool b)
 {
     m_linkSize = b;
 
+    KoImageResource kir;
     if (b) {
-        bnLinkSize->setPixmap(chain_24);
+        bnLinkSize->setPixmap(kir.chain());
     }
     else {
-        bnLinkSize->setPixmap(chain_broken_24);
+        bnLinkSize->setPixmap(kir.chainBroken());
     }
 }
 
@@ -225,11 +141,12 @@ void KisAutobrush::linkFadeToggled(bool b)
 {
     m_linkFade = b;
 
+    KoImageResource kir;
     if (b) {
-        bnLinkFade->setPixmap(chain_24);
+        bnLinkFade->setPixmap(kir.chain());
     }
     else {
-        bnLinkFade->setPixmap(chain_broken_24);
+        bnLinkFade->setPixmap(kir.chainBroken());
     }
 }
 

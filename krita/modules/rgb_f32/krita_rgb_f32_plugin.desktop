@@ -7,6 +7,7 @@ Name[et]=RGB värvimudel (32-bitine)
 Name[pt]=Modelo de Cor RGB (v. flutuante de 32-bits)
 Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 32-bits)
 Name[sv]=RGB-färgmodell (32-bitars heltal)
+Name[tr]=RGB Renk Modeli (32-bit kayan)
 Name[xx]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder

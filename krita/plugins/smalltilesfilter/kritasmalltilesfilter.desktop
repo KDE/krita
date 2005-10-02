@@ -7,6 +7,7 @@ Name[et]=Pisipaanide filter
 Name[pt]=Filtro de pequenos padrões
 Name[pt_BR]=Filtro de pequenos padrões
 Name[sv]=Smårutorsfilter
+Name[tr]=Küçük döşeme süzgeci
 Name[xx]=xxSmall tiles filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service

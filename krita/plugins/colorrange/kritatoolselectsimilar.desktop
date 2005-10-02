@@ -7,6 +7,7 @@ Name[et]=Sarnase värvi valimise tööriist
 Name[pt]=Ferramenta de Selecção de Cores Semelhantes
 Name[pt_BR]=Ferramenta de Selecção de Cores Semelhantes
 Name[sv]=Välj liknande färg-verktyg
+Name[tr]=Benzer Renkler Seçim Aracı
 Name[xx]=xxSelect Similar Colors Toolxx
 ServiceTypes=Krita/CoreModule
 Type=Service

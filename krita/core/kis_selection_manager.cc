@@ -459,11 +459,18 @@ KisLayerSP KisSelectionManager::paste()
 
 
         img->layerAdd(layer, img -> index(layer));
+
         //figure out where to position the clip
         KisCanvasController *cc = m_parent->getCanvasController();
         QPoint center = cc->viewToWindow(QPoint(cc->canvas()->width()/2, cc->canvas()->height()/2));
+        QPoint bottomright = cc->viewToWindow(QPoint(cc->canvas()->width(), cc->canvas()->height()));
+        if(bottomright.x() > img->width())
+            center.setX(img->width()/2);
+        if(bottomright.y() > img->height())
+            center.setY(img->height()/2);
         center -= QPoint(r.width()/2, r.height()/2);
         layer -> move(center.x(), center.y());
+
         img -> notify();
 
         return layer;

@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include <kxmlguibuilder.h>
-
+#include <kxmlguiclient.h>
 #include <koView.h>
 
 #include "kis_canvas_controller.h"
@@ -118,7 +118,6 @@ public: // KXMLGUIBuilder implementation
 
     virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
     virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
-
 
 public: // KoView implementation
     virtual bool eventFilter(QObject *o, QEvent *e);

@@ -246,7 +246,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_tabletEventTimer.start();
 
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
-
 }
 
 KisView::~KisView()
@@ -262,14 +261,40 @@ KisView::~KisView()
 
 }
 
+
+static Qt::Dock stringToDock( const QString& attrPosition )
+{
+    KToolBar::Dock dock = KToolBar::DockTop;
+    if ( !attrPosition.isEmpty() ) {
+        if ( attrPosition == "top" )
+            dock = Qt::DockTop;
+        else if ( attrPosition == "left" )
+            dock = Qt::DockLeft;
+        else if ( attrPosition == "right" )
+            dock = Qt::DockRight;
+        else if ( attrPosition == "bottom" )
+            dock = Qt::DockBottom;
+        else if ( attrPosition == "floating" )
+            dock = Qt::DockTornOff;
+        else if ( attrPosition == "flat" )
+            dock = Qt::DockMinimized;
+    }
+    return dock;
+}
+
 QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
     if( element.attribute( "name" ) == "ToolBox" )
     {
-        m_toolBox = new KoToolBox(mainWindow(), "toolbox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
+        m_toolBox = new KoToolBox(mainWindow(), "ToolBox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
         m_toolBox -> setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
-        return m_toolBox;
+
+        kdDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
+        Dock dock = stringToDock( element.attribute( "position" ).lower() );
+
+        mainWindow()->addDockWindow( m_toolBox, dock, false);
+        mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
     }
 
     return KXMLGUIBuilder::createContainer( parent, index, element, id );

@@ -45,12 +45,6 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plu
 {
     setInstance(ScreenshotFactory::instance());
 
-//     kdDebug() << "Screenshot plugin. Class: " 
-//           << className() 
-//           << ", Parent: " 
-//           << parent -> className()
-//           << "\n";
-
     KImageIO::registerFormats(); // ???
 
     snapshot = new KSnapshot();
@@ -58,7 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plu
     connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
 
     (void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
-    
+
 }
 
 Screenshot::~Screenshot()
@@ -69,13 +63,13 @@ Screenshot::~Screenshot()
 void Screenshot::slotScreenshot()
 {
     snapshot -> show();
-}     
+}
 
 void Screenshot::slotScreenGrabbed()
 {
     KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
     snapshot -> save(temp.name());
-         
+
     KisView *view = dynamic_cast<KisView *>(parent());
     if(view)
         view->koDocument()->import(temp.name());

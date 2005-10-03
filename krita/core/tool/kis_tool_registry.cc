@@ -31,7 +31,6 @@ KisToolRegistry *KisToolRegistry::m_singleton = 0;
 
 KisToolRegistry::KisToolRegistry()
 {
-     kdDebug(DBG_AREA_REGISTRY) << " creating a KisToolRegistry" << endl;
 }
 
 KisToolRegistry::~KisToolRegistry()

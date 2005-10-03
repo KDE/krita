@@ -54,17 +54,10 @@ K_EXPORT_COMPONENT_FACTORY( kritaimagenhancement, KritaImageEnhancementFactory( 
 {
     setInstance(KritaImageEnhancementFactory::instance());
 
-
-    kdDebug(DBG_AREA_PLUGINS) << "KritaImageEnhancement plugin. Class: "
-      << className()
-      << ", Parent: "
-      << parent -> className()
-      << "\n";
-
-  if ( parent->inherits("KisFactory") )
-  {
-     KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
-  }
+    if ( parent->inherits("KisFactory") )
+    {
+        KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
+    }
 }
 
 KritaImageEnhancement::~KritaImageEnhancement()

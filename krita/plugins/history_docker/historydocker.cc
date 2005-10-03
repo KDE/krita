@@ -43,12 +43,6 @@ KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const 
     setInstance(KritaHistoryDockerFactory::instance());
 
 
-    kdDebug(DBG_AREA_PLUGINS) << "HistoryDocker plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if ( !parent->inherits("KisView") )
     {
         return;

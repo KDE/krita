@@ -107,14 +107,12 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     for (int y = 0; y < maskHeight; y++)
     {
-        KisHLineIteratorPixel hiter = tmpDev->createHLineIterator(0, y, maskWidth, false);
+        KisHLineIterator hiter = tmpDev->createHLineIterator(0, y, maskWidth, false);
         int x=0;
         while(! hiter.isDone())
         {
-            // XXX: Q_UINT8 should be Q_UINT8
             Q_UINT8 alpha = mask -> alphaAt( x++, y );
-            KisPixel p = colorSpace -> toKisPixel( hiter.rawData());
-            p.alpha() = alpha;
+            colorSpace->setAlpha(hiter.rawData(), alpha, 1);
 
             ++hiter;
         }

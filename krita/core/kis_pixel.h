@@ -24,7 +24,6 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_profile.h"
-#include "kis_quantum.h"
 #include "kis_colorspace.h"
 
 class QColor;
@@ -129,9 +128,9 @@ public:
 
 public:
 
-    KisQuantum operator[](int index) const { return KisQuantum(&m_channels[index]); };
+    Q_UINT8 operator[](int index) const { return m_channels[index]; };
 
-    KisQuantum alpha() const { return KisQuantum(m_alpha); };
+    Q_UINT8 alpha() const { return m_alpha[0]; };
 
     KisColorSpace * colorSpace() const { return m_colorSpace; };
 

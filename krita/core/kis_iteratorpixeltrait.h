@@ -83,8 +83,8 @@ public:
      * Return one channel from the current kispixel. Does not check whether
      * channel index actually exists in this colorspace.
      */
-    inline KisQuantum operator[](int index) const
-            { return m_device -> toPixel(m_underlyingIterator->rawData())[index]; };
+    inline Q_UINT8 operator[](int index) const
+            { return m_underlyingIterator->rawData()[index]; };
             
     /**
      * Returns if the pixel is selected or not. This is much faster than first building a KisPixel

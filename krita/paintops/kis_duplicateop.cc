@@ -111,34 +111,24 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     while ( srcY < sh )
     {
-        KisHLineIteratorPixel srcLit = srcdev -> createHLineIterator(0, srcY, sw - 1, true);
-        KisHLineIteratorPixel dabLit = dab.data() -> createHLineIterator(0, srcY, sw - 1, false);
-        KisHLineIteratorPixel devLit = device -> createHLineIterator(srcPoint.x(), srcPoint.y() + srcY, srcPoint.x() + sw - 1, false);
+        KisHLineIterator srcLit = srcdev -> createHLineIterator(0, srcY, sw - 1, true);
+        KisHLineIterator dabLit = dab.data() -> createHLineIterator(0, srcY, sw - 1, false);
+        KisHLineIterator devLit = device -> createHLineIterator(srcPoint.x(), srcPoint.y() + srcY, srcPoint.x() + sw - 1, false);
         
         while( !srcLit.isDone() )
         {
-            KisPixel srcP= srcLit.pixel();
-            KisPixel dabP = dabLit.pixel();
-            KisPixel devP = devLit.pixel();
+            // XXX: This is 8-bit broken
             for( Q_INT32 i = 0; i < device -> colorSpace() -> nColorChannels(); i++) {
-                Q_UINT8 devQ = (Q_UINT8) devP[ i ];
-                Q_UINT8 dabQ = (Q_UINT8) dabP[ i ];
-                srcP[ i ] = (Q_UINT8) (((Q_UINT8_MAX - dabQ) * (devQ) ) / Q_UINT8_MAX);
+                Q_UINT8 devQ = (Q_UINT8) devLit.rawData()[ i ];
+                Q_UINT8 dabQ = (Q_UINT8) dabLit.rawData()[ i ];
+                srcLit.rawData()[ i ] = (Q_UINT8) (((Q_UINT8_MAX - dabQ) * (devQ) ) / Q_UINT8_MAX);
             }
             for( Q_INT32 i = device -> colorSpace() -> nColorChannels(); i < device -> colorSpace() -> nChannels(); i++) {
-                Q_UINT8 devQ = (Q_UINT8) devP[ i ];
-                Q_UINT8 dabQ = (Q_UINT8) dabP[ i ];
-                srcP[ i ] = (Q_UINT8) ((dabQ * devQ) / Q_UINT8_MAX);
+                Q_UINT8 devQ = (Q_UINT8) devLit.rawData()[ i ];
+                Q_UINT8 dabQ = (Q_UINT8) dabLit.rawData()[ i ];
+                srcLit.rawData()[ i ] = (Q_UINT8) ((dabQ * devQ) / Q_UINT8_MAX);
             }
             
-            // XXX: Fix this when alpha is set in KisPixel
-            //device -> colorSpace() -> computeDuplicatePixel( &srcUit, &dabUit, &devUit);
-            /*
-            for (int i = 0; i < depth; ++i) {
-                dstPR[i] = ( (Q_UINT8_MAX - dabPR[i]) * (srcPR[i) ) / Q_UINT8_MAX;
-            }
-            dstPR.alpha() = ( dabPR.alpha() * srcPR.alpha() ) / Q_UINT8_MAX;
-            */
             ++srcLit; ++dabLit; ++devLit;
         }
         srcY++;

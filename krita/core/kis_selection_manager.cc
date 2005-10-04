@@ -412,7 +412,6 @@ void KisSelectionManager::copy()
             ++selectionIt;
         }
     }
-    layer -> deselect();
 
     kdDebug(DBG_AREA_CORE) << "Selection copied: "
                    << r.x() << ", "

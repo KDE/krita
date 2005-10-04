@@ -1430,7 +1430,13 @@ void KisImage::mergeVisibleLayers()
 {
     vKisLayerSP beforeLayers = m_layers;
 
-    KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+    QString newName = 0;
+    if( activeLayer() && activeLayer()->visible())
+        newName = activeLayer()->name();
+    if( !newName )
+        newName = nextLayerName();
+
+    KisLayerSP dst = new KisLayer(this, newName, OPACITY_OPAQUE);
     Q_CHECK_PTR(dst);
 
     KisFillPainter painter(dst.data());

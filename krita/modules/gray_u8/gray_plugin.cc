@@ -52,6 +52,13 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
+        // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
+        LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
+        cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
+        cmsFreeGamma(Gamma);
+        KisProfile *defProfile = new KisProfile(hProfile);
+        KisColorSpaceFactoryRegistry::instance() -> addProfile(defProfile);
+kdDebug() << "defprofile " << defProfile->productName() << endl;
         KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace(0);
         KisColorSpaceFactory * csf = new KisGrayColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceGrayA);

@@ -115,7 +115,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisGrayColorSpace(p); };
 
-    virtual QString defaultProfile() { return "sRGB"; };
+    virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

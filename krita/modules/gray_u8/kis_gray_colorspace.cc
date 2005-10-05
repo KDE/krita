@@ -49,13 +49,7 @@ KisGrayColorSpace::KisGrayColorSpace(KisProfile *p) :
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));
-/*
-    // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
-    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
-    cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
-    cmsFreeGamma(Gamma);
 
-*/
     m_alphaPos = PIXEL_GRAY_ALPHA;
 
     init();

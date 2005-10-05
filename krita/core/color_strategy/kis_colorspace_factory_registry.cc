@@ -86,6 +86,13 @@ QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSp
     return profiles;
 }
 
+void KisColorSpaceFactoryRegistry::addProfile(KisProfile *p)
+{
+      if (p -> valid()) {
+          m_profileMap[p->productName()] = p;
+      }
+}
+
 void KisColorSpaceFactoryRegistry::resetProfiles()
 {
     // XXX: Should find a way to make sure not all profiles are read for all color strategies

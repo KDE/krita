@@ -51,6 +51,11 @@ public:
     void resetProfiles();
 
     /**
+     * Add the profile to the list.
+     */
+    void addProfile(KisProfile * p);
+
+    /**
      * Return the profile associated with the given product name,
      * or 0.
      */

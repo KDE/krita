@@ -58,7 +58,6 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
         cmsFreeGamma(Gamma);
         KisProfile *defProfile = new KisProfile(hProfile);
         KisColorSpaceFactoryRegistry::instance() -> addProfile(defProfile);
-kdDebug() << "defprofile " << defProfile->productName() << endl;
         KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace(0);
         KisColorSpaceFactory * csf = new KisGrayColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceGrayA);

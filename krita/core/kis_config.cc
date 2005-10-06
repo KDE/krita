@@ -38,7 +38,7 @@ namespace {
     const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
     const Q_INT32 DEFAULT_SWAPPINESS = 100;
     const Q_INT32 DEFAULT_PRESSURE_CORRECTION = 50;
-    const Q_INT32 DEFAULT_DOCKABILITY = 2;
+    const Q_INT32 DEFAULT_DOCKABILITY = 0;
 }
 
 KisConfig::KisConfig()

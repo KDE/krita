@@ -53,6 +53,10 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         m_view = dynamic_cast<KisView*>(parent);
 
         KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+        if (!img) {
+            m_cache = 0;
+            return;
+        }
         
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged

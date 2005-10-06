@@ -66,6 +66,7 @@
 #include "kis_filter_config_widget.h"
 
 #include "dlg_perftest.h"
+#include "wdg_perftest.h"
 
 #define USE_CALLGRIND 0
 
@@ -120,7 +121,7 @@ void PerfTest::slotPerfTest()
         if (dlgPerfTest -> exec() == QDialog::Accepted) {
 
         Q_INT32 testCount = (Q_INT32)qRound(dlgPerfTest -> page() -> intTestCount -> value());
-        
+
         if (dlgPerfTest -> page() -> chkBitBlt -> isChecked()) {
             kdDebug() << "bltTest:\n";
             QString s = bltTest(testCount);
@@ -242,14 +243,14 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
     KisIDList l = KisColorSpaceFactoryRegistry::instance() -> listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
-                    
+
         kdDebug() << "Image -> " << (*it).name() << "\n";
 
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
          KisImageSP img = doc -> newImage("blt-" + (*it).name(), 1000, 1000,
                 KisColorSpaceFactoryRegistry::instance() -> getColorSpace(*it,""));
-        
+
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
         report = report.append( "\n");
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE / 2, testCount, img));
@@ -406,7 +407,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         kdDebug() << "Filltest on " << (*it).name() + "\n";
-        
+
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
         KisImageSP img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisColorSpaceFactoryRegistry::instance() -> getColorSpace(*it,""));
@@ -1064,10 +1065,10 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
     QString report = QString("* paintView test\n\n");
 
     KisDoc * doc = m_view -> getCanvasSubject() -> document();
-    
+
     KisImageSP img = doc->currentImage();
     img->resize(512,512);
-    
+
 
     KisLayerSP l = img -> activeLayer();
 

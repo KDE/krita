@@ -23,13 +23,9 @@
 #ifndef __selecttoolpolygonal_h__
 #define __selecttoolpolygonal_h__
 
-#include <qpoint.h>
-#include <qpointarray.h>
-
-#include "kis_tool.h"
+#include "kis_point.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
-
 #include "kis_selection.h"
 
 class KisSelectionOptions;
@@ -93,11 +89,11 @@ public:
     KisToolSelectPolygonalFactory() : super() {};
     virtual ~KisToolSelectPolygonalFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectPolygonal(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectPolygonal();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal select tool")); }
 };

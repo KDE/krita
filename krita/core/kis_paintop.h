@@ -28,6 +28,7 @@
 #include <ksharedptr.h>
 #include <klocale.h>
 
+#include "kis_global.h"
 #include "kis_types.h"
 #include "kis_id.h"
 #include "kis_vec.h"
@@ -71,7 +72,7 @@ public:
      * tool needs to activate its timer.
      */
     virtual bool incremental() { return false; }
-    
+
 protected:
 
     virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
@@ -100,7 +101,7 @@ public:
      * The filename of the pixmap we can use to represent this paintop in the ui.
      */
     virtual QString pixmap() { return ""; };
-    
+
     /**
      * Whether this paintop is internal to a certain tool or can be used
      * in various tools. If false, it won't show up in the toolchest.

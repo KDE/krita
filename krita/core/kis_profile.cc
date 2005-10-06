@@ -35,6 +35,7 @@
 
 #include "kis_profile.h"
 #include "kis_annotation.h"
+#include "kis_global.h"
 
 #include "ksharedptr.h"
 
@@ -187,7 +188,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
 
         return new KisProfile(profile, bytes);
     } else {
-        kdDebug(DBG_AREA_CMS) << "No profile set for X11, not correcting" << endl;
+        kdDebug() << "No profile set for X11, not correcting" << endl;
         return NULL;
     }
 #else

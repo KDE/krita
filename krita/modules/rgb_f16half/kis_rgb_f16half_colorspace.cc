@@ -30,7 +30,6 @@
 #include "kis_image.h"
 #include "kis_rgb_f16half_colorspace.h"
 #include "kis_f32_base_colorspace.h"
-#include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 
 namespace {

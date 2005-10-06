@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _KIS_WDG_GRADIENT_SLIDER_H_
 #define _KIS_WDG_GRADIENT_SLIDER_H_
 
@@ -30,43 +30,50 @@ class KisGradientSegment;
 class KisGradientSliderWidget : public QWidget
 {
     Q_OBJECT
-    public:
-        KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
-    public:
-        virtual void paintEvent ( QPaintEvent * );
-        void setGradientResource( KisAutogradientResource* agr);
-        KisGradientSegment* selectedSegment() { return m_selectedSegment; };
-    signals:
-        void sigSelectedSegment(KisGradientSegment*);
-        void sigChangedSegment(KisGradientSegment*);
-    protected:
-        virtual void mousePressEvent( QMouseEvent * e );
-        virtual void mouseReleaseEvent ( QMouseEvent * e );
-        virtual void mouseMoveEvent( QMouseEvent * e );
-        virtual void contextMenuEvent( QContextMenuEvent * e );
-    private slots:
-        void slotMenuAction(int id);
-    private:
-        enum {
-            NO_DRAG,
-            LEFT_DRAG,
-            RIGHT_DRAG,
-            MIDDLE_DRAG
-        };
 
-        enum {
-            SPLIT_SEGMENT,
-            DUPLICATE_SEGMENT,
-            MIRROR_SEGMENT,
-            REMOVE_SEGMENT
-        };
-        
-        KPixmapIO m_pixmapIO;
-        KisAutogradientResource* m_autogradientResource;
-        KisGradientSegment* m_currentSegment;
-        KisGradientSegment* m_selectedSegment;
-        KPopupMenu* m_segmentMenu;
-        int m_drag;
+public:
+    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
+
+public:
+    virtual void paintEvent ( QPaintEvent * );
+    void setGradientResource( KisAutogradientResource* agr);
+    KisGradientSegment* selectedSegment() { return m_selectedSegment; };
+
+signals:
+    void sigSelectedSegment(KisGradientSegment*);
+    void sigChangedSegment(KisGradientSegment*);
+
+protected:
+    virtual void mousePressEvent( QMouseEvent * e );
+    virtual void mouseReleaseEvent ( QMouseEvent * e );
+    virtual void mouseMoveEvent( QMouseEvent * e );
+    virtual void contextMenuEvent( QContextMenuEvent * e );
+
+private slots:
+    void slotMenuAction(int id);
+
+private:
+
+    enum {
+        NO_DRAG,
+        LEFT_DRAG,
+        RIGHT_DRAG,
+        MIDDLE_DRAG
+    };
+
+    enum {
+        SPLIT_SEGMENT,
+        DUPLICATE_SEGMENT,
+        MIRROR_SEGMENT,
+        REMOVE_SEGMENT
+    };
+
+    KPixmapIO m_pixmapIO;
+    KisAutogradientResource* m_autogradientResource;
+    KisGradientSegment* m_currentSegment;
+    KisGradientSegment* m_selectedSegment;
+    KPopupMenu* m_segmentMenu;
+    int m_drag;
 };
 
 #endif

@@ -26,6 +26,7 @@
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
+#include "kis_canvas_controller.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_non_paint.h"
 

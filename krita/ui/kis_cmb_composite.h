@@ -21,7 +21,6 @@
 #ifndef KIS_CMB_COMPOSITE_H_
 #define KIS_CMB_COMPOSITE_H_
 
-#include "kis_global.h"
 #include <koffice_export.h>
 #include "qcombobox.h"
 #include "kis_composite_op.h"
@@ -43,7 +42,7 @@ class KRITAUI_EXPORT KisCmbComposite : public QComboBox
 
     Q_OBJECT
 
- public: 
+ public:
 
     KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
     virtual ~KisCmbComposite();

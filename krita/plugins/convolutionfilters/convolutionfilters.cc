@@ -19,40 +19,53 @@
  */
 
 #include <stdlib.h>
-#include <vector>
-
-#include <qpoint.h>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kinstance.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <ktempfile.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_painter.h>
-
-// #include <kmessagebox.h>
-
+#include <kis_convolution_painter.h>
 #include "convolutionfilters.h"
+
 #include "kis_custom_convolution_filter.h"
+
+KisKernel * createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
+                          Q_INT32 i3, Q_INT32 i4, Q_INT32 i5,
+                          Q_INT32 i6, Q_INT32 i7, Q_INT32 i8,
+                          Q_INT32 factor, Q_INT32 offset )
+{
+    KisKernel * kernel = new KisKernel();
+    kernel -> width = 3;
+    kernel -> height = 3;
+
+    kernel -> factor = factor;
+    kernel -> offset = offset;
+
+    kernel->data = new Q_INT32[9];
+    kernel->data[0] = i0;
+    kernel->data[1] = i1;
+    kernel->data[2] = i2;
+    kernel->data[3] = i3;
+    kernel->data[4] = i4;
+    kernel->data[5] = i5;
+    kernel->data[6] = i6;
+    kernel->data[7] = i7;
+    kernel->data[8] = i8;
+
+    return kernel;
+};
+
+
 
 typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
 
-    KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const char *name, const QStringList &)
+KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
-           setInstance(KritaConvolutionFiltersFactory::instance());
+    setInstance(KritaConvolutionFiltersFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "ConvolutionFilters plugin. Class: "
+    kdDebug(DBG_AREA_PLUGINS) << "ConvolutionFilters plugin. Class: "
            << className()
            << ", Parent: "
            << parent -> className()
@@ -80,131 +93,82 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 {
 }
 
-KisGaussianBlurFilter::KisGaussianBlurFilter() 
+KisGaussianBlurFilter::KisGaussianBlurFilter()
     : KisConvolutionConstFilter(id(), "blur", i18n("&Gaussian Blur"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-    int mat[3][3] =  { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 16, 0);
+    m_matrix = createKernel( 1, 2, 1, 2, 4, 2, 1, 2, 1, 16, 0);
 }
 
 
-KisSharpenFilter::KisSharpenFilter() 
+KisSharpenFilter::KisSharpenFilter()
     : KisConvolutionConstFilter(id(), "enhance", i18n("&Sharpen"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 0, -2, 0 }, { -2, 11, -2 }, { 0, -2, 0} };
-    m_matrixes[0] = KisMatrix3x3(mat, 3, 0);
+    m_matrix = createKernel( 0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0);
 }
 
-KisMeanRemovalFilter::KisMeanRemovalFilter() 
+KisMeanRemovalFilter::KisMeanRemovalFilter()
     : KisConvolutionConstFilter(id(), "enhance", i18n("&Mean Removal"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { -1, -1, -1 }, { -1, 9, -1 }, { -1, -1, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 0);
+    m_matrix = createKernel( -1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0);
 }
 
-KisEmbossLaplascianFilter::KisEmbossLaplascianFilter() 
+KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Laplascian"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss in All Directions"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( -1, -1, -1 , -1, 8, -1 , -1, -1, -1, 1, 127);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Horizontal && Vertical"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 0, -1, 0 }, { -1, 4, -1 }, { 0, -1, 0} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( 0, -1, 0 , -1, 4, -1 , 0, -1, 0, 1, 127);
 }
 
-KisEmbossVerticalFilter::KisEmbossVerticalFilter() 
+KisEmbossVerticalFilter::KisEmbossVerticalFilter()
     : KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Vertical Only"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 0, -1, 0 }, { 0, 2, 0 }, { 0, -1, 0} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( 0, -1, 0 , 0, 2, 0 , 0, -1, 0, 1, 127);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
     KisConvolutionConstFilter(id(), "emboss", i18n("Emboss Horizontal Only"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 0, 0, 0 }, { -1, 4, -1 }, { 0, 0, 0} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( 0, 0, 0 , -1, 4, -1 , 0, 0, 0, 1, 127);
 
 }
 
-KisEmbossDiagonalFilter::KisEmbossDiagonalFilter() 
+KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { -1, 0, -1 }, { 0, 4, 0 }, { -1, 0, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 
-KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter() 
+KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Top Edge Detection"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( 1, 1, 1 , 0, 0, 0 , -1, -1, -1, 1, 127);
 
 }
 
 KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
     : KisConvolutionConstFilter(id(), "edge", i18n("Right Edge Detection"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    int mat[3][3] =  { { -1, 0, 1 }, { -1, 0, 1 }, { -1, 0, 1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel(  -1, 0, 1 , -1, 0, 1 , -1, 0, 1,  1, 127);
 }
 
 KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Bottom Edge Detection"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { -1, -1, -1 }, { 0, 0, 0 }, { 1, 1, 1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( -1, -1, -1 , 0, 0, 0 , 1, 1, 1, 1, 127);
 }
 
 KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionConstFilter(id(), "edge", i18n("Left Edge Detection"))
 {
-    m_matrixes = new KisMatrix3x3[1];
-    Q_CHECK_PTR(m_matrixes);
-
-    int mat[3][3] =  { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1} };
-    m_matrixes[0] = KisMatrix3x3(mat, 1, 127);
+    m_matrix = createKernel( 1, 0, -1 , 1, 0, -1 , 1, 0, -1, 1, 127);
 }

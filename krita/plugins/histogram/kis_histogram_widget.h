@@ -18,13 +18,7 @@
 #ifndef KIS_HISTOGRAM_WIDGET_
 #define KIS_HISTOGRAM_WIDGET_
 
-#include <qwidget.h>
-#include <qpixmap.h>
-#include <qvaluevector.h>
-
 #include "kis_types.h"
-#include "kis_channelinfo.h"
-#include "kis_layer.h"
 #include "wdghistogram.h"
 
 class KisColorSpace;

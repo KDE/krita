@@ -24,6 +24,8 @@
 
 #include <kcolorbutton.h>
 #include <knuminput.h>
+#include "kis_gradient.h"
+#include "kis_autogradient_resource.h"
 
 #include "kis_gradient_slider_widget.h"
 

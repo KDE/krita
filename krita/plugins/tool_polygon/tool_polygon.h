@@ -21,21 +21,17 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a polygon tool.
  */
 class ToolPolygon : public KParts::Plugin
 {
     Q_OBJECT
+
 public:
+
     ToolPolygon(QObject *parent, const char *name, const QStringList &);
     virtual ~ToolPolygon();
-
-private:
-
-    KisView * m_view;
 
 };
 

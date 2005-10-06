@@ -18,17 +18,10 @@
 #ifndef KIS_DLG_APPLY_PROFILE_H_
 #define KIS_DLG_APPLY_PROFILE_H_
 
-#include <qspinbox.h>
-
 #include <kdialogbase.h>
 
-#include "kis_global.h"
-#include "wdgapplyprofile.h"
-
-#include "kis_types.h"
-#include "kis_image.h"
-
 class KisID;
+class WdgApplyProfile;
 
 class KisDlgApplyProfile : public KDialogBase {
     typedef KDialogBase super;
@@ -36,7 +29,7 @@ class KisDlgApplyProfile : public KDialogBase {
     Q_OBJECT
 
 public:
-    KisDlgApplyProfile(QWidget *parent = 0, 
+    KisDlgApplyProfile(QWidget *parent = 0,
                const char *name = 0);
     virtual ~KisDlgApplyProfile();
 
@@ -47,7 +40,7 @@ public:
     void fillCmbProfiles(const KisID & s);
 
 private:
-    
+
     WdgApplyProfile * m_page;
 };
 

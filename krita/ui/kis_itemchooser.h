@@ -20,9 +20,6 @@
 
 #include <qptrlist.h>
 #include <qwidget.h>
-#include <qframe.h>
-
-#include <koIconChooser.h>
 
 class QHBox;
 

@@ -34,6 +34,8 @@
 #include <koColor.h>
 #include <kdebug.h>
 #include "kis_color.h"
+#include "kis_canvas_subject.h"
+
 KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {
     m_subject = 0;

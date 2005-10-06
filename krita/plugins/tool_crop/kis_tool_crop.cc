@@ -46,6 +46,7 @@
 #include <kis_move_event.h>
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
+#include <kis_layer.h>
 
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
@@ -186,8 +187,6 @@ void KisToolCrop::move(KisMoveEvent *e)
                 if (m_mouseOnHandleType != None && m_dragStart != m_dragStop ) {
 
                     QPoint pos = e -> pos().floorQPoint();
-                    Q_INT32 width = QABS( m_startPos.x() - m_endPos.x() ); //with of the selected rectangle
-                    Q_INT32 height = QABS( m_startPos.y() - m_endPos.y() ); //height of the selected rectangle
 
                     Q_INT32 imageWidth = m_subject -> currentImg() -> width();
                     Q_INT32 imageHeight = m_subject -> currentImg() -> height();

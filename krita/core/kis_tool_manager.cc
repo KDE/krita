@@ -26,6 +26,8 @@
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kotoolbox.h"
+#include "kis_image.h"
+#include "kis_layer.h"
 
 KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller)
     : m_subject(parent),

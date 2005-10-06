@@ -20,20 +20,6 @@
 #ifndef KIS_PAINTER_H_
 #define KIS_PAINTER_H_
 
-#include <qbrush.h>
-#include <qfontinfo.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
-#include <qregion.h>
-#include <qwmatrix.h>
-#include <qimage.h>
-#include <qmap.h>
-#include <qpixmap.h>
-#include <qpointarray.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qvaluevector.h>
-
 #include <kcommand.h>
 
 #include "kis_color.h"
@@ -41,7 +27,6 @@
 #include "kis_types.h"
 #include "kis_paint_device_impl.h"
 #include "kis_point.h"
-#include "kis_matrix.h"
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "kis_paintop.h"
@@ -103,20 +88,20 @@ public:
 
 
         // The current paint device.
-        KisPaintDeviceImplSP device() const { return m_device; } 
+        KisPaintDeviceImplSP device() const { return m_device; }
 
 
     // ------------------------------------------------------------------------------------------
     //  Native paint methods that are undo/redo-able,
         // uses the color strategies and the composite operations.
-            
+
     /**
      * Blast the specified region from src onto the current paint device.
      */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy, 
-            const KisCompositeOp& op, 
+        void bitBlt(Q_INT32 dx, Q_INT32 dy,
+            const KisCompositeOp& op,
             KisPaintDeviceImplSP src,
-                    Q_INT32 sx, Q_INT32 sy, 
+                    Q_INT32 sx, Q_INT32 sy,
             Q_INT32 sw, Q_INT32 sh)
     {
         bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
@@ -126,11 +111,11 @@ public:
      * Overloaded version of the previous, differs in that it is possible to specify
          * a value for opacity
      */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy, 
-            const KisCompositeOp& op, 
+        void bitBlt(Q_INT32 dx, Q_INT32 dy,
+            const KisCompositeOp& op,
             KisPaintDeviceImplSP src,
                     Q_UINT8 opacity,
-                    Q_INT32 sx, Q_INT32 sy, 
+                    Q_INT32 sx, Q_INT32 sy,
             Q_INT32 sw, Q_INT32 sh);
 
 
@@ -144,7 +129,7 @@ public:
               Q_UINT8 opacity,
               Q_INT32 sx, Q_INT32 sy,
               Q_INT32 sw, Q_INT32 sh);
- 
+
 
     /**
      * A version of bitBlt that applies the destination selection mask
@@ -152,10 +137,10 @@ public:
      * only then blits. This means that the source device is permanently altered.
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
-              const KisCompositeOp &op, 
+              const KisCompositeOp &op,
               KisPaintDeviceImplSP src,
               Q_UINT8 opacity,
-              Q_INT32 sx, Q_INT32 sy, 
+              Q_INT32 sx, Q_INT32 sy,
               Q_INT32 sw, Q_INT32 sh);
 
 
@@ -302,7 +287,7 @@ public:
 
     void setPressure(double pressure) { m_pressure = pressure; }
     double pressure() { return m_pressure; }
-    
+
     void setPaintOp(KisPaintOp * paintOp) { m_paintOp = paintOp; }
     KisPaintOp * paintOp() const { return m_paintOp; }
 

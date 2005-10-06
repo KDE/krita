@@ -21,7 +21,6 @@
 #ifndef __KIS_TOOL_DUPLICATE_H__
 #define __KIS_TOOL_DUPLICATE_H__
 
-#include "kis_tool.h"
 #include "kis_tool_freehand.h"
 #include "kis_tool_factory.h"
 

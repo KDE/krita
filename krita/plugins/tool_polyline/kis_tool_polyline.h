@@ -21,11 +21,10 @@
 #ifndef KIS_TOOL_POLYLINE_H_
 #define KIS_TOOL_POLYLINE_H_
 
-#include <qpoint.h>
 #include <qvaluevector.h>
 
-#include "kis_tool.h"
-#include "kis_tool_rectangle.h"
+#include "kis_tool_paint.h"
+#include "kis_point.h"
 
 class KisCanvas;
 class KisDoc;
@@ -43,15 +42,15 @@ public:
     KisToolPolyline();
     virtual ~KisToolPolyline();
 
-        //
-        // KisCanvasObserver interface
-        //
+    //
+    // KisCanvasObserver interface
+    //
 
-        virtual void update (KisCanvasSubject *subject);
-        
-        //
-        // KisToolPaint interface
-        //
+    virtual void update (KisCanvasSubject *subject);
+
+    //
+    // KisToolPaint interface
+    //
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
@@ -73,8 +72,8 @@ protected:
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-        typedef QValueVector<KisPoint> KisPointVector;
-        KisPointVector m_points;
+    typedef QValueVector<KisPoint> KisPointVector;
+    KisPointVector m_points;
 };
 
 
@@ -85,12 +84,12 @@ class KisToolPolylineFactory : public KisToolFactory {
 public:
     KisToolPolylineFactory() : super() {};
     virtual ~KisToolPolylineFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolPolyline(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolPolyline();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
 };

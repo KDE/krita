@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include "kis_brush.h"
+#include "kis_layer.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_button_press_event.h"

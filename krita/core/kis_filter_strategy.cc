@@ -18,7 +18,7 @@
  */
 #include <kdebug.h>
 #include <klocale.h>
-
+#include "kis_global.h"
 #include "kis_filter_strategy.h"
 
 double KisHermiteFilterStrategy::valueAt(double t) const {
@@ -34,10 +34,10 @@ Q_UINT32 KisHermiteFilterStrategy::intValueAt(Q_INT32 t) const {
         if(t < 256)
     {
         t =(2 * t - 3*256) * t * t +(256<<16);
-    
+
         //go from .24 fixed point to .8 fixedpoint (hack only works with positve numbers, which it is)
         t = (t + 0x8000) >> 16;
-    
+
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
         if(t >= 128)
             return t - 1;

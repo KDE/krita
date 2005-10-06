@@ -24,12 +24,16 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qcolor.h>
+
+#include <kdualcolorbutton.h>
+
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
-#include <kdualcolorbutton.h>
-#include <qcolor.h>
+
 #include <kis_color.h>
+#include <kis_canvas_subject.h>
 
 KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {

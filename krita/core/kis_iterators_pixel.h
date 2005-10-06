@@ -19,17 +19,15 @@
 #ifndef KIS_ITERATORS_PIXEL_H_
 #define KIS_ITERATORS_PIXEL_H_
 
-#include "tiles/kis_iterator.h"
+#include "kis_iterator.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_pixel.h"
-#include "kis_colorspace.h"
-
 
 /**
  * The pixel iterators are high level iterarators. The lower level iterators merely return a pointer to some memory
  * where a pixel begins; these iterators return KisPixels -- high-level representations of a pixel together with
  * color model, profile and selectedness. You can access individual channels using the KisPixel [] operator, and .
- */ 
+ */
 
 
 class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTrait <KisHLineIterator>

@@ -20,12 +20,10 @@
 #ifndef DLG_IMAGESIZE
 #define DLG_IMAGESIZE
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
-#include "kis_filter_strategy.h"
-#include "wdg_imagesize.h"
+class KisFilterStrategy;
+class WdgImageSize;
 
 /**
  * This dialog allows the user to create a selection mask based
@@ -47,7 +45,7 @@ public:
     void setWidthPercent(Q_UINT32 w);
     void setMaximumWidth(Q_UINT32 w);
     Q_INT32 width();
-    
+
     void setHeight(Q_UINT32 h);
     void setHeightPercent(Q_UINT32 h);
     void setMaximumHeight(Q_UINT32 h);
@@ -55,7 +53,7 @@ public:
 
     bool scale();
     bool cropLayers();
-    
+
     KisFilterStrategy *filterType();
 
 private slots:
@@ -76,7 +74,7 @@ private:
     double m_oldWPercent, m_oldHPercent;
     double m_origW, m_origH;
     double m_maxW, m_maxH;
-    
+
     bool m_lock;
 
 };

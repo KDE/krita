@@ -22,7 +22,6 @@
 #define _KIS_ACCUMULATING_PRODUCER_H_
 
 #include <kis_basic_histogram_producers.h>
-
 #include "kis_cachedhistogram.h"
 
 /**

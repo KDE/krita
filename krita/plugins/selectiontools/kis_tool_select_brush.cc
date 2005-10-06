@@ -42,6 +42,7 @@
 #include "kis_selection.h"
 #include "kis_tool_select_brush.h"
 #include "kis_types.h"
+#include "kis_layer.h"
 #include "kis_view.h"
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"

@@ -33,8 +33,6 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_tool_registry.h>
-#include <kis_factory.h>
-#include <kis_view.h>
 
 #include "tool_transform.h"
 #include "kis_tool_transform.h"
@@ -57,8 +55,6 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
 
     if ( parent->inherits("KisFactory") )
     {
-        KisView * view = dynamic_cast<KisView *>(parent);
-
         KisToolRegistry * r = KisToolRegistry::instance();
         KisToolTransformFactory * f = new KisToolTransformFactory();
         Q_CHECK_PTR(f);

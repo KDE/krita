@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_sobel_filter_plugin.h"
 #include "kis_sobel_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritasobelfilter, KisSobelFilterPluginFactory( "krita" ) )

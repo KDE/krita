@@ -48,13 +48,12 @@ namespace FiltersGallery {
             KisFilter* m_filter;
             KisFilterConfiguration* m_filterconfig;
     };
+
     class KisFiltersListView : public KIconView {
         public:
-            KisFiltersListView(KisView* view, QWidget* parent);
+            KisFiltersListView(KisView * view, QWidget* parent);
         public:
             void buildPreview();
-//             KisImageSP image();
-//             KisLayerSP layer();
         private:
             KisView* m_view;
             KisImageSP m_imgthumb;

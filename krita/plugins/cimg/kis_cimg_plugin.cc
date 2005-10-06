@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_cimg_plugin.h"
 #include "kis_cimg_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisCImgPlugin> KisCImgPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacimg, KisCImgPluginFactory( "krita" ) )

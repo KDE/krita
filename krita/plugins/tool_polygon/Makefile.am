@@ -3,14 +3,8 @@ kde_services_DATA = kritatoolpolygon.desktop
 # all_includes must remain last!
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy/ \
-	-I$(srcdir)/../../core/resources/ \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../tools \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
+	$(all_includes)
 
 kritatoolpolygon_la_SOURCES = \
         tool_polygon.cc \
@@ -24,7 +18,7 @@ noinst_HEADERS = \
 	kis_tool_polygon.h 
 
 kritatoolpolygon_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritatoolpolygon_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritatoolpolygon_la_LIBADD =  ../../libkritacommon.la
 
 kritatoolpolygon_la_METASOURCES = AUTO
 

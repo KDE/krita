@@ -20,11 +20,9 @@
 #ifndef DLG_PERFTEST_H_
 #define DLG_PERFTEST_H_
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
-#include "wdg_perftest.h"
+class WdgPerfTest;
 
 class DlgPerfTest: public KDialogBase {
     typedef KDialogBase super;
@@ -35,7 +33,7 @@ public:
     DlgPerfTest(QWidget * parent = 0,
              const char* name = 0);
     ~DlgPerfTest();
-    
+
     WdgPerfTest * page();
 
 private slots:
@@ -49,7 +47,7 @@ private slots:
 private:
 
     WdgPerfTest * m_page;
-    double m_oldAngle;    
+    double m_oldAngle;
     bool m_lock;
 
 };

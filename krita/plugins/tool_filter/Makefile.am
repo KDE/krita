@@ -4,13 +4,8 @@ kde_services_DATA = kritatoolfilter.desktop
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
-	-I$(srcdir)/../../core/resources/ \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/filters \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
+	-I$(srcdir)/../../core/strategy/ $(all_includes)
 
 kritatoolfilter_la_SOURCES = \
 	kis_filterop.cc \
@@ -26,7 +21,7 @@ noinst_HEADERS = \
 	tool_filter.h
 
 kritatoolfilter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritatoolfilter_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritatoolfilter_la_LIBADD =  ../../libkritacommon.la
 
 kritatoolfilter_la_METASOURCES = AUTO
 

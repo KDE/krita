@@ -29,10 +29,6 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_guide.h"
-#include "kis_scale_visitor.h"
-#include "resources/kis_profile.h"
-#include "kis_annotation.h"
-
 
 #include <koffice_export.h>
 
@@ -47,6 +43,8 @@ class KisCompositeOp;
 class KisColor;
 class KisFilterStrategy;
 class KisImageIface;
+class KisProfile;
+class KisProgressDisplayInterface;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
@@ -67,7 +65,7 @@ public:
                      QPainter &painter,
                      KisProfile *  profile,
                      float exposure = 0.0f);
-    
+
     /**
      * Render the projection onto a QImage. In contrast with the above method, the
      * selection is not rendered.
@@ -76,9 +74,9 @@ public:
                                     Q_INT32 y1,
                                     Q_INT32 x2,
                                     Q_INT32 y2,
-                                    KisProfile * profile, 
+                                    KisProfile * profile,
                                     float exposure = 0.0f);
-    
+
 public:
     QString name() const;
     void setName(const QString& name);
@@ -123,7 +121,7 @@ public:
 
     /**
      *  returns a paintdevice that contains the merged layers of this image, within
-     * the bounds of this image (with the colorspace and profile of this image) 
+     * the bounds of this image (with the colorspace and profile of this image)
      */
     KisPaintDeviceImplSP mergedImage();
 

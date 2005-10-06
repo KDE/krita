@@ -28,13 +28,12 @@
 #include <kio/job.h>
 
 #include "kis_resource.h"
-#include "kis_global.h"
-#include "kis_layer.h"
+#include "kis_types.h"
 #include "kis_point.h"
 #include "kis_alpha_mask.h"
 #include "koffice_export.h"
 #include "kis_boundary.h"
-#include "paintop/kis_paintop.h"
+#include "kis_paintop.h"
 
 class QPoint;
 class QPixmap;
@@ -54,10 +53,10 @@ class KRITACORE_EXPORT KisBrush : public KisResource {
 
 public:
     KisBrush(const QString& filename);
-    KisBrush(const QString& filename, 
+    KisBrush(const QString& filename,
          const QByteArray & data,
          Q_UINT32 & dataPos);
-    
+
     virtual ~KisBrush();
 
     virtual bool load();
@@ -96,7 +95,7 @@ public:
 
     QImage outline(double pressure = PRESSURE_DEFAULT);
     virtual KisBoundary boundary();
-    
+
     /**
      * Returns true if this brush can return something useful for the info. This is used
      * by Pipe Brushes that can't paint sometimes
@@ -145,7 +144,7 @@ private:
 
     // Find the scaled brush(es) nearest to the given scale.
     void findScaledBrushes(double scale, const ScaledBrush **aboveBrush, const ScaledBrush **belowBrush) const;
-    
+
     // Initialize our boundary
     void generateBoundary();
 
@@ -167,7 +166,7 @@ private:
     Q_UINT32 m_magic_number; /*  GIMP brush magic number  */
 
     enumBrushType m_brushType;
-    
+
     KisBoundary* m_boundary;
 
 };

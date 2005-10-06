@@ -22,17 +22,15 @@
 #define _KIS_CONVOLUTION_FILTER_H_
 
 #include "kis_filter.h"
-#include "kis_matrix.h"
-#include "kis_view.h"
-#include <kdebug.h>
+class KisKernel;
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 public:
-    KisConvolutionConfiguration(KisMatrix3x3* matrixes) : m_matrixes(matrixes) {};
+    KisConvolutionConfiguration(KisKernel * matrix) : m_matrix(matrix) {};
 public:
-    inline KisMatrix3x3* matrixes() { return m_matrixes; };
+    inline KisKernel * matrix() { return m_matrix; };
 private:
-    KisMatrix3x3* m_matrixes;
+    KisKernel * m_matrix;
 };
 
 
@@ -46,7 +44,7 @@ public:
 };
 
 
-/** 
+/**
  * This class is used for a convolution filter with a constant matrix
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {
@@ -56,7 +54,7 @@ public:
 public:
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 protected:
-    KisMatrix3x3* m_matrixes;
+    KisKernel * m_matrix;
 };
 
 #endif

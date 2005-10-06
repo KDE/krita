@@ -29,8 +29,6 @@
 
 #include <kio/job.h>
 
-#include <koIconChooser.h>
-
 #include "kis_resource.h"
 #include "kis_global.h"
 
@@ -70,7 +68,7 @@ class KisGradientSegment {
 
         // startOffset <= t <= endOffset
         Color colorAt(double t) const;
-    
+
         const Color& startColor() const;
         const Color& endColor() const;
 
@@ -80,7 +78,7 @@ class KisGradientSegment {
         double startOffset() const;
         double middleOffset() const;
         double endOffset() const;
-        
+
         void setStartOffset(double t);
         void setMiddleOffset(double t);
         void setEndOffset(double t);
@@ -89,7 +87,7 @@ class KisGradientSegment {
 
         int interpolation() const;
         int colorInterpolation() const;
-        
+
         void setInterpolation(int interpolationType);
         void setColorInterpolation(int colorInterpolationType);
 
@@ -100,121 +98,121 @@ class KisGradientSegment {
         public:
             ColorInterpolationStrategy() {}
             virtual ~ColorInterpolationStrategy() {}
-    
+
             virtual Color colorAt(double t, Color start, Color end) const = 0;
             virtual int type() const = 0;
         };
-    
+
         class RGBColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static RGBColorInterpolationStrategy *instance();
-    
+
             virtual Color colorAt(double t, Color start, Color end) const;
             virtual int type() const { return COLOR_INTERP_RGB; }
-    
+
         private:
             RGBColorInterpolationStrategy() {}
-    
+
             static RGBColorInterpolationStrategy *m_instance;
         };
-    
+
         class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCWColorInterpolationStrategy *instance();
-    
+
             virtual Color colorAt(double t, Color start, Color end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CW; }
         private:
             HSVCWColorInterpolationStrategy() {}
-    
+
             static HSVCWColorInterpolationStrategy *m_instance;
         };
-    
+
         class HSVCCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCCWColorInterpolationStrategy *instance();
-    
+
             virtual Color colorAt(double t, Color start, Color end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CCW; }
         private:
             HSVCCWColorInterpolationStrategy() {}
-    
+
             static HSVCCWColorInterpolationStrategy *m_instance;
         };
-    
+
         class InterpolationStrategy {
         public:
             InterpolationStrategy() {}
             virtual ~InterpolationStrategy() {}
-    
+
             virtual double valueAt(double t, double middle) const = 0;
             virtual int type() const = 0;
         };
-    
+
         class LinearInterpolationStrategy : public InterpolationStrategy {
         public:
             static LinearInterpolationStrategy *instance();
-    
+
             virtual double valueAt(double t, double middle) const;
             virtual int type() const { return INTERP_LINEAR; }
-    
+
             // This does the actual calculation and is made
             // static as an optimisation for the other
             // strategies that need this for their own calculation.
             static double calcValueAt(double t, double middle);
-    
+
         private:
             LinearInterpolationStrategy() {}
-    
+
             static LinearInterpolationStrategy *m_instance;
         };
-    
+
         class CurvedInterpolationStrategy : public InterpolationStrategy {
         public:
             static CurvedInterpolationStrategy *instance();
-    
+
             virtual double valueAt(double t, double middle) const;
             virtual int type() const { return INTERP_CURVED; }
         private:
             CurvedInterpolationStrategy();
-    
+
             static CurvedInterpolationStrategy *m_instance;
             double m_logHalf;
         };
-    
+
         class SphereIncreasingInterpolationStrategy : public InterpolationStrategy {
         public:
             static SphereIncreasingInterpolationStrategy *instance();
-    
+
             virtual double valueAt(double t, double middle) const;
             virtual int type() const { return INTERP_SPHERE_INCREASING; }
         private:
             SphereIncreasingInterpolationStrategy() {}
-    
+
             static SphereIncreasingInterpolationStrategy *m_instance;
         };
-    
+
         class SphereDecreasingInterpolationStrategy : public InterpolationStrategy {
         public:
             static SphereDecreasingInterpolationStrategy *instance();
-    
+
             virtual double valueAt(double t, double middle) const;
             virtual int type() const { return INTERP_SPHERE_DECREASING; }
         private:
             SphereDecreasingInterpolationStrategy() {}
-    
+
             static SphereDecreasingInterpolationStrategy *m_instance;
         };
-    
+
         class SineInterpolationStrategy : public InterpolationStrategy {
         public:
             static SineInterpolationStrategy *instance();
-    
+
             virtual double valueAt(double t, double middle) const;
             virtual int type() const { return INTERP_SINE; }
         private:
             SineInterpolationStrategy() {}
-    
+
             static SineInterpolationStrategy *m_instance;
         };
     private:

@@ -1,6 +1,3 @@
-if use_kjsembed
-  kjsembed_plugin = kiskjsembed
-endif
 
 SUBDIRS = cimg \
 	bumpmap \
@@ -26,7 +23,6 @@ SUBDIRS = cimg \
 	histogram \
 	variations \
 	performancetest \
-	$(kjsembed_plugin) \
 	pixelizefilter \
 	cubismfilter \
 	filtersgallery \

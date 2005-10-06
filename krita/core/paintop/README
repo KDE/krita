@@ -1,4 +1,0 @@
-A paintop is a particular way to take a brush shape, color or pattern
-and paint it onto the layer. The standard implementations are in krita/paintops,
-but more implementations can be created as add-on plugins. These need to
-call KisPaintOpRegistry:add in the plugin constructor.

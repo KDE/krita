@@ -20,6 +20,8 @@
 #include <kapplication.h>
 
 #include "kis_doc.h"
+#include "kis_image.h"
+
 #include <dcopclient.h>
 
 KisDocIface::KisDocIface( KisDoc *doc_ )

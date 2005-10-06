@@ -29,7 +29,6 @@
 #include "kis_image.h"
 #include "kis_cmyk_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
-#include "kis_iterators_pixel.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
 #include "kis_colorspace_factory_registry.h"

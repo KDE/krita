@@ -18,8 +18,6 @@
 #ifndef KIS_PALETTE_
 #define KIS_PALETTE_
 
-#include <qcstring.h>
-#include <qsize.h>
 #include <qimage.h>
 #include <qcolor.h>
 #include <qvaluevector.h>
@@ -30,8 +28,6 @@
 #include "kis_types.h"
 #include "kis_resource.h"
 #include "kis_global.h"
-#include "kis_layer.h"
-#include "kis_point.h"
 #include "kis_gradient.h"
 #include "kis_alpha_mask.h"
 
@@ -101,7 +97,7 @@ private:
     QString m_comment;
     Q_INT32 m_columns;
     QValueVector<KisPaletteEntry> m_colors;
-    
+
 };
 #endif // KIS_PALETTE_
 

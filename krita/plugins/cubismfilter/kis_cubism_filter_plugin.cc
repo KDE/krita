@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_cubism_filter_plugin.h"
 #include "kis_cubism_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisCubismFilterPlugin> KisCubismFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacubismfilter, KisCubismFilterPluginFactory( "krita" ) )

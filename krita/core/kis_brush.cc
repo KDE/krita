@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_layer.h"
 #include "kis_global.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
@@ -99,7 +100,7 @@ KisBrush::KisBrush(const QString& filename,
     dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
- 
+
 KisBrush::~KisBrush()
 {
     m_scaledBrushes.clear();
@@ -145,7 +146,7 @@ bool KisBrush::init()
     }
     else {
         bh.spacing = ntohl(bh.spacing);
-    
+
         if (bh.spacing > 1000) {
             return false;
         }
@@ -746,13 +747,13 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                         + a * (1 - b) * qRed(bottomLeft)             * qAlpha(bottomLeft)
                         + (1 - a) * b * qRed(topRight)               * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qRed(bottomRight)      * qAlpha(bottomRight) + 0.5);
-                    green = static_cast<int>(a * b * qGreen(topLeft)     * qAlpha(topLeft)      
-                        + a * (1 - b) * qGreen(bottomLeft)           * qAlpha(bottomLeft)   
-                        + (1 - a) * b * qGreen(topRight)             * qAlpha(topRight)     
+                    green = static_cast<int>(a * b * qGreen(topLeft)     * qAlpha(topLeft)
+                        + a * (1 - b) * qGreen(bottomLeft)           * qAlpha(bottomLeft)
+                        + (1 - a) * b * qGreen(topRight)             * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qGreen(bottomRight)    * qAlpha(bottomRight) + 0.5);
-                    blue = static_cast<int>(a * b * qBlue(topLeft)       * qAlpha(topLeft)      
-                        + a * (1 - b) * qBlue(bottomLeft)            * qAlpha(bottomLeft)   
-                        + (1 - a) * b * qBlue(topRight)              * qAlpha(topRight)     
+                    blue = static_cast<int>(a * b * qBlue(topLeft)       * qAlpha(topLeft)
+                        + a * (1 - b) * qBlue(bottomLeft)            * qAlpha(bottomLeft)
+                        + (1 - a) * b * qBlue(topRight)              * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qBlue(bottomRight)     * qAlpha(bottomRight) + 0.5);
                     alpha = static_cast<int>(a * b * qAlpha(topLeft)
                         + a * (1 - b) * qAlpha(bottomLeft)

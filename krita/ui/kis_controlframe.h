@@ -22,9 +22,6 @@
 #ifndef __kis_controlframe_h__
 #define __kis_controlframe_h__
 
-#include <qframe.h>
-#include <qtabwidget.h>
-#include <qdockwindow.h>
 #include <qpopupmenu.h>
 
 #include <ktoolbar.h>
@@ -33,6 +30,7 @@
 
 class QWidget;
 class QTimer;
+class QTabWidget;
 
 class KToolBar;
 
@@ -75,14 +73,14 @@ private:
  *   Control Frame - status display with access to
  *   color selector, brushes, patterns, and preview
  */
-class KisControlFrame : public QObject  //: public KToolBar 
+class KisControlFrame : public QObject  //: public KToolBar
 {
     Q_OBJECT
 
 public:
     KisControlFrame(KMainWindow * window, KisView * view, const char *name = 0 );
     virtual ~KisControlFrame() {};
-    
+
 public slots:
 
     void slotSetBrush(KoIconItem *item);
@@ -103,7 +101,7 @@ private:
 private:
     QFont m_font;
     KisView * m_view;
-    
+
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
 

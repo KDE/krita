@@ -22,6 +22,7 @@
 #define _KIS_POLYGON_H_
 
 #include <qvaluevector.h>
+
 typedef QValueVector<KisPoint> KisPointVector;
 class KisPolygon : public KisPointVector
 {

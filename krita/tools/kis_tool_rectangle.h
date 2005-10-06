@@ -24,7 +24,6 @@
 #ifndef __KIS_TOOL_RECTANGLE_H__
 #define __KIS_TOOL_RECTANGLE_H__
 
-#include <qpoint.h>
 #include <qrect.h>
 
 #include "kis_tool_shape.h"
@@ -80,12 +79,12 @@ class KisToolRectangleFactory : public KisToolFactory {
 public:
     KisToolRectangleFactory() : super() {};
     virtual ~KisToolRectangleFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolRectangle(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolRectangle();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("rectangle", i18n("Rectangle tool")); }
 };

@@ -35,6 +35,7 @@
 #include "kis_move_event.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
+#include "kis_layer.h"
 
 KisToolMove::KisToolMove()
 {
@@ -102,9 +103,9 @@ void KisToolMove::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Move"), 
-                        "move", 
-                        Qt::SHIFT+Qt::Key_V, 
+        m_action = new KRadioAction(i18n("&Move"),
+                        "move",
+                        Qt::SHIFT+Qt::Key_V,
                         this,
                         SLOT(activate()),
                         collection,

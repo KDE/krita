@@ -32,7 +32,7 @@
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_undo_adapter.h"
-#include "tiles/kis_iterator.h"
+#include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_scale_visitor.h"

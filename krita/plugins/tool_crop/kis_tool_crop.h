@@ -26,8 +26,6 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 
-#include <kis_tool.h>
-
 class QRect;
 class QCursor;
 class WdgToolCrop;
@@ -68,11 +66,11 @@ public slots:
 private:
     void clearRect();
     void cropLayer(KisLayerSP layer, QRect rc);
-        QRegion handles(QRect rect);
-        void paintOutlineWithHandles();
-        void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
-        Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
-        void setMoveResizeCursor (Q_INT32 handle);
+    QRegion handles(QRect rect);
+    void paintOutlineWithHandles();
+    void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
+    Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
+    void setMoveResizeCursor (Q_INT32 handle);
     void validateSelection(void);
     void setOptionWidgetStartX(Q_INT32 x);
     void setOptionWidgetStartY(Q_INT32 y);
@@ -90,22 +88,22 @@ private slots:
 private:
     KisCanvasSubject *m_subject;
     QPoint m_startPos;
-        QPoint m_endPos;
-        bool m_selecting;
+    QPoint m_endPos;
+    bool m_selecting;
     QPoint m_dragStart;
     QPoint m_dragStop;
 
     WdgToolCrop* m_optWidget;
 
-        Q_INT32 m_handleSize;
-        QRegion m_handlesRegion;
-        bool m_haveCropSelection;
-        Q_INT32 m_dx, m_dy;
-        Q_INT32 m_mouseOnHandleType;
+    Q_INT32 m_handleSize;
+    QRegion m_handlesRegion;
+    bool m_haveCropSelection;
+    Q_INT32 m_dx, m_dy;
+    Q_INT32 m_mouseOnHandleType;
 
-        enum handleType
-        {
-                None = 0,
+    enum handleType
+    {
+        None = 0,
         UpperLeft = 1,
         UpperRight = 2,
         LowerLeft = 3,
@@ -124,10 +122,10 @@ public:
     KisToolCropFactory() : super() {};
     virtual ~KisToolCropFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t = new KisToolCrop(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t = new KisToolCrop();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t -> setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("crop", i18n("Crop tool")); }

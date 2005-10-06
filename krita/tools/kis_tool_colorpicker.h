@@ -20,7 +20,6 @@
 #ifndef KIS_TOOL_COLOR_PICKER_H_
 #define KIS_TOOL_COLOR_PICKER_H_
 
-#include "kis_tool.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 

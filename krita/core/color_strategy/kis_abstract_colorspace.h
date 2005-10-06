@@ -25,7 +25,6 @@
 #include <qpair.h>
 
 #include "kis_global.h"
-#include "kis_types.h"
 #include "kis_channelinfo.h"
 #include "kis_profile.h"
 #include "kis_id.h"

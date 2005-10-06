@@ -23,10 +23,9 @@
 #define KIS_TOOL_TRANSFORM_H_
 
 #include <qpoint.h>
+
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
-
-#include <kis_tool.h>
 
 class KisTransaction;
 class WdgToolTransform;
@@ -108,7 +107,7 @@ private:
     double m_clickangle;
     KisTransaction *m_transaction;
     KisFilterStrategy *m_filter;
-    
+
     WdgToolTransform *m_optWidget;
 };
 
@@ -118,8 +117,8 @@ public:
     KisToolTransformFactory() : super() {};
     virtual ~KisToolTransformFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t = new KisToolTransform(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t = new KisToolTransform();
         Q_CHECK_PTR(t);
         t -> setup(ac); return t;
     }

@@ -23,9 +23,8 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include <kdebug.h>
-#include "wdg_perchannel.h"
 
+class WdgPerChannel;
 
 class KisPerChannelFilterConfiguration
     : public KisFilterConfiguration

@@ -2,13 +2,9 @@ AM_CXXFLAGS = -DQT_PLUGIN
 
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../ui \
-	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/compositeop \
 	-I$(srcdir)/../../core/color_strategy \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+	$(all_includes)
 
 kde_widget_LTLIBRARIES = kritawidgets.la
 

@@ -20,7 +20,9 @@
 #define __KIS_SELECTION_OPTIONS_H__
 
 #include <qwidget.h>
+
 #include "koffice_export.h"
+
 class KisCanvasSubject;
 class WdgSelectionOptions;
 

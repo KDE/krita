@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_raindrops_filter_plugin.h"
 #include "kis_raindrops_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisRainDropsFilterPlugin> KisRainDropsFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaraindropsfilter, KisRainDropsFilterPluginFactory( "krita" ) )

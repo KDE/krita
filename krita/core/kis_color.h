@@ -36,8 +36,8 @@ class KRITACORE_EXPORT KisColor {
 
 public:
     // Create an empty KisColor. It will be valid, but also black and transparent
-    KisColor(); 
-    
+    KisColor();
+
     virtual ~KisColor();
 
     // Create a KisColor on the basis of a QColor, assuming an sRGB profile for the result
@@ -51,11 +51,11 @@ public:
     // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
     // is assumed to have the current monitor profile.
     KisColor(const QColor & color, KisColorSpace * colorSpace);
-    
+
     // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
-    // is assumed to have the current monitor profile.    
+    // is assumed to have the current monitor profile.
     KisColor(const QColor & color, Q_UINT8 alpha, KisColorSpace * colorSpace);
-    
+
     // Create a KisColor using a native color strategy. The data is copied.
     KisColor(const Q_UINT8 * data, KisColorSpace * colorSpace);
 
@@ -70,16 +70,16 @@ public:
 
     // For easy memcpy'ing etc.
     Q_UINT8 * data() const { return m_data; }
-    
+
     KisColorSpace * colorSpace() const { return m_colorSpace; }
-    
-    KisProfile *  profile() const { return m_colorSpace -> getProfile(); } 
+
+    KisProfile *  profile() const { return m_colorSpace -> getProfile(); }
 
     // Convert this KisColor to the specified colorspace. If the specified colorspace is the
     // same as the original colorspace, do nothing. Returns the converted KisColor.
     void convertTo(KisColorSpace * cs);
 
-    // Replace the existing color data, and colorspace with the specified data. 
+    // Replace the existing color data, and colorspace with the specified data.
     void setColor(Q_UINT8 * data, KisColorSpace * colorSpace = 0);
 
     // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
@@ -87,17 +87,13 @@ public:
     void toQColor(QColor *c, Q_UINT8 *opacity) const;
 
     QColor toQColor() const;
-    
+
     void dump() const;
-#if 0
-    // XXX (bsar): Do we need these?
-    void toLab(float * l, float * a, float * b, float * alpha, KisProfile *  profile = 0);
-    void fromLab(float l, float a, float b, float alpha, KisProfile *  profile = 0);
-#endif    
+
 private:
 
     Q_UINT8 * m_data;
-    
+
     KisColorSpace * m_colorSpace;
 };
 

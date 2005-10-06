@@ -19,10 +19,9 @@
 #ifndef _KIS_CUSTOM_CONVOLUTION_FILTER_CONFIGURATION_WIDGET_H_
 #define _KIS_CUSTOM_CONVOLUTION_FILTER_CONFIGURATION_WIDGET_H_
 
-#include <vector>
-#include <qwidget.h>
-#include <kis_filter.h>
 #include "kis_filter_config_widget.h"
+
+class QWidget;
 class KisCustomConvolutionFilterConfigurationBaseWidget;
 class KisMatrixWidget;
 class KisFilter;

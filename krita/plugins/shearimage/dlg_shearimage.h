@@ -20,11 +20,9 @@
 #ifndef DLG_SHEARIMAGE
 #define DLG_SHEARIMAGE
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
-#include "wdg_shearimage.h"
+class WdgShearImage;
 
 class DlgShearImage: public KDialogBase {
     typedef KDialogBase super;
@@ -40,15 +38,15 @@ public:
     void setAngleY(Q_UINT32 w);
         Q_INT32 angleX();
         Q_INT32 angleY();
-        
+
 private slots:
 
     void okClicked();
-        
+
 private:
 
     WdgShearImage * m_page;
-    double m_oldAngle;    
+    double m_oldAngle;
     bool m_lock;
 
 };

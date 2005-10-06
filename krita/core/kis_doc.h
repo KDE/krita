@@ -24,11 +24,8 @@
 
 #include <koDocument.h>
 
-#include "kis_global.h"
 #include "kis_types.h"
-#include "kis_image.h"
 #include "kis_undo_adapter.h"
-#include "kis_composite_op.h"
 
 #include <koffice_export.h>
 
@@ -41,6 +38,7 @@ class KCommand;
 class KoCommandHistory;
 class KMacroCommand;
 
+class KisProfile;
 class KisView;
 class KisNameServer;
 class KisChildDoc;
@@ -73,13 +71,13 @@ public:
      *      by Krita because we appear to be doing our zooming
      *      elsewhere. This may affect KOffice compatibility.
      */
-    virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);    
+    virtual void paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/);
 
     /**
      * Called by KisView to repaint the specified rect.
      */
     virtual void paintContent(QPainter& painter, const QRect& rect, KisProfile *  profile, float exposure = 0.0f);
-    
+
     virtual QDomDocument saveXML();
 
 private: // Undo adapter
@@ -110,19 +108,19 @@ public:
 
     /**
      * Adds the specified child document to this document; this
-     * is not done with KoDocument::insertChild() because that 
+     * is not done with KoDocument::insertChild() because that
      * is protected and cannot be called from KisView.
      */
     KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
 
     // Makes an otherwise empty document ready for import/export
     void prepareForImport();
-    
-    KisImageSP currentImage() { return m_currentImage;};
+
+    KisImageSP currentImage();
     void setCurrentImage(KisImageSP image);
 
     KisUndoAdapter * undoAdapter() { return this; }
-    
+
 public slots:
     void slotImageUpdated();
     void slotImageUpdated(const QRect& rect);
@@ -134,13 +132,13 @@ signals:
     void docUpdated();
     void docUpdated(const QRect& rect);
     void imageListUpdated();
-    
+
 
 protected:
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent, const char *name);
     virtual bool saveChildren( KoStore * ) { return true; };
-    
+
 private slots:
     void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
     void slotIOProgress(Q_INT8 percentage);
@@ -151,7 +149,7 @@ private:
     QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     bool init();
-    
+
     void setIOSteps(Q_INT32 nsteps);
     void IOCompletedStep();
     void IODone();

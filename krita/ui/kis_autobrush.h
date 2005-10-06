@@ -15,13 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _KIS_AUTOBRUSH_H_
 #define _KIS_AUTOBRUSH_H_
 
 #include <qobject.h>
 #include "wdgautobrush.h"
-#include <kis_brush.h>
 #include <kis_autobrush_resource.h>
 
 class KisAutobrush : public KisWdgAutobrush
@@ -30,7 +29,7 @@ class KisAutobrush : public KisWdgAutobrush
 public:
     KisAutobrush(QWidget *parent, const char* name, const QString& caption);
     void activate();
-    
+
 signals:
     void activatedResource(KisResource *r);
 

@@ -23,8 +23,9 @@
 #include "kis_tool_factory.h"
 #include <koffice_export.h>
 
+#include "kis_point.h"
+
 class KisCanvasSubject;
-class KisPoint;
 
 /**
  * The dummy tool is activated when a layer does not permit painting
@@ -63,12 +64,12 @@ class KisToolDummyFactory : public KisToolFactory {
 public:
     KisToolDummyFactory() : super() {};
     virtual ~KisToolDummyFactory() {};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolDummy();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("dummy", i18n("Dummy tool")); }
 };

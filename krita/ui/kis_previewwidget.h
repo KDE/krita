@@ -23,13 +23,11 @@
 #ifndef __kis_previewwidget_h__
 #define __kis_previewwidget_h__
 
-#include <qwidget.h>
-#include <qsize.h>
-
 #include "kis_types.h"
 
 #include "kis_previewwidgetbase.h"
 
+class QWidget;
 class KisUndoAdapter;
 
 /**
@@ -62,15 +60,15 @@ public:
 
     /** returns if the preview is automatically updated */
     bool getAutoUpdate();
-    
+
 
 public slots:
 
     /** Sets the preview to use the layer specified as argument */
     void slotSetLayer(KisLayerSP lay);
 
-    /** 
-     * This should be called at the beginning of the effect. This ensures that 
+    /**
+     * This should be called at the beginning of the effect. This ensures that
      * the layer in the preview widget is in the right state. */
     void slotRenewLayer();
 
@@ -84,7 +82,7 @@ public slots:
 
     /** Toggle the automatically update of the preview */
     void toggleAutoUpdate();
-    
+
     /** Toggle between display preview and display original */
     void toggleImageDisplayed();
 signals:

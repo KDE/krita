@@ -21,12 +21,12 @@
 #include <qvaluelist.h>
 #include <qpair.h>
 #include <koffice_export.h>
-#include "kis_paint_device_impl.h"
+
 #include "kis_point.h"
 
 class QPixmap;
 class QPainter;
-
+class KisPaintDeviceImpl;
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
  * marching ants selection. You can use it to paint the outline of a KisBrush while painting.

@@ -20,15 +20,10 @@
 #ifndef DLG_SEPARATE
 #define DLG_SEPARATE
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
+#include <kis_channel_separator.h>
 
-#include "kis_filter_strategy.h"
-#include "wdg_separations.h"
-
-#include "kis_channel_separator.h"
-
+class WdgSeparations;
 
 /**
  * This dialog allows the user to configure the decomposition of an image
@@ -54,7 +49,7 @@ public:
     void enableDownscale(bool enable);
 
     bool getToColor();
-    
+
 
 private slots:
     void slotSetColorSpaceLabel(int buttonid);

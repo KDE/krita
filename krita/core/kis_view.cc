@@ -108,7 +108,7 @@
 #include "kis_view_iface.h"
 #include "kis_label_cursor_pos.h"
 #include "kis_label_progress.h"
-#include "strategy/kis_strategy_move.h"
+#include "kis_strategy_move.h"
 
 
 #include <kis_resourceserver.h>

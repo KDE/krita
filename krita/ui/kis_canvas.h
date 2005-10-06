@@ -62,7 +62,7 @@ public:
     KisCanvas(QWidget *parent = 0, const char *name = 0);
     virtual ~KisCanvas();
     void showScrollBars();
-    
+
     // When enabled, the canvas may throw away move events if the application
     // is unable to keep up with them, i.e. intermediate move events in the event
     // queue are skipped.
@@ -157,7 +157,7 @@ protected:
             double m_pressure;
             KisVector2D m_tilt;
         };
-    
+
         State translateAxisData(const int *axisData) const;
 
     private:

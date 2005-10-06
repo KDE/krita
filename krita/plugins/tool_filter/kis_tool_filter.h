@@ -21,7 +21,6 @@
 #ifndef __KIS_TOOL_FILTER_H__
 #define __KIS_TOOL_FILTER_H__
 
-#include "kis_tool.h"
 #include "kis_tool_freehand.h"
 #include "kis_tool_factory.h"
 
@@ -67,11 +66,11 @@ public:
     KisToolFilterFactory() : super() {};
     virtual ~KisToolFilterFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
+    virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolFilter();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
 };

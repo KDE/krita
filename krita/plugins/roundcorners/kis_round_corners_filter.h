@@ -23,17 +23,15 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include "kis_view.h"
-#include <kdebug.h>
 
 class KisRoundCornersFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisRoundCornersFilterConfiguration(Q_INT32 radius) : m_radius(radius){};
-    public:
-                inline Q_INT32 radius() { return m_radius; };
-    private:
-                Q_INT32 m_radius;
+public:
+    KisRoundCornersFilterConfiguration(Q_INT32 radius) : m_radius(radius){};
+public:
+    inline Q_INT32 radius() { return m_radius; };
+private:
+    Q_INT32 m_radius;
 };
 
 class KisRoundCornersFilter : public KisFilter
@@ -46,7 +44,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
+        { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);

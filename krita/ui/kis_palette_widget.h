@@ -19,13 +19,7 @@
 #ifndef __KIS_PALETTE_WIDGET_H__
 #define __KIS_PALETTE_WIDGET_H__
 
-#include <qframe.h>
-#include <qpixmap.h>
-#include <qgridview.h>
 #include <qdict.h>
-
-#include "kselect.h"
-#include "kcolordialog.h"
 
 class QComboBox;
 class QLineEdit;
@@ -82,5 +76,5 @@ protected:
     bool init;
 };
 
-#endif        // __KCOLORDIALOG_H__
+#endif
 

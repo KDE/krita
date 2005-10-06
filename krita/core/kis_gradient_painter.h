@@ -18,31 +18,14 @@
 #ifndef KIS_GRADIENT_PAINTER_H_
 #define KIS_GRADIENT_PAINTER_H_
 
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qfontinfo.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
-#include <qregion.h>
-#include <qwmatrix.h>
-#include <qimage.h>
-#include <qmap.h>
-#include <qpixmap.h>
-#include <qpointarray.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qvaluevector.h>
-
 #include <kcommand.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
 #include "kis_point.h"
-#include "kis_matrix.h"
-#include "kis_progress_subject.h"
 #include "kis_painter.h"
 #include <koffice_export.h>
+
 class KisGradient;
 
 

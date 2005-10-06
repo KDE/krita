@@ -74,7 +74,6 @@ void KisToolPan::move(KisMoveEvent *e)
 void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasController *controller = m_subject -> canvasController();
         setCursor(m_openHandCursor);
         m_dragging = false;
     }

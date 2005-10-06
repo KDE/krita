@@ -32,7 +32,6 @@
 #include "kis_colorspace_registry.h"
 #include "kis_image.h"
 #include "kis_wet_sticky_colorspace.h"
-#include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 #include "kis_types.h"
 #include "kis_channelinfo.h"

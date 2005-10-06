@@ -1,9 +1,5 @@
 AM_CPPFLAGS = \
 	-I$(srcdir)/../ \
-	-I$(srcdir)/../resources \
-	-I$(srcdir)/../visitors \
-	-I$(srcdir)/../tool \
-	-I$(srcdir)/../paintop \
 	-I$(srcdir)/../tiles \
 	-I$(srcdir)/../../ui \
 	-I$(srcdir)/../../sdk \

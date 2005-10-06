@@ -23,14 +23,18 @@
 
 #include "kis_convolution_filter.h"
 #include "kis_filter_config_widget.h"
+#include "kis_id.h"
+#include "kis_types.h"
+
+class QWidget;
+class KisKernel;
 
 class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
 public:
-    KisCustomConvolutionConfiguration(KisMatrix3x3* matrixes) : KisConvolutionConfiguration(matrixes) {
-    };
-    ~KisCustomConvolutionConfiguration() { delete m_matrixes; };
+    KisCustomConvolutionConfiguration(KisKernel* matrix) : KisConvolutionConfiguration(matrix) {};
+    ~KisCustomConvolutionConfiguration();
 private:
-    KisMatrix3x3* m_matrixes;
+    KisKernel* m_matrix;
 };
 
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
@@ -46,9 +50,9 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 protected:
-    virtual KisMatrix3x3* matrixes() { return m_matrix; };
+    virtual KisKernel* matrix() { return m_matrix; };
 private:
-    KisMatrix3x3* m_matrix;
+    KisKernel* m_matrix;
 };
 
 

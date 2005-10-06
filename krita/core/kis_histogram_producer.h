@@ -22,14 +22,13 @@
 #include <qglobal.h>
 #include <ksharedptr.h>
 
-#include <kis_channelinfo.h>
 #include <kis_colorspace.h>
 
-#include "kis_global.h"
 #include "kis_generic_registry.h"
 
 class KisRectIteratorPixel;
 class QString;
+class KisChannelInfo;
 
 /**
  * This class is an interface used in the generation of a histogram. It is a container of

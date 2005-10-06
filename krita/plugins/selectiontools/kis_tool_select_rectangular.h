@@ -22,11 +22,9 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-#include <qpoint.h>
-#include "kis_tool.h"
+#include "kis_point.h"
 #include "kis_tool_non_paint.h"
 #include "kis_selection.h"
-
 #include "kis_tool_factory.h"
 
 class KisSelectionOptions;
@@ -81,11 +79,11 @@ public:
     KisToolSelectRectangularFactory() : super() {};
     virtual ~KisToolSelectRectangularFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectRectangular(); 
-        t -> setup(ac); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectRectangular();
+        t -> setup(ac);
         Q_CHECK_PTR(t);
-        return t; 
+        return t;
     }
     virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
 };

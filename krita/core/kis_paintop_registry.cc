@@ -29,6 +29,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
 #include "kis_id.h"
+#include "kis_global.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -76,27 +77,27 @@ bool KisPaintOpRegistry::userVisible(const KisID & id) const
         kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return false;
     }
-    
+
     return f->userVisible();
-    
+
 }
 
 QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 {
     KisPaintOpFactorySP f = get(id);
-    
+
     if (!f) {
         kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return QPixmap();
     }
 
     QString pname = f->pixmap();
-    
+
     if (pname.isEmpty() /*|| pname.isNull() || pname == ""*/) {
         return QPixmap();
     }
-    
+
     QString fname = KisFactory::instance()->dirs()->findResource("kis_images", pname);
-    
+
     return QPixmap(fname);
 }

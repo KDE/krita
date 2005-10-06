@@ -46,8 +46,11 @@
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
 #include <kis_colorspace_factory_registry.h>
+#include <kis_cmb_idlist.h>
+
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"
+#include "wdgconvertcolorspace.h"
 
 typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFactory( "krita" ) )

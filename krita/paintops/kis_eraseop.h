@@ -24,9 +24,9 @@
 #define KIS_ERASEOP_H_
 
 #include "kis_paintop.h"
-#include "kis_point.h"
-#include "kis_painter.h"
-#include "kis_types.h"
+
+class KisPoint;
+class KisPainter;
 
 class KisEraseOpFactory : public KisPaintOpFactory {
 

@@ -31,7 +31,7 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-
+#include "kis_layer.h"
 #include "kis_airbrushop.h"
 
 KisPaintOp * KisAirbrushOpFactory::createOp(KisPainter * painter)

@@ -28,6 +28,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_image.h"
 
 KisToolZoom::KisToolZoom()
 {

@@ -34,6 +34,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_tool_select_elliptical.h"
+#include "kis_layer.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"

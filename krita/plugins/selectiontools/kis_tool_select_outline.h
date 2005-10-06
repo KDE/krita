@@ -26,10 +26,9 @@
 #include <qpoint.h>
 #include <qpointarray.h>
 
-#include "kis_tool.h"
+#include "kis_point.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
-
 #include "kis_selection.h"
 
 class KisSelectionOptions;
@@ -42,15 +41,7 @@ public:
     KisToolSelectOutline();
     virtual ~KisToolSelectOutline();
 
-        //
-        // KisCanvasObserver interface
-        //
-
     virtual void update (KisCanvasSubject *subject);
-
-        //
-        // KisToolPaint interface
-        //
 
     virtual void setup(KActionCollection *collection);
     virtual Q_UINT32 priority() { return 6; }
@@ -95,11 +86,11 @@ public:
     KisToolSelectOutlineFactory() : super() {};
     virtual ~KisToolSelectOutlineFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectOutline(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectOutline();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }
 };

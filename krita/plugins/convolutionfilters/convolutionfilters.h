@@ -18,19 +18,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EXAMPLE_H
-#define EXAMPLE_H
+#ifndef CONVOLUTIONFILTERS_H
+#define CONVOLUTIONFILTERS_H
 
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
-#include "kis_matrix.h"
 
 class KisGaussianBlurFilter : public KisConvolutionConstFilter {
 public:
     KisGaussianBlurFilter();
 public:
     static inline KisID id() { return KisID("gaussian blur", i18n("Gaussian Blur")); };
-        virtual bool supportsPainting() { return true; }
+    virtual bool supportsPainting() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
 };
 
@@ -39,7 +38,7 @@ public:
     KisSharpenFilter();
 public:
     static inline KisID id() { return KisID("sharpen", i18n("Sharpen")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
     virtual bool supportsIncrementalPainting() { return false; }
 };
 
@@ -48,7 +47,7 @@ public:
     KisMeanRemovalFilter();
 public:
     static inline KisID id() { return KisID("mean removal", i18n("Mean Removal")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -57,7 +56,7 @@ public:
     KisEmbossLaplascianFilter();
 public:
     static inline KisID id() { return KisID("emboss laplascian", i18n("Emboss Laplascian")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -66,7 +65,7 @@ public:
     KisEmbossInAllDirectionsFilter();
 public:
     static inline KisID id() { return KisID("emboss all directions", i18n("Emboss in All Directions")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -75,7 +74,7 @@ public:
     KisEmbossHorizontalVerticalFilter();
 public:
     static inline KisID id() { return KisID("", i18n("Emboss Horizontal & Vertical")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -84,7 +83,7 @@ public:
     KisEmbossVerticalFilter();
 public:
     static inline KisID id() { return KisID("emboss vertical only", i18n("Emboss Vertical Only")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -93,7 +92,7 @@ public:
     KisEmbossHorizontalFilter();
 public:
     static inline KisID id() { return KisID("emboss horizontal only", i18n("Emboss Horizontal Only")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -102,7 +101,7 @@ public:
     KisEmbossDiagonalFilter();
 public:
     static inline KisID id() { return KisID("emboss diagonal", i18n("Emboss Diagonal")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -111,7 +110,7 @@ public:
     KisTopEdgeDetectionFilter();
 public:
     static inline KisID id() { return KisID("top edge detections", i18n("Top Edge Detection")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -120,7 +119,7 @@ public:
     KisRightEdgeDetectionFilter();
 public:
     static inline KisID id() { return KisID("right edge detections", i18n("Right Edge Detection")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -129,7 +128,7 @@ public:
     KisBottomEdgeDetectionFilter();
 public:
     static inline KisID id() { return KisID("bottom edge detections", i18n("Bottom Edge Detection")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 
@@ -138,7 +137,7 @@ public:
     KisLeftEdgeDetectionFilter();
 public:
     static inline KisID id() { return KisID("left edge detections", i18n("Left Edge Detection")); };
-        virtual bool supportsPainting() { return false; }
+    virtual bool supportsPainting() { return false; }
 
 };
 

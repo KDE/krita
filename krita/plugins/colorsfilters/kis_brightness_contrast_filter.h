@@ -21,12 +21,11 @@
 #ifndef _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 #define _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 
-#include <qwidget.h>
-
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include <kdebug.h>
-#include "wdg_brightness_contrast.h"
+
+class WdgBrightnessContrast;
+class QWidget;
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
 public:

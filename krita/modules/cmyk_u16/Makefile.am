@@ -5,9 +5,6 @@ kde_services_DATA = krita_cmyk_u16_plugin.desktop
 
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../ui \
 	$(KOFFICE_INCLUDES) \

@@ -56,6 +56,7 @@
 #include "kis_convolution_painter.h"
 
 
+
 KisConvolutionPainter::KisConvolutionPainter()
     : super()
 {
@@ -64,25 +65,6 @@ KisConvolutionPainter::KisConvolutionPainter()
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceImplSP device) : super(device)
 {
 }
-
-void KisConvolutionPainter::applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-    KisKernel * kernel = new KisKernel();
-    kernel -> width = 3;
-    kernel -> height = 3;
-
-    kernel -> factor = matrix->factor();
-    kernel -> offset = matrix->offset();
-    kernel->data = new Q_INT32[9];
-    
-    for (int row = 0; row < 3; ++row) {
-        for (int col = 0; col < 3; ++col) {
-            kernel -> data[row * 3 + col] = matrix[0][col][row];
-        }
-    }
-    applyMatrix(kernel, x, y, w, h);
-}
-
 
 void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                     KisConvolutionBorderOp borderOp,
@@ -108,16 +90,16 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     kw = kernel->width;
     kh = kernel->height;
     kd = (kw - 1) / 2;
-    
+
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
     if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
-    
+
     m_cancelRequested = false;
     int lastProgressPercent = 0;
     emit notifyProgress(this, 0);
 
     KisColorSpace * cs = m_device->colorSpace();
-    
+
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
         case BORDER_DEFAULT_FILL :
@@ -131,7 +113,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
             w -= kw - 1;
             h -= kh - 1;
     }
-        
+
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
     QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
@@ -141,22 +123,22 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     for (int row = y; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
-        int col = x; 
-        
+        int col = x;
+
         KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
-        
+
         while (!hit.isDone()) {
             if (hit.isSelected()) {
-                
+
                 // Iterate over all contributing pixels that are covered by the kernel
                 // krow = the y position in the kernel matrix
                 Q_INT32 i = 0;
                 for (Q_INT32 krow = 0; krow <  kh; ++krow) {
-    
+
                     // col - kd = the left starting point of the kernel as centered on our pixel
                     // krow - kd = the offset for the top of the kernel as centered on our pixel
                     // kw = the width of the kernel
-                    
+
                     // Fill the cache with pointers to the pixels under the kernel
                     KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
                     while (!kit.isDone()) {
@@ -174,7 +156,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
         }
 
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
-        
+
         if (progressPercent > lastProgressPercent) {
             emit notifyProgress(this, progressPercent);
             lastProgressPercent = progressPercent;
@@ -182,8 +164,8 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
             if (m_cancelRequested) {
                 return;
             }
-        }        
-    
+        }
+
     }
 
     addDirtyRect(QRect(x, y, w, h));

@@ -23,7 +23,6 @@
 
 #include <qpoint.h>
 
-#include "kis_tool.h"
 #include "kis_tool_paint.h"
 
 class KisPainter;
@@ -42,16 +41,16 @@ public:
 
     KisToolFill();
     virtual ~KisToolFill();
-  
+
     virtual void setup(KActionCollection *collection);
         virtual enumToolType toolType() { return TOOL_FILL; }
 
     virtual void update(KisCanvasSubject *subject);
 
-    virtual void buttonPress(KisButtonPressEvent*); 
+    virtual void buttonPress(KisButtonPressEvent*);
 
     bool flood(int startX, int startY);
-      
+
     virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
@@ -86,12 +85,12 @@ class KisToolFillFactory : public KisToolFactory {
 public:
     KisToolFillFactory() : super() {};
     virtual ~KisToolFillFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisToolFill * t = new KisToolFill(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisToolFill * t = new KisToolFill();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("fill", i18n("Fill tool")); }
 

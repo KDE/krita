@@ -24,10 +24,7 @@
 #include <kio/job.h>
 
 #include "kis_resource.h"
-#include "kis_alpha_mask.h"
-#include "kis_global.h"
-#include "kis_layer.h"
-#include "kis_point.h"
+#include "kis_types.h"
 
 class QPoint;
 class QImage;

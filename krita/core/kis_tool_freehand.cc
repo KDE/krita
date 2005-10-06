@@ -29,6 +29,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_tool_freehand.h"
@@ -38,6 +39,7 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
+#include "kis_layer.h"
 
 KisToolFreehand::KisToolFreehand(QString transactionText)
         : super(transactionText),

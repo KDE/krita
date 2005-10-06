@@ -21,8 +21,6 @@
 #ifndef KIS_DLG_TRANSFORM_H_
 #define KIS_DLG_TRANSFORM_H_
 
-#include <qwmatrix.h>
-
 #include <kdialogbase.h>
 
 class WdgMatrix;
@@ -40,7 +38,7 @@ class KisDlgTransform : public KDialogBase {
 public:
 
     KisDlgTransform( QWidget *  parent = 0,
-             const char * name = 0);
+                     const char * name = 0);
     virtual ~KisDlgTransform();
 
 private:

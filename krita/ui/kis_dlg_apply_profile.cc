@@ -28,6 +28,7 @@
 #include "kis_config.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
+#include "wdgapplyprofile.h"
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
@@ -64,7 +65,7 @@ KisProfile *  KisDlgApplyProfile::profile() const
     } else {
         profileName = m_page -> cmbProfile -> currentText();
     }
-    
+
     return KisColorSpaceFactoryRegistry::instance()->getProfileByName(profileName);
 }
 
@@ -86,7 +87,7 @@ void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());
     }
-    
+
 
 }
 

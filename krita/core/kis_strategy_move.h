@@ -21,7 +21,7 @@
 
 #include <qpoint.h>
 #include <qrect.h>
-#include "kis_types.h"
+
 #include <koffice_export.h>
 
 class KoDocument;
@@ -47,8 +47,8 @@ private:
     KisStrategyMove& operator=(const KisStrategyMove&);
 
 private:
-    KoDocument *m_doc; 
-    KisCanvasController *m_controller; 
+    KoDocument *m_doc;
+    KisCanvasController *m_controller;
     KisCanvasSubject *m_subject;
     QRect m_deviceBounds;
     QPoint m_dragStart;

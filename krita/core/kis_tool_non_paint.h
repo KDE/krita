@@ -21,13 +21,11 @@
 
 #include <qcursor.h>
 #include <qcolor.h>
+#include <qwidget.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool.h"
-#include "kis_brush.h"
-#include "kis_pattern.h"
-#include "kis_gradient.h"
 #include <koffice_export.h>
 
 class QEvent;
@@ -79,7 +77,7 @@ public slots:
 
 protected:
     void notifyModified() const;
-    
+
 protected:
     KisCanvasSubject *m_subject;
 

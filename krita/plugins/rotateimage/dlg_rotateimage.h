@@ -20,13 +20,11 @@
 #ifndef DLG_ROTATEIMAGE
 #define DLG_ROTATEIMAGE
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
 #include <kis_global.h>
 
-#include "wdg_rotateimage.h"
+class WdgRotateImage;
 
 enum enumRotationDirection {
     CLOCKWISE,
@@ -49,7 +47,7 @@ public:
 
     void setDirection (enumRotationDirection direction);
     enumRotationDirection direction();
-    
+
 private slots:
 
     void okClicked();
@@ -59,7 +57,7 @@ private slots:
 private:
 
     WdgRotateImage * m_page;
-    double m_oldAngle;    
+    double m_oldAngle;
     bool m_lock;
 
 };

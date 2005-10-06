@@ -22,9 +22,11 @@
 #include <map>
 #include <qglobal.h>
 #include <qstring.h>
-#include <kcommand.h>
+
 #include "kis_transaction.h"
+
 #include "koffice_export.h"
+
 class KRITACORE_EXPORT KisSelectedTransaction : public KisTransaction {
     typedef KisTransaction super;
 public:

@@ -35,6 +35,8 @@
 
 #include "kis_image_iface.h"
 
+#include "kis_annotation.h"
+
 #include "kis_command.h"
 #include "kis_types.h"
 #include "kis_guide.h"
@@ -47,8 +49,8 @@
 #include "kis_background.h"
 #include "kis_doc.h"
 #include "kis_nameserver.h"
-#include "visitors/kis_flatten.h"
-#include "visitors/kis_merge.h"
+#include "kis_flatten.h"
+#include "kis_merge.h"
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
@@ -540,7 +542,7 @@ void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace *
 {
     Q_ASSERT(colorSpace != 0);
     m_renderinit = false;
-    
+
     m_doc = doc;
 
     if (m_doc != 0) {
@@ -1536,7 +1538,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                                float exposure)
 {
 
-        
+
 //    QRect r = m_projection->extent();
 //    kdDebug() << "projection extent: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "...\n";
 
@@ -1599,7 +1601,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 #endif
         return img;
     }
-    
+
     return QImage();
 }
 

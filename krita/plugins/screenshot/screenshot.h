@@ -21,7 +21,6 @@
 #define SCREENSHOT_H
 
 #include <kparts/plugin.h>
-#include <qimage.h>
 
 class KSnapshot;
 
@@ -31,7 +30,7 @@ class Screenshot : public KParts::Plugin
 public:
     Screenshot(QObject *parent, const char *name, const QStringList &);
     virtual ~Screenshot();
-    
+
 private slots:
     void slotScreenshot();
     void slotScreenGrabbed();

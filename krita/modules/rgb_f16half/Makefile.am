@@ -12,9 +12,6 @@ kde_services_DATA = krita_rgb_f16half_plugin.desktop
 INCLUDES  = \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../sdk \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/resources \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../ui \
 	$(KOFFICE_INCLUDES) \

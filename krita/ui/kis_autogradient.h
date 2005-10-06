@@ -17,12 +17,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_AUTOGRADIENT_H_ 
+#ifndef _KIS_AUTOGRADIENT_H_
 #define _KIS_AUTOGRADIENT_H_
 
 #include "wdgautogradient.h"
-#include "kis_gradient.h"
-#include "kis_autogradient_resource.h"
+
+class KisResource;
+class KisGradientSegment;
+class KisAutogradientResource;
 
 class KisAutogradient : public KisWdgAutogradient
 {

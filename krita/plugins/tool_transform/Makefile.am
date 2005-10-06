@@ -4,12 +4,8 @@ kde_services_DATA = kritatooltransform.desktop
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
-	-I$(srcdir)/../../core/resources/ \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
+	-I$(srcdir)/../../core/strategy/ $(all_includes)
 
 kritatooltransform_la_SOURCES = \
 	wdg_tool_transform.ui \
@@ -24,7 +20,7 @@ noinst_HEADERS = \
 	kis_tool_transform.h 
 
 kritatooltransform_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritatooltransform_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritatooltransform_la_LIBADD =  ../../libkritacommon.la
 
 kritatooltransform_la_METASOURCES = AUTO
 

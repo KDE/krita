@@ -20,9 +20,10 @@
 
 #include <qvaluevector.h>
 #include <qmap.h>
+#include <qpoint.h>
+
 #include <ksharedptr.h>
 
-#include "kis_global.h"
 #include "kis_shared_ptr_vector.h"
 
 /**

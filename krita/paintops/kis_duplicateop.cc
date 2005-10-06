@@ -27,10 +27,11 @@
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device_impl.h"
+#include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
-#include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
+#include "kis_iterators_pixel.h"
 
 #include "kis_duplicateop.h"
 

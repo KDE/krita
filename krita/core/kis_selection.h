@@ -20,13 +20,9 @@
 
 #include <qrect.h>
 
-#include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device_impl.h"
 #include <koffice_export.h>
-
-class QColor;
-
 
 enum enumSelectionMode {
     SELECTION_ADD,
@@ -76,9 +72,9 @@ public:
      * that encloses the selection
      */
     QRect selectedExactRect();
-    
+
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-    
+
 private:
     KisPaintDeviceImplSP m_parentLayer;
 };

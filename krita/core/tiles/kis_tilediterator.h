@@ -19,13 +19,16 @@
 #define KIS_TILED_ITERATOR_H_
 
 #include <qglobal.h>
+
+#include <ksharedptr.h>
+
 #include <kis_tile.h>
 #include <kis_tileddatamanager.h>
 #include <koffice_export.h>
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDeviceImpl hiding the tile structure
  */
-class KRITACORE_EXPORT KisTiledIterator {
+class KRITACORE_EXPORT KisTiledIterator : public KShared {
 
 protected:
     KisTiledDataManager *m_ktm;

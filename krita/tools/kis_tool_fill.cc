@@ -47,6 +47,7 @@
 #include "kis_progress_display_interface.h"
 #include "kis_undo_adapter.h"
 #include "kis_canvas_subject.h"
+#include "kis_selection.h"
 
 KisToolFill::KisToolFill()
     : super(i18n("Fill"))

@@ -28,7 +28,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_painter.h"
 #include "kis_gradient_painter.h"
 #include "kis_tool_factory.h"
 
@@ -107,12 +106,12 @@ class KisToolGradientFactory : public KisToolFactory {
 public:
     KisToolGradientFactory() : super() {};
     virtual ~KisToolGradientFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolGradient(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolGradient();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
 };

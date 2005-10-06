@@ -20,7 +20,6 @@
 #ifndef KIS_TOOL_SELECT_PICKER_H_
 #define KIS_TOOL_SELECT_PICKER_H_
 
-#include <kis_tool.h>
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 #include <kis_selection.h>
@@ -32,9 +31,9 @@ class QCheckBox;
 
 /**
  * Tool to select colours by pointing at a color on the image.
- * TODO: 
- *       Implement shift/shift-ctrl keyboard shortcuts for 
- *       temporary add/subtract selection mode.     
+ * TODO:
+ *       Implement shift/shift-ctrl keyboard shortcuts for
+ *       temporary add/subtract selection mode.
  */
 
 class KisSelectionOptions;
@@ -59,7 +58,7 @@ public:
 public slots:
     virtual void slotSetFuzziness(int);
     virtual void slotSetAction(int);
-    
+
 private:
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
@@ -85,12 +84,12 @@ class KisToolSelectSimilarFactory : public KisToolFactory {
 public:
     KisToolSelectSimilarFactory() : super() {};
     virtual ~KisToolSelectSimilarFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectSimilar(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectSimilar();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("selectsimilar", i18n("Select similar")); }
 };

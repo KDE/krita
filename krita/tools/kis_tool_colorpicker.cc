@@ -28,6 +28,7 @@
 #include <qcolor.h>
 #include <kmessagebox.h>
 
+#include "kis_layer.h"
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
@@ -55,7 +56,7 @@ KisToolColorPicker::KisToolColorPicker()
     m_pickedColor = KisColor();
 }
 
-KisToolColorPicker::~KisToolColorPicker() 
+KisToolColorPicker::~KisToolColorPicker()
 {
 }
 
@@ -110,7 +111,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
         if (m_updateColor) {
             if (e -> button() == QMouseEvent::LeftButton)
                 m_subject -> setFGColor(m_pickedColor);
-            else 
+            else
                 m_subject -> setBGColor(m_pickedColor);
         }
     }
@@ -154,7 +155,7 @@ void KisToolColorPicker::setup(KActionCollection *collection)
 QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 {
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
-    
+
     m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
     m_optionsWidget -> cmbSources -> setCurrentItem(0);
     m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
@@ -164,7 +165,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     const KisImageSP img = m_subject->currentImg();
     if (img) {
         vKisLayerSP layers = img->layers();
-        
+
         for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
             const KisLayerSP& layer = *it;
             if (layer->visible()) {

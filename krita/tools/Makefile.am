@@ -4,14 +4,9 @@ kde_services_DATA = kritadefaulttools.desktop
 INCLUDES = -I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
 	-I$(srcdir)/../core/color_strategy/ \
-	-I$(srcdir)/../core/resources/ \
-	-I$(srcdir)/../core/tiles \
-	-I$(srcdir)/../core/tool \
-	-I$(srcdir)/../core/paintop \
 	-I$(srcdir)/../ui \
-	-I$(srcdir)/../ui/widgets \
 	-I../ui \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../core/strategy/ $(all_includes)
+	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 kritadefaulttools_la_SOURCES = \
 	default_tools.cc \

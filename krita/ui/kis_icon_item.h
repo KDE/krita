@@ -20,6 +20,7 @@
 #define KIS_ICON_ITEM_H_
 
 #include <koIconChooser.h>
+
 class KisResource;
 
 class KisIconItem : public KoIconItem {

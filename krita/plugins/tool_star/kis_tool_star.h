@@ -21,9 +21,6 @@
 #ifndef KIS_TOOL_STAR_H_
 #define KIS_TOOL_STAR_H_
 
-#include <qpoint.h>
-#include <qpointarray.h> 
-
 #include "kis_tool_shape.h"
 
 class KisCanvas;
@@ -49,7 +46,7 @@ public:
         virtual void update (KisCanvasSubject *subject);
 
         virtual QWidget* createOptionWidget(QWidget* parent);
-        
+
         //
         // KisToolPaint interface
         //
@@ -88,12 +85,12 @@ class KisToolStarFactory : public KisToolFactory {
 public:
     KisToolStarFactory() : super() {};
     virtual ~KisToolStarFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolStar(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolStar();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("starshape", i18n("Star tool")); }
 };

@@ -24,7 +24,6 @@
 #define KIS_AIRBRUSHOP_H_
 
 #include "kis_paintop.h"
-#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;

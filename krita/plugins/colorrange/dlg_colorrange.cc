@@ -31,18 +31,12 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kaction.h>
 
-#include <kis_brush.h>
-#include <kis_canvas_observer.h>
 #include <kis_canvas_subject.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
-#include <kis_gradient.h>
-#include <kis_id.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_device_impl.h>
-#include <kis_pattern.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_types.h>
@@ -50,8 +44,9 @@
 #include <kis_view.h>
 #include <kis_colorspace.h>
 #include <kis_profile.h>
-#include "kis_color_conversions.h"
-#include "kis_selected_transaction.h"
+#include <kis_color_conversions.h>
+#include <kis_selected_transaction.h>
+#include <kis_cursor.h>
 
 #include "dlg_colorrange.h"
 #include "wdg_colorrange.h"
@@ -194,9 +189,9 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
-        m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_layer.data());
+    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_layer.data());
     Q_CHECK_PTR(m_transaction);
-    
+
     if(! m_layer -> hasSelection())
         m_layer -> selection() -> clear();
     m_selection = m_layer -> selection();
@@ -218,7 +213,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
 
     connect(m_page -> cmbSelect, SIGNAL(activated(int)),
         this, SLOT(slotSelectionTypeChanged(int)));
-        
+
     connect (m_page -> radioAdd, SIGNAL(toggled(bool)),
          this, SLOT(slotAdd(bool)));
 
@@ -347,7 +342,7 @@ void DlgColorRange::slotSelectClicked()
 void DlgColorRange::slotDeselectClicked()
 {
     m_layer -> selection() -> clear();
-    updatePreview(); 
+    updatePreview();
 }
 
 

@@ -19,14 +19,14 @@
 #ifndef KIS_TILE_COMMAND_H_
 #define KIS_TILE_COMMAND_H_
 
-#include <map>
-#include <qglobal.h>
 #include <qstring.h>
+
 #include <kcommand.h>
+
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
 
 class QRect;
+class KisTransactionPrivate;
 
 class KisTransaction : public KCommand {
 public:
@@ -37,13 +37,8 @@ public:
     virtual void execute();
     virtual void unexecute();
     virtual QString name() const;
-
-public:
-
 private:
-    QString m_name;
-    KisPaintDeviceImplSP m_device;
-    KisMementoSP m_memento;
+    KisTransactionPrivate * m_private;
 };
 
 #endif // KIS_TILE_COMMAND_H_

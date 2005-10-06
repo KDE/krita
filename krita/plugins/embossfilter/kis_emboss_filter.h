@@ -23,8 +23,6 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-#include "kis_view.h"
-#include <kdebug.h>
 
 class KisEmbossFilterConfiguration : public KisFilterConfiguration
 {

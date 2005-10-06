@@ -2,15 +2,11 @@ kde_services_DATA = kritaselectiontools.desktop
 
 # all_includes must remain last!
 INCLUDES =  -I$(srcdir)/../../sdk \
-	 -I$(srcdir)/../../core \
+	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
-	-I$(srcdir)/../../core/resources/ \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
 	-I../../ui \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
+	$(all_includes)
 
 kritaselectiontools_la_SOURCES = \
 	selection_tools.cc \
@@ -37,7 +33,7 @@ noinst_HEADERS = \
 
 
 kritaselectiontools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritaselectiontools_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritaselectiontools_la_LIBADD =  ../../libkritacommon.la
 
 kritaselectiontools_la_METASOURCES = AUTO
 

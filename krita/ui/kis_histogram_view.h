@@ -25,10 +25,10 @@
 #include <qstringlist.h>
 
 #include "kis_types.h"
-#include "kis_channelinfo.h"
-#include "kis_layer.h"
 #include "kis_histogram_producer.h"
 #include "kis_histogram.h"
+
+class KisChannelInfo;
 
 /**
  * This class displays a histogram. It has a list of channels it can select. The easy
@@ -36,11 +36,11 @@
  * with the integer the same as the one the selected string in that stringlist has.
  * If the selected one is a producer, the histogram will automatically display all its
  * channels, and color them if that is possible.
- * 
+ *
  * You can also set the channels manually, just don't forget that the displayed channels
  * all need to belong to the same producer! If you set them manually, don't forget to set
  * the (non)usage of color as well.
- * 
+ *
  * You can either set this to use a specific layer, or use a specific histogram. With the latter,
  * some functionality will disappear, like listProducers(). Setting a histogram will discard
  * info on the layer, and setting a layer will discard info on the histogram.
@@ -79,11 +79,13 @@ protected:
 private:
     void setChannels();
     void addProducerChannels(KisHistogramProducerSP producer);
+
     typedef struct {
         bool isProducer;
         KisHistogramProducerSP producer;
         KisChannelInfo * channel;
     } ComboboxInfo;
+
     QValueVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;

@@ -21,12 +21,9 @@
 #ifndef DLG_LAYERSIZE
 #define DLG_LAYERSIZE
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
-#include "wdg_layersize.h"
-
+class WdgLayerSize;
 class KisFilterStrategy;
 
 class DlgLayerSize: public KDialogBase {
@@ -43,11 +40,11 @@ public:
     void setWidthPercent(Q_UINT32 w);
     void setMaximumWidth(Q_UINT32 w);
     Q_INT32 width();
-    
+
     void setHeight(Q_UINT32 h);
     void setHeightPercent(Q_UINT32 h);
     void setMaximumHeight(Q_UINT32 h);
-    Q_INT32 height();    
+    Q_INT32 height();
     KisFilterStrategy *filterType();
 
 private slots:
@@ -68,7 +65,7 @@ private:
     double m_oldWPercent, m_oldHPercent;
     double m_origW, m_origH;
     double m_maxW, m_maxH;
-    
+
     bool m_lock;
 
 };

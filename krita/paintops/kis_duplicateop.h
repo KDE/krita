@@ -24,7 +24,6 @@
 #define KIS_DUPLICATEOP_H_
 
 #include "kis_paintop.h"
-#include "kis_types.h"
 
 class KisPoint;
 class KisPainter;
@@ -38,7 +37,7 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
     virtual bool userVisible() { return false; }
-    
+
 };
 
 class KisDuplicateOp : public KisPaintOp {

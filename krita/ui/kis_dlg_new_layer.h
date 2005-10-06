@@ -19,7 +19,10 @@
 #ifndef  KIS_DLG_NEW_LAYER_H_
 #define KIS_DLG_NEW_LAYER_H_
 
+#include <kdialogbase.h>
+
 #include "kis_composite_op.h"
+#include <kis_global.h>
 
 class QSpinBox;
 class QWidget;
@@ -30,10 +33,6 @@ class KIntNumInput;
 class KisCmbComposite;
 class KisCmbImageType;
 class KisCmbIDList;
-
-#include <kdialogbase.h>
-
-#include <kis_global.h>
 
 class NewLayerDialog : public KDialogBase {
     typedef KDialogBase super;

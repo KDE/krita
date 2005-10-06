@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_small_tiles_filter_plugin.h"
 #include "kis_small_tiles_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisSmallTilesFilterPlugin> KisSmallTilesFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritasmalltilesfilter, KisSmallTilesFilterPluginFactory( "krita" ) )

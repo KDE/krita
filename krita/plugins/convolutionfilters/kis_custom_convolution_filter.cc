@@ -24,10 +24,10 @@
 
 #include <qspinbox.h>
 
+#include "kis_convolution_painter.h"
 #include "kis_custom_convolution_filter_configuration_widget.h"
 #include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
-
 
 KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", "&Custom Convolution...")
 {
@@ -40,50 +40,61 @@ KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QW
     return ccfcw;
 }
 
-KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisCustomConvolutionConfiguration::~KisCustomConvolutionConfiguration()
+{
+    delete m_matrix;
+}
+
+KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP /*dev*/)
 {
     KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
-    Q_INT32 imgdepth = dev->colorSpace()->nChannels();
+
     if ( widget == 0 )
     {
-        // Create the identity matrices:
-        KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
-        Q_CHECK_PTR(amatrixes);
+        // Create the identity matrix:
+        KisKernel * kernel = new KisKernel();
+        kernel -> width = 3;
+        kernel -> height = 3;
 
-        int mat[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-        for(int i = 0; i < imgdepth - 1; i ++)
-        {
-            amatrixes[i] = KisMatrix3x3(mat, 1, 127);
-        }
-         int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-        amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-    
-        return new KisCustomConvolutionConfiguration( amatrixes );
+        kernel -> factor = 1;
+        kernel -> offset = 127;
+
+        kernel->data = new Q_INT32[9];
+        kernel->data[0] = 0;
+        kernel->data[1] = 0;
+        kernel->data[2] = 0;
+        kernel->data[3] = 0;
+        kernel->data[4] = 1;
+        kernel->data[5] = 0;
+        kernel->data[6] = 0;
+        kernel->data[7] = 0;
+        kernel->data[8] = 0;
+
+        return new KisCustomConvolutionConfiguration( kernel );
     } else {
 
-        KisMatrix3x3* amatrixes = new KisMatrix3x3[imgdepth];
-        Q_CHECK_PTR(amatrixes);
+        // Create the identity matrices:
+        KisKernel * kernel = new KisKernel();
+        kernel -> width = 3;
+        kernel -> height = 3;
+
+        kernel->data = new Q_INT32[9];
 
         KisCustomConvolutionFilterConfigurationBaseWidget* mw = widget->matrixWidget();
-        for(int i = 0; i < imgdepth - 1; i ++)
-        {
-            amatrixes[i][0][0] = mw->matrixWidget->m11->value();
-            amatrixes[i][1][0] = mw->matrixWidget->m21->value();
-            amatrixes[i][2][0] = mw->matrixWidget->m31->value();
-            amatrixes[i][0][1] = mw->matrixWidget->m12->value();
-            amatrixes[i][1][1] = mw->matrixWidget->m22->value();
-            amatrixes[i][2][1] = mw->matrixWidget->m32->value();
-            amatrixes[i][0][2] = mw->matrixWidget->m13->value();
-            amatrixes[i][1][2] = mw->matrixWidget->m23->value();
-            amatrixes[i][2][2] = mw->matrixWidget->m33->value();
-            amatrixes[i].setFactor( mw->spinBoxFactor->value() );
-            amatrixes[i].setOffset( mw->spinBoxOffset->value() );
-        }
-        
-        // XXX make this configurable?
-        int matalpha[3][3] =  { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0} };
-        amatrixes[imgdepth - 1] = KisMatrix3x3(matalpha, 1, 0);
-        
-        return new KisCustomConvolutionConfiguration( amatrixes );
+
+        kernel->data[0] = mw->matrixWidget->m11->value();
+        kernel->data[1] = mw->matrixWidget->m21->value();
+        kernel->data[2] = mw->matrixWidget->m31->value();
+        kernel->data[3] = mw->matrixWidget->m12->value();
+        kernel->data[4] = mw->matrixWidget->m22->value();
+        kernel->data[5] = mw->matrixWidget->m32->value();
+        kernel->data[6] = mw->matrixWidget->m13->value();
+        kernel->data[7] = mw->matrixWidget->m23->value();
+        kernel->data[8] = mw->matrixWidget->m33->value();
+
+        kernel -> factor = mw->spinBoxFactor->value();
+        kernel -> offset = mw->spinBoxOffset->value();
+
+        return new KisCustomConvolutionConfiguration( kernel );
     }
 }

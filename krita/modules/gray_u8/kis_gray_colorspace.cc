@@ -33,7 +33,6 @@
 #include "kis_u8_base_colorspace.h"
 #include "kis_image.h"
 #include "kis_gray_colorspace.h"
-#include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))

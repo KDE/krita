@@ -4,13 +4,8 @@ INCLUDES  = \
 	 -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/resources \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	$(KOFFICE_INCLUDES) \
-	-I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+	-I$(interfacedir) $(all_includes)
 
 kde_module_LTLIBRARIES = kritapixelizefilter.la
 
@@ -21,6 +16,6 @@ noinst_HEADERS = kis_pixelize_filter_plugin.h \
 	kis_pixelize_filter.h
 
 kritapixelizefilter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritapixelizefilter_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
+kritapixelizefilter_la_LIBADD =  ../../libkritacommon.la
 
 kritapixelizefilter_la_METASOURCES = AUTO

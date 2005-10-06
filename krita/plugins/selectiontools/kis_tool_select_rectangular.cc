@@ -35,6 +35,7 @@
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
+#include "kis_layer.h"
 #include "kis_tool_select_rectangular.h"
 #include "kis_undo_adapter.h"
 #include "kis_button_press_event.h"
@@ -177,22 +178,22 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
             if (m_endPos.x() > img -> width())
                 m_endPos.setX(img -> width());
             if (img) {
-            
+
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 KisLayerSP layer = img -> activeLayer();
                 bool hasSelection = layer -> hasSelection();
 
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), layer.data());            
+                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), layer.data());
                 KisSelectionSP selection = layer -> selection();
                 QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
 
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
-                
+
                 if (img -> undoAdapter())
                     img -> undoAdapter() -> addCommand(t);
-                    
+
                 if(! hasSelection)
                 {
                     selection->clear();
@@ -213,7 +214,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                     default:
                         break;
                 }
-                
+
                 if(hasSelection)
                     layer->emitSelectionChanged(rc);
                 else

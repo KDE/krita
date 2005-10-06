@@ -29,6 +29,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include <kis_layer.h>
 #include <kis_selection_options.h>
 #include <kis_canvas_controller.h>
 #include <kis_canvas_subject.h>
@@ -143,7 +144,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 
             if (img -> undoAdapter())
                 img -> undoAdapter() -> addCommand(t);
-                
+
             QApplication::restoreOverrideCursor();
         }
 
@@ -174,7 +175,7 @@ void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
     }
 
     if (m_dragging && event -> button() == RightButton) {
-        
+
         }
 }
 
@@ -226,10 +227,10 @@ void KisToolSelectPolygonal::draw(QPainter& gc)
                 start = (*it);
             } else {
                 end = (*it);
-                
+
                 startPos = controller -> windowToView(start.floorQPoint());
                 endPos = controller -> windowToView(end.floorQPoint());
-                
+
                 gc.drawLine(startPos, endPos);
 
                 start = end;

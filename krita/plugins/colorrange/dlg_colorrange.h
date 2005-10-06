@@ -20,41 +20,22 @@
 #ifndef DLG_COLORRANGE
 #define DLG_COLORRANGE
 
-#include <qpixmap.h>
-#include <qcolor.h>
 #include <qcursor.h>
 
 #include <kdialogbase.h>
 
 #include <kis_types.h>
 
-#include <kis_brush.h>
-#include <kis_canvas_observer.h>
-#include <kis_canvas_subject.h>
-#include <kis_cursor.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
-#include <kis_gradient.h>
-#include <kis_id.h>
-#include <kis_iterators_pixel.h>
-#include <kis_layer.h>
-#include <kis_paint_device_impl.h>
-#include <kis_pattern.h>
-#include <kis_selection.h>
-#include <kis_selection_manager.h>
-#include <kis_selected_transaction.h>
+#include <kis_selection.h> // For enums
 #include <kis_types.h>
-#include <kis_undo_adapter.h>
-#include <kis_view.h>
 #include <kis_global.h>
-
-#include "wdg_colorrange.h"
 
 
 class KisView;
 class KisCanvasSubject;
 class DlgColorRange;
-
+class KisSelectedTransaction;
+class WdgColorRange;
 
 enum enumAction {
     REDS,
@@ -88,7 +69,7 @@ private slots:
 
     void okClicked();
     void cancelClicked();
-    
+
     void slotInvertClicked();
     void slotSelectionTypeChanged(int index);
     void updatePreview();
@@ -96,7 +77,7 @@ private slots:
     void slotAdd(bool on);
     void slotSelectClicked();
     void slotDeselectClicked();
-                
+
 private:
     QImage createMask(KisSelectionSP selection, KisLayerSP layer);
 

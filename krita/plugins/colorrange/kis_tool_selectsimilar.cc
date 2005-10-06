@@ -51,7 +51,6 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
 
-    Q_UINT8 opacity = OPACITY_OPAQUE;
     dev -> exactBounds(x, y, w, h);
 
     KisColorSpace * cs = dev -> colorSpace();

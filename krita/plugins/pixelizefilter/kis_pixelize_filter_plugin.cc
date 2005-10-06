@@ -21,6 +21,7 @@
 #include <kgenericfactory.h>
 #include "kis_pixelize_filter_plugin.h"
 #include "kis_pixelize_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory( "krita" ) )

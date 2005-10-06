@@ -18,31 +18,9 @@
 #ifndef KIS_CONVOLUTION_PAINTER_H_
 #define KIS_CONVOLUTION_PAINTER_H_
 
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qfontinfo.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
-#include <qregion.h>
-#include <qwmatrix.h>
-#include <qimage.h>
-#include <qmap.h>
-#include <qpixmap.h>
-#include <qpointarray.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qvaluevector.h>
-
-#include <kcommand.h>
-
-#include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
-#include "kis_point.h"
-#include "kis_matrix.h"
-#include "kis_progress_subject.h"
-#include "kis_channelinfo.h"
 #include "kis_painter.h"
+
 #include "koffice_export.h"
 
 enum KisConvolutionBorderOp {
@@ -69,14 +47,8 @@ class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 
 public:
 
-        KisConvolutionPainter();
-        KisConvolutionPainter(KisPaintDeviceImplSP device);
-
-    /**
-     * Convolve all channels in the current paint device using the specified matrix. Only the first matrix of the array is
-     * used.
-     */
-    void applyMatrix(KisMatrix3x3* matrix, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    KisConvolutionPainter();
+    KisConvolutionPainter(KisPaintDeviceImplSP device);
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
@@ -92,8 +64,8 @@ public:
      * Note that we do not (currently) support different kernels for different channels _or_ channel types.
      */
     void applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
-        KisConvolutionBorderOp borderOp = BORDER_AVOID,
-        enumChannelFlags channelFlags = FLAG_COLOR);
+                     KisConvolutionBorderOp borderOp = BORDER_AVOID,
+                     enumChannelFlags channelFlags = FLAG_COLOR);
 
 
 

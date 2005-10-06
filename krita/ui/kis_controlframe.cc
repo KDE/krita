@@ -75,7 +75,7 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 }
 
 
-KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const char* name ) 
+KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, const char* name )
     : QObject(view, name)
     //: KToolBar ( window, Qt::DockTop, false, name, true, true )
     , m_view(view)
@@ -102,7 +102,7 @@ KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const ch
                                          i18n("&Brush"),
                                          0,
                                          view,
-                                         0, 
+                                         0,
                                          view->actionCollection(),
                                          "brushes");
 
@@ -113,7 +113,7 @@ KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const ch
                                i18n("&Patterns"),
                                0,
                                view,
-                               0, 
+                               0,
                                view->actionCollection(),
                                "patterns");
 
@@ -123,7 +123,7 @@ KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const ch
                                i18n("&Gradients"),
                                0,
                                view,
-                               0, 
+                               0,
                                view->actionCollection(),
                                "gradients");
 
@@ -132,7 +132,7 @@ KisControlFrame::KisControlFrame( KMainWindow * window, KisView * view, const ch
                                i18n("&Painter's tools"),
                                0,
                                view,
-                               0, 
+                               0,
                                view->actionCollection(),
                                "paintops");
 

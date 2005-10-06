@@ -22,8 +22,8 @@
 #include "qptrlist.h"
 
 #include "kis_image.h"
-#include "kis_selection.h"
 #include <koffice_export.h>
+
 class KAction;
 class KisView;
 class KisDoc;

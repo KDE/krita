@@ -34,7 +34,7 @@
 #include "kis_colorspace.h"
 #include "kis_paint_device_impl.h"
 #include "kis_iterators_pixel.h"
-#include "tiles/kis_iterator.h"
+#include "kis_iterator.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"

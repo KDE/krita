@@ -19,6 +19,7 @@
 #ifndef KIS_TOOL_PAN_H_
 #define KIS_TOOL_PAN_H_
 
+#include "kis_point.h"
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
 #include <koffice_export.h>
@@ -59,12 +60,12 @@ class KisToolPanFactory : public KisToolFactory {
 public:
     KisToolPanFactory() : super() {};
     virtual ~KisToolPanFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolPan(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolPan();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
 };

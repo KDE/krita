@@ -46,6 +46,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
+#include "kis_layer.h"
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
@@ -103,7 +104,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
             }
         }
     }
-    
+
     // I assume ncells is correct. If it isn't, complain to the parasite header.
     brushesCount[0] = ncells / rank[0];
     for (int i = 1; i < dim; i++) {
@@ -173,7 +174,7 @@ bool KisImagePipeBrush::init()
         Q_CHECK_PTR(brush);
 
         m_brushes.append(brush);
-        
+
          numOfBrushes++;
      }
 

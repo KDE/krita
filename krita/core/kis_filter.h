@@ -20,8 +20,6 @@
 
 #include <list>
 
-#include <qobject.h>
-#include <qwidget.h>
 #include <qstring.h>
 
 #include <ksharedptr.h>
@@ -30,13 +28,14 @@
 #include "kis_types.h"
 #include "kis_filter_registry.h"
 #include "kis_id.h"
-#include "koffice_export.h"
 #include "kis_progress_subject.h"
-#include "kis_paint_device_impl.h"
+
+#include "koffice_export.h"
 
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
+class QWidget;
 
 /**
  * Empty interface for passing filter configuration data
@@ -61,7 +60,7 @@ public:
 public:
 
     virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
-    
+
     virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
@@ -75,22 +74,22 @@ public:
     /// This filter can be displayed in a preview dialog
     virtual bool supportsPreview() { return false; };
 
-    /** 
-         * Return a list of default configuration to demonstrates the use of the filter
+    /**
+     * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
-    
+
     // Can this filter work incrementally when painting, or do we need to work
     // on the state as it was before painting started. The former is faster.
     virtual bool supportsIncrementalPainting() { return true; };
-    
+
     // This filter supports cutting up the work area and filtering
     // each chunk in a separate thread. Filters that need access to the
     // whole area for correct computations should return false.
     virtual bool supportsThreading() { return true; };
-    
+
     // Used when threading is used -- the overlap margin is passed to the
     // filter to use to compute pixels, but the margin is not pasted into the
     // resulting image.
@@ -98,7 +97,7 @@ public:
 
     virtual void enableProgress();
     virtual void disableProgress();
-    
+
     bool autoUpdate();
 
     // Unique identification for this filter
@@ -142,12 +141,12 @@ protected:
     Q_INT32 m_progressTotalSteps;
     Q_INT32 m_lastProgressPerCent;
     Q_INT32 m_progressSteps;
-    
+
     KisID m_id;
     KisProgressDisplayInterface * m_progressDisplay;
     QString m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text
-    
+
 };
 
 

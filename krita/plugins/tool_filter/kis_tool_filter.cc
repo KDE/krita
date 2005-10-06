@@ -28,24 +28,25 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <kis_filter.h>
-#include <kis_brush.h>
-#include <kis_canvas_subject.h>
-#include <kis_cursor.h>
-#include <kis_doc.h>
-#include <kis_image.h>
-#include <kis_painter.h>
-#include <kis_vec.h>
-#include <kis_button_press_event.h>
-#include <kis_button_release_event.h>
-#include <kis_move_event.h>
-#include <kis_filterop.h>
-#include <kis_paintop.h>
-#include <kis_paintop_registry.h>
-#include <kis_id.h>
-#include <kis_cmb_idlist.h>
 #include "kis_filter_config_widget.h"
 #include "kis_tool_filter.h"
+#include <kis_brush.h>
+#include <kis_button_press_event.h>
+#include <kis_button_release_event.h>
+#include <kis_canvas_subject.h>
+#include <kis_cmb_idlist.h>
+#include <kis_cursor.h>
+#include <kis_doc.h>
+#include <kis_filter.h>
+#include <kis_filterop.h>
+#include <kis_id.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_move_event.h>
+#include <kis_painter.h>
+#include <kis_paintop.h>
+#include <kis_paintop_registry.h>
+#include <kis_vec.h>
 
 KisToolFilter::KisToolFilter()
     : super(i18n("Filter tool")), m_filterConfigurationWidget(0)

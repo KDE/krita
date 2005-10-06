@@ -24,7 +24,6 @@
 #define __kis_previewview_h__
 
 #include <qwidget.h>
-#include <qsize.h>
 
 #include "kis_types.h"
 

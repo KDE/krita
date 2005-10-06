@@ -26,7 +26,7 @@ class KoStore;
 
 
 // Change the following two lines to switch (at compiletime) to another datamanager
-#include "kis_tileddatamanager.h"
+#include "tiles/kis_tileddatamanager.h"
 #define ACTUAL_DATAMGR KisTiledDataManager
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 2004 Sven Langkamp <longamp@reallygood.de>
@@ -19,15 +19,16 @@
 */
 
 #include <math.h>
-  
+
 #include <qpoint.h>
 #include <qpainter.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include "kis_colorwheel.h"
 
 #define pi 3.14159265
- 
+
 KisColorWheel::KisColorWheel( QWidget *parent, const char *name ): KXYSelector( parent, name )
 {
 
@@ -48,7 +49,7 @@ void KisColorWheel::drawWheel( QPixmap *pixmap )
 {
     int size = QMIN(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
-    
+
     QImage image( size, size, 32 );
     image.fill(colorGroup ().background().pixel());
 
@@ -67,7 +68,7 @@ void KisColorWheel::drawWheel( QPixmap *pixmap )
                 h = (int)(atan2( b-center.x(), a-center.y())* 180.0 / pi);
                 if(h<0) h += 360;
                 if(h>360) h -= 360;
-                
+
                 col.setHsv( h, s, 210 );
                 *p = col.rgb();
             }
@@ -89,7 +90,7 @@ void KisColorWheel::mousePressEvent( QMouseEvent *e )
     int h, s;
 
     s = (int)(sqrt(pow(yVal-center.y(), 2) + pow(xVal-center.x(), 2))/(size/2)*255);
-    if(s>255) s = 255;    
+    if(s>255) s = 255;
 
     h = (int)(atan2( xVal-center.x(), yVal-center.y())* 180.0 / pi);
     if(h<0) h += 360;

@@ -20,6 +20,7 @@
 #include <kgenericfactory.h>
 #include "kis_emboss_filter_plugin.h"
 #include "kis_emboss_filter.h"
+#include "kis_global.h"
 
 typedef KGenericFactory<KisEmbossFilterPlugin> KisEmbossFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaembossfilter, KisEmbossFilterPluginFactory( "krita" ) )

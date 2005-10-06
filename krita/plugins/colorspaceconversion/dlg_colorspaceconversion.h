@@ -20,15 +20,12 @@
 #ifndef DLG_COLORSPACECONVERSION
 #define DLG_COLORSPACECONVERSION
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
-#include "wdgconvertcolorspace.h"
 #include <kis_id.h>
-#include <kis_cmb_idlist.h>
 
-class QComboBox;
+class WdgConvertColorSpace;
+
 /**
  * XXX
  */
@@ -38,8 +35,7 @@ class DlgColorSpaceConversion: public KDialogBase {
 
 public:
 
-    DlgColorSpaceConversion(QWidget * parent = 0,
-             const char* name = 0);
+    DlgColorSpaceConversion(QWidget * parent = 0, const char* name = 0);
     ~DlgColorSpaceConversion();
 
     WdgConvertColorSpace * m_page;

@@ -23,7 +23,6 @@
 #define EXAMPLE_H
 
 #include <kparts/plugin.h>
-#include "kis_filter.h"
 
 class KritaImageEnhancement : public KParts::Plugin
 {

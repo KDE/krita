@@ -24,11 +24,11 @@
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
 #include <qpoint.h>
-#include "kis_tool.h"
-#include "kis_tool_non_paint.h"
 
-#include "kis_tool_factory.h"
+#include "kis_point.h"
 #include "kis_selection.h"
+#include "kis_tool_factory.h"
+#include "kis_tool_non_paint.h"
 
 class KisSelectionOptions;
 
@@ -81,11 +81,11 @@ public:
     KisToolSelectEllipticalFactory() : super() {};
     virtual ~KisToolSelectEllipticalFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectElliptical(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectElliptical();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
 };

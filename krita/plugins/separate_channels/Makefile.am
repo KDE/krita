@@ -5,13 +5,8 @@ EXTRA_DIST = $(kritarc_DATA)
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
         -I$(srcdir)/../../core/color_strategy \
-        -I$(srcdir)/../../core/resources \
-        -I$(srcdir)/../../core/compositeop \
-        -I$(srcdir)/../../core/tiles \
-        -I$(srcdir)/../../core/tool \
         -I$(srcdir)/../../ui \
-        $(KOFFICE_INCLUDES) \
-         -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+         -I$(interfacedir)  $(all_includes)
 
 kde_module_LTLIBRARIES = kritaseparatechannels.la
 
@@ -23,6 +18,6 @@ noinst_HEADERS = wdg_separations.h kis_separate_channels_plugin.h \
 		kis_channel_separator.h dlg_separate.h
 
 kritaseparatechannels_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritaseparatechannels_la_LIBADD =  ../../libkritacommon.la $(LIB_KOFFICECORE) $(LIB_KOPAINTER)
+kritaseparatechannels_la_LIBADD =  ../../libkritacommon.la 
 
 kritaseparatechannels_la_METASOURCES = AUTO

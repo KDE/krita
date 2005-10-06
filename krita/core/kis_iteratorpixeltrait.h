@@ -20,7 +20,7 @@
 #ifndef KIS_ITERATORPIXELTRAIT_H_
 #define KIS_ITERATORPIXELTRAIT_H_
 
-#include "tiles/kis_iterator.h"
+#include "kis_iterator.h"
 #include "kis_pixel.h"
 #include <kis_paint_device_impl.h>
 

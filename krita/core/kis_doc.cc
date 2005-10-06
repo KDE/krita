@@ -52,6 +52,7 @@
 #include <kocommandhistory.h>
 
 // Local
+#include "kis_annotation.h"
 #include "kis_types.h"
 #include "kis_config.h"
 #include "kis_global.h"
@@ -62,6 +63,7 @@
 #include "kis_layer.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
+#include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_command.h"
 #include "kis_view.h"
@@ -391,7 +393,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
         {
-            // An old file: take a reasonable default. 
+            // An old file: take a reasonable default.
             // Krita didn't support anything else in those
             // days anyway.
             colorspacename = "RGBA";
@@ -1026,6 +1028,11 @@ void KisDoc::prepareForImport()
     if (m_nserver == 0)
         init();
 
+}
+
+KisImageSP KisDoc::currentImage()
+{
+    return m_currentImage;
 }
 
 void KisDoc::setCurrentImage(KisImageSP image)

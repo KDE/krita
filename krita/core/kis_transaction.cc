@@ -17,60 +17,73 @@
  */
 #include "kis_types.h"
 #include "kis_global.h"
-#include "tiles/kis_tile.h"
-#include "tiles/kis_tileddatamanager.h"
+#include "kis_tile.h"
+#include "kis_tileddatamanager.h"
 #include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_memento.h"
+#include "kis_paint_device_impl.h"
+
+
+class KisTransactionPrivate {
+public:
+    QString m_name;
+    KisPaintDeviceImplSP m_device;
+    KisMementoSP m_memento;
+
+};
 
 KisTransaction::KisTransaction(const QString& name, KisPaintDeviceImplSP device)
 {
-    m_name = name;
-    m_device = device;
-    m_memento = device -> getMemento();
+    m_private = new KisTransactionPrivate;
+
+    m_private->m_name = name;
+    m_private->m_device = device;
+    m_private->m_memento = device -> getMemento();
 }
 
 KisTransaction::~KisTransaction()
 {
-    if (m_memento) {
+    if (m_private->m_memento) {
         // For debugging purposes
-        m_memento -> setInvalid();
+        m_private->m_memento -> setInvalid();
     }
+    delete m_private;
 }
 
 void KisTransaction::execute()
 {
-    Q_ASSERT(m_memento != 0);
+    Q_ASSERT(m_private->m_memento != 0);
 
-    KisImageSP img = m_device -> image();
-    
-    m_device->rollforward(m_memento);
-    
-    QRect rc;    
+    KisImageSP img = m_private->m_device -> image();
+
+    m_private->m_device->rollforward(m_private->m_memento);
+
+    QRect rc;
     Q_INT32 x, y, width, height;
-    m_memento->extent(x,y,width,height);
-    rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
+    m_private->m_memento->extent(x,y,width,height);
+    rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
     if (img)
         img -> notify(rc);
 }
 
 void KisTransaction::unexecute()
 {
-    Q_ASSERT(m_memento != 0);
+    Q_ASSERT(m_private->m_memento != 0);
 
-    KisImageSP img = m_device -> image();
-    
-    m_device -> rollback(m_memento);
-    
-    QRect rc;    
+    KisImageSP img = m_private->m_device -> image();
+
+    m_private->m_device -> rollback(m_private->m_memento);
+
+    QRect rc;
     Q_INT32 x, y, width, height;
-    m_memento->extent(x,y,width,height);
-    rc.setRect(x + m_device->getX(), y + m_device->getY(), width, height);
+    m_private->m_memento->extent(x,y,width,height);
+    rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
     if (img)
         img -> notify(rc);
 }
 
 QString KisTransaction::name() const
 {
-    return m_name;
+    return m_private->m_name;
 }

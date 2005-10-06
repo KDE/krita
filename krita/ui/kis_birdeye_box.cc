@@ -21,6 +21,8 @@
 #include "qlabel.h"
 #include "qpixmap.h"
 #include "qpainter.h"
+#include "qimage.h"
+
 #include "klocale.h"
 
 #include "kobirdeyepanel.h"

@@ -29,6 +29,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include <kis_layer.h>
 #include <kis_selection_options.h>
 #include <kis_canvas_controller.h>
 #include <kis_canvas_subject.h>
@@ -151,7 +152,7 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
                 layer->emitSelectionChanged(painter.dirtyRect());
             else
                 layer->emitSelectionChanged();
-            
+
             if (img -> undoAdapter())
                 img -> undoAdapter() -> addCommand(t);
 

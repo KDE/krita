@@ -18,19 +18,16 @@
 #ifndef KIS_DLG_CREATE_IMG_H_
 #define KIS_DLG_CREATE_IMG_H_
 
-#include <qspinbox.h>
-
 #include <kdialogbase.h>
 
 #include <qcolor.h>
 
 #include "kis_global.h"
-#include "wdgnewimage.h"
 
 class KisProfile;
 class KisID;
 class QButtonGroup;
-
+class WdgNewImage;
 
 class KisDlgCreateImg : public KDialogBase {
     typedef KDialogBase super;

@@ -20,17 +20,15 @@
 #ifndef DLG_HISTOGRAM
 #define DLG_HISTOGRAM
 
-#include <qpixmap.h>
-
 #include <kdialogbase.h>
 
 #include "kis_types.h"
-#include "kis_histogram_widget.h"
 
+class KisHistogramWidget;
 
 /**
  * This dialog shows the histogram for the (selected) portion
- * of the current layer. 
+ * of the current layer.
  *
  * XXX: Also for complete image?
  */

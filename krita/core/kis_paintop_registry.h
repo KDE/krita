@@ -21,9 +21,11 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
-#include "kis_paintop.h"
 #include <koffice_export.h>
+
 class QStringList;
+class KisPaintop;
+class KisPainter;
 
 class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
 
@@ -32,14 +34,14 @@ public:
 
     KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
     KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
-    
+
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KisID & id) const;
 
     // Get the pixmap to show in the toolchest
     QPixmap getPixmap(const KisID & id) const;
 
-    
+
 public:
     static KisPaintOpRegistry* instance();
 

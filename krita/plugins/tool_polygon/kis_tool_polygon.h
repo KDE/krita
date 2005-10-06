@@ -21,7 +21,6 @@
 #ifndef KIS_TOOL_POLYGON_H_
 #define KIS_TOOL_POLYGON_H_
 
-#include <qpoint.h>
 #include <qvaluevector.h>
 
 #include "kis_tool_shape.h"
@@ -46,7 +45,7 @@ public:
         //
 
         virtual void update (KisCanvasSubject *subject);
-        
+
         //
         // KisToolPaint interface
         //
@@ -82,12 +81,12 @@ class KisToolPolygonFactory : public KisToolFactory {
 public:
     KisToolPolygonFactory() : super() {};
     virtual ~KisToolPolygonFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolPolygon(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolPolygon();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
-        return t; 
+        t -> setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
 };

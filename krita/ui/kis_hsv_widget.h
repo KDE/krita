@@ -24,19 +24,19 @@
 
 #include "koColor.h"
 
-#include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
+
 #include <koffice_export.h>
 
-
+class KDualColorButton;
+class KValueSelector;
+class KisCanvasSubject;
+class KisColorWheel;
+class KoColorSlider;
 class KoFrameButton;
 class QGridLayout;
-class KoColorSlider;
 class QLabel;
 class QSpinBox;
-class KDualColorButton;
-class KisColorWheel;
-class KValueSelector;
 
 class KRITAUI_EXPORT KisHSVWidget
      : public QWidget,

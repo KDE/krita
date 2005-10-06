@@ -25,6 +25,7 @@
 
 #include "kis_paintop.h"
 #include <koffice_export.h>
+
 class KisPoint;
 class KisPainter;
 class KisFilterConfiguration;

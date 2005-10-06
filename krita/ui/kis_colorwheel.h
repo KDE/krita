@@ -21,13 +21,13 @@
 #ifndef KIS_COLORWHEEL_H
 #define KIS_COLORWHEEL_H
 
-#include <qimage.h>
 #include <qpixmap.h>
-#include <qpainter.h>
 
-#include <kselect.h> 
-#include <koColor.h> 
- 
+#include <kselect.h>
+#include <koColor.h>
+
+class QPainter;
+
 class KisColorWheel : public KXYSelector
 {
   Q_OBJECT

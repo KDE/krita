@@ -4,13 +4,8 @@ kde_services_DATA = kritatoolpolyline.desktop
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
-	-I$(srcdir)/../../core/resources/ \
-	-I$(srcdir)/../../core/tiles \
-	-I$(srcdir)/../../core/tool \
-	-I$(srcdir)/../../core/paintop \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../tools \
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir)/../../core/strategy/ $(all_includes)
+	$(all_includes)
 
 kritatoolpolyline_la_SOURCES = \
         tool_polyline.cc \
@@ -24,7 +19,7 @@ noinst_HEADERS = \
 	kis_tool_polyline.h 
 
 kritatoolpolyline_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritatoolpolyline_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritatoolpolyline_la_LIBADD =  ../../libkritacommon.la 
 
 kritatoolpolyline_la_METASOURCES = AUTO
 

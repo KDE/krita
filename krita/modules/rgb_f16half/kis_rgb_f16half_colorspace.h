@@ -132,7 +132,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbF16HalfColorSpace(p); };
 
-    virtual QString defaultProfile() { return "sRGB"; };
+    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };
 
 #endif // KIS_RGB_F16HALF_COLORSPACE_H_

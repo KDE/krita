@@ -130,7 +130,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbColorSpace(p); };
 
-    virtual QString defaultProfile() { return "sRGB"; };
+    virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

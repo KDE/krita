@@ -56,6 +56,8 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
 
     if ( parent->inherits("KisFactory") )
     {
+        KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+        KisColorSpaceFactoryRegistry::instance() -> addProfile(defProfile);
         KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(0);
         KisColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBA);

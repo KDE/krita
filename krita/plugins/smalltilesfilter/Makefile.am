@@ -5,8 +5,9 @@ INCLUDES  = \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
-	-I../../ui/ \
-	-I$(interfacedir) $(all_includes)
+	-I$(interfacedir) \
+        -I$(top_srcdir)/lib/kofficecore \
+	$(all_includes)
 
 kde_module_LTLIBRARIES = kritasmalltilesfilter.la
 

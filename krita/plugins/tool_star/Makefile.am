@@ -5,6 +5,8 @@ INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
 	-I$(srcdir)/../../ui \
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
 	$(all_includes)
 
 kritatoolstar_la_SOURCES = \

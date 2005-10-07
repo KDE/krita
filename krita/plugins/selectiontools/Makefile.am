@@ -5,7 +5,8 @@ INCLUDES =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
 	-I$(srcdir)/../../ui \
-	-I../../ui \
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
 	$(all_includes)
 
 kritaselectiontools_la_SOURCES = \

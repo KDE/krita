@@ -4,7 +4,9 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
-	-I$(interfacedir) $(all_includes)
+	-I$(interfacedir) \
+	-I$(top_srcdir)/lib/kofficecore \
+	$(all_includes)
 
 kritacolorsfilters_la_SOURCES = colorsfilters.cc \
 	kis_perchannel_filter.cc \

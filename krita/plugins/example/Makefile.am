@@ -7,7 +7,9 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../ui \
-	-I$(interfacedir) $(all_includes)
+	-I$(interfacedir) \
+	-I$(top_srcdir)/lib/kofficecore \
+	$(all_includes)
 
 kritaexample_la_SOURCES = example.cc
 

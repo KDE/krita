@@ -7,6 +7,7 @@ INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
 	-I$(srcdir)/../../ui \
+	-I$(top_srcdir)/lib/kofficecore \
 	$(all_includes)
 
 kritacimg_la_SOURCES = \

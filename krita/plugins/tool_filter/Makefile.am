@@ -3,9 +3,11 @@ kde_services_DATA = kritatoolfilter.desktop
 # all_includes must remain last!
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy/ \
+	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../core/strategy/ $(all_includes)
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
+	$(all_includes)
 
 kritatoolfilter_la_SOURCES = \
 	kis_filterop.cc \

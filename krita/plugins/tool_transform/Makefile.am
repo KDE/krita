@@ -5,7 +5,9 @@ INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy/ \
 	-I$(srcdir)/../../ui \
-	-I$(srcdir)/../../core/strategy/ $(all_includes)
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
+	$(all_includes)
 
 kritatooltransform_la_SOURCES = \
 	wdg_tool_transform.ui \

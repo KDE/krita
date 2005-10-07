@@ -4,6 +4,8 @@ kde_services_DATA = kritatoolpolygon.desktop
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
 	$(all_includes)
 
 kritatoolpolygon_la_SOURCES = \

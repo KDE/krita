@@ -6,6 +6,8 @@ INCLUDES  = -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../ui \
+	-I$(top_srcdir)/lib/kofficecore \
+	-I$(top_srcdir)/lib/kopalette \
 	$(all_includes)
 
 kritahistogramdocker_la_SOURCES = histogramdocker.cc  kis_imagerasteredcache.cc kis_cachedhistogram.cc kis_accumulating_producer.cc

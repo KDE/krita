@@ -5,7 +5,10 @@ INCLUDES  = \
 	 -I$(srcdir)/../../core/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
-	-I$(interfacedir) $(all_includes)
+	-I$(interfacedir) \
+        -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
+	$(all_includes)
 
 kde_module_LTLIBRARIES = kritapixelizefilter.la
 

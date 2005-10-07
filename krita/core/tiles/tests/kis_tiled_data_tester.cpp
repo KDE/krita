@@ -21,6 +21,7 @@
 
 #include "kis_tiled_data_tester.h"
 #include "kis_datamanager.h"
+#include "kis_global.h"
 
 using namespace KUnitTest;
 

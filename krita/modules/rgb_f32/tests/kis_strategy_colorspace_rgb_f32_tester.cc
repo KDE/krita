@@ -64,7 +64,9 @@ void KisRgbF32ColorSpaceTester::allTests()
 
 void KisRgbF32ColorSpaceTester::testBasics()
 {
-    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace(profile);
     KisAbstractColorSpace * csSP = cs;
 
     CHECK(cs -> hasAlpha(), true);
@@ -317,7 +319,9 @@ void KisRgbF32ColorSpaceTester::testBasics()
 
 void KisRgbF32ColorSpaceTester::testMixColors()
 {
-    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace(profile);
 
     // Test mixColors.
     float pixel1[NUM_CHANNELS];
@@ -418,7 +422,9 @@ void KisRgbF32ColorSpaceTester::testMixColors()
 
 void KisRgbF32ColorSpaceTester::testToQImage()
 {
-    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisAbstractColorSpace * cs = new KisRgbF32ColorSpace(profile);
 
     KisRgbF32ColorSpace::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
@@ -477,7 +483,9 @@ void KisRgbF32ColorSpaceTester::testToQImage()
 
 void KisRgbF32ColorSpaceTester::testCompositeOps()
 {
-    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace(profile);
 
     KisRgbF32ColorSpace::Pixel srcPixel;
     KisRgbF32ColorSpace::Pixel dstPixel;

@@ -67,7 +67,11 @@ void KisRgbF16HalfColorSpaceTester::allTests()
 
 void KisRgbF16HalfColorSpaceTester::testBasics()
 {
-    KisRgbF16HalfColorSpace *cs = new KisRgbF16HalfColorSpace();
+
+
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbF16HalfColorSpace *cs = new KisRgbF16HalfColorSpace(profile);
     KisAbstractColorSpace * csSP = cs;
 
     CHECK(cs -> hasAlpha(), true);
@@ -320,7 +324,8 @@ void KisRgbF16HalfColorSpaceTester::testBasics()
 
 void KisRgbF16HalfColorSpaceTester::testMixColors()
 {
-    KisAbstractColorSpace * cs = new KisRgbF16HalfColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+    KisAbstractColorSpace * cs = new KisRgbF16HalfColorSpace(profile);
 
     // Test mixColors.
     half pixel1[NUM_CHANNELS];
@@ -421,7 +426,9 @@ void KisRgbF16HalfColorSpaceTester::testMixColors()
 
 void KisRgbF16HalfColorSpaceTester::testToQImage()
 {
-    KisAbstractColorSpace * cs = new KisRgbF16HalfColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisAbstractColorSpace * cs = new KisRgbF16HalfColorSpace(profile);
 
     KisRgbF16HalfColorSpace::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
         {CHANNEL_VALUE_ONE, CHANNEL_VALUE_ONE, CHANNEL_VALUE_ONE, CHANNEL_VALUE_ONE / 4},
@@ -480,7 +487,9 @@ void KisRgbF16HalfColorSpaceTester::testToQImage()
 
 void  KisRgbF16HalfColorSpaceTester::testCompositeOps()
 {
-    KisRgbF16HalfColorSpace *cs = new KisRgbF16HalfColorSpace();
+    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbF16HalfColorSpace *cs = new KisRgbF16HalfColorSpace(profile);
 
     KisRgbF16HalfColorSpace::Pixel srcPixel;
     KisRgbF16HalfColorSpace::Pixel dstPixel;

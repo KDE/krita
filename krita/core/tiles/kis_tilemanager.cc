@@ -296,7 +296,7 @@ void KisTileManager::printInfo() {
     kdDebug(DBG_AREA_TILES) << "Pool stats (" <<  m_tilesPerPool << " tiles per pool)" << endl;
     for (int i = 0; i < 4; i++) {
         if (m_pools[i]) {
-            kdDebug() << "Pool " << i << ": Freelist count: " << m_poolFreeList[i].count()
+            kdDebug(DBG_AREA_TILES) << "Pool " << i << ": Freelist count: " << m_poolFreeList[i].count()
                     << ", pixelSize: " << m_poolPixelSizes[i] << endl;
         }
     }

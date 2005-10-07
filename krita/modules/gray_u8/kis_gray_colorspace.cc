@@ -169,54 +169,6 @@ Q_INT32 KisGrayColorSpace::pixelSize() const
     return MAX_CHANNEL_GRAYSCALEA;
 }
 
-#if 0
-QImage KisGrayColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                               KisProfile *  srcProfile, KisProfile *  dstProfile,
-                               Q_INT32 renderingIntent, float /*exposure*/)
-{
-
-    QImage img(width, height, 32, 0, QImage::LittleEndian);
-
-    // No profiles
-    if (srcProfile == 0 || dstProfile == 0) {
-        Q_INT32 i = 0;
-        uchar *j = img.bits();
-
-        while ( i < width * height * MAX_CHANNEL_GRAYSCALEA) {
-            Q_UINT8 q = *( data + i + PIXEL_GRAY );
-
-            // XXX: Temporarily moved here to get rid of these global constants
-            const Q_UINT8 PIXEL_BLUE = 0;
-            const Q_UINT8 PIXEL_GREEN = 1;
-            const Q_UINT8 PIXEL_RED = 2;
-            const Q_UINT8 PIXEL_ALPHA = 3;
-
-            *( j + PIXEL_ALPHA ) = *( data + i + PIXEL_GRAY_ALPHA );
-            *( j + PIXEL_RED )   = q;
-            *( j + PIXEL_GREEN ) = q;
-            *( j + PIXEL_BLUE )  = q;
-
-            i += MAX_CHANNEL_GRAYSCALEA;
-
-            j += 4; // Because we're hard-coded 32 bits deep, 4 bytes
-        }
-        return img;
-    }
-    else {
-
-       kdDebug() << "Do a nice calibrated conversion\n";
-        KisAbstractColorSpace * dstCS = KisColorSpaceRegistry::instance() -> get("RGBA");
-        convertPixelsTo(const_cast<Q_UINT8 *>(data), srcProfile,
-                img.bits(), dstCS, dstProfile,
-                width * height, renderingIntent);
-    }
-
-
-    // Create display transform if not present
-    return img;
-}
-#endif
-
 void KisGrayColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 dstRowStride,
                       const Q_UINT8 *src,

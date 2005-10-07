@@ -22,6 +22,8 @@
 
 #include <qcolor.h>
 
+#include <klocale.h>
+
 #include <koffice_export.h>
 
 #include "kis_global.h"

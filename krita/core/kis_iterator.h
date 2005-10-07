@@ -33,22 +33,24 @@ typedef KSharedPtr<KisTiledHLineIterator> KisTiledHLineIteratorSP;
 
 class KisDataManager;
 
-/** 
+/**
  * The KisRectIterator iterators over a rectangular area in the most efficient order. That is,
  * there is no guarantee that the iterator will work scanline by scanline.
  */
 class KisRectIterator
 {
 
-public:
 
+public:
     KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
+
+public:
     virtual ~KisRectIterator();
     KisRectIterator(const KisRectIterator& rhs);
     KisRectIterator& operator=(const KisRectIterator& rhs);
 
 
-public:    
+public:
     /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
     Q_UINT8 * rawData() const;
 
@@ -58,19 +60,19 @@ public:
     /// Returns the number of consequtive pixels that we point at
     /// This is useful for optimizing
     Q_INT32 nConseqPixels() const;
-    
+
     /// Advances a number of pixels until it reaches the end of the rect
     KisRectIterator & operator+=(int n);
-    
+
     /// Advances one pixel going to the beginning of the next line when it reaches the end of a line
     KisRectIterator & operator++();
-    
+
     /// returns true when iterators has reached the end
     bool isDone()  const;
-    
+
      // current x position
      Q_INT32 x() const;
-     
+
      // current y position
      Q_INT32 y() const;
 
@@ -85,11 +87,14 @@ class KisHLineIterator
 public:
 
     KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable);
+
+public:
+
     virtual ~KisHLineIterator();
     KisHLineIterator(const KisHLineIterator& rhs);
     KisHLineIterator& operator=(const KisHLineIterator& rhs);
 
-public:    
+public:
     /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
     Q_UINT8 *rawData() const;
 
@@ -98,23 +103,23 @@ public:
 
     /// Advances one pixel until it reaches the end of the line
     KisHLineIterator & operator++();
-    
+
     /// Returns the number of consequtive horizontal pixels that we point at
     /// This is useful for optimizing
     Q_INT32 nConseqHPixels() const;
-    
+
     /// Advances a number of pixels until it reaches the end of the line
     KisHLineIterator & operator+=(int n);
-    
+
     /// Goes back one pixel until it reaches the beginning of the line
     KisHLineIterator & operator--();
-    
+
     /// returns true when iterators has reached the end
     bool isDone()  const;
-    
+
     // current x position
     Q_INT32 x() const;
-     
+
     // current y position
     Q_INT32 y() const;
 
@@ -124,12 +129,12 @@ private:
     KisTiledHLineIteratorSP m_iter;
 };
 
-class KisVLineIterator 
+class KisVLineIterator
 {
-
 
 public:
     KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable);
+public:
     ~KisVLineIterator();
     KisVLineIterator(const KisVLineIterator& rhs);
     KisVLineIterator& operator=(const KisVLineIterator& rhs);
@@ -143,13 +148,13 @@ public:
 
     /// Advances one pixel until it reaches the end of the line
     KisVLineIterator & operator++();
-    
+
     /// returns true when iterators has reached the end
     bool isDone() const;
-    
+
     // current x position
     Q_INT32 x() const;
-    
+
     // current y position
     Q_INT32 y() const;
 

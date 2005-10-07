@@ -48,8 +48,8 @@ void KisRgbColorSpaceTester::allTests()
 
 void KisRgbColorSpaceTester::testBasics()
 {
-    KisRgbColorSpace *cs = new KisRgbColorSpace();
-    KisAbstractColorSpace * csSP = cs;
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());  
+    KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
 
     Q_UINT8 pixel[NUM_CHANNELS];
 
@@ -102,7 +102,9 @@ void KisRgbColorSpaceTester::testBasics()
 
 void KisRgbColorSpaceTester::testMixColors()
 {
-    KisAbstractColorSpace * cs = new KisRgbColorSpace();
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+    KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
+
 
     // Test mixColors.
     Q_UINT8 pixel1[4];

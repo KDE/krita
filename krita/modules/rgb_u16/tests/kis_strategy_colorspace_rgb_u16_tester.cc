@@ -62,7 +62,9 @@ void KisRgbU16ColorSpaceTester::allTests()
 
 void KisRgbU16ColorSpaceTester::testBasics()
 {
-    KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace();
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace(defProfile);
     KisAbstractColorSpace * csSP = cs;
 
     CHECK(cs -> hasAlpha(), true);
@@ -303,7 +305,9 @@ void KisRgbU16ColorSpaceTester::testBasics()
 
 void KisRgbU16ColorSpaceTester::testMixColors()
 {
-    KisAbstractColorSpace * cs = new KisRgbU16ColorSpace();
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisAbstractColorSpace * cs = new KisRgbU16ColorSpace(defProfile);
 
     // Test mixColors.
     Q_UINT16 pixel1[NUM_CHANNELS];
@@ -404,7 +408,9 @@ void KisRgbU16ColorSpaceTester::testMixColors()
 
 void KisRgbU16ColorSpaceTester::testToQImage()
 {
-    KisAbstractColorSpace * cs = new KisRgbU16ColorSpace();
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisAbstractColorSpace * cs = new KisRgbU16ColorSpace(defProfile);
 
     KisRgbU16ColorSpace::Pixel pixels[PIXELS_WIDTH * PIXELS_HEIGHT] = {
         {MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE, MAX_CHANNEL_VALUE / 4},
@@ -460,7 +466,9 @@ void KisRgbU16ColorSpaceTester::testToQImage()
 
 void  KisRgbU16ColorSpaceTester::testCompositeOps()
 {
-    KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace();
+    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+
+    KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace(defProfile);
 
     KisRgbU16ColorSpace::Pixel srcPixel;
     KisRgbU16ColorSpace::Pixel dstPixel;

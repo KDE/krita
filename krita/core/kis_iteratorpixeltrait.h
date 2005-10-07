@@ -77,7 +77,7 @@ public:
      * Return the current pixel
      */
      inline KisPixel pixel() const { return m_device->toPixel(m_underlyingIterator->rawData()); };
-        inline KisPixelRO oldPixel() const { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
+     inline KisPixelRO oldPixel() const { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
 
     /**
      * Return one channel from the current kispixel. Does not check whether
@@ -115,10 +115,6 @@ public:
 protected:
     KisPaintDeviceImpl *m_device;
 
-    //KisColorSpace * m_colorSpace;
-
-    // XXX: Is this fix correct? BSAR
-    //inline void advance(int n){if(m_selectionIterator)(*m_selectionIterator)++;};
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
 
     void setSelectionIterator(_iTp *si){m_selectionIterator = si;};

@@ -17,9 +17,12 @@
  */
 #ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
-
 #include <qcolor.h>
+
+#include <klocale.h>
+
 #include <koffice_export.h>
+
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
@@ -59,12 +62,6 @@ public:
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
 
-#if 0
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                       KisProfile *  srcProfile, KisProfile *  dstProfile,
-                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
-                       float exposure = 0.0f);
-#endif
     virtual void bitBlt(Q_UINT8 *dst,
                 Q_INT32 dststride,
                 const Q_UINT8 *src,

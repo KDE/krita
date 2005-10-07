@@ -36,7 +36,7 @@
 #include "kis_image_iface.h"
 
 #include "kis_annotation.h"
-
+#include "kis_colorspace_factory_registry.h"
 #include "kis_command.h"
 #include "kis_types.h"
 #include "kis_guide.h"
@@ -434,7 +434,6 @@ namespace {
 
 KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
-    m_profile = 0;
     init(doc, width, height, colorSpace, name);
     setName(name);
     m_dcop = 0L;
@@ -456,7 +455,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_colorSpace = rhs.m_colorSpace;
         m_dirty = rhs.m_dirty;
         m_adapter = rhs.m_adapter;
-        m_profile = rhs.m_profile;
 
         m_bkg = new KisBackground(this, rhs.width(), rhs.height());
         Q_CHECK_PTR(m_bkg);
@@ -826,8 +824,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
         (*it) -> convertTo(dstColorSpace, renderingIntent);
     }
 
-    setProfile(dstColorSpace -> getProfile());
-
     m_projection->convertTo(dstColorSpace, renderingIntent);
     m_bkg->convertTo(dstColorSpace, renderingIntent);
 
@@ -845,22 +841,18 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     notifyLayersChanged();
 }
 
-KisProfile *  KisImage::profile() const
+KisProfile *  KisImage::getProfile() const
 {
-    return m_profile;
+    return colorSpace()->getProfile();
 }
 
 void KisImage::setProfile(const KisProfile * profile)
 {
-    // XXX: When we set a new profile, we should do a transform!
-    if (profile && profile -> valid()) {
-        m_profile = const_cast<KisProfile *>( profile );
-    }
-    else {
-        m_profile = 0;
-    }
+    KisColorSpace * dstSpace = KisColorSpaceFactoryRegistry::instance()->getColorSpace( colorSpace()->id(), profile);
+    convertTo( dstSpace );
+
     notify();
-    emit(sigProfileChanged(m_profile));
+    emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
 }
 
 double KisImage::xRes()
@@ -1756,8 +1748,10 @@ void KisImage::removeAnnotation(QString type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    if (m_profile) {
-        addAnnotation(m_profile -> annotation());
+    KisProfile * profile = colorSpace()->getProfile();
+    
+    if (profile) {
+        addAnnotation(profile -> annotation());
     } else {
         removeAnnotation("icc");
     }

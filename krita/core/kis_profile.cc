@@ -188,7 +188,6 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
 
         return new KisProfile(profile, bytes);
     } else {
-        kdDebug() << "No profile set for X11, not correcting" << endl;
         return NULL;
     }
 #else

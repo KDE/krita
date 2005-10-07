@@ -433,11 +433,11 @@ void KisView::updateStatusBarProfileLabel()
     KisImageSP img = currentImg();
     if (!img) return;
 
-    if (img -> profile() == 0) {
+    if (img -> getProfile() == 0) {
         m_statusBarProfileLabel -> setText(i18n("No profile"));
     }
     else {
-        m_statusBarProfileLabel -> setText(img -> profile() -> productName());
+        m_statusBarProfileLabel -> setText(img -> getProfile() -> productName());
     }
 }
 
@@ -754,7 +754,7 @@ void KisView::paintView(const KisRect& r)
                     }
                     gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-                    m_doc -> paintContent(gc, wr, monitorProfile(), HDRExposure());
+                    m_doc -> paintContent(gc, wr, m_monitorProfile, HDRExposure());
                 }
 
                 paintGuides();
@@ -1063,11 +1063,22 @@ void KisView::slotImageProperties()
 
     if (!img) return;
 
-    KisDlgImageProperties * dlg = new KisDlgImageProperties(img, this);
-    Q_CHECK_PTR(dlg);
-
-    dlg -> exec();
-    delete dlg;
+    KisDlgImageProperties dlg(img, this);
+    
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.imageWidth() != img -> width() ||
+            dlg.imageHeight() != img -> height()) {
+            
+            resizeCurrentImage(dlg.imageWidth(),
+                               dlg.imageHeight());
+        }
+        Q_INT32 opacity = dlg.opacity();
+        opacity = opacity * 255 / 100;
+        img -> setName(dlg.imageName());
+        img -> setResolution(dlg.resolution(), dlg.resolution());
+        img -> setDescription(dlg.description());
+        img -> setProfile(dlg.profile());
+    }
 }
 
 void KisView::slotInsertImageAsLayer()

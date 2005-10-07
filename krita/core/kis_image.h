@@ -96,7 +96,7 @@ public:
     void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
-    KisProfile *  profile() const;
+    KisProfile *  getProfile() const;
 
     // Set the profile associated with this image
     void setProfile(const KisProfile * profile);
@@ -254,8 +254,6 @@ private:
     KURL m_uri;
     QString m_name;
     QString m_description;
-
-    KisProfile *  m_profile;
 
     Q_INT32 m_width;
     Q_INT32 m_height;

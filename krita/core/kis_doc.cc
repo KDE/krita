@@ -328,8 +328,8 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("colorspacename", img -> colorSpace() -> id().id());
     image.setAttribute("description", img -> description());
     // XXX: Save profile as blob inside the image, instead of the product name.
-    if (img -> profile() && img -> profile()-> valid())
-        image.setAttribute("profile", img -> profile() -> productName());
+    if (img -> getProfile() && img -> getProfile()-> valid())
+        image.setAttribute("profile", img -> getProfile() -> productName());
     image.setAttribute("x-res", img -> xRes());
     image.setAttribute("y-res", img -> yRes());
 
@@ -650,11 +650,11 @@ bool KisDoc::completeSaving(KoStore *store)
             store -> close();
         }
     }
-    if ((img) -> profile()) {
+    if ((img) -> getProfile()) {
         location = external ? QString::null : uri;
         location += (img) -> name() + "/annotations/icc";
         if (store -> open(location)) {
-            store -> write((img) -> profile() -> annotation() -> annotation());
+            store -> write((img) -> getProfile() -> annotation() -> annotation());
             store -> close();
         }
     }
@@ -666,7 +666,7 @@ bool KisDoc::completeSaving(KoStore *store)
 
         QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
         QPainter gc(pix);
-        m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> profile());
+        m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile());
         gc.end();
         QImage composite = pix -> convertToImage();
 

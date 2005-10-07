@@ -444,13 +444,13 @@ KisLayerSP KisSelectionManager::paste()
         gc.end();
 
         KisConfig cfg;
-        if (cfg.askProfileOnPaste() && clip -> colorSpace() -> getProfile() == 0 && img -> profile() != 0) {
+        if (cfg.askProfileOnPaste() && clip -> colorSpace() -> getProfile() == 0 && img -> getProfile() != 0) {
             KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
             Q_CHECK_PTR(dlg);
 
             if (dlg -> exec() == QDialog::Accepted) {
                 KisProfile *  profile = dlg -> profile();
-                if (profile != img -> profile()) {
+                if (profile != img -> getProfile()) {
                     layer -> convertTo(img -> colorSpace(), dlg -> renderIntent());
                 }
             }

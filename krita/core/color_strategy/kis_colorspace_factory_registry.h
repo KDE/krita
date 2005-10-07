@@ -74,6 +74,11 @@ public:
     KisColorSpace *  getColorSpace(const KisID & csID, const QString & profileName);
 
     /**
+     * Return the colorspace + profile -- where the profile is matched on the name of the specified profile
+     */
+    KisColorSpace * getColorSpace(const KisID & csID, const KisProfile * profile);
+    
+    /**
      * Convenience method to get the often used xyz16 colorspace
      */
     static KisColorSpace * getXYZ16();

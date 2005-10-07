@@ -21,7 +21,6 @@
 #include <kdialogbase.h>
 
 class WdgNewImage;
-class KisView;
 class QButtonGroup;
 class KisID;
 
@@ -35,9 +34,15 @@ public:
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
 
+    int imageWidth();
+    int imageHeight();
+    int opacity();
+    QString imageName();
+    double resolution();
+    QString description();
+    KisProfile * profile();
+    
 private slots:
-
-    void okClicked();
 
     void fillCmbProfiles(const KisID &);
 
@@ -45,7 +50,6 @@ private:
 
     WdgNewImage * m_page;
     KisImageSP m_image;
-    KisView * m_view;
 };
 
 

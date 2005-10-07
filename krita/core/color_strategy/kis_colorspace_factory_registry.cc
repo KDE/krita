@@ -127,8 +127,7 @@ void KisColorSpaceFactoryRegistry::resetProfiles()
 
 }
 
-KisColorSpace *  KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID,
-const QString & pName)
+KisColorSpace *  KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const QString & pName)
 {
     QString profileName = pName;
 
@@ -160,6 +159,13 @@ const QString & pName)
 
     return m_csMap[name];
 }
+
+
+KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const KisProfile * profile)
+{
+    return getColorSpace( csID, profile->productName());
+}
+    
 
 KisColorSpace * KisColorSpaceFactoryRegistry::getXYZ16()
 {

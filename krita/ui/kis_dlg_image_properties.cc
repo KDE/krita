@@ -38,7 +38,6 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"
-#include "kis_view.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
 
@@ -50,8 +49,6 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page = new WdgNewImage(this);
 
     m_image = image;
-
-    m_view = (KisView*)parent;
 
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
@@ -73,8 +70,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     fillCmbProfiles(image -> colorSpace() -> id());
     
-    if (image -> profile()) {
-        m_page -> cmbProfile -> setCurrentText(image -> profile() -> productName());
+    if (image -> getProfile()) {
+        m_page -> cmbProfile -> setCurrentText(image -> getProfile() -> productName());
     }
     else {
         m_page -> cmbProfile -> setCurrentItem(0);
@@ -103,31 +100,41 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-void KisDlgImageProperties::okClicked()
+int KisDlgImageProperties::imageWidth()
 {
-    if (m_page -> intWidth -> value() != m_image -> width() ||
-        m_page -> intHeight -> value() != m_image -> height()) {
-        m_view -> resizeCurrentImage(m_page -> intWidth -> value(),
-                             m_page -> intHeight -> value());
-    }
-    
-    
-    // XXX Convert m_page -> cmbColorSpaces -> currentText ();
-    // XXX Convert background color
-    // XXX: Convert opacity of background layer
-    
-    Q_INT32 opacity = m_page -> sliderOpacity -> value();
-    opacity = opacity * 255 / 100;
-    
-    m_image -> setName(m_page -> txtName -> text());
-    m_image -> setResolution(m_page -> doubleResolution -> value(), 
-                 m_page -> doubleResolution -> value());
-    m_image -> setDescription(m_page -> txtDescription -> text());
+    return m_page -> intWidth -> value();
+}
 
+int KisDlgImageProperties::imageHeight()
+{
+    return m_page -> intHeight -> value();
+}
+
+int KisDlgImageProperties::opacity()
+{
+    return m_page -> sliderOpacity -> value();
+}
+
+QString KisDlgImageProperties::imageName()
+{
+    return m_page -> txtName -> text();
+}
+
+double KisDlgImageProperties::resolution()
+{
+    return m_page -> doubleResolution -> value();
+}
+
+QString KisDlgImageProperties::description()
+{
+    return m_page -> txtDescription -> text();
+}
+
+KisProfile * KisDlgImageProperties::profile()
+{
     QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( m_image -> colorSpace()->id() );
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
-
-    m_image -> setProfile(profileList.at(index));
+    return profileList.at(index);
 }
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class

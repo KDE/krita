@@ -1710,6 +1710,9 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)
 {
+// XXX: This is broken at the moment, Fix ASAP.
+    return;
+/*
     // Find the icc annotation, if there is one
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {
@@ -1720,6 +1723,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
         ++it;
     }
     m_annotations.push_back(annotation);
+*/
 }
 
 KisAnnotationSP KisImage::annotation(QString type)

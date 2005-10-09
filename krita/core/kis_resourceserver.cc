@@ -55,8 +55,9 @@ void KisResourceServerBase::loadResources()
         
         QString front = *filenames.begin();
         filenames.pop_front();
-
+        
         QString fname = QFileInfo(front).fileName();
+        
         // XXX: Don't load resources with the same filename. Actually, we should look inside
         //      the resource to find out whether they are really the same, but for now this
         //      will prevent the same brush etc. showing up twice.
@@ -84,5 +85,3 @@ QValueList<KisResource*> KisResourceServerBase::resources()
 
     return m_resources;
 }
-
-#include "kis_resourceserver.moc"

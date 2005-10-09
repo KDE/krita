@@ -850,6 +850,7 @@ bool KisDoc::slotNewImage()
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
+    kdDebug() << "Going to create the view\n";
     KisView * v = new KisView(this, this, parent, name);
     Q_CHECK_PTR(v);
 

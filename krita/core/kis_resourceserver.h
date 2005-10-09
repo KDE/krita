@@ -22,14 +22,11 @@
 #ifndef KIS_RESOURCESERVER_H_
 #define KIS_RESOURCESERVER_H_
 
-#include <qobject.h>
 #include <qstring.h>
 
 class KisResource;
 
-class KisResourceServerBase : public QObject {
-    typedef QObject super;
-    Q_OBJECT
+class KisResourceServerBase {
 
 public:
     KisResourceServerBase(QString type, QStringList fileExtensions);
@@ -37,7 +34,8 @@ public:
 
     void loadResources();
     QValueList<KisResource*> resources();
-
+    QString type() { return m_type; };
+    
 protected:
     virtual KisResource* createResource( QString filename ) = 0;
 

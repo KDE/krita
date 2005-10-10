@@ -107,20 +107,24 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
 bool KisLabelProgress::event(QEvent * e)
 {
-    
+
     if (!e) return false;
-    
+
     int type = e->type();
-    
+
     switch (type) {
         case(KisProgress::ProgressEventBase + 1):
-            KisProgress::UpdateEvent * ue = dynamic_cast<KisProgress::UpdateEvent*>(e);
-            update(ue->m_percent);
-            break;
+            {
+                KisProgress::UpdateEvent * ue = dynamic_cast<KisProgress::UpdateEvent*>(e);
+                update(ue->m_percent);
+                break;
+            }
         case(KisProgress::ProgressEventBase + 2):
-            KisProgress::UpdateStageEvent * use = dynamic_cast<KisProgress::UpdateStageEvent*>(e);
-            updateStage(use->m_stage, use->m_percent);
-            break;
+            {
+                KisProgress::UpdateStageEvent * use = dynamic_cast<KisProgress::UpdateStageEvent*>(e);
+                updateStage(use->m_stage, use->m_percent);
+                break;
+            }
         case(KisProgress::ProgressEventBase + 3):
             done();
             break;
@@ -129,11 +133,11 @@ bool KisLabelProgress::event(QEvent * e)
             break;
         case(KisProgress::ProgressEventBase + 5):
             subjectDestroyed();
-            break;                                                
+            break;
         default:
             return QLabel::event(e);
     };
-    
+
     return true;
 }
 

@@ -12,3 +12,4 @@ Name[xx]=xxSelect Similar Colors Toolxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorrange
+X-KDE-Version=2

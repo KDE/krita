@@ -21,3 +21,4 @@ Comment[xx]=xxCommand history docker for Kritaxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritahistorydocker
+X-KDE-Version=2

@@ -66,3 +66,4 @@ Comment[zh_CN]=8 位/通道 RGB 图像的色彩模型
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritargbplugin
+X-KDE-Version=2

@@ -27,3 +27,4 @@ Name[zh_CN]=折线工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatoolpolyline
+X-KDE-Version=2

@@ -21,3 +21,4 @@ Comment[xx]=xxColor filtersxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacolorsfilters
+X-KDE-Version=2

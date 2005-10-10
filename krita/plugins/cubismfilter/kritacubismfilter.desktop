@@ -21,3 +21,4 @@ Comment[xx]=xxCubism filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacubismfilter
+X-KDE-Version=2

@@ -21,3 +21,4 @@ Comment[xx]=xxRaindrops filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaraindropsfilter
+X-KDE-Version=2

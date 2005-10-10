@@ -34,3 +34,4 @@ Name[zh_CN]=默认工具
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritadefaulttools
+X-KDE-Version=2

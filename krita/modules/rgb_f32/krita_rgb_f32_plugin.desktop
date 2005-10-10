@@ -23,5 +23,4 @@ Comment[tr]=Her kanala 16-bit tam sayı RGB resimleri için, renk modeli.
 Comment[xx]=xxColor model for 16-bit integer per channel RGB imagesxx
 ServiceTypes=Krita/CoreModule
 Type=Service
-X-KDE-Library=krita_rgb_f32_plugin
-
+X-KDE-Version=2

@@ -25,3 +25,4 @@ Comment[xx]=xxTemplate paint operationsxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatemplatepaintops
+X-KDE-Version=2

@@ -21,3 +21,4 @@ Comment[xx]=xxOilpaint filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaoilpaintfilter
+X-KDE-Version=2

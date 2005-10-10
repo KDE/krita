@@ -24,3 +24,5 @@ Name[zh_CN]=湿性/粘性画布色彩模型
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritawsplugin
+X-KDE-Version=2
+

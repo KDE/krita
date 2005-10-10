@@ -23,3 +23,4 @@ Comment[xx]=xxWet & Sticky paintbrushxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritawsbrushpaintop
+X-KDE-Version=2

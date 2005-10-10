@@ -135,7 +135,8 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
     // Load all modules: color models, paintops, filters
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
-                                                         QString::fromLatin1("Type == 'Service'"));
+                                                         QString::fromLatin1("(Type == 'Service') and "
+                                                                             "([X-KDE-Version] == 2)"));
 
     KTrader::OfferList::ConstIterator iter;
 
@@ -191,7 +192,7 @@ KInstance* KisFactory::instance()
     {
         s_instance = new KInstance(s_aboutData);
         Q_CHECK_PTR(s_instance);
-    
+
         s_instance -> dirs() -> addResourceType("krita_template",
                          KStandardDirs::kde_default("data") + "krita/templates");
 

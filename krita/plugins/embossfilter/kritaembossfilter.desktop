@@ -21,3 +21,4 @@ Comment[xx]=xxEmboss filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaembossfilter
+X-KDE-Version=2

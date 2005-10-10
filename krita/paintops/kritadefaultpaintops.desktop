@@ -52,3 +52,4 @@ Comment[zh_CN]=默认绘图操作
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritadefaultpaintops
+X-KDE-Version=2

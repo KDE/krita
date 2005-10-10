@@ -19,3 +19,4 @@ Comment[xx]=xxColor model for 16-bit integer per channel CMYK imagesxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin
+X-KDE-Version=2

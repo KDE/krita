@@ -27,3 +27,5 @@ Comment[xx]=xxColor model for 16-bit integer per channel RGB imagesxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=krita_rgb_u16_plugin
+X-KDE-Version=2
+

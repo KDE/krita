@@ -15,3 +15,4 @@ Name[xx]=xxTransform Toolxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritatooltransform
+X-KDE-Version=2

@@ -13,3 +13,4 @@ Name[xx]=xxSobel filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritaroundcornersfilter
+X-KDE-Version=2

@@ -12,3 +12,4 @@ Name[xx]=xxSmall tiles filterxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritasmalltilesfilter
+X-KDE-Version=2

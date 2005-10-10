@@ -46,3 +46,4 @@ Comment[zh_CN]=CImg 图像修复滤镜
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritacimg
+X-KDE-Version=2

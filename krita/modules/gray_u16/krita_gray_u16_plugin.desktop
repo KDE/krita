@@ -18,4 +18,5 @@ Comment[tr]=Her kanala 16-bit tam sayı Gri ton resimleri için renk modeli
 Comment[xx]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 ServiceTypes=Krita/CoreModule
 Type=Service
+X-KDE-Version=2
 X-KDE-Library=krita_gray_u16_plugin

@@ -29,3 +29,5 @@ Comment[ta]=Kritaக்கான முக்கிய செயல்படு�
 Comment[tr]=Krita için temel işlevsellik modülü
 Comment[xx]=xxCore functionality module for Kritaxx
 Comment[zh_CN]=Krita 的核心功能模块
+[PropertyDef::X-KDE-Version]
+Type=int

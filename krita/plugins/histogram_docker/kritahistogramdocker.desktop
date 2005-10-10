@@ -9,3 +9,4 @@ Name[xx]=xxHistogram Dockerxx
 ServiceTypes=Krita/CoreModule
 Type=Service
 X-KDE-Library=kritahistogramdocker
+X-KDE-Version=2

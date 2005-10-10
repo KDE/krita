@@ -42,8 +42,8 @@
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
 
-KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth, 
-                 Q_INT32 maxHeight, Q_INT32 defHeight, 
+KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
+                 Q_INT32 maxHeight, Q_INT32 defHeight,
                  QString colorSpaceName, QString imageName,
                  QWidget *parent, const char *name)
     : super(parent, name, true, "", Ok | Cancel)
@@ -67,7 +67,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
     m_page -> cmbColorSpaces -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
     m_page -> cmbColorSpaces -> setCurrentText(colorSpaceName);
 
-    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
 
     // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
@@ -135,8 +135,6 @@ QString KisDlgCreateImg::profileName() const
 
 void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 {
-
-
     m_page -> cmbProfile -> clear();
 
     KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);

@@ -19,8 +19,8 @@
  */
 
 
-#include <math.h> 
- 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qspinbox.h>
 
@@ -88,11 +88,11 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
             // erase old lines on canvas
             draw();
             m_dragging = false;
-    
+
             KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
             KisPainter painter (device);
             painter.beginTransaction (i18n ("Polygon"));
-    
+
             painter.setPaintColor(m_subject -> fgColor());
             painter.setBackgroundColor(m_subject -> bgColor());
             painter.setFillStyle(fillStyle());
@@ -106,10 +106,10 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
             painter.paintPolygon(m_points);
 
             m_points.clear();
-            
+
             m_currentImage -> notify( painter.dirtyRect() );
             notifyModified();
-    
+
             KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
             if (adapter) {
                 adapter -> addCommand(painter.endTransaction());
@@ -141,7 +141,7 @@ void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
     }
 
     if (m_dragging && event -> button() == RightButton) {
-        
+
         }
 }
 
@@ -171,7 +171,7 @@ void KisToolPolygon::draw(QPainter& gc)
         if (!m_subject || !m_currentImage)
             return;
 
-        QPen pen(Qt::white, 0, Qt::SolidLine); 
+        QPen pen(Qt::white, 0, Qt::SolidLine);
 
     gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
@@ -211,7 +211,7 @@ void KisToolPolygon::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F8));
+        shortcut.append(KShortcut(Qt::Key_F9));
         m_action = new KRadioAction(i18n("&Polygon"),
                         "polygon",
                         shortcut,

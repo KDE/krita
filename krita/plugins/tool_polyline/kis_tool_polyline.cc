@@ -19,8 +19,8 @@
  */
 
 
-#include <math.h> 
- 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qspinbox.h>
 
@@ -88,18 +88,18 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
             // erase old lines on canvas
             draw();
             m_dragging = false;
-    
+
             KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
             KisPainter painter (device);
             painter.beginTransaction (i18n ("Polyline"));
-    
+
             painter.setPaintColor(m_subject -> fgColor());
             painter.setBrush(m_subject -> currentBrush());
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
             KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
             painter.setPaintOp(op); // Painter takes ownership
-    
+
             KisPoint start,end;
             KisPointVector::iterator it;
             for( it = m_points.begin(); it != m_points.end(); ++it )
@@ -114,10 +114,10 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
                 }
             }
             m_points.clear();
-            
+
             m_currentImage -> notify( painter.dirtyRect() );
             notifyModified();
-    
+
             KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
             if (adapter) {
                 adapter -> addCommand(painter.endTransaction());
@@ -149,7 +149,7 @@ void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
     }
 
     if (m_dragging && event -> button() == RightButton) {
-        
+
         }
 }
 
@@ -179,7 +179,7 @@ void KisToolPolyline::draw(QPainter& gc)
         if (!m_subject || !m_currentImage)
             return;
 
-        QPen pen(Qt::white, 0, Qt::SolidLine); 
+        QPen pen(Qt::white, 0, Qt::SolidLine);
 
     gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
@@ -219,7 +219,7 @@ void KisToolPolyline::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F8));
+        shortcut.append(KShortcut(Qt::Key_F9));
         m_action = new KRadioAction(i18n("&Polyline"),
                         "polyline",
                         shortcut,

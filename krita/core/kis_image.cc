@@ -27,6 +27,7 @@
 #include <qsize.h>
 #include <qtl.h>
 #include <qapplication.h>
+#include <qthread.h>
 
 #include <kcommand.h>
 #include <kocommandhistory.h>

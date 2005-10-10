@@ -469,13 +469,13 @@ namespace {
     }
 }
 
-KisGradientPainter::KisGradientPainter() 
+KisGradientPainter::KisGradientPainter()
     : super()
-{ 
-    m_gradient = 0; 
+{
+    m_gradient = 0;
 }
 
-KisGradientPainter::KisGradientPainter(KisPaintDeviceImplSP device) : super(device), m_gradient(0) 
+KisGradientPainter::KisGradientPainter(KisPaintDeviceImplSP device) : super(device), m_gradient(0)
 {
 }
 
@@ -494,7 +494,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     m_cancelRequested = false;
 
     if (!m_gradient) return false;
-    
+
     GradientShapeStrategy *shapeStrategy = 0;
 
     switch (shape) {
@@ -548,7 +548,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
         width = r.width();
         height = r.height();
     }
-    kdDebug(DBG_AREA_CORE) << "Going to compute gradient for rect: " 
+    kdDebug(DBG_AREA_CORE) << "Going to compute gradient for rect: "
         << startx << ", " << starty << ", " << width << ", " << height << "\n";
 
     Q_INT32 endx = startx + width - 1;
@@ -557,7 +557,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     int pixelsProcessed = 0;
     int lastProgressPercent = 0;
 
-    emit notifyProgressStage(this, i18n("Rendering gradient..."), 0);
+    emit notifyProgressStage(i18n("Rendering gradient..."), 0);
 
     int totalPixels = width * height;
 
@@ -578,7 +578,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
             QColor color;
             Q_UINT8 opacity;
-            
+
             m_gradient -> colorAt(t, &color, &opacity);
             layer -> colorSpace() -> fromQColor( color, opacity, iter.rawData());
 
@@ -587,7 +587,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             int progressPercent = (pixelsProcessed * 100) / totalPixels;
 
             if (progressPercent > lastProgressPercent) {
-                emit notifyProgress(this, progressPercent);
+                emit notifyProgress(progressPercent);
                 lastProgressPercent = progressPercent;
 
                 if (m_cancelRequested) {
@@ -604,7 +604,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
-        emit notifyProgressStage(this, i18n("Anti-aliasing gradient..."), lastProgressPercent);
+        emit notifyProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
         KisColorSpace * cs = layer->colorSpace();
         for (int y = starty; y <= endy; y++) {
             KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
@@ -696,7 +696,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                 int progressPercent = (pixelsProcessed * 100) / totalPixels;
 
                 if (progressPercent > lastProgressPercent) {
-                    emit notifyProgress(this, progressPercent);
+                    emit notifyProgress(progressPercent);
                     lastProgressPercent = progressPercent;
 
                     if (m_cancelRequested) {
@@ -717,7 +717,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
     delete shapeStrategy;
 
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
 
     return !m_cancelRequested;
 }

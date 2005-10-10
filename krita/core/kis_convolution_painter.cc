@@ -96,7 +96,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
 
     m_cancelRequested = false;
     int lastProgressPercent = 0;
-    emit notifyProgress(this, 0);
+    emit notifyProgress(0);
 
     KisColorSpace * cs = m_device->colorSpace();
 
@@ -158,7 +158,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
         int progressPercent = 100 - ((((y + h) - row) * 100) / h);
 
         if (progressPercent > lastProgressPercent) {
-            emit notifyProgress(this, progressPercent);
+            emit notifyProgress(progressPercent);
             lastProgressPercent = progressPercent;
 
             if (m_cancelRequested) {
@@ -170,5 +170,5 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
 
     addDirtyRect(QRect(x, y, w, h));
 
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
 }

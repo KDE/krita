@@ -85,8 +85,8 @@ KisFillPainter::KisFillPainter(KisPaintDeviceImplSP device) : super(device)
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, Q_UINT8 opacity)
 {
 
-    // Make sure we're in the right colorspace  
-    
+    // Make sure we're in the right colorspace
+
     KisColor kc2(kc); // get rid of const
     kc2.convertTo(m_device->colorSpace());
     Q_UINT8 * data = kc2.data();
@@ -105,7 +105,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
             ++hiter;
         }
     }
-    
+
     addDirtyRect(QRect(x1, y1, w, h));
 }
 
@@ -208,7 +208,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceImplSP filled) {
     bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
                  0, 0, m_width, m_height);
 
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
 
     m_width = m_height = -1;
 }
@@ -261,13 +261,13 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
     KisColorSpace * colorSpace = selection -> colorSpace();
     KisColorSpace * devColorSpace = sourceDevice -> colorSpace();
-    
+
     Q_UINT8* source = new Q_UINT8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
     KisPixel pixel = pixelIt.rawData();
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
-    
+
     std::stack<FillSegment*> stack;
 
     stack.push(new FillSegment(startX, startY/*, 0*/));
@@ -277,8 +277,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     memset(map, None, m_size * sizeof(Status));
 
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
-    emit notifyProgressStage(this, i18n("Making fill outline..."), 0);
-    
+    emit notifyProgressStage(i18n("Making fill outline..."), 0);
+
     bool hasSelection = m_careForSelection && sourceDevice -> hasSelection();
     KisSelectionSP srcSel = 0;
     if (hasSelection)
@@ -292,7 +292,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             continue;
         }
         map[m_width * segment->y + segment->x] = Checked;
-        
+
         int x = segment->x;
         int y = segment->y;
 
@@ -323,7 +323,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         }
 
         ++pixelsDone;
-        
+
         bool stop = false;
 
         --pixelIt;
@@ -389,11 +389,11 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             ++selIt;
             ++x;
         }
-        
+
         if (m_size > 0) {
             progressPercent = (pixelsDone * 100) / m_size;
             if (progressPercent > currentPercent) {
-                emit notifyProgress(this, progressPercent);
+                emit notifyProgress(progressPercent);
                 currentPercent = progressPercent;
             }
         }

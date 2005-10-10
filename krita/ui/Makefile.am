@@ -14,7 +14,6 @@ noinst_LTLIBRARIES = libkisui.la
 libkisui_la_SOURCES = \
     kis_cmb_idlist.cc \
     kis_dlg_preferences.cc \
-    kis_dlg_progress.cc \
     kis_canvas.cc \
     kis_cmb_composite.cc \
     kis_layerbox.cc \
@@ -79,7 +78,6 @@ libkisui_la_SOURCES = \
 
 
 noinst_HEADERS = kis_dlg_preferences.h \
-    kis_dlg_progress.h \
     kis_canvas.h \
     kis_layerbox.h \
     kis_dlg_create_img.h \

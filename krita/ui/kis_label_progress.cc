@@ -30,6 +30,19 @@
 #include "kis_label_progress.h"
 #include "kis_cursor.h"
 
+class EscapeButton : public QToolButton {
+
+public:
+
+    EscapeButton(QWidget * parent, const char * name) : QToolButton(parent, name) {};
+
+    void keyReleaseEvent(QKeyEvent *e)
+    {
+        if (e->key()==Qt::Key_Escape)
+            emit clicked();
+    }
+};
+
 KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
 {
     m_subject = 0;
@@ -40,8 +53,8 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) 
 
     QIconSet cancelIconSet = SmallIconSet("stop");
 
-    m_cancelButton = new QToolButton(this, "cancel_button");
-    m_cancelButton -> setIconSet(cancelIconSet);
+    m_cancelButton = new EscapeButton(this, "cancel_button");
+    m_cancelButton->setIconSet(cancelIconSet);
     QToolTip::add(m_cancelButton, i18n("Cancel"));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
 
@@ -60,10 +73,10 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
         m_subject = subject;
         m_modal = modal;
 
-        connect(subject, SIGNAL(notifyProgress(KisProgressSubject*, int)), this, SLOT(update(KisProgressSubject*, int)));
-        connect(subject, SIGNAL(notifyProgressStage(KisProgressSubject*, const QString&, int)), this, SLOT(updateStage(KisProgressSubject*, const QString&, int)));
-        connect(subject, SIGNAL(notifyProgressDone(KisProgressSubject*)), this, SLOT(done(KisProgressSubject*)));
-        connect(subject, SIGNAL(notifyProgressError(KisProgressSubject*)), this, SLOT(error(KisProgressSubject*)));
+        connect(subject, SIGNAL(notifyProgress(int)), this, SLOT(update(int)));
+        connect(subject, SIGNAL(notifyProgressStage(const QString&, int)), this, SLOT(updateStage(const QString&, int)));
+        connect(subject, SIGNAL(notifyProgressDone()), this, SLOT(done()));
+        connect(subject, SIGNAL(notifyProgressError()), this, SLOT(error()));
         connect(subject, SIGNAL(destroyed()), this, SLOT(subjectDestroyed()));
 
         show();
@@ -92,6 +105,38 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
     }
 }
 
+bool KisLabelProgress::event(QEvent * e)
+{
+    
+    if (!e) return false;
+    
+    int type = e->type();
+    
+    switch (type) {
+        case(KisProgress::ProgressEventBase + 1):
+            KisProgress::UpdateEvent * ue = dynamic_cast<KisProgress::UpdateEvent*>(e);
+            update(ue->m_percent);
+            break;
+        case(KisProgress::ProgressEventBase + 2):
+            KisProgress::UpdateStageEvent * use = dynamic_cast<KisProgress::UpdateStageEvent*>(e);
+            updateStage(use->m_stage, use->m_percent);
+            break;
+        case(KisProgress::ProgressEventBase + 3):
+            done();
+            break;
+        case(KisProgress::ProgressEventBase + 4):
+            error();
+            break;
+        case(KisProgress::ProgressEventBase + 5):
+            subjectDestroyed();
+            break;                                                
+        default:
+            return QLabel::event(e);
+    };
+    
+    return true;
+}
+
 void KisLabelProgress::reset()
 {
     if (m_subject) {
@@ -112,7 +157,7 @@ void KisLabelProgress::reset()
     hide();
 }
 
-void KisLabelProgress::update(KisProgressSubject *, int percent)
+void KisLabelProgress::update(int percent)
 {
     m_bar -> setValue(percent);
 
@@ -122,7 +167,7 @@ void KisLabelProgress::update(KisProgressSubject *, int percent)
     app -> processEvents();
 }
 
-void KisLabelProgress::updateStage(KisProgressSubject *, const QString&, int percent)
+void KisLabelProgress::updateStage(const QString&, int percent)
 {
     m_bar -> setValue(percent);
 
@@ -145,12 +190,12 @@ void KisLabelProgress::subjectDestroyed()
     reset();
 }
 
-void KisLabelProgress::done(KisProgressSubject *)
+void KisLabelProgress::done()
 {
     reset();
 }
 
-void KisLabelProgress::error(KisProgressSubject *)
+void KisLabelProgress::error()
 {
     reset();
 }

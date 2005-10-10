@@ -41,7 +41,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     }
     Q_INT32 targetW = QABS( qRound( xscale * width ) );
     Q_INT32 targetH = QABS( qRound( yscale * height ) );
-    
+
     Q_UINT8* newData = new Q_UINT8[targetW * targetH * m_pixelSize ];
     Q_CHECK_PTR(newData);
 
@@ -66,7 +66,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
     //create array of pointers to intermediate rows
     Q_UINT8 **tmpRows = new Q_UINT8*[ height ];
-    
+
     //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
     Q_UINT8 **tmpRowsMem;
     if(yscale < 1.0)
@@ -77,8 +77,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
              tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
              Q_CHECK_PTR(tmpRowsMem[i]);
         }
-    } 
-    else 
+    }
+    else
     {
         tmpRowsMem = new Q_UINT8*[ (int)(fwidth * 2 + 1) ];
         for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
@@ -91,8 +91,8 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     m_cancelRequested = false;
     if ( progress )
         progress -> setSubject(this, true, true);
-    emit notifyProgressStage(this,i18n("Scaling layer..."),0);
-        
+    emit notifyProgressStage(i18n("Scaling layer..."),0);
+
     // build x weights
     contribX = new ContribList[ targetW ];
     for(int x = 0; x < targetW; x++)
@@ -101,18 +101,18 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     }
 
     QTime starttime = QTime::currentTime ();
-    
+
     for(int y = 0; y < targetH; y++)
     {
         //progress info
-        emit notifyProgress(this,(y * 100) / targetH);
+        emit notifyProgress((y * 100) / targetH);
         if (m_cancelRequested) {
                 break;
         }
 
         // build y weights
         calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
-                
+
         //copy pixel data to temporary arrays
         for(int srcpos = 0; srcpos < contribY.n; srcpos++)
         {
@@ -123,7 +123,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
                 m_dev ->readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
             }
         }
-    
+
         /* Apply vert filter to make dst row in tmp. */
         for(int x = 0; x < width; x++)
         {
@@ -150,7 +150,7 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
             }
         } /* next row in temp column */
         delete[] contribY.p;
-        
+
         for(int x = 0; x < targetW; x++)
         {
             for(int channel = 0; channel < m_pixelSize; channel++){
@@ -195,15 +195,15 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     delete[] tmp;
     delete[] weight;
     delete[] bPelDelta;
-    
+
     if(yscale < 1.0)
     {
         for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
         {
             delete[] tmpRowsMem[i];
         }
-    } 
-    else 
+    }
+    else
     {
         for(int i = 0; i < (int)(fwidth * 2 + 1); i++)
         {
@@ -212,11 +212,11 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     }
 
     //progress info
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
 
     QTime stoptime = QTime::currentTime ();
-    kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl; 
-    
+    kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl;
+
     return;
 }
 
@@ -238,7 +238,7 @@ int KisScaleVisitor::calcContrib(ContribList *contrib, double scale, double fwid
 
         if(scale < 1.0)
         {
-                //Shrinking image 
+                //Shrinking image
                 width = fwidth / scale;
                 fscale = 1.0 / scale;
 

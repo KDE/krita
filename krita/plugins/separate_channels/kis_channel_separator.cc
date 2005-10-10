@@ -69,7 +69,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     m_cancelRequested = false;
     if ( progress )
         progress -> setSubject(this, true, true);
-    emit notifyProgressStage(this, i18n("Separating image..."), 0);
+    emit notifyProgressStage(i18n("Separating image..."), 0);
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
@@ -217,7 +217,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         ++i;
 
-        emit notifyProgress(this, (i * 100) / numberOfChannels);
+        emit notifyProgress((i * 100) / numberOfChannels);
         if (m_cancelRequested) {
             break;
         }
@@ -247,7 +247,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     }
 
-    emit notifyProgressDone(this);
+    emit notifyProgressDone();
 
 }
 

@@ -27,7 +27,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 
-KisTransformVisitor::KisTransformVisitor(double xscale, double yscale, 
+KisTransformVisitor::KisTransformVisitor(double xscale, double yscale,
                     double xshear, double yshear, double rotation,
                     Q_INT32 xtranslate, Q_INT32 ytranslate,
                     KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
@@ -58,7 +58,7 @@ void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDevice
         r = src->exactBounds();
         dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
     }
-        
+
     for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
         KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), true);
         KisVLineIterator vit = dst -> createVLineIterator(-y, r.x(), r.width(), true);
@@ -67,7 +67,7 @@ void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDevice
             while (!hit.isDone()) {
             if (hit.isSelected())  {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
-                
+
                 // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
                 // but for now this will do
                 *(hit.rawData()+3) = 0;
@@ -107,7 +107,7 @@ void KisTransformVisitor::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceI
         while (!vit.isDone()) {
             if (hit.isSelected()) {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
-                
+
                 // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
                 // but for now this will do
                 *(hit.rawData()+3) = 0;
@@ -146,7 +146,7 @@ void KisTransformVisitor::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImpl
         while (!dstIt.isDone()) {
             if (srcIt.isSelected())  {
                 memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
-                
+
                 // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
                 // but for now this will do
                 *(srcIt.rawData()+3) = 0;
@@ -210,29 +210,29 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
     KisColorSpace * cs = src->colorSpace();
     Q_INT32 scale;
     Q_INT32 scaleDenom;
-    
+
     if(src->hasSelection())
         dstSelection = dst->selection();
     else
         dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
-        
+
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
-        
+
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
-        
+
     Q_UINT8 *weight = new Q_UINT8[100];
     const Q_UINT8 *colors[100];
     Q_INT32 support = filterStrategy->intSupport();
     Q_INT32  dstLen, dstStart;
     Q_INT32 invfscale = 256;
-    
+
     // handle magnification/minification
     if(abs(scale) < scaleDenom)
     {
         support *= scaleDenom;
         support /= scale;
-        
+
         invfscale *= scale;
         invfscale /= scaleDenom;
         if(scale < 0) // handle mirroring
@@ -241,27 +241,27 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
             invfscale = -invfscale;
         }
     }
-    
+
     // handle mirroring
     if(scale < 0)
         dstLen = -srcLen * scale / scaleDenom;
     else
         dstLen = srcLen * scale / scaleDenom;
-    
-    
+
+
     // Calculate extra length (in each side) needed due to shear
     Q_INT32 extraLen = (support+256)>>8;
-    
+
     Q_UINT8 *tmpLine = new Q_UINT8[(srcLen +2*extraLen)* pixelSize];
     Q_CHECK_PTR(tmpLine);
 
     Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
     Q_CHECK_PTR(tmpSel);
-    
+
     kdDebug(DBG_AREA_CORE) << "srcLen=" << srcLen << " dstLen" << dstLen << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
     kdDebug(DBG_AREA_CORE) << "srcStart="<< srcStart << ",dx=" << dx << endl;
     kdDebug(DBG_AREA_CORE) << "extraLen="<< extraLen << endl;
-    
+
     for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
     {
         if(scale < 0)
@@ -270,23 +270,23 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
             dstStart = (srcStart) * scale / scaleDenom + dx;
 
         dstStart += int( lineNum * shear +0.5);
-        
+
         // Build a temporary line
         T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
         int i = 0;
         while(!srcIt.isDone())
         {
             Q_UINT8 *data;
-            
+
             if(srcIt.isSelected())
             {
                 data = srcIt.rawData();
                 memcpy(&tmpLine[i*pixelSize], data, pixelSize);
-                
+
                 // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
                 // but for now this will do
                 *(data+3) = 0;
-                
+
                 tmpSel[i] = 255;
             }
             else
@@ -297,7 +297,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
         T dstSelIt = createIterator <T>(dstSelection, dstStart, lineNum, dstLen);
-        
+
         i=0;
         while(!dstIt.isDone())
         {
@@ -305,14 +305,14 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
                 center = (srcLen<<8) + (((i * scaleDenom))<<8) / scale;
             else
                 center = ((i * scaleDenom)<<8) / scale;
-            
+
             center += (extraLen<<8);
-            
+
             // find contributing pixels
             begin = (255 + center - support)>>8; // takes ceiling by adding 255
             end = (center + support)>>8; // takes floor
-                    
-printf("sup=%d begin=%d end=%d",support,begin,end);    
+
+printf("sup=%d begin=%d end=%d",support,begin,end);
             Q_UINT8 selectedness = tmpSel[center>>8];
             if(selectedness)
             {
@@ -324,30 +324,30 @@ printf("sup=%d begin=%d end=%d",support,begin,end);
                 for(int srcpos = begin; srcpos <= end; srcpos++)
                 {
                     Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
-                    
+
                     tmpw >>=8;
                     sum += tmpw;
-printf(" %d=%d",t,tmpw);    
+printf(" %d=%d",t,tmpw);
                     weight[num] = tmpw;
                     colors[num] = &tmpLine[srcpos*pixelSize];
                     num++;
                     t += dt;
-                }                
-printf(" )=%d\n",sum);    
+                }
+printf(" )=%d\n",sum);
                 data = dstIt.rawData();
                 cs->mixColors(colors, weight, num, data);
                 data = dstSelIt.rawData();
                 *data = selectedness;
             }
-            
+
             ++dstSelIt;
             ++dstIt;
             i++;
         }
-        
+
         //progress info
         m_progressStep += dstLen;
-        emit notifyProgress(this,(m_progressStep * 100) / m_progressTotalSteps);
+        emit notifyProgress((m_progressStep * 100) / m_progressTotalSteps);
         if (m_cancelRequested) {
             break;
         }
@@ -381,7 +381,7 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
     double rotation = m_rotation;
     Q_INT32 xtranslate = m_xtranslate;
     Q_INT32 ytranslate = m_ytranslate;
-    
+
     int rotQuadrant = int(rotation /(M_PI/2) + 0.5);
     double tmp;
     switch(rotQuadrant)
@@ -409,7 +409,7 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
         default:
             break;
     }
-    
+
     yscale *= cos(rotation);
     yshear = xscale*sin(rotation);
     xscale *= 1/cos(rotation);
@@ -422,21 +422,21 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
 QTime time;
 time.start();
     if ( m_cancelRequested) {
-        emit notifyProgressDone(this);
+        emit notifyProgressDone();
         return false;
     }
-    
+
     transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
 printf("time taken first pass %d\n",time.restart());
     if(dev->hasSelection())
         dev->selection()->clear();
 printf("time taken to clear selection %d\n",time.restart());
-    
+
     if ( m_cancelRequested) {
-        emit notifyProgressDone(this);
+        emit notifyProgressDone();
         return false;
     }
-    
+
     transformPass <KisHLineIteratorPixel>(tmpdev2, dev, xscale, xshear, xtranslate, m_filter);
 
 printf("time taken second pass %d\n",time.elapsed());
@@ -445,7 +445,7 @@ printf("%d %d\n",m_progressStep,m_progressTotalSteps);
 printf("%f\n",rotation);
 
     //progress info
-        emit notifyProgressDone(this);
+        emit notifyProgressDone();
 
         return m_cancelRequested;
 }

@@ -124,7 +124,6 @@
 #include "kis_factory.h"
 
 // Dialog boxes
-#include "kis_dlg_progress.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_dlg_transform.h"

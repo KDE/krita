@@ -20,6 +20,7 @@
 #define KIS_LABEL_PROGRESS_H_
 
 #include <qlabel.h>
+#include <qevent.h>
 
 #include "kis_progress_display_interface.h"
 
@@ -38,11 +39,14 @@ public:
     // Implements KisProgressDisplayInterface
     void setSubject(KisProgressSubject *subject, bool modal, bool canCancel);
 
+    // Overrides QLabel::event()
+    bool event(QEvent * ev);
+
 private slots:
-    virtual void update(KisProgressSubject *subject, int percent);
-    virtual void updateStage(KisProgressSubject *subject, const QString& stage, int percent);
-    virtual void done(KisProgressSubject *subject);
-    virtual void error(KisProgressSubject *subject);
+    virtual void update(int percent);
+    virtual void updateStage(const QString& stage, int percent);
+    virtual void done();
+    virtual void error();
     virtual void subjectDestroyed();
 
 private slots:

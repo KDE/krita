@@ -1,4 +1,4 @@
-/*
+    /*
  *  kis_previewview.cc - part of Krita
  *
  *  Copyright (c) 2001 John Califf  <jwcaliff@compuzone.net>
@@ -167,7 +167,7 @@ void KisPreviewView::resizeEvent(QResizeEvent *) {
     emit updated();
 }
 
-void KisPreviewView::slotUpdate(KisImageSP img, QRect r) 
+void KisPreviewView::slotUpdate(KisImageSP /*img*/, QRect r) 
 {
     kdDebug() << "slotUpdate called with rect: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "\n";
     // Assume that the preview image is just as big as the image we're previewing.

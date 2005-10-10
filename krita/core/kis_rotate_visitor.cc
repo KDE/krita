@@ -30,7 +30,7 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 
-void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress) 
+void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress)
 {
     KisPoint centreOfRotation;
 
@@ -52,7 +52,7 @@ void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProg
         // Clear selected pixels
         m_dev -> clearSelection();
     }
-    
+
     KisPainter p(m_dev);
     QRect r = rotated -> extent();
 
@@ -61,7 +61,7 @@ void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProg
     p.end();
 }
 
-void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *progress) 
+void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInterface *progress)
 {
     const double pi=3.1415926535897932385;
     double thetaX = angleX * pi / 180;
@@ -99,7 +99,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
          // Clear selected pixels
          m_dev -> clearSelection();
      }
-    
+
     KisPainter p2(m_dev);
     r = sheared -> extent();
 
@@ -284,7 +284,7 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
         double displacement;
         Q_INT32 displacementInt;
         double weight;
-        
+
     for (Q_INT32 y = r.top(); y <= r.bottom(); y++) {
 
         //calculate displacement
@@ -316,7 +316,7 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
             ++dstIt;
         }
         incrementProgress();
-    }        
+    }
 
     return dst;
 }
@@ -372,35 +372,35 @@ KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double s
 void KisRotateVisitor::initProgress(Q_INT32 totalSteps)
 {
     if (!m_progress) return;
-    
+
     m_progressTotalSteps = totalSteps;
     m_progressStep = 0;
     m_lastProgressPerCent = 0;
 
-    
+
     m_progress -> setSubject(this, true, false);
-    emit notifyProgress(this, 0);
+    emit notifyProgress(0);
 
 }
 
 void KisRotateVisitor::incrementProgress()
 {
     if (!m_progress) return;
-    
+
     m_progressStep++;
     Q_INT32 progressPerCent = (m_progressStep * 100) / m_progressTotalSteps;
 
     if (progressPerCent != m_lastProgressPerCent) {
         m_lastProgressPerCent = progressPerCent;
-        emit notifyProgress(this, progressPerCent);
+        emit notifyProgress(progressPerCent);
     }
 }
 
 void KisRotateVisitor::setProgressDone()
 {
     if (!m_progress) return;
-    
-    emit notifyProgressDone(this);
+
+    emit notifyProgressDone();
 }
 
 

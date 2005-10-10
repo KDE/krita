@@ -21,6 +21,45 @@
 
 class KisProgressSubject;
 
+
+namespace KisProgress {
+
+    const int ProgressEventBase = QEvent::User + 42 + 42;
+
+    class UpdateEvent : QCustomEvent {
+    
+    public:
+    
+        UpdateEvent(int percent) : QCustomEvent(ProgressEventBase + 1), m_percent(percent) {};
+        int m_percent;
+    };
+    
+    class UpdateStageEvent : QCustomEvent {
+    
+    public:
+    
+        UpdateStageEvent(const QString & stage, int percent) : QCustomEvent(ProgressEventBase + 2 ), m_stage(stage), m_percent(percent) {};
+        QString m_stage;
+        int m_percent;
+    };
+    
+    class DoneEvent : QCustomEvent {
+        DoneEvent() : QCustomEvent(ProgressEventBase + 3){};
+    };
+    
+    class ErrorEvent : QCustomEvent {
+        ErrorEvent() : QCustomEvent(ProgressEventBase + 4){};
+    };
+    
+    class DestroyedEvent: QCustomEvent {
+        DestroyedEvent() : QCustomEvent(ProgressEventBase + 5){};
+    };
+
+
+};
+
+
+
 class KisProgressDisplayInterface {
 public:
     KisProgressDisplayInterface() {}

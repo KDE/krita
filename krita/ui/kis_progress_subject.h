@@ -32,10 +32,10 @@ public:
     virtual void cancel() = 0;
 
 signals:
-    void notifyProgress(KisProgressSubject *subject, int percent);
-    void notifyProgressStage(KisProgressSubject *subject, const QString& stage, int percent);
-    void notifyProgressDone(KisProgressSubject *subject);
-    void notifyProgressError(KisProgressSubject *subject);
+    void notifyProgress(int percent);
+    void notifyProgressStage(const QString& stage, int percent);
+    void notifyProgressDone();
+    void notifyProgressError();
 };
 
 #endif // KIS_PROGRESS_SUBJECT_H_

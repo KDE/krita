@@ -12,9 +12,6 @@
             <height>574</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -260,9 +257,6 @@ layer, the current layer will be used.</string>
                     <property name="text">
                         <string>&amp;Linear</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -274,9 +268,6 @@ layer, the current layer will be used.</string>
                     <property name="text">
                         <string>&amp;Spherical</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
@@ -284,9 +275,6 @@ layer, the current layer will be used.</string>
                     </property>
                     <property name="text">
                         <string>S&amp;inusoidal</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+I</string>
                     </property>
                 </widget>
             </grid>
@@ -309,9 +297,6 @@ layer, the current layer will be used.</string>
                     <property name="text">
                         <string>&amp;Compensate for darkening</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -323,9 +308,6 @@ layer, the current layer will be used.</string>
                     <property name="text">
                         <string>&amp;Tile bumpmap</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
-                    </property>
                 </widget>
                 <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
@@ -333,9 +315,6 @@ layer, the current layer will be used.</string>
                     </property>
                     <property name="text">
                         <string>I&amp;nvert bumpmap</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
                     </property>
                 </widget>
             </grid>
@@ -362,9 +341,6 @@ layer, the current layer will be used.</string>
             </property>
             <property name="text">
                 <string>&amp;Preview</string>
-            </property>
-            <property name="accel">
-                <string>Alt+P</string>
             </property>
         </widget>
     </grid>

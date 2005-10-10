@@ -294,9 +294,6 @@
                     <property name="text">
                         <string>&amp;Constrain proportions</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>

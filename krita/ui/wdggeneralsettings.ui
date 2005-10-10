@@ -12,9 +12,6 @@
             <height>209</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -94,9 +91,6 @@
                             <property name="text">
                                 <string>allow &amp;Docking</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
-                            </property>
                         </widget>
                         <widget class="QRadioButton">
                             <property name="name">
@@ -105,9 +99,6 @@
                             <property name="text">
                                 <string>allow only &amp;Floating</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+F</string>
-                            </property>
                         </widget>
                         <widget class="QRadioButton">
                             <property name="name">
@@ -115,9 +106,6 @@
                             </property>
                             <property name="text">
                                 <string>allow docking only on &amp;Large screens</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+L</string>
                             </property>
                         </widget>
                     </vbox>

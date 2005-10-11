@@ -31,5 +31,6 @@ SUBDIRS = cimg \
 	imagenhancement \
 	sobelfilter \
 	roundcorners \
+	dropshadow \
         histogram_docker
 

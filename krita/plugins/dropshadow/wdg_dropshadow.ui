@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>570</width>
-            <height>362</height>
+            <height>326</height>
         </rect>
     </property>
     <property name="caption">
@@ -157,6 +157,14 @@
             </property>
             <property name="value">
                 <number>128</number>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>blurDropshadowCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Blur dropshadow</string>
             </property>
         </widget>
     </grid>

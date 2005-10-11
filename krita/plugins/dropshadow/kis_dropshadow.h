@@ -36,7 +36,7 @@ public:
     KisDropshadow(KisView * view);
     virtual ~KisDropshadow() {};
 
-    void dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity);
+    void dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool blurshadow);
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }

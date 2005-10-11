@@ -1,7 +1,7 @@
 /*
- *  dlg_separate.cc - part of KimageShop^WKrayon^WKrita
+ *  dlg_dropshadow.cc - part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,6 +77,11 @@ Q_UINT8 DlgDropshadow::getShadowOpacity()
 QColor DlgDropshadow::getShadowColor()
 {
     return m_page->shadowColorButton->color();
+}
+
+bool DlgDropshadow::blurShadowChecked()
+{
+    return m_page->blurDropshadowCheckBox->isChecked();
 }
 
 // SLOTS

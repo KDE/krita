@@ -85,7 +85,8 @@ void KisDropshadowPlugin::slotDropshadow()
                            dlgDropshadow->getYOffset(),
                            dlgDropshadow->getBlurRadius(),
                            dlgDropshadow->getShadowColor(),
-                           dlgDropshadow->getShadowOpacity());
+                           dlgDropshadow->getShadowOpacity(),
+                           dlgDropshadow->blurShadowChecked());
         
     }
 

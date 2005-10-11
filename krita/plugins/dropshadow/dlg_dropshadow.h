@@ -1,5 +1,5 @@
 /*
- *  dlg_imagesize.h -- part of KimageShop^WKrayon^WKrita
+ *  dlg_dropshadow.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
@@ -47,6 +47,7 @@ public:
     Q_INT32 getBlurRadius();
     Q_UINT8 getShadowOpacity();
     QColor getShadowColor();
+    bool blurShadowChecked();
 private slots:
     void okClicked();
 

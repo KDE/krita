@@ -52,6 +52,7 @@
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
 #include <kis_channelinfo.h>
+#include <kis_convolution_painter.h>
 
 #include "kis_dropshadow.h"
 
@@ -60,7 +61,7 @@ KisDropshadow::KisDropshadow(KisView * view)
 {
 }
 
-void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity)
+void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool blurshadow)
 {
     KisImageSP image = m_view->getCanvasSubject()->currentImg();
     if (!image) return;
@@ -92,7 +93,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
             if (srcIt.isSelected())
             {
                 //set the shadow color
-                //XXXX: is it ok to assume fixed channal positions for RGBA?
+                //XXX: is it ok to assume fixed channal positions for RGBA?
                 dstIt.rawData()[0] = color.blue();
                 dstIt.rawData()[1] = color.green();
                 dstIt.rawData()[2] = color.red();
@@ -103,12 +104,39 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         }
         emit notifyProgress((row * 100) / rect.height() );
     }
+
+    if( blurshadow )
+    {
+        KisConvolutionPainter painter( shadowLayer.data() );
+        KisKernel * kernel = new KisKernel();
+        kernel -> width = 3;
+        kernel -> height = 3;
     
+        kernel -> factor = 16;
+        kernel -> offset = 0;
+    
+        kernel->data = new Q_INT32[9];
+        kernel->data[0] = 1;
+        kernel->data[1] = 2;
+        kernel->data[2] = 1;
+        kernel->data[3] = 2;
+        kernel->data[4] = 4;
+        kernel->data[5] = 2;
+        kernel->data[6] = 1;
+        kernel->data[7] = 2;
+        kernel->data[8] = 1;
+    
+        painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(),BORDER_AVOID,FLAG_ALPHA);
+    
+        if (painter.cancelRequested()) {
+            cancel();
+        }
+    }
     if (!m_cancelRequested) {
         shadowLayer -> move (xoffset,yoffset);
         shadowLayer -> setOpacity(opacity);
         image -> layerAdd( shadowLayer, -1 );
-        //XXXX: fix this, the shadow layer should be behind the active layer and not behind all layers
+        //XXX: fix this, the shadow layer should be behind the active layer and not behind all layers
         image -> bottom( shadowLayer );
         image -> notifyLayersChanged();
         

@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritadropshadow" version="6">
+<MenuBar>
+    <Menu name="Filter"><text>Filter</text>
+	<Action name="dropshadow"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

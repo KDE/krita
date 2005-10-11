@@ -1,0 +1,82 @@
+/*
+ *  dlg_separate.cc - part of KimageShop^WKrayon^WKrita
+ *
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qbutton.h>
+
+#include <klocale.h>
+#include <knuminput.h>
+#include <kdebug.h>
+
+#include "dlg_dropshadow.h"
+#include "wdg_dropshadow.h"
+
+DlgDropshadow::DlgDropshadow( const QString & imageCS,
+                          const QString & layerCS,
+                          QWidget *  parent,
+                          const char * name)
+    : super (parent, name, true, i18n("Dropshadow"), Ok | Cancel, Ok)
+{
+    m_page = new WdgDropshadow(this, "dropshadow");
+    Q_CHECK_PTR(m_page);
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
+
+    connect(this, SIGNAL(okClicked()),
+        this, SLOT(okClicked()));
+}
+
+DlgDropshadow::~DlgDropshadow()
+{
+    delete m_page;
+}
+
+Q_INT32 DlgDropshadow::getXOffset()
+{
+    return m_page->xOffsetSpinBox->value();
+}
+
+Q_INT32 DlgDropshadow::getYOffset()
+{
+    return m_page->yOffsetSpinBox->value();
+}
+
+Q_INT32 DlgDropshadow::getBlurRadius()
+{
+    return m_page->blurRadiusSpinBox->value();
+}
+
+Q_UINT8 DlgDropshadow::getOpacity()
+{
+    return m_page->opacitySpinBox->value();
+}
+
+// SLOTS
+
+void DlgDropshadow::okClicked()
+{
+    accept();
+}
+
+//#include "dlg_dropshadow.moc"

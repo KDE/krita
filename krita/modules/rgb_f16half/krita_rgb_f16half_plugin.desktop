@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
 Name[es]=Modelo de color RGB (decimal «medio» de 16 bits)
+Name[fr]=Modèle de couleurs RVB (demi flottants 16 bits)
 Name[pt]=Modelo de Cor RGB (v. flutuante de 16-bits 'half')
 Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 16-bits 'half')
 Name[sv]=RGB-färgmodell (16-bitars flyttal 'halva')
@@ -12,6 +13,7 @@ Comment[en_GB]=Colour model for 16-bit integer per channel RGB images
 Comment[eo]=Kolormodelo por 16-bitaj entjeraj perĉen-RGB-aj bildoj 
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes RGB
 Comment[et]=16 bitti kanali kohta RGB piltide värvimudel
+Comment[fr]=Modèle de couleurs pour des images RVB en 16 bits/plage
 Comment[pt]=Modelo de cor para imagens RGB com 16 bits por canal
 Comment[pt_BR]=Modelo de cor para imagens RGB com 16 bits por canal
 Comment[ru]=Цветовая модель для изображений в RGB (красный, зелёный, синий) 16-бит/канал RGB

@@ -23,27 +23,9 @@
 
 #include <kis_progress_subject.h>
 
+class QColor;
 class KisView;
 class KisProgressDisplayInterface;
-
-
-enum enumSepAlphaOptions {
-    COPY_ALPHA_TO_SEPARATIONS = 0,
-    DISCARD_ALPHA = 1,
-    CREATE_ALPHA_SEPARATION = 2
-};
-
-
-enum enumSepSource {
-    CURRENT_LAYER = 0,
-    ALL_LAYERS = 1,
-    VISIBLE_LAYERS = 2
-};
-
-enum enumSepOutput {
-    TO_LAYERS = 0,
-    TO_IMAGES = 1
-};
 
 class KisDropshadow : public KisProgressSubject {
 
@@ -54,7 +36,7 @@ public:
     KisDropshadow(KisView * view);
     virtual ~KisDropshadow() {};
 
-    void dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, Q_UINT8 opacity);
+    void dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity);
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }

@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <qcolor.h>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kinstance.h>
@@ -58,7 +60,7 @@ KisDropshadow::KisDropshadow(KisView * view)
 {
 }
 
-void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, Q_UINT8 opacity)
+void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity)
 {
     KisImageSP image = m_view->getCanvasSubject()->currentImg();
     if (!image) return;
@@ -89,11 +91,12 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         {
             if (srcIt.isSelected())
             {
-                for( int i = 0; i < pixelSize -1 ; i++)
-                {
-                    dstIt.rawData()[i] = 0;
-                }
-                dstIt.rawData()[pixelSize-1] = srcIt.oldRawData()[pixelSize-1];
+                //set the shadow color
+                //XXXX: is it ok to assume fixed channal positions for RGBA?
+                dstIt.rawData()[0] = color.blue();
+                dstIt.rawData()[1] = color.green();
+                dstIt.rawData()[2] = color.red();
+                dstIt.rawData()[3] = srcIt.oldRawData()[pixelSize-1];
             }
             ++srcIt;
             ++dstIt;
@@ -105,7 +108,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         shadowLayer -> move (xoffset,yoffset);
         shadowLayer -> setOpacity(opacity);
         image -> layerAdd( shadowLayer, -1 );
-        //XXX: fix this, the shadow layer should be behind the active layer and not behind all layers
+        //XXXX: fix this, the shadow layer should be behind the active layer and not behind all layers
         image -> bottom( shadowLayer );
         image -> notifyLayersChanged();
         

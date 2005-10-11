@@ -24,6 +24,7 @@
 #include <kis_dropshadow.h>
 
 class WdgDropshadow;
+class QColor;
 
 /**
  * This dialog allows the user to configure the decomposition of an image
@@ -44,8 +45,8 @@ public:
     Q_INT32 getXOffset();
     Q_INT32 getYOffset();
     Q_INT32 getBlurRadius();
-    Q_UINT8 getOpacity();
-    
+    Q_UINT8 getShadowOpacity();
+    QColor getShadowColor();
 private slots:
     void okClicked();
 

@@ -24,10 +24,12 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qbutton.h>
+#include <qcolor.h>
 
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdebug.h>
+#include <kcolorbutton.h>
 
 #include "dlg_dropshadow.h"
 #include "wdg_dropshadow.h"
@@ -67,9 +69,14 @@ Q_INT32 DlgDropshadow::getBlurRadius()
     return m_page->blurRadiusSpinBox->value();
 }
 
-Q_UINT8 DlgDropshadow::getOpacity()
+Q_UINT8 DlgDropshadow::getShadowOpacity()
 {
     return m_page->opacitySpinBox->value();
+}
+
+QColor DlgDropshadow::getShadowColor()
+{
+    return m_page->shadowColorButton->color();
 }
 
 // SLOTS

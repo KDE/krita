@@ -118,7 +118,7 @@
                 </widget>
                 <widget class="KColorButton">
                     <property name="name">
-                        <cstring>kColorButton1</cstring>
+                        <cstring>shadowColorButton</cstring>
                     </property>
                     <property name="text">
                         <string></string>
@@ -161,6 +161,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>opacitySpinBox</sender>

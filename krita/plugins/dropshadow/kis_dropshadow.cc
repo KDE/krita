@@ -64,7 +64,7 @@ KisDropshadow::KisDropshadow(KisView * view)
 {
 }
 
-void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool blurshadow)
+void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool allowResize)
 {
     KisImageSP image = m_view->getCanvasSubject()->currentImg();
     if (!image) return;
@@ -109,12 +109,13 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         emit notifyProgress((row * 100) / rect.height() );
     }
 
-    if( blurshadow )
+    if( blurradius > 0 )
     {
         bShadowLayer = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
         gaussianblur(shadowLayer, bShadowLayer, rect, blurradius, blurradius, BLUR_RLE, progress);
         shadowLayer = bShadowLayer;
     }
+
     if (!m_cancelRequested) {
         shadowLayer -> move (xoffset,yoffset);
         shadowLayer -> setOpacity(opacity);
@@ -124,6 +125,14 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         image -> notifyLayersChanged();
         
         if (undo) undo -> addCommand(t);
+
+        if ( allowResize )
+        {
+            //XXX: this is only correct if the offsets are greater then zero!
+            Q_UINT32 width = image->width() + xoffset + blurradius;
+            Q_UINT32 height = image->height() +yoffset + blurradius;
+            image->resize( width, height );
+        }
 
         m_view->getCanvasSubject()->document()->setModified(true);
 
@@ -165,10 +174,10 @@ void KisDropshadow::gaussianblur (KisLayerSP srcDev, KisLayerSP dstDev, QRect& r
     Q_INT32          length;
     Q_INT32          initial_pp, initial_mm;
 
-    x1 = rect.x();
-    y1 = rect.y();
-    width = rect.width();
-    height = rect.height();
+    x1 = rect.x() - horz;
+    y1 = rect.y() - vert;
+    width = rect.width() + 2 * horz;
+    height = rect.height() + 2 * vert;
     x2 = x1 + width;
     y2 = y1 + height;
 

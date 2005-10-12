@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>570</width>
-            <height>326</height>
+            <width>396</width>
+            <height>294</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,7 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
                 <cstring>layout2</cstring>
             </property>
@@ -48,7 +48,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout1</cstring>
             </property>
@@ -77,7 +77,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
                 <cstring>layout3</cstring>
             </property>
@@ -103,7 +103,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
                 <cstring>layout7</cstring>
             </property>
@@ -129,45 +129,55 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLabel" row="4" column="0">
+        <widget class="QLayoutWidget" row="4" column="0">
             <property name="name">
-                <cstring>textLabel4</cstring>
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Opacity:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>opacitySlider</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>255</number>
+                    </property>
+                    <property name="value">
+                        <number>204</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>opacitySpinBox</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>255</number>
+                    </property>
+                    <property name="value">
+                        <number>204</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QCheckBox" row="5" column="0">
+            <property name="name">
+                <cstring>allowResizingCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Opacity:</string>
-            </property>
-        </widget>
-        <widget class="QSlider" row="4" column="1">
-            <property name="name">
-                <cstring>opacitySlider</cstring>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="value">
-                <number>255</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QSpinBox" row="4" column="2">
-            <property name="name">
-                <cstring>opacitySpinBox</cstring>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="value">
-                <number>255</number>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>blurDropshadowCheckBox</cstring>
-            </property>
-            <property name="text">
-                <string>Blur dropshadow</string>
+                <string>Allow resizing</string>
             </property>
             <property name="checked">
                 <bool>true</bool>

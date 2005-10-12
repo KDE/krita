@@ -47,7 +47,7 @@ public:
     Q_INT32 getBlurRadius();
     Q_UINT8 getShadowOpacity();
     QColor getShadowColor();
-    bool blurShadowChecked();
+    bool allowResizingChecked();
 private slots:
     void okClicked();
 

@@ -79,9 +79,9 @@ QColor DlgDropshadow::getShadowColor()
     return m_page->shadowColorButton->color();
 }
 
-bool DlgDropshadow::blurShadowChecked()
+bool DlgDropshadow::allowResizingChecked()
 {
-    return m_page->blurDropshadowCheckBox->isChecked();
+    return m_page->allowResizingCheckBox->isChecked();
 }
 
 // SLOTS

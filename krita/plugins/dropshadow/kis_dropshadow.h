@@ -22,6 +22,14 @@
 #define _KIS_DROPSHADOW_H_
 
 #include <kis_progress_subject.h>
+#include <kis_paint_device_impl.h>
+
+typedef enum
+{
+  BLUR_IIR,
+  BLUR_RLE
+} BlurMethod;
+
 
 class QColor;
 class KisView;
@@ -40,6 +48,16 @@ public:
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
+
+private:
+    void gaussianblur (KisLayerSP src, KisLayerSP dst, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay);
+    //gaussian blur helper functions
+    void find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double  std_dev);
+    void transfer_pixels(double *src1, double *src2, Q_UINT8  *dest, Q_INT32 bytes, Q_INT32 width);
+    Q_INT32* make_curve(double sigma, Q_INT32 *length);
+    void run_length_encode (Q_UINT8 *src, Q_INT32 *dest, Q_INT32 bytes, Q_INT32 width);
+    void multiply_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes);
+    void separate_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes);
 
 private:
     KisView * m_view;

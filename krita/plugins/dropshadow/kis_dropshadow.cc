@@ -150,4 +150,4 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
 }
 
-//#include "kis_dropshadow.moc"
+#include "kis_dropshadow.moc"

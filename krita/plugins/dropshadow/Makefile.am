@@ -8,6 +8,7 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
         -I$(srcdir)/../../ui \
         -I$(interfacedir) \
         -I$(top_srcdir)/lib/kofficecore \
+        -I$(top_srcdir)/lib/kofficeui \
 	 $(all_includes)
 
 kde_module_LTLIBRARIES = kritadropshadow.la

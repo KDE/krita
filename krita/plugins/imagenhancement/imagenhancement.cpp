@@ -45,6 +45,7 @@
 #include "imagenhancement.h"
 
 #include "kis_simple_noise_reducer.h"
+#include "kis_wavelet_noise_reduction.h"
 
 typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagenhancement, KritaImageEnhancementFactory( "krita" ) )
@@ -54,10 +55,11 @@ K_EXPORT_COMPONENT_FACTORY( kritaimagenhancement, KritaImageEnhancementFactory( 
 {
     setInstance(KritaImageEnhancementFactory::instance());
 
-    if ( parent->inherits("KisFactory") )
-    {
-        KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
-    }
+  if ( parent->inherits("KisFactory") )
+  {
+     KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
+     KisFilterRegistry::instance()->add(new KisWaveletNoiseReduction());
+  }
 }
 
 KritaImageEnhancement::~KritaImageEnhancement()

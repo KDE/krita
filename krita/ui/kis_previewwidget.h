@@ -85,6 +85,9 @@ public slots:
 
     /** Toggle between display preview and display original */
     void toggleImageDisplayed();
+    
+    /** use to indicate that the preview need to be updated. */
+    void needUpdate();
 signals:
     /** This is emitted when the position or zoom factor of the widget has changed */
     void updated();
@@ -94,6 +97,7 @@ private slots:
     void redirectUpdated();
     void forceUpdate();
 private:
+    
     bool m_autoupdate, m_previewisdiplayed;
 
     KisLayerSP m_sourceLayer, m_previewLayer;

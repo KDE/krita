@@ -71,11 +71,9 @@ private:
         void render(QPainter &painter, KisImageSP image);
 
 private slots:
-
         void slotUpdate(KisImageSP, QRect);
 
 private:
-
         KisImageSP m_image;
         QPoint m_startDrag, m_pos;
         double m_zoom;

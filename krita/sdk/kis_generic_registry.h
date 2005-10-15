@@ -33,17 +33,29 @@ public:
     KisGenericRegistry() { };
     virtual ~KisGenericRegistry() { };
 public:
+    /**
+     * add an object to the registry
+     * @param _T the item to add (NOTE: _T must have an KisID id() function)
+     */
     void add(_T item)
     {
         m_storage.insert( typename storageMap::value_type( item->id(), item) );
     }
-
+    /**
+     * add an object to the registry
+     * @param id the id of the object
+     * @param _T the item
+     */
     void add(KisID id, _T item)
     {
         m_storage.insert(typename storageMap::value_type(id, item));
         //kdDebug() << "Added ID: " << id.id() << ", " << id.name() << "\n";
     }
-    
+    /**
+     * This function allow to get an object from its KisID
+     * @param name the KisID of the object
+     * @return _T the object
+     */
     _T get(const KisID& name) const
     {
         _T p;
@@ -67,7 +79,10 @@ public:
         return get(KisID(id, ""));
     }
 
-
+    /**
+     * @param id
+     * @return true if there is an object corresponding to id
+     */
     bool exists(const KisID& id) const
     {
         typename storageMap::const_iterator it = m_storage.find(id);
@@ -78,8 +93,28 @@ public:
     {
         return exists(KisID(id, ""));
     }
+    /**
+     * This function allow to search a KisID from the name.
+     * @param t the name to search
+     * @param result The result is filled in this variable
+     * @return true if the search has been successfull, false otherwise
+     */
+    bool search(const QString& t, KisID& result) const
+    {
+        for(typename storageMap::const_iterator it = m_storage.begin();
+            it != m_storage.end(); ++it)
+        {
+            if(it->first.name() == t)
+            {
+                result = it->first;
+                return true;
+            }
+        }
+        return false;
+    }
 
-
+    /** This function return a list of all the keys
+     */
     KisIDList listKeys() const
     {
         KisIDList list;

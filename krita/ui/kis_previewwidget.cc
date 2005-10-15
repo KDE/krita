@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcolor.h>
+#include <qgroupbox.h>
 
 #include <kdebug.h>
 #include <ktoolbarbutton.h>
@@ -66,7 +67,10 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 void KisPreviewWidget::forceUpdate()
 {
     if(m_previewisdiplayed)
+    {
+        m_groupBox->setTitle(i18n("Preview"));
         emit updated();
+    }
 }
 
 void KisPreviewWidget::redirectUpdated() {
@@ -104,6 +108,7 @@ void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
     m_previewImage -> add(m_previewLayer, -1);
     slotRenewLayer();
     m_preview->setDisplayImage(m_previewImage);
+    m_groupBox->setTitle(i18n("Preview"));
     redirectUpdated();
     m_previewisdiplayed = true;
 }
@@ -143,14 +148,18 @@ void KisPreviewWidget::toggleImageDisplayed()
 {
     if(m_previewisdiplayed)
     {
-        kdDebug() << "Display source image" << endl;
+        m_groupBox->setTitle(i18n("Original"));
         m_preview->setDisplayImage(m_sourceImage);
     } else {
-        kdDebug() << "Display preview image" << endl;
+        m_groupBox->setTitle(i18n("Preview"));
         m_preview->setDisplayImage(m_previewImage);
-        emit redirectUpdated();
     }
     m_previewisdiplayed = !m_previewisdiplayed;
+}
+void KisPreviewWidget::needUpdate()
+{
+    if(m_previewisdiplayed)
+        m_groupBox->setTitle(i18n("Preview (need update)"));
 }
 
 
@@ -167,4 +176,7 @@ QPoint KisPreviewWidget::getPos()
 bool KisPreviewWidget::getAutoUpdate() {
     return m_autoupdate;
 }
+
+
+
 #include "kis_previewwidget.moc"

@@ -95,9 +95,6 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
     if( image == 0 ) // This is usefull only for Qt/Designer
         return;
 
-    if (!image)
-        return;
-
     if (m_zoom != 1.0)
         painter.scale(m_zoom, m_zoom);
 

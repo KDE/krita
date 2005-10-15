@@ -275,7 +275,11 @@ void KisFilterManager::slotConfigChanged()
     if( m_lastDialog == 0 )
         return;
     if(m_lastDialog->previewWidget()->getAutoUpdate())
+    {
         refreshPreview();
+    } else {
+        m_lastDialog->previewWidget()->needUpdate();
+    }
 }
 
 
@@ -292,6 +296,7 @@ void KisFilterManager::refreshPreview( )
     
     QRect rect = layer -> extent();
     m_lastFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
+    layer->image()->notify();
     m_lastDialog->previewWidget() -> slotUpdate();
 }
 

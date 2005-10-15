@@ -201,40 +201,62 @@ KisDesaturateFilter::KisDesaturateFilter()
 //XXX: This filter should write to dst, too!
 void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
+    KisColorAdjustment *adj = src->colorSpace()->createDesaturateAdjustment();
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    
-    KisColorSpace * scs = src -> colorSpace();
 
     setProgressTotalSteps(rect.width() * rect.height());
     Q_INT32 pixelsProcessed = 0;
 
     while( ! srcIt.isDone()  && !cancelRequested())
     {
-        if (srcIt.isSelected()) {
-            QColor c;
+        Q_UINT32 npix=0, maxpix = srcIt.nConseqPixels();
+        Q_UINT8 selectedness = srcIt.selectedness();
+        // The idea here is to handle stretches of completely selected and completely unselected pixels.
+        // Partially selected pixels are handled on pixel at a time.
+        switch(selectedness)
+        {
+            case MIN_SELECTED:
+                while(srcIt.selectedness()==MIN_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                dstIt+=npix;
+                pixelsProcessed += npix;
+                break;
 
-            const Q_UINT8 * srcData = srcIt.oldRawData();
-            // Try to be colorspace independent
-            scs -> toQColor(srcData, &c);
-            ;
-            /* I thought of using the HSV model, but GIMP seems to use
-                HSL for desaturating. Better use the gimp model for now
-                (HSV produces a lighter image than HSL) */
+            case MAX_SELECTED:
+            {
+                const Q_UINT8 *firstPixel = srcIt.oldRawData();
+                while(srcIt.selectedness()==MAX_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                // desaturate
+                src->colorSpace()->applyAdjustment(firstPixel, dstIt.rawData(), adj, npix);
+                pixelsProcessed += npix;
+                dstIt += npix;
+                break;
+            }
 
-//             Q_INT32 lightness = ( QMAX(QMAX(c.red(), c.green()), c.blue())
-//                     + QMIN(QMIN(c.red(), c.green()), c.blue()) ) / 2;
-
-            // XXX: BSAR: Doesn't this doe the same but better?
-		// XXX: Move to colorspace -- not independent
-            Q_INT32 lightness = qGray(c.red(), c.green(), c.blue());
-            scs -> fromQColor(QColor(lightness, lightness, lightness), dstIt.rawData());
+            default:
+                // adjust, but since it's partially selected we also only partially adjust
+                src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, 1);
+                const Q_UINT8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
+                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                src->colorSpace()->mixColors(pixels, weights, 1, dstIt.rawData());
+                ++srcIt;
+                ++dstIt;
+                pixelsProcessed++;
+                break;
         }
-        ++srcIt;
-        ++dstIt;
-
-        pixelsProcessed++;
         setProgress(pixelsProcessed);
     }
+
     setProgressDone();
 }

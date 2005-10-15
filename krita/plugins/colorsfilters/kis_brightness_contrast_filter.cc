@@ -89,16 +89,50 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
 
     while( ! srcIt.isDone()  && !cancelRequested())
     {
-        Q_UINT32 npix;
-        npix = srcIt.nConseqPixels();
+        Q_UINT32 npix=0, maxpix = srcIt.nConseqPixels();
+        Q_UINT8 selectedness = srcIt.selectedness();
+        // The idea here is to handle stretches of completely selected and completely unselected pixels.
+        // Partially selected pixels are handled on pixel at a time.
+        switch(selectedness)
+        {
+            case MIN_SELECTED:
+                while(srcIt.selectedness()==MIN_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                dstIt+=npix;
+                pixelsProcessed += npix;
+                break;
 
-        // change the brightness and contrast
-        src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, npix);
+            case MAX_SELECTED:
+            {
+                const Q_UINT8 *firstPixel = srcIt.oldRawData();
+                while(srcIt.selectedness()==MAX_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                // desaturate
+                src->colorSpace()->applyAdjustment(firstPixel, dstIt.rawData(), adj, npix);
+                pixelsProcessed += npix;
+                dstIt += npix;
+                break;
+            }
 
-        srcIt+=npix;
-        dstIt+=npix;
-
-        pixelsProcessed++;
+            default:
+                // adjust, but since it's partially selected we also only partially adjust
+                src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, 1);
+                const Q_UINT8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
+                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                src->colorSpace()->mixColors(pixels, weights, 1, dstIt.rawData());
+                ++srcIt;
+                ++dstIt;
+                pixelsProcessed++;
+                break;
+        }
         setProgress(pixelsProcessed);
     }
 

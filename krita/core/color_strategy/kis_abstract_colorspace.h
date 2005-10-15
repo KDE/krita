@@ -303,6 +303,10 @@ public:
      */
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
 
+    /**
+     * Create an adjustment object for desaturating
+     */
+    virtual KisColorAdjustment *createDesaturateAdjustment();
 
     /**
      * Apply the adjustment created with onr of the other functions

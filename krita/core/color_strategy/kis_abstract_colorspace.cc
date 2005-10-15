@@ -216,6 +216,87 @@ KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_
     return adj;
 }
 
+typedef struct {
+                double Saturation;
+
+} BCHSWADJUSTS, *LPBCHSWADJUSTS;
+
+
+static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID Cargo)
+{
+    cmsCIELab LabIn, LabOut;
+    cmsCIELCh LChIn, LChOut;
+    LPBCHSWADJUSTS bchsw = (LPBCHSWADJUSTS) Cargo;
+
+    cmsLabEncoded2Float(&LabIn, In);
+
+    cmsLab2LCh(&LChIn, &LabIn);
+
+    // Do some adjusts on LCh
+    LChOut.L = LChIn.L;
+    LChOut.C = 0;//LChIn.C + bchsw -> Saturation;
+    LChOut.h = LChIn.h;
+
+    cmsLCh2Lab(&LabOut, &LChOut);
+
+    // Back to encoded
+    cmsFloat2LabEncoded(Out, &LabOut);
+
+    return TRUE;
+}
+
+KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
+{
+    KisColorAdjustment *adj = new KisColorAdjustment;
+
+    adj->profiles[0] = m_profile->profile();
+    adj->profiles[2] = m_profile->profile();
+
+     LPLUT Lut;
+     BCHSWADJUSTS bchsw;
+
+     bchsw.Saturation = -25;
+
+     adj->profiles[1] = _cmsCreateProfilePlaceholder();
+     if (!adj->profiles[1]) // can't allocate
+        return NULL;
+
+     cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
+     cmsSetColorSpace(adj->profiles[1], icSigLabData);
+     cmsSetPCS(adj->profiles[1], icSigLabData);
+
+     cmsSetRenderingIntent(adj->profiles[1], INTENT_PERCEPTUAL); 
+
+     // Creates a LUT with 3D grid only
+     Lut = cmsAllocLUT();
+
+     cmsAlloc3DGrid(Lut, 32, 3, 3);
+
+     if (!cmsSample3DGrid(Lut, desaturateSampler, (LPVOID) &bchsw, 0)) {
+         // Shouldn't reach here
+         cmsFreeLUT(Lut);
+         cmsCloseProfile(adj->profiles[1]);
+         return NULL;
+     }
+
+    // Create tags
+
+    cmsAddTag(adj->profiles[1], icSigDeviceMfgDescTag,      (LPVOID) "(krita internal)"); 
+    cmsAddTag(adj->profiles[1], icSigProfileDescriptionTag, (LPVOID) "krita satuation abstract profile");  
+    cmsAddTag(adj->profiles[1], icSigDeviceModelDescTag,    (LPVOID) "satuation built-in");      
+
+    cmsAddTag(adj->profiles[1], icSigMediaWhitePointTag, (LPVOID) cmsD50_XYZ());
+
+    cmsAddTag(adj->profiles[1], icSigAToB0Tag, (LPVOID) Lut);
+
+    // LUT is already on virtual profile
+    cmsFreeLUT(Lut);
+
+    adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+
+    return adj;
+}
+
 void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
 {
     cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);

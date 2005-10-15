@@ -31,6 +31,8 @@
 
 #include <koUnitWidgets.h>
 
+#include "kis_factory.h"
+#include "kis_meta_registry.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_dlg_image_properties.h"
 #include "wdgnewimage.h"
@@ -69,7 +71,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
 
     fillCmbProfiles(image -> colorSpace() -> id());
-    
+
     if (image -> getProfile()) {
         m_page -> cmbProfile -> setCurrentText(image -> getProfile() -> productName());
     }
@@ -80,7 +82,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page -> sliderOpacity -> setEnabled(false); // XXX re-enable when figured out a way to do this
     m_page -> opacityPanel -> hide();
     m_page -> lblOpacity -> hide();
-    
+
     m_page -> cmbColor -> setEnabled(false); // XXX re-enable when figured out a way to do this
     m_page -> cmbColor -> hide();
     m_page -> lblColor -> hide();
@@ -89,10 +91,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
         this, SLOT(okClicked()));
 
 
-    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)), 
+    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
 
-    
+
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -132,7 +134,7 @@ QString KisDlgImageProperties::description()
 
 KisProfile * KisDlgImageProperties::profile()
 {
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( m_image -> colorSpace()->id() );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image -> colorSpace()->id() );
     Q_UINT32 index = m_page -> cmbProfile -> currentItem();
     return profileList.at(index);
 }
@@ -141,14 +143,14 @@ KisProfile * KisDlgImageProperties::profile()
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
-    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbProfile -> clear();
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());
     }
-    
+
 
 }
 

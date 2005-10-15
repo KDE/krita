@@ -1,0 +1,11 @@
+This library is still dependent upon krita/sdk for some headers. This
+should be changed. The headers concerned are:
+
+kis_id.h
+kis_global.h
+kis_annotation.h
+kis_integer_maths.h
+
+Additionally, there is a problem with the histogram producers: those are
+tied to the individual base colorspaces, but also need iterators, so they
+are in core for the moment.

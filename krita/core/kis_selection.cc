@@ -35,7 +35,7 @@
 KisSelection::KisSelection(KisPaintDeviceImplSP layer, const QString& name)
      : super(
         layer -> image(),
-        KisColorSpaceFactoryRegistry::getAlpha8(),
+        KisMetaRegistry::instance()->csRegistry()->getAlpha8(),
         name)
 {
     m_parentLayer = layer;
@@ -86,7 +86,8 @@ QImage KisSelection::maskImage()
 void KisSelection::select(QRect r)
 {
     KisFillPainter painter(this);
-    painter.fillRect(r, KisColor(Qt::white), MAX_SELECTED);
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    painter.fillRect(r, KisColor(Qt::white, cs), MAX_SELECTED);
     Q_INT32 x, y, w, h;
     extent(x, y, w, h);
     kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
@@ -95,7 +96,8 @@ void KisSelection::select(QRect r)
 void KisSelection::clear(QRect r)
 {
     KisFillPainter painter(this);
-    painter.fillRect(r, KisColor(Qt::white), MIN_SELECTED);
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    painter.fillRect(r, KisColor(Qt::white, cs), MIN_SELECTED);
 }
 
 void KisSelection::clear()

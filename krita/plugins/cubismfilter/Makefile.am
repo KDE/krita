@@ -2,7 +2,8 @@ kde_services_DATA = kritacubismfilter.desktop
 
 INCLUDES  = \
 	 -I$(srcdir)/../../sdk \
-	 -I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
         -I$(top_srcdir)/lib/kofficecore \

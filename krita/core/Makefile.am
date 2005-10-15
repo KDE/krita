@@ -1,13 +1,15 @@
 # all_includes must remain last!
 INCLUDES  = \
 	-I$(srcdir)/../sdk \
-	-I$(srcdir)/color_strategy \
 	-I$(srcdir)/tiles \
+	-I$(srcdir)/../libkritacolor \
+	-I$(srcdir)/../libkritacolor/color_strategy \
 	-I$(srcdir)/../ui \
 	-I../ui \
 	$(KOFFICE_INCLUDES) \
 	-I$(interfacedir) \
 	$(KOPAINTER_INCLUDES) \
+    $(OPENEXR_CFLAGS) \
 	$(all_includes)
 
 #CXXFLAGS = -shared -fPIC
@@ -15,10 +17,9 @@ INCLUDES  = \
 noinst_LTLIBRARIES = libkritacore.la
 
 libkritacore_la_LIBADD = tiles/libkistile.la \
-	color_strategy/libkiscolor_strategy.la \
-	$(LIB_KOPAINTER)
+	$(LIB_KOPAINTER) $(OPENEXR_LIBS)
 
-libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc \
+libkritacore_la_SOURCES = kis_paint_device_impl.cc kis_layer.cc \
 	kis_image.cc kis_doc.cc kis_view.cc kis_factory.cc kis_nameserver.cc \
 	kis_painter.cc kis_fill_painter.cc kis_gradient_painter.cc \
 	kis_convolution_painter.cc kis_cursor.cc kis_selection.cc kis_command.cc kis_background.cc \
@@ -29,7 +30,7 @@ libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc \
 	kis_clipboard.cc kis_filter.cc kis_filter_registry.cc kis_filter_strategy.cc \
 	kis_part_layer.cc kis_filter_manager.cc kis_tool_manager.cc \
 	kis_paint_device_iface.cc kis_paint_device_iface.skel kis_histogram.cc \
-    kis_boundary.cc kis_histogram_producer.cc kis_paintop.cc kis_paintop_registry.cc \
+    kis_boundary.cc kis_paintop.cc kis_paintop_registry.cc \
     kis_strategy_move.cc \
     kis_tool.cc \
     kis_tool_dummy.cc \
@@ -46,10 +47,9 @@ libkritacore_la_SOURCES = kis_color.cc kis_paint_device_impl.cc kis_layer.cc \
     kis_imagepipe_brush.cc \
     kis_palette.cc \
     kis_pattern.cc \
-    kis_profile.cc \
     kis_resource.cc \
     kis_resourceserver.cc \
-    kis_iterator.cc
+    kis_iterator.cc kis_meta_registry.cc
 
 
 noinst_HEADERS = kis_paint_device_impl.h kis_layer.h kis_image.h kis_doc.h \
@@ -60,7 +60,7 @@ noinst_HEADERS = kis_paint_device_impl.h kis_layer.h kis_image.h kis_doc.h \
 	kis_selection_manager.h kis_scale_visitor.h kis_rotate_visitor.h \
 	kis_filter.h kis_filter_registry.h kis_part_layer.h \
 	kis_filter_manager.h kis_tool_manager.h kis_histogram.h \
-	kis_paint_device_iface.h kis_boundary.h kis_histogram_producer.h kis_paintop_registry.h kis_paintop.h \
+	kis_paint_device_iface.h kis_boundary.h kis_paintop_registry.h kis_paintop.h \
     kis_strategy_move.h \
     kis_tool_shape.h \
     kis_tool_registry.h \
@@ -73,7 +73,6 @@ noinst_HEADERS = kis_paint_device_impl.h kis_layer.h kis_image.h kis_doc.h \
     kis_tool.h \
     kis_resourceserver.h \
     kis_resource.h \
-    kis_profile.h \
     kis_pattern.h \
     kis_palette.h \
     kis_imagepipe_brush.h \
@@ -92,5 +91,5 @@ if include_kunittest_tests
 TESTSDIR = tests
 endif
 
-SUBDIRS = tiles color_strategy  . $(TESTSDIR)
+SUBDIRS = tiles . $(TESTSDIR)
 

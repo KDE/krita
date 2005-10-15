@@ -116,8 +116,8 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
 
 }
 
-KisWetColorSpace::KisWetColorSpace(KisProfile *p) :
-    KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData, p)
+KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData, parent, p)
 {
     wet_init_render_tab();
 

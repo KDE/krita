@@ -26,10 +26,12 @@
 #include <ksharedptr.h>
 #include <kurl.h>
 
+#include "koUnit.h"
+
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_guide.h"
-
+#include "kis_annotation.h"
 #include <koffice_export.h>
 
 class KoCommandHistory;
@@ -45,6 +47,7 @@ class KisFilterStrategy;
 class KisImageIface;
 class KisProfile;
 class KisProgressDisplayInterface;
+
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
@@ -212,7 +215,9 @@ public:
     /** delete the annotation, if the image contains it */
     void removeAnnotation(QString type);
 
-    /** start of an iteration over the annotations of this image (including the ICC Profile) */
+    /** 
+     * Start of an iteration over the annotations of this image (including the ICC Profile) 
+     */
     vKisAnnotationSP_it beginAnnotations();
 
     /** end of an iteration over the annotations of this image */

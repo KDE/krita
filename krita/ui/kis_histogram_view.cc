@@ -38,7 +38,7 @@
 #include "kis_basic_histogram_producers.h"
 
 
-KisHistogramView::KisHistogramView(QWidget *parent, const char *name, WFlags f) 
+KisHistogramView::KisHistogramView(QWidget *parent, const char *name, WFlags f)
     : QLabel(parent, name, f)
 {
     // This is needed until we can computationally scale it well. Until then, this is needed
@@ -227,8 +227,7 @@ void KisHistogramView::setChannels()
     m_channels.clear();
     m_channelToOffset.clear();
 
-    KisIDList list = KisHistogramProducerFactoryRegistry::instance()
-            -> listKeysCompatibleWith(m_cs);
+    KisIDList list = KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
 
     if (list.count() == 0) {
         kdDebug() << "Attention! No native histogram for this colorspace. Using converted RGB"
@@ -238,8 +237,7 @@ void KisHistogramView::setChannels()
     } else {
         for (uint i = 0; i < list.count(); i++) {
             KisID id(*(list.at(i)));
-            addProducerChannels( KisHistogramProducerFactoryRegistry::instance()
-                    -> get(id) -> generate() );
+            addProducerChannels( KisHistogramProducerFactoryRegistry::instance() -> get(id) -> generate() );
         }
     }
 
@@ -267,11 +265,11 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
         }
 }
 
-void KisHistogramView::updateHistogram() 
+void KisHistogramView::updateHistogram()
 {
     Q_UINT32 height = this -> height();
     int selFrom, selTo; // from - to in bins
-    
+
     if (!m_currentProducer) { // Something's very wrong
         kdDebug() << "No producer for this colorspace to update histogram with!!" << endl;
         return;

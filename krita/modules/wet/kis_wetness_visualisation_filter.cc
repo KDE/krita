@@ -17,15 +17,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include <kdebug.h>
 
 #include <klocale.h>
-
+#include "kis_meta_registry.h"
 #include <kis_view.h>
 #include <kis_image.h>
 #include <kis_colorspace_factory_registry.h>
-
+#include <kis_factory.h>
 #include "kis_wet_colorspace.h"
 #include "kis_wetness_visualisation_filter.h"
 
@@ -41,7 +41,7 @@ void WetnessVisualisationFilter::setAction(KToggleAction* action) {
     if (!m_action)
         return;
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""),"") );
     Q_ASSERT(cs);
     m_action -> setChecked(cs -> paintWetness());
 }
@@ -53,7 +53,7 @@ void WetnessVisualisationFilter::slotActivated() {
         return;
     }
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""),"") );
     Q_ASSERT(cs);
     if (!m_action -> isChecked()) {
         m_timer.stop();
@@ -69,7 +69,7 @@ void WetnessVisualisationFilter::slotActivated() {
 void WetnessVisualisationFilter::slotTimeout() {
     kdDebug() << "repaint" << endl;
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""),"") );
     Q_ASSERT(cs);
     cs -> resetPhase();
 

@@ -27,8 +27,8 @@
 #include "kis_colorspace.h"
 
 KisHistogram::KisHistogram(KisLayerSP layer,
-               KisHistogramProducerSP producer,
-               const enumHistogramType type)
+                           KisHistogramProducerSP producer,
+                           const enumHistogramType type)
 {
     m_dev = layer.data();
     m_type = type;
@@ -68,7 +68,12 @@ void KisHistogram::updateHistogram()
 
     // Let the producer do it's work
     m_producer -> clear();
-    m_producer -> addRegionToBin(srcIt, cs);
+    int i;
+    while ( !srcIt.isDone() ) {
+        i = srcIt.nConseqPixels();
+        m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
+        srcIt += i;
+    }
 
     //kdDebug() << t.elapsed() << "ms for histogram (new version)" << endl;
 

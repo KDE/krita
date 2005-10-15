@@ -26,13 +26,12 @@
 #include "kis_global.h"
 #include "kis_types.h"
 
-
 /**
  * KisAlphaMask is intended to create alpha values from a QImage for use
  * in brush creation. It is not a generic alpha mask that can be used with
  * KisPaintDeviceImpls: use a KisSelection for that.
  */
-class KRITACORE_EXPORT KisAlphaMask : public KShared {
+class KisAlphaMask : public KShared {
     
  public:
     /**

@@ -25,13 +25,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_config.h"
-#include "kis_image.h"
 #include "kis_cmyk_colorspace.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
 
-#include "kis_factory.h"
 #include "kis_profile.h"
 #include "kis_integer_maths.h"
 
@@ -40,8 +37,8 @@ namespace cmyk {
     const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykColorSpace::KisCmykColorSpace(KisProfile *p) :
-    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, p)
+KisCmykColorSpace::KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));

@@ -31,7 +31,6 @@
 
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_image.h"
 #include "kis_gray_colorspace.h"
 #include "kis_integer_maths.h"
 
@@ -43,8 +42,8 @@ namespace {
     const Q_INT32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-KisGrayColorSpace::KisGrayColorSpace(KisProfile *p) :
-    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData, p)
+KisGrayColorSpace::KisGrayColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale/Alpha")), TYPE_GRAYA_8, icSigGrayData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, COLOR));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, ALPHA));

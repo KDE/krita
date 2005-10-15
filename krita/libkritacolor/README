@@ -1,0 +1,4 @@
+The color library is a wrapper around lcms and provides colorspaces
+that can do things to arrays of bytes that represent pixels. The
+number of colorspaces is extensible with plugins. The colorspace
+registry is responsible for loading the colorspace plugins.

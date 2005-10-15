@@ -24,6 +24,7 @@
 #include "kis_image_tester.h"
 #include "kis_image.h"
 #include "kis_factory.h"
+#include "kis_meta_registry.h"
 #include "kis_rgb_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_color.h"
@@ -54,7 +55,7 @@ void KisImageTester::allTests()
 
 void KisImageTester::mergeTests()
 {
-    KisColorSpace * colorSpace = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA", ""), "");
+    KisColorSpace * colorSpace = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""), "");
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 

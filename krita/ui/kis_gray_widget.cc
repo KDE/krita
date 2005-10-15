@@ -32,7 +32,10 @@
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 
+#include <kis_meta_registry.h>
+#include <kis_factory.h>
 #include <kis_color.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_canvas_subject.h>
 
 KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
@@ -83,17 +86,19 @@ void KisGrayWidget::slotChanged(int v)
 {
     v = 255 - v;
 
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setRgb(v, v, v);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
         if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor));
+            m_subject->setFGColor(KisColor(m_fgColor, cs));
     }
     else{
         m_bgColor.setRgb(v, v, v);
         m_ColorButton->setCurrent(KDualColorButton::Background);
         if(m_subject)
-            m_subject->setBGColor(m_bgColor);
+            m_subject->setBGColor(KisColor(m_bgColor, cs));
     }
 }
 
@@ -131,21 +136,25 @@ void KisGrayWidget::update(KisCanvasSubject *subject)
 void KisGrayWidget::slotFGColorSelected(const QColor& c)
 {
     m_fgColor = c;
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
     if(m_subject)
     {
         QColor bgColor = m_ColorButton -> background();
-        m_subject->setFGColor(m_fgColor);
+        m_subject->setFGColor(KisColor(m_fgColor, cs));
         //Background signal could be blocked so do that manually
         //see bug 106919
-        m_subject->setBGColor(bgColor);
+        m_subject->setBGColor(KisColor(bgColor, cs));
     }
 }
 
 void KisGrayWidget::slotBGColorSelected(const QColor& c)
 {
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
     m_bgColor = c;
     if(m_subject)
-        m_subject->setBGColor(m_bgColor);
+        m_subject->setBGColor(KisColor(m_bgColor, cs));
 }
 
 #include "kis_gray_widget.moc"

@@ -24,6 +24,6 @@ Comment[ru]=Цветовая модель для изображений в RGB (
 Comment[sv]=Färgmodell för 16-bitars heltal/kanal RGB-bilder
 Comment[tr]=Her kanala 16-bit tam sayı RGB resimleri için, renk modeli.
 Comment[xx]=xxColor model for 16-bit integer per channel RGB imagesxx
-ServiceTypes=Krita/CoreModule
+ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Version=2

@@ -79,6 +79,7 @@ Colorspace independence (found with the test colorstrategy)
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
 	* Merge grayscale layers back into one color image.
+    * Floodfill is not cs independent -- or if its, cmyk floodfill is broken.
     
 Core
 

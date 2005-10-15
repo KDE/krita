@@ -408,8 +408,9 @@ DCOPObject *KisPaintDeviceImpl::dcopObject()
 
 void KisPaintDeviceImpl::move(Q_INT32 x, Q_INT32 y)
 {
-        m_x = x;
-        m_y = y;
+    m_x = x;
+    m_y = y;
+
     if(m_selection)
     {
         m_selection->setX(x);
@@ -732,12 +733,12 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
 void KisPaintDeviceImpl::convertFromImage(const QImage& img)
 {
     // XXX: Apply import profile
-    if (colorSpace() == KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"")) {
+    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
-        KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"")->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+        KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, 0, 0, img.width(), img.height());
     }
 }

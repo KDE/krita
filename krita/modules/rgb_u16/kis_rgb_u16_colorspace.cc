@@ -28,7 +28,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_rgb_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_color_conversions.h"
@@ -43,8 +42,8 @@ namespace {
 //const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_OPAQUE;
 //const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
-KisRgbU16ColorSpace::KisRgbU16ColorSpace(KisProfile *p) :
-    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, p)
+KisRgbU16ColorSpace::KisRgbU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16), QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16), QColor(0,255,0)));

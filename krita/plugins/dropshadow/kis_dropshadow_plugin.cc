@@ -94,4 +94,4 @@ void KisDropshadowPlugin::slotDropshadow()
 
 }
 
-//#include "kis_dropshadow_plugin.moc.cc"
+#include "kis_dropshadow_plugin.moc"

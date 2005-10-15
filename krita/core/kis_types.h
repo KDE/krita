@@ -106,14 +106,6 @@ typedef KSharedPtr<KisAlphaColorSpace> KisAlphaColorSpaceSP;
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 
-
-class KisAnnotation;
-typedef KSharedPtr<KisAnnotation> KisAnnotationSP;
-typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
-typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
-typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
-
-
 class KisFileFormat;
 typedef KSharedPtr<KisFileFormat> KisFileFormatSP;
 typedef KisSharedPtrVector<KisFileFormat> vKisFileFormatSP;

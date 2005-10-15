@@ -4,7 +4,8 @@ kritarc_DATA = kritahistogramdocker.rc
 
 INCLUDES  = -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
 	-I$(srcdir)/../../ui \
 	-I$(top_srcdir)/lib/kofficecore \
 	-I$(top_srcdir)/lib/kopalette \

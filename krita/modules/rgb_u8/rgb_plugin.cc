@@ -32,11 +32,9 @@
 #include <kgenericfactory.h>
 
 #include <kis_colorspace_factory_registry.h>
-#include <kis_factory.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_plugin.h"
-
 #include "kis_rgb_colorspace.h"
 
 typedef KGenericFactory<RGBPlugin> RGBPluginFactory;
@@ -46,7 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( kritargbplugin, RGBPluginFactory( "krita" ) )
 RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(RGBPluginFactory::instance());
+    setInstance(RGBPluginFactory::instance());
 
     kdDebug(DBG_AREA_PLUGINS) << "RGB Color model plugin. Class: "
         << className()
@@ -54,14 +52,18 @@ RGBPlugin::RGBPlugin(QObject *parent, const char *name, const QStringList &)
         << parent -> className()
         << "\n";
 
-    if ( parent->inherits("KisFactory") )
+    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {
+	KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>(parent);
+
         KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
-        KisColorSpaceFactoryRegistry::instance() -> addProfile(defProfile);
-        KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(0);
+        f->addProfile(defProfile);
+
+
         KisColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceRGBA);
-        KisColorSpaceFactoryRegistry::instance() -> add(csFactory);
+        f->add(csFactory);
+
+        KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
                 (KisID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );

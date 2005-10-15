@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
+#include "kis_factory.h"
 #include "kis_undo_adapter.h"
 #include "kis_global.h"
 #include "kis_layer.h"
@@ -41,7 +42,7 @@
 #include "kis_config.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_profile.h"
-
+#include <kis_meta_registry.h>
 #include "kis_colorspace.h"
 
 #include "kis_previewview.h"
@@ -63,7 +64,7 @@ void KisPreviewView::setDisplayImage(KisImageSP i)
     connect(m_image, SIGNAL(sigImageUpdated(KisImageSP, QRect)), this, SLOT(slotUpdate(KisImageSP, QRect)));
 
     m_image = i;
-    
+
     updatedPreview();
 }
 
@@ -104,7 +105,7 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
 
-    KisProfile *  monitorProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
+    KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
     painter.fillRect(0, 0, width(), height(), KGlobalSettings::baseColor());
     image -> renderToPainter(0, 0, image -> width(), image -> height(), painter, monitorProfile);
 
@@ -167,7 +168,7 @@ void KisPreviewView::resizeEvent(QResizeEvent *) {
     emit updated();
 }
 
-void KisPreviewView::slotUpdate(KisImageSP /*img*/, QRect r) 
+void KisPreviewView::slotUpdate(KisImageSP /*img*/, QRect r)
 {
     kdDebug() << "slotUpdate called with rect: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "\n";
     // Assume that the preview image is just as big as the image we're previewing.

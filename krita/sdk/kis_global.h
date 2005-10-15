@@ -25,8 +25,8 @@
 #include <limits.h>
 #include <qglobal.h>
 #include <kglobal.h>
-#include <koGlobal.h>
-#include <koUnit.h>
+//include <koGlobal.h>
+//include <koUnit.h>
 
 #include "config.h"
 

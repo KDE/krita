@@ -34,8 +34,9 @@
 #include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-#include <koffice_export.h>
 #include "kis_paint_device.h"
+
+#include <koffice_export.h>
 
 class DCOPObject;
 

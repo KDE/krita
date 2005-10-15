@@ -91,4 +91,4 @@ void DlgDropshadow::okClicked()
     accept();
 }
 
-//#include "dlg_dropshadow.moc.cc"
+#include "dlg_dropshadow.moc"

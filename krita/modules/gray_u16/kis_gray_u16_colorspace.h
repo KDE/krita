@@ -38,7 +38,7 @@ public:
     };
 
 public:
-    KisGrayU16ColorSpace(KisProfile *p);
+    KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisGrayU16ColorSpace();
 
 public:
@@ -109,7 +109,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisGrayU16ColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisGrayU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };

@@ -312,7 +312,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
             begin = (255 + center - support)>>8; // takes ceiling by adding 255
             end = (center + support)>>8; // takes floor
 
-printf("sup=%d begin=%d end=%d",support,begin,end);
+////printf("sup=%d begin=%d end=%d",support,begin,end);
             Q_UINT8 selectedness = tmpSel[center>>8];
             if(selectedness)
             {
@@ -327,13 +327,13 @@ printf("sup=%d begin=%d end=%d",support,begin,end);
 
                     tmpw >>=8;
                     sum += tmpw;
-printf(" %d=%d",t,tmpw);
+//printf(" %d=%d",t,tmpw);
                     weight[num] = tmpw;
                     colors[num] = &tmpLine[srcpos*pixelSize];
                     num++;
                     t += dt;
                 }
-printf(" )=%d\n",sum);
+//printf(" )=%d\n",sum);
                 data = dstIt.rawData();
                 cs->mixColors(colors, weight, num, data);
                 data = dstSelIt.rawData();
@@ -419,18 +419,18 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
     m_progressTotalSteps = int(yscale * r.width() * r.height());
     m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
 
-QTime time;
-time.start();
+//QTime time;
+//time.start();
     if ( m_cancelRequested) {
         emit notifyProgressDone();
         return false;
     }
 
     transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
-printf("time taken first pass %d\n",time.restart());
+//printf("time taken first pass %d\n",time.restart());
     if(dev->hasSelection())
         dev->selection()->clear();
-printf("time taken to clear selection %d\n",time.restart());
+//printf("time taken to clear selection %d\n",time.restart());
 
     if ( m_cancelRequested) {
         emit notifyProgressDone();
@@ -439,10 +439,10 @@ printf("time taken to clear selection %d\n",time.restart());
 
     transformPass <KisHLineIteratorPixel>(tmpdev2, dev, xscale, xshear, xtranslate, m_filter);
 
-printf("time taken second pass %d\n",time.elapsed());
-printf("%d %d\n",xtranslate, ytranslate);
-printf("%d %d\n",m_progressStep,m_progressTotalSteps);
-printf("%f\n",rotation);
+//printf("time taken second pass %d\n",time.elapsed());
+//printf("%d %d\n",xtranslate, ytranslate);
+//printf("%d %d\n",m_progressStep,m_progressTotalSteps);
+//printf("%f\n",rotation);
 
     //progress info
         emit notifyProgressDone();

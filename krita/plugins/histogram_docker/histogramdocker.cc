@@ -29,12 +29,14 @@
 
 #include <kopalettemanager.h>
 
+#include "kis_meta_registry.h"
 #include <kis_doc.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_factory.h>
 
-#include <color_strategy/kis_basic_histogram_producers.h>
+#include <kis_basic_histogram_producers.h>
 #include <kis_colorspace_factory_registry.h>
 
 #include "histogramdocker.h"
@@ -131,9 +133,7 @@ void KritaHistogramDocker::producerChanged(int pos)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram(
-        new KisPaintDeviceImpl(KisColorSpaceFactoryRegistry::getAlpha8(), "Dummy"),
-        m_producer, LOGARITHMIC);
+    m_histogram = new KisHistogram( new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "Dummy"), m_producer, LOGARITHMIC);
 
     if (m_hview) {
         m_hview -> setCurrentChannels(m_producer, m_producer -> channels());

@@ -24,7 +24,7 @@
 #include "kis_pixel.h"
 #include <kis_paint_device_impl.h>
 
-template< typename _iTp> 
+template< typename _iTp>
 class KisIteratorPixelTrait
 {
 public:
@@ -46,32 +46,32 @@ public:
             return;
         m_device = rhs.m_device;
         m_underlyingIterator = rhs.m_underlyingIterator;
-        
+
         if (rhs.m_selectionIterator) {
             m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
         } else {
             m_selectionIterator = 0;
         }
     }
-    
+
     KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs)
     {
         if (this == &rhs)
             return *this;
         m_device = rhs.m_device;
         m_underlyingIterator = rhs.m_underlyingIterator;
-        
+
         delete m_selectionIterator;
         if (rhs.m_selectionIterator) {
             m_selectionIterator = new _iTp(*rhs.m_selectionIterator);
         } else {
             m_selectionIterator = 0;
         }
-        
+
         return *this;
     }
 
-    
+
 public:
     /**
      * Return the current pixel
@@ -85,7 +85,7 @@ public:
      */
     inline Q_UINT8 operator[](int index) const
             { return m_underlyingIterator->rawData()[index]; };
-            
+
     /**
      * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
      */
@@ -108,10 +108,21 @@ public:
                 return MAX_SELECTED;
             }
         };
-        
-                        
-                    
-    
+
+    /**
+     * Returns the selectionmask from the current point; this is guaranteed
+     * to have the same number of consecutive pixels that the iterator has
+     * at a given point. It return a 0 if there is no selection.
+     */
+    inline Q_UINT8 * selectionMask() const
+        {
+            if ( m_selectionIterator )
+                return m_selectionIterator->rawData();
+            else
+                return 0;
+        }
+
+
 protected:
     KisPaintDeviceImpl *m_device;
 

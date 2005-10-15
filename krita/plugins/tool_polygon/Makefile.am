@@ -3,6 +3,8 @@ kde_services_DATA = kritatoolpolygon.desktop
 # all_includes must remain last!
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
 	-I$(srcdir)/../../ui \
         -I$(top_srcdir)/lib/kofficecore \
         -I$(top_srcdir)/lib/kofficeui \

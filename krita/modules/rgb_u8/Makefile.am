@@ -10,18 +10,14 @@ kde_services_DATA = kritargbplugin.desktop
 #EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  =  -I$(srcdir)/../../sdk \
-	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy \
-	-I$(srcdir)/../../ui \
-	$(KOFFICE_INCLUDES) \
-	-I$(interfacedir) \
-	$(KOPAINTER_INCLUDES) \
+	-I$(srcdir)/../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../libkritacolor/ \
 	$(all_includes)
 
 lib_LTLIBRARIES = libkritargb.la
 libkritargb_la_SOURCES = kis_rgb_colorspace.cc
 libkritargb_la_LDFLAGS = $(all_libraries)
-libkritargb_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+libkritargb_la_LIBADD =  ../../libkritacolor/libkritacolor.la
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritargbplugin.la
@@ -31,7 +27,7 @@ kritargbplugin_la_SOURCES = rgb_plugin.cc
 noinst_HEADERS = rgb_plugin.h kis_rgb_colorspace.h
 
 kritargbplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritargbplugin_la_LIBADD =  ../../libkritacommon.la libkritargb.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritargbplugin_la_LIBADD =  libkritargb.la ../../libkritacolor/libkritacolor.la
 
 kritargbplugin_la_METASOURCES = AUTO
 #METASOURCES = AUTO # XXX: which of the two?

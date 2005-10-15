@@ -25,6 +25,11 @@
 
 void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceImplSP dev) {
     m_producer -> clear();
-    KisRectIteratorPixel it = dev -> createRectIterator(m_x, m_y, m_w, m_h, false);
-    m_producer -> addRegionToBin(it, dev -> colorSpace());
+    KisRectIteratorPixel srcIt = dev -> createRectIterator(m_x, m_y, m_w, m_h, false);
+    int i;
+    while ( !srcIt.isDone() ) {
+        i = srcIt.nConseqPixels();
+        m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, dev -> colorSpace());
+        srcIt += i;
+    }
 }

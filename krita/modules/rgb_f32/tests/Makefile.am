@@ -1,9 +1,7 @@
 AM_CPPFLAGS = -I$(srcdir)/.. \
 	-I$(srcdir)/../../../sdk \
-	-I$(srcdir)/../../../core \
-	-I$(srcdir)/../../../core/resources \
-	-I$(srcdir)/../../../core/color_strategy \
-	-I$(srcdir)/../../../ui \
+	-I$(srcdir)/../../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../../color_strategy/ \
 	$(all_includes)
 
 # The check_ target makes sure we don't install the modules,

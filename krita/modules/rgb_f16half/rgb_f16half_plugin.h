@@ -22,9 +22,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-
 /**
  * A plugin wrapper around the RGB F16Half colour space strategy.
  */

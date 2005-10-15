@@ -31,7 +31,7 @@ class KisAccumulatingHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     // Iterates over nothing at all, just does its thing with all the source producers
-    virtual void addRegionToBin(KisRectIteratorPixel& it, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8* selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
     virtual QString positionToString(double pos) const
         { return m_source -> at(0) -> positionToString(pos); }
 

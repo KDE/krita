@@ -42,6 +42,7 @@
 #include <qstringlist.h>
 
 // KDE
+#include <kis_meta_registry.h>
 #include <kglobalsettings.h>
 #include <dcopobject.h>
 #include <kaction.h>
@@ -222,8 +223,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     else
         setXMLFile("krita.rc");
 
-    m_fg = KisColor(Qt::black);
-    m_bg = KisColor(Qt::white);
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    m_fg = KisColor(Qt::black, cs);
+    m_bg = KisColor(Qt::white, cs);
 
     createLayerBox();
 
@@ -457,7 +459,7 @@ void KisView::resetMonitorProfile()
     if (m_monitorProfile == 0) {
         KisConfig cfg;
         QString monitorProfileName = cfg.monitorProfile();
-        m_monitorProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
+        m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
     }
 
 }
@@ -1063,11 +1065,11 @@ void KisView::slotImageProperties()
     if (!img) return;
 
     KisDlgImageProperties dlg(img, this);
-    
+
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.imageWidth() != img -> width() ||
             dlg.imageHeight() != img -> height()) {
-            
+
             resizeCurrentImage(dlg.imageWidth(),
                                dlg.imageHeight());
         }
@@ -1554,7 +1556,7 @@ void KisView::print(KPrinter& printer)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KisProfile *  printerProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(printerProfileName);
+    KisProfile *  printerProfile = KisMetaRegistry::instance()->csRegistry() ->getProfileByName(printerProfileName);
 
     if (printerProfile != 0)
         kdDebug(DBG_AREA_CMS) << "Printer profile: " << printerProfile -> productName() << "\n";
@@ -1933,7 +1935,7 @@ void KisView::layerAdd()
         NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisColorSpaceFactoryRegistry::instance() -> getColorSpace(dlg.colorSpaceID(),""));
+            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisMetaRegistry::instance()->csRegistry()->getColorSpace(dlg.colorSpaceID(),""));
             if (layer) {
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 resizeEvent(0);

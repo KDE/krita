@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_rgb_colorspace.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_color_conversions.h"
@@ -44,8 +43,8 @@ namespace {
     const Q_INT32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisRgbColorSpace::KisRgbColorSpace(KisProfile *p) :
-    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData, p)
+KisRgbColorSpace::KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, 1, QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, 1, QColor(0,255,0)));
@@ -129,7 +128,8 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         colors++;
     }
 
-    Q_ASSERT(newAlpha <= 255);
+    //Q_ASSERT(newAlpha <= 255);
+    if (newAlpha > 255) newAlpha = 255;
 
     dst[PIXEL_ALPHA] = newAlpha;
 
@@ -142,17 +142,20 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
     // Divide by 255.
     totalRed += 0x80;
     Q_UINT32 dstRed = ((totalRed >> 8) + totalRed) >> 8;
-    Q_ASSERT(dstRed <= 255);
+    //Q_ASSERT(dstRed <= 255);
+    if (dstRed > 255) dstRed = 255;
     dst[PIXEL_RED] = dstRed;
 
     totalGreen += 0x80;
     Q_UINT32 dstGreen = ((totalGreen >> 8) + totalGreen) >> 8;
-    Q_ASSERT(dstGreen <= 255);
+    //Q_ASSERT(dstGreen <= 255);
+    if (dstGreen > 255) dstGreen = 255;
     dst[PIXEL_GREEN] = dstGreen;
 
     totalBlue += 0x80;
     Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
-    Q_ASSERT(dstBlue <= 255);
+    //Q_ASSERT(dstBlue <= 255);
+    if (dstBlue > 255) dstBlue = 255;
     dst[PIXEL_BLUE] = dstBlue;
 }
 
@@ -224,7 +227,7 @@ QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     img = img.copy();
 
     if (dstProfile != 0) {
-        KisColorSpace *dstCS = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),  dstProfile->productName());
+        KisColorSpace *dstCS = m_parent->getColorSpace(KisID("RGBA",""),  dstProfile->productName());
         convertPixelsTo(img.bits(),
                         img.bits(), dstCS,
                         width * height, renderingIntent);

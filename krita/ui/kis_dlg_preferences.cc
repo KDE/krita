@@ -38,6 +38,8 @@
 #include <klineedit.h>
 #include <kiconloader.h>
 
+#include <kis_meta_registry.h>
+#include "kis_factory.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
@@ -58,17 +60,17 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 {
 
     KisConfig cfg;
-    
+
     m_cmbCursorShape -> setCurrentItem(cfg.cursorStyle());
     grpDockability->setButton(cfg.dockability());
     numDockerFontSize->setValue((int)cfg.getDefaultDockerFontSize());
-    
+
 }
 
 void GeneralTab::setDefault()
 {
     KisConfig cfg;
-    
+
     m_cmbCursorShape->setCurrentItem( cfg.getDefaultCursorStyle());
     grpDockability->setButton(cfg.getDefaultDockability());
     numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));
@@ -104,10 +106,10 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
     KisConfig cfg;
 
-    m_page -> cmbWorkingColorSpace -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
+    m_page -> cmbWorkingColorSpace -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
     m_page -> cmbWorkingColorSpace -> setCurrentText(cfg.workingColorSpace());
 
-    m_page -> cmbPrintingColorSpace -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
+    m_page -> cmbPrintingColorSpace -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
     m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
     refillMonitorProfiles(KisID(cfg.workingColorSpace(), ""));
@@ -157,7 +159,7 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 {
-    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
 
     m_page -> cmbMonitorProfile -> clear();
     m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
@@ -165,7 +167,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     if ( !csf )
     return;
 
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigDisplayClass)
@@ -176,12 +178,12 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
 
 void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 {
-    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbPrintProfile -> clear();
     m_page -> cmbPrintProfile -> insertItem(i18n("None"));
     if ( !csf )
         return;
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigOutputClass)
@@ -192,12 +194,12 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 
 void ColorSettingsTab::refillImportProfiles(const KisID & s)
 {
-    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbImportProfile -> clear();
     m_page -> cmbImportProfile -> insertItem(i18n("None"));
     if ( !csf )
         return;
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         if ((*it) -> deviceClass() == icSigInputClass)
@@ -289,7 +291,7 @@ bool PreferencesDialog::editPreferences()
         cfg.setCursorStyle(dialog -> m_general -> cursorStyle());
         cfg.setDockability( dialog->m_general->dockability() );
         cfg.setDockerFontSize( dialog->m_general->dockerFontSize() );
-                
+
         // Color settings
         cfg.setMonitorProfile( dialog -> m_colorSettings -> m_page -> cmbMonitorProfile -> currentText());
         cfg.setWorkingColorSpace( dialog -> m_colorSettings -> m_page -> cmbWorkingColorSpace -> currentText());

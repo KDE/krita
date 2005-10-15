@@ -30,7 +30,7 @@
 
 class KRITACORE_EXPORT KisGrayColorSpace : public KisU8BaseColorSpace {
 public:
-    KisGrayColorSpace(KisProfile *p);
+    KisGrayColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisGrayColorSpace();
 
 public:
@@ -110,7 +110,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisGrayColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisGrayColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };

@@ -3,7 +3,8 @@ AM_CXXFLAGS = -DQT_PLUGIN
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../ui \
 	-I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
 	$(all_includes)
 
 kde_widget_LTLIBRARIES = kritawidgets.la

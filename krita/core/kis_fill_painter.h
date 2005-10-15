@@ -21,7 +21,9 @@
 
 #include <qrect.h>
 
+#include "kis_meta_registry.h"
 #include "kis_color.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include <koffice_export.h>
@@ -135,14 +137,16 @@ void KisFillPainter::fillRect(const QRect& rc, const KisColor& c)
 inline
 void KisFillPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
 {
-    KisColor c(Qt::black);
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KisColor c(Qt::black, cs);
     fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT);
 }
 
 inline
 void KisFillPainter::eraseRect(const QRect& rc)
 {
-    KisColor c(Qt::black);
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KisColor c(Qt::black, cs);
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT);
 }
 

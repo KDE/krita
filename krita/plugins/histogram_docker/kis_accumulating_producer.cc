@@ -30,7 +30,7 @@ KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHist
 {
 }
 
-void KisAccumulatingHistogramProducer::addRegionToBin(KisRectIteratorPixel&, KisColorSpace*) {
+void KisAccumulatingHistogramProducer::addRegionToBin(Q_UINT8 *, Q_UINT8*, Q_UINT32, KisColorSpace*) {
     uint count = m_source -> count();
     for (uint i = 0; i < count; i++) {
         KisHistogramProducer* p = m_source -> at(i);

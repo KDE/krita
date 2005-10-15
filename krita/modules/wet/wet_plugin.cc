@@ -41,6 +41,7 @@
 #include <kopalettemanager.h>
 #include <koMainWindow.h>
 
+#include "kis_meta_registry.h"
 #include <kis_factory.h>
 #include <kis_image.h>
 #include <kis_global.h>
@@ -78,11 +79,11 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {
-        KisColorSpace * colorSpaceWet = new KisWetColorSpace(0);
+        KisColorSpace * colorSpaceWet = new KisWetColorSpace(KisMetaRegistry::instance()->csRegistry(), 0);
         KisColorSpaceFactory * csf = new KisWetColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceWet);
         // colorspace
-        KisColorSpaceFactoryRegistry::instance() -> add(csf);
+        KisMetaRegistry::instance()->csRegistry() -> add(csf);
         // histogram producer
         KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>

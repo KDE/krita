@@ -34,7 +34,7 @@ Getter/setter
 	Krita doesn't use Qt's properties -- yet. If you want to introduce use of
 	properties, convert any and all classes in Krita before committing.
 
-	Getter/setters are named 'getX() for getters and x(int x) for setters. If you
+	Getter/setters are named 'x() for getters and setX(int x) for setters. If you
 	come across violations of this rule, change the code.	
 
 	Note that this does not hold for dialogs: getter in dialogs

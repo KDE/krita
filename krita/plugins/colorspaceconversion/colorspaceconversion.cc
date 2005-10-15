@@ -43,9 +43,11 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include "kis_meta_registry.h"
 #include <kis_view.h>
 #include <kis_paint_device_impl.h>
 #include <kis_colorspace_factory_registry.h>
+#include <kis_factory.h>
 #include <kis_cmb_idlist.h>
 
 #include "colorspaceconversion.h"
@@ -98,7 +100,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
 
         image -> setProfile(cs->getProfile());
         QApplication::setOverrideCursor(KisCursor::waitCursor());
@@ -124,7 +126,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());

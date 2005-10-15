@@ -23,13 +23,12 @@
 #include <koffice_export.h>
 #include "kis_pixel.h"
 #include "kis_global.h"
-#include "kis_types.h"
 #include "kis_u8_base_colorspace.h"
 
 class KRITACORE_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
-    KisCmykColorSpace(KisProfile *p);
+    KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisCmykColorSpace();
 
 public:
@@ -95,7 +94,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisCmykColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisCmykColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Adobe CMYK"; }; //  Do not i18n -- this is from a data file
 };

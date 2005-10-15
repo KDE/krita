@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_factory.h>
+
 #include <kis_colorspace_factory_registry.h>
 #include <kis_basic_histogram_producers.h>
 
@@ -50,12 +50,14 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
            << parent -> className()
            << "\n";
 
-    if ( parent->inherits("KisFactory") )
+    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {
-        KisColorSpace * colorSpaceCMYK = new KisCmykColorSpace(0);
+        KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>( parent );
+
+        KisColorSpace * colorSpaceCMYK = new KisCmykColorSpace(f, 0);
         KisColorSpaceFactory * csf = new KisCmykColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceCMYK);
-        KisColorSpaceFactoryRegistry::instance() -> add(csf);
+        f->add(csf);
 
         if (colorSpaceCMYK -> valid()) {
              KisHistogramProducerFactoryRegistry::instance() -> add(

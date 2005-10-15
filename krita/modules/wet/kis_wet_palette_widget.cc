@@ -36,6 +36,8 @@
 #include <knuminput.h>
 #include <koFrameButton.h>
 
+#include <kis_meta_registry.h>
+#include <kis_factory.h>
 #include <kis_canvas_subject.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_color.h>
@@ -187,8 +189,7 @@ void KisWetPaletteWidget::update(KisCanvasSubject *subject)
 
 void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 {
-    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
 
     WetPack pack;
@@ -208,15 +209,14 @@ void KisWetPaletteWidget::slotWetnessChanged(int n)
     if (!m_subject)
         return;
 
-    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
-    
+
     KisColor color = m_subject -> fgColor();
     color.convertTo(cs);
     WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));
     pack.paint.w = 15 * n;
-    
+
     color.setColor(reinterpret_cast<Q_UINT8*>(&pack), cs);
     m_subject->setFGColor(color);
 }
@@ -227,9 +227,9 @@ void KisWetPaletteWidget::slotStrengthChanged(double n)
         return;
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("WET", ""), ""));
+            KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""), ""));
     Q_ASSERT(cs);
-    
+
     KisColor color = m_subject -> fgColor();
     color.convertTo(cs);
     WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));

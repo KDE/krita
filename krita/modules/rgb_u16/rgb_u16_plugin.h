@@ -21,9 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-
 /**
  * A plugin wrapper around the RGB U16 colour space strategy.
  */

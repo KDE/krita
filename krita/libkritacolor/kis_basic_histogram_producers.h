@@ -1,0 +1,186 @@
+/*
+ *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef _KIS_BASIC_HISTOGRAM_PRODUCERS_
+#define _KIS_BASIC_HISTOGRAM_PRODUCERS_
+
+#include <qvaluevector.h>
+#include <klocale.h>
+
+#include "config.h"
+
+#include "kis_histogram_producer.h"
+#include "kis_colorspace.h"
+#include "kis_id.h"
+
+class KisBasicHistogramProducer : public KisHistogramProducer {
+public:
+    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs);
+    virtual ~KisBasicHistogramProducer() {}
+
+    virtual void clear();
+
+    virtual void setView(double from, double size) { m_from = from; m_width = size; }
+
+    virtual const KisID& id() const { return m_id; }
+    virtual QValueVector<KisChannelInfo *> channels() { return m_colorSpace -> channels(); }
+    virtual Q_INT32 numberOfBins() { return m_nrOfBins; }
+    virtual double viewFrom() const { return m_from; }
+    virtual double viewWidth() const { return m_width; }
+
+    virtual Q_INT32 count() { return m_count; }
+
+    virtual Q_INT32 getBinAt(int channel, int position)
+        { return m_bins.at(externalToInternal(channel)).at(position); }
+
+    virtual Q_INT32 outOfViewLeft(int channel)
+        { return m_outLeft.at(externalToInternal(channel)); }
+
+    virtual Q_INT32 outOfViewRight(int channel)
+        { return m_outRight.at(externalToInternal(channel)); }
+
+protected:
+    /**
+     * The order in which channels() returns is not the same as the internal representation,
+     * that of the pixel internally. This method converts external usage to internal usage.
+     * This method uses some basic assumtpions about the layout of the pixel, so _extremely_
+     * exotic spaces might want to override this (see makeExternalToInternal source for
+     * those assumptions)
+     **/
+    virtual int externalToInternal(int ext) {
+        if (channels().count() > 0 && m_external.count() == 0) // Set up the translation table
+            makeExternalToInternal();
+        return m_external.at(ext);
+    }
+    // not virtual since that is useless: we call it from constructor
+    void makeExternalToInternal();
+    typedef QValueVector<Q_UINT32> vBins;
+    QValueVector<vBins> m_bins;
+    vBins m_outLeft, m_outRight;
+    double m_from, m_width;
+    Q_INT32 m_count;
+    int m_channels, m_nrOfBins;
+    KisColorSpace *m_colorSpace;
+    KisID m_id;
+    QValueVector<Q_INT32> m_external;
+};
+
+class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const { return 1.0; }
+};
+
+class KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+};
+
+class KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+};
+
+#if HAVE_OPENEXR
+class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+};
+#endif
+
+/**
+ * Parametrized on a specific KisHistogramProducer. Its generated producers
+ * will have the same KisID as the factory's. This is acceptable because we can't mix
+ * Factories with Producers in the code because they are incompatible types, and
+ * in the GUI we actually only need a producer's name, not a factory's.
+ */
+template<class T> class KisBasicHistogramProducerFactory : public KisHistogramProducerFactory {
+public:
+    KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *cs)
+        : KisHistogramProducerFactory(id), m_cs(cs) {}
+    virtual ~KisBasicHistogramProducerFactory() {}
+    virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
+    virtual bool isCompatibleWith(KisColorSpace* cs) const { return cs -> id() == m_cs -> id(); }
+protected:
+    KisColorSpace *m_cs;
+};
+
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to RGB8 with toQColor, and then does its counting on RGB. This is NOT registered with the
+ * Registry, because it isCompatibleWith all colorspaces, and should only be used in extreme
+ * cases (like no other producer being available
+ **/
+class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisGenericRGBHistogramProducer();
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+    virtual QValueVector<KisChannelInfo *> channels();
+protected:
+    QValueVector<KisChannelInfo *> m_channelsList;
+};
+
+/** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
+public:
+    KisGenericRGBHistogramProducerFactory()
+        : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
+    virtual ~KisGenericRGBHistogramProducerFactory() {}
+    virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
+    virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+};
+
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to LAB, and then does its counting on the L channel also known as lightnessRGB.
+ * It isCompatibleWith all colorspaces
+ **/
+class KisGenericLightnessHistogramProducer : public KisBasicHistogramProducer {
+public:
+    KisGenericLightnessHistogramProducer();
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual QString positionToString(double pos) const;
+    virtual double maximalZoom() const;
+    virtual QValueVector<KisChannelInfo *> channels();
+protected:
+    QValueVector<KisChannelInfo *> m_channelsList;
+};
+
+/** KisGenericLightnessHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericLightnessHistogramProducerFactory : public KisHistogramProducerFactory {
+public:
+    KisGenericLightnessHistogramProducerFactory()
+        : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", i18n("Generic Lab Lightness Histogram"))) {}
+    virtual ~KisGenericLightnessHistogramProducerFactory() {}
+    virtual KisHistogramProducerSP generate() { return new KisGenericLightnessHistogramProducer(); }
+    virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+};
+#endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

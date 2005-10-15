@@ -42,7 +42,7 @@ public:
     };
 
 public:
-    KisRgbU16ColorSpace(KisProfile *p);
+    KisRgbU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbU16ColorSpace();
 
 public:
@@ -127,7 +127,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbU16ColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisRgbU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

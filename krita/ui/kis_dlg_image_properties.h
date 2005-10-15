@@ -20,6 +20,8 @@
 
 #include <kdialogbase.h>
 
+#include <kis_types.h>
+
 class WdgNewImage;
 class QButtonGroup;
 class KisID;

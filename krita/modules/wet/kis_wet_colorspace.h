@@ -91,7 +91,7 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
 class KisWetColorSpace : public KisAbstractColorSpace {
 public:
-    KisWetColorSpace(KisProfile *p);
+    KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisWetColorSpace();
 
 public:
@@ -192,7 +192,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisWetColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisWetColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB"; };
 };

@@ -19,6 +19,7 @@
  */
 #include "sdk/kis_id.h"
 #include "sdk/kis_generic_registry.h"
+#include "libkritacolor/color_strategy/kis_colorspace_factory_registry.h"
 #include "core/kis_factory.h"
 
 

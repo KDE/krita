@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_cmyk_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_color_conversions.h"
@@ -38,8 +37,8 @@ namespace {
     const Q_INT32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisProfile *p) :
-    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, p)
+KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0 * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1 * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));

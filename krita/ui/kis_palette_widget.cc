@@ -45,13 +45,16 @@
 #include <kseparator.h>
 #include <kpalette.h>
 #include <kimageeffect.h>
-#include <kis_color.h>
 
 #include <kcolordialog.h>
 #include <kcolordrag.h>
 #include <config.h>
 #include <kdebug.h>
 
+#include <kis_meta_registry.h>
+#include <kis_color.h>
+#include <kis_factory.h>
+#include <kis_colorspace_factory_registry.h>
 #include "kis_palette_widget.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
@@ -172,17 +175,19 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
 
 void KisPaletteWidget::slotColorCellSelected( int col )
 {
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
-    emit colorSelected( KisColor(m_currentPalette->getColor(col).color) );
+    emit colorSelected( KisColor(m_currentPalette->getColor(col).color, cs));
 
 }
 
 void KisPaletteWidget::slotColorCellDoubleClicked( int col )
 {
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
         return;
-    emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color), m_currentPalette->getColor(col).name);
+    emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color, cs), m_currentPalette->getColor(col).name);
 }
 
 

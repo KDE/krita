@@ -21,16 +21,19 @@
 #ifndef __kis_factory_h__
 #define __kis_factory_h__
 
+#include <qptrlist.h>
+
+#include <kparts/plugin.h>
+
 #include <koFactory.h>
+
 #include "kis_generic_registry.h"
 
 #include <koffice_export.h>
 
-
 class KInstance;
 class KisResourceServerBase;
 class KAboutData;
-
 
 typedef KisGenericRegistry<KisResourceServerBase*> KisResourceServerRegistry;
 
@@ -51,12 +54,14 @@ public:
 
     static KAboutData        *aboutData();
     static KInstance         *instance();
+
     static KisResourceServerRegistry *rServerRegistry();
 
 private:
-    static KInstance           *s_instance;
-    static KAboutData          *s_aboutData;
-    static KisResourceServerRegistry *s_rserverRegistry;
+    static KInstance                    *s_instance;
+    static KAboutData                   *s_aboutData;
+    static KisResourceServerRegistry    *s_rserverRegistry;
+
 };
 
 #endif

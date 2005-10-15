@@ -26,12 +26,10 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_factory.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "gray_plugin.h"
-
 #include "kis_gray_colorspace.h"
 
 typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
@@ -50,21 +48,29 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
            << "\n";
 
     // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KisFactory") )
+    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {
+
+        KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>( parent );
+
         // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
         LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
         cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
         cmsFreeGamma(Gamma);
         KisProfile *defProfile = new KisProfile(hProfile);
-        KisColorSpaceFactoryRegistry::instance() -> addProfile(defProfile);
-        KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace(0);
+
+        f->addProfile(defProfile);
+
+        KisColorSpace * colorSpaceGrayA = new KisGrayColorSpace(f, 0);
+
         KisColorSpaceFactory * csf = new KisGrayColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceGrayA);
-        KisColorSpaceFactoryRegistry::instance() -> add(csf);
+
+        f->add(csf);
+
         KisHistogramProducerFactoryRegistry::instance() -> add(
-                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
+            new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
+            (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
     }
 
 }

@@ -4,7 +4,8 @@ INCLUDES = \
     -I$(srcdir)/../core/filters \
 	-I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
-    -I$(srcdir)/../core/color_strategy \
+	-I$(srcdir)/../libkritacolor \
+    -I$(srcdir)/../libkritacolor/color_strategy \
     $(KOFFICE_INCLUDES) \
     $(KOPAINTER_INCLUDES) \
 	$(all_includes)

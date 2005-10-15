@@ -40,7 +40,7 @@ public:
     };
 
 public:
-    KisCmykU16ColorSpace(KisProfile *p);
+    KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisCmykU16ColorSpace();
 
 public:
@@ -114,7 +114,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisCmykU16ColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB"; };
 };

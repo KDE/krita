@@ -4,11 +4,11 @@ EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-        -I$(srcdir)/../../core/color_strategy \
-        -I$(srcdir)/../../ui \
-        -I$(interfacedir) \
-        -I$(top_srcdir)/lib/kofficecore \
-        -I$(top_srcdir)/lib/kofficeui \
+ 	 -I$(srcdir)/../../libkritacolor/ \
+	 -I$(srcdir)/../../libkritacolor/color_strategy \
+     -I$(srcdir)/../../ui \
+     -I$(top_srcdir)/lib/kofficecore \
+     -I$(top_srcdir)/lib/kofficeui \
 	 $(all_includes)
 
 kde_module_LTLIBRARIES = kritadropshadow.la
@@ -24,3 +24,5 @@ kritadropshadow_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritadropshadow_la_LIBADD =  ../../libkritacommon.la 
 
 kritadropshadow_la_METASOURCES = AUTO
+
+KDE_OPTIONS = nofinal

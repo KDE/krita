@@ -37,6 +37,8 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
+#include <kis_factory.h>
+#include "kis_meta_registry.h"
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_transaction.h>
@@ -131,10 +133,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("GRAYA",""),"" ), ch->name());
+                dev = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ), ch->name());
             }
             else {
-                dev = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("GRAYA16",""),"" ), ch->name());
+                dev = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ), ch->name());
                 destSize = 2;
             }
         }

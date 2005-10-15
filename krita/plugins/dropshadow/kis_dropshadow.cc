@@ -38,9 +38,11 @@
 #include <knuminput.h>
 
 #include <kis_doc.h>
+#include <kis_factory.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
+#include "kis_meta_registry.h"
 #include <kis_transaction.h>
 #include <kis_undo_adapter.h>
 #include <kis_global.h>
@@ -83,7 +85,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         t = new KisTransaction(i18n("Add dropshadow"), src.data());
     }
     
-    KisLayerSP shadowLayer = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
+    KisLayerSP shadowLayer = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
     KisLayerSP bShadowLayer;
 
     QRect rect = src->exactBounds();
@@ -111,7 +113,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
     if( blurradius > 0 )
     {
-        bShadowLayer = new KisLayer( KisColorSpaceFactoryRegistry::instance() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
+        bShadowLayer = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
         gaussianblur(shadowLayer, bShadowLayer, rect, blurradius, blurradius, BLUR_RLE, progress);
         shadowLayer = bShadowLayer;
     }
@@ -731,4 +733,4 @@ void KisDropshadow::separate_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes)
     }
 }
 
-//#include "kis_dropshadow.moc.cc"
+#include "kis_dropshadow.moc"

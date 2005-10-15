@@ -3,7 +3,8 @@ kde_services_DATA = kritadefaulttools.desktop
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
-	-I$(srcdir)/../core/color_strategy/ \
+	-I$(srcdir)/../libkritacolor/color_strategy \
+	-I$(srcdir)/../libkritacolor \
 	-I$(srcdir)/../ui \
 	-I../ui \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
@@ -16,9 +17,9 @@ kritadefaulttools_la_SOURCES = \
 	kis_tool_brush.cc \
 	kis_tool_line.cc \
 	kis_tool_duplicate.cc \
-        kis_tool_fill.cc \
-        kis_tool_rectangle.cc \
-        kis_tool_ellipse.cc \
+    kis_tool_fill.cc \
+    kis_tool_rectangle.cc \
+    kis_tool_ellipse.cc \
 	kis_tool_pan.cc \
 	kis_tool_text.cc \
 	kis_tool_gradient.cc \

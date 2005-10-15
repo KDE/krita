@@ -1,9 +1,7 @@
 AM_CPPFLAGS = -I$(srcdir)/.. \
 	-I$(srcdir)/../../../sdk \
-	-I$(srcdir)/../../../core \
-	-I$(srcdir)/../../../core/resources \
-	-I$(srcdir)/../../../core/color_strategy \
-	-I$(srcdir)/../../../ui \
+	-I$(srcdir)/../../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../../color_strategy/ \
 	-I$(srcdir)/../../../modules/rgb_f32 \
 	$(OPENEXR_CFLAGS) \
 	$(all_includes)

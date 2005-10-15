@@ -5,7 +5,8 @@ kde_services_DATA = kritaexample.desktop
 
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
 	-I$(srcdir)/../../ui \
 	-I$(interfacedir) \
 	-I$(top_srcdir)/lib/kofficecore \

@@ -21,9 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-
 /**
  * A plugin wrapper around the CMYK U16 colour space strategy.
  */

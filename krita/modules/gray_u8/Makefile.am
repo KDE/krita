@@ -1,23 +1,16 @@
-#kritarcdir = $(kde_datadir)/krita/kpartplugins
-#kritarc_DATA = grayplugin.rc
 kde_services_DATA = kritagrayplugin.desktop
 
-#EXTRA_DIST = $(kritarc_DATA)
-
 INCLUDES  =  -I$(srcdir)/../../sdk \
-	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../core/color_strategy \
-	-I$(srcdir)/../../ui \
-	$(KOFFICE_INCLUDES) \
+	-I$(srcdir)/../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../libkritacolor/ \
 	-I$(interfacedir) \
-	$(KOPAINTER_INCLUDES) \
 	$(all_includes)
 
 
 lib_LTLIBRARIES = libkritagrayscale.la
 libkritagrayscale_la_SOURCES = kis_gray_colorspace.cc
 libkritagrayscale_la_LDFLAGS = $(all_libraries)
-libkritagrayscale_la_LIBADD =  ../../libkritacommon.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+libkritagrayscale_la_LIBADD =  ../../libkritacolor/libkritacolor.la
 
 kde_module_LTLIBRARIES = kritagrayplugin.la
 
@@ -25,7 +18,7 @@ kritagrayplugin_la_SOURCES = gray_plugin.cc
 noinst_HEADERS = gray_plugin.h kis_gray_colorspace.h
 
 kritagrayplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritagrayplugin_la_LIBADD =  ../../libkritacommon.la libkritagrayscale.la $(LIB_KOPAINTER) $(LIB_KOFFICECORE)
+kritagrayplugin_la_LIBADD =  libkritagrayscale.la ../../libkritacolor/libkritacolor.la
 
 kritagrayplugin_la_METASOURCES = AUTO
 

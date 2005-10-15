@@ -52,6 +52,7 @@
 #include <kocommandhistory.h>
 
 // Local
+#include <kis_meta_registry.h>
 #include "kis_annotation.h"
 #include "kis_types.h"
 #include "kis_config.h"
@@ -405,10 +406,10 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if ((profileProductName = element.attribute("profile")).isNull()) {
             // no mention of profile so get default profile
-            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename,"");
+            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename,"");
         }
         else {
-            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename, profileProductName);
+            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename, profileProductName);
         }
 
         if (cs == 0) {
@@ -559,10 +560,10 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     {
         if ((profileProductName = element.attribute("profile")).isNull()) {
             // no mention of profile so get default profile
-            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename,"");
+            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename,"");
         }
         else {
-            cs = KisColorSpaceFactoryRegistry::instance() -> getColorSpace(colorspacename, profileProductName);
+            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename, profileProductName);
         }
 
         if (cs == 0) {
@@ -784,10 +785,11 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     KisLayerSP layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
     Q_CHECK_PTR(layer);
 
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     KisFillPainter painter;
 
     painter.begin(layer.data());
-    painter.fillRect(0, 0, width, height, Qt::white, OPACITY_OPAQUE);
+    painter.fillRect(0, 0, width, height, KisColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
     img -> add(layer, -1);
@@ -813,7 +815,7 @@ bool KisDoc::slotNewImage()
         KisImageSP img;
         KisLayerSP layer;
 
-        KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance()->getColorSpace(dlg.colorSpaceID(), dlg.profileName());
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(dlg.colorSpaceID(), dlg.profileName());
 
         if (!cs) return false;
 
@@ -862,7 +864,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transpare
     // XXX: Use transparent flag to forego the background layer
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfile *  profile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
+    KisProfile *  profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     paintContent(painter, rect, profile);
 

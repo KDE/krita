@@ -4,7 +4,8 @@ EXTRA_DIST = $(kritarc_DATA)
 
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-        -I$(srcdir)/../../core/color_strategy \
+	-I$(srcdir)/../../libkritacolor/ \
+	-I$(srcdir)/../../libkritacolor/color_strategy \
         -I$(srcdir)/../../ui \
         -I$(interfacedir) \
         -I$(top_srcdir)/lib/kofficecore \

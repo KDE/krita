@@ -21,10 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "kis_types.h"
-
-class KisView;
-
 /**
  * A plugin wrapper around the GRAY colour space strategy.
  */

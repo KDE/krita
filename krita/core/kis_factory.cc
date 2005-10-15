@@ -22,6 +22,7 @@
 
 #include <qstringlist.h>
 #include <qthread.h>
+#include <qdir.h>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -34,23 +35,20 @@
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 
-#include "kis_factory.h"
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
-#include "kis_colorspace_factory_registry.h"
 #include "kis_paintop_registry.h"
 #include "kis_filter_registry.h"
 #include "kis_tool_registry.h"
 #include "kis_doc.h"
-
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_gradient.h"
 #include "kis_pattern.h"
 #include "kis_palette.h"
-
 #include <kogradientmanager.h>
 
+#include "kis_factory.h"
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_instance = 0;
@@ -88,6 +86,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 {
     s_aboutData = newKritaAboutData();
 
+
     (void)instance();
 
     s_rserverRegistry = new KisResourceServerRegistry();
@@ -97,41 +96,47 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     KisResourceServer<KisBrush>* brushServer = new KisResourceServer<KisBrush>("kis_brushes", fileExtensions);
     ResourceLoaderThread t1 (brushServer);
     t1.start();
-    s_rserverRegistry -> add( KisID( "BrushServer", ""), brushServer );
 
     fileExtensions.clear();
     fileExtensions << "*.gih";
     KisResourceServer<KisImagePipeBrush>* imagePipeBrushServer = new KisResourceServer<KisImagePipeBrush>("kis_brushes", fileExtensions);
     ResourceLoaderThread t2 (imagePipeBrushServer);
     t2.start();
-    s_rserverRegistry -> add( KisID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
 
     fileExtensions.clear();
     fileExtensions << "*.pat";
     KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns", fileExtensions);
     ResourceLoaderThread t3 (patternServer);
     t3.start();
-    s_rserverRegistry -> add( KisID( "PatternServer", ""), patternServer );
 
     fileExtensions.clear();
     fileExtensions = KoGradientManager::filters();
     KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients", fileExtensions);
     ResourceLoaderThread t4 (gradientServer);
     t4.start();
-    s_rserverRegistry -> add( KisID( "GradientServer", ""), gradientServer );
 
     fileExtensions.clear();
     fileExtensions << "*.gpl" << "*.pal" << "*.act";
     KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes", fileExtensions);
     ResourceLoaderThread t5 (paletteServer);
     t5.start();
+
+    t1.wait();
+    t2.wait();
+    t3.wait();
+    t4.wait();
+    t5.wait();
+
+    s_rserverRegistry -> add( KisID( "BrushServer", ""), brushServer );
+    s_rserverRegistry -> add( KisID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
+    s_rserverRegistry -> add( KisID( "PatternServer", ""), patternServer );
+    s_rserverRegistry -> add( KisID( "GradientServer", ""), gradientServer );
     s_rserverRegistry -> add( KisID( "PaletteServer", ""), paletteServer );
 
     // Load extension modules and plugins
     KisToolRegistry::instance();
     KisPaintOpRegistry::instance();
     KisFilterRegistry::instance();
-    KisColorSpaceFactoryRegistry::instance();
 
     // Load all modules: color models, paintops, filters
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
@@ -150,11 +155,6 @@ KisFactory::KisFactory( QObject* parent, const char* name )
             kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
     }
 
-    t1.wait();
-    t2.wait();
-    t3.wait();
-    t4.wait();
-    t5.wait();
 }
 
 KisFactory::~KisFactory()
@@ -184,6 +184,12 @@ KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
         doc->setReadWrite( false );
 
     return doc;
+}
+
+
+KAboutData* KisFactory::aboutData()
+{
+    return s_aboutData;
 }
 
 KInstance* KisFactory::instance()
@@ -232,14 +238,10 @@ KInstance* KisFactory::instance()
     return s_instance;
 }
 
-KAboutData* KisFactory::aboutData()
-{
-    return s_aboutData;
-}
-
 KisResourceServerRegistry* KisFactory::rServerRegistry()
 {
     return s_rserverRegistry;
 }
+
 
 #include "kis_factory.moc"

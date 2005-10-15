@@ -22,7 +22,6 @@ SUBDIRS = cimg \
 	selectiontools \
 	histogram \
 	variations \
-	performancetest \
 	pixelizefilter \
 	cubismfilter \
 	filtersgallery \
@@ -32,5 +31,6 @@ SUBDIRS = cimg \
 	sobelfilter \
 	roundcorners \
 	dropshadow \
-        histogram_docker
+    histogram_docker \
+	performancetest
 

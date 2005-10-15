@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_gray_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_color_conversions.h"
@@ -39,8 +38,8 @@ namespace {
     const Q_INT32 MAX_CHANNEL_GRAYA = 2;
 }
 
-KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisProfile *p) :
-    KisU16BaseColorSpace(KisID("GRAYA16", i18n("GRAY/Alpha (16-bit integer/channel)")), TYPE_GRAYA_16, icSigGrayData, p)
+KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisU16BaseColorSpace(KisID("GRAYA16", i18n("GRAY/Alpha (16-bit integer/channel)")), TYPE_GRAYA_16, icSigGrayData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(Q_UINT16), COLOR, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), ALPHA, sizeof(Q_UINT16)));

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/ViewPlugin
+Comment=GUI functionality for Krita
+[PropertyDef::X-KDE-Version]
+Type=int

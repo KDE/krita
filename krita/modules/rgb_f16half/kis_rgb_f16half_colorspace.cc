@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_rgb_f16half_colorspace.h"
 #include "kis_f32_base_colorspace.h"
 #include "kis_color_conversions.h"
@@ -46,8 +45,8 @@ namespace {
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisProfile *p) :
-    KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB/Alpha (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)
+KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
+    KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB/Alpha (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), COLOR, sizeof(half)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), COLOR, sizeof(half)));

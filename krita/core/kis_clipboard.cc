@@ -17,7 +17,8 @@
  */
 #include <qapplication.h>
 #include <qclipboard.h>
-#include "qobject.h"
+#include <qobject.h>
+#include <qimage.h>
 
 #include "kdebug.h"
 
@@ -25,7 +26,8 @@
 #include "kis_paint_device_impl.h"
 #include "kis_config.h"
 #include "kis_colorspace_factory_registry.h"
-
+#include "kis_factory.h"
+#include <kis_meta_registry.h>
 #include "kis_clipboard.h"
 
 KisClipboard *KisClipboard::m_singleton = 0;
@@ -70,7 +72,7 @@ void KisClipboard::setClip(KisPaintDeviceImplSP selection)
             // XXX: Is this a performance problem?
             KisConfig cfg;
             QString monitorProfileName = cfg.monitorProfile();
-            KisProfile *  monitorProfile = KisColorSpaceFactoryRegistry::instance() -> getProfileByName(monitorProfileName);
+            KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
             qimg = selection -> convertToQImage(monitorProfile);
         }
         else {
@@ -95,7 +97,7 @@ void KisClipboard::clipboardDataChanged()
         QImage qimg = cb -> image();
 
         if (!qimg.isNull()) {
-            KisColorSpace * cs = KisColorSpaceFactoryRegistry::instance()->getColorSpace(KisID("RGBA",""),"");
+            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"");
 
             m_clip =
                 new KisPaintDeviceImpl(cs,
@@ -109,7 +111,7 @@ void KisClipboard::clipboardDataChanged()
 }
 
 
-bool KisClipboard::hasClip() 
+bool KisClipboard::hasClip()
 {
     if (m_clip != 0) {
         return true;

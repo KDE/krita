@@ -34,9 +34,11 @@
 
 #include <koUnitWidgets.h>
 
+#include "kis_factory.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_dlg_create_img.h"
 #include "wdgnewimage.h"
+#include <kis_meta_registry.h>
 #include "kis_profile.h"
 #include "kis_colorspace.h"
 #include "kis_id.h"
@@ -64,7 +66,7 @@ KisDlgCreateImg::KisDlgCreateImg(Q_INT32 maxWidth, Q_INT32 defWidth,
     m_page -> intHeight -> setMaxValue(maxHeight);
     m_page -> doubleResolution -> setValue(100.0); // XXX: Get this from settings?
 
-    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
+    m_page -> cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
     m_page -> cmbColorSpaces -> setCurrentText(colorSpaceName);
 
     connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
@@ -102,8 +104,6 @@ QColor KisDlgCreateImg::backgroundColor() const
 
 Q_UINT8 KisDlgCreateImg::backgroundOpacity() const
 {
-    // XXX: This widget is sizeof quantum dependent. Scale
-    // to selected bit depth.
     Q_INT32 opacity = m_page -> sliderOpacity -> value();
 
     if (!opacity)
@@ -137,10 +137,10 @@ void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 {
     m_page -> cmbProfile -> clear();
 
-    KisColorSpaceFactory * csf = KisColorSpaceFactoryRegistry::instance() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     if (csf == 0) return;
 
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance()->profilesFor( csf );
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page -> cmbProfile -> insertItem((*it) -> productName());

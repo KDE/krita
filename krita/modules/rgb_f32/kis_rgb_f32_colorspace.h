@@ -30,10 +30,11 @@
 #include "kis_f32_base_colorspace.h"
 #include "kis_pixel.h"
 
+class KisColorSpaceFactoryRegistry;
 
 class KRITATOOL_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
 public:
-    KisRgbF32ColorSpace(KisProfile *p);
+    KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF32ColorSpace();
 
 public:
@@ -133,7 +134,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbF32ColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisRgbF32ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

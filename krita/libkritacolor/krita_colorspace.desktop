@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/ColorSpace
+Comment=A module implementing a complete colorspace for use with libkritacolor
+[PropertyDef::X-KDE-Version]
+Type=int

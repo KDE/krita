@@ -28,6 +28,7 @@
 #include <knuminput.h>
 #include <kdebug.h>
 
+#include "kis_meta_registry.h"
 #include <kis_factory.h>
 #include <kis_colorspace_factory_registry.h>
 #include "kis_profile.h"
@@ -48,7 +49,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
-    m_page -> cmbColorSpaces -> setIDList(KisColorSpaceFactoryRegistry::instance() -> listKeys());
+    m_page -> cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
 
     fillCmbDestProfile(m_page -> cmbColorSpaces -> currentItem());
 
@@ -78,7 +79,7 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
     m_page -> cmbDestProfile -> clear();
 
-    QValueVector<KisProfile *>  profileList = KisColorSpaceFactoryRegistry::instance() -> profilesFor(s);
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry() -> profilesFor(s);
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbDestProfile -> insertItem((*it) -> productName());

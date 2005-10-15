@@ -34,7 +34,7 @@ const Q_UINT8 PIXEL_ALPHA = 3;
 
 class KRITATOOL_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace {
 public:
-    KisRgbColorSpace(KisProfile *p);
+    KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbColorSpace();
 
 public:
@@ -130,7 +130,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KisColorSpace *createColorSpace(KisProfile *p) { return new KisRgbColorSpace(p); };
+    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile * p) { return new KisRgbColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

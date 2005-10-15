@@ -29,7 +29,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_color_conversions.h"
 
@@ -47,8 +46,9 @@ namespace {
 // FIXME: lcms doesn't support 32-bit float
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisProfile *p) :
-    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData,0) // disable the lcms handling by setting profile=0
+// disable the lcms handling by setting profile=0
+KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
+    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData, parent, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), COLOR, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), COLOR, sizeof(float)));
@@ -205,8 +205,8 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF32ColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  dstProfile,
-                         Q_INT32 renderingIntent, float exposure)
+                                            KisProfile *  /*dstProfile*/,
+                                            Q_INT32 /*renderingIntent*/, float exposure)
 
 {
     const float *data = reinterpret_cast<const float *>(dataU8);

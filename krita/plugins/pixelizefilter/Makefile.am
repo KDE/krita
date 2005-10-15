@@ -2,8 +2,8 @@ kde_services_DATA = kritapixelizefilter.desktop
 
 INCLUDES  = \
 	 -I$(srcdir)/../../sdk \
-	-I$(srcdir)/../../libkritacolor/ \
-	-I$(srcdir)/../../libkritacolor/color_strategy \
+	-I$(srcdir)/../../kritacolor/ \
+	-I$(srcdir)/../../kritacolor/color_strategy \
 	-I$(srcdir)/../../core \
 	-I$(srcdir)/../../ui \
 	-I$(interfacedir) \

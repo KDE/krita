@@ -3,8 +3,8 @@ kde_services_DATA = kritadefaulttools.desktop
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../sdk \
 	-I$(srcdir)/../core \
-	-I$(srcdir)/../libkritacolor/color_strategy \
-	-I$(srcdir)/../libkritacolor \
+	-I$(srcdir)/../kritacolor/color_strategy \
+	-I$(srcdir)/../kritacolor \
 	-I$(srcdir)/../ui \
 	-I../ui \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)

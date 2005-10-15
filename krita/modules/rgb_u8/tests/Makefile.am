@@ -1,6 +1,6 @@
 AM_CPPFLAGS =  -I$(srcdir)/../../../sdk \
 	 -I$(srcdir)/.. \
-	-I$(srcdir)/../../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../../kritacolor/color_strategy/ \
 	-I$(srcdir)/../../../color_strategy/ \
 	$(all_includes)
 

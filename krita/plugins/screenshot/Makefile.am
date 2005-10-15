@@ -5,8 +5,8 @@ EXTRA_DIST =  $(kritarc_DATA) #$(kpresenterrc_DATA) $(kwordrc_DATA)
 
 INCLUDES =  -I$(srcdir)/../../sdk \
 	 -I$(srcdir)/../../core \
-	-I$(srcdir)/../../libkritacolor/ \
-	-I$(srcdir)/../../libkritacolor/color_strategy \
+	-I$(srcdir)/../../kritacolor/ \
+	-I$(srcdir)/../../kritacolor/color_strategy \
 	-I$(srcdir)/../../ui \
 	-I$(srcdir)/../../core/strategy \
         -I$(top_srcdir)/lib/kofficecore \

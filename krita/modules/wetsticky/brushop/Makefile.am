@@ -5,7 +5,7 @@ kritaimages_DATA = wetpaintbrush.png
 
 # all_includes must remain last!
 INCLUDES =  -I$(srcdir)/../../../sdk \
-	-I$(srcdir)/../../../libkritacolor/color_strategy/ \
+	-I$(srcdir)/../../../kritacolor/color_strategy/ \
 	-I$(srcdir)/../../../color_strategy/ \
 	-I$(srcdir)/../../../core/ \
 	-I$(srcdir)/../../../ui \

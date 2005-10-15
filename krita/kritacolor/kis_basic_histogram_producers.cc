@@ -426,7 +426,8 @@ double KisGenericLightnessHistogramProducer::maximalZoom() const {
 }
 
 
-void KisGenericLightnessHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels,  KisColorSpace *cs) {
+void KisGenericLightnessHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels,  KisColorSpace *cs)
+{
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
         m_outLeft.at(i) = 0;

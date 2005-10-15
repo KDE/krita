@@ -3,8 +3,8 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../../ \
 	-I$(srcdir)/../../../core/ \
 	-I$(srcdir)/../../../sdk/ \
-	-I$(srcdir)/../../libkritacolor/ \
-	-I$(srcdir)/../../libkritacolor/color_strategy \
+	-I$(srcdir)/../../kritacolor/ \
+	-I$(srcdir)/../../kritacolor/color_strategy \
 	-I$(srcdir)/../../../ui \
 	 -I$(interfacedir)$(all_includes)
 

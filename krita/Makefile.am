@@ -1,11 +1,11 @@
-INCLUDES  = -I$(srcdir)/sdk -I$(srcdir)/libkritacolor/color_strategy -I$(srcdir)/libkritacolor \
+INCLUDES  = -I$(srcdir)/sdk -I$(srcdir)/kritacolor/color_strategy -I$(srcdir)/kritacolor \
     $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The common lib, shared between the part, the plugins, and the filters
 lib_LTLIBRARIES = libkritacommon.la
 libkritacommon_la_SOURCES = dummycommon.cc
 libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
-libkritacommon_la_LIBADD = sdk/libkissdk.la core/libkritacore.la ui/libkisui.la libkritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
+libkritacommon_la_LIBADD = sdk/libkissdk.la core/libkritacore.la ui/libkisui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
 
 ## The part
 kde_module_LTLIBRARIES = libkritapart.la
@@ -32,7 +32,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = sdk libkritacolor ui core . dtd paintops tools modules plugins data pics 
+SUBDIRS = sdk kritacolor ui core . dtd paintops tools modules plugins data pics 
 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.

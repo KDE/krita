@@ -2,8 +2,8 @@
 INCLUDES  = \
 	-I$(srcdir)/../sdk \
 	-I$(srcdir)/tiles \
-	-I$(srcdir)/../libkritacolor \
-	-I$(srcdir)/../libkritacolor/color_strategy \
+	-I$(srcdir)/../kritacolor \
+	-I$(srcdir)/../kritacolor/color_strategy \
 	-I$(srcdir)/../ui \
 	-I../ui \
 	$(KOFFICE_INCLUDES) \

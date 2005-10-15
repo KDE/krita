@@ -186,5 +186,3 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
 }
 
 
-#include "kis_profile.moc"
-

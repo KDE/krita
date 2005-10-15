@@ -7,6 +7,7 @@ kde_services_DATA = kritacmykplugin.desktop
 INCLUDES  = -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../kritacolor/color_strategy \
 	-I$(srcdir)/../../kritacolor \
+	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 kde_module_LTLIBRARIES = kritacmykplugin.la

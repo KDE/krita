@@ -6,6 +6,7 @@ kde_services_DATA = krita_gray_u16_plugin.desktop
 INCLUDES  =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../kritacolor/color_strategy \
 	-I$(srcdir)/../../kritacolor/ \
+	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 lib_LTLIBRARIES = libkrita_gray_u16.la

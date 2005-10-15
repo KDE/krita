@@ -1,5 +1,6 @@
 INCLUDES  = -I$(srcdir)/.. \
 	-I$(srcdir)/../../sdk \
+	$(KOFFICE_INCLUDES) \
 	 $(all_includes)
 
 noinst_LTLIBRARIES = libkiscolorspaces.la

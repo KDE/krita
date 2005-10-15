@@ -7,6 +7,7 @@ INCLUDES  = \
 	-I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../kritacolor/color_strategy/ \
 	-I$(srcdir)/../../kritacolor/ \
+	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 

@@ -8,6 +8,7 @@ INCLUDES  = \
 	-I$(srcdir)/../../kritacolor/color_strategy/ \
 	-I$(srcdir)/../../kritacolor/ \
 	$(OPENEXR_CFLAGS) \
+	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 

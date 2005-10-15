@@ -3,6 +3,7 @@ INCLUDES  = -I$(srcdir) \
     -I$(srcdir)/../sdk \
     -I$(srcdir)/colorspaces \
     $(OPENEXR_CFLAGS) \
+    $(KOFFICE_INCLUDES) \
     $(all_includes)
 
 lib_LTLIBRARIES = libkritacolor.la

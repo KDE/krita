@@ -28,7 +28,6 @@
 #include "kis_types.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_fill_painter.h"
-#include "kis_alpha_colorspace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 

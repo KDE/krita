@@ -20,8 +20,6 @@
 
 #include <qcolor.h>
 
-#include <qcolor.h>
-
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_pixel.h"

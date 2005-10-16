@@ -40,6 +40,7 @@
 #include <kmimetype.h>
 #include <knotifyclient.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 // KOffice
 #include <koFilterManager.h>
@@ -206,7 +207,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     } else if (ret == KoTemplateChooseDia::File) {
 
         KURL url( file );
-        kdDebug() << "KisDoc::initDoc opening URL " << url.prettyURL() << endl;
         ok = openURL(url);
 
     } else if (ret == KoTemplateChooseDia::Empty) {
@@ -245,6 +245,11 @@ bool KisDoc::init()
 
     m_nserver = new KisNameServer(i18n("Image %1"), 1);
     Q_CHECK_PTR(m_nserver);
+
+   if (!KisMetaRegistry::instance()->csRegistry()->exists(KisID("RGBA",""))) {
+        KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
+        return false;
+    }
 
     return true;
 }

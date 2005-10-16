@@ -23,7 +23,7 @@
 
 //#include "kis_global.h"
 #include "kis_id.h"
-#include "koffice_export.h"
+
 enum CompositeOp {
     COMPOSITE_OVER,
     COMPOSITE_IN,
@@ -71,7 +71,7 @@ enum CompositeOp {
     COMPOSITE_UNDEF
 };
 
-class KRITACORE_EXPORT KisCompositeOp {
+class KisCompositeOp {
 public:
     KisCompositeOp();
     KisCompositeOp(const QString& id);

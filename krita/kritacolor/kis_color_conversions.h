@@ -20,32 +20,30 @@
 #define _KIS_CONVERSIONS_H_
 
 #include <qglobal.h>
-#include <kdebug.h>
-#include "koffice_export.h"
 
 /**
  * A number of often-used conversions between color models
  */
 
 // 8-bit integer versions. RGBSL are 0-255, H is 0-360.
-KRITA_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
-KRITA_EXPORT void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
+ void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
+ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
 
 // Floating point versions. RGBSL are 0-1, H is 0-360.
-KRITA_EXPORT void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
-KRITA_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
+ void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
+ void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
 
-KRITA_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
-KRITA_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
+ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
+ void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
-KRITA_EXPORT void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s);
+ void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s);
 
-KRITA_EXPORT float hue_value(float n1, float n2, float hue);
+ float hue_value(float n1, float n2, float hue);
 
-KRITA_EXPORT void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
+ void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
 
-KRITA_EXPORT void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s);
-KRITA_EXPORT void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
+ void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s);
+ void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
 
 #endif // _KIS_CONVERSIONS_H_
 

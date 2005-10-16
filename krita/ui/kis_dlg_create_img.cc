@@ -135,7 +135,12 @@ QString KisDlgCreateImg::profileName() const
 
 void KisDlgCreateImg::fillCmbProfiles(const KisID & s)
 {
+
     m_page -> cmbProfile -> clear();
+
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+        return;
+    }
 
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     if (csf == 0) return;

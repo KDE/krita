@@ -23,7 +23,6 @@
 
 #include <qvaluevector.h>
 
-#include "koffice_export.h"
 #include "kis_composite_op.h"
 #include "kis_channelinfo.h"
 
@@ -40,7 +39,7 @@ struct KisColorAdjustment;
  * in Krita. This is the definition of the public API for
  * colormodels.
  */
-class KRITACORE_EXPORT KisColorSpace {
+class KisColorSpace {
 
 
 public:
@@ -325,7 +324,7 @@ public:
                 const KisCompositeOp& op) = 0;
 };
 
-class KRITACORE_EXPORT KisColorSpaceFactory {
+class KisColorSpaceFactory {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +

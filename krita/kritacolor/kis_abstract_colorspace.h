@@ -31,8 +31,6 @@
 #include "kis_composite_op.h"
 #include "kis_colorspace.h"
 
-#include "koffice_export.h"
-
 class QPainter;
 class KisPixel;
 class KisPixelRO;
@@ -59,7 +57,7 @@ struct transform {
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
  */
-class KRITACORE_EXPORT KisAbstractColorSpace : public KisColorSpace {
+class KisAbstractColorSpace : public KisColorSpace {
 
 
 public:

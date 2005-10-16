@@ -30,14 +30,13 @@
 #include <qcstring.h>
 
 #include <kio/job.h>
-#include <koffice_export.h>
 
 #include <kis_annotation.h>
 
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy
 //     that matches the profile's color model
-class KRITACORE_EXPORT KisProfile {
+class KisProfile {
 
 public:
     KisProfile(QByteArray rawData);

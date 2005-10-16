@@ -19,7 +19,6 @@
 #include <cmath>
 
 #include <qglobal.h>
-#include <kdebug.h>
 
 #include "kis_color_conversions.h"
 

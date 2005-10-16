@@ -102,6 +102,8 @@ Core
           progressbar and be cancelable.
 	* On copying paint devices, do not actually copy the tiles, but only create
 	  new tiles when there is change. Also create a memory pool for creating new tiles (BART)
+        * Color adjustment filters seem to have a problem with partially selected pixels
+        * Color adjustment (the perchannel filter) modifies brightness and not the individual channels (CBR)
 
 File Format:
 

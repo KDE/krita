@@ -40,7 +40,7 @@
                 </widget>
                 <widget class="QComboBox">
                     <property name="name">
-                        <cstring>comboBox1</cstring>
+                        <cstring>cmbChannel</cstring>
                     </property>
                 </widget>
             </hbox>

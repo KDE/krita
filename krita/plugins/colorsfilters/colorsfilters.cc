@@ -69,7 +69,7 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
         KisFilterRegistry::instance()->add(new KisBrightnessContrastFilter());
         KisFilterRegistry::instance()->add(new KisAutoContrast());
         //KisFilterRegistry::instance()->add(new KisGammaCorrectionFilter());
-        //KisFilterRegistry::instance()->add(new KisPerChannelFilter());
+        KisFilterRegistry::instance()->add(new KisPerChannelFilter());
         KisFilterRegistry::instance()->add(new KisDesaturateFilter());
     }
 }
@@ -198,7 +198,6 @@ KisDesaturateFilter::KisDesaturateFilter()
 {
 }
 
-//XXX: This filter should write to dst, too!
 void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     KisColorAdjustment *adj = src->colorSpace()->createDesaturateAdjustment();

@@ -17,6 +17,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <qlayout.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
 #include "wdg_perchannel.h"
@@ -27,7 +33,7 @@
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
 
-#if 0
+
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration()
 {
 }
@@ -68,7 +74,7 @@ void KisPerChannelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
 {
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
 
-    KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfer);
+    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -94,6 +100,36 @@ void KisPerChannelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
     setProgressDone();
 }
 
+void KisPerChannelConfigWidget::setActiveChannel(int ch)
+{
+    int i;
+    int height = 256;
+printf("setactivechannel\n");
+    QPixmap pix(256, height);
+    pix.fill();
+    QPainter p(&pix);
+    p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
+
+    m_histogram->setChannel(ch);
+
+    double highest = (double)m_histogram->calculations().getHighest();
+    Q_INT32 bins = m_histogram->producer() -> numberOfBins();
+
+    if (m_histogram->getHistogramType() == LINEAR) {
+        double factor = (double)height / highest;
+        for( i=0; i<bins; ++i ) {
+            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
+        }
+    } else {
+        double factor = (double)height / (double)log(highest);
+        for( i = 0; i < bins; ++i ) {
+            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+        }
+    }
+
+    m_page->kCurve->setPixmap(pix);
+}
+
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
@@ -103,9 +139,17 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
+    m_dev = dev;
+
     l -> add(m_page);
     height = 256;
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+
+    // Fill in the channel chooser
+    QValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
+    for(i=0; i < dev->colorSpace()->nColorChannels(); i++)
+        m_page->cmbChannel -> insertItem(channels.at(i)->name());
+    connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // Create the horizontal gradient label
     QPixmap hgradientpix(256, 1);
@@ -129,30 +173,12 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KisHistogramProducerSP producer = new KisGenericLightnessHistogramProducer();
-    KisHistogram histogram(dev, producer, LINEAR);
-    QPixmap pix(256, height);
-    pix.fill();
-    QPainter p(&pix);
-    p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
+    KisIDList keys = 
+        KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
+    KisHistogramProducerFactory *hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(0)));
+    m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
-    double highest = (double)histogram.calculations().getHighest();
-    Q_INT32 bins = histogram.producer() -> numberOfBins();
-
-    if (histogram.getHistogramType() == LINEAR) {
-        double factor = (double)height / highest;
-        for( i=0; i<bins; ++i ) {
-            p.drawLine(i, height, i, height - int(histogram.getValue(i) * factor));
-        }
-    } else {
-        double factor = (double)height / (double)log(highest);
-        for( i = 0; i < bins; ++i ) {
-            p.drawLine(i, height, i, height - int(log((double)histogram.getValue(i)) * factor));
-        }
-    }
-
-    m_page->kCurve->setPixmap(pix);
-
+    setActiveChannel(0);
 }
 
 KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
@@ -174,4 +200,4 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
     return cfg;
 }
 
-#endif
+#include "kis_perchannel_filter.moc"

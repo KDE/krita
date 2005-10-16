@@ -175,7 +175,12 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     KisIDList keys = 
         KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
-    KisHistogramProducerFactory *hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(0)));
+    KisHistogramProducerFactory *hpf;
+    // workaround until we have 'default' producer for a cs
+    if ((*keys.at(0)) == KisID("GENLIGHTHISTO", ""))
+        hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(1)));
+    else
+        hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(0)));
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
     setActiveChannel(0);

@@ -28,6 +28,7 @@ Bugs
       the second image should be loaded in a second view and not replace the 
       first image in the first view.
     * KisDuplicateOp is 8-bit broken
+    * F9 and single hiding/showing of dockers don't interact correctly
 
 Transform tool (CBR)
 

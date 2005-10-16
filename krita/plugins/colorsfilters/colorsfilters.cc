@@ -45,6 +45,8 @@
 #include <kis_pixel.h>
 #include <kis_colorspace.h>
 
+#include "kis_histogram.h"
+#include "kis_basic_histogram_producers.h"
 #include "colorsfilters.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
@@ -68,7 +70,6 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
     {
         KisFilterRegistry::instance()->add(new KisBrightnessContrastFilter());
         KisFilterRegistry::instance()->add(new KisAutoContrast());
-        //KisFilterRegistry::instance()->add(new KisGammaCorrectionFilter());
         KisFilterRegistry::instance()->add(new KisPerChannelFilter());
         KisFilterRegistry::instance()->add(new KisDesaturateFilter());
     }
@@ -89,103 +90,100 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", "&Auto Contrast")
 // XXX: This filter should write to dst, too!
 void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* , const QRect& rect)
 {
-    setProgressTotalSteps(rect.width() * rect.height() * 2);
-    Q_INT32 pixelsProcessed = 0;
+    // initialize
+    KisHistogramProducerSP producer = new KisGenericLightnessHistogramProducer();
+    KisHistogram histogram(src, producer, LINEAR);
+    int minvalue = int(255*histogram.calculations().getMin() + 0.5);
+    int maxvalue = int(255*histogram.calculations().getMax() + 0.5);
+
+    if(maxvalue>255)
+        maxvalue= 255;
+
+    // build the transferfunction
+    int diff = maxvalue - minvalue;
+
+    KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
+
+    for(int i=0; i <255; i++)
+        cfg->transfer[i] = 0xFFFF;
+
+    if (diff != 0)
+    {
+        for(int i=0; i <minvalue; i++)
+            cfg->transfer[i] = 0x0;
+        for(int i=minvalue; i <maxvalue; i++)
+        {
+            Q_INT32 val = (i-minvalue)/diff;
+
+            val = int((0xFFFF * (i-minvalue)) / diff);
+            if(val >0xFFFF)
+                val=0xFFFF;
+            if(val <0)
+                val = 0;
+
+            cfg->transfer[i] = val;
+        }
+        for(int i=maxvalue; i <256; i++)
+            cfg->transfer[i] = 0xFFFF;
+    }
+
+    // apply
+    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
-    // Number of channels in this device except alpha
-     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
+    setProgressTotalSteps(rect.width() * rect.height());
+    Q_INT32 pixelsProcessed = 0;
 
-
-    // initialize
-    Q_UINT8* maxvalues = new Q_UINT8[depth];
-    Q_UINT8* minvalues = new Q_UINT8[depth];
-    memset(maxvalues, 0, depth * sizeof(Q_UINT8));
-    memset(minvalues, OPACITY_OPAQUE, depth * sizeof(Q_UINT8));
-    
-    Q_UINT8** lut = new Q_UINT8*[depth];
-
-    for (int i = 0; i < depth; i++) {
-        lut[i] = new Q_UINT8[Q_UINT8_MAX+1];
-        memset(lut[i], 0, (Q_UINT8_MAX+1) * sizeof(Q_UINT8));
-    }
-
-    while (!srcIt.isDone() && !cancelRequested())
+    while( ! srcIt.isDone()  && !cancelRequested())
     {
-        if (srcIt.isSelected()) {
-            Q_UINT8 opacity;
+        Q_UINT32 npix=0, maxpix = srcIt.nConseqPixels();
+        Q_UINT8 selectedness = srcIt.selectedness();
+        // The idea here is to handle stretches of completely selected and completely unselected pixels.
+        // Partially selected pixels are handled on pixel at a time.
+        switch(selectedness)
+        {
+            case MIN_SELECTED:
+                while(srcIt.selectedness()==MIN_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                dstIt+=npix;
+                pixelsProcessed += npix;
+                break;
 
-            QColor color;
-            src -> colorSpace() -> toQColor(srcIt.rawData(), &color, &opacity);
+            case MAX_SELECTED:
+            {
+                const Q_UINT8 *firstPixel = srcIt.oldRawData();
+                while(srcIt.selectedness()==MAX_SELECTED && maxpix)
+                {
+                    --maxpix;
+                    ++srcIt;
+                    ++npix;
+                }
+                // adjust
+                src->colorSpace()->applyAdjustment(firstPixel, dstIt.rawData(), adj, npix);
+                pixelsProcessed += npix;
+                dstIt += npix;
+                break;
+            }
 
-            // skip non-opaque pixels
-            if (src -> colorSpace() -> hasAlpha() && opacity != OPACITY_OPAQUE) {
+            default:
+                // adjust, but since it's partially selected we also only partially adjust
+                src->colorSpace()->applyAdjustment(srcIt.oldRawData(), dstIt.rawData(), adj, 1);
+                const Q_UINT8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
+                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                src->colorSpace()->mixColors(pixels, weights, 1, dstIt.rawData());
                 ++srcIt;
-                continue;
-            }
-
-            for (int i = 0; i < depth; i++) {
-		// XXX: Move to colorspace -- not independent
-                Q_UINT8 index = srcIt.rawData()[i];
-                if( index > maxvalues[i])
-                    maxvalues[i] = index;
-                if( index < minvalues[i])
-                    minvalues[i] = index;
-            }
+                ++dstIt;
+                pixelsProcessed++;
+                break;
         }
-        ++srcIt;
-
-        pixelsProcessed++;
         setProgress(pixelsProcessed);
     }
-
-    if (cancelRequested()) {
-        setProgressDone();
-        return;
-    }
-    
-    // build the LUT
-    for (int i = 0; i < depth; i++) {
-        Q_UINT8 diff = maxvalues[i] - minvalues[i];
-        if (diff != 0) {
-            for (int j = minvalues[i]; j <= maxvalues[i]; j++) {
-                lut[i][j] = Q_UINT8_MAX * (j - minvalues[i]) / diff;
-            }
-        } else {
-            lut[i][minvalues[i]] = minvalues[i];
-        }
-    }
-
-    // apply
-
-    srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(),rect.height(), true);
-
-    while (!srcIt.isDone()  && !cancelRequested()) {
-        if (srcIt.isSelected()) {
-            Q_UINT8* dstData = dstIt.rawData();
-            Q_UINT8* srcData = srcIt.rawData();
-
-            // Iterate through all channels except alpha
-            for (int i = 0; i < depth; ++i) {
-                dstData[i] = lut[i][srcData[i]];
-            }
-        }
-        ++dstIt;
-        ++srcIt;
-
-        pixelsProcessed++;
-        setProgress(pixelsProcessed);
-    }
-    
-    // and delete everything
-    delete[] maxvalues;
-    delete[] minvalues;
-    for (int i = 0; i < depth; i++) {
-        delete[] lut[i];
-    }
-    delete[] lut;
 
     setProgressDone();
 }

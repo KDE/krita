@@ -115,7 +115,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
                     ++srcIt;
                     ++npix;
                 }
-                // desaturate
+                // adjust
                 src->colorSpace()->applyAdjustment(firstPixel, dstIt.rawData(), adj, npix);
                 pixelsProcessed += npix;
                 dstIt += npix;

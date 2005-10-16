@@ -58,9 +58,10 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
                                                                              "([X-KDE-Version] == 2)"));
 
     KTrader::OfferList::ConstIterator iter;
-
+printf("going through color models\n");
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
+printf("got a color models\n");
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =
@@ -144,7 +145,10 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
         m_csMap[name] = cs;
     }
 
-    return m_csMap[name];
+    if(m_csMap.contains(name))
+        return m_csMap[name];
+    else
+        return 0;
 }
 
 

@@ -1755,7 +1755,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
     KisProfile * profile = colorSpace()->getProfile();
 
     if (profile) {
-        addAnnotation(profile -> annotation());
+//         addAnnotation(profile -> annotation());
     } else {
         removeAnnotation("icc");
     }

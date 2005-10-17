@@ -62,7 +62,7 @@ public:
      * The producer may only read the iterator, it may safely be constructed with write = false
      *
      * @param pixels A pointer an array of pixeldata in the given colorspace
-     * @param selectionMast a pointer to an array of bytes, where 0 is unselected and 1-255 is degree of selectedness. The array
+     * @param selectionMask a pointer to an array of bytes, where 0 is unselected and 1-255 is degree of selectedness. The array
      *                      must be just as long as the array of pixels.
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.

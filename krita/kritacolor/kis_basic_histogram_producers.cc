@@ -93,18 +93,20 @@ void KisBasicU8HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * sel
     Q_INT32 pSize = cs->pixelSize();
 
     if ( selectionMask ) {
-        if ( ! (m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT) ) {
+        while (nPixels > 0) {
+            if ( ! (m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT) ) {
 
-            for (int i = 0; i < m_channels; i++) {
-                m_bins.at(i).at(pixels[i])++;
+                for (int i = 0; i < m_channels; i++) {
+                    m_bins.at(i).at(pixels[i])++;
+                }
+                m_count++;
+
             }
-            m_count++;
 
+            pixels += pSize;
+            selectionMask++;
+            nPixels--;
         }
-
-        pixels += pSize;
-        selectionMask++;
-        nPixels--;
     }
     else {
         while (nPixels > 0) {
@@ -372,7 +374,6 @@ void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
     Q_INT32 pSize = cs->pixelSize();
     if (selectionMask) {
         while (nPixels > 0) {
-
             if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 cs -> toQColor(pixels, &c);
                 m_bins.at(0).at(c.red())++;

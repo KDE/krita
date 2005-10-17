@@ -140,7 +140,7 @@ protected:
 class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericRGBHistogramProducer();
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
     virtual QValueVector<KisChannelInfo *> channels();
@@ -166,7 +166,7 @@ public:
 class KisGenericLightnessHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericLightnessHistogramProducer();
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
     virtual QValueVector<KisChannelInfo *> channels();

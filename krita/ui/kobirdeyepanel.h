@@ -137,7 +137,6 @@ public:
      * Create a new bird eye panel.
      *
      * @param zoomListener the object that listens to the zoom instructions we give
-     * @param doc a KOffice document. The initial thumbnail will be generated with paintContents
      * @param parent the parent widget
      * @param name the QObject name of this bird eye widget
      * @param f the widget flags (@see QWidget)

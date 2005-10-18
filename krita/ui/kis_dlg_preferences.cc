@@ -63,8 +63,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
 
     m_cmbCursorShape -> setCurrentItem(cfg.cursorStyle());
     grpDockability->setButton(cfg.dockability());
-    numDockerFontSize->setValue((int)cfg.getDefaultDockerFontSize());
-
+    numDockerFontSize->setValue((int)cfg.dockerFontSize());
 }
 
 void GeneralTab::setDefault()

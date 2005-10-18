@@ -69,10 +69,16 @@ void KisHistogram::updateHistogram()
     // Let the producer do it's work
     m_producer -> clear();
     int i;
-    while ( !srcIt.isDone() ) {
-        i = srcIt.nConseqPixels();
-        m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
-        srcIt += i;
+    // Handle degenerate case (this happens with the accumulating histogram,
+    // which has an empty device)
+    if (srcIt.isDone()) {
+        m_producer -> addRegionToBin(0, 0, 0, cs);
+    } else {
+        while ( !srcIt.isDone() ) {
+            i = srcIt.nConseqPixels();
+            m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
+            srcIt += i;
+        }
     }
 
     //kdDebug() << t.elapsed() << "ms for histogram (new version)" << endl;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LMS Color Model (32-bit float)
+Comment=Color model for LMS cone space (Long Middle and Short wavelengths)
+ServiceTypes=Krita/ColorSpace
+Type=Service
+X-KDE-Library=krita_lms_f32_plugin
+X-KDE-Version=2

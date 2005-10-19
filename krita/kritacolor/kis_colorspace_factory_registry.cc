@@ -160,7 +160,11 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
 
 KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const KisProfile * profile)
 {
-    return getColorSpace( csID, profile->productName());
+    if( profile ) {
+        return getColorSpace( csID, profile->productName());
+    } else {
+        return getColorSpace( csID, "");
+    }
 }
 
 

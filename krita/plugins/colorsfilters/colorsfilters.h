@@ -41,6 +41,7 @@ public:
     static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
     virtual bool supportsPreview() { return true; }
     virtual bool supportsPainting() { return false; }
+    virtual bool supportsThreading() { return false; };
 
 };
 

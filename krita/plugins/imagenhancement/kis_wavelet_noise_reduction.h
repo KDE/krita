@@ -52,6 +52,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsThreading() { return false; };
 
 };
 

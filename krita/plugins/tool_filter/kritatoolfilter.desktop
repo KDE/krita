@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Filter Tool
 Name[br]=Ostil ar sil
+Name[cy]=Erfyn Hidlen
 Name[da]=Filterværktøj
 Name[de]=Filterwerkzeug
 Name[el]=Εργαλείο φιλτραρίσματος
@@ -27,6 +28,7 @@ Name[tr]=Süzme Aracı
 Name[xx]=xxFilter Toolxx
 Name[zh_CN]=过滤工具
 Comment=Filter tool and paint operation
+Comment[cy]=Erfyn hidlen a gweithrediadau paent
 Comment[da]=Filterværktøj og maleoperation
 Comment[de]=Filterwerkzeug und Maloperation
 Comment[el]=Εργαλείο φιλτραρίσματος και λειτουργία σχεδίασης

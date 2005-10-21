@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[cy]=Ategyn Paent Dyfrlliw
 Name[da]=Plugin for vandfarvemaling
 Name[de]=Plugin für Wasserfarben-Effekte
 Name[eo]=Kromprogramo por akvarela pentrado
@@ -23,6 +24,7 @@ Name[tr]=Suluboya Boyama Eklentisi
 Name[xx]=xxWatercolor Paint Pluginxx
 Name[zh_CN]=水彩绘画插件
 Comment=Color model and tools for painting with simulated watercolors
+Comment[cy]=Model lliw ac offer ar gyfer paentio efo dyfrliwiau wedi'u hefelychu
 Comment[da]=Farvemodel og værktøjer til at male med simulerede vandfarver
 Comment[de]=Farbmodell und Werkzeuge zum Malen mit simulierten Wasserfarben
 Comment[en_GB]=Colour model and tools for painting with simulated watercolours

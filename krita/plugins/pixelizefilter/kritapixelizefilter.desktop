@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize filter
+Name[cy]=Hidlen bicseleiddio
 Name[eo]=Rastrumeriga filtrilo
 Name[es]=Filtro de pixelación
 Name[et]=Pikseldamisfilter
@@ -12,6 +13,7 @@ Name[sv]=Bildpunktsfilter
 Name[tr]=Pikselleme süzgeci
 Name[xx]=xxPixelize filterxx
 Comment=Pixelize filter
+Comment[cy]=Hidlen bicseleiddio
 Comment[eo]=Rastrumeriga filtrilo
 Comment[es]=Filtro de pixelación
 Comment[et]=Pikseldamisfilter

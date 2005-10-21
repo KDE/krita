@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=History Docker
+Name[cy]=Bachydd Hanes
 Name[eo]=Histori-legilo
 Name[es]=Anclaje del histórico
 Name[et]=Ajaloo dokk
@@ -11,6 +12,7 @@ Name[sv]=Historikdockning
 Name[tr]=Geçmiş Modülü
 Name[xx]=xxHistory Dockerxx
 Comment=Command history docker for Krita
+Comment[cy]=Bachydd yr hanes gorchmynion ar gyfer Krita
 Comment[eo]=Legilo de komandhistorio por Krita
 Comment[es]=Anclaje con el histórico de órdenes para Krita
 Comment[et]=Krita käskude ajaloo dokk

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolutions filters
+Name[cy]=Hidlau Cordeddiadau
 Name[eo]=Konvoluciaj filtriloj
 Name[es]=Filtros de convoluciones
 Name[et]=Konvolutsioonifiltrid
@@ -11,6 +12,7 @@ Name[sv]=Faltningsfilter
 Name[tr]=Kıvrım süzgeci
 Name[xx]=xxConvolutions filtersxx
 Comment=Convolution filters
+Comment[cy]=Hidlau cordeddiadau
 Comment[eo]=Konvoluciaj filtriloj
 Comment[es]=Filtros de convoluciones
 Comment[et]=Konvolutsioonifiltrid

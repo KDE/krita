@@ -1,7 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=LMS Color Model (32-bit float)
+Name[cy]=Model Lliw LMS (arnawf 32-did)
+Name[pt]=Modelo de Cor LMS (v. flutuante de 32-bits)
+Name[pt_BR]=Modelo de Cor LMS (v. flutuante de 32-bits)
 Comment=Color model for LMS cone space (Long Middle and Short wavelengths)
+Comment[cy]=Model lliw ar gyfer gofod côn LMS (tonfeddi Hir, Canolig a Byr)
+Comment[pt]=Modelo de cor para o espaço cónico do LMS (comprimentos de onda longos, médios e curtos)
+Comment[pt_BR]=Modelo de cor para o espaço cónico do LMS (comprimentos de onda longos, médios e curtos)
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_lms_f32_plugin

@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
+Comment[cy]=Swyddogaeth GUI ar gyfer Krita
 Comment[da]=GUI-funktionalitet for Krita
 Comment[pt]=Funcionalidade gráfica para o Krita
 Comment[pt_BR]=Funcionalidade gráfica para o Krita

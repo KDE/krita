@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Default Paint Operations
+Name[cy]=Gweithrediadau Paent Rhagosodol
 Name[da]=Standard maleoperationer
 Name[de]=Standard Zeichen- und Maloperationen
 Name[el]=Προκαθορισμένες λειτουργίες σχεδίασης
@@ -24,6 +25,7 @@ Name[tr]=Varsayılan Boyama İşlemleri
 Name[xx]=xxDefault Paint Operationsxx
 Name[zh_CN]=默认绘图操作
 Comment=Default paint operations
+Comment[cy]=Gweithrediadau paent rhagosodol
 Comment[da]=Standard maleoperationer
 Comment[de]=Standard Zeichen- und Maloperationen
 Comment[el]=Προκαθορισμένες λειτουργίες σχεδίασης

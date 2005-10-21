@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss filter
+Name[cy]=Hidlen Foglynnu
 Name[eo]=Gravuraĵa filtrilo
 Name[es]=Filtro de realce
 Name[et]=Kohrutusfilter
@@ -11,6 +12,7 @@ Name[sv]=Relieffilter
 Name[tr]=Kabartma Süzgeci
 Name[xx]=xxEmboss filterxx
 Comment=Emboss filter
+Comment[cy]=Hidlen foglynnu
 Comment[eo]=Filtrilo por gravuraĵaj efektoj
 Comment[es]=Filtro de realce
 Comment[et]=Kohrutusfilter

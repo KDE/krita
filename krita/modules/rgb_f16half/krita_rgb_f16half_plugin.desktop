@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
+Name[cy]=Model Lliw RGB (arnawf 16-did 'hanner')
 Name[da]=RGB-farvemodel (16-bit heltal 'halv')
 Name[es]=Modelo de color RGB (decimal «medio» de 16 bits)
 Name[fr]=Modèle de couleurs RVB (demi flottants 16 bits)
@@ -9,6 +10,7 @@ Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 16-bits 'half')
 Name[sv]=RGB-färgmodell (16-bitars flyttal 'halva')
 Name[xx]=xxRGB Color Model (16-bit float 'half')xx
 Comment=Color model for 16-bit integer per channel RGB images
+Comment[cy]=Model lliw ar gyfer delweddau RGB â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal RGB-billeder
 Comment[en_GB]=Colour model for 16-bit integer per channel RGB images
 Comment[eo]=Kolormodelo por 16-bitaj entjeraj perĉen-RGB-aj bildoj 

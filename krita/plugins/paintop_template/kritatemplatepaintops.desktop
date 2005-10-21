@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Template Paint Operations
+Name[cy]=Gweithrediadau Paent o Batrymlun
 Name[da]=Skabelon for maleoperationer
 Name[eo]=Ŝablono de pentrad-operacioj
 Name[es]=Operaciones de plantilla de pintura
@@ -13,6 +14,7 @@ Name[sv]=Mallar för målningsoperationer
 Name[tr]=Boyama İşlemleri Şablonu
 Name[xx]=xxTemplate Paint Operationsxx
 Comment=Template paint operations
+Comment[cy]=Gweithrediadau paent o batrymlun
 Comment[da]=Skabelon for maleoperationer
 Comment[eo]=Ŝablono de pentrad-operacioj
 Comment[es]=Operaciones de plantilla de pintura

@@ -62,7 +62,6 @@ private:
 private:
     Q_UINT8 *m_data;
     Q_INT32 m_nReadlock;
-    bool m_writeLock;
     Q_INT32 m_row;
     Q_INT32 m_col;
     Q_INT32 m_pixelSize;

@@ -58,8 +58,8 @@ public:
     virtual void clear() = 0;
 
     /**
-     * Iterates over the rectangle specified by the iterator, on a piece with the colorspace.
-     * The producer may only read the iterator, it may safely be constructed with write = false
+     * Adds the values from the specified array of pixels to the bins -- does not
+     * reset anything.
      *
      * @param pixels A pointer an array of pixeldata in the given colorspace
      * @param selectionMask a pointer to an array of bytes, where 0 is unselected and 1-255 is degree of selectedness. The array

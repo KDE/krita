@@ -79,7 +79,7 @@ public:
      *
      * @param img The QImage to convert from. We will use the RGBA colorspace and no profile.
      */
-    virtual void convertFromImage(const QImage& img) = 0;
+    virtual void convertFromQImage(const QImage& img) = 0;
 
 
     virtual bool hasAlpha() const = 0;

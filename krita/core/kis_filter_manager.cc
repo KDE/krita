@@ -43,6 +43,7 @@
 #include "kis_id.h"
 #include "kis_canvas_subject.h"
 #include "kis_doc.h"
+#include "kis_transaction.h"
 #include <kis_progress_display_interface.h>
 
 KisFilterManager::KisFilterManager(KisView * view, KisDoc * doc)
@@ -214,7 +215,7 @@ void KisFilterManager::slotApplyFilter(int i)
     KisFilterConfiguration * oldConfig = m_lastFilterConfig;
     KisFilter * oldFilter = m_lastFilter;
 
-    kdDebug() << "With index " << i << " found filter: " << m_filterList[i].name() << "\n";
+    //kdDebug() << "With index " << i << " found filter: " << m_filterList[i].name() << "\n";
     m_lastFilter = KisFilterRegistry::instance()->get(m_filterList[i]);
 
     if (!m_lastFilter) {
@@ -287,17 +288,18 @@ void KisFilterManager::refreshPreview( )
 {
     if( m_lastDialog == 0 )
         return;
-    
-    m_lastDialog -> previewWidget() -> slotRenewLayer();
-    
+        
     KisLayerSP layer = m_lastDialog -> previewWidget()->getLayer();
-
+    if (!layer) return;
+    
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget, layer.data());
     
     QRect rect = layer -> extent();
+    KisTransaction cmd("Temporary transaction", (KisPaintDeviceImplSP) layer);
     m_lastFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
-    layer->image()->notify();
     m_lastDialog->previewWidget() -> slotUpdate();
+    cmd.unexecute();
+    
 }
 
 

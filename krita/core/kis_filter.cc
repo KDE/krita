@@ -21,8 +21,6 @@
 #include "kis_filter_registry.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
-#include "kis_previewdialog.h"
-#include "kis_previewwidget.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_id.h"

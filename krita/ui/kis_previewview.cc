@@ -1,4 +1,4 @@
-    /*
+/*
  *  kis_previewview.cc - part of Krita
  *
  *  Copyright (c) 2001 John Califf  <jwcaliff@compuzone.net>
@@ -28,23 +28,13 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcolor.h>
+#include <qcursor.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
 
-#include "kis_factory.h"
-#include "kis_undo_adapter.h"
-#include "kis_global.h"
-#include "kis_layer.h"
-#include "kis_image.h"
-#include "kis_painter.h"
-#include "kis_types.h"
-#include "kis_config.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_profile.h"
-#include <kis_meta_registry.h>
-#include "kis_colorspace.h"
-
+#include "kis_cursor.h"
 #include "kis_previewview.h"
 
 // The View
@@ -53,6 +43,7 @@ KisPreviewView::KisPreviewView(QWidget* parent, const char * name, WFlags f)
       m_pos(QPoint(0,0)), m_zoom(1.0)
 {
     m_moving = false;
+    setCursor(KisCursor::handCursor());
 }
 
 void KisPreviewView::setDisplayImage(KisImageSP i)
@@ -103,7 +94,7 @@ void KisPreviewView::render(QPainter &painter, KisImageSP image)
     QString monitorProfileName = cfg.monitorProfile();
 
     KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
-    painter.fillRect(0, 0, width(), height(), KGlobalSettings::baseColor());
+    
     image -> renderToPainter(0, 0, image -> width(), image -> height(), painter, monitorProfile);
 
 }
@@ -131,8 +122,11 @@ void KisPreviewView::slotMoved(QPoint zoomedPos)
 void KisPreviewView::paintEvent(QPaintEvent*)
 {
     setUpdatesEnabled(false);
-    QPainter painter(this);
+    QPixmap p(width(), height());
+    QPainter painter(&p);
+    painter.fillRect(0, 0, width(), height(), KGlobalSettings::baseColor());
     render(painter, m_image);
+    bitBlt(this, 0, 0, &p, 0, 0, width(), height(), Qt::CopyROP);
     setUpdatesEnabled(true);
 }
 

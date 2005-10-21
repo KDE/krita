@@ -35,7 +35,6 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
     m_col = col;
     m_row = row;
     m_nReadlock = 0;
-    m_writeLock = false;
 
     allocate();
 
@@ -51,7 +50,6 @@ KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
         m_data = 0;
         m_nextTile = 0;
         m_nReadlock = 0;
-        m_writeLock = false;
 
         allocate();
 
@@ -75,7 +73,6 @@ KisTile::KisTile(KisTile& rhs)
         m_data = 0;
         m_nextTile = 0;
         m_nReadlock = 0;
-        m_writeLock = false;
 
         allocate();
 

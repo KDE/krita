@@ -103,7 +103,7 @@ void KisClipboard::clipboardDataChanged()
                 new KisPaintDeviceImpl(cs,
                            "KisClipboard created clipboard selection");
             Q_CHECK_PTR(m_clip);
-            m_clip -> convertFromImage(qimg);
+            m_clip -> convertFromQImage(qimg);
         }
     }
 

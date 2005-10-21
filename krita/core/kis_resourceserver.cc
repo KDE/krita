@@ -27,13 +27,12 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
-#include "kis_factory.h"
 #include "kis_resource.h"
 
 #include "kis_resourceserver.h"
 
-KisResourceServerBase::KisResourceServerBase(QString type, QStringList fileExtensions)
-    : m_fileExtensions(fileExtensions), m_type(type), m_loaded(false)
+KisResourceServerBase::KisResourceServerBase(QString type)
+    : m_type(type), m_loaded(false)
 {
 }
 
@@ -41,23 +40,18 @@ KisResourceServerBase::~KisResourceServerBase()
 {
 }
 
-void KisResourceServerBase::loadResources()
+void KisResourceServerBase::loadResources(QStringList filenames)
 {
-    QStringList filenames;
     QStringList uniqueFiles;
-    
-    QStringList::Iterator it;
-    for ( it = m_fileExtensions.begin(); it != m_fileExtensions.end(); ++it ) 
-        filenames += KisFactory::instance() -> dirs() -> findAllResources(m_type.ascii(), (*it));
-    
+
     while( !filenames.empty() )
     {
-        
+
         QString front = *filenames.begin();
         filenames.pop_front();
-        
+
         QString fname = QFileInfo(front).fileName();
-        
+
         // XXX: Don't load resources with the same filename. Actually, we should look inside
         //      the resource to find out whether they are really the same, but for now this
         //      will prevent the same brush etc. showing up twice.
@@ -80,8 +74,10 @@ void KisResourceServerBase::loadResources()
 
 QValueList<KisResource*> KisResourceServerBase::resources()
 {
-    if(!m_loaded)
-        loadResources();
+    if(!m_loaded) {
+        kdDebug() << "resources for type " << m_type << " not loaded\n";
+        return QValueList<KisResource*>();
+    }
 
     return m_resources;
 }

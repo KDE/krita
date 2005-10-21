@@ -26,18 +26,22 @@
 
 class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles) : m_numberOfTiles(numberOfTiles) {};
-    public:
-                inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };
-        private:
-                Q_UINT32 m_numberOfTiles;
+public:
+    KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles) : m_numberOfTiles(numberOfTiles) {};
+
+public:
+    inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };
+
+private:
+    Q_UINT32 m_numberOfTiles;
 };
 
 class KisSmallTilesFilter : public KisFilter
 {
+
 public:
     KisSmallTilesFilter();
+
 public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("smalltiles", i18n("Small tiles")); };
@@ -45,9 +49,11 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }
+
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+
 private:
     void createSmallTiles(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 numberOfTiles);
 };

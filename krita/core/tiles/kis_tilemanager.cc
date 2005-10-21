@@ -25,6 +25,9 @@
 #include <string.h>
 #include <fcntl.h>
 
+#include <qmutex.h>
+#include <qthread.h>
+
 #include <kstaticdeleter.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -49,6 +52,7 @@ KisTileManager::KisTileManager() {
 
     // Hardcoded (at the moment only?): 4 pools of 1000 tiles each
     m_tilesPerPool = 1000;
+
     m_pools = new Q_UINT8*[4];
     m_poolPixelSizes = new Q_INT32[4];
     m_poolFreeList = new PoolFreeList[4];
@@ -57,7 +61,6 @@ KisTileManager::KisTileManager() {
         m_poolPixelSizes[i] = 0;
         m_poolFreeList[i] = PoolFreeList();
     }
-
     m_currentInMem = 0;
 
     KConfig * cfg = KGlobal::config();
@@ -69,6 +72,9 @@ KisTileManager::KisTileManager() {
     m_freeLists.reserve(8);
 
     counter = 0;
+
+    m_poolMutex = new QMutex(true);
+    m_swapMutex = new QMutex(true);
 }
 
 KisTileManager::~KisTileManager() {
@@ -99,9 +105,16 @@ KisTileManager::~KisTileManager() {
     kdDebug(DBG_AREA_TILES) << "Destructing TileManager: deleting file" << endl;
     m_tempFile.close();
     m_tempFile.unlink();
+
+    m_poolMutex->unlock();
+    delete m_poolMutex;
+
+    m_swapMutex->unlock();
+    delete m_swapMutex;
 }
 
-KisTileManager* KisTileManager::instance() {
+KisTileManager* KisTileManager::instance() 
+{
     if(KisTileManager::m_singleton == 0) {
         staticDeleter.setObject(KisTileManager::m_singleton, new KisTileManager());
         Q_CHECK_PTR(KisTileManager::m_singleton);
@@ -109,7 +122,11 @@ KisTileManager* KisTileManager::instance() {
     return KisTileManager::m_singleton;
 }
 
-void KisTileManager::registerTile(KisTile* tile) {
+void KisTileManager::registerTile(KisTile* tile) 
+{
+
+    m_swapMutex->lock();
+
     TileInfo* info = new TileInfo();
     info -> tile = tile;
     info -> inMem = true;
@@ -130,9 +147,14 @@ void KisTileManager::registerTile(KisTile* tile) {
 
     if (++counter % 50 == 0)
         printInfo();
+
+    m_swapMutex->unlock();
 }
 
 void KisTileManager::deregisterTile(KisTile* tile) {
+
+    m_swapMutex->lock();
+
     Q_ASSERT(m_tileMap.contains(tile));
 
     TileInfo* info = m_tileMap[tile];
@@ -168,11 +190,16 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     delete info;
     m_tileMap.erase(tile);
 
-
     doSwapping();
+
+    m_swapMutex->lock();
 }
 
-void KisTileManager::ensureTileLoaded(KisTile* tile) {
+void KisTileManager::ensureTileLoaded(KisTile* tile) 
+{
+
+    m_swapMutex->lock();
+
     TileInfo* info = m_tileMap[tile];
     if (info -> validNode) {
         m_swappableList.erase(info -> node);
@@ -182,18 +209,29 @@ void KisTileManager::ensureTileLoaded(KisTile* tile) {
     if (!info -> inMem) {
         fromSwap(info);
     }
+
+    m_swapMutex->unlock();
 }
 
-void KisTileManager::maySwapTile(KisTile* tile) {
+void KisTileManager::maySwapTile(KisTile* tile) 
+{
+
+    m_swapMutex->lock();
+
     TileInfo* info = m_tileMap[tile];
     m_swappableList.push_back(info);
     info -> validNode = true;
     info -> node = -- m_swappableList.end();
 
     doSwapping();
+
+    m_swapMutex->unlock();
 }
 
-void KisTileManager::fromSwap(TileInfo* info) {
+void KisTileManager::fromSwap(TileInfo* info) 
+{
+    m_swapMutex->lock();
+
     Q_ASSERT(!info -> inMem);
 
     doSwapping();
@@ -204,9 +242,14 @@ void KisTileManager::fromSwap(TileInfo* info) {
     info -> inMem = true;
     m_currentInMem++;
     m_bytesInMem += info -> size;
+
+    m_swapMutex->unlock();
 }
 
 void KisTileManager::toSwap(TileInfo* info) {
+
+    m_swapMutex->lock();
+
     Q_ASSERT(info -> inMem);
 
     if (info -> filePos < 0) {
@@ -253,10 +296,12 @@ void KisTileManager::toSwap(TileInfo* info) {
         memcpy(data, tile -> m_data, info -> size);
         madvise(data, info -> fsize, MADV_DONTNEED);
 
+        m_poolMutex->lock();
         if (isPoolTile(tile -> m_data, tile -> m_pixelSize))
             reclaimTileToPool(tile -> m_data, tile -> m_pixelSize);
         else
             delete[] tile -> m_data;
+        m_poolMutex->unlock();
 
         tile -> m_data = data;
     } else {
@@ -266,12 +311,21 @@ void KisTileManager::toSwap(TileInfo* info) {
     info -> inMem = false;
     m_currentInMem--;
     m_bytesInMem -= info -> size;
+
+    m_swapMutex->unlock();
 }
 
-void KisTileManager::doSwapping() {
-    if (m_currentInMem <= m_maxInMem)
+void KisTileManager::doSwapping() 
+{
+    m_swapMutex->lock();
+
+    if (m_currentInMem <= m_maxInMem) {
+        m_swapMutex->unlock();
         return;
+    }
+
 #if 1 // enable this to enable swapping
+
     Q_INT32 count = QMIN(m_swappableList.size(), m_swappiness);
 
     for (Q_INT32 i = 0; i < count; i++) {
@@ -279,10 +333,14 @@ void KisTileManager::doSwapping() {
         m_swappableList.front() -> validNode = false;
         m_swappableList.pop_front();
     }
+
 #endif
+
+    m_swapMutex->unlock();
 }
 
-void KisTileManager::printInfo() {
+void KisTileManager::printInfo() 
+{
     kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
     kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
@@ -303,27 +361,38 @@ void KisTileManager::printInfo() {
     kdDebug(DBG_AREA_TILES) << endl;
 }
 
-Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize) {
+Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize) 
+{
+    m_swapMutex->lock();
+
     Q_UINT8* data = findTileFor(pixelSize);
     if ( data ) {
+        m_swapMutex->unlock();
         return data;
     }
+    m_swapMutex->unlock();
     return new Q_UINT8[m_tileSize * pixelSize];
 }
 
-void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize) {
+void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize) 
+{
+    m_poolMutex->lock();
     if (isPoolTile(data, pixelSize)) {
         reclaimTileToPool(data, pixelSize);
     } else
         delete[] data;
+    m_poolMutex->unlock();
 }
 
-Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize) {
+Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize) 
+{
+    m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize) {
             if (!m_poolFreeList[i].isEmpty()) {
                 Q_UINT8* data = m_poolFreeList[i].front();
                 m_poolFreeList[i].pop_front();
+                m_poolMutex->unlock();
                 return data;
             }
         }
@@ -334,30 +403,41 @@ Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize) {
             // j = 1 because we return the first element, so no need to add it to the freelist
             for (int j = 1; j < m_tilesPerPool; j++)
                 m_poolFreeList[i].append(&m_pools[i][j * pixelSize * m_tileSize]);
+            m_poolMutex->unlock();
             return m_pools[i];
         }
     }
+    m_poolMutex->unlock();
     return 0;
 }
 
 bool KisTileManager::isPoolTile(Q_UINT8* data, Q_INT32 pixelSize) {
+
     if (data == 0)
         return false;
+
+    m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
-        if (m_poolPixelSizes[i] == pixelSize)
-            return data >= m_pools[i]
-                    && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool;
+        if (m_poolPixelSizes[i] == pixelSize) {
+            bool b = data >= m_pools[i]
+                     && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool;
+            m_poolMutex->unlock();
+            return b;
+        }
     }
+    m_poolMutex->unlock();
     return false;
 }
 
 void KisTileManager::reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize) {
+    m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize)
-            if (data >= m_pools[i]
-                && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool)
+            if (data >= m_pools[i] && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool) {
                 m_poolFreeList[i].append(data);
+            }
     }
+    m_poolMutex->unlock();
 }
 
 void KisTileManager::configChanged() {
@@ -369,5 +449,7 @@ void KisTileManager::configChanged() {
     kdDebug(DBG_AREA_TILES) << "TileManager has new config: maxinmem: " << m_maxInMem
             << " swappiness: " << m_swappiness << endl;
 
+    m_swapMutex->lock();
     doSwapping();
+    m_swapMutex->unlock();
 }

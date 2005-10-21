@@ -19,17 +19,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef __kis_previewwidget_h__
 #define __kis_previewwidget_h__
+
+#include <qimage.h>
 
 #include "kis_types.h"
 
 #include "kis_previewwidgetbase.h"
 
 class QWidget;
-class KisUndoAdapter;
-
+class KisProfile;
 /**
  * A widget that can be used by plugins to show a preview of the effect of the
  * plugin to the user. This is a convenience class thand handily packs a source and a
@@ -49,15 +49,6 @@ public:
     /** @return the layer, so the dialog can apply its effect on it. */
     KisLayerSP getLayer();
 
-    /**
-     * returns the zoom factor. This could be useful if the filter has to rely on
-     * the whole layer. With this and getPos(), there is enough information to
-     * paint the preview from a source different from the layer in @see getLayer */
-    double getZoom();
-
-    /** returns the 'vector' the image in the preview has been moved by. @see getZoom */
-    QPoint getPos();
-
     /** returns if the preview is automatically updated */
     bool getAutoUpdate();
 
@@ -66,11 +57,6 @@ public slots:
 
     /** Sets the preview to use the layer specified as argument */
     void slotSetLayer(KisLayerSP lay);
-
-    /**
-     * This should be called at the beginning of the effect. This ensures that
-     * the layer in the preview widget is in the right state. */
-    void slotRenewLayer();
 
     /**
      * Call this when the effect has finished updating the layer. Makes the preview
@@ -88,20 +74,33 @@ public slots:
     
     /** use to indicate that the preview need to be updated. */
     void needUpdate();
+    
 signals:
     /** This is emitted when the position or zoom factor of the widget has changed */
     void updated();
 
 private slots:
 
-    void redirectUpdated();
-    void forceUpdate();
-private:
-    
-    bool m_autoupdate, m_previewisdiplayed;
+    void zoomIn();
+    void zoomOut();
 
-    KisLayerSP m_sourceLayer, m_previewLayer;
-    KisImageSP m_sourceImage, m_previewImage;
+    void forceUpdate();
+    
+private:
+
+    void zoomChanged();
+    
+    bool m_autoupdate, m_previewIsDisplayed;
+
+    QImage m_unscaledSource;
+    QImage m_scaledPreview;
+    KisLayerSP m_previewLayer;
+    
+    double m_zoom;
+    KisProfile * m_profile;
+
+    KisImageSP m_image;
+    KisLayerSP m_origLayer;
 };
 
 #endif

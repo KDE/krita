@@ -35,7 +35,6 @@ libkisui_la_SOURCES = \
     kis_progress_subject.cc \
     kis_double_widget.cc \
     kis_dlg_apply_profile.cc \
-    kis_previewview.cc \
     kis_previewdialog.cc \
     kis_selection_options.cc \
     kis_guide.cc \
@@ -60,6 +59,7 @@ libkisui_la_SOURCES = \
     kis_gradient_slider_widget.cc \
     kcurve.cc\
     kis_histogram_view.cc \
+    imageviewer.cc \
     kis_matrix_widget.ui \
     wdgbirdeye.ui \
     wdgautogradient.ui \
@@ -116,6 +116,7 @@ noinst_HEADERS = kis_dlg_preferences.h \
     kis_label_cursor_pos.h \
     kis_label_progress.h \
     kis_label_zoom.h\
+    imageviewer.h \
     kis_multi_integer_filter_widget.h \
     kis_multi_bool_filter_widget.h \
     kis_gradient_slider_widget.h \

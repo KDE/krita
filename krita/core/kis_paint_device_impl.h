@@ -185,7 +185,7 @@ public:
     /**
      * Fill this paint device with the data from img;
      */
-    virtual void convertFromImage(const QImage& img);
+    virtual void convertFromQImage(const QImage& img);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.

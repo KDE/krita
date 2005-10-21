@@ -45,7 +45,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     QFrame* frame = makeMainWidget();
     m_hlayout = new QHBoxLayout(frame);
 
-
     m_kflw = new KisFiltersListView(m_view, frame  );
     m_hlayout->addWidget(m_kflw);
     connect(m_kflw, SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
@@ -59,11 +58,9 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 
 }
 
-
 KisDlgFiltersGallery::~KisDlgFiltersGallery()
 {
 }
-
 
 void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
 {
@@ -91,8 +88,7 @@ void KisDlgFiltersGallery::refreshPreview( )
 {
     if(m_currentFilter == 0)
         return;
-    m_previewWidget->slotRenewLayer();
-
+    
     KisLayerSP layer = m_previewWidget->getLayer();
 
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());

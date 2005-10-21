@@ -21,6 +21,8 @@
 #include <qglobal.h>
 #include <qmap.h>
 #include <qvaluelist.h>
+#include <qmutex.h>
+
 #include <ktempfile.h>
 
 class KisTile;
@@ -88,6 +90,8 @@ private:
     Q_INT32 *m_poolPixelSizes;
     Q_INT32 m_tilesPerPool;
     PoolFreeList *m_poolFreeList;
+    QMutex * m_poolMutex;
+    QMutex * m_swapMutex;
 
     // debug
     int counter;
@@ -100,6 +104,7 @@ private:
     Q_UINT8* findTileFor(Q_INT32 pixelSize);
     bool isPoolTile(Q_UINT8* data, Q_INT32 pixelSize);
     void reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize);
+
 };
 
 #endif // KIS_TILEMANAGER_H_

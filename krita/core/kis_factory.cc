@@ -59,26 +59,41 @@ class ResourceLoaderThread : public QThread {
 
 public:
 
-    ResourceLoaderThread(KisResourceServerBase * server)
+    ResourceLoaderThread(KisResourceServerBase * server, QStringList files)
         : QThread()
         , m_server(server)
+        , m_fileNames( files )
     {
-        //kdDebug() << "Created resource loader thread " << m_server->type() << "\n";
+        kdDebug() << "Created resource loader thread " << m_server->type() << "\n";
     }
 
 
     void run()
     {
-        //kdDebug() << "Started resource loader thread " << m_server->type() << "\n";
-        m_server->loadResources();
-        //kdDebug() << "Done resource loader thread " << m_server->type() << "\n";
+        kdDebug() << "Started resource loader thread " << m_server->type() << "\n";
+        m_server->loadResources(m_fileNames);
+        kdDebug() << "Done resource loader thread " << m_server->type() << "\n";
     }
 
 private:
 
     KisResourceServerBase * m_server;
+    QStringList m_fileNames;
 
 };
+
+QStringList getFileNames( QString extensions, QString type )
+{
+    QStringList extensionList = QStringList::split(":", extensions);
+    QStringList fileNames;
+
+    QStringList::Iterator it;
+    for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
+        QString s = (*it);
+        fileNames += KisFactory::instance() -> dirs() -> findAllResources(type.ascii(), (*it));
+    }
+    return fileNames;
+}
 
 
 KisFactory::KisFactory( QObject* parent, const char* name )
@@ -91,34 +106,24 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
     s_rserverRegistry = new KisResourceServerRegistry();
 
-    QStringList fileExtensions;
-    fileExtensions << "*.gbr";
-    KisResourceServer<KisBrush>* brushServer = new KisResourceServer<KisBrush>("kis_brushes", fileExtensions);
-    ResourceLoaderThread t1 (brushServer);
+    KisResourceServer<KisBrush>* brushServer = new KisResourceServer<KisBrush>("kis_brushes");
+    ResourceLoaderThread t1 (brushServer, getFileNames( "*.gbr","kis_brushes" ));
     t1.start();
 
-    fileExtensions.clear();
-    fileExtensions << "*.gih";
-    KisResourceServer<KisImagePipeBrush>* imagePipeBrushServer = new KisResourceServer<KisImagePipeBrush>("kis_brushes", fileExtensions);
-    ResourceLoaderThread t2 (imagePipeBrushServer);
+    KisResourceServer<KisImagePipeBrush>* imagePipeBrushServer = new KisResourceServer<KisImagePipeBrush>("kis_brushes");
+    ResourceLoaderThread t2 (imagePipeBrushServer, getFileNames( "*.gih", "kis_brushes"));
     t2.start();
 
-    fileExtensions.clear();
-    fileExtensions << "*.pat";
-    KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns", fileExtensions);
-    ResourceLoaderThread t3 (patternServer);
+    KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns");
+    ResourceLoaderThread t3 (patternServer, getFileNames("*.pat", "kis_patterns"));
     t3.start();
 
-    fileExtensions.clear();
-    fileExtensions = KoGradientManager::filters();
-    KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients", fileExtensions);
-    ResourceLoaderThread t4 (gradientServer);
+    KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients");
+    ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
     t4.start();
 
-    fileExtensions.clear();
-    fileExtensions << "*.gpl" << "*.pal" << "*.act";
-    KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes", fileExtensions);
-    ResourceLoaderThread t5 (paletteServer);
+    KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes");
+    ResourceLoaderThread t5 (paletteServer, getFileNames(".gpl:.pal:.act", "kis_palettes") );
     t5.start();
 
     t1.wait();

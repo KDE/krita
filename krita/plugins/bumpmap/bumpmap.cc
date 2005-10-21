@@ -365,15 +365,15 @@ KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDe
 KisBumpmapConfiguration::KisBumpmapConfiguration()
 {
     bumpmap = QString();
-        azimuth = 135.0;
-        elevation = 45.0;
-        depth = 3;
-        xofs = 0;
-        yofs = 0;
-        waterlevel = 0;
-        ambient = 0;
-        compensate = true;
-        invert = false;
+    azimuth = 135.0;
+    elevation = 45.0;
+    depth = 3;
+    xofs = 0;
+    yofs = 0;
+    waterlevel = 0;
+    ambient = 0;
+    compensate = true;
+    invert = false;
     tiled = true;
     type = krita::LINEAR;
 }

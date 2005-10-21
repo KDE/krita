@@ -1,5 +1,6 @@
 
-SUBDIRS = cimg \
+SUBDIRS = \
+    cimg \
 	bumpmap \
 	example \
 	colorsfilters \
@@ -23,11 +24,10 @@ SUBDIRS = cimg \
 	histogram \
 	variations \
 	pixelizefilter \
-	cubismfilter \
 	filtersgallery \
 	separate_channels \
 	smalltilesfilter \
-	imagenhancement \
+	imageenhancement \
 	sobelfilter \
 	roundcorners \
 	dropshadow \

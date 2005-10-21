@@ -282,6 +282,7 @@ public:
      */
     virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2) = 0;
 
+    
     /**
      * Mix the colors given their weights and return in dst
      * The sum of weights is assumed 255 */

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Invert Filter with Threads
+ServiceTypes=Krita/CoreModule
+Type=Service
+X-KDE-Library=kritathreadtest
+X-KDE-Version=2

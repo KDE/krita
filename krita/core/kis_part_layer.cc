@@ -86,7 +86,7 @@ void KisPartLayer::deactivate()
 
     m_doc->document()->paintContent(painter, image()->bounds(), true);
     QImage qimg = pm.convertToImage();
-    convertFromImage(qimg);
+    convertFromQImage(qimg);
 }
 
 #include "kis_part_layer.moc"

@@ -23,25 +23,25 @@
 #define KIS_RESOURCESERVER_H_
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 class KisResource;
 
 class KisResourceServerBase {
 
 public:
-    KisResourceServerBase(QString type, QStringList fileExtensions);
+    KisResourceServerBase(QString type);
     virtual ~KisResourceServerBase();
 
-    void loadResources();
+    void loadResources(QStringList filenames);
     QValueList<KisResource*> resources();
     QString type() { return m_type; };
-    
+
 protected:
     virtual KisResource* createResource( QString filename ) = 0;
 
 private:
     QValueList<KisResource*> m_resources;
-    QStringList m_fileExtensions;
     QString m_type;
 
     bool m_loaded;
@@ -52,7 +52,7 @@ template <class T> class KisResourceServer : public KisResourceServerBase {
     typedef KisResourceServerBase super;
 
 public:
-    KisResourceServer(QString type, QStringList fileExtensions) :super( type, fileExtensions) {}
+    KisResourceServer(QString type) :super( type ) {}
     virtual ~KisResourceServer(){}
 
 private:

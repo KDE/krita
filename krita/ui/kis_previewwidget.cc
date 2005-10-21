@@ -19,7 +19,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qpushbutton.h>
@@ -39,26 +38,35 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_colorspace.h"
+#include "kis_meta_registry.h"
+#include "kis_colorspace_factory_registry.h"
+#include "kis_config.h"
+#include "kis_profile.h"
 
 #include "kis_previewwidgetbase.h"
 #include "kis_previewwidget.h"
-#include "kis_previewview.h"
+#include "imageviewer.h"
 
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     : PreviewWidgetBase( parent, name )
 {
+    m_image = new KisImage(0, 0, 0, KisMetaRegistry::instance()->csRegistry()->getRGB8(), "preview image");
     m_autoupdate = true;
-    m_previewisdiplayed = true;
-    connect(m_preview, SIGNAL(updated()), this, SLOT(redirectUpdated()));
+    m_previewIsDisplayed = true;
+
     kToolBar1->insertButton("viewmag+",0, true, "zoom+");
-    connect(kToolBar1->getButton(0),SIGNAL(clicked()),m_preview,SLOT(zoomIn()));
+    connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
+    
     kToolBar1->insertButton("viewmag-",1, true, "zoom-");
-    connect(kToolBar1->getButton(1),SIGNAL(clicked()),m_preview,SLOT(zoomOut()));
+    connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
+
     kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, "update");
     connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
+    
     kToolBar1->insertButton("",3, true, "autoupdate");
     connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
+    
     kToolBar1->insertButton("",4, true, "switch");
     connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));
     kToolBar1->insertButton("",5, true, "popup original and preview");
@@ -66,115 +74,123 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 
 void KisPreviewWidget::forceUpdate()
 {
-    if(m_previewisdiplayed)
+    kdDebug() << "forceUpdate\n";
+    if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(i18n("Preview"));
+        m_groupBox->setTitle(m_origLayer->name());
         emit updated();
     }
 }
 
-void KisPreviewWidget::redirectUpdated() {
-    if (m_autoupdate && m_previewisdiplayed)
-        emit updated();
-}
-
 void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
 {
+    //kdDebug() << "slotSetLayer\n";
+    
     Q_ASSERT(lay);
     if (!lay) return;
+
+    m_origLayer = lay;
     
-    Q_INT32 w = static_cast<Q_INT32>(ceil(size().width() / m_preview->getZoom()));
-    Q_INT32 h = static_cast<Q_INT32>(ceil(size().height() / m_preview->getZoom()));
+    KisConfig cfg;
+    QString monitorProfileName = cfg.monitorProfile();
+    m_profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
+
+    QRect r = lay->exactBounds();
+    //kdDebug() << "layer size: " << r.width() << ", " << r.height() << "\n";
     
-    m_sourceImage = new KisImage(0, w, h, lay->colorSpace(), "preview");
-    Q_CHECK_PTR(m_sourceImage);
-    m_sourceImage->setProfile(lay -> colorSpace() -> getProfile());
-    m_sourceLayer = new KisLayer( *lay );
-    m_sourceLayer->setImage(m_sourceImage);
-    m_sourceImage->add(m_sourceLayer, -1);
-    
-    m_previewImage = new KisImage(0, w, h, lay->colorSpace(), "preview");
-    Q_CHECK_PTR(m_previewImage);
-    m_previewImage -> setProfile(lay -> colorSpace() -> getProfile());
-    m_previewLayer = new KisLayer(m_previewImage, m_previewImage -> nextLayerName(), OPACITY_OPAQUE);
-    Q_CHECK_PTR(m_previewImage);
-    
-    KisPainter gc;
-    KisPaintDeviceImplSP pd(m_sourceLayer.data());
-    gc.begin(m_previewLayer.data());
-    
-    gc.bitBlt(0, 0, COMPOSITE_OVER, pd, m_preview->getPos().x(), m_preview->getPos().y(), -1, -1);
-    gc.end();
-    m_previewImage -> add(m_previewLayer, -1);
-    slotRenewLayer();
-    m_preview->setDisplayImage(m_previewImage);
-    m_groupBox->setTitle(i18n("Preview"));
-    redirectUpdated();
-    m_previewisdiplayed = true;
+    m_unscaledSource = lay->convertToQImage(m_profile, 0, 0, r.width(), r.height());
+    //kdDebug() << "preview size: " << m_preview->width() << ", "  << m_preview->height() << "\n";
+
+    m_groupBox->setTitle(lay->name());
+    m_previewIsDisplayed = true;
+
+    m_zoom = (double)m_preview->width() / (double)m_unscaledSource.width();
+    zoomChanged();
+    //kdDebug() << "initial zoom = " << m_zoom << "\n";
 }
 
-void KisPreviewWidget::slotRenewLayer() {
-    if (!m_previewLayer || !m_sourceLayer) return;
-
-    KisPaintDeviceImplSP pd(m_sourceLayer.data());
-    KisPainter gc;
-    QPoint delta = m_preview->getPos();
-    gc.begin(m_previewLayer.data());
-    gc.bltSelection(0, 0, COMPOSITE_COPY, pd, OPACITY_OPAQUE, delta.x(), delta.y(), m_previewImage->width(), m_previewImage->height());
-    gc.end();
-}
 
 KisLayerSP KisPreviewWidget::getLayer()
 {
-	return m_previewLayer;
+    //kdDebug() << "getLayer\n";
+    return m_previewLayer;
 }
 
 void KisPreviewWidget::slotUpdate()
 {
-    m_preview->updatedPreview();
+    //kdDebug() << "slotUpdate\n";
+    m_scaledPreview = m_previewLayer->convertToQImage(m_profile, 0, 0, m_scaledPreview.width(), m_scaledPreview.height());
+    m_preview->setImage(m_scaledPreview);
 }
 
 void KisPreviewWidget::slotSetAutoUpdate(bool set) {
+    //kdDebug() << "slotSetAutoUpdate\n";
     m_autoupdate = set;
 }
 
 void KisPreviewWidget::toggleAutoUpdate()
 {
-    kdDebug() << "m_autoupdate = " << m_autoupdate << endl;
+    //kdDebug() << "m_autoupdate = " << m_autoupdate << endl;
     m_autoupdate = !m_autoupdate;
 }
 
 void KisPreviewWidget::toggleImageDisplayed()
 {
-    if(m_previewisdiplayed)
+    //kdDebug() << "toggleImageDisplayed\n";
+    if(m_previewIsDisplayed)
     {
         m_groupBox->setTitle(i18n("Original"));
-        m_preview->setDisplayImage(m_sourceImage);
+        //m_preview->setDisplayImage(m_unscaledSourceImage);
     } else {
         m_groupBox->setTitle(i18n("Preview"));
-        m_preview->setDisplayImage(m_previewImage);
+        //m_preview->setDisplayImage(m_previewImage);
     }
-    m_previewisdiplayed = !m_previewisdiplayed;
+    m_previewIsDisplayed = !m_previewIsDisplayed;
 }
+
 void KisPreviewWidget::needUpdate()
 {
-    if(m_previewisdiplayed)
-        m_groupBox->setTitle(i18n("Preview (need update)"));
-}
-
-
-double KisPreviewWidget::getZoom()
-{
-    return m_preview->getZoom();
-}
-
-QPoint KisPreviewWidget::getPos()
-{
-    return m_preview->getPos();
+    //kdDebug() << "needUpdate\n";
+    if(m_previewIsDisplayed)
+        m_groupBox->setTitle(i18n("Preview (needs update)"));
 }
 
 bool KisPreviewWidget::getAutoUpdate() {
     return m_autoupdate;
+}
+
+void KisPreviewWidget::zoomChanged()
+{
+    kdDebug() << "zoomChanged " << m_zoom << "\n";
+    int w, h;
+       
+    w = m_unscaledSource.width() * m_zoom;
+    h = m_unscaledSource.height() * m_zoom;
+
+    kdDebug() << "   width: " << w << "\n";
+    kdDebug() << "   height: " << h << "\n";
+    
+    m_scaledPreview = m_unscaledSource.smoothScale(w, h, QImage::ScaleMax);
+
+    m_image->resize(m_scaledPreview.width(), m_scaledPreview.height());
+    m_previewLayer = new KisLayer(m_image, "preview layer", OPACITY_OPAQUE);
+    m_previewLayer->convertFromQImage(m_scaledPreview);
+    
+    emit updated();
+ }
+
+void KisPreviewWidget::zoomIn() {
+    if (m_zoom * 1.5 < 8) {
+        m_zoom = m_zoom * 1.5;
+        zoomChanged();
+    }
+}
+
+void KisPreviewWidget::zoomOut() {
+    if (m_zoom / 1.5 > 1/8) {
+        m_zoom = m_zoom / 1.5;
+        zoomChanged();
+   }
 }
 
 

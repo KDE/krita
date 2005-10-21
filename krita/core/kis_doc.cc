@@ -178,7 +178,7 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
                 return ok;
         }
 
-        QString file;
+    QString file;
     KoTemplateChooseDia::DialogType dlgtype;
 
      if (flags != KoDocument::InitDocFileNew) {

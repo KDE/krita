@@ -84,7 +84,7 @@ Colorspace independence (found with the test colorstrategy)
     
 Core
 
-        * The fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
+     * The fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
           tool should use that rect to blit and notify the image, instead of notifying the complete image.s
 	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
 	* Adjustment layers (Layers that dynamically apply a filter to
@@ -114,7 +114,7 @@ File Format:
 
 Import/Export
 
-        * Fix gimp XCF PSD and import/export (ImageMagick hacking...)
+    * Fix gimp XCF PSD and import/export (ImageMagick hacking...)
 	* Fix imports to import metadata.
 
 User Interface
@@ -125,7 +125,6 @@ User Interface
     * Add opacity widget (One that grows more white or transparent (showing those gray blocks) based on the
 	  input)
     * Add out-of-gamut selection
-    * Fix crash with tablet because of tool refactoring.
     * Fix layout problems in tool option widgets.
     * Disable dragging the toolbox from dock position to dock position (see Karbon)
     * Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.

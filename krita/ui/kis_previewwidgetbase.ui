@@ -26,6 +26,9 @@
             <height>200</height>
         </size>
     </property>
+    <property name="caption">
+        <string>PreviewWidgetBase</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -44,7 +47,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KisPreviewView">
+                <widget class="ImageViewer">
                     <property name="name">
                         <cstring>m_preview</cstring>
                     </property>
@@ -56,6 +59,18 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>150</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>1000</width>
+                            <height>1000</height>
+                        </size>
+                    </property>
                 </widget>
             </vbox>
         </widget>
@@ -63,13 +78,19 @@
             <property name="name">
                 <cstring>kToolBar1</cstring>
             </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>32</height>
+                </size>
+            </property>
         </widget>
     </vbox>
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KisPreviewView</class>
-        <header location="local">kis_previewview.h</header>
+        <class>ImageViewer</class>
+        <header location="local">imageviewer.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>
@@ -109,13 +130,20 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
-        <pixmap>image0</pixmap>
+        <pixmap>image1</pixmap>
     </customwidget>
 </customwidgets>
 <images>
     <image name="image0">
         <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
     </image>
+    <image name="image1">
+        <data format="PNG" length="741">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002ac49444154388db5d53d4c13611cc7f12fbd83ca3561c0232a03e2408b2c242e24482204582531a1c1c4059cdab8100712572663620823918e0eb8a0a2042160085638a824d4817a5a7931a4b4e5d52b5c5fae75406bc1a654a2bfe42e4ffec9f379eeff24cf73056eb79bd3525f5f9f3a5973bbdd05b9e698ce82e6aa67ae0c90fad78ff86b81e59901c22bb3c4a37b9844f3698d1c4b9124634435d6bd2e6e3f3caaa5e1f0ca2c6b4b2e92b91bcc1a4180022061fcaea5e178748f640aee3cfa7b1860e8c13952e87fc299ed87c361c442112da2e15df2323232c2cece0e0dd71b282f2f4792248a2dc5acaeade21a74313931c905db2dd63f3efd13cecce0e0209ba14d66dfcfa2cc29b4dbdbe9efef473e2f03a0eb3a33ef66585d5925b819ccda4156b8a7a7273d3689263c1e0f034f06b8db7917df271fbdbdbd2c7a16d9dada4292a4fc6100abd58ac3e9402c142993cbb0d96c949494a07e5269bcd148576717cf5f3c677f7f9fd157a3f9c18e7b0eda6eb6d1dadc4a3c11c75c64261a8b62124cc46231eaeaea68696ec16ab3e2f7fbb3c2594f9e20081849032da261321d61a150888383035455657c629cefda772a2f57120e85f3df8ad72f5f2397ca5455552197ca08824020184092242c160bcbbe65865f0eb3f8619179cf7c5638eb176f7cdb20140ea1691a878787e8873a5393530c3d1bc2e7f3b1a02c100c04b1dbed545babf387f5988efa59c5ffd58f7fc54f2c1ea3a9a909d5a7b2e059a0e24a05814000c330703a9df96f85288a28730a35576bb0b7db8944225cba7889eefbddd45eab65eccd18cabc82a228747474e4868b241941381a27120976b777e97bdc47dfe3beac137f65faed340066a98ccc6b260d1b518d028ecefc05dbad9cd8c998a532b4ed2f64ca6978ddeb2261400afdd899cf27a99faf6432a3f8bf2efa537f4d67cd7f837f00a0a6494d8d22e5ed0000000049454e44ae426082</data>
+    </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>imageviewer.h</includehint>
+    <includehint>ktoolbar.h</includehint>
+</includehints>
 </UI>

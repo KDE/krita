@@ -150,7 +150,7 @@ void KisBasicU16HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
     Q_UINT16 width = static_cast<Q_UINT16>(m_width * UINT16_MAX + 0.5); // We include the end
     Q_UINT16 to = from + width;
     double factor = 255.0 / width;
-    kdDebug() << "from: " << from << "; to: " << to << endl;
+    //kdDebug() << "from: " << from << "; to: " << to << endl;
 
     Q_INT32 pSize = cs->pixelSize();
 

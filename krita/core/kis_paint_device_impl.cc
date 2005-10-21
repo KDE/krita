@@ -314,7 +314,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
     colorSpace -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
-        delete [] defPixel;
+    delete [] defPixel;
 
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
@@ -730,7 +730,7 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
     return 0;
 }
 
-void KisPaintDeviceImpl::convertFromImage(const QImage& img)
+void KisPaintDeviceImpl::convertFromQImage(const QImage& img)
 {
     // XXX: Apply import profile
     if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {

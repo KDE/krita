@@ -42,13 +42,13 @@
 
 // #include <kmessagebox.h>
 
-#include "imagenhancement.h"
+#include "imageenhancement.h"
 
 #include "kis_simple_noise_reducer.h"
 #include "kis_wavelet_noise_reduction.h"
 
 typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaimagenhancement, KritaImageEnhancementFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory( "krita" ) )
 
         KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const char *name, const QStringList &)
   : KParts::Plugin(parent, name)

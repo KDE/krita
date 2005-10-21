@@ -22,5 +22,5 @@ Comment[tr]=Resmin kalitesini artır
 Comment[xx]=xxEnhance the quality of an imagexx
 ServiceTypes=Krita/CoreModule
 Type=Service
-X-KDE-Library=kritaimagenhancement
+X-KDE-Library=kritaimageenhancement
 X-KDE-Version=2

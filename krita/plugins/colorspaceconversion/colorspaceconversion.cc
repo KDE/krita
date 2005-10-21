@@ -101,11 +101,12 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         // XXX: Do the rest of the stuff
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+kdDebug()<<dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText()<<endl;
 
-        image -> setProfile(cs->getProfile());
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         image -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         QApplication::restoreOverrideCursor();
+        image -> setProfile(cs->getProfile());
     }
     delete dlgColorSpaceConversion;
 }

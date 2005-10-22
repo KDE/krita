@@ -192,7 +192,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     doSwapping();
 
-    m_swapMutex->lock();
+    m_swapMutex->unlock();
 }
 
 void KisTileManager::ensureTileLoaded(KisTile* tile) 

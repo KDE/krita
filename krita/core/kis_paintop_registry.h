@@ -24,7 +24,7 @@
 #include <koffice_export.h>
 
 class QStringList;
-class KisPaintop;
+class KisPaintOp;
 class KisPainter;
 
 class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {

@@ -27,7 +27,7 @@ libkritacolor_la_SOURCES = \
     $(OPENEXR_SOURCES) 
 
 libkritacolor_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
-libkritacolor_la_LIBADD  = colorspaces/libkiscolorspaces.la $(LCMS_LIBS) $(LIB_KPARTS) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS)
+libkritacolor_la_LIBADD  = colorspaces/libkritacolorspaces.la $(LCMS_LIBS) $(LIB_KPARTS) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS)
 
 include_HEADERS =  \
     kis_channelinfo.h \

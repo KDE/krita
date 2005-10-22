@@ -24,7 +24,6 @@
 
 #include <koffice_export.h>
 
-class KoDocument;
 class KisCanvasController;
 class KisCanvasSubject;
 
@@ -47,7 +46,6 @@ private:
     KisStrategyMove& operator=(const KisStrategyMove&);
 
 private:
-    KoDocument *m_doc;
     KisCanvasController *m_controller;
     KisCanvasSubject *m_subject;
     QRect m_deviceBounds;

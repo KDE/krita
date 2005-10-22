@@ -20,11 +20,8 @@
 #include <qwidget.h>
 
 #include <kdebug.h>
-#include <koDocument.h>
 
-#include "kis_doc.h"
-#include "kis_config.h"
-#include "kis_cursor.h"
+#include "kis_image.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_tool_controller.h"
@@ -133,12 +130,9 @@ void KisToolNonPaint::activate()
 
 void KisToolNonPaint::notifyModified() const
 {
-    if (m_subject) {
-        KoDocument *doc = m_subject -> document();
-
-        if (doc) {
-            doc -> setModified(true);
-        }
+    if (m_subject && m_subject->currentImg()) {
+        
+        m_subject->currentImg()->setModified();
     }
 }
 

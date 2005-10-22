@@ -21,6 +21,8 @@
  */
 
 #include <qpainter.h>
+#include <qlayout.h>
+#include <qwidget.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -169,7 +171,7 @@ KisPoint KisToolLine::straightLine(KisPoint point)
 {
     KisPoint comparison = point - m_startPos;
     KisPoint result;
-    
+
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
         result.setY(m_startPos.y());
@@ -177,7 +179,7 @@ KisPoint KisToolLine::straightLine(KisPoint point)
         result.setX( m_startPos.x() );
         result.setY( point.y() );
     }
-    
+
     return result;
 }
 

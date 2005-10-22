@@ -30,16 +30,20 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_guide.h"
+//#include "kis_guide.h"
 #include "kis_annotation.h"
 #include <koffice_export.h>
 
+class DCOPObject;
+class KCommand;
+
 class KoCommandHistory;
+
+class KisColorSpace;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
 class DCOPObject;
-class KisDoc;
 class KCommand;
 class KisCompositeOp;
 class KisColor;
@@ -47,13 +51,13 @@ class KisFilterStrategy;
 class KisImageIface;
 class KisProfile;
 class KisProgressDisplayInterface;
-
+class KisUndoAdapter;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
-    KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height, KisColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height, KisColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual KisImageIface *dcopObject();
@@ -105,6 +109,9 @@ public:
     void setProfile(const KisProfile * profile);
 
     void enableUndo(KoCommandHistory *history);
+
+    // Tell the image it's modified; this emits the sigImageModified signal
+    void setModified();
 
     KisColorSpace * colorSpace() const;
     void setColorSpace(KisColorSpace * colorSpace);
@@ -200,7 +207,7 @@ public:
     void notifyLayersChanged();
 
     KisUndoAdapter *undoAdapter() const;
-    KisGuideMgr *guides() const;
+    //KisGuideMgr *guides() const;
 
     /**
      * Add an annotation for this image. This can be anything: Gamma, EXIF, etc.
@@ -215,8 +222,8 @@ public:
     /** delete the annotation, if the image contains it */
     void removeAnnotation(QString type);
 
-    /** 
-     * Start of an iteration over the annotations of this image (including the ICC Profile) 
+    /**
+     * Start of an iteration over the annotations of this image (including the ICC Profile)
      */
     vKisAnnotationSP_it beginAnnotations();
 
@@ -224,6 +231,7 @@ public:
     vKisAnnotationSP_it endAnnotations();
 
 signals:
+
     void sigActiveSelectionChanged(KisImageSP image);
     void sigSelectionChanged(KisImageSP image);
     void sigLayersChanged(KisImageSP image);
@@ -240,6 +248,11 @@ signals:
      */
     void sigImageUpdated(KisImageSP image, const QRect& rc);
 
+    /**
+     * Emitted whenever the image has been changed.
+     */
+    void sigImageModified();
+
     void sigSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
     void sigProfileChanged(KisProfile *  profile);
     void sigColorSpaceChanged(KisColorSpace*  cs);
@@ -251,10 +264,10 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
+    void init(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
 
 private:
-    KisDoc *m_doc;
+
     KoCommandHistory *m_undoHistory;
     KURL m_uri;
     QString m_name;
@@ -286,7 +299,7 @@ private:
 
     KisNameServer *m_nserver;
     KisUndoAdapter *m_adapter;
-    KisGuideMgr m_guides;
+    //KisGuideMgr m_guides;
 
     KisImageIface *m_dcop;
 

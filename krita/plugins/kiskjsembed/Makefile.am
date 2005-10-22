@@ -23,6 +23,6 @@ kritakjsembed_la_SOURCES = kis_kjsembed.cc \
 noinst_HEADERS = kis_kjsembed.h kis_script.h kis_function_base.h
 
 kritakjsembed_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritakjsembed_la_LIBADD =  ../../libkritacommon.la -lkjsembed  ./functions/libkiskjsembedfunctions.la ./objects/libkiskjsembedobjects.la
+kritakjsembed_la_LIBADD =  ../../libkritacommon.la -lkjsembed  ./functions/libkritakjsembedfunctions.la ./objects/libkritakjsembedobjects.la
 
 kritakjsembed_la_METASOURCES = AUTO

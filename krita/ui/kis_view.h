@@ -177,14 +177,14 @@ protected:
 
 
 // -------------------------------------------------------------------------//
-//                    KisCanvasSubject implementation 
+//                    KisCanvasSubject implementation
 // -------------------------------------------------------------------------//
 public:
 
     KisCanvasSubject * getCanvasSubject() { return this; };
 
 private:
-    
+
     virtual KisImageSP currentImg() const;
 
     virtual void attach(KisCanvasObserver *observer);
@@ -196,7 +196,7 @@ private:
 
     virtual KisColor fgColor() const;
     virtual void setFGColor(const KisColor& c);
-    
+
     float HDRExposure() const;
     void setHDRExposure(float exposure);
 
@@ -211,19 +211,19 @@ private:
 
     virtual KisCanvasController *canvasController() const;
     virtual KisToolControllerInterface *toolController() const;
-    
+
     virtual KisProgressDisplayInterface *progressDisplay() const;
 
     virtual KisDoc * document() const;
 
     KisSelectionManager * selectionManager() { return m_selectionManager; }
-    
+
     KoPaletteManager * paletteManager();
-    
+
     KisProfile *  monitorProfile();
 
 // -------------------------------------------------------------------------//
-//                    KisCanvasController implementation 
+//                    KisCanvasController implementation
 // -------------------------------------------------------------------------//
 
 public:
@@ -232,24 +232,24 @@ public:
 
 
 private:
-    
+
     virtual QWidget *canvas() const;
-    
+
     virtual Q_INT32 horzValue() const;
     virtual Q_INT32 vertValue() const;
-    
+
     virtual void scrollTo(Q_INT32 x, Q_INT32 y);
-    
+
     virtual void updateCanvas();
     virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void updateCanvas(const QRect& rc);
 
     virtual void zoomIn();
     virtual void zoomIn(Q_INT32 x, Q_INT32 y);
-    
+
     virtual void zoomOut();
     virtual void zoomOut(Q_INT32 x, Q_INT32 y);
-    
+
     virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void zoomTo(const QRect& r);
     virtual void zoomTo(const KisRect& r);
@@ -260,15 +260,15 @@ private:
     virtual QRect viewToWindow(const QRect& rc);
     virtual KisRect viewToWindow(const KisRect& rc);
     virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y);
-    
+
     virtual QPoint windowToView(const QPoint& pt);
     virtual KisPoint windowToView(const KisPoint& pt);
     virtual QRect windowToView(const QRect& rc);
     virtual KisRect windowToView(const KisRect& rc);
     virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
-    
+
     virtual QCursor setCanvasCursor(const QCursor & cursor);
-    
+
     void setInputDevice(enumInputDevice inputDevice);
     enumInputDevice currentInputDevice() const;
 
@@ -281,15 +281,15 @@ private:
     void clearCanvas(const QRect& rc);
     void connectCurrentImg() const;
     void disconnectCurrentImg() const;
-    void eraseGuides();
-    void paintGuides();
-    void updateGuides();
+//    void eraseGuides();
+//    void paintGuides();
+//    void updateGuides();
     void imgUpdateGUI();
 
     void layerUpdateGUI(bool enable);
     void createLayerBox();
     void createDockers();
-    
+
     void paintView(const KisRect& rc);
 
     /**
@@ -316,7 +316,7 @@ private slots:
 
     void imgUpdated(KisImageSP img, const QRect& rc);
     void imgResizeToActiveLayer();
-    
+
     void canvasGotMoveEvent(KisMoveEvent *e);
     void canvasGotButtonPressEvent(KisButtonPressEvent *e);
     void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
@@ -336,7 +336,7 @@ private slots:
 
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
-    
+
     void layerCompositeOp(const KisCompositeOp& compositeOp);
     void layerOpacity(int opacity);
 
@@ -358,7 +358,7 @@ private slots:
     void mergeLayer();
     void mergeLinkedLayers();
     void saveLayerAsImage();
-    
+
     void slotUpdateFullScreen(bool toggle);
     void showRuler();
 
@@ -367,7 +367,7 @@ private slots:
     void slotActualPixels();
     void slotActualSize();
     void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
-    
+
     void scrollH(int value);
     void scrollV(int value);
 
@@ -375,7 +375,7 @@ private slots:
     void profileChanged(KisProfile *  profile);
 
     void preferences();
-    
+
 private:
 
     KisDoc *m_doc;
@@ -429,8 +429,8 @@ private:
     QScrollBar *m_vScroll; // is not right yet.
     int m_scrollX;
     int m_scrollY;
-    KisGuideSP m_currentGuide;
-    QPoint m_lastGuidePoint;
+//    KisGuideSP m_currentGuide;
+//    QPoint m_lastGuidePoint;
     KisUndoAdapter *m_adapter;
     vKisCanvasObserver m_observers;
     QLabel *m_statusBarZoomLabel;
@@ -441,7 +441,7 @@ private:
     KisLayerBox *m_layerBox;
     KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
-    
+
     // Current colours, brushes, patterns etc.
 
     KisColor m_fg;

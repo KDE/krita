@@ -38,8 +38,10 @@
 class QPoint;
 class QPixmap;
 class KisBoundary;
+class KisColorSpace;
+
 enum enumBrushType {
-        INVALID,
+    INVALID,
     MASK,
     IMAGE,
     PIPE_MASK,

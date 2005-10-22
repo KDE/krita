@@ -501,7 +501,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
             p.eraseRect(0, 0, 1000, 1000);
 //             p.paintEllipse(500, 1000, 100, 0, 0);
             p.setPaintColor(KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
-            KisResourceServerBase* r = KisFactory::rServerRegistry() -> get("PatternServer");
+            KisResourceServerBase* r = KisResourceServerRegistry::instance() -> get("PatternServer");
             Q_CHECK_PTR(r);
             p.setPattern((KisPattern*)r -> resources().first());
             p.setFillThreshold(15);

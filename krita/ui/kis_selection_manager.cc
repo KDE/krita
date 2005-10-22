@@ -494,7 +494,7 @@ void KisSelectionManager::pasteNew()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
     KisDoc * doc = (KisDoc*) entry.createDoc();
 
-    KisImageSP img = new KisImage(doc, r.width(), r.height(), clip->colorSpace(), "Pasted");
+    KisImageSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted");
     KisLayerSP layer = new KisLayer(img, clip->name(), OPACITY_OPAQUE, clip->colorSpace());
     KisPainter p(layer);
     p.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());

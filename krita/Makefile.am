@@ -1,16 +1,15 @@
-INCLUDES  = -I$(srcdir)/sdk -I$(srcdir)/kritacolor/color_strategy -I$(srcdir)/kritacolor \
-    $(KOFFICE_INCLUDES) -I$(interfacedir) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES  = $(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The common lib, shared between the part, the plugins, and the filters
 lib_LTLIBRARIES = libkritacommon.la
 libkritacommon_la_SOURCES = dummycommon.cc
 libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
-libkritacommon_la_LIBADD = sdk/libkissdk.la core/libkritacore.la ui/libkisui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
+libkritacommon_la_LIBADD = sdk/libkritasdk.la core/libkritaimage.la ui/libkritaui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
 
 ## The part
 kde_module_LTLIBRARIES = libkritapart.la
 libkritapart_la_SOURCES = krita_part_init.cc
-libkritapart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) 
+libkritapart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 libkritapart_la_LIBADD = libkritacommon.la
 
 METASOURCES = AUTO
@@ -22,17 +21,13 @@ krita_la_SOURCES = main.cc
 krita_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 krita_la_LIBADD = $(LIB_KOFFICECORE)
 
-#kdelnk_DATA = krita.desktop
-#kdelnkdir = $(kde_appsdir)/Office
 xdg_apps = krita.desktop
-
-#kdemime_DATA = x-krita.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = sdk kritacolor ui core . dtd paintops tools modules plugins data pics 
+SUBDIRS = sdk kritacolor core ui . dtd paintops tools modules plugins data pics 
 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.
@@ -40,7 +35,7 @@ dummycommon.cc:
 	echo > dummycommon.cc
 
 # Needed to compile libkritapart.la, which has no source files to itself
-# but everything in libkritacommon.la and static libs.
+# but everything in libkritacommon.la static libs.
 dummy.cc:
 	echo > dummy.cc
 
@@ -51,7 +46,8 @@ messages: rc.cpp
 	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` core/kis_aboutdata.h -o $(podir)/krita.pot
 	rm -f i18ndata
 
-kde_services_DATA = kritapart.desktop
-
 DOXYGEN_EXCLUDE = CImg.h
 include $(top_srcdir)/admin/Doxyfile.am
+
+kde_services_DATA = kritapart.desktop
+

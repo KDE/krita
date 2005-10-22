@@ -36,8 +36,6 @@ KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const char *name, co
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
-
     if ( parent->inherits("KisFactory") )
     {
         KisFilterRegistry::instance()->add(new KisSobelFilter());

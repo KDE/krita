@@ -40,7 +40,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_command.h"
 #include "kis_types.h"
-#include "kis_guide.h"
+//#include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device_impl.h"
 #include "kis_paint_device_visitor.h"
@@ -48,14 +48,13 @@
 #include "kis_fill_painter.h"
 #include "kis_layer.h"
 #include "kis_background.h"
-#include "kis_doc.h"
 #include "kis_nameserver.h"
+#include "kis_undo_adapter.h"
 #include "kis_flatten.h"
 #include "kis_merge.h"
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
-#include "kis_config.h"
 
 #define DEBUG_IMAGES 0
 const Q_INT32 RENDER_HEIGHT = 128;
@@ -433,9 +432,9 @@ namespace {
 
 }
 
-KisImage::KisImage(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
-    init(doc, width, height, colorSpace, name);
+    init(adapter, width, height, colorSpace, name);
     setName(name);
     m_dcop = 0L;
 }
@@ -444,7 +443,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
     m_dcop = 0L;
     if (this != &rhs) {
-        m_doc = rhs.m_doc;
         m_undoHistory = rhs.m_undoHistory;
         m_uri = rhs.m_uri;
         m_name = QString::null;
@@ -481,7 +479,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
         Q_CHECK_PTR(m_nserver);
 
-        m_guides = rhs.m_guides;
+        //m_guides = rhs.m_guides;
 
     }
 
@@ -537,19 +535,11 @@ QString KisImage::nextLayerName() const
     return m_nserver -> name();
 }
 
-void KisImage::init(KisDoc *doc, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
+void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
     Q_ASSERT(colorSpace != 0);
     m_renderinit = false;
-
-    m_doc = doc;
-
-    if (m_doc != 0) {
-        m_adapter = m_doc -> undoAdapter();
-        Q_ASSERT(m_adapter != 0);
-    } else {
-        m_adapter = 0;
-    }
+    m_adapter = adapter;
 
     m_nserver = new KisNameServer(i18n("Layer %1"), 1);
     Q_CHECK_PTR(m_nserver);
@@ -926,7 +916,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
 
             if (m_adapter->undo())
                 m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-            m_doc->setModified(true);
+            emit sigImageModified();
             layer -> setVisible(true);
             emit sigLayersUpdated(this);
         }
@@ -952,7 +942,7 @@ KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& composi
 
             if (m_adapter->undo())
                 m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-            m_doc->setModified(true);
+            emit sigImageModified();
             layer -> setVisible(true);
             emit sigLayersUpdated(this);
         }
@@ -967,7 +957,7 @@ KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
     if (!add(l, -1))
         return 0;
 
-    m_doc->setModified(true);
+    emit sigImageModified();
     setLayerPosition(l, position);
 
     if (m_adapter->undo())
@@ -982,7 +972,7 @@ KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
 void KisImage::layerRemove(KisLayerSP layer)
 {
     if (layer) {
-        m_doc->setModified(true);
+        emit sigImageModified();
 
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer));
@@ -1009,7 +999,7 @@ void KisImage::layerNext(KisLayerSP l)
 
         if (!l -> visible()) {
             l -> setVisible(true);
-            m_doc->setModified(true);
+            emit sigImageModified();
         }
 
         if (!activate(l))
@@ -1023,7 +1013,7 @@ void KisImage::layerNext(KisLayerSP l)
             }
         }
 
-        m_doc->setModified(true);
+        emit sigImageModified();
         emit sigLayersUpdated(this);
     }
 }
@@ -1045,7 +1035,7 @@ void KisImage::layerPrev(KisLayerSP l)
 
         if (!l -> visible()) {
             l -> setVisible(true);
-            m_doc->setModified(true);
+            emit sigImageModified();
         }
 
         if (!activate(l))
@@ -1059,7 +1049,7 @@ void KisImage::layerPrev(KisLayerSP l)
             }
         }
 
-        m_doc->setModified(true);
+        emit sigImageModified();
         emit sigLayersUpdated(this);
     }
 }
@@ -1081,7 +1071,7 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
             layer -> setCompositeOp(compositeOp);
         }
 
-        m_doc->setModified(true);
+        emit sigImageModified();
         emit sigLayersUpdated(this);
 
         notify();
@@ -1525,6 +1515,11 @@ void KisImage::enableUndo(KoCommandHistory *history)
     m_undoHistory = history;
 }
 
+void KisImage::setModified()
+{
+    emit sigImageModified();
+}
+
 void KisImage::renderToPainter(Q_INT32 x1,
                                Q_INT32 y1,
                                Q_INT32 x2,
@@ -1671,10 +1666,10 @@ KisUndoAdapter* KisImage::undoAdapter() const
     return m_adapter;
 }
 
-KisGuideMgr *KisImage::guides() const
-{
-    return const_cast<KisGuideMgr*>(&m_guides);
-}
+//KisGuideMgr *KisImage::guides() const
+//{
+//    return const_cast<KisGuideMgr*>(&m_guides);
+//}
 
 void KisImage::slotSelectionChanged()
 {

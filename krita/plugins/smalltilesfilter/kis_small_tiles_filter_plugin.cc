@@ -36,9 +36,8 @@ KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const char
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
 
-    if ( parent->inherits("KisFactory") )
+        if ( parent->inherits("KisFactory") )
     {
         KisFilterRegistry::instance()->add(new KisSmallTilesFilter());
     }

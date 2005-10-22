@@ -8,11 +8,11 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../../ui \
 	$(all_includes)
 
-noinst_LTLIBRARIES = libkiskjsembedfunctions.la
+noinst_LTLIBRARIES = libkritakjsembedfunctions.la
 
-libkiskjsembedfunctions_la_SOURCES = kis_mainwindow_functions.cc \
+libkritakjsembedfunctions_la_SOURCES = kis_mainwindow_functions.cc \
 	kis_functions_factory.cc
 
 noinst_HEADERS = kis_mainwindow_functions.h
 
-libkiskjsembedfunctions_la_METASOURCES = AUTO
+libkritakjsembedfunctions_la_METASOURCES = AUTO

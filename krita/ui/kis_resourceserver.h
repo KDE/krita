@@ -25,6 +25,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include "kis_generic_registry.h"
+
 class KisResource;
 
 class KisResourceServerBase {
@@ -48,6 +50,7 @@ private:
 
 };
 
+
 template <class T> class KisResourceServer : public KisResourceServerBase {
     typedef KisResourceServerBase super;
 
@@ -59,5 +62,24 @@ private:
     KisResource* createResource( QString filename ){return new T(filename);}
 };
 
-#endif // KIS_RESOURCESERVER_H_
 
+
+
+class KisResourceServerRegistry : public KisGenericRegistry<KisResourceServerBase*>
+{
+
+public:
+    virtual ~KisResourceServerRegistry();
+
+    static KisResourceServerRegistry* instance();
+
+private:
+    KisResourceServerRegistry();
+     KisResourceServerRegistry(const KisResourceServerRegistry&);
+     KisResourceServerRegistry operator=(const KisResourceServerRegistry&);
+
+    static KisResourceServerRegistry *m_singleton;
+};
+
+
+#endif // KIS_RESOURCESERVER_H_

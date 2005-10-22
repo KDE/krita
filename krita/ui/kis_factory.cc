@@ -52,48 +52,7 @@
 
 KAboutData* KisFactory::s_aboutData = 0;
 KInstance* KisFactory::s_instance = 0;
-KisResourceServerRegistry* KisFactory::s_rserverRegistry = 0;
 
-
-class ResourceLoaderThread : public QThread {
-
-public:
-
-    ResourceLoaderThread(KisResourceServerBase * server, QStringList files)
-        : QThread()
-        , m_server(server)
-        , m_fileNames( files )
-    {
-        kdDebug() << "Created resource loader thread " << m_server->type() << "\n";
-    }
-
-
-    void run()
-    {
-        kdDebug() << "Started resource loader thread " << m_server->type() << "\n";
-        m_server->loadResources(m_fileNames);
-        kdDebug() << "Done resource loader thread " << m_server->type() << "\n";
-    }
-
-private:
-
-    KisResourceServerBase * m_server;
-    QStringList m_fileNames;
-
-};
-
-QStringList getFileNames( QString extensions, QString type )
-{
-    QStringList extensionList = QStringList::split(":", extensions);
-    QStringList fileNames;
-
-    QStringList::Iterator it;
-    for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
-        QString s = (*it);
-        fileNames += KisFactory::instance() -> dirs() -> findAllResources(type.ascii(), (*it));
-    }
-    return fileNames;
-}
 
 
 KisFactory::KisFactory( QObject* parent, const char* name )
@@ -104,44 +63,11 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
     (void)instance();
 
-    s_rserverRegistry = new KisResourceServerRegistry();
-
-    KisResourceServer<KisBrush>* brushServer = new KisResourceServer<KisBrush>("kis_brushes");
-    ResourceLoaderThread t1 (brushServer, getFileNames( "*.gbr","kis_brushes" ));
-    t1.start();
-
-    KisResourceServer<KisImagePipeBrush>* imagePipeBrushServer = new KisResourceServer<KisImagePipeBrush>("kis_brushes");
-    ResourceLoaderThread t2 (imagePipeBrushServer, getFileNames( "*.gih", "kis_brushes"));
-    t2.start();
-
-    KisResourceServer<KisPattern>* patternServer = new KisResourceServer<KisPattern>("kis_patterns");
-    ResourceLoaderThread t3 (patternServer, getFileNames("*.pat", "kis_patterns"));
-    t3.start();
-
-    KisResourceServer<KisGradient>* gradientServer = new KisResourceServer<KisGradient>("kis_gradients");
-    ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
-    t4.start();
-
-    KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes");
-    ResourceLoaderThread t5 (paletteServer, getFileNames(".gpl:.pal:.act", "kis_palettes") );
-    t5.start();
-
-    t1.wait();
-    t2.wait();
-    t3.wait();
-    t4.wait();
-    t5.wait();
-
-    s_rserverRegistry -> add( KisID( "BrushServer", ""), brushServer );
-    s_rserverRegistry -> add( KisID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
-    s_rserverRegistry -> add( KisID( "PatternServer", ""), patternServer );
-    s_rserverRegistry -> add( KisID( "GradientServer", ""), gradientServer );
-    s_rserverRegistry -> add( KisID( "PaletteServer", ""), paletteServer );
-
     // Load extension modules and plugins
     KisToolRegistry::instance();
     KisPaintOpRegistry::instance();
     KisFilterRegistry::instance();
+    KisResourceServerRegistry::instance();
 
     // Load all modules: color models, paintops, filters
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
@@ -164,8 +90,6 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 
 KisFactory::~KisFactory()
 {
-    delete s_rserverRegistry;
-    s_rserverRegistry = 0L;
     delete s_aboutData;
     s_aboutData = 0L;
     delete s_instance;
@@ -242,11 +166,5 @@ KInstance* KisFactory::instance()
 
     return s_instance;
 }
-
-KisResourceServerRegistry* KisFactory::rServerRegistry()
-{
-    return s_rserverRegistry;
-}
-
 
 #include "kis_factory.moc"

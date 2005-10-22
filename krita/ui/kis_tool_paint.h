@@ -20,6 +20,7 @@
 #define KIS_TOOL_PAINT_H_
 
 #include <qcursor.h>
+#include <qlayout.h>
 
 #include <koffice_export.h>
 
@@ -96,7 +97,7 @@ protected:
     Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
     bool m_paintOutline;
-    
+
 private:
     QString m_UIName;
 

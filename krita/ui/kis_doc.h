@@ -42,6 +42,7 @@ class KisProfile;
 class KisView;
 class KisNameServer;
 class KisChildDoc;
+class KisColorSpace;
 
 class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 

@@ -1,141 +1,176 @@
-KDE_OPTIONS = nofinal
 
 INCLUDES = \
-    -I$(srcdir)/../core/filters \
-	-I$(srcdir)/../sdk \
-	-I$(srcdir)/../core \
-	-I$(srcdir)/../kritacolor \
-    -I$(srcdir)/../kritacolor/color_strategy \
+    -I$(srcdir) \
+    -I$(srcdir)/../sdk \
+    -I$(srcdir)/../core \
+    -I$(srcdir)/../kritacolor \
     $(KOFFICE_INCLUDES) \
     $(KOPAINTER_INCLUDES) \
-	$(all_includes)
+    $(all_includes)
 
-noinst_LTLIBRARIES = libkisui.la
+lib_LTLIBRARIES = libkritaui.la
+libkritaui_la_LDFLAGS =  -version-info 1:0:0 -no-undefined $(all_libraries) 
+libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritacolor/libkritacolor.la \
+    $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
 
-libkisui_la_SOURCES = \
-    kis_cmb_idlist.cc \
-    kis_dlg_preferences.cc \
+libkritaui_la_SOURCES = \
+    imageviewer.cc \
+    kcurve.cc \
+    kis_autobrush.cc \
+    kis_autogradient.cc \
+    kis_birdeye_box.cc \
+    kis_brush_chooser.cc \
     kis_canvas.cc \
+    kis_clipboard.cc \
     kis_cmb_composite.cc \
-    kis_layerbox.cc \
+    kis_cmb_idlist.cc \
+    kis_color_cup.cc \
+    kis_colorwheel.cc \
+    kis_config.cc \
+    kis_controlframe.cc \
+    kis_cursor.cc \
+    kis_dlg_apply_profile.cc \
     kis_dlg_create_img.cc \
     kis_dlg_image_properties.cc \
-    kis_dlg_new_layer.cc \
     kis_dlg_layer_properties.cc \
+    kis_dlg_new_layer.cc \
+    kis_dlg_preferences.cc \
     kis_dlg_transform.cc \
+    kis_doc.cc \
+    kis_doc_iface.cc \
+    kis_doc_iface.skel \
+    kis_double_widget.cc \
+    kis_factory.cc \
+    kis_filter_manager.cc \
+    kis_gradient_chooser.cc \
+    kis_gradient_slider_widget.cc \
     kis_gray_widget.cc \
+    kis_histogram_view.cc \
+    kis_hsv_widget.cc \
     kis_icon_item.cc \
-    kis_ruler.cc \
     kis_iconwidget.cc \
     kis_itemchooser.cc \
-    kis_previewwidget.cc \
-    kis_rgb_widget.cc \
-    kis_hsv_widget.cc \
-    kis_colorwheel.cc \
-    kis_progress_subject.cc \
-    kis_double_widget.cc \
-    kis_dlg_apply_profile.cc \
-    kis_previewdialog.cc \
-    kis_selection_options.cc \
-    kis_guide.cc \
-    kis_paintop_box.cc \
-    kis_color_cup.cc \
-    kis_autogradient.cc \
-    kis_gradient_chooser.cc \
-    kobirdeyepanel.cpp \
-    kis_birdeye_box.cc \
-    kis_pattern_chooser.cc \
-    kis_palette_widget.cc \
-    kis_brush_chooser.cc \
-    kis_resource_mediator.cc \
-    kis_autobrush.cc \
-    kis_controlframe.cc \
     kis_label_cursor_pos.cc \
     kis_label_progress.cc \
     kis_label_zoom.cc \
-    kis_multi_integer_filter_widget.cc \
-    kis_multi_double_filter_widget.cc \
+    kis_layerbox.cc \
     kis_multi_bool_filter_widget.cc \
-    kis_gradient_slider_widget.cc \
-    kcurve.cc\
-    kis_histogram_view.cc \
-    imageviewer.cc \
+    kis_multi_double_filter_widget.cc \
+    kis_multi_integer_filter_widget.cc \
+    kis_paintop_box.cc \
+    kis_palette_widget.cc \
+    kis_part_layer.cc \
+    kis_pattern_chooser.cc \
+    kis_previewdialog.cc \
+    kis_previewwidget.cc \
+    kis_resource_mediator.cc \
+    kis_resourceserver.cc \
+    kis_rgb_widget.cc \
+    kis_ruler.cc \
+    kis_selection_manager.cc \
+    kis_selection_options.cc \
+    kis_tool.cc \
+    kis_tool_dummy.cc \
+    kis_tool_freehand.cc \
+    kis_tool_manager.cc \
+    kis_tool_non_paint.cc \
+    kis_tool_paint.cc \
+    kis_tool_registry.cc \
+    kis_tool_shape.cc \
+    kis_view.cc \
+    kis_view_iface.cc \
+    kis_view_iface.skel \
+    kobirdeyepanel.cpp \
     kis_matrix_widget.ui \
-    wdgbirdeye.ui \
-    wdgautogradient.ui \
-    wdgautobrush.ui \
-    wdgmatrix.ui \
     kis_previewwidgetbase.ui \
+    wdgapplyprofile.ui \
+    wdgautobrush.ui \
+    wdgautogradient.ui \
+    wdgbirdeye.ui \
+    wdgcolorsettings.ui \
+    wdggeneralsettings.ui \
+    wdglayerbox.ui \
     wdglayerproperties.ui \
+    wdgmatrix.ui \
+    wdgnewimage.ui \
+    wdgperformancesettings.ui \
     wdgselectionoptions.ui \
     wdgshapeoptions.ui \
-    wdgnewimage.ui \
-    wdgcolorsettings.ui \
-    wdgapplyprofile.ui \
-    wdglayerbox.ui \
-    wdgperformancesettings.ui \
-    wdggeneralsettings.ui \
-    wdgpressuresettings.ui
+    wdgpressuresettings.ui 
 
-
-noinst_HEADERS = kis_dlg_preferences.h \
+noinst_HEADERS = \
+    imageviewer.h \
+    kcurve.h \
+    kis_aboutdata.h \
+    kis_autobrush.h \
+    kis_autogradient.h \
+    kis_birdeye_box.h \
+    kis_brush_chooser.h \
+    kis_button_event.h \
+    kis_button_press_event.h \
+    kis_button_release_event.h \
     kis_canvas.h \
-    kis_layerbox.h \
+    kis_clipboard.h \
+    kis_cmb_composite.h \
+    kis_cmb_idlist.h \
+    kis_color_cup.h \
+    kis_colorwheel.h \
+    kis_config.h \
+    kis_controlframe.h \
+    kis_cursor.h \
+    kis_dlg_apply_profile.h \
     kis_dlg_create_img.h \
-    kis_dlg_new_layer.h \
-    kis_dlg_layer_properties.h \
     kis_dlg_image_properties.h \
+    kis_dlg_layer_properties.h \
+    kis_dlg_new_layer.h \
+    kis_dlg_preferences.h \
     kis_dlg_transform.h \
+    kis_doc.h \
+    kis_doc_iface.h \
+    kis_double_click_event.h \
+    kis_double_widget.h \
+    kis_event.h \
+    kis_factory.h \
+    kis_filter_manager.h \
+    kis_gradient_chooser.h \
+    kis_gradient_slider_widget.h \
     kis_gray_widget.h \
+    kis_histogram_view.h \
+    kis_hsv_widget.h \
     kis_icon_item.h \
-    kis_ruler.h \
     kis_iconwidget.h \
     kis_itemchooser.h \
-    kis_previewwidget.h \
-    kis_rgb_widget.h \
-    kis_hsv_widget.h \
-    kis_colorwheel.h \
-    kis_progress_subject.h \
-    kis_double_widget.h \
-    kis_dlg_apply_profile.h \
-    kis_guide.h \
-    kis_paintop_box.h \
-    wdgmatrix.h \
-    kis_previewwidgetbase.h \
-    kis_previewdialog.h \
-    kis_color_cup.h \
-    kis_autogradient.h \
-    kobirdeyepanel.h \
-    kis_birdeye_box.h \
-    kis_pattern_chooser.h \
-    kis_palette_widget.h \
-    kis_brush_chooser.h \
-    kis_resource_mediator.h \
-    kis_autobrush.h \
-    kis_gradient_chooser.h \
     kis_label_cursor_pos.h \
     kis_label_progress.h \
-    kis_label_zoom.h\
-    imageviewer.h \
-    kis_multi_integer_filter_widget.h \
+    kis_label_zoom.h \
+    kis_layerbox.h \
+    kis_matrix_widget.ui.h \
+    kis_move_event.h \
     kis_multi_bool_filter_widget.h \
-    kis_gradient_slider_widget.h \
-    kis_histogram_view.h \
-    wdgnewimage.h \
-    wdgcolorsettings.h \
-    wdgapplyprofile.h \
-    wdglayerbox.h \
-    wdglayerproperties.h \
-    wdgperformancesettings.h \
-    wdggeneralsettings.h \
-    wdgpressuresettings.h \
-    wdgbirdeye.h \
-    wdgautogradient.h \
-    wdgautobrush.h
-
-#libkisui_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
-#libkisui_la_LIBADD  = $(LIB_KOFFICECORE) ../core/libkritacore.la
+    kis_multi_double_filter_widget.h \
+    kis_multi_integer_filter_widget.h \
+    kis_paintop_box.h \
+    kis_palette_widget.h \
+    kis_part_layer.h \
+    kis_pattern_chooser.h \
+    kis_previewdialog.h \
+    kis_previewwidget.h \
+    kis_resource_mediator.h \
+    kis_resourceserver.h \
+    kis_rgb_widget.h \
+    kis_ruler.h \
+    kis_selection_manager.h \
+    kis_selection_options.h \
+    kis_tool_controller.h \
+    kis_tool_dummy.h \
+    kis_tool_manager.h \
+    kis_tool_registry.h \
+    kis_view.h \
+    kis_view_iface.h \
+    kobirdeyepanel.h
 
 METASOURCES = AUTO
 
+	echo > dummy.cc
+KDE_OPTIONS = nofinal
 

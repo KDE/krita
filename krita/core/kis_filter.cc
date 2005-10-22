@@ -17,7 +17,6 @@
  */
 #include "kis_filter.h"
 
-#include "kis_cursor.h"
 #include "kis_filter_registry.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
@@ -25,7 +24,6 @@
 #include "kis_selection.h"
 #include "kis_id.h"
 #include "kis_canvas_subject.h"
-#include "kis_doc.h"
 #include "kis_progress_display_interface.h"
 #include "kis_types.h"
 #include "kis_filter_config_widget.h"

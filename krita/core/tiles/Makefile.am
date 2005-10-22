@@ -10,8 +10,8 @@ INCLUDES  = -I$(srcdir)/../ \
 	-I$(interfacedir) \
 	$(all_includes)
 
-noinst_LTLIBRARIES = libkistile.la
+noinst_LTLIBRARIES = libkritatile.la
 
-libkistile_la_SOURCES = kis_tiledvlineiterator.cc kis_tiledhlineiterator.cc kis_tileddatamanager.cc kis_tile.cc kis_tilediterator.cc kis_tiledrectiterator.cc kis_memento.cc kis_tilemanager.cc 
-libkistile_la_METASOURCES = AUTO
+libkritatile_la_SOURCES = kis_tiledvlineiterator.cc kis_tiledhlineiterator.cc kis_tileddatamanager.cc kis_tile.cc kis_tilediterator.cc kis_tiledrectiterator.cc kis_memento.cc kis_tilemanager.cc 
+libkritatile_la_METASOURCES = AUTO
 

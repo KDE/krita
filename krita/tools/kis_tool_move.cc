@@ -94,8 +94,9 @@ void KisToolMove::move(KisMoveEvent *e)
 
 void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && e -> button() == QMouseEvent::LeftButton)
+    if (m_subject && e -> button() == QMouseEvent::LeftButton) {
         m_strategy.endDrag(e -> pos().floorQPoint());
+    }
 }
 
 void KisToolMove::setup(KActionCollection *collection)

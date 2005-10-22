@@ -36,7 +36,6 @@ KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const 
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        KisView * view;
 
     if ( parent->inherits("KisFactory") )
     {

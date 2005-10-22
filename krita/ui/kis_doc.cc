@@ -424,7 +424,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         img = new KisImage(this, width, height, cs, name);
         Q_CHECK_PTR(img);
-
+        connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img -> setDescription(description);
         img -> setResolution(xres, yres);
 
@@ -604,7 +604,7 @@ bool KisDoc::completeSaving(KoStore *store)
 
     img = new KisImage(*m_currentImage);
     Q_CHECK_PTR(img);
-
+    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img -> setName((m_currentImage) -> name());
 
     setIOSteps(totalSteps + 1);
@@ -786,6 +786,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 {
     KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
     Q_CHECK_PTR(img);
+    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
     KisLayerSP layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
     Q_CHECK_PTR(layer);
@@ -829,7 +830,7 @@ bool KisDoc::slotNewImage()
                    cs,
                    dlg.imgName());
         Q_CHECK_PTR(img);
-
+        connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
         img -> setDescription(dlg.imgDescription());
         img -> setProfile(cs->getProfile());
@@ -893,6 +894,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfile *  mo
 void KisDoc::slotImageUpdated()
 {
     emit docUpdated();
+    setModified( true );
 }
 
 void KisDoc::slotImageUpdated(const QRect& rect)

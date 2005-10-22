@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org> 
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <qcolor.h>
-#include <koDocument.h>
-#include <kis_doc.h>
+#include <koDocument.h> // XXX: We don't want to depend on KOffice in this lib!
+
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
@@ -80,7 +80,7 @@ namespace {
     }
 
     void MoveCommand::moveTo(const QPoint& pos)
-    { 
+    {
        m_device -> move(pos.x(), pos.y());
        m_controller -> updateCanvas(m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height()));
        m_deviceBounds.setRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
@@ -107,10 +107,8 @@ void KisStrategyMove::reset(KisCanvasSubject *subject)
     m_dragging = false;
 
     if (m_subject) {
-        m_doc = subject -> document();
         m_controller = subject -> canvasController();
     } else {
-        m_doc = 0;
         m_controller = 0;
     }
 }
@@ -118,7 +116,7 @@ void KisStrategyMove::reset(KisCanvasSubject *subject)
 void KisStrategyMove::startDrag(const QPoint& pos)
 {
     // pos is the user chosen handle point
-    
+
     if (m_subject) {
         KisImageSP img;
         KisPaintDeviceImplSP dev;
@@ -132,7 +130,6 @@ void KisStrategyMove::startDrag(const QPoint& pos)
             return;
 
         m_dragging = true;
-        m_doc -> setModified(true);
         m_dragStart.setX(pos.x());
         m_dragStart.setY(pos.y());
         m_layerStart.setX(dev -> getX());
@@ -144,7 +141,7 @@ void KisStrategyMove::startDrag(const QPoint& pos)
 void KisStrategyMove::drag(const QPoint& original)
 {
     // original is the position of the user chosen handle point
-    
+
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject -> currentImg();
         KisPaintDeviceImplSP dev;
@@ -160,7 +157,7 @@ void KisStrategyMove::drag(const QPoint& original)
             rc = dev -> extent();
             dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
             rc = rc.unite(dev->extent());
-            
+
             m_layerPosition = QPoint(dev ->getX(), dev ->getY());
              m_dragStart = original;
 
@@ -187,6 +184,7 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
                 if (adapter)
                     adapter -> addCommand(cmd);
             }
+            img->setModified();
         }
     }
 }

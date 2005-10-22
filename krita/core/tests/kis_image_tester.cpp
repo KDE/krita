@@ -23,7 +23,6 @@
 
 #include "kis_image_tester.h"
 #include "kis_image.h"
-#include "kis_factory.h"
 #include "kis_meta_registry.h"
 #include "kis_rgb_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
@@ -39,12 +38,8 @@ void KisImageTester::allTests()
 {
     if (qApp != 0) {
 
-        // We need this so that the colour profile loading can operate without crashing.
-        KisFactory *factory = new KisFactory();
-
         mergeTests();
 
-        delete factory;
     } else {
         SKIP("Skipping KisImage tests because we are being run from the command line. KisImage contains a QPixmap which requires a gui to be available. Use kunittestguimodrunner.");
     }

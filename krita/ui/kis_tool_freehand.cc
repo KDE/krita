@@ -29,13 +29,13 @@
 #include <kcommand.h>
 #include <klocale.h>
 
+#include "kis_canvas_subject.h"
+#include "kis_undo_adapter.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_tool_freehand.h"
 #include "kis_cursor.h"
-#include "kis_doc.h"
-#include "kis_view.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"

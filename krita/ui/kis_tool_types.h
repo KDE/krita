@@ -1,8 +1,5 @@
 /*
- *  main.cc - part of KImageShop
- *
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +13,22 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <dcopclient.h>
-#include <kcmdlineargs.h>
-#include <koApplication.h>
+#ifndef KIS_TOOL_TYPES_H_
+#define KIS_TOOL_TYPES_H_
 
-#include "ui/kis_aboutdata.h"
+#include <ksharedptr.h>
+#include "kis_shared_ptr_vector.h"
 
-static const KCmdLineOptions options[] = {
-    { "+[file(s)]", I18N_NOOP("File(s) or URL(s) to open"), 0 },
-    KCmdLineLastOption
-};
 
-extern "C" KRITA_EXPORT int kdemain(int argc, char **argv)
-{
-    KCmdLineArgs::init(argc, argv, newKritaAboutData());
-    KCmdLineArgs::addCmdLineOptions(options);
+class KisTool;
+typedef KSharedPtr<KisTool> KisToolSP;
+typedef KisSharedPtrVector<KisTool> vKisTool;
+typedef vKisTool::iterator vKisTool_it;
+typedef vKisTool::const_iterator vKisTool_cit;
 
-    KoApplication app;
+class KisToolFactory;
+typedef KSharedPtr<KisToolFactory> KisToolFactorySP;
 
-    if (!app.start())
-        return 1;
-
-    return app.exec();
-}
-
+#endif // KIS_TOOL_TYPES_H_

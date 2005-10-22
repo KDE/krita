@@ -8,13 +8,13 @@ INCLUDES  =  -I$(srcdir)/../../sdk \
 	-I$(srcdir)/../../../ui \
 	 -I$(interfacedir)$(all_includes)
 
-noinst_LTLIBRARIES = libkiskjsembedobjects.la
+noinst_LTLIBRARIES = libkritakjsembedobjects.la
 
-libkiskjsembedobjects_la_SOURCES = kis_objects_factory.cc kis_paint_device_object.cc
+libkritakjsembedobjects_la_SOURCES = kis_objects_factory.cc kis_paint_device_object.cc
 
 
 # kritakjsembedobjects_la_LIBADD = -lkjs
 
 noinst_HEADERS = 
 
-libkiskjsembedobjects_la_METASOURCES = AUTO
+libkritakjsembedobjects_la_METASOURCES = AUTO

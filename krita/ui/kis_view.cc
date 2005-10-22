@@ -84,7 +84,7 @@
 #include "kis_double_click_event.h"
 #include "kis_factory.h"
 #include "kis_gradient.h"
-#include "kis_guide.h"
+//#include "kis_guide.h"
 #include "kis_layerbox.h"
 #include "kis_layer.h"
 #include "kis_move_event.h"
@@ -109,8 +109,6 @@
 #include "kis_view_iface.h"
 #include "kis_label_cursor_pos.h"
 #include "kis_label_progress.h"
-#include "kis_strategy_move.h"
-
 
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
@@ -186,7 +184,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_vScroll( 0 )
     , m_scrollX( 0 )
     , m_scrollY( 0 )
-    , m_currentGuide( 0 )
+//    , m_currentGuide( 0 )
     , m_adapter( adapter )
     , m_statusBarZoomLabel( 0 )
     , m_statusBarSelectionLabel( 0 )
@@ -571,10 +569,10 @@ void KisView::resizeEvent(QResizeEvent *)
     Q_INT32 docW;
     Q_INT32 docH;
 
-    if (img) {
-        KisGuideMgr *mgr = img -> guides();
-        mgr -> resize(size());
-    }
+//    if (img) {
+//        KisGuideMgr *mgr = img -> guides();
+//        mgr -> resize(size());
+//    }
 
     docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
     docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
@@ -758,7 +756,7 @@ void KisView::paintView(const KisRect& r)
                     m_doc -> paintContent(gc, wr, m_monitorProfile, HDRExposure());
                 }
 
-                paintGuides();
+//                paintGuides();
             }
 
             m_canvas -> update(vr.qRect());
@@ -1118,7 +1116,7 @@ void KisView::saveLayerAsImage()
     KisDoc d;
     d.prepareForImport();
 
-    KisImageSP dst = new KisImage(&d, r.width(), r.height(), l->colorSpace(), l->name());
+    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), l->colorSpace(), l->name());
     d.setCurrentImage( dst );
     KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorSpace());
     if (!layer) return;
@@ -1609,36 +1607,36 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 
     KisImageSP img = currentImg();
 
-    if (img) {
-        QPoint pt = mapToScreen(e -> pos().floorQPoint());
-        KisGuideMgr *mgr = img -> guides();
-
-        m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
-        m_currentGuide = 0;
-
-        if ((e -> state() & ~Qt::ShiftButton) == Qt::NoButton) {
-            KisGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
-
-            if (gd) {
-                m_currentGuide = gd;
-
-                if ((e -> button() == Qt::RightButton) || ((e -> button() & Qt::ShiftButton) == Qt::ShiftButton)) {
-                    if (gd -> isSelected())
-                        mgr -> unselect(gd);
-                    else
-                        mgr -> select(gd);
-                } else {
-                    if (!gd -> isSelected()) {
-                        mgr -> unselectAll();
-                        mgr -> select(gd);
-                    }
-                }
-
-                updateGuides();
-                return;
-            }
-        }
-    }
+//    if (img) {
+//        QPoint pt = mapToScreen(e -> pos().floorQPoint());
+//        KisGuideMgr *mgr = img -> guides();
+//
+//        m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
+//        m_currentGuide = 0;
+//
+//        if ((e -> state() & ~Qt::ShiftButton) == Qt::NoButton) {
+//            KisGuideSP gd = mgr -> find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
+//
+//            if (gd) {
+//                m_currentGuide = gd;
+//
+//                if ((e -> button() == Qt::RightButton) || ((e -> button() & Qt::ShiftButton) == Qt::ShiftButton)) {
+//                    if (gd -> isSelected())
+//                        mgr -> unselect(gd);
+//                    else
+//                        mgr -> select(gd);
+//              } else {
+//                    if (!gd -> isSelected()) {
+//                        mgr -> unselectAll();
+//                        mgr -> select(gd);
+//                    }
+//                }
+//
+//                updateGuides();
+//                return;
+//            }
+//        }
+//    }
 
     if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
@@ -1674,6 +1672,7 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 
     KisPoint wp = viewToWindow(e -> pos());
 
+#if 0
     if (img && m_currentGuide) {
         QPoint p = mapToScreen(e -> pos().floorQPoint());
         KisGuideMgr *mgr = img -> guides();
@@ -1691,13 +1690,15 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
             m_doc -> setModified(true);
             paintGuides();
         }
-    } else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
+    } else
+#endif
+    if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisMoveEvent ev(e -> device(), wp, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> state());
 
         m_toolManager->currentTool() -> move(&ev);
     }
 
-    m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
+//    m_lastGuidePoint = mapToScreen(e -> pos().floorQPoint());
     emit cursorPosition(wp.floorX(), wp.floorY());
 }
 
@@ -1722,9 +1723,10 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 
     KisImageSP img = currentImg();
 
-    if (img && m_currentGuide) {
-        m_currentGuide = 0;
-    } else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
+//    if (img && m_currentGuide) {
+//        m_currentGuide = 0;
+//    } else
+    if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
         KisButtonReleaseEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
@@ -2479,6 +2481,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
         break;
     }
 
+#if 0
     if ((o == m_hRuler || o == m_vRuler) && (e -> type() == QEvent::MouseMove || e -> type() == QEvent::MouseButtonRelease)) {
         QMouseEvent *me = dynamic_cast<QMouseEvent*>(e);
         QPoint pt = mapFromGlobal(me -> globalPos());
@@ -2533,10 +2536,12 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
             canvasGotMoveEvent(&kme);
         }
     }
+#endif
 
     return super::eventFilter(o, e);
 }
 
+#if 0
 void KisView::eraseGuides()
 {
     KisImageSP img = currentImg();
@@ -2566,6 +2571,7 @@ void KisView::updateGuides()
     eraseGuides();
     paintGuides();
 }
+#endif
 
 QPoint KisView::mapToScreen(const QPoint& pt)
 {
@@ -2736,7 +2742,7 @@ void KisView::createDockers()
     m_palettewidget -> setCaption(i18n("Palettes"));
 
     KisResourceServerBase* rServer;
-    rServer = KisFactory::rServerRegistry() -> get("PaletteServer");
+    rServer = KisResourceServerRegistry::instance() -> get("PaletteServer");
     QValueList<KisResource*> resources = rServer->resources();
     QValueList<KisResource*>::iterator it;
     for ( it = resources.begin(); it != resources.end(); ++it ) {

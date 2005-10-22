@@ -40,7 +40,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_factory.h"
 #include <kis_meta_registry.h>
 #include "kis_layer.h"
 #include "kis_global.h"

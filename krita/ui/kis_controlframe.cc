@@ -39,7 +39,7 @@
 #include <koFrameButton.h>
 #include <kactioncollection.h>
 
-#include "kis_factory.h"
+#include "kis_resourceserver.h"
 #include "kis_controlframe.h"
 #include "kis_resource_mediator.h"
 #include "kis_itemchooser.h"
@@ -236,9 +236,9 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisFactory::rServerRegistry() -> get("ImagePipeBrushServer");
+    rServer = KisResourceServerRegistry::instance() -> get("ImagePipeBrushServer");
     m_brushMediator -> connectServer(rServer);
-    rServer = KisFactory::rServerRegistry() -> get("BrushServer");
+    rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
     m_brushMediator -> connectServer(rServer);
 
     KisControlFrame::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
@@ -269,7 +269,7 @@ void KisControlFrame::createPatternsChooser(KisView * view)
     connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisFactory::rServerRegistry() -> get("PatternServer");
+    rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
     m_patternMediator -> connectServer(rServer);
 
     KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
@@ -301,7 +301,7 @@ void KisControlFrame::createGradientsChooser(KisView * view)
     connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisFactory::rServerRegistry()->get("GradientServer");
+    rServer = KisResourceServerRegistry::instance()->get("GradientServer");
     m_gradientMediator -> connectServer(rServer);
 
     connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));

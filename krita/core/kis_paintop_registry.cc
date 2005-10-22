@@ -23,7 +23,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "kis_factory.h"
 #include "kis_generic_registry.h"
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
@@ -97,7 +96,7 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
         return QPixmap();
     }
 
-    QString fname = KisFactory::instance()->dirs()->findResource("kis_images", pname);
+    QString fname = KGlobal::dirs()->findResource("kis_images", pname);
 
     return QPixmap(fname);
 }

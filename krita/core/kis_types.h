@@ -73,44 +73,18 @@ typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
 typedef vKisHistogramSP::iterator vKisHistogramSP_it;
 typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
-class KisPaintOp;
-typedef KSharedPtr<KisPaintOp> KisPaintOpSP;
-
 class KisPaintOpFactory;
 typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
-class KisToolFactory;
-typedef KSharedPtr<KisToolFactory> KisToolFactorySP;
-
-class KisPluginFactory;
-typedef KSharedPtr<KisPluginFactory> KisPluginFactorySP;
-
-class KisTool;
-typedef KSharedPtr<KisTool> KisToolSP;
-typedef KisSharedPtrVector<KisTool> vKisTool;
-typedef vKisTool::iterator vKisTool_it;
-typedef vKisTool::const_iterator vKisTool_cit;
-
 typedef QValueVector<QPoint> vKisSegments;
 
-class KisGuide;
-typedef KSharedPtr<KisGuide> KisGuideSP;
+//class KisGuide;
+//typedef KSharedPtr<KisGuide> KisGuideSP;
 
 class KisAlphaMask;
 typedef KSharedPtr<KisAlphaMask> KisAlphaMaskSP;
 
-class KisAlphaColorSpace;
-typedef KSharedPtr<KisAlphaColorSpace> KisAlphaColorSpaceSP;
-
-
 class KisFilter;
 typedef KSharedPtr<KisFilter> KisFilterSP;
 
-class KisFileFormat;
-typedef KSharedPtr<KisFileFormat> KisFileFormatSP;
-typedef KisSharedPtrVector<KisFileFormat> vKisFileFormatSP;
-typedef vKisFileFormatSP::iterator vKisFileFormatSP_it;
-typedef vKisFileFormatSP::const_iterator vKisFileFormatSP_cit;
-
-class KisColorSpace;
 #endif // KISTYPES_H_

@@ -18,8 +18,8 @@
 #include <qstringlist.h>
 #include <qdir.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
-#include <kis_factory.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_meta_registry.h>
 
@@ -30,10 +30,10 @@ KisMetaRegistry::KisMetaRegistry()
     // Create the colorspaces and load the profiles
 
     QStringList profileFilenames;
-    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KisFactory::instance() -> dirs() -> findAllResources("kis_profiles", "*.icc");
+    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.icc");
 
     QDir d("/usr/share/color/icc/", "*.icc");
     profileFilenames += d.entryList();

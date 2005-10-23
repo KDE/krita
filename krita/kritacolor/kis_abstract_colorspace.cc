@@ -327,8 +327,7 @@ void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
         
         while (nPixels--)
         {
-            // Ugly hack to get around the current constness mess of the colour strategy...
-            const_cast<KisAbstractColorSpace *>(this) -> toQColor(src, &c, &opacity);
+            toQColor(src, &c, &opacity);
             c.setRgb(Q_UINT8_MAX - c.red(), Q_UINT8_MAX - c.green(), Q_UINT8_MAX - c.blue());
             fromQColor( c, opacity, src);
     

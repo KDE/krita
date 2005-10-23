@@ -27,13 +27,17 @@ KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
 
 KisMetaRegistry::KisMetaRegistry()
 {
+    kdDebug() << "meta registry constructed\n";
     // Create the colorspaces and load the profiles
 
+    KGlobal::instance() -> dirs() -> addResourceType("kis_profiles",
+                                                     KStandardDirs::kde_default("data") + "krita/profiles/");
+                          
     QStringList profileFilenames;
-    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::dirs() -> findAllResources("kis_profiles", "*.icc");
+    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.icc");
 
     QDir d("/usr/share/color/icc/", "*.icc");
     profileFilenames += d.entryList();

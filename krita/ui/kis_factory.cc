@@ -60,7 +60,6 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 {
     s_aboutData = newKritaAboutData();
 
-
     (void)instance();
 
     // Load extension modules and plugins
@@ -125,6 +124,7 @@ KInstance* KisFactory::instance()
 {
     if ( !s_instance )
     {
+        kdDebug() << "instance created\n";
         s_instance = new KInstance(s_aboutData);
         Q_CHECK_PTR(s_instance);
 

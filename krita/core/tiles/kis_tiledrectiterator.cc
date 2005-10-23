@@ -31,9 +31,7 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT
     m_h(nh)
 {
 
-
     Q_ASSERT(ndevice != 0);
-
 
     m_writable = writable;
     m_x = nleft;

@@ -62,26 +62,12 @@ class KisAbstractColorSpace : public KisColorSpace {
 
 public:
 
-    /**
-     * Create a new colorspace strategy.
-     *
-     * @param id The Krita identification of this color model.
-     * @param cmType The littlecms colorstrategy type we wrap.
-     * @param colorSpaceSignature The icc signature for the colorspace we are.
-     * @param p The KisProfile for the colorspace we are, can be 0.
-     */
     KisAbstractColorSpace(const KisID & id,
                           DWORD cmType,
                           icColorSpaceSignature colorSpaceSignature,
                           KisColorSpaceFactoryRegistry * parent,
                           KisProfile *p);
 
-    /**
-     * Call init to setup the default
-     * colortransforms from and to sRGB and xyz -- if your colorspace needs
-     * the fallback to the default transforms for the qcolor conversion
-     * and the default pixel ops.
-     */
     void init();
 
     virtual ~KisAbstractColorSpace();
@@ -97,65 +83,28 @@ public:
     // Return a vector describing all the channels this color model has.
     virtual QValueVector<KisChannelInfo *> channels() const = 0;
 
-    /**
-     * The total number of channels for a single pixel in this color model
-     */
     virtual Q_INT32 nChannels() const = 0;
 
-    /**
-     * The total number of color channels (excludes alpha and substance) for a single
-     * pixel in this color model.
-     */
     virtual Q_INT32 nColorChannels() const = 0;
 
-    /**
-     * The total number of substance channels for a single pixel
-     * in this color model
-     */
     virtual Q_INT32 nSubstanceChannels() const { return 0; };
 
-    /**
-     * The size in bytes of a single pixel in this color model
-     */
     virtual Q_INT32 pixelSize() const = 0;
 
-    /**
-     * Whether this color model has a channel of type ALPHA
-     */
     virtual bool hasAlpha() const = 0;
 
-    /**
-     * Gives the position of the first byte of alpha in the pixel
-     */
     virtual Q_INT32 alphaPos() { return m_alphaPos; }
 
-    /**
-     * Gives the length in bytes of the alphachannel
-     */
     virtual Q_INT32 alphaSize() { return m_alphaSize; }
 
-    /**
-     * Return a string with the channel's value suitable for display in the gui.
-     */
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
-    /**
-     * Return a string with the channel's value with integer
-     * channels normalised to the floating point range 0 to 1, if appropriate.
-     */
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
     //========== Identification ===============================================//
 
-    /**
-     * Krita definition for use in .kra files and internally: unchanging name +
-     * i18n'able description.
-     */
     virtual KisID id() const { return m_id; }
 
-    /**
-     * lcms colorspace type definition.
-     */
     void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
     Q_UINT32 colorSpaceType() { return m_cmType; }
 
@@ -163,11 +112,6 @@ public:
 
     //========== Capabilities =================================================//
 
-    /**
-     * Returns the list of user-visible composite ops supported by this colourspace. Internal
-     * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
-     * for layers in the full image model.
-     */
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
     virtual bool valid() { return true; }
@@ -175,89 +119,36 @@ public:
 
     //========== Display profiles =============================================//
 
-    /**
-     * Return the profile of this color space. This may be 0
-     */
     virtual KisProfile * getProfile() { return m_profile; };
 
 
 //================= Conversion functions ==================================//
 
 
-    /**
-     * The fromQColor methods take a given color defined as an RGB QColor
-     * and fills a byte array with the corresponding color in the
-     * the colorspace managed by this strategy.
-     *
-     * XXX: We actually do not use the display profile yet
-     */
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst) = 0;
     virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst) = 0;
 
-    /**
-     * The toQColor methods take a byte array that is at least pixelSize() long
-     * and converts the contents to a QColor, using the display profile as a destination profile.
-     *
-     * XXX: We actually do not use the display profile yet
-     *
-     */
     virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
 
-
     virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src) = 0;
+    
     virtual KisPixel toKisPixel(Q_UINT8 *src) = 0;
 
-    /**
-     * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
-     * color strategy.
-     */
     virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-    /**
-     * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
-     * The pixels are supposed to be encoded in this color model. The default implementation
-     * will convert the pixels using either the profiles or the default profiles for the
-     * current colorstrategy and the RGBA colorstrategy. If that is not what you want,
-     * or if you think you can do better than lcms, reimplement this methods.
-     *
-     * @param data A pointer to a contiguous memory region containing width * height pixels
-     * @param width in pixels
-     * @param height in pixels
-     * @param dstProfile destination profile
-     * @param renderingIntent the rendering intent
-     * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
-     */
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                                    KisProfile *  dstProfile,
                                    Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
-
-
-    /**
-     * Convert a byte array of srcLen pixels *src to the specified color space
-     * and put the converted bytes into the prepared byte array *dst.
-     *
-     * Returns false if the conversion failed, true if it succeeded
-     */
     virtual bool convertPixelsTo(const Q_UINT8 * src,
                                  Q_UINT8 * dst, KisColorSpace * dstColorSpace,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
-    /**
-     * Convert the value of the channel at the specified position into
-     * an 8-bit value. The position is not the number of bytes, but
-     * the position of the channel as defined in the channel info list.
-     */
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
-    /**
-     * Convert the value of the channel at the specified position into
-     * a 16-bit value. This may be upscaling or downscaling, depending
-     * on the defined value of the channel
-     */
      virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
 //============================== Manipulation fucntions ==========================//
@@ -268,88 +159,24 @@ public:
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
 
-    /**
-    * Get the alpha value of the given pixel, downscaled to an 8-bit value.
-    */
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) = 0;
-
-    /**
-     * Set the alpha channel of the given run of pixels to the given value.
-     *
-     * pixels -- a pointer to the pixels that will have their alpha set to this value
-     * alpha --  a downscaled 8-bit value for opacity
-     * nPixels -- the number of pixels
-     *
-     * XXX: Also add a function that modifies the current alpha with the given alpha, i.e., premultiply them?
-     */
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) = 0;
-
-    /**
-     * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just
-     * as many alpha values as pixels but we do not check this; the alpha values
-     * are assumed to be 8-bits.
-     */
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels) = 0;
-
-    /**
-     * Applies the inverted 8-bit alpha mask to the pixels. We assume that there are just
-     * as many alpha values as pixels but we do not check this; the alpha values
-     * are assumed to be 8-bits.
-     */
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels) = 0;
-
-    /**
-     * Create an adjustment object for adjusting the brightness and contrast
-     * transferValues is a 256 bins array with values from 0 to 0xFFFF
-     */
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
 
-    /**
-     * Create an adjustment object for desaturating
-     */
     virtual KisColorAdjustment *createDesaturateAdjustment();
 
-    /**
-     * Apply the adjustment created with onr of the other functions
-     */
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 
-
-    // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
-    /**
-     * Get the difference between 2 colors, normalized in the range (0,255)
-     */
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    
     virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
 
-    /**
-     * Mix the colors given their weights and return in dst
-     * The sum of weights is assumed 255 */
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    /**
-     * Convolve the given array of pointers to pixels and return the result
-     * in dst. The kernel values are clamped between -128 and 128
-     */
     virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const;
 
-    /**
-     * Darken all color channels with the given amount. If compensate is true,
-     * the compensation factor will be used to limit the darkening.
-     *
-     * (See the bumpmap filter)
-     */
     virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 
-    /**
-     * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
-    */
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
-    /**
-     * Compose two arrays of pixels together. If source and target
-     * are not the same colour model, the source pixels will be
-     * converted to the target model.
-     */
     virtual void bitBlt(Q_UINT8 *dst,
                 Q_INT32 dststride,
                 KisColorSpace * srcSpace,

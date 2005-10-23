@@ -224,11 +224,11 @@ typedef struct {
 } BCHSWADJUSTS, *LPBCHSWADJUSTS;
 
 
-static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID Cargo)
+static int desaturateSampler(register WORD In[], register WORD Out[], register LPVOID /*Cargo*/)
 {
     cmsCIELab LabIn, LabOut;
     cmsCIELCh LChIn, LChOut;
-    LPBCHSWADJUSTS bchsw = (LPBCHSWADJUSTS) Cargo;
+    //LPBCHSWADJUSTS bchsw = (LPBCHSWADJUSTS) Cargo;
 
     cmsLabEncoded2Float(&LabIn, In);
 
@@ -304,6 +304,39 @@ void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, Ki
     cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
+
+void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
+        KisColorSpace * xyz = m_parent->getXYZ16();
+        
+        Q_UINT32 psize = xyz->pixelSize();
+
+        if ( m_conversionCache.size() < nPixels * psize ) {
+            m_conversionCache.resize( nPixels * psize, QGArray::SpeedOptim );
+        }
+
+        cmsDoTransform( m_defaultToXYZ, src, m_conversionCache.data(), nPixels);
+        xyz->invertColor(m_conversionCache.data(), nPixels);
+        cmsDoTransform( m_defaultFromXYZ, m_conversionCache.data(), src, nPixels);
+    }
+    else {
+        QColor c;
+        Q_UINT8 opacity;
+        Q_UINT32 psize = pixelSize();
+        
+        while (nPixels--)
+        {
+            // Ugly hack to get around the current constness mess of the colour strategy...
+            const_cast<KisAbstractColorSpace *>(this) -> toQColor(src, &c, &opacity);
+            c.setRgb(Q_UINT8_MAX - c.red(), Q_UINT8_MAX - c.green(), Q_UINT8_MAX - c.blue());
+            fromQColor( c, opacity, src);
+    
+            src += psize;
+        }
+    }
+
+}
 
 // BC: should this default be HSV-based?
 Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)

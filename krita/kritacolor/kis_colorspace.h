@@ -275,6 +275,10 @@ public:
      */
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels) = 0;
 
+    /**
+     * Invert color channels of the given pixels
+     */
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels) = 0;
 
     // XXX: What with alpha channels? YYY: Add an overloaded function that takes alpha into account?
     /**

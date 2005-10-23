@@ -80,14 +80,21 @@ void KisFilterInvert::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
+
+    KisColorSpace * cs = src->colorSpace();
+    Q_INT32 psize = cs->pixelSize();
+    
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
         {
-            for( int i = 0; i < depth; i++)
-            {
-                dstIt.rawData()[i] = Q_UINT8_MAX - srcIt.oldRawData()[i];
-            }
+            //memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
+            
+            cs->invertColor( srcIt.rawData(), 1);
+            //for( int i = 0; i < depth; i++)
+            //{
+            //    dstIt.rawData()[i] = Q_UINT8_MAX - srcIt.oldRawData()[i];
+            //}
         }
         setProgress(++pixelsProcessed);
         ++srcIt;

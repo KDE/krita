@@ -1,5 +1,5 @@
 
-SUBDIRS = \
+SUBDIRS = threadtest \
     cimg \
 	bumpmap \
 	example \

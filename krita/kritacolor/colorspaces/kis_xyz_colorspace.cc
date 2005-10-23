@@ -93,6 +93,22 @@ void KisXyzColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColo
 {
 }
 
+void KisXyzColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_INT32 pSize = pixelSize();
+    
+    while (nPixels--)
+    {
+        Q_UINT16 * p = reinterpret_cast<Q_UINT16 *>(src);
+        //kdDebug() << "Before X " << p[PIXEL_X] << ", Y " << p[PIXEL_Y] << ", z " << p[PIXEL_Z] << "\n";
+        p[PIXEL_X] = UINT16_MAX - p[PIXEL_X];
+        p[PIXEL_Y] = UINT16_MAX - p[PIXEL_Y];
+        p[PIXEL_Z] = UINT16_MAX - p[PIXEL_Z];
+        //kdDebug() << "After X " << p[PIXEL_X] << ", Y " << p[PIXEL_Y] << ", z " << p[PIXEL_Z] << "\n";
+        src += pSize;
+    }
+}
+
 Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);

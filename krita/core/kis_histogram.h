@@ -52,6 +52,8 @@ public:
         Q_UINT32 m_high, m_low, m_count;
         friend class KisHistogram;
     public:
+        Calculations() : m_max(0.0), m_min(0.0), m_mean(0.0), m_total(0.0), m_median(0.0),
+            m_stddev(0.0), m_high(0), m_low(0), m_count(0) {}
         double getMax() { return m_max; }
         double getMin() { return m_min; }
         Q_UINT32 getHighest() { return m_high; }

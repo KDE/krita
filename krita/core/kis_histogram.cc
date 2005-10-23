@@ -129,7 +129,6 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
     double max = from, min = to, total = 0.0, mean = 0.0; //, median = 0.0, stddev = 0.0;
     Q_UINT32 high = 0, low = (Q_UINT32) -1, count = 0;
 
-
     if (m_producer -> count() == 0) {
         // We won't get anything, even if a range is specified
         // XXX make sure all initial '0' values are correct here!

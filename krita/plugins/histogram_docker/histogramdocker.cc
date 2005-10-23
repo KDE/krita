@@ -136,6 +136,8 @@ void KritaHistogramDocker::producerChanged(int pos)
     m_histogram = new KisHistogram( new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "Dummy"), m_producer, LOGARITHMIC);
 
     if (m_hview) {
+        m_hview -> setHistogram(m_histogram);
+        m_hview -> setColor(true);
         m_hview -> setCurrentChannels(m_producer, m_producer -> channels());
 
         connect(m_cache, SIGNAL(cacheUpdated()),

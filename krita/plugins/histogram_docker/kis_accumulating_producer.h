@@ -38,7 +38,6 @@ public:
     virtual void setView(double, double) {} // No view support
     virtual double maximalZoom() const { return 1.0; }
 
-    virtual Q_INT32 count() { return m_source -> at(0) -> count(); }
     virtual Q_INT32 numberOfBins() { return m_source -> at(0) -> numberOfBins(); }
 
     virtual QValueVector<KisChannelInfo *> channels() { return m_source -> at(0) -> channels(); }

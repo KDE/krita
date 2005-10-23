@@ -123,7 +123,9 @@ void KisImageRasteredCache::cleanUpElements() {
         for (uint j = 0; j < m_raster.at(i).count(); j++) {
             delete m_raster.at(i).at(j);
         }
+        m_raster.at(i).clear();
     }
+    m_raster.clear();
     m_queue.clear();
 }
 

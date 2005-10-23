@@ -34,6 +34,7 @@ void KisAccumulatingHistogramProducer::addRegionToBin(Q_UINT8 *, Q_UINT8*, Q_UIN
     uint count = m_source -> count();
     for (uint i = 0; i < count; i++) {
         KisHistogramProducer* p = m_source -> at(i);
+        m_count += p -> count();
 
         for (int j = 0; j < m_channels; j++) {
             for (int k = 0; k < m_nrOfBins; k++) {

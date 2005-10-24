@@ -80,10 +80,11 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
     QSize minSize = QSize(sv->verticalScrollBar()->width(), 0);
     minSize += QSize(sv->frameWidth(), 0);
     minSize += QSize(cellSize);
-    sv->setFixedSize(minSize);
+    sv->setMinimumSize(minSize);
+    sv->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
     layout->addWidget(sv);
 
-    setFixedSize(sizeHint());
+    //setFixedSize(sizeHint());
 
     connect( combo, SIGNAL(activated(const QString &)),
          this, SLOT(slotSetPalette( const QString &)));

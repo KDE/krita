@@ -6,5 +6,6 @@ Comment[cy]=Swyddogaeth GUI ar gyfer Krita
 Comment[da]=GUI-funktionalitet for Krita
 Comment[pt]=Funcionalidade gráfica para o Krita
 Comment[pt_BR]=Funcionalidade gráfica para o Krita
+Comment[sv]=Grafisk gränssnittsfunktion för Krita
 [PropertyDef::X-KDE-Version]
 Type=int

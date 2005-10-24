@@ -60,7 +60,7 @@ void KisResourceServerBase::loadResources(QStringList filenames)
         filenames.pop_front();
 
         QString fname = QFileInfo(front).fileName();
-        //kdDebug() << "Loading " << fname << "\n";
+        //ebug() << "Loading " << fname << "\n";
         // XXX: Don't load resources with the same filename. Actually, we should look inside
         //      the resource to find out whether they are really the same, but for now this
         //      will prevent the same brush etc. showing up twice.
@@ -155,8 +155,9 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
     t4.start();
 
+                          
     KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes");
-    ResourceLoaderThread t5 (paletteServer, getFileNames(".gpl:.pal:.act", "kis_palettes") );
+    ResourceLoaderThread t5 (paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
     t5.start();
 
     t1.wait();

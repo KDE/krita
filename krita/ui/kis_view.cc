@@ -221,6 +221,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     else
         setXMLFile("krita.rc");
 
+    KStdAction::keyBindings( factory(), SLOT( configureShortcuts() ), actionCollection() );
+
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     m_fg = KisColor(Qt::black, cs);
     m_bg = KisColor(Qt::white, cs);

@@ -26,7 +26,6 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include "kaction.h"
-#include "kis_filter.h"
 
 class QString;
 class KisView;

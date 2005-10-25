@@ -27,7 +27,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = sdk kritacolor core ui . dtd paintops tools modules plugins data pics 
+SUBDIRS = sdk kritacolor core ui . dtd colorspaces plugins data pics 
 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.
@@ -43,7 +43,7 @@ messages: rc.cpp
 	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
 	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
 	perl extracti18n.pl > i18ndata
-	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` core/kis_aboutdata.h -o $(podir)/krita.pot
+	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` ui/kis_aboutdata.h -o $(podir)/krita.pot
 	rm -f i18ndata
 
 DOXYGEN_EXCLUDE = CImg.h

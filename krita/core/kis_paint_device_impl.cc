@@ -183,7 +183,7 @@ namespace {
     };
 
     MoveCommand::MoveCommand(KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
-        super(i18n("Moved Layer"))
+        super(i18n("Move Layer"))
     {
         m_device = device;
         m_oldPos = oldpos;

@@ -55,7 +55,7 @@ namespace {
     };
 
     MoveCommand::MoveCommand(KisCanvasController *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
-        super(i18n("Moved Painting Device"))
+        super(i18n("Move Layer"))
     {
         m_controller = controller;
         m_img = img;
@@ -82,7 +82,8 @@ namespace {
     void MoveCommand::moveTo(const QPoint& pos)
     {
        m_device -> move(pos.x(), pos.y());
-       m_controller -> updateCanvas(m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height()));
+       m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
+       m_img -> notify(m_deviceBounds);
        m_deviceBounds.setRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
     }
 }
@@ -149,9 +150,6 @@ void KisStrategyMove::drag(const QPoint& original)
         if (img && (dev = img -> activeDevice())) {
             QPoint pos = original;
             QRect rc;
-
-            if (pos.x() >= img -> width() || pos.y() >= img -> height())
-                return;
 
             pos -= m_dragStart; // convert to delta
             rc = dev -> extent();

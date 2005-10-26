@@ -171,6 +171,5 @@ noinst_HEADERS = \
 
 METASOURCES = AUTO
 
-	echo > dummy.cc
 KDE_OPTIONS = nofinal
 

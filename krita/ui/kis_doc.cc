@@ -629,13 +629,17 @@ bool KisDoc::completeSaving(KoStore *store)
         }
 
         if ((*it2) -> colorSpace() -> getProfile()) {
-            // save layer profile
-            location = external ? QString::null : uri;
-            location += (img) -> name() + "/layers/" + (*it2) -> name() + ".icc";
+            KisAnnotationSP annotation = (*it2) -> colorSpace() -> getProfile() -> annotation();
 
-            if (store -> open(location)) {
-                store -> write((*it2) -> colorSpace() -> getProfile() -> annotation() -> annotation());
-                store -> close();
+            if (annotation) {
+                // save layer profile
+                location = external ? QString::null : uri;
+                location += (img) -> name() + "/layers/" + (*it2) -> name() + ".icc";
+
+                if (store -> open(location)) {
+                    store -> write(annotation -> annotation());
+                    store -> close();
+                }
             }
         }
 
@@ -656,12 +660,16 @@ bool KisDoc::completeSaving(KoStore *store)
             store -> close();
         }
     }
-    if ((img) -> getProfile()) {
-        location = external ? QString::null : uri;
-        location += (img) -> name() + "/annotations/icc";
-        if (store -> open(location)) {
-            store -> write((img) -> getProfile() -> annotation() -> annotation());
-            store -> close();
+    if (img -> getProfile()) {
+        annotation = img -> getProfile() -> annotation();
+
+        if (annotation) {
+            location = external ? QString::null : uri;
+            location += img -> name() + "/annotations/icc";
+            if (store -> open(location)) {
+                store -> write(annotation -> annotation());
+                store -> close();
+            }
         }
     }
 

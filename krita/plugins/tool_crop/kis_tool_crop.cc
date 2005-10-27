@@ -780,7 +780,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return Right;
     }
-    else if ( QRect ( m_startPos.x() , m_startPos.y(), m_endPos.x() - m_startPos.x() , m_endPos.y() - m_startPos.y() ).contains( currentViewPoint ) )
+    else if ( QRect ( startx , starty, endx - startx , endy - starty ).contains( currentViewPoint ) )
     {
         return Inside;
     }

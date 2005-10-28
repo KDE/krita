@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Separate Channels Plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritaseparatechannels
+X-KDE-Version=2

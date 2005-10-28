@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Histogram Plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritahistogram
+X-KDE-Version=2

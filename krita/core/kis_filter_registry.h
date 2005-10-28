@@ -20,20 +20,20 @@
 #ifndef KIS_FILTER_REGISTRY_H_
 #define KIS_FILTER_REGISTRY_H_
 
-#include "qptrlist.h"
+#include <qobject.h>
 
-#include "ksharedptr.h"
 #include "kis_types.h"
 #include "kis_generic_registry.h"
-#include "kaction.h"
-#include "kis_filter.h"
+
 #include <koffice_export.h>
 
 class QString;
 class QStringList;
 
-class KRITACORE_EXPORT KisFilterRegistry : public KisGenericRegistry<KisFilterSP>,  public KShared
+class KRITACORE_EXPORT KisFilterRegistry : public QObject, public KisGenericRegistry<KisFilterSP>
 {
+
+    Q_OBJECT
 
 public:
     virtual ~KisFilterRegistry();

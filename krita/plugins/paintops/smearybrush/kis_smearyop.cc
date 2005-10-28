@@ -1,0 +1,136 @@
+/*
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include <qrect.h>
+
+#include <kdebug.h>
+
+#include "kis_brush.h"
+#include "kis_global.h"
+#include "kis_paint_device_impl.h"
+#include "kis_layer.h"
+#include "kis_painter.h"
+#include "kis_types.h"
+#include "kis_paintop.h"
+
+#include "kis_smearyop.h"
+
+/**
+ * The smeary brush implements bidirectional paint transfer. It takes the
+ * color at the footprint of the brush (unless it's the image color or
+ * transparent and mixes it with the paint color, creating a new paint
+ * color.
+ */
+KisPaintOp * KisSmearyOpFactory::createOp(KisPainter * painter)
+{
+    KisPaintOp * op = new KisSmearyOp(painter);
+    Q_CHECK_PTR(op);
+    return op;
+}
+
+KisSmearyOp::KisSmearyOp(KisPainter * painter)
+    : super(painter)
+{
+}
+
+KisSmearyOp::~KisSmearyOp()
+{
+}
+
+void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
+{
+    if (!m_painter -> device()) return;
+
+    KisBrush *brush = m_painter -> brush();
+
+    Q_ASSERT(brush);
+
+    if (!brush) return;
+
+    if (! brush -> canPaintFor(info) )
+        return;
+
+    KisPaintDeviceImplSP device = m_painter -> device();
+    KisColorSpace * colorSpace = device -> colorSpace();
+    Q_INT32 pixelSize = colorSpace->pixelSize();
+    KisColor kc = m_painter -> paintColor();
+    kc.convertTo(colorSpace);
+
+    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint pt = pos - hotSpot;
+
+    // Split the coordinates into integer plus fractional parts. The integer
+    // is where the dab will be positioned and the fractional part determines
+    // the sub-pixel positioning.
+    Q_INT32 x, y;
+    double xFraction, yFraction;
+
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
+
+    KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
+    KisLayerSP dab = new KisLayer(colorSpace, "dab");
+    Q_CHECK_PTR(dab);
+
+    Q_INT32 maskWidth = mask -> width();
+    Q_INT32 maskHeight = mask -> height();
+
+    for (int y = 0; y < maskHeight; y++)
+    {
+        KisHLineIteratorPixel hiter = dab->createHLineIterator(0, y, maskWidth, true);
+        int x=0;
+        while(! hiter.isDone())
+        {
+            colorSpace->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
+            memcpy(hiter.rawData(), kc.data(), pixelSize);
+            ++hiter;
+        }
+    }
+
+
+    Q_UINT8 * mixbytes = new Q_UINT8[2 * pixelSize * maskWidth * maskHeight];
+    m_device->readBytes( mixBytes, x, y, maskWidth, maskHeight );
+    dab->readBytes( mixBytes + ( pixelSize * maskWidth * maskHeight ), 0, 0, maskWidth, maskHeight );
+    colorSpace->mixColors
+    m_painter -> setPressure(info.pressure);
+
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
+    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+
+    KisImage * image = device -> image();
+
+    if (image != 0) {
+        dstRect &= image -> bounds();
+    }
+
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+
+    Q_INT32 sx = dstRect.x() - x;
+    Q_INT32 sy = dstRect.y() - y;
+    Q_INT32 sw = dstRect.width();
+    Q_INT32 sh = dstRect.height();
+
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
+    m_painter -> addDirtyRect(dstRect);
+}
+
+

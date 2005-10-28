@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Variations Plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritavariations
+X-KDE-Version=2

@@ -22,6 +22,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
 
 #include "kis_generic_registry.h"
 #include "kis_types.h"
@@ -36,6 +40,23 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 {
     Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
     KisPaintOpRegistry::m_singleton = this;
+
+    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Paintop"),
+                                                         QString::fromLatin1("(Type == 'Service') and "
+                                                                             "([X-KDE-Version] == 2)"));
+
+    KTrader::OfferList::ConstIterator iter;
+
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    {
+        KService::Ptr service = *iter;
+        int errCode = 0;
+        KParts::Plugin* plugin =
+             KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
+        if ( plugin )
+            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
+    }
+
 }
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
@@ -100,3 +121,5 @@ QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
 
     return QPixmap(fname);
 }
+
+#include "kis_paintop_registry.moc"

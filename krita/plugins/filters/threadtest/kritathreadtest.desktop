@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Invert Filter with Threads
+Name[cy]=Gwrthdroi Hidlen efo Edeifion
+Name[pt]=Filtro de Inversão Multitarefa
+Name[pt_BR]=Filtro de Inversão Multitarefa
+Name[sv]=Inverteringsfilter med trådar
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritathreadtest
+X-KDE-Version=2

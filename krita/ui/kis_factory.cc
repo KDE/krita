@@ -30,10 +30,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <ktrader.h>
-#include <kparts/componentfactory.h>
 
 #include "kis_aboutdata.h"
 #include "kis_resourceserver.h"
@@ -68,22 +64,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     KisFilterRegistry::instance();
     KisResourceServerRegistry::instance();
 
-    // Load all modules: color models, paintops, filters
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/CoreModule"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
 
-    KTrader::OfferList::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-             KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
-        if ( plugin )
-            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
-    }
 
 }
 

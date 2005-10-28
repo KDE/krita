@@ -19,6 +19,8 @@
 #ifndef KIS_TOOL_REGISTRY_H_
 #define KIS_TOOL_REGISTRY_H_
 
+#include <qobject.h>
+
 #include "kis_tool_types.h"
 #include "kis_generic_registry.h"
 #include <koffice_export.h>
@@ -33,7 +35,9 @@ class QStringList;
  * in contrast to the paintop and colormodel registries, creates
  * a vector containing instances of all registered tools.
  */
-class KRITACORE_EXPORT KisToolRegistry : public KisGenericRegistry<KisToolFactorySP> {
+class KRITACORE_EXPORT KisToolRegistry : public QObject, public KisGenericRegistry<KisToolFactorySP>{
+
+    Q_OBJECT
 
 public:
     virtual ~KisToolRegistry();

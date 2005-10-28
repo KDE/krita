@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Rotate Image Plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritarotateimage
+X-KDE-Version=2

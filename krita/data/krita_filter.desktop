@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/Filter
+Comment=Filter plugin for Krita
+[PropertyDef::X-KDE-Version]
+Type=int

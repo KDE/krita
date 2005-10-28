@@ -1,4 +1,3 @@
-
 INCLUDES = \
     -I$(srcdir) \
     -I$(srcdir)/../sdk \

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Image resize and scale plugin
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritaimagesize
+X-KDE-Version=2

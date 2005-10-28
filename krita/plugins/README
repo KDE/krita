@@ -8,3 +8,35 @@ Plugins are _not_ allowed to depend on each other. You may _not_
 #include a header file from a plugin anywhere but in that same plugin.
 You can however choose to group a cluster of related functions in
 one plugin, like with the selection tools.
+
+There are several kinds of plugins for Krita:
+
+* Tools
+
+    Tools have the Krita/Tool servicetype. A tool plugin registers 
+    the tool factories it provides with the tool registry. A tool must descend
+    from the KisTool interface. There are several base classes for 
+    specialized tools, like painting and non painting tools.
+
+* Paintops
+
+    Paintops implement methods for changing pixels that can be used
+    by painting tools. Examples are brush, pen, airbrush. Paintop plugins
+    have the Krita/Paintop servicetype, register paintop factories they
+    provide the paintop registry. Paintops inherit KisPaintOp.
+    
+* Filters
+
+    Filters implement methods of changin a rectangular area of pixels. Filter
+    plugins have the Krita/Filter servicetype and are registered with
+    the filter registry. A filter inherits the KisFilter class and may
+    provide a configuration widget and a configuration object.
+
+* Extensions
+
+    Extensions are loaded by every view instance. They provide user interface
+    elements such as dialog boxes and wizards. Their parent is KisView and
+    they provide an .rc file to merge their gui with the view gui. Extensions
+    have the servicetype Krita/Plugin. They are not loaded automatically by
+    the KParts mechanism; please do not create ordinary kparts that are to
+    be loaded by the Krita view since KParts are not versioned.

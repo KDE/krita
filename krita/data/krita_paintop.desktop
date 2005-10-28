@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/Paintop
+Comment=Paint operation plugin for Krita
+[PropertyDef::X-KDE-Version]
+Type=int

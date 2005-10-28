@@ -1,0 +1,17 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaimagesize" version="6">
+<MenuBar>
+    <Menu name="Image"><text>&amp;Image</text>
+	<Separator/>
+	<Action name="imagesize"/>
+    </Menu>
+    <Menu name="Layer"><text>La&amp;yer</text>
+	<Separator/>
+	<Action name="layersize"/>
+    </Menu>
+    <Menu name="Adjust"><text>&amp;Adjust</text>
+	<Separator/>
+	<Action name="selectionscale"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

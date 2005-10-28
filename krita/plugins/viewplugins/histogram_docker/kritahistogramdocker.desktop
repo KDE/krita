@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Histogram Docker
+Name[cy]=Bachydd Histogram
+Name[es]=Anclaje del histograma
+Name[fr]=Ancrage d'histogramme
+Name[pt]=Acoplador de Histogramas
+Name[pt_BR]=Acoplador de Histogramas
+Name[sv]=Histogramdockning
+Name[xx]=xxHistogram Dockerxx
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritahistogramdocker
+X-KDE-Version=2

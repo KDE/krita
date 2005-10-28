@@ -43,7 +43,6 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
     if (!profileFilenames.empty()) {
         KisProfile * profile = 0;
         for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
-            kdDebug() << "loading profile " << *it << "\n";
             profile = new KisProfile(*it);
             Q_CHECK_PTR(profile);
 

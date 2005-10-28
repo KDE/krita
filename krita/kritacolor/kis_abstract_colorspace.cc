@@ -307,6 +307,7 @@ void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, Ki
 
 void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
 {
+/*
     if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
         KisColorSpace * xyz = m_parent->getXYZ16();
         
@@ -317,10 +318,11 @@ void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
         }
 
         cmsDoTransform( m_defaultToXYZ, src, m_conversionCache.data(), nPixels);
-        xyz->invertColor(m_conversionCache.data(), nPixels);
+        //xyz->invertColor(m_conversionCache.data(), nPixels);
         cmsDoTransform( m_defaultFromXYZ, m_conversionCache.data(), src, nPixels);
     }
     else {
+*/    
         QColor c;
         Q_UINT8 opacity;
         Q_UINT32 psize = pixelSize();
@@ -333,13 +335,14 @@ void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
     
             src += psize;
         }
-    }
+    //}
 
 }
 
 // BC: should this default be HSV-based?
 Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
+/*    
     if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
         Q_UINT32 psize = xyz::MAX_CHANNEL_XYZA * sizeof(Q_UINT16);
 
@@ -355,6 +358,7 @@ Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src
 
     }
     else {
+*/    
         QColor color1, color2;
         toQColor(src1, &color1);
         toQColor(src2, &color2);
@@ -364,7 +368,7 @@ Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src
         rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
 
         return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
-    }
+//    }
 }
 
 void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const

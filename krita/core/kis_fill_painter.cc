@@ -23,7 +23,6 @@
 #include <stack>
 
 #include "qbrush.h"
-#include "qcolor.h"
 #include "qfontinfo.h"
 #include "qfontmetrics.h"
 #include "qpen.h"

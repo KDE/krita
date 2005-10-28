@@ -4,24 +4,6 @@ Code organization
       Problem: what to do when it is useful for plugins to derive from a base class with some default functionality. Composition
       with delegation here? Go through patterns book.
     * Separate the core Krita image library from the part; place the former in krita/libkrita and the latter in krita/kritapart
-    * Reorganize plugin directories as follows:
-        plugins/
-                tools/
-                    /defaultools
-                    /selectiontools
-                    /...
-                filters/
-                    /...
-                colorspaces/
-                    /rgbu8
-                    /rgbu16
-                    /...
-                paintops/
-                    /...
-                extensions
-                    /imagesize
-                    /...
-                
 
 Bugs
     * On opening a second image after loading first image but not changing it,
@@ -80,7 +62,7 @@ Colorspace independence (found with the test colorstrategy)
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
 	* Merge grayscale layers back into one color image.
-    * Floodfill is not cs independent -- or if its, cmyk floodfill is broken.
+    * Allow both simply setting the profile and converting to the new profile
     
 Core
 
@@ -103,8 +85,8 @@ Core
           progressbar and be cancelable.
 	* On copying paint devices, do not actually copy the tiles, but only create
 	  new tiles when there is change. Also create a memory pool for creating new tiles (BART)
-        * Color adjustment filters seem to have a problem with partially selected pixels
-        * Color adjustment (the perchannel filter) modifies brightness and not the individual channels (CBR)
+    * Color adjustment filters seem to have a problem with partially selected pixels
+    * Color adjustment (the perchannel filter) modifies brightness and not the individual channels (CBR)
 
 File Format:
 
@@ -170,8 +152,6 @@ User Interface
 	  it onto a background image -- or not, if another KOffice app wants it
 	  rendered with transparency. But that'd probably better wait until Qt 4,
 	  where it would be a hardware accelerated snip.
-    * the screenshot tool wants to close the current document before it can do 
-      its work, what about making it snapshot to a new layer?
     * Doing a copy of a selection, but having the wrong layer selected gives 
       me an empty selection (all transparent).  Pressing paste should say so 
       (popup) instead of creating a new useless layer.
@@ -194,26 +174,25 @@ Selections
 
 	* On shearing, the whole image is mirrored, not the selected
 	  bits.
-        * Add opacity slider to selection painting tools so you can
+    * Add opacity slider to selection painting tools so you can
           select something 50%.
 
 Profiles
 
 	* Add an input profile combobox to the import image & scan dialogs
 	* Add an export profile combobox to the export image/print dialogs
-        * Add loading and saving of profiles associated with images in .krita 
+    * Add loading and saving of profiles associated with images in .krita 
           files.
-        * Export profiles in tiff, png and jpg (this and the previous item
-          depend on ImageMagick or GraphicsMagick supporting this in some way.)
-        * Support out-of-gamut warning indications for parts of an image 
-          containing unprintable colours (no idea how to implement this). -> this
-          is pretty easy with lcms
+    * Export profiles in tiff, png and jpg (this and the previous item
+      depend on ImageMagick or GraphicsMagick supporting this in some way.)
+    * Support out-of-gamut warning indications for parts of an image 
+      containing unprintable colours (no idea how to implement this). -> this
+      is pretty easy with lcms
 	* preferences dialog can show non-existent profile for the monitor profile -> confusing
 
 
 Tools
 
-	* All tools must have a tool options tab (#Boudewijn, Adrian, Cyrille)
 	* Zoom tool should zoom out when alt is pressed. Show zoom-minus cursor in that case
 	* Implement the following tools or paintops: 
 		    - fix airbrush tool (add rate option, add increase
@@ -228,7 +207,7 @@ Tools
 	            - calligraphic pen tool
  
 	* Pressure sensivitize all relevant tools (e.g. line tool)
-        * Add resize slider to freehand tools that resizes the mean brush size.
+    * Add resize slider to freehand tools that resizes the mean brush size.
 	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
@@ -252,8 +231,4 @@ Printing
 
 	* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
 	* Use gutenprint or something better for image printing.
-
-
-Paintops
-	*core The convolution paintop doesn't do anything at all -- but it can be used using paint-by-filters.
 

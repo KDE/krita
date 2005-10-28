@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Select Similar Colors Tool
+Name[cy]=Offer Detholi Lliwiau Tebyg
+Name[eo]=Ilo por selekti similajn kolorojn
+Name[es]=Herramienta de selección de colores similares
+Name[et]=Sarnase värvi valimise tööriist
+Name[fr]=Outils de sélection des couleurs similaires
+Name[pt]=Ferramenta de Selecção de Cores Semelhantes
+Name[pt_BR]=Ferramenta de Selecção de Cores Semelhantes
+Name[sv]=Välj liknande färg-verktyg
+Name[tr]=Benzer Renkler Seçim Aracı
+Name[xx]=xxSelect Similar Colors Toolxx
+ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatoolselectsimilar
+X-KDE-Version=2

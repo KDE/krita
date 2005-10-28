@@ -310,8 +310,6 @@ private:
 #endif
 
     bool m_renderinit;
-
-    QMutex m_mutex;
 };
 
 #endif // KIS_IMAGE_H_

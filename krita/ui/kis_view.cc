@@ -62,6 +62,10 @@
 #include <kdebug.h>
 #include <ksharedptr.h>
 #include <ktoolbar.h>
+#include <kparts/plugin.h>
+#include <kservice.h>
+#include <ktrader.h>
+#include <kparts/componentfactory.h>
 
 // KOffice
 #include <koPartSelectAction.h>
@@ -213,7 +217,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     createDockers();
 
-    setInstance(KisFactory::instance(), true );
+    setInstance(KisFactory::instance());
     setClientBuilder( this );
 
     if (!doc -> isReadWrite())
@@ -221,7 +225,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     else
         setXMLFile("krita.rc");
 
-    KStdAction::keyBindings( factory(), SLOT( configureShortcuts() ), actionCollection() );
+    KStdAction::keyBindings( mainWindow()->guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
 
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     m_fg = KisColor(Qt::black, cs);
@@ -247,6 +251,24 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_tabletEventTimer.start();
 
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
+/*
+    // Load all plugins
+    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
+                                                         QString::fromLatin1("(Type == 'Service') and "
+                                                                             "([X-KDE-Version] == 2)"));
+    KTrader::OfferList::ConstIterator iter;
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    {
+        KService::Ptr service = *iter;
+        int errCode = 0;
+        KParts::Plugin* plugin =
+             KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
+        if ( plugin ) {
+            kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+            factory()->addClient(plugin);
+        }
+    }
+*/
 }
 
 KisView::~KisView()

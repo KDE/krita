@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Smeary brush paint operation
+Comment=paint operation with bidirectional paint transfer
+ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritasmearybrush
+X-KDE-Version=2

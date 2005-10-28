@@ -48,8 +48,6 @@ KisMetaRegistry::KisMetaRegistry()
     profileFilenames += d.entryList();
 
     m_csRegistry = new KisColorSpaceFactoryRegistry(profileFilenames);
-
-
 }
 
 KisMetaRegistry::~KisMetaRegistry()

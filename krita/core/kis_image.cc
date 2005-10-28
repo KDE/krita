@@ -615,11 +615,14 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
     notify();
 }
 
+// XXX: Find a better
+class ScaleThread : QThread
+{
+};
+
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
     if (m_layers.empty()) return; // Nothing to scale
-
-    m_mutex.lock();
 
     // New image size. XXX: Pass along to discourage rounding errors?
     Q_INT32 w, h;
@@ -631,6 +634,8 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->beginMacro("Scale image");
         }
+
+        QPtrList<QThread *> scalethreads;
 
         vKisLayerSP_it it;
         for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
@@ -669,7 +674,6 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         emit sigSizeChanged(KisImageSP(this), w, h);
 
     }
-    m_mutex.unlock();
 }
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)

@@ -19,6 +19,8 @@
 #ifndef KIS_PAINTOP_REGISTRY_H_
 #define KIS_PAINTOP_REGISTRY_H_
 
+#include <qobject.h>
+
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include <koffice_export.h>
@@ -27,7 +29,10 @@ class QStringList;
 class KisPaintOp;
 class KisPainter;
 
-class KRITACORE_EXPORT KisPaintOpRegistry : public KisGenericRegistry<KisPaintOpFactorySP> {
+class KRITACORE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
+{
+
+    Q_OBJECT
 
 public:
     virtual ~KisPaintOpRegistry();

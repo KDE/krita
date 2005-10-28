@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Krita/Tool
+Comment=Tool plugin for Krita
+[PropertyDef::X-KDE-Version]
+Type=int

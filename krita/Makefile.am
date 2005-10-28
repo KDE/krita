@@ -1,4 +1,4 @@
-INCLUDES  = $(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The common lib, shared between the part, the plugins, and the filters
 lib_LTLIBRARIES = libkritacommon.la
@@ -27,7 +27,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/krita
 rc_DATA = krita.rc krita_readonly.rc
 
-SUBDIRS = sdk kritacolor core ui . dtd paintops tools modules plugins data pics 
+SUBDIRS = sdk kritacolor core ui . dtd colorspaces plugins data pics 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.
 dummycommon.cc:

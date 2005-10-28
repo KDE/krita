@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Filters Gallery
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritafiltersgallery
+X-KDE-Version=2

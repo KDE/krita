@@ -19,7 +19,6 @@
 #ifndef KIS_CANVAS_SUBJECT_H_
 #define KIS_CANVAS_SUBJECT_H_
 
-#include <qstring.h>
 #include "kis_types.h"
 #include "kis_id.h"
 

@@ -9,7 +9,6 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 	-I$(srcdir)/../../../ui \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
-	$(all_includes)
 
 kritaexample_la_SOURCES = example.cc
 

@@ -1,4 +1,4 @@
-kri <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritarotateimage" version="7">
 <MenuBar>
     <Menu name="Image"><text>&amp;Image</text>

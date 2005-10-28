@@ -54,6 +54,7 @@
 #include "kis_view.h"
 #include "kis_autobrush.h"
 #include "kis_autogradient.h"
+#include "kis_config.h"
 #include "kis_paintop_box.h"
 
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
@@ -91,9 +92,9 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     , m_paintopBox(0)
 {
 
+    KisConfig cfg;
     m_font  = KGlobalSettings::generalFont();
-    float ps = m_font.pointSize() * 0.8;
-    m_font.setPointSize((int)ps);
+    m_font.setPointSize(cfg.dockerFontSize());
 
     m_brushWidget = new KisIconWidget(view, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush shapes") );

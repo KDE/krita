@@ -20,7 +20,7 @@ INCLUDES = -I$(srcdir)/../../../sdk \
 
 kritasmearybrush_la_SOURCES = \
 	smearybrush.cc \
-	kis_smearyop.cc \
+	kis_smearyop.cc
 
 noinst_HEADERS = smearybrush.h 	kis_smearyop.h
 

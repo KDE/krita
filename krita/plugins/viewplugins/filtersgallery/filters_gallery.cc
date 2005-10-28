@@ -40,7 +40,7 @@ K_EXPORT_COMPONENT_FACTORY( kritafiltersgallery, KritaFiltersGalleryFactory( "kr
 KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
-    
+
     kdDebug() << "FiltersGallery plugin. Class: "
           << className()
           << ", Parent: "
@@ -50,14 +50,14 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
     if ( parent->inherits("KisView") )
     {
         setInstance(KritaFiltersGallery::instance());
-        //setXMLFile(locate("data","kritaplugins/kritafiltersgallery.rc"), true);
+        setXMLFile(locate("data","kritaplugins/kritafiltersgallery.rc"), true);
 
         m_view = (KisView*) parent;
 
         (void) new KAction(i18n("&Filters gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
     }
 
-    
+
 }
 
 KritaFiltersGallery::~KritaFiltersGallery()
@@ -71,7 +71,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
     {
         if(dlg.currentFilter() != 0 )
         {
-        
+
         }
     }
 }

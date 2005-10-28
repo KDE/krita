@@ -251,7 +251,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_tabletEventTimer.start();
 
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
-/*
+
     // Load all plugins
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
                                                          QString::fromLatin1("(Type == 'Service') and "
@@ -265,10 +265,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin ) {
             kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
-            factory()->addClient(plugin);
+            insertChildClient(plugin);
         }
     }
-*/
 }
 
 KisView::~KisView()

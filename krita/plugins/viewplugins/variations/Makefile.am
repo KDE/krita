@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = variations.rc
 
 EXTRA_DIST = $(kritarc_DATA)
@@ -20,6 +20,6 @@ noinst_HEADERS = wdg_variations.h
 kritavariations_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritavariations_la_LIBADD =  ../../../libkritacommon.la
 
-#kde_services_DATA = kritavariations.desktop
+kde_services_DATA = kritavariations.desktop
 
 kritavariations_la_METASOURCES = AUTO

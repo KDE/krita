@@ -1,8 +1,7 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = perftest.rc
 
 EXTRA_DIST = $(kritarc_DATA)
-
 
 INCLUDES  =  -I$(srcdir)/../../../sdk \
 	-I$(srcdir)/../../../core \
@@ -20,6 +19,6 @@ noinst_HEADERS = wdg_perftest.h dlg_perftest.h perftest.h
 kritaperftest_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritaperftest_la_LIBADD =  ../../../libkritacommon.la
 
-#kde_services_DATA = kritaperftest.desktop
+kde_services_DATA = kritaperftest.desktop
 
 kritaperftest_la_METASOURCES = AUTO

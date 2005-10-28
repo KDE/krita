@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = kritafiltersgallery.rc
 
 EXTRA_DIST = $(kritarc_DATA)
@@ -17,7 +17,7 @@ kritafiltersgallery_la_SOURCES = filters_gallery.cc kis_filters_listview.cc \
 kde_module_LTLIBRARIES = kritafiltersgallery.la
 noinst_HEADERS = filters_gallery.h kis_filters_listview.h kis_dlg_filtersgallery.h
 
-#kde_services_DATA = kritafiltersgallery.desktop
+kde_services_DATA = kritafiltersgallery.desktop
 
 kritafiltersgallery_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritafiltersgallery_la_LIBADD =  ../../../libkritacommon.la 

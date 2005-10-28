@@ -47,7 +47,7 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char
         kdDebug () << "instantiating separate channels plugin\n";
 
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
-        //setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);
+        setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView*) parent;
         (void) new KAction(i18n("Separate image..."), 0, 0, this, SLOT(slotSeparate()), actionCollection(), "separate");
     }

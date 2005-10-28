@@ -53,7 +53,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         m_view = dynamic_cast<KisView*>(parent);
 
         setInstance(KritaHistogramDockerFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/kritahistogramdocker.rc"), true);
+        setXMLFile(locate("data","kritaplugins/kritahistogramdocker.rc"), true);
 
         KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
         if (!img) {

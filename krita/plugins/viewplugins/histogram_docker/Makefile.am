@@ -1,5 +1,5 @@
-#kde_services_DATA = kritahistogramdocker.desktop
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kde_services_DATA = kritahistogramdocker.desktop
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = kritahistogramdocker.rc
 
 INCLUDES  = -I$(srcdir)/../../../sdk \

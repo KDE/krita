@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = screenshot-krita.rc
 
 EXTRA_DIST =  $(kritarc_DATA)
@@ -18,7 +18,7 @@ noinst_HEADERS = screenshot.h ksnapshot.h regiongrabber.h ksnapshotwidget.h ksna
 kritascreenshot_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritascreenshot_la_LIBADD =  ../../../libkritacommon.la 
 
-#kde_services_DATA = kritascreenshot.desktop
+kde_services_DATA = kritascreenshot.desktop
 
 kritascreenshot_la_METASOURCES = AUTO
 

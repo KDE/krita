@@ -68,7 +68,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(ImageSizeFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/imagesize.rc"), true);
+        setXMLFile(locate("data","kritaplugins/imagesize.rc"), true);
 
         (void) new KAction(i18n("Change &Image Size..."), 0, "Shift-s", this, SLOT(slotImageSize()), actionCollection(), "imagesize");
         (void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");

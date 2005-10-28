@@ -66,7 +66,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisView") ) {
 
         setInstance(HistogramFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/histogram.rc"), true);
+        setXMLFile(locate("data","kritaplugins/histogram.rc"), true);
 
         m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 

@@ -60,10 +60,10 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
            << parent -> className()
            << "\n";
 
-    
+
     if (parent -> inherits("KisView")) {
         setInstance(ColorRangeFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
+        setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
         m_view = dynamic_cast<KisView*>(parent);
         m_view -> getCanvasSubject() -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 

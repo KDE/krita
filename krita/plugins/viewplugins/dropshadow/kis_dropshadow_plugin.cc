@@ -47,12 +47,12 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const char *name, cons
                 << ", Parent: "
                 << parent -> className()
                 << "\n";
-        
+
 
     if ( parent->inherits("KisView") ) {
 
         setInstance(KGenericFactory<KisDropshadowPlugin>::instance());
-        //setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
+        setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView*) parent;
         (void) new KAction(i18n("Add dropshadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
@@ -75,18 +75,18 @@ void KisDropshadowPlugin::slotDropshadow()
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Dropshadow"));
-    
+
     if (dlgDropshadow->exec() == QDialog::Accepted) {
-        
+
         KisDropshadow dropshadow(m_view);
-        dropshadow.dropshadow(m_view->getCanvasSubject()->progressDisplay(), 
-                           dlgDropshadow->getXOffset(), 
+        dropshadow.dropshadow(m_view->getCanvasSubject()->progressDisplay(),
+                           dlgDropshadow->getXOffset(),
                            dlgDropshadow->getYOffset(),
                            dlgDropshadow->getBlurRadius(),
                            dlgDropshadow->getShadowColor(),
                            dlgDropshadow->getShadowOpacity(),
                            dlgDropshadow->allowResizingChecked());
-        
+
     }
 
     delete dlgDropshadow;

@@ -3,5 +3,5 @@ Encoding=UTF-8
 Name=Performance test
 ServiceTypes=Krita/ViewPlugin
 Type=Service
-X-KDE-Library=krita
+X-KDE-Library=kritaperftest
 X-KDE-Version=2

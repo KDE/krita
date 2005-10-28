@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = colorspaceconversion.rc
 
 EXTRA_DIST = $(kritarc_DATA)
@@ -22,5 +22,5 @@ kritacolorspaceconversion_la_LIBADD =  ../../../libkritacommon.la
 
 kritacolorspaceconversion_la_METASOURCES = AUTO
 
-#kde_services_DATA = kritacolorspaceconversion.desktop
+kde_services_DATA = kritacolorspaceconversion.desktop
 

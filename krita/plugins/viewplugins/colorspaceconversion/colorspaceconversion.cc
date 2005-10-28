@@ -67,16 +67,16 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const char *name, co
            << parent -> className()
            << "\n";
 
-    if ( !parent->inherits("KisView") )
+    if ( parent->inherits("KisView") )
     {
+        m_view = (KisView*) parent;
+
         setInstance(ColorSpaceConversionFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/colorspaceconversion.rc"), true);
+        setXMLFile(locate("data","kritaplugins/colorspaceconversion.rc"), true);
 
         (void) new KAction(i18n("&Convert Image Type..."), 0, 0, this, SLOT(slotImgColorSpaceConversion()), actionCollection(), "imgcolorspaceconversion");
         (void) new KAction(i18n("&Convert Layer Type..."), 0, 0, this, SLOT(slotLayerColorSpaceConversion()), actionCollection(), "layercolorspaceconversion");
 
-    } else {
-        m_view = (KisView*) parent;
     }
 }
 

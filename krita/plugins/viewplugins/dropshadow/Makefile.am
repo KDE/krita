@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = dropshadow.rc
 EXTRA_DIST = $(kritarc_DATA)
 
@@ -22,7 +22,7 @@ noinst_HEADERS = wdg_dropshadow.h kis_dropshadow_plugin.h \
 kritadropshadow_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritadropshadow_la_LIBADD =  ../../../libkritacommon.la 
 
-#kde_services_DATA = kritadropshadow.desktop
+kde_services_DATA = kritadropshadow.desktop
 
 kritadropshadow_la_METASOURCES = AUTO
 

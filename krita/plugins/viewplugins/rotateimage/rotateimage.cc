@@ -64,7 +64,7 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
 
     if ( parent->inherits("KisView") ) {
         setInstance(RotateImageFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/rotateimage.rc"), true);
+        setXMLFile(locate("data","kritaplugins/rotateimage.rc"), true);
         m_view = (KisView*) parent;
         (void) new KAction(i18n("&Rotate Image..."), 0, 0, this, SLOT(slotRotateImage()), actionCollection(), "rotateimage");
         (void) new KAction(i18n("Rotate Image CW"), "rotate_cw", 0, this, SLOT(slotRotateImage90()), actionCollection(), "rotateImageCW90");

@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = shearimage.rc
 
 EXTRA_DIST = $(kritarc_DATA)
@@ -13,7 +13,7 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 
 kde_module_LTLIBRARIES = kritashearimage.la
 
-#kde_services_DATA = kritashearimage.desktop
+kde_services_DATA = kritashearimage.desktop
 
 kritashearimage_la_SOURCES = wdg_shearimage.ui shearimage.cc dlg_shearimage.cc
 noinst_HEADERS = wdg_shearimage.h dlg_shearimage.h shearimage.h

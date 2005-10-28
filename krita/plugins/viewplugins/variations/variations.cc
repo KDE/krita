@@ -52,9 +52,9 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
 
-     kdDebug(41006) << "Variations plugin. Class: " 
-           << className() 
-           << ", Parent: " 
+     kdDebug(41006) << "Variations plugin. Class: "
+           << className()
+           << ", Parent: "
            << parent -> className()
            << "\n";
 
@@ -62,7 +62,7 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(VariationsFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/variations.rc"), true);
+        setXMLFile(locate("data","kritaplugins/variations.rc"), true);
 
         (void) new KAction(i18n("&Variations..."), 0, 0, this, SLOT(slotVariationsActivated()), actionCollection(), "variations");
 
@@ -80,10 +80,10 @@ void Variations::slotVariationsActivated()
     Q_CHECK_PTR(dlgVariations);
     // Render layer to a QIMage -- keep in mind possibility of selection
 
-    // Scale QImage 
+    // Scale QImage
 
     // Set original QImage in dialog
-        
+
     if (dlgVariations -> exec() == QDialog::Accepted) {
         // Retrieve changes made by dialog
         // Apply changes to layer (selection)

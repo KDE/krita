@@ -91,7 +91,7 @@ PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(PerfTestFactory::instance());
-        //setXMLFile(locate("data","kritaplugins/perftest.rc"), true);
+        setXMLFile(locate("data","kritaplugins/perftest.rc"), true);
 
         (void) new KAction(i18n("&Performance Test..."), 0, 0, this, SLOT(slotPerfTest()), actionCollection(), "perf_test");
 

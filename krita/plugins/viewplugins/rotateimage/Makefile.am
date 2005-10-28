@@ -1,4 +1,4 @@
-kritarcdir = $(kde_datadir)/krita/kpartplugins
+kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = rotateimage.rc
 
 EXTRA_DIST = $(kritarc_DATA)
@@ -19,6 +19,6 @@ noinst_HEADERS = wdg_rotateimage.h dlg_rotateimage.h rotateimage.h
 kritarotateimage_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritarotateimage_la_LIBADD =  ../../../libkritacommon.la
 
-#kde_services_DATA = kritarotateimage.desktop
+kde_services_DATA = kritarotateimage.desktop
 
 kritarotateimage_la_METASOURCES = AUTO

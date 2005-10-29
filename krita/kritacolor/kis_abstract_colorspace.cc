@@ -603,3 +603,22 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
     return 0;
 }
 
+void KisAbstractColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+{
+    Q_UINT8 *dst = dstRowStart;
+    const Q_UINT8 *src = srcRowStart;
+    Q_INT32 bytesPerPixel = pixelSize();
+
+    while (rows > 0) {
+        memcpy(dst, src, numColumns * bytesPerPixel);
+
+        if (opacity != OPACITY_OPAQUE) {
+            multiplyAlpha(dst, opacity, numColumns);
+        }
+
+        dst += dstRowStride;
+        src += srcRowStride;
+        --rows;
+    }
+}
+

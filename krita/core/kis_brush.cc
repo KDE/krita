@@ -1123,7 +1123,7 @@ void KisBrush::setHeight(Q_INT32 h)
     m_height = h;
 }
 
-QImage KisBrush::outline(double pressure) {
+/*QImage KisBrush::outline(double pressure) {
     KisLayerSP layer = image(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""),
                              KisPaintInformation(pressure));
     KisBoundary bounds(layer.data());
@@ -1135,7 +1135,7 @@ QImage KisBrush::outline(double pressure) {
     QImage result;
     result = pix;
     return result;
-}
+}*/
 
 void KisBrush::generateBoundary() {
     KisLayerSP layer;

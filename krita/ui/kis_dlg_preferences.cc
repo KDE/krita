@@ -30,6 +30,7 @@
 #include <qbitmap.h>
 #include <qbuttongroup.h>
 #include <qslider.h>
+#include <qgl.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -244,6 +245,34 @@ void PressureSettingsTab::setDefault()
     slPressure->setValue(100 - cfg.getDefaultPressureCorrection());
 }
 
+DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
+    : WdgDisplaySettings( parent, name )
+{
+    KisConfig cfg;
+
+    if (!QGLFormat::hasOpenGL()) {
+        cbUseOpenGL -> setEnabled(false);
+        cbUseOpenGLShaders -> setEnabled(false);
+    } else {
+        cbUseOpenGL -> setChecked(cfg.useOpenGL());
+        cbUseOpenGLShaders -> setChecked(cfg.useOpenGLShaders());
+        cbUseOpenGLShaders -> setEnabled(cfg.useOpenGL());
+    }
+
+    connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
+}
+
+void DisplaySettingsTab::setDefault()
+{
+    cbUseOpenGL -> setChecked(false);
+    cbUseOpenGLShaders -> setChecked(false);
+    cbUseOpenGLShaders -> setEnabled(false);
+}
+
+void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
+{
+    cbUseOpenGLShaders -> setEnabled(isChecked);
+}
 
 //---------------------------------------------------------------------------------------------------
 
@@ -254,6 +283,9 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", KIcon::SizeMedium ));
     m_general = new GeneralTab( vbox );
+
+    vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", KIcon::SizeMedium ));
+    m_displaySettings = new DisplaySettingsTab( vbox );
 
     vbox = addVBoxPage( i18n( "Colormanagement"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
@@ -272,10 +304,11 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::slotDefault()
 {
-    m_general->setDefault();
-    //m_directories->setDefault();
-    //m_undoRedo->setDefault();
-    m_colorSettings->setDefault();
+    m_general -> setDefault();
+    m_colorSettings -> setDefault();
+    m_pressureSettings -> setDefault();
+    m_performanceSettings -> setDefault();
+    m_displaySettings -> setDefault();
 }
 
 bool PreferencesDialog::editPreferences()
@@ -313,6 +346,9 @@ bool PreferencesDialog::editPreferences()
 
         // Pressure sensitivity setting == between 0 and 99
         cfg.setPressureCorrection( 100 - dialog->m_pressureSettings->slPressure->value() );
+
+        cfg.setUseOpenGL(dialog -> m_displaySettings -> cbUseOpenGL -> isChecked());
+        cfg.setUseOpenGLShaders(dialog -> m_displaySettings -> cbUseOpenGLShaders -> isChecked());
     }
         delete dialog;
         return baccept;

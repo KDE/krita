@@ -54,8 +54,8 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual Q_UINT32 priority() { return 1; }
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(KisCanvasPainter& gc);
+    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
@@ -68,7 +68,7 @@ private:
     void cropLayer(KisLayerSP layer, QRect rc);
     QRegion handles(QRect rect);
     void paintOutlineWithHandles();
-    void paintOutlineWithHandles(QPainter& gc, const QRect& rc);
+    void paintOutlineWithHandles(KisCanvasPainter& gc, const QRect& rc);
     Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
     void setMoveResizeCursor (Q_INT32 handle);
     void validateSelection(void);

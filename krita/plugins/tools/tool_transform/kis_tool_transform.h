@@ -52,15 +52,15 @@ public:
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual Q_UINT32 priority() { return 0; }
     virtual void clear();
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(KisCanvasPainter& gc);
+    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
 private:
     void paintOutline();
-    void paintOutline(QPainter& gc, const QRect& rc);
+    void paintOutline(KisCanvasPainter& gc, const QRect& rc);
     void transform();
     void recalcOutline();
     double rotX(double x, double y) { return m_cosa*x - m_sina*y;};

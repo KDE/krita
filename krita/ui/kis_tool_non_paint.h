@@ -51,8 +51,8 @@ public:
 
 // KisTool
 public:
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(KisCanvasPainter& gc);
+    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     virtual void clear();
     virtual void clear(const QRect& rc);
 

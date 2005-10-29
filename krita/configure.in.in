@@ -80,3 +80,10 @@ AC_MSG_CHECKING([for kunittest])
 have_kunittest_header="no"
 KDE_CHECK_HEADER(kunittest/tester.h, have_kunittest_header="yes", , )
 AM_CONDITIONAL(include_kunittest_tests, test "$have_kunittest_header" = "yes")
+
+# --- OpenGL check ---
+
+AC_HAVE_GL( [], [] )
+
+# --- End of OpenGL check ---
+

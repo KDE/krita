@@ -39,7 +39,7 @@
 #include "kis_types.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
-
+#include "kis_opengl_image_context.h"
 #include "kis_id.h"
 #include "koffice_export.h"
 #include "kis_color.h"
@@ -232,9 +232,8 @@ public:
 
 
 private:
-
-    virtual QWidget *canvas() const;
-
+    virtual KisCanvas *canvas() const;
+    
     virtual Q_INT32 horzValue() const;
     virtual Q_INT32 vertValue() const;
 
@@ -253,7 +252,7 @@ private:
     virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void zoomTo(const QRect& r);
     virtual void zoomTo(const KisRect& r);
-    virtual void zoomAroundPoint(Q_INT32 x, Q_INT32 y, double zf);
+    virtual void zoomAroundPoint(double x, double y, double zf);
 
     virtual QPoint viewToWindow(const QPoint& pt);
     virtual KisPoint viewToWindow(const KisPoint& pt);
@@ -279,8 +278,8 @@ private:
 private:
 
     void clearCanvas(const QRect& rc);
-    void connectCurrentImg() const;
-    void disconnectCurrentImg() const;
+    void connectCurrentImg();
+    void disconnectCurrentImg();
 //    void eraseGuides();
 //    void paintGuides();
 //    void updateGuides();
@@ -291,6 +290,7 @@ private:
     void createDockers();
 
     void paintView(const KisRect& rc);
+    void paintOpenGLView(const KisRect& rc);
 
     /**
      * Reset the monitor profile to the new settings.
@@ -310,7 +310,7 @@ private:
     virtual void updateCanvas(const KisRect& rc);
     KisFilterManager * filterManager() { return m_filterManager; }
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
-
+    void setCurrentImage(KisImageSP image);
 
 private slots:
 
@@ -455,7 +455,12 @@ private:
 
     QTime m_tabletEventTimer;
     QTabletEvent::TabletDevice m_lastTabletEventDevice;
+
     QPixmap m_canvasPixmap;
+
+    // OpenGL context for the current image, containing textures
+    // shared between multiple views.
+    KisOpenGLImageContextSP m_OpenGLImageContext;
 
     // Monitorprofile for this view
     KisProfile *  m_monitorProfile;
@@ -472,7 +477,7 @@ private:
     KisPaletteWidget *m_palettewidget;
 
 private:
-    mutable KisImageSP m_current;
+    KisImageSP m_current;
 
 protected:
 

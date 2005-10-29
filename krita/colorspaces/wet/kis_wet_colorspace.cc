@@ -215,6 +215,10 @@ void KisWetColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels
 {
 }
 
+void KisWetColorSpace::multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+}
+
 void KisWetColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
 {
 }

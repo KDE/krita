@@ -17,11 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpainter.h>
 #include <kaction.h>
 #include <klocale.h>
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_zoom.moc"
@@ -50,13 +51,13 @@ void KisToolZoom::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolZoom::paint(QPainter& gc)
+void KisToolZoom::paint(KisCanvasPainter& gc)
 {
     if (m_dragging)
         paintOutline(gc, QRect());
 }
 
-void KisToolZoom::paint(QPainter& gc, const QRect& rc)
+void KisToolZoom::paint(KisCanvasPainter& gc, const QRect& rc)
 {
     if (m_dragging)
         paintOutline(gc, rc);
@@ -111,15 +112,15 @@ void KisToolZoom::paintOutline()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
         QRect rc;
 
         paintOutline(gc, rc);
     }
 }
 
-void KisToolZoom::paintOutline(QPainter& gc, const QRect&)
+void KisToolZoom::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();

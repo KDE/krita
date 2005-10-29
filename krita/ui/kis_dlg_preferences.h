@@ -30,6 +30,7 @@
 #include "wdggeneralsettings.h"
 #include "wdgpressuresettings.h"
 #include "wdgperformancesettings.h"
+#include "wdgdisplaysettings.h"
 
 class QLineEdit;
 class QCheckBox;
@@ -80,7 +81,7 @@ public:
 
 
 /**
- *  "Directories"-tab for preferences dialog
+ *  "Performance"-tab for preferences dialog
  */
 class PerformanceTab : public WdgPerformanceSettings
 {
@@ -113,6 +114,24 @@ public:
 //=======================
 
 
+/**
+ *  Display settings tab for preferences dialog
+ */
+class DisplaySettingsTab : public WdgDisplaySettings
+{
+Q_OBJECT
+
+public:
+    DisplaySettingsTab( QWidget *parent = 0, const char *name = 0 );
+
+public:
+    void setDefault();
+protected slots:
+    void slotUseOpenGLToggled(bool isChecked);
+};
+
+//=======================
+
 
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
@@ -137,6 +156,7 @@ protected:
     ColorSettingsTab* m_colorSettings;
     PerformanceTab* m_performanceSettings;
     PressureSettingsTab * m_pressureSettings;
+    DisplaySettingsTab * m_displaySettings;
 
 protected slots:
 

@@ -3,7 +3,15 @@ if test -z "$LCMS_LIBS"; then
   echo "LittleCMS is missing, Krita will not be built."
   echo ""
   echo "If you want to compile Krita you should install:"
-    echo "  * lcms 1.12 or newer (http://www.littlecms.com/)"
+  echo "  * lcms 1.12 or newer (http://www.littlecms.com/)"
   echo ""
   all_tests=bad
+else
+  if test -z "$GLLIB"; then
+    echo ""
+    echo "You're missing OpenGL libraries. krita will"
+    echo "not be able to use OpenGL for hardware"
+    echo "accelerated rendering."
+    echo ""
+  fi
 fi

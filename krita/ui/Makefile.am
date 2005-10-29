@@ -10,7 +10,7 @@ INCLUDES = \
 lib_LTLIBRARIES = libkritaui.la
 libkritaui_la_LDFLAGS =  -version-info 1:0:0 -no-undefined $(all_libraries) 
 libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritacolor/libkritacolor.la \
-    $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
+    $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT) $(GLLIB)
 
 libkritaui_la_SOURCES = \
     imageviewer.cc \
@@ -18,8 +18,10 @@ libkritaui_la_SOURCES = \
     kis_autobrush.cc \
     kis_autogradient.cc \
     kis_birdeye_box.cc \
+    kis_boundary_painter.cc \
     kis_brush_chooser.cc \
     kis_canvas.cc \
+    kis_canvas_painter.cc \
     kis_clipboard.cc \
     kis_cmb_composite.cc \
     kis_cmb_idlist.cc \
@@ -56,12 +58,17 @@ libkritaui_la_SOURCES = \
     kis_multi_bool_filter_widget.cc \
     kis_multi_double_filter_widget.cc \
     kis_multi_integer_filter_widget.cc \
+    kis_opengl_canvas.cc \
+    kis_opengl_canvas_painter.cc \
+    kis_opengl_image_context.cc \
     kis_paintop_box.cc \
     kis_palette_widget.cc \
     kis_part_layer.cc \
     kis_pattern_chooser.cc \
     kis_previewdialog.cc \
     kis_previewwidget.cc \
+    kis_qpaintdevice_canvas.cc \
+    kis_qpaintdevice_canvas_painter.cc \
     kis_resource_mediator.cc \
     kis_resourceserver.cc \
     kis_rgb_widget.cc \
@@ -87,6 +94,7 @@ libkritaui_la_SOURCES = \
     wdgautogradient.ui \
     wdgbirdeye.ui \
     wdgcolorsettings.ui \
+    wdgdisplaysettings.ui \
     wdggeneralsettings.ui \
     wdglayerbox.ui \
     wdglayerproperties.ui \

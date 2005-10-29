@@ -24,24 +24,20 @@
 
 #include "kis_point.h"
 
-class QPixmap;
-class QPainter;
 class KisPaintDeviceImpl;
+
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
  * marching ants selection. You can use it to paint the outline of a KisBrush while painting.
  * It's not really optimized, so it's not recommended to do big things with it and expect
  * it to be fast.
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
- * you can use the paint method to let it paint the outline, or get a pixmap with the specified
- * width and height.
+ * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
  **/
 class KRITACORE_EXPORT KisBoundary {
 public:
     KisBoundary(KisPaintDeviceImpl* dev);
     void generateBoundary(int w, int h);
-    QPixmap pixmap(int w, int h);
-    void paint(QPainter& painter);
 
 private:
     typedef QPair<KisPoint, int> PointPair; // int -> length
@@ -49,8 +45,13 @@ private:
     KisPaintDeviceImpl* m_device;
     int m_fuzzyness;
 
-    QValueList< QValueList<PointPair> > m_horSegments;
-    QValueList< QValueList<PointPair> > m_vertSegments;
+    typedef QValueList<PointPair> PointPairList;
+    typedef QValueList< PointPairList > PointPairListList;
+
+    PointPairListList m_horSegments;
+    PointPairListList m_vertSegments;
+
+    friend class KisBoundaryPainter;
 };
 
 #endif // _KIS_BOUNDARY_H_

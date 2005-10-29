@@ -176,7 +176,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev -> extentIsValid()) {
+    if (srcdev -> extentIsValid() && op != COMPOSITE_COPY) {
         srcRect &= srcdev -> extent();
     }
 
@@ -270,7 +270,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev -> extentIsValid()) {
+    if (srcdev -> extentIsValid() && op != COMPOSITE_COPY) {
         srcRect &= srcdev -> extent();
     }
 

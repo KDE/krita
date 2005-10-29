@@ -52,6 +52,7 @@
 #include "kis_convolution_painter.h"
 #include "kis_integer_maths.h"
 #include "kis_fill_painter.h"
+#include "kis_canvas.h"
 
 KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
     : m_parent(parent),

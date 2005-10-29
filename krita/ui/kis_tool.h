@@ -31,7 +31,6 @@
 class QCursor;
 class QEvent;
 class QKeyEvent;
-class QPainter;
 class QRect;
 class QWidget;
 class KActionCollection;
@@ -44,6 +43,7 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
 class KisMoveEvent;
+class KisCanvasPainter;
 
 enum enumToolType {
     TOOL_SHAPE = 0,   // Geometric shapes like ellipses and lines
@@ -66,8 +66,8 @@ public:
 
 public:
 
-    virtual void paint(QPainter& gc) = 0;
-    virtual void paint(QPainter& gc, const QRect& rc) = 0;
+    virtual void paint(KisCanvasPainter& gc) = 0;
+    virtual void paint(KisCanvasPainter& gc, const QRect& rc) = 0;
     virtual void clear() = 0;
     virtual void clear(const QRect& rc) = 0;
 

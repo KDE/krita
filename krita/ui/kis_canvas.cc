@@ -65,6 +65,8 @@
 #include "kis_button_release_event.h"
 #include "kis_double_click_event.h"
 #include "kis_config.h"
+#include "kis_qpaintdevice_canvas.h"
+#include "kis_opengl_canvas.h"
 
 #ifdef Q_WS_X11
 
@@ -73,18 +75,18 @@
 
 #include <X11/keysym.h>
 
-bool KisCanvas::X11SupportInitialised = false;
-long KisCanvas::X11AltMask = 0;
-long KisCanvas::X11MetaMask = 0;
+bool KisCanvasWidget::X11SupportInitialised = false;
+long KisCanvasWidget::X11AltMask = 0;
+long KisCanvasWidget::X11MetaMask = 0;
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
 
-int KisCanvas::X11DeviceMotionNotifyEvent = -1;
-int KisCanvas::X11DeviceButtonPressEvent = -1;
-int KisCanvas::X11DeviceButtonReleaseEvent = -1;
+int KisCanvasWidget::X11DeviceMotionNotifyEvent = -1;
+int KisCanvasWidget::X11DeviceButtonPressEvent = -1;
+int KisCanvasWidget::X11DeviceButtonReleaseEvent = -1;
 
-//X11XIDTabletDeviceMap KisCanvas::X11TabletDeviceMap;
-std::map<XID, KisCanvas::X11TabletDevice> KisCanvas::X11TabletDeviceMap;
+//X11XIDTabletDeviceMap KisCanvasWidget::X11TabletDeviceMap;
+std::map<XID, KisCanvasWidget::X11TabletDevice> KisCanvasWidget::X11TabletDeviceMap;
 
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
@@ -131,12 +133,9 @@ namespace {
     }
 }
 
-KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
+KisCanvasWidget::KisCanvasWidget()
 {
-    setBackgroundMode(QWidget::NoBackground);
-    setMouseTracking(true);
-    setAcceptDrops(true);
-    m_enableMoveEventCompressionHint = true;
+    m_enableMoveEventCompressionHint = false;
     m_lastPressure = 0;
 
 #ifdef Q_WS_X11
@@ -149,49 +148,40 @@ KisCanvas::KisCanvas(QWidget *parent, const char *name) : super(parent, name)
 #endif
 }
 
-KisCanvas::~KisCanvas()
+KisCanvasWidget::~KisCanvasWidget()
 {
 }
 
-void KisCanvas::showScrollBars()
+void KisCanvasWidget::widgetGotPaintEvent(QPaintEvent *e)
 {
-    Q_INT32 w = width();
-    Q_INT32 h = height();
-
-    resize(w - 1, h - 1);
-    resize(w, h);
+    emit sigGotPaintEvent(e);
 }
 
-void KisCanvas::paintEvent(QPaintEvent *e)
-{
-    emit gotPaintEvent(e);
-}
-
-void KisCanvas::mousePressEvent(QMouseEvent *e)
+void KisCanvasWidget::widgetGotMousePressEvent(QMouseEvent *e)
 {
     KisButtonPressEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
     buttonPressEvent(&ke);
 }
 
-void KisCanvas::mouseReleaseEvent(QMouseEvent *e)
+void KisCanvasWidget::widgetGotMouseReleaseEvent(QMouseEvent *e)
 {
     KisButtonReleaseEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
     buttonReleaseEvent(&ke);
 }
 
-void KisCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+void KisCanvasWidget::widgetGotMouseDoubleClickEvent(QMouseEvent *e)
 {
     KisDoubleClickEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> button(), e -> state());
     doubleClickEvent(&ke);
 }
 
-void KisCanvas::mouseMoveEvent(QMouseEvent *e)
+void KisCanvasWidget::widgetGotMouseMoveEvent(QMouseEvent *e)
 {
     KisMoveEvent ke(INPUT_DEVICE_MOUSE, e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> state());
     moveEvent(&ke);
 }
 
-void KisCanvas::tabletEvent(QTabletEvent *e)
+void KisCanvasWidget::widgetGotTabletEvent(QTabletEvent *e)
 {
     enumInputDevice device;
 
@@ -237,62 +227,62 @@ void KisCanvas::tabletEvent(QTabletEvent *e)
     }
 }
 
-void KisCanvas::enterEvent(QEvent *e)
+void KisCanvasWidget::widgetGotEnterEvent(QEvent *e)
 {
-    emit gotEnterEvent(e);
+    emit sigGotEnterEvent(e);
 }
 
-void KisCanvas::leaveEvent(QEvent *e)
+void KisCanvasWidget::widgetGotLeaveEvent(QEvent *e)
 {
-    emit gotLeaveEvent(e);
+    emit sigGotLeaveEvent(e);
 }
 
-void KisCanvas::wheelEvent(QWheelEvent *e)
+void KisCanvasWidget::widgetGotWheelEvent(QWheelEvent *e)
 {
-    emit mouseWheelEvent(e);
+    emit sigGotMouseWheelEvent(e);
 }
 
-void KisCanvas::keyPressEvent(QKeyEvent *e)
+void KisCanvasWidget::widgetGotKeyPressEvent(QKeyEvent *e)
 {
-    emit gotKeyPressEvent(e);
+    emit sigGotKeyPressEvent(e);
 }
 
-void KisCanvas::keyReleaseEvent(QKeyEvent *e)
+void KisCanvasWidget::widgetGotKeyReleaseEvent(QKeyEvent *e)
 {
-    emit gotKeyReleaseEvent(e);
+    emit sigGotKeyReleaseEvent(e);
 }
 
-void KisCanvas::dragEnterEvent(QDragEnterEvent *e)
+void KisCanvasWidget::widgetGotDragEnterEvent(QDragEnterEvent *e)
 {
-    emit gotDragEnterEvent(e);
+    emit sigGotDragEnterEvent(e);
 }
 
-void KisCanvas::dropEvent(QDropEvent *e)
+void KisCanvasWidget::widgetGotDropEvent(QDropEvent *e)
 {
-    emit gotDropEvent(e);
+    emit sigGotDropEvent(e);
 }
 
-void KisCanvas::moveEvent(KisMoveEvent *e)
+void KisCanvasWidget::moveEvent(KisMoveEvent *e)
 {
-    emit gotMoveEvent(e);
+    emit sigGotMoveEvent(e);
 }
 
-void KisCanvas::buttonPressEvent(KisButtonPressEvent *e)
+void KisCanvasWidget::buttonPressEvent(KisButtonPressEvent *e)
 {
-    emit gotButtonPressEvent(e);
+    emit sigGotButtonPressEvent(e);
 }
 
-void KisCanvas::buttonReleaseEvent(KisButtonReleaseEvent *e)
+void KisCanvasWidget::buttonReleaseEvent(KisButtonReleaseEvent *e)
 {
-    emit gotButtonReleaseEvent(e);
+    emit sigGotButtonReleaseEvent(e);
 }
 
-void KisCanvas::doubleClickEvent(KisDoubleClickEvent *e)
+void KisCanvasWidget::doubleClickEvent(KisDoubleClickEvent *e)
 {
-    emit gotDoubleClickEvent(e);
+    emit sigGotDoubleClickEvent(e);
 }
 
-void KisCanvas::translateTabletEvent(KisEvent *e)
+void KisCanvasWidget::translateTabletEvent(KisEvent *e)
 {
     bool checkThresholdOnly = false;
 
@@ -330,7 +320,7 @@ void KisCanvas::translateTabletEvent(KisEvent *e)
 
 #ifdef Q_WS_X11
 
-void KisCanvas::initX11Support()
+void KisCanvasWidget::initX11Support()
 {
     Q_ASSERT(!X11SupportInitialised);
     X11SupportInitialised = true;
@@ -402,7 +392,7 @@ void KisCanvas::initX11Support()
 #endif // EXTENDED_X11_TABLET_SUPPORT
 }
 
-Qt::ButtonState KisCanvas::translateX11ButtonState(int state)
+Qt::ButtonState KisCanvasWidget::translateX11ButtonState(int state)
 {
     int buttonState = 0;
 
@@ -424,7 +414,7 @@ Qt::ButtonState KisCanvas::translateX11ButtonState(int state)
     return static_cast<Qt::ButtonState>(buttonState);
 }
 
-Qt::ButtonState KisCanvas::translateX11Button(unsigned int X11Button)
+Qt::ButtonState KisCanvasWidget::translateX11Button(unsigned int X11Button)
 {
     Qt::ButtonState qtButton;
 
@@ -447,7 +437,7 @@ Qt::ButtonState KisCanvas::translateX11Button(unsigned int X11Button)
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
 
-KisCanvas::X11TabletDevice::X11TabletDevice()
+KisCanvasWidget::X11TabletDevice::X11TabletDevice()
 {
     m_device = INPUT_DEVICE_UNKNOWN;
     m_buttonPressEvent = -1;
@@ -455,7 +445,7 @@ KisCanvas::X11TabletDevice::X11TabletDevice()
     m_motionNotifyEvent = -1;
 }
 
-KisCanvas::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
+KisCanvasWidget::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
 {
     m_device = INPUT_DEVICE_UNKNOWN;
     m_deviceId = deviceInfo -> id;
@@ -506,7 +496,7 @@ KisCanvas::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
         m_buttonReleaseEvent = -1;
         m_motionNotifyEvent = -1;
 
-        XDevice *device = XOpenDevice(x11AppDisplay(), m_deviceId);
+        XDevice *device = XOpenDevice(QApplication::desktop() -> x11Display(), m_deviceId);
 
         if (device != NULL) {
             for (int i = 0; i < device -> num_classes; i++) {
@@ -529,7 +519,7 @@ KisCanvas::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
     }
 }
 
-double KisCanvas::X11TabletDevice::translateAxisValue(int value, const XAxisInfo& axisInfo) const
+double KisCanvasWidget::X11TabletDevice::translateAxisValue(int value, const XAxisInfo& axisInfo) const
 {
     int axisRange = axisInfo.max_value - axisInfo.min_value;
     double translatedValue = 0;
@@ -544,12 +534,12 @@ double KisCanvas::X11TabletDevice::translateAxisValue(int value, const XAxisInfo
     return translatedValue;
 }
 
-KisCanvas::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt)
+KisCanvasWidget::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt)
     : m_pos(pos), m_pressure(pressure), m_tilt(tilt)
 {
 }
 
-KisCanvas::X11TabletDevice::State KisCanvas::X11TabletDevice::translateAxisData(const int *axisData) const
+KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::translateAxisData(const int *axisData) const
 {
     KisPoint pos = KisPoint(translateAxisValue(axisData[0], m_xInfo), translateAxisValue(axisData[1], m_yInfo));
     double pressure = translateAxisValue(axisData[2], m_pressureInfo);
@@ -559,7 +549,7 @@ KisCanvas::X11TabletDevice::State KisCanvas::X11TabletDevice::translateAxisData(
 
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
-bool KisCanvas::x11Event(XEvent *event)
+bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QPoint widgetOriginPos)
 {
     if (event -> type == MotionNotify) {
         // Mouse move
@@ -574,7 +564,7 @@ bool KisCanvas::x11Event(XEvent *event)
                 QPoint pos(motion.x, motion.y);
                 QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, state);
 
-                mouseMoveEvent(&e);
+                widgetGotMouseMoveEvent(&e);
             }
 
             m_lastRootX = globalPos.x();
@@ -601,12 +591,12 @@ bool KisCanvas::x11Event(XEvent *event)
             XEvent mouseEvent;
 
             // Look for an accompanying core event.
-            if (XCheckTypedWindowEvent(x11Display(), winId(), MotionNotify, &mouseEvent)) {
+            if (XCheckTypedWindowEvent(x11Display, winId, MotionNotify, &mouseEvent)) {
                 if (motion -> time == mouseEvent.xmotion.time) {
                     // Do nothing
                     //  kdDebug() << "Consumed core event" << endl;
                 } else {
-                    XPutBackEvent(x11Display(), &mouseEvent);
+                    XPutBackEvent(x11Display, &mouseEvent);
                 }
             }
 
@@ -614,7 +604,7 @@ bool KisCanvas::x11Event(XEvent *event)
                 while (true) {
                     // Look for another motion notify in the queue and skip
                     // to that if found.
-                    if (!XCheckTypedWindowEvent(x11Display(), winId(), X11DeviceMotionNotifyEvent, &mouseEvent)) {
+                    if (!XCheckTypedWindowEvent(x11Display, winId, X11DeviceMotionNotifyEvent, &mouseEvent)) {
                         break;
                     }
 
@@ -623,7 +613,7 @@ bool KisCanvas::x11Event(XEvent *event)
                     XEvent coreMotionEvent;
 
                     // Look for an accompanying core event.
-                    if (!XCheckTypedWindowEvent(x11Display(), winId(), MotionNotify, &coreMotionEvent)) {
+                    if (!XCheckTypedWindowEvent(x11Display, winId, MotionNotify, &coreMotionEvent)) {
                         // Do nothing
                         // kdDebug() << "Didn't find an expected core move event" << endl;
                     }
@@ -647,13 +637,13 @@ bool KisCanvas::x11Event(XEvent *event)
             XEvent mouseEvent;
 
             // Look for an accompanying core event.
-            if (XCheckTypedWindowEvent(x11Display(), winId(), ButtonPress, &mouseEvent)) {
+            if (XCheckTypedWindowEvent(x11Display, winId, ButtonPress, &mouseEvent)) {
                 if (buttonPressed -> time == mouseEvent.xbutton.time) {
                     // Do nothing
                     // kdDebug() << "Consumed core event" << endl;
                 }
                 else {
-                    XPutBackEvent(x11Display(), &mouseEvent);
+                    XPutBackEvent(x11Display, &mouseEvent);
                 }
             }
         }
@@ -668,13 +658,13 @@ bool KisCanvas::x11Event(XEvent *event)
             XEvent mouseEvent;
 
             // Look for an accompanying core event.
-            if (XCheckTypedWindowEvent(x11Display(), winId(), ButtonRelease, &mouseEvent)) {
+            if (XCheckTypedWindowEvent(x11Display, winId, ButtonRelease, &mouseEvent)) {
                 if (buttonReleased -> time == mouseEvent.xbutton.time) {
                     // Do nothing
                     // kdDebug() << "Consumed core event" << endl;
                 }
                 else {
-                    XPutBackEvent(x11Display(), &mouseEvent);
+                    XPutBackEvent(x11Display, &mouseEvent);
                 }
             }
         }
@@ -690,7 +680,7 @@ bool KisCanvas::x11Event(XEvent *event)
             QDesktopWidget *desktop = QApplication::desktop();
             KisPoint globalPos(deviceState.pos().x() * desktop -> width(), deviceState.pos().y() * desktop -> height());
             // Convert screen coordinates to widget coordinates
-            KisPoint pos = globalPos - mapToGlobal(QPoint(0, 0));
+            KisPoint pos = globalPos - widgetOriginPos;
 
             // Map tilt to -60 - +60 degrees
             KisVector2D tilt(deviceState.tilt().x() * 60, deviceState.tilt().y() * 60);
@@ -723,6 +713,219 @@ bool KisCanvas::x11Event(XEvent *event)
 }
 
 #endif // Q_WS_X11
+
+/*************************************************************************/
+
+#define QPAINTDEVICE_CANVAS_WIDGET false
+#define OPENGL_CANVAS_WIDGET true
+
+KisCanvas::KisCanvas(QWidget *parent, const char *name)
+{
+    m_parent = parent;
+    m_name = name;
+    m_enableMoveEventCompressionHint = false;
+    m_canvasWidget = 0;
+    m_useOpenGL = false;
+    createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
+}
+
+KisCanvas::~KisCanvas()
+{
+    delete m_canvasWidget;
+}
+
+void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget)
+{
+    delete m_canvasWidget;
+
+    if (useOpenGL && !QGLFormat::hasOpenGL()) {
+        kdDebug() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        useOpenGL = false;
+    }
+
+    if (useOpenGL) {
+        m_canvasWidget = new KisOpenGLCanvasWidget(m_parent, m_name.latin1(), sharedContextWidget);
+    } else {
+        m_canvasWidget = new KisQPaintDeviceCanvasWidget(m_parent, m_name.latin1());
+    }
+
+    m_useOpenGL = useOpenGL;
+
+    Q_CHECK_PTR(m_canvasWidget);
+    QWidget *widget = dynamic_cast<QWidget *>(m_canvasWidget);
+
+    widget -> setBackgroundMode(QWidget::NoBackground);
+    widget -> setMouseTracking(true);
+    widget -> setAcceptDrops(true);
+    m_canvasWidget -> enableMoveEventCompressionHint(m_enableMoveEventCompressionHint);
+
+    connect(m_canvasWidget, SIGNAL(sigGotPaintEvent(QPaintEvent *)), SIGNAL(sigGotPaintEvent(QPaintEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotEnterEvent(QEvent*)), SIGNAL(sigGotEnterEvent(QEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotLeaveEvent(QEvent*)), SIGNAL(sigGotLeaveEvent(QEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotMouseWheelEvent(QWheelEvent*)), SIGNAL(sigGotMouseWheelEvent(QWheelEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), SIGNAL(sigGotKeyPressEvent(QKeyEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotKeyReleaseEvent(QKeyEvent*)), SIGNAL(sigGotKeyReleaseEvent(QKeyEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotDragEnterEvent(QDragEnterEvent*)), SIGNAL(sigGotDragEnterEvent(QDragEnterEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotDropEvent(QDropEvent*)), SIGNAL(sigGotDropEvent(QDropEvent*)));
+    connect(m_canvasWidget, SIGNAL(sigGotMoveEvent(KisMoveEvent *)), SIGNAL(sigGotMoveEvent(KisMoveEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent *)), SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)), SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)));
+    connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)), SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)));
+}
+
+void KisCanvas::createQPaintDeviceCanvas()
+{
+    createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
+}
+
+void KisCanvas::createOpenGLCanvas(QGLWidget *sharedContextWidget)
+{
+    createCanvasWidget(OPENGL_CANVAS_WIDGET, sharedContextWidget);
+}
+
+bool KisCanvas::isOpenGLCanvas() const
+{
+    return m_useOpenGL;
+}
+
+void KisCanvas::enableMoveEventCompressionHint(bool enableMoveCompression)
+{
+    m_enableMoveEventCompressionHint = enableMoveCompression;
+    if (m_canvasWidget != 0) {
+        m_canvasWidget -> enableMoveEventCompressionHint(enableMoveCompression);
+    }
+}
+
+QWidget *KisCanvas::QPaintDeviceWidget() const
+{
+    if (m_useOpenGL) {
+        return 0;
+    } else {
+        return dynamic_cast<QWidget *>(m_canvasWidget);
+    }
+}
+
+QGLWidget *KisCanvas::OpenGLWidget() const
+{
+    if (m_useOpenGL) {
+        return dynamic_cast<QGLWidget *>(m_canvasWidget);
+    } else {
+        return 0;
+    }
+}
+
+KisCanvasWidgetPainter *KisCanvas::createPainter()
+{
+    Q_ASSERT(m_canvasWidget != 0);
+    return m_canvasWidget -> createPainter();
+}
+
+KisCanvasWidget *KisCanvas::canvasWidget() const
+{
+    return m_canvasWidget;
+}
+
+void KisCanvas::setGeometry(int x, int y, int width, int height)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> setGeometry(x, y, width, height);
+}
+
+void KisCanvas::show()
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> show();
+}
+
+int KisCanvas::width() const
+{
+    Q_ASSERT(m_canvasWidget);
+    return dynamic_cast<QWidget *>(m_canvasWidget) -> width();
+}
+
+int KisCanvas::height() const
+{
+    Q_ASSERT(m_canvasWidget);
+    return dynamic_cast<QWidget *>(m_canvasWidget) -> height();
+}
+
+void KisCanvas::update()
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> update();
+}
+
+void KisCanvas::update(const QRect& r)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> update(r);
+}
+
+void KisCanvas::update(int x, int y, int width, int height)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> update(x, y, width, height);
+}
+
+void KisCanvas::repaint()
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> repaint();
+}
+
+void KisCanvas::repaint(bool erase)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> repaint(erase);
+}
+
+void KisCanvas::repaint(int x, int y, int width, int height, bool erase)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> repaint(x, y, width, height, erase);
+}
+
+void KisCanvas::repaint(const QRect& r, bool erase)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> repaint(r, erase);
+}
+
+void KisCanvas::repaint(const QRegion& r, bool erase)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> repaint(r, erase);
+}
+
+bool KisCanvas::isUpdatesEnabled() const
+{
+    Q_ASSERT(m_canvasWidget);
+    return dynamic_cast<QWidget *>(m_canvasWidget) -> isUpdatesEnabled();
+}
+
+void KisCanvas::setUpdatesEnabled(bool updatesEnabled)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> setUpdatesEnabled(updatesEnabled);
+}
+
+void KisCanvas::setFocusPolicy(QWidget::FocusPolicy focusPolicy)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> setFocusPolicy(focusPolicy);
+}
+
+const QCursor& KisCanvas::cursor() const
+{
+    Q_ASSERT(m_canvasWidget);
+    return dynamic_cast<QWidget *>(m_canvasWidget) -> cursor();
+}
+
+void KisCanvas::setCursor(const QCursor& cursor)
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> setCursor(cursor);
+}
 
 #include "kis_canvas.moc"
 

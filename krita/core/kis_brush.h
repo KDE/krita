@@ -95,7 +95,7 @@ public:
 
     virtual enumBrushType brushType() const;
 
-    QImage outline(double pressure = PRESSURE_DEFAULT);
+    //QImage outline(double pressure = PRESSURE_DEFAULT);
     virtual KisBoundary boundary();
 
     /**

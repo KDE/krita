@@ -74,6 +74,12 @@ public:
     Q_INT32 renderIntent();
     void setRenderIntent(Q_INT32 renderIntent);
 
+    bool useOpenGL() const;
+    void setUseOpenGL(bool useOpenGL);
+
+    bool useOpenGLShaders() const;
+    void setUseOpenGLShaders(bool useOpenGLShaders);
+
     Q_INT32 maxNumberOfThreads();
     void setMaxNumberOfThreads(Q_INT32 numberOfThreads);
 

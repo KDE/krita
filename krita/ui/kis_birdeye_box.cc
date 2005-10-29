@@ -29,9 +29,11 @@
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
-#include "kis_image.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"
+#include "kis_canvas.h"
+#include "kis_image.h"
+#include "kis_rect.h"
 
 namespace {
 
@@ -43,16 +45,16 @@ namespace {
         
     public:
     
-        virtual QRect visibleArea() 
+        virtual KoRect visibleArea() 
             {
-                if (!m_canvasSubject->currentImg()) return QRect(0,0,0,0);
+                if (!m_canvasSubject->currentImg()) return KoRect(0,0,0,0);
                 
                 KisCanvasController * c = m_canvasSubject->canvasController();
                 
                 if (c && c->canvas())
-                    return c->viewToWindow(QRect(0, 0, c->canvas()->width(), c->canvas()->height()));
+                    return c->viewToWindow(KisRect(0, 0, c->canvas()->width(), c->canvas()->height()));
                 else
-                    return QRect(0,0,0,0);
+                    return KoRect(0,0,0,0);
             };
             
         virtual QRect size() 
@@ -62,7 +64,7 @@ namespace {
                 return QRect(0, 0, m_canvasSubject->currentImg()->width(), m_canvasSubject->currentImg()->height()); 
             };
             
-        virtual void setViewCenterPoint(Q_INT32 x, Q_INT32 y) 
+        virtual void setViewCenterPoint(double x, double y) 
             { 
                 m_canvasSubject->canvasController()->zoomAroundPoint(x, y, m_canvasSubject->zoomFactor());
             };
@@ -84,7 +86,7 @@ namespace {
 
         public:
 
-                void zoomTo( Q_INT32 x, Q_INT32 y, double factor ) { m_canvasController->zoomAroundPoint(x, y, factor); }
+            void zoomTo( double x, double y, double factor ) { m_canvasController->zoomAroundPoint(x, y, factor); }
             void zoomIn() { m_canvasController->zoomIn(); }
             void zoomOut() { m_canvasController->zoomOut(); }
             double getMinZoom() { return (1.0 / 16.0); }

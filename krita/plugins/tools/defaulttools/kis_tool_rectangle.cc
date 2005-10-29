@@ -36,6 +36,8 @@
 #include "kis_paintop_registry.h"
 #include "kis_tool_rectangle.h"
 #include "kis_undo_adapter.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 KisToolRectangle::KisToolRectangle()
     : super(i18n ("Rectangle")),
@@ -148,8 +150,8 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
         return;
 
     KisCanvasController *controller = m_subject->canvasController ();
-    QWidget *canvas = controller->canvas ();
-    QPainter p (canvas);
+    KisCanvas *canvas = controller->canvas ();
+    KisCanvasPainter p (canvas);
 
     p.setRasterOp (Qt::NotROP);
     p.drawRect (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));

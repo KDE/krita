@@ -47,12 +47,12 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
-    virtual void paint(QPainter& gc);
-    virtual void paint(QPainter& gc, const QRect& rc);
+    virtual void paint(KisCanvasPainter& gc);
+    virtual void paint(KisCanvasPainter& gc, const QRect& rc);
 
 private:
     void paintOutline();
-    void paintOutline(QPainter& gc, const QRect& rc);
+    void paintOutline(KisCanvasPainter& gc, const QRect& rc);
 
 private:
     KisCanvasSubject *m_subject;

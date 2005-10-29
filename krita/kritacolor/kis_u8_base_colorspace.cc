@@ -92,6 +92,18 @@ void KisU8BaseColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPix
 
 }
 
+void KisU8BaseColorSpace::multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+{
+    if (m_alphaPos < 0) return;
+    Q_INT32 psize = pixelSize();
+
+    while (nPixels > 0) {
+        pixels[m_alphaPos] = UINT8_MULT(pixels[m_alphaPos], alpha);
+        --nPixels;
+        pixels += psize;
+    }
+}
+
 void KisU8BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
 {
     Q_INT32 psize = pixelSize();

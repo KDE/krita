@@ -18,15 +18,29 @@
 #ifndef KIS_BACKGROUND_H_
 #define KIS_BACKGROUND_H_
 
-#include "kis_paint_device_impl.h"
-#include "kis_layer.h"
+#include <qimage.h>
 
-class KisBackground : public KisLayer {
-    typedef KisLayer super;
+#include <ksharedptr.h>
+
+class KisBackground : public KShared {
 
 public:
-    KisBackground(KisImage *img, Q_INT32 width, Q_INT32 height);
+    KisBackground();
     virtual ~KisBackground();
+
+    // Paint the background pattern into the image, 'behind' the image
+    // contents. The coordinates are for the image's top-left corner
+    // in image space.
+    void paintBackground(QImage image, int leftX, int topY);
+
+    // Returns the pattern tile.
+    const QImage& patternTile() const;
+
+protected:
+    static const int PATTERN_WIDTH = 32;
+    static const int PATTERN_HEIGHT = 32;
+
+    QImage m_patternTile;
 };
 
 #endif // KIS_BACKGROUND_H_

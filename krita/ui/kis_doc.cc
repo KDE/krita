@@ -680,7 +680,8 @@ bool KisDoc::completeSaving(KoStore *store)
 
         QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
         QPainter gc(pix);
-        m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile());
+        m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile(),
+                                          KisImage::PAINT_IMAGE_ONLY);
         gc.end();
         QImage composite = pix -> convertToImage();
 
@@ -873,30 +874,20 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
     return v;
 }
 
-void KisDoc::paintContent(QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY)
+void KisDoc::paintContent(QPainter& painter, const QRect& rc, bool transparent, double zoomX, double zoomY)
 {
-    // XXX: Use transparent flag to forego the background layer
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     KisProfile *  profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
-    paintContent(painter, rect, profile);
-
-}
-
-void KisDoc::paintContent(QPainter& painter, const QRect& rect, KisProfile *  monitorProfile, float exposure)
-{
-    Q_INT32 x1;
-    Q_INT32 y1;
-    Q_INT32 x2;
-    Q_INT32 y2;
-
-    x1 = CLAMP(rect.x(), 0, m_currentImage -> width() - 1);
-    y1 = CLAMP(rect.y(), 0, m_currentImage -> height() - 1);
-    x2 = CLAMP(rect.x() + rect.width() - 1, 0, m_currentImage -> width() - 1);
-    y2 = CLAMP(rect.y() + rect.height() - 1, 0, m_currentImage -> height() - 1);
-
-    m_currentImage -> renderToPainter(x1, y1, x2, y2, painter, monitorProfile, exposure);
+    QRect rect = rc & m_currentImage -> bounds();
+    KisImage::PaintFlags paintFlags;
+    if (transparent) {
+        paintFlags = KisImage::PAINT_SELECTION;
+    } else {
+        paintFlags = (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION);
+    }
+    m_currentImage -> renderToPainter(rect.left(), rect.top(), rect.right(), rect.bottom(), painter, profile, paintFlags);
 }
 
 void KisDoc::slotImageUpdated()

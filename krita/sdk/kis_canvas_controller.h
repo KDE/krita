@@ -29,6 +29,7 @@ class QWidget;
 class KisTool;
 class KisRect;
 class KisPoint;
+class KisCanvas;
 
 /**
  * Interface for classes that implement a canvas; i.e., a widget where KisImages
@@ -41,7 +42,7 @@ public:
     virtual ~KisCanvasController() {};
 
 public:
-    virtual QWidget *canvas() const = 0;
+    virtual KisCanvas *canvas() const = 0;
     virtual Q_INT32 horzValue() const = 0;
     virtual Q_INT32 vertValue() const = 0;
     
@@ -62,8 +63,7 @@ public:
      * x, Q_INT32 y, double zf), which centres on the given point, with the 
      * given zoom. 
      */
-    virtual void zoomAroundPoint(Q_INT32 x, Q_INT32 y, double zf) = 0;
-
+    virtual void zoomAroundPoint(double x, double y, double zf) = 0;
     virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
     virtual void zoomTo(const QRect& r) = 0;
     virtual void zoomTo(const KisRect& r) = 0;

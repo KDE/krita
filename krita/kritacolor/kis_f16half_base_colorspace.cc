@@ -46,6 +46,22 @@ void KisF16HalfBaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT3
     }
 }
 
+void KisF16HalfBaseColorSpace::multiplyAlpha(Q_UINT8 *U8_pixel, Q_UINT8 U8_alpha, Q_INT32 nPixels)
+{
+    if (m_alphaPos < 0) return;
+    Q_INT32 psize = pixelSize();
+    half alpha = UINT8_TO_HALF(U8_alpha);
+
+    while (nPixels > 0) {
+
+        half *pixelAlpha = reinterpret_cast<half *>(U8_pixel + m_alphaPos);
+        *pixelAlpha *= alpha;
+
+        --nPixels;
+        U8_pixel += psize;
+    }
+}
+
 void KisF16HalfBaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8, Q_INT32 nPixels)
 {
     if (m_alphaPos < 0) return;

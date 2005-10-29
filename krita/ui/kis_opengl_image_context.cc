@@ -1,0 +1,363 @@
+/*
+ *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include <kdebug.h>
+#include <ksharedptr.h>
+
+#include "kis_global.h"
+#include "kis_meta_registry.h"
+#include "kis_colorspace_factory_registry.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_selection.h"
+#include "kis_background.h"
+#include "kis_opengl_canvas.h"
+#include "kis_opengl_image_context.h"
+
+using namespace std;
+
+QGLWidget *KisOpenGLImageContext::SharedContextWidget = 0;
+int KisOpenGLImageContext::SharedContextWidgetRefCount = 0;
+
+KisOpenGLImageContext::ImageContextMap KisOpenGLImageContext::imageContextMap;
+
+KisOpenGLImageContext::KisOpenGLImageContext()
+{
+    m_image = 0;
+    m_monitorProfile = 0;
+    m_exposure = 0;
+}
+
+KisOpenGLImageContext::~KisOpenGLImageContext()
+{
+    kdDebug() << "Destroyed KisOpenGLImageContext\n";
+
+    --SharedContextWidgetRefCount;
+    kdDebug() << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
+
+    if (SharedContextWidgetRefCount == 0) {
+
+        kdDebug() << "Deleting shared context widget\n";
+
+        delete SharedContextWidget;
+        SharedContextWidget = 0;
+    }
+
+    imageContextMap.erase(m_image);
+}
+
+KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile)
+{
+    kdDebug() << "Created KisOpenGLImageContext\n";
+
+    m_image = image;
+    m_monitorProfile = monitorProfile;
+    m_exposure = 0;
+
+    if (SharedContextWidget == 0) {
+        kdDebug() << "Creating shared context widget\n";
+
+        SharedContextWidget = new QGLWidget(KisOpenGLCanvasFormat);
+    }
+
+    ++SharedContextWidgetRefCount;
+
+    kdDebug() << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
+
+#ifdef HAVE_GL
+    SharedContextWidget -> makeCurrent();
+    glGenTextures(1, &m_backgroundTexture);
+    generateBackgroundTexture();
+
+    GLint max_texture_size;
+
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
+
+    m_imageTextureTileWidth = QMIN(PREFERRED_IMAGE_TEXTURE_WIDTH, max_texture_size);
+    m_imageTextureTileHeight = QMIN(PREFERRED_IMAGE_TEXTURE_HEIGHT, max_texture_size);
+
+    createImageTextureTiles();
+
+    connect(m_image, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(slotImageUpdated(KisImageSP, const QRect&)));
+    connect(m_image, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+
+    updateImageTextureTiles(m_image -> bounds());
+#endif
+}
+
+KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KisProfile *monitorProfile)
+{
+    if (imageCanShareImageContext(image)) {
+        ImageContextMap::iterator it = imageContextMap.find(image);
+
+        if (it != imageContextMap.end()) {
+
+            kdDebug() << "Sharing image context from map\n";
+
+            KisOpenGLImageContextSP context = (*it).second;
+            context -> setMonitorProfile(monitorProfile);
+
+            return context;
+        } else {
+            KisOpenGLImageContext *imageContext = new KisOpenGLImageContext(image, monitorProfile);
+            imageContextMap[image] = imageContext;
+
+            kdDebug() << "Added shareable context to map\n";
+
+            return imageContext;
+        }
+    } else {
+        kdDebug() << "Creating non-shareable image context\n";
+
+        return new KisOpenGLImageContext(image, monitorProfile);
+    }
+}
+
+bool KisOpenGLImageContext::imageCanShareImageContext(KisImageSP image)
+{
+    if (image -> colorSpace() -> hasHighDynamicRange()) {
+        //XXX: and we don't have shaders...
+        return false;
+    } else {
+        return true;
+    }
+}
+
+QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
+{
+    return SharedContextWidget;
+}
+
+void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
+{
+    QRect updateRect = rect & m_image -> bounds();
+
+    if (!updateRect.isEmpty()) {
+
+        SharedContextWidget -> makeCurrent();
+
+        int firstColumn = updateRect.left() / m_imageTextureTileWidth;
+        int lastColumn = updateRect.right() / m_imageTextureTileWidth;
+        int firstRow = updateRect.top() / m_imageTextureTileHeight;
+        int lastRow = updateRect.bottom() / m_imageTextureTileHeight;
+
+        for (int column = firstColumn; column <= lastColumn; column++) {
+            for (int row = firstRow; row <= lastRow; row++) {
+
+                QRect tileRect(column * m_imageTextureTileWidth, row * m_imageTextureTileHeight,
+                               m_imageTextureTileWidth, m_imageTextureTileHeight);
+
+                QRect tileUpdateRect = tileRect & updateRect;
+
+                glBindTexture(GL_TEXTURE_2D, imageTextureTile(tileRect.x(), tileRect.y()));
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+                QImage tileUpdateImage = m_image -> convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(), 
+                                                                    tileUpdateRect.right(), tileUpdateRect.bottom(),
+                                                                     m_monitorProfile, m_exposure);
+
+                //XXX: and not using shader
+                if (m_image -> activeLayer() != 0 && m_image -> activeLayer() -> hasSelection()) {
+                    m_image -> activeLayer() -> selection() -> paintSelection(tileUpdateImage, 
+                                                                              tileUpdateRect.x(), tileUpdateRect.y(),
+                                                                              tileUpdateRect.width(), tileUpdateRect.height());
+                }
+
+                if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
+                    //kdDebug() << "TexImage " << tileUpdateRect << endl;
+
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0, 
+                          GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
+                } else {
+                    int xOffset = tileUpdateRect.x() - tileRect.x();
+                    int yOffset = tileUpdateRect.y() - tileRect.y();
+
+                    //kdDebug() << "TexSubImage " << tileUpdateRect << endl;
+
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(), 
+                                    GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
+                }
+
+                GLenum error = glGetError ();
+                if (error != GL_NO_ERROR)
+                {
+                    kdDebug() << "Error loading texture: " << endl;
+                }
+            }
+        }
+    }
+}
+
+KisColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KisColorSpace *imageColorSpace)
+{
+    return KisMetaRegistry::instance() -> csRegistry() -> getColorSpace(KisID("RGBA", ""), "");
+}
+
+void KisOpenGLImageContext::setMonitorProfile(KisProfile *monitorProfile)
+{
+    if (monitorProfile != m_monitorProfile) {
+        m_monitorProfile = monitorProfile;
+        generateBackgroundTexture();
+        updateImageTextureTiles(m_image -> bounds());
+    }
+}
+
+void KisOpenGLImageContext::setHDRExposure(float exposure)
+{
+    if (exposure != m_exposure) {
+        m_exposure = exposure;
+
+        if (m_image -> colorSpace() -> hasHighDynamicRange()) {
+            //XXX: and we are not using shaders...
+            updateImageTextureTiles(m_image -> bounds());
+        }
+    }
+}
+
+void KisOpenGLImageContext::generateBackgroundTexture()
+{
+#ifdef HAVE_GL
+    SharedContextWidget -> makeCurrent();
+
+    glBindTexture(GL_TEXTURE_2D, m_backgroundTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    QImage backgroundImage = m_image -> background() -> patternTile();
+
+    // XXX: temp.
+    Q_ASSERT(backgroundImage.width() == BACKGROUND_TEXTURE_WIDTH);
+    Q_ASSERT(backgroundImage.height() == BACKGROUND_TEXTURE_HEIGHT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, 0, 
+          GL_BGRA, GL_UNSIGNED_BYTE, backgroundImage.bits());
+#endif // HAVE_GL
+}
+
+GLuint KisOpenGLImageContext::backgroundTexture() const
+{
+    return m_backgroundTexture;
+}
+
+int KisOpenGLImageContext::imageTextureTileIndex(int x, int y) const
+{
+    int column = x / m_imageTextureTileWidth;
+    int row = y / m_imageTextureTileHeight;
+
+    return column + (row * m_numImageTextureTileColumns);
+}
+
+GLuint KisOpenGLImageContext::imageTextureTile(int pixelX, int pixelY) const
+{
+    int textureTileIndex = imageTextureTileIndex(pixelX, pixelY);
+
+    textureTileIndex = CLAMP(textureTileIndex, 0, m_imageTextureTiles.count() - 1);
+
+    return m_imageTextureTiles[textureTileIndex];
+}
+
+int KisOpenGLImageContext::imageTextureTileWidth() const
+{
+    return m_imageTextureTileWidth;
+}
+
+int KisOpenGLImageContext::imageTextureTileHeight() const
+{
+    return m_imageTextureTileHeight;
+}
+
+void KisOpenGLImageContext::createImageTextureTiles()
+{
+#ifdef HAVE_GL
+    SharedContextWidget -> makeCurrent();
+
+    destroyImageTextureTiles();
+
+    m_numImageTextureTileColumns = (m_image -> width() + m_imageTextureTileWidth - 1) / m_imageTextureTileWidth;
+    int numImageTextureTileRows = (m_image -> height() + m_imageTextureTileHeight - 1) / m_imageTextureTileHeight;
+    int numImageTextureTiles = m_numImageTextureTileColumns * numImageTextureTileRows;
+
+    m_imageTextureTiles.resize(numImageTextureTiles);
+    glGenTextures(numImageTextureTiles, &(m_imageTextureTiles[0]));
+
+    //XXX: will be float/half with shaders
+    #define RGBA_BYTES_PER_PIXEL 4
+
+    QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * RGBA_BYTES_PER_PIXEL);
+    emptyTilePixelData.fill(0);
+
+    for (int tileIndex = 0; tileIndex < numImageTextureTiles; ++tileIndex) {
+
+        glBindTexture(GL_TEXTURE_2D, m_imageTextureTiles[tileIndex]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0, 
+              GL_BGRA, GL_UNSIGNED_BYTE, &emptyTilePixelData[0]);
+    }
+#endif
+}
+
+void KisOpenGLImageContext::destroyImageTextureTiles()
+{
+#ifdef HAVE_GL
+    if (!m_imageTextureTiles.empty()) {
+        SharedContextWidget -> makeCurrent();
+        glDeleteTextures(m_imageTextureTiles.count(), &(m_imageTextureTiles[0]));
+        m_imageTextureTiles.clear();
+    }
+#endif
+}
+
+void KisOpenGLImageContext::slotImageUpdated(KisImageSP image, const QRect& rc)
+{
+    Q_ASSERT(image == m_image);
+    QRect r = rc & m_image -> bounds();
+    //kdDebug() << "Slot image updated " << r << endl;
+
+    updateImageTextureTiles(r);
+    emit sigImageUpdated(image, r);
+}
+
+void KisOpenGLImageContext::slotImageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h)
+{
+    Q_ASSERT(image == m_image);
+    kdDebug() << "Slot image resized\n";
+
+    createImageTextureTiles();
+    updateImageTextureTiles(m_image -> bounds());
+
+    emit sigSizeChanged(image,w, h);
+}
+
+#include "kis_opengl_image_context.moc"
+

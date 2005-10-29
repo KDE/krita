@@ -39,6 +39,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 #include "kis_tool_polygon.h"
 
@@ -145,12 +147,12 @@ void KisToolPolygon::buttonRelease(KisButtonReleaseEvent *event)
         }
 }
 
-void KisToolPolygon::paint(QPainter& gc)
+void KisToolPolygon::paint(KisCanvasPainter& gc)
 {
     draw(gc);
 }
 
-void KisToolPolygon::paint(QPainter& gc, const QRect&)
+void KisToolPolygon::paint(KisCanvasPainter& gc, const QRect&)
 {
     draw(gc);
 }
@@ -159,14 +161,14 @@ void KisToolPolygon::draw()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
 
         draw(gc);
     }
 }
 
-void KisToolPolygon::draw(QPainter& gc)
+void KisToolPolygon::draw(KisCanvasPainter& gc)
 {
         if (!m_subject || !m_currentImage)
             return;

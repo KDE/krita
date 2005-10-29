@@ -25,6 +25,7 @@
 #include <qwidget.h>
 
 #include <koPoint.h>
+#include <koRect.h>
 
 class QPixmap;
 class KAction;
@@ -42,7 +43,7 @@ public:
     /**
      * Returns the area of the document that is visible, in pixels
      */
-    virtual QRect visibleArea() = 0;
+    virtual KoRect visibleArea() = 0;
     
     /**
      * Returns the total area of the document in pixels. Use KoPageLayout and KoZoomhandler
@@ -53,7 +54,7 @@ public:
     /**
      * Show pt in the center of the view
      */
-    virtual void setViewCenterPoint(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void setViewCenterPoint(double x, double y) = 0;
 };
 
 /**
@@ -71,7 +72,7 @@ public:
     /**
      * Zoom to the specified factor around the point x and y
      */
-    virtual void zoomTo(Q_INT32 x, Q_INT32 y, double factor ) = 0;
+    virtual void zoomTo(double x, double y, double factor ) = 0;
     
     /**
      * Zoom one step in.
@@ -179,6 +180,7 @@ public slots:
 protected slots:
 
     void updateVisibleArea();
+    void zoomValueChanged(int zoom);
 
 protected:
     

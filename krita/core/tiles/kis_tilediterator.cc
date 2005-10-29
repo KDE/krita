@@ -41,6 +41,7 @@ KisTiledIterator::~KisTiledIterator( )
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
+    : KShared()
 {
     if (this != &rhs) {
         m_ktm = rhs.m_ktm;

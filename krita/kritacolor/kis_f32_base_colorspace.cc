@@ -46,6 +46,22 @@ void KisF32BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nP
     }
 }
 
+void KisF32BaseColorSpace::multiplyAlpha(Q_UINT8 *U8_pixel, Q_UINT8 U8_alpha, Q_INT32 nPixels)
+{
+    if (m_alphaPos < 0) return;
+    Q_INT32 psize = pixelSize();
+    float alpha = UINT8_TO_FLOAT(U8_alpha);
+
+    while (nPixels > 0) {
+
+        float *pixelAlpha = reinterpret_cast<float *>(U8_pixel + m_alphaPos);
+        *pixelAlpha *= alpha;
+
+        --nPixels;
+        U8_pixel += psize;
+    }
+}
+
 void KisF32BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8, Q_INT32 nPixels)
 {
     if (m_alphaPos < 0) return;

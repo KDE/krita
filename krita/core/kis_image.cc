@@ -455,7 +455,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_dirty = rhs.m_dirty;
         m_adapter = rhs.m_adapter;
 
-        m_bkg = new KisBackground(this, rhs.width(), rhs.height());
+        m_bkg = new KisBackground();
         Q_CHECK_PTR(m_bkg);
 
         m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
@@ -546,7 +546,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_name = name;
 
     m_colorSpace = colorSpace;
-    m_bkg = new KisBackground(this, width, height);
+    m_bkg = new KisBackground();
     Q_CHECK_PTR(m_bkg);
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
@@ -584,9 +584,6 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 
         m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
         Q_CHECK_PTR(m_projection);
-
-        m_bkg = new KisBackground(this, w, h);
-        Q_CHECK_PTR(m_bkg);
 
         if (cropLayers) {
             vKisLayerSP_it it;
@@ -664,9 +661,6 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
         Q_CHECK_PTR(m_projection);
 
-        m_bkg = new KisBackground(this, w, h);
-        Q_CHECK_PTR(m_bkg);
-
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
@@ -724,9 +718,6 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
     Q_CHECK_PTR(m_projection);
-
-    m_bkg = new KisBackground(this, w, h);
-    Q_CHECK_PTR(m_bkg);
 
     undoAdapter()->endMacro();
 
@@ -790,9 +781,6 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
         Q_CHECK_PTR(m_projection);
 
-        m_bkg = new KisBackground(this, w, h);
-        Q_CHECK_PTR(m_bkg);
-
         undoAdapter()->endMacro();
 
         emit sigSizeChanged(KisImageSP(this), w, h);
@@ -823,7 +811,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     }
 
     m_projection->convertTo(dstColorSpace, renderingIntent);
-    m_bkg->convertTo(dstColorSpace, renderingIntent);
 
     if (undoAdapter() && m_adapter->undo()) {
 
@@ -1388,6 +1375,18 @@ Q_INT32 KisImage::nLinkedLayers() const
     return n;
 }
 
+Q_INT32 KisImage::lowestVisibleLayerIndex() const
+{
+    Q_INT32 layerIndex;
+
+    for (layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
+        if (m_layers[layerIndex] -> visible()) {
+            return layerIndex;
+        }
+    }
+    return -1;
+}
+
 void KisImage::flatten()
 {
     vKisLayerSP beforeLayers = m_layers;
@@ -1530,6 +1529,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                                Q_INT32 y2,
                                QPainter &painter,
                                KisProfile *  monitorProfile,
+                               PaintFlags paintFlags,
                                float exposure)
 {
 
@@ -1541,27 +1541,22 @@ void KisImage::renderToPainter(Q_INT32 x1,
     Q_INT32 h = y2 - y1 + 1;
 
     if (!m_renderinit) {
-
-        KisPainter gc;
-        QRect rc (x1, y1, w, h);
-        gc.begin(m_projection.data());
-
-        gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_bkg.data(), rc.x(), rc.y(), rc.width(), rc.height());
-
-        if (!m_layers.empty()) {
-            KisFlatten<flattenAllVisible> visitor(rc.x(), rc.y(), rc.width(), rc.height());
-            visitor(gc, m_layers);
-        }
-        gc.end();
-
-        m_renderinit = true;
+        QRect rc(x1, y1, w, h);
+        rc &= bounds();
+        updateProjection(rc);
     }
 
+    QImage img = m_projection -> convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
-    QImage img = m_projection->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
+    if (paintFlags & PAINT_BACKGROUND) {
+        m_bkg -> paintBackground(img, x1, y1);
+        img.setAlphaBuffer(false);
+    }
 
-    if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
-        m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+    if (paintFlags & PAINT_SELECTION) {
+        if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
+            m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+        }
     }
 
     if (!img.isNull()) {
@@ -1585,11 +1580,12 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 
     QImage img = m_projection->convertToQImage(profile, x1, y1, w, h, exposure);
 
-    if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
-        m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
-    }
-
     if (!img.isNull()) {
+
+        /* Docs says this fn doesn't draw the selection.
+        if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
+            m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+        }*/
 
 #ifdef __BIG_ENDIAN__
         cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
@@ -1624,6 +1620,42 @@ KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
     return dev -> colorAt(x, y);
 }
 
+void KisImage::updateProjection(const QRect& rc)
+{
+    QRect rect = rc & QRect(0, 0, width(), height());
+
+    // Composite the image
+    KisFillPainter gc;
+
+    gc.begin(m_projection.data());
+
+    int layerIndex = lowestVisibleLayerIndex();
+
+    if (layerIndex >= 0) {
+        // Copy the lowest layer rather than compositing it with the background
+        // or an empty image. This means the layer's composite op is ignored, 
+        // which is consistent with Photoshop and gimp.
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, m_layers[layerIndex].data(), m_layers[layerIndex] -> opacity(), 
+                  rect.x(), rect.y(), rect.width(), rect.height());
+        --layerIndex;
+
+        while (layerIndex >= 0) {
+            KisLayerSP layer = m_layers[layerIndex];
+
+            if (layer -> visible()) {
+                gc.bitBlt(rect.x(), rect.y(), layer -> compositeOp(), layer.data(), layer -> opacity(),
+                          rect.x(), rect.y(), rect.width(), rect.height());
+            }
+            --layerIndex;
+        }
+    } else {
+        gc.eraseRect(rect);
+    }
+
+    gc.end();
+    m_renderinit = true;
+}
+
 void KisImage::notify()
 {
     notify(QRect(0, 0, width(), height()));
@@ -1631,28 +1663,13 @@ void KisImage::notify()
 
 void KisImage::notify(const QRect& rc)
 {
-   QRect rect = rc & QRect(0, 0, width(), height());
-#if 1
-    // Composite the image
-    KisPainter gc;
+    QRect rect = rc & QRect(0, 0, width(), height());
 
-    gc.begin(m_projection.data());
-
-    gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, m_bkg.data(), rect.x(), rect.y(), rect.width(), rect.height());
-
-    if (!m_layers.empty()) {
-        KisFlatten<flattenAllVisible> visitor(rect.x(), rect.y(), rect.width(), rect.height());
-        visitor(gc, m_layers);
-    }
-
-    gc.end();
-    m_renderinit = true;
-#endif
+    updateProjection(rect);
 
     if (rect.isValid()) {
         emit sigImageUpdated(KisImageSP(this), rect);
     }
-
 }
 
 void KisImage::notifyLayersChanged()
@@ -1699,9 +1716,6 @@ KisColorSpace * KisImage::colorSpace() const
 void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
-
-    m_bkg = new KisBackground(this, m_width, m_height);
-    Q_CHECK_PTR(m_bkg);
 
     m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
     Q_CHECK_PTR(m_projection);
@@ -1767,5 +1781,9 @@ vKisAnnotationSP_it KisImage::endAnnotations()
     return m_annotations.end();
 }
 
+KisBackgroundSP KisImage::background() const
+{
+    return m_bkg;
+}
 #include "kis_image.moc"
 

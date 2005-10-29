@@ -116,6 +116,11 @@ public:
 
     virtual bool valid() { return true; }
 
+    /**
+     * Returns true if the colorspace supports channel values outside the 
+     * (normalised) range 0 to 1.
+     */
+    virtual bool hasHighDynamicRange() const { return false; }
 
     //========== Display profiles =============================================//
 
@@ -158,7 +163,6 @@ public:
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
-
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
 
     virtual KisColorAdjustment *createDesaturateAdjustment();
@@ -215,7 +219,7 @@ protected:
                           KisProfile *  dstProfile,
                           Q_INT32 renderingIntent);
 
-
+    virtual void compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity);
 
 protected:
 

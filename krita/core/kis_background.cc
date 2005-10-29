@@ -17,43 +17,90 @@
  */
 #include "kis_global.h"
 #include "kis_background.h"
-#include "kis_image.h"
-#include "kis_iterators_pixel.h"
+#include "kis_integer_maths.h"
 
-KisBackground::KisBackground(KisImage *img, Q_INT32 /*width*/, Q_INT32 /*height*/) :
-    super(img, "background flyweight", OPACITY_OPAQUE)
+KisBackground::KisBackground()
+    : KShared()
 {
-    Q_INT32 y;
-        Q_UINT8* src = new Q_UINT8[pixelSize()];
-    Q_UINT32 d = pixelSize();
+    m_patternTile = QImage(PATTERN_WIDTH, PATTERN_HEIGHT, 32);
+    m_patternTile.setAlphaBuffer(false);
 
-    Q_ASSERT( colorSpace() != 0 );
-
-    for (y = 0; y < 64; y++)
+    for (int y = 0; y < PATTERN_HEIGHT; y++)
     {
-        // This is a little tricky. The background layer doesn't have any pixel
-        // data written to it yet. So, if we open a read-only iterator, it'll give
-        // us the default tile, i.e., the empty tile. Fortunately this default tile
-        // is not shared among all paint devices, because...
-        KisHLineIteratorPixel hiter = createHLineIterator(0, y, 64, false);
-        while( ! hiter.isDone())
+        for (int x = 0; x < PATTERN_WIDTH; x++)
         {
-            Q_UINT8 v = 128 + 63 * ((hiter.x() / 16 + y / 16) % 2);
-            QColor c(v,v,v);
-            colorSpace() -> fromQColor(c, OPACITY_OPAQUE, ( Q_UINT8* ) src);
-
-            // We cold-bloodedly copy our check pattern bang over the default tile data.
-            // Now the default tile is checkered. This begs the questions -- should we add
-            // a setDefaultBackground method to the data manager?
-            memcpy(hiter.rawData(), src, d);
-
-            ++hiter;
+            Q_UINT8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
+            m_patternTile.setPixel(x, y, qRgb(v, v, v));
         }
     }
-        delete [] src;
-    setExtentIsValid(false);
 }
 
 KisBackground::~KisBackground()
 {
 }
+
+const QImage& KisBackground::patternTile() const
+{
+    return m_patternTile;
+}
+
+void KisBackground::paintBackground(QImage image, int imageLeftX, int imageTopY)
+{
+    int patternLeftX;
+
+    if (imageLeftX >= 0) {
+        patternLeftX = imageLeftX % PATTERN_WIDTH;
+    } else {
+        patternLeftX = (PATTERN_WIDTH - (-imageLeftX % PATTERN_WIDTH)) % PATTERN_WIDTH;
+    }
+
+    int patternTopY;
+
+    if (imageTopY >= 0) {
+        patternTopY = imageTopY % PATTERN_HEIGHT;
+    } else {
+        patternTopY = (PATTERN_HEIGHT - (-imageTopY % PATTERN_HEIGHT)) % PATTERN_HEIGHT;
+    }
+
+    int imageWidth = image.width();
+    int imageHeight = image.height();
+
+    int patternY = patternTopY;
+
+    for (int y = 0; y < imageHeight; y++)
+    {
+        QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(image.scanLine(y));
+        const QRgb *patternScanLine = reinterpret_cast<const QRgb *>(m_patternTile.scanLine(patternY));
+        int patternX = patternLeftX;
+
+        for (int x = 0; x < imageWidth; x++)
+        {
+            QRgb imagePixel = *imagePixelPtr;
+            Q_UINT8 imagePixelAlpha = qAlpha(imagePixel);
+
+            if (imagePixelAlpha != 255) {
+
+                QRgb patternPixel = patternScanLine[patternX];
+                Q_UINT8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);
+                Q_UINT8 imageGreen = UINT8_BLEND(qGreen(imagePixel), qGreen(patternPixel), imagePixelAlpha);
+                Q_UINT8 imageBlue = UINT8_BLEND(qBlue(imagePixel), qBlue(patternPixel), imagePixelAlpha);
+
+                *imagePixelPtr = qRgba(imageRed, imageGreen, imageBlue, 255);
+            }
+
+            ++imagePixelPtr;
+            ++patternX;
+
+            if (patternX == PATTERN_WIDTH) {
+                patternX = 0;
+            }
+        }
+
+        ++patternY;
+
+        if (patternY == PATTERN_HEIGHT) {
+            patternY = 0;
+        }
+    }
+}
+

@@ -44,6 +44,8 @@
 #include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal()
     : super()
@@ -178,12 +180,12 @@ void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
         }
 }
 
-void KisToolSelectPolygonal::paint(QPainter& gc)
+void KisToolSelectPolygonal::paint(KisCanvasPainter& gc)
 {
     draw(gc);
 }
 
-void KisToolSelectPolygonal::paint(QPainter& gc, const QRect&)
+void KisToolSelectPolygonal::paint(KisCanvasPainter& gc, const QRect&)
 {
     draw(gc);
 }
@@ -192,14 +194,14 @@ void KisToolSelectPolygonal::draw()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
 
         draw(gc);
     }
 }
 
-void KisToolSelectPolygonal::draw(QPainter& gc)
+void KisToolSelectPolygonal::draw(KisCanvasPainter& gc)
 {
     if (!m_subject)
         return;

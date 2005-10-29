@@ -478,17 +478,6 @@ void KisXyzColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-void KisXyzColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
-                        const Q_UINT8 */*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 /*opacity*/)
-{
-    while (rows > 0) {
-        memcpy(dstRowStart, srcRowStart, numColumns * sizeof(Pixel));
-        --rows;
-        srcRowStart += srcRowStride;
-        dstRowStart += dstRowStride;
-    }
-}
-
 void KisXyzColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 dstRowStride,
                       const Q_UINT8 *src,
@@ -545,7 +534,7 @@ void KisXyzColorSpace::bitBlt(Q_UINT8 *dst,
         //compositeBumpmap(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
         break;
     case COMPOSITE_COPY:
-        compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+        compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, U8_opacity);
         break;
     case COMPOSITE_COPY_RED:
         //compositeCopyRed(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);

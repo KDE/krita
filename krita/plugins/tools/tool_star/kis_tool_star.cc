@@ -40,6 +40,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 #include "kis_tool_star.h"
 #include "wdg_tool_star.h"
@@ -149,8 +151,8 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
         return;
 
     KisCanvasController *controller = m_subject -> canvasController();
-    QWidget *canvas = controller->canvas ();
-    QPainter p (canvas);
+    KisCanvas *canvas = controller->canvas ();
+    KisCanvasPainter p (canvas);
     QPen pen(Qt::SolidLine);
 
     KisPoint startPos;

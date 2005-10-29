@@ -1287,7 +1287,6 @@ void KisRgbColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-
 void KisRgbColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 dstRowStride,
                       const Q_UINT8 *src,
@@ -1343,7 +1342,7 @@ void KisRgbColorSpace::bitBlt(Q_UINT8 *dst,
         compositeBumpmap(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
         break;
     case COMPOSITE_COPY:
-        compositeCopy(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+        compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
     case COMPOSITE_COPY_RED:
         compositeCopyRed(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);

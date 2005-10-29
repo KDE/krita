@@ -129,6 +129,12 @@ public:
 
     virtual bool valid() = 0;
 
+    /**
+     * Returns true if the colorspace supports channel values outside the 
+     * (normalised) range 0 to 1.
+     */
+    virtual bool hasHighDynamicRange() const = 0;
+
 
     //========== Display profiles =============================================//
 
@@ -240,9 +246,18 @@ public:
      * alpha --  a downscaled 8-bit value for opacity
      * nPixels -- the number of pixels
      *
-     * XXX: Also add a function that modifies the current alpha with the given alpha, i.e., premultiply them?
      */
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) = 0;
+
+    /**
+     * Multiply the alpha channel of the given run of pixels by the given value.
+     *
+     * pixels -- a pointer to the pixels that will have their alpha set to this value
+     * alpha --  a downscaled 8-bit value for opacity
+     * nPixels -- the number of pixels
+     *
+     */
+    virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) = 0;
 
     /**
      * Applies the specified 8-bit alpha mask to the pixels. We assume that there are just

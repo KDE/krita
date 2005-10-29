@@ -44,6 +44,8 @@
 #include "kis_selection.h"
 #include "kis_selection_options.h"
 #include <kis_selected_transaction.h>
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular()
 {
@@ -78,13 +80,13 @@ void KisToolSelectRectangular::update(KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
-void KisToolSelectRectangular::paint(QPainter& gc)
+void KisToolSelectRectangular::paint(KisCanvasPainter& gc)
 {
     if (m_selecting)
         paintOutline(gc, QRect());
 }
 
-void KisToolSelectRectangular::paint(QPainter& gc, const QRect& rc)
+void KisToolSelectRectangular::paint(KisCanvasPainter& gc, const QRect& rc)
 {
     if (m_selecting)
         paintOutline(gc, rc);
@@ -232,15 +234,15 @@ void KisToolSelectRectangular::paintOutline()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
         QRect rc;
 
         paintOutline(gc, rc);
     }
 }
 
-void KisToolSelectRectangular::paintOutline(QPainter& gc, const QRect&)
+void KisToolSelectRectangular::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();

@@ -39,6 +39,8 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 #include "kis_tool_polyline.h"
 
@@ -153,12 +155,12 @@ void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
         }
 }
 
-void KisToolPolyline::paint(QPainter& gc)
+void KisToolPolyline::paint(KisCanvasPainter& gc)
 {
     draw(gc);
 }
 
-void KisToolPolyline::paint(QPainter& gc, const QRect&)
+void KisToolPolyline::paint(KisCanvasPainter& gc, const QRect&)
 {
     draw(gc);
 }
@@ -167,14 +169,14 @@ void KisToolPolyline::draw()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
 
         draw(gc);
     }
 }
 
-void KisToolPolyline::draw(QPainter& gc)
+void KisToolPolyline::draw(KisCanvasPainter& gc)
 {
         if (!m_subject || !m_currentImage)
             return;

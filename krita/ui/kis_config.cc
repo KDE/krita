@@ -234,6 +234,28 @@ void KisConfig::setRenderIntent(Q_INT32 renderIntent)
     m_cfg -> writeEntry("renderIntent", renderIntent);
 }
 
+bool KisConfig::useOpenGL() const
+{
+    // XXX: Default to?
+    return m_cfg -> readBoolEntry("useOpenGL", false);
+}
+
+void KisConfig::setUseOpenGL(bool useOpenGL)
+{
+    m_cfg -> writeEntry("useOpenGL", useOpenGL);
+}
+
+bool KisConfig::useOpenGLShaders() const
+{
+    // XXX: Default to?
+    return m_cfg -> readBoolEntry("useOpenGLShaders", false);
+}
+
+void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
+{
+    m_cfg -> writeEntry("useOpenGLShaders", useOpenGLShaders);
+}
+
 Q_INT32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg -> readNumEntry("maxthreads", DEFAULT_MAX_THREADS);

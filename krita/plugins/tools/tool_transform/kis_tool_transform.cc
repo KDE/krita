@@ -53,6 +53,8 @@
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 namespace {
     class TransformCmd : public KisSelectedTransaction {
@@ -164,12 +166,12 @@ void KisToolTransform::activate()
     }
 }
 
-void KisToolTransform::paint(QPainter& gc)
+void KisToolTransform::paint(KisCanvasPainter& gc)
 {
     paintOutline(gc, QRect());
 }
 
-void KisToolTransform::paint(QPainter& gc, const QRect& rc)
+void KisToolTransform::paint(KisCanvasPainter& gc, const QRect& rc)
 {
     paintOutline(gc, rc);
 }
@@ -558,8 +560,8 @@ void KisToolTransform::paintOutline()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
         QRect rc;
 
         paintOutline(gc, rc);
@@ -590,7 +592,7 @@ void KisToolTransform::recalcOutline()
     m_bottomright = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
 }
 
-void KisToolTransform::paintOutline(QPainter& gc, const QRect&)
+void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();

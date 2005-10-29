@@ -25,10 +25,12 @@
 #endif
 
 #include <qwidget.h>
+#include <qgl.h>
+#include <qpainter.h>
 
+#include "kis_global.h"
 #include "kis_point.h"
 #include "kis_vec.h"
-#include "kis_global.h"
 
 #ifdef Q_WS_X11
 
@@ -53,54 +55,57 @@ class KisMoveEvent;
 class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisDoubleClickEvent;
+class KisCanvasWidgetPainter;
 
-class KisCanvas : public QWidget {
+class KisCanvasWidget : public QObject {
     Q_OBJECT
-    typedef QWidget super;
 
 public:
-    KisCanvas(QWidget *parent = 0, const char *name = 0);
-    virtual ~KisCanvas();
-    void showScrollBars();
-
+    KisCanvasWidget();
+    virtual ~KisCanvasWidget();
+    
     // When enabled, the canvas may throw away move events if the application
     // is unable to keep up with them, i.e. intermediate move events in the event
     // queue are skipped.
     void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
 
+    virtual KisCanvasWidgetPainter *createPainter() = 0;
+
 signals:
-    void gotPaintEvent(QPaintEvent*);
-    void gotEnterEvent(QEvent*);
-    void gotLeaveEvent(QEvent*);
-    void mouseWheelEvent(QWheelEvent*);
-    void gotKeyPressEvent(QKeyEvent*);
-    void gotKeyReleaseEvent(QKeyEvent*);
-    void gotDragEnterEvent(QDragEnterEvent*);
-    void gotDropEvent(QDropEvent*);
-    void gotMoveEvent(KisMoveEvent *);
-    void gotButtonPressEvent(KisButtonPressEvent *);
-    void gotButtonReleaseEvent(KisButtonReleaseEvent *);
-    void gotDoubleClickEvent(KisDoubleClickEvent *);
+    void sigGotPaintEvent(QPaintEvent*);
+    void sigGotEnterEvent(QEvent*);
+    void sigGotLeaveEvent(QEvent*);
+    void sigGotMouseWheelEvent(QWheelEvent*);
+    void sigGotKeyPressEvent(QKeyEvent*);
+    void sigGotKeyReleaseEvent(QKeyEvent*);
+    void sigGotDragEnterEvent(QDragEnterEvent*);
+    void sigGotDropEvent(QDropEvent*);
+    void sigGotMoveEvent(KisMoveEvent *);
+    void sigGotButtonPressEvent(KisButtonPressEvent *);
+    void sigGotButtonReleaseEvent(KisButtonReleaseEvent *);
+    void sigGotDoubleClickEvent(KisDoubleClickEvent *);
 
 protected:
-    virtual void paintEvent(QPaintEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void tabletEvent(QTabletEvent *event);
-    virtual void enterEvent(QEvent *event );
-    virtual void leaveEvent(QEvent *event);
-    virtual void wheelEvent(QWheelEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent *event);
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent *event);
+    void widgetGotPaintEvent(QPaintEvent *event);
+    void widgetGotMousePressEvent(QMouseEvent *event);
+    void widgetGotMouseReleaseEvent(QMouseEvent *event);
+    void widgetGotMouseDoubleClickEvent(QMouseEvent *event);
+    void widgetGotMouseMoveEvent(QMouseEvent *event);
+    void widgetGotTabletEvent(QTabletEvent *event);
+    void widgetGotEnterEvent(QEvent *event );
+    void widgetGotLeaveEvent(QEvent *event);
+    void widgetGotWheelEvent(QWheelEvent *event);
+    void widgetGotKeyPressEvent(QKeyEvent *event);
+    void widgetGotKeyReleaseEvent(QKeyEvent *event);
+    void widgetGotDragEnterEvent(QDragEnterEvent *event);
+    void widgetGotDropEvent(QDropEvent *event);
     void moveEvent(KisMoveEvent *event);
     void buttonPressEvent(KisButtonPressEvent *event);
     void buttonReleaseEvent(KisButtonReleaseEvent *event);
     void doubleClickEvent(KisDoubleClickEvent *event);
     void translateTabletEvent(KisEvent *event);
+
+protected:
 
     bool m_enableMoveEventCompressionHint;
     double m_lastPressure;
@@ -111,7 +116,7 @@ protected:
     // we receive all move events, so that painting follows the mouse's motion
     // accurately.
     static void initX11Support();
-    bool x11Event(XEvent *event);
+    bool x11Event(XEvent *event, Display *x11Display, WId winId, QPoint widgetOriginPos);
     static Qt::ButtonState translateX11ButtonState(int state);
     static Qt::ButtonState translateX11Button(unsigned int button);
 
@@ -184,6 +189,84 @@ protected:
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
 #endif // Q_WS_X11
+};
+
+class KisCanvas : public QObject {
+    Q_OBJECT
+
+public:
+    KisCanvas(QWidget *parent, const char *name);
+    virtual ~KisCanvas();
+    
+    // When enabled, the canvas may throw away move events if the application
+    // is unable to keep up with them, i.e. intermediate move events in the event
+    // queue are skipped.
+    void enableMoveEventCompressionHint(bool enableMoveCompression);
+
+    bool isOpenGLCanvas() const;
+
+    int width() const;
+    int height() const;
+
+    void update();
+    void update(const QRect& r);
+    void update(int x, int y, int width, int height);
+    void repaint();
+    void repaint(bool erase);
+    void repaint(int x, int y, int width, int height, bool erase = true);
+    void repaint(const QRect& r, bool erase = true);
+    void repaint(const QRegion& r, bool erase = true);
+
+signals:
+    void sigGotPaintEvent(QPaintEvent*);
+    void sigGotEnterEvent(QEvent*);
+    void sigGotLeaveEvent(QEvent*);
+    void sigGotMouseWheelEvent(QWheelEvent*);
+    void sigGotKeyPressEvent(QKeyEvent*);
+    void sigGotKeyReleaseEvent(QKeyEvent*);
+    void sigGotDragEnterEvent(QDragEnterEvent*);
+    void sigGotDropEvent(QDropEvent*);
+    void sigGotMoveEvent(KisMoveEvent *);
+    void sigGotButtonPressEvent(KisButtonPressEvent *);
+    void sigGotButtonReleaseEvent(KisButtonReleaseEvent *);
+    void sigGotDoubleClickEvent(KisDoubleClickEvent *);
+
+protected:
+    // Allow KisView to render on the widget directly, but everything else
+    // has restricted access.
+    friend class KisView;
+    friend class KisCanvasPainter;
+
+    // One of these will be valid, the other null. In Qt3, using a QPainter on
+    // a QGLWidget is not reliable.
+    QWidget *QPaintDeviceWidget() const;
+    QGLWidget *OpenGLWidget() const;
+
+    void createQPaintDeviceCanvas();
+    void createOpenGLCanvas(QGLWidget *sharedContextWidget);
+
+    void show();
+    void setGeometry(int x, int y, int width, int height);
+
+    void setUpdatesEnabled(bool updatesEnabled);
+    bool isUpdatesEnabled() const;
+
+    void setFocusPolicy(QWidget::FocusPolicy focusPolicy);
+
+    const QCursor& cursor() const;
+    void setCursor(const QCursor& cursor);
+
+    KisCanvasWidgetPainter *createPainter();
+    KisCanvasWidget *canvasWidget() const;
+
+protected:
+    void createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget = 0);
+
+    QWidget *m_parent;
+    QString m_name;
+    KisCanvasWidget *m_canvasWidget;
+    bool m_enableMoveEventCompressionHint;
+    bool m_useOpenGL;
 };
 
 #endif // KIS_CANVAS_H_

@@ -42,6 +42,9 @@
 #include "kis_canvas_subject.h"
 #include "kis_boundary.h"
 #include "kis_move_event.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
+#include "kis_boundary_painter.h"
 
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
@@ -144,13 +147,13 @@ void KisToolBrush::paintOutline(const KisPoint& point) {
         return;
     }
 
-    QWidget *canvas = controller -> canvas();
+    KisCanvas *canvas = controller -> canvas();
     canvas -> repaint();
 
     KisBrush *brush = m_subject -> currentBrush();
     // There may not be a brush present, and we shouldn't crash in that case
     if (brush) {
-        QPainter gc(canvas);    
+        KisCanvasPainter gc(canvas);    
         QPen pen(Qt::SolidLine);
     
         KisPoint hotSpot = brush -> hotSpot();
@@ -162,7 +165,7 @@ void KisToolBrush::paintOutline(const KisPoint& point) {
         gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
                         (- controller -> vertValue()) / m_subject -> zoomFactor());
         gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
-        brush -> boundary().paint(gc);
+        KisBoundaryPainter::paint(brush -> boundary(), gc);
         m_paintedOutline = true;
     }
 }

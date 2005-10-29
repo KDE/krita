@@ -51,6 +51,8 @@
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
 
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 KisToolCrop::KisToolCrop()
 {
@@ -96,12 +98,12 @@ void KisToolCrop::activate()
     }
 }
 
-void KisToolCrop::paint(QPainter& gc)
+void KisToolCrop::paint(KisCanvasPainter& gc)
 {
     paintOutlineWithHandles(gc, QRect());
 }
 
-void KisToolCrop::paint(QPainter& gc, const QRect& rc)
+void KisToolCrop::paint(KisCanvasPainter& gc, const QRect& rc)
 {
     paintOutlineWithHandles(gc, rc);
 }
@@ -315,15 +317,15 @@ void KisToolCrop::paintOutlineWithHandles()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
         QRect rc;
 
         paintOutlineWithHandles(gc, rc);
     }
 }
 
-void KisToolCrop::paintOutlineWithHandles(QPainter& gc, const QRect&)
+void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject && (m_selecting || m_haveCropSelection)) {
         KisCanvasController *controller = m_subject -> canvasController();

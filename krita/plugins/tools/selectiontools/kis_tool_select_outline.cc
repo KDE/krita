@@ -44,6 +44,8 @@
 #include "kis_selected_transaction.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
 
 KisToolSelectOutline::KisToolSelectOutline()
     : super()
@@ -163,12 +165,12 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
     }
 }
 
-void KisToolSelectOutline::paint(QPainter& gc)
+void KisToolSelectOutline::paint(KisCanvasPainter& gc)
 {
     draw(gc);
 }
 
-void KisToolSelectOutline::paint(QPainter& gc, const QRect&)
+void KisToolSelectOutline::paint(KisCanvasPainter& gc, const QRect&)
 {
     draw(gc);
 }
@@ -177,14 +179,14 @@ void KisToolSelectOutline::draw()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
 
         draw(gc);
     }
 }
 
-void KisToolSelectOutline::draw(QPainter& gc)
+void KisToolSelectOutline::draw(KisCanvasPainter& gc)
 {
     if (!m_subject)
         return;
@@ -210,8 +212,8 @@ void KisToolSelectOutline::clear()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        QWidget *canvas = controller -> canvas();
-        QPainter gc(canvas);
+        KisCanvas *canvas = controller -> canvas();
+        KisCanvasPainter gc(canvas);
 
         QPen pen(Qt::white, 0, Qt::DotLine);
 

@@ -63,6 +63,12 @@ public:
     virtual KisImageIface *dcopObject();
 
 public:
+    typedef enum enumPaintFlags {
+        PAINT_IMAGE_ONLY = 0,
+        PAINT_BACKGROUND = 1,
+        PAINT_SELECTION = 2
+    } PaintFlags;
+
     /// Paint the specified rect onto the painter, adjusting the colors using the
     /// given profile. The exposure setting is used if the image has a high dynamic range.
     virtual void renderToPainter(Q_INT32 x1,
@@ -70,9 +76,9 @@ public:
                      Q_INT32 x2,
                      Q_INT32 y2,
                      QPainter &painter,
-                     KisProfile *  profile,
+                     KisProfile *profile,
+                     PaintFlags paintFlags,
                      float exposure = 0.0f);
-
     /**
      * Render the projection onto a QImage. In contrast with the above method, the
      * selection is not rendered.
@@ -83,6 +89,7 @@ public:
                                     Q_INT32 y2,
                                     KisProfile * profile,
                                     float exposure = 0.0f);
+    KisBackgroundSP background() const;
 
 public:
     QString name() const;
@@ -181,6 +188,7 @@ public:
     Q_INT32 nlayers() const;
     Q_INT32 nHiddenLayers() const;
     Q_INT32 nLinkedLayers() const;
+    Q_INT32 lowestVisibleLayerIndex() const;
 
     KCommand *raiseLayerCommand(KisLayerSP layer);
     KCommand *lowerLayerCommand(KisLayerSP layer);
@@ -262,6 +270,9 @@ public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
 
+protected:
+    void updateProjection(const QRect& rc);
+
 private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
@@ -288,6 +299,7 @@ private:
 
     KisBackgroundSP m_bkg;
     KisLayerSP m_projection;
+
     vKisLayerSP m_layers; // Contains the list of all layers
     vKisLayerSP m_layerStack; // Contains a stack of layers in
                   // order of activation, so that when

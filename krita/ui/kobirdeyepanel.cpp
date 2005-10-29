@@ -70,6 +70,16 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 
     
     l->addWidget(m_page);
+
+    connect(m_page->zoom, SIGNAL(valueChanged(int)), SLOT(zoomValueChanged(int)));
+}
+
+void KoBirdEyePanel::zoomValueChanged(int zoom)
+{
+    KoPoint center;
+    center = m_canvas->visibleArea().center();
+
+    m_zoomListener->zoomTo(center.x(), center.y(), zoom / 100.0);
 }
 
 KoBirdEyePanel::~KoBirdEyePanel()
@@ -100,7 +110,7 @@ void KoBirdEyePanel::updateView()
 
 void KoBirdEyePanel::updateVisibleArea()
 {
-    QRect visibleRect = m_canvas->visibleArea();
+    KoRect visibleRect = m_canvas->visibleArea();
     QRect canvasSize = m_canvas->size();
     QSize viewSize = m_page->view->size();
     

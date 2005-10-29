@@ -151,14 +151,7 @@ void KisAlphaColorSpace::bitBlt(Q_UINT8 *dst,
         return;
     switch (op.op()) {
     case COMPOSITE_COPY:
-        linesize = sizeof(Q_UINT8) * cols;
-        d = dst;
-        s = src;
-        while (rows-- > 0) {
-            memcpy(d, s, linesize);
-            d += dststride;
-            s += srcRowStride;
-        }
+        compositeCopy(dst, dststride, src, srcRowStride, srcAlphaMask, maskRowStride, rows, cols, opacity);
         return;
     case COMPOSITE_CLEAR:
         linesize = sizeof(Q_UINT8) * cols;

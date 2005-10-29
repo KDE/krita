@@ -113,14 +113,7 @@ void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,
 
     switch (op.op()) {
     case COMPOSITE_COPY:
-        d = dst;
-        s = src;
-
-        while (rows-- > 0) {
-            memcpy(d, s, linesize);
-            d += dstRowStride;
-            s += srcRowStride;
-        }
+        compositeCopy(dst, dstRowStride, src, srcRowStride, srcAlphaMask, maskRowStride, rows, cols, opacity);
         break;
     case COMPOSITE_CLEAR:
         d = dst;

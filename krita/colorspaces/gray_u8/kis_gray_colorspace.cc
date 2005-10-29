@@ -210,20 +210,8 @@ void KisGrayColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_ERASE:
         compositeErase(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
-    case COMPOSITE_COPY: {
-        Q_UINT8 *d;
-        const Q_UINT8 *s;
-        Q_INT32 linesize;
-
-        linesize = MAX_CHANNEL_GRAYSCALEA*sizeof(Q_UINT8) * cols;
-        d = dst;
-        s = src;
-        while (rows-- > 0) {
-            memcpy(d, s, linesize);
-            d += dstRowStride;
-            s += srcRowStride;
-        }
-    }
+    case COMPOSITE_COPY:
+        compositeCopy(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
     case COMPOSITE_CLEAR: {
         Q_UINT8 *d;

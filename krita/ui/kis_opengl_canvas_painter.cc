@@ -26,13 +26,13 @@ KisOpenGLCanvasPainter::KisOpenGLCanvasPainter()
     : m_active(false), m_widget(0)
 {
 }
-
+#ifdef HAVE_GL
 KisOpenGLCanvasPainter::KisOpenGLCanvasPainter(QGLWidget *widget)
     : m_active(true), m_widget(widget)
 {
     prepareForDrawing();
 }
-
+#endif
 KisOpenGLCanvasPainter::~KisOpenGLCanvasPainter()
 {
     if (m_widget) {

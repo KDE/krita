@@ -24,7 +24,9 @@
 #endif
 
 #include <qwidget.h>
+#ifdef HAVE_GL
 #include <qgl.h>
+#endif
 #include <qpainter.h>
 
 #include "kis_global.h"
@@ -33,7 +35,9 @@
 class KisOpenGLCanvasPainter : public KisCanvasWidgetPainter {
 public:
     KisOpenGLCanvasPainter();
+#ifdef HAVE_GL
     KisOpenGLCanvasPainter(QGLWidget *widget);
+#endif
     virtual ~KisOpenGLCanvasPainter();
 
     virtual bool begin(KisCanvasWidget *canvasWidget, bool unclipped = false);
@@ -204,7 +208,9 @@ protected:
 #endif // HAVE_GL
 
 protected:
+#ifdef HAVE_GL
     QGLWidget *m_widget;
+#endif
 };
 
 #endif // KIS_OPENGL_CANVAS_PAINTER_H_

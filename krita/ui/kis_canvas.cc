@@ -779,7 +779,9 @@ void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidge
 
 void KisCanvas::createQPaintDeviceCanvas()
 {
-    createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
+#ifdef HAVE_GL
+	createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
+#endif
 }
 
 #ifdef HAVE_GL
@@ -811,6 +813,7 @@ QWidget *KisCanvas::QPaintDeviceWidget() const
     }
 }
 
+#ifdef HAVE_GL
 QGLWidget *KisCanvas::OpenGLWidget() const
 {
     if (m_useOpenGL) {
@@ -819,6 +822,7 @@ QGLWidget *KisCanvas::OpenGLWidget() const
         return 0;
     }
 }
+#endif
 
 KisCanvasWidgetPainter *KisCanvas::createPainter()
 {

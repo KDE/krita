@@ -20,6 +20,7 @@
 #include "kis_opengl_canvas.h"
 #include "kis_opengl_canvas_painter.h"
 
+#ifdef HAVE_GL
 KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget)
     : QGLWidget(KisOpenGLCanvasFormat, parent, name, sharedContextWidget)
 {
@@ -115,3 +116,4 @@ KisCanvasWidgetPainter *KisOpenGLCanvasWidget::createPainter()
     return new KisOpenGLCanvasPainter(this);
 }
 
+#endif

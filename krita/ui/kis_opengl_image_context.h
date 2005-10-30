@@ -73,8 +73,9 @@ public:
     // In order to use the image textures, the caller must pass
     // the sharedContextWidget() as the shareWidget argument to the 
     // QGLWidget constructor.
+#ifdef HAVE_GL
     QGLWidget *sharedContextWidget() const;
-
+#endif
     void setMonitorProfile(KisProfile *profile);
     void setHDRExposure(float exposure);
 
@@ -148,7 +149,9 @@ private:
     // We create a single OpenGL context and share it between all views
     // in the process. Apparently with some OpenGL implementations, only
     // one context will be hardware accelerated.
+#ifdef HAVE_GL
     static QGLWidget *SharedContextWidget;
+#endif
     static int SharedContextWidgetRefCount;
 
     typedef std::map<KisImageSP, KisOpenGLImageContext*> ImageContextMap;

@@ -30,7 +30,9 @@
 #include <qbitmap.h>
 #include <qbuttongroup.h>
 #include <qslider.h>
+#ifdef HAVE_GL
 #include <qgl.h>
+#endif
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -249,11 +251,13 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
     KisConfig cfg;
-
+#ifdef HAVE_GL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL -> setEnabled(false);
         cbUseOpenGLShaders -> setEnabled(false);
-    } else {
+    } else 
+#endif    
+    {
         cbUseOpenGL -> setChecked(cfg.useOpenGL());
         cbUseOpenGLShaders -> setChecked(cfg.useOpenGLShaders());
         cbUseOpenGLShaders -> setEnabled(cfg.useOpenGL());

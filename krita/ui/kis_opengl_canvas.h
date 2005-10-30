@@ -24,8 +24,9 @@
 #endif
 
 #include <qwidget.h>
+#ifdef HAVE_GL
 #include <qgl.h>
-
+#endif
 #include "kis_global.h"
 #include "kis_canvas.h"
 
@@ -34,7 +35,7 @@
 #endif // Q_WS_X11
 
 #define KisOpenGLCanvasFormat (QGL::DoubleBuffer|QGL::Rgba|QGL::DirectRendering|QGL::NoDepthBuffer)
-
+#ifdef HAVE_GL
 class KisOpenGLCanvasWidget : public virtual QGLWidget, public virtual KisCanvasWidget {
 public:
     KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget);
@@ -60,6 +61,7 @@ protected:
     bool x11Event(XEvent *event);
 #endif // Q_WS_X11
 };
+#endif
 
 #endif // KIS_OPENGL_CANVAS_H_
 

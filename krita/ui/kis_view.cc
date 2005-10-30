@@ -788,7 +788,7 @@ void KisView::paintView(const KisRect& r)
                         }
                         gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-                        m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(), 
+                        m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
                                                      (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION), HDRExposure());
                     }
 
@@ -848,7 +848,7 @@ void KisView::paintOpenGLView(const KisRect& r)
             glTexCoord2f((img -> width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 0.0);
             glVertex2f(img -> width() * zoom(), 0.0);
 
-            glTexCoord2f((img -> width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH, 
+            glTexCoord2f((img -> width() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_WIDTH,
                          (img -> height() * zoom()) / KisOpenGLImageContext::BACKGROUND_TEXTURE_HEIGHT);
             glVertex2f(img -> width() * zoom(), img -> height() * zoom());
 
@@ -870,11 +870,11 @@ void KisView::paintOpenGLView(const KisRect& r)
 
             m_canvas -> OpenGLWidget() -> makeCurrent();
 
-            for (int x = (wr.left() / m_OpenGLImageContext -> imageTextureTileWidth()) * m_OpenGLImageContext -> imageTextureTileWidth(); 
-                  x <= wr.right(); 
+            for (int x = (wr.left() / m_OpenGLImageContext -> imageTextureTileWidth()) * m_OpenGLImageContext -> imageTextureTileWidth();
+                  x <= wr.right();
                   x += m_OpenGLImageContext -> imageTextureTileWidth()) {
-                for (int y = (wr.top() / m_OpenGLImageContext -> imageTextureTileHeight()) * m_OpenGLImageContext -> imageTextureTileHeight(); 
-                      y <= wr.bottom(); 
+                for (int y = (wr.top() / m_OpenGLImageContext -> imageTextureTileHeight()) * m_OpenGLImageContext -> imageTextureTileHeight();
+                      y <= wr.bottom();
                       y += m_OpenGLImageContext -> imageTextureTileHeight()) {
 
                     glBindTexture(GL_TEXTURE_2D, m_OpenGLImageContext -> imageTextureTile(x, y));
@@ -1526,10 +1526,13 @@ void KisView::preferences()
             disconnectCurrentImg();
 
             //XXX: Need to notify other views that this global setting has changed.
+#ifdef HAVE_GL
             if (cfg.useOpenGL()) {
                 m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_current, monitorProfile());
                 m_canvas -> createOpenGLCanvas(m_OpenGLImageContext -> sharedContextWidget());
-            } else {
+            } else
+#endif
+            {
                 m_OpenGLImageContext = 0;
                 m_canvas -> createQPaintDeviceCanvas();
             }
@@ -2351,7 +2354,7 @@ void KisView::scrollH(int value)
             if (xShift < 0) {
                 if (!m_canvas -> isOpenGLCanvas()) {
                     bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
-    
+
                     KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
                     paintView(viewToWindow(drawRect));
                 }
@@ -2800,18 +2803,19 @@ KisImageSP KisView::currentImg() const
     return m_current;
 }
 
-void KisView::setCurrentImage(KisImageSP image) 
+void KisView::setCurrentImage(KisImageSP image)
 {
     disconnectCurrentImg();
     m_current = image;
 
     KisConfig cfg;
 
+#ifdef HAVE_GL
     if (cfg.useOpenGL()) {
         m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(image, monitorProfile());
         m_canvas -> createOpenGLCanvas(m_OpenGLImageContext -> sharedContextWidget());
     }
-
+#endif
     connectCurrentImg();
     m_current -> notify();
 

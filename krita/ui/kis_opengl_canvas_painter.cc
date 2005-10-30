@@ -23,7 +23,9 @@
 #include "kis_opengl_canvas_painter.h"
 
 KisOpenGLCanvasPainter::KisOpenGLCanvasPainter()
-    : m_active(false), m_widget(0)
+#ifdef HAVE_GL
+: m_active(false), m_widget(0)
+#endif
 {
 }
 #ifdef HAVE_GL
@@ -35,16 +37,19 @@ KisOpenGLCanvasPainter::KisOpenGLCanvasPainter(QGLWidget *widget)
 #endif
 KisOpenGLCanvasPainter::~KisOpenGLCanvasPainter()
 {
-    if (m_widget) {
+#ifdef HAVE_GL
+   if (m_widget) {
         if (m_active) {
             end();
         }
         m_widget -> doneCurrent();
     }
+#endif
 }
 
 bool KisOpenGLCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipped*/)
 {
+#ifdef HAVE_GL
     m_widget = dynamic_cast<QGLWidget *>(canvasWidget);
 
     if (m_widget != 0) {
@@ -53,15 +58,16 @@ bool KisOpenGLCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipp
     } else {
         return false;
     }
+#endif
+    return false;
 }
-
+#ifdef HAVE_GL
 void KisOpenGLCanvasPainter::prepareForDrawing()
 {
     if (m_widget != 0) {
         m_widget -> makeCurrent();
         m_active = true;
         save();
-#ifdef HAVE_GL
         glDrawBuffer(GL_FRONT);
         glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);
         glEnable(GL_BLEND);
@@ -77,11 +83,9 @@ void KisOpenGLCanvasPainter::prepareForDrawing()
         glLoadIdentity();
 
         setPen(m_defaultPen);
-#endif
     }
 }
 
-#ifdef HAVE_GL
 
 void KisOpenGLCanvasPainter::updateViewTransformation()
 {

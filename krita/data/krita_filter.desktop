@@ -2,5 +2,21 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Filter
 Comment=Filter plugin for Krita
+Comment[de]=Filter-Plugin für Krita
+Comment[el]=Πρόσθετο φίλτρου για το Krita
+Comment[eu]=Krita-ren iragazkia
+Comment[fi]=Suodinliitännäinen Kritalle
+Comment[he]=תוסף סינון של Krita
+Comment[hu]=Szűrőmodul a Kritához
+Comment[it]=Plugin di filtro per Krita
+Comment[nb]=Krita-programtillegg for filter
+Comment[nn]=Krita-programtillegg for filter
+Comment[pt_BR]=Plugin de filtro para o Krita
+Comment[sl]=Vstavek za filtriranje za Krito
+Comment[sr]=Филтерски прикључак за Krita-у
+Comment[sr@Latn]=Filterski priključak za Krita-u
+Comment[tr]=Krita için Süzgeç Eklentisi
+Comment[uk]=Втулок фільтра для Krita
+Comment[zh_CN]=Krita 过滤器插件
 [PropertyDef::X-KDE-Version]
 Type=int

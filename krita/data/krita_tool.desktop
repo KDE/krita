@@ -2,5 +2,24 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Tool
 Comment=Tool plugin for Krita
+Comment[de]=Werkzeug-Plugin für Krita
+Comment[el]=Πρόσθετο εργαλείων για το Krita
+Comment[eo]=Ila kromprogramo por Krita
+Comment[et]=Krita tööriistade plugin
+Comment[eu]=Krita-ren Tresna plugina
+Comment[fi]=Kritan työkaluliitännäinen
+Comment[fr]=Module d'outils pour Krita
+Comment[he]=תוסף כלים של Krita
+Comment[hu]=Eszközmodul a Kritához
+Comment[it]=Plugin per gli strumenti per Krita
+Comment[nb]=Krita-programtillegg for verktøy
+Comment[nn]=Krita-programtillegg for verktøy
+Comment[pt_BR]=Plugin de ferramenta para o Krita
+Comment[ru]=Инструмент Krita
+Comment[sr]=Алатни прикључак за Krita-у
+Comment[sr@Latn]=Alatni priključak za Krita-u
+Comment[tr]=Krita için araç eklenti modülü
+Comment[xx]=xxTool plugin for Kritaxx
+Comment[zh_CN]=Krita 工具插件
 [PropertyDef::X-KDE-Version]
 Type=int

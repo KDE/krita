@@ -16,6 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_GL
+
 #include <kdebug.h>
 #include <ksharedptr.h>
 
@@ -30,9 +36,8 @@
 #include "kis_opengl_image_context.h"
 
 using namespace std;
-#ifdef HAVE_GL
+
 QGLWidget *KisOpenGLImageContext::SharedContextWidget = 0;
-#endif
 int KisOpenGLImageContext::SharedContextWidgetRefCount = 0;
 
 KisOpenGLImageContext::ImageContextMap KisOpenGLImageContext::imageContextMap;
@@ -54,10 +59,8 @@ KisOpenGLImageContext::~KisOpenGLImageContext()
     if (SharedContextWidgetRefCount == 0) {
 
         kdDebug() << "Deleting shared context widget\n";
-#ifdef HAVE_GL
         delete SharedContextWidget;
         SharedContextWidget = 0;
-#endif
     }
 
     imageContextMap.erase(m_image);
@@ -71,7 +74,6 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     m_monitorProfile = monitorProfile;
     m_exposure = 0;
 
-#ifdef HAVE_GL
     if (SharedContextWidget == 0) {
         kdDebug() << "Creating shared context widget\n";
 
@@ -79,10 +81,9 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     }
 
     ++SharedContextWidgetRefCount;
-#endif
+
     kdDebug() << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
 
-#ifdef HAVE_GL
     SharedContextWidget -> makeCurrent();
     glGenTextures(1, &m_backgroundTexture);
     generateBackgroundTexture();
@@ -100,7 +101,6 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     connect(m_image, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
 
     updateImageTextureTiles(m_image -> bounds());
-#endif
 }
 
 KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KisProfile *monitorProfile)
@@ -141,22 +141,19 @@ bool KisOpenGLImageContext::imageCanShareImageContext(KisImageSP image)
     }
 }
 
-#ifdef HAVE_GL
 QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
 {
     return SharedContextWidget;
 }
-#endif
 
 void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 {
     QRect updateRect = rect & m_image -> bounds();
 
     if (!updateRect.isEmpty()) {
-#ifdef HAVE_GL
 
         SharedContextWidget -> makeCurrent();
-#endif
+
         int firstColumn = updateRect.left() / m_imageTextureTileWidth;
         int lastColumn = updateRect.right() / m_imageTextureTileWidth;
         int firstRow = updateRect.top() / m_imageTextureTileHeight;
@@ -169,7 +166,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                m_imageTextureTileWidth, m_imageTextureTileHeight);
 
                 QRect tileUpdateRect = tileRect & updateRect;
-#ifdef HAVE_GL
+
                 glBindTexture(GL_TEXTURE_2D, imageTextureTile(tileRect.x(), tileRect.y()));
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);//GL_LINEAR);
@@ -177,7 +174,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-#endif
+
                 QImage tileUpdateImage = m_image -> convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
                                                                     tileUpdateRect.right(), tileUpdateRect.bottom(),
                                                                      m_monitorProfile, m_exposure);
@@ -191,27 +188,24 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
                     //kdDebug() << "TexImage " << tileUpdateRect << endl;
-#ifdef HAVE_GL
+
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
                           GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
-#endif
                 } else {
                     int xOffset = tileUpdateRect.x() - tileRect.x();
                     int yOffset = tileUpdateRect.y() - tileRect.y();
 
                     //kdDebug() << "TexSubImage " << tileUpdateRect << endl;
-#ifdef HAVE_GL
                     glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(),
                                     GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
-#endif
                 }
-#ifdef HAVE_GL
+
                 GLenum error = glGetError ();
+
                 if (error != GL_NO_ERROR)
                 {
                     kdDebug() << "Error loading texture: " << endl;
                 }
-#endif
             }
         }
     }
@@ -245,7 +239,6 @@ void KisOpenGLImageContext::setHDRExposure(float exposure)
 
 void KisOpenGLImageContext::generateBackgroundTexture()
 {
-#ifdef HAVE_GL
     SharedContextWidget -> makeCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_backgroundTexture);
@@ -265,7 +258,6 @@ void KisOpenGLImageContext::generateBackgroundTexture()
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, 0,
           GL_BGRA, GL_UNSIGNED_BYTE, backgroundImage.bits());
-#endif // HAVE_GL
 }
 
 GLuint KisOpenGLImageContext::backgroundTexture() const
@@ -302,7 +294,6 @@ int KisOpenGLImageContext::imageTextureTileHeight() const
 
 void KisOpenGLImageContext::createImageTextureTiles()
 {
-#ifdef HAVE_GL
     SharedContextWidget -> makeCurrent();
 
     destroyImageTextureTiles();
@@ -333,18 +324,15 @@ void KisOpenGLImageContext::createImageTextureTiles()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
               GL_BGRA, GL_UNSIGNED_BYTE, &emptyTilePixelData[0]);
     }
-#endif
 }
 
 void KisOpenGLImageContext::destroyImageTextureTiles()
 {
-#ifdef HAVE_GL
     if (!m_imageTextureTiles.empty()) {
         SharedContextWidget -> makeCurrent();
         glDeleteTextures(m_imageTextureTiles.count(), &(m_imageTextureTiles[0]));
         m_imageTextureTiles.clear();
     }
-#endif
 }
 
 void KisOpenGLImageContext::slotImageUpdated(KisImageSP image, const QRect& rc)
@@ -369,4 +357,6 @@ void KisOpenGLImageContext::slotImageSizeChanged(KisImageSP image, Q_INT32 w, Q_
 }
 
 #include "kis_opengl_image_context.moc"
+
+#endif // HAVE_GL
 

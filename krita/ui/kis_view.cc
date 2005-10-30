@@ -1513,7 +1513,9 @@ void KisView::mergeLayer()
 
 void KisView::preferences()
 {
+#ifdef HAVE_GL
     bool canvasWasOpenGL = m_canvas -> isOpenGLCanvas();
+#endif
 
     if (PreferencesDialog::editPreferences())
     {
@@ -1521,17 +1523,16 @@ void KisView::preferences()
 
         resetMonitorProfile();
 
+#ifdef HAVE_GL
         if (cfg.useOpenGL() != canvasWasOpenGL) {
 
             disconnectCurrentImg();
 
             //XXX: Need to notify other views that this global setting has changed.
-#ifdef HAVE_GL
             if (cfg.useOpenGL()) {
                 m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_current, monitorProfile());
                 m_canvas -> createOpenGLCanvas(m_OpenGLImageContext -> sharedContextWidget());
             } else
-#endif
             {
                 m_OpenGLImageContext = 0;
                 m_canvas -> createQPaintDeviceCanvas();
@@ -1545,6 +1546,7 @@ void KisView::preferences()
         if (cfg.useOpenGL()) {
             m_OpenGLImageContext -> setMonitorProfile(monitorProfile());
         }
+#endif
 
         canvasRefresh();
 
@@ -2422,10 +2424,13 @@ void KisView::connectCurrentImg()
 
         connect(m_current, SIGNAL(sigLayersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
 
+#ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
             connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
             connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
-        } else {
+        } else 
+#endif
+        {
             connect(m_current, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
             connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
         }
@@ -2438,9 +2443,11 @@ void KisView::disconnectCurrentImg()
         m_current -> disconnect(this);
     }
 
+#ifdef HAVE_GL
     if (m_OpenGLImageContext != 0) {
         m_OpenGLImageContext -> disconnect(this);
     }
+#endif
 }
 
 void KisView::imgUpdated(KisImageSP img, const QRect& rc)

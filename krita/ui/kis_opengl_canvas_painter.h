@@ -23,10 +23,10 @@
 #include <config.h>
 #endif
 
-#include <qwidget.h>
 #ifdef HAVE_GL
+
+#include <qwidget.h>
 #include <qgl.h>
-#endif
 #include <qpainter.h>
 
 #include "kis_global.h"
@@ -35,14 +35,11 @@
 class KisOpenGLCanvasPainter : public KisCanvasWidgetPainter {
 public:
     KisOpenGLCanvasPainter();
-#ifdef HAVE_GL
     KisOpenGLCanvasPainter(QGLWidget *widget);
-#endif
+
     virtual ~KisOpenGLCanvasPainter();
 
     virtual bool begin(KisCanvasWidget *canvasWidget, bool unclipped = false);
-
-#ifdef HAVE_GL
 
     // If we don't have OpenGL, we use the base class's no-op methods.
 
@@ -205,13 +202,11 @@ protected:
     QRect m_viewport;
     bool m_active;
 
-#endif // HAVE_GL
-
 protected:
-#ifdef HAVE_GL
     QGLWidget *m_widget;
-#endif
 };
+
+#endif // HAVE_GL
 
 #endif // KIS_OPENGL_CANVAS_PAINTER_H_
 

@@ -726,9 +726,7 @@ KisCanvas::KisCanvas(QWidget *parent, const char *name)
     m_enableMoveEventCompressionHint = false;
     m_canvasWidget = 0;
     m_useOpenGL = false;
-#ifdef HAVE_GL
     createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
-#endif
 }
 
 KisCanvas::~KisCanvas()
@@ -738,9 +736,15 @@ KisCanvas::~KisCanvas()
 
 #ifdef HAVE_GL
 void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget)
+#else
+void KisCanvas::createCanvasWidget(bool useOpenGL)
+#endif
 {
     delete m_canvasWidget;
 
+#ifndef HAVE_GL
+    useOpenGL = false;
+#else
     if (useOpenGL && !QGLFormat::hasOpenGL()) {
         kdDebug() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         useOpenGL = false;
@@ -748,7 +752,9 @@ void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidge
 
     if (useOpenGL) {
         m_canvasWidget = new KisOpenGLCanvasWidget(m_parent, m_name.latin1(), sharedContextWidget);
-    } else {
+    } else
+#endif
+    {
         m_canvasWidget = new KisQPaintDeviceCanvasWidget(m_parent, m_name.latin1());
     }
 
@@ -775,13 +781,10 @@ void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidge
     connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)), SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)));
     connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)), SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)));
 }
-#endif
 
 void KisCanvas::createQPaintDeviceCanvas()
 {
-#ifdef HAVE_GL
 	createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
-#endif
 }
 
 #ifdef HAVE_GL

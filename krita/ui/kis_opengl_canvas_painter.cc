@@ -16,6 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_GL
+
 #include <kdebug.h>
 
 #include "kis_canvas.h"
@@ -23,33 +29,28 @@
 #include "kis_opengl_canvas_painter.h"
 
 KisOpenGLCanvasPainter::KisOpenGLCanvasPainter()
-#ifdef HAVE_GL
 : m_active(false), m_widget(0)
-#endif
 {
 }
-#ifdef HAVE_GL
+
 KisOpenGLCanvasPainter::KisOpenGLCanvasPainter(QGLWidget *widget)
     : m_active(true), m_widget(widget)
 {
     prepareForDrawing();
 }
-#endif
+
 KisOpenGLCanvasPainter::~KisOpenGLCanvasPainter()
 {
-#ifdef HAVE_GL
    if (m_widget) {
         if (m_active) {
             end();
         }
         m_widget -> doneCurrent();
     }
-#endif
 }
 
 bool KisOpenGLCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipped*/)
 {
-#ifdef HAVE_GL
     m_widget = dynamic_cast<QGLWidget *>(canvasWidget);
 
     if (m_widget != 0) {
@@ -58,10 +59,9 @@ bool KisOpenGLCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipp
     } else {
         return false;
     }
-#endif
     return false;
 }
-#ifdef HAVE_GL
+
 void KisOpenGLCanvasPainter::prepareForDrawing()
 {
     if (m_widget != 0) {
@@ -85,7 +85,6 @@ void KisOpenGLCanvasPainter::prepareForDrawing()
         setPen(m_defaultPen);
     }
 }
-
 
 void KisOpenGLCanvasPainter::updateViewTransformation()
 {

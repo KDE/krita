@@ -236,7 +236,6 @@ void KisConfig::setRenderIntent(Q_INT32 renderIntent)
 
 bool KisConfig::useOpenGL() const
 {
-    // XXX: Default to?
     return m_cfg -> readBoolEntry("useOpenGL", false);
 }
 
@@ -247,7 +246,6 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
 
 bool KisConfig::useOpenGLShaders() const
 {
-    // XXX: Default to?
     return m_cfg -> readBoolEntry("useOpenGLShaders", false);
 }
 

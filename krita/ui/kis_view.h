@@ -23,6 +23,10 @@
 #ifndef KIS_VIEW_H_
 #define KIS_VIEW_H_
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <qdatetime.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
@@ -458,9 +462,11 @@ private:
 
     QPixmap m_canvasPixmap;
 
+#ifdef HAVE_GL
     // OpenGL context for the current image, containing textures
     // shared between multiple views.
     KisOpenGLImageContextSP m_OpenGLImageContext;
+#endif
 
     // Monitorprofile for this view
     KisProfile *  m_monitorProfile;

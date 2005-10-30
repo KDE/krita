@@ -116,4 +116,5 @@ KisCanvasWidgetPainter *KisOpenGLCanvasWidget::createPainter()
     return new KisOpenGLCanvasPainter(this);
 }
 
-#endif
+#endif // HAVE_GL
+

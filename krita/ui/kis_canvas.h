@@ -266,6 +266,8 @@ protected:
 protected:
 #ifdef HAVE_GL
     void createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget = 0);
+#else
+    void createCanvasWidget(bool useOpenGL);
 #endif
     QWidget *m_parent;
     QString m_name;

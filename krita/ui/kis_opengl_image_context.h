@@ -18,46 +18,27 @@
 #ifndef KIS_OPENGL_IMAGE_CONTEXT_H_
 #define KIS_OPENGL_IMAGE_CONTEXT_H_
 
-#include <map>
-
-#include <qobject.h>
-
-#include <qvaluevector.h>
-
-#include <koffice_export.h>
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "kis_types.h"
 #ifdef HAVE_GL
+
+#include <map>
+
 #include <qgl.h>
-#endif
+#include <qobject.h>
+#include <qvaluevector.h>
+
+#include <koffice_export.h>
+
+#include "kis_types.h"
 
 class QRegion;
 
 class KisOpenGLImageContext;
 typedef KSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
 class KisColorSpace;
-
-#ifndef HAVE_GL
-typedef unsigned int GLenum;
-typedef unsigned char GLboolean;
-typedef unsigned int GLbitfield;
-typedef signed char GLbyte;
-typedef short GLshort;
-typedef int GLint;
-typedef int GLsizei;
-typedef unsigned char GLubyte;
-typedef unsigned short GLushort;
-typedef unsigned int GLuint;
-typedef float GLfloat;
-typedef float GLclampf;
-typedef double GLdouble;
-typedef double GLclampd;
-typedef void GLvoid;
-#endif
 
 class KRITACORE_EXPORT KisOpenGLImageContext : public QObject , public KShared {
 
@@ -73,9 +54,8 @@ public:
     // In order to use the image textures, the caller must pass
     // the sharedContextWidget() as the shareWidget argument to the 
     // QGLWidget constructor.
-#ifdef HAVE_GL
     QGLWidget *sharedContextWidget() const;
-#endif
+
     void setMonitorProfile(KisProfile *profile);
     void setHDRExposure(float exposure);
 
@@ -149,15 +129,15 @@ private:
     // We create a single OpenGL context and share it between all views
     // in the process. Apparently with some OpenGL implementations, only
     // one context will be hardware accelerated.
-#ifdef HAVE_GL
     static QGLWidget *SharedContextWidget;
-#endif
     static int SharedContextWidgetRefCount;
 
     typedef std::map<KisImageSP, KisOpenGLImageContext*> ImageContextMap;
 
     static ImageContextMap imageContextMap;
 };
+
+#endif // HAVE_GL
 
 #endif // KIS_OPENGL_IMAGE_CONTEXT_H_
 

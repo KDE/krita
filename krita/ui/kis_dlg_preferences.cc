@@ -254,18 +254,21 @@ void PressureSettingsTab::setDefault()
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
-    KisConfig cfg;
 #ifdef HAVE_GL
+    KisConfig cfg;
+
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL -> setEnabled(false);
         cbUseOpenGLShaders -> setEnabled(false);
-    } else 
-#endif    
-    {
+    } else {
         cbUseOpenGL -> setChecked(cfg.useOpenGL());
         cbUseOpenGLShaders -> setChecked(cfg.useOpenGLShaders());
         cbUseOpenGLShaders -> setEnabled(cfg.useOpenGL());
     }
+#else
+    cbUseOpenGL -> setEnabled(false);
+    cbUseOpenGLShaders -> setEnabled(false);
+#endif
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }

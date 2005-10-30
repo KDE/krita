@@ -25,7 +25,9 @@
 #endif
 
 #include <qwidget.h>
+#ifdef HAVE_GL
 #include <qgl.h>
+#endif
 #include <qpainter.h>
 
 #include "kis_global.h"
@@ -240,11 +242,13 @@ protected:
     // One of these will be valid, the other null. In Qt3, using a QPainter on
     // a QGLWidget is not reliable.
     QWidget *QPaintDeviceWidget() const;
+#ifdef HAVE_GL
     QGLWidget *OpenGLWidget() const;
-
+#endif
     void createQPaintDeviceCanvas();
+#ifdef HAVE_GL
     void createOpenGLCanvas(QGLWidget *sharedContextWidget);
-
+#endif
     void show();
     void setGeometry(int x, int y, int width, int height);
 
@@ -260,8 +264,9 @@ protected:
     KisCanvasWidget *canvasWidget() const;
 
 protected:
+#ifdef HAVE_GL
     void createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget = 0);
-
+#endif
     QWidget *m_parent;
     QString m_name;
     KisCanvasWidget *m_canvasWidget;

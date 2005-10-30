@@ -21,7 +21,7 @@
 #include <map>
 
 #include <qobject.h>
-#include <qgl.h>
+
 #include <qvaluevector.h>
 
 #include <koffice_export.h>
@@ -31,6 +31,9 @@
 #endif
 
 #include "kis_types.h"
+#ifdef HAVE_GL
+#include <qgl.h>
+#endif
 
 class QRegion;
 

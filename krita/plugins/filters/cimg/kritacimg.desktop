@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CImg Image Restoration Filter
+Name[bg]=Филтър за възстановяване на изображение CImg
 Name[da]=Cimg-billedrestaureringsfilter
 Name[de]=CImg Filter zur Bildrestauration
 Name[el]=Φίλτρο αποκατάστασης εικόνων CImg
@@ -24,6 +25,7 @@ Name[sv]=Cimg-bildrestaureringsfilter
 Name[xx]=xxCImg Image Restoration Filterxx
 Name[zh_CN]=CImg 图像修复滤镜
 Comment=CImg Image restoration filter
+Comment[bg]=Филтър за възстановяване на изображение CImg
 Comment[cy]=Hidlen adfer Delwedd CImg 
 Comment[da]=Cimg-billedforbedringsfilter
 Comment[de]=CImg basierter Filter zur Bildrestauration

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter
+Name[bg]=Инвертиращ филтър
 Name[cy]=Hidlen Wrthdroi
 Name[eo]=Inversfiltrilo
 Name[es]=Filtro de inversión
@@ -13,6 +14,7 @@ Name[sv]=Inverteringsfilter
 Name[tr]=Çevirme Süzgeci
 Name[xx]=xxInvert Filterxx
 Comment=Invert the colors of an image
+Comment[bg]=Инвертиращ филтър
 Comment[cy]=Gwrthdroi lliwiau delwedd
 Comment[eo]=Tio ĉi inversigas la koloroj nde bildo
 Comment[es]=Invierte los colores de una imagen

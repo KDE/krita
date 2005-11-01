@@ -6,6 +6,7 @@ Name[xx]=xxKritaxx
 Exec=krita %U
 DocPath=krita/index.html
 GenericName=Painting and Image Editing Application
+GenericName[bg]=Редактор на графични изображения
 GenericName[cy]=Cymhwysiad Peintio Golygu Delweddau
 GenericName[de]=Mal- und Bildbearbeitungsprogramm
 GenericName[eo]=Aplikaĵo por pentrado kaj bildkreado

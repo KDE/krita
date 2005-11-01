@@ -13,6 +13,7 @@ Name[sv]=Historikdockning
 Name[tr]=Geçmiş Modülü
 Name[xx]=xxHistory Dockerxx
 Comment=Command history docker for Krita
+Comment[bg]=Основната функционалност на Krita
 Comment[cy]=Bachydd yr hanes gorchmynion ar gyfer Krita
 Comment[eo]=Legilo de komandhistorio por Krita
 Comment[es]=Anclaje con el histórico de órdenes para Krita

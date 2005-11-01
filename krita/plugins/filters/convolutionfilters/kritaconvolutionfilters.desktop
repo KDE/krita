@@ -1,22 +1,26 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolutions filters
+Name[bg]=Изкривяващи филтри
 Name[cy]=Hidlau Cordeddiadau
 Name[eo]=Konvoluciaj filtriloj
 Name[es]=Filtros de convoluciones
 Name[et]=Konvolutsioonifiltrid
 Name[fr]=Filtres de déformations
+Name[ja]=コンヴォリューションフィルタ
 Name[pt]=Filtros de convolução
 Name[pt_BR]=Filtros de convolução
 Name[sv]=Faltningsfilter
 Name[tr]=Kıvrım süzgeci
 Name[xx]=xxConvolutions filtersxx
 Comment=Convolution filters
+Comment[bg]=Изкривяващи филтри
 Comment[cy]=Hidlau cordeddiadau
 Comment[eo]=Konvoluciaj filtriloj
 Comment[es]=Filtros de convoluciones
 Comment[et]=Konvolutsioonifiltrid
 Comment[fr]=Filtres de déformations
+Comment[ja]=コンヴォリューションフィルタ
 Comment[pt]=Filtros de convolução
 Comment[pt_BR]=Filtros de convolução
 Comment[sv]=Faltningsfilter

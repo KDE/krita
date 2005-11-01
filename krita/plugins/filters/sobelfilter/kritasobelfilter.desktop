@@ -1,12 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sobel filter
+Name[bg]=Филтър Sobel
 Name[cy]=Hidlen Sobel
 Name[eo]=Sobel-filtrilo
 Name[es]=Filtro Sobel
 Name[et]=Sobeli filter
 Name[fr]=Filtre de Sobel
 Name[ga]=Scagaire Sobel
+Name[ja]=ソーベルフィルタ
 Name[pt]=Filtro Sobel
 Name[pt_BR]=Filtro Sobel
 Name[sv]=Sobelfilter

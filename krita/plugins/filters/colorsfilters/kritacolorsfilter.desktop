@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color filters
+Name[bg]=Цветови филтри
 Name[cy]=Hidlau lliw
 Name[eo]=Kolorfiltriloj
 Name[es]=Filtros de color
@@ -13,6 +14,7 @@ Name[sv]=Färgfilter
 Name[tr]=Renk süzgeci
 Name[xx]=xxColor filtersxx
 Comment=Color filters
+Comment[bg]=Цветови филтри
 Comment[cy]=Hidlau lliw
 Comment[eo]=Kolorfiltriloj
 Comment[es]=Filtros de color

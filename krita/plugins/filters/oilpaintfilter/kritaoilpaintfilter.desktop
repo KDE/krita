@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Oilpaint filter
+Name[bg]=Филтър маслена боя
 Name[cy]=Hidlen Baent Olew
 Name[eo]=Oleo-filtrilo
 Name[es]=Filtro de pintura al óleo
@@ -13,6 +14,7 @@ Name[sv]=Oljemålningsfilter
 Name[tr]=Yağlıboya süzgeci
 Name[xx]=xxOilpaint filterxx
 Comment=Oilpaint filter
+Comment[bg]=Филтър маслена боя
 Comment[cy]=Hidlen baent olew
 Comment[eo]=Filtrilo por efektoj de oleo-pentrado
 Comment[es]=Filtro de pintura al óleo

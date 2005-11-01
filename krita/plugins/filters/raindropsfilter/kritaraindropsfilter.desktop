@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Raindrops filter
+Name[bg]=Филтър за дъждовни капки
 Name[cy]=Hidlen Ddiferion Glaw
 Name[eo]=Pluvgutoj-filtrilo
 Name[es]=Filtro de gotas de lluvia
@@ -13,6 +14,7 @@ Name[sv]=Regndroppsfilter
 Name[tr]=Yağmur damlası süzgeci
 Name[xx]=xxRaindrops filterxx
 Comment=Raindrops filter
+Comment[bg]=Филтър за дъждовни капки
 Comment[cy]=Hidlen ddiferion glaw
 Comment[eo]=Filtrilo por efektoj de pluvaj gutoj
 Comment[es]=Filtro de gotas de lluvia

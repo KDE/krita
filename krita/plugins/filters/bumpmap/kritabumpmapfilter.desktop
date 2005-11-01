@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap filter
+Name[bg]=Филтър Bumpmap
 Name[cy]=Hidlen chwyddfap
 Name[eo]=Bumpmap-filtrilo
 Name[es]=Filtro de mapa de colisiones
@@ -14,6 +15,7 @@ Name[sv]=Bulkartefilter
 Name[tr]=Kabarcık haritası süzgeci
 Name[xx]=xxBumpmap filterxx
 Comment=Bumpmap filter
+Comment[bg]=Филтър Bumpmap
 Comment[cy]=Hidlen chwyddfap
 Comment[eo]=Bumpmap-filtrilo
 Comment[es]=Filtro de mapa de colisiones

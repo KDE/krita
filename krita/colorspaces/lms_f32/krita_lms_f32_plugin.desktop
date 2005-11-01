@@ -1,14 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=LMS Color Model (32-bit float)
+Name[bg]=Цветови модел LMS (32 бита)
 Name[cy]=Model Lliw LMS (arnawf 32-did)
 Name[da]=LMS-farvemodel (32-bit float)
 Name[es]=Modelo de color LMS (decimal de 32 bits)
-Name[ja]=LMSカラーモデル(32-bit float)
+Name[ja]=LMSカラーモデル(32ビット浮動小数)
 Name[pt]=Modelo de Cor LMS (v. flutuante de 32-bits)
 Name[pt_BR]=Modelo de Cor LMS (v. flutuante de 32-bits)
 Name[sv]=LMS-färgmodell (32-bitars flyttal)
 Comment=Color model for LMS cone space (Long Middle and Short wavelengths)
+Comment[bg]=Цветови модел за интервали LMS (дълги, средни и къси вълни)
 Comment[cy]=Model lliw ar gyfer gofod côn LMS (tonfeddi Hir, Canolig a Byr)
 Comment[es]=Modelo de color para el espacio cónico LMS (con longitudes de onda larga, media y corta)
 Comment[pt]=Modelo de cor para o espaço cónico do LMS (comprimentos de onda longos, médios e curtos)

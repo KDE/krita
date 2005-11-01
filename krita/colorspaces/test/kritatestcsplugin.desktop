@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=test Color Model
+Name[bg]=Тестване на цветови модел
 Name[cy]=profi Model Lliw
 Name[da]=test-farvemodel
 Name[en_GB]=test Colour Model
@@ -16,7 +17,7 @@ Name[sv]=Testfärgmodell
 Name[tr]=Renk Modeli test
 Name[xx]=xxtest Color Modelxx
 Comment=Color model for 8-bit/channel RGB images
-Comment[bg]=Цветови модел за 8 битови RGB изображения
+Comment[bg]=Цветови модел за 8 битови изображения RGB
 Comment[cy]=Model lliw ar gyfer delweddau RGB 8-did/sianel
 Comment[da]=Farvemodel for 8-bit/kanal RGB-billeder
 Comment[de]=Farbmodell für 8-Bit/-Kanal RGB-Bilder
@@ -31,6 +32,7 @@ Comment[fr]=Modèle de couleurs pour des images RVB en 8 bits/plage
 Comment[he]=מודל צבעים עבור תמונות RGB של 8 סיביות/ערוצים
 Comment[hu]=Színmodell 8 bit/csatorna RGB képekhez
 Comment[it]=Modello di colore per per immagini RGB a canale di 8 bit
+Comment[ja]=8ビット/チャンネル RGB画像のためのカラーモデル
 Comment[nb]=Fargemodell for RGB-bilde med 8 bit per kanal
 Comment[nl]=Kleurmodel voor 8-bit/kanaal RGB-afbeeldingen
 Comment[nn]=Fargemodell for RGB-bilete med 8 bit per kanal

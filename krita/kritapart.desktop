@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Painting and Image Editor Component
+Name[bg]=Компонент за рисуване и редактиране на изображения в KOffice
 Name[cy]=Cydran Peintio a Golygu Delweddau KOffice
 Name[eo]=Komponanto de Koffice por pentrado kaj bildkreado
 Name[es]=Componente de pintura y de edición de imágenes de KOffice
@@ -19,6 +20,7 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krita
 GenericName=Image Object
+GenericName[bg]=Обект изображение
 GenericName[br]=Tra skeudenn
 GenericName[cy]=Gwrthrych Delwedd
 GenericName[eo]=Bildobjekto

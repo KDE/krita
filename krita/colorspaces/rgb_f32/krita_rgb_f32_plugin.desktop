@@ -1,13 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (32-bit float)
+Name[bg]=Цветови модел RGB (32 бита)
 Name[cy]=Model Lliw RGB (arnawf 32-did)
 Name[da]=RGB-farvemodel (32-bit float)
 Name[eo]=RGB-a kolormodelo (32-bita glitpunkto)
 Name[es]=Modelo de color RGB (decimal de 32 bits)
 Name[et]=RGB värvimudel (32-bitine)
 Name[fr]=Modèle de couleurs RVB (flottants 32 bits)
-Name[ja]=RGBカラーモデル(32-bit float)
+Name[ja]=RGBカラーモデル(32ビット浮動小数)
 Name[pt]=Modelo de Cor RGB (v. flutuante de 32-bits)
 Name[pt_BR]=Modelo de Cor RGB (v. flutuante de 32-bits)
 Name[sv]=RGB-färgmodell (32-bitars heltal)
@@ -15,6 +16,7 @@ Name[tr]=RGB Renk Modeli (32-bit kayan)
 Name[xx]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 32-bit floating point per channel RGB images
 Comment[es]=Modelo de color decimal de 32 bits por canal para imágenes RGB
+Comment[ja]=32ビット浮動小数/チャンネル RGB画像のためのカラーモデル
 Comment[pt]=Modelo de cor para imagens RGB com 32 bits de vírgula flutuante por canal
 Comment[pt_BR]=Modelo de cor para imagens RGB com 32 bits de vírgula flutuante por canal
 Comment[sv]=Färgmodell för 32-bitars flyttal per kanal RGB-bilder

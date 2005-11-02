@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filters Gallery
+Name[es]=Galería de filtros
+Name[pt]=Galeria de Filtros
+Name[pt_BR]=Galeria de Filtros
+Name[sv]=Filtrergalleri
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery

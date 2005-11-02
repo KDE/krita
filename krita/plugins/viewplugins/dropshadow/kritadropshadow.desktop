@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Dropshadow
+Name[pt]=Sombreado
+Name[pt_BR]=Sombreado
+Name[sv]=Fallskugga
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow

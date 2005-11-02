@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Screensot
+Name[pt]=Captura
+Name[pt_BR]=Captura
+Name[sv]=Skärmdump
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

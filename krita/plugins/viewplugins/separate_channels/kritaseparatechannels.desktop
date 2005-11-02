@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Separate Channels Plugin
+Name[es]=Extensión para canales separados
+Name[pt]='Plugin' de Separação de Canais
+Name[pt_BR]='Plugin' de Separação de Canais
+Name[sv]=Insticksprogram för separata kanaler
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels

@@ -33,46 +33,46 @@
 class KisColor {
 
 public:
-    // Create an empty KisColor. It will be valid, but also black and transparent
+    /// Create an empty KisColor. It will be valid, but also black and transparent
     KisColor();
 
     virtual ~KisColor();
 
-    // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
-    // is assumed to have the current monitor profile.
+    /// Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
+    /// is assumed to have the current monitor profile.
     KisColor(const QColor & color, KisColorSpace * colorSpace);
 
-    // Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
-    // is assumed to have the current monitor profile.
+    /// Create a KisColor from a QColor. The QColor is immediately converted to native. The QColor
+    /// is assumed to have the current monitor profile.
     KisColor(const QColor & color, Q_UINT8 alpha, KisColorSpace * colorSpace);
 
-    // Create a KisColor using a native color strategy. The data is copied.
+    /// Create a KisColor using a native color strategy. The data is copied.
     KisColor(const Q_UINT8 * data, KisColorSpace * colorSpace);
 
-    // Create a KisColor by converting src into another colorspace
+    /// Create a KisColor by converting src into another colorspace
     KisColor(const KisColor &src, KisColorSpace * colorSpace);
 
-    // Copy constructor -- deep copies the colors.
+    /// Copy constructor -- deep copies the colors.
     KisColor(const KisColor & rhs);
 
-    // Effective C++, item 11
+    /// Effective C++, item 11
     KisColor &operator=(const KisColor &);
 
-    // For easy memcpy'ing etc.
+    /// For easy memcpy'ing etc.
     Q_UINT8 * data() const { return m_data; }
 
     KisColorSpace * colorSpace() const { return m_colorSpace; }
 
     KisProfile *  profile() const { return m_colorSpace -> getProfile(); }
 
-    // Convert this KisColor to the specified colorspace. If the specified colorspace is the
-    // same as the original colorspace, do nothing. Returns the converted KisColor.
+    /// Convert this KisColor to the specified colorspace. If the specified colorspace is the
+    /// same as the original colorspace, do nothing. Returns the converted KisColor.
     void convertTo(KisColorSpace * cs);
 
-    // Replace the existing color data, and colorspace with the specified data.
+    /// Replace the existing color data, and colorspace with the specified data.
     void setColor(Q_UINT8 * data, KisColorSpace * colorSpace = 0);
 
-    // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
+    /// To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
     void toQColor(QColor *c) const;
     void toQColor(QColor *c, Q_UINT8 *opacity) const;
 

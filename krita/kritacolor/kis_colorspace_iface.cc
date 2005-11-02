@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2002, 2003 Patrick Julien <freak@codepimps.org>
+ *  This file is part of the KDE project
+ *
+ *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,46 +16,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+*/
+#include <kapplication.h>
 
-#include <qwidget.h>
+#include "kis_colorspace_iface.h"
+#include "kis_colorspace.h"
 
-#include <kaction.h>
+#include <dcopclient.h>
 
-#include "kis_tool.h"
-#include "kis_tool.moc"
-
-
-class KisTool::KisToolPrivate 
+KisColorSpaceIface::KisColorSpaceIface( KisColorSpace * parent )
+	: DCOPObject(parent->id().id().latin1())
 {
-public:
-
-    QWidget * optionWidget;
-};
-
-KisTool::KisTool()
-{
-    m_action = 0;
-    m_ownAction = false;
-    d = new KisToolPrivate();
+	m_parent = parent;
 }
 
-KisTool::~KisTool()
+QByteArray KisColorSpaceIface::invertColor(QByteArray src, Q_INT32 nPixels)
 {
-    if (m_ownAction) {
-        delete m_action;
-        m_action = 0;
-    }
-}
+    m_parent->invertColor((Q_UINT8*)src.data(), nPixels);
+    return src;
 
-QWidget* KisTool::createOptionWidget(QWidget* parent)
-{
-    d->optionWidget = new QWidget(parent);
-    return d->optionWidget;
-}
-
-QWidget* KisTool::optionWidget()
-{
-    return d->optionWidget;
 }
 

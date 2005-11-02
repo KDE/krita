@@ -113,7 +113,6 @@ public:
 private:
     void visit(KisPainter& gc, KisPaintDeviceImplSP dev, Q_INT32 opacity)
     {
-//         kdDebug() << "\tpainting device " << dev->name() << ", " << dev->colorSpace()->id().name() << "\n";
         Q_INT32 w = m_rc.width();
         Q_INT32 h = m_rc.height();
         Q_INT32 dx = m_rc.x();

@@ -62,11 +62,18 @@ class KisAbstractColorSpace : public KisColorSpace {
 
 public:
 
+    /**
+     * @param id The unique human and machine readable identifiation of this colorspace
+     * @param cmType the lcms type indentification for this colorspace, may be 0
+     * @param colorSpaceSignature the icc identification for this colorspace, may be 0
+     * @param parent the registry that owns this instance
+     * @param profile the profile this colorspace uses for transforms
+     */
     KisAbstractColorSpace(const KisID & id,
                           DWORD cmType,
                           icColorSpaceSignature colorSpaceSignature,
                           KisColorSpaceFactoryRegistry * parent,
-                          KisProfile *p);
+                          KisProfile *profile);
 
     void init();
 

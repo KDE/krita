@@ -114,11 +114,9 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
                 means[i] /= pixelsnb;
                 if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
                 {
-//                     kdDebug() << ABS(means[i] - srcIt.oldRawData()[i]) << " " << ( 0.1 * means[i] ) << " " << means[i] << " " << (int)srcIt.oldRawData()[i] << endl;
                     ++depthbad;
                 }
             }
-//             kdDebug() << depthbad << " " << (depth / 2) << endl;
             // Change the value of the pixel, if the pixel is too much different
             if(depthbad > depth / 2)
             {

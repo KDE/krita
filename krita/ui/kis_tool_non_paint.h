@@ -67,8 +67,6 @@ public:
 
     virtual QCursor cursor();
     virtual void setCursor(const QCursor& cursor);
-    virtual QWidget* createOptionWidget(QWidget* parent) ;
-    virtual QWidget* optionWidget();
 
     virtual enumToolType toolType() { return TOOL_CANVAS; }
 

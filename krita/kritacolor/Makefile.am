@@ -14,6 +14,8 @@ endif
 libkritacolor_la_SOURCES = \
     kis_color.cc \
     kis_colorspace.cc \
+    kis_colorspace_iface.cc \
+    kis_colorspace_iface.skel \
     kis_composite_op.cc \
     kis_profile.cc \
     kis_histogram_producer.cc \

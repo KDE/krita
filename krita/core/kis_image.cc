@@ -487,7 +487,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
 
 
-KisImageIface *KisImage::dcopObject()
+DCOPObject * KisImage::dcopObject()
 {
     if (!m_dcop) {
         m_dcop = new KisImageIface(this);

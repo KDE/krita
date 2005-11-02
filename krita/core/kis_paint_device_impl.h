@@ -364,6 +364,9 @@ public:
     /** Deselect the selection for this paintdevice. */
     void deselect();
 
+    /** Reinstates the old selection */
+    void reselect();
+        
     /** Clear the selected pixels from the paint device */
     void clearSelection();
 
@@ -412,10 +415,12 @@ private:
 
     // Whether the selection is active
     bool m_hasSelection;
+    bool m_selectionDeselected;
+    
     // Contains the actual selection. For now, there can be only
     // one selection per layer. XXX: is this a limitation?
     KisSelectionSP m_selection;
-
+    
     DCOPObject * m_dcop;
 
 };

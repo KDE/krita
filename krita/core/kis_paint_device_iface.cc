@@ -19,11 +19,13 @@
 */
 #include <kapplication.h>
 
+#include <dcopclient.h>
+
 #include "kis_paint_device_iface.h"
+#include "kis_colorspace_iface.h"
+#include "kis_colorspace.h"
 
 #include "kis_paint_device_impl.h"
-
-#include <dcopclient.h>
 
 KisPaintDeviceImplIface::KisPaintDeviceImplIface( KisPaintDeviceImpl * parent )
     : DCOPObject(parent->name().utf8())
@@ -56,7 +58,7 @@ Q_INT32 KisPaintDeviceImplIface::nChannels() const
 QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     QByteArray b (w * h * m_parent->pixelSize());
-    
+
     m_parent->readBytes((Q_UINT8*)b.data(), x, y, w, h);
     return b;
 }
@@ -64,4 +66,21 @@ QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
 void KisPaintDeviceImplIface::writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_parent->writeBytes((Q_UINT8*)bytes.data(), x, y, w, h);
+}
+
+DCOPRef KisPaintDeviceImplIface::colorSpace() const
+{
+    KisColorSpace * cs = m_parent->colorSpace();
+    if ( !cs )
+        return DCOPRef();
+    else
+        return DCOPRef( kapp->dcopClient()->appId(),
+                        cs->dcopObject()->objId(),
+                        "KisColorSpaceIface" );
+}
+
+void KisPaintDeviceImplIface::setColorSpace(DCOPRef)
+{
+    // XXX: Figure out how to get the correct object from
+    //      the dcopref
 }

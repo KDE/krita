@@ -2933,6 +2933,7 @@ void KisView::setHDRExposure(float exposure)
 {
     if (exposure != m_HDRExposure) {
         m_HDRExposure = exposure;
+        notifyObservers();
         updateCanvas();
     }
 }

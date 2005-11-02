@@ -26,6 +26,8 @@
 #include "kis_composite_op.h"
 #include "kis_channelinfo.h"
 
+class DCOPObject;
+
 class KisPixel;
 class KisPixelRO;
 class KisProfile;
@@ -46,6 +48,8 @@ public:
 
     KisColorSpace();
     virtual ~KisColorSpace();
+
+    virtual DCOPObject * dcopObject();
 
 public:
 
@@ -130,7 +134,7 @@ public:
     virtual bool valid() = 0;
 
     /**
-     * Returns true if the colorspace supports channel values outside the 
+     * Returns true if the colorspace supports channel values outside the
      * (normalised) range 0 to 1.
      */
     virtual bool hasHighDynamicRange() const = 0;
@@ -301,7 +305,7 @@ public:
      */
     virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2) = 0;
 
-    
+
     /**
      * Mix the colors given their weights and return in dst
      * The sum of weights is assumed 255 */
@@ -342,6 +346,11 @@ public:
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op) = 0;
+
+private:
+
+    DCOPObject * m_dcop;
+
 };
 
 class KisColorSpaceFactory {

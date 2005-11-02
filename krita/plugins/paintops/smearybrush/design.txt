@@ -1,0 +1,3 @@
+The smeary brush mixes the colors on the canvas with the paint color and deposits 
+the mixture onto the canvas in the next brush stroke. This should be extended with
+the concept of wetness to make sure paint dries and doesn't smear.

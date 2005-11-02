@@ -3,7 +3,6 @@ Code organization
     * Separate all interfaces from the implementations and place them in krita/sdk. Use these interfaces for DCOP.
       Problem: what to do when it is useful for plugins to derive from a base class with some default functionality. Composition
       with delegation here? Go through patterns book.
-    * Separate the core Krita image library from the part; place the former in krita/libkrita and the latter in krita/kritapart
 
 Bugs
     * On opening a second image after loading first image but not changing it,
@@ -30,7 +29,6 @@ Transform tool (CBR)
 
 Integration
 
-	(BSAR, akademy)
 	* A krita document embedded in KWord has the wrong scaling and transparency
 	* A krita document embedded in another document prints at the wrong place
 	* Embedded KOffice objects don't paint themselves correctly
@@ -143,15 +141,6 @@ User Interface
 		* Add history docker
         * Convert the layer & channel box to a qlistbox; enable the channel box.
 
-   * Use OpenGL if available to composite checkerboard with image so
-          while scrolling the checks can stay in place, and the partially
-          transparent image move. This maybe needs Qt 4. OpenGL can also be
-  	  used to bumpmap images on a height-field canvas.
-	  we now have a checkered background layer that we composite everything
-	  on, but in future we should composite the image first, and then render
-	  it onto a background image -- or not, if another KOffice app wants it
-	  rendered with transparency. But that'd probably better wait until Qt 4,
-	  where it would be a hardware accelerated snip.
     * Doing a copy of a selection, but having the wrong layer selected gives 
       me an empty selection (all transparent).  Pressing paste should say so 
       (popup) instead of creating a new useless layer.

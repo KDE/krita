@@ -42,33 +42,109 @@ public:
     virtual ~KisCanvasController() {};
 
 public:
+
+    /**
+     * @return the canvas object
+     */
     virtual KisCanvas *canvas() const = 0;
+
+
+    /**
+     * @return the value of the horizontal scrollbar.
+     */
     virtual Q_INT32 horzValue() const = 0;
+
+    /**
+     * @return the value of the vertical scrollbar
+     */
     virtual Q_INT32 vertValue() const = 0;
     
+    /**
+     * Sets the horizontal and vertical scrollbars to the specified values
+     *
+     * @param x the value the horizontal scrollbar is set to
+     * @param y the value the vertical scrollbar is set to
+     */
     virtual void scrollTo(Q_INT32 x, Q_INT32 y) = 0;
     
+    /**
+     * Tell all of the canvas to repaint itself.
+     */
     virtual void updateCanvas() = 0;
+
+
+    /**
+     * Tell the canvas to repaint the rectangle defined by x, y, w and h.
+     * The coordinates are image coordinates.
+     */
     virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+
+    /**
+     * Tell the canvas repaint the specified rectangle. The coordinates
+     * are image coordinates, not view coordinates.
+     */
     virtual void updateCanvas(const QRect& rc) = 0;
     
+    /**
+     * Increase the zoomlevel one step
+     */
     virtual void zoomIn() = 0;
+
+    /**
+     * Increase the zoomlevel one step and make sure that x,y is the center point of the view.
+     *
+     * @param x The x coordinate of the visible point in image coordinates
+     * @param y the y coordinate of the visible point in image coordinates
+     */
     virtual void zoomIn(Q_INT32 x, Q_INT32 y) = 0;
     
+    /**
+     * Decrease the zoomlevel one step
+     */
     virtual void zoomOut() = 0;
+
+
+    /**
+     * Decrease the zoomlevel one step and make sure that x,y is the center point of the view.
+     *
+     * @param x the x coordinate of the visible point in image coordinates
+     * @param y the y coordinate of the visible point in image coordinates
+     */
     virtual void zoomOut(Q_INT32 x, Q_INT32 y) = 0;
     
     /**
-     * To centre the view on a point you can use KisView::zoomAroundPoint(Q_INT32 
-     * x, Q_INT32 y, double zf), which centres on the given point, with the 
-     * given zoom. 
+     * To centre the view on the given point with the given zoom factor.
+     *
+     * @param x the x coordinate of the center point in image coordinates
+     * @param y the y coordinate of the center point in image coordinates
+     * @param zf the zoomfactor
      */
     virtual void zoomAroundPoint(double x, double y, double zf) = 0;
+
+    /**
+     * Make the rect defined by x, y, w and h visible, zooming in or
+     * out as necessary. The view will be centered around the center point
+     * of the specified rect.
+     */
     virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+
+    /**
+     * Make the rect defined by x, y, w and h visible, zooming in or
+     * out as necessary. The view will be centered around the center point
+     * of the specified rect.
+     */
     virtual void zoomTo(const QRect& r) = 0;
+    
+    /**
+     * Make the rect defined by x, y, w and h visible, zooming in or
+     * out as necessary. The view will be centered around the center point
+     * of the specified rect.
+     */
     virtual void zoomTo(const KisRect& r) = 0;
     
     /**
+     * Conversion functions from view coordinates to image coordinates
+     *
      * You can get the rectangle of the image that's visible using the 
      * viewToWindow() functions (KisCanvasController). E.g. 
      * viewToWindow(QRect(0, 0, canvasWidth, canvasHeight)).
@@ -82,15 +158,36 @@ public:
     virtual KisRect viewToWindow(const KisRect& rc) = 0;
     virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y) = 0;
     
+    /**
+     * Conversion functions from image coordinates to view coordinates
+     */
     virtual QPoint windowToView(const QPoint& pt) = 0;
     virtual KisPoint windowToView(const KisPoint& pt) = 0;
     virtual QRect windowToView(const QRect& rc) = 0;
     virtual KisRect windowToView(const KisRect& rc) = 0;
     virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;
     
-    virtual QCursor setCanvasCursor(const QCursor &) = 0;
+    /**
+     * Set the cursor shown when the pointer is over the canvas widget to 
+     * the specified cursor.
+     *
+     * @param cursor the new cursor
+     * @return the old cursor
+     */
+    virtual QCursor setCanvasCursor(const QCursor & cursor) = 0;
     
+    /**
+     * Set the active input device to the specified input device, This
+     * could be a mouse, a stylus, an eraser or any other pointing input
+     * device.
+     *
+     * @param inputDevice the new input device
+     */
     virtual void setInputDevice(enumInputDevice inputDevice) = 0;
+
+    /**
+     * @return the current input device, such as a mouse or a stylus
+     */
     virtual enumInputDevice currentInputDevice() const = 0;
 
 

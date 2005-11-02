@@ -372,22 +372,22 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(
 {
         if (this != &rhs) {
                 m_owner = 0;
-        m_dcop = rhs.m_dcop;
+                m_dcop = rhs.m_dcop;
                 if (rhs.m_datamanager) {
-            m_datamanager = new KisDataManager(*rhs.m_datamanager);
-            Q_CHECK_PTR(m_datamanager);
-        }
-        m_extentIsValid = rhs.m_extentIsValid;
+                    m_datamanager = new KisDataManager(*rhs.m_datamanager);
+                    Q_CHECK_PTR(m_datamanager);
+                }
+                m_extentIsValid = rhs.m_extentIsValid;
                 m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
                 m_name = rhs.m_name;
                 m_compositeOp = rhs.m_compositeOp;
-        m_colorSpace = rhs.m_colorSpace;
-        m_hasSelection = false;
-        m_selection = 0;
-        m_pixelSize = rhs.m_pixelSize;
-        m_nChannels = rhs.m_nChannels;
+                m_colorSpace = rhs.m_colorSpace;
+                m_hasSelection = false;
+                m_selection = 0;
+                m_pixelSize = rhs.m_pixelSize;
+                m_nChannels = rhs.m_nChannels;
         }
 }
 
@@ -819,8 +819,13 @@ void KisPaintDeviceImpl::emitSelectionChanged(const QRect& r) {
 }
 
 
-KisSelectionSP KisPaintDeviceImpl::selection(){
-    if (!m_selection) {
+KisSelectionSP KisPaintDeviceImpl::selection()
+{
+    // If there either is no selection yet,
+    // or there is a selection but it has been deselected
+    // create a new selection
+    // otherwise, make do with the current selection
+    if (!m_selection || (m_selection && m_selectionDeselected)) {
         m_selection = new KisSelection(this, "layer selection for: " + name());
         Q_CHECK_PTR(m_selection);
         m_selection -> setVisible(true);
@@ -829,6 +834,7 @@ KisSelectionSP KisPaintDeviceImpl::selection(){
     }
 
     m_hasSelection = true;
+    m_selectionDeselected = false;
 
     return m_selection;
 }
@@ -842,7 +848,16 @@ bool KisPaintDeviceImpl::hasSelection()
 
 void KisPaintDeviceImpl::deselect()
 {
-    m_hasSelection = false;
+    if (m_selection && m_hasSelection) {
+        m_hasSelection = false;
+        m_selectionDeselected = true;
+    }
+}
+
+void KisPaintDeviceImpl::reselect()
+{
+    m_hasSelection = true;
+    m_selectionDeselected = false;
 }
 
 void KisPaintDeviceImpl::addSelection(KisSelectionSP selection) {

@@ -52,6 +52,7 @@
 
 #endif // Q_WS_X11
 
+
 class KisEvent;
 class KisMoveEvent;
 class KisButtonPressEvent;

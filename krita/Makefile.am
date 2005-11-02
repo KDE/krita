@@ -45,7 +45,7 @@ messages: rc.cpp
 	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` ui/kis_aboutdata.h -o $(podir)/krita.pot
 	rm -f i18ndata
 
-DOXYGEN_EXCLUDE = CImg.h
+DOXYGEN_EXCLUDE = CImg.h colorspaces plugins kritacolor/colorspaces core/tiles
 include $(top_srcdir)/admin/Doxyfile.am
 
 kde_services_DATA = kritapart.desktop

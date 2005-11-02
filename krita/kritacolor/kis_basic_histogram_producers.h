@@ -30,7 +30,7 @@
 
 class KisBasicHistogramProducer : public KisHistogramProducer {
 public:
-    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs);
+    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *colorSpace);
     virtual ~KisBasicHistogramProducer() {}
 
     virtual void clear();
@@ -82,24 +82,24 @@ protected:
 
 class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *cs);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const { return 1.0; }
 };
 
 class KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *cs);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
 
 class KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *cs);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -107,8 +107,8 @@ public:
 #if HAVE_OPENEXR
 class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *cs);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs);
+    KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -122,11 +122,11 @@ public:
  */
 template<class T> class KisBasicHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
-    KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *cs)
-        : KisHistogramProducerFactory(id), m_cs(cs) {}
+    KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *colorSpace)
+        : KisHistogramProducerFactory(id), m_cs(colorSpace) {}
     virtual ~KisBasicHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
-    virtual bool isCompatibleWith(KisColorSpace* cs) const { return cs -> id() == m_cs -> id(); }
+    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace -> id() == m_cs -> id(); }
 protected:
     KisColorSpace *m_cs;
 };

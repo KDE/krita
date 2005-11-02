@@ -136,7 +136,8 @@ KInstance* KisFactory::instance()
         s_instance -> dirs() -> addResourceType("kis_profiles",
                           KStandardDirs::kde_default("data") + "krita/profiles/");
 
-        s_instance -> dirs() -> addResourceDir("kis_profiles", "/usr/share/color/icc/");
+// XXX: Is this why the open dialog always st arts in icc
+//        s_instance -> dirs() -> addResourceDir("kis_profiles", "/usr/share/color/icc/");
 
         s_instance -> dirs() -> addResourceType("kis_palettes",
                           KStandardDirs::kde_default("data") + "krita/palettes/");

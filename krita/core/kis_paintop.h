@@ -42,7 +42,7 @@ class KisPaintBox;
 
 /**
  * This class keeps information that can be used in the painting process, for example by
- * bruses.
+ * brushes.
  **/
 class KRITACORE_EXPORT KisPaintInformation {
 public:

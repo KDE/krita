@@ -45,6 +45,9 @@ class KisDoubleClickEvent;
 class KisMoveEvent;
 class KisCanvasPainter;
 
+
+class KisToolPrivate;
+
 enum enumToolType {
     TOOL_SHAPE = 0,   // Geometric shapes like ellipses and lines
     TOOL_FREEHAND = 1, // Freehand drawing tools
@@ -84,8 +87,8 @@ public:
 
     virtual QCursor cursor() = 0;
     virtual void setCursor(const QCursor& cursor) = 0;
-    virtual QWidget* createOptionWidget(QWidget* parent) = 0;
-    virtual QWidget* optionWidget() = 0;
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
     KRadioAction *action() const { return m_action; }
 
     // Methods for integration with karbon-style toolbox
@@ -103,6 +106,11 @@ private:
 protected:
     KRadioAction *m_action;
     bool m_ownAction;
+
+private:
+    class KisToolPrivate;
+    KisToolPrivate * d;
+    
 };
 
 #endif // KIS_TOOL_H_

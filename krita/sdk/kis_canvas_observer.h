@@ -21,12 +21,29 @@
 
 class KisCanvasSubject;
 
+/**
+ * This is the base interface plugins use to implement the Observer
+ * design pattern. Observer can register themselves with an implementation
+ * of KisCanvasSubject. The KisCanvasSubject will then call update()
+ * on all registered observers whenever something interesting has happened.
+ *
+ * (This is something my predecessor should have done with signals and slots,
+ * I think...)
+ */
 class KisCanvasObserver {
 public:
     KisCanvasObserver() {};
     virtual ~KisCanvasObserver() {};
 
 public:
+    /**
+     * Implement this function to query the KisCanvasSubject implementation
+     * about state that may be interesting, such as current paint color and
+     * so on.
+     *
+     * @param subject the KisCanvasSubject that may know something that's 
+     *                interesting for us.
+     */
     virtual void update(KisCanvasSubject *subject) = 0;
 
 private:

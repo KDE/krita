@@ -43,7 +43,6 @@ class KisColorSpace;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
-class DCOPObject;
 class KCommand;
 class KisCompositeOp;
 class KisColor;
@@ -60,7 +59,7 @@ public:
     KisImage(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height, KisColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
-    virtual KisImageIface *dcopObject();
+    virtual DCOPObject *dcopObject();
 
 public:
     typedef enum enumPaintFlags {
@@ -313,7 +312,7 @@ private:
     KisUndoAdapter *m_adapter;
     //KisGuideMgr m_guides;
 
-    KisImageIface *m_dcop;
+    DCOPObject *m_dcop;
 
     vKisAnnotationSP m_annotations;
 

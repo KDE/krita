@@ -35,7 +35,7 @@ public:
 public:
     /**
      * add an object to the registry
-     * @param _T the item to add (NOTE: _T must have an KisID id() function)
+     * @param item the item to add (NOTE: _T must have an KisID id() function)
      */
     void add(_T item)
     {
@@ -44,12 +44,11 @@ public:
     /**
      * add an object to the registry
      * @param id the id of the object
-     * @param _T the item
+     * @param item the item
      */
     void add(KisID id, _T item)
     {
         m_storage.insert(typename storageMap::value_type(id, item));
-        //kdDebug() << "Added ID: " << id.id() << ", " << id.name() << "\n";
     }
     /**
      * This function allow to get an object from its KisID
@@ -64,7 +63,6 @@ public:
             p = it -> second;
         }
         if (!p) {
-            //kdDebug() << "No item " << name.id() << ", " << name.name() << " found\n";
             return 0;
         }
         return p;

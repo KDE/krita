@@ -533,7 +533,7 @@ void KisSelectionManager::selectAll()
 
 void KisSelectionManager::deselect()
 {
-        KisImageSP img = m_parent -> currentImg();
+    KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
     KisLayerSP layer = img -> activeLayer();
@@ -636,7 +636,7 @@ void KisSelectionManager::reselect()
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Reselect"), layer.data());
     Q_CHECK_PTR(t);
 
-    layer -> selection(); // sets hasSelection=true
+    layer -> reselect(); // sets hasSelection=true
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);

@@ -1,4 +1,6 @@
-/* This file is part of the KDE project
+/*
+ *  This file is part of the KDE project
+ *
  *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -15,7 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef _KIS_PAINT_DEVICE_IFACE_H
 #define _KIS_PAINT_DEVICE_IFACE_H
 
@@ -67,6 +68,16 @@ k_dcop:
      * the paint device will grow.
      */
     void writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+
+    /**
+     * Get the colorspace of this image
+     */
+    DCOPRef colorSpace() const;
+
+    /**
+     * Set the colorspace of this image
+     */
+    void setColorSpace(DCOPRef colorSpace);
 
 
 private:

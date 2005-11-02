@@ -17,8 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qwidget.h>
-
 #include <kdebug.h>
 
 #include "kis_image.h"
@@ -87,17 +85,6 @@ void KisToolNonPaint::keyPress(QKeyEvent *)
 
 void KisToolNonPaint::keyRelease(QKeyEvent *)
 {
-}
-
-
-QWidget* KisToolNonPaint::createOptionWidget(QWidget* /*parent*/)
-{
-    return 0;
-}
-
-QWidget* KisToolNonPaint::optionWidget()
-{
-    return 0;
 }
 
 QCursor KisToolNonPaint::cursor()

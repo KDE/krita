@@ -246,9 +246,6 @@ void KisLayerBox::slotSetCurrentItem(int n)
 {
     if (n != m_lst -> listLayers -> currentItem()) {
         m_lst -> listLayers -> setSelected(n, true);
-    } else {
-        //kdDebug() << "Not calling setSelected as is same\n";
-
     }
     m_lst -> bnRaise -> setEnabled(n > 0);
     m_lst -> bnLower -> setEnabled((Q_UINT32)n < m_lst -> listLayers -> count() - 1);

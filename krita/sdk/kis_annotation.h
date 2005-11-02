@@ -34,19 +34,43 @@
  * An annotation can be of something like a QByteArray or a QString op a more specific
  * datatype that can be attached to an image (or maybe later, if needed, to a layer)
  * and contains data that must be associated with an image for purposes of import/export.
+ * 
+ * Annotations will be saved to krita images and may be exported in filetypes that support
+ * them.
+ *
+ * Examples of annotations are EXIF data and ICC profiles.
  */
 class KisAnnotation : public KShared {
 
 
 public:
 
+    /**
+     * Creates a new annotation object. The annotation object cannot be changed later
+     *
+     * @param type a non-localized string identifying the type of the annotation
+     * @param description a localized string describing the annotation
+     * @param data a binary blob containing the annotation data
+     */
     KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
         : m_type(type),
           m_description(description),
           m_annotation(data) {};
 
+    /**
+     * @return a non-localized string identifiying the type of the annotation
+     */
     QString & type() {return m_type;};
+
+    /**
+     * @return a localized string describing the type of the annotations
+     *         for user interface purposes.
+     */
     QString & description() {return m_description;};
+
+    /**
+     * @return a binary blob representation of this annotation
+     */
     QByteArray & annotation() { return m_annotation;};
 
 private:

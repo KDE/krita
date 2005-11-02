@@ -1,6 +1,5 @@
-/*
- * This file is part of the KDE project
- *  Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+/* This file is part of the KDE project
+ *  Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,55 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_IFACE_H
-#define KIS_IMAGE_IFACE_H
+#ifndef _KIS_COLORSPACE_IFACE_H
+#define _KIS_COLORSPACE_IFACE_H
 
 #include <dcopref.h>
 #include <dcopobject.h>
 
-
 #include <qstring.h>
 
-class KisImage;
-class KisPaintDeviceImplIface;
+class KisColorSpace;
 
-class KisImageIface : virtual public DCOPObject
+class KisColorSpaceIface : public DCOPObject
 {
-    K_DCOP
+	K_DCOP
 public:
-    KisImageIface( KisImage *img_ );
+	KisColorSpaceIface( KisColorSpace * parent );
 k_dcop:
 
-    int height() const;
-    int width() const;
-    bool empty() const;
-
-    void setName(const QString& name);
-
-    void rotateCCW();
-    void rotateCW();
-    void rotate180();
-    void rotate(double angle);
-
-    /**
-     * Get the active painting device.
-     */
-    DCOPRef activeDevice();
-
-    /**
-     * Get the colorspace of this image
-     */
-    DCOPRef colorSpace() const;
-
-    /**
-     * Set the colorspace of this image
-     */
-    void setColorSpace(DCOPRef colorSpace);
-
+    QByteArray invertColor(QByteArray src, Q_INT32 nPixels);
 
 private:
 
-    KisImage *m_img;
+	KisColorSpace *m_parent;
 };
 
 #endif

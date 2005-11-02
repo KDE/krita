@@ -88,3 +88,20 @@ DCOPRef KisImageIface::activeDevice()
                         "KisPaintDeviceImplIface");
 
 }
+
+DCOPRef KisImageIface::colorSpace() const
+{
+    KisColorSpace * cs = m_img->colorSpace();
+    if ( !cs )
+        return DCOPRef();
+    else
+        return DCOPRef( kapp->dcopClient()->appId(),
+                        cs->dcopObject()->objId(),
+                        "KisColorSpaceIface" );
+}
+
+void KisImageIface::setColorSpace(DCOPRef colorSpace)
+{
+    // XXX: Figure out how to get the correct object from
+    //      the dcopref
+}

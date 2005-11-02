@@ -181,7 +181,6 @@ void waveuntrans(Wavelet* wav, Wavelet* buff, uint halfsize, KisColorSpace* cs)
         memcpy(wav->coeffs + p, buff->coeffs + p, l);
     }
     
-    kdDebug() << halfsize << " " << wav->size << endl;
     if(halfsize != wav->size/2)
     {
         waveuntrans(wav, buff, halfsize*2, cs);

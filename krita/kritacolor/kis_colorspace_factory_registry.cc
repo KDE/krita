@@ -24,7 +24,7 @@
 #include <kparts/componentfactory.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-
+#include "kis_debug_areas.h"
 #include "kis_colorspace.h"
 #include "kis_profile.h"
 #include "kis_colorspace_factory_registry.h"

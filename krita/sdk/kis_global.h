@@ -20,42 +20,12 @@
 #define KISGLOBAL_H_
 
 #include <config.h>
-
 #include LCMS_HEADER
 #include <limits.h>
 #include <qglobal.h>
 #include <kglobal.h>
-//include <koGlobal.h>
-//include <koUnit.h>
-
-#include "config.h"
-
 
 #define KRITA_VERSION VERSION
-
-#define DBG_AREA_CORE 41001
-#define DBG_AREA_REGISTRY 40002
-#define DBG_AREA_TOOLS 41003
-#define DBG_AREA_CMS 41004
-#define DBG_AREA_FILTERS 41005
-#define DBG_AREA_PLUGINS 41006
-#define DBG_AREA_UI 41007
-#define DBG_AREA_FILE 41008
-#define DBG_AREA_MATH 41009
-#define DBG_AREA_RENDER 41010
-#define DBG_AREA_SCRIPT 41011
-/**
- * Mime type for this app - not same as file type, but file types
- * can be associated with a mime type and are opened with applications
- * associated with the same mime type
- */
-#define APP_MIMETYPE "application/x-krita"
-
-/**
- * Mime type for native file format
- */
-#define NATIVE_MIMETYPE "application/x-kra"
-
 
 const Q_UINT8 Q_UINT8_MAX = UCHAR_MAX;
 

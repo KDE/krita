@@ -61,6 +61,11 @@ public:
      * and paintop
      */
     virtual void attach(KisCanvasObserver *observer) = 0;
+
+    /**
+     * From now on, the specified observer will no longer be informed
+     * of changes.
+     */
     virtual void detach(KisCanvasObserver *observer) = 0;
     
     /**
@@ -135,18 +140,30 @@ public:
      */
     virtual double zoomFactor() const = 0;
     
+    /**
+     * retrieve the undo adapater -- there is one undo adapter
+     * per document, and it collects all transactions
+     */
     virtual KisUndoAdapter *undoAdapter() const = 0;
     
+    /**
+     * @return the interface to the canvas widget
+     */
     virtual KisCanvasController *canvasController() const = 0;
     
+    /// XXX: Remove this method
     virtual KisToolControllerInterface *toolController() const = 0;
     
+    /// XXX: Remove this method
     virtual KisDoc * document() const = 0;
     
+    /// XXX: Remove this method
     virtual KisProgressDisplayInterface *progressDisplay() const = 0;
     
+    /// XXX: Remove this method
     virtual KisSelectionManager * selectionManager() = 0;
 
+    /// XXX: Remove this method
     virtual KoPaletteManager * paletteManager() = 0;
 
     /**

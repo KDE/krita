@@ -41,10 +41,11 @@
 #include <kopalettemanager.h>
 #include <koMainWindow.h>
 
+#include <kis_debug_areas.h>
 #include "kis_meta_registry.h"
 #include <kis_factory.h>
 #include <kis_image.h>
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_view.h>
 #include <kis_colorspace_factory_registry.h>

@@ -18,8 +18,9 @@
  */
 #include <kdebug.h>
 #include <klocale.h>
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 #include "kis_filter_strategy.h"
+#include <math.h>
 
 double KisHermiteFilterStrategy::valueAt(double t) const {
         /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */

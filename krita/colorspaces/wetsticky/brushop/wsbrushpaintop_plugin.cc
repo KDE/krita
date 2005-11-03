@@ -26,9 +26,8 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_factory.h>
 #include <kis_paintop_registry.h>
-
+#include <kis_debug_areas.h>
 #include "kis_wsbrushop.h"
 
 #include "wsbrushpaintop_plugin.h"
@@ -40,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( kritawsbrushpaintop, WSBrushPaintOpPluginFactory( "k
 WSBrushPaintOpPlugin::WSBrushPaintOpPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-           setInstance(WSBrushPaintOpPluginFactory::instance());
+    setInstance(WSBrushPaintOpPluginFactory::instance());
 
      kdDebug(DBG_AREA_PLUGINS) << "WSBrushPaintOpPlugin. Class: "
            << className()

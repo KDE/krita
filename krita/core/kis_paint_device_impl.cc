@@ -821,20 +821,18 @@ void KisPaintDeviceImpl::emitSelectionChanged(const QRect& r) {
 
 KisSelectionSP KisPaintDeviceImpl::selection()
 {
-    // If there either is no selection yet,
-    // or there is a selection but it has been deselected
-    // create a new selection
-    // otherwise, make do with the current selection
-    if (!m_selection || (m_selection && m_selectionDeselected)) {
+    if ( m_selectionDeselected && m_selection ) {
+        m_selection->setVisible( true );
+        m_selectionDeselected = false;
+    }
+    else if (!m_selection) {
         m_selection = new KisSelection(this, "layer selection for: " + name());
         Q_CHECK_PTR(m_selection);
         m_selection -> setVisible(true);
         m_selection -> setX(m_x);
         m_selection -> setY(m_y);
     }
-
     m_hasSelection = true;
-    m_selectionDeselected = false;
 
     return m_selection;
 }

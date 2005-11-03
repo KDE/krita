@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <kis_debug_areas.h>
 #include "kis_cmyk_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_color_conversions.h"

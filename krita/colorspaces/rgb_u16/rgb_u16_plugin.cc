@@ -23,7 +23,7 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_colorspace_factory_registry.h>
 
 #include "rgb_u16_plugin.h"

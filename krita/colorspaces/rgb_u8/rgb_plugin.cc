@@ -30,7 +30,9 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kis_debug_areas.h>
 
+#include <kis_debug_areas.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_basic_histogram_producers.h>
 

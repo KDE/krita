@@ -17,7 +17,6 @@ libkritaui_la_SOURCES = \
     kcurve.cc \
     kis_autobrush.cc \
     kis_autogradient.cc \
-    kis_birdeye_box.cc \
     kis_boundary_painter.cc \
     kis_brush_chooser.cc \
     kis_canvas.cc \
@@ -83,6 +82,7 @@ libkritaui_la_SOURCES = \
     kis_tool_paint.cc \
     kis_tool_registry.cc \
     kis_tool_shape.cc \
+    kis_birdeye_box.cc \
     kis_view.cc \
     kis_view_iface.cc \
     kis_view_iface.skel \

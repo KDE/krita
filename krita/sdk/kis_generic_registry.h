@@ -26,6 +26,15 @@
 
 #include <kis_id.h>
 
+/**
+ * Base class for registry objects in Krita. Krita registries
+ * contain resources such as filters, tools or colorspaces.
+ *
+ * Items are mapped by KisID. A KisID is the combination of 
+ * a non-localized string that can be used in files and a
+ * user-visible, translated string that can be used in the 
+ * user interface.
+ */
 template<typename _T>
 class KisGenericRegistry {
     typedef std::map<KisID, _T> storageMap;
@@ -33,6 +42,7 @@ public:
     KisGenericRegistry() { };
     virtual ~KisGenericRegistry() { };
 public:
+
     /**
      * add an object to the registry
      * @param item the item to add (NOTE: _T must have an KisID id() function)

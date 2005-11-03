@@ -26,7 +26,8 @@
 #include <kservice.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
-
+#include "kis_debug_areas.h"
+#include <math.h>
 #include "kis_types.h"
 #include "kis_filter_registry.h"
 #include "kis_paint_device_impl.h"

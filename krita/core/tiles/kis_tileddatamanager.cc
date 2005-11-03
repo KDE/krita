@@ -23,6 +23,7 @@
 #include <koStore.h>
 
 #include "kis_global.h"
+#include "kis_debug_areas.h"
 #include "kis_tileddatamanager.h"
 #include "kis_tilediterator.h"
 #include "kis_tile.h"

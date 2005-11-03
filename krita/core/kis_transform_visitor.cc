@@ -20,6 +20,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "kis_debug_areas.h"
 #include "kis_paint_device_impl.h"
 #include "kis_selection.h"
 #include "kis_transform_visitor.h"

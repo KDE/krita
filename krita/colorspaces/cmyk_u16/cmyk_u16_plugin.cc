@@ -23,10 +23,10 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_basic_histogram_producers.h>
-
+#include <kis_debug_areas.h>
 #include "cmyk_u16_plugin.h"
 #include "kis_cmyk_u16_colorspace.h"
 

@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <kis_debug_areas.h>
 #include "kis_abstract_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_image.h"

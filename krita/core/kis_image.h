@@ -23,6 +23,9 @@
 #include <qvaluevector.h>
 #include <qmutex.h>
 
+#include <config.h>
+#include LCMS_HEADER
+
 #include <ksharedptr.h>
 #include <kurl.h>
 
@@ -30,7 +33,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-//#include "kis_guide.h"
 #include "kis_annotation.h"
 #include <koffice_export.h>
 

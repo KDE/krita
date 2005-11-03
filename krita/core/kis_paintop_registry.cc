@@ -32,7 +32,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
 #include "kis_id.h"
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 

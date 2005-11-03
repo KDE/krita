@@ -45,7 +45,7 @@
 #include "kis_channelinfo.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"

@@ -21,7 +21,7 @@
 #include <kdebug.h>
 
 #include <kis_brush.h>
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_paint_device_impl.h>
 #include <kis_painter.h>
 #include <kis_types.h>

@@ -27,6 +27,7 @@
 #include <kis_colorspace_factory_registry.h>
 #include <kis_factory.h>
 #include "kis_wet_colorspace.h"
+#include <kis_debug_areas.h>
 #include "kis_wetness_visualisation_filter.h"
 
 WetnessVisualisationFilter::WetnessVisualisationFilter(KisView* view)

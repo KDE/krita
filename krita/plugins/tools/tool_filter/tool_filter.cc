@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>

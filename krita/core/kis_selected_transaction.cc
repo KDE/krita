@@ -26,9 +26,10 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDevi
     m_hadSelection(device->hasSelection())
 {
     m_selTransaction = new KisTransaction(name, device->selection().data());
-    
-    if(! m_hadSelection)
+    if(! m_hadSelection) {
         m_device->deselect(); // let us not be the cause of select
+
+    }
 }
 
 KisSelectedTransaction::~KisSelectedTransaction()
@@ -50,7 +51,7 @@ void KisSelectedTransaction::execute()
 void KisSelectedTransaction::unexecute()
 {
     m_redoHasSelection = m_device->hasSelection();
-    
+
     super::unexecute();
     m_selTransaction->unexecute();
     if(m_hadSelection)

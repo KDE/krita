@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <kis_debug_areas.h>
 #include <kis_colorspace_registry.h>
 #include <kis_factory.h>
 

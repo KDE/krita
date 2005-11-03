@@ -30,7 +30,7 @@
 #include "kis_tool_factory.h"
 #include "kis_canvas_subject.h"
 #include "kis_id.h"
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 
 KisToolRegistry *KisToolRegistry::m_singleton = 0;
 

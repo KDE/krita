@@ -23,6 +23,7 @@
 
 #include <kio/job.h>
 
+#include "kis_debug_areas.h"
 #include "kis_resource.h"
 #include "kis_types.h"
 

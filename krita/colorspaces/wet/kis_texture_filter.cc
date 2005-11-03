@@ -21,7 +21,7 @@
 #include <kdebug.h>
 #include <kis_view.h>
 #include <kis_image.h>
-
+#include <kis_debug_areas.h>
 #include "kis_texture_painter.h"
 #include "kis_texture_filter.h"
 

@@ -24,10 +24,10 @@
 
 #include <kis_iterators_pixel.h>
 #include <kis_filter_registry.h>
-#include <kis_global.h>
+#include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_paint_device_impl.h>
-
+#include <kis_debug_areas.h>
 #include "wetphysicsfilter.h"
 
 
@@ -44,7 +44,7 @@ void WetPhysicsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     // XXX: Don't do the flow yet. It loops three times through the paint device and creates an enormous amount
     //      of temporary data -- size arrays of doubles width * height of the paint device, and besides, it's
     //      subject to the same problems as the Wet & Sticky model; the windscreen wiper effect.
-    
+
     // Because I don't want to put a timer here (yet), just do it 25 times
     for (int i = 0; i < 25; i++) {
         flow(src, dst, rect);
@@ -105,7 +105,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
     Q_INT32 dx, dy;
     dx = r.x();
     dy = r.y();
-    
+
     int ix = width + 1; // keeps track where we are in the one-dimensional arrays
 
     for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
@@ -180,7 +180,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
         ix += 2;
     }
 
-    // Third iteration: Combine the paint from the flow areas.    
+    // Third iteration: Combine the paint from the flow areas.
     ix = width + 1;
     for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
         KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, dy + y2, width, false);
@@ -272,46 +272,46 @@ void WetPhysicsFilter::adsorb(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
 
         double ads;
-    
+
         WetPixDbl wet_top;
         WetPixDbl wet_bot;
-    
+
         WetPack pack;
         Q_UINT16 w;
-    
+
         while (!srcIt.isDone()) {
             // Two wet pixels in one KisWetColorSpace pixels.
             pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
             WetPix* paint = &(pack.paint);
             WetPix* adsorb = &(pack.adsorb);
-    
+
             /* do adsorption */
             w = paint -> w;
-    
+
             if (w == 0) {
                 ++srcIt;
                 ++dstIt;
                 continue;
             }
-    
+
             ads = 0.5 / QMAX(w, 1);
-    
+
             wetPixToDouble(&wet_top, paint);
             wetPixToDouble(&wet_bot, adsorb);
-    
+
             mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
-    
+
             wetPixFromDouble(adsorb, &wet_bot);
-    
+
             paint -> rd *= (1 - ads);
             paint -> rw *= (1 - ads);
             paint -> gd *= (1 - ads);
             paint -> gw *= (1 - ads);
             paint -> bd *= (1 - ads);
             paint -> bw *= (1 - ads);
-    
+
             *(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
-    
+
             ++srcIt;
             ++dstIt;
         }

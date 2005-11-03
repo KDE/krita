@@ -57,7 +57,7 @@
 #include "kis_annotation.h"
 #include "kis_types.h"
 #include "kis_config.h"
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 #include "kis_dlg_create_img.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
@@ -77,6 +77,18 @@
 #include "kis_doc_iface.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
+
+/**
+ * Mime type for this app - not same as file type, but file types
+ * can be associated with a mime type and are opened with applications
+ * associated with the same mime type
+ */
+#define APP_MIMETYPE "application/x-krita"
+
+/**
+ * Mime type for native file format
+ */
+#define NATIVE_MIMETYPE "application/x-kra"
 
 namespace {
     class KisCommandImageMv : public KisCommand {

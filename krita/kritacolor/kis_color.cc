@@ -18,7 +18,7 @@
 #include <qcolor.h>
 
 #include "kdebug.h"
-
+#include "kis_debug_areas.h"
 #include "kis_pixel.h"
 #include "kis_color.h"
 #include "kis_profile.h"

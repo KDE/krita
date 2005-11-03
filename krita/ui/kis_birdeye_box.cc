@@ -22,10 +22,9 @@
 #include "qpixmap.h"
 #include "qpainter.h"
 #include "qimage.h"
-
+#include "config.h"
+#include LCMS_HEADER
 #include "klocale.h"
-
-#include "kobirdeyepanel.h"
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
@@ -34,6 +33,8 @@
 #include "kis_canvas.h"
 #include "kis_image.h"
 #include "kis_rect.h"
+
+#include "kobirdeyepanel.h"
 
 namespace {
 

@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_global.h"
+#include "kis_debug_areas.h"
 #include "kis_palette.h"
 #include "kis_iterators_pixel.h"
 

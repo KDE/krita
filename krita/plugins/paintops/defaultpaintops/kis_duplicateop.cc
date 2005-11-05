@@ -32,6 +32,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
+#include "kis_selection.h"
 
 #include "kis_duplicateop.h"
 
@@ -106,34 +107,28 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab.data() -> colorSpace(), "duplicate srcdev");
+    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab -> colorSpace(), "duplicate srcdev");
     Q_CHECK_PTR(srcdev);
-    int srcY = 0;
 
-    while ( srcY < sh )
-    {
-        KisHLineIterator srcLit = srcdev -> createHLineIterator(0, srcY, sw - 1, true);
-        KisHLineIterator dabLit = dab.data() -> createHLineIterator(0, srcY, sw - 1, false);
-        KisHLineIterator devLit = device -> createHLineIterator(srcPoint.x(), srcPoint.y() + srcY, srcPoint.x() + sw - 1, false);
-        
-        while( !srcLit.isDone() )
-        {
-            // XXX: This is 8-bit broken
-            for( Q_INT32 i = 0; i < device -> colorSpace() -> nColorChannels(); i++) {
-                Q_UINT8 devQ = (Q_UINT8) devLit.rawData()[ i ];
-                Q_UINT8 dabQ = (Q_UINT8) dabLit.rawData()[ i ];
-                srcLit.rawData()[ i ] = (Q_UINT8) (((Q_UINT8_MAX - dabQ) * (devQ) ) / Q_UINT8_MAX);
-            }
-            for( Q_INT32 i = device -> colorSpace() -> nColorChannels(); i < device -> colorSpace() -> nChannels(); i++) {
-                Q_UINT8 devQ = (Q_UINT8) devLit.rawData()[ i ];
-                Q_UINT8 dabQ = (Q_UINT8) dabLit.rawData()[ i ];
-                srcLit.rawData()[ i ] = (Q_UINT8) ((dabQ * devQ) / Q_UINT8_MAX);
-            }
-            
-            ++srcLit; ++dabLit; ++devLit;
-        }
-        srcY++;
-    }
+    // First, copy the source data on the temporary device:
+    KisPainter copyPainter(srcdev);
+    copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
+    copyPainter.end();
+
+    // Convert the dab to the colorspace of a selection
+    dab -> convertTo(srcdev -> selection() -> colorSpace());
+
+    // Add the dab as selection to the srcdev
+    KisPainter copySelection(srcdev -> selection().data());
+    copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
+    copySelection.end();
+
+    // copy the seldev onto a new device, after applying the dab selection
+    KisPaintDeviceImplSP target = new KisPaintDeviceImpl(srcdev -> colorSpace(), "target");
+    copyPainter.begin(target);
+    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev -> selection(),
+                             OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.end();
 
     QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -151,6 +146,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     sw = dstRect.width();
     sh = dstRect.height();
 
-    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), srcdev.data(), m_painter -> opacity(), sx, sy, sw, sh);
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), target,
+                              m_painter -> opacity(), sx, sy, sw, sh);
     m_painter -> addDirtyRect(dstRect);
 }

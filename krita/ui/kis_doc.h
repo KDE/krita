@@ -135,6 +135,11 @@ protected:
     virtual KoView* createViewInstance(QWidget *parent, const char *name);
     virtual bool saveChildren( KoStore * ) { return true; };
 
+protected slots:
+    // Overide KoDocument
+    virtual void openExistingFile(const QString& file);
+    virtual void openTemplate(const QString& file);
+
 private slots:
     void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
     void slotIOProgress(Q_INT8 percentage);

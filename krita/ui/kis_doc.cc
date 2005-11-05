@@ -145,6 +145,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     m_ioProgressTotalSteps = 0;
 
     setInstance( KisFactory::instance(), false );
+    setTemplateType( "krita_template" );
 
     if (name)
         dcopObject();
@@ -234,6 +235,24 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     setUndo(true);
 
     return ok;
+}
+
+void KisDoc::openExistingFile(const QString& file)
+{
+  setUndo(false);
+
+  KoDocument::openExistingFile(file);
+
+  setUndo(true);
+}
+
+void KisDoc::openTemplate(const QString& file)
+{
+  setUndo(false);
+
+  KoDocument::openTemplate(file);
+
+  setUndo(true);
 }
 
 bool KisDoc::init()

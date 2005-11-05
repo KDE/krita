@@ -61,19 +61,39 @@ public:
         m_storage.insert(typename storageMap::value_type(id, item));
     }
     /**
+     * This function remove an item from the registry
+     * @return the object which have been remove from the registry and which can be safely delete
+     */
+    _T remove(const KisID& name)
+    {
+        _T p = 0;
+        typename storageMap::iterator it = m_storage.find(name);
+        if (it != m_storage.end()) {
+            m_storage.erase(it);
+            p = it -> second;
+        }
+        return p;
+    }
+    /**
+     * This function remove an item from the registry
+     * @param id the identifiant of the object
+     * @return the object which have been remove from the registry and which can be safely delete
+     */
+    _T remove(const QString& id)
+    {
+        return remove(KisID(id,""));
+    }
+    /**
      * This function allow to get an object from its KisID
      * @param name the KisID of the object
      * @return _T the object
      */
     _T get(const KisID& name) const
     {
-        _T p;
+        _T p = 0;
         typename storageMap::const_iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
             p = it -> second;
-        }
-        if (!p) {
-            return 0;
         }
         return p;
     }

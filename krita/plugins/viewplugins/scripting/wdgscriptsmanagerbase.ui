@@ -1,0 +1,76 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgScriptsManagerBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgScriptsManagerBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>300</width>
+            <height>300</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>300</width>
+            <height>300</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Scripts Manager</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KListView">
+            <property name="name">
+                <cstring>scriptsList</cstring>
+            </property>
+        </widget>
+        <widget class="KToolBar">
+            <property name="name">
+                <cstring>toolBar</cstring>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KToolBar</class>
+        <header location="local">ktoolbar.h</header>
+        <sizehint>
+            <width>20</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+    <includehint>ktoolbar.h</includehint>
+</includehints>
+</UI>

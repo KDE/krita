@@ -40,6 +40,10 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_layer.h"
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
+#include "kis_boundary_painter.h"
+#include "kis_brush.h"
 
 KisToolFreehand::KisToolFreehand(QString transactionText)
         : super(transactionText),
@@ -51,6 +55,7 @@ KisToolFreehand::KisToolFreehand(QString transactionText)
     m_currentImage = 0;
 
     m_useTempLayer = false;
+    m_paintedOutline = false;
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -233,6 +238,46 @@ KisImageSP KisToolFreehand::currentImage()
 void KisToolFreehand::setUseTempLayer(bool u) {
     m_useTempLayer = u;
 }
+
+void KisToolFreehand::paintOutline(const KisPoint& point) {
+    if (!m_subject) {
+        return;
+    }
+
+    KisCanvasController *controller = m_subject -> canvasController();
+
+    if (currentImage() &&
+        ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {
+        if (m_paintedOutline) {
+            controller -> canvas() -> update();
+            m_paintedOutline = false;
+        }
+        return;
+        }
+
+        KisCanvas *canvas = controller -> canvas();
+        canvas -> repaint();
+
+        KisBrush *brush = m_subject -> currentBrush();
+    // There may not be a brush present, and we shouldn't crash in that case
+        if (brush) {
+            KisCanvasPainter gc(canvas);    
+            QPen pen(Qt::SolidLine);
+
+            KisPoint hotSpot = brush -> hotSpot();
+
+            gc.setRasterOp(Qt::NotROP);
+            gc.setPen(pen);
+            gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
+                           static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
+            gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
+                            (- controller -> vertValue()) / m_subject -> zoomFactor());
+            gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
+            KisBoundaryPainter::paint(brush -> boundary(), gc);
+            m_paintedOutline = true;
+        }
+}
+
 
 #include "kis_tool_freehand.moc"
 

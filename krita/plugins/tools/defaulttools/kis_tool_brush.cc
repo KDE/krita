@@ -43,8 +43,6 @@
 #include "kis_boundary.h"
 #include "kis_move_event.h"
 #include "kis_canvas.h"
-#include "kis_canvas_painter.h"
-#include "kis_boundary_painter.h"
 
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
@@ -53,7 +51,6 @@ KisToolBrush::KisToolBrush()
     setCursor(KisCursor::blankCursor());
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
-    m_paintedOutline = false;
     Q_CHECK_PTR(m_timer);
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
@@ -129,45 +126,6 @@ void KisToolBrush::move(KisMoveEvent *e) {
 
 void KisToolBrush::leave(QEvent *e) {
     m_subject -> canvasController() -> canvas() -> update(); // remove the outline
-}
-
-void KisToolBrush::paintOutline(const KisPoint& point) {
-    if (!m_subject) {
-        return;
-    }
-
-    KisCanvasController *controller = m_subject -> canvasController();
-
-    if (currentImage() &&
-        ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {
-        if (m_paintedOutline) {
-            controller -> canvas() -> update();
-            m_paintedOutline = false;
-        }
-        return;
-    }
-
-    KisCanvas *canvas = controller -> canvas();
-    canvas -> repaint();
-
-    KisBrush *brush = m_subject -> currentBrush();
-    // There may not be a brush present, and we shouldn't crash in that case
-    if (brush) {
-        KisCanvasPainter gc(canvas);    
-        QPen pen(Qt::SolidLine);
-    
-        KisPoint hotSpot = brush -> hotSpot();
-
-        gc.setRasterOp(Qt::NotROP);
-        gc.setPen(pen);
-        gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
-                       static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
-        gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
-                        (- controller -> vertValue()) / m_subject -> zoomFactor());
-        gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
-        KisBoundaryPainter::paint(brush -> boundary(), gc);
-        m_paintedOutline = true;
-    }
 }
 
 

@@ -51,8 +51,6 @@ protected:
     virtual void move(KisMoveEvent *e);
     virtual void leave(QEvent *e);
 
-    void paintOutline(const KisPoint& point);
-
 private slots:
 
     virtual void timeoutPaint();
@@ -60,8 +58,6 @@ private slots:
 private:
     Q_INT32 m_rate;
     QTimer * m_timer;
-    bool m_paintedOutline;
-
 };
 
 class KisToolBrushFactory : public KisToolFactory {

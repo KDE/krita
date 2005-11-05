@@ -31,6 +31,7 @@ class KisPainter;
 class KisBrush;
 class KisEvent;
 
+
 class KRITACORE_EXPORT KisToolFreehand : public KisToolPaint {
     Q_OBJECT
     typedef KisToolPaint super;
@@ -70,6 +71,8 @@ protected:
 
     KisImageSP currentImage();
 
+    void paintOutline(const KisPoint& point);
+
     /**
      * Use a temporary drawing layer (true), or draw directly on the paint device (false).
      * To be set before KisToolFreehand::initPaint is called.
@@ -92,6 +95,8 @@ protected:
     KisPainter *m_painter;
 
     KisImageSP m_currentImage;
+private:
+    bool m_paintedOutline;
 };
 
 

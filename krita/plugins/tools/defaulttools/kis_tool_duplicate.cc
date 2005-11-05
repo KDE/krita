@@ -37,6 +37,9 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 
+#include "kis_canvas_painter.h"
+#include "kis_boundary_painter.h"
+
 KisToolDuplicate::KisToolDuplicate() 
     : super(i18n("Duplicate")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
 {
@@ -101,6 +104,34 @@ void KisToolDuplicate::initPaint(KisEvent *e)
     }
 }
 
+void KisToolDuplicate::move(KisMoveEvent *e)
+{
+    super::move(e);
+
+    // Paint the outline where we will (or are) copying from
+    if( m_position == QPoint(-1,-1) )
+        return;
+
+    QPoint srcPos;
+    if (m_mode == PAINT) {
+        srcPos = painter() -> duplicateOffset().floorQPoint();
+    } else {
+        if(m_isOffsetNotUptodate)
+            srcPos = e -> pos().floorQPoint() - m_position.floorQPoint();
+        else
+            srcPos = m_offset.floorQPoint();
+    }
+
+    Q_INT32 x;
+    Q_INT32 y;
+
+    // like KisPaintOp::splitCoordinate
+    x = (e -> x() < 0) ? e -> x() - 1 : e -> x();
+    y = (e -> y() < 0) ? e -> y() - 1 : e -> y();
+    srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
+
+    paintOutline(srcPos);
+}
 
 void KisToolDuplicate::paintAt(const KisPoint &pos,
                    const double pressure,

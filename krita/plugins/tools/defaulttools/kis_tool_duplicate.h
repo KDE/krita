@@ -41,6 +41,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
     virtual void buttonPress(KisButtonPressEvent *e);
+    virtual void move(KisMoveEvent *e);
     
     virtual void paintAt(const KisPoint &pos,
                  const double pressure,

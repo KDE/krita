@@ -54,81 +54,85 @@ class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
-        KisPainter();
-        KisPainter(KisPaintDeviceImplSP device);
+    /// Construct painter without a device
+    KisPainter();
+    /// Construct a painter, and begin painting on the device
+    KisPainter(KisPaintDeviceImplSP device);
+    /// Construct a painter, and begin painting on the layer
     KisPainter(KisLayerSP device);
-        virtual ~KisPainter();
+    virtual ~KisPainter();
 
 private:
     // Implement KisProgressSubject
     virtual void cancel() { m_cancelRequested = true; }
 
 public:
-        /**
+    /**
      * Start painting on the specified device. Not undoable.
      */
-        void begin(KisPaintDeviceImplSP device);
+    void begin(KisPaintDeviceImplSP device);
 
-        /**
+    /**
      * Finish painting on the current device
      */
-        KCommand *end();
+    KCommand *end();
 
-        // Begin an undoable paint operation
-        void beginTransaction(const QString& customName = QString::null);
+    /// Begin an undoable paint operation
+    void beginTransaction(const QString& customName = QString::null);
 
-        // Finish the undoable paint operation
-        KCommand *endTransaction();
+    /// Finish the undoable paint operation
+    KCommand *endTransaction();
 
-        // begin a transaction with the given command
-        void beginTransaction( KisTransaction* command);
+    /// begin a transaction with the given command
+    void beginTransaction( KisTransaction* command);
 
-    // Return the current transcation
+    /// Return the current transcation
     KisTransaction  * transaction() { return m_transaction; }
 
 
-        // The current paint device.
-        KisPaintDeviceImplSP device() const { return m_device; }
+    /// Returns the current paint device.
+    KisPaintDeviceImplSP device() const { return m_device; }
 
 
-    // ------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------
     //  Native paint methods that are undo/redo-able,
-        // uses the color strategies and the composite operations.
+    // use the color strategies and the composite operations.
 
     /**
      * Blast the specified region from src onto the current paint device.
      */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy,
-            const KisCompositeOp& op,
-            KisPaintDeviceImplSP src,
-                    Q_INT32 sx, Q_INT32 sy,
-            Q_INT32 sw, Q_INT32 sh)
+    void bitBlt(Q_INT32 dx, Q_INT32 dy,
+                const KisCompositeOp& op,
+                KisPaintDeviceImplSP src,
+                Q_INT32 sx, Q_INT32 sy,
+                Q_INT32 sw, Q_INT32 sh)
     {
         bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
     }
 
-        /**
+    /**
      * Overloaded version of the previous, differs in that it is possible to specify
-         * a value for opacity
+     * a value for opacity
      */
-        void bitBlt(Q_INT32 dx, Q_INT32 dy,
-            const KisCompositeOp& op,
-            KisPaintDeviceImplSP src,
-                    Q_UINT8 opacity,
-                    Q_INT32 sx, Q_INT32 sy,
-            Q_INT32 sw, Q_INT32 sh);
+    void bitBlt(Q_INT32 dx, Q_INT32 dy,
+                const KisCompositeOp& op,
+                KisPaintDeviceImplSP src,
+                Q_UINT8 opacity,
+                Q_INT32 sx, Q_INT32 sy,
+                Q_INT32 sw, Q_INT32 sh);
 
 
-    /** A version of bitBlt that applies an external selection mask first to the source device and
-     * only then blits. This means that the source device is permanently altered.
+    /**
+     * A version of bitBlt that applies an external selection mask first to the source device
+     * and only then blits. This means that the source device is permanently altered.
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
-              const KisCompositeOp &op,
-              KisPaintDeviceImplSP src,
-              KisSelectionSP selMask,
-              Q_UINT8 opacity,
-              Q_INT32 sx, Q_INT32 sy,
-              Q_INT32 sw, Q_INT32 sh);
+                      const KisCompositeOp &op,
+                      KisPaintDeviceImplSP src,
+                      KisSelectionSP selMask,
+                      Q_UINT8 opacity,
+                      Q_INT32 sx, Q_INT32 sy,
+                      Q_INT32 sw, Q_INT32 sh);
 
 
     /**
@@ -137,24 +141,25 @@ public:
      * only then blits. This means that the source device is permanently altered.
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
-              const KisCompositeOp &op,
-              KisPaintDeviceImplSP src,
-              Q_UINT8 opacity,
-              Q_INT32 sx, Q_INT32 sy,
-              Q_INT32 sw, Q_INT32 sh);
+                      const KisCompositeOp &op,
+                      KisPaintDeviceImplSP src,
+                      Q_UINT8 opacity,
+                      Q_INT32 sx, Q_INT32 sy,
+                      Q_INT32 sw, Q_INT32 sh);
 
 
     /**
-     * The methods below are 'higher' level than the above methods. They need brushes, colors etc.
-     * set before they can be called. The methods do not directly tell the image to update, but
-     * you can call dirtyRect() to get the rect that needs to be notified by your painting code.
+     * The methods below are 'higher' level than the above methods. They need brushes, colors
+     * etc. set before they can be called. The methods do not directly tell the image to
+     * update, but you can call dirtyRect() to get the rect that needs to be notified by your
+     * painting code.
      *
-     * Call will reset it!
+     * Call will RESET the dirtyRect!
     */
     QRect dirtyRect();
 
     /**
-     * Add the r to the current dirty rect.
+     * Add the r to the current dirty rect, and return the dirtyRect after adding r to it.
      */
     QRect addDirtyRect(QRect r) { m_dirtyRect |= r; return m_dirtyRect; }
 
@@ -163,8 +168,8 @@ public:
     /**
      * Paint a line that connects the dots in points
      */
-        void paintPolyline (const QValueVector <KisPoint> &points,
-                            int index = 0, int numPoints = -1);
+    void paintPolyline(const QValueVector <KisPoint> &points,
+                       int index = 0, int numPoints = -1);
 
     /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
@@ -182,6 +187,7 @@ public:
              const double xTilt2,
              const double yTilt2,
              const double savedDist = -1);
+
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
      * If savedDist is less than zero, the brush is painted at pos1 before being
@@ -202,8 +208,8 @@ public:
                 const double savedDist = -1);
 
     /**
-     * Fill points with the points along the Bezier curve between pos1 and pos2 using control points 1 and 2,
-     * excluding the final pos2.
+     * Fill the given vector points with the points needed to draw the Bezier curve between
+     * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
      */
     void getBezierCurvePoints(const KisPoint &pos1,
                   const KisPoint &control1,
@@ -212,19 +218,29 @@ public:
                   vKisPoint& points);
 
 
-        void paintRect(const KisPoint &startPoint,
+    /**
+     * Paint the rectangle with given begin and end points
+     */
+    void paintRect(const KisPoint &startPoint,
                const KisPoint &endPoint,
                const double pressure,
                const double xTilt,
                const double yTilt);
 
 
-        void paintEllipse(const KisPoint &startPoint,
-                          const KisPoint &endPoint,
-                          const double pressure,
-              const double /*xTilt*/,
-              const double /*yTilt*/);
+    /**
+     * Paint the ellipse with given begin and end points
+     */
+    void paintEllipse(const KisPoint &startPoint,
+                      const KisPoint &endPoint,
+                      const double pressure,
+                      const double /*xTilt*/,
+                      const double /*yTilt*/);
 
+    /**
+     * Paint the polygon with the points given in points. It automatically closes the polygon
+     * by drawing the line from the last point to the first.
+     */
     void paintPolygon(const vKisPoint& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
@@ -234,25 +250,36 @@ public:
              const double /*yTilt*/);
 
 
-    // ------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     // Set the parameters for the higher level graphics primitives.
 
+    /// Set the current brush
     void setBrush(KisBrush* brush) { m_brush = brush; }
+    /// Returns the currently set brush
     KisBrush * brush() const { return m_brush; }
 
+    /// Set the current pattern
     void setPattern(KisPattern * pattern) { m_pattern = pattern; }
+    /// Returns the currently set pattern
     KisPattern * pattern() const { return m_pattern; }
 
+    /// Set the color that will be used to paint with
     void setPaintColor(const KisColor& color) { m_paintColor = color;}
+    /// Returns the color that will be used to paint with
     KisColor paintColor() const { return m_paintColor; }
 
+    /// Set the current background color
     void setBackgroundColor(const KisColor& color) {m_backgroundColor = color; }
+    /// Returns the current background color
     KisColor backgroundColor() const { return m_backgroundColor; }
 
+    /// Set the current fill color
     void setFillColor(const KisColor& color) { m_fillColor = color; }
+    /// Returns the current fill color
     KisColor fillColor() const { return m_fillColor; }
 
 
+    /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
         FillStyleNone,
         FillStyleForegroundColor,
@@ -262,53 +289,85 @@ public:
         FillStyleStrokes
     };
 
+    /// Set the current style with which to fill
     void setFillStyle(FillStyle fillStyle) { m_fillStyle = fillStyle; }
+    /// Returns the current fill style
     FillStyle fillStyle() const { return m_fillStyle; }
 
+    /// The style of the brush stroke around polygons and so
     enum StrokeStyle {
         StrokeStyleNone,
         StrokeStyleBrush
     };
 
+    /// Set the current brush stroke style
     void setStrokeStyle(StrokeStyle strokeStyle) { m_strokeStyle = strokeStyle; }
+    /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const { return m_strokeStyle; }
 
+    /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(Q_UINT8 opacity) { m_opacity = opacity; }
+    /// Returns the opacity that is used in painting
     Q_UINT8 opacity() const { return m_opacity; }
 
+    /**
+     * Sets the current composite operation. Everything painted will be composited on
+     * the destination layer with this composite op.
+     **/
     void setCompositeOp(const KisCompositeOp& op) { m_compositeOp = op; }
+    /// Returns the current composite operation
     KisCompositeOp compositeOp() const { return m_compositeOp; }
 
+    /// Sets the current KisFilter, used by the paintops that support it (like KisFilterOp)
     void setFilter(KisFilterSP filter) { m_filter = filter; }
+    /// Returns the current KisFilter
     KisFilterSP filter() { return m_filter; }
 
-    void setDuplicateOffset(const KisPoint offset) { m_duplicateOffset = offset; }
+    /**
+     * The offset for paint operations that use it (like KisDuplicateOp). It will use as source
+     * the part of the layer that is at its paintedPosition - duplicateOffset
+     */
+    void setDuplicateOffset(const KisPoint& offset) { m_duplicateOffset = offset; }
+    /// Returns the offset for duplication
     KisPoint duplicateOffset(){ return m_duplicateOffset; }
 
+    /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
+    /// Returns the current pressure
     double pressure() { return m_pressure; }
 
-    void setPaintOp(KisPaintOp * paintOp) { m_paintOp = paintOp; }
+    /**
+     * Set the current paint operation. This is used for all drawing functions.
+     * The painter will DELETE the paint op itself!!
+     * That means no that you should not delete it yourself (or put it on the stack)
+     */
+    void setPaintOp(KisPaintOp * paintOp) { delete m_paintOp; m_paintOp = paintOp; }
+    /// Returns the current paint operation
     KisPaintOp * paintOp() const { return m_paintOp; }
 
+    /// Set a current 'dab'. This usually is a paint device containing a rendered brush
     void setDab(KisPaintDeviceImplSP dab) { m_dab = dab; }
+    /// Get the currently set dab
     KisPaintDeviceImplSP dab() const { return m_dab; }
 
+    /// Is cancel Requested by the KisProgressSubject for this painter
     bool cancelRequested() const { return m_cancelRequested; }
 
 protected:
-
+    /// Initialize, set everything to '0' or defaults
     void init();
-        KisPainter(const KisPainter&);
-        KisPainter& operator=(const KisPainter&);
+    KisPainter(const KisPainter&);
+    KisPainter& operator=(const KisPainter&);
 
+    /// Calculate the distance that point p is from the line made by connecting l0 and l1
     static double pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
+    /// Fill the polygon defined by points with the fillStyle
     void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
 
 protected:
-        KisPaintDeviceImplSP m_device;
-        KisTransaction  *m_transaction;
+    KisPaintDeviceImplSP m_device;
+    KisTransaction  *m_transaction;
 
     QRect m_dirtyRect;
 

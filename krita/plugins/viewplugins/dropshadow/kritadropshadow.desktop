@@ -4,6 +4,7 @@ Name=Dropshadow
 Name[pt]=Sombreado
 Name[pt_BR]=Sombreado
 Name[sv]=Fallskugga
+Name[xx]=xxDropshadowxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow

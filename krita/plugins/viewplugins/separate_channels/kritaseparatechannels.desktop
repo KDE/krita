@@ -5,6 +5,7 @@ Name[es]=Extensión para canales separados
 Name[pt]='Plugin' de Separação de Canais
 Name[pt_BR]='Plugin' de Separação de Canais
 Name[sv]=Insticksprogram för separata kanaler
+Name[xx]=xxSeparate Channels Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels

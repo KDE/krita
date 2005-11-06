@@ -16,6 +16,7 @@ Comment[es]=Modelo de color decimal «medio» de 16 bits por canal para imágene
 Comment[pt]=Modelo de cor para imagens RGB com 16 bits de vírgula flutuante 'half' por canal
 Comment[pt_BR]=Modelo de cor para imagens RGB com 16 bits de vírgula flutuante 'half' por canal
 Comment[sv]=Färgmodell för 16-bitars flyttal 'halva' per kanal RGB-bilder
+Comment[xx]=xxColor model for 16-bit floating point 'half' per channel RGB imagesxx
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_rgb_f16half_plugin

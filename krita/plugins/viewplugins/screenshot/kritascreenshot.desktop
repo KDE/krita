@@ -4,6 +4,7 @@ Name=Screensot
 Name[pt]=Captura
 Name[pt_BR]=Captura
 Name[sv]=Skärmdump
+Name[xx]=xxScreensotxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

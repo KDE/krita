@@ -7,6 +7,7 @@ Name[ga]=Inbhéartaigh Scagaire le Snáitheanna
 Name[pt]=Filtro de Inversão Multitarefa
 Name[pt_BR]=Filtro de Inversão Multitarefa
 Name[sv]=Inverteringsfilter med trådar
+Name[xx]=xxInvert Filter with Threadsxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritathreadtest

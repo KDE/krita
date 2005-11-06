@@ -6,5 +6,6 @@ Comment[es]=Extensión de operación de pintura para Krita
 Comment[pt]='Plugin' de operações de pintura do Krita
 Comment[pt_BR]='Plugin' de operações de pintura do Krita
 Comment[sv]=Insticksprogram med målningsåtgärder för Krita
+Comment[xx]=xxPaint operation plugin for Kritaxx
 [PropertyDef::X-KDE-Version]
 Type=int

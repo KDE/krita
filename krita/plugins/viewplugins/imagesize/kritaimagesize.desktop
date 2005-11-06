@@ -5,6 +5,7 @@ Name[es]=Extensiones para redimensionar y para escalar la imagen
 Name[pt]='Plugin' de dimensionamento e escala da imagem
 Name[pt_BR]='Plugin' de dimensionamento e escala da imagem
 Name[sv]=Insticksprogram för storleksändring och skalning
+Name[xx]=xxImage resize and scale pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize

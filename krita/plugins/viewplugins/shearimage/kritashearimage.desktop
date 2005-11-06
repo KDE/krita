@@ -5,6 +5,7 @@ Name[es]=Extensión para cortar la imagen
 Name[pt]='Plugin' de Inclinação da Imagem
 Name[pt_BR]='Plugin' de Inclinação da Imagem
 Name[sv]=Insticksprogram för skjuva bild
+Name[xx]=xxShear Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage

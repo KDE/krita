@@ -20,6 +20,7 @@ Comment[ja]=32ビット浮動小数/チャンネル RGB画像のためのカラ�
 Comment[pt]=Modelo de cor para imagens RGB com 32 bits de vírgula flutuante por canal
 Comment[pt_BR]=Modelo de cor para imagens RGB com 32 bits de vírgula flutuante por canal
 Comment[sv]=Färgmodell för 32-bitars flyttal per kanal RGB-bilder
+Comment[xx]=xxColor model for 32-bit floating point per channel RGB imagesxx
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Version=2

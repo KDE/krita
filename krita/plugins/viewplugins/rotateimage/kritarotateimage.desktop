@@ -5,6 +5,7 @@ Name[es]=Extensión para girar la imagen
 Name[pt]='Plugin' para Rodar a Imagem
 Name[pt_BR]='Plugin' para Rodar a Imagem
 Name[sv]=Insticksprogram för rotera bild
+Name[xx]=xxRotate Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage

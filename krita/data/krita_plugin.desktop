@@ -10,5 +10,6 @@ Comment[ja]=KritaのGUI機能
 Comment[pt]=Funcionalidade gráfica para o Krita
 Comment[pt_BR]=Funcionalidade gráfica para o Krita
 Comment[sv]=Grafisk gränssnittsfunktion för Krita
+Comment[xx]=xxGUI functionality for Kritaxx
 [PropertyDef::X-KDE-Version]
 Type=int

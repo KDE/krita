@@ -11,7 +11,6 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 	-I$(top_srcdir)/kexi/scriptingcore/main \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
-	$(all_includes)
 
 kritascripting_la_SOURCES = scripting.cc kis_script.cc wdgscriptsmanagerbase.ui \
 	wdgscriptsmanager.cpp kis_scripts_registry.cpp

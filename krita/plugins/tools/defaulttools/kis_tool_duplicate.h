@@ -47,7 +47,8 @@ public:
                  const double pressure,
                  const double xTilt,
                  const double yTilt);
-    
+
+    virtual QString quickHelp() const;
 
 protected slots:
     virtual void activate();

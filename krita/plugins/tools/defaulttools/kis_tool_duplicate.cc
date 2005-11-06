@@ -149,4 +149,8 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
     }
 }
 
+QString KisToolDuplicate::quickHelp() const {
+    return i18n("To start, right click on the place you want to duplicate from. Then you can start painting. An indication of where you are copying from will be displayed while drawing and moving the mouse.");
+}
+
 #include "kis_tool_duplicate.moc"

@@ -95,6 +95,7 @@ public:
     virtual Q_UINT32 priority() { return 0; }
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
     virtual QString icon() { return m_action->icon(); }
+    virtual QString quickHelp() const { return ""; }
 
 public slots:
     virtual void activate() = 0;

@@ -8,7 +8,6 @@ Bugs
     * On opening a second image after loading first image but not changing it,
       the second image should be loaded in a second view and not replace the 
       first image in the first view.
-    * KisDuplicateOp is 8-bit broken
     * F9 and single hiding/showing of dockers don't interact correctly
 
 Transform tool (CBR)
@@ -200,7 +199,6 @@ Tools
 	* Implement path tools (Michael Thaler?)
 	* Sumi-e brush tool
 	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
-	* Add statusbar messages for tools about modifier keys and other use hints
 
 Plugins
 

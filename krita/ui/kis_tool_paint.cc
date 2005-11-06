@@ -20,6 +20,8 @@
 #include <qrect.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qpushbutton.h>
+#include <qwhatsthis.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -128,16 +130,31 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
-    m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
+    if (!quickHelp().isEmpty()) {
+        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 3, 0, 6);
 
-    m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
-    m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
+        m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
+        m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
 
-    m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
-    m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
+        m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
+        m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
+
+        // XXX make this a picture of a '?', like you see everywhere
+        QPushButton* push = new QPushButton("?", m_optionWidget);
+        connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
+        m_optionWidgetLayout -> addWidget(push, 0, 2);
+    } else {
+        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
+
+        m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
+        m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
+
+        m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
+        m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
+    }
 
     m_optionWidgetLayout -> setRowSpacing(3, 6);
-    
+
     return m_optionWidget;
 }
 
@@ -222,6 +239,10 @@ void KisToolPaint::updateCompositeOpComboBox()
             }
         }
     }
+}
+
+void KisToolPaint::slotPopupQuickHelp() {
+    QWhatsThis::display(quickHelp());
 }
 
 #include "kis_tool_paint.moc"

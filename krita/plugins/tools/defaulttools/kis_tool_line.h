@@ -56,6 +56,8 @@ class KisToolLine : public KisToolPaint {
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
 
+    virtual QString quickHelp() const;
+
  private:
     void paintLine();
     void paintLine(KisCanvasPainter& gc, const QRect& rc);

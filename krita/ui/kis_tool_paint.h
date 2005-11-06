@@ -81,6 +81,7 @@ public slots:
     virtual void activate();
     void slotSetOpacity(int opacityPerCent);
     void slotSetCompositeMode(const KisCompositeOp& compositeOp);
+    void slotPopupQuickHelp();
 
 protected:
     void notifyModified() const;

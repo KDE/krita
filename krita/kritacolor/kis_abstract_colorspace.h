@@ -174,6 +174,8 @@ public:
 
     virtual KisColorAdjustment *createDesaturateAdjustment();
 
+    virtual KisColorAdjustment *createPerChannelAdjustment(Q_UINT16 **transferValues);
+
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
 
     virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);

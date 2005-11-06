@@ -34,8 +34,17 @@
 #include "kis_basic_histogram_producers.h"
 
 
-KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration()
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
 {
+    for(int i=0;i<n;i++)
+         transfers[i] = new Q_UINT16[256];
+    m_nTransfers=n;
+}
+
+KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
+{
+    for(int i=0;i<m_nTransfers;i++)
+        delete [] transfers[i];
 }
 
 KisPerChannelFilter::KisPerChannelFilter()
@@ -55,7 +64,7 @@ KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget, Kis
 
     if ( widget == 0 )
     {
-        return new KisPerChannelFilterConfiguration();
+        return new KisPerChannelFilterConfiguration(3);
     } else {
         return widget->config();
     }
@@ -65,7 +74,7 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 {
 //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
-    list.insert(list.begin(), new KisPerChannelFilterConfiguration( ));
+//    list.insert(list.begin(), new KisPerChannelFilterConfiguration(m_dev->colorspace()->nColorChannels()));
     return list;
 }
 
@@ -74,7 +83,7 @@ void KisPerChannelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
 {
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
 
-    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
+    KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
@@ -138,7 +147,6 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 {
     int i;
     int height = 256;
-printf("setactivechannel\n");
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
@@ -222,7 +230,8 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
 KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
 {
-    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration();
+    int nCh = m_dev->colorSpace()->nColorChannels();
+    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     for(int i=0; i <256; i++)
     {
@@ -233,7 +242,8 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
         if(val <0)
             val = 0;
 
-        cfg->transfer[i] = val;
+        for(int ch = 0; ch < nCh; ch++)
+            cfg->transfers[ch][i] = val;
     }
 
     return cfg;

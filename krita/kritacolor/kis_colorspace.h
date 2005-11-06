@@ -288,6 +288,12 @@ public:
      */
     virtual KisColorAdjustment *createDesaturateAdjustment() = 0;
 
+    /**
+     * Create an adjustment object for adjusting individual channels
+     * transferValues is an array of nColorChannels number of 256 bins array with values from 0 to 0xFFFF
+     */
+    virtual KisColorAdjustment *createPerChannelAdjustment(Q_UINT16 **transferValues) = 0;
+
 
     /**
      * Apply the adjustment created with onr of the other functions

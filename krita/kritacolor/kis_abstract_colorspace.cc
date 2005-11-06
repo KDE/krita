@@ -36,8 +36,10 @@ struct KisColorAdjustment
 {
     ~KisColorAdjustment() { cmsDeleteTransform(transform);
         cmsCloseProfile(profiles[0]);
-        cmsCloseProfile(profiles[1]);
-        cmsCloseProfile(profiles[2]);
+        if(profiles[1])
+            cmsCloseProfile(profiles[1]);
+        if(profiles[2])
+            cmsCloseProfile(profiles[2]);
     }
 
     cmsHPROFILE profiles[3];
@@ -295,6 +297,29 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
     cmsFreeLUT(Lut);
 
     adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
+
+    return adj;
+}
+
+KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 **transferValues)
+{
+    LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[nColorChannels()+1];
+    transferFunctions[0] = cmsBuildGamma(256, 1.0);
+    transferFunctions[1] = cmsBuildGamma(256, 1.0);
+    transferFunctions[2] = cmsBuildGamma(256, 1.0);
+    transferFunctions[3] = cmsBuildGamma(256, 1.0);
+
+    for(int ch=0; ch <nColorChannels(); ch++)
+        for(int i =0; i < 256; i++)
+            transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
+
+    KisColorAdjustment *adj = new KisColorAdjustment;
+    adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
+    adj->profiles[1] = NULL;
+    adj->profiles[2] = NULL;
+    adj->transform  = cmsCreateTransform(adj->profiles[0], m_cmType, NULL, m_cmType, INTENT_PERCEPTUAL, 0);
+
+    delete [] transferFunctions;
 
     return adj;
 }

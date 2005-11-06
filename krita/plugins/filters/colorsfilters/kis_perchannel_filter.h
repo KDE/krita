@@ -30,12 +30,14 @@ class KisPerChannelFilterConfiguration
     : public KisFilterConfiguration
 {
 public:
-    KisPerChannelFilterConfiguration();
+    KisPerChannelFilterConfiguration(int n);
+    ~KisPerChannelFilterConfiguration();
 
 public:
-    Q_UINT16 transfer[256];
+    Q_UINT16 *transfers[256];
 
 private:
+    Q_UINT16 m_nTransfers;
 };
 
 

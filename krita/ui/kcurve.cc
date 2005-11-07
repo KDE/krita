@@ -54,12 +54,13 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
     setMouseTracking(true);
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(150, 50);
-    dpoint *p = new dpoint;
-    p->x = 0.0;p->y=0.0;
-    m_points.inSort(p);
-    p = new dpoint;
-    p->x = 1.0;p->y=1.0;
-    m_points.inSort(p);
+    QPair<double,double> *p = new QPair<double,double>;
+    p->first = 0.0;p->second=0.0;
+    m_points.append(p);
+    p = new QPair<double,double>;
+    p->first = 1.0;p->second=1.0;
+    m_points.append(p);
+    m_points.setAutoDelete(true);
     setFocusPolicy(QWidget::StrongFocus);
 }
 
@@ -95,7 +96,6 @@ void KCurve::keyPressEvent(QKeyEvent *e)
     {
         if(m_grab_point)
             m_points.remove(m_grab_point);
-        delete m_grab_point;
         m_grab_point = 0;
         repaint(false);
     }
@@ -157,12 +157,12 @@ void KCurve::paintEvent(QPaintEvent *)
     // Drawing curve handles.
     if ( !m_readOnlyMode )
     {
-        dpoint *p = m_points.first();
+        QPair<double,double> *p = m_points.first();
         
         while(p)
         {
-            double curveX = p->x;
-            double curveY = p->y;
+            double curveX = p->first;
+            double curveY = p->second;
         
             if(p == m_grab_point)
             {
@@ -190,7 +190,7 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
 {
     if (m_readOnlyMode) return;
     
-    dpoint *closest_point=NULL;
+    QPair<double,double> *closest_point=NULL;
     double distance;
     
     if (e->button() != Qt::LeftButton)
@@ -198,38 +198,51 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
     
     double x = e->pos().x() / (float)width();
     double y = 1.0 - e->pos().y() / (float)height();
-    
+
     distance = 1000; // just a big number
-    
-    dpoint *p = m_points.first();
+
+    QPair<double,double> *p = m_points.first();
+    int insert_pos,pos=0;
     while(p)
     {
-        if (fabs (x - p->x) < distance)
+        if (fabs (x - p->first) < distance)
         {
-            distance = fabs(x - p->x);
+            distance = fabs(x - p->first);
             closest_point = p;
+            if(x < p->first)
+                insert_pos = pos;
+            else
+                insert_pos = pos + 1;
         }
         p = m_points.next();
+        pos++;
     }
-    
-        
-    if(closest_point == NULL || distance * width() > 5)
+
+
+    if(closest_point == NULL)
     {
-        closest_point = new dpoint;
-        closest_point->x = x;
-        closest_point->y = y;
-        m_points.inSort(closest_point);
+        closest_point = new QPair<double,double>;
+        closest_point->first = x;
+        closest_point->second = y;
+        m_points.append(closest_point);
+    }
+    else if(distance * width() > 5)
+    {
+        closest_point = new QPair<double,double>;
+        closest_point->first = x;
+        closest_point->second = y;
+        m_points.insert(insert_pos, closest_point);
     }
     else
-        if(fabs(y - closest_point->y) * width() > 5)
+        if(fabs(y - closest_point->second) * width() > 5)
             return;
-        
+    
     
     m_grab_point = closest_point;
-    m_grabOffsetX = m_grab_point->x - x;
-    m_grabOffsetY = m_grab_point->y - y;
-    m_grab_point->x = x + m_grabOffsetX;
-    m_grab_point->y = y + m_grabOffsetY;
+    m_grabOffsetX = m_grab_point->first - x;
+    m_grabOffsetY = m_grab_point->second - y;
+    m_grab_point->first = x + m_grabOffsetX;
+    m_grab_point->second = y + m_grabOffsetY;
     m_dragging = true;
 
     setCursor( KCursor::crossCursor() );
@@ -243,10 +256,10 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
     {
         if (p != m_grab_point)
         {
-            if(p->x> m_leftmost && p->x < x)
-                m_leftmost = p->x;
-            if(p->x < m_rightmost && p->x > x)
-                m_rightmost = p->x;
+            if(p->first> m_leftmost && p->first < x)
+                m_leftmost = p->first;
+            if(p->first < m_rightmost && p->first > x)
+                m_rightmost = p->first;
         }
         p = m_points.next();
     }
@@ -269,23 +282,21 @@ void KCurve::mouseReleaseEvent ( QMouseEvent * e )
 void KCurve::mouseMoveEvent ( QMouseEvent * e )
 {
     if (m_readOnlyMode) return;
-    
-    int x1, x2, y1, y2;
-    
+
     double x = e->pos().x() / (float)width();
     double y = 1.0 - e->pos().y() / (float)height();
-        
+    
     if (m_dragging == false)   // If no point is selected set the the cursor shape if on top
     {
         double distance = 1000;
         double ydistance = 1000;
-        dpoint *p = m_points.first();
+        QPair<double,double> *p = m_points.first();
         while(p)
         {
-            if (fabs (x - p->x) < distance)
+            if (fabs (x - p->first) < distance)
             {
-                distance = fabs(x - p->x);
-                ydistance = fabs(y - p->y);
+                distance = fabs(x - p->first);
+                ydistance = fabs(y - p->second);
             }
             p = m_points.next();
         }
@@ -314,8 +325,8 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         if(y < 0.0)
             y = 0.0;
             
-        m_grab_point->x = x;
-        m_grab_point->y = y;
+        m_grab_point->first = x;
+        m_grab_point->second = y;
         
         emit modified();
     }
@@ -325,49 +336,54 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
 
 double KCurve::getCurveValue(double x)
 {
+    return getCurveValue(m_points, x);
+}
+
+double KCurve::getCurveValue(QPtrList<QPair<double,double> > &curve, double x)
+{
     double t;
-    dpoint *p;
-    dpoint *p0,*p1,*p2,*p3;
+    QPair<double,double> *p;
+    QPair<double,double> *p0,*p1,*p2,*p3;
     double c0,c1,c2,c3;
     double val;
     
-    if(m_points.count() == 0)
+    if(curve.count() == 0)
         return 0.5;
     
     // First find curve segment
-    p = m_points.first();
-    if(x < p->x)
-        return p->y;
+    p = curve.first();
+    if(x < p->first)
+        return p->second;
         
-    p = m_points.last();
-    if(x >= p->x)
-        return p->y;
+    p = curve.last();
+    if(x >= p->first)
+        return p->second;
     
     // Find the four control points (two on each side of x)    
-    p = m_points.first();
-    while(x >= p->x)
+    p = curve.first();
+    while(x >= p->first)
     {
-        p = m_points.next();
+        p = curve.next();
     }
-    m_points.prev();
+    curve.prev();
     
-    if((p0 = m_points.prev()) == NULL)
-        p1 = p0 = m_points.first();
+    if((p0 = curve.prev()) == NULL)
+        p1 = p0 = curve.first();
     else
-        p1 = m_points.next();
+        p1 = curve.next();
     
-    p2 = m_points.next();
-    if(p = m_points.next())
+    p2 = curve.next();
+    if( (p = curve.next()) )
         p3 = p;
     else
         p3 = p2;
     
     // Calculate the value
-    t = (x - p1->x) / (p2->x - p1->x);
-    c2 = (p2->y - p0->y) * (p2->x-p1->x) / (p2->x-p0->x);
-    c3 = p1->y;
-    c0 = -2*p2->y + 2*c3 + c2 + (p3->y - p1->y) * (p2->x - p1->x) / (p3->x - p1->x);
-    c1 = p2->y - c3 - c2 - c0;
+    t = (x - p1->first) / (p2->first - p1->first);
+    c2 = (p2->second - p0->second) * (p2->first-p1->first) / (p2->first-p0->first);
+    c3 = p1->second;
+    c0 = -2*p2->second + 2*c3 + c2 + (p3->second - p1->second) * (p2->first - p1->first) / (p3->first - p1->first);
+    c1 = p2->second - c3 - c2 - c0;
     val = ((c0*t + c1)*t + c2)*t + c3;
     
     if(val < 0.0)
@@ -375,6 +391,39 @@ double KCurve::getCurveValue(double x)
     if(val > 1.0)
         val = 1.0;
     return val;
+}
+
+QPtrList<QPair<double,double> > KCurve::getCurve()
+{
+    QPtrList<QPair<double,double> > outlist;
+    QPair<double,double> *p;
+    QPair<double,double> *outpoint;
+
+    p = m_points.first();
+    while(p)
+    {
+        outpoint = new QPair<double,double>(p->first, p->second);
+        outlist.append(outpoint);
+        p = m_points.next();
+    }
+
+    return outlist;
+}
+
+void KCurve::setCurve(QPtrList<QPair<double,double> >inlist)
+{
+    QPair<double,double> *p;
+    QPair<double,double> *inpoint;
+
+    m_points.clear();
+
+    inpoint = inlist.first();
+    while(inpoint)
+    {
+        p = new QPair<double,double>(inpoint->first, inpoint->second);
+        m_points.append(p);
+        inpoint = inlist.next();
+    }
 }
 
 void KCurve::leaveEvent( QEvent * )

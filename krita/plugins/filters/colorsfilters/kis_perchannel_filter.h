@@ -21,6 +21,8 @@
 #ifndef _KIS_PERCHANNEL_FILTER_H_
 #define _KIS_PERCHANNEL_FILTER_H_
 
+#include <qpair.h>
+#include <qptrlist.h>
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 
@@ -78,6 +80,8 @@ private:
     WdgPerChannel * m_page;
     KisPaintDeviceImplSP m_dev;
     KisHistogram *m_histogram;
+    QPtrList<QPair<double,double> > *m_curves;
+    int m_activeCh;
 };
 
 #endif

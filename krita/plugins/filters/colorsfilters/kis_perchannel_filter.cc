@@ -169,6 +169,11 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
         }
     }
 
+    m_curves[m_activeCh].setAutoDelete(true);
+    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    m_activeCh = ch;
+    m_page->kCurve->setCurve(m_curves[m_activeCh]);
+
     m_page->kCurve->setPixmap(pix);
 }
 
@@ -182,6 +187,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     Q_CHECK_PTR(l);
 
     m_dev = dev;
+    m_curves = new QSortedList<QPair<double,double> >[m_dev->colorSpace()->nColorChannels()];
+    m_activeCh = 0;
+    for(int ch=0; ch <m_dev->colorSpace()->nColorChannels(); ch++)
+    {
+        m_curves[ch].append(new QPair<double,double>(0, 0));
+        m_curves[ch].append(new QPair<double,double>(1, 1));
+    }
 
     l -> add(m_page);
     height = 256;
@@ -233,19 +245,22 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
     int nCh = m_dev->colorSpace()->nColorChannels();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
-    for(int i=0; i <256; i++)
+    m_curves[m_activeCh].setAutoDelete(true);
+    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    for(int ch = 0; ch < nCh; ch++)
     {
-        Q_INT32 val;
-        val = int(0xFFFF * m_page->kCurve->getCurveValue( i / 255.0));
-        if(val >0xFFFF)
-            val=0xFFFF;
-        if(val <0)
-            val = 0;
+        for(int i=0; i <256; i++)
+        {
+            Q_INT32 val;
+            val = int(0xFFFF * m_page->kCurve->getCurveValue( m_curves[ch],  i / 255.0));
+            if(val >0xFFFF)
+                val=0xFFFF;
+            if(val <0)
+                val = 0;
 
-        for(int ch = 0; ch < nCh; ch++)
             cfg->transfers[ch][i] = val;
+        }
     }
-
     return cfg;
 }
 

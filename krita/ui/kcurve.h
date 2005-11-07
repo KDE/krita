@@ -23,6 +23,7 @@
 
 #include <qwidget.h>
 #include <qcolor.h>
+#include <qpair.h>
 #include <qsortedlist.h>
 #include <koffice_export.h>
 class KRITAUI_EXPORT KCurve : public QWidget
@@ -53,17 +54,16 @@ protected:
     void leaveEvent ( QEvent * );
     
 public:
+    static double getCurveValue(QPtrList<QPair<double,double> > &curve, double x);
     double getCurveValue(double x);
     
+    QPtrList<QPair<double,double> > getCurve();
+    void setCurve(QPtrList<QPair<double,double> >inlist);
+
 private:
-    struct dpoint {
-        double x,y;
-        bool operator <(dpoint &rhs){return x < rhs.x;};
-        bool operator ==(dpoint &rhs){return x == rhs.x;};
-    };
     double m_leftmost;
     double m_rightmost;
-    dpoint *m_grab_point;
+    QPair<double,double> *m_grab_point;
     bool m_dragging;
     double m_grabOffsetX;
     double m_grabOffsetY;
@@ -71,7 +71,7 @@ private:
     bool m_readOnlyMode;
     bool m_guideVisible;
     QColor m_colorGuide;
-    QSortedList<dpoint> m_points;
+    QPtrList<QPair<double,double> > m_points;
     QPixmap *m_pix;
 };
 

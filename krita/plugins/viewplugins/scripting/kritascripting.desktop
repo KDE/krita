@@ -1,7 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting plugin
+Name[ga]=Breiseán scriptithe
+Name[ja]=スクリプトプラグイン
+Name[sv]=Skriptinsticksprogram
 Comment=Allow to execute scripts
+Comment[ja]=スクリプトの実行を可能にします
+Comment[sv]=Gör det möjligt att köra skript
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting

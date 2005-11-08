@@ -1,18 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Smeary brush paint operation
-Name[es]=Operación de pintura con brocha muy mojada
-Name[pt]=Operação de Pintura Viscosa
-Name[pt_BR]=Operação de Pintura Viscosa
-Name[sv]=Målningsåtgärd med smetig pensel
-Name[xx]=xxSmeary brush paint operationxx
-Comment=paint operation with bidirectional paint transfer
-Comment[es]=operación de pintura con transferencia bidireccional
-Comment[pt]=operação de pintura com transferência de tinta bidireccional
-Comment[pt_BR]=operação de pintura com transferência de tinta bidireccional
-Comment[sv]=Målningsåtgärd med färgbeläggning i två riktningar
-Comment[xx]=xxpaint operation with bidirectional paint transferxx
+Name=Smeary brush
+Comment=Smeary brush
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasmearybrush
 X-KDE-Version=2
+

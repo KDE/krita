@@ -1,22 +1,11 @@
-kritaimagesdir = $(prefix)/share/apps/krita/images
-
-kritaimages_DATA = \
-	airbrush.png \
-	paintbrush.png \
-	eraser.png \
-	pencil.png
-
-
 kde_services_DATA = kritasmearybrush.desktop
 
 # all_includes must remain last!
 INCLUDES = -I$(srcdir)/../../../sdk \
 	-I$(srcdir)/../../../core \
-	-I$(srcdir)/../../../kritacolor/color_strategy/ \
 	-I$(srcdir)/../../../kritacolor/ \
 	-I$(srcdir)/../../../ui \
 	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
-
 
 kritasmearybrush_la_SOURCES = \
 	smearybrush.cc \

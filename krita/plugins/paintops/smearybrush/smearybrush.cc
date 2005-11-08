@@ -31,31 +31,30 @@
 #include "smearybrush.h"
 
 typedef KGenericFactory<SmearyBrush> SmearyBrushFactory;
-K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, SmearyBrushFactory( "kritacore" ) )
-
+K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("kritacore"))
 
 SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-           setInstance(SmearyBrushFactory::instance());
+    setInstance(SmearyBrushFactory::instance());
 
-     kdDebug(41006) << "SmearyBrush. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
+    kdDebug() << "SmearyBrush. Class: "
+                   << className()
+                   << ", Parent: "
+                   << parent -> className()
+                   << "\n";
+    
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
-    {
-        KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-        r -> add ( new KisSmearyOpFactory );
-    }
-
+        {
+            KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
+            r -> add ( new KisSmearyOpFactory );
+        }
+    
 }
 
 SmearyBrush::~SmearyBrush()
 {
 }
 
-#include "defaultpaintops_plugin.moc"
+#include "smearybrush.moc"

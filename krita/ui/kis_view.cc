@@ -900,12 +900,12 @@ void KisView::paintOpenGLView(const KisRect& r)
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_BLEND);
 
-            //glDisable (GL_TEXTURE_RECTANGLE_NV);
-            //glDisable (GL_FRAGMENT_PROGRAM_NV);
+            // Unbind the texture otherwise the ATI driver crashes when the canvas context is
+            // made current after the textures are deleted following an image resize.
+            glBindTexture(GL_TEXTURE_2D, 0);
 
             //paintGuides();
 
-            //m_canvas -> update(vr.qRect());
             m_canvas -> OpenGLWidget() -> swapBuffers();
         }
     }

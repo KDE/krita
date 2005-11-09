@@ -22,6 +22,9 @@
 #include <koRect.h>
 #include "kis_point.h"
 
+/**
+ * A double-based rect class that can return a QRect that encloses the KisRect.
+ */
 class KisRect : public KoRect
 {
     typedef KoRect super;
@@ -32,6 +35,9 @@ public:
     KisRect(const QRect& qr) : super(qr.x(), qr.y(), qr.width(), qr.height()) {}
     KisRect(const KoRect& r) : super(r) {}
 
+    /**
+     * Return the QRect that encloses this KisRect.
+     */
     QRect qRect() const;
 
 private:

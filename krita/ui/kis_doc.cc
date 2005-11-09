@@ -882,7 +882,7 @@ bool KisDoc::slotNewImage()
         painter.begin(layer.data());
         painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
         painter.end();
-
+        img -> setBackgroundColor(KisColor(c, opacity, cs));
         img -> add(layer, -1);
         img -> notify();
 

@@ -672,17 +672,6 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 render
 
     for (Q_INT32 row = y; row < y + h; ++row) {
 
-#if 0
-
-        KisHLineIterator srcIt = createHLineIterator( x, row, w, false );
-        KisHLineIterator dstIt = dst.createHLineIterator( x, row, w, true );
-        while ( !srcIt.isDone() ) {
-            m_colorSpace->convertPixelsTo( srcIt.rawData(), m_profile, dstIt.rawData(), dstColorSpace, dstProfile, 1, renderingIntent );
-            ++srcIt;
-            ++dstIt;
-        }
-
-#else
         Q_INT32 column = x;
         Q_INT32 columnsRemaining = w;
 
@@ -702,8 +691,6 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 render
             column += columns;
             columnsRemaining -= columns;
         }
-#endif
-
     }
 
     if (undoAdapter() && undoAdapter() -> undo()) {

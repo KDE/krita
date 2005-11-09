@@ -321,7 +321,7 @@ float KisConfig::dockerFontSize()
 
 float KisConfig::getDefaultDockerFontSize()
 {
-    float ps = KGlobalSettings::generalFont().pointSize() * 0.7;
+    float ps = QMIN(9, KGlobalSettings::generalFont().pointSize() * 0.8);
     return ps;
 }
 

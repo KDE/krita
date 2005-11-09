@@ -21,6 +21,10 @@
 #include <qvaluevector.h>
 #include <koPoint.h>
 
+/**
+ * A double-based point class that can return it's coordinates
+ * approximated to integers.
+ */
 class KisPoint : public KoPoint {
     typedef KoPoint super;
 public:

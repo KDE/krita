@@ -54,6 +54,7 @@ class KisProfile;
 class KisProgressDisplayInterface;
 class KisUndoAdapter;
 
+
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
@@ -93,6 +94,10 @@ public:
     KisBackgroundSP background() const;
 
 public:
+
+    KisColor backgroundColor() const;
+    void setBackgroundColor(const KisColor & color);
+
     QString name() const;
     void setName(const QString& name);
 
@@ -323,6 +328,9 @@ private:
 #endif
 
     bool m_renderinit;
+    
+    class KisImagePrivate;
+    KisImagePrivate * m_private;
 };
 
 #endif // KIS_IMAGE_H_

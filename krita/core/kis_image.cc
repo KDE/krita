@@ -38,6 +38,7 @@
 
 #include "kis_annotation.h"
 #include "kis_colorspace_factory_registry.h"
+#include "kis_color.h"
 #include "kis_command.h"
 #include "kis_types.h"
 //#include "kis_guide.h"
@@ -64,9 +65,13 @@ const Q_INT32 RENDER_WIDTH = 128;
 static int numImages = 0;
 #endif
 
-namespace {
+class KisImage::KisImagePrivate {
+public:
+    KisColor backgroundColor;
+};
 
-    // -------------------------------------------------------
+
+namespace {
 
     class KisResizeImageCmd : public KNamedCommand {
         typedef KNamedCommand super;
@@ -498,6 +503,7 @@ DCOPObject * KisImage::dcopObject()
 
 KisImage::~KisImage()
 {
+    delete m_private;
     delete m_nserver;
     delete m_dcop;
 }
@@ -525,6 +531,17 @@ void KisImage::setDescription(const QString& description)
 }
 
 
+KisColor KisImage::backgroundColor() const
+{
+    return m_private->backgroundColor;
+}
+
+void KisImage::setBackgroundColor(const KisColor & color)
+{
+    m_private->backgroundColor = color;
+}
+
+
 QString KisImage::nextLayerName() const
 {
     if (m_nserver -> currentSeed() == 0) {
@@ -537,6 +554,9 @@ QString KisImage::nextLayerName() const
 
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
+    m_private = new KisImagePrivate();
+    m_private->backgroundColor = KisColor(Qt::white, colorSpace);
+
     Q_ASSERT(colorSpace != 0);
     m_renderinit = false;
     m_adapter = adapter;
@@ -834,9 +854,8 @@ KisProfile *  KisImage::getProfile() const
 void KisImage::setProfile(const KisProfile * profile)
 {
     KisColorSpace * dstSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(), profile);
-    convertTo( dstSpace );
-
-    notify();
+    //convertTo( dstSpace ); // XXX: We shouldn't convert here -- if you want to convert, use the conversion function.
+    setColorSpace(dstSpace); 
     emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
 }
 

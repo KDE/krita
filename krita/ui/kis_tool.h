@@ -45,9 +45,6 @@ class KisDoubleClickEvent;
 class KisMoveEvent;
 class KisCanvasPainter;
 
-
-class KisToolPrivate;
-
 enum enumToolType {
     TOOL_SHAPE = 0,   // Geometric shapes like ellipses and lines
     TOOL_FREEHAND = 1, // Freehand drawing tools

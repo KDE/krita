@@ -83,7 +83,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
         if (!sampleMerged) {
             // Find layer
             QString layerName = m_optionsWidget->cmbSources->currentText();
-            KisPaintDeviceImplSP dev = img->findLayer(layerName).data();
+            dev = img->findLayer(layerName).data();
 
             if (!dev ) {
                 return;

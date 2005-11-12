@@ -27,6 +27,9 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_iterators_pixel.h>
+#include <kis_layer.h>
+#include <kis_meta_registry.h>
+#include <kis_colorspace_factory_registry.h>
 
 #include "kis_wetop.h"
 #include "kis_wet_colorspace.h"
@@ -53,10 +56,23 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_painter -> device()) return;
     KisPaintDeviceImplSP device = m_painter -> device();
 
-    int x = pos.floorX(); // XXX subpixel positioning?
-    int y = pos.floorY();
-    int r = 10; // ### radius afaik, but please make configurable (KisBrush or so?)
-    kdDebug(DBG_AREA_CMS) << info.pressure << endl;
+    if (!m_painter -> device()) return;
+
+    KisBrush *brush = m_painter -> brush();
+    Q_ASSERT(brush);
+
+    if (! brush -> canPaintFor(info) )
+        return;
+
+    KisLayerSP dab = 0;
+
+    if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
+        dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), info);
+    }
+    else {
+        KisAlphaMaskSP mask = brush -> mask(info);
+        dab = computeDab(mask, KisMetaRegistry::instance() -> csRegistry() -> getAlpha8());
+    }
 
     KisColorSpace * cs = device -> colorSpace();
 
@@ -81,41 +97,32 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
     strength  = strength * (strength + info.pressure) * 0.5;
 
-    // Maybe it wouldn't be a bad idea to use a KisBrush in some way here
-    double r_fringe;
-    int x0, y0;
-    int x1, y1;
     WetPack currentPack;
     WetPix currentPix;
-    int xp, yp;
-    double xx, yy, rr;
     double eff_height;
     double press, contact;
 
-    r_fringe = r + 1;
-    x0 = floor(x - r_fringe);
-    y0 = floor(y - r_fringe);
-    x1 = ceil(x + r_fringe);
-    y1 = ceil(y + r_fringe);
+    int maskW = brush -> maskWidth(info);
+    int maskH = brush -> maskHeight(info);
+    KoPoint dest = (pos - (brush -> hotSpot(info)));
+    int xStart = dest.x();
+    int yStart = dest.y();
 
-    for (yp = y0; yp < y1; yp++) {
-        yy = (yp + 0.5 - y);
-        yy *= yy;
-        for (xp = x0; xp < x1; xp++) {
-            // XXX this only does something with .paint, and not with adsorb I assume?
-            KisHLineIteratorPixel it = device -> createHLineIterator(xp, yp, 1, true);
+    for (int y = 0; y < maskH; y++) {
+        KisHLineIteratorPixel dabIt = dab -> createHLineIterator(0, y, maskW, false);
+        KisHLineIteratorPixel it = device -> createHLineIterator(xStart, yStart+y, maskW, true);
+
+        while (!dabIt.isDone()) {
+            // This only does something with .paint, and not with adsorb.
             currentPack = *(reinterpret_cast<WetPack*>(it.rawData()));
             WetPix currentData = currentPack.adsorb;
             currentPix = currentPack.paint;
 
-            xx = (xp + 0.5 - x);
-            xx *= xx;
-            rr = yy + xx;
-            if (rr < r * r) {
+            // Hardcoded threshold for the dab 'strength': above it, it will get painted
+            if (*dabIt.rawData() > 125)
                 press = info.pressure * 0.25;
-            } else {
+            else
                 press = -1;
-            }
 
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentPix.w - 192) * (1.0 / 255);
@@ -144,8 +151,10 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 currentPack.paint = currentPix;
                 *(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;
             }
+            ++dabIt;
+            ++it;
         }
     }
 
-    m_painter -> addDirtyRect(QRect(x0, y0, x1 - x0, y1 - y0));
+    m_painter -> addDirtyRect(QRect(xStart, yStart, xStart + maskW, yStart + maskH));
 }

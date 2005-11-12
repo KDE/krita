@@ -39,6 +39,7 @@ class KisPoint;
 class KisAlphaMask;
 class KisPainter;
 class KisPaintBox;
+class KisColorSpace;
 
 /**
  * This class keeps information that can be used in the painting process, for example by
@@ -76,6 +77,7 @@ public:
 protected:
 
     virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
+    virtual KisLayerSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
 
 
     /**

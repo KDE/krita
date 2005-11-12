@@ -76,8 +76,9 @@ void KisColorCup::setColor(const QColor & c)
 
 void KisColorCup::slotClicked()
 {    
-    m_popup->move(this->mapToGlobal( this->rect().topRight() ) );
-    m_popup->show();
+//    m_popup->move(this->mapToGlobal( this->rect().topRight() ) );
+//    m_popup->show();
+    emit changed(m_color);
 }
 
 QSize KisColorCup::sizeHint() const

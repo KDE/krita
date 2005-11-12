@@ -31,6 +31,10 @@
 class KisPattern;
 
 // XXX: Filling should set dirty rect.
+/**
+ * This painter can be used to fill paint devices in different ways. This can also be used
+ * for flood filling related operations.
+ */
 class KRITACORE_EXPORT KisFillPainter : public KisPainter
 {
 
@@ -38,25 +42,41 @@ class KRITACORE_EXPORT KisFillPainter : public KisPainter
 
 public:
 
+    /**
+     * Construct an empty painter. Use the begin(KisPaintDeviceImplSP) method to attach
+     * to a paint device
+     */
     KisFillPainter();
+    /**
+     * Start painting on the specified paint device
+     */
     KisFillPainter(KisPaintDeviceImplSP device);
 
     /**
      * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
      */
     void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
+    /**
+     * Overloaded version of the above function.
+     */
     void eraseRect(const QRect& rc);
 
     /**
      * Fill a rectangle with a certain color.
      */
     void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c);
+    /**
+     * Overloaded version of the above function.
+     */
     void fillRect(const QRect& rc, const KisColor& c);
 
     /**
      * Fill a rectangle with a certain color and opacity.
      */
     void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, Q_UINT8 opacity);
+    /**
+     * Overloaded version of the above function.
+     */
     void fillRect(const QRect& rc, const KisColor& c, Q_UINT8 opacity);
 
     /**
@@ -64,6 +84,9 @@ public:
      * entire rectangle.
      */
     void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern);
+    /**
+     * Overloaded version of the above function.
+     */
     void fillRect(const QRect& rc, KisPattern * pattern);
 
     /**
@@ -83,7 +106,13 @@ public:
      **/
     KisSelectionSP createFloodSelection(int startX, int startY);
 
+    /**
+     * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
+     * fill parts that are the exact same color, 255 means anything will be filled
+     */
     void setFillThreshold(int threshold);
+    /** Returns the fill threshold, see setFillThreshold for details */
+    int fillThreshold() const { return m_threshold; }
 
     /** Sets the width of the layer */
     void setWidth(int w) { m_width = w; }
@@ -93,21 +122,26 @@ public:
 
     /** If sample merged is set to true, the paint device will get the bounds of the
      * floodfill from the complete image instead of the layer */
-
-    bool sampleMerged() { return m_sampleMerged; }
+    bool sampleMerged() const { return m_sampleMerged; }
+    /** Set sample merged. See sampleMerged() for details */
     void setSampleMerged(bool set) { m_sampleMerged = set; }
 
     /** If true, floodfill doesn't fill outside the selected area of a layer */
-    bool careForSelection() { return m_careForSelection; }
+    bool careForSelection() const { return m_careForSelection; }
+    /** Set caring for selection. See careForSelection for details */
     void setCareForSelection(bool set) { m_careForSelection = set; }
+
+    /**
+     * If true, the floodfill will be fuzzy. This means that the 'value' of selectedness
+     * will depend on the difference between the sampled color and the color at the current
+     * position.
+     */
+    bool fuzzyFill() const { return m_fuzzy; }
+    /** Sets the fuzzyfill parameter. See fuzzyFill for details */
+    void setFuzzyFill(bool set) { m_fuzzy = set; }
 
 private:
     // for floodfill
-    /**
-     * calculates the difference between 2 pixel values. Returns a value between 0 and
-     * 255 (actually should be MIN_SELECTED to MAX_SELECTED?). Only 0 and 255 are
-     * returned when anti-aliasing is off
-     **/
     void genericFillStart(int startX, int startY);
     void genericFillEnd(KisPaintDeviceImplSP filled);
 
@@ -119,6 +153,7 @@ private:
     QRect m_rect;
     bool m_sampleMerged;
     bool m_careForSelection;
+    bool m_fuzzy;
 };
 
 

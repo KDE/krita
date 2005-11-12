@@ -49,6 +49,9 @@ class KisPattern;
  *
  * KisPainter supports transactions that can group various paint operations
  * in one undoable step.
+ * 
+ * For more complex operations, you might want to have a look at the subclasses
+ * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
 class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
     typedef KisProgressSubject super;

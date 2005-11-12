@@ -75,44 +75,28 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
     int v;
 
     v = floor (8192.0 * src->rd + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->rd = v;
+    dst->rd = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->rw + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->rw = v;
+    dst->rw = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->gd + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->gd = v;
+    dst->gd = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->gw + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->gw = v;
+    dst->gw = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->bd + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->bd = v;
+    dst->bd = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->bw + 0.5);
-    if (v < 0) v = 0;
-    if (v > 65535) v = 65535;
-    dst->bw = v;
+    dst->bw = CLAMP(v, 0, 65535);
 
     v = floor (8192.0 * src->w + 0.5);
-    if (v < 0) v = 0;
-    if (v > 511) v = 511;
-    dst->w = v;
+    dst->w = CLAMP(v, 0, 511);
 
     v = floor (8192.0 * src->h + 0.5);
-    if (v < 0) v = 0;
-    if (v > 511) v = 511;
-    dst->h = v;
+    dst->h = CLAMP(v, 0, 511);
 
 }
 
@@ -250,10 +234,10 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
     WetPack * wp = (WetPack*)src;
 
     // First the adsorption layers
-    wet_composite(rgb, &wp -> adsorb);
+    wet_composite(RGB, rgb, &wp -> adsorb);
 
     // Then the paint layer (which comes first in our double-packed pixel)
-    wet_composite(rgb,  &wp -> paint);
+    wet_composite(RGB, rgb,  &wp -> paint);
 
     c -> setRgb(rgb[0], rgb[1], rgb[2]);
 
@@ -326,10 +310,11 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     while ( i < width * height) {
         // First the adsorption layers
         WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
-        wet_composite(rgb, &(wp -> adsorb));
+        // XXX Probably won't work on MSB archs!
+        wet_composite(BGR, rgb, &(wp -> adsorb));
 
         // Then the paint layer (which comes first in our double-packed pixel)
-        wet_composite(rgb, &(wp -> paint));
+        wet_composite(BGR, rgb, &(wp -> paint));
 
         // XXX pay attention to this comment!!
         // Display the wet stripes -- this only works if we have at least three scanlines in height,
@@ -406,14 +391,17 @@ void KisWetColorSpace::wet_init_render_tab()
 
 }
 
-void KisWetColorSpace::wet_composite(Q_UINT8 *rgb, WetPix * wet)
+void KisWetColorSpace::wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet)
 {
     int r, g, b;
     int d, w;
     int ab;
     int wa;
 
-    r = rgb[0];
+    if (m == RGB)
+        r = rgb[0];
+    else
+        r = rgb[2];
     w = wet[0].rw >> 4;
     d = wet[0].rd >> 4;
 
@@ -422,8 +410,12 @@ void KisWetColorSpace::wet_composite(Q_UINT8 *rgb, WetPix * wet)
 
     wa = (w * (ab >> 16) + 0x80) >> 8;
     r = wa + (((r - wa) * (ab & 0xffff) + 0x4000) >> 15);
-    rgb[0] = r;
+    if (m == RGB)
+        rgb[0] = r;
+    else
+        rgb[2] = r;
 
+    // Green is 1 both in RGB as BGR
     g = rgb[1];
     w = wet[0].gw >> 4;
     d = wet[0].gd >> 4;
@@ -433,15 +425,20 @@ void KisWetColorSpace::wet_composite(Q_UINT8 *rgb, WetPix * wet)
     g = wa + (((g - wa) * (ab & 0xffff) + 0x4000) >> 15);
     rgb[1] = g;
 
-    b = rgb[2];
+    if (m == RGB)
+        b = rgb[2];
+    else
+        b = rgb[0];
     w = wet[0].bw >> 4;
     d = wet[0].bd >> 4;
     d = d >= 4096 ? 4095 : d;
     ab = wet_render_tab[d];
     wa = (w * (ab >> 16) + 0x80) >> 8;
     b = wa + (((b - wa) * (ab & 0xffff) + 0x4000) >> 15);
-    rgb[2] = b;
-
+    if (m == RGB)
+        rgb[2] = b;
+    else
+        rgb[0] = b;
 }
 
 void KisWetColorSpace::wet_render_wetness(Q_UINT8 * rgb, WetPack * pack)

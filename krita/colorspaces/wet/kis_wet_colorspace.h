@@ -161,8 +161,9 @@ private:
     // it can be just as well a private member variable.
     void wet_init_render_tab();
 
-    // Convert a single pixel from its wet representation to rgb
-    void wet_composite(Q_UINT8 *rgb, WetPix * wet);
+    /// Convert a single pixel from its wet representation to rgb: internal rgb: rgb[0] = R, etc
+    typedef enum { RGB, BGR } RGBMode;
+    void wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet);
 
     void wet_render_wetness(Q_UINT8 * rgb, WetPack * pack);
 
@@ -195,7 +196,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisWetColorSpace(parent, p); };
 
-    virtual QString defaultProfile() { return "sRGB"; };
+    virtual QString defaultProfile() { return ""; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_WET_H_

@@ -23,20 +23,23 @@
 
 #include <qpoint.h>
 
-#include <klocale.h>
+#include <kdebug.h>
+#include <kfiledialog.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <kinstance.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <kdebug.h>
-#include <kgenericfactory.h>
-#include <kmessagebox.h>
 
+#define KROSS_MAIN_EXPORT KDE_EXPORT
+#include <main/manager.h>
+
+#include <kis_doc.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kfiledialog.h>
 
 
 #include "kis_scripts_registry.h"
@@ -67,8 +70,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         (void) new KAction(i18n("Load and &execute a script"), 0, 0, this, SLOT(slotLoadAndExecuteScript()), actionCollection(), "loadandexecutescript");
         (void) new KAction(i18n("&Show script manager"), 0, 0, this, SLOT(slotShowManager()), actionCollection(), "showmanager");
         
-        
-        
+        Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
     }
 
 }

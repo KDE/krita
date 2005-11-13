@@ -1,3 +1,9 @@
+if compile_kross
+SCRIPTINGDIR = scripting
+endif
+
+
+
 SUBDIRS = \
     colorrange \
     colorspaceconversion \
@@ -12,4 +18,4 @@ SUBDIRS = \
     screenshot \
     separate_channels \
     shearimage \
-    variations
+    variations $(SCRIPTINGDIR)

@@ -19,7 +19,7 @@
 #ifndef KIS_SCRIPT_H
 #define KIS_SCRIPT_H
 
-#include <scriptcontainer.h>
+#include <main/scriptcontainer.h>
 #include <qobject.h>
 
 #include <kurl.h>

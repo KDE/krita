@@ -1,14 +1,15 @@
+SUBDIRS = kritacore samples
 kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = scripting.rc
 
 kde_services_DATA = kritascripting.desktop
 
 
-INCLUDES  =  -I$(srcdir)/../../../sdk \
-	-I$(srcdir)/../../../core \
-	-I$(srcdir)/../../../kritacolor/ \
-	-I$(srcdir)/../../../ui \
-	-I$(top_srcdir)/kexi/scriptingcore/main \
+INCLUDES  =  -I$(top_srcdir)/krita/sdk \
+	-I$(top_srcdir)/krita/core \
+	-I$(top_srcdir)/krita/kritacolor/ \
+	-I$(top_srcdir)/krita/ui \
+	-I$(top_srcdir)/lib/kross \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
@@ -19,7 +20,7 @@ kde_module_LTLIBRARIES = kritascripting.la
 noinst_HEADERS = scripting.h kis_script.h wdgscriptsmanager.h
 
 kritascripting_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kritascripting_la_LIBADD =  ../../../libkritacommon.la $(top_builddir)/kexi/scriptingcore/main/libkrossmain.la
+kritascripting_la_LIBADD =  ../../../libkritacommon.la $(top_builddir)/lib/kross/main/libkrossmain.la
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

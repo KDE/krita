@@ -120,6 +120,16 @@ void KisColorSpaceFactoryRegistry::addProfile(KisProfile *p)
       }
 }
 
+void KisColorSpaceFactoryRegistry::addPaintDeviceAction(KisColorSpace* cs,
+        KisPaintDeviceAction* action) {
+    m_paintDevActionMap[cs -> id()].append(action);
+}
+
+QValueVector<KisPaintDeviceAction *>
+KisColorSpaceFactoryRegistry::paintDeviceActionsFor(KisColorSpace* cs) {
+    return m_paintDevActionMap[cs -> id()];
+}
+
 KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const QString & pName)
 {
     QString profileName = pName;

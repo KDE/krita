@@ -116,6 +116,7 @@
 #include "kis_label_progress.h"
 #include "kis_opengl_image_context.h"
 #include "kis_background.h"
+#include "kis_paint_device_action.h"
 
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
@@ -2108,8 +2109,17 @@ void KisView::layerAdd()
         NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(), dlg.opacity(), KisMetaRegistry::instance()->csRegistry()->getColorSpace(dlg.colorSpaceID(),""));
+            KisColorSpace* cs = KisMetaRegistry::instance() ->  csRegistry() ->
+                    getColorSpace(dlg.colorSpaceID(),"");
+            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(),
+                                             dlg.opacity(), cs);
             if (layer) {
+
+                QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+                        csRegistry() -> paintDeviceActionsFor(cs);
+                for (uint i = 0; i < actions.count(); i++)
+                    actions.at(i) -> act(layer.data(), img -> width(), img -> height());
+
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());

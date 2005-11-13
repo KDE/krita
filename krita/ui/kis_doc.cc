@@ -75,6 +75,7 @@
 #include "kis_id.h"
 #include "kis_part_layer.h"
 #include "kis_doc_iface.h"
+#include "kis_paint_device_action.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -882,6 +883,12 @@ bool KisDoc::slotNewImage()
         painter.begin(layer.data());
         painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
         painter.end();
+
+        QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+                csRegistry() -> paintDeviceActionsFor(cs);
+        for (uint i = 0; i < actions.count(); i++)
+            actions.at(i) -> act(layer.data(), img -> width(), img -> height());
+
         img -> setBackgroundColor(KisColor(c, opacity, cs));
         img -> add(layer, -1);
         img -> notify();

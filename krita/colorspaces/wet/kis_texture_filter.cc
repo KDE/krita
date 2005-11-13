@@ -25,29 +25,20 @@
 #include "kis_texture_painter.h"
 #include "kis_texture_filter.h"
 
-TextureFilter::TextureFilter(KisView* view)
-    : m_view(view) {
-}
-
-void TextureFilter::slotActivated() {
-    if (!m_view -> getCanvasSubject()->currentImg())
-        return;
-    if (!m_view -> getCanvasSubject()->currentImg() -> activeDevice())
-        return;
-
-    KisPaintDeviceImplSP device = m_view -> getCanvasSubject()->currentImg() -> activeDevice();
+void WetPaintDevAction::act(KisPaintDeviceImplSP device, Q_INT32 w, Q_INT32 h) const {
     KisColorSpace * cs = device -> colorSpace();
 
     if (cs -> id() != KisID("WET","")) {
         kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
         return;
+    } else {
+        kdDebug(DBG_AREA_CMS) << "Wet Paint Action activated!\n";
     }
 
     // XXX if params of the painter get configurable, make them here configurable as well?
     KisTexturePainter painter(device);
-    painter.createTexture(0, 0, m_view -> getCanvasSubject()->currentImg() -> width(), m_view -> getCanvasSubject()->currentImg() -> height());
+    painter.createTexture(0, 0, w, h);
     painter.end();
-    m_view -> getCanvasSubject()->currentImg() -> notify();
 }
 
 #include "kis_texture_filter.moc"

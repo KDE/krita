@@ -24,12 +24,14 @@
 #include "kis_colorspace.h"
 
 class QStringList;
+class KisPaintDeviceAction;
 
 /**
  * This class contains:
  *      - a registry of singleton color strategies.
  *      - a registry of icc profiles
  *      - a registry of default pixel operations
+ *      - a registry of actions that can be performed when a layer with a colorstrategy is made
  */
 class KisColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KisColorSpaceFactory *> {
 
@@ -93,6 +95,16 @@ public:
      */
     KisColorSpace * getRGB8();
 
+    /**
+     * add a KisConstructPaintDeviceAction to the registry for a colorspace
+     */
+    void addPaintDeviceAction(KisColorSpace* cs, KisPaintDeviceAction* action);
+
+    /**
+     * Get a list of KisConstructPaintDeviceAction for a colorspace
+     */
+    QValueVector<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
+
 private:
     KisColorSpaceFactoryRegistry();
     KisColorSpaceFactoryRegistry(const KisColorSpaceFactoryRegistry&);
@@ -102,6 +114,8 @@ private:
 
     QMap<QString, KisProfile * > m_profileMap;
     QMap<QString, KisColorSpace * > m_csMap;
+    typedef QValueVector<KisPaintDeviceAction *> PaintActionVector;
+    QMap<KisID, PaintActionVector> m_paintDevActionMap;
     KisColorSpace *m_xyzCs;
     KisColorSpace *m_alphaCs;
 };

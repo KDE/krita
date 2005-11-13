@@ -4,11 +4,5 @@
 <Menu name="View"><text>&amp;View</text>
 	<Action name="wetnessvisualisation"/>
 </Menu>
-
-<Menu name="Layer"><text>La&amp;yer</text>
-	<Menu name="watercolors"><text>&amp;Watercolors</text>
-		<Action name="texturefilter"/>
-	</Menu>
-</Menu>
 </MenuBar>
 </kpartgui>

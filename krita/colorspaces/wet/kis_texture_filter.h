@@ -21,24 +21,18 @@
 #ifndef _TEXTURE_FILTER_H
 #define _TEXTURE_FILTER_H
 
-#include <qobject.h>
-#include <qtimer.h>
-#include <kactionclasses.h>
+#include <qstring.h>
+#include <klocale.h>
+#include <kis_paint_device_action.h>
 
-class KisView;
-
-class TextureFilter : public QObject
-{
-Q_OBJECT
+/// Initializes a wet paint device with a texture
+class WetPaintDevAction : public KisPaintDeviceAction {
 public:
-    TextureFilter(KisView* view);
-    virtual ~TextureFilter() {}
-    
-private slots:
-    void slotActivated();
+    virtual ~WetPaintDevAction() {}
 
-private:
-    KisView * m_view;
+    virtual void act(KisPaintDeviceImplSP device, Q_INT32 w = 0, Q_INT32 h = 0) const;
+    virtual QString name() const { return i18n("Wet Texture"); }
+    virtual QString description() const { return i18n("Add a texture to the wet canvas"); }
 };
 
 #endif // _TEXTURE_FILTER_H

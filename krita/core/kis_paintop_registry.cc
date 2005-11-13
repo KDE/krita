@@ -33,6 +33,7 @@
 #include "kis_paintop.h"
 #include "kis_id.h"
 #include "kis_debug_areas.h"
+#include "kis_colorspace.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -89,7 +90,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painte
     return paintOp(KisID(id, ""), painter);
 }
 
-bool KisPaintOpRegistry::userVisible(const KisID & id) const
+bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
 {
 
     KisPaintOpFactorySP f = get(id);
@@ -98,7 +99,7 @@ bool KisPaintOpRegistry::userVisible(const KisID & id) const
         return false;
     }
 
-    return f->userVisible();
+    return f->userVisible(cs);
 
 }
 

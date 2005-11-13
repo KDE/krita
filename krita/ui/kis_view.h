@@ -146,6 +146,11 @@ signals:
     void gradientChanged(KisGradient * gradient);
     void patternChanged(KisPattern * pattern);
     void paintopChanged(KisID paintop);
+    /**
+     * Indicates when the current layer changed so that the current colorspace could have
+     * changed.
+     **/
+    void currentColorSpaceChanged(KisLayerSP layer);
     void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 
 public slots:

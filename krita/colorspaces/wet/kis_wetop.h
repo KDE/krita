@@ -21,6 +21,7 @@
 
 #include "kis_paintop.h"
 #include "kis_types.h"
+#include "kis_colorspace.h"
 
 class KisPoint;
 class KisPainter;
@@ -34,6 +35,7 @@ public:
 
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("watercolor brush")); }
+    virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
 };
 
 class KisWetOp : public KisPaintOp {

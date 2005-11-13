@@ -102,8 +102,6 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
         // Texture Action:
         f -> addPaintDeviceAction(colorSpaceWet, new WetPaintDevAction);
-
-        //(void) new KAction(i18n("Dry the paint (25 times)"), 0, 0, kfi, SLOT(slotActivated()), actionCollection(), "wetphysics");
     }
     else if (parent -> inherits("KisView"))
     {

@@ -107,8 +107,9 @@ public:
     /**
      * Whether this paintop is internal to a certain tool or can be used
      * in various tools. If false, it won't show up in the toolchest.
+     * The KisColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible() { return true; }
+    virtual bool userVisible(KisColorSpace*) { return true; }
 
     /**
      * Slot the paint op into the relevant toolbox, if so desired. It's

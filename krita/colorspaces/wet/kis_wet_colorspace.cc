@@ -176,7 +176,6 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
         (*p).paint = m_conversionMap[c.rgb()];
         (*p).adsorb = m_conversionMap[c.rgb()]; // or maybe best add water here?
     } else {
-        kdDebug(DBG_AREA_CMS) << c.red() << " " << c.green() << " " << c.blue() << endl;
         // water
         (*p).paint = m_paintbox[14];
         (*p).adsorb = m_paintbox[14];

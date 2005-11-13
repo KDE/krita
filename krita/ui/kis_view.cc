@@ -1031,6 +1031,8 @@ void KisView::layerUpdateGUI(bool enable)
     m_filterManager->updateGUI();
     m_toolManager->updateGUI();
 
+    emit currentColorSpaceChanged(layer);
+
     imgUpdateGUI();
 }
 

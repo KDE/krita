@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = krosskritacore.la
 krosskritacore_la_SOURCES = kritacoremodule.cpp krs_doc.cpp krs_layer.cpp \
 	krs_image.cpp
 
-krosskritacore_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+krosskritacore_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 krosskritacore_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \

@@ -140,8 +140,7 @@ public:
      * @param zoomListener the object that listens to the zoom instructions we give
      * @param thumbnailProvider the class that creates the small image at the right
      *        zoomlevel
-     * @param canvas the place the document is painted.:q
-
+     * @param canvas the place the document is painted.
      * @param parent the parent widget
      * @param name the QObject name of this bird eye widget
      * @param f the widget flags (@see QWidget)

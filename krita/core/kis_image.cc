@@ -584,9 +584,9 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 #ifdef __BIG_ENDIAN__
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     m_bigEndianTransform = cmsCreateTransform(hProfile ,
-                                              TYPE_BGRA_8,
+                                              TYPE_ABGR_8,
                                               hProfile ,
-                                              TYPE_ARGB_8,
+                                              TYPE_RGBA_8,
                                               INTENT_PERCEPTUAL,
                                               0);
 #endif
@@ -1568,6 +1568,10 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     QImage img = m_projection -> convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
+#ifdef __BIG_ENDIAN__
+        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+#endif
+
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg -> paintBackground(img, x1, y1);
         img.setAlphaBuffer(false);
@@ -1580,10 +1584,6 @@ void KisImage::renderToPainter(Q_INT32 x1,
     }
 
     if (!img.isNull()) {
-
-#ifdef __BIG_ENDIAN__
-        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
-#endif
         painter.drawImage(x1, y1, img, 0, 0, w, h);
     }
 }
@@ -1601,11 +1601,6 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     QImage img = m_projection->convertToQImage(profile, x1, y1, w, h, exposure);
 
     if (!img.isNull()) {
-
-        /* Docs says this fn doesn't draw the selection.
-        if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
-            m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
-        }*/
 
 #ifdef __BIG_ENDIAN__
         cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);

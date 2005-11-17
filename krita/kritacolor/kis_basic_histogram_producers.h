@@ -127,6 +127,7 @@ public:
     virtual ~KisBasicHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
     virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace -> id() == m_cs -> id(); }
+    virtual float preferrednessLevelWith(KisColorSpace* colorSpace) const { return 1.0; }
 protected:
     KisColorSpace *m_cs;
 };
@@ -156,6 +157,7 @@ public:
     virtual ~KisGenericRGBHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericRGBHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+    virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
 };
 
 /**
@@ -182,5 +184,6 @@ public:
     virtual ~KisGenericLightnessHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new KisGenericLightnessHistogramProducer(); }
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+    virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
 };
 #endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

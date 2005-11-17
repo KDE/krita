@@ -99,8 +99,12 @@ class KisHistogramProducerFactory {
 public:
     KisHistogramProducerFactory(const KisID& id) : m_id(id) {}
     virtual ~KisHistogramProducerFactory() {}
+    /// Factory method, generates a new KisHistogramProducer
     virtual KisHistogramProducerSP generate() = 0;
+    /// Returns if a colorspace can be used with this producer
     virtual bool isCompatibleWith(KisColorSpace* colorSpace) const = 0;
+    /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
+    virtual float preferrednessLevelWith(KisColorSpace* colorSpace) const = 0;
     virtual const KisID& id() const { return m_id; }
 protected:
     KisID m_id;
@@ -111,6 +115,7 @@ class KisHistogramProducerFactoryRegistry
 public:
     virtual ~KisHistogramProducerFactoryRegistry();
     static KisHistogramProducerFactoryRegistry* instance();
+    /// returns a list, sorted by preferrence: higher preferance comes first
     KisIDList listKeysCompatibleWith(KisColorSpace* colorSpace) const;
 
 private:

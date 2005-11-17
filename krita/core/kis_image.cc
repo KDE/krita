@@ -1569,7 +1569,20 @@ void KisImage::renderToPainter(Q_INT32 x1,
     QImage img = m_projection -> convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
 #ifdef __BIG_ENDIAN__
-        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+        //cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+	uchar * data = img.bits();
+	for (int i = 0; i < w * h; ++i) {
+	    uchar r, g, b, a;
+	    a = data[0];
+	    b = data[1];
+	    g = data[2];
+	    r = data[3];
+	    data[0] = r;
+	    data[1] = g;
+	    data[2] = b;
+	    data[3] = a;
+	    data += 4;
+	}
 #endif
 
     if (paintFlags & PAINT_BACKGROUND) {

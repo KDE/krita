@@ -172,7 +172,7 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     m_checkSampleMerged->setChecked(m_sampleMerged);
     connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
 
-    m_checkFillSelection = new QCheckBox(i18n("Fill Entire Selection"), widget);
+    m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
     m_checkFillSelection -> setChecked(m_fillOnlySelection);
     connect(m_checkFillSelection, SIGNAL(stateChanged(int)), this, SLOT(slotSetFillSelection(int)));
 

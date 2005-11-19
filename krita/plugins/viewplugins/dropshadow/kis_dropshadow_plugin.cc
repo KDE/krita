@@ -55,7 +55,7 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const char *name, cons
         setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView*) parent;
-        (void) new KAction(i18n("Add dropshadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
+        (void) new KAction(i18n("Add Dropshadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
     }
 }
 

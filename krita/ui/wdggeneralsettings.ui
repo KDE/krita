@@ -75,7 +75,7 @@
                         <cstring>grpDockability</cstring>
                     </property>
                     <property name="title">
-                        <string>Palette behaviour</string>
+                        <string>Palette Behavior</string>
                     </property>
                     <property name="exclusive">
                         <bool>true</bool>
@@ -89,7 +89,7 @@
                                 <cstring>radioAllowDocking</cstring>
                             </property>
                             <property name="text">
-                                <string>allow &amp;Docking</string>
+                                <string>Allow &amp;docking</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -97,7 +97,7 @@
                                 <cstring>radioDisallowDocking</cstring>
                             </property>
                             <property name="text">
-                                <string>allow only &amp;Floating</string>
+                                <string>Allow only &amp;floating</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -105,7 +105,7 @@
                                 <cstring>radioSmartDocking</cstring>
                             </property>
                             <property name="text">
-                                <string>allow docking only on &amp;Large screens</string>
+                                <string>Allow docking only on &amp;large screens</string>
                             </property>
                         </widget>
                     </vbox>

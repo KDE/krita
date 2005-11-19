@@ -65,7 +65,7 @@
                                 <cstring>cbUseOpenGLShaders</cstring>
                             </property>
                             <property name="text">
-                                <string>Enable OpenGL Shaders</string>
+                                <string>Enable OpenGL shaders</string>
                             </property>
                         </widget>
                     </vbox>

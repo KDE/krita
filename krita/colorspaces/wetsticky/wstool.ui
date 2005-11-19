@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgWSPaintOp</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,315 +8,245 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>433</height>
+            <width>582</width>
+            <height>359</height>
         </rect>
     </property>
-    <widget class="QGroupBox">
+    <grid>
         <property name="name">
-            <cstring>grpPaint</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>30</x>
-                <y>250</y>
-                <width>360</width>
-                <height>143</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>&amp;Paint</string>
-        </property>
-        <grid>
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>grpGravity</cstring>
             </property>
-            <widget class="QLabel" row="0" column="0">
-                <property name="name">
-                    <cstring>lblDryingRate</cstring>
-                </property>
-                <property name="text">
-                    <string>&amp;Drying rate:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>intDryingRate</cstring>
-                </property>
-            </widget>
-            <widget class="QCheckBox" row="1" column="0" rowspan="2" colspan="4">
-                <property name="name">
-                    <cstring>chkLiquid</cstring>
-                </property>
-                <property name="text">
-                    <string>&amp;Liquid content:</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="KIntNumInput" row="0" column="1" rowspan="1" colspan="3">
-                <property name="name">
-                    <cstring>intDryingRate</cstring>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="maxValue">
-                    <number>100</number>
-                </property>
-            </widget>
-            <widget class="KIntNumInput" row="2" column="2" rowspan="1" colspan="2">
-                <property name="name">
-                    <cstring>intMiscibility</cstring>
-                </property>
-            </widget>
-            <widget class="KIntNumInput" row="3" column="3">
-                <property name="name">
-                    <cstring>intLiquidContent</cstring>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="maxValue">
-                    <number>100</number>
-                </property>
-            </widget>
-            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
-                <property name="name">
-                    <cstring>lblMiscibility</cstring>
-                </property>
-                <property name="text">
-                    <string>&amp;Miscibility:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>intMiscibility</cstring>
-                </property>
-            </widget>
-        </grid>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>grpGravity</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>10</y>
-                <width>233</width>
-                <height>122</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>&amp;Gravity</string>
-        </property>
-        <grid>
-            <property name="name">
-                <cstring>unnamed</cstring>
+            <property name="title">
+                <string>&amp;Gravity</string>
             </property>
-            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+            <grid>
                 <property name="name">
-                    <cstring>chkGravity</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="text">
-                    <string>Paint &amp;gravity</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="1" column="0">
-                <property name="name">
-                    <cstring>lblDirection</cstring>
-                </property>
-                <property name="text">
-                    <string>Direction:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>intDryingRate</cstring>
-                </property>
-            </widget>
-            <widget class="QComboBox" row="1" column="1">
-                <item>
-                    <property name="text">
-                        <string>Up</string>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkGravity</cstring>
                     </property>
-                </item>
-                <item>
                     <property name="text">
-                        <string>Right</string>
+                        <string>Paint &amp;gravity</string>
                     </property>
-                </item>
-                <item>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblDirection</cstring>
+                    </property>
                     <property name="text">
-                        <string>Down</string>
+                        <string>Direction:</string>
                     </property>
-                </item>
-                <item>
+                    <property name="buddy" stdset="0">
+                        <cstring>intDryingRate</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Up</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Right</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Down</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Left</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cmbGravitationalDirection</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblStrength</cstring>
+                    </property>
                     <property name="text">
-                        <string>Left</string>
+                        <string>&amp;Strength:</string>
                     </property>
-                </item>
+                    <property name="buddy" stdset="0">
+                        <cstring>intGravitationalStrength</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intGravitationalStrength</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpPaint</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Paint</string>
+            </property>
+            <grid>
                 <property name="name">
-                    <cstring>cmbGravitationalDirection</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-            </widget>
-            <widget class="QLabel" row="2" column="0">
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lblDryingRate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Drying rate:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intDryingRate</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0" rowspan="2" colspan="4">
+                    <property name="name">
+                        <cstring>chkLiquid</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Liquid content:</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>intDryingRate</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="2" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>intMiscibility</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="3">
+                    <property name="name">
+                        <cstring>intLiquidContent</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>lblMiscibility</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Miscibility:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intMiscibility</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="1">
+            <property name="name">
+                <cstring>grpSubstrate</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Canvas</string>
+            </property>
+            <grid>
                 <property name="name">
-                    <cstring>lblStrength</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="text">
-                    <string>&amp;Strength:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>intGravitationalStrength</cstring>
-                </property>
-            </widget>
-            <widget class="KIntNumInput" row="2" column="1">
-                <property name="name">
-                    <cstring>intGravitationalStrength</cstring>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-            </widget>
-        </grid>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>grpSubstrate</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>280</x>
-                <y>20</y>
-                <width>270</width>
-                <height>210</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>&amp;Canvas</string>
-        </property>
-        <widget class="KIntNumInput">
-            <property name="name">
-                <cstring>intHeight</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>130</y>
-                    <width>130</width>
-                    <height>27</height>
-                </rect>
-            </property>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>lblHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intHeight</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>intAbsorbency</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>lblAbsorbency</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Absorbency:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>intAbsorbency</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>lblColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Color:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>bnCanvasColor</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>chkCanvas</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Paint canvas attributes</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>bnCanvasColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>lblHeight</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>30</x>
-                    <y>120</y>
-                    <width>82</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;Height:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>intHeight</cstring>
-            </property>
-        </widget>
-        <widget class="KIntNumInput">
-            <property name="name">
-                <cstring>intAbsorbency</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>90</y>
-                    <width>130</width>
-                    <height>27</height>
-                </rect>
-            </property>
-            <property name="minValue">
-                <number>0</number>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>lblAbsorbency</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>90</y>
-                    <width>110</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;Absorbency:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>intAbsorbency</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>lblColor</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>30</x>
-                    <y>60</y>
-                    <width>60</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;Color:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>bnCanvasColor</cstring>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>chkCanvas</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>20</y>
-                    <width>170</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Paint canvas attributes</string>
-            </property>
-            <property name="accel">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="KColorButton">
-            <property name="name">
-                <cstring>bnCanvasColor</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>50</y>
-                    <width>130</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-        </widget>
-    </widget>
+    </grid>
 </widget>
 <customwidgets>
 </customwidgets>
@@ -328,6 +258,5 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kcolorbutton.h</includehint>
 </includehints>
 </UI>

@@ -27,7 +27,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Custom gradient</string>
+                <string>Custom Gradient</string>
             </property>
             <vbox>
                 <property name="name">

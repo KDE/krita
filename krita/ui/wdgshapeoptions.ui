@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Geometry options</string>
+        <string>Geometry Options</string>
     </property>
     <grid>
         <property name="name">
@@ -36,17 +36,17 @@
         <widget class="QComboBox" row="2" column="1">
             <item>
                 <property name="text">
-                    <string>Not filled</string>
+                    <string>Not Filled</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>Foreground color</string>
+                    <string>Foreground Color</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>Background color</string>
+                    <string>Background Color</string>
                 </property>
             </item>
             <item>

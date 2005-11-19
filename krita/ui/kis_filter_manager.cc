@@ -88,7 +88,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     am = new KActionMenu(i18n("Decor"), ac, "decor_filters");
     m_filterActionMenus.insert("decor", am);
 
-    am = new KActionMenu(i18n("Edge detection"), ac, "edge_filters");
+    am = new KActionMenu(i18n("Edge Detection"), ac, "edge_filters");
     m_filterActionMenus.insert("edge", am);
 
     am = new KActionMenu(i18n("Emboss"), ac, "emboss_filters");
@@ -103,7 +103,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     am = new KActionMenu(i18n("Other"), ac, "misc_filters");
     m_filterActionMenus.insert("", am);
     
-    m_reapplyAction = new KAction(i18n("Apply filter again"),
+    m_reapplyAction = new KAction(i18n("Apply Filter Again"),
                 "Ctrl+Shift+J",
                 this, SLOT(slotApply()),
                 ac, "filter_apply_again");

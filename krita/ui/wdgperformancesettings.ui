@@ -29,7 +29,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Maximum of tiles in memory</string>
+                        <string>Maximum of tiles in memory:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>The maximum number of "tiles" that is kept in memory. For regular RGBA8 images, each tile is about 16 kB big. Thus, for a value of 500 tiles this usually means about 8 megabytes of data used for image data. If you regularily handle big images, a bigger value here might be useful.
@@ -83,7 +83,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Swappiness</string>
+                        <string>Swappiness:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>This configures how much Krita likes to swap. Move the slider to the left, and there is no swapping at all. Move it to the right there is a lot of swapping going on.</string>

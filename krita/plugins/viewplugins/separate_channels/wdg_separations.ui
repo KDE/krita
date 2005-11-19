@@ -37,7 +37,7 @@
                 <cstring>grpAlpha</cstring>
             </property>
             <property name="title">
-                <string>Alpha options</string>
+                <string>Alpha Options</string>
             </property>
             <vbox>
                 <property name="name">

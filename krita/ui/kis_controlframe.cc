@@ -130,7 +130,7 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 
     m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
     action = new KWidgetAction(m_paintopBox,
-                               i18n("&Painter's tools"),
+                               i18n("&Painter's Tools"),
                                0,
                                view,
                                0,

@@ -554,7 +554,7 @@ void KisView::setupActions()
     // layer actions
     m_layerAdd = new KAction(i18n("&Add Layer..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
 
-    m_actionPartLayer = new KoPartSelectAction( i18n( "&Object layer" ), "frame_query",
+    m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
                                                     this, SLOT( addPartLayer() ),
                                                     actionCollection(), "insert_part_layer" );
 

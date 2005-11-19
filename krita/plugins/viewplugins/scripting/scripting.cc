@@ -66,9 +66,9 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
         m_view = (KisView*) parent;
 
-        (void) new KAction(i18n("&Load script"), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "loadscript");
-        (void) new KAction(i18n("Load and &execute a script"), 0, 0, this, SLOT(slotLoadAndExecuteScript()), actionCollection(), "loadandexecutescript");
-        (void) new KAction(i18n("&Show script manager"), 0, 0, this, SLOT(slotShowManager()), actionCollection(), "showmanager");
+        (void) new KAction(i18n("&Load Script"), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "loadscript");
+        (void) new KAction(i18n("Load && &Execute Script"), 0, 0, this, SLOT(slotLoadAndExecuteScript()), actionCollection(), "loadandexecutescript");
+        (void) new KAction(i18n("&Show Script Manager"), 0, 0, this, SLOT(slotShowManager()), actionCollection(), "showmanager");
         
         Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
     }

@@ -54,7 +54,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
 
         m_view = (KisView*) parent;
 
-        (void) new KAction(i18n("&Filters gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
+        (void) new KAction(i18n("&Filters Gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
     }
 
 

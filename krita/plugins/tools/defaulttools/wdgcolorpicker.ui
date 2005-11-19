@@ -24,7 +24,7 @@
                 <cstring>cbNormaliseValues</cstring>
             </property>
             <property name="text">
-                <string>Normalize Integer Values</string>
+                <string>Normalize integer values</string>
             </property>
         </widget>
         <widget class="QListView" row="3" column="0">
@@ -65,13 +65,13 @@
                 <cstring>cbUpdateCurrentColour</cstring>
             </property>
             <property name="text">
-                <string>Update Current Color</string>
+                <string>Update current color</string>
             </property>
         </widget>
         <widget class="QComboBox" row="0" column="0">
             <item>
                 <property name="text">
-                    <string>Sample all visible layers</string>
+                    <string>Sample All Visible Layers</string>
                 </property>
             </item>
             <property name="name">

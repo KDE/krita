@@ -21,7 +21,7 @@ krita_la_SOURCES = main.cc
 krita_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 krita_la_LIBADD = $(LIB_KOFFICECORE)
 
-xdg_apps = krita.desktop
+xdg_apps_DATA = krita.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/krita

@@ -55,7 +55,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", "&Small tiles...")
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", "&Small Tiles...")
 {
 }
 
@@ -64,10 +64,10 @@ void KisSmallTilesFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
         Q_INT32 height = rect.height();
-        
+
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
-        
+
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
@@ -87,7 +87,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDev
             {
                 KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
                 KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
-    
+
                 while( ! tmpIt.isDone() )
                 {
                     if(tmpIt.isSelected())
@@ -103,7 +103,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDev
             }
         }
     }
-    
+
     setProgressDone();
 }
 

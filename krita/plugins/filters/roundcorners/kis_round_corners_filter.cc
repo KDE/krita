@@ -52,7 +52,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "decor", "&Round corners...")
+KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "decor", "&Round Corners...")
 {
 }
 
@@ -61,7 +61,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 radius = ((KisRoundCornersFilterConfiguration*)configuration)->radius();
     Q_UINT32 pixelSize = src -> pixelSize();
-    
+
     setProgressTotalSteps( rect.height() );
         setProgressStage(i18n("Applying pixelize filter..."),0);
 
@@ -87,7 +87,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
                     else
                     {
                         if( x <= radius && y <= radius)
-                        {    
+                        {
                             double dx = radius - x;
                             double dy = radius - y;
                             double dradius = static_cast<double>(radius);
@@ -118,7 +118,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
                         }
                         else if( x >= x0 + width - radius && y >= y0 + height - radius)
                         {
-                            
+
                             double dx = x + radius - x0 - width;
                             double dy = y + radius - y0 - height;
                             double dradius = static_cast<double>(radius);

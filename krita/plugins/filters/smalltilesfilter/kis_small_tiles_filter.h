@@ -44,7 +44,7 @@ public:
 
 public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("smalltiles", i18n("Small tiles")); };
+    static inline KisID id() { return KisID("smalltiles", i18n("Small Tiles")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )

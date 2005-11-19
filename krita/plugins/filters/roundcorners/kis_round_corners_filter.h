@@ -40,7 +40,7 @@ public:
     KisRoundCornersFilter();
 public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("roundcorners", i18n("Round corners")); };
+    static inline KisID id() { return KisID("roundcorners", i18n("Round Corners")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )

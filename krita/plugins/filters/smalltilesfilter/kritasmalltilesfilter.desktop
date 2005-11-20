@@ -1,18 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Small Tiles Filter
-Name[bg]=Филтър за малки плочки
-Name[cy]=Hidlen Deiliau Bychain
-Name[eo]=Etkahela filtrilo
-Name[es]=Filtro de azulejos pequeños
-Name[et]=Pisipaanide filter
-Name[fr]=Filtre mosaïque
-Name[ja]=小タイルフィルター
-Name[pt]=Filtro de pequenos padrões
-Name[pt_BR]=Filtro de pequenos padrões
-Name[sv]=Smårutorsfilter
-Name[tr]=Küçük döşeme süzgeci
-Name[xx]=xxSmall tiles filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

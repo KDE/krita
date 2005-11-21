@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Small Tiles Filter
+Name[it]=Filtro per piccoli riquadri
+Name[pt]=Filtro de Pequenos Padrões
+Name[pt_BR]=Filtro de Pequenos Padrões
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

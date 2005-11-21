@@ -1,7 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Smeary brush
+Name[it]=Pennello oleoso
+Name[pt]=Pintura viscosa
+Name[pt_BR]=Pintura viscosa
 Comment=Smeary brush
+Comment[it]=Pennello oleoso
+Comment[pt]=Pincel viscoso
+Comment[pt_BR]=Pincel viscoso
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasmearybrush

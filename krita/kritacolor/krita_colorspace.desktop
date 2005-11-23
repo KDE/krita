@@ -8,6 +8,8 @@ Comment[es]=Un módulo que implementa un espacio de color completo para usar con
 Comment[it]=Un modulo che implementa uno spazio dei colori completo per usarlo con libkritacolor
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
 Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
+Comment[sr]=Модул који имплементира потпун простор боја за употребу са libkritacolor
+Comment[sr@Latn]=Модул који имплементира потпун простор боја за употребу са libkritacolor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor
 Comment[xx]=xxA module implementing a complete colorspace for use with libkritacolorxx
 [PropertyDef::X-KDE-Version]

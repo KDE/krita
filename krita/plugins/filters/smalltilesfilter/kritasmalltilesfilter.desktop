@@ -1,9 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Small Tiles Filter
+Name[cy]=Hidlen Deiliau Bychain
 Name[it]=Filtro per piccoli riquadri
 Name[pt]=Filtro de Pequenos Padrões
 Name[pt_BR]=Filtro de Pequenos Padrões
+Name[sr]=Филтер малих плоча
+Name[sr@Latn]=Филтер малих плоча
 Name[sv]=Smårutorsfilter
 ServiceTypes=Krita/Filter
 Type=Service

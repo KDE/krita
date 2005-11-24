@@ -2,7 +2,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 
 ## The common lib, shared between the part, the plugins, and the filters
 lib_LTLIBRARIES = libkritacommon.la
-libkritacommon_la_SOURCES = dummycommon.cc
+libkritacommon_la_SOURCES = dummy.cc
 libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
 libkritacommon_la_LIBADD = sdk/libkritasdk.la core/libkritaimage.la ui/libkritaui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
 
@@ -30,11 +30,6 @@ rc_DATA = krita.rc krita_readonly.rc
 SUBDIRS = sdk kritacolor core ui . dtd colorspaces plugins data pics 
 # Needed to compile libkritacommon.la, which has no source files to itself
 # but everything in static libs.
-dummycommon.cc:
-	echo > dummycommon.cc
-
-# Needed to compile libkritapart.la, which has no source files to itself
-# but everything in libkritacommon.la static libs.
 dummy.cc:
 	echo > dummy.cc
 

@@ -72,6 +72,7 @@ void KisResourceServerBase::loadResources(QStringList filenames)
             {
                 m_resources.append(resource);
                 Q_CHECK_PTR(resource);
+                emit resourceAdded(resource);
             }
             else {
                 delete resource;
@@ -89,6 +90,17 @@ QValueList<KisResource*> KisResourceServerBase::resources()
     }
 
     return m_resources;
+}
+
+void KisResourceServerBase::addResource(KisResource* resource)
+{
+    if (!resource -> valid()) {
+        kdDebug() << "Tried to add an invalid resource!" << endl;
+        return;
+    }
+
+    m_resources.append(resource);
+    emit resourceAdded(resource);
 }
 
 
@@ -188,4 +200,5 @@ KisResourceServerRegistry* KisResourceServerRegistry::instance()
 }
 
 
+#include "kis_resourceserver.moc"
 

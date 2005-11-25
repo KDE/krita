@@ -56,6 +56,7 @@
 #include "kis_autogradient.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
+#include "kis_custom_brush.h"
 
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
     : QPopupMenu(parent, name)
@@ -232,6 +233,12 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
     connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
 
+    KisCustomBrush* customBrushes = new KisCustomBrush(m_brushesTab, "custombrush",
+            i18n("Custom Brush"), m_view);
+    m_brushesTab -> addTab( customBrushes, i18n("Custom Brush"));
+    connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
+            m_view, SLOT(brushActivated(KisResource*)));
+
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
@@ -246,6 +253,7 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
 
+    customBrushes -> setResourceServer(rServer);
 }
 
 void KisControlFrame::createPatternsChooser(KisView * view)

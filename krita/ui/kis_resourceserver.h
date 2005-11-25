@@ -29,15 +29,20 @@
 
 class KisResource;
 
-class KisResourceServerBase {
-
+class KisResourceServerBase : public QObject {
+    Q_OBJECT
 public:
     KisResourceServerBase(QString type);
     virtual ~KisResourceServerBase();
 
     void loadResources(QStringList filenames);
+    /// Adds an already loaded resource to the server
+    void addResource(KisResource* resource);
     QValueList<KisResource*> resources();
     QString type() { return m_type; };
+
+signals:
+    void resourceAdded(KisResource*);
 
 protected:
     virtual KisResource* createResource( QString filename ) = 0;

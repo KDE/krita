@@ -41,11 +41,15 @@ KisResourceMediator::~KisResourceMediator()
 
 void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 {
+    // Add the initially loaded items
     QValueList<KisResource*> resources = rServer->resources();
     QValueList<KisResource*>::iterator it;
     for ( it = resources.begin(); it != resources.end(); ++it )
         rServerAddedResource( *it );
 
+    // And connect to the server permanently, so that we may recieve updates afterwards
+    connect(rServer, SIGNAL(resourceAdded(KisResource*)),
+            this, SLOT(rServerAddedResource(KisResource*)));
 }
 
 KisResource *KisResourceMediator::currentResource() const

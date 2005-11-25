@@ -3,6 +3,7 @@
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +48,7 @@
 #include "kis_alpha_mask.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
+#include "kis_image.h"
 
 
 namespace {
@@ -58,6 +60,7 @@ namespace {
         Q_UINT32 bytes;        /*  depth of brush in bytes */
     };
 
+    /// All fields are in MSB on disk!
     struct GimpBrushHeader {
         Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
         Q_UINT32 version;      /*  brush file version #  */
@@ -69,6 +72,9 @@ namespace {
         Q_UINT32 magic_number; /*  GIMP brush magic number  */
         Q_UINT32 spacing;      /*  brush spacing as % of width & height, 0 - 1000 */
     };
+
+    // Needed, or the GIMP won't open it!
+    Q_UINT32 const GimpV2Magic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 }
 
 #define DEFAULT_SPACING 0.25
@@ -101,6 +107,33 @@ KisBrush::KisBrush(const QString& filename,
     dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
+KisBrush::KisBrush(KisImageSP image)
+    : super(QString(""))
+{
+    m_brushType = INVALID;
+    m_ownData = true;
+    m_useColorAsMask = false;
+    m_hasColor = true;
+    m_spacing = DEFAULT_SPACING;
+    m_boundary = 0;
+
+    initFromImage(image);
+}
+
+KisBrush::KisBrush(const QImage& image, const QString& name)
+    : super(QString(""))
+{
+    m_ownData = false;
+    m_useColorAsMask = false;
+    m_hasColor = true;
+    m_spacing = DEFAULT_SPACING;
+    m_boundary = 0;
+
+    setImage(image);
+    setName(name);
+    setBrushType(IMAGE);
+}
+
 
 KisBrush::~KisBrush()
 {
@@ -110,10 +143,12 @@ KisBrush::~KisBrush()
 
 bool KisBrush::load()
 {
-    QFile file(filename());
-    file.open(IO_ReadOnly);
-    m_data = file.readAll();
-    file.close();
+    if (m_ownData) {
+        QFile file(filename());
+        file.open(IO_ReadOnly);
+        m_data = file.readAll();
+        file.close();
+    }
     return init();
 }
 
@@ -167,10 +202,13 @@ bool KisBrush::init()
         const char *text = &m_data[sizeof(GimpBrushV1Header)];
         name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
     } else {
-        name = QString::fromAscii(&m_data[sizeof(GimpBrushHeader)], bh.header_size - sizeof(GimpBrushHeader));
+        // ### Version = 3 -> cinepaint; may be float16 data!
+        // Version >=2: UTF-8 encoding is used
+        name = QString::fromUtf8(&m_data[sizeof(GimpBrushHeader)],
+                                  bh.header_size - sizeof(GimpBrushHeader));
     }
 
-    setName(i18n(name.ascii()));
+    setName(i18n(name.ascii())); // Ascii? And what with real UTF-8 chars?
 
     if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
         return false;
@@ -233,10 +271,74 @@ bool KisBrush::init()
     return true;
 }
 
+bool KisBrush::initFromImage(KisImageSP image) {
+    // Forcefully convert to RGBA8
+    // XXX profile and exposure?
+    setImage(image -> convertToQImage(0, 0, image -> width(), image -> height(), 0));
+    setName(image -> name());
+
+    m_brushType = IMAGE;
+    m_hasColor = true;
+
+    return true;
+}
 
 bool KisBrush::save()
 {
-    return false;
+    QFile file(filename());
+    file.open(IO_WriteOnly | IO_Truncate);
+    bool ok = saveToDevice(&file);
+    file.close();
+    return ok;
+}
+
+bool KisBrush::saveToDevice(QIODevice* dev) const
+{
+    GimpBrushHeader bh;
+    QCString utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    char const* name = utf8Name.data();
+    int nameLength = qstrlen(name);
+    int wrote;
+
+    bh.header_size = htonl(sizeof(GimpBrushHeader) + nameLength);
+    bh.version = htonl(2); // Only RGBA8 data needed atm, no cinepaint stuff
+    bh.width = htonl(width());
+    bh.height = htonl(height());
+    bh.bytes = htonl(4); // Hardcoded, 4 bytes RGBA!
+    bh.magic_number = htonl(GimpV2Magic);
+    bh.spacing = htonl(static_cast<Q_UINT32>(spacing() * 100.0));
+
+    // Write header: first bh, then the name
+    QByteArray bytes;
+    bytes.setRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
+    wrote = dev -> writeBlock(bytes);
+    bytes.resetRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
+
+    if (wrote == -1)
+        return false;
+
+    wrote = dev -> writeBlock(name, nameLength); // No +1 for the trailing NULL it seems...
+    if (wrote == -1)
+        return false;
+
+    int k = 0;
+    bytes.resize(width() * height() * 4);
+    for (Q_UINT32 y = 0; y < height(); y++) {
+        for (Q_UINT32 x = 0; x < width(); x++) {
+            // order for gimp brushes, v2 is: RGBA
+            QRgb pixel = m_img.pixel(x,y);
+            bytes[k++] = static_cast<char>(qRed(pixel));
+            bytes[k++] = static_cast<char>(qGreen(pixel));
+            bytes[k++] = static_cast<char>(qBlue(pixel));
+            bytes[k++] = static_cast<char>(qAlpha(pixel));
+        }
+    }
+
+    wrote = dev -> writeBlock(bytes);
+    if (wrote == -1)
+        return false;
+
+    return true;
 }
 
 QImage KisBrush::img()

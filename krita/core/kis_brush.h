@@ -21,6 +21,7 @@
 #define KIS_BRUSH_
 
 #include <qcstring.h>
+#include <qstring.h>
 #include <qsize.h>
 #include <qimage.h>
 #include <qvaluevector.h>
@@ -39,6 +40,7 @@ class QPoint;
 class QPixmap;
 class KisBoundary;
 class KisColorSpace;
+class QIODevice;
 
 enum enumBrushType {
     INVALID,
@@ -54,14 +56,21 @@ class KRITACORE_EXPORT KisBrush : public KisResource {
     Q_OBJECT
 
 public:
+    /// Construct brush to load filename later as brush
     KisBrush(const QString& filename);
+    /// Load brush from the specified data, at position dataPos, and set the filename
     KisBrush(const QString& filename,
          const QByteArray & data,
          Q_UINT32 & dataPos);
+    /// Load brush from the specified KisImage
+    KisBrush(KisImageSP image);
+    /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
+    KisBrush(const QImage& image, const QString& name = QString(""));
 
     virtual ~KisBrush();
 
     virtual bool load();
+    /// synchronous, doesn't emit any signal (none defined!)
     virtual bool save();
     virtual QImage img();
 
@@ -110,6 +119,7 @@ protected:
     void setImage(const QImage& img);
     void setBrushType(enumBrushType type) { m_brushType = type; };
     static double scaleForPressure(double pressure);
+    virtual bool saveToDevice(QIODevice* dev) const;
 
 private:
     class ScaledBrush {
@@ -133,6 +143,7 @@ private:
 
 
     bool init();
+    bool initFromImage(KisImageSP image);
     void createScaledBrushes() const;
 
     KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;

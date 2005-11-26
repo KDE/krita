@@ -33,7 +33,8 @@ enum enumChannelValueType {
     UINT8,
     UINT16,
     FLOAT16,
-    FLOAT32
+    FLOAT32,
+    OTHER // Use this if the channel is neither an integer or a float
 };
 
 enum enumChannelFlags {

@@ -29,6 +29,13 @@ enum enumChannelType {
     SUBSTRATE // The channel represents a real-world painting substrate like a canvas
 };
 
+enum enumChannelValueType {
+    UINT8,
+    UINT16,
+    FLOAT16,
+    FLOAT32
+};
+
 enum enumChannelFlags {
     FLAG_COLOR = 1,
     FLAG_ALPHA = (1 << 1),
@@ -44,8 +51,8 @@ enum enumChannelFlags {
 class KisChannelInfo : public KShared {
 public:
     KisChannelInfo() { };
-    KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, Q_INT32 size = 1, QColor color = QColor(0,0,0))
-    : m_name (name), m_pos (npos), m_channelType(channelType), m_size(size), m_color(color) { };
+    KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, enumChannelValueType channelValueType, Q_INT32 size = 1, QColor color = QColor(0,0,0))
+    : m_name (name), m_pos (npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { };
 public:
     /**
      * User-friendly name for this channel for presentation purposes in the gui
@@ -66,7 +73,10 @@ public:
      * returns the type of the channel
      */
     inline enumChannelType channelType() const { return m_channelType; };
-    
+    /**
+     * return the type of the value of the channel (float, uint8 or uint16)
+     */
+    inline enumChannelValueType channelValueType() const { return m_channelValueType; };
     /**
      * This is a color that can be used to represent this channel in histograms and so.
      * By default this is black, so keep in mind that many channels might look the same
@@ -78,6 +88,7 @@ private:
     QString m_name;
     Q_INT32 m_pos;
     enumChannelType m_channelType;
+    enumChannelValueType m_channelValueType;
     Q_INT32 m_size;
     QColor m_color;
 

@@ -64,7 +64,7 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
             ::KisDoc* document = (::KisDoc*)( kritadocumentqt->getObject() );
             if(document) {
                 kdDebug()<<"KexiAppModule::KritaCoreModule 4"<<endl;
-                addChild( new KrsDoc(document) );
+                addChild( new Doc(document) );
                 return;
              }
          }

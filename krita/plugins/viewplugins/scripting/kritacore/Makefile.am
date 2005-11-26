@@ -1,5 +1,5 @@
 
-INCLUDES = -I$(top_srcdir)/core -I$(top_srcdir)/krita -I$(top_srcdir)/lib/kross $(all_includes) -I$(top_srcdir)/krita/ui -I$(top_srcdir)/krita/core -I$(top_srcdir)/krita/sdk
+INCLUDES = -I$(top_srcdir)/core -I$(top_srcdir)/krita $(KOFFICECORE_INCLUDES) $(KROSS_INCLUDES) $(all_includes) -I$(top_srcdir)/krita/ui -I$(top_srcdir)/krita/core -I$(top_srcdir)/krita/sdk -I$(top_srcdir)/krita/kritacolor
 
 kde_module_LTLIBRARIES = krosskritacore.la
 
@@ -19,4 +19,4 @@ SUBDIRS = .
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-noinst_HEADERS = krs_doc.h
+noinst_HEADERS = krs_doc.h krs_iterator.h

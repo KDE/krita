@@ -19,24 +19,76 @@
 #include "krs_layer.h"
 
 #include <kis_layer.h>
+#include <kis_iterators_pixel.h>
+
+#include "krs_iterator.h"
 
 namespace Kross {
 
 namespace KritaCore {
 
-KrsLayer::KrsLayer(KisLayerSP layer)
-    : Kross::Api::Class<KrsLayer>("KritaLayer"), m_layer(layer)
+Layer::Layer(KisLayerSP layer)
+    : Kross::Api::Class<Layer>("KritaLayer"), m_layer(layer)
+{
+    addFunction("createRectIterator", &Layer::createRectIterator,
+                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("createHLineIterator", &Layer::createHLineIterator,
+                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("createVLineIterator", &Layer::createVLineIterator,
+                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("getWidth", &Layer::getWidth);
+    addFunction("getHeight", &Layer::getHeight);
+}
+
+
+Layer::~Layer()
 {
 }
 
+const QString Layer::getClassName() const {
+    return "Kross::KritaCore::Layer";
+}
 
-KrsLayer::~KrsLayer()
+Kross::Api::Object::Ptr Layer::createRectIterator(Kross::Api::List::Ptr args)
 {
+    return new Iterator<KisRectIteratorPixel>(
+            m_layer->createRectIterator(Kross::Api::Variant::toUInt(args->item(0)),
+                                        Kross::Api::Variant::toUInt(args->item(1)),
+                                        Kross::Api::Variant::toUInt(args->item(2)),
+                                        Kross::Api::Variant::toUInt(args->item(3)), true),
+            m_layer);
+}
+Kross::Api::Object::Ptr Layer::createHLineIterator(Kross::Api::List::Ptr args)
+{
+    return new Iterator<KisHLineIteratorPixel>(
+            m_layer->createHLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
+                                        Kross::Api::Variant::toUInt(args->item(1)),
+                                        Kross::Api::Variant::toUInt(args->item(2)), true),
+            m_layer);
+}
+Kross::Api::Object::Ptr Layer::createVLineIterator(Kross::Api::List::Ptr args)
+{
+    return new Iterator<KisVLineIteratorPixel>(
+            m_layer->createVLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
+                                        Kross::Api::Variant::toUInt(args->item(1)),
+                                        Kross::Api::Variant::toUInt(args->item(2)), true),
+            m_layer);
+}
+Kross::Api::Object::Ptr Layer::getWidth(Kross::Api::List::Ptr)
+{
+    QRect r1 = m_layer->extent();
+    QRect r2 = m_layer->image()->bounds();
+    QRect rect = r1.intersect(r2);
+    return new Kross::Api::Variant(rect.width());
+}
+Kross::Api::Object::Ptr Layer::getHeight(Kross::Api::List::Ptr)
+{
+    QRect r1 = m_layer->extent();
+    QRect r2 = m_layer->image()->bounds();
+    QRect rect = r1.intersect(r2);
+    return new Kross::Api::Variant(rect.height());
 }
 
-const QString KrsLayer::getClassName() const {
-    return "Kross::KritaCore::KrsLayer";
-}
 
 
 }

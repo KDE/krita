@@ -25,23 +25,30 @@
 
 namespace Kross { namespace KritaCore {
 
-KrsDoc::KrsDoc(::KisDoc* doc) : Kross::Api::Class<KrsDoc>("KritaDocument", 0 ), m_doc(doc) {
-    addFunction("getImage", &KrsDoc::getImage);
+Doc::Doc(::KisDoc* doc) : Kross::Api::Class<Doc>("KritaDocument", 0 ), m_doc(doc) {
+    addFunction("getImage", &Doc::getImage);
+    addFunction("notifyModification", &Doc::notifyModification);
 }
 
-KrsDoc::~KrsDoc() {
+Doc::~Doc() {
     
 }
 
-const QString KrsDoc::getClassName() const {
-    return "Kross::KritaCore::KrsDoc";
+const QString Doc::getClassName() const {
+    return "Kross::KritaCore::Doc";
 }
 
-Kross::Api::Object::Ptr KrsDoc::getImage(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr Doc::getImage(Kross::Api::List::Ptr)
 {
-    return new KrsImage(m_doc->currentImage());
+    return new Image(m_doc->currentImage());
 }
 
+Kross::Api::Object::Ptr Doc::notifyModification(Kross::Api::List::Ptr args)
+{
+    m_doc->setModified(true);
+    m_doc->currentImage()->notify();
+    return 0;
+}
 
 }
 }

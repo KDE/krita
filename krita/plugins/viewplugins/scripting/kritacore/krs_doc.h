@@ -25,14 +25,15 @@ class KisDoc;
 
 namespace Kross { namespace KritaCore {
 
-class KrsDoc : public Kross::Api::Class<KrsDoc>
+class Doc : public Kross::Api::Class<Doc>
 {
     public:
-        explicit KrsDoc(::KisDoc* doc);
-        virtual ~KrsDoc();
+        explicit Doc(::KisDoc* doc);
+        virtual ~Doc();
         virtual const QString getClassName() const;
     private:
         Kross::Api::Object::Ptr getImage(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr notifyModification(Kross::Api::List::Ptr);
     private:
         KisDoc* m_doc;
 

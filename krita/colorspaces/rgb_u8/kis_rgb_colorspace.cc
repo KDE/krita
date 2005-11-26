@@ -46,10 +46,10 @@ namespace {
 KisRgbColorSpace::KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, 1, QColor(255,0,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, 1, QColor(0,255,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR, 1, QColor(0,0,255)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA));
+    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, UINT8, 1, QColor(255,0,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, UINT8, 1, QColor(0,255,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR, UINT8, 1, QColor(0,0,255)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA, UINT8));
 
     m_alphaPos = PIXEL_ALPHA;
     init();

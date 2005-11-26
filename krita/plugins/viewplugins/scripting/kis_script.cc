@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_script.h"
+
+#include <qapplication.h>
 #include <qbuffer.h>
 
 KisScript::KisScript(KURL url, bool execute ) : ScriptContainer(url.path()), m_url(url), m_id(url.path(), url.fileName())
@@ -67,7 +69,9 @@ void KisScript::slotResult(KIO::Job* job)
 
 void KisScript::execute()
 {
+    QApplication::setOverrideCursor( Qt::waitCursor );
     ScriptContainer::execute();
+    QApplication::restoreOverrideCursor();
 }
 
         

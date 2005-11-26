@@ -42,7 +42,7 @@ KisAlphaColorSpace::KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
                                        KisProfile *p) :
     KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA, UINT8));
     m_alphaPos = 0;
 }
 

@@ -30,14 +30,16 @@ namespace KritaCore {
 /**
 @author Cyrille Berger
 */
-    class KrsImage : public Kross::Api::Class<KrsImage>
+    class Image : public Kross::Api::Class<Image>
 {
     public:
-        KrsImage(KisImageSP image);
-        ~KrsImage();
+        Image(KisImageSP image);
+        ~Image();
         virtual const QString getClassName() const;
     private:
         Kross::Api::Object::Ptr getActiveLayer(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
     private:
         KisImageSP m_image;
 };

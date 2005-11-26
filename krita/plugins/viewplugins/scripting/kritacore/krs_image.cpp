@@ -27,24 +27,34 @@ namespace Kross {
 
 namespace KritaCore {
 
-KrsImage::KrsImage(KisImageSP image)
-    : Kross::Api::Class<KrsImage>("KritaImage"), m_image(image)
+Image::Image(KisImageSP image)
+    : Kross::Api::Class<Image>("KritaImage"), m_image(image)
 {
-    addFunction("getActiveLayer", &KrsImage::getActiveLayer);
+    addFunction("getActiveLayer", &Image::getActiveLayer);
+    addFunction("getWidth", &Image::getWidth);
+    addFunction("getHeight", &Image::getHeight);
 }
 
 
-KrsImage::~KrsImage()
+Image::~Image()
 {
 }
 
-const QString KrsImage::getClassName() const {
-    return "Kross::KritaCore::KrsImage";
+const QString Image::getClassName() const {
+    return "Kross::KritaCore::Image";
 }
 
-Kross::Api::Object::Ptr KrsImage::getActiveLayer(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr Image::getActiveLayer(Kross::Api::List::Ptr)
 {
-    return new KrsLayer(m_image->activeLayer());
+    return new Layer(m_image->activeLayer());
+}
+Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant(m_image->width());
+}
+Kross::Api::Object::Ptr Image::getHeight(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant(m_image->height());
 }
 
 

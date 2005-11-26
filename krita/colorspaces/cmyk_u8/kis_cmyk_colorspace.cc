@@ -40,11 +40,11 @@ namespace cmyk {
 KisCmykColorSpace::KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA));
+    m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, COLOR, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, COLOR, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, COLOR, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, COLOR, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA, UINT8));
 
     m_alphaPos = PIXEL_CMYK_ALPHA;
 

@@ -30,12 +30,18 @@ namespace KritaCore {
 /**
 @author Cyrille Berger
 */
-class KrsLayer : public Kross::Api::Class<KrsLayer>
+class Layer : public Kross::Api::Class<Layer>
 {
     public:
-        explicit KrsLayer(KisLayerSP layer);
-        virtual ~KrsLayer();
+        explicit Layer(KisLayerSP layer);
+        virtual ~Layer();
         virtual const QString getClassName() const;
+    private:
+        Kross::Api::Object::Ptr createRectIterator(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr createHLineIterator(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr createVLineIterator(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
     private:
         KisLayerSP m_layer;
 };

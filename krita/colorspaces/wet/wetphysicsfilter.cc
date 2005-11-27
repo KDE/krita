@@ -46,15 +46,18 @@ void WetPhysicsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     //      subject to the same problems as the Wet & Sticky model; the windscreen wiper effect.
 
     // Because I don't want to put a timer here (yet), just do it 25 times
+    setProgressTotalSteps(25);
     for (int i = 0; i < 25; i++) {
         flow(src, dst, rect);
-        if (m_adsorbCount++ == 2) {
+        /*if (m_adsorbCount++ == 2) {
             // XXX I think we could combine dry and adsorb, yes
             adsorb(src, dst, rect);
             dry(src, dst, rect);
             m_adsorbCount = 0;
-        }
+        }*/
+        setProgress(i + 1);
     }
+    setProgressDone();
 }
 
 

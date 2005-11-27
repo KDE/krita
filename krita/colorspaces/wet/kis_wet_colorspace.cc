@@ -121,23 +121,23 @@ KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
         << i18n("Ivory Black")
         << i18n("Pure Water");
 
-    m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), 0, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), 1, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), 2, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), 3, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), 4, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), 5, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), 6, SUBSTANCE));
-    m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), 7, SUBSTANCE));
+    m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), 0, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), 1, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), 2, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), 3, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), 4, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), 5, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), 6, SUBSTANCE, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), 7, SUBSTANCE, UINT16));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), 8, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), 9, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), 10, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), 11, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), 12, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, COLOR));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, SUBSTANCE));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, SUBSTANCE));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), 8, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), 9, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), 10, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), 11, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), 12, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, COLOR, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, SUBSTANCE, UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, SUBSTANCE, UINT16));
 
 
     // we store the conversion in an QRgb (equivalent to unsigned int)

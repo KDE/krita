@@ -68,7 +68,8 @@ public:
     typedef enum enumPaintFlags {
         PAINT_IMAGE_ONLY = 0,
         PAINT_BACKGROUND = 1,
-        PAINT_SELECTION = 2
+        PAINT_SELECTION = 2,
+        PAINT_MASKINACTIVELAYERS = 4
     } PaintFlags;
 
     /// Paint the specified rect onto the painter, adjusting the colors using the

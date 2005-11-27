@@ -84,6 +84,7 @@ signals:
     void itemFront();
     void itemBack();
     void opacityChanged(int opacity);
+    void actLayerVisChanged(int visibility);
     void itemComposite(const KisCompositeOp&);
 
 private slots:

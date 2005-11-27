@@ -33,6 +33,7 @@
 #include <qtooltip.h>
 #include <qwidget.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -125,6 +126,7 @@ KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const c
     connect(m_lst -> bnProperties, SIGNAL(clicked()), SIGNAL(itemProperties()));
     connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(opacityChanged(int)));
     connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(itemComposite(const KisCompositeOp&)));
+    connect(m_lst -> chkActLayerVis, SIGNAL(stateChanged(int)), SIGNAL(actLayerVisChanged(int)));
 }
 
 KisLayerBox::~KisLayerBox()

@@ -159,6 +159,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_filterManager( 0 )
     , m_paletteManager( 0 )
     , m_toolManager( 0 )
+    , m_actLayerVis( false )
     , m_hRuler( 0 )
     , m_vRuler( 0 )
     , m_imgFlatten( 0 )
@@ -364,6 +365,7 @@ void KisView::createLayerBox()
     connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
     connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
     connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
+    connect(m_layerBox, SIGNAL(actLayerVisChanged(int)), this, SLOT(actLayerVisChanged(int)));
     connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
     connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
     connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
@@ -783,13 +785,17 @@ void KisView::paintView(const KisRect& r)
                     }
 
                     if (!wr.isNull()) {
-
+                        wr = wr.normalize();
                         if (zoom() < 1.0 || zoom() > 1.0) {
                             gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
                         }
                         gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
-                        m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
+                        if(m_actLayerVis)
+                            m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
+                                                     (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION|KisImage::PAINT_MASKINACTIVELAYERS), HDRExposure());
+                        else
+                            m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
                                                      (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION), HDRExposure());
                     }
 
@@ -2321,6 +2327,11 @@ void KisView::layerToggleLocked()
     KNamedCommand *cmd = layer -> setLockedCommand(!layer -> locked());
     cmd -> execute();
     undoAdapter() -> addCommand(cmd);
+}
+
+void KisView::actLayerVisChanged(int show)
+{
+    m_actLayerVis = (show != 0);
 }
 
 void KisView::layerSelected(int n)

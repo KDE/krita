@@ -1596,6 +1596,12 @@ void KisImage::renderToPainter(Q_INT32 x1,
         }
     }
 
+    if (paintFlags & PAINT_MASKINACTIVELAYERS) {
+        if (m_activeLayer != 0) {
+            m_activeLayer -> paintMaskInactiveLayers(img, x1, y1, w, h);
+        }
+    }
+
     if (!img.isNull()) {
         painter.drawImage(x1, y1, img, 0, 0, w, h);
     }

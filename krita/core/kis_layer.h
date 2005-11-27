@@ -60,6 +60,7 @@ public:
     void setLocked(bool l);
     KNamedCommand *setLockedCommand(bool locked);
 
+    void paintMaskInactiveLayers(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private:
     Q_UINT8 m_opacity;

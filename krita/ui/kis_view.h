@@ -354,6 +354,7 @@ private slots:
     void layerSelected(int n);
     void layerToggleLinked();
     void layerToggleLocked();
+    void actLayerVisChanged(int show);
     void layerProperties();
     void layerAdd();
     void addPartLayer();
@@ -395,6 +396,7 @@ private:
     KisFilterManager * m_filterManager;
     KoPaletteManager * m_paletteManager;
     KisToolManager * m_toolManager;
+    bool m_actLayerVis;
 
     // Fringe benefits
     KisRuler *m_hRuler;

@@ -17,6 +17,7 @@
  */
 
 #include <kdebug.h>
+#include <qimage.h>
 
 #include "kis_debug_areas.h"
 #include "kis_image.h"
@@ -24,6 +25,7 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
+#include "kis_iterators_pixel.h"
 
 #define DEBUG_LAYERS 0
 
@@ -298,5 +300,28 @@ KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
     return new KisLayerLockedCommand(this, locked(), newLocked);
 }
 
+void KisLayer::paintMaskInactiveLayers(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+    uchar *j = img.bits();
+
+    KisColorSpace *cs = colorSpace();
+
+    for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+        KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+        while ( ! it.isDone()) {
+            Q_UINT8 s = cs->getAlpha(it.rawData());
+            if(s==0)
+            {
+                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+
+                *(j+0) = 128+g ;
+                *(j+1) = 165+g;
+                *(j+2) = 128+g;
+            }
+            j+=4;
+            ++it;
+        }
+    }
+}
 
 #include "kis_layer.moc"

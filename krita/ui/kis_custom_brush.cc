@@ -21,6 +21,7 @@
 #include <qlabel.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+#include <qcombobox.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -29,6 +30,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_brush.h"
+#include "kis_imagepipe_brush.h"
 #include "kis_custom_brush.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
@@ -36,16 +38,18 @@
 KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView* view)
     : KisWdgCustomBrush(parent, name), m_view(view)
 {
+    Q_ASSERT(m_view);
     m_mediator = 0;
     setCaption(caption);
 
-    m_brush = new KisBrush(m_view -> getCanvasSubject() -> currentImg());
+    m_brush = 0;
+
     preview -> setScaledContents(true);
-    preview -> setPixmap(QPixmap(m_brush -> img()));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
     connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
+    connect(style, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 }
 
 KisCustomBrush::~KisCustomBrush() {
@@ -53,9 +57,17 @@ KisCustomBrush::~KisCustomBrush() {
 }
 
 void KisCustomBrush::showEvent(QShowEvent *) {
+    slotUpdateCurrentBrush(0);
+}
+
+void KisCustomBrush::slotUpdateCurrentBrush(int) {
     delete m_brush;
-    m_brush = new KisBrush(m_view -> getCanvasSubject() -> currentImg());
-    preview -> setPixmap(QPixmap(m_brush -> img()));
+    if (m_view -> getCanvasSubject() && m_view -> getCanvasSubject() -> currentImg()) {
+        createBrush();
+        preview -> setPixmap(QPixmap(m_brush -> img()));
+    } else {
+        m_brush = 0;
+    }
 }
 
 void KisCustomBrush::slotExport() {
@@ -66,12 +78,19 @@ void KisCustomBrush::slotAddPredefined() {
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/brushes
     // a unique file with this brushname
     QString dir = KGlobal::dirs() -> saveLocation("data", "krita/brushes");
-    KTempFile file(dir, ".gbr");
+    QString extension;
+
+    if (style -> currentItem() == 0) {
+        extension = ".gbr";
+    } else {
+        extension = ".gih";
+    }
+    KTempFile file(dir, extension);
     file.close(); // If we don't, and brush -> save first, it might get truncated!
 
     // Save it to that file 
     m_brush -> setFilename(file.name());
-    m_brush -> save();
+    kdDebug() << "Saving: " << m_brush -> save() << endl;
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
@@ -85,6 +104,37 @@ void KisCustomBrush::slotUseBrush() {
     Q_CHECK_PTR(copy);
 
     emit(activatedResource(copy));
+}
+
+void KisCustomBrush::createBrush() {
+    KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+
+    if (!img)
+        return;
+
+    if (style -> currentItem() == 0) {
+        m_brush = new KisBrush(img -> mergedImage(), 0, 0, img -> width(), img -> height());
+        return;
+    }
+
+    kdDebug() << "Creating animated!" << endl;
+
+    // For each layer in the current image, create a new image, and add it to the list
+    QValueVector< QValueVector<KisPaintDeviceImpl*> > devices;
+    devices.push_back(QValueVector<KisPaintDeviceImpl*>());
+    int w = img -> width();
+    int h = img -> height();
+
+    for (uint i = 0; i < img -> layers().count(); i++) {
+        if (!img -> layer(i) -> visible())
+            continue;
+        devices.at(0).push_back(img -> layer(i).data());
+    }
+
+    QValueVector<KisPipeBrushParasite::SelectionMode> modes;
+    modes.push_back(KisPipeBrushParasite::Incremental); // FIXME
+
+    m_brush = new KisImagePipeBrush(img -> name(), w, h, devices, modes);
 }
 
 

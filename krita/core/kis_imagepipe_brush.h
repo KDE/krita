@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +21,7 @@
 
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qvaluevector.h>
 #include <qmap.h>
 #include <qstring.h>
 
@@ -54,8 +56,22 @@ class QSize;
  **/
 class KisPipeBrushParasite {
 public:
-    KisPipeBrushParasite() {}
+    /// Set some default values
+    KisPipeBrushParasite() : ncells(0), dim(0), needsMovement(false) {
+        for (int i = 0; i < MaxDim; i++) {
+            rank[i] = index[i] = brushesCount[i] = 0;
+            selection[i] = Constant;
+        }
+    }
+    /// Initializes the brushesCount helper
+    void setBrushesCount();
+    /// Load the parasite from the source string
     KisPipeBrushParasite(const QString& source);
+    /**
+     * Saves a GIMP-compatible representation of this parasite to the device. Also writes the
+     * number of brushes (== ncells) (no trailing '\n') */
+    bool saveToDevice(QIODevice* dev) const;
+
     /** Velocity won't be supported, atm Angular and Tilt aren't either, but have chances of implementation */
     enum SelectionMode {
         Constant, Incremental, Angular, Velocity, Random, Pressure, TiltX, TiltY
@@ -88,10 +104,19 @@ class KisImagePipeBrush : public KisBrush {
 
 public:
     KisImagePipeBrush(const QString& filename);
+    /**
+     * Specialized constructor that makes a new pipe brush from a sequence of samesize
+     * devices. The fact that it's a vector of a vector, is to support multidimensional
+     * brushes (not yet supported!) */
+    KisImagePipeBrush(const QString& name, int w, int h,
+                      QValueVector< QValueVector<KisPaintDeviceImpl*> > devices,
+                      QValueVector<KisPipeBrushParasite::SelectionMode> modes);
     virtual ~KisImagePipeBrush();
 
     virtual bool load();
     virtual bool save();
+    /// Will call KisBrush's saveToDevice as well
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
       @return the next image in the pipe.
@@ -114,7 +139,7 @@ public:
     
     virtual KisBoundary boundary();
     
-    KisPipeBrushParasite parasite() { return m_parasite; }
+    KisPipeBrushParasite const& parasite() const { return m_parasite; }
     
     virtual bool canPaintFor(const KisPaintInformation& info);
 

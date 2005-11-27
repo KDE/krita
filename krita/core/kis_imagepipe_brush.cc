@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *            (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qstringlist.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -105,6 +106,14 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
         }
     }
 
+    for (int i = 0; i < dim; i++) {
+        index[i] = 0;
+    }
+
+    setBrushesCount();
+}
+
+void KisPipeBrushParasite::setBrushesCount() {
     // I assume ncells is correct. If it isn't, complain to the parasite header.
     brushesCount[0] = ncells / rank[0];
     for (int i = 1; i < dim; i++) {
@@ -112,11 +121,65 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     }
 }
 
+bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const {
+    // write out something like
+    // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>
+
+    QTextStream stream(dev);
+    /// FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)
+    stream << ncells << " ncells:" << ncells << " dim:" << dim;
+
+    for (int i = 0; i < dim; i++) {
+        stream << " rank" << i << ":" << rank[i] << " sel" << i << ":";
+        switch (selection[i]) {
+            case Constant: stream << "constant"; break;
+            case Incremental: stream << "incremental"; break;
+            case Angular: stream << "angular"; break;
+            case Velocity: stream << "velocity"; break;
+            case Random: stream << "random"; break;
+            case Pressure: stream << "pressure"; break;
+            case TiltX: stream << "xtilt"; break;
+            case TiltY: stream << "ytilt"; break;
+        }
+    }
+
+    return true;
+}
+
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 {
     m_brushType = INVALID;
     m_numOfBrushes = 0;
     m_currentBrush = 0;
+}
+
+KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
+                                     QValueVector< QValueVector<KisPaintDeviceImpl*> > devices,
+                                     QValueVector<KisPipeBrushParasite::SelectionMode> modes)
+    : super("")
+{
+    Q_ASSERT(devices.count() == modes.count());
+    Q_ASSERT(devices.count() > 0);
+    Q_ASSERT(devices.count() < 2); // XXX Multidimensionals not supported yet, change to MaxDim!
+
+    setName(name);
+
+    m_parasite.dim = devices.count();
+    // XXX Change for multidim! :
+    m_parasite.ncells = devices.at(0).count();
+    m_parasite.rank[0] = m_parasite.ncells;
+    m_parasite.selection[0] = modes.at(0);
+    // XXX needsmovement!
+
+    m_parasite.setBrushesCount();
+
+    for (uint i = 0; i < devices.at(0).count(); i++) {
+        m_brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
+    }
+
+    setImage(m_brushes.at(0) -> img());
+
+    m_brushType = PIPE_IMAGE;
 }
 
 KisImagePipeBrush::~KisImagePipeBrush()
@@ -197,7 +260,49 @@ bool KisImagePipeBrush::init()
 
 bool KisImagePipeBrush::save()
 {
-    return false;
+    QFile file(filename());
+    file.open(IO_WriteOnly | IO_Truncate);
+    bool ok = saveToDevice(&file);
+    file.close();
+    return ok;
+}
+
+bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
+{
+    QCString utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    char const* name = utf8Name.data();
+    int len = qstrlen(name);
+
+    if (parasite().dim != 1) {
+        kdDebug() << "Save to file for pipe brushes with dim != not yet supported!" << endl;
+        return false;
+    }
+
+    // Save this pipe brush: first the header, and then all individual brushes consecutively
+    // (this needs some care for when we have > 1 dimension), FIXME
+
+    // Gimp Pipe Brush header format: Name\n<number of brushes> <parasite>\n
+
+    // The name\n
+    if (dev -> writeBlock(name, len) == -1)
+        return false;
+
+    if (dev -> putch('\n') == -1)
+        return false;
+
+    // Write the parasite (also writes number of brushes)
+    if (!m_parasite.saveToDevice(dev))
+        return false;
+
+    if (dev -> putch('\n') == -1)
+        return false;
+
+    // <gbr brushes>
+    for (uint i = 0; i < m_brushes.count(); i++)
+        if (!m_brushes.at(i) -> saveToDevice(dev))
+            return false;
+
+    return true;
 }
 
 QImage KisImagePipeBrush::img()

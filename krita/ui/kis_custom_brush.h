@@ -46,8 +46,10 @@ private slots:
     void slotExport();
     void slotAddPredefined();
     void slotUseBrush();
+    void slotUpdateCurrentBrush(int); // To connect with activated(int)
 
 private:
+    void createBrush();
     KisView* m_view;
     KisBrush* m_brush;
     KisResourceMediator* m_mediator;

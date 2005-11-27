@@ -62,8 +62,8 @@ public:
     KisBrush(const QString& filename,
          const QByteArray & data,
          Q_UINT32 & dataPos);
-    /// Load brush from the specified KisImage
-    KisBrush(KisImageSP image);
+    /// Load brush from the specified paint device, in the specified region
+    KisBrush(KisPaintDeviceImpl* image, int x, int y, int w, int h);
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisBrush(const QImage& image, const QString& name = QString(""));
 
@@ -73,6 +73,7 @@ public:
     /// synchronous, doesn't emit any signal (none defined!)
     virtual bool save();
     virtual QImage img();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
        @return a mask computed from the grey-level values of the
@@ -119,7 +120,6 @@ protected:
     void setImage(const QImage& img);
     void setBrushType(enumBrushType type) { m_brushType = type; };
     static double scaleForPressure(double pressure);
-    virtual bool saveToDevice(QIODevice* dev) const;
 
 private:
     class ScaledBrush {
@@ -143,7 +143,7 @@ private:
 
 
     bool init();
-    bool initFromImage(KisImageSP image);
+    bool initFromPaintDev(KisPaintDeviceImpl* image, int x, int y, int w, int h);
     void createScaledBrushes() const;
 
     KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;

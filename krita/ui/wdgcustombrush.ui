@@ -27,46 +27,27 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="1">
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioButton1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Regular</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioButton2</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>Animated</string>
-                            </property>
-                        </widget>
-                    </hbox>
+                    <property name="text">
+                        <string>Source</string>
+                    </property>
                 </widget>
-                <widget class="QComboBox" row="1" column="1">
+                <widget class="QComboBox" row="0" column="1">
                     <item>
                         <property name="text">
-                            <string>Entire Image</string>
+                            <string>Regular</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Animated</string>
                         </property>
                     </item>
                     <property name="name">
-                        <cstring>comboBox1</cstring>
+                        <cstring>style</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -77,20 +58,17 @@
                         <string>Selection Mode</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QComboBox" row="1" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Entire Image</string>
+                        </property>
+                    </item>
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>comboBox1</cstring>
                     </property>
-                    <property name="text">
-                        <string>Source</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Style</string>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="2" column="1">
@@ -109,6 +87,14 @@
                     </property>
                     <property name="enabled">
                         <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Style</string>
                     </property>
                 </widget>
             </grid>

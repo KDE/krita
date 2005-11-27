@@ -107,7 +107,7 @@ KisBrush::KisBrush(const QString& filename,
     dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
-KisBrush::KisBrush(KisImageSP image)
+KisBrush::KisBrush(KisPaintDeviceImpl* image, int x, int y, int w, int h)
     : super(QString(""))
 {
     m_brushType = INVALID;
@@ -117,7 +117,7 @@ KisBrush::KisBrush(KisImageSP image)
     m_spacing = DEFAULT_SPACING;
     m_boundary = 0;
 
-    initFromImage(image);
+    initFromPaintDev(image, x, y, w, h);
 }
 
 KisBrush::KisBrush(const QImage& image, const QString& name)
@@ -271,10 +271,10 @@ bool KisBrush::init()
     return true;
 }
 
-bool KisBrush::initFromImage(KisImageSP image) {
+bool KisBrush::initFromPaintDev(KisPaintDeviceImpl* image, int x, int y, int w, int h) {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image -> convertToQImage(0, 0, image -> width(), image -> height(), 0));
+    setImage(image -> convertToQImage(0, x, y, w, h));
     setName(image -> name());
 
     m_brushType = IMAGE;

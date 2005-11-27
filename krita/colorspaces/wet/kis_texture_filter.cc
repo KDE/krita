@@ -41,4 +41,3 @@ void WetPaintDevAction::act(KisPaintDeviceImplSP device, Q_INT32 w, Q_INT32 h) c
     painter.end();
 }
 
-#include "kis_texture_filter.moc"

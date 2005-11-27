@@ -448,7 +448,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
     m_dcop = 0L;
     if (this != &rhs) {
-        m_private = rhs.m_private;
+        m_private = new KisImagePrivate(*rhs.m_private);
         m_undoHistory = rhs.m_undoHistory;
         m_uri = rhs.m_uri;
         m_name = QString::null;

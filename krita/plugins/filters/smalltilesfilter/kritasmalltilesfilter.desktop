@@ -9,6 +9,7 @@ Name[pt_BR]=Filtro de Pequenos Padrões
 Name[sr]=Филтер малих плоча
 Name[sr@Latn]=Филтер малих плоча
 Name[sv]=Smårutorsfilter
+Name[xx]=xxSmall Tiles Filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

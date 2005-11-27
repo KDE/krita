@@ -15,6 +15,7 @@ GenericName[pt_BR]=Pintura e Manipulação de Imagens
 GenericName[sr]=Цртање и уређивање слика
 GenericName[sr@Latn]=Цртање и уређивање слика
 GenericName[sv]=Målning och bildredigering
+GenericName[xx]=xxPainting and Image Editingxx
 MimeType=application/x-krita
 Type=Application
 Icon=krita

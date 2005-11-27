@@ -1829,6 +1829,10 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 
     if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
+        // somewhat of a hack: we should actually test if we intersect with the scrollers,
+        // but the globalPos seems to be off by a few pixels
+        if (m_vScroll -> draggingSlider() || m_hScroll -> draggingSlider())
+            return;
         KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
         m_toolManager->currentTool() -> buttonPress(&ev);

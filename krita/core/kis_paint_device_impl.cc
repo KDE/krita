@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "kis_global.h"
 #include "kis_types.h"

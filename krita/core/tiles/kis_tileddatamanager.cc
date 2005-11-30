@@ -20,7 +20,7 @@
 
 #include <kdebug.h>
 
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "kis_global.h"
 #include "kis_debug_areas.h"

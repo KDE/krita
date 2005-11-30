@@ -46,8 +46,8 @@
 #include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <koTemplateChooseDia.h>
 #include <koApplication.h>
 #include <kocommandhistory.h>

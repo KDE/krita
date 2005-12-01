@@ -249,7 +249,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     setupActions();
     dcopObject();
 
+
     connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
+    connect(this, SIGNAL(autoScroll(const QPoint &)), SLOT(slotAutoScroll(const QPoint &)));
+
+    setMouseTracking(true);
 
     resetMonitorProfile();
 
@@ -597,7 +601,6 @@ void KisView::setupActions()
 void KisView::resizeEvent(QResizeEvent *)
 {
     KisImageSP img = currentImg();
-    Q_INT32 rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
     Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
     Q_INT32 drawH;
     Q_INT32 drawW;
@@ -612,8 +615,9 @@ void KisView::resizeEvent(QResizeEvent *)
     docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
     docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
 
-    drawH = height() - rulerThickness;
-    drawW = width() - rulerThickness;
+    m_rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
+    drawH = height() - m_rulerThickness;
+    drawW = width() - m_rulerThickness;
 
     if (drawH < docH) {
         // Will need vert scrollbar
@@ -629,8 +633,8 @@ void KisView::resizeEvent(QResizeEvent *)
             drawW -= scrollBarExtent;
     }
 
-    m_hRuler -> setGeometry(rulerThickness, 0, drawW, rulerThickness);
-    m_vRuler -> setGeometry(0, rulerThickness, rulerThickness, drawH);
+    m_hRuler -> setGeometry(m_rulerThickness, 0, drawW, m_rulerThickness);
+    m_vRuler -> setGeometry(0, m_rulerThickness, m_rulerThickness, drawH);
 
     m_vScroll -> setEnabled(docH > drawH);
     m_hScroll -> setEnabled(docW > drawW);
@@ -641,42 +645,49 @@ void KisView::resizeEvent(QResizeEvent *)
         m_hScroll -> hide();
         m_vScroll -> setValue(0);
         m_hScroll -> setValue(0);
+        m_vScrollBarExtent = 0;
+        m_hScrollBarExtent = 0;
     } else if (docH <= drawH) {
         // we need a horizontal scrollbar only
         m_vScroll -> hide();
         m_vScroll -> setValue(0);
         m_hScroll -> setRange(0, docW - drawW);
-        m_hScroll -> setGeometry(rulerThickness,
+        m_hScroll -> setGeometry(m_rulerThickness,
                      height() - scrollBarExtent,
-                     width() - rulerThickness,
+                     width() - m_rulerThickness,
                      scrollBarExtent);
         m_hScroll -> show();
+        m_hScrollBarExtent = scrollBarExtent;
+        m_hScrollBarExtent = scrollBarExtent;
     } else if(docW <= drawW) {
         // we need a vertical scrollbar only
         m_hScroll -> hide();
         m_hScroll -> setValue(0);
         m_vScroll -> setRange(0, docH - drawH);
-        m_vScroll -> setGeometry(width() - scrollBarExtent, rulerThickness, scrollBarExtent, height()  - rulerThickness);
+        m_vScroll -> setGeometry(width() - scrollBarExtent, m_rulerThickness, scrollBarExtent, height()  - m_rulerThickness);
         m_vScroll -> show();
+        m_vScrollBarExtent = scrollBarExtent;
     } else {
         // we need both scrollbars
         m_vScroll -> setRange(0, docH - drawH);
         m_vScroll -> setGeometry(width() - scrollBarExtent,
-                    rulerThickness,
+                    m_rulerThickness,
                     scrollBarExtent,
-                    height() -2* rulerThickness);
+                    height() -2* m_rulerThickness);
         m_hScroll -> setRange(0, docW - drawW);
-        m_hScroll -> setGeometry(rulerThickness,
+        m_hScroll -> setGeometry(m_rulerThickness,
                      height() - scrollBarExtent,
-                     width() - 2*rulerThickness,
+                     width() - 2*m_rulerThickness,
                      scrollBarExtent);
         m_vScroll -> show();
         m_hScroll -> show();
+        m_vScrollBarExtent = scrollBarExtent;
+        m_hScrollBarExtent = scrollBarExtent;
     }
 
     //Check if rulers are visible
     if( m_RulerAction->isChecked() )
-        m_canvas -> setGeometry(rulerThickness, rulerThickness, drawW, drawH);
+        m_canvas -> setGeometry(m_rulerThickness, m_rulerThickness, drawW, drawH);
     else
         m_canvas -> setGeometry(0, 0, drawW, drawH);
     m_canvas -> show();
@@ -1833,8 +1844,10 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
         // but the globalPos seems to be off by a few pixels
         if (m_vScroll -> draggingSlider() || m_hScroll -> draggingSlider())
             return;
+
         KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
+        enableAutoScroll();
         m_toolManager->currentTool() -> buttonPress(&ev);
     }
 }
@@ -1895,6 +1908,37 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
     emit cursorPosition(wp.floorX(), wp.floorY());
 }
 
+int KisView::leftBorder() const
+{
+  return m_rulerThickness;
+}
+
+int KisView::rightBorder() const
+{
+  return m_hScrollBarExtent;
+}
+
+int KisView::topBorder() const
+{
+  return m_rulerThickness;
+}
+
+int KisView::bottomBorder() const
+{
+  return m_vScrollBarExtent;
+}
+
+void KisView::mouseMoveEvent(QMouseEvent *e)
+{
+    KisMoveEvent ke(currentInputDevice(), e -> pos(), e -> globalPos(), PRESSURE_DEFAULT, 0, 0, e -> state());
+    canvasGotMoveEvent(&ke);
+}
+
+void KisView::slotAutoScroll(const QPoint &p)
+{
+    scrollTo(horzValue()+p.x(), vertValue()+p.y());
+}
+
 void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
@@ -1923,6 +1967,7 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
         KisPoint p = viewToWindow(e -> pos());
         KisButtonReleaseEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
 
+        disableAutoScroll();
         if (m_toolManager->currentTool()) {
             m_toolManager->currentTool() -> buttonRelease(&ev);
         }

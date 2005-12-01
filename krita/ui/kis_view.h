@@ -135,6 +135,11 @@ public: // KoView implementation
     virtual void updateReadWrite(bool readwrite);
     virtual void guiActivateEvent(KParts::GUIActivateEvent *event);
 
+    virtual int leftBorder() const;
+    virtual int rightBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
+
     Q_INT32 docWidth() const;
     Q_INT32 docHeight() const;
 
@@ -174,6 +179,7 @@ public slots:
 
 
 public:
+    virtual void mouseMoveEvent(QMouseEvent *e);
 
     void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
@@ -387,6 +393,8 @@ private slots:
 
     void preferences();
 
+    void slotAutoScroll(const QPoint &p);
+
 private:
 
     KisDoc *m_doc;
@@ -401,6 +409,9 @@ private:
     // Fringe benefits
     KisRuler *m_hRuler;
     KisRuler *m_vRuler;
+    Q_INT32 m_rulerThickness;
+    Q_INT32 m_vScrollBarExtent;
+    Q_INT32 m_hScrollBarExtent;
 
     // Actions
     KAction *m_imgFlatten;

@@ -116,7 +116,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         KisChannelInfo * ch = (*it);
 
-        if (ch->channelType() == ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
+        if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             // Don't make an separate separation of the alpha channel if the user didn't ask for it.
             continue;
         }

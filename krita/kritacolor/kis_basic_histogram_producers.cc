@@ -345,9 +345,9 @@ KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
                                 3, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("R"), 0, COLOR, UINT8, 1, QColor(255,0,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("G"), 1, COLOR, UINT8, 1, QColor(0,255,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("B"), 2, COLOR, UINT8, 1, QColor(0,0,255)));
+    m_channelsList.append(new KisChannelInfo(i18n("R"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("G"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("B"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
 }
 
 QValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
@@ -411,7 +411,7 @@ KisGenericLightnessHistogramProducer::KisGenericLightnessHistogramProducer()
     : KisBasicHistogramProducer(KisID("GENLIGHTHISTO", i18n("Generic Lab Lightness Histogram")), 1, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("L"), 0, COLOR, UINT8));
+    m_channelsList.append(new KisChannelInfo(i18n("L"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
 }
 
 QValueVector<KisChannelInfo *> KisGenericLightnessHistogramProducer::channels() {

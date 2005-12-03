@@ -18,4 +18,5 @@ SUBDIRS = \
     screenshot \
     separate_channels \
     shearimage \
-    variations $(SCRIPTINGDIR)
+    variations \
+    panorama $(SCRIPTINGDIR)

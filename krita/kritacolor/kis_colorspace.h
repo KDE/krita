@@ -321,7 +321,7 @@ public:
      * Convolve the given array of pointers to pixels and return the result
      * in dst. The kernel values are clamped between -128 and 128
      */
-    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const = 0;
+    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const = 0;
 
     /**
      * Darken all color channels with the given amount. If compensate is true,

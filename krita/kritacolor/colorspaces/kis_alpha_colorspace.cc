@@ -42,7 +42,7 @@ KisAlphaColorSpace::KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
                                        KisProfile *p) :
     KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, ALPHA, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
     m_alphaPos = 0;
 }
 
@@ -263,7 +263,7 @@ QString KisAlphaColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_U
 }
 
 
-void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
     Q_INT32 totalAlpha = 0;
 
@@ -278,7 +278,7 @@ void KisAlphaColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues
         kernelValues++;
     }
 
-    if (channelFlags & FLAG_ALPHA) {
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
     }
 }

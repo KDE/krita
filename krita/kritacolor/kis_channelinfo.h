@@ -22,34 +22,33 @@
 #include "qstring.h"
 #include "ksharedptr.h"
 
-enum enumChannelType {
-    COLOR, // The channel represents a color
-    ALPHA, // The channel represents the opacity of a pixel
-    SUBSTANCE, // The channel represents a real-world substance like pigments or medium
-    SUBSTRATE // The channel represents a real-world painting substrate like a canvas
-};
-
-enum enumChannelValueType {
-    UINT8,
-    UINT16,
-    FLOAT16,
-    FLOAT32,
-    OTHER // Use this if the channel is neither an integer or a float
-};
-
-enum enumChannelFlags {
-    FLAG_COLOR = 1,
-    FLAG_ALPHA = (1 << 1),
-    FLAG_SUBSTANCE = (1 << 2),
-    FLAG_SUBSTRATE = (1 << 3)
-};
-
 /** 
  * This class gives some basic information about a channel,
  * that is, one of the components that makes up a particular 
  * pixel.
  */
 class KisChannelInfo : public KShared {
+public:
+    enum enumChannelType {
+        COLOR, // The channel represents a color
+        ALPHA, // The channel represents the opacity of a pixel
+        SUBSTANCE, // The channel represents a real-world substance like pigments or medium
+        SUBSTRATE // The channel represents a real-world painting substrate like a canvas
+    };
+    enum enumChannelValueType {
+        UINT8,
+        UINT16,
+        FLOAT16,
+        FLOAT32,
+        OTHER // Use this if the channel is neither an integer or a float
+    };
+    enum enumChannelFlags {
+        FLAG_COLOR = 1,
+        FLAG_ALPHA = (1 << 1),
+        FLAG_SUBSTANCE = (1 << 2),
+        FLAG_SUBSTRATE = (1 << 3)
+    };
+
 public:
     KisChannelInfo() { };
     KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, enumChannelValueType channelValueType, Q_INT32 size = 1, QColor color = QColor(0,0,0))

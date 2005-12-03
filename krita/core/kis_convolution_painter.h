@@ -65,7 +65,7 @@ public:
      */
     void applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID,
-                     enumChannelFlags channelFlags = FLAG_COLOR);
+                     KisChannelInfo::enumChannelFlags channelFlags = KisChannelInfo::FLAG_COLOR);
 
 
 

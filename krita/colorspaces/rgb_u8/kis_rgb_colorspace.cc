@@ -46,10 +46,10 @@ namespace {
 KisRgbColorSpace::KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU8BaseColorSpace(KisID("RGBA", i18n("RGB/Alpha (8 bits/channel)")), TYPE_BGRA_8, icSigRgbData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, COLOR, UINT8, 1, QColor(255,0,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, COLOR, UINT8, 1, QColor(0,255,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, COLOR, UINT8, 1, QColor(0,0,255)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, ALPHA, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
 
     m_alphaPos = PIXEL_ALPHA;
     init();
@@ -159,7 +159,7 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
     dst[PIXEL_BLUE] = dstBlue;
 }
 
-void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
     Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
@@ -178,12 +178,12 @@ void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, e
     }
 
 
-    if (channelFlags & FLAG_COLOR) {
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
         dst[PIXEL_RED] = CLAMP((totalRed / factor) + offset, 0, Q_UINT8_MAX);
         dst[PIXEL_GREEN] = CLAMP((totalGreen / factor) + offset, 0, Q_UINT8_MAX);
         dst[PIXEL_BLUE] =  CLAMP((totalBlue / factor) + offset, 0, Q_UINT8_MAX);
     }
-    if (channelFlags & FLAG_ALPHA) {
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         dst[PIXEL_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
     }
 }

@@ -68,7 +68,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceImplSP device) : supe
 
 void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                     KisConvolutionBorderOp borderOp,
-                    enumChannelFlags  channelFlags )
+                    KisChannelInfo::enumChannelFlags  channelFlags )
 {
     // Make the area we cover as small as possible
     if (m_device -> hasSelection()) {

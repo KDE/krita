@@ -744,7 +744,7 @@ void KisSelectionManager::feather()
     rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
     rect &= QRect(0, 0, img -> width(), img -> height());
 
-    painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, FLAG_ALPHA);
+    painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, KisChannelInfo::FLAG_ALPHA);
     painter.end();
 
     if (img -> undoAdapter())

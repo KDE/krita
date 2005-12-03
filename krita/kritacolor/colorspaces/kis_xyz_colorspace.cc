@@ -43,10 +43,10 @@ KisXyzColorSpace::KisXyzColorSpace(KisColorSpaceFactoryRegistry * parent,
                                    KisProfile *p) :
     KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("X"), 0, COLOR, UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Y"), 1, COLOR, UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Z"), 2, COLOR, UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, ALPHA, UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("X"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Y"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Z"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
@@ -121,7 +121,7 @@ void KisXyzColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
 {
 }
 
-void KisXyzColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const
+void KisXyzColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const
 {
 }
 

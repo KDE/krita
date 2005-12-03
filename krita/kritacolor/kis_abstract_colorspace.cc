@@ -444,7 +444,7 @@ void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
     const_cast<KisAbstractColorSpace *>(this) -> fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
-void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
 {
     Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
@@ -471,14 +471,14 @@ void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelVal
     }
 
 
-    if (channelFlags & FLAG_COLOR) {
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
         const_cast<KisAbstractColorSpace *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, Q_UINT8_MAX),
                                         CLAMP((totalGreen / factor) + offset, 0, Q_UINT8_MAX),
                                         CLAMP((totalBlue / factor) + offset, 0, Q_UINT8_MAX)),
             dstOpacity,
             dst);
     }
-    if (channelFlags & FLAG_ALPHA) {
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         const_cast<KisAbstractColorSpace *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX), dst);
     }
 

@@ -48,17 +48,17 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             kdDebug() << ci->pos() << " " << ci->channelValueType() << " " << Kross::Api::Variant::toUInt(new Api::Variant( ci->pos())) << endl;
             switch(ci->channelValueType())
             {
-                case UINT8:
+                case KisChannelInfo::UINT8:
                     kdDebug() << "UINT8 channel" << endl;
                     addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelUINT8, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),false) );
                     addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelUINT8,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant( ci->pos()),false));
                     break;
-                case UINT16:
+                case KisChannelInfo::UINT16:
                     kdDebug() << "UINT16 channel" << endl;
                     addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelUINT16,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),false));
                     addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelUINT16,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),true));
                     break;
-                case FLOAT32:
+                case KisChannelInfo::FLOAT32:
                     kdDebug() << "FLOAT32 channel" << endl;
                     addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelFLOAT,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Double", new Api::Variant(ci->pos()),false));
                     addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelFLOAT,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Double") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),true));

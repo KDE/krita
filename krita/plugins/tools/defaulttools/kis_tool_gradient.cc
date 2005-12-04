@@ -173,8 +173,8 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
             }
 
             /* remove remains of the line drawn while moving */
-            if (controller -> canvas()) {
-                controller -> canvas() -> update();
+            if (controller -> kiscanvas()) {
+                controller -> kiscanvas() -> update();
             }
 
         } else {
@@ -204,7 +204,7 @@ void KisToolGradient::paintLine()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
 
         paintLine(gc);

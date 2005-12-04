@@ -52,8 +52,8 @@ namespace {
                 
                 KisCanvasController * c = m_canvasSubject->canvasController();
                 
-                if (c && c->canvas())
-                    return c->viewToWindow(KisRect(0, 0, c->canvas()->width(), c->canvas()->height()));
+                if (c && c->kiscanvas())
+                    return c->viewToWindow(KisRect(0, 0, c->kiscanvas()->width(), c->kiscanvas()->height()));
                 else
                     return KoRect(0,0,0,0);
             };

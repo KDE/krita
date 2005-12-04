@@ -168,7 +168,7 @@ void KisToolManager::updateGUI()
 void KisToolManager::setCurrentTool(KisTool *tool)
 {
     KisTool *oldTool = currentTool();
-    KisCanvas * canvas = (KisCanvas*)m_controller->canvas();
+    KisCanvas * canvas = (KisCanvas*)m_controller->kiscanvas();
 
 
     if (oldTool)

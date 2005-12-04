@@ -46,7 +46,7 @@ public:
     /**
      * @return the canvas object
      */
-    virtual KisCanvas *canvas() const = 0;
+    virtual KisCanvas *kiscanvas() const = 0;
 
 
     /**

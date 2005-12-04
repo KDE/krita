@@ -234,7 +234,7 @@ void KisToolSelectRectangular::paintOutline()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
         QRect rc;
 

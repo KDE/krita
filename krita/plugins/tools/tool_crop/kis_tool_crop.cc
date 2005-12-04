@@ -116,7 +116,7 @@ void KisToolCrop::clearRect()
 
         Q_ASSERT(controller);
 
-        controller -> canvas() -> update();
+        controller -> kiscanvas() -> update();
 
         m_startPos = QPoint(0, 0);
         m_endPos = QPoint(0, 0);
@@ -317,7 +317,7 @@ void KisToolCrop::paintOutlineWithHandles()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
         QRect rc;
 
@@ -384,9 +384,9 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
 
         //draw guides
         gc.drawLine(0,endy,startx - m_handleSize / 2,endy);
-        gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller -> canvas() -> height());
+        gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller -> kiscanvas() -> height());
         gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
-        gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller -> canvas() -> width(), starty);
+        gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller -> kiscanvas() -> width(), starty);
         QMemArray <QRect> rects = m_handlesRegion.rects ();
         for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
         {

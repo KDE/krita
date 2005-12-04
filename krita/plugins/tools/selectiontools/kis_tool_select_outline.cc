@@ -179,7 +179,7 @@ void KisToolSelectOutline::draw()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
 
         draw(gc);
@@ -212,7 +212,7 @@ void KisToolSelectOutline::clear()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
 
         QPen pen(Qt::white, 0, Qt::DotLine);

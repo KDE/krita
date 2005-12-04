@@ -966,7 +966,7 @@ enumInputDevice KisView::currentInputDevice() const
 }
 
 
-KisCanvas *KisView::canvas() const
+KisCanvas *KisView::kiscanvas() const
 {
     return m_canvas;
 }

@@ -249,13 +249,13 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
     if (currentImage() &&
         ( point.x() >= currentImage() -> width() || point.y() >= currentImage() -> height()) ) {
         if (m_paintedOutline) {
-            controller -> canvas() -> update();
+            controller -> kiscanvas() -> update();
             m_paintedOutline = false;
         }
         return;
         }
 
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         canvas -> repaint();
 
         KisBrush *brush = m_subject -> currentBrush();

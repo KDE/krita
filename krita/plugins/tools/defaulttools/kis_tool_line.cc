@@ -151,8 +151,8 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             notifyModified();
 
             /* remove remains of the line drawn while moving */
-            if (controller -> canvas()) {
-                controller -> canvas() -> update();
+            if (controller -> kiscanvas()) {
+                controller -> kiscanvas() -> update();
             }
 
             KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
@@ -189,7 +189,7 @@ void KisToolLine::paintLine()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> canvas();
+        KisCanvas *canvas = controller -> kiscanvas();
         KisCanvasPainter gc(canvas);
         QRect rc;
 

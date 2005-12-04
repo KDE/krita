@@ -84,7 +84,7 @@ void KisToolBrush::initPaint(KisEvent *e)
 
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
     
-    m_subject -> canvasController() -> canvas() -> update(); // remove the outline
+    m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
 
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
     
@@ -125,7 +125,7 @@ void KisToolBrush::move(KisMoveEvent *e) {
 }
 
 void KisToolBrush::leave(QEvent *e) {
-    m_subject -> canvasController() -> canvas() -> update(); // remove the outline
+    m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
 }
 
 

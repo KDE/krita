@@ -248,7 +248,7 @@ public:
 
 
 private:
-    virtual KisCanvas *canvas() const;
+    virtual KisCanvas *kiscanvas() const;
     
     virtual Q_INT32 horzValue() const;
     virtual Q_INT32 vertValue() const;

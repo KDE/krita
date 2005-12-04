@@ -150,7 +150,7 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
         return;
 
     KisCanvasController *controller = m_subject->canvasController ();
-    KisCanvas *canvas = controller->canvas ();
+    KisCanvas *canvas = controller->kiscanvas();
     KisCanvasPainter p (canvas);
 
     p.setRasterOp (Qt::NotROP);

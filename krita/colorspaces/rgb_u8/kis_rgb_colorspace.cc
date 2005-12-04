@@ -112,48 +112,45 @@ Q_INT8 KisRgbColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 
 void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
-    Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
+    Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
     while (nColors--)
     {
         Q_UINT32 alpha = (*colors)[PIXEL_ALPHA];
-        Q_UINT32 alphaTimesWeight = UINT8_MULT(alpha, *weights);
+        Q_UINT32 alphaTimesWeight = alpha * *weights;
 
         totalRed += (*colors)[PIXEL_RED] * alphaTimesWeight;
         totalGreen += (*colors)[PIXEL_GREEN] * alphaTimesWeight;
         totalBlue += (*colors)[PIXEL_BLUE] * alphaTimesWeight;
-        newAlpha += alphaTimesWeight;
+        totalAlpha += alphaTimesWeight;
 
         weights++;
         colors++;
     }
 
-    //Q_ASSERT(newAlpha <= 255);
-    if (newAlpha > 255) newAlpha = 255;
-
-    dst[PIXEL_ALPHA] = newAlpha;
-
-    if (newAlpha > 0) {
-        totalRed = UINT8_DIVIDE(totalRed, newAlpha);
-        totalGreen = UINT8_DIVIDE(totalGreen, newAlpha);
-        totalBlue = UINT8_DIVIDE(totalBlue, newAlpha);
-    }
+    //Q_ASSERT(newAlpha <= 255*255);
+    if (totalAlpha > 255*255) totalAlpha = 255*255;
 
     // Divide by 255.
-    totalRed += 0x80;
-    Q_UINT32 dstRed = ((totalRed >> 8) + totalRed) >> 8;
+    dst[PIXEL_ALPHA] =(((totalAlpha + 0x80)>>8)+totalAlpha) >>8;
+
+    if (totalAlpha > 0) {
+        totalRed = totalRed / totalAlpha;
+        totalGreen = totalGreen / totalAlpha;
+        totalBlue = totalBlue / totalAlpha;
+    } // else the values are already 0 too
+
+    Q_UINT32 dstRed = totalRed;
     //Q_ASSERT(dstRed <= 255);
     if (dstRed > 255) dstRed = 255;
     dst[PIXEL_RED] = dstRed;
 
-    totalGreen += 0x80;
-    Q_UINT32 dstGreen = ((totalGreen >> 8) + totalGreen) >> 8;
+    Q_UINT32 dstGreen = totalGreen;
     //Q_ASSERT(dstGreen <= 255);
     if (dstGreen > 255) dstGreen = 255;
     dst[PIXEL_GREEN] = dstGreen;
 
-    totalBlue += 0x80;
-    Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
+    Q_UINT32 dstBlue = totalBlue;
     //Q_ASSERT(dstBlue <= 255);
     if (dstBlue > 255) dstBlue = 255;
     dst[PIXEL_BLUE] = dstBlue;

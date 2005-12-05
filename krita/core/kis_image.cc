@@ -1800,12 +1800,15 @@ void KisImage::removeAnnotation(QString type)
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
     KisProfile * profile = colorSpace()->getProfile();
+    KisAnnotationSP annotation;
 
-    if (profile) {
-//         addAnnotation(profile -> annotation());
-    } else {
+    if (profile)
+        annotation =  profile -> annotation();
+
+    if (annotation)
+         addAnnotation(annotation);
+    else
         removeAnnotation("icc");
-    }
 
     return m_annotations.begin();
 }

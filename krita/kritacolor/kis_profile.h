@@ -41,11 +41,6 @@ class KisProfile {
 public:
     KisProfile(QByteArray rawData);
     KisProfile(const QString& file);
-    KisProfile(const cmsHPROFILE profile, QByteArray rawData);
-
-    // Create a profile from a cms profile handle; this profile does not have associated
-    // raw data, so we cannot save it as an annotation, unless we implement the code
-    // in lcms testbed TestSaveToMem -- XXX.
     KisProfile(const cmsHPROFILE profile);
 
     virtual ~KisProfile();

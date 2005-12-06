@@ -53,20 +53,20 @@ KisProfile::KisProfile(const QString& file)
 {
 }
 
-KisProfile::KisProfile(cmsHPROFILE profile, QByteArray rawData)
-    : m_profile(profile),
-      m_rawData(rawData),
-      m_filename (QString()),
-      m_valid( false )
-{
-    init();
-}
-
 KisProfile::KisProfile(const cmsHPROFILE profile)
     : m_profile(profile),
       m_filename( QString() ),
       m_valid( true )
 {
+    size_t  bytesNeeded=0;
+
+    // Make a raw data image ready for saving
+    _cmsSaveProfileToMem(m_profile, 0, &bytesNeeded); // calc size
+    if(m_rawData.resize(bytesNeeded))
+        _cmsSaveProfileToMem(m_profile, m_rawData.data(), &bytesNeeded); // fill buffer
+    else
+        m_rawData.resize(0);
+
     init();
 }
 
@@ -150,8 +150,6 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
     unsigned long bytes_after;
     Q_UINT8 * str;
 
-    cmsHPROFILE profile = NULL;
-
     static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
 
     if  ( XGetWindowProperty ( qt_xdisplay(),
@@ -167,15 +165,11 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
                     &bytes_after,
                     (unsigned char **) &str)
                 ) {
-        if ( nitems )
-             profile =
-                cmsOpenProfileFromMem(&str,
-                            nitems * sizeof(long));
 
         QByteArray bytes (nitems);
         bytes.assign((char*)str, (Q_UINT32)nitems);
 
-        return new KisProfile(profile, bytes);
+        return new KisProfile(bytes);
     } else {
         return NULL;
     }

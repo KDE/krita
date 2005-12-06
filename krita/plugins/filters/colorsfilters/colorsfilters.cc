@@ -100,7 +100,7 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
         maxvalue= 255;
 
     histogram.setChannel(0);
-    int twoPercent = int(0.02*histogram.calculations().getCount());
+    int twoPercent = int(0.005*histogram.calculations().getCount());
     int pixCount = 0;
     int binnum = 0;
     while(binnum<histogram.producer()->numberOfBins())

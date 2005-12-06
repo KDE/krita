@@ -99,6 +99,32 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
     if(maxvalue>255)
         maxvalue= 255;
 
+    histogram.setChannel(0);
+    int twoPercent = int(0.02*histogram.calculations().getCount());
+    int pixCount = 0;
+    int binnum = 0;
+    while(binnum<histogram.producer()->numberOfBins())
+    {
+        pixCount += histogram.getValue(binnum);
+        if(pixCount > twoPercent)
+        {
+            minvalue = binnum;
+            break;
+        }
+        binnum++;
+    }
+    pixCount = 0;
+    binnum = histogram.producer()->numberOfBins()-1;
+    while(binnum>0)
+    {
+        pixCount += histogram.getValue(binnum);
+       if(pixCount > twoPercent)
+        {
+            maxvalue = binnum;
+            break;
+        }
+        binnum--;
+    }
     // build the transferfunction
     int diff = maxvalue - minvalue;
 

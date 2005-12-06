@@ -9,6 +9,7 @@ Name[sr]=Падајућа сенка
 Name[sr@Latn]=Падајућа сенка
 Name[sv]=Fallskugga
 Name[xx]=xxDropshadowxx
+Name[zh_CN]=阴影
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow

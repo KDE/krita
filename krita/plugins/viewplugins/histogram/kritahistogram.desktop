@@ -10,6 +10,7 @@ Name[sr]=Хистограмски прикључак
 Name[sr@Latn]=Хистограмски прикључак
 Name[sv]=Insticksprogram med histogram
 Name[xx]=xxHistogram Pluginxx
+Name[zh_CN]=直方图插件
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogram

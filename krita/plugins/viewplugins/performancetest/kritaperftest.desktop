@@ -10,6 +10,7 @@ Name[sr]=Проба перформанси
 Name[sr@Latn]=Проба перформанси
 Name[sv]=Prestandatest
 Name[xx]=xxPerformance testxx
+Name[zh_CN]=性能测试
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaperftest

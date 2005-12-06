@@ -16,6 +16,7 @@ Name[sr@Latn]=Алат за избор сличних боја
 Name[sv]=Välj liknande färg-verktyg
 Name[tr]=Benzer Renkler Seçim Aracı
 Name[xx]=xxSelect Similar Colors Toolxx
+Name[zh_CN]=选择相似颜色工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolselectsimilar

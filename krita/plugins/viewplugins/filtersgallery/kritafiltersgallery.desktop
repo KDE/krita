@@ -11,6 +11,7 @@ Name[sr]=Галерија филтера
 Name[sr@Latn]=Галерија филтера
 Name[sv]=Filtrergalleri
 Name[xx]=xxFilters Galleryxx
+Name[zh_CN]=滤镜库
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery

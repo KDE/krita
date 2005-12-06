@@ -10,6 +10,7 @@ Name[sr]=Претварање простора боја
 Name[sr@Latn]=Претварање простора боја
 Name[sv]=Färgrymdskonvertering
 Name[xx]=xxColorspace conversionxx
+Name[zh_CN]=色彩空间转换
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion

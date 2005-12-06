@@ -63,7 +63,12 @@ KisProfile::KisProfile(const cmsHPROFILE profile)
     // Make a raw data image ready for saving
     _cmsSaveProfileToMem(m_profile, 0, &bytesNeeded); // calc size
     if(m_rawData.resize(bytesNeeded))
+    {
         _cmsSaveProfileToMem(m_profile, m_rawData.data(), &bytesNeeded); // fill buffer
+        cmsHPROFILE newprofile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD) bytesNeeded);
+        cmsCloseProfile(m_profile);
+        m_profile = newprofile;
+    }
     else
         m_rawData.resize(0);
 

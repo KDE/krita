@@ -28,6 +28,7 @@
 #include "kis_filter_config_widget.h"
 #include "kis_paint_device_impl.h"
 #include "kis_layer.h"
+#include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_previewwidget.h"
@@ -92,11 +93,13 @@ void KisDlgFiltersGallery::refreshPreview( )
     
     KisLayerSP layer = m_previewWidget->getLayer();
 
+    KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());
 
     QRect rect = layer -> extent();
-    m_currentFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
+    m_currentFilter->process(layer.data(), layer.data(), config, rect);
     m_previewWidget->slotUpdate();
+    cmd.unexecute();
 }
 
 }

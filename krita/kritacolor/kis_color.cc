@@ -76,9 +76,11 @@ KisColor::KisColor(const KisColor &src, KisColorSpace * colorSpace)
     // XXX: We shouldn't use KisPixel as an intermediary.
     // XXX: the position of the alpha channel is wrong, of course, but that doesn't hurt for the
     //      conversion and it's too costly to determine at the moment.
-    KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorSpace());
-    KisPixel dstPixel = KisPixel(m_data, m_data, colorSpace);
-    src.colorSpace()->convertTo(srcPixel, dstPixel);
+    //      XXX: Casper removed KisPixel and now this doesn't work anymore. Casper!
+    //
+    //KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorSpace());
+    //KisPixel dstPixel = KisPixel(m_data, m_data, colorSpace);
+    //src.colorSpace()->convertTo(srcPixel, dstPixel);
 }
 
 KisColor::KisColor(const KisColor & rhs)

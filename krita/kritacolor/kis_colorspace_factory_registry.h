@@ -97,6 +97,9 @@ public:
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
+     * 
+     * These actions are exectued when an image is created on the first layer
+     * in the image, on the image width and height rect.
      */
     void addPaintDeviceAction(KisColorSpace* cs, KisPaintDeviceAction* action);
 

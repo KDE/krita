@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qcolor.h>
-
+ 
 #include "kdebug.h"
 #include "kis_debug_areas.h"
-#include "kis_pixel.h"
 #include "kis_color.h"
 #include "kis_profile.h"
 #include "kis_colorspace.h"

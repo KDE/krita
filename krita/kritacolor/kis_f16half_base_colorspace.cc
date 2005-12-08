@@ -18,7 +18,6 @@
 #include "kdebug.h"
 
 #include "kis_global.h"
-#include "kis_pixel.h"
 #include "kis_f16half_base_colorspace.h"
 
 Q_UINT8 KisF16HalfBaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)

@@ -24,7 +24,6 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 
 /**
  * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels

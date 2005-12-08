@@ -54,7 +54,6 @@
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
-#include "kis_pixel.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kis_color.h"
@@ -265,7 +264,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     Q_UINT8* source = new Q_UINT8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
-    KisPixel pixel = pixelIt.rawData();
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
 

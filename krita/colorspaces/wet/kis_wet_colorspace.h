@@ -24,7 +24,6 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 
 
 /**

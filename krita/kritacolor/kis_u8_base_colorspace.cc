@@ -22,7 +22,6 @@
 
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_pixel.h"
 #include "kis_integer_maths.h"
 
 void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst)

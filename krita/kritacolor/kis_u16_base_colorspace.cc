@@ -19,7 +19,6 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 #include "kis_integer_maths.h"
 #include "kis_u16_base_colorspace.h"
 

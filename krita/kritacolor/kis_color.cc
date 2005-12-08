@@ -42,6 +42,7 @@ KisColor::KisColor(const QColor & color, KisColorSpace * colorSpace)
 
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
+
     m_colorSpace->fromQColor(color, OPACITY_OPAQUE, m_data);
 }
 
@@ -72,14 +73,8 @@ KisColor::KisColor(const KisColor &src, KisColorSpace * colorSpace)
 {
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
-    // XXX: We shouldn't use KisPixel as an intermediary.
-    // XXX: the position of the alpha channel is wrong, of course, but that doesn't hurt for the
-    //      conversion and it's too costly to determine at the moment.
-    //      XXX: Casper removed KisPixel and now this doesn't work anymore. Casper!
-    //
-    //KisPixel srcPixel = KisPixel(src.data(), src.data(), src.colorSpace());
-    //KisPixel dstPixel = KisPixel(m_data, m_data, colorSpace);
-    //src.colorSpace()->convertTo(srcPixel, dstPixel);
+
+    src.colorSpace()->convertPixelsTo(src.data(), m_data, colorSpace, 1);
 }
 
 KisColor::KisColor(const KisColor & rhs)

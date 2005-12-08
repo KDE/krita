@@ -36,7 +36,6 @@ include_HEADERS =  \
     kis_color.h \
     kis_colorspace.h \
     kis_composite_op.h \
-    kis_pixel.h \
     kis_profile.h \
     kis_histogram_producer.h \
     kis_basic_histogram_producers.h

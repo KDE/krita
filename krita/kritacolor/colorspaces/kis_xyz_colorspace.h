@@ -23,7 +23,6 @@
 #include "kis_global.h"
 #include "kis_integer_maths.h"
 #include "kis_u16_base_colorspace.h"
-#include "kis_pixel.h"
 
 namespace xyz {
     const Q_INT32 MAX_CHANNEL_XYZ = 3;
@@ -49,16 +48,6 @@ public:
     virtual ~KisXyzColorSpace();
 
 public:
-
-    // Conversion functions
-
-    //XXX: KisPixel(RO) does not work with this colorspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
-
-    virtual KisPixel toKisPixel(Q_UINT8 *src)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
-
     // Pixel manipulation
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
     virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);

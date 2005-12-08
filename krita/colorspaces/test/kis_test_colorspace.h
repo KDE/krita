@@ -22,7 +22,6 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 #include "koffice_export.h"
 
 class KRITATOOL_EXPORT KisTestColorSpace : public KisAbstractColorSpace {
@@ -38,11 +37,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixelRO (src, src + 4, this, profile); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0)
-        { return KisPixel (src, src + 4, this, profile); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

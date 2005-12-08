@@ -21,7 +21,6 @@
 #define KIS_ITERATORPIXELTRAIT_H_
 
 #include "kis_iterator.h"
-#include "kis_pixel.h"
 #include <kis_paint_device_impl.h>
 
 template< typename _iTp>
@@ -73,12 +72,6 @@ public:
 
 
 public:
-    /**
-     * Return the current pixel
-     */
-     inline KisPixel pixel() const { return m_device->toPixel(m_underlyingIterator->rawData()); };
-     inline KisPixelRO oldPixel() const { return m_device->toPixelRO( m_underlyingIterator->oldRawData()); };
-
     /**
      * Return one channel from the current kispixel. Does not check whether
      * channel index actually exists in this colorspace.

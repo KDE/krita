@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_colorspace.h"
-#include "kis_pixel.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
 #include "kis_paint_device.h"
@@ -250,13 +249,6 @@ public:
     bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
 
     bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
-
-    /**
-     * Return a KisPixel wrapper around these bytes. If there are not enough
-     * bytes, bad things will happen. XXX: use vectors?
-     */
-    KisPixel toPixel(Q_UINT8 * bytes);
-    KisPixelRO toPixelRO(const Q_UINT8 * bytes);
 
     bool hasAlpha() const;
 
@@ -487,16 +479,6 @@ inline void KisPaintDeviceImpl::setImage(KisImage *image)
 inline bool KisPaintDeviceImpl::hasAlpha() const
 {
         return colorSpace() -> hasAlpha();
-}
-
-inline KisPixel KisPaintDeviceImpl::toPixel(Q_UINT8 * bytes)
-{
-    return m_colorSpace -> toKisPixel(bytes);
-}
-
-inline KisPixelRO KisPaintDeviceImpl::toPixelRO(const Q_UINT8 * bytes)
-{
-    return m_colorSpace -> toKisPixelRO(bytes);
 }
 
 inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

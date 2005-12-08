@@ -24,7 +24,6 @@
 
 #include "kis_global.h"
 #include "kis_u16_base_colorspace.h"
-#include "kis_pixel.h"
 #include "kis_integer_maths.h"
 
 
@@ -44,13 +43,6 @@ public:
     virtual ~KisCmykU16ColorSpace();
 
 public:
-
-
-    //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(Q_UINT16), this); }
 
     virtual QValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;

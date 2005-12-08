@@ -22,7 +22,6 @@
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 
 namespace WetAndSticky {
 
@@ -85,10 +84,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile = 0);
-
-    virtual KisPixel toKisPixel(Q_UINT8 *src, KisProfile *  profile = 0);
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 *pixel);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);

@@ -22,7 +22,6 @@
 
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_pixel.h"
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
@@ -42,9 +41,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src) { return KisPixelRO (src, src, this); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src) { return KisPixel (src, src, this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

@@ -21,7 +21,6 @@
 
 #include "kis_iterator.h"
 #include "kis_iteratorpixeltrait.h"
-#include "kis_pixel.h"
 
 /**
  * The pixel iterators are high level iterarators. The lower level iterators merely return a pointer to some memory

@@ -27,7 +27,6 @@
 
 #include "kis_global.h"
 #include "kis_f16half_base_colorspace.h"
-#include "kis_pixel.h"
 
 
 class KRITATOOL_EXPORT KisRgbF16HalfColorSpace : public KisF16HalfBaseColorSpace {
@@ -44,12 +43,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
-
-    //XXX: KisPixel(RO) does not work with this colourspace as it only handles 8-bit channels.
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
-        { return KisPixelRO (src, src + PIXEL_ALPHA * sizeof(half), this); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src)
-        { return KisPixel (src, src + PIXEL_ALPHA * sizeof(half), this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

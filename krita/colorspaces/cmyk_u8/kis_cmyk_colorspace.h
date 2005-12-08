@@ -21,7 +21,6 @@
 #include <qcolor.h>
 #include <qmap.h>
 #include <koffice_export.h>
-#include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
 
@@ -32,11 +31,6 @@ public:
     virtual ~KisCmykColorSpace();
 
 public:
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
-        { return KisPixelRO (src, src + PIXEL_CMYK_ALPHA, this); }
-    virtual KisPixel toKisPixel(Q_UINT8 *src)
-        { return KisPixel (src, src + PIXEL_CMYK_ALPHA, this); }
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 

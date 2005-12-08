@@ -175,10 +175,6 @@ public:
     virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
 
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src) = 0;
-    virtual KisPixel toKisPixel(Q_UINT8 *src) = 0;
-
     /**
      * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
      * color strategy.

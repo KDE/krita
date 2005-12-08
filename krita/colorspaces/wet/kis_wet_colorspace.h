@@ -115,12 +115,6 @@ public:
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 */*src*/)
-        { return 0; };
-
-    virtual KisPixel toKisPixel(Q_UINT8 */*src*/)
-        { return 0; };
-
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;

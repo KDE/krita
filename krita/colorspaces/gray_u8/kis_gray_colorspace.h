@@ -26,7 +26,6 @@
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
-#include "kis_pixel.h"
 
 class KRITACORE_EXPORT KisGrayColorSpace : public KisU8BaseColorSpace {
 public:
@@ -46,12 +45,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
-
-    virtual KisPixelRO toKisPixelRO(const Q_UINT8 *src)
-        { return KisPixelRO (src, src + PIXEL_GRAY_ALPHA, this); }
-
-    virtual KisPixel toKisPixel(Q_UINT8 *src)
-        { return KisPixel (src, src + PIXEL_GRAY_ALPHA, this); }
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

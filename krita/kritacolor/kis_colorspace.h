@@ -28,8 +28,6 @@
 
 class DCOPObject;
 
-class KisPixel;
-class KisPixelRO;
 class KisProfile;
 class KisColorSpaceFactoryRegistry;
 
@@ -174,12 +172,6 @@ public:
      */
     virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
-
-    /**
-     * This function is used to convert a KisPixelRepresentation from this color strategy to the specified
-     * color strategy.
-     */
-    virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.

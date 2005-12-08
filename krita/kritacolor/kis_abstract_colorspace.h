@@ -32,7 +32,6 @@
 #include "kis_colorspace.h"
 
 class QPainter;
-class KisPixel;
 class KisPixelRO;
 class KisColorSpaceFactoryRegistry;
 
@@ -142,8 +141,6 @@ public:
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
-
-    virtual bool convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                                    KisProfile *  dstProfile,

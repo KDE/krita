@@ -22,7 +22,6 @@
 #include <kconfig.h>
 
 #include "kis_abstract_colorspace.h"
-#include "kis_pixel.h"
 #include "kis_global.h"
 #include "kis_profile.h"
 #include "kis_id.h"
@@ -104,14 +103,6 @@ void KisAbstractColorSpace::init()
 
 KisAbstractColorSpace::~KisAbstractColorSpace()
 {
-}
-
-
-bool KisAbstractColorSpace::convertTo(KisPixel& src, KisPixel& dst, Q_INT32 renderingIntent)
-{
-    return convertPixelsTo(src.channels(),
-			   dst.channels(), dst.colorSpace(),
-			   renderingIntent);
 }
 
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,

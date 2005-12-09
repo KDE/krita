@@ -87,10 +87,6 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page -> cmbColor -> hide();
     m_page -> lblColor -> hide();
 
-    connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
-
-
     connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
 

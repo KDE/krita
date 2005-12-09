@@ -69,43 +69,43 @@ noinst_HEADERS = \
     kis_iteratorpixeltrait.h \
     kis_merge.h
 
-include_HEADERS = \
-    kis_alpha_mask.h \
-    kis_autobrush_resource.h \
-    kis_autogradient_resource.h \
-    kis_background.h \
-    kis_boundary.h \
-    kis_brush.h \
-    kis_command.h \
-    kis_convolution_painter.h \
-    kis_fill_painter.h \
-    kis_filter.h \
-    kis_filter_registry.h \
-    kis_gradient.h \
-    kis_gradient_painter.h \
-    kis_histogram.h \
-    kis_image.h \
-    kis_image_iface.h \
-    kis_imagepipe_brush.h \
-    kis_iterator.h \
-    kis_iterators_pixel.h \
-    kis_layer.h \
-    kis_meta_registry.h \
-    kis_nameserver.h \
-    kis_paint_device_iface.h \
-    kis_paint_device_impl.h \
-    kis_painter.h \
-    kis_paintop.h \
-    kis_paintop_registry.h \
-    kis_palette.h \
-    kis_pattern.h \
-    kis_point.h \
-    kis_rect.h \
-    kis_resource.h \
-    kis_selection.h \
-    kis_transaction.h \
-    kis_types.h \
-    kis_vec.h 
+#include_HEADERS = \
+#    kis_alpha_mask.h \
+#    kis_autobrush_resource.h \
+#    kis_autogradient_resource.h \
+#    kis_background.h \
+#    kis_boundary.h \
+#    kis_brush.h \
+#    kis_command.h \
+#    kis_convolution_painter.h \
+#    kis_fill_painter.h \
+#    kis_filter.h \
+#    kis_filter_registry.h \
+#    kis_gradient.h \
+#    kis_gradient_painter.h \
+#    kis_histogram.h \
+#    kis_image.h \
+#    kis_image_iface.h \
+#    kis_imagepipe_brush.h \
+#    kis_iterator.h \
+#    kis_iterators_pixel.h \
+#    kis_layer.h \
+#    kis_meta_registry.h \
+#    kis_nameserver.h \
+#    kis_paint_device_iface.h \
+#    kis_paint_device_impl.h \
+#    kis_painter.h \
+#    kis_paintop.h \
+#    kis_paintop_registry.h \
+#    kis_palette.h \
+#    kis_pattern.h \
+#    kis_point.h \
+#    kis_rect.h \
+#    kis_resource.h \
+#    kis_selection.h \
+#    kis_transaction.h \
+#    kis_types.h \
+#    kis_vec.h 
 
 libkritaimage_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
 libkritaimage_la_LIBADD = ../sdk/libkritasdk.la ../kritacolor/libkritacolor.la tiles/libkritatile.la $(OPENEXR_LIBS) $(LCMS_LIBS) $(LIB_KOFFICECORE) $(LIB_KOPAINTER) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS) 

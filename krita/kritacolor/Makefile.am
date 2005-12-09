@@ -31,14 +31,14 @@ libkritacolor_la_SOURCES = \
 libkritacolor_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
 libkritacolor_la_LIBADD  = colorspaces/libkritacolorspaces.la $(LCMS_LIBS) $(LIB_KPARTS) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS)
 
-include_HEADERS =  \
-    kis_channelinfo.h \
-    kis_color.h \
-    kis_colorspace.h \
-    kis_composite_op.h \
-    kis_profile.h \
-    kis_histogram_producer.h \
-    kis_basic_histogram_producers.h
+#include_HEADERS =  \
+#    kis_channelinfo.h \
+#    kis_color.h \
+#    kis_colorspace.h \
+#    kis_composite_op.h \
+#    kis_profile.h \
+#    kis_histogram_producer.h \
+#    kis_basic_histogram_producers.h
 
 
 if include_kunittest_tests

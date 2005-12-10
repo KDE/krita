@@ -123,14 +123,13 @@ void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisPro
 	cmsDoTransform(m_lastFromRGB, m_qcolordata, dst, 1);
     }
 
-
-    dst[m_alphaPos] = OPACITY_OPAQUE;
+    setAlpha(dst, OPACITY_OPAQUE, 1);
 }
 
 void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile)
 {
     fromQColor(color, dst, profile);
-    dst[m_alphaPos] = opacity;
+    setAlpha(dst, opacity, 1);
 }
 
 void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
@@ -155,8 +154,7 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *
 void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
 {
     toQColor(src, c, profile);
-    // XXX: assume 8-bit alpha!
-    *opacity = src[m_alphaPos];
+    *opacity = getAlpha(src);
 }
 
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,

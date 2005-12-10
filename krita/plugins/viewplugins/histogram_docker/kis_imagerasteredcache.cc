@@ -119,7 +119,7 @@ void KisImageRasteredCache::timeOut() {
         m_queue.front() -> observer -> regionUpdated(dev);
         m_queue.front() -> valid = true;
         m_queue.pop_front();
-        qApp -> processEvents();
+        //qApp -> processEvents();
     }
 
     emit cacheUpdated();

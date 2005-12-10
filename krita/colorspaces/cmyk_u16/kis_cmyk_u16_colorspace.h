@@ -50,7 +50,6 @@ public:
     virtual Q_INT32 nColorChannels() const;
     virtual Q_INT32 pixelSize() const;
 
-    virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;

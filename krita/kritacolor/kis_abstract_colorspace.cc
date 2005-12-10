@@ -96,6 +96,13 @@ void KisAbstractColorSpace::init()
 					    INTENT_PERCEPTUAL, 0);
 	
     }
+    cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
+
+    m_defaultFromLab = cmsCreateTransform(hLab, TYPE_Lab_16, m_profile->profile(), m_cmType,
+                                                    INTENT_PERCEPTUAL, 0);
+
+    m_defaultToLab = cmsCreateTransform(m_profile->profile(), m_cmType, hLab, TYPE_Lab_16,
+                                                    INTENT_PERCEPTUAL, 0);
 }
 
 KisAbstractColorSpace::~KisAbstractColorSpace()
@@ -130,7 +137,6 @@ void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisPro
 
 
     dst[m_alphaPos] = OPACITY_OPAQUE;
-
 }
 
 void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile)
@@ -402,36 +408,23 @@ void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
 
 }
 
-// BC: should this default be HSV-based?
-Q_INT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
+Q_UINT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
-/*    
-    if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
-        Q_UINT32 psize = xyz::MAX_CHANNEL_XYZA * sizeof(Q_UINT16);
+    Q_UINT8 lab1[8], lab2[8];
+    cmsCIELab labF1, labF2;
 
+    if (getAlpha(src1) == OPACITY_TRANSPARENT || getAlpha(src2) == OPACITY_TRANSPARENT)
+        return (getAlpha(src1) == getAlpha(src2) ? 0 : 255);
 
-        if ( m_conversionCache.size() < 2 * psize ) {
-            m_conversionCache.resize( 2 * psize, QGArray::SpeedOptim );
-        }
-
-        cmsDoTransform( m_defaultToXYZ, const_cast<Q_UINT8*>( src1 ), m_conversionCache.data(), 1);
-        cmsDoTransform( m_defaultToXYZ, const_cast<Q_UINT8*>( src2 ), m_conversionCache.data() + psize, 1);
-
-        return m_parent->getXYZ16()->difference( m_conversionCache.data(), m_conversionCache.data() + psize );
-
-    }
-    else {
-*/    
-        QColor color1, color2;
-        toQColor(src1, &color1);
-        toQColor(src2, &color2);
-
-        int h1, s1, v1, h2, s2, v2;
-        rgb_to_hsv(color1.red(), color1.green(), color1.blue(), &h1, &s1, &v1);
-        rgb_to_hsv(color2.red(), color2.green(), color2.blue(), &h2, &s2, &v2);
-
-        return QMAX(QABS(v1 - v2), QMAX(QABS(s1 - s2), QABS(h1 - h2)));
-//    }
+    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src1 ), lab1, 1);
+    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src2 ), lab2, 1);
+    cmsLabEncoded2Float(&labF1, (WORD *)lab1);
+    cmsLabEncoded2Float(&labF2, (WORD *)lab2);
+    double diff = cmsDeltaE(&labF1, &labF2);
+    if(diff>255)
+        return 255;
+    else
+        return Q_INT8(diff);
 }
 
 void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const

@@ -84,11 +84,6 @@ void KisGrayColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels
     }
 }
 
-Q_INT8 KisGrayColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
-{
-    return QABS(src2[PIXEL_GRAY] - src1[PIXEL_GRAY]);
-}
-
 void KisGrayColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalGray = 0, newAlpha = 0;

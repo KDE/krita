@@ -318,7 +318,7 @@ public:
     /**
      * Get the difference between 2 colors, normalized in the range (0,255)
      */
-    virtual Q_INT8 difference(const Q_UINT8* src1, const Q_UINT8* src2) = 0;
+    virtual Q_UINT8 difference(const Q_UINT8* src1, const Q_UINT8* src2) = 0;
 
 
     /**

@@ -109,14 +109,6 @@ void KisXyzColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
     }
 }
 
-Q_INT8 KisXyzColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
-{
-    const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
-    const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
-
-    return QMAX(QABS(src1->X - src2->X), QMAX(QABS(src1->Y - src2->Y), QABS(src1->Z - src2->Z)));
-}
-
 void KisXyzColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
 }

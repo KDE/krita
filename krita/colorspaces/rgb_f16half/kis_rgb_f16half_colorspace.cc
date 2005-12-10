@@ -117,7 +117,7 @@ void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 
     *opacity = HALF_TO_UINT8(src -> alpha);
 }
 
-Q_INT8 KisRgbF16HalfColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
+Q_UINT8 KisRgbF16HalfColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);

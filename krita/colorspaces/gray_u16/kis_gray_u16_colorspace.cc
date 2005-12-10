@@ -58,14 +58,6 @@ KisGrayU16ColorSpace::~KisGrayU16ColorSpace()
 {
 }
 
-Q_INT8 KisGrayU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
-{
-    const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
-    const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
-
-    return UINT16_TO_UINT8(QABS(src2 -> gray - src1 -> gray));
-}
-
 void KisGrayU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalGray = 0, newAlpha = 0;

@@ -80,16 +80,6 @@ void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *
     *alpha = srcPixel -> alpha;
 }
 
-Q_INT8 KisRgbU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
-{
-    const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
-    const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
-
-    return UINT16_TO_UINT8(QMAX(QABS(src2 -> red - src1 -> red),
-                QMAX(QABS(src2 -> green - src1 -> green),
-                     QABS(src2 -> blue - src1 -> blue))));
-}
-
 void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;

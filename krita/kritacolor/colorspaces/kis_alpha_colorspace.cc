@@ -76,8 +76,9 @@ void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacit
     *opacity = src[PIXEL_MASK];
 }
 
-Q_INT8 KisAlphaColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
+Q_UINT8 KisAlphaColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 {
+    // Arithmetic operands smaller than int are converted to int automatically
     return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 

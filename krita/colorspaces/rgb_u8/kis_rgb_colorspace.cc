@@ -76,15 +76,6 @@ void KisRgbColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *gre
     *alpha = pixel[PIXEL_ALPHA];
 }
 
-Q_INT8 KisRgbColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
-{
-    if (src1[PIXEL_ALPHA] == OPACITY_TRANSPARENT || src2[PIXEL_ALPHA] == OPACITY_TRANSPARENT)
-        return (src1[PIXEL_ALPHA] == src2[PIXEL_ALPHA]) ? 0 : Q_UINT8_MAX;
-    return QMAX(QABS(src2[PIXEL_RED] - src1[PIXEL_RED]),
-                QMAX(QABS(src2[PIXEL_GREEN] - src1[PIXEL_GREEN]),
-                    QABS(src2[PIXEL_BLUE] - src1[PIXEL_BLUE])));
-}
-
 void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;

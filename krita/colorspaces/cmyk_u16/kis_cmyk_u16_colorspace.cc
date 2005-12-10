@@ -74,18 +74,6 @@ KisCmykU16ColorSpace::~KisCmykU16ColorSpace()
 {
 }
 
-
-Q_INT8 KisCmykU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
-{
-    const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
-    const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
-
-    return UINT16_TO_UINT8(QMAX(QABS(src2 -> cyan - src1 -> cyan),
-                                QMAX(QABS(src2 -> magenta - src1 -> magenta),
-                                     QMAX(QABS(src2 -> yellow - src1 -> yellow),
-                                         QABS( src2 -> black - src1 ->black )))) );
-}
-
 void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalCyan = 0, totalMagenta = 0, totalYellow = 0, totalBlack = 0, newAlpha = 0;

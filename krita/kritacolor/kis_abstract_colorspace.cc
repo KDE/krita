@@ -147,11 +147,11 @@ void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_U
 void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
 {
     if (profile == 0) {
-	if (!m_defaultToRGB) return;
+        if (!m_defaultToRGB) return;
 
         m_defaultToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
-					    profile, TYPE_BGR_8,
-					    INTENT_PERCEPTUAL, 0);
+                                            cmsCreate_sRGBProfile(), TYPE_BGR_8,
+                                            INTENT_PERCEPTUAL, 0);
 	// XXX: Properly convert using the rgb colorspace and the profile
 	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     }

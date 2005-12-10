@@ -73,21 +73,16 @@ void KisAbstractColorSpace::init()
 
     m_lastRGBProfile = 0;
     m_lastToRGB = 0;
-    m_lastFromRGB = 0;
+    // For conversions from default rgb
+    m_lastFromRGB = cmsCreate_sRGBProfile();
 
-    if (m_cmType != TYPE_BGR_8) {
-        // For conversions from default rgb
-        m_lastFromRGB = cmsCreate_sRGBProfile();
+    m_defaultFromRGB = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_8,
+                                          m_profile->profile(), m_cmType,
+                                          INTENT_PERCEPTUAL, 0);
 
-        m_defaultFromRGB = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_8,
-                                              m_profile->profile(), m_cmType,
-                                              INTENT_PERCEPTUAL, 0);
-
-        m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
-                                             m_lastFromRGB, TYPE_BGR_8,
-                                             INTENT_PERCEPTUAL, 0);
-    }
-
+    m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
+                                         m_lastFromRGB, TYPE_BGR_8,
+                                         INTENT_PERCEPTUAL, 0);
     if (m_cmType != TYPE_XYZ_16) {
     	// For conversion from default 16 bit xyz for default pixel ops
     	cmsHPROFILE hsXYZ = cmsCreateXYZProfile();
@@ -147,12 +142,8 @@ void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_U
 void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
 {
     if (profile == 0) {
+	// Default sRGB transform
         if (!m_defaultToRGB) return;
-
-        m_defaultToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
-                                            cmsCreate_sRGBProfile(), TYPE_BGR_8,
-                                            INTENT_PERCEPTUAL, 0);
-	// XXX: Properly convert using the rgb colorspace and the profile
 	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     }
     else {

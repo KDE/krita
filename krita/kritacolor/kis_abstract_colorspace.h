@@ -236,12 +236,12 @@ protected:
 
 private:
 
-    cmsHTRANSFORM m_defaultToRGB;
-    cmsHTRANSFORM m_defaultFromRGB;
+    cmsHTRANSFORM m_defaultToRGB;    // Default transform to 8 bit sRGB
+    cmsHTRANSFORM m_defaultFromRGB;  // Default transform from 8 bit sRGB
 
-    cmsHPROFILE   m_lastRGBProfile;
-    cmsHTRANSFORM m_lastToRGB;
-    cmsHTRANSFORM m_lastFromRGB;
+    cmsHPROFILE   m_lastRGBProfile;  // Last used profile to transform to/from RGB
+    cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
+    cmsHTRANSFORM m_lastFromRGB;     // Last used transform to transform from RGB
 
     cmsHTRANSFORM m_defaultToXYZ;
     cmsHTRANSFORM m_defaultFromXYZ;

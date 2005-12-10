@@ -7,7 +7,6 @@ endif
 SUBDIRS = \
     colorrange \
     colorspaceconversion \
-    dropshadow \
     filtersgallery \
     histogram \
     histogram_docker \
@@ -16,6 +15,5 @@ SUBDIRS = \
     performancetest \
     rotateimage \
     screenshot \
-    separate_channels \
     shearimage \
     variations $(SCRIPTINGDIR)

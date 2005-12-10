@@ -21,17 +21,27 @@
 #ifndef _KIS_ACCUMULATING_PRODUCER_H_
 #define _KIS_ACCUMULATING_PRODUCER_H_
 
+#include <qobject.h>
+
 #include <kis_basic_histogram_producers.h>
 #include "kis_cachedhistogram.h"
 
 /**
- * Kept very minimalistic because all options would require much reiterating which we don't want
+ * Kept very minimalistic because all options would require much reiterating which we don't want.
+ * This class is multithreading! Don't expect it to contain the right data after an
+ * addRegionsToBinAsync call, but await it's completed() signal. Also beware! This function
+ * _does_ clear() before addRegionsToBinAsync! (hence not conforming to the regular semantics
+ * of HistogramProducers if you'd take addRegionsToBinAsync = addRegionToBin, but since that is
+ * already violated with the asynchronousity of it that is not really an issue anymore, I think)
  **/
-class KisAccumulatingHistogramProducer : public KisBasicHistogramProducer {
+class KisAccumulatingHistogramProducer : public QObject, public KisBasicHistogramProducer {
+Q_OBJECT
 public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
-    // Iterates over nothing at all, just does its thing with all the source producers
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8* selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    ~KisAccumulatingHistogramProducer();
+    /// Does _nothing_, use addRegionsToBinAsync
+    virtual void addRegionToBin(Q_UINT8 *, Q_UINT8*, Q_UINT32, KisColorSpace *) {}
+    virtual void addRegionsToBinAsync();
     virtual QString positionToString(double pos) const
         { return m_source -> at(0) -> positionToString(pos); }
 
@@ -49,10 +59,20 @@ public:
         makeExternalToInternal();
     }
 
+signals:
+    void completed();
+
 protected:
     /// source already converts external to internal
     virtual int externalToInternal(int ext) { return ext; }
     KisCachedHistogramObserver::Producers* m_source;
+
+    /// To be called from the thread, to be on the safe site with multithreading
+    void emitCompleted() { emit completed(); }
+
+    class ThreadedProducer;
+    friend class ThreadedProducer;
+    ThreadedProducer* m_thread;
 };
 
 #endif // _KIS_ACCUMULATING_PRODUCER_H_

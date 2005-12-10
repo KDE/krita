@@ -72,6 +72,7 @@ private:
     int m_rasterSize;
     int m_width, m_height;
     KisView * m_view;
+    bool m_busy;
 };
 
 #endif // _KIS_IMAGE_RASTERED_CACHE_H_

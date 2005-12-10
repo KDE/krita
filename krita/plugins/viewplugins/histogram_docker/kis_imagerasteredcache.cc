@@ -20,6 +20,8 @@
 
 #include <cmath>
 
+#include <qapplication.h>
+
 #include <kdebug.h>
 
 #include <kis_doc.h>
@@ -32,8 +34,9 @@
 KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) 
     : m_observer(o -> createNew(0, 0, 0, 0)), m_view(view)
 {
+    m_busy = false;
     m_rasterSize = 64;
-    m_timeOutMSec = 125;
+    m_timeOutMSec = 250;
 
     KisImageSP img = view -> getCanvasSubject() -> currentImg();
 
@@ -75,9 +78,11 @@ void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) 
         }
     }
 
-    // If the timer is already started, this resets it. That way, we update always
-    // m_timeOutMSec milliseconds after the lastly monitored activity
-    m_timer.start(m_timeOutMSec, true); // true -> singleshot
+    if (!m_busy) {
+        // If the timer is already started, this resets it. That way, we update always
+        // m_timeOutMSec milliseconds after the lastly monitored activity
+        m_timer.start(m_timeOutMSec, true); // true -> singleshot
+    }
 }
 
 void KisImageRasteredCache::imageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h) {
@@ -107,15 +112,18 @@ void KisImageRasteredCache::imageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT3
 }
 
 void KisImageRasteredCache::timeOut() {
+    m_busy = true;
     KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
-    KisPaintDeviceImplSP dev = img -> mergedImage(); // XXX use img -> projection or so?
     while(!m_queue.isEmpty()) {
+        KisPaintDeviceImplSP dev = img -> mergedImage(); // Just returns a pointer to projection
         m_queue.front() -> observer -> regionUpdated(dev);
         m_queue.front() -> valid = true;
         m_queue.pop_front();
+        qApp -> processEvents();
     }
 
     emit cacheUpdated();
+    m_busy = false;
 }
 
 void KisImageRasteredCache::cleanUpElements() {

@@ -18,7 +18,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <qthread.h>
+
 #include "kis_accumulating_producer.h"
+
+/**
+ * The threaded producer definition in c++ file because this is really an internal affair.
+ * Note that since we _know_ that we'll only have a single instance of it running, at most,
+ * we don't care too much about locking and synchronization
+ **/
+class KisAccumulatingHistogramProducer::ThreadedProducer : public QThread {
+    KisAccumulatingHistogramProducer* m_source;
+    bool m_stop;
+protected:
+    virtual void run();
+public:
+    ThreadedProducer(KisAccumulatingHistogramProducer* source)
+        : m_source(source), m_stop(false) {}
+    void cancel() { m_stop = true; }
+};
 
 KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source)
     : KisBasicHistogramProducer(
@@ -28,18 +46,51 @@ KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHist
         0),
       m_source(source)
 {
+    m_thread = new ThreadedProducer(this);
 }
 
-void KisAccumulatingHistogramProducer::addRegionToBin(Q_UINT8 *, Q_UINT8*, Q_UINT32, KisColorSpace*) {
-    uint count = m_source -> count();
-    for (uint i = 0; i < count; i++) {
-        KisHistogramProducer* p = m_source -> at(i);
-        m_count += p -> count();
+KisAccumulatingHistogramProducer::~KisAccumulatingHistogramProducer() {
+    m_thread -> cancel();
+    m_thread -> wait();
+    delete m_thread;
+}
 
-        for (int j = 0; j < m_channels; j++) {
-            for (int k = 0; k < m_nrOfBins; k++) {
-                m_bins.at(j).at(k) += p -> getBinAt(j, k);
+void KisAccumulatingHistogramProducer::addRegionsToBinAsync() {
+    m_thread -> cancel();
+    m_thread -> wait();
+    clear();
+    m_thread -> start();
+}
+
+void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
+    m_stop = false;
+
+    uint count = m_source -> m_source -> count(); // Talk about bad naming schemes...
+    KisCachedHistogramObserver::Producers* source = m_source -> m_source;
+    QValueVector<vBins>& bins = m_source -> m_bins;
+    int channels = m_source -> m_channels;
+    int nrOfBins = m_source -> m_nrOfBins;
+
+    for (uint i = 0; i < count && !m_stop; i++) {
+        KisHistogramProducer* p = source -> at(i);
+        m_source -> m_count += p -> count();
+
+        for (int j = 0; j < channels && !m_stop; j++) {
+            for (int k = 0; k < nrOfBins; k++) {
+                bins.at(j).at(k) += p -> getBinAt(j, k);
             }
         }
     }
+
+//    kdDebug() << "Ran Thread" << endl;
+//    kdDebug() << "Bin 0 @ channel 0: " << bins.at(0).at(0) << endl;
+//    kdDebug() << "Bin MAX @ channel 0: " << bins.at(0).at(nrOfBins-1) << endl;
+
+    if (!m_stop) {
+//        kdDebug() << "And emitted completed" << endl;
+        m_source -> emitCompleted();
+    }
 }
+
+#include "kis_accumulating_producer.moc"
+

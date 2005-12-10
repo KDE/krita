@@ -64,12 +64,16 @@ class KisGenericRGBHistogramProducerFactory;
 class HistogramDockerUpdater : public QObject {
 Q_OBJECT
 public:
-    HistogramDockerUpdater(KisHistogramSP h, KisHistogramView* v) : m_histogram(h), m_view(v) {}
+    HistogramDockerUpdater(KisHistogramSP h, KisHistogramView* v,
+                           KisAccumulatingHistogramProducer* p);
 public slots:
-    void updated() { m_histogram -> updateHistogram(); m_view -> updateHistogram(); }
+    void updated();
+private slots:
+    void completed();
 private:
     KisHistogramSP m_histogram;
     KisHistogramView* m_view;
+    KisAccumulatingHistogramProducer* m_producer;
 };
 
 #endif //_HISTOGRAMDOCKER_H_

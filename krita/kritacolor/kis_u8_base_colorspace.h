@@ -40,12 +40,6 @@ public:
 	m_alphaSize = sizeof(Q_UINT8);
     };
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
-
-    virtual void toQColor(const Q_UINT8 *src, QColor *c);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
-
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
     virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);

@@ -37,14 +37,8 @@ public:
     void setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const;
     void getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *alpha) const;
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
-
     virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
     virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
-    virtual void toQColor(const Q_UINT8 *src, QColor *c);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

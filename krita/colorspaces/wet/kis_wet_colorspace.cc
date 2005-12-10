@@ -166,7 +166,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -184,7 +184,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
     // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile * profile)
 {
     fromQColor(c, dst);
 }
@@ -221,7 +221,7 @@ Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelP
 }
 
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
 {
     Q_UINT8 * rgb = new Q_UINT8[3];
     Q_CHECK_PTR(rgb);
@@ -243,7 +243,7 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
 {
     toQColor(src, c);
 }

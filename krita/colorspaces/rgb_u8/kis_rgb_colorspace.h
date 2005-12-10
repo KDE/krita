@@ -18,8 +18,6 @@
 #ifndef KIS_STRATEGY_COLORSPACE_RGB_H_
 #define KIS_STRATEGY_COLORSPACE_RGB_H_
 
-#include <qcolor.h>
-
 #include "klocale.h"
 
 #include "kis_global.h"
@@ -39,12 +37,6 @@ public:
 public:
     void setPixel(Q_UINT8 *pixel, Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, Q_UINT8 alpha) const;
     void getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *green, Q_UINT8 *blue, Q_UINT8 *alpha) const;
-
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst);
-
-    virtual void toQColor(const Q_UINT8 *src, QColor *c);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity);
 
     virtual Q_INT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

@@ -136,11 +136,11 @@ public:
 //================= Conversion functions ==================================//
 
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst) = 0;
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst) = 0;
+    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c) = 0;
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity) = 0;
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
+    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                                    KisProfile *  dstProfile,
@@ -230,8 +230,19 @@ protected:
     Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
     Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
+    QValueVector<KisChannelInfo *> m_channels;
+
+    KisColorSpaceFactoryRegistry * m_parent;
+
+private:
+
     cmsHTRANSFORM m_defaultToRGB;
     cmsHTRANSFORM m_defaultFromRGB;
+
+    cmsHPROFILE   m_lastRGBProfile;
+    cmsHTRANSFORM m_lastToRGB;
+    cmsHTRANSFORM m_lastFromRGB;
+
     cmsHTRANSFORM m_defaultToXYZ;
     cmsHTRANSFORM m_defaultFromXYZ;
 
@@ -239,11 +250,6 @@ protected:
     KisProfile *  m_lastUsedDstProfile;
     cmsHTRANSFORM m_lastUsedTransform;
 
-    QValueVector<KisChannelInfo *> m_channels;
-
-    KisColorSpaceFactoryRegistry * m_parent;
-
-private:
 
     KisID m_id;
     DWORD m_cmType;                           // The colorspace type as defined by littlecms
@@ -255,7 +261,7 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    QMemArray<Q_UINT8> m_conversionCache; // XXX: :This will be a bad problem when we have threading.
+    QMemArray<Q_UINT8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

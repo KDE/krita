@@ -50,8 +50,8 @@ KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id,
                                              icColorSpaceSignature colorSpaceSignature,
                                              KisColorSpaceFactoryRegistry * parent,
                                              KisProfile *p)
-    : m_profile( p )
-    , m_parent( parent )
+    : m_parent( parent )
+    , m_profile( p )
     , m_id( id )
     , m_cmType( cmType )
     , m_colorSpaceSignature( colorSpaceSignature )
@@ -69,20 +69,22 @@ void KisAbstractColorSpace::init()
     m_qcolordata = new Q_UINT8[3];
     Q_CHECK_PTR(m_qcolordata);
 
-    if(m_profile==0) return;
+    if(m_profile == 0) return;
 
-    cmsHPROFILE hProfile = m_profile->profile();
+    m_lastRGBProfile = 0;
+    m_lastToRGB = 0;
+    m_lastFromRGB = 0;
 
     if (m_cmType != TYPE_BGR_8) {
         // For conversions from default rgb
-        cmsHPROFILE hsRGB = cmsCreate_sRGBProfile();
+        m_lastFromRGB = cmsCreate_sRGBProfile();
 
-        m_defaultFromRGB = cmsCreateTransform(hsRGB, TYPE_BGR_8,
-                                              hProfile, m_cmType,
+        m_defaultFromRGB = cmsCreateTransform(m_lastFromRGB, TYPE_BGR_8,
+                                              m_profile->profile(), m_cmType,
                                               INTENT_PERCEPTUAL, 0);
 
-        m_defaultToRGB =  cmsCreateTransform(hProfile, m_cmType,
-                                             hsRGB, TYPE_BGR_8,
+        m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
+                                             m_lastFromRGB, TYPE_BGR_8,
                                              INTENT_PERCEPTUAL, 0);
     }
 
@@ -90,19 +92,86 @@ void KisAbstractColorSpace::init()
     	// For conversion from default 16 bit xyz for default pixel ops
     	cmsHPROFILE hsXYZ = cmsCreateXYZProfile();
 
-	    m_defaultFromXYZ = cmsCreateTransform(hsXYZ, TYPE_XYZ_16,
-		    	                		      hProfile, m_cmType,
-                			    		      INTENT_PERCEPTUAL, 0);
-
-      	m_defaultToXYZ = cmsCreateTransform(hProfile, m_cmType,
-	                    				    hsXYZ, TYPE_XYZ_16,
-					                        INTENT_PERCEPTUAL, 0);
-
+	m_defaultFromXYZ = cmsCreateTransform(hsXYZ, TYPE_XYZ_16,
+					      m_profile->profile(), m_cmType,
+					      INTENT_PERCEPTUAL, 0);
+	
+      	m_defaultToXYZ = cmsCreateTransform(m_profile->profile(), m_cmType,
+					    hsXYZ, TYPE_XYZ_16,
+					    INTENT_PERCEPTUAL, 0);
+	
     }
 }
 
 KisAbstractColorSpace::~KisAbstractColorSpace()
 {
+}
+
+
+
+void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisProfile * profile)
+{
+    m_qcolordata[2] = color.red();
+    m_qcolordata[1] = color.green();
+    m_qcolordata[0] = color.blue();
+
+
+    if (profile == 0) {
+	// Default sRGB
+	if (!m_defaultFromRGB) return;
+
+	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
+    }
+    else {
+	if (m_lastFromRGB == 0 || (m_lastFromRGB != 0 && m_lastRGBProfile != profile->profile())) {
+	    m_lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
+					       m_profile->profile(), m_cmType,
+					       INTENT_PERCEPTUAL, 0);
+	    m_lastRGBProfile = profile->profile();
+
+	}
+	cmsDoTransform(m_lastFromRGB, m_qcolordata, dst, 1);
+    }
+
+
+    dst[m_alphaPos] = OPACITY_OPAQUE;
+
+}
+
+void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile)
+{
+    fromQColor(color, dst, profile);
+    dst[m_alphaPos] = opacity;
+}
+
+void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
+{
+    if (profile == 0) {
+	if (!m_defaultToRGB) return;
+
+        m_defaultToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
+					    profile, TYPE_BGR_8,
+					    INTENT_PERCEPTUAL, 0);
+	// XXX: Properly convert using the rgb colorspace and the profile
+	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
+    }
+    else {
+	if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
+	    m_lastToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
+                                             profile->profile(), TYPE_BGR_8,
+                                             INTENT_PERCEPTUAL, 0);
+	    m_lastRGBProfile = profile->profile();
+	}
+	cmsDoTransform(m_lastToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
+    }
+    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
+}
+
+void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
+{
+    toQColor(src, c, profile);
+    // XXX: assume 8-bit alpha!
+    *opacity = src[m_alphaPos];
 }
 
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
@@ -171,22 +240,9 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
         return true;
     }
-
-    // Couldn't get a profile. Use QColor -- this is okay here, because even if we were to use KisColor,
-    // we still wouldn't be able to get a transform. That's why we're here...
-    while (numPixels > 0) {
-        QColor color;
-        Q_UINT8 opacity;
-
-        toQColor(src, &color, &opacity);
-        dstColorSpace -> fromQColor(color, opacity, dst);
-
-        src += srcPixelSize;
-        dst += dstPixelSize;
-        numPixels--;
-    }
-
-    return true;
+    
+    // The conversion failed.
+    return false;
 }
 
 
@@ -619,7 +675,7 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
     return 0;
 }
 
-void KisAbstractColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+void KisAbstractColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 */*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     Q_UINT8 *dst = dstRowStart;
     const Q_UINT8 *src = srcRowStart;

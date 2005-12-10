@@ -24,54 +24,6 @@
 #include "kis_u8_base_colorspace.h"
 #include "kis_integer_maths.h"
 
-void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst)
-{
-    if (!m_defaultFromRGB) return;
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    dst[m_alphaPos] = OPACITY_OPAQUE;
-
-}
-
-void KisU8BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst)
-{
-    if (!m_defaultFromRGB) return;
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-    // XXX: assume 8-bit alpha
-    dst[m_alphaPos] = opacity;
-}
-
-void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
-{
-    if (!m_defaultToRGB) return;
-
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-}
-
-void KisU8BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
-{
-    if (!m_defaultToRGB) return;
-
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-
-    // XXX: assume 8-bit alpha!
-    *opacity = src[m_alphaPos];
-}
 
 Q_UINT8 KisU8BaseColorSpace::getAlpha(const Q_UINT8 * pixel)
 {

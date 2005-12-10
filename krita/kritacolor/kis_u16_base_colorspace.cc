@@ -22,47 +22,10 @@
 #include "kis_integer_maths.h"
 #include "kis_u16_base_colorspace.h"
 
-void KisU16BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst)
+
+void KisU16BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
 {
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-
-    if (hasAlpha())
-        setAlpha(dst, OPACITY_OPAQUE, 1);
-
-}
-
-void KisU16BaseColorSpace::fromQColor(const QColor& color, Q_UINT8 opacity, Q_UINT8 *dst)
-{
-
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
-
-    // XXX: Use proper conversion from RGB with profiles
-    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
-
-    if (hasAlpha())
-        setAlpha(dst, opacity, 1);
-}
-
-void KisU16BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
-{
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
-}
-
-void KisU16BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
-{
-    // XXX: Properly convert using the rgb colorspace and the profile
-    cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
+    KisAbstractColorSpace::toQColor(src, c, profile);
 
     if (hasAlpha()) {
         const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(src + m_alphaPos);

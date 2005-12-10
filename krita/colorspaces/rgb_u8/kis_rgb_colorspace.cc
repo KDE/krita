@@ -23,6 +23,7 @@
 #include LCMS_HEADER
 
 #include <qimage.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -73,32 +74,6 @@ void KisRgbColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *red, Q_UINT8 *gre
     *green = pixel[PIXEL_GREEN];
     *blue = pixel[PIXEL_BLUE];
     *alpha = pixel[PIXEL_ALPHA];
-}
-
-void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
-{
-    dst[PIXEL_RED] = upscale(c.red());
-    dst[PIXEL_GREEN] = upscale(c.green());
-    dst[PIXEL_BLUE] = upscale(c.blue());
-}
-
-void KisRgbColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst)
-{
-    dst[PIXEL_RED] = upscale(c.red());
-    dst[PIXEL_GREEN] = upscale(c.green());
-    dst[PIXEL_BLUE] = upscale(c.blue());
-    dst[PIXEL_ALPHA] = opacity;
-}
-
-void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
-{
-    c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
-}
-
-void KisRgbColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
-{
-    c -> setRgb(downscale(src[PIXEL_RED]), downscale(src[PIXEL_GREEN]), downscale(src[PIXEL_BLUE]));
-    *opacity = src[PIXEL_ALPHA];
 }
 
 Q_INT8 KisRgbColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)

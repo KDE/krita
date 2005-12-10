@@ -70,18 +70,6 @@ void KisGrayColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *a
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
-void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst)
-{
-    // Use qGray for a better rgb -> gray formula: (r*11 + g*16 + b*5)/32.
-    dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
-}
-
-void KisGrayColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst)
-{
-    dst[PIXEL_GRAY] = upscale(qGray(c.red(), c.green(), c.blue()));
-    dst[PIXEL_GRAY_ALPHA] = opacity;
-}
-
 void KisGrayColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
 {
     *alpha = pixel[PIXEL_GRAY_ALPHA];
@@ -94,17 +82,6 @@ void KisGrayColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels
         --nPixels;
         pixels += MAX_CHANNEL_GRAYSCALEA;
     }
-}
-
-void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c)
-{
-    c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
-}
-
-void KisGrayColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
-{
-    c -> setRgb(downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]), downscale(src[PIXEL_GRAY]));
-    *opacity = src[PIXEL_GRAY_ALPHA];
 }
 
 Q_INT8 KisGrayColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)

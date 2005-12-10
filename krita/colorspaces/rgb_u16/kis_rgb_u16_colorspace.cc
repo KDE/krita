@@ -24,6 +24,7 @@
 #include LCMS_HEADER
 
 #include <qimage.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -77,42 +78,6 @@ void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *
     *green = srcPixel -> green;
     *blue = srcPixel -> blue;
     *alpha = srcPixel -> alpha;
-}
-
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8)
-{
-    Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-
-    dst -> red = UINT8_TO_UINT16(c.red());
-    dst -> green = UINT8_TO_UINT16(c.green());
-    dst -> blue = UINT8_TO_UINT16(c.blue());
-    dst -> alpha = U16_OPACITY_OPAQUE;
-}
-
-void KisRgbU16ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8)
-{
-    Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-
-    dst -> red = UINT8_TO_UINT16(c.red());
-    dst -> green = UINT8_TO_UINT16(c.green());
-    dst -> blue = UINT8_TO_UINT16(c.blue());
-    dst -> alpha = UINT8_TO_UINT16(opacity);
-}
-
-
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c)
-{
-    const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
-
-    c -> setRgb(UINT16_TO_UINT8(src -> red), UINT16_TO_UINT8(src -> green), UINT16_TO_UINT8(src -> blue));
-}
-
-void KisRgbU16ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity)
-{
-    const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
-
-    c -> setRgb(UINT16_TO_UINT8(src -> red), UINT16_TO_UINT8(src -> green), UINT16_TO_UINT8(src -> blue));
-    *opacity = UINT16_TO_UINT8(src -> alpha);
 }
 
 Q_INT8 KisRgbU16ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)

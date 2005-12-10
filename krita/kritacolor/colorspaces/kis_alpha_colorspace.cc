@@ -50,12 +50,12 @@ KisAlphaColorSpace::~KisAlphaColorSpace()
 {
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 *dst, KisProfile * /*profile*/)
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT8 *dst)
+void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * /*profile*/)
 {
     dst[PIXEL_MASK] = opacity;
 }
@@ -65,12 +65,12 @@ void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
     *alpha = *pixel;
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfile * /*profile*/)
 {
     c -> setRgb(255, 255, 255);
 }
 
-void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity)
+void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
     c -> setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];

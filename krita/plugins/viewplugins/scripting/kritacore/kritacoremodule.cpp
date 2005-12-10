@@ -9,9 +9,9 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Library General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -25,8 +25,12 @@
 #include <main/manager.h>
 
 #include "kis_doc.h"
+#include "kis_script.h"
+
+#include "kis_scripts_registry.h"
 
 #include "krs_doc.h"
+#include "krs_script.h"
 
 extern "C"
 {
@@ -54,24 +58,39 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
         kdDebug() << it.key() << " " << it.data() << endl;
     }
     
-    kdDebug()<<"KritaCoreModule::KritaCoreModule 1"<<endl;
+    // Wrap doc
     Kross::Api::Object::Ptr kritadocument = ((Kross::Api::Object*)manager)->getChild("KritaDocument");
     if(kritadocument) {
-        kdDebug()<<"KexiAppModule::KritaCoreModule 2"<<endl;
         Kross::Api::QtObject* kritadocumentqt = (Kross::Api::QtObject*)( kritadocument.data() );
         if(kritadocumentqt) {
-            kdDebug()<<"KexiAppModule::KritaCoreModule 3"<<endl;
             ::KisDoc* document = (::KisDoc*)( kritadocumentqt->getObject() );
             if(document) {
-                kdDebug()<<"KexiAppModule::KritaCoreModule 4"<<endl;
                 addChild( new Doc(document) );
-                return;
-             }
+            } else {
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaDocument' published.") );
+            }
          }
    }
-
-    kdDebug()<<"KritaCoreModule::KritaCore 5"<<endl;
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaDocument' published.") );
+   // Wrap script
+   KisScriptSP script = KisScriptsRegistry::instance()->getRunningScript();
+   if(script != 0)
+   {
+       addChild(new Script(script));
+   } else {
+       throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaScript' executed.") );
+   }
+   /*Kross::Api::Object::Ptr kritaview = ((Kross::Api::Object*)manager)->getChild("KritaView");
+   if(kritaview) {
+       Kross::Api::QtObject* kritaviewqt = (Kross::Api::QtObject*)( kritaview.data() );
+       if(kritaviewqt) {
+               ::KisView* view = (::KisView*)( kritaviewqt->getObject() );
+               if(view) {
+                   addChild( new View(view) );
+               } else {
+                   throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaView' published.") );
+               }
+       }
+}*/
 }
 
 KritaCoreModule::~KritaCoreModule()
@@ -83,4 +102,3 @@ const QString KritaCoreModule::getClassName() const
 {
     return "Kross::KritaCore::KritaCoreModule";
 }
-

@@ -2,16 +2,16 @@
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Library General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Library General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -27,8 +27,8 @@ namespace Kross {
 
 namespace KritaCore {
 
-Image::Image(KisImageSP image)
-    : Kross::Api::Class<Image>("KritaImage"), m_image(image)
+    Image::Image(KisImageSP image, KisDoc* doc)
+    : Kross::Api::Class<Image>("KritaImage"), m_image(image), m_doc(doc)
 {
     addFunction("getActiveLayer", &Image::getActiveLayer);
     addFunction("getWidth", &Image::getWidth);
@@ -46,7 +46,7 @@ const QString Image::getClassName() const {
 
 Kross::Api::Object::Ptr Image::getActiveLayer(Kross::Api::List::Ptr)
 {
-    return new Layer(m_image->activeLayer());
+    return new Layer(m_image->activeLayer(), m_doc);
 }
 Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
 {

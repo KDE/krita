@@ -71,6 +71,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         (void) new KAction(i18n("&Show Script Manager"), 0, 0, this, SLOT(slotShowManager()), actionCollection(), "showmanager");
         
         Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
+        Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");
     }
 
 }
@@ -97,7 +98,7 @@ KisScript* Scripting::loadScript(bool exec)
                 ks->reload();
             }
         } else {
-            KisScriptsRegistry::instance()->add( ks = new KisScript(fn, exec) );
+            KisScriptsRegistry::instance()->add( ks = new KisScript(fn, m_view, exec) );
         }
         return ks;
     }

@@ -2,16 +2,16 @@
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Library General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Library General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -23,6 +23,9 @@
 
 #include <kis_types.h>
 
+class KisDoc;
+class KisTransaction;
+
 namespace Kross {
 
 namespace KritaCore {
@@ -33,7 +36,7 @@ namespace KritaCore {
 class Layer : public Kross::Api::Class<Layer>
 {
     public:
-        explicit Layer(KisLayerSP layer);
+        explicit Layer(KisLayerSP layer, KisDoc* doc = 0);
         virtual ~Layer();
         virtual const QString getClassName() const;
     private:
@@ -42,8 +45,13 @@ class Layer : public Kross::Api::Class<Layer>
         Kross::Api::Object::Ptr createVLineIterator(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr createHistogram(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
     private:
         KisLayerSP m_layer;
+        KisDoc* m_doc;
+        KisTransaction* m_cmd;
 };
 
 }

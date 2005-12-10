@@ -21,7 +21,12 @@
 #include <qapplication.h>
 #include <qbuffer.h>
 
-KisScript::KisScript(KURL url, bool execute ) : ScriptContainer(url.path()), m_url(url), m_id(url.path(), url.fileName())
+#include <kis_progress_display_interface.h>
+#include <kis_view.h>
+
+#include "kis_scripts_registry.h"
+
+KisScript::KisScript(KURL url, KisView* view, bool execute ) : ScriptContainer(url.path()), m_url(url), m_id(url.path(), url.fileName()), m_view(view)
 {
     setInterpreterName("python");
     
@@ -33,11 +38,10 @@ KisScript::KisScript(KURL url, bool execute ) : ScriptContainer(url.path()), m_u
     }
 }
 
-KisScript::KisScript(const QString& name, QString language) : ScriptContainer(name), m_id(name, name)
+KisScript::KisScript(const QString& name, QString language, KisView* view) : ScriptContainer(name), m_id(name, name), m_view(view)
 {
     setInterpreterName(language);
 }
-
 
 KisScript::~KisScript()
 {
@@ -70,9 +74,48 @@ void KisScript::slotResult(KIO::Job* job)
 void KisScript::execute()
 {
     QApplication::setOverrideCursor( Qt::waitCursor );
+    KisScriptsRegistry::instance()->setRunningScript( this );
+    m_view->getCanvasSubject()->progressDisplay()->setSubject( this, true, true );
     ScriptContainer::execute();
+    KisScriptsRegistry::instance()->setRunningScript( 0 );
     QApplication::restoreOverrideCursor();
 }
 
-        
+void KisScript::setProgressTotalSteps(Q_INT32 totalSteps)
+{
+    m_progressTotalSteps = totalSteps;
+    m_progressSteps = 0;
+    m_lastProgressPerCent = 0;
+    emit notifyProgress(0);
+}
+
+void KisScript::setProgress(Q_INT32 progress)
+{
+    m_progressSteps = progress;
+    Q_INT32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
+
+    if (progressPerCent != m_lastProgressPerCent) {
+
+        m_lastProgressPerCent = progressPerCent;
+        emit notifyProgress(progressPerCent);
+    }
+}
+
+void KisScript::incProgress()
+{
+    setProgress( ++m_progressSteps );
+}
+
+void KisScript::setProgressStage(const QString& stage, Q_INT32 progress)
+{
+    Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+    m_lastProgressPerCent = progress;
+    emit notifyProgressStage( stage, progressPerCent);
+}
+
+void KisScript::setProgressDone( )
+{
+    emit notifyProgressDone();
+}
+
 #include "kis_script.moc"

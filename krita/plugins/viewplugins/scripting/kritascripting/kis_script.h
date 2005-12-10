@@ -20,30 +20,34 @@
 #define KIS_SCRIPT_H
 
 #include <main/scriptcontainer.h>
+#include <kis_progress_subject.h>
+
 #include <qobject.h>
 
 #include <kurl.h>
 #include <kio/job.h>
 
+
 #include "kis_id.h"
 
 class QBuffer;
+class KisView;
 
 /**
 @author Cyrille Berger
 */
-class KisScript : public QObject, public Kross::Api::ScriptContainer
+class KisScript : public KisProgressSubject /* public QObject */ , public Kross::Api::ScriptContainer
 {
     Q_OBJECT
     public:
         /**
          * Create a script from a file on the disk
          */
-        KisScript(KURL url, bool execute = false);
+        KisScript(KURL url, KisView* view, bool execute = false);
         /**
          * Create a script with no code
          */
-        KisScript(const QString& name, QString language);
+        KisScript(const QString& name, QString language, KisView* view);
         ~KisScript();
     public:
         KisID id() { return m_id; }
@@ -61,10 +65,23 @@ class KisScript : public QObject, public Kross::Api::ScriptContainer
         void slotResult(KIO::Job*);
     signals:
         void loaded();
+    public:
+        /**
+         * Implementation of the cancel function of 
+         */
+        virtual void cancel() { /* TODO: how to cancel a script ? */ }
+    public:
+        void setProgressTotalSteps(Q_INT32 totalSteps);
+        void setProgress(Q_INT32 progress);
+        void incProgress();
+        void setProgressStage(const QString& stage, Q_INT32 progress);
+        void setProgressDone();
     private:
+        Q_INT32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KURL m_url;
         QBuffer *m_buffer;
         KisID m_id;
+        KisView * m_view;
 };
 
 #endif

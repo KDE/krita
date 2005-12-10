@@ -46,9 +46,12 @@ class KisScriptsRegistry :  public QObject, public KisGenericRegistry<KisScriptS
          * the function will create it.
          */
         static KisScriptsRegistry* instance();
+        inline void setRunningScript(KisScriptSP s) { m_runningScript = s; };
+        inline KisScriptSP getRunningScript() { return m_runningScript; };
     private:
         static KisScriptsRegistry *m_singleton;
         KisView* m_view;
+        KisScriptSP m_runningScript;
 };
 
 #endif

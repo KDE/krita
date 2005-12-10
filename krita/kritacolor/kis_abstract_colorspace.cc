@@ -208,17 +208,14 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
         cmsDoTransform(tf, const_cast<Q_UINT8 *>(src), dst, numPixels);
 
-        if (dstColorSpace -> hasAlpha())
-        {
-            // Lcms does nothing to the destination alpha channel so we must convert that manually.
-            while (numPixels > 0) {
-                Q_UINT8 alpha = getAlpha(src);
-                dstColorSpace -> setAlpha(dst, alpha, 1);
+        // Lcms does nothing to the destination alpha channel so we must convert that manually.
+        while (numPixels > 0) {
+            Q_UINT8 alpha = getAlpha(src);
+            dstColorSpace -> setAlpha(dst, alpha, 1);
 
-                src += srcPixelSize;
-                dst += dstPixelSize;
-                numPixels--;
-            }
+            src += srcPixelSize;
+            dst += dstPixelSize;
+            numPixels--;
         }
 
         return true;

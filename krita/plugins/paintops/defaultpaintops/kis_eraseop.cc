@@ -104,61 +104,31 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     QRect dstRect;
 
-    if (device -> hasAlpha()) {
-        dab -> setOpacity(OPACITY_OPAQUE);
-        KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
-        KisColorSpace* cs = dab -> colorSpace();
-        while (!it.isDone()) {
-            cs -> setAlpha(it.rawData(), Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()), 1);
-            ++it;
-        }
+    dab -> setOpacity(OPACITY_OPAQUE);
+    KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
+    KisColorSpace* cs = dab -> colorSpace();
+    while (!it.isDone()) {
+        cs -> setAlpha(it.rawData(), Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()), 1);
+        ++it;
+    }
 
-        QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-        dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
+    QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
+    dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-        KisImage * image = device -> image();
+    KisImage * image = device -> image();
 
-        if (image != 0) {
-            dstRect &= image -> bounds();
-        }
+    if (image != 0) {
+        dstRect &= image -> bounds();
+    }
 
-        if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-        Q_INT32 sx = dstRect.x() - destX;
-        Q_INT32 sy = dstRect.y() - destY;
-        Q_INT32 sw = dstRect.width();
-        Q_INT32 sh = dstRect.height();
+    Q_INT32 sx = dstRect.x() - destX;
+    Q_INT32 sy = dstRect.y() - destY;
+    Q_INT32 sw = dstRect.width();
+    Q_INT32 sh = dstRect.height();
 
-        m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
-
-     } else {
-        dab -> setOpacity(OPACITY_TRANSPARENT);
-        KisColor c = m_painter->backgroundColor();
-        KisColorSpace* cs = dab -> colorSpace();
-        for (int y = 0; y < maskHeight; y++) {
-            for (int x = 0; x < maskWidth; x++) {
-                cs -> setAlpha(c.data(), mask->alphaAt(x, y), 1);
-                dab -> setPixel(x, y, c);
-            }
-        }
-        QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-        dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
-
-        KisImage * image = device -> image();
-
-        if (image != 0) {
-            dstRect &= image -> bounds();
-        }
-
-        if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
-
-        Q_INT32 sx = dstRect.x() - destX;
-        Q_INT32 sy = dstRect.y() - destY;
-        Q_INT32 sw = dstRect.width();
-        Q_INT32 sh = dstRect.height();
-
-        m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_OVER, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
-     }
+    m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
 
     m_painter -> addDirtyRect(dstRect);
 }

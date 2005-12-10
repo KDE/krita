@@ -105,24 +105,23 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisColorSpace * cs = dab->colorSpace();
 
-    if (dab -> hasAlpha()) {
-        // Set all alpha > opaque/2 to opaque, the rest to transparent.
-        // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
+    // Set all alpha > opaque/2 to opaque, the rest to transparent.
+    // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
 
-        KisRectIteratorPixel pixelIt = dab -> createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
+    KisRectIteratorPixel pixelIt = dab -> createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
 
-        while (!pixelIt.isDone()) {
-            Q_UINT8 alpha = cs->getAlpha(pixelIt.rawData());
+    while (!pixelIt.isDone()) {
+        Q_UINT8 alpha = cs->getAlpha(pixelIt.rawData());
 
-            if (alpha < (4 * OPACITY_OPAQUE) / 10) {
-                cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
-            } else {
-                cs->setAlpha(pixelIt.rawData(), OPACITY_OPAQUE, 1);
-            }
-
-            ++pixelIt;
+        if (alpha < (4 * OPACITY_OPAQUE) / 10) {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
+        } else {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_OPAQUE, 1);
         }
+
+        ++pixelIt;
     }
+
 
     Q_INT32 sx = dstRect.x() - x;
     Q_INT32 sy = dstRect.y() - y;

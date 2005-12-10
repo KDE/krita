@@ -79,21 +79,6 @@ public:
     virtual Q_INT32 pixelSize() const = 0;
 
     /**
-     * Whether this color model has a channel of type ALPHA
-     */
-    virtual bool hasAlpha() const = 0;
-
-    /**
-     * Gives the position of the first byte of alpha in the pixel
-     */
-    virtual Q_INT32 alphaPos() = 0;
-
-    /**
-     * Gives the length in bytes of the alphachannel
-     */
-    virtual Q_INT32 alphaSize() = 0;
-
-    /**
      * Return a string with the channel's value suitable for display in the gui.
      */
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;

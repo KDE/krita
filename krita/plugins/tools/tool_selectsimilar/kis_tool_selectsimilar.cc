@@ -146,8 +146,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
         KisColor c = dev->colorAt(pos.x(), pos.y());
-        if (dev -> colorSpace() -> hasAlpha())
-            opacity = dev -> colorSpace() -> getAlpha(c.data());
+        opacity = dev -> colorSpace() -> getAlpha(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)

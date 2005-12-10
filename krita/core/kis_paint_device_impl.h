@@ -250,8 +250,6 @@ public:
 
     bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
 
-    bool hasAlpha() const;
-
     KisColorSpace * colorSpace() const;
 
     KisDataManagerSP dataManager() const { return m_datamanager; }
@@ -474,11 +472,6 @@ inline const KisImage *KisPaintDeviceImpl::image() const
 inline void KisPaintDeviceImpl::setImage(KisImage *image)
 {
         m_owner = image;
-}
-
-inline bool KisPaintDeviceImpl::hasAlpha() const
-{
-        return colorSpace() -> hasAlpha();
 }
 
 inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

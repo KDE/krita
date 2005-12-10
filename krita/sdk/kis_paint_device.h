@@ -81,9 +81,6 @@ public:
      */
     virtual void convertFromQImage(const QImage& img) = 0;
 
-
-    virtual bool hasAlpha() const = 0;
-
     /**
      * Return the number of bytes a pixel takes.
      */

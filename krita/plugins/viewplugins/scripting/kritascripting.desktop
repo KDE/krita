@@ -12,6 +12,7 @@ Name[sr@Latn]=Прикључак за скриптовање
 Name[sv]=Skriptinsticksprogram
 Name[xx]=xxScripting pluginxx
 Comment=Allow execution of scripts
+Comment[sv]=Gör det möjligt att köra skript
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting

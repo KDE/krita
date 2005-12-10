@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolution filters
+Name[ga]=Scagairí conbhlóide
+Name[sv]=Faltningsfilter
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
 Comment[cy]=Hidlau cordeddiadau
@@ -8,6 +10,7 @@ Comment[eo]=Konvoluciaj filtriloj
 Comment[es]=Filtros de convoluciones
 Comment[et]=Konvolutsioonifiltrid
 Comment[fr]=Filtres de déformations
+Comment[ga]=Scagairí conbhlóide
 Comment[it]=Filtri di convoluzione
 Comment[ja]=コンヴォリューションフィルタ
 Comment[pt]=Filtros de convolução

@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Screenshot
+Name[br]=Skrammpaker
+Name[ga]=Pictiúr den Scáileán
+Name[sv]=Skärmdump
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

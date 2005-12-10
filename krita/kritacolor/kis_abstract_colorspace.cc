@@ -83,19 +83,7 @@ void KisAbstractColorSpace::init()
     m_defaultToRGB =  cmsCreateTransform(m_profile->profile(), m_cmType,
                                          m_lastFromRGB, TYPE_BGR_8,
                                          INTENT_PERCEPTUAL, 0);
-    if (m_cmType != TYPE_XYZ_16) {
-    	// For conversion from default 16 bit xyz for default pixel ops
-    	cmsHPROFILE hsXYZ = cmsCreateXYZProfile();
 
-	m_defaultFromXYZ = cmsCreateTransform(hsXYZ, TYPE_XYZ_16,
-					      m_profile->profile(), m_cmType,
-					      INTENT_PERCEPTUAL, 0);
-	
-      	m_defaultToXYZ = cmsCreateTransform(m_profile->profile(), m_cmType,
-					    hsXYZ, TYPE_XYZ_16,
-					    INTENT_PERCEPTUAL, 0);
-	
-    }
     cmsHPROFILE hLab  = cmsCreateLabProfile(NULL);
 
     m_defaultFromLab = cmsCreateTransform(hLab, TYPE_Lab_16, m_profile->profile(), m_cmType,
@@ -376,36 +364,18 @@ void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, Ki
 
 void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
 {
-/*
-    if ( m_defaultToXYZ != 0 && m_defaultFromXYZ != 0 ) {
-        KisColorSpace * xyz = m_parent->getXYZ16();
-        
-        Q_UINT32 psize = xyz->pixelSize();
+    QColor c;
+    Q_UINT8 opacity;
+    Q_UINT32 psize = pixelSize();
 
-        if ( m_conversionCache.size() < nPixels * psize ) {
-            m_conversionCache.resize( nPixels * psize, QGArray::SpeedOptim );
-        }
+    while (nPixels--)
+    {
+        toQColor(src, &c, &opacity);
+        c.setRgb(Q_UINT8_MAX - c.red(), Q_UINT8_MAX - c.green(), Q_UINT8_MAX - c.blue());
+        fromQColor( c, opacity, src);
 
-        cmsDoTransform( m_defaultToXYZ, src, m_conversionCache.data(), nPixels);
-        //xyz->invertColor(m_conversionCache.data(), nPixels);
-        cmsDoTransform( m_defaultFromXYZ, m_conversionCache.data(), src, nPixels);
+        src += psize;
     }
-    else {
-*/    
-        QColor c;
-        Q_UINT8 opacity;
-        Q_UINT32 psize = pixelSize();
-        
-        while (nPixels--)
-        {
-            toQColor(src, &c, &opacity);
-            c.setRgb(Q_UINT8_MAX - c.red(), Q_UINT8_MAX - c.green(), Q_UINT8_MAX - c.blue());
-            fromQColor( c, opacity, src);
-    
-            src += psize;
-        }
-    //}
-
 }
 
 Q_UINT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)

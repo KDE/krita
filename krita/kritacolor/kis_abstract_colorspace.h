@@ -243,15 +243,12 @@ private:
     cmsHTRANSFORM m_lastToRGB;       // Last used transform to transform to RGB
     cmsHTRANSFORM m_lastFromRGB;     // Last used transform to transform from RGB
 
-    cmsHTRANSFORM m_defaultToXYZ;
-    cmsHTRANSFORM m_defaultFromXYZ;
     cmsHTRANSFORM m_defaultToLab;
     cmsHTRANSFORM m_defaultFromLab;
 
     KisProfile *  m_profile;
     KisProfile *  m_lastUsedDstProfile;
     cmsHTRANSFORM m_lastUsedTransform;
-
 
     KisID m_id;
     DWORD m_cmType;                           // The colorspace type as defined by littlecms

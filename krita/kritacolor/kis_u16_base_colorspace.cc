@@ -23,18 +23,6 @@
 #include "kis_u16_base_colorspace.h"
 
 
-void KisU16BaseColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
-{
-    KisAbstractColorSpace::toQColor(src, c, profile);
-
-    if (hasAlpha()) {
-        const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(src + m_alphaPos);
-        *opacity = UINT16_TO_UINT8(*pixel);
-    }
-    else
-        *opacity = OPACITY_OPAQUE;
-}
-
 Q_UINT8 KisU16BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;

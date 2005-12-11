@@ -42,10 +42,9 @@ public:
     virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;
-    virtual bool hasAlpha() const;
-    virtual Q_INT32 nChannels() const;
-    virtual Q_INT32 nColorChannels() const;
-    virtual Q_INT32 pixelSize() const;
+    virtual Q_UINT32 nChannels() const;
+    virtual Q_UINT32 nColorChannels() const;
+    virtual Q_UINT32 pixelSize() const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfile *  dstProfile = 0,

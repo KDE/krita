@@ -257,28 +257,23 @@ QValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
     return m_channels;
 }
 
-bool KisWetColorSpace::hasAlpha() const
-{
-    return false;
-}
-
-Q_INT32 KisWetColorSpace::nChannels() const
+Q_UINT32 KisWetColorSpace::nChannels() const
 {
     return 16;
 }
 
-Q_INT32 KisWetColorSpace::nColorChannels() const
+Q_UINT32 KisWetColorSpace::nColorChannels() const
 {
     return 12;
 }
 
-Q_INT32 KisWetColorSpace::nSubstanceChannels() const
+Q_UINT32 KisWetColorSpace::nSubstanceChannels() const
 {
     return 4;
 }
 
 
-Q_INT32 KisWetColorSpace::pixelSize() const
+Q_UINT32 KisWetColorSpace::pixelSize() const
 {
     return 32; // This color strategy wants an unsigned short for each
            // channel, and every pixel consists of two wetpix structs

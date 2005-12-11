@@ -89,19 +89,13 @@ public:
     // Return a vector describing all the channels this color model has.
     virtual QValueVector<KisChannelInfo *> channels() const = 0;
 
-    virtual Q_INT32 nChannels() const = 0;
+    virtual Q_UINT32 nChannels() const = 0;
 
-    virtual Q_INT32 nColorChannels() const = 0;
+    virtual Q_UINT32 nColorChannels() const = 0;
 
-    virtual Q_INT32 nSubstanceChannels() const { return 0; };
+    virtual Q_UINT32 nSubstanceChannels() const { return 0; };
 
-    virtual Q_INT32 pixelSize() const = 0;
-
-    virtual bool hasAlpha() const = 0;
-
-    virtual Q_INT32 alphaPos() { return m_alphaPos; }
-
-    virtual Q_INT32 alphaSize() { return m_alphaSize; }
+    virtual Q_UINT32 pixelSize() const = 0;
 
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
@@ -123,8 +117,6 @@ public:
     //========== Capabilities =================================================//
 
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
-
-    //virtual bool valid() { return true; }
 
     /**
      * Returns true if the colorspace supports channel values outside the 

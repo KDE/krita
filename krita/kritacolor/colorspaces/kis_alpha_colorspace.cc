@@ -100,10 +100,6 @@ QValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
 {
     return m_channels;
 }
-bool KisAlphaColorSpace::hasAlpha() const
-{
-    return true; // Of course!
-}
 
 bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src,
                      Q_UINT8 *dst, KisAbstractColorSpace * dstColorSpace,

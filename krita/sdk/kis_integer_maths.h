@@ -28,6 +28,10 @@
 #define UINT32_MAX (4294967295u)
 #define UINT32_MIN 0u
 
+#define INT16_MAX 32767
+#define INT16_MIN -32768
+
+
 inline uint UINT8_MULT(uint a, uint b)
 {
     uint c = a * b + 0x80u;

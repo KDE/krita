@@ -169,22 +169,17 @@ QValueVector<KisChannelInfo *> KisLmsF32ColorSpace::channels() const
     return m_channels;
 }
 
-bool KisLmsF32ColorSpace::hasAlpha() const
-{
-    return true;
-}
-
-Q_INT32 KisLmsF32ColorSpace::nChannels() const
+Q_UINT32 KisLmsF32ColorSpace::nChannels() const
 {
     return MAX_CHANNEL_LMSA;
 }
 
-Q_INT32 KisLmsF32ColorSpace::nColorChannels() const
+Q_UINT32 KisLmsF32ColorSpace::nColorChannels() const
 {
     return MAX_CHANNEL_LMS;
 }
 
-Q_INT32 KisLmsF32ColorSpace::pixelSize() const
+Q_UINT32 KisLmsF32ColorSpace::pixelSize() const
 {
     return MAX_CHANNEL_LMSA * sizeof(float);
 }

@@ -119,22 +119,17 @@ QValueVector<KisChannelInfo *> KisCmykU16ColorSpace::channels() const
     return m_channels;
 }
 
-bool KisCmykU16ColorSpace::hasAlpha() const
-{
-    return true;
-}
-
-Q_INT32 KisCmykU16ColorSpace::nChannels() const
+Q_UINT32 KisCmykU16ColorSpace::nChannels() const
 {
     return MAX_CHANNEL_CMYKA;
 }
 
-Q_INT32 KisCmykU16ColorSpace::nColorChannels() const
+Q_UINT32 KisCmykU16ColorSpace::nColorChannels() const
 {
     return MAX_CHANNEL_CMYK;
 }
 
-Q_INT32 KisCmykU16ColorSpace::pixelSize() const
+Q_UINT32 KisCmykU16ColorSpace::pixelSize() const
 {
     return MAX_CHANNEL_CMYKA * sizeof(Q_UINT16);
 }

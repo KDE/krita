@@ -94,22 +94,17 @@ QValueVector<KisChannelInfo *> KisGrayU16ColorSpace::channels() const
     return m_channels;
 }
 
-bool KisGrayU16ColorSpace::hasAlpha() const
-{
-    return true;
-}
-
-Q_INT32 KisGrayU16ColorSpace::nChannels() const
+Q_UINT32 KisGrayU16ColorSpace::nChannels() const
 {
     return MAX_CHANNEL_GRAYA;
 }
 
-Q_INT32 KisGrayU16ColorSpace::nColorChannels() const
+Q_UINT32 KisGrayU16ColorSpace::nColorChannels() const
 {
     return MAX_CHANNEL_GRAY;
 }
 
-Q_INT32 KisGrayU16ColorSpace::pixelSize() const
+Q_UINT32 KisGrayU16ColorSpace::pixelSize() const
 {
     return MAX_CHANNEL_GRAYA * sizeof(Q_UINT16);
 }

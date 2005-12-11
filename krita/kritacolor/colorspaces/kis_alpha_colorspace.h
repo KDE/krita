@@ -46,10 +46,9 @@ public:
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;
-    virtual bool hasAlpha() const;
-    virtual Q_INT32 nChannels() const { return 1; };
-    virtual Q_INT32 nColorChannels() const { return 0; };
-    virtual Q_INT32 pixelSize() const { return 1; };
+    virtual Q_UINT32 nChannels() const { return 1; };
+    virtual Q_UINT32 nColorChannels() const { return 0; };
+    virtual Q_UINT32 pixelSize() const { return 1; };
 
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;

@@ -59,24 +59,24 @@ public:
     /**
      * The total number of channels for a single pixel in this color model
      */
-    virtual Q_INT32 nChannels() const = 0;
+    virtual Q_UINT32 nChannels() const = 0;
 
     /**
      * The total number of color channels (excludes alpha and substance) for a single
      * pixel in this color model.
      */
-    virtual Q_INT32 nColorChannels() const = 0;
+    virtual Q_UINT32 nColorChannels() const = 0;
 
     /**
      * The total number of substance channels for a single pixel
      * in this color model
      */
-    virtual Q_INT32 nSubstanceChannels() const { return 0; };
+    virtual Q_UINT32 nSubstanceChannels() const { return 0; };
 
     /**
      * The size in bytes of a single pixel in this color model
      */
-    virtual Q_INT32 pixelSize() const = 0;
+    virtual Q_UINT32 pixelSize() const = 0;
 
     /**
      * Return a string with the channel's value suitable for display in the gui.
@@ -126,9 +126,6 @@ public:
      * for layers in the full image model.
      */
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
-
-
-    //virtual bool valid() = 0;
 
     /**
      * Returns true if the colorspace supports channel values outside the

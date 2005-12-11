@@ -35,10 +35,9 @@ public:
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;
-    virtual bool hasAlpha() const;
-    virtual Q_INT32 nChannels() const;
-    virtual Q_INT32 nColorChannels() const;
-    virtual Q_INT32 pixelSize() const;
+    virtual Q_UINT32 nChannels() const;
+    virtual Q_UINT32 nColorChannels() const;
+    virtual Q_UINT32 pixelSize() const;
 
     virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
 

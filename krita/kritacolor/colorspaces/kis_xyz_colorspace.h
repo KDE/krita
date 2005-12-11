@@ -59,10 +59,9 @@ public:
 
     // Information about the colorstrategy
     virtual QValueVector<KisChannelInfo *> channels() const;
-    virtual bool hasAlpha() const;
-    virtual Q_INT32 nChannels() const;
-    virtual Q_INT32 nColorChannels() const;
-    virtual Q_INT32 pixelSize() const;
+    virtual Q_UINT32 nChannels() const;
+    virtual Q_UINT32 nColorChannels() const;
+    virtual Q_UINT32 pixelSize() const;
 
 
     // Composition

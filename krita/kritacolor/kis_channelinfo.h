@@ -40,6 +40,8 @@ public:
         UINT16,
         FLOAT16,
         FLOAT32,
+        INT8,
+        INT16,
         OTHER // Use this if the channel is neither an integer or a float
     };
     enum enumChannelFlags {

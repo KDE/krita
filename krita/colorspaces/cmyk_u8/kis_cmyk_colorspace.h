@@ -54,8 +54,6 @@ virtual void bitBlt(Q_UINT8 *dst,
             Q_INT32 cols,
             const KisCompositeOp& op);
 
-    virtual bool valid() { return true; }
-
     KisCompositeOpList userVisiblecompositeOps() const;
 protected:
 

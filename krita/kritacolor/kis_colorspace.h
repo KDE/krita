@@ -89,6 +89,20 @@ public:
      */
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
+    /**
+     * Convert the value of the channel at the specified position into
+     * an 8-bit value. The position is not the number of bytes, but
+     * the position of the channel as defined in the channel info list.
+     */
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+
+    /**
+     * Convert the value of the channel at the specified position into
+     * a 16-bit value. This may be upscaling or downscaling, depending
+     * on the defined value of the channel
+     */
+     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+
     //========== Identification ===============================================//
 
     /**
@@ -114,7 +128,7 @@ public:
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
 
-    virtual bool valid() = 0;
+    //virtual bool valid() = 0;
 
     /**
      * Returns true if the colorspace supports channel values outside the
@@ -209,20 +223,6 @@ public:
                                  Q_UINT8 * dst, KisColorSpace * dstColorSpace,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
-
-    /**
-     * Convert the value of the channel at the specified position into
-     * an 8-bit value. The position is not the number of bytes, but
-     * the position of the channel as defined in the channel info list.
-     */
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
-
-    /**
-     * Convert the value of the channel at the specified position into
-     * a 16-bit value. This may be upscaling or downscaling, depending
-     * on the defined value of the channel
-     */
-     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
 //============================== Manipulation fucntions ==========================//
 
@@ -323,7 +323,7 @@ public:
      *
      * (See the bumpmap filter)
      */
-    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const = 0;
+   // virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const = 0;
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible

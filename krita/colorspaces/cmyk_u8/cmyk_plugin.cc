@@ -59,11 +59,9 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
         Q_CHECK_PTR(colorSpaceCMYK);
         f->add(csf);
 
-        if (colorSpaceCMYK -> valid()) {
-             KisHistogramProducerFactoryRegistry::instance() -> add(
-                     new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                     (KisID("CMYKHISTO", i18n("CMYK Histogram")), colorSpaceCMYK) );
-        }
+        KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
+                (KisID("CMYKHISTO", i18n("CMYK Histogram")), colorSpaceCMYK) );
     }
 
 }

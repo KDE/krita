@@ -107,6 +107,10 @@ public:
 
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
 
+    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+
+    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+
     //========== Identification ===============================================//
 
     virtual KisID id() const { return m_id; }
@@ -120,7 +124,7 @@ public:
 
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
-    virtual bool valid() { return true; }
+    //virtual bool valid() { return true; }
 
     /**
      * Returns true if the colorspace supports channel values outside the 
@@ -151,10 +155,6 @@ public:
                                  Q_UINT8 * dst, KisColorSpace * dstColorSpace,
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
-
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
-
-     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
 //============================== Manipulation fucntions ==========================//
 
@@ -194,7 +194,6 @@ public:
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op);
-
 
 //========================== END of Public API ========================================//
 

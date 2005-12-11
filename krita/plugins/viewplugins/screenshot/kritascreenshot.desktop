@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=Screenshot
 Name[br]=Skrammpaker
+Name[de]=Bildschirmphoto
+Name[es]=Captura de pantalla
 Name[ga]=Pictiúr den Scáileán
 Name[sv]=Skärmdump
 ServiceTypes=Krita/ViewPlugin

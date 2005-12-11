@@ -39,7 +39,7 @@ namespace {
 }
 
 KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK/Alpha (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, parent, p)
+    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0 * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1 * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));

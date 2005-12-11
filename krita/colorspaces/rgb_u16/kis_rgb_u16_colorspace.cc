@@ -44,7 +44,7 @@ namespace {
 //const Q_UINT16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
 KisRgbU16ColorSpace::KisRgbU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB/Alpha (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, parent, p)
+    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, parent, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(0,255,0)));

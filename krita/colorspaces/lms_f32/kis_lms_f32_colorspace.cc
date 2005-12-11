@@ -49,7 +49,7 @@ namespace {
 
 // disable the lcms handling by setting profile=0
 KisLmsF32ColorSpace::KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
-    KisF32BaseColorSpace(KisID("LMSAF32", i18n("LMS/Alpha (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData, parent, 0)
+    KisF32BaseColorSpace(KisID("LMSAF32", i18n("LMS (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData, parent, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));

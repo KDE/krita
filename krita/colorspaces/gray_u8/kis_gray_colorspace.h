@@ -86,7 +86,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("GRAYA", i18n("Grayscale/Alpha")); };
+    virtual KisID id() const { return KisID("GRAYA", i18n("Grayscale")); };
 
     /**
      * lcms colorspace type definition.

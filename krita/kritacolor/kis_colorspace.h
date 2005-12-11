@@ -328,7 +328,7 @@ public:
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
     */
-    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const = 0;
+    //virtual Q_UINT8 intensity8(const Q_UINT8 * src) const = 0;
 
     /**
      * Compose two arrays of pixels together. If source and target

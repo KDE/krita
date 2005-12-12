@@ -19,7 +19,7 @@
 #define KIS_POINT_H_
 
 #include <qvaluevector.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 /**
  * A double-based point class that can return it's coordinates

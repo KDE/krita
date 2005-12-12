@@ -24,8 +24,8 @@
 #include <qrect.h>
 #include <qwidget.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 class QPixmap;
 class KAction;

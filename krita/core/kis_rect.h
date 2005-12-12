@@ -19,7 +19,7 @@
 #define KIS_RECT_H_
 
 #include <qrect.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include "kis_point.h"
 
 /**

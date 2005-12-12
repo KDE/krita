@@ -57,7 +57,6 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     KisLayerSP dab = new KisLayer(cs, "dab");
     Q_CHECK_PTR(dab);
 
-    // XXX: Quick hack: we should use the correct color instead of going via QColor
     KisColor kc = m_painter -> paintColor();
     
     KisColorSpace * colorSpace = dab -> colorSpace();
@@ -79,10 +78,6 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
             // XXX: Set mask
             colorSpace->setAlpha(kc.data(), mask->alphaAt(x++, y), 1);
             memcpy(hiter.rawData(), kc.data(), pixelSize);
-//             colorSpace -> fromQColor(c,
-//                              mask -> alphaAt(x++, y),
-//                              hiter.rawData(),
-//                              profile);
             ++hiter;
         }
     }

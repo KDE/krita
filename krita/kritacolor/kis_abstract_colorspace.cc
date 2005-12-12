@@ -577,42 +577,21 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
 }
 
 QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
-                                              KisProfile *profile,
+                                              KisProfile *dstProfile,
                                               Q_INT32 renderingIntent, float /*exposure*/)
 
 {
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
     img.setAlphaBuffer( true );
 
-    int numPixels=width * height;
-    if (profile == 0) {
-	// Default sRGB transform
-        if (!m_defaultToRGB) return img;
-	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(data), img.bits(), numPixels);
-    }
-    else {
-	if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
-	    m_lastToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
-                                             profile->profile(), TYPE_BGR_8,
-                                             INTENT_PERCEPTUAL, 0);
-	    m_lastRGBProfile = profile->profile();
-	}
-	cmsDoTransform(m_lastToRGB, const_cast <Q_UINT8 *>(data), img.bits(), numPixels);
-    }
+    KisColorSpace * dstCS;
 
-    // Lcms does nothing to the destination alpha channel so we must convert that manually.
-    // well for for BGRA lcms does but not in general
-    Q_INT32 srcPixelSize = pixelSize();
-    const Q_UINT8 *src = data;
-    Q_UINT8 *dst = img.bits();
-    while (numPixels > 0) {
-        Q_UINT8 alpha = getAlpha(src);
-        dst[4] = alpha;
+    if (dstProfile)
+        dstCS = m_parent->getColorSpace(KisID("RGBA",""),dstProfile->productName());
+    else
+        dstCS = m_parent->getRGB8();
 
-        src += srcPixelSize;
-        dst += 4;
-        numPixels--;
-    }
+    convertPixelsTo(const_cast<Q_UINT8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
 
     return img;
 }

@@ -440,10 +440,10 @@ void KisGenericLightnessHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UI
     if (selectionMask) {
         while (nPixels > 0) {
             if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
-
+/*
                 cs -> toQColor(pixels, &c);
                 m_bins.at(0).at(c.red())++;
-
+*/
                 m_count++;
             }
             pixels += pSize;
@@ -454,10 +454,10 @@ void KisGenericLightnessHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UI
     else {
         while (nPixels > 0) {
             if ( !(m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT))  {
-
+/*
                 cs -> toQColor(pixels, &c);
                 m_bins.at(0).at(c.red())++;
-
+*/
                 m_count++;
             }
             pixels += pSize;

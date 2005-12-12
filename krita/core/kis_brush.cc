@@ -438,12 +438,14 @@ KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisLayer *layer = new KisLayer(colorSpace, "brush image");
+    KisLayer *layer = new KisLayer(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush image");
+   
     Q_CHECK_PTR(layer);
 
     for (int y = 0; y < outputHeight; y++) {
         KisHLineIterator iter = layer -> createHLineIterator( 0, y, outputWidth, true);
         for (int x = 0; x < outputWidth; x++) {
+	    Q_UINT8 * p = iter.rawData();
 
             QRgb pixel = outputImage.pixel(x, y);
             int red = qRed(pixel);
@@ -452,17 +454,15 @@ KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation
             int alpha = qAlpha(pixel);
 
             // Scaled images are in pre-multiplied alpha form so
-            // divide by alpha.
+            // divide by alpha. 
+	    // channel order is BGRA
             if (alpha != 0) {
-                red = (red * 255) / alpha;
-                green = (green * 255) / alpha;
-                blue = (blue * 255) / alpha;
+                p[2] = (red * 255) / alpha;
+                p[1] = (green * 255) / alpha;
+		p[0] = (blue * 255) / alpha;
+		p[3] = alpha;
             }
-
-            QColor colour = QColor(red, green, blue);
-            Q_UINT8 a = (alpha * OPACITY_OPAQUE) / 255;
-
-            layer -> colorSpace() -> fromQColor(colour, a, iter.rawData());
+	    
             ++iter;
         }
     }

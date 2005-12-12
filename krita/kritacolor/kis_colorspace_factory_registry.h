@@ -28,10 +28,9 @@ class KisPaintDeviceAction;
 
 /**
  * This class contains:
- *      - a registry of singleton color strategies.
+ *      - a registry of colorspace instantiated with specific profiles.
+ *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
- *      - a registry of default pixel operations
- *      - a registry of actions that can be performed when a layer with a colorstrategy is made
  */
 class KisColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KisColorSpaceFactory *> {
 
@@ -81,17 +80,12 @@ public:
     KisColorSpace * getColorSpace(const KisID & csID, const KisProfile * profile);
 
     /**
-     * Convenience method to get the often used xyz16 colorspace
-     */
-    KisColorSpace * getXYZ16();
-
-    /**
      * Convenience method to get the often used alpha colorspace
      */
     KisColorSpace * getAlpha8();
 
     /**
-     * Convenience method an RGB colorspace with the default lcms profile
+     * Convenience method to get an RGB colorspace with the default lcms profile
      */
     KisColorSpace * getRGB8();
 
@@ -119,7 +113,6 @@ private:
     QMap<QString, KisColorSpace * > m_csMap;
     typedef QValueVector<KisPaintDeviceAction *> PaintActionVector;
     QMap<KisID, PaintActionVector> m_paintDevActionMap;
-    KisColorSpace *m_xyzCs;
     KisColorSpace *m_alphaCs;
 };
 

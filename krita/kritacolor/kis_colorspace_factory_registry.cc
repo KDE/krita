@@ -30,13 +30,13 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_xyz_colorspace.h"
 #include "kis_alpha_colorspace.h"
+#include "kis_lab_colorspace.h"
 
 
 KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFilenames)
 {
     // Create the built-in colorspaces
 
-    m_xyzCs = new KisXyzColorSpace(this, 0);
     m_alphaCs = new KisAlphaColorSpace(this, 0);
 
     // Load the profiles
@@ -52,6 +52,9 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
             }
         }
     }
+
+    KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
+    addProfile(labProfile);
 
     // Load all colorspace modules
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ColorSpace"),
@@ -73,7 +76,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         if ( plugin )
             kdDebug(DBG_AREA_PLUGINS) << "found colorspace " << service -> property("Name").toString() << "\n";
     }
-
+    add(new KisLabColorSpaceFactory());
 }
 
 KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry()
@@ -174,12 +177,6 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
     } else {
         return getColorSpace( csID, "");
     }
-}
-
-
-KisColorSpace * KisColorSpaceFactoryRegistry::getXYZ16()
-{
-   return m_xyzCs;
 }
 
 KisColorSpace * KisColorSpaceFactoryRegistry::getAlpha8()

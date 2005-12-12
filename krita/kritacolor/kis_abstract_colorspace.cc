@@ -181,21 +181,21 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
     if (!tf && m_profile && dstColorSpace->getProfile()) {
 
-        if (!m_transforms.contains(KisProfilePair(m_profile, dstColorSpace->getProfile()))) {
+        if (!m_transforms.contains(dstColorSpace)) {
             tf = createTransform(dstColorSpace,
-                         m_profile,
-                         dstColorSpace->getProfile(),
-                         renderingIntent);
+				 m_profile,
+				 dstColorSpace->getProfile(),
+				 renderingIntent);
             if (tf) {
 //                  kdDebug() << "Going to add transform to cache "
 //                            << " m_profile: " << m_profile->productName()
 //                            << " dstProfile " << dstColorSpace->getProfile()->productName() << "\n";
-
-                 m_transforms[KisProfilePair(m_profile, dstColorSpace->getProfile())] = tf;
+		// XXX: Should we clear the transform cache if it gets too big?
+		m_transforms[dstColorSpace] = tf;
             }
         }
         else {
-            tf = m_transforms[KisProfilePair(m_profile, dstColorSpace->getProfile())];
+            tf = m_transforms[dstColorSpace];
         }
 
         if ( tf ) {

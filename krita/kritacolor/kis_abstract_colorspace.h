@@ -36,22 +36,6 @@ class KisPixelRO;
 class KisColorSpaceFactoryRegistry;
 
 
-// XXX: This is not enough to identify all the transforms we need: we
-// need something that combines the two profiles + the rendering
-// intent + the lcms colortype -- a certain profile can be used with
-// many varieties of, e.g. RGB(a).
-typedef QPair<KisProfile * , KisProfile * > KisProfilePair;
-
-// This would be better, I guess.
-struct transform {
-    KisProfile srcProfile;
-    Q_UINT32 srcCmType;
-    KisProfile dstProfile;
-    Q_UINT32 dstType;
-    Q_UINT32 renderIntent;
-};
-
-
 /**
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
@@ -245,7 +229,8 @@ private:
     DWORD m_cmType;                           // The colorspace type as defined by littlecms
     icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
-    typedef QMap<KisProfilePair, cmsHTRANSFORM>  TransformMap;
+    // cmsHTRANSFORM is a void *, so this should work.
+    typedef QMap<KisColorSpace *, cmsHTRANSFORM>  TransformMap;
     TransformMap m_transforms; // Cache for existing transforms
 
     KisAbstractColorSpace(const KisAbstractColorSpace&);

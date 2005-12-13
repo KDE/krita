@@ -47,24 +47,6 @@ KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent
     m_channels.push_back(new KisChannelInfo(i18n("Black"), 3 * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4 * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
-/*PROFILEMERGE
-    KisProfile *  profile = KisColorSpaceRegistry::instance()->getProfileByName("Adobe CMYK");
-    if ( profile == 0 )
-    if (getDefaultProfile() == 0) {
-        kdDebug(DBG_AREA_CMS) << "No Adobe CMYK!\n";
-        if (profileCount() != 0) {
-            profile = profiles()[0];
-        }
-    }
-
-    if (profile == 0) {
-        kdDebug(DBG_AREA_CMS) << "No default CMYK profile; CMYK U16 will not work!\n";
-        return;
-    }
-
-    cmsHPROFILE hProfile = profile->profile();
-    setDefaultProfile( new KisProfile(hProfile, TYPE_CMYK5_16) );
-*/
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 
     init();

@@ -55,6 +55,12 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
 
     KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
+    add(new KisLabColorSpaceFactory());
+/* XXX where to put this
+    KisHistogramProducerFactoryRegistry::instance() -> add(
+                new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
+                (KisID("LABAHISTO", i18n("L*a*b Histogram")), new KisLabColorSpace(this, 0);) );
+*/
 
     // Load all colorspace modules
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ColorSpace"),
@@ -76,7 +82,6 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         if ( plugin )
             kdDebug(DBG_AREA_PLUGINS) << "found colorspace " << service -> property("Name").toString() << "\n";
     }
-    add(new KisLabColorSpaceFactory());
 }
 
 KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry()

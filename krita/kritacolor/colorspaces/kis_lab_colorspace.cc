@@ -36,7 +36,7 @@
 
 KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p)
     : KisAbstractColorSpace(KisID("LABA", i18n("L*a*b (16-bit integer/channel)")),
-        COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)|DOSWAP_SH(1),
+        COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1),
          icSigLabData, parent, p)
 
 {
@@ -76,7 +76,7 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
     while (nColors--)
     {
         Pixel *color = (Pixel *)*colors;
-        Q_UINT32 alphaTimesWeight = (color->alpha * *weights)>>8; // need to keep this in manageble size
+        Q_UINT32 alphaTimesWeight = UINT8_MULT(color->alpha, *weights);
 
         totalLightness += color->lightness * alphaTimesWeight;
         totala += color->a * alphaTimesWeight;
@@ -87,8 +87,8 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         colors++;
     }
 
-    if (totalAlpha > 255*255)
-        totalAlpha = 255*255;
+    if (totalAlpha > UINT16_MAX)
+        totalAlpha = UINT16_MAX;
     ((Pixel *)dst)->alpha = totalAlpha;
 
     if (totalAlpha > 0) {
@@ -97,16 +97,16 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         totalb /= totalAlpha;
     } // else the values are already 0 too
 
-    if (totalLightness > 255*255)
-        totalLightness = 255*255;
+    if (totalLightness > UINT16_MAX)
+        totalLightness = UINT16_MAX;
     ((Pixel *)dst)->lightness = totalLightness;
 
-    if (totala > 255*255)
-        totala = 255*255;
+    if (totala > INT16_MAX)
+        totala = INT16_MAX;
     ((Pixel *)dst)->a = totala;
 
-    if (totalb > 255*255)
-        totalb = 255*255;
+    if (totalb > INT16_MAX)
+        totalb = INT16_MAX;
     ((Pixel *)dst)->b = totalb;
 }
 
@@ -134,7 +134,6 @@ Q_UINT32 KisLabColorSpace::pixelSize() const
 void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
     while (rows > 0) {
-
         const Pixel *src = reinterpret_cast<const Pixel *>(srcRowStart);
         Pixel *dst = reinterpret_cast<Pixel *>(dstRowStart);
         const Q_UINT8 *mask = maskRowStart;
@@ -146,10 +145,8 @@ void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
 
             // apply the alphamask
             if (mask != 0) {
-                Q_UINT8 U8_mask = *mask;
-
-                if (U8_mask != OPACITY_OPAQUE) {
-                    srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
+                if (*mask != OPACITY_OPAQUE) {
+                    srcAlpha = UINT16_MULT(srcAlpha, *mask);
                 }
                 mask++;
             }
@@ -184,8 +181,8 @@ void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                         memcpy(dst, src, sizeof(Pixel));
                     } else {
                         dst->lightness = UINT16_BLEND(src->lightness, dst->lightness, srcBlend);
-                        dst->a = UINT16_BLEND(src->a, dst->a, srcBlend);
-                        dst->b = UINT16_BLEND(src->b, dst->b, srcBlend);
+                        dst->a = INT16_BLEND(src->a, dst->a, srcBlend);
+                        dst->b = INT16_BLEND(src->b, dst->b, srcBlend);
                     }
                 }
             }

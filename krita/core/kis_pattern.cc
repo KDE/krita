@@ -211,26 +211,12 @@ KisLayerSP KisPattern::image(KisColorSpace * colorSpace) {
         return (*it);
 
     // If not, create one
-    Q_INT32 width = m_img.width();
-    Q_INT32 height = m_img.height();
     KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
+
     Q_CHECK_PTR(layer);
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            QRgb pixel = m_img.pixel(x, y);
-            int red = qRed(pixel);
-            int green = qGreen(pixel);
-            int blue = qBlue(pixel);
-            int alpha = qAlpha(pixel);
-            
-            Q_UINT8 a = (alpha * OPACITY_OPAQUE) / 255;
-            
-            KisColor color = KisColor(QColor(red, green, blue), a, colorSpace);
-            
-            layer -> setPixel(x, y, color);
-        }
-    }
+    layer->convertFromQImage(m_img);
+
     m_colorspaces[colorSpace->id().id()] = layer;
     return layer;
 }

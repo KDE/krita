@@ -717,17 +717,29 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
     return 0;
 }
 
-void KisPaintDeviceImpl::convertFromQImage(const QImage& img)
+void KisPaintDeviceImpl::convertFromQImage(const QImage& image)
 {
+    QImage img = image;
+
+    // Krita is little-endian inside.
+    if (img.bitOrder() == QImage::LittleEndian) {
+	kdDebug() << "source was littleendian\n";
+	img = img.convertBitOrder(QImage::BigEndian);
+    }
+
+    // Krita likes bgra (convertDepth returns *this is the img is alread 32 bits)
+    img = img.convertDepth( 32 );
+#if 0    
     // XXX: Apply import profile
     if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
+#endif
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
         KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, 0, 0, img.width(), img.height());
-    }
+//    }
 }
 
 QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, float exposure)

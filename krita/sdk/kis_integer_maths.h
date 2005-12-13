@@ -46,13 +46,23 @@ inline uint UINT8_DIVIDE(uint a, uint b)
 
 inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 {
-    return UINT8_MULT(a - b, alpha) + b;
+    // Basically we do a*alpha + b*(1-alpha)
+    // However refactored to (a-b)*alpha + b  since that saves a multiplication
+    // Signed arithmetic is needed since a-b might be negative
+    int c = ((int(a) - int(b)) * int(alpha)) >> 8;
+
+    return uint(c) + b;
 }
 
 inline uint UINT16_MULT(uint a, uint b)
 {
     uint c = a * b + 0x8000u;
     return ((c >> 16) + c) >> 16;
+}
+
+inline int INT16_MULT(int a, int b)
+{
+    return (a*b) / INT16_MAX;
 }
 
 inline uint UINT16_DIVIDE(uint a, uint b)
@@ -63,7 +73,7 @@ inline uint UINT16_DIVIDE(uint a, uint b)
 
 inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 {
-    return UINT16_MULT(a - b, alpha) + b;
+    return uint(INT16_MULT(int(a) - int(b), alpha) + b);
 }
 
 inline uint UINT8_TO_UINT16(uint c)
@@ -73,7 +83,17 @@ inline uint UINT8_TO_UINT16(uint c)
 
 inline uint UINT16_TO_UINT8(uint c)
 {
-    return c / 257u;
+    //return round(c / 257.0);
+    //For all UINT16 this calculation is the same and a lot faster (off by c/65656 which for every c is 0)
+    c = c - (c >> 8) + 128;
+    return c >>8;
+}
+
+inline int INT16_BLEND(int a, int b, int alpha)
+{
+    // Basically we do a*alpha + b*(1-alpha)
+    // However refactored to (a-b)*alpha + b  since that saves a multiplication
+    return INT16_MULT(a - b, alpha) + b;
 }
 
 #endif

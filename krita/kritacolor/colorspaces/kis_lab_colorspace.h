@@ -23,14 +23,12 @@
 
 #include <klocale.h>
 
-#include <koffice_export.h>
-
 #include "kis_global.h"
 #include "kis_integer_maths.h"
 #include "kis_abstract_colorspace.h"
 
 
-class KRITATOOL_EXPORT KisLabColorSpace : public KisAbstractColorSpace {
+class KisLabColorSpace : public KisAbstractColorSpace {
 public:
     KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisLabColorSpace();

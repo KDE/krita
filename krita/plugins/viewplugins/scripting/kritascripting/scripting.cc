@@ -82,7 +82,7 @@ Scripting::~Scripting()
 
 KisScript* Scripting::loadScript(bool exec)
 {
-    KFileDialog* kfd = new KFileDialog(QString::null, "*.py", m_view, "", true);
+    KFileDialog* kfd = new KFileDialog(QString::null, "*.py *.rb", m_view, "", true);
     kfd->setCaption("load a script");
     if(kfd->exec())
     {

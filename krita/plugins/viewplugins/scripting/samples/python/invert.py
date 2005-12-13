@@ -45,6 +45,5 @@ class Inverter:
             script.incProgress()
             it.next()
         layer.endPainting()
-        script.setProgressDone()
 
 Inverter()

@@ -12,7 +12,7 @@ INCLUDES  =  -I$(top_srcdir)/krita/sdk \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
-kritascripting_la_SOURCES =  wdgscriptsmanagerbase.ui scripting.cc kis_script.cc \
+kritascripting_la_SOURCES = wdgscriptsmanagerbase.ui scripting.cc kis_script.cc \
 	wdgscriptsmanager.cpp kis_scripts_registry.cpp
 
 kde_module_LTLIBRARIES = kritascripting.la

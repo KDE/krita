@@ -75,7 +75,6 @@ class KisScript : public KisProgressSubject /* public QObject */ , public Kross:
         void setProgress(Q_INT32 progress);
         void incProgress();
         void setProgressStage(const QString& stage, Q_INT32 progress);
-        void setProgressDone();
     private:
         Q_INT32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KURL m_url;

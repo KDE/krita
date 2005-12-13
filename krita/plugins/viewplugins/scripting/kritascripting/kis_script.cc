@@ -28,7 +28,16 @@
 
 KisScript::KisScript(KURL url, KisView* view, bool execute ) : ScriptContainer(url.path()), m_url(url), m_id(url.path(), url.fileName()), m_view(view)
 {
-    setInterpreterName("python");
+    QString scriptFileName = url.fileName();
+    int pos = scriptFileName.findRev('.');
+    QString extension = scriptFileName.right( scriptFileName.length() - pos - 1);
+    if(extension == "rb")
+    {
+        setInterpreterName("ruby");
+    } else {
+        kdDebug() << extension << "###################################################################" << endl;
+        setInterpreterName("python");
+    }
     
     reload();
     
@@ -75,8 +84,11 @@ void KisScript::execute()
 {
     QApplication::setOverrideCursor( Qt::waitCursor );
     KisScriptsRegistry::instance()->setRunningScript( this );
-    m_view->getCanvasSubject()->progressDisplay()->setSubject( this, true, true );
+    m_view->getCanvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
+    kdDebug() << "Start executing" << endl;
     ScriptContainer::execute();
+    kdDebug() << "Executing finished" << endl;
+    emit notifyProgressDone();
     KisScriptsRegistry::instance()->setRunningScript( 0 );
     QApplication::restoreOverrideCursor();
 }
@@ -111,11 +123,6 @@ void KisScript::setProgressStage(const QString& stage, Q_INT32 progress)
     Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
-}
-
-void KisScript::setProgressDone( )
-{
-    emit notifyProgressDone();
 }
 
 #include "kis_script.moc"

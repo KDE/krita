@@ -12,7 +12,8 @@ libkritacolorspaces_la_SOURCES = \
 
 noinst_HEADERS = \
     kis_alpha_colorspace.h  \
-    kis_xyz_colorspace.h
+    kis_xyz_colorspace.h \
+    kis_lab_colorspace.h
 
 libkritacolorspaces_la_LIBADD = $(OPENEXR_LIBS)
 

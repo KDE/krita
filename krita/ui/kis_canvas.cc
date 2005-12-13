@@ -680,7 +680,7 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             QDesktopWidget *desktop = QApplication::desktop();
             KisPoint globalPos(deviceState.pos().x() * desktop -> width(), deviceState.pos().y() * desktop -> height());
             // Convert screen coordinates to widget coordinates
-            KisPoint pos = globalPos - widgetOriginPos;
+            KisPoint pos = globalPos - KoPoint( widgetOriginPos );
 
             // Map tilt to -60 - +60 degrees
             KisVector2D tilt(deviceState.tilt().x() * 60, deviceState.tilt().y() * 60);

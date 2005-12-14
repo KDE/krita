@@ -8,3 +8,5 @@ libkochart_la_LIBADD = $(LIB_KOFFICECORE)
 METASOURCES = AUTO
 
 include_HEADERS = koChart.h
+
+include $(top_srcdir)/admin/Doxyfile.am

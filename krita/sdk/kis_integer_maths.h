@@ -73,7 +73,11 @@ inline uint UINT16_DIVIDE(uint a, uint b)
 
 inline uint UINT16_BLEND(uint a, uint b, uint alpha)
 {
-    return uint(INT16_MULT(int(a) - int(b), alpha) + b);
+    // Basically we do a*alpha + b*(1-alpha)
+    // However refactored to (a-b)*alpha + b  since that saves a multiplication
+    // Signed arithmetic is needed since a-b might be negative
+    int c = ((int(a) - int(b)) * int(alpha)) >> 16;
+    return uint(c) + b;
 }
 
 inline uint UINT8_TO_UINT16(uint c)
@@ -89,11 +93,12 @@ inline uint UINT16_TO_UINT8(uint c)
     return c >>8;
 }
 
-inline int INT16_BLEND(int a, int b, int alpha)
+inline int INT16_BLEND(int a, int b, uint alpha)
 {
     // Basically we do a*alpha + b*(1-alpha)
     // However refactored to (a-b)*alpha + b  since that saves a multiplication
-    return INT16_MULT(a - b, alpha) + b;
+    int c = ((int(a) - int(b)) * int(alpha)) >> 16;
+    return c + b;
 }
 
 #endif

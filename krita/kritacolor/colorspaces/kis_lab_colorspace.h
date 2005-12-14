@@ -120,7 +120,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisLabColorSpace(parent, p); };
 
-    virtual QString defaultProfile() { return ""; };
+    virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_LAB_H_

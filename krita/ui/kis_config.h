@@ -26,13 +26,14 @@ public:
     KisConfig();
     ~KisConfig();
 
-    Q_INT32 maxImgWidth() const;
     Q_INT32 defImgWidth() const;
     void defImgWidth(Q_INT32 width);
 
-    Q_INT32 maxImgHeight() const;
     Q_INT32 defImgHeight() const;
     void defImgHeight(Q_INT32 height);
+
+    double defImgResolution() const;
+    void defImgResolution(double res);
 
     enumCursorStyle cursorStyle() const;
     enumCursorStyle getDefaultCursorStyle() const;

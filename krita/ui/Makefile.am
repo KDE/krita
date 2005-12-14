@@ -29,7 +29,6 @@ libkritaui_la_SOURCES = \
     kis_controlframe.cc \
     kis_cursor.cc \
     kis_dlg_apply_profile.cc \
-    kis_dlg_create_img.cc \
     kis_dlg_image_properties.cc \
     kis_dlg_layer_properties.cc \
     kis_dlg_new_layer.cc \
@@ -82,6 +81,7 @@ libkritaui_la_SOURCES = \
     kis_view.cc \
     kis_view_iface.cc \
     kis_custom_brush.cc \
+    kis_custom_image_widget.cc\
     kis_view_iface.skel \
     kobirdeyepanel.cpp \
     kis_matrix_widget.ui \
@@ -123,7 +123,6 @@ noinst_HEADERS = \
     kis_controlframe.h \
     kis_cursor.h \
     kis_dlg_apply_profile.h \
-    kis_dlg_create_img.h \
     kis_dlg_image_properties.h \
     kis_dlg_layer_properties.h \
     kis_dlg_new_layer.h \
@@ -169,7 +168,8 @@ noinst_HEADERS = \
     kis_view.h \
     kis_view_iface.h \
     kobirdeyepanel.h \
-    kis_custom_brush.h
+    kis_custom_brush.h\
+    kis_custom_image_widget.h
 
 METASOURCES = AUTO
 

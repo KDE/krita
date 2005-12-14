@@ -43,6 +43,7 @@ class KisView;
 class KisNameServer;
 class KisChildDoc;
 class KisColorSpace;
+class KisColor;
 
 class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
@@ -64,6 +65,7 @@ public:
     virtual bool loadChildren( KoStore* /*store*/) { return true; };
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QCString mimeType() const;
+    virtual QWidget* createCustomDocumentWidget(QWidget *parent);
 
     /**
      * Draw the image embedded in another KOffice document
@@ -97,6 +99,12 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
+    bool newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution);
+
+    /**
+     * Create a new image that has this document as a parent and
+     * replace the current image with this image.
+     */
     KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy);
 
     void renameImage(const QString& oldName, const QString& newName);
@@ -120,7 +128,6 @@ public:
 public slots:
     void slotImageUpdated();
     void slotImageUpdated(const QRect& rect);
-    bool slotNewImage();
     void slotDocumentRestored();
     void slotCommandExecuted();
 

@@ -60,9 +60,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     KisConfig cfg;
 
     m_page -> intWidth -> setValue(image -> width());
-    m_page -> intWidth -> setMaxValue(cfg.maxImgWidth());
     m_page -> intHeight -> setValue(image -> height());
-    m_page -> intHeight -> setMaxValue(cfg.maxImgHeight());
 
     m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
 

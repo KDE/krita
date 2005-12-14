@@ -102,8 +102,6 @@ void ImageSize::slotImageSize()
 
     dlgImageSize -> setWidth(image -> width());
     dlgImageSize -> setHeight(image -> height());
-    dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
-    dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
     if (dlgImageSize -> exec() == QDialog::Accepted) {
         Q_INT32 w = dlgImageSize -> width();
@@ -138,8 +136,6 @@ void ImageSize::slotLayerSize()
 
     dlgLayerSize -> setWidth(image -> width());
     dlgLayerSize -> setHeight(image -> height());
-    dlgLayerSize -> setMaximumWidth(cfg.maxImgWidth());
-    dlgLayerSize -> setMaximumHeight(cfg.maxImgHeight());
 
     if (dlgLayerSize -> exec() == QDialog::Accepted) {
         Q_INT32 w = dlgLayerSize -> width();
@@ -177,8 +173,6 @@ void ImageSize::slotSelectionScale()
 
     dlgImageSize -> setWidth(image -> width());
     dlgImageSize -> setHeight(image -> height());
-    dlgImageSize -> setMaximumWidth(cfg.maxImgWidth());
-    dlgImageSize -> setMaximumHeight(cfg.maxImgHeight());
 
     dlgImageSize -> hideScaleBox();
 

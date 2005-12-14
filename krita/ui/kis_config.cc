@@ -29,8 +29,7 @@
 #include "kis_config.h"
 
 namespace {
-    const Q_INT32 IMG_WIDTH_MAX = USHRT_MAX;
-    const Q_INT32 IMG_HEIGHT_MAX = USHRT_MAX;
+    const double IMG_DEFAULT_RESOLUTION = 100.0;
     const Q_INT32 IMG_DEFAULT_WIDTH = 512;
     const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
@@ -58,24 +57,19 @@ KisConfig::~KisConfig()
     m_cfg -> sync();
 }
 
-Q_INT32 KisConfig::maxImgWidth() const
-{
-    return m_cfg -> readNumEntry("imgWidthMax", IMG_WIDTH_MAX);
-}
-
 Q_INT32 KisConfig::defImgWidth() const
 {
     return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
 }
 
-Q_INT32 KisConfig::maxImgHeight() const
-{
-    return m_cfg -> readNumEntry("imgHeightMax", IMG_HEIGHT_MAX);
-}
-
 Q_INT32 KisConfig::defImgHeight() const
 {
     return m_cfg -> readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
+}
+
+double KisConfig::defImgResolution() const
+{
+    return m_cfg -> readDoubleNumEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
 }
 
 void KisConfig::defImgWidth(Q_INT32 width)
@@ -86,6 +80,11 @@ void KisConfig::defImgWidth(Q_INT32 width)
 void KisConfig::defImgHeight(Q_INT32 height)
 {
     m_cfg -> writeEntry("imgHeightDef", height);
+}
+
+void KisConfig::defImgResolution(double res)
+{
+    m_cfg->writeEntry("imgResolutionDef", res);
 }
 
 enumCursorStyle KisConfig::cursorStyle() const

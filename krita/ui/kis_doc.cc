@@ -58,7 +58,6 @@
 #include "kis_types.h"
 #include "kis_config.h"
 #include "kis_debug_areas.h"
-#include "kis_dlg_create_img.h"
 #include "kis_doc.h"
 #include "kis_factory.h"
 #include "kis_image.h"
@@ -76,6 +75,7 @@
 #include "kis_part_layer.h"
 #include "kis_doc_iface.h"
 #include "kis_paint_device_action.h"
+#include "kis_custom_image_widget.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -184,13 +184,14 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
         if (flags==KoDocument::InitDocEmpty)
         {
+/*
                 if ((ok = slotNewImage()))
                         emit imageListUpdated();
                 setModified(false);
                 KoDocument::setEmpty();
                 setUndo(true);
                 return ok;
-        }
+*/        }
 
     QString file;
     KoTemplateChooseDia::DialogType dlgtype;
@@ -210,12 +211,10 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     setUndo(false);
 
     if (ret == KoTemplateChooseDia::Template) {
-
         resetURL();
         ok = loadNativeFormat( file );
         emit imageListUpdated();
         setEmpty();
-        setModified(true);//XXX:hack
         ok = true;
 
     } else if (ret == KoTemplateChooseDia::File) {
@@ -224,12 +223,12 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         ok = openURL(url);
 
     } else if (ret == KoTemplateChooseDia::Empty) {
-
+/*
         if ((ok = slotNewImage())) {
             emit imageListUpdated();
             setEmpty();
         }
-
+*/
     }
 
     setModified(false);
@@ -334,7 +333,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
     if (!root.hasChildNodes()) {
         // No children == empty file == show create dialog
-        return slotNewImage();
+        return false; // XXX used to be: return slotNewImage();
     }
 
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -411,22 +410,14 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
             return 0;
         if ((attr = element.attribute("width")).isNull())
             return 0;
-        if ((width = attr.toInt()) < 0 || width > cfg.maxImgWidth())
-            return 0;
         if ((attr = element.attribute("height")).isNull())
-            return 0;
-        if ((height = attr.toInt()) < 0 || height > cfg.maxImgHeight())
             return 0;
         description = element.attribute("description");
 
         if ((attr = element.attribute("x-res")).isNull())
             xres = 100.0;
-        else if ((xres = attr.toInt()) < 0 || xres > cfg.maxImgHeight())
-            xres = 100.0;
 
         if ((attr = element.attribute("y-res")).isNull())
-            yres = 100.0;
-        else if ((yres = attr.toInt()) < 0 || yres > cfg.maxImgHeight())
             yres = 100.0;
 
         if ((colorspacename = element.attribute("colorspacename")).isNull())
@@ -812,6 +803,13 @@ bool KisDoc::completeLoading(KoStore *store)
     return true;
 }
 
+QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
+{
+    KisConfig cfg;
+
+    return new KisCustomImageWidget(parent, this,cfg.defImgWidth(), cfg.defImgHeight(), cfg.defImgResolution(), cfg.workingColorSpace(),"foobar");
+}
+
 void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
     (m_currentImage) -> setName(newName);
@@ -846,61 +844,47 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     return img;
 }
 
-bool KisDoc::slotNewImage()
+bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution)
 {
     KisConfig cfg;
-    KisDlgCreateImg dlg(cfg.maxImgWidth(), cfg.defImgWidth(),
-                cfg.maxImgHeight(), cfg.defImgHeight(),
-                "RGBA",
-                i18n("New Image"));
-    qApp -> setOverrideCursor(Qt::ArrowCursor);
-    if (dlg.exec() == QDialog::Accepted) {
-        qApp -> restoreOverrideCursor();
-        QString name;
-        Q_UINT8 opacity = dlg.backgroundOpacity();
-        QColor c = dlg.backgroundColor();
-        KisImageSP img;
-        KisLayerSP layer;
 
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(dlg.colorSpaceID(), dlg.profileName());
+    Q_UINT8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();
+    KisImageSP img;
+    KisLayerSP layer;
 
-        if (!cs) return false;
+    if (!cs) return false;
 
-        img = new KisImage(this, dlg.imgWidth(),
-                   dlg.imgHeight(),
-                   cs,
-                   dlg.imgName());
-        Q_CHECK_PTR(img);
-        connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
-        img -> setResolution(dlg.imgResolution(), dlg.imgResolution()); // XXX needs to be added to dialog
-        img -> setDescription(dlg.imgDescription());
-        img -> setProfile(cs->getProfile());
+    img = new KisImage(this, width, height, cs, name);
+    Q_CHECK_PTR(img);
+    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    img -> setResolution(imgResolution, imgResolution);
+    img -> setDescription(imgDescription);
+    img -> setProfile(cs->getProfile());
 
-        layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
-        Q_CHECK_PTR(layer);
+    layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
+    Q_CHECK_PTR(layer);
 
-        KisFillPainter painter;
-        painter.begin(layer.data());
-        painter.fillRect(0, 0, dlg.imgWidth(), dlg.imgHeight(), KisColor(c, opacity, cs), opacity);
-        painter.end();
+    KisFillPainter painter;
+    painter.begin(layer.data());
+    painter.fillRect(0, 0, width, height, bgColor, opacity);
+    painter.end();
 
-        QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+    QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry() -> paintDeviceActionsFor(cs);
-        for (uint i = 0; i < actions.count(); i++)
-            actions.at(i) -> act(layer.data(), img -> width(), img -> height());
+    for (uint i = 0; i < actions.count(); i++)
+        actions.at(i) -> act(layer.data(), img -> width(), img -> height());
 
-        img -> setBackgroundColor(KisColor(c, opacity, cs));
-        img -> add(layer, -1);
-        img -> notify();
+    img -> setBackgroundColor(bgColor);
+    img -> add(layer, -1);
+    img -> notify();
 
-        m_currentImage = img;
+    m_currentImage = img;
 
-        cfg.defImgWidth(dlg.imgWidth());
-        cfg.defImgHeight(dlg.imgHeight());
+    cfg.defImgWidth(width);
+    cfg.defImgHeight(height);
+    cfg.defImgResolution(imgResolution);
 
-        return true;
-    }
-    return initDoc( KoDocument::InitDocAppStarting);
+    return true;
 }
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)

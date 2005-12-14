@@ -1,4 +1,4 @@
-SUBDIRS = . brushes patterns gradients templates profiles palettes
+SUBDIRS = . brushes patterns gradients profiles palettes
 kde_servicetypes_DATA = \
     krita_filter.desktop \
     krita_paintop.desktop \

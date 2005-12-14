@@ -66,6 +66,9 @@ class KoPartSelectAction;
 class KoIconItem;
 class KoTabBar;
 class KoPaletteManager;
+class KoGrayWidget;
+class KoHSVWidget;
+class KoRGBWidget;
 
 class KisBirdEyeBox;
 class KisBrush;
@@ -80,8 +83,6 @@ class KisDoubleClickEvent;
 class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
-class KisGrayWidget;
-class KisHSVWidget;
 class KisLabelProgress;
 class KisLayerBox;
 class KisMoveEvent;
@@ -91,7 +92,6 @@ class KisPoint;
 class KisRect;
 class KisResource;
 class KisResourceMediator;
-class KisRGBWidget;
 class KisRuler;
 class KisSelectionManager;
 class KoToolBox;
@@ -157,6 +157,9 @@ signals:
      **/
     void currentColorSpaceChanged(KisLayerSP layer);
     void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
+
+    void sigFGQColorChanged(const QColor &);
+    void sigBGQColorChanged(const QColor &);
 
 public slots:
 
@@ -330,6 +333,9 @@ private:
 
 private slots:
 
+    void slotSetFGQColor(const QColor & c);
+    void slotSetBGQColor(const QColor & c);
+
     void imgUpdated(KisImageSP img, const QRect& rc);
     void imgResizeToActiveLayer();
 
@@ -496,9 +502,9 @@ private:
     enumInputDevice m_inputDevice;
 
     KisBirdEyeBox * m_birdEyeBox;
-    KisHSVWidget *m_hsvwidget;
-    KisRGBWidget *m_rgbwidget;
-    KisGrayWidget *m_graywidget;
+    KoHSVWidget *m_hsvwidget;
+    KoRGBWidget *m_rgbwidget;
+    KoGrayWidget *m_graywidget;
     KisPaletteWidget *m_palettewidget;
 
 private:

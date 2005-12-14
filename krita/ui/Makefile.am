@@ -25,7 +25,6 @@ libkritaui_la_SOURCES = \
     kis_cmb_composite.cc \
     kis_cmb_idlist.cc \
     kis_color_cup.cc \
-    kis_colorwheel.cc \
     kis_config.cc \
     kis_controlframe.cc \
     kis_cursor.cc \
@@ -44,9 +43,7 @@ libkritaui_la_SOURCES = \
     kis_filter_manager.cc \
     kis_gradient_chooser.cc \
     kis_gradient_slider_widget.cc \
-    kis_gray_widget.cc \
     kis_histogram_view.cc \
-    kis_hsv_widget.cc \
     kis_icon_item.cc \
     kis_iconwidget.cc \
     kis_itemchooser.cc \
@@ -70,7 +67,6 @@ libkritaui_la_SOURCES = \
     kis_qpaintdevice_canvas_painter.cc \
     kis_resource_mediator.cc \
     kis_resourceserver.cc \
-    kis_rgb_widget.cc \
     kis_ruler.cc \
     kis_selection_manager.cc \
     kis_selection_options.cc \
@@ -123,7 +119,6 @@ noinst_HEADERS = \
     kis_cmb_composite.h \
     kis_cmb_idlist.h \
     kis_color_cup.h \
-    kis_colorwheel.h \
     kis_config.h \
     kis_controlframe.h \
     kis_cursor.h \
@@ -143,9 +138,7 @@ noinst_HEADERS = \
     kis_filter_manager.h \
     kis_gradient_chooser.h \
     kis_gradient_slider_widget.h \
-    kis_gray_widget.h \
     kis_histogram_view.h \
-    kis_hsv_widget.h \
     kis_icon_item.h \
     kis_iconwidget.h \
     kis_itemchooser.h \
@@ -166,7 +159,6 @@ noinst_HEADERS = \
     kis_previewwidget.h \
     kis_resource_mediator.h \
     kis_resourceserver.h \
-    kis_rgb_widget.h \
     kis_ruler.h \
     kis_selection_manager.h \
     kis_selection_options.h \

@@ -72,7 +72,10 @@
 #include <koFilterManager.h>
 #include <koMainWindow.h>
 #include <koView.h>
-#include "kotabbar.h"
+#include <kotabbar.h>
+#include <ko_gray_widget.h>
+#include <ko_hsv_widget.h>
+#include <ko_rgb_widget.h>
 
 // Local
 #include "kis_brush.h"
@@ -121,11 +124,8 @@
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
 
-#include "kis_gray_widget.h"
-#include "kis_hsv_widget.h"
 #include "kis_icon_item.h"
 #include "kis_palette_widget.h"
-#include "kis_rgb_widget.h"
 #include "kis_birdeye_box.h"
 #include "kis_color.h"
 #include "kis_factory.h"
@@ -1728,6 +1728,21 @@ void KisView::slotSetBGColor(const KisColor& c)
     setBGColor(c);
 }
 
+void KisView::slotSetFGQColor(const QColor& c)
+{
+    KisColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA"), m_monitorProfile);
+    setFGColor(KisColor(c, monitorSpace));
+    emit sigFGQColorChanged(c);
+}
+
+void KisView::slotSetBGQColor(const QColor& c)
+{
+    KisColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA"), m_monitorProfile);
+    setBGColor(KisColor(c, monitorSpace));
+    emit sigBGQColorChanged(c);
+}
+
+
 void KisView::setupPrinter(KPrinter& printer)
 {
     KisImageSP img = currentImg();
@@ -3017,20 +3032,30 @@ void KisView::createDockers()
     m_birdEyeBox -> setCaption(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
-    m_hsvwidget = new KisHSVWidget(this, "hsv");
+    m_hsvwidget = new KoHSVWidget(this, "hsv");
     m_hsvwidget -> setCaption(i18n("HSV"));
+
+    connect(m_hsvwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
+    connect(m_hsvwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
+    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
+    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
-    attach(m_hsvwidget);
-
-    m_rgbwidget = new KisRGBWidget(this, "rgb");
+    
+    m_rgbwidget = new KoRGBWidget(this, "rgb");
     m_rgbwidget -> setCaption(i18n("RGB"));
+    connect(m_rgbwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
+    connect(m_rgbwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
+    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setFgColor(const QColor &)));
+    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
-    attach(m_rgbwidget);
-
-    m_graywidget = new KisGrayWidget(this, "gray");
+    
+    m_graywidget = new KoGrayWidget(this, "gray");
     m_graywidget -> setCaption(i18n("Gray"));
+    connect(m_graywidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
+    connect(m_graywidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
+    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_graywidget, SLOT(setFgColor(const QColor &)));
+    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_graywidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
-    attach(m_graywidget);
 
     m_palettewidget = new KisPaletteWidget(this);
     m_palettewidget -> setCaption(i18n("Palettes"));

@@ -1,5 +1,6 @@
 # all_includes must remain last!
-INCLUDES  = -I$(srcdir) \
+INCLUDES  = $(KOFFICE_INCLUDES) \
+    -I$(srcdir) \
     -I$(srcdir)/../sdk \
     -I$(srcdir)/colorspaces \
     $(OPENEXR_CFLAGS) \

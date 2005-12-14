@@ -48,6 +48,7 @@ class Layer : public Kross::Api::Class<Layer>
         Kross::Api::Object::Ptr createHistogram(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
     private:
         KisLayerSP m_layer;
         KisDoc* m_doc;

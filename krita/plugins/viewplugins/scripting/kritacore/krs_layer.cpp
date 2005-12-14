@@ -18,8 +18,10 @@
 
 #include "krs_layer.h"
 
+#include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
 #include <kis_layer.h>
+#include <kis_meta_registry.h>
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
 
@@ -44,6 +46,7 @@ Layer::Layer(KisLayerSP layer, KisDoc* doc)
     addFunction("createHistogram", &Layer::createHistogram, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("beginPainting", &Layer::beginPainting, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String", new Api::Variant("script") ) );
     addFunction("endPainting", &Layer::endPainting);
+    addFunction("convertToColorspace", &Layer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
 
 
@@ -149,6 +152,18 @@ Kross::Api::Object::Ptr Layer::endPainting(Kross::Api::List::Ptr)
     return 0;
 }
 
+Kross::Api::Object::Ptr Layer::convertToColorspace(Kross::Api::List::Ptr args)
+{
+    KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(Kross::Api::Variant::toString(args->item(0)), ""), "");
+    if(!dstCS)
+    {
+        // FIXME: inform user
+        kdDebug() << Kross::Api::Variant::toString(args->item(0)) << " colorspace is not available, please check your installation." << endl;
+        return 0;
+    }
+    m_layer->convertTo(dstCS);
+    return 0;
+}
 
 }
 

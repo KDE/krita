@@ -18,8 +18,10 @@
 
 #include "krs_image.h"
 
+#include <kis_colorspace_factory_registry.h>
 #include <kis_image.h>
 #include <kis_layer.h>
+#include <kis_meta_registry.h>
 
 #include "krs_layer.h"
 
@@ -33,6 +35,7 @@ namespace KritaCore {
     addFunction("getActiveLayer", &Image::getActiveLayer);
     addFunction("getWidth", &Image::getWidth);
     addFunction("getHeight", &Image::getHeight);
+    addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
 
 
@@ -55,6 +58,18 @@ Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
 Kross::Api::Object::Ptr Image::getHeight(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(m_image->height());
+}
+Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
+{
+    KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(Kross::Api::Variant::toString(args->item(0)), ""), "");
+    if(!dstCS)
+    {
+        // FIXME: inform user
+        kdDebug() << Kross::Api::Variant::toString(args->item(0)) << " colorspace is not available, please check your installation." << endl;
+        return 0;
+    }
+    m_image->convertTo(dstCS);
+    return 0;
 }
 
 

@@ -420,7 +420,7 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kiscmbidlist.h</includehint>
+    <includehint>kis_cmb_idlist.h</includehint>
     <includehint>kcolorcombo.h</includehint>
 </includehints>
 </UI>

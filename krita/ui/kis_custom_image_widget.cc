@@ -91,6 +91,7 @@ void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             cmbProfile -> insertItem((*it) -> productName());
     }
+    cmbProfile -> setCurrentText(csf->defaultProfile());
 }
 
 #include "kis_custom_image_widget.moc"

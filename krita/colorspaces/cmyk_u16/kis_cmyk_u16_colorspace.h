@@ -105,7 +105,7 @@ public:
 
     virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
 
-    virtual QString defaultProfile() { return "sRGB"; };
+    virtual QString defaultProfile() { return "Adobe CMYK"; };
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_CMYK_U16_H_

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=History Docker
 Name[cy]=Bachydd Hanes
+Name[da]=Historikdokning
 Name[de]=Verlauf-Docker
 Name[eo]=Histori-legilo
 Name[es]=Anclaje del histórico
@@ -19,6 +20,7 @@ Name[xx]=xxHistory Dockerxx
 Comment=Command history docker for Krita
 Comment[bg]=Основната функционалност на Krita
 Comment[cy]=Bachydd yr hanes gorchmynion ar gyfer Krita
+Comment[da]=Dokning af kommandohistorik for Krita
 Comment[de]=Befehlsverlauf-Docker für Krita
 Comment[eo]=Legilo de komandhistorio por Krita
 Comment[es]=Anclaje con el histórico de órdenes para Krita

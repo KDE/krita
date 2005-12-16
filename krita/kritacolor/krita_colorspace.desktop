@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/ColorSpace
 Comment=A module implementing a complete colorspace for use with libkritacolor
 Comment[bg]=Модул, реализиращ пълна цветова гама за употреба с libkritacolor
 Comment[cy]=Modiwl sy'n gweithredoli gofod lliw cyflawn i'w ddefnyddio efo libkritacolor
+Comment[da]=Et modul som implementerer et fuldstændigt farverum til brug med libkritacolor
 Comment[de]=Ein Modul, das einen kompletten Farbraum zur Benutzung mit libkritacolor implementiert
 Comment[en_GB]=A module implementing a complete colourspace for use with libkritacolor
 Comment[es]=Un módulo que implementa un espacio de color completo para usar con libkritacolor

@@ -18,6 +18,7 @@ Name[xx]=xxLMS Color Model (32-bit float)xx
 Comment=Color model for LMS cone space (Long Middle and Short wavelengths)
 Comment[bg]=Цветови модел за интервали LMS (дълги, средни и къси вълни)
 Comment[cy]=Model lliw ar gyfer gofod côn LMS (tonfeddi Hir, Canolig a Byr)
+Comment[da]=Farvemodel for LMS-keglerum (Lange, mellemliggende og korte bølgelængder)
 Comment[de]=Farbmodell für LMS cone space (Lange, Mittelere und Kurze Wellenlängen)
 Comment[en_GB]=Colour model for LMS cone space (Long Middle and Short wavelengths)
 Comment[es]=Modelo de color para el espacio cónico LMS (con longitudes de onda larga, media y corta)

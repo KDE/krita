@@ -76,6 +76,7 @@
 #include "kis_doc_iface.h"
 #include "kis_paint_device_action.h"
 #include "kis_custom_image_widget.h"
+#include "kis_part_layer.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -810,6 +811,30 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
     return new KisCustomImageWidget(parent, this,cfg.defImgWidth(), cfg.defImgHeight(), cfg.defImgResolution(), cfg.workingColorSpace(),"foobar");
 }
 
+
+KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
+    KoDocument* doc = super::hitTest(pos, matrix);
+
+    if (doc && doc != this) {
+        // We hit a child document. We will only acknowledge we hit it, if the hit child
+        // is the currently active parts layer.
+        KisPartLayer* partLayer = dynamic_cast<KisPartLayer*>
+                (currentImage() -> activeLayer().data());
+
+        if (!partLayer)
+            return this;
+
+        if (doc == partLayer -> childDoc() -> document()) {
+            kdDebug() << "Embedded part hit!" << endl;
+            return doc;
+        }
+        kdDebug() << "Embedded part miss :-(" << endl;
+        return this;
+    }
+
+    return doc;
+}
+
 void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
     (m_currentImage) -> setName(newName);
@@ -909,6 +934,9 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rc, bool transparent, 
     } else {
         paintFlags = (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION);
     }
+
+    paintFlags = (KisImage::PaintFlags)(paintFlags | KisImage::PAINT_EMBEDDED_RECT);
+
     m_currentImage -> renderToPainter(rect.left(), rect.top(), rect.right(), rect.bottom(), painter, profile, paintFlags);
 }
 

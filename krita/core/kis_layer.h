@@ -23,6 +23,7 @@
 #include <koffice_export.h>
 
 class KNamedCommand;
+class QPainter;
 
 class KRITACORE_EXPORT KisLayer : public KisPaintDeviceImpl {
     typedef KisPaintDeviceImpl super;
@@ -47,7 +48,7 @@ public:
 public:
     virtual const bool visible() const;
     virtual void setVisible(bool v);
-    
+
     Q_UINT8 opacity() const;
     void setOpacity(Q_UINT8 val);
     KNamedCommand *setOpacityCommand(Q_UINT8 val);
@@ -61,6 +62,10 @@ public:
     KNamedCommand *setLockedCommand(bool locked);
 
     void paintMaskInactiveLayers(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    /**
+     * Paints a rect around the active part of the layer. To be used for drawing the rect
+     * around an embedding layer */
+    virtual void paintBoundingRect(QPainter&, Q_INT32 x, Q_INT32 y) {}
 
 private:
     Q_UINT8 m_opacity;

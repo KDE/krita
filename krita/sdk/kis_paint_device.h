@@ -75,11 +75,13 @@ public:
     virtual void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
 
     /**
-     * Fill this paint device with the data from img;
+     * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      *
      * @param img The QImage to convert from. We will use the RGBA colorspace and no profile.
+     * @param offsetX the offset in X coordinates
+     * @param offsetY the offset in Y coordinates
      */
-    virtual void convertFromQImage(const QImage& img) = 0;
+    virtual void convertFromQImage(const QImage& img, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0) = 0;
 
     /**
      * Return the number of bytes a pixel takes.

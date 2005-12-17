@@ -1604,6 +1604,12 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
     if (!img.isNull()) {
         painter.drawImage(x1, y1, img, 0, 0, w, h);
+
+        if (paintFlags & PAINT_EMBEDDED_RECT) {
+            if (m_activeLayer != 0) {
+                m_activeLayer -> paintBoundingRect(painter, x1, y1);
+            }
+        }
     }
 }
 
@@ -1635,6 +1641,7 @@ KisPaintDeviceImplSP KisImage::mergedImage()
     return m_projection.data();
 }
 
+// XXX ### why not use the projection?
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
     KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged pixel");

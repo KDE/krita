@@ -66,6 +66,7 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QCString mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
+    virtual KoDocument* hitTest(const QPoint &pos, const QWMatrix& matrix = QWMatrix());
 
     /**
      * Draw the image embedded in another KOffice document

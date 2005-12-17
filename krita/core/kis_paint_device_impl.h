@@ -81,7 +81,9 @@ public:
 
 public:
 
+    /// Moves the device to these new coordinates (so no incremental move or so)
     virtual void move(Q_INT32 x, Q_INT32 y);
+    /// Convenience method for the above
     virtual void move(const QPoint& pt);
     virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
 
@@ -182,9 +184,9 @@ public:
     virtual void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
-     * Fill this paint device with the data from img;
+     * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      */
-    virtual void convertFromQImage(const QImage& img);
+    virtual void convertFromQImage(const QImage& img, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.

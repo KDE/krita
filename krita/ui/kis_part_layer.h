@@ -42,21 +42,17 @@ public:
     KisChildDoc ( KisDoc * kisDdoc );
 
     virtual ~KisChildDoc();
-    
+
     KisDoc * parent() const { return m_doc; }
-    
+
     void setPartLayer (KisPartLayerSP layer) { m_partLayer = layer; }
-    
+
     KisPartLayerSP partLayer() const { return m_partLayer; }
-    
-    
 protected:
 
     KisDoc * m_doc;
     KisPartLayerSP m_partLayer;
-
 };
- 
 
 
 /**
@@ -65,27 +61,42 @@ protected:
  *
  * The part is rendered into an RBGA8 paint device so we can composite it with
  * the other layers.
+ *
+ * When it is activated (see activate()), it draws a rectangle around itself on the kisdoc,
+ * whereas when it is deactivated (deactivate()), it removes that rectangle and commits
+ * the child to the paint device.
+ *
+ * XXX At the moment, it is not actually embedded when you save this as a Krita Native File!
+ * Only the RGBA8 data gets saved :(
  */
 class KisPartLayer : public KisLayer {
-
-
     Q_OBJECT
-
+    typedef KisLayer super;
 public:
-
     KisPartLayer(KisImageSP img, KisChildDoc * doc);
     virtual ~KisPartLayer();
 
-    // Called when the layer is made active
+    /// Called when the layer is made active
     virtual void activate();
 
-    // Called when another layer is made active
+    /// Called when another layer is made inactive
     virtual void deactivate();
+
+    /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
+    virtual KisChildDoc* childDoc() { return m_doc; }
+
+    /// Only override this one, super::move(const QPoint&) calls this one
+    virtual void move(Q_INT32 x, Q_INT32 y);
+
+    virtual void paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y);
+
+private slots:
+    /// Repaints our device with the data from the embedded part
+    void repaint();
 
 private:
     KoFrame * m_frame; // The widget that holds the editable view of the embedded part
     KisChildDoc * m_doc; // The sub-document
-
 };
 
 #endif // _KIS_PART_LAYER_

@@ -194,6 +194,8 @@ protected:
 
     virtual void resizeEvent(QResizeEvent*); // From QWidget
 
+protected slots:
+    virtual void slotChildActivated(bool a); // from KoView
 
 // -------------------------------------------------------------------------//
 //                    KisCanvasSubject implementation

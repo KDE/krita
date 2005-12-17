@@ -717,7 +717,8 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
     return 0;
 }
 
-void KisPaintDeviceImpl::convertFromQImage(const QImage& image)
+void KisPaintDeviceImpl::convertFromQImage(const QImage& image,
+                                           Q_INT32 offsetX, Q_INT32 offsetY)
 {
     QImage img = image;
 
@@ -738,7 +739,7 @@ void KisPaintDeviceImpl::convertFromQImage(const QImage& image)
 #endif
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
         KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
-        writeBytes(dstData, 0, 0, img.width(), img.height());
+        writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
 //    }
 }
 

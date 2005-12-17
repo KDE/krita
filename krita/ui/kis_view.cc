@@ -803,11 +803,22 @@ void KisView::paintView(const KisRect& r)
                         gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
 
                         if(m_actLayerVis)
-                            m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
-                                                     (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION|KisImage::PAINT_MASKINACTIVELAYERS), HDRExposure());
+                            m_current -> renderToPainter(wr.left(), wr.top(),
+                                wr.right(), wr.bottom(), gc, monitorProfile(),
+                                (KisImage::PaintFlags)(
+                                         KisImage::PAINT_BACKGROUND
+                                        |KisImage::PAINT_SELECTION
+                                        |KisImage::PAINT_MASKINACTIVELAYERS
+                                        |KisImage::PAINT_EMBEDDED_RECT
+                                                      ), HDRExposure());
                         else
-                            m_current -> renderToPainter(wr.left(), wr.top(), wr.right(), wr.bottom(), gc, monitorProfile(),
-                                                     (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION), HDRExposure());
+                            m_current -> renderToPainter(wr.left(), wr.top(),
+                                wr.right(), wr.bottom(), gc, monitorProfile(),
+                                (KisImage::PaintFlags)(
+                                         KisImage::PAINT_BACKGROUND
+                                        |KisImage::PAINT_SELECTION
+                                        |KisImage::PAINT_EMBEDDED_RECT
+                                                      ), HDRExposure());
                     }
 
 //                    paintGuides();
@@ -2216,7 +2227,10 @@ void KisView::addPartLayer()
     if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
-    KisChildDoc * childDoc = m_doc->createChildDoc(img->bounds(), doc);
+    kdDebug() << "AddPartLayer: KoDocument is " << doc << endl;
+    //img->bounds()
+    KisChildDoc * childDoc = m_doc->createChildDoc(QRect(0,0,255,255), doc);
+    kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
     KisPartLayer * partLayer = new KisPartLayer(img, childDoc);
     img->layerAdd(partLayer, 0);
@@ -2226,7 +2240,16 @@ void KisView::addPartLayer()
 
 }
 
+void KisView::slotChildActivated(bool a) {
+    // It should be so that the only part (child) we can activate, is the current layer:
+    if (a) {
+        currentImg() -> activeLayer() -> activate();
+    } else {
+        currentImg() -> activeLayer() -> deactivate();
+    }
 
+    super::slotChildActivated(a);
+}
 
 void KisView::layerRemove()
 {

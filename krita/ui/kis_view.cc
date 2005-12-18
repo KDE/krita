@@ -2224,7 +2224,7 @@ void KisView::addPartLayer()
     if ( !doc )
         return;
 
-    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !doc->showEmbedInitDialog(this) )
         return;
 
     kdDebug() << "AddPartLayer: KoDocument is " << doc << endl;

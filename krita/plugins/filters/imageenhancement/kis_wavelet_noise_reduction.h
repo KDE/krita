@@ -24,6 +24,8 @@
 
 #include <kis_filter.h>
 
+#define BEST_WAVELET_THRESHOLD_VALUE 7.0
+
 class KisWaveletNoiseReductionConfiguration
     : public KisFilterConfiguration
 {

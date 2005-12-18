@@ -158,6 +158,8 @@ public:
     virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
+    
+    virtual KisID mathToolboxID() const;
 
     virtual void bitBlt(Q_UINT8 *dst,
                 Q_INT32 dststride,

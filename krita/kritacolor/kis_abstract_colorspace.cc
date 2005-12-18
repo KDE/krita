@@ -516,6 +516,11 @@ Q_UINT8 KisAbstractColorSpace::intensity8(const Q_UINT8 * src) const
 }
 
 
+KisID KisAbstractColorSpace::mathToolboxID() const
+{
+    return KisID("Basic");
+}
+
 void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
                    Q_INT32 dststride,
                    KisColorSpace * srcSpace,

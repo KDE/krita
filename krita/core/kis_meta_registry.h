@@ -19,6 +19,7 @@
 #define _KIS_META_REGISTRY_
 
 class KisColorSpaceFactoryRegistry;
+class KisMathToolboxFactoryRegistry;
 
 /**
  * A single singleton that provides access to several registries.
@@ -32,8 +33,8 @@ public:
     virtual ~KisMetaRegistry();
     static KisMetaRegistry* instance();
 
-    KisColorSpaceFactoryRegistry * csRegistry();
-
+    KisColorSpaceFactoryRegistry * csRegistry() { return m_csRegistry; };
+    KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; };
 private:
 
     KisMetaRegistry();
@@ -43,5 +44,6 @@ private:
     static KisMetaRegistry * m_singleton;
 
     KisColorSpaceFactoryRegistry * m_csRegistry;
+    KisMathToolboxFactoryRegistry* m_mtRegistry;
 };
 #endif

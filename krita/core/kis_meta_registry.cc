@@ -21,6 +21,7 @@
 #include <kglobal.h>
 
 #include <kis_colorspace_factory_registry.h>
+#include <kis_math_toolbox.h>
 #include <kis_meta_registry.h>
 
 KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
@@ -48,6 +49,7 @@ KisMetaRegistry::KisMetaRegistry()
     profileFilenames += d.entryList();
 
     m_csRegistry = new KisColorSpaceFactoryRegistry(profileFilenames);
+    m_mtRegistry = new KisMathToolboxFactoryRegistry();
 }
 
 KisMetaRegistry::~KisMetaRegistry()
@@ -62,7 +64,3 @@ KisMetaRegistry * KisMetaRegistry::instance()
     return KisMetaRegistry::m_singleton;
 }
 
-KisColorSpaceFactoryRegistry * KisMetaRegistry::csRegistry()
-{
-    return m_csRegistry;
-}

@@ -123,7 +123,7 @@ public:
     bool progressEnabled() const { return m_progressEnabled; }
     inline bool cancelRequested() const { return m_progressEnabled && m_cancelRequested; }
 
-protected:
+protected slots:
 
     // Convenience functions for progress display.
     void setProgressTotalSteps(Q_INT32 totalSteps);
@@ -131,7 +131,7 @@ protected:
     void incProgress();
     void setProgressStage(const QString& stage, Q_INT32 progress);
     void setProgressDone();
-
+    inline Q_INT32 progress() { return m_progressSteps; }
 private:
     bool m_cancelRequested;
     bool m_progressEnabled;

@@ -14,6 +14,7 @@ libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritaco
 
 libkritaui_la_SOURCES = \
     imageviewer.cc \
+    layerlist.cpp \
     kcurve.cc \
     kis_autobrush.cc \
     kis_autogradient.cc \
@@ -105,6 +106,7 @@ libkritaui_la_SOURCES = \
 
 noinst_HEADERS = \
     imageviewer.h \
+    layerlist.h \
     kcurve.h \
     kis_aboutdata.h \
     kis_autobrush.h \

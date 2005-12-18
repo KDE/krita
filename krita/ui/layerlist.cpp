@@ -1,0 +1,1085 @@
+/*
+  Copyright (c) 2005 Gábor Lehel <illissius@gmail.com>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
+  Boston, MA 02110-1301, USA.
+*/
+
+
+#include "layerlist.h"
+
+#include <qbitmap.h>
+#include <qcursor.h>
+#include <qimage.h>
+#include <qheader.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qtimer.h>
+
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+#include <kstringhandler.h>
+
+class LayerItemIterator: public QListViewItemIterator
+{
+public:
+    LayerItemIterator( LayerList *list ): QListViewItemIterator( list ) { }
+    LayerItemIterator( LayerItem *item ): QListViewItemIterator( item ) { }
+    LayerItem *operator*() { return static_cast<LayerItem*>( QListViewItemIterator::operator*() ); }
+};
+
+struct LayerProperty
+{
+    QString name;
+    QString displayName;
+    QIconSet icon;
+    bool defaultValue;
+    bool validForFolders;
+
+    LayerProperty(): defaultValue( false ), validForFolders( true ) { }
+    LayerProperty( const QString &pname, const QString &pdisplayName, const QIconSet &picon,
+                   bool pdefaultValue, bool pvalidForFolders )
+        : name( pname ),
+          displayName( pdisplayName ),
+          icon( picon ),
+          defaultValue( pdefaultValue ),
+          validForFolders( pvalidForFolders )
+        { }
+};
+
+class LayerList::Private
+{
+public:
+    LayerItem *activeLayer;
+    bool foldersCanBeActive;
+    bool previewsShown;
+    int itemHeight;
+    QValueList<LayerProperty> properties;
+    KPopupMenu contextMenu;
+
+    Private(): activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 ) { }
+};
+
+class LayerItem::Private
+{
+public:
+    bool isFolder;
+    int id;
+    QValueList<bool> properties;
+    QImage *previewImage;
+    QPixmap *previewPixmap;
+    bool previewChanged;
+    QPixmap scaledPreview;
+
+    Private( int pid ): isFolder( false ), id( pid ), previewImage( 0 ), previewPixmap( 0 ), previewChanged( false )
+    { }
+};
+
+
+static int getID()
+{
+    static int id = -2;
+    return id--;
+}
+
+static QSize iconSize() { return QIconSet::iconSize( QIconSet::Small ); }
+
+
+///////////////
+// LayerList //
+///////////////
+
+LayerList::LayerList( QWidget *parent, const char *name )
+    : super( parent, name ), d( new Private )
+{
+    setSelectionMode( QListView::Extended );
+    setRootIsDecorated( true );
+    setSorting( -1 );
+    setSortColumn( -1 );
+    setAllColumnsShowFocus( true );
+    setFullWidth( true );
+    setItemsRenameable( false );
+    setDropHighlighter( true );
+    setDefaultRenameAction( QListView::Accept );
+    setDragEnabled( true );
+    setAcceptDrops( true );
+    setItemsMovable( true );
+    addColumn( QString() );
+    header()->hide();
+
+    setNumRows( 2 );
+
+    connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ),
+                 SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
+    connect( this, SIGNAL( moved( QListViewItem*, QListViewItem*, QListViewItem* ) ),
+             SLOT( slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* ) ) );
+    connect( this, SIGNAL( executed( QListViewItem* ) ), SLOT( slotItemExecuted( QListViewItem* ) ) );
+}
+
+LayerList::~LayerList()
+{
+    delete d;
+}
+
+void LayerList::addProperty( const QString &name, const QString &displayName, const QIconSet &icon,
+                             bool defaultValue, bool validForFolders )
+{
+    d->properties.append( LayerProperty( name, displayName, icon, defaultValue, validForFolders ) );
+
+    for( LayerItemIterator it( this ); *it; ++it )
+        (*it)->d->properties.append( defaultValue );
+
+    //we do this only afterwards in case someone wants to access the other items in a connected slot...
+    for( LayerItemIterator it( this ); *it; ++it )
+        if( validForFolders || !(*it)->isFolder() )
+        {
+            emit propertyChanged( *it, name, defaultValue );
+            emit propertyChanged( (*it)->id(), name, defaultValue );
+        }
+
+    triggerUpdate();
+}
+
+LayerItem *LayerList::layer( int id ) const
+{
+    if( !firstChild() || id == -1 )
+        return 0;
+
+    for( LayerItemIterator it( firstChild() ); *it; ++it )
+        if( (*it)->id() == id )
+            return (*it);
+
+    return 0;
+}
+
+LayerItem *LayerList::folder( int id ) const
+{
+    if( !firstChild() || id == -1 )
+        return 0;
+
+    for( LayerItemIterator it( firstChild() ); *it; ++it )
+        if( (*it)->id() == id && (*it)->isFolder() )
+            return (*it);
+
+    return 0;
+}
+
+LayerItem *LayerList::activeLayer() const
+{
+    return d->activeLayer;
+}
+
+int LayerList::activeLayerID() const
+{
+    if( activeLayer() )
+        return activeLayer()->id();
+    return -1;
+}
+
+QValueList<LayerItem*> LayerList::selectedLayers() const
+{
+    if( !firstChild() )
+        return QValueList<LayerItem*>();
+
+    QValueList<LayerItem*> layers;
+    for( LayerItemIterator it( firstChild() ); *it; ++it )
+        if( (*it)->isSelected() )
+            layers.append( *it );
+
+    return layers;
+}
+
+QValueList<int> LayerList::selectedLayerIDs() const
+{
+    const QValueList<LayerItem*> layers = selectedLayers();
+    QValueList<int> ids;
+    for( int i = 0, n = layers.count(); i < n; ++i )
+        ids.append( layers[i]->id() );
+
+    return ids;
+}
+
+bool LayerList::foldersCanBeActive() const
+{
+    return d->foldersCanBeActive;
+}
+
+bool LayerList::previewsShown() const
+{
+    return d->previewsShown;
+}
+
+int LayerList::itemHeight() const
+{
+    return d->itemHeight;
+}
+
+int LayerList::numRows() const
+{
+    if( itemHeight() < kMax( fontMetrics().height(), iconSize().height() ) )
+        return 0;
+
+    return ( itemHeight() - fontMetrics().height() ) / iconSize().height() + 1;
+}
+
+void LayerList::makeFolder( int id )
+{
+    LayerItem* const l = layer( id );
+    if( l )
+        l->makeFolder();
+}
+
+bool LayerList::isFolder( int id ) const
+{
+    LayerItem* const l = layer( id );
+    if( !l )
+        return false;
+
+    return l->isFolder();
+}
+
+QString LayerList::displayName( int id ) const
+{
+    LayerItem* const l = layer( id );
+    if( !l )
+        return QString::null; //should be more severe...
+
+    return l->displayName();
+}
+
+bool LayerList::property( int id, const QString &name ) const
+{
+    LayerItem* const l = layer( id );
+    if( !l )
+        return false; //should be more severe...
+
+    return l->property( name );
+}
+
+KPopupMenu *LayerList::contextMenu() const
+{
+    return &( d->contextMenu );
+}
+
+void LayerList::setFoldersCanBeActive( bool can ) //SLOT
+{
+    d->foldersCanBeActive = can;
+    if( !can && activeLayer() && activeLayer()->isFolder() )
+    {
+        d->activeLayer = 0;
+        emit activated( static_cast<LayerItem*>( 0 ) );
+        emit activated( -1 );
+    }
+}
+
+void LayerList::setPreviewsShown( bool show ) //SLOT
+{
+    d->previewsShown = show;
+    triggerUpdate();
+}
+
+void LayerList::setItemHeight( int height ) //SLOT
+{
+    d->itemHeight = height;
+    for( LayerItemIterator it( this ); *it; ++it )
+        (*it)->setup();
+    triggerUpdate();
+}
+
+void LayerList::setNumRows( int rows )
+{
+    if( rows < 1 )
+        return;
+
+    if( rows == 1 )
+        setItemHeight( kMax( fontMetrics().height(), iconSize().height() ) );
+    else
+        setItemHeight( fontMetrics().height() + ( rows - 1 ) * iconSize().height() );
+}
+
+void LayerList::setActiveLayer( LayerItem *layer ) //SLOT
+{
+    if( !foldersCanBeActive() && layer && layer->isFolder() )
+        return;
+
+    if( currentItem() != layer )
+        setCurrentItem( layer );
+
+    if( d->activeLayer == layer )
+        return;
+
+    d->activeLayer = layer;
+
+    emit activated( layer );
+    if( layer )
+        emit activated( layer->id() );
+    else
+        emit activated( -1 );
+}
+
+void LayerList::setActiveLayer( int id ) //SLOT
+{
+    setActiveLayer( layer( id ) );
+}
+
+void LayerList::setLayerDisplayName( LayerItem *layer, const QString &displayName )
+{
+    if( !layer )
+        return;
+
+    layer->setDisplayName( displayName );
+}
+
+void LayerList::setLayerDisplayName( int id, const QString &displayName )
+{
+    setLayerDisplayName( layer( id ), displayName );
+}
+
+void LayerList::setLayerProperty( LayerItem *layer, const QString &name, bool on ) //SLOT
+{
+    if( !layer )
+        return;
+
+    layer->setProperty( name, on );
+}
+
+void LayerList::setLayerProperty( int id, const QString &name, bool on ) //SLOT
+{
+    setLayerProperty( layer( id ), name, on );
+}
+
+void LayerList::toggleLayerProperty( LayerItem *layer, const QString &name ) //SLOT
+{
+    if( !layer )
+        return;
+
+    layer->toggleProperty( name );
+}
+
+void LayerList::toggleLayerProperty( int id, const QString &name ) //SLOT
+{
+    toggleLayerProperty( layer( id ), name );
+}
+
+void LayerList::setLayerPreviewImage( LayerItem *layer, QImage *image )
+{
+    if( !layer )
+        return;
+
+    layer->setPreviewImage( image );
+}
+
+void LayerList::setLayerPreviewImage( int id, QImage *image )
+{
+    setLayerPreviewImage( layer( id ), image );
+}
+
+void LayerList::setLayerPreviewPixmap( LayerItem *layer, QPixmap *pixmap )
+{
+    if( !layer )
+        return;
+
+    layer->setPreviewPixmap( pixmap );
+}
+
+void LayerList::setLayerPreviewPixmap( int id, QPixmap *pixmap )
+{
+    setLayerPreviewPixmap( layer( id ), pixmap );
+}
+
+void LayerList::layerPreviewChanged( LayerItem *layer )
+{
+    if( !layer )
+        return;
+
+    layer->previewChanged();
+}
+
+void LayerList::layerPreviewChanged( int id )
+{
+    layerPreviewChanged( layer( id ) );
+}
+
+LayerItem *LayerList::addLayer( const QString &displayName, LayerItem *after, int id ) //SLOT
+{
+    return new LayerItem( displayName, this, after, id );
+}
+
+LayerItem *LayerList::addLayer( const QString &displayName, int afterID, int id ) //SLOT
+{
+    return new LayerItem( displayName, this, layer( afterID ), id );
+}
+
+//SLOT
+LayerItem *LayerList::addLayerToParent( const QString &displayName, LayerItem *parent, LayerItem *after, int id )
+{
+    if( parent && parent->isFolder() )
+        return parent->addLayer( displayName, after, id );
+    else
+        return 0;
+}
+
+LayerItem *LayerList::addLayerToParent( const QString &displayName, int parentID, int afterID, int id ) //SLOT
+{
+    return addLayerToParent( displayName, folder( parentID ), layer( afterID ), id );
+}
+
+void LayerList::moveLayer( LayerItem *layer, LayerItem *parent, LayerItem *after ) //SLOT
+{
+    if( !layer )
+        return;
+
+    if( parent && !parent->isFolder() )
+        parent = 0;
+
+    if( layer->parent() == parent && layer->prevSibling() == after )
+        return;
+
+    moveItem( layer, parent, after );
+    emit layerMoved( layer, parent, after );
+    emit layerMoved( layer->id(), parent ? parent->id() : -1, after ? after->id() : -1 );
+}
+
+void LayerList::moveLayer( int id, int parentID, int afterID ) //SLOT
+{
+    moveLayer( layer( id ), folder( parentID ), layer( afterID ) );
+}
+
+void LayerList::removeLayer( LayerItem *layer ) //SLOT
+{
+    delete layer;
+}
+
+void LayerList::removeLayer( int id ) //SLOT
+{
+    delete layer( id );
+}
+
+void LayerList::contentsMousePressEvent( QMouseEvent *e )
+{
+    LayerItem *item = static_cast<LayerItem*>( itemAt( contentsToViewport( e->pos() ) ) );
+
+    if( item )
+    {
+        QMouseEvent m( QEvent::MouseButtonPress, item->mapFromListView( e->pos() ), e->button(), e->state() );
+        if( !item->mousePressEvent( &m ) )
+            super::contentsMousePressEvent( e );
+    }
+    else
+    {
+        super::contentsMousePressEvent( e );
+        if( e->button() == Qt::LeftButton && KGlobalSettings::singleClick() )
+        {
+            emit requestNewLayer( static_cast<LayerItem*>( 0 ), static_cast<LayerItem*>( 0 ) );
+            emit requestNewLayer( -1, -1 );
+        }
+        else if( e->button() == Qt::RightButton )
+            showContextMenu();
+    }
+}
+
+void LayerList::contentsMouseDoubleClickEvent( QMouseEvent *e )
+{
+    super::contentsMouseDoubleClickEvent( e );
+    if( !KGlobalSettings::singleClick() && !itemAt( contentsToViewport( e->pos() ) ) )
+    {
+        emit requestNewLayer( static_cast<LayerItem*>( 0 ), static_cast<LayerItem*>( 0 ) );
+        emit requestNewLayer( -1, -1 );
+    }
+}
+
+void LayerList::findDrop( const QPoint &pos, QListViewItem *&parent, QListViewItem *&after )
+{
+    LayerItem *item = static_cast<LayerItem*>( itemAt( contentsToViewport( pos ) ) );
+    if( item && item->isFolder() )
+    {
+        parent = item;
+        after = 0;
+    }
+    else
+        super::findDrop( pos, parent, after );
+}
+
+void LayerList::showContextMenu()
+{
+    LayerItem *layer = static_cast<LayerItem*>( itemAt( viewport()->mapFromGlobal( QCursor::pos() ) ) );
+
+    d->contextMenu.clear();
+    if( layer )
+    {
+        layer->setSelected( true );
+        for( int i = 0, n = d->properties.count(); i < n; ++i )
+            if( !layer->isFolder() || d->properties[i].validForFolders )
+                d->contextMenu.insertItem( d->properties[i].icon.pixmap( QIconSet::Small, layer->d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ), d->properties[i].displayName, MenuItems::COUNT + i );
+        d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties" ), MenuItems::LayerProperties );
+        d->contextMenu.insertSeparator();
+        d->contextMenu.insertItem( SmallIconSet( "editdelete" ),
+            selectedLayers().count() > 1 ? i18n( "Remove Layers" )
+                   : layer->isFolder() ? i18n( "&Remove Folder" )
+                                       : i18n( "&Remove Layer" ), MenuItems::RemoveLayer );
+    }
+    d->contextMenu.insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer" ), MenuItems::NewLayer );
+    d->contextMenu.insertItem( SmallIconSet( "folder" ), i18n( "New &Folder" ), MenuItems::NewFolder );
+
+    menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
+}
+
+void LayerList::menuActivated( int id, LayerItem *layer )
+{
+    const QValueList<LayerItem*> selected = selectedLayers();
+
+    LayerItem *parent = ( layer && layer->isFolder() ) ? layer : 0;
+    LayerItem *after = 0;
+    if( !parent && layer )
+    {
+        parent = layer->parent();
+        if( parent && after != parent->firstChild() )
+            after = parent->firstChild();
+        while( after && after->nextSibling() != layer )
+            after = after->nextSibling();
+    }
+    switch( id )
+    {
+        case MenuItems::NewLayer:
+            emit requestNewLayer( parent, after );
+            emit requestNewLayer( parent ? parent->id() : -1, after ? after->id() : -1 );
+            break;
+        case MenuItems::NewFolder:
+            emit requestNewFolder( parent, after );
+            emit requestNewFolder( parent ? parent->id() : -1, after ? after->id() : -1 );
+            break;
+        case MenuItems::RemoveLayer:
+            {
+                QValueList<int> ids;
+                for( int i = 0, n = selected.count(); i < n; ++i )
+                {
+                    ids.append( selected[i]->id() );
+                    emit requestRemoveLayer( selected[i]->id() );
+                }
+                emit requestRemoveLayers( ids );
+            }
+            for( int i = 0, n = selected.count(); i < n; ++i )
+                emit requestRemoveLayer( selected[i] );
+            emit requestRemoveLayers( selected );
+            break;
+        case MenuItems::LayerProperties:
+            if( layer )
+            {
+                emit requestLayerProperties( layer );
+                emit requestLayerProperties( layer->id() );
+            }
+            break;
+        default:
+            if( id >= MenuItems::COUNT && layer )
+                for( int i = 0, n = selected.count(); i < n; ++i )
+                    selected[i]->toggleProperty( d->properties[ id - MenuItems::COUNT ].name );
+    }
+}
+
+void LayerList::slotItemRenamed( QListViewItem *item, const QString &text, int col )
+{
+    if( !item || col != 0 )
+        return;
+
+    emit displayNameChanged( static_cast<LayerItem*>( item ), text );
+    emit displayNameChanged( static_cast<LayerItem*>( item )->id(), text );
+}
+
+void LayerList::slotItemMoved( QListViewItem *item, QListViewItem *afterBefore, QListViewItem *afterNow )
+{
+    LayerItem *l = static_cast<LayerItem*>( item ), *a = static_cast<LayerItem*>( afterNow );
+    if( !l || ( afterNow && !a ) )
+        return;
+
+    if( l->parent() )
+        l->parent()->setOpen( true );
+
+    if( afterBefore == afterNow )
+        return;
+
+    emit layerMoved( l, l->parent(), a );
+    emit layerMoved( l->id(), l->parent() ? l->parent()->id() : -1, a ? a->id() : -1 );
+}
+
+void LayerList::slotItemExecuted( QListViewItem *i )
+{
+    LayerItem *layer = static_cast<LayerItem*>( i );
+    if( layer )
+    {
+        emit requestLayerProperties( layer );
+        emit requestLayerProperties( layer->id() );
+    }
+}
+
+void LayerList::setCurrentItem( QListViewItem *item )
+{
+    super::setCurrentItem( item );
+    if( activeLayer() != item )
+        setActiveLayer( static_cast<LayerItem*>(item) );
+}
+
+
+///////////////
+// LayerItem //
+///////////////
+
+LayerItem::LayerItem( const QString &displayName, LayerList *p, LayerItem *after, int id )
+    : super( p, after ), d( new Private( id ) )
+{
+    init();
+    setDisplayName( displayName );
+}
+
+LayerItem::LayerItem( const QString &displayName, LayerItem *p, LayerItem *after, int id )
+    : super( ( p && p->isFolder() ) ? p : 0, after ), d( new Private( id ) )
+{
+    init();
+    setDisplayName( displayName );
+}
+
+void LayerItem::init()
+{
+    if( d->id < 0 )
+        d->id = getID();
+
+    for( int i = 0, n = listView()->d->properties.count(); i < n; ++i )
+        d->properties.append( listView()->d->properties[i].defaultValue );
+}
+
+LayerItem::~LayerItem()
+{
+    delete d;
+}
+
+void LayerItem::makeFolder()
+{
+    d->isFolder = true;
+    setPixmap( 0, SmallIcon( "folder", 16 ) );
+    if( isActive() && !listView()->foldersCanBeActive() )
+        listView()->setActiveLayer( static_cast<LayerItem*>( 0 ) );
+}
+
+bool LayerItem::isFolder() const
+{
+    return d->isFolder;
+}
+
+int LayerItem::id() const
+{
+    return d->id;
+}
+
+QString LayerItem::displayName() const
+{
+    return text( 0 );
+}
+
+void LayerItem::setDisplayName( const QString &s )
+{
+    if( displayName() == s )
+        return;
+    setText( 0, s );
+    emit listView()->displayNameChanged( this, s );
+    emit listView()->displayNameChanged( id(), s );
+}
+
+bool LayerItem::isActive() const
+{
+    return listView()->activeLayer() == this;
+}
+
+void LayerItem::setActive()
+{
+    listView()->setActiveLayer( this );
+}
+
+bool LayerItem::property( const QString &name ) const
+{
+    int i = listView()->d->properties.count() - 1;
+    while( i && listView()->d->properties[i].name != name )
+        --i;
+
+    if( i < 0 )
+        return false; //should do something more severe... but what?
+
+    return d->properties[i];
+}
+
+void LayerItem::setProperty( const QString &name, bool on )
+{
+    int i = listView()->d->properties.count() - 1;
+    while( i && listView()->d->properties[i].name != name )
+        --i;
+
+    if( i < 0 || ( isFolder() && !listView()->d->properties[i].validForFolders ) )
+        return;
+
+    const bool notify = ( on != d->properties[i] );
+    d->properties[i] = on;
+    if( notify );
+    {
+        emit listView()->propertyChanged( this, name, on );
+        emit listView()->propertyChanged( id(), name, on );
+    }
+
+    update();
+}
+
+void LayerItem::toggleProperty( const QString &name )
+{
+    int i = listView()->d->properties.count() - 1;
+    while( i && listView()->d->properties[i].name != name )
+        --i;
+
+    if( i < 0 || ( isFolder() && !listView()->d->properties[i].validForFolders ) )
+        return;
+
+    d->properties[i] = !(d->properties[i]);
+    emit listView()->propertyChanged( this, name, d->properties[i] );
+    emit listView()->propertyChanged( id(), name, d->properties[i] );
+
+    update();
+}
+
+void LayerItem::setPreviewImage( QImage *image )
+{
+    d->previewPixmap = 0;
+    d->previewImage = image;
+    previewChanged();
+}
+
+void LayerItem::setPreviewPixmap( QPixmap *pixmap )
+{
+    d->previewImage = 0;
+    d->previewPixmap = pixmap;
+    previewChanged();
+}
+
+void LayerItem::previewChanged()
+{
+    d->previewChanged = true;
+    update();
+}
+
+LayerItem *LayerItem::addLayer( const QString &displayName, LayerItem *after, int id )
+{
+    if( !isFolder() )
+        return 0;
+    return new LayerItem( displayName, this, after, id );
+}
+
+LayerItem *LayerItem::prevSibling() const
+{
+    LayerItem *item = parent() ? parent()->firstChild() : listView()->firstChild();
+    if( !item || this == item )
+        return 0;
+    for(; item && this != item; item = item->nextSibling() );
+    return item;
+}
+
+int LayerItem::mapXFromListView( int x ) const
+{
+    return x - rect().left();
+}
+
+int LayerItem::mapYFromListView( int y ) const
+{
+    return y - rect().top();
+}
+
+QPoint LayerItem::mapFromListView( const QPoint &point ) const
+{
+    return QPoint( mapXFromListView( point.x() ), mapYFromListView( point.y() ) );
+}
+
+QRect LayerItem::mapFromListView( const QRect &rect ) const
+{
+    return QRect( mapFromListView( rect.topLeft() ), rect.size() );
+}
+
+int LayerItem::mapXToListView( int x ) const
+{
+    return x + rect().left();
+}
+
+int LayerItem::mapYToListView( int y ) const
+{
+    return y + rect().top();
+}
+
+QPoint LayerItem::mapToListView( const QPoint &point ) const
+{
+    return QPoint( mapXToListView( point.x() ), mapYToListView( point.y() ) );
+}
+
+QRect LayerItem::mapToListView( const QRect &rect ) const
+{
+    return QRect( mapToListView( rect.topLeft() ), rect.size() );
+}
+
+QRect LayerItem::rect() const
+{
+    const int indent = listView()->treeStepSize() * ( depth() + 1 );
+    return QRect( listView()->header()->sectionPos( 0 )  + indent, itemPos(),
+                  listView()->header()->sectionSize( 0 ) - indent, height() );
+}
+
+QRect LayerItem::textRect() const
+{
+    static QFont f;
+    static int minbearing = 1337 + 666; //can be 0 or negative, 2003 is less likely
+    if( minbearing == 2003 || f != font() )
+    {
+        f = font(); //getting your bearings can be expensive, so we cache them
+        minbearing = fontMetrics().minLeftBearing() + fontMetrics().minRightBearing();
+    }
+
+    const int margin = listView()->itemMargin();
+    int indent = previewRect().right() + margin;
+    if( pixmap( 0 ) )
+        indent += pixmap( 0 )->width() + margin;
+
+    const int width = ( multiline() ? rect().right() : iconsRect().left() ) - indent - margin + minbearing;
+
+    return QRect( indent, 0, width, fontMetrics().height() );
+}
+
+QRect LayerItem::iconsRect() const
+{
+    const QValueList<LayerProperty> &lp = listView()->d->properties;
+    int propscount = 0;
+    for( int i = 0, n = lp.count(); i < n; ++i )
+        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+            propscount++;
+
+    const int iconswidth = propscount * iconSize().width() + (propscount - 1) * listView()->itemMargin();
+
+    const int x = multiline() ? previewRect().right() + listView()->itemMargin() : rect().width() - iconswidth;
+    const int y = multiline() ? fontMetrics().height() : 0;
+
+    return QRect( x, y, iconswidth, iconSize().height() );
+}
+
+QRect LayerItem::previewRect() const
+{
+    return QRect( 0, 0, listView()->previewsShown() ? height() : 0, height() );
+}
+
+void LayerItem::drawText( QPainter *p, const QColorGroup &cg, const QRect &r )
+{
+    p->translate( r.left(), r.top() );
+
+    p->setPen( isSelected() ? cg.highlightedText() : cg.text() );
+
+    const QString text = KStringHandler::rPixelSqueeze( displayName(), p->fontMetrics(), r.width() );
+    p->drawText( listView()->itemMargin(), 0, r.width(), r.height(), Qt::AlignAuto | Qt::AlignTop, text );
+
+    p->translate( -r.left(), -r.top() );
+}
+
+void LayerItem::drawIcons( QPainter *p, const QColorGroup &/*cg*/, const QRect &r )
+{
+    p->translate( r.left(), r.top() );
+
+    int x = 0;
+    const QValueList<LayerProperty> &lp = listView()->d->properties;
+    for( int i = 0, n = lp.count(); i < n; ++i )
+        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+        {
+            if( !isFolder() || lp[i].validForFolders )
+                p->drawPixmap( x, 0, lp[i].icon.pixmap( QIconSet::Small,
+                                                 d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ) );
+            x += iconSize().width() + listView()->itemMargin();
+        }
+
+    p->translate( -r.left(), -r.top() );
+}
+
+void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect &r )
+{
+    if( !showPreview() )
+        return;
+
+    if( d->previewChanged || r.size() != d->scaledPreview.size() )
+    {
+        d->scaledPreview = QPixmap( r.size() );
+        QBitmap b( r.size() );
+        b.fill( Qt::color0 );
+        QPainter bp( &b );
+        bp.setBrush( Qt::color1 );
+        QPainter p( &(d->scaledPreview) );
+        QImage i = ( d->previewImage ? d->previewImage->smoothScale( r.size(), QImage::ScaleMin )
+                   : d->previewPixmap->convertToImage().smoothScale( r.size(), QImage::ScaleMin ) );
+        p.drawImage( r.width() / 2 - i.width() / 2, r.height() / 2 - i.height() / 2, i );
+        bp.drawRect( r.width() / 2 - i.width() / 2, r.height() / 2 - i.height() / 2, i.width(), i.height() );
+        bp.end();
+        p.end();
+        d->scaledPreview.setMask( b );
+        //argh! there has to be a simpler way to do this!
+
+        d->previewChanged = false;
+    }
+
+    p->drawPixmap( r.topLeft(), d->scaledPreview );
+}
+
+bool LayerItem::showPreview() const
+{
+    return listView()->previewsShown() && ( ( d->previewImage  && !d->previewImage->isNull()  ) ||
+                                            ( d->previewPixmap && !d->previewPixmap->isNull() )    );
+}
+
+bool LayerItem::multiline() const
+{
+    return height() >= fontMetrics().height() + iconSize().height();
+}
+
+QFont LayerItem::font() const
+{
+    if( isActive() )
+    {
+        QFont f = listView()->font();
+        f.setBold( !f.bold() );
+        f.setItalic( !f.italic() );
+        return f;
+    }
+    else
+        return listView()->font();
+}
+
+QFontMetrics LayerItem::fontMetrics() const
+{
+    return QFontMetrics( font() );
+}
+
+bool LayerItem::mousePressEvent( QMouseEvent *e )
+{
+    if( e->button() == Qt::RightButton )
+    {
+        QTimer::singleShot( 0, listView(), SLOT( showContextMenu() ) );
+        return false;
+    }
+
+    const QRect ir = iconsRect(), tr = textRect();
+
+    if( ir.contains( e->pos() ) )
+    {
+        const int iconWidth = iconSize().width();
+        int x = e->pos().x() - ir.left();
+        if( x % ( iconWidth + listView()->itemMargin() ) < iconWidth ) //it's on an icon, not a margin
+        {
+            const QValueList<LayerProperty> &lp = listView()->d->properties;
+            int p = -1;
+            for( int i = 0, n = lp.count(); i < n; ++i )
+            {
+                if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+                    x -= iconWidth + listView()->itemMargin();
+                p += 1;
+                if( x < 0 )
+                    break;
+            }
+            toggleProperty( lp[p].name );
+        }
+        return true;
+    }
+
+    else if( tr.contains( e->pos() ) && isSelected() && !listView()->renameLineEdit()->isVisible() )
+    {
+        listView()->rename( this, 0 );
+        QRect r( listView()->contentsToViewport( mapToListView( tr.topLeft() ) ), tr.size() );
+        listView()->renameLineEdit()->setGeometry( r );
+        return true;
+    }
+
+    return false;
+}
+
+int LayerItem::width( const QFontMetrics &fm, const QListView *lv, int c ) const
+{
+    if( c != 0 )
+        return super::width( fm, lv, c );
+
+    const QValueList<LayerProperty> &lp = listView()->d->properties;
+    int propscount = 0;
+    for( int i = 0, n = d->properties.count(); i < n; ++i )
+        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+            propscount++;
+
+    const int iconswidth = propscount * iconSize().width() + (propscount - 1) * listView()->itemMargin();
+
+    if( multiline() )
+        return kMax( super::width( fm, lv, 0 ), iconswidth );
+    else
+        return super::width( fm, lv, 0 ) + iconswidth;
+}
+
+void LayerItem::paintCell( QPainter *painter, const QColorGroup &cg, int column, int width, int align )
+{
+    if( column != 0 )
+    {
+        super::paintCell( painter, cg, column, width, align );
+        return;
+    }
+
+    QPixmap buf( width, height() );
+    QPainter p( &buf );
+
+    p.setFont( font() );
+
+    const QColorGroup cg_ = isEnabled() ? listView()->palette().active() : listView()->palette().disabled();
+
+    const QColor bg = isSelected()  ? cg_.highlight()
+                    : isAlternate() ? listView()->alternateBackground()
+                    : listView()->viewport()->backgroundColor();
+
+    buf.fill( bg );
+
+    if( pixmap( 0 ) )
+        p.drawPixmap( previewRect().right() + listView()->itemMargin(), 0, *pixmap( 0 ) );
+
+    drawText( &p, cg_, textRect() );
+    drawIcons( &p, cg_, iconsRect() );
+    drawPreview( &p, cg_, previewRect() );
+
+    painter->drawPixmap( 0, 0, buf );
+}
+
+void LayerItem::setup()
+{
+    super::setup();
+    setHeight( listView()->d->itemHeight );
+}
+
+
+/////////////////////////
+// Convenience Methods //
+/////////////////////////
+
+LayerItem *LayerList::firstChild() const { return static_cast<LayerItem*>( super::firstChild() ); }
+LayerItem *LayerList::lastChild() const { return static_cast<LayerItem*>( super::lastChild() ); }
+LayerList *LayerItem::listView() const { return static_cast<LayerList*>( super::listView() ); }
+void LayerItem::update() const { listView()->repaintItem( this ); }
+LayerItem *LayerItem::firstChild() const { return static_cast<LayerItem*>( super::firstChild() ); }
+LayerItem *LayerItem::nextSibling() const { return static_cast<LayerItem*>( super::nextSibling() ); }
+LayerItem *LayerItem::parent() const { return static_cast<LayerItem*>( super::parent() ); }
+
+
+#include "layerlist.moc"

@@ -2370,8 +2370,8 @@ void KisView::layersUpdated()
 
     if (img) {
          vKisLayerSP l = img -> layers();
-         for (vKisLayerSP_it it = l.begin(); it != l.end(); ++it)
-              m_layerBox -> insertItem((*it) -> name(), (*it) -> visible(), (*it) -> linked(), (*it) -> locked());
+         for (int n = l.count() - 1; n >= 0; --n)
+              m_layerBox -> insertItem(l[n] -> name(), l[n] -> visible(), l[n] -> linked(), l[n] -> locked());
 
         layerSelected( img -> index(layer) );
         m_layerBox -> slotSetCurrentItem(img -> index(layer));

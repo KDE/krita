@@ -151,7 +151,6 @@ private:
 private slots:
     void slotItemRenamed( QListViewItem *item, const QString &text, int col );
     void slotItemMoved( QListViewItem *item, QListViewItem*, QListViewItem* );
-    void slotItemExecuted( QListViewItem *item );
 
 public: //reimplemented for internal reasons
     virtual void setCurrentItem( QListViewItem *i );
@@ -200,7 +199,7 @@ public: //convenience
     void update() const; //like QWidget::update()
 
 protected:
-    QRect rect() const;
+    virtual QRect rect() const;
 
     int    mapXFromListView( int x ) const;
     int    mapYFromListView( int y ) const;

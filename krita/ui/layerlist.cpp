@@ -131,7 +131,6 @@ LayerList::LayerList( QWidget *parent, const char *name )
                  SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
     connect( this, SIGNAL( moved( QListViewItem*, QListViewItem*, QListViewItem* ) ),
              SLOT( slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* ) ) );
-    connect( this, SIGNAL( executed( QListViewItem* ) ), SLOT( slotItemExecuted( QListViewItem* ) ) );
 }
 
 LayerList::~LayerList()
@@ -486,12 +485,7 @@ void LayerList::contentsMousePressEvent( QMouseEvent *e )
     else
     {
         super::contentsMousePressEvent( e );
-        if( e->button() == Qt::LeftButton && KGlobalSettings::singleClick() )
-        {
-            emit requestNewLayer( static_cast<LayerItem*>( 0 ), static_cast<LayerItem*>( 0 ) );
-            emit requestNewLayer( -1, -1 );
-        }
-        else if( e->button() == Qt::RightButton )
+        if( e->button() == Qt::RightButton )
             showContextMenu();
     }
 }
@@ -499,7 +493,17 @@ void LayerList::contentsMousePressEvent( QMouseEvent *e )
 void LayerList::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
     super::contentsMouseDoubleClickEvent( e );
-    if( !KGlobalSettings::singleClick() && !itemAt( contentsToViewport( e->pos() ) ) )
+    if( KGlobalSettings::singleClick() )
+        return;
+    if( LayerItem *layer = static_cast<LayerItem*>( itemAt( contentsToViewport( e->pos() ) ) ) )
+    {
+        if( !layer->iconsRect().contains( layer->mapFromListView( e->pos() ) ) )
+        {
+            emit requestLayerProperties( layer );
+            emit requestLayerProperties( layer->id() );
+        }
+    }
+    else
     {
         emit requestNewLayer( static_cast<LayerItem*>( 0 ), static_cast<LayerItem*>( 0 ) );
         emit requestNewLayer( -1, -1 );
@@ -617,16 +621,6 @@ void LayerList::slotItemMoved( QListViewItem *item, QListViewItem *afterBefore, 
 
     emit layerMoved( l, l->parent(), a );
     emit layerMoved( l->id(), l->parent() ? l->parent()->id() : -1, a ? a->id() : -1 );
-}
-
-void LayerList::slotItemExecuted( QListViewItem *i )
-{
-    LayerItem *layer = static_cast<LayerItem*>( i );
-    if( layer )
-    {
-        emit requestLayerProperties( layer );
-        emit requestLayerProperties( layer->id() );
-    }
 }
 
 void LayerList::setCurrentItem( QListViewItem *item )

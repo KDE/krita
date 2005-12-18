@@ -57,22 +57,13 @@ public:
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation);
 
-    bool dither8Bit() const;
-    void setDither8Bit(bool dither8Bit);
-
     bool showRulers() const;
     void setShowRulers(bool rulers);
 
-    bool askProfileOnOpen() const;
-    void setAskProfileOnOpen(bool askProfileOnOpen);
+    Q_INT32 pasteBehaviour() const;
+    void setPasteBehaviour(Q_INT32 behaviour);
 
-    bool askProfileOnPaste() const;
-    void setAskProfileOnPaste(bool askProfileOnPaste);
-
-    bool applyMonitorProfileOnCopy() const;
-    void setApplyMonitorProfileOnCopy(bool applyMonitorProfileOnCopy);
-
-    Q_INT32 renderIntent();
+    Q_INT32 renderIntent() const;
     void setRenderIntent(Q_INT32 renderIntent);
 
     bool useOpenGL() const;

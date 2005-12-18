@@ -51,7 +51,7 @@ inline uint UINT8_BLEND(uint a, uint b, uint alpha)
     // Signed arithmetic is needed since a-b might be negative
     int c = ((int(a) - int(b)) * int(alpha)) >> 8;
 
-    return uint(c) + b;
+    return uint(c + b);
 }
 
 inline uint UINT16_MULT(uint a, uint b)
@@ -77,7 +77,7 @@ inline uint UINT16_BLEND(uint a, uint b, uint alpha)
     // However refactored to (a-b)*alpha + b  since that saves a multiplication
     // Signed arithmetic is needed since a-b might be negative
     int c = ((int(a) - int(b)) * int(alpha)) >> 16;
-    return uint(c) + b;
+    return uint(c + b);
 }
 
 inline uint UINT8_TO_UINT16(uint c)

@@ -126,17 +126,6 @@ void KisConfig::setWorkingColorSpace(QString workingColorSpace)
 }
 
 
-QString KisConfig::importProfile() const
-{
-    return m_cfg -> readEntry("importProfile", "None");
-}
-
-void KisConfig::setImportProfile(QString importProfile)
-{
-    m_cfg -> writeEntry("importProfile", importProfile);
-}
-
-
 QString KisConfig::printerColorSpace() const
 {
     return m_cfg -> readEntry("printerColorSpace", "CMYK");
@@ -170,16 +159,6 @@ void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
 }
 
 
-bool KisConfig::dither8Bit() const
-{
-    return m_cfg -> readBoolEntry("dither8Bit", false);
-}
-
-void KisConfig::setDither8Bit(bool dither8Bit)
-{
-    m_cfg -> writeEntry("dither8Bit", dither8Bit);
-}
-
 bool KisConfig::showRulers() const
 {
     return m_cfg->readBoolEntry("showrulers", false);
@@ -190,40 +169,19 @@ void KisConfig::setShowRulers(bool rulers)
     m_cfg->writeEntry("showrulers", rulers);
 }
 
-bool KisConfig::askProfileOnOpen() const
+
+Q_INT32 KisConfig::pasteBehaviour() const
 {
-    return m_cfg -> readBoolEntry("askProfileOnOpen", true);
+    return m_cfg -> readNumEntry("pasteBehaviour", 2);
 }
 
-void KisConfig::setAskProfileOnOpen(bool askProfileOnOpen)
+void KisConfig::setPasteBehaviour(Q_INT32 renderIntent)
 {
-    m_cfg -> writeEntry("askProfileOnOpen", askProfileOnOpen);
-}
-
-
-bool KisConfig::askProfileOnPaste() const
-{
-    return m_cfg -> readBoolEntry("askProfileOnPaste", true);
-}
-
-void KisConfig::setAskProfileOnPaste(bool askProfileOnPaste)
-{
-    m_cfg -> writeEntry("askProfileOnPaste", askProfileOnPaste);
+    m_cfg -> writeEntry("pasteBehaviour", renderIntent);
 }
 
 
-bool KisConfig::applyMonitorProfileOnCopy() const
-{
-    return m_cfg -> readBoolEntry("applyMonitorProfileOnCopy", false);
-}
-
-void KisConfig::setApplyMonitorProfileOnCopy(bool applyMonitorProfileOnCopy)
-{
-    m_cfg -> writeEntry("applyMonitorProfileOnCopy", applyMonitorProfileOnCopy);
-}
-
-
-Q_INT32 KisConfig::renderIntent()
+Q_INT32 KisConfig::renderIntent() const
 {
     return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
 }

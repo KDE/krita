@@ -47,11 +47,12 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
     cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
     cmbColorSpaces -> setCurrentText(defColorSpaceName);
 
+    // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
+    fillCmbProfiles(KisID(cmbColorSpaces->currentText(), ""));
+
     connect(cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
 
-    // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
-    fillCmbProfiles(KisID(cmbColorSpaces->currentText(), ""));
 
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
 }

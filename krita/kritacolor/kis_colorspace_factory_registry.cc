@@ -177,8 +177,26 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
 
 KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const KisProfile * profile)
 {
-    if( profile ) {
-        return getColorSpace( csID, profile->productName());
+    if( profile )
+    {
+        KisColorSpace *cs = getColorSpace( csID, profile->productName());
+
+        if(!cs)
+        {
+            // The profile was not stored and thus not the combination either
+            KisColorSpaceFactory *csf = get(csID);
+            if(!csf)
+                return 0;
+
+            KisColorSpace *cs = csf -> createColorSpace(this, const_cast<KisProfile *>(profile));
+            if(!cs )
+                return 0;
+
+            QString name = csID.id() + "<comb>" + profile->productName();
+            m_csMap[name] = cs;
+        }
+
+        return cs;
     } else {
         return getColorSpace( csID, "");
     }

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>572</width>
-            <height>711</height>
+            <height>595</height>
         </rect>
     </property>
     <property name="caption">
@@ -373,7 +373,7 @@
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>41</height>
+                    <height>0</height>
                 </size>
             </property>
         </spacer>
@@ -420,7 +420,7 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kis_cmb_idlist.h</includehint>
+    <includehint>kiscmbidlist.h</includehint>
     <includehint>kcolorcombo.h</includehint>
 </includehints>
 </UI>

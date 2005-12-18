@@ -28,7 +28,6 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qcombobox.h>
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
@@ -44,6 +43,7 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <kiconloader.h>
+#include <kcombobox.h>
 
 #include <kis_meta_registry.h>
 #include "kis_factory.h"
@@ -118,48 +118,31 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     m_page -> cmbPrintingColorSpace -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
     m_page -> cmbPrintingColorSpace -> setCurrentText(cfg.printerColorSpace());
 
-    refillMonitorProfiles(KisID(cfg.workingColorSpace(), ""));
+    refillMonitorProfiles(KisID("RGBA", ""));
     refillPrintProfiles(KisID(cfg.printerColorSpace(), ""));
-    refillImportProfiles(KisID(cfg.workingColorSpace(), ""));
 
-    m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
-    m_page -> cmbImportProfile -> setCurrentText(cfg.importProfile());
-    m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
+    if(m_page -> cmbMonitorProfile -> contains(cfg.monitorProfile()))
+        m_page -> cmbMonitorProfile -> setCurrentText(cfg.monitorProfile());
+    if(m_page -> cmbPrintProfile -> contains(cfg.printerProfile()))
+        m_page -> cmbPrintProfile -> setCurrentText(cfg.printerProfile());
     m_page -> chkBlackpoint -> setChecked(cfg.useBlackPointCompensation());
-    m_page -> chkDither8Bit -> setChecked(cfg.dither8Bit());
-    m_page -> chkAskOpen -> setChecked(cfg.askProfileOnOpen());
-    m_page -> chkAskPaste -> setChecked(cfg.askProfileOnPaste());
-    m_page -> chkApplyMonitorOnCopy -> setChecked(cfg.applyMonitorProfileOnCopy());
-    m_page -> grpIntent -> setButton(cfg.renderIntent());
-
-    connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
-            this, SLOT(refillMonitorProfiles(const KisID &)));
-
-    connect(m_page -> cmbWorkingColorSpace, SIGNAL(activated(const KisID &)),
-            this, SLOT(refillImportProfiles(const KisID &)));
+    m_page -> grpPasteBehaviour -> setButton(cfg.pasteBehaviour());
+    m_page -> cmbMonitorIntent -> setCurrentItem(cfg.renderIntent());
 
     connect(m_page -> cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
             this, SLOT(refillPrintProfiles(const KisID &)));
-
-
 }
 
 void ColorSettingsTab::setDefault()
 {
-    //TODO
     m_page -> cmbWorkingColorSpace -> setCurrentText("RGBA");
 
     m_page -> cmbPrintingColorSpace -> setCurrentText("CMYK");
+    refillPrintProfiles(KisID("CMYK", ""));
 
-    m_page -> cmbMonitorProfile -> setCurrentText("None");
-    m_page -> cmbImportProfile -> setCurrentText("None");
-    m_page -> cmbPrintProfile -> setCurrentText("None");
     m_page -> chkBlackpoint -> setChecked(false);
-    m_page -> chkDither8Bit -> setChecked(false);
-    m_page -> chkAskOpen -> setChecked(true);
-    m_page -> chkAskPaste -> setChecked(true);
-    m_page -> chkApplyMonitorOnCopy -> setChecked(false);
-    m_page -> grpIntent -> setButton(INTENT_PERCEPTUAL);
+    m_page -> cmbMonitorIntent -> setCurrentItem(INTENT_PERCEPTUAL);
+    m_page -> grpPasteBehaviour -> setButton(2);
 }
 
 
@@ -168,7 +151,6 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
 
     m_page -> cmbMonitorProfile -> clear();
-    m_page -> cmbMonitorProfile -> insertItem(i18n("None"));
 
     if ( !csf )
     return;
@@ -176,41 +158,30 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        if ((*it) -> deviceClass() == icSigDisplayClass)
-            m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
+            if ((*it) -> deviceClass() == icSigDisplayClass)
+                m_page -> cmbMonitorProfile -> insertItem((*it) -> productName());
     }
 
+    m_page -> cmbMonitorProfile -> setCurrentText(csf->defaultProfile());
 }
 
 void ColorSettingsTab::refillPrintProfiles(const KisID & s)
 {
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+
     m_page -> cmbPrintProfile -> clear();
-    m_page -> cmbPrintProfile -> insertItem(i18n("None"));
+
     if ( !csf )
         return;
+
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        if ((*it) -> deviceClass() == icSigOutputClass)
-            m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
+            if ((*it) -> deviceClass() == icSigOutputClass)
+                m_page -> cmbPrintProfile -> insertItem((*it) -> productName());
     }
 
-}
-
-void ColorSettingsTab::refillImportProfiles(const KisID & s)
-{
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
-    m_page -> cmbImportProfile -> clear();
-    m_page -> cmbImportProfile -> insertItem(i18n("None"));
-    if ( !csf )
-        return;
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        if ((*it) -> deviceClass() == icSigInputClass)
-            m_page -> cmbImportProfile -> insertItem((*it) -> productName());
-    }
+    m_page -> cmbPrintProfile -> setCurrentText(csf->defaultProfile());
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -338,16 +309,12 @@ bool PreferencesDialog::editPreferences()
         // Color settings
         cfg.setMonitorProfile( dialog -> m_colorSettings -> m_page -> cmbMonitorProfile -> currentText());
         cfg.setWorkingColorSpace( dialog -> m_colorSettings -> m_page -> cmbWorkingColorSpace -> currentText());
-        cfg.setImportProfile( dialog -> m_colorSettings -> m_page -> cmbImportProfile -> currentText());
         cfg.setPrinterColorSpace( dialog -> m_colorSettings -> m_page -> cmbPrintingColorSpace -> currentText());
         cfg.setPrinterProfile( dialog -> m_colorSettings -> m_page -> cmbPrintProfile -> currentText());
 
         cfg.setUseBlackPointCompensation( dialog -> m_colorSettings -> m_page -> chkBlackpoint -> isChecked());
-        cfg.setDither8Bit( dialog -> m_colorSettings -> m_page -> chkDither8Bit -> isChecked());
-        cfg.setAskProfileOnOpen( dialog -> m_colorSettings -> m_page -> chkAskOpen -> isChecked());
-        cfg.setAskProfileOnPaste( dialog -> m_colorSettings -> m_page -> chkAskPaste -> isChecked());
-        cfg.setApplyMonitorProfileOnCopy( dialog -> m_colorSettings -> m_page -> chkApplyMonitorOnCopy -> isChecked());
-        cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> grpIntent -> selectedId());
+        cfg.setPasteBehaviour( dialog -> m_colorSettings -> m_page -> grpPasteBehaviour->selectedId());
+        cfg.setRenderIntent( dialog -> m_colorSettings -> m_page -> cmbMonitorIntent -> currentItem());
 
         // it's scaled from 0 - 6, but the config is in 0 - 300
         cfg.setSwappiness(dialog -> m_performanceSettings -> m_swappiness -> value() * 50);

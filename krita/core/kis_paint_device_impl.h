@@ -185,8 +185,9 @@ public:
 
     /**
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
+     * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& img, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.

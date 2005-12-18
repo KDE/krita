@@ -215,7 +215,7 @@ KisLayerSP KisPattern::image(KisColorSpace * colorSpace) {
 
     Q_CHECK_PTR(layer);
 
-    layer->convertFromQImage(m_img);
+    layer->convertFromQImage(m_img,"");
 
     m_colorspaces[colorSpace->id().id()] = layer;
     return layer;

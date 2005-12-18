@@ -78,10 +78,11 @@ public:
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      *
      * @param img The QImage to convert from. We will use the RGBA colorspace and no profile.
+     * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
      * @param offsetX the offset in X coordinates
      * @param offsetY the offset in Y coordinates
      */
-    virtual void convertFromQImage(const QImage& img, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0) = 0;
+    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0) = 0;
 
     /**
      * Return the number of bytes a pixel takes.

@@ -72,7 +72,6 @@ private slots:
 
     void refillMonitorProfiles(const KisID & s);
     void refillPrintProfiles(const KisID & s);
-    void refillImportProfiles(const KisID & s);
 
 public:
     void setDefault();

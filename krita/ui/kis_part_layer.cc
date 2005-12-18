@@ -127,7 +127,8 @@ void KisPartLayer::repaint() {
     m_doc -> document() -> paintEverything(painter, sizeRect, true);
 
     QImage qimg = pm.convertToImage();
-    convertFromQImage(qimg, rect.left(), rect.top()); // We need to paint offsetted
+    convertFromQImage(qimg,"", rect.left(), rect.top()); //assume the part is sRGB for now
+                                                                              // And we need to paint offsetted
 
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry

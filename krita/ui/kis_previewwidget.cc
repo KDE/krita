@@ -174,7 +174,7 @@ void KisPreviewWidget::zoomChanged()
 
     m_image->resize(m_scaledPreview.width(), m_scaledPreview.height());
     m_previewLayer = new KisLayer(m_image, "preview layer", OPACITY_OPAQUE);
-    m_previewLayer->convertFromQImage(m_scaledPreview);
+    m_previewLayer->convertFromQImage(m_scaledPreview,""); //should perhaps be m_profile->name
     
     emit updated();
  }

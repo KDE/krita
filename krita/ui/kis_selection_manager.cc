@@ -444,20 +444,6 @@ KisLayerSP KisSelectionManager::paste()
         gc.bitBlt(0, 0, COMPOSITE_COPY, clip.data(), r.x(), r.y(), r.width(), r.height());
         gc.end();
 
-        KisConfig cfg;
-        if (cfg.askProfileOnPaste() && clip -> colorSpace() -> getProfile() == 0 && img -> getProfile() != 0) {
-            KisDlgApplyProfile * dlg = new KisDlgApplyProfile(m_parent);
-            Q_CHECK_PTR(dlg);
-
-            if (dlg -> exec() == QDialog::Accepted) {
-                KisProfile *  profile = dlg -> profile();
-                if (profile != img -> getProfile()) {
-                    layer -> convertTo(img -> colorSpace(), dlg -> renderIntent());
-                }
-            }
-        }
-
-
         img->layerAdd(layer, img -> index(layer));
 
         //figure out where to position the clip
@@ -471,6 +457,13 @@ KisLayerSP KisSelectionManager::paste()
         center -= QPoint(r.width()/2, r.height()/2);
         layer -> move(center.x(), center.y());
 
+/*XXX CBR have an idea of asking the user if he is about to paste a clip ion another cs than that of
+ the image if that is what he want rather than silently converting
+        if (clip->colorSpace != img ->colorSpace())
+            if (dlg -> exec() == QDialog::Accepted)
+                layer -> convertTo(img -> colorSpace());
+*/
+
         img -> notify();
 
         return layer;
@@ -482,7 +475,7 @@ void KisSelectionManager::pasteNew()
 {
     kdDebug() << "Paste new!\n";
 
-        KisPaintDeviceImplSP clip = m_clipboard -> clip();
+    KisPaintDeviceImplSP clip = m_clipboard -> clip();
     if (!clip) return;
 
     QRect r = clip->exactBounds();

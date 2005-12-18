@@ -65,6 +65,7 @@ private:
     static KisClipboard * m_singleton;
 
     KisPaintDeviceImplSP m_clip;
+    bool m_hasClip;
 
     bool m_pushedClipboard;
 

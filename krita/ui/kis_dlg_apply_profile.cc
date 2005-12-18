@@ -60,13 +60,7 @@ KisProfile *  KisDlgApplyProfile::profile() const
 {
     QString profileName;
 
-    if (m_page -> cmbProfile -> currentItem() == 0) {
-        // Use import profile
-        KisConfig cfg;
-        profileName = cfg.importProfile();
-    } else {
-        profileName = m_page -> cmbProfile -> currentText();
-    }
+    profileName = m_page -> cmbProfile -> currentText();
 
     return KisMetaRegistry::instance()->csRegistry()->getProfileByName(profileName);
 }
@@ -77,20 +71,24 @@ int KisDlgApplyProfile::renderIntent() const
 }
 
 
-// XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
+// XXX: Copy & paste from kis_custom_image_widget -- refactor to separate class
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
+    m_page -> cmbProfile -> clear();
+
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+        return;
+    }
 
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
-    m_page -> cmbProfile -> clear();
-    m_page -> cmbProfile -> insertItem(i18n("None"));
+    if (csf == 0) return;
+
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page -> cmbProfile -> insertItem((*it) -> productName());
+            m_page -> cmbProfile -> insertItem((*it) -> productName());
     }
-
-
+    m_page -> cmbProfile -> setCurrentText(csf->defaultProfile());
 }
 
 #include "kis_dlg_apply_profile.moc"

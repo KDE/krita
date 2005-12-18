@@ -19,8 +19,15 @@
 #include <qclipboard.h>
 #include <qobject.h>
 #include <qimage.h>
+#include <qmessagebox.h>
+#include <qbuffer.h>
+#include <kmultipledrag.h>
+#include <klocale.h>
 
 #include "kdebug.h"
+
+#include "KoStore.h"
+#include "KoStoreDrag.h"
 
 #include "kis_types.h"
 #include "kis_paint_device_impl.h"
@@ -38,12 +45,15 @@ KisClipboard::KisClipboard()
     KisClipboard::m_singleton = this;
 
     m_pushedClipboard = false;
+    m_hasClip = false;
     m_clip = 0;
 
+    // Check that we don't already have a clip ready
+    clipboardDataChanged();
+
+    // Make sure we are notified when clipboard changes
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
          this, SLOT( clipboardDataChanged() ) );
-
-
 }
 
 KisClipboard::~KisClipboard()
@@ -64,47 +74,153 @@ void KisClipboard::setClip(KisPaintDeviceImplSP selection)
 {
     m_clip = selection;
 
-    if (selection) {
-        KisConfig cfg;
-        QImage qimg;
+    if (!selection)
+        return;
 
-        if (cfg.applyMonitorProfileOnCopy()) {
-            // XXX: Is this a performance problem?
-            KisConfig cfg;
-            QString monitorProfileName = cfg.monitorProfile();
-            KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
-            qimg = selection -> convertToQImage(monitorProfile);
-        }
-        else {
-            qimg = selection -> convertToQImage(0);
-        }
-        QClipboard *cb = QApplication::clipboard();
+    m_hasClip = true;
 
-        cb -> setImage(qimg);
-        m_pushedClipboard = true;
+    // We'll create a store (ZIP format) in memory
+    QBuffer buffer;
+    QCString mimeType("application/x-krita-selection");
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    Q_ASSERT( store );
+    Q_ASSERT( !store->bad() );
+
+    // Layer data
+    if (store -> open("layerdata")) {
+        if (!selection -> write(store)) {
+            selection -> disconnect();
+            store -> close();
+            return;
+        }
+        store -> close();
     }
+
+    // ColorSpace id of layer data
+    if (store -> open("colorspace")) {
+        QString csName = selection -> colorSpace()->id().id();
+        store->write(csName.ascii(), strlen(csName.ascii()));
+        store -> close();
+    }
+
+    if (selection -> colorSpace() -> getProfile()) {
+        KisAnnotationSP annotation = selection -> colorSpace() -> getProfile() -> annotation();
+         if (annotation) {
+            // save layer profile
+             if (store -> open("profile.icc")) {
+                store -> write(annotation -> annotation());
+                store -> close();
+            }
+        }
+    }
+
+    delete store;
+
+    // We also create a QImage so we can interchange with other applications
+    QImage qimg;
+    KisConfig cfg;
+    QString monitorProfileName = cfg.monitorProfile();
+    KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
+    qimg = selection -> convertToQImage(monitorProfile);
+
+    QImageDrag *qimgDrag = new QImageDrag(qimg);
+    KMultipleDrag *multiDrag = new KMultipleDrag();
+    if ( !qimg.isNull() )
+        multiDrag->addDragObject( qimgDrag );
+    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
+    storeDrag->setEncodedData( buffer.buffer() );
+    multiDrag->addDragObject( storeDrag );
+
+
+    QClipboard *cb = QApplication::clipboard();
+    cb -> setData(multiDrag);
+    m_pushedClipboard = true;
 }
 
 KisPaintDeviceImplSP KisClipboard::clip()
 {
+    QClipboard *cb = QApplication::clipboard();
+    QCString mimeType("application/x-krita-selection");
+    QMimeSource *cbData = cb->data();
+
+    if(cbData && cbData->provides(mimeType))
+    {
+        QBuffer buffer(cbData->encodedData(mimeType));
+        KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
+        KisProfile *profile=0;
+
+        if (store -> hasFile("profile.icc")) {
+            QByteArray data;
+            store -> open("profile.icc");
+            data = store -> read(store -> size());
+            store -> close();
+           profile = new KisProfile(data);
+        }
+
+        QString csName;
+        // ColorSpace id of layer data
+        if (store -> hasFile("colorspace")) {
+            store -> open("colorspace");
+            csName = QString(store->read(store -> size()));
+            store -> close();
+        }
+
+        KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
+
+        m_clip = new KisPaintDeviceImpl(cs, "KisClipboard created clipboard selection");
+
+        if (store -> hasFile("layerdata")) {
+            store -> open("layerdata");
+            m_clip->read(store);
+            store -> close();
+        }
+        delete store;
+    }
+    else
+    {
+        QImage qimg = cb -> image();
+
+        if (qimg.isNull())
+            return 0;
+
+        KisConfig cfg;
+
+        Q_UINT32 behaviour = cfg.pasteBehaviour();
+
+        if(behaviour==2)
+        {
+            // Ask user each time
+            behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications data is supposed to be sRGB.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret the data?"),"As &Web","As on &monitor");
+        }
+
+        KisColorSpace * cs;
+        QString profileName("");
+        if(behaviour==1)
+            profileName = cfg.monitorProfile();
+
+        cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""), profileName);
+        m_clip = new KisPaintDeviceImpl(cs, "KisClipboard created clipboard selection");
+        Q_CHECK_PTR(m_clip);
+        m_clip -> convertFromQImage(qimg, profileName);
+    }
+
     return m_clip;
 }
 
 void KisClipboard::clipboardDataChanged()
 {
+    m_hasClip = false;
     if (!m_pushedClipboard) {
         QClipboard *cb = QApplication::clipboard();
         QImage qimg = cb -> image();
+        QMimeSource *cbData = cb->data();
+        QCString mimeType("application/x-krita-selection");
 
-        if (!qimg.isNull()) {
-            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"");
+        if(cbData && cbData->provides(mimeType))
+            m_hasClip = true;
 
-            m_clip =
-                new KisPaintDeviceImpl(cs,
-                           "KisClipboard created clipboard selection");
-            Q_CHECK_PTR(m_clip);
-            m_clip -> convertFromQImage(qimg);
-        }
+        if (!qimg.isNull())
+            m_hasClip = true;
     }
 
     m_pushedClipboard = false;
@@ -113,10 +229,7 @@ void KisClipboard::clipboardDataChanged()
 
 bool KisClipboard::hasClip()
 {
-    if (m_clip != 0) {
-        return true;
-    }
-    return false;
+    return m_hasClip;
 }
 
 #include "kis_clipboard.moc"

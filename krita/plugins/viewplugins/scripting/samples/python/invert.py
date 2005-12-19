@@ -32,7 +32,8 @@ class Inverter:
         layer.beginPainting("invert")
         it = layer.createRectIterator( 0, 0, width, height )
         print "kikoo\n"
-        while (not it.isDone()) :
+        finesh = it.isDone()
+        while (not finesh) :
             r = it.getRed()
             nr = 255 - r
             it.setRed(nr)
@@ -43,7 +44,7 @@ class Inverter:
             nb = 255-b
             it.setBlue(nb)
             script.incProgress()
-            it.next()
+            finesh = it.next()
         layer.endPainting()
 
 Inverter()

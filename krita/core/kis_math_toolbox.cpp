@@ -20,7 +20,9 @@
 
 #include "kis_math_toolbox.h"
 
+#if HAVE_OPENEXR
 #include <half.h>
+#endif
 
 #include "kis_basic_math_toolbox.h"
 #include "kis_iterators_pixel.h"
@@ -73,9 +75,11 @@ void KisMathToolbox::transformToFR(KisPaintDeviceImplSP src, KisFloatRepresentat
             case KisChannelInfo::UINT16:
                 f[k] = toDouble<Q_UINT16>;
                 break;
+#if HAVE_OPENEXR		
             case KisChannelInfo::FLOAT16:
                 f[k] = toDouble<half>;
                 break;
+#endif
             case KisChannelInfo::FLOAT32:
                 f[k] = toDouble<float>;
                 break;
@@ -123,9 +127,11 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceImplSP dst, KisFloatRepresent
             case KisChannelInfo::UINT16:
                 f[k] = fromDouble<Q_UINT16>;
                 break;
+#if HAVE_OPENEXR
             case KisChannelInfo::FLOAT16:
                 f[k] = fromDouble<half>;
                 break;
+#endif		
             case KisChannelInfo::FLOAT32:
                 f[k] = fromDouble<float>;
                 break;

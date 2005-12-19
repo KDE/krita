@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#if HAVE_OPENEXR
+#ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
 
@@ -271,7 +271,7 @@ void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
     }
 }
 
-#if HAVE_OPENEXR
+#ifdef HAVE_OPENEXR
 // ------------ Float16 Half ---------------------
 KisBasicF16HalfHistogramProducer::KisBasicF16HalfHistogramProducer(const KisID& id,
                                                                    KisColorSpace *cs)

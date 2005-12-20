@@ -93,7 +93,11 @@
 #include "kis_factory.h"
 #include "kis_gradient.h"
 //#include "kis_guide.h"
+
+#ifdef LAYERBOXDISABLE
 #include "kis_layerbox.h"
+#endif
+
 #include "kis_layer.h"
 #include "kis_move_event.h"
 #include "kis_paint_device_impl.h"
@@ -199,7 +203,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_statusBarSelectionLabel( 0 )
     , m_statusBarProfileLabel( 0 )
     , m_progress( 0 )
+    #ifdef LAYERBOXDISABLE
     , m_layerBox( 0 )
+    #endif
     , m_toolBox( 0 )
     , m_brush( 0 )
     , m_pattern( 0 )
@@ -214,7 +220,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
+    #ifdef LAYERBOXDISABLE
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
+    #endif
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
@@ -239,7 +247,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_fg = KisColor(Qt::black, cs);
     m_bg = KisColor(Qt::white, cs);
 
+    #ifdef LAYERBOXDISABLE
     createLayerBox();
+    #endif
 
     setupCanvas();
     setupRulers();
@@ -359,7 +369,7 @@ KoPaletteManager * KisView::paletteManager()
     return m_paletteManager;
 }
 
-
+#ifdef LAYERBOXDISABLE
 void KisView::createLayerBox()
 {
     m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, this);
@@ -383,7 +393,7 @@ void KisView::createLayerBox()
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 
 }
-
+#endif
 
 DCOPObject* KisView::dcopObject()
 {
@@ -1341,7 +1351,9 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 layer -> setImage(current);
                 layer -> setName(current -> nextLayerName());
                 current->layerAdd(layer, 0);
+                #ifdef LAYERBOXDISABLE
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
+                #endif
             }
             resizeEvent(0);
             updateCanvas();
@@ -2203,7 +2215,9 @@ void KisView::layerAdd()
                 for (uint i = 0; i < actions.count(); i++)
                     actions.at(i) -> act(layer.data(), img -> width(), img -> height());
 
+                #ifdef LAYERBOXDISABLE
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
+                #endif
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2262,7 +2276,9 @@ void KisView::layerRemove()
             Q_INT32 n = img -> index(layer);
 
             img->layerRemove(layer);
+            #ifdef LAYERBOXDISABLE
             m_layerBox->slotSetCurrentItem(n - 1);
+            #endif
             resizeEvent(0);
             updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2288,7 +2304,9 @@ void KisView::layerDuplicate()
     KisLayerSP layer = img->layerAdd(dup, index);
 
     if (layer) {
+        #ifdef LAYERBOXDISABLE
         m_layerBox->slotSetCurrentItem(img -> index(layer));
+        #endif
         resizeEvent(0);
         updateCanvas(0, 0, img -> width(), img -> height());
     } else {
@@ -2361,6 +2379,7 @@ void KisView::layersUpdated()
     KisImageSP img = currentImg();
     if (!img) return;
 
+    #ifdef LAYERBOXDISABLE
     KisLayerSP layer = img -> activeLayer();
 
     layerUpdateGUI(img && layer);
@@ -2379,6 +2398,7 @@ void KisView::layersUpdated()
 
     m_layerBox -> setUpdatesAndSignalsEnabled(true);
     m_layerBox -> updateAll();
+    #endif
     img->notify();
     notifyObservers();
 }
@@ -2437,10 +2457,12 @@ void KisView::layerSelected(int n)
     if (opacity)
         opacity++;
 
+    #ifdef LAYERBOXDISABLE
     m_layerBox -> setOpacity(opacity);
     m_layerBox -> setColorSpace(l -> colorSpace());
     m_layerBox -> setCompositeOp(l -> compositeOp());
     m_layerBox -> slotSetCurrentItem(n);
+    #endif
 
     updateCanvas();
 }
@@ -3094,7 +3116,9 @@ void KisView::createDockers()
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
 
     m_paletteManager->showWidget("hsvwidget");
+    #ifdef LAYERBOXDISABLE
     m_paletteManager->showWidget("layerbox");
+    #endif
     m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
 
 

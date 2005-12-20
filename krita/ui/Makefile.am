@@ -14,7 +14,6 @@ libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritaco
 
 libkritaui_la_SOURCES = \
     imageviewer.cc \
-    layerlist.cpp \
     kcurve.cc \
     kis_autobrush.cc \
     kis_autogradient.cc \
@@ -50,7 +49,6 @@ libkritaui_la_SOURCES = \
     kis_label_cursor_pos.cc \
     kis_label_progress.cc \
     kis_label_zoom.cc \
-    kis_layerbox.cc \
     kis_multi_bool_filter_widget.cc \
     kis_multi_double_filter_widget.cc \
     kis_multi_integer_filter_widget.cc \
@@ -94,7 +92,6 @@ libkritaui_la_SOURCES = \
     wdgcolorsettings.ui \
     wdgdisplaysettings.ui \
     wdggeneralsettings.ui \
-    wdglayerbox.ui \
     wdglayerproperties.ui \
     wdgmatrix.ui \
     wdgnewimage.ui \
@@ -106,7 +103,6 @@ libkritaui_la_SOURCES = \
 
 noinst_HEADERS = \
     imageviewer.h \
-    layerlist.h \
     kcurve.h \
     kis_aboutdata.h \
     kis_autobrush.h \
@@ -146,7 +142,6 @@ noinst_HEADERS = \
     kis_label_cursor_pos.h \
     kis_label_progress.h \
     kis_label_zoom.h \
-    kis_layerbox.h \
     kis_matrix_widget.ui.h \
     kis_move_event.h \
     kis_multi_bool_filter_widget.h \

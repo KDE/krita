@@ -84,7 +84,9 @@ class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
 class KisLabelProgress;
+#ifdef LAYERBOXDISABLE
 class KisLayerBox;
+#endif
 class KisMoveEvent;
 class KisPaletteWidget;
 class KisPattern;
@@ -307,7 +309,9 @@ private:
     void imgUpdateGUI();
 
     void layerUpdateGUI(bool enable);
+    #ifdef LAYERBOXDISABLE
     void createLayerBox();
+    #endif
     void createDockers();
 
     void paintView(const KisRect& rc);
@@ -469,7 +473,9 @@ private:
     QLabel *m_statusBarProfileLabel;
     KisLabelProgress *m_progress;
 
+#ifdef LAYERBOXDISABLE
     KisLayerBox *m_layerBox;
+#endif
     KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 

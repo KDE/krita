@@ -207,7 +207,6 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 void KisToolManager::setCurrentTool( const QString & toolName )
 {
     setCurrentTool(findTool(toolName));
-    m_toolBox->slotSetTool(toolName);
 }
 
 KisTool * KisToolManager::currentTool() const

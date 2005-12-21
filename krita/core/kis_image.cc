@@ -44,14 +44,16 @@
 //#include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device_impl.h"
-#include "kis_paint_device_visitor.h"
+#include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_colorspace_convert_visitor.h"
 #include "kis_background.h"
 #include "kis_nameserver.h"
 #include "kis_undo_adapter.h"
-#include "kis_flatten.h"
 #include "kis_merge.h"
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
@@ -124,12 +126,12 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img, vKisLayerSP& beforeLayers, vKisLayerSP& afterLayers, const QString& name) : super(name)
+        KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img, KisLayerSP oldRootLayer, KisLayerSP newRootLayer, const QString& name) : super(name)
             {
                 m_adapter = adapter;
                 m_img = img;
-                m_beforeLayers = beforeLayers;
-                m_afterLayers = afterLayers;
+                m_oldRootLayer = oldRootLayer;
+                m_newRootLayer = newRootLayer;
             }
 
         virtual ~KisChangeLayersCmd()
@@ -141,14 +143,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); ++it) {
-                    m_img -> rm(*it);
-                }
-
-                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); ++it) {
-                    m_img -> add(*it, -1);
-                }
-
+// XXX LAYERREMOVE
                 m_adapter -> setUndo(true);
                 m_img -> notify();
                 m_img -> notifyLayersChanged();
@@ -158,13 +153,7 @@ namespace {
             {
                 m_adapter -> setUndo(false);
 
-                for (vKisLayerSP::const_iterator it = m_afterLayers.begin(); it != m_afterLayers.end(); ++it) {
-                    m_img -> rm(*it);
-                }
-
-                for (vKisLayerSP::const_iterator it = m_beforeLayers.begin(); it != m_beforeLayers.end(); ++it) {
-                    m_img -> add(*it, -1);
-                }
+// XXX LAYERREMOVE
 
                 m_adapter -> setUndo(true);
                 m_img -> notify();
@@ -174,8 +163,8 @@ namespace {
     private:
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
-        vKisLayerSP m_beforeLayers;
-        vKisLayerSP m_afterLayers;
+        KisLayerSP m_oldRootLayer;
+        KisLayerSP m_newRootLayer;
     };
 
 
@@ -269,33 +258,35 @@ namespace {
         typedef KisImageCommand super;
 
     public:
-        KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, Q_INT32 position) : super(name, image)
+        KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis) : super(name, image)
             {
                 m_layer = layer;
-                m_oldPosition = image -> index(layer);
-                m_newPosition = position;
-            }
+                m_oldParent = layer->parent();
+                m_oldAboveThis = layer->nextSibling();
+                m_newParent = parent;
+                m_newAboveThis = aboveThis;
+           }
 
         virtual void execute()
             {
                 setUndo(false);
-                m_image -> setLayerPosition(m_layer, m_newPosition);
-                m_image -> notifyLayersChanged();
+                m_image -> moveLayer(m_layer, m_newParent, m_newAboveThis);
                 setUndo(true);
             }
 
         virtual void unexecute()
             {
                 setUndo(false);
-                m_image -> setLayerPosition(m_layer, m_oldPosition);
-                m_image -> notifyLayersChanged();
+                m_image -> moveLayer(m_layer, m_oldParent, m_oldAboveThis);
                 setUndo(true);
             }
 
     private:
         KisLayerSP m_layer;
-        Q_INT32 m_oldPosition;
-        Q_INT32 m_newPosition;
+        KisLayerSP m_oldParent;
+        KisLayerSP m_oldAboveThis;
+        KisLayerSP m_newParent;
+        KisLayerSP m_newAboveThis;
     };
 
 
@@ -309,7 +300,8 @@ namespace {
             {
                 m_img = img;
                 m_layer = layer;
-                m_index = img->index(layer);
+                m_parent = layer->parent();
+                m_aboveThis = layer->nextSibling();
             }
 
         virtual ~LayerAddCmd()
@@ -319,21 +311,22 @@ namespace {
         virtual void execute()
             {
                 adapter() -> setUndo(false);
-                m_img -> layerAdd(m_layer, m_index);
+                m_img -> addLayer(m_layer, m_parent, m_aboveThis);
                 adapter() -> setUndo(true);
             }
 
         virtual void unexecute()
             {
                 adapter() -> setUndo(false);
-                m_img -> layerRemove(m_layer);
+                m_img -> removeLayer(m_layer);
                 adapter() -> setUndo(true);
             }
 
     private:
         KisImageSP m_img;
         KisLayerSP m_layer;
-        Q_INT32 m_index;
+        KisLayerSP m_parent;
+        KisLayerSP m_aboveThis;
     };
 
     // -------------------------------------------------------
@@ -347,7 +340,8 @@ namespace {
                 m_adapter = adapter;
                 m_img = img;
                 m_layer = layer;
-                m_index = img -> index(layer);
+                m_parent = layer->parent();
+                m_aboveThis = layer->nextSibling();
             }
 
         virtual ~LayerRmCmd()
@@ -357,14 +351,14 @@ namespace {
         virtual void execute()
             {
                 m_adapter -> setUndo(false);
-                m_img -> layerRemove(m_layer);
+                m_img -> removeLayer(m_layer);
                 m_adapter -> setUndo(true);
             }
 
         virtual void unexecute()
             {
                 m_adapter -> setUndo(false);
-                m_img -> layerAdd(m_layer, m_index);
+                m_img -> addLayer(m_layer, m_parent, m_aboveThis);
                 m_adapter -> setUndo(true);
             }
 
@@ -372,7 +366,8 @@ namespace {
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
         KisLayerSP m_layer;
-        Q_INT32 m_index;
+        KisLayerSP m_parent;
+        KisLayerSP m_aboveThis;
     };
 
 
@@ -433,8 +428,6 @@ namespace {
         Q_INT32 m_opacity;
         KisCompositeOp m_compositeOp;
     };
-
-
 }
 
 KisImage::KisImage(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
@@ -464,31 +457,18 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_bkg = new KisBackground();
         Q_CHECK_PTR(m_bkg);
 
-        m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+        m_projection = new KisPaintDeviceImpl(this, m_colorSpace, "projection");
         Q_CHECK_PTR(m_projection);
 
-        m_layers.reserve(rhs.m_layers.size());
-
-        for (vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); ++it) {
-            KisLayerSP layer = new KisLayer(**it);
-            Q_CHECK_PTR(layer);
-
-            layer -> setImage(this);
-            m_layers.push_back(layer);
-            m_layerStack.push_back(layer);
-            m_activeLayer = layer;
-        }
+        m_rootLayer = rhs.m_rootLayer->clone();
 
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
-
 
         m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
         Q_CHECK_PTR(m_nserver);
 
         //m_guides = rhs.m_guides;
-
     }
-
 }
 
 
@@ -570,8 +550,11 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_bkg = new KisBackground();
     Q_CHECK_PTR(m_bkg);
 
-    m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+    m_projection = new KisPaintDeviceImpl(this, m_colorSpace, "projection");
     Q_CHECK_PTR(m_projection);
+
+    m_rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
+    Q_CHECK_PTR(m_rootLayer);
 
     m_xres = 1.0;
     m_yres = 1.0;
@@ -592,6 +575,9 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 #endif
 }
 
+void KisImage::resize(Q_INT32 , Q_INT32 , bool )
+{
+/*LAYERREMOVE
 void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
 {
     if (w != width() || h != height()) {
@@ -603,7 +589,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
         m_width = w;
         m_height = h;
 
-        m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+        m_projection = new KisPaintDeviceImpl(this, colorSpace(), "projection");
         Q_CHECK_PTR(m_projection);
 
         if (cropLayers) {
@@ -625,6 +611,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
         emit sigSizeChanged(KisImageSP(this), w, h);
         notify();
     }
+*/
 }
 
 void KisImage::resize(const QRect& rc, bool cropLayers)
@@ -638,6 +625,9 @@ class ScaleThread : QThread
 {
 };
 
+void KisImage::scale(double , double , KisProgressDisplayInterface *, KisFilterStrategy *)
+{
+/*LAYERREMOVE
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
 {
     if (m_layers.empty()) return; // Nothing to scale
@@ -689,8 +679,12 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         emit sigSizeChanged(KisImageSP(this), w, h);
 
     }
+*/
 }
 
+void KisImage::rotate(double , KisProgressDisplayInterface *)
+{
+/*LAYERREMOVE
 void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 {
     const double pi=3.1415926535897932385;
@@ -744,8 +738,12 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
     emit sigSizeChanged(KisImageSP(this), w, h);
     notify();
+*/
 }
 
+void KisImage::shear(double , double , KisProgressDisplayInterface *)
+{
+/*LAYERREMOVE
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
     const double pi=3.1415926535897932385;
@@ -807,13 +805,12 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         emit sigSizeChanged(KisImageSP(this), w, h);
         notify();
     }
+*/
 }
 
 void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 {
-    // XXX profile() == profile() will mostly result in extra work being done here, but there doesn't seem to be a better way?
-    if ( (m_colorSpace -> id() == dstColorSpace -> id())
-         && (m_colorSpace -> getProfile() == dstColorSpace -> getProfile()) )
+    if ( m_colorSpace == dstColorSpace )
     {
 //         kdDebug(DBG_AREA_CORE) << "KisImage: NOT GOING TO CONVERT\n";
         return;
@@ -823,13 +820,8 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
         m_adapter->beginMacro(i18n("Convert Image Type")); //XXX: fix when string freeze over
     }
 
-    vKisLayerSP_it it;
-    for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-//         kdDebug() << "Converting layer " << ( *it )->name() << " from " << ( *it )->colorSpace()->id().name()
-//                   << " to " << dstColorSpace->id().name() << "\n";
-
-        (*it) -> convertTo(dstColorSpace, renderingIntent);
-    }
+    KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
+    m_rootLayer->accept(visitor);
 
     m_projection->convertTo(dstColorSpace, renderingIntent);
 
@@ -839,7 +831,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
                                                          m_colorSpace, dstColorSpace));
         m_adapter->endMacro();
     }
-
 
     setColorSpace(dstColorSpace);
 
@@ -886,183 +877,42 @@ Q_INT32 KisImage::height() const
     return m_height;
 }
 
-
-bool KisImage::empty() const
-{
-    return m_layers.size() > 0;
-}
-
-vKisLayerSP KisImage::layers()
-{
-    return m_layers;
-}
-
-const vKisLayerSP& KisImage::layers() const
-{
-    return m_layers;
-}
-
 KisPaintDeviceImplSP KisImage::activeDevice()
 {
+/*LAYERREMOVE
     if (m_activeLayer) {
         return m_activeLayer.data();
     }
-
+*/
     return 0;
 }
 
 KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
 {
-    KisLayerSP layer;
-    layer = new KisLayer(this, name, devOpacity);
-    Q_CHECK_PTR(layer);
-
-    // No need to fill the layer with something; it's empty and transparent
-    // and doesn't have any pixels by default.
-    if (layer && add(layer, -1)) {
-        layer = activate(layer);
-
-        if (layer) {
-            top(layer);
-
-            if (m_adapter->undo())
-                m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-            emit sigImageModified();
-            layer -> setVisible(true);
-            emit sigLayersUpdated(this);
-        }
-    }
-
-    return layer;
+//LAYERREMOVE
+//    return layerAdd(name,,, devOpacity, colorSpace());
+return 0;
 }
 
 KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy)
 {
     KisLayerSP layer;
-    layer = new KisLayer(colorstrategy, name);
+    layer = new KisPaintLayer(this, name, opacity, colorstrategy);
     Q_CHECK_PTR(layer);
 
-    layer -> setOpacity(opacity);
     layer -> setCompositeOp(compositeOp);
+    layer -> setVisible(true);
 
-    if (layer && add(layer, -1)) {
-        layer = activate(layer);
-
-        if (layer) {
-            top(layer);
-
-            if (m_adapter->undo())
-                m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-            emit sigImageModified();
-            layer -> setVisible(true);
-            emit sigLayersUpdated(this);
-        }
-    }
-
-    return layer;
-}
-
-
-KisLayerSP KisImage::layerAdd(KisLayerSP l, Q_INT32 position)
-{
-    if (!add(l, -1))
-        return 0;
-
-    emit sigImageModified();
-    setLayerPosition(l, position);
+    addLayer(layer, m_activeLayer->parent(), m_activeLayer->nextSibling());
+    activate(layer);
 
     if (m_adapter->undo())
-        m_adapter->addCommand(new LayerAddCmd(m_adapter, this, l));
+        m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
 
-    l -> setVisible(true);
-    emit sigLayersUpdated(this);
+    //notify() //not needed as the layer is transparent
+    notifyLayersChanged();
 
-    return l;
-}
-
-void KisImage::layerRemove(KisLayerSP layer)
-{
-    if (layer) {
-        emit sigImageModified();
-
-        if (m_adapter->undo())
-            m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer));
-
-        rm(layer);
-        emit sigLayersUpdated(this);
-    }
-}
-
-void KisImage::layerNext(KisLayerSP l)
-{
-    if (l) {
-        Q_INT32 npos = index(l);
-        Q_INT32 n = nlayers();
-
-        if (npos < 0 || npos >= n - 1)
-            return;
-
-        npos--;
-        l = layer(npos);
-
-        if (!l)
-            return;
-
-        if (!l -> visible()) {
-            l -> setVisible(true);
-            emit sigImageModified();
-        }
-
-        if (!activate(l))
-            return;
-
-        for (Q_INT32 i = 0; i < npos; i++) {
-            l = layer(i);
-
-            if (l) {
-                l->setVisible(false);
-            }
-        }
-
-        emit sigImageModified();
-        emit sigLayersUpdated(this);
-    }
-}
-
-void KisImage::layerPrev(KisLayerSP l)
-{
-    if (l) {
-        Q_INT32 npos = index(l);
-        Q_INT32 n = nlayers();
-
-        if (npos < 0 || npos >= n - 1)
-            return;
-
-        npos++;
-        l = layer(npos);
-
-        if (!l)
-            return;
-
-        if (!l -> visible()) {
-            l -> setVisible(true);
-            emit sigImageModified();
-        }
-
-        if (!activate(l))
-            return;
-
-        for (Q_INT32 i = 0; i < npos; i++) {
-            l = layer(i);
-
-            if (l) {
-                l->setVisible(false);
-            }
-        }
-
-        emit sigImageModified();
-        emit sigLayersUpdated(this);
-    }
+    return layer;
 }
 
 void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp,    const QString& name)
@@ -1082,13 +932,15 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
             layer -> setCompositeOp(compositeOp);
         }
 
-        emit sigImageModified();
-        emit sigLayersUpdated(this);
-
         notify();
+        notifyLayersChanged();
     }
 }
 
+KisLayerSP KisImage::rootLayer()
+{
+    return m_rootLayer;
+}
 
 const KisLayerSP KisImage::activeLayer() const
 {
@@ -1102,26 +954,8 @@ KisLayerSP KisImage::activeLayer()
 
 KisLayerSP KisImage::activate(KisLayerSP layer)
 {
-    vKisLayerSP_it it;
-
-    if (m_layers.empty() || !layer)
+    if ( !layer )
         return 0;
-
-    it = qFind(m_layers.begin(), m_layers.end(), layer);
-
-    if (it == m_layers.end()) {
-        layer = m_layers[0];
-        it = m_layers.begin();
-    }
-
-    if (layer) {
-        it = qFind(m_layerStack.begin(), m_layerStack.end(), layer);
-
-        if (it != m_layerStack.end())
-            m_layerStack.erase(it);
-
-        m_layerStack.insert(m_layerStack.begin() + 0, layer);
-    }
 
     if (layer != m_activeLayer) {
         if (m_activeLayer) m_activeLayer->deactivate();
@@ -1129,316 +963,115 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
         if (m_activeLayer) m_activeLayer->activate();
     }
 
-
     return layer;
 }
 
-KisLayerSP KisImage::activateLayer(Q_INT32 n)
+KisLayerSP KisImage::findLayer(const QString& name)
 {
-    if (n < 0 || static_cast<Q_UINT32>(n) > m_layers.size())
-        return 0;
-
-    return activate(m_layers[n]);
-}
-
-KisLayerSP KisImage::layer(Q_INT32 n)
-{
-    if (n < 0 || static_cast<Q_UINT32>(n) > m_layers.size())
-        return 0;
-
-    return m_layers[n];
-
-}
-
-KisLayerSP KisImage::findLayer(const QString & name)
-{
-    for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
-        if (m_layers[i]->name() == name)
-            return m_layers[i];
-    }
+//LAYERREMOVE
     return 0;
 }
 
-
-Q_INT32 KisImage::index(const KisLayerSP &layer)
+bool KisImage::addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis)
 {
-    for (Q_UINT32 i = 0; i < m_layers.size(); i++) {
-        if (m_layers[i] == layer)
-            return i;
-    }
+//LAYERREMOVE
+    if (m_adapter->undo())
+        m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
 
-    return -1;
-}
+    parent->insertLayer(layer, aboveThis);
 
-KisLayerSP KisImage::layer(const QString& name)
-{
-    for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it) {
-        if ((*it) -> name() == name)
-            return *it;
-    }
-
-    return 0;
-}
-
-KisLayerSP KisImage::layer(Q_UINT32 npos)
-{
-    if (npos >= m_layers.size())
-        return 0;
-
-    return m_layers[npos];
-}
-
-bool KisImage::add(KisLayerSP layer, Q_INT32 position)
-{
-    if (layer == 0)
-        return false;
-
-    if (layer -> image() && layer -> image() != KisImageSP(this))
-        return false;
-
-    if (qFind(m_layers.begin(), m_layers.end(), layer) != m_layers.end())
-        return false;
-
-    layer -> setImage(KisImageSP(this));
-
-    if (position == -1) {
-        // Add to bottom of layer stack
-        position = m_layers.size();
-    }
-
-    m_layers.insert(m_layers.begin() + position, layer);
-    activate(layer);
-
-    m_layerStack.push_back(layer);
     return true;
 }
 
-void KisImage::rm(KisLayerSP layer)
+bool KisImage::removeLayer(KisLayerSP layer)
 {
-    if (layer == 0)
-        return;
+//LAYERREMOVE
+    if (m_adapter->undo())
+        m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer));
 
-    vKisLayerSP_it it = qFind(m_layers.begin(), m_layers.end(), layer);
+//    parent->insert(layer);
 
-    if (it == m_layers.end())
-        return;
-
-    m_layers.erase(it);
-    it = qFind(m_layerStack.begin(), m_layerStack.end(), layer);
-
-    if (it != m_layerStack.end())
-        m_layerStack.erase(it);
-
-    layer -> setImage(0);
-
-    if (layer == m_activeLayer) {
-        if (m_layers.empty()) {
-            m_activeLayer = 0;
-        } else {
-            activate(m_layerStack[0]);
-        }
-    }
+    return true;
 }
 
-bool KisImage::raise(KisLayerSP layer)
+bool KisImage::raiseLayer(KisLayerSP l)
 {
-    Q_INT32 position;
-
-    if (layer == 0)
-        return false;
-
-    position = index(layer);
-
-    if (position <= 0)
-        return false;
-
-    return setLayerPosition(layer, position - 1);
+//LAYERREMOVE
+    return true;
 }
 
-KCommand *KisImage::raiseLayerCommand(KisLayerSP layer)
+bool KisImage::lowerLayer(KisLayerSP l)
 {
-    return new KisLayerPositionCommand(i18n("Raise Layer"), this, layer, index(layer) - 1);
+//LAYERREMOVE
+    return true;
 }
 
-bool KisImage::lower(KisLayerSP layer)
+bool KisImage::toTop(KisLayerSP layer)
 {
-    Q_INT32 position;
-    Q_INT32 size;
-
-    if (layer == 0)
-        return false;
-
-    position = index(layer);
-    size = m_layers.size();
-
-    if (position >= size)
-        return false;
-
-    return setLayerPosition(layer, position + 1);
+ //LAYERREMOVE
+   return true;
 }
 
-KCommand *KisImage::lowerLayerCommand(KisLayerSP layer)
+bool KisImage::toBottom(KisLayerSP layer)
 {
-    return new KisLayerPositionCommand(i18n("Lower Layer"), this, layer, index(layer) + 1);
+//LAYERREMOVE
+    return true;
 }
 
-bool KisImage::top(KisLayerSP layer)
+bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis)
 {
-    Q_INT32 position;
-
-    if (layer == 0)
-        return false;
-
-    position = index(layer);
-
-    if (position == 0)
-        return false;
-
-    return setLayerPosition(layer, 0);
-}
-
-KCommand *KisImage::topLayerCommand(KisLayerSP layer)
-{
-    return new KisLayerPositionCommand(i18n("Layer Top"), this, layer, 0);
-}
-
-bool KisImage::bottom(KisLayerSP layer)
-{
-    Q_INT32 position;
-    Q_INT32 size;
-
-    if (layer == 0)
-        return false;
-
-    position = index(layer);
-    size = m_layers.size();
-
-    if (position >= size - 1)
-        return false;
-
-    return setLayerPosition(layer, size - 1);
-}
-
-KCommand *KisImage::bottomLayerCommand(KisLayerSP layer)
-{
-    return new KisLayerPositionCommand(i18n("Layer Bottom"), this, layer, nlayers() - 1);
-}
-
-bool KisImage::setLayerPosition(KisLayerSP layer, Q_INT32 position)
-{
-    Q_INT32 old;
-    Q_INT32 nlayers;
-
-    if (layer == 0)
-        return false;
-
-    old = index(layer);
-
-    if (old < 0)
-        return false;
-
-    nlayers = m_layers.size();
-
-    if (position < 0)
-        position = 0;
-
-    if (position >= nlayers)
-        position = nlayers - 1;
-
-    if (old == position)
-        return true;
-
-    if (position < old) {
-        m_layers.erase(m_layers.begin() + old);
-        m_layers.insert(m_layers.begin() + position, layer);
-    }
-    else {
-        m_layers.insert(m_layers.begin() + position + 1, layer);
-        m_layers.erase(m_layers.begin() + old);
-    }
+//LAYERREMOVE
+    notify();
+    notifyLayersChanged();
 
     return true;
 }
 
 Q_INT32 KisImage::nlayers() const
 {
-    return m_layers.size();
+//LAYERREMOVE
+    return 1;
 }
 
 Q_INT32 KisImage::nHiddenLayers() const
 {
-    Q_INT32 n = 0;
-
-    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it) {
-        const KisLayerSP& layer = *it;
-
-        if (!layer -> visible()) {
-            n++;
-        }
-    }
-
-    return n;
+//LAYERREMOVE
+    return 0;
 }
 
 Q_INT32 KisImage::nLinkedLayers() const
 {
-    Q_INT32 n = 0;
-
-    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it) {
-        const KisLayerSP& layer = *it;
-
-        if (layer -> linked()) {
-            n++;
-        }
-    }
-
-    return n;
-}
-
-Q_INT32 KisImage::lowestVisibleLayerIndex() const
-{
-    Q_INT32 layerIndex;
-
-    for (layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
-        if (m_layers[layerIndex] -> visible()) {
-            return layerIndex;
-        }
-    }
-    return -1;
+//LAYERREMOVE
+    return 0;
 }
 
 void KisImage::flatten()
 {
-    vKisLayerSP beforeLayers = m_layers;
+    KisLayerSP oldRootLayer = m_rootLayer;
 
-    if (m_layers.empty()) return;
+    m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
 
-    KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
 
-    KisFillPainter painter(dst.data());
+    KisPainter painter(dst->paintDevice());
 
-    vKisLayerSP mergeLayers = layers();
+    KisMergeVisitor visitor(this, &painter);
+    oldRootLayer ->accept(visitor);
 
-    KisLayerSP bottomLayer = mergeLayers.back();
-    QString bottomName =  bottomLayer -> name();
-
-    KisMerge<isVisible, All> visitor(this);
-    visitor(painter, mergeLayers);
-    dst -> setName(bottomName);
-
-    add(dst, -1);
+    addLayer(dst, m_rootLayer, 0);
 
     notify();
     notifyLayersChanged();
 
     if (m_adapter && m_adapter -> undo()) {
-        m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Flatten Image")));
+        m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, oldRootLayer, m_rootLayer, i18n("Flatten Image")));
     }
 }
 
 void KisImage::mergeVisibleLayers()
 {
+/*
     vKisLayerSP beforeLayers = m_layers;
 
     QString newName = 0;
@@ -1470,10 +1103,12 @@ void KisImage::mergeVisibleLayers()
     if (m_adapter && m_adapter -> undo()) {
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Visible Layers")));
     }
+*/
 }
 
 void KisImage::mergeLinkedLayers()
 {
+/*
     vKisLayerSP beforeLayers = m_layers;
 
     KisLayerSP dst = new KisLayer(this, nextLayerName(), OPACITY_OPAQUE);
@@ -1499,10 +1134,12 @@ void KisImage::mergeLinkedLayers()
     if (m_adapter && m_adapter -> undo()) {
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Linked Layers")));
     }
+*/
 }
 
 void KisImage::mergeLayer(KisLayerSP l)
 {
+/*
     vKisLayerSP beforeLayers = m_layers;
 
     KisLayerSP dst = new KisLayer(this, l -> name(), OPACITY_OPAQUE);
@@ -1530,6 +1167,7 @@ void KisImage::mergeLayer(KisLayerSP l)
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("&Merge Layers")));
 //XXX fix name after string freeze
     }
+*/
 }
 
 
@@ -1591,8 +1229,8 @@ void KisImage::renderToPainter(Q_INT32 x1,
     }
 
     if (paintFlags & PAINT_SELECTION) {
-        if (m_activeLayer != 0 && m_activeLayer -> hasSelection()) {
-            m_activeLayer -> selection()->paintSelection(img, x1, y1, w, h);
+        if (m_activeLayer != 0) {
+            m_activeLayer -> paintSelection(img, x1, y1, w, h);
         }
     }
 
@@ -1602,15 +1240,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
         }
     }
 
-    if (!img.isNull()) {
-        painter.drawImage(x1, y1, img, 0, 0, w, h);
-
-        if (paintFlags & PAINT_EMBEDDED_RECT) {
-            if (m_activeLayer != 0) {
-                m_activeLayer -> paintBoundingRect(painter, x1, y1);
-            }
-        }
-    }
+    painter.drawImage(x1, y1, img, 0, 0, w, h);
 }
 
 QImage KisImage::convertToQImage(Q_INT32 x1,
@@ -1638,27 +1268,12 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 
 KisPaintDeviceImplSP KisImage::mergedImage()
 {
-    return m_projection.data();
+    return m_projection;
 }
 
-// XXX ### why not use the projection?
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
-    KisPaintDeviceImplSP dev = new KisPaintDeviceImpl(colorSpace(), "merged pixel");
-
-    KisPainter gc;
-
-    gc.begin(dev.data());
-
-    if (!m_layers.empty()) {
-        KisFlatten<flattenAllVisible> visitor(x, y, 1, 1);
-
-        visitor(gc, m_layers);
-    }
-
-    gc.end();
-
-    return dev -> colorAt(x, y);
+    return m_projection -> colorAt(x, y);
 }
 
 void KisImage::updateProjection(const QRect& rc)
@@ -1667,33 +1282,14 @@ void KisImage::updateProjection(const QRect& rc)
 
     // Composite the image
     KisFillPainter gc;
-
-    gc.begin(m_projection.data());
-
-    int layerIndex = lowestVisibleLayerIndex();
-
-    if (layerIndex >= 0) {
-        // Copy the lowest layer rather than compositing it with the background
-        // or an empty image. This means the layer's composite op is ignored, 
-        // which is consistent with Photoshop and gimp.
-        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, m_layers[layerIndex].data(), m_layers[layerIndex] -> opacity(), 
-                  rect.x(), rect.y(), rect.width(), rect.height());
-        --layerIndex;
-
-        while (layerIndex >= 0) {
-            KisLayerSP layer = m_layers[layerIndex];
-
-            if (layer -> visible()) {
-                gc.bitBlt(rect.x(), rect.y(), layer -> compositeOp(), layer.data(), layer -> opacity(),
-                          rect.x(), rect.y(), rect.width(), rect.height());
-            }
-            --layerIndex;
-        }
-    } else {
-        gc.eraseRect(rect);
-    }
-
+    gc.begin(m_projection);
+    gc.eraseRect(rect);
     gc.end();
+
+    KisPainter painter(m_projection);
+    KisMergeVisitor visitor(this, &painter);
+    m_rootLayer ->accept(visitor);
+
     m_renderinit = true;
 }
 
@@ -1709,13 +1305,13 @@ void KisImage::notify(const QRect& rc)
     updateProjection(rect);
 
     if (rect.isValid()) {
-        emit sigImageUpdated(KisImageSP(this), rect);
+        emit sigImageUpdated(rect);
     }
 }
 
 void KisImage::notifyLayersChanged()
 {
-    emit sigLayersChanged(KisImageSP(this));
+    emit sigLayersChanged();
 }
 
 QRect KisImage::bounds() const
@@ -1758,7 +1354,7 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
 
-    m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
+    m_projection = new KisPaintDeviceImpl(this, colorSpace, "projection");
     Q_CHECK_PTR(m_projection);
 
     emit sigColorSpaceChanged(colorSpace);

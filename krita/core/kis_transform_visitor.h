@@ -22,7 +22,6 @@
 
 #include "kis_types.h"
 #include "kis_progress_subject.h"
-#include "kis_paint_device_visitor.h"
 
 class KisPaintDeviceImpl;
 class KisProgressDisplayInterface;
@@ -30,7 +29,7 @@ class KisHLineIteratorPixel;
 class KisVLineIteratorPixel;
 class KisFilterStrategy;
 
-class KisTransformVisitor : public KisProgressSubject, KisPaintDeviceImplVisitor {
+class KisTransformVisitor : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
@@ -41,44 +40,6 @@ public:
     ~KisTransformVisitor();
 
 public:
-    virtual bool visit(KisPainter& gc, KisPaintDeviceImplSP dev)
-    {
-        visit(gc, dev);
-        
-        return true;
-    }
-
-    virtual bool visit(KisPainter& gc, vKisPaintDeviceImplSP& devs)
-    {
-        for (Q_INT32 i = devs.size() - 1; i >= 0; i--)
-            visit(gc, devs[i]);
-
-        return true;
-    }
-
-    virtual bool visit(KisPainter& gc, vKisLayerSP& layers)
-    {
-        for (Q_INT32 i = layers.size() - 1; i >= 0; i--) {
-            KisLayerSP& layer = layers[i];
-
-            visit(gc, layer.data());
-        }
-
-        return true;
-    }
-
-    virtual bool visit(KisPainter& gc, KisLayerSP layer)
-    {
-        visit(gc, layer.data());
-        return true; 
-    }
-
-    virtual bool visit(KisPainter& gc, KisSelectionSP selection)
-    {
-        visit(gc, selection.data());
-        return true; 
-    }
-    
 	bool isCanceled() { return m_cancelRequested;};
 private:
     bool visit(KisPainter& gc, KisPaintDeviceImpl *dev);

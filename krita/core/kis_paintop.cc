@@ -41,11 +41,11 @@ KisPaintOp::~KisPaintOp()
 {
 }
 
-KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask) {
+KisPaintDeviceImplSP KisPaintOp::computeDab(KisAlphaMaskSP mask) {
     return computeDab(mask, m_painter -> device() -> colorSpace());
 }
 
-KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
+KisPaintDeviceImplSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
 {
     // XXX: According to the SeaShore source, the Gimp uses a
     // temporary layer the size of the layer that is being painted
@@ -54,7 +54,7 @@ KisLayerSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisLayerSP dab = new KisLayer(cs, "dab");
+    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(cs, "dab");
     Q_CHECK_PTR(dab);
 
     KisColor kc = m_painter -> paintColor();

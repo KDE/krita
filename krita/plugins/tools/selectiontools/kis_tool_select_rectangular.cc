@@ -182,11 +182,11 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
             if (img) {
 
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisLayerSP layer = img -> activeLayer();
-                bool hasSelection = layer -> hasSelection();
+                KisPaintDeviceImplSP dev = img -> activeDevice();
+                bool hasSelection = dev -> hasSelection();
 
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), layer.data());
-                KisSelectionSP selection = layer -> selection();
+                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
+                KisSelectionSP selection = dev -> selection();
                 QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
 
@@ -203,24 +203,24 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                         selection->invert();
                 }
 
-                KisSelectionSP tmpSel = new KisSelection(layer.data(),"tmp sel");
+                KisSelectionSP tmpSel = new KisSelection(dev,"tmp sel");
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {
                     case SELECTION_ADD:
-                        layer->addSelection(tmpSel);
+                        dev->addSelection(tmpSel);
                         break;
                     case SELECTION_SUBTRACT:
-                        layer->subtractSelection(tmpSel);
+                        dev->subtractSelection(tmpSel);
                         break;
                     default:
                         break;
                 }
 
                 if(hasSelection)
-                    layer->emitSelectionChanged(rc);
+                    dev->emitSelectionChanged(rc);
                 else
-                    layer->emitSelectionChanged();
+                    dev->emitSelectionChanged();
 
                 QApplication::restoreOverrideCursor();
             }

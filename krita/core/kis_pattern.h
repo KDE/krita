@@ -43,10 +43,10 @@ public:
     virtual QImage img();
 
     /**
-     * returns a KisLayerSP made with colorSpace as the ColorSpace strategy
+     * returns a KisPaintDeviceImplSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisLayerSP image(KisColorSpace * colorSpace);
+    KisPaintDeviceImplSP image(KisColorSpace * colorSpace);
 
     Q_INT32 width() const;
     Q_INT32 height() const;
@@ -61,7 +61,7 @@ private:
 private:
     QByteArray m_data;
     QImage m_img;
-    QMap<QString, KisLayerSP> m_colorspaces;
+    QMap<QString, KisPaintDeviceImplSP> m_colorspaces;
 
     Q_INT32 m_width;
     Q_INT32 m_height;

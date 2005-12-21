@@ -43,6 +43,7 @@
 #include "kis_color.h"
 #include "kis_integer_maths.h"
 #include "kis_colorspace_factory_registry.h"
+#include "kis_selection.h"
 
 #include "kis_paint_device.h"
 #include "kis_paint_device_iface.h"
@@ -84,81 +85,6 @@ namespace {
         if (m_paintDevice -> image()) {
             m_paintDevice -> image() -> notifyLayersChanged();
         }
-    }
-
-    class KisPaintDeviceImplVisibilityCommand : public KisPaintDeviceImplCommand {
-        typedef KisPaintDeviceImplCommand super;
-
-    public:
-        KisPaintDeviceImplVisibilityCommand(KisPaintDeviceImplSP paintDevice, bool oldVisibility, bool newVisibility);
-
-        virtual void execute();
-        virtual void unexecute();
-
-    private:
-        bool m_oldVisibility;
-        bool m_newVisibility;
-    };
-
-    KisPaintDeviceImplVisibilityCommand::KisPaintDeviceImplVisibilityCommand(KisPaintDeviceImplSP paintDevice, bool oldVisibility, bool newVisibility) :
-        super(i18n("Layer Visibility"), paintDevice)
-    {
-        m_oldVisibility = oldVisibility;
-        m_newVisibility = newVisibility;
-    }
-
-    void KisPaintDeviceImplVisibilityCommand::execute()
-    {
-        setUndo(false);
-        m_paintDevice -> setVisible(m_newVisibility);
-        notifyPropertyChanged();
-        setUndo(true);
-    }
-
-    void KisPaintDeviceImplVisibilityCommand::unexecute()
-    {
-        setUndo(false);
-        m_paintDevice -> setVisible(m_oldVisibility);
-        notifyPropertyChanged();
-        setUndo(true);
-    }
-
-    class KisPaintDeviceImplCompositeOpCommand : public KisPaintDeviceImplCommand {
-        typedef KisPaintDeviceImplCommand super;
-
-    public:
-        KisPaintDeviceImplCompositeOpCommand(KisPaintDeviceImplSP paintDevice, const KisCompositeOp& oldCompositeOp, const KisCompositeOp& newCompositeOp);
-
-        virtual void execute();
-        virtual void unexecute();
-
-    private:
-        KisCompositeOp m_oldCompositeOp;
-        KisCompositeOp m_newCompositeOp;
-    };
-
-    KisPaintDeviceImplCompositeOpCommand::KisPaintDeviceImplCompositeOpCommand(KisPaintDeviceImplSP paintDevice, const KisCompositeOp& oldCompositeOp,
-                                       const KisCompositeOp& newCompositeOp) :
-        super(i18n("Layer Composite Mode"), paintDevice)
-    {
-        m_oldCompositeOp = oldCompositeOp;
-        m_newCompositeOp = newCompositeOp;
-    }
-
-    void KisPaintDeviceImplCompositeOpCommand::execute()
-    {
-        setUndo(false);
-        m_paintDevice -> setCompositeOp(m_newCompositeOp);
-        notifyPropertyChanged();
-        setUndo(true);
-    }
-
-    void KisPaintDeviceImplCompositeOpCommand::unexecute()
-    {
-        setUndo(false);
-        m_paintDevice -> setCompositeOp(m_oldCompositeOp);
-        notifyPropertyChanged();
-        setUndo(true);
     }
 
     class MoveCommand : public KNamedCommand {
@@ -319,11 +245,8 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 
-    m_visible = true;
     m_owner = 0;
     m_name = name;
-
-    m_compositeOp = COMPOSITE_OVER;
 
     m_colorSpace = colorSpace;
 
@@ -340,10 +263,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
         m_x = 0;
         m_y = 0;
 
-    m_visible = true;
-
     m_name = name;
-    m_compositeOp = COMPOSITE_OVER;
     m_hasSelection = false;
     m_selection = 0;
 
@@ -378,11 +298,9 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(
                     Q_CHECK_PTR(m_datamanager);
                 }
                 m_extentIsValid = rhs.m_extentIsValid;
-                m_visible = rhs.m_visible;
                 m_x = rhs.m_x;
                 m_y = rhs.m_y;
                 m_name = rhs.m_name;
-                m_compositeOp = rhs.m_compositeOp;
                 m_colorSpace = rhs.m_colorSpace;
                 m_hasSelection = false;
                 m_selection = 0;
@@ -470,7 +388,7 @@ void KisPaintDeviceImpl::setExtentIsValid(bool isValid)
     m_extentIsValid = isValid;
 }
 
-void KisPaintDeviceImpl::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
+void KisPaintDeviceImpl::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
     QRect r = exactBounds();
     x = r.x();
@@ -479,7 +397,7 @@ void KisPaintDeviceImpl::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32
     h = r.height();
 }
 
-QRect KisPaintDeviceImpl::exactBounds()
+QRect KisPaintDeviceImpl::exactBounds() const
 {
     Q_INT32 x, y, w, h, boundX, boundY, boundW, boundH;
     extent(x, y, w, h);
@@ -493,7 +411,7 @@ QRect KisPaintDeviceImpl::exactBounds()
     bool found = false;
 
     for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
-        KisHLineIterator it = createHLineIterator(x, y2, w, false);
+        KisHLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundY = y2;
@@ -508,7 +426,7 @@ QRect KisPaintDeviceImpl::exactBounds()
     found = false;
 
     for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
-        KisHLineIterator it = createHLineIterator(x, y2, w, false);
+        KisHLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundH = y2 - boundY + 1;
@@ -522,7 +440,7 @@ QRect KisPaintDeviceImpl::exactBounds()
     found = false;
 
     for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
-        KisVLineIterator it = createVLineIterator(x2, y, h, false);
+        KisVLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundX = x2;
@@ -538,7 +456,7 @@ QRect KisPaintDeviceImpl::exactBounds()
 
     // Loog for right edge )
     for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
-        KisVLineIterator it = createVLineIterator(x2, y, h, false);
+        KisVLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundW = x2 - boundX + 1;
@@ -823,13 +741,11 @@ void KisPaintDeviceImpl::emitSelectionChanged(const QRect& r) {
 KisSelectionSP KisPaintDeviceImpl::selection()
 {
     if ( m_selectionDeselected && m_selection ) {
-        m_selection->setVisible( true );
         m_selectionDeselected = false;
     }
     else if (!m_selection) {
         m_selection = new KisSelection(this, "layer selection for: " + name());
         Q_CHECK_PTR(m_selection);
-        m_selection -> setVisible(true);
         m_selection -> setX(m_x);
         m_selection -> setY(m_y);
     }
@@ -1017,16 +933,6 @@ void KisPaintDeviceImpl::setY(Q_INT32 y)
     m_y = y;
     if(m_selection)
         m_selection->setY(y);
-}
-
-KNamedCommand *KisPaintDeviceImpl::setVisibleCommand(bool newVisibility)
-{
-    return new KisPaintDeviceImplVisibilityCommand(this, visible(), newVisibility);
-}
-
-KNamedCommand *KisPaintDeviceImpl::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
-{
-    return new KisPaintDeviceImplCompositeOpCommand(this, compositeOp(), newCompositeOp);
 }
 
 #include "kis_paint_device_impl.moc"

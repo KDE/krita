@@ -85,7 +85,7 @@ private:
 
     WdgColorRange * m_page;
     KisSelectionSP m_selection;
-    KisLayerSP m_layer;
+    KisPaintDeviceImplSP m_dev;
     KisView * m_view;
     KisCanvasSubject * m_subject;
     enumSelectionMode m_mode;

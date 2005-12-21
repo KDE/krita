@@ -76,8 +76,8 @@ public:
 
 protected:
 
-    virtual KisLayerSP computeDab(KisAlphaMaskSP mask);
-    virtual KisLayerSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
+    virtual KisPaintDeviceImplSP computeDab(KisAlphaMaskSP mask);
+    virtual KisPaintDeviceImplSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
 
 
     /**

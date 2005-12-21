@@ -36,6 +36,7 @@
 #include <kis_selection_manager.h>
 #include <kis_canvas_subject.h>
 #include <kis_image.h>
+#include <kis_layer.h>
 #include <kis_paint_device_impl.h>
 #include <kis_button_press_event.h>
 #include <kis_canvas_subject.h>
@@ -96,7 +97,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
         dev = img -> activeDevice();
 
-        if (!dev || !dev -> visible())
+        if (!dev || !img->activeLayer()->visible())
             return;
 
 
@@ -107,7 +108,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         fillpainter.setSampleMerged(m_sampleMerged);
         KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
         
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev.data());
+        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev);
         
         if (!dev -> hasSelection()) {
             dev->selection()->clear();

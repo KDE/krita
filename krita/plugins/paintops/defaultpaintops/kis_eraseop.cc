@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
 
-    KisLayerSP dab = new KisLayer(device -> colorSpace(), "eraser_dab");
+    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(device -> colorSpace(), "eraser_dab");
     Q_CHECK_PTR(dab);
 
     Q_INT32 maskWidth = mask -> width();
@@ -104,7 +104,6 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     QRect dstRect;
 
-    dab -> setOpacity(OPACITY_OPAQUE);
     KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
     KisColorSpace* cs = dab -> colorSpace();
     while (!it.isDone()) {

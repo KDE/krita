@@ -78,13 +78,6 @@ KisPainter::KisPainter(KisPaintDeviceImplSP device)
         begin(device);
 }
 
-KisPainter::KisPainter(KisLayerSP device)
-{
-    init();
-    Q_ASSERT(device);
-    begin(device.data());
-}
-
 void KisPainter::init()
 {
     m_transaction = 0;

@@ -27,6 +27,7 @@
 class KisView;
 class KisID;
 class QString;
+class KisColorSpace;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -60,7 +61,7 @@ signals:
 private slots:
 
     void slotItemSelected(int index);
-    void colorSpaceChanged(KisLayerSP layer);
+    void colorSpaceChanged(KisColorSpace *cs);
 
 private:
     KisView * m_view;

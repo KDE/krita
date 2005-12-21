@@ -36,15 +36,9 @@
 
 class KisImage;
 typedef KSharedPtr<KisImage> KisImageSP;
-typedef KisSharedPtrVector<KisImage> vKisImageSP;
-typedef vKisImageSP::iterator vKisImageSP_it;
-typedef vKisImageSP::const_iterator vKisImageSP_cit;
 
 class KisPaintDeviceImpl;
 typedef KSharedPtr<KisPaintDeviceImpl> KisPaintDeviceImplSP;
-typedef KisSharedPtrVector<KisPaintDeviceImpl> vKisPaintDeviceImplSP;
-typedef vKisPaintDeviceImplSP::iterator vKisPaintDeviceImplSP_it;
-typedef vKisPaintDeviceImplSP::const_iterator vKisPaintDeviceImplSP_cit;
 
 class KisLayer;
 typedef KSharedPtr<KisLayer> KisLayerSP;
@@ -54,24 +48,15 @@ typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
 class KisPartLayer;
 typedef KSharedPtr<KisPartLayer> KisPartLayerSP;
-typedef KisSharedPtrVector<KisPartLayer> vKisPartLayerSP;
-typedef vKisPartLayerSP::iterator vKisPartLayerSP_it;
-typedef vKisPartLayerSP::const_iterator vKisPartLayerSP_cit;
 
 class KisSelection;
 typedef KSharedPtr<KisSelection> KisSelectionSP;
-typedef KisSharedPtrVector<KisSelection> vKisSelectionSP;
-typedef vKisSelectionSP::iterator vKisSelectionSP_it;
-typedef vKisSelectionSP::const_iterator vKisSelectionSP_cit;
 
 class KisBackground;
 typedef KSharedPtr<KisBackground> KisBackgroundSP;
 
 class KisHistogram;
 typedef KSharedPtr<KisHistogram> KisHistogramSP;
-typedef KisSharedPtrVector<KisHistogram> vKisHistogramSP;
-typedef vKisHistogramSP::iterator vKisHistogramSP_it;
-typedef vKisHistogramSP::const_iterator vKisHistogramSP_cit;
 
 class KisPaintOpFactory;
 typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;

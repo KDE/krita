@@ -75,11 +75,10 @@ void KisPaintopBox::slotItemSelected(int index)
     emit selected(id);
 }
 
-void KisPaintopBox::colorSpaceChanged(KisLayerSP layer)
+void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
 {
     QValueList<KisID>::iterator it = m_paintops -> begin();
     QValueList<KisID>::iterator end = m_paintops -> end();
-    KisColorSpace* cs = layer -> colorSpace();
     m_displayedOps -> clear();
     clear();
 

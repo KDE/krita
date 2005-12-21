@@ -38,7 +38,6 @@ k_dcop:
 
     int height() const;
     int width() const;
-    bool empty() const;
 
     void setName(const QString& name);
 

@@ -42,7 +42,7 @@
 #include <klocale.h>
 
 #include <kis_meta_registry.h>
-#include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 #include "kis_global.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
@@ -399,7 +399,7 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
     return outputMask;
 }
 
-KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceImplSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -438,7 +438,7 @@ KisLayerSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisLayer *layer = new KisLayer(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush image");
+    KisPaintDeviceImpl *layer = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush image");
    
     Q_CHECK_PTR(layer);
 
@@ -1240,7 +1240,7 @@ void KisBrush::setHeight(Q_INT32 h)
 }*/
 
 void KisBrush::generateBoundary() {
-    KisLayerSP layer;
+    KisPaintDeviceImplSP layer;
     int w = maskWidth(KisPaintInformation());
     int h = maskHeight(KisPaintInformation());
 
@@ -1249,7 +1249,7 @@ void KisBrush::generateBoundary() {
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
         KisColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"");
-        layer = new KisLayer(cs, "temp");
+        layer = new KisPaintDeviceImpl(cs, "temp");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = layer -> createHLineIterator(0, y, w, true);
             int x = 0;

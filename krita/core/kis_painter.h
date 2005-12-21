@@ -61,8 +61,6 @@ public:
     KisPainter();
     /// Construct a painter, and begin painting on the device
     KisPainter(KisPaintDeviceImplSP device);
-    /// Construct a painter, and begin painting on the layer
-    KisPainter(KisLayerSP device);
     virtual ~KisPainter();
 
 private:

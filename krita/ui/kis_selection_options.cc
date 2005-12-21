@@ -60,10 +60,10 @@ void KisSelectionOptions::slotActivated()
     if (!m_subject) return;
     KisImageSP img = m_subject -> currentImg();
     if (!img) return;
-    KisLayerSP l = img -> activeLayer();
-    if (!l) return;
+    KisPaintDeviceImplSP dev = img -> activeDevice();
+    if (!dev) return;
 
-    if (l -> hasSelection()) {
+    if (dev -> hasSelection()) {
     }
 }
 

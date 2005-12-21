@@ -27,7 +27,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
-#include "kis_paint_device_impl.h"
+#include "kis_layer.h"
 #include "kis_strategy_move.h"
 #include "kis_undo_adapter.h"
 
@@ -36,7 +36,7 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        MoveCommand(KisCanvasController *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos);
+        MoveCommand(KisCanvasController *controller, KisImageSP img, KisLayerSP device, const QPoint& oldpos, const QPoint& newpos);
         virtual ~MoveCommand();
 
         virtual void execute();
@@ -47,14 +47,14 @@ namespace {
 
     private:
         KisCanvasController *m_controller;
-        KisPaintDeviceImplSP m_device;
+        KisLayerSP m_device;
         QRect m_deviceBounds;
         QPoint m_oldPos;
         QPoint m_newPos;
         KisImageSP m_img;
     };
 
-    MoveCommand::MoveCommand(KisCanvasController *controller, KisImageSP img, KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
+    MoveCommand::MoveCommand(KisCanvasController *controller, KisImageSP img, KisLayerSP device, const QPoint& oldpos, const QPoint& newpos) :
         super(i18n("Move Layer"))
     {
         m_controller = controller;
@@ -81,7 +81,8 @@ namespace {
 
     void MoveCommand::moveTo(const QPoint& pos)
     {
-       m_device -> move(pos.x(), pos.y());
+       m_device -> setX(pos.x());
+       m_device -> setY(pos.y());
        m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
        m_img -> notify(m_deviceBounds);
        m_deviceBounds.setRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
@@ -120,12 +121,12 @@ void KisStrategyMove::startDrag(const QPoint& pos)
 
     if (m_subject) {
         KisImageSP img;
-        KisPaintDeviceImplSP dev;
+        KisLayerSP dev;
 
         if (!(img = m_subject -> currentImg()))
             return;
 
-        dev = img -> activeDevice();
+        dev = img -> activeLayer();
 
         if (!dev || !dev -> visible())
             return;
@@ -133,8 +134,8 @@ void KisStrategyMove::startDrag(const QPoint& pos)
         m_dragging = true;
         m_dragStart.setX(pos.x());
         m_dragStart.setY(pos.y());
-        m_layerStart.setX(dev -> getX());
-        m_layerStart.setY(dev -> getY());
+        m_layerStart.setX(dev->x());
+        m_layerStart.setY(dev->y());
         m_layerPosition = m_layerStart;
     }
 }
@@ -145,19 +146,20 @@ void KisStrategyMove::drag(const QPoint& original)
 
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject -> currentImg();
-        KisPaintDeviceImplSP dev;
+        KisLayerSP dev;
 
-        if (img && (dev = img -> activeDevice())) {
+        if (img && (dev = img -> activeLayer())) {
             QPoint pos = original;
             QRect rc;
 
             pos -= m_dragStart; // convert to delta
             rc = dev -> extent();
-            dev -> move(dev ->getX() + pos.x(), dev->getY() + pos.y());
+            dev->setX(dev->x() + pos.x());
+            dev->setY(dev->y() + pos.y());
             rc = rc.unite(dev->extent());
 
-            m_layerPosition = QPoint(dev ->getX(), dev ->getY());
-             m_dragStart = original;
+            m_layerPosition = QPoint(dev->x(), dev->y());
+            m_dragStart = original;
 
             img->notify(rc);
         }
@@ -168,14 +170,14 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
     if (m_subject && m_dragging) {
         KisImageSP img = m_subject -> currentImg();
-        KisPaintDeviceImplSP dev;
+        KisLayerSP dev;
 
-        if (img && (dev = img -> activeDevice())) {
+        if (img && (dev = img -> activeLayer())) {
             drag(pos);
             m_dragging = false;
 
             if (undo) {
-                KCommand *cmd = new MoveCommand(m_controller, img, img -> activeDevice(), m_layerStart, m_layerPosition);
+                KCommand *cmd = new MoveCommand(m_controller, img, img -> activeLayer(), m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
                 KisUndoAdapter *adapter = img -> undoAdapter();
 

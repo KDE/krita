@@ -42,11 +42,6 @@ int KisImageIface::width() const
     return m_img->width();
 }
 
-bool KisImageIface::empty() const
-{
-    return m_img->empty();
-}
-
 void KisImageIface::setName(const QString& name)
 {
     m_img->setName( name );

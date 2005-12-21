@@ -34,6 +34,7 @@
 #include <kis_selection_manager.h>
 #include <kis_canvas_subject.h>
 #include <kis_image.h>
+#include <kis_layer.h>
 #include <kis_paint_device_impl.h>
 #include <kis_button_press_event.h>
 #include <kis_canvas_subject.h>
@@ -137,9 +138,8 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 
         dev = img -> activeDevice();
 
-        if (!dev || !dev -> visible())
+        if (!dev || !img->activeLayer()->visible())
             return;
-
 
         pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
 

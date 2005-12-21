@@ -81,14 +81,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
         if (!sampleMerged) {
-            // Find layer
-            QString layerName = m_optionsWidget->cmbSources->currentText();
-            dev = img->findLayer(layerName).data();
-
-            if (!dev ) {
-                return;
-            }
-            if (!dev -> visible()) {
+            if (!img->activeLayer()-> visible()) {
                 KMessageBox::information(0, i18n("Cannot pick the color as the active layer is hidden."));
                 return;
             }
@@ -161,7 +154,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
 
     m_optionsWidget -> listViewChannels -> setSorting(-1);
-
+/*
     const KisImageSP img = m_subject->currentImg();
     if (img) {
         vKisLayerSP layers = img->layers();
@@ -173,7 +166,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
             }
         }
     }
-
+*/
     connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
     connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
 

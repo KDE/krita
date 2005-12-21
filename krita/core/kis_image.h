@@ -141,9 +141,6 @@ public:
 
     bool empty() const;
 
-    vKisLayerSP layers();
-    const vKisLayerSP& layers() const;
-
     /**
      *  returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image)
@@ -155,48 +152,45 @@ public:
      */
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
+KisLayerSP layerAdd(const QString& name, Q_UINT8 opacity);
+KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy);
+
     // Get the active painting device
     KisPaintDeviceImplSP activeDevice();
 
-    // Add layers and emit sigLayersUpdated
-    KisLayerSP layerAdd(const QString& name, Q_UINT8 devOpacity);
-    KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,  Q_UINT8 opacity,  KisColorSpace * colorstrategy);
-    KisLayerSP layerAdd(KisLayerSP layer, Q_INT32 position);
-
-    void layerRemove(KisLayerSP layer);
-    void layerNext(KisLayerSP layer);
-    void layerPrev(KisLayerSP layer);
-
     void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
+    KisLayerSP rootLayer();
     KisLayerSP activeLayer();
     const KisLayerSP activeLayer() const;
 
     KisLayerSP activate(KisLayerSP layer);
-    KisLayerSP activateLayer(Q_INT32 n);
+    KisLayerSP findLayer(const QString& name);
 
-    KisLayerSP layer(Q_INT32 n);
-    KisLayerSP findLayer(const QString & name);
+    /// Move layer to specified position and emit sigLayersUpdated
+    bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    Q_INT32 index(const KisLayerSP &layer);
+    /// Add layer and emit sigLayersUpdated
+    bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    KisLayerSP layer(const QString& name);
-    KisLayerSP layer(Q_UINT32 npos);
+    /// Remove layer and emit sigLayersUpdated
+    bool removeLayer(KisLayerSP layer);
 
-    // add a layer and don't emit the sigLayersUpdate -- these probably should be private and used by friend kis_view.
-    bool add(KisLayerSP layer, Q_INT32 position);
-    void rm(KisLayerSP layer);
-    bool raise(KisLayerSP layer);
-    bool lower(KisLayerSP layer);
-    bool top(KisLayerSP layer);
-    bool bottom(KisLayerSP layer);
+    /// Move layer up one slot and emit sigLayersUpdated
+    bool raiseLayer(KisLayerSP layer);
 
-    bool setLayerPosition(KisLayerSP layer, Q_INT32 position);
+    /// Move layer down one slot and emit sigLayersUpdated
+    bool lowerLayer(KisLayerSP layer);
+
+    /// Move layer to top slot and emit sigLayersUpdated
+    bool toTop(KisLayerSP layer);
+
+    /// Move layer to tbottom slot and emit sigLayersUpdated
+    bool toBottom(KisLayerSP layer);
 
     Q_INT32 nlayers() const;
     Q_INT32 nHiddenLayers() const;
     Q_INT32 nLinkedLayers() const;
-    Q_INT32 lowestVisibleLayerIndex() const;
 
     KCommand *raiseLayerCommand(KisLayerSP layer);
     KCommand *lowerLayerCommand(KisLayerSP layer);
@@ -250,19 +244,21 @@ signals:
 
     void sigActiveSelectionChanged(KisImageSP image);
     void sigSelectionChanged(KisImageSP image);
-    void sigLayersChanged(KisImageSP image);
-    void sigLayersUpdated(KisImageSP image);
+
+    /** Emitted whenever something about layers change like the order or their names or other properties.
+     *   The call is emitted by notifyLayersChanged().
+     *
+     *  This signal is useful for the layerbox. A canvas should listen for sigImageUpdated instead.
+     */
+    void sigLayersChanged();
 
     /**
      * Emitted whenever an action has caused the image to be recomposited. This happens
      * after calls to notify().
      *
-     * @param image this image (useful in case something has more than one image, but that
-     *               hasn't happened in a year, because we no longer have more than one image
-     *               in a doc
      * @param rc The rect that has been recomposited.
      */
-    void sigImageUpdated(KisImageSP image, const QRect& rc);
+    void sigImageUpdated(const QRect& rc);
 
     /**
      * Emitted whenever the image has been changed.
@@ -306,15 +302,9 @@ private:
     QRect m_dirtyRect;
 
     KisBackgroundSP m_bkg;
-    KisLayerSP m_projection;
+    KisPaintDeviceImplSP m_projection;
 
-    vKisLayerSP m_layers; // Contains the list of all layers
-    vKisLayerSP m_layerStack; // Contains a stack of layers in
-                  // order of activation, so that when
-                  // we remove a layer can activate
-                  // the previously activated layer
-                  // instead of the bottom or topmost
-                  // layer.
+    KisLayerSP m_rootLayer; // The layers are contained in here
     KisLayerSP m_activeLayer;
 
     KisNameServer *m_nserver;

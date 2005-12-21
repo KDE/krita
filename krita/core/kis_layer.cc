@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
  *
  *  this program is free software; you can redistribute it and/or modify
  *  it under the terms of the gnu general public license as published by
@@ -22,16 +23,8 @@
 #include "kis_debug_areas.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
-#include "kis_iterators_pixel.h"
-
-#define DEBUG_LAYERS 0
-
-#if DEBUG_LAYERS
-static int numLayers = 0;
-#endif
 
 namespace {
 
@@ -182,67 +175,122 @@ namespace {
         setUndo(true);
     }
 
+    class KisLayerVisibilityCommand : public KisLayerCommand {
+        typedef KisLayerCommand super;
+
+    public:
+        KisLayerVisibilityCommand(KisLayerSP layer, bool oldVisibility, bool newVisibility);
+
+        virtual void execute();
+        virtual void unexecute();
+
+    private:
+        bool m_oldVisibility;
+        bool m_newVisibility;
+    };
+
+    KisLayerVisibilityCommand::KisLayerVisibilityCommand(KisLayerSP layer, bool oldVisibility, bool newVisibility) :
+        super(i18n("Layer Visibility"), layer)
+    {
+        m_oldVisibility = oldVisibility;
+        m_newVisibility = newVisibility;
+    }
+
+    void KisLayerVisibilityCommand::execute()
+    {
+        setUndo(false);
+        m_layer -> setVisible(m_newVisibility);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
+
+    void KisLayerVisibilityCommand::unexecute()
+    {
+        setUndo(false);
+        m_layer -> setVisible(m_oldVisibility);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
+
+    class KisLayerCompositeOpCommand : public KisLayerCommand {
+        typedef KisLayerCommand super;
+
+    public:
+        KisLayerCompositeOpCommand(KisLayerSP layer, const KisCompositeOp& oldCompositeOp, const KisCompositeOp& newCompositeOp);
+
+        virtual void execute();
+        virtual void unexecute();
+
+    private:
+        KisCompositeOp m_oldCompositeOp;
+        KisCompositeOp m_newCompositeOp;
+    };
+
+    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KisCompositeOp& oldCompositeOp,
+                                       const KisCompositeOp& newCompositeOp) :
+        super(i18n("Layer Composite Mode"), layer)
+    {
+        m_oldCompositeOp = oldCompositeOp;
+        m_newCompositeOp = newCompositeOp;
+    }
+
+    void KisLayerCompositeOpCommand::execute()
+    {
+        setUndo(false);
+        m_layer -> setCompositeOp(m_newCompositeOp);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
+
+    void KisLayerCompositeOpCommand::unexecute()
+    {
+        setUndo(false);
+        m_layer -> setCompositeOp(m_oldCompositeOp);
+        notifyPropertyChanged();
+        setUndo(true);
+    }
+
 }
 
-KisLayer::KisLayer(KisColorSpace * colorSpace, const QString& name)
-    : super(colorSpace, name),
-      m_opacity(OPACITY_OPAQUE),
-      m_linked(false),
-      m_locked(false)
+
+
+KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
+    QObject(),
+    KShared(),
+    m_opacity(opacity),
+    m_linked(false),
+    m_locked(false),
+    m_visible(true),
+    m_name(name),
+    m_parent(0),
+    m_image(img),
+    m_compositeOp(COMPOSITE_OVER)
 {
-#if DEBUG_LAYERS
-    numLayers++;
-    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
-#endif
 }
 
-KisLayer::KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity)
-    : super(img, img -> colorSpace(), name),
-      m_opacity(opacity),
-      m_linked(false),
-      m_locked(false)
+KisLayer::KisLayer(const KisLayer& rhs) :
+    QObject(),
+    KShared(rhs)
 {
-#if DEBUG_LAYERS
-    numLayers++;
-    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
-#endif
-}
-
-KisLayer::KisLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
-    : super(img, colorSpace, name),
-      m_opacity(opacity),
-      m_linked(false),
-      m_locked(false)
-{
-#if DEBUG_LAYERS
-    numLayers++;
-    kdDebug(DBG_AREA_CORE) << "LAYER " << name << " CREATED total now = " << numLayers << endl;
-#endif
-}
-
-KisLayer::KisLayer(const KisLayer& rhs) : super(rhs)
-{
-#if DEBUG_LAYERS
-    numLayers++;
-    kdDebug(DBG_AREA_CORE) << "LAYER " << rhs.name() << " copy CREATED total now = " << numLayers << endl;
-#endif
     if (this != &rhs) {
         m_opacity = rhs.m_opacity;
-        //m_preserveTransparency = rhs.m_preserveTransparency;
-        //m_initial = rhs.m_initial;
         m_linked = rhs.m_linked;
         m_locked = rhs.m_locked;
-/*        if (rhs.m_mask)
-            m_mask = new KisMask(*rhs.m_mask);*/
+        m_visible = rhs.m_visible;
+        m_name = rhs.m_name;
+        m_image = rhs.m_image;
+        m_parent = 0;
+        m_compositeOp = rhs.m_compositeOp;
     }
 }
 
 KisLayer::~KisLayer()
 {
-#if DEBUG_LAYERS
-    numLayers--;
-    kdDebug(DBG_AREA_CORE) << "LAYER " << name() << " DESTROYED total now = " << numLayers << endl;
-#endif
+}
+
+KisLayerSP KisLayer::parent() const
+{
+    return m_parent;
 }
 
 Q_UINT8 KisLayer::opacity() const
@@ -277,12 +325,20 @@ KNamedCommand *KisLayer::setLinkedCommand(bool newLinked)
 
 const bool KisLayer::visible() const
 {
-    return super::visible() && m_opacity != OPACITY_TRANSPARENT;
+    return m_visible && m_opacity != OPACITY_TRANSPARENT; //XXX hmm is this right?
 }
 
 void KisLayer::setVisible(bool v)
 {
-    super::setVisible(v);
+    if (m_visible != v) {
+        m_visible = v;
+        emit visibilityChanged(this);
+    }
+}
+
+KNamedCommand *KisLayer::setVisibleCommand(bool newVisibility)
+{
+    return new KisLayerVisibilityCommand(this, m_visible, newVisibility);
 }
 
 bool KisLayer::locked() const
@@ -300,28 +356,44 @@ KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
     return new KisLayerLockedCommand(this, locked(), newLocked);
 }
 
-void KisLayer::paintMaskInactiveLayers(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+QString KisLayer::name() const
 {
-    uchar *j = img.bits();
+        return m_name;
+}
 
-    KisColorSpace *cs = colorSpace();
+void KisLayer::setName(const QString& name)
+{
+        if (!name.isEmpty())
+                m_name = name;
+}
 
-    for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
-        KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-        while ( ! it.isDone()) {
-            Q_UINT8 s = cs->getAlpha(it.rawData());
-            if(s==0)
-            {
-                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+KNamedCommand *KisLayer::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
+{
+    return new KisLayerCompositeOpCommand(this, compositeOp(), newCompositeOp);
+}
 
-                *(j+0) = 128+g ;
-                *(j+1) = 165+g;
-                *(j+2) = 128+g;
-            }
-            j+=4;
-            ++it;
-        }
+KisUndoAdapter *KisLayer::undoAdapter() const
+{
+    if (m_image) {
+        return m_image -> undoAdapter();
     }
+    return 0;
+}
+
+void KisLayer::paintMaskInactiveLayers(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
+{
+}
+
+void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
+{
+}
+
+void KisLayer::insertLayer(KisLayerSP , KisLayerSP )
+{
+}
+
+void KisLayer::removeLayer(KisLayerSP )
+{
 }
 
 #include "kis_layer.moc"

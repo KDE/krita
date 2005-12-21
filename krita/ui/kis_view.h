@@ -360,7 +360,6 @@ private slots:
     void canvasGotDropEvent(QDropEvent*);
 
     void docImageListUpdate();
-    void layersUpdated(KisImageSP img);
 
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
@@ -369,8 +368,6 @@ private slots:
     void layerOpacity(int opacity);
 
     void layerToggleVisible();
-    void layerSelected(int n);
-    void layerToggleLinked();
     void layerToggleLocked();
     void actLayerVisChanged(int show);
     void layerProperties();
@@ -385,7 +382,6 @@ private slots:
     void flattenImage();
     void mergeVisibleLayers();
     void mergeLayer();
-    void mergeLinkedLayers();
     void saveLayerAsImage();
 
     void slotUpdateFullScreen(bool toggle);
@@ -427,7 +423,6 @@ private:
 
     // Actions
     KAction *m_imgFlatten;
-    KAction *m_imgMergeLinked;
     KAction *m_imgMergeVisible;
     KAction *m_imgMergeLayer;
     KAction *m_imgRename;

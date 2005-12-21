@@ -29,6 +29,7 @@
 #include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_custom_brush.h"
@@ -119,6 +120,7 @@ void KisCustomBrush::createBrush() {
 
     kdDebug() << "Creating animated!" << endl;
 
+/*LAYERREMOVE
     // For each layer in the current image, create a new image, and add it to the list
     QValueVector< QValueVector<KisPaintDeviceImpl*> > devices;
     devices.push_back(QValueVector<KisPaintDeviceImpl*>());
@@ -130,11 +132,11 @@ void KisCustomBrush::createBrush() {
             continue;
         devices.at(0).push_back(img -> layer(i).data());
     }
-
     QValueVector<KisPipeBrushParasite::SelectionMode> modes;
     modes.push_back(KisPipeBrushParasite::Incremental); // FIXME
 
     m_brush = new KisImagePipeBrush(img -> name(), w, h, devices, modes);
+*/
 }
 
 

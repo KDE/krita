@@ -89,7 +89,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisLayerSP dab = 0;
+    KisPaintDeviceImplSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
         dab = brush -> image(device -> colorSpace(), info, xFraction, yFraction);

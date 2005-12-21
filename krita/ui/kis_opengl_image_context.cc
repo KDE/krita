@@ -180,8 +180,8 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                                                      m_monitorProfile, m_exposure);
 
                 //XXX: and not using shader
-                if (m_image -> activeLayer() != 0 && m_image -> activeLayer() -> hasSelection()) {
-                    m_image -> activeLayer() -> selection() -> paintSelection(tileUpdateImage,
+                if (m_image -> activeLayer() != 0) {
+                    m_image -> activeLayer() -> paintSelection(tileUpdateImage,
                                                                               tileUpdateRect.x(), tileUpdateRect.y(),
                                                                               tileUpdateRect.width(), tileUpdateRect.height());
                 }

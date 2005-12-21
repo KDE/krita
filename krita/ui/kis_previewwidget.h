@@ -47,7 +47,7 @@ public:
     KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
 
     /** @return the layer, so the dialog can apply its effect on it. */
-    KisLayerSP getLayer();
+    KisPaintDeviceImplSP getDevice();
 
     /** returns if the preview is automatically updated */
     bool getAutoUpdate();
@@ -56,7 +56,7 @@ public:
 public slots:
 
     /** Sets the preview to use the layer specified as argument */
-    void slotSetLayer(KisLayerSP lay);
+    void slotSetDevice(KisPaintDeviceImplSP dev);
 
     /**
      * Call this when the effect has finished updating the layer. Makes the preview
@@ -94,13 +94,13 @@ private:
 
     QImage m_unscaledSource;
     QImage m_scaledPreview;
-    KisLayerSP m_previewLayer;
+    KisPaintDeviceImplSP m_previewDevice;
     
     double m_zoom;
     KisProfile * m_profile;
 
     KisImageSP m_image;
-    KisLayerSP m_origLayer;
+    KisPaintDeviceImplSP m_origDevice;
 };
 
 #endif

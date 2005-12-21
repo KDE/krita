@@ -115,12 +115,12 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
         if (img) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisLayerSP layer = img -> activeLayer();
-            bool hasSelection = layer -> hasSelection();
+            KisPaintDeviceImplSP dev = img -> activeDevice();
+            bool hasSelection = dev -> hasSelection();
 
             //XXX: Fix string
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), layer.data());
-            KisSelectionSP selection = layer -> selection();
+            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
+            KisSelectionSP selection = dev->selection();
 
             if (!hasSelection) {
                 selection -> clear();
@@ -151,9 +151,9 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
 
             if(hasSelection)
-                layer->emitSelectionChanged(painter.dirtyRect());
+                dev->emitSelectionChanged(painter.dirtyRect());
             else
-                layer->emitSelectionChanged();
+                dev->emitSelectionChanged();
 
             if (img -> undoAdapter())
                 img -> undoAdapter() -> addCommand(t);

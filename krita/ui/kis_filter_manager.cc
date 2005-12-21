@@ -29,6 +29,7 @@
 #include "kis_doc.h"
 #include "kis_filter.h"
 #include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 #include "kis_filter_manager.h"
 #include "kis_filter_config_widget.h"
 #include "kis_previewwidget.h"
@@ -163,22 +164,22 @@ bool KisFilterManager::apply()
     KisImageSP img = m_view->currentImg();
     if (!img) return false;
 
-    KisLayerSP layer = img->activeLayer();
-    if (!layer) return false;
+    KisPaintDeviceImplSP dev = img->activeDevice();
+    if (!dev) return false;
     
     QApplication::setOverrideCursor( Qt::waitCursor );
 
     //Apply the filter
-    m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget, layer.data());
+    m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget, dev);
 
-    QRect r1 = layer -> extent();
+    QRect r1 = dev -> extent();
     QRect r2 = img -> bounds();
 
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
 
-    if (layer->hasSelection()) {
-        QRect r3 = layer->selection()->selectedExactRect();
+    if (dev->hasSelection()) {
+        QRect r3 = dev->selection()->selectedExactRect();
         rect = rect.intersect(r3);
     }
 
@@ -187,9 +188,9 @@ bool KisFilterManager::apply()
     m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
     m_lastFilter->setProgressDisplay( m_view->progressDisplay());
     
-    KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), layer.data());
+    KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), dev);
     Q_CHECK_PTR(cmd);
-    m_lastFilter->process((KisPaintDeviceImplSP)layer, (KisPaintDeviceImplSP)layer, m_lastFilterConfig, rect);
+    m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
 
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
@@ -226,22 +227,22 @@ void KisFilterManager::slotApplyFilter(int i)
     KisImageSP img = m_view->currentImg();
     if (!img) return;
 
-    KisLayerSP layer = img->activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = img->activeDevice();
+    if (!dev) return;
 
     m_lastFilter->disableProgress();
 
     // Create the config dialog
     m_lastDialog = new KisPreviewDialog(m_view, m_lastFilter->id().name().ascii(), true, m_lastFilter->id().name());
     Q_CHECK_PTR(m_lastDialog);
-    m_lastWidget = m_lastFilter->createConfigurationWidget( (QWidget*)m_lastDialog->container(), layer.data() );
+    m_lastWidget = m_lastFilter->createConfigurationWidget( (QWidget*)m_lastDialog->container(), dev );
 
     
     if( m_lastWidget != 0)
     {
         connect(m_lastWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
     
-        m_lastDialog->previewWidget()->slotSetLayer( layer );
+        m_lastDialog->previewWidget()->slotSetDevice( dev );
 
         connect(m_lastDialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
         
@@ -289,17 +290,16 @@ void KisFilterManager::refreshPreview( )
     if( m_lastDialog == 0 )
         return;
         
-    KisLayerSP layer = m_lastDialog -> previewWidget()->getLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = m_lastDialog -> previewWidget()->getDevice();
+    if (!dev) return;
     
-    KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget, layer.data());
+    KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget, dev);
     
-    QRect rect = layer -> extent();
-    KisTransaction cmd("Temporary transaction", (KisPaintDeviceImplSP) layer);
-    m_lastFilter->process((KisPaintDeviceImplSP) layer, (KisPaintDeviceImplSP) layer, config, rect);
+    QRect rect = dev -> extent();
+    KisTransaction cmd("Temporary transaction", dev);
+    m_lastFilter->process(dev, dev, config, rect);
     m_lastDialog->previewWidget() -> slotUpdate();
     cmd.unexecute();
-    
 }
 
 

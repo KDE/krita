@@ -75,27 +75,26 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     m_dragDist = 0;
 
     // Create painter
-    KisLayerSP layer;
-    if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
-        if (m_painter)
-            delete m_painter;
-        if(! layer -> hasSelection())
-        {
-            layer -> selection() -> clear();
-            layer -> emitSelectionChanged();
-        }
-        KisSelectionSP selection = layer -> selection();
-
-        m_painter = new KisPainter(selection.data());
-        Q_CHECK_PTR(m_painter);
-        m_painter -> beginTransaction(i18n("Selection Eraser"));
-        m_painter -> setPaintColor(KisColor(Qt::white, selection->colorSpace()));
-        m_painter -> setBrush(m_subject -> currentBrush());
-        m_painter -> setOpacity(OPACITY_OPAQUE);
-        m_painter -> setCompositeOp(COMPOSITE_ERASE);
-        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
-        painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+    KisPaintDeviceImplSP dev;
+    if (m_painter)
+        delete m_painter;
+    if(! dev -> hasSelection())
+    {
+        dev -> selection() -> clear();
+        dev -> emitSelectionChanged();
     }
+    KisSelectionSP selection = dev -> selection();
+
+    m_painter = new KisPainter(selection.data());
+    Q_CHECK_PTR(m_painter);
+    m_painter -> beginTransaction(i18n("Selection Eraser"));
+    m_painter -> setPaintColor(KisColor(Qt::white, selection->colorSpace()));
+    m_painter -> setBrush(m_subject -> currentBrush());
+    m_painter -> setOpacity(OPACITY_OPAQUE);
+    m_painter -> setCompositeOp(COMPOSITE_ERASE);
+    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", painter());
+    painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
 #if 0

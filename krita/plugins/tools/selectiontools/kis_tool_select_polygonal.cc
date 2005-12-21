@@ -103,12 +103,12 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 
         if (img) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisLayerSP layer = img -> activeLayer();
-            bool hasSelection = layer -> hasSelection();
+            KisPaintDeviceImplSP dev = img -> activeDevice();
+            bool hasSelection = dev -> hasSelection();
 
             //XXX: Fix string
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), layer.data());
-            KisSelectionSP selection = layer -> selection();
+            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), dev);
+            KisSelectionSP selection = dev -> selection();
 
             if (!hasSelection)
             {
@@ -139,9 +139,9 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             painter.paintPolygon(m_points);
 
             if(hasSelection)
-                layer->emitSelectionChanged(painter.dirtyRect());
+                dev->emitSelectionChanged(painter.dirtyRect());
             else
-                layer->emitSelectionChanged();
+                dev->emitSelectionChanged();
 
             if (img -> undoAdapter())
                 img -> undoAdapter() -> addCommand(t);

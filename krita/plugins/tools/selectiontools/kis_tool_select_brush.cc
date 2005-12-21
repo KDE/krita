@@ -77,28 +77,27 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
     m_dragDist = 0;
 
     // Create painter
-    KisLayerSP layer;
-    if (m_currentImage && (layer = m_currentImage -> activeLayer())) {
-        if (m_painter)
-            delete m_painter;
-        bool hasSelection = layer->hasSelection();
-        m_transaction = new KisSelectedTransaction(i18n("Selection Brush"),layer.data());
-        if(! hasSelection)
-        {
-            layer -> selection() -> clear();
-            layer -> emitSelectionChanged();
-        }
-        KisSelectionSP selection = layer -> selection();
-        
-        m_painter = new KisPainter(selection.data());
-        Q_CHECK_PTR(m_painter);
-        m_painter -> setPaintColor(KisColor(Qt::black, selection->colorSpace()));
-        m_painter -> setBrush(m_subject -> currentBrush());
-        m_painter -> setOpacity(MAX_SELECTED);
-        m_painter -> setCompositeOp(COMPOSITE_OVER);
-        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
-        painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+    KisPaintDeviceImplSP dev = m_currentImage -> activeDevice();
+    if (m_painter)
+        delete m_painter;
+    bool hasSelection = dev->hasSelection();
+    m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
+    if(! hasSelection)
+    {
+        dev->selection()->clear();
+        dev->emitSelectionChanged();
     }
+    KisSelectionSP selection = dev -> selection();
+
+    m_painter = new KisPainter(selection.data());
+    Q_CHECK_PTR(m_painter);
+    m_painter -> setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+    m_painter -> setBrush(m_subject -> currentBrush());
+    m_painter -> setOpacity(MAX_SELECTED);
+    m_painter -> setCompositeOp(COMPOSITE_OVER);
+    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
+    painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
 #if 0

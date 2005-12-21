@@ -62,6 +62,7 @@
 #include "kis_factory.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_nameserver.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
@@ -371,6 +372,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("x-res", img -> xRes());
     image.setAttribute("y-res", img -> yRes());
 
+/*LAYERREMOVE create a KisSaveVisitor
     layers = img -> layers();
 
     if (layers.size() > 0) {
@@ -381,7 +383,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
         for (vKisLayerSP_it it = layers.begin(); it != layers.end(); ++it)
             elem.appendChild(saveLayer(doc, *it));
     }
-
+*/
 
     // TODO Image colormap if any
     return image;
@@ -467,12 +469,14 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
                             kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
                             return 0;
                         }
-                        img -> add(layer, -1);
+                        img -> addLayer(layer, img -> rootLayer(), 0);
                     }
-
+/*IMAGEREMOVE
                     if (img -> nlayers()) {
                         img -> activateLayer(0);
+
                     }
+*/
                 } else if (node.nodeName() == "COLORMAP") {
                     // TODO
                 }
@@ -490,19 +494,20 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
     QDomElement layerElement = doc.createElement("layer");
 
     layerElement.setAttribute("name", layer -> name());
-    layerElement.setAttribute("x", layer->getX());
-    layerElement.setAttribute("y", layer-> getY());
+    layerElement.setAttribute("x", layer->x());
+    layerElement.setAttribute("y", layer->y());
     layerElement.setAttribute("opacity", layer -> opacity());
     layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
     layerElement.setAttribute("visible", layer -> visible());
     layerElement.setAttribute("linked", layer -> linked());
     layerElement.setAttribute("locked", layer -> locked());
+/*LAYERREMOVE
     layerElement.setAttribute("colorspacename", layer -> colorSpace() -> id().id());
     // XXX: Save profile as blob inside the layer, instead of the product name.
     if (layer -> colorSpace() -> getProfile() && layer -> colorSpace() -> getProfile() -> valid()) {
         layerElement.setAttribute("profile", layer -> colorSpace() -> getProfile() -> productName());
     }
-
+*/
     return layerElement;
 }
 
@@ -608,13 +613,14 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
         }
     }
 
-    layer = new KisLayer(img, name, opacity, cs);
+    layer = new KisPaintLayer(img, name, opacity, cs);
     Q_CHECK_PTR(layer);
 
     layer -> setCompositeOp(compositeOp);
     layer -> setLinked(linked);
     layer -> setVisible(visible);
-    layer -> move(x, y);
+    layer -> setX(x);
+    layer -> setY(y);
     return layer;
 }
 
@@ -637,7 +643,7 @@ bool KisDoc::completeSaving(KoStore *store)
     img -> setName((m_currentImage) -> name());
 
     setIOSteps(totalSteps + 1);
-
+/*LAYERREMOVE
     vKisLayerSP layers = (img) -> layers();
 
     for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
@@ -675,7 +681,7 @@ bool KisDoc::completeSaving(KoStore *store)
         IOCompletedStep();
         (*it2) -> disconnect();
     }
-
+*/
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
@@ -743,6 +749,7 @@ bool KisDoc::completeLoading(KoStore *store)
 
     setIOSteps(totalSteps);
 
+/*LAYERREMOVE
     vKisLayerSP layers = (m_currentImage) -> layers();
 
     for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
@@ -772,12 +779,14 @@ bool KisDoc::completeLoading(KoStore *store)
             store -> close();
 /*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
                 (*it2) -> colorSpace() -> colorSpaceType()));
-*/            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
+*/
+/*            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 
         IOCompletedStep();
         (*it2) -> disconnect();
     }
+*/
 
     // annotations
     // exif
@@ -819,7 +828,7 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 
 KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
     KoDocument* doc = super::hitTest(pos, matrix);
-
+/*LAYERREMOVE
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
         // is the currently active parts layer.
@@ -836,7 +845,7 @@ KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
         kdDebug() << "Embedded part miss :-(" << endl;
         return this;
     }
-
+*/
     return doc;
 }
 
@@ -857,17 +866,18 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     Q_CHECK_PTR(img);
     connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
-    KisLayerSP layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayer *layer = new KisPaintLayer(img, img -> nextLayerName(), OPACITY_OPAQUE,colorstrategy);
     Q_CHECK_PTR(layer);
 
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     KisFillPainter painter;
 
-    painter.begin(layer.data());
+    painter.begin(layer->paintDevice());
     painter.fillRect(0, 0, width, height, KisColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
-    img -> add(layer, -1);
+    img->addLayer(layer, img->rootLayer(),0);
+    img->activate(layer);
     img->notify();
 
     m_currentImage = img;
@@ -880,7 +890,7 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
 
     Q_UINT8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();
     KisImageSP img;
-    KisLayerSP layer;
+    KisPaintLayer *layer;
 
     if (!cs) return false;
 
@@ -891,21 +901,23 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     img -> setDescription(imgDescription);
     img -> setProfile(cs->getProfile());
 
-    layer = new KisLayer(img, img -> nextLayerName(), OPACITY_OPAQUE);
+    layer = new KisPaintLayer(img, img -> nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);
 
     KisFillPainter painter;
-    painter.begin(layer.data());
+    painter.begin(layer->paintDevice());
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
+/*LAYERREMOVE
     QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry() -> paintDeviceActionsFor(cs);
     for (uint i = 0; i < actions.count(); i++)
         actions.at(i) -> act(layer.data(), img -> width(), img -> height());
-
+*/
     img -> setBackgroundColor(bgColor);
-    img -> add(layer, -1);
+    img -> addLayer(layer, img->rootLayer(), 0);
+    img->activate(layer);
     img -> notify();
 
     m_currentImage = img;
@@ -1081,10 +1093,11 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 
 KisChildDoc * KisDoc::createChildDoc( const QRect & rect, KoDocument* childDoc )
 {
+/*LAYERREMOVE
     KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
     insertChild( ch );
     return ch;
-
+*/
 }
 
 void KisDoc::prepareForImport()

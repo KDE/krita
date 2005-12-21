@@ -174,10 +174,10 @@ Q_UINT32 matchColors(const QColor & c, enumAction action)
 
 
 
-DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  parent, const char * name)
+DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceImplSP dev, QWidget *  parent, const char * name)
     : super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
-    m_layer = layer;
+    m_dev = dev;
     m_view = view;
 
     m_subject = view -> getCanvasSubject();
@@ -189,12 +189,12 @@ DlgColorRange::DlgColorRange( KisView * view, KisLayerSP layer, QWidget *  paren
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
-    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_layer.data());
+    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev));
     Q_CHECK_PTR(m_transaction);
 
-    if(! m_layer -> hasSelection())
-        m_layer -> selection() -> clear();
-    m_selection = m_layer -> selection();
+    if(! m_dev -> hasSelection())
+        m_dev -> selection() -> clear();
+    m_selection = m_dev -> selection();
 
         updatePreview();
 
@@ -239,7 +239,7 @@ void DlgColorRange::updatePreview()
     if (!m_selection) return;
 
     Q_INT32 x, y, w, h;
-    m_layer -> exactBounds(x, y, w, h);
+    m_dev -> exactBounds(x, y, w, h);
     QPixmap pix = QPixmap(m_selection -> maskImage().smoothScale(350, 350, QImage::ScaleMin));
     m_subject -> canvasController() -> updateCanvas();
     m_page -> pixSelection -> setPixmap(pix);
@@ -285,11 +285,11 @@ void DlgColorRange::slotSelectClicked()
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
-    m_layer -> exactBounds(x, y, w, h);
-    KisColorSpace * cs = m_layer -> colorSpace();
+    m_dev -> exactBounds(x, y, w, h);
+    KisColorSpace * cs = m_dev -> colorSpace();
     Q_UINT8 opacity;
     for (int y2 = y; y2 < h - y; ++y2) {
-        KisHLineIterator hiter = m_layer -> createHLineIterator(x, y2, w, false);
+        KisHLineIterator hiter = m_dev -> createHLineIterator(x, y2, w, false);
         KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
             QColor c;
@@ -341,7 +341,7 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    m_layer -> selection() -> clear();
+    m_dev -> selection() -> clear();
     updatePreview();
 }
 

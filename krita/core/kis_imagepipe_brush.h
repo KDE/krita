@@ -128,7 +128,7 @@ public:
     */
     virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
-    virtual KisLayerSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceImplSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;

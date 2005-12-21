@@ -82,7 +82,7 @@ public:
     virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisLayerSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceImplSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(KisPoint);

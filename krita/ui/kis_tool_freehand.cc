@@ -40,6 +40,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_boundary_painter.h"
@@ -135,20 +136,21 @@ void KisToolFreehand::initPaint(KisEvent *)
                 m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
 
             // XXX ugly! hacky!
-            m_target = m_currentImage->layerAdd("temp", OPACITY_OPAQUE);
+            m_tempLayer = new KisPaintLayer(m_currentImage, "temp", OPACITY_OPAQUE);
+            m_target= m_tempLayer->paintDevice();
 
-            m_target -> setCompositeOp(m_compositeOp);
+            m_tempLayer -> setCompositeOp(m_compositeOp);
 
             if (device -> hasSelection()) {
                 m_target -> addSelection(device -> selection());
             }
 
-            dynamic_cast<KisLayer*>(m_target.data()) -> setVisible(true);
+           m_tempLayer -> setVisible(true);
 
             // XXX doesn't look very good I'm afraid
-            currentImage() -> add(dynamic_cast<KisLayer*>(m_target.data()),
-                currentImage() -> index(dynamic_cast<KisLayer*>(device.data())) + 1);
-            m_target = currentImage() -> activate(dynamic_cast<KisLayer*>(m_target.data()));
+            currentImage() -> addLayer(m_tempLayer, m_currentImage -> activeLayer()->parent(), m_currentImage -> activeLayer());
+
+            currentImage() -> activate(m_tempLayer);
             currentImage() -> notify();
         } else {
             m_target = device;
@@ -192,11 +194,11 @@ void KisToolFreehand::endPaint()
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
                 painter.beginTransaction(m_transactionText);
-                 painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, OPACITY_OPAQUE,
+                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, OPACITY_OPAQUE,
                            m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
                 adapter -> addCommand(painter.endTransaction());
-                m_currentImage->layerRemove(dynamic_cast<KisLayer*>(m_target.data()));
+                m_currentImage->removeLayer(m_tempLayer);
                 currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
                 adapter -> endMacro();
             } else {

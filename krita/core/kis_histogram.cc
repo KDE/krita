@@ -31,7 +31,7 @@ KisHistogram::KisHistogram(KisLayerSP layer,
                            KisHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-    m_dev = layer.data();
+//LAYERREMOVE    m_dev = layer.data();
     m_type = type;
     m_producer = producer;
     m_selection = false;

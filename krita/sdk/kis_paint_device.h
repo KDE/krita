@@ -45,7 +45,7 @@ public:
      * implementations, especially on larger paint devices because it does a 
      * linear scanline search.
      */
-    virtual QRect exactBounds() = 0;
+    virtual QRect exactBounds() const = 0;
         
     /**
      * Completely erase the current paint device. Its size will become 0.

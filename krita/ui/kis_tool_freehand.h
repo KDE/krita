@@ -30,6 +30,7 @@ class QWidget;
 class KisPainter;
 class KisBrush;
 class KisEvent;
+class KisPaintLayer;
 
 
 class KRITACORE_EXPORT KisToolFreehand : public KisToolPaint {
@@ -88,6 +89,7 @@ protected:
 
     bool m_useTempLayer;
     KisPaintDeviceImplSP m_target;
+    KisPaintLayer *m_tempLayer;
     KisPaintDeviceImplSP m_source;
 
     QString m_transactionText;

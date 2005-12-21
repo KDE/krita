@@ -99,9 +99,9 @@
 #endif
 
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_move_event.h"
 #include "kis_paint_device_impl.h"
-#include "kis_paint_device_visitor.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
@@ -167,7 +167,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_hRuler( 0 )
     , m_vRuler( 0 )
     , m_imgFlatten( 0 )
-    , m_imgMergeLinked( 0 )
     , m_imgMergeVisible( 0 )
     , m_imgMergeLayer( 0 )
     , m_imgRename( 0 )
@@ -460,9 +459,9 @@ void KisView::updateStatusBarSelectionLabel()
 
     KisImageSP img = currentImg();
     if (img) {
-        KisLayerSP layer = img->activeLayer();
-        if (layer) {
-            if (layer -> hasSelection()) {
+        KisPaintDeviceImplSP dev = img->activeDevice();
+        if (dev) {
+            if (dev -> hasSelection()) {
                 m_statusBarSelectionLabel -> setText(i18n("Selection Active"));
                 return;
             }
@@ -590,7 +589,6 @@ void KisView::setupActions()
 
     // image actions
     m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), "Ctrl+Shift+E", this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
-    m_imgMergeLinked = new KAction(i18n("Merge &Linked Layers"), 0, this, SLOT(mergeLinkedLayers()), actionCollection(), "merge_linked_layers");
     m_imgMergeLayer = new KAction(i18n("&Merge Layer"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
     m_imgFlatten = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
 
@@ -1032,19 +1030,17 @@ void KisView::layerUpdateGUI(bool enable)
     KisLayerSP layer;
     Q_INT32 nlayers = 0;
     Q_INT32 nvisible = 0;
-    Q_INT32 nlinked = 0;
     Q_INT32 layerPos = 0;
 
     if (img) {
         layer = img -> activeLayer();
         nlayers = img -> nlayers();
         nvisible = nlayers - img -> nHiddenLayers();
-        nlinked = img -> nLinkedLayers();
     }
-
+/*LAYERREMOVE
     if (layer)
         layerPos = img->index(layer);
-
+*/
     enable = enable && img && layer && layer->visible() && !layer->locked();
     m_layerDup -> setEnabled(enable);
     m_layerRm -> setEnabled(enable);
@@ -1053,16 +1049,16 @@ void KisView::layerUpdateGUI(bool enable)
     m_layerProperties -> setEnabled(enable);
     m_layerSaveAs -> setEnabled(enable);
 //        m_layerTransform -> setEnabled(enable);
+/*
     m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
     m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
     m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
     m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-
+*/
     // XXX these should be named layer instead of img
     m_imgFlatten -> setEnabled(nlayers > 1);
 
     m_imgMergeVisible -> setEnabled(nvisible > 1);
-    m_imgMergeLinked -> setEnabled(nlinked > 1);
     m_imgMergeLayer -> setEnabled(nlayers > 1 && layerPos < nlayers - 1);
 
     m_selectionManager->updateGUI();
@@ -1301,14 +1297,10 @@ void KisView::saveLayerAsImage()
     KisDoc d;
     d.prepareForImport();
 
-    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), l->colorSpace(), l->name());
+    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
     d.setCurrentImage( dst );
-    KisLayerSP layer = dst->layerAdd(l->name(), COMPOSITE_COPY, l->opacity(), l->colorSpace());
-    if (!layer) return;
+    dst->addLayer(l->clone(),dst->rootLayer(),0);
 
-    KisPainter p(layer);
-    p.bitBlt(0, 0, COMPOSITE_COPY, l.data(), r.x(), r.y(), r.width(), r.height());
-    p.end();
     d.setOutputMimeType(mimefilter.latin1());
     d.exp0rt(url);
 }
@@ -1339,6 +1331,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
         img = d.currentImage();
 
         if (currentImg()) {
+/*LAYERREMOVE
             vKisLayerSP v = img -> layers();
             KisImageSP current = currentImg();
 
@@ -1355,6 +1348,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 #endif
             }
+*/
             resizeEvent(0);
             updateCanvas();
         }
@@ -1383,17 +1377,17 @@ void KisView::rotateLayerRight90()
 void KisView::mirrorLayerX()
 {
     if (!currentImg()) return;
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    if (!dev) return;
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Mirror Layer X"), layer.data());
+        t = new KisTransaction(i18n("Mirror Layer X"), dev);
         Q_CHECK_PTR(t);
     }
 
-    layer->mirrorX();
+    dev->mirrorX();
 
     if (undo) undo -> addCommand(t);
 
@@ -1405,17 +1399,17 @@ void KisView::mirrorLayerX()
 void KisView::mirrorLayerY()
 {
     if (!currentImg()) return;
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    if (!dev) return;
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Mirror Layer Y"), layer.data());
+        t = new KisTransaction(i18n("Mirror Layer Y"), dev);
         Q_CHECK_PTR(t);
     }
 
-    layer->mirrorY();
+    dev->mirrorY();
 
     if (undo) undo -> addCommand(t);
 
@@ -1428,17 +1422,17 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
 {
     if (!currentImg()) return;
 
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    if (!dev) return;
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Scale Layer"), layer.data());
+        t = new KisTransaction(i18n("Scale Layer"), dev);
         Q_CHECK_PTR(t);
     }
 
-    layer -> scale(sx, sy, m_progress, filterStrategy);
+    dev -> scale(sx, sy, m_progress, filterStrategy);
 
     if (undo) undo -> addCommand(t);
 
@@ -1453,18 +1447,18 @@ void KisView::rotateLayer(double angle)
 {
     if (!currentImg()) return;
 
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    if (!dev) return;
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Rotate Layer"), layer.data());
+        t = new KisTransaction(i18n("Rotate Layer"), dev);
         Q_CHECK_PTR(t);
     }
 
     // Rotate
-    layer -> rotate(angle, false, m_progress);
+    dev -> rotate(angle, false, m_progress);
 
     if (undo) undo -> addCommand(t);
 
@@ -1479,17 +1473,17 @@ void KisView::shearLayer(double angleX, double angleY)
 {
     if (!currentImg()) return;
 
-    KisLayerSP layer = currentImg() -> activeLayer();
-    if (!layer) return;
+    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    if (!dev) return;
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Shear layer"), layer.data());
+        t = new KisTransaction(i18n("Shear layer"), dev);
         Q_CHECK_PTR(t);
     }
 
-    layer -> shear(angleX, angleY, m_progress);
+    dev -> shear(angleX, angleY, m_progress);
 
     if (undo) undo -> addCommand(t);
 
@@ -1531,15 +1525,6 @@ void KisView::mergeVisibleLayers()
 
     if (img) {
         img -> mergeVisibleLayers();
-    }
-}
-
-void KisView::mergeLinkedLayers()
-{
-    KisImageSP img = currentImg();
-
-    if (img) {
-        img -> mergeLinkedLayers();
     }
 }
 
@@ -2146,21 +2131,6 @@ void KisView::docImageListUpdate()
     setCurrentImage(m_doc -> currentImage());
 }
 
-void KisView::layerToggleLinked()
-{
-    KisImageSP img = currentImg();
-
-    if (img) {
-        KisLayerSP layer = img -> activeLayer();
-
-        if (layer) {
-            KNamedCommand *cmd = layer -> setLinkedCommand(!layer -> linked());
-            cmd -> execute();
-            undoAdapter() -> addCommand(cmd);
-        }
-    }
-}
-
 void KisView::layerProperties()
 {
     KisImageSP img = currentImg();
@@ -2172,7 +2142,7 @@ void KisView::layerProperties()
             KisDlgLayerProperties dlg(layer -> name(),
                                      layer->opacity(),
                                      layer->compositeOp(),
-                                     layer->colorSpace());
+                                     img->colorSpace()); // LAYERREMOVE used to be cs of layer
 
             if (dlg.exec() == QDialog::Accepted) {
                 bool changed = layer -> name() != dlg.getName()
@@ -2206,15 +2176,16 @@ void KisView::layerAdd()
         if (dlg.exec() == QDialog::Accepted) {
             KisColorSpace* cs = KisMetaRegistry::instance() ->  csRegistry() ->
                     getColorSpace(dlg.colorSpaceID(),"");
-            KisLayerSP layer = img->layerAdd(dlg.layerName(), dlg.compositeOp(),
-                                             dlg.opacity(), cs);
+            KisLayerSP layer = new KisPaintLayer(img, dlg.layerName(), dlg.opacity(), cs);
             if (layer) {
-
+                layer->setCompositeOp(dlg.compositeOp());
+                img->addLayer(layer, img->activeLayer()->parent(), img->activeLayer());
+/*LAYERREMOVE
                 QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                         csRegistry() -> paintDeviceActionsFor(cs);
                 for (uint i = 0; i < actions.count(); i++)
                     actions.at(i) -> act(layer.data(), img -> width(), img -> height());
-
+*/
                 #ifdef LAYERBOXDISABLE
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 #endif
@@ -2229,6 +2200,7 @@ void KisView::layerAdd()
 
 void KisView::addPartLayer()
 {
+/*LAYERREMOVE
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -2250,7 +2222,7 @@ void KisView::addPartLayer()
     img->layerAdd(partLayer, 0);
 
     m_doc->setModified(true);
-
+*/
 
 }
 
@@ -2273,9 +2245,9 @@ void KisView::layerRemove()
         KisLayerSP layer = img -> activeLayer();
 
         if (layer) {
-            Q_INT32 n = img -> index(layer);
+            //Q_INT32 n = img -> index(layer);
 
-            img->layerRemove(layer);
+            img->removeLayer(layer);
             #ifdef LAYERBOXDISABLE
             m_layerBox->slotSetCurrentItem(n - 1);
             #endif
@@ -2298,12 +2270,11 @@ void KisView::layerDuplicate()
     if (!active)
         return;
 
-    Q_INT32 index = img -> index(active);
-    KisLayerSP dup = new KisLayer(*active);
+    KisLayerSP dup = active->clone();
     dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
-    KisLayerSP layer = img->layerAdd(dup, index);
+    img->addLayer(dup, active->parent(), active);
 
-    if (layer) {
+    if (dup) {
         #ifdef LAYERBOXDISABLE
         m_layerBox->slotSetCurrentItem(img -> index(layer));
         #endif
@@ -2324,11 +2295,7 @@ void KisView::layerRaise()
 
     layer = img -> activeLayer();
 
-    if (layer) {
-        KCommand *cmd = img -> raiseLayerCommand(layer);
-        cmd -> execute();
-        undoAdapter() -> addCommand(cmd);
-    }
+    img -> raiseLayer(layer);
 }
 
 void KisView::layerLower()
@@ -2341,11 +2308,7 @@ void KisView::layerLower()
 
     layer = img -> activeLayer();
 
-    if (layer) {
-        KCommand *cmd = img -> lowerLayerCommand(layer);
-        cmd -> execute();
-        undoAdapter() -> addCommand(cmd);
-    }
+    img -> lowerLayer(layer);
 }
 
 void KisView::layerFront()
@@ -2353,11 +2316,11 @@ void KisView::layerFront()
     KisImageSP img = currentImg();
     KisLayerSP layer;
 
-    if (img && (layer = img -> activeLayer())) {
-        KCommand *cmd = img -> topLayerCommand(layer);
-        cmd -> execute();
-        undoAdapter() -> addCommand(cmd);
-    }
+    if (!img)
+        return;
+
+    layer = img -> activeLayer();
+    img -> toTop(layer);
 }
 
 void KisView::layerBack()
@@ -2367,11 +2330,8 @@ void KisView::layerBack()
 
     KisLayerSP layer;
 
-    if (img && (layer = img -> activeLayer())) {
-        KCommand *cmd = img -> bottomLayerCommand(layer);
-        cmd -> execute();
-        undoAdapter() -> addCommand(cmd);
-    }
+    layer = img -> activeLayer();
+    img -> toBottom(layer);
 }
 
 void KisView::layersUpdated()
@@ -2401,12 +2361,6 @@ void KisView::layersUpdated()
     #endif
     img->notify();
     notifyObservers();
-}
-
-void KisView::layersUpdated(KisImageSP img)
-{
-    if (img == currentImg())
-        layersUpdated();
 }
 
 void KisView::layerToggleVisible()
@@ -2440,7 +2394,7 @@ void KisView::actLayerVisChanged(int show)
 {
     m_actLayerVis = (show != 0);
 }
-
+/*LAYERREMOVE
 void KisView::layerSelected(int n)
 {
     KisImageSP img = currentImg();
@@ -2466,6 +2420,7 @@ void KisView::layerSelected(int n)
 
     updateCanvas();
 }
+*/
 
 void KisView::scrollH(int value)
 {
@@ -2551,10 +2506,9 @@ void KisView::connectCurrentImg()
     if (m_current) {
         connect(m_current, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
-        connect(m_current, SIGNAL(sigLayersUpdated(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
         connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_current, SIGNAL(sigLayersChanged(KisImageSP)), SLOT(layersUpdated(KisImageSP)));
+        connect(m_current, SIGNAL(sigLayersChanged()), SLOT(layersUpdated()));
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {

@@ -38,6 +38,7 @@
 #include "kis_point.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_cursor.h"
 #include "kis_tool_text.h"
 #include "kis_paint_device_impl.h"
@@ -97,14 +98,15 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 
         Q_INT32 height = boundingRect.height();
         Q_INT32 width = boundingRect.width();
-        KisLayerSP layer = img->layerAdd('"' + text + '"', OPACITY_OPAQUE);
+        KisPaintLayer *layer = new KisPaintLayer(img, '"' + text + '"', OPACITY_OPAQUE);
+        img->addLayer(layer, img->activeLayer()->parent(), img->activeLayer());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);
                  // use the 'blackness' as alpha :)
                 Q_UINT8 alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
                 QColor c = m_subject->fgColor().toQColor();
-                layer->setPixel(x, y, c, alpha);
+                layer->paintDevice()->setPixel(x, y, c, alpha);
             }
         }
 
@@ -113,7 +115,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 
         Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
         Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
-        layer->move(x, y);
+        layer->setX(x);
+        layer->setY(y);
         img->notify();
     }
 }

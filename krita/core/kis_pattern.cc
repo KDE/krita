@@ -39,6 +39,7 @@
 #include "kis_color.h"
 #include "kis_pattern.h"
 #include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 
 namespace {
     struct GimpPatternHeader {
@@ -204,14 +205,14 @@ bool KisPattern::init()
     return true;
 }
 
-KisLayerSP KisPattern::image(KisColorSpace * colorSpace) {
+KisPaintDeviceImplSP KisPattern::image(KisColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
-    QMap<QString, KisLayerSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
+    QMap<QString, KisPaintDeviceImplSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
     if (it != m_colorspaces.end())
         return (*it);
 
     // If not, create one
-    KisLayerSP layer = new KisLayer(colorSpace, "pattern image");
+    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl(colorSpace, "pattern image");
 
     Q_CHECK_PTR(layer);
 

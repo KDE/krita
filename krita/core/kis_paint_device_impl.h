@@ -87,10 +87,6 @@ public:
     virtual void move(const QPoint& pt);
     virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
 
-    virtual const bool visible() const;
-    virtual void setVisible(bool v);
-    KNamedCommand *setVisibleCommand(bool visible);
-
     bool contains(Q_INT32 x, Q_INT32 y) const;
     bool contains(const QPoint& pt) const;
 
@@ -117,8 +113,8 @@ public:
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h);
-    virtual QRect exactBounds();
+    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    virtual QRect exactBounds() const;
 
     void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x - m_x, y - m_y, w, h); };
     void crop(QRect r) { r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r); };
@@ -262,20 +258,15 @@ public:
      */
     void setData(KisDataManagerSP data, KisColorSpace * colorSpace);
 
-    KisCompositeOp compositeOp() { return m_compositeOp; }
-    void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
-
-    KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
-
     /**
      * The X offset of the paint device
      */
-    Q_INT32 getX();
+    Q_INT32 getX() const;
 
     /**
      * The Y offset of the paint device
      */
-    Q_INT32 getY();
+    Q_INT32 getY() const;
 
     /**
      * Return the X offset of the paint device
@@ -370,8 +361,6 @@ public:
     void applySelectionMask(KisSelectionSP mask);
 
 signals:
-
-        void visibilityChanged(KisPaintDeviceImplSP device);
         void positionChanged(KisPaintDeviceImplSP device);
         void ioProgress(Q_INT8 percentage);
     void profileChanged(KisProfile *  profile);
@@ -394,10 +383,7 @@ private:
 
     Q_INT32 m_x;
     Q_INT32 m_y;
-    bool m_visible;
     QString m_name;
-    // Operation used to composite this layer with the layers _under_ this layer
-    KisCompositeOp m_compositeOp;
     KisColorSpace * m_colorSpace;
     // Cached for quick access
     Q_INT32 m_pixelSize;
@@ -438,29 +424,15 @@ inline KisColorSpace * KisPaintDeviceImpl::colorSpace() const
 }
 
 
-inline Q_INT32 KisPaintDeviceImpl::getX()
+inline Q_INT32 KisPaintDeviceImpl::getX() const
 {
     return m_x;
 }
 
-inline Q_INT32 KisPaintDeviceImpl::getY()
+inline Q_INT32 KisPaintDeviceImpl::getY() const
 {
     return m_y;
 }
-
-inline const bool KisPaintDeviceImpl::visible() const
-{
-        return m_visible;
-}
-
-inline void KisPaintDeviceImpl::setVisible(bool v)
-{
-        if (m_visible != v) {
-                m_visible = v;
-                emit visibilityChanged(this);
-        }
-}
-
 
 inline KisImage *KisPaintDeviceImpl::image()
 {

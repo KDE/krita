@@ -186,21 +186,21 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                 m_endPos.setX(img -> width());
 
             if (img) {
-                KisLayerSP layer = img -> activeLayer();
+                KisPaintDeviceImplSP dev = img -> activeDevice();
                                 
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), layer.data());
+                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);
 
-                bool hasSelection = layer -> hasSelection();
+                bool hasSelection = dev -> hasSelection();
                 if(! hasSelection)
                 {
-                    layer -> selection() -> clear();
+                    dev -> selection() -> clear();
                     if(m_selectAction==SELECTION_SUBTRACT)
-                        layer -> selection()->invert();
+                        dev -> selection()->invert();
                 }
                 QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
                 
-                KisSelectionSP tmpSel = new KisSelection(layer.data(),"tmp sel");
+                KisSelectionSP tmpSel = new KisSelection(dev,"tmp sel");
                 KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
                 Q_UINT8 value;
                 for (int y = 0; y <= rc.height(); y++)
@@ -212,10 +212,10 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                 switch(m_selectAction)
                 {
                     case SELECTION_ADD:
-                        layer->addSelection(tmpSel);
+                        dev->addSelection(tmpSel);
                         break;
                     case SELECTION_SUBTRACT:
-                        layer->subtractSelection(tmpSel);
+                        dev->subtractSelection(tmpSel);
                         break;
                 }
                 
@@ -224,9 +224,9 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                     adapter -> addCommand(t);
 
                 if(hasSelection)
-                    layer->emitSelectionChanged(rc);
+                    dev->emitSelectionChanged(rc);
                 else
-                    layer->emitSelectionChanged();
+                    dev->emitSelectionChanged();
                     
                 QApplication::restoreOverrideCursor();
             }

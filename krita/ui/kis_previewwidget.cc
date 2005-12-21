@@ -77,31 +77,31 @@ void KisPreviewWidget::forceUpdate()
     kdDebug() << "forceUpdate\n";
     if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(m_origLayer->name());
+        m_groupBox->setTitle(m_origDevice->name());
         emit updated();
     }
 }
 
-void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
+void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 {
     //kdDebug() << "slotSetLayer\n";
     
-    Q_ASSERT(lay);
-    if (!lay) return;
+    Q_ASSERT(dev);
+    if (!dev) return;
 
-    m_origLayer = lay;
+    m_origDevice = dev;
     
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     m_profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
 
-    QRect r = lay->exactBounds();
+    QRect r = dev->exactBounds();
     //kdDebug() << "layer size: " << r.width() << ", " << r.height() << "\n";
     
-    m_unscaledSource = lay->convertToQImage(m_profile, 0, 0, r.width(), r.height());
+    m_unscaledSource = dev->convertToQImage(m_profile, 0, 0, r.width(), r.height());
     //kdDebug() << "preview size: " << m_preview->width() << ", "  << m_preview->height() << "\n";
 
-    m_groupBox->setTitle(lay->name());
+    m_groupBox->setTitle(dev->name());
     m_previewIsDisplayed = true;
 
     m_zoom = (double)m_preview->width() / (double)m_unscaledSource.width();
@@ -110,16 +110,16 @@ void KisPreviewWidget::slotSetLayer(KisLayerSP lay)
 }
 
 
-KisLayerSP KisPreviewWidget::getLayer()
+KisPaintDeviceImplSP KisPreviewWidget::getDevice()
 {
     //kdDebug() << "getLayer\n";
-    return m_previewLayer;
+    return m_previewDevice;
 }
 
 void KisPreviewWidget::slotUpdate()
 {
     //kdDebug() << "slotUpdate\n";
-    m_scaledPreview = m_previewLayer->convertToQImage(m_profile, 0, 0, m_scaledPreview.width(), m_scaledPreview.height());
+    m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, m_scaledPreview.width(), m_scaledPreview.height());
     m_preview->setImage(m_scaledPreview);
 }
 
@@ -173,8 +173,8 @@ void KisPreviewWidget::zoomChanged()
     m_scaledPreview = m_unscaledSource.smoothScale(w, h, QImage::ScaleMax);
 
     m_image->resize(m_scaledPreview.width(), m_scaledPreview.height());
-    m_previewLayer = new KisLayer(m_image, "preview layer", OPACITY_OPAQUE);
-    m_previewLayer->convertFromQImage(m_scaledPreview,""); //should perhaps be m_profile->name
+    m_previewDevice = new KisPaintDeviceImpl(m_image, m_image->colorSpace(), "preview layer");
+    m_previewDevice->convertFromQImage(m_scaledPreview, ""); //should perhaps be m_profile->name
     
     emit updated();
  }

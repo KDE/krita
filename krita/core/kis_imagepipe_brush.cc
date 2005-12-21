@@ -44,6 +44,7 @@
 #include <kapplication.h>
 
 #include "kis_global.h"
+#include "kis_paint_device_impl.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
@@ -322,7 +323,7 @@ KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double s
     return m_brushes.at(m_currentBrush) -> mask(info, subPixelX, subPixelY);
 }
 
-KisLayerSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceImplSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
     selectNextBrush(info);

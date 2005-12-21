@@ -1,5 +1,5 @@
 require "krosskritacore"
 
-doc = $krosskritacore.get("KritaDocument")
+doc = Krosskritacore::get("KritaDocument")
 image = doc.getImage()
 image.convertToColorspace("LABA")

@@ -2,8 +2,10 @@ print "begin invert script\n"
 
 require "krosskritacore"
 
-doc = $krosskritacore.get("KritaDocument")
-script = $krosskritacore.get("KritaScript")
+print "Before error\n"
+
+doc = Krosskritacore::get("KritaDocument")
+script = Krosskritacore::get("KritaScript")
 image = doc.getImage()
 layer = image.getActiveLayer()
 width = layer.getWidth()
@@ -13,8 +15,7 @@ print height
 script.setProgressTotalSteps(width * height)
 layer.beginPainting("invert")
 it = layer.createRectIterator( 0, 0, width, height )
-finish = it.isDone()
-while ( finish == 0 )
+while (it.isDone() == 0)
     r = it.getRed()
     nr = 255 - r
     it.setRed(nr)
@@ -25,7 +26,7 @@ while ( finish == 0 )
     nb = 255-b
     it.setBlue(nb)
     script.incProgress()
-    finish = it.next()
+    it.next()
 end
 
 layer.endPainting()

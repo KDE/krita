@@ -53,7 +53,10 @@ public:
     virtual void insertLayer(KisLayerSP newLayer, KisLayerSP belowLayer);
     virtual void removeLayer(KisLayerSP layer);
 
-    virtual void accept(KisLayerVisitor &v) { v.visit(this); };
+    virtual void accept(KisLayerVisitor &v) { v.visit(this); }
+
+    virtual KisLayerSP firstChild() const;
+    virtual KisLayerSP lastChild() const;
 
 private:
     vKisLayerSP m_layers; // Contains the list of all layers

@@ -71,4 +71,22 @@ void KisGroupLayer::removeLayer(KisLayerSP layer)
     }
 }
 
+KisLayerSP KisGroupLayer::firstChild() const {
+    if (m_layers.count() == 0) {
+        kdDebug() << "No children for firstChild!" << endl;
+        return 0;
+    }
+
+    return m_layers.at(0);
+}
+
+KisLayerSP KisGroupLayer::lastChild() const {
+    if (m_layers.count() == 0) {
+        kdDebug() << "No children for lastChild!" << endl;
+        return 0;
+    }
+
+    return m_layers.at(m_layers.count() - 1);
+}
+
 #include "kis_group_layer.moc"

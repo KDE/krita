@@ -157,7 +157,7 @@ signals:
      * Indicates when the current layer changed so that the current colorspace could have
      * changed.
      **/
-    void currentColorSpaceChanged(KisLayerSP layer);
+    void currentColorSpaceChanged(KisColorSpace* cs);
     void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
 
     void sigFGQColorChanged(const QColor &);

@@ -53,8 +53,8 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     m_currentID = KisID("paintbrush","");
 
-    connect(m_view, SIGNAL(currentColorSpaceChanged(KisLayerSP)),
-            this, SLOT(colorSpaceChanged(KisLayerSP)));
+    connect(m_view, SIGNAL(currentColorSpaceChanged(KisColorSpace*)),
+            this, SLOT(colorSpaceChanged(KisColorSpace*)));
 }
 
 KisPaintopBox::~KisPaintopBox()

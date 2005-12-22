@@ -81,12 +81,12 @@ public:
 
         KisMergeVisitor visitor(m_img, &painter);
         bool first = true;
-/*LAYERREMOVE
-        KisLayerSP child = layer->lastChild()
+
+        KisLayerSP child = layer->lastChild();
 
         while(child)
         {
-            if(true)//test(child))
+            if(true)//test(child)) // LAYERREMOVE
             {
                 if(first)
                 {
@@ -105,7 +105,7 @@ public:
             }
             child = child->prevSibling();
         }
-*/
+
         Q_INT32 sx, sy, dx, dy, w, h;
 
         dst ->extent(sx,sy,w,h);

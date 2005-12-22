@@ -40,6 +40,7 @@
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
@@ -148,7 +149,7 @@ void KisToolFreehand::initPaint(KisEvent *)
            m_tempLayer -> setVisible(true);
 
             // XXX doesn't look very good I'm afraid
-            currentImage() -> addLayer(m_tempLayer, m_currentImage -> activeLayer()->parent(), m_currentImage -> activeLayer());
+            currentImage() -> addLayer(m_tempLayer, m_currentImage -> activeLayer()->parent().data(), m_currentImage -> activeLayer());
 
             currentImage() -> activate(m_tempLayer);
             currentImage() -> notify();

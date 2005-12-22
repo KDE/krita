@@ -63,7 +63,6 @@ namespace {
 
     protected:
         void setUndo(bool undo);
-        void notifyPropertyChanged();
 
         KisPaintDeviceImplSP m_paintDevice;
     };
@@ -77,13 +76,6 @@ namespace {
     {
         if (m_paintDevice -> undoAdapter()) {
             m_paintDevice -> undoAdapter() -> setUndo(undo);
-        }
-    }
-
-    void KisPaintDeviceImplCommand::notifyPropertyChanged()
-    {
-        if (m_paintDevice -> image()) {
-            m_paintDevice -> image() -> notifyLayersChanged();
         }
     }
 
@@ -188,7 +180,6 @@ namespace {
                 m_adapter -> setUndo(true);
                 if (m_paintDevice -> image()) {
                     m_paintDevice -> image() -> notify();
-                    m_paintDevice -> image() -> notifyLayersChanged();
                 }
             }
 
@@ -201,7 +192,6 @@ namespace {
                 m_adapter -> setUndo(true);
                 if (m_paintDevice -> image()) {
                     m_paintDevice -> image() -> notify();
-                    m_paintDevice -> image() -> notifyLayersChanged();
                 }
             }
 

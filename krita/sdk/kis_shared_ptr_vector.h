@@ -56,6 +56,14 @@ public:
         qFill(first, last, 0);
         return super::erase(first, last);
     }
+
+    bool contains(KSharedPtr<T> ptr) const
+    {
+        for (int i = 0, n = super::count(); i < n; ++i)
+            if (super::at(i) == ptr)
+                return true;
+        return false;
+    }
 };
 
 #endif // KIS_SHARED_PTR_VECTOR_H

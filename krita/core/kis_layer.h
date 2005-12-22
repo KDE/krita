@@ -28,6 +28,7 @@
 class KNamedCommand;
 class QPainter;
 class KisUndoAdapter;
+class KisGroupLayer;
 
 class KRITACORE_EXPORT KisLayer : public QObject, public KShared
 {
@@ -40,7 +41,7 @@ public:
 
     virtual KisLayerSP clone() const = 0;
 
-    virtual KisLayerSP parent() const;
+    virtual KisGroupLayerSP parent() const;
     virtual KisLayerSP prevSibling() const{return 0;};
     virtual KisLayerSP nextSibling() const{return 0;};
     virtual KisLayerSP firstChild() const{return 0;};
@@ -93,12 +94,9 @@ public:
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
-    virtual void insertLayer(KisLayerSP newLayer, KisLayerSP belowLayer);
-    virtual void removeLayer(KisLayerSP layer);
-
     virtual void accept(KisLayerVisitor &) = 0;
 
-    void setParent(KisLayerSP parent) { m_parent=parent;};
+    void setParent(KisGroupLayerSP parent);
 
 signals:
     void visibilityChanged(KisLayerSP device);
@@ -109,7 +107,7 @@ private:
     bool m_locked;
     bool m_visible;
     QString m_name;
-    KisLayerSP m_parent;
+    KisGroupLayerSP m_parent;
     KisImage *m_image;
 
     // Operation used to composite this layer with the layers _under_ this layer

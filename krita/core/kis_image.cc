@@ -126,7 +126,9 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img, KisLayerSP oldRootLayer, KisLayerSP newRootLayer, const QString& name) : super(name)
+        KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img,
+                           KisLayerSP oldRootLayer, KisLayerSP newRootLayer, const QString& name)
+            : super(name)
             {
                 m_adapter = adapter;
                 m_img = img;
@@ -145,8 +147,8 @@ namespace {
 
 // XXX LAYERREMOVE
                 m_adapter -> setUndo(true);
-                m_img -> notify();
                 m_img -> notifyLayersChanged();
+                m_img -> notify();
             }
 
         virtual void unexecute()
@@ -156,8 +158,8 @@ namespace {
 // XXX LAYERREMOVE
 
                 m_adapter -> setUndo(true);
-                m_img -> notify();
                 m_img -> notifyLayersChanged();
+                m_img -> notify();
             }
 
     private:
@@ -198,7 +200,6 @@ namespace {
 
                 m_adapter -> setUndo(true);
                 m_img -> notify();
-                m_img -> notifyLayersChanged();
             }
 
         virtual void unexecute()
@@ -210,7 +211,6 @@ namespace {
 
                 m_adapter -> setUndo(true);
                 m_img -> notify();
-                m_img -> notifyLayersChanged();
             }
 
     private:
@@ -311,7 +311,7 @@ namespace {
         virtual void execute()
             {
                 adapter() -> setUndo(false);
-                m_img -> addLayer(m_layer, m_parent, m_aboveThis);
+                m_img -> addLayer(m_layer, m_parent.data(), m_aboveThis);
                 adapter() -> setUndo(true);
             }
 
@@ -325,7 +325,7 @@ namespace {
     private:
         KisImageSP m_img;
         KisLayerSP m_layer;
-        KisLayerSP m_parent;
+        KisGroupLayerSP m_parent;
         KisLayerSP m_aboveThis;
     };
 
@@ -335,13 +335,15 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        LayerRmCmd(KisUndoAdapter *adapter, KisImageSP img, KisLayerSP layer) : super(i18n("Remove Layer"))
+        LayerRmCmd(KisUndoAdapter *adapter, KisImageSP img,
+                   KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
+            : super(i18n("Remove Layer"))
             {
                 m_adapter = adapter;
                 m_img = img;
                 m_layer = layer;
-                m_parent = layer->parent();
-                m_aboveThis = layer->nextSibling();
+                m_prevParent = wasParent;
+                m_prevAbove = wasAbove;
             }
 
         virtual ~LayerRmCmd()
@@ -358,7 +360,7 @@ namespace {
         virtual void unexecute()
             {
                 m_adapter -> setUndo(false);
-                m_img -> addLayer(m_layer, m_parent, m_aboveThis);
+                m_img -> addLayer(m_layer, m_prevParent.data(), m_prevAbove);
                 m_adapter -> setUndo(true);
             }
 
@@ -366,8 +368,53 @@ namespace {
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
         KisLayerSP m_layer;
-        KisLayerSP m_parent;
-        KisLayerSP m_aboveThis;
+        KisGroupLayerSP m_prevParent;
+        KisLayerSP m_prevAbove;
+    };
+
+    class LayerMoveCmd: public KNamedCommand {
+        typedef KNamedCommand super;
+
+    public:
+        LayerMoveCmd(KisUndoAdapter *adapter, KisImageSP img,
+                         KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAbove)
+            : super(i18n("Move Layer"))
+            {
+                m_adapter = adapter;
+                m_img = img;
+                m_layer = layer;
+                m_prevParent = wasParent;
+                m_prevAbove = wasAbove;
+                m_newParent = layer -> parent();
+                m_newAbove = layer -> nextSibling();
+            }
+
+        virtual ~LayerMoveCmd()
+            {
+            }
+
+        virtual void execute()
+            {
+                m_adapter -> setUndo(false);
+                m_img -> moveLayer(m_layer, m_newParent.data(), m_newAbove);
+                m_adapter -> setUndo(true);
+            }
+
+        virtual void unexecute()
+            {
+                m_adapter -> setUndo(false);
+                m_img -> moveLayer(m_layer, m_prevParent.data(), m_prevAbove);
+                m_adapter -> setUndo(true);
+            }
+
+    private:
+        KisUndoAdapter *m_adapter;
+        KisImageSP m_img;
+        KisLayerSP m_layer;
+        KisGroupLayerSP m_prevParent;
+        KisLayerSP m_prevAbove;
+        KisGroupLayerSP m_newParent;
+        KisLayerSP m_newAbove;
     };
 
 
@@ -835,7 +882,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     setColorSpace(dstColorSpace);
 
     notify();
-    notifyLayersChanged();
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -905,21 +951,15 @@ KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& composi
     layer -> setCompositeOp(compositeOp);
     layer -> setVisible(true);
 
-    addLayer(layer, m_activeLayer->parent(), m_activeLayer->nextSibling());
+    addLayer(layer, m_activeLayer->parent().data(), m_activeLayer->nextSibling());
     activate(layer);
-
-    if (m_adapter->undo())
-        m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-
-    //notify() //not needed as the layer is transparent
-    notifyLayersChanged();
 
     return layer;
 }
 
-void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp,    const QString& name)
+void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name)
 {
-    if (layer) {
+    if (layer && (layer->opacity() != opacity || layer->compositeOp() != compositeOp || layer->name() != name)) {
         if (m_adapter->undo()) {
             QString oldname = layer -> name();
             Q_INT32 oldopacity = layer -> opacity();
@@ -935,7 +975,7 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
         }
 
         notify();
-        notifyLayersChanged();
+        emit sigLayerPropertiesChanged(layer);
     }
 }
 
@@ -963,6 +1003,7 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
         if (m_activeLayer) m_activeLayer->deactivate();
         m_activeLayer = layer;
         if (m_activeLayer) m_activeLayer->activate();
+        emit sigLayerActivated(m_activeLayer);
     }
 
     return layer;
@@ -974,59 +1015,95 @@ KisLayerSP KisImage::findLayer(const QString& name)
     return 0;
 }
 
-bool KisImage::addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis)
+bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
 {
-//LAYERREMOVE
-    if (m_adapter->undo())
-        m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(p.data());
+    if (!parent)
+        return false;
 
-    parent->insertLayer(layer, aboveThis);
+    const bool success = parent->addLayer(layer, aboveThis);
+    if (success)
+    {
+        if (m_adapter->undo())
+            m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
+        notify();
+        emit sigLayerAdded(layer);
+    }
 
-    return true;
+    return success;
 }
 
 bool KisImage::removeLayer(KisLayerSP layer)
 {
-//LAYERREMOVE
-    if (m_adapter->undo())
-        m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer));
+    if (KisGroupLayerSP parent = layer -> parent())
+    {
 
-//    parent->insert(layer);
+        KisLayerSP wasAbove = layer -> nextSibling();
+        const bool success = parent -> removeLayer(layer);
+        if (success)
+        {
+            if (m_adapter->undo())
+                m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
+            notify();
+            emit sigLayerRemoved(layer, parent, wasAbove);
+        }
+        return success;
+    }
 
-    return true;
+    return false;
 }
 
-bool KisImage::raiseLayer(KisLayerSP l)
+bool KisImage::raiseLayer(KisLayerSP layer)
 {
-//LAYERREMOVE
-    return true;
+    return moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
 }
 
-bool KisImage::lowerLayer(KisLayerSP l)
+bool KisImage::lowerLayer(KisLayerSP layer)
 {
-//LAYERREMOVE
-    return true;
+    if (KisLayerSP next = layer -> nextSibling())
+        return moveLayer(layer, layer -> parent().data(), next -> nextSibling());
+    return false;
 }
 
 bool KisImage::toTop(KisLayerSP layer)
 {
- //LAYERREMOVE
-   return true;
+    return moveLayer(layer, rootLayer(), rootLayer() -> firstChild());
 }
 
 bool KisImage::toBottom(KisLayerSP layer)
 {
-//LAYERREMOVE
-    return true;
+    return moveLayer(layer, rootLayer(), 0);
 }
 
-bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis)
+bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
 {
-//LAYERREMOVE
-    notify();
-    notifyLayersChanged();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(p.data());
+    if (!parent)
+        return false;
 
-    return true;
+    KisGroupLayerSP wasParent = layer -> parent();
+    KisLayerSP wasAbove = layer -> nextSibling();
+
+    if (!wasParent -> removeLayer(layer))
+        return false;
+
+    const bool success = parent -> addLayer(layer, aboveThis);
+    if (success)
+    {
+        if (m_adapter->undo())
+            m_adapter->addCommand(new LayerMoveCmd(m_adapter, this, layer, wasParent, wasAbove));
+        notify();
+        emit sigLayerMoved(layer, wasParent, wasAbove);
+    }
+    else //we already removed the layer above, but re-adding it failed, so...
+    {
+        if (m_adapter->undo())
+            m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, wasParent, wasAbove));
+        notify();
+        emit sigLayerRemoved(layer, wasParent, wasAbove);
+    }
+
+    return success;
 }
 
 Q_INT32 KisImage::nlayers() const
@@ -1314,6 +1391,11 @@ void KisImage::notify(const QRect& rc)
 void KisImage::notifyLayersChanged()
 {
     emit sigLayersChanged();
+}
+
+void KisImage::notifyPropertyChanged(KisLayerSP layer)
+{
+    emit sigLayerPropertiesChanged(layer);
 }
 
 QRect KisImage::bounds() const

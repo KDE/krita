@@ -92,6 +92,7 @@
 #include "kis_double_click_event.h"
 #include "kis_factory.h"
 #include "kis_gradient.h"
+#include "kis_group_layer.h"
 //#include "kis_guide.h"
 
 #ifdef LAYERBOXDISABLE
@@ -2177,7 +2178,7 @@ void KisView::layerAdd()
             KisLayerSP layer = new KisPaintLayer(img, dlg.layerName(), dlg.opacity(), cs);
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
-                img->addLayer(layer, img->activeLayer()->parent(), img->activeLayer());
+                img->addLayer(layer, img->activeLayer()->parent().data(), img->activeLayer());
 /*LAYERREMOVE
                 QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                         csRegistry() -> paintDeviceActionsFor(cs);
@@ -2270,7 +2271,7 @@ void KisView::layerDuplicate()
 
     KisLayerSP dup = active->clone();
     dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
-    img->addLayer(dup, active->parent(), active);
+    img->addLayer(dup, active->parent().data(), active);
 
     if (dup) {
         #ifdef LAYERBOXDISABLE

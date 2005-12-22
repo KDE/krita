@@ -167,25 +167,25 @@ KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UI
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name);
 
-    /// Move layer to specified position and emit sigLayersUpdated
+    /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Add layer and emit sigLayersUpdated
+    /// Add layer
     bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Remove layer and emit sigLayersUpdated
+    /// Remove layer
     bool removeLayer(KisLayerSP layer);
 
-    /// Move layer up one slot and emit sigLayersUpdated
+    /// Move layer up one slot
     bool raiseLayer(KisLayerSP layer);
 
-    /// Move layer down one slot and emit sigLayersUpdated
+    /// Move layer down one slot
     bool lowerLayer(KisLayerSP layer);
 
-    /// Move layer to top slot and emit sigLayersUpdated
+    /// Move layer to top slot
     bool toTop(KisLayerSP layer);
 
-    /// Move layer to tbottom slot and emit sigLayersUpdated
+    /// Move layer to bottom slot
     bool toBottom(KisLayerSP layer);
 
     Q_INT32 nlayers() const;
@@ -214,7 +214,10 @@ KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UI
     void notify();
     void notify(const QRect& rc);
 
+    /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
+
+    void notifyPropertyChanged(KisLayerSP layer);
 
     KisUndoAdapter *undoAdapter() const;
     //KisGuideMgr *guides() const;
@@ -245,11 +248,32 @@ signals:
     void sigActiveSelectionChanged(KisImageSP image);
     void sigSelectionChanged(KisImageSP image);
 
-    /** Emitted whenever something about layers change like the order or their names or other properties.
-     *   The call is emitted by notifyLayersChanged().
-     *
-     *  This signal is useful for the layerbox. A canvas should listen for sigImageUpdated instead.
-     */
+    /// Emitted after a different layer is made active.
+    void sigLayerActivated(KisLayerSP layer);
+
+    /// Emitted after a layer is added: you can find out where by asking it for its parent(), et al.
+    void sigLayerAdded(KisLayerSP layer);
+
+    /** Emitted after a layer is removed.
+        It's no longer in the image, but still exists, so @p layer is valid.
+
+        @param layer the removed layer
+        @param parent the parent of the layer, before it was removed
+        @param wasAboveThis the layer it was above, before it was removed.
+    */
+    void sigLayerRemoved(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP wasAboveThis);
+
+    /** Emitted after a layer is moved to a different position under its parent layer, or its parent changes.
+
+        @param previousParent the parent of the layer, before it was moved
+        @param wasAboveThis the layer it was above, before it was moved.
+    */
+    void sigLayerMoved(KisLayerSP layer, KisGroupLayerSP previousParent, KisLayerSP wasAboveThis);
+
+    /// Emitted after a layer's properties (opacity, composite op, name) change
+    void sigLayerPropertiesChanged(KisLayerSP layer);
+
+    /// Emitted when the layers have changed completely
     void sigLayersChanged();
 
     /**

@@ -38,6 +38,7 @@
 #include "kis_point.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_cursor.h"
 #include "kis_tool_text.h"
@@ -99,7 +100,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         Q_INT32 height = boundingRect.height();
         Q_INT32 width = boundingRect.width();
         KisPaintLayer *layer = new KisPaintLayer(img, '"' + text + '"', OPACITY_OPAQUE);
-        img->addLayer(layer, img->activeLayer()->parent(), img->activeLayer());
+        img->addLayer(layer, img->activeLayer()->parent().data(), img->activeLayer());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);

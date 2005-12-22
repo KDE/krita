@@ -40,16 +40,19 @@ KisGroupLayer::~KisGroupLayer()
 {
 }
 
-void KisGroupLayer::insertLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
+bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
-    if(!aboveThis)
+    if (m_layers.contains(newLayer))
+        return false;
+
+    if(aboveThis)
     {
         for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
             if (m_layers[layerIndex] == aboveThis)
             {
                 m_layers.insert(m_layers.begin() + layerIndex, newLayer);
                 newLayer->setParent(this);
-                return;
+                return true;
             }
         }
         // Falls through to be added on bottom
@@ -57,18 +60,21 @@ void KisGroupLayer::insertLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 
     //Add to bottom
     m_layers.push_back(newLayer);
+    return true;
 }
 
-void KisGroupLayer::removeLayer(KisLayerSP layer)
+bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
     for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
         if (m_layers[layerIndex] == layer)
         {
             m_layers.erase(m_layers.begin() + layerIndex);
             layer->setParent(0);
-            return;
+            return true;
         }
     }
+
+    return false;
 }
 
 KisLayerSP KisGroupLayer::firstChild() const {

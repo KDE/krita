@@ -49,6 +49,12 @@ typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 class KisPartLayer;
 typedef KSharedPtr<KisPartLayer> KisPartLayerSP;
 
+class KisPaintLayer;
+typedef KSharedPtr<KisPaintLayer> KisPaintLayerSP;
+
+class KisGroupLayer;
+typedef KSharedPtr<KisGroupLayer> KisGroupLayerSP;
+
 class KisSelection;
 typedef KSharedPtr<KisSelection> KisSelectionSP;
 

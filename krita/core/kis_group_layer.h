@@ -50,13 +50,13 @@ public:
     virtual QRect extent() const {return QRect();};
     virtual QRect exactBounds() const {return QRect();};
 
-    virtual void insertLayer(KisLayerSP newLayer, KisLayerSP belowLayer);
-    virtual void removeLayer(KisLayerSP layer);
-
     virtual void accept(KisLayerVisitor &v) { v.visit(this); }
 
     virtual KisLayerSP firstChild() const;
     virtual KisLayerSP lastChild() const;
+
+    bool addLayer(KisLayerSP newLayer, KisLayerSP belowLayer);
+    bool removeLayer(KisLayerSP layer);
 
 private:
     vKisLayerSP m_layers; // Contains the list of all layers

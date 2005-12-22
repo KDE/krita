@@ -21,6 +21,7 @@
 #include <qimage.h>
 
 #include "kis_debug_areas.h"
+#include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -60,7 +61,7 @@ namespace {
     void KisLayerCommand::notifyPropertyChanged()
     {
         if (m_layer -> image()) {
-            m_layer -> image() -> notifyLayersChanged();
+            m_layer -> image() -> notifyPropertyChanged(m_layer);
         }
     }
 
@@ -288,7 +289,7 @@ KisLayer::~KisLayer()
 {
 }
 
-KisLayerSP KisLayer::parent() const
+KisGroupLayerSP KisLayer::parent() const
 {
     return m_parent;
 }
@@ -388,12 +389,9 @@ void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 {
 }
 
-void KisLayer::insertLayer(KisLayerSP , KisLayerSP )
+void KisLayer::setParent(KisGroupLayerSP parent)
 {
-}
-
-void KisLayer::removeLayer(KisLayerSP )
-{
+    m_parent = parent;
 }
 
 #include "kis_layer.moc"

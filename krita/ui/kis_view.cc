@@ -2519,7 +2519,7 @@ void KisView::connectCurrentImg()
         {
             connect(m_current, SIGNAL(sigImageUpdated(const QRect&)),
                     SLOT(imgUpdated(const QRect&)));
-            connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)),
+            connect(m_current, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
                     SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         }
     }

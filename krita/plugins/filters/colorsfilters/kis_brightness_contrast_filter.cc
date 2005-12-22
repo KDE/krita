@@ -144,7 +144,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
-    l -> add(m_page);
+    l -> addWidget(m_page, 0, Qt::AlignTop);
     height = 256;
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 

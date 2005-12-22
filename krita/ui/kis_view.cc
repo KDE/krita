@@ -2514,14 +2514,14 @@ void KisView::connectCurrentImg()
             connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(const QRect&)),
                     SLOT(imgUpdated(const QRect&)));
             connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
-                    SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+                    SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         } else 
 #endif
         {
             connect(m_current, SIGNAL(sigImageUpdated(const QRect&)),
                     SLOT(imgUpdated(const QRect&)));
             connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)),
-                    SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+                    SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         }
     }
 }
@@ -2549,12 +2549,9 @@ void KisView::profileChanged(KisProfile *  /*profile*/)
     updateStatusBarProfileLabel();
 }
 
-void KisView::slotImageSizeChanged(KisImageSP img, Q_INT32 /*w*/, Q_INT32 /*h*/)
+void KisView::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
 {
-
-    if (img == currentImg()) {
-        resizeEvent(0);
-    }
+    resizeEvent(0);
     canvasRefresh();
 }
 

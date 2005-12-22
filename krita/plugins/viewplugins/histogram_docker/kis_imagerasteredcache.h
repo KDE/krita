@@ -48,8 +48,8 @@ signals:
     void cacheUpdated();
 
 private slots:
-    void imageUpdated(KisImageSP image, const QRect& rc);
-    void imageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
+    void imageUpdated(const QRect& rc);
+    void imageSizeChanged(Q_INT32 w, Q_INT32 h);
     void timeOut();
 
 private:

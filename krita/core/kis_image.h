@@ -289,7 +289,7 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
+    void sigSizeChanged(Q_INT32 w, Q_INT32 h);
     void sigProfileChanged(KisProfile *  profile);
     void sigColorSpaceChanged(KisColorSpace*  cs);
 

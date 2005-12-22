@@ -84,16 +84,15 @@ signals:
      * @param image  The image 
      * @param rc     The rect that has been recomposited.
      */
-    void sigImageUpdated(KisImageSP image, const QRect& rc);
+    void sigImageUpdated(const QRect& rc);
 
     /**
      * Emitted whenever the image size changes.
      *
-     * @param image  The image 
      * @param width  New image width 
      * @param height New image height
      */
-    void sigSizeChanged(KisImageSP image, Q_INT32 width, Q_INT32 height);
+    void sigSizeChanged(Q_INT32 width, Q_INT32 height);
 
 protected:
     KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile);
@@ -108,8 +107,8 @@ protected:
     static bool imageCanShareImageContext(KisImageSP image);
 
 protected slots:
-    void slotImageUpdated(KisImageSP image, const QRect& r);
-    void slotImageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h);
+    void slotImageUpdated(const QRect& r);
+    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
 
 private:
     KisImageSP m_image;

@@ -47,10 +47,10 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 
     imageSizeChanged(img, img -> width(), img -> height());
 
-    connect(img, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)),
-            this, SLOT(imageUpdated(KisImageSP, const QRect&)));
-    connect(img, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)),
-            this, SLOT(imageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+    connect(img, SIGNAL(sigImageUpdated(const QRect&)),
+            this, SLOT(imageUpdated(const QRect&)));
+    connect(img, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
+            this, SLOT(imageSizeChanged(Q_INT32, Q_INT32)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -58,7 +58,7 @@ KisImageRasteredCache::~KisImageRasteredCache() {
     cleanUpElements();
 }
 
-void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) {
+void KisImageRasteredCache::imageUpdated(const QRect& rc) {
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
     r = r.normalize();
@@ -85,7 +85,7 @@ void KisImageRasteredCache::imageUpdated(KisImageSP /*image*/, const QRect& rc) 
     }
 }
 
-void KisImageRasteredCache::imageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h) {
+void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
     cleanUpElements();
 
     m_width = static_cast<int>(ceil(float(w) / float(m_rasterSize)));

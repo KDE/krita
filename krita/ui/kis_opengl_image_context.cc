@@ -97,8 +97,10 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
 
     createImageTextureTiles();
 
-    connect(m_image, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(slotImageUpdated(KisImageSP, const QRect&)));
-    connect(m_image, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+    connect(m_image, SIGNAL(sigImageUpdated(const QRect&)),
+            SLOT(slotImageUpdated(const QRect&)));
+    connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
+            SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
 
     updateImageTextureTiles(m_image -> bounds());
 }
@@ -335,25 +337,23 @@ void KisOpenGLImageContext::destroyImageTextureTiles()
     }
 }
 
-void KisOpenGLImageContext::slotImageUpdated(KisImageSP image, const QRect& rc)
+void KisOpenGLImageContext::slotImageUpdated(const QRect& rc)
 {
-    Q_ASSERT(image == m_image);
     QRect r = rc & m_image -> bounds();
     //kdDebug() << "Slot image updated " << r << endl;
 
     updateImageTextureTiles(r);
-    emit sigImageUpdated(image, r);
+    emit sigImageUpdated(r);
 }
 
-void KisOpenGLImageContext::slotImageSizeChanged(KisImageSP image, Q_INT32 w, Q_INT32 h)
+void KisOpenGLImageContext::slotImageSizeChanged(Q_INT32 w, Q_INT32 h)
 {
-    Q_ASSERT(image == m_image);
     kdDebug() << "Slot image resized\n";
 
     createImageTextureTiles();
     updateImageTextureTiles(m_image -> bounds());
 
-    emit sigSizeChanged(image,w, h);
+    emit sigSizeChanged(w, h);
 }
 
 #include "kis_opengl_image_context.moc"

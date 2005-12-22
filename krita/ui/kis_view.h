@@ -391,7 +391,7 @@ private slots:
     void slotZoomOut();
     void slotActualPixels();
     void slotActualSize();
-    void slotImageSizeChanged(KisImageSP img, Q_INT32 w, Q_INT32 h);
+    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
 
     void scrollH(int value);
     void scrollV(int value);

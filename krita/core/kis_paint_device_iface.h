@@ -34,9 +34,6 @@ public:
     KisPaintDeviceImplIface( KisPaintDeviceImpl * parent );
 k_dcop:
 
-        virtual QString name() const;
-        virtual void setName(const QString& name);
-
     /**
      * Return the number of bytes a pixel takes.
      */

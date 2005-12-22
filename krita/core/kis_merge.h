@@ -76,7 +76,7 @@ public:
 
     virtual bool visit(KisGroupLayer *layer)
     {
-        KisPaintDeviceImpl *dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace(), "");
+        KisPaintDeviceImpl *dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
         KisPainter painter(dst);
 
         KisMergeVisitor visitor(m_img, &painter);

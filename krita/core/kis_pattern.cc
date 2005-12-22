@@ -212,7 +212,7 @@ KisPaintDeviceImplSP KisPattern::image(KisColorSpace * colorSpace) {
         return (*it);
 
     // If not, create one
-    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl(colorSpace, "pattern image");
+    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl(colorSpace);
 
     Q_CHECK_PTR(layer);
 

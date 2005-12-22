@@ -534,7 +534,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
     Q_ASSERT(repeatStrategy != 0);
 
-    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl( m_device -> colorSpace(), "gradient");
+    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl( m_device -> colorSpace());
     Q_CHECK_PTR(layer);
 
     KisPainter painter(layer);

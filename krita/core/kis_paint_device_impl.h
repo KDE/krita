@@ -66,9 +66,9 @@ class KRITACORE_EXPORT KisPaintDeviceImpl
         Q_OBJECT
 
 public:
-    KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString& name);
+    KisPaintDeviceImpl(KisColorSpace * colorSpace);
 
-    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace, const QString& name);
+    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace);
 
     KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
     virtual ~KisPaintDeviceImpl();
@@ -209,8 +209,6 @@ public:
      */
     virtual QImage convertToQImage(KisProfile *  dstProfile, float exposure = 0.0f);
 
-    virtual QString name() const;
-    virtual void setName(const QString& name);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -383,7 +381,6 @@ private:
 
     Q_INT32 m_x;
     Q_INT32 m_y;
-    QString m_name;
     KisColorSpace * m_colorSpace;
     // Cached for quick access
     Q_INT32 m_pixelSize;

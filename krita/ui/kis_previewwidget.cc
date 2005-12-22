@@ -175,7 +175,7 @@ void KisPreviewWidget::zoomChanged()
     m_scaledPreview = m_unscaledSource.smoothScale(w, h, QImage::ScaleMax);
 
     m_image->resize(m_scaledPreview.width(), m_scaledPreview.height());
-    m_previewDevice = new KisPaintDeviceImpl(m_image, m_image->colorSpace(), "preview layer");
+    m_previewDevice = new KisPaintDeviceImpl(m_image, m_image->colorSpace());
     m_previewDevice->convertFromQImage(m_scaledPreview, ""); //should perhaps be m_profile->name
     
     emit updated();

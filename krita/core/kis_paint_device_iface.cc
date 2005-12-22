@@ -28,20 +28,9 @@
 #include "kis_paint_device_impl.h"
 
 KisPaintDeviceImplIface::KisPaintDeviceImplIface( KisPaintDeviceImpl * parent )
-    : DCOPObject(parent->name().utf8())
+    : DCOPObject("paintdevice")
 {
     m_parent = parent;
-}
-
-
-QString KisPaintDeviceImplIface::name() const
-{
-    return m_parent->name();
-}
-
-void KisPaintDeviceImplIface::setName(const QString& name)
-{
-    m_parent->setName(name);
 }
 
 Q_INT32 KisPaintDeviceImplIface::pixelSize() const
@@ -53,7 +42,6 @@ Q_INT32 KisPaintDeviceImplIface::nChannels() const
 {
     return m_parent->nChannels();
 }
-
 
 QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {

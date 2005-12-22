@@ -107,7 +107,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab -> colorSpace(), "duplicate srcdev");
+    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab -> colorSpace());
     Q_CHECK_PTR(srcdev);
 
     // First, copy the source data on the temporary device:
@@ -124,7 +124,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copySelection.end();
 
     // copy the seldev onto a new device, after applying the dab selection
-    KisPaintDeviceImplSP target = new KisPaintDeviceImpl(srcdev -> colorSpace(), "target");
+    KisPaintDeviceImplSP target = new KisPaintDeviceImpl(srcdev -> colorSpace());
     copyPainter.begin(target);
     copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev -> selection(),
                              OPACITY_OPAQUE, 0, 0, sw, sh);

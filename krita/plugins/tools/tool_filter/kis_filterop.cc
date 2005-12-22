@@ -90,7 +90,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 maskHeight = mask -> height();
 
     // Create a temporary paint device
-    KisPaintDeviceImplSP tmpDev = new KisPaintDeviceImpl(colorSpace, "temp");
+    KisPaintDeviceImplSP tmpDev = new KisPaintDeviceImpl(colorSpace);
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device

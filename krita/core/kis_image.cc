@@ -457,7 +457,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_bkg = new KisBackground();
         Q_CHECK_PTR(m_bkg);
 
-        m_projection = new KisPaintDeviceImpl(this, m_colorSpace, "projection");
+        m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
         Q_CHECK_PTR(m_projection);
 
         m_rootLayer = rhs.m_rootLayer->clone();
@@ -550,7 +550,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_bkg = new KisBackground();
     Q_CHECK_PTR(m_bkg);
 
-    m_projection = new KisPaintDeviceImpl(this, m_colorSpace, "projection");
+    m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
     Q_CHECK_PTR(m_projection);
 
     m_rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
@@ -1356,7 +1356,7 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
 
-    m_projection = new KisPaintDeviceImpl(this, colorSpace, "projection");
+    m_projection = new KisPaintDeviceImpl(this, colorSpace);
     Q_CHECK_PTR(m_projection);
 
     emit sigColorSpaceChanged(colorSpace);

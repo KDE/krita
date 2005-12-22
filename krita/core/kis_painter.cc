@@ -780,7 +780,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceImplSP polygon = new KisPaintDeviceImpl(m_device -> colorSpace(), "polygon");
+    KisPaintDeviceImplSP polygon = new KisPaintDeviceImpl(m_device -> colorSpace());
     Q_CHECK_PTR(polygon);
     polygon -> setX(m_device -> getX());
     polygon -> setY(m_device -> getY());
@@ -813,7 +813,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
         break;
     }
 
-    KisSelectionSP polygonMask = new KisSelection(polygon, "polygon mask");
+    KisSelectionSP polygonMask = new KisSelection(polygon);
     polygonMask -> setX(polygon -> getX());
     polygonMask -> setY(polygon -> getY());
 

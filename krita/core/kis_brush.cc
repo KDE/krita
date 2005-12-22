@@ -438,7 +438,7 @@ KisPaintDeviceImplSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintI
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisPaintDeviceImpl *layer = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush image");
+    KisPaintDeviceImpl *layer = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getRGB8());
    
     Q_CHECK_PTR(layer);
 
@@ -1240,18 +1240,18 @@ void KisBrush::setHeight(Q_INT32 h)
 }*/
 
 void KisBrush::generateBoundary() {
-    KisPaintDeviceImplSP layer;
+    KisPaintDeviceImplSP dev;
     int w = maskWidth(KisPaintInformation());
     int h = maskHeight(KisPaintInformation());
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        layer = image(KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),""), KisPaintInformation());
+        dev = image(KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),""), KisPaintInformation());
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
         KisColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"");
-        layer = new KisPaintDeviceImpl(cs, "temp");
+        dev = new KisPaintDeviceImpl(cs);
         for (int y = 0; y < h; y++) {
-            KisHLineIteratorPixel it = layer -> createHLineIterator(0, y, w, true);
+            KisHLineIteratorPixel it = dev -> createHLineIterator(0, y, w, true);
             int x = 0;
 
             while(!it.isDone()) {
@@ -1261,7 +1261,7 @@ void KisBrush::generateBoundary() {
         }
     }
 
-    m_boundary = new KisBoundary(layer.data());
+    m_boundary = new KisBoundary(dev);
     m_boundary -> generateBoundary(w, h);
 }
 

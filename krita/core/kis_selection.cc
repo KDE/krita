@@ -31,11 +31,8 @@
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 
-KisSelection::KisSelection(KisPaintDeviceImplSP layer, const QString& name)
-     : super(
-        layer -> image(),
-        KisMetaRegistry::instance()->csRegistry()->getAlpha8(),
-        name)
+KisSelection::KisSelection(KisPaintDeviceImplSP layer)
+     : super(layer -> image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())
 {
     m_parentLayer = layer;
 }

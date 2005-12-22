@@ -57,7 +57,7 @@ void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDevice
     else
     {
         r = src->exactBounds();
-        dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
     }
 
     for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
@@ -94,7 +94,7 @@ void KisTransformVisitor::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceI
     else
     {
         r = src->exactBounds();
-        dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
     }
     Q_INT32 x = 0;
 
@@ -135,7 +135,7 @@ void KisTransformVisitor::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImpl
     else
     {
         r = src->exactBounds();
-        dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
     }
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
@@ -215,7 +215,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
     if(src->hasSelection())
         dstSelection = dst->selection();
     else
-        dstSelection = new KisSelection(dst, "dummy"); // essentially a dummy to be deleted
+        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
 
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
@@ -371,8 +371,8 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
     else
         r = dev->exactBounds();
 
-    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorSpace(),"temporary");;
-    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorSpace(),"temporary");;
+    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorSpace());;
+    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorSpace());;
     KisPaintDeviceImplSP srcdev = dev;
 
     double xscale = m_xscale;

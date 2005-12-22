@@ -200,7 +200,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                 QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
                 
-                KisSelectionSP tmpSel = new KisSelection(dev,"tmp sel");
+                KisSelectionSP tmpSel = new KisSelection(dev);
                 KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
                 Q_UINT8 value;
                 for (int y = 0; y <= rc.height(); y++)

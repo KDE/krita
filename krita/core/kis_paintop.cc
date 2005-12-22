@@ -54,7 +54,7 @@ KisPaintDeviceImplSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(cs, "dab");
+    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(cs);
     Q_CHECK_PTR(dab);
 
     KisColor kc = m_painter -> paintColor();

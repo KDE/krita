@@ -203,7 +203,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                         selection->invert();
                 }
 
-                KisSelectionSP tmpSel = new KisSelection(dev,"tmp sel");
+                KisSelectionSP tmpSel = new KisSelection(dev);
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {

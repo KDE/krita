@@ -219,7 +219,7 @@ namespace {
 
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace) :
     KShared()
 {
     if (colorSpace == 0) {
@@ -229,7 +229,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
 
     m_dcop = 0;
     Q_ASSERT(colorSpace != 0);
-    Q_ASSERT(name.isEmpty() == false);
     m_x = 0;
     m_y = 0;
 
@@ -246,7 +245,6 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
     m_extentIsValid = true;
 
     m_owner = 0;
-    m_name = name;
 
     m_colorSpace = colorSpace;
 
@@ -254,16 +252,14 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const QString
     m_selection = 0;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace, const QString& name) :
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace) :
     KShared()
 {
     m_dcop = 0;
-    Q_ASSERT(name.isEmpty() == false);
 
-        m_x = 0;
-        m_y = 0;
+    m_x = 0;
+    m_y = 0;
 
-    m_name = name;
     m_hasSelection = false;
     m_selection = 0;
 
@@ -283,29 +279,28 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     colorSpace -> fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
-        delete [] defPixel;
+    delete [] defPixel;
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 }
 
 KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KisPaintDevice(), KShared(rhs)
 {
-        if (this != &rhs) {
-                m_owner = 0;
-                m_dcop = rhs.m_dcop;
-                if (rhs.m_datamanager) {
-                    m_datamanager = new KisDataManager(*rhs.m_datamanager);
-                    Q_CHECK_PTR(m_datamanager);
-                }
-                m_extentIsValid = rhs.m_extentIsValid;
-                m_x = rhs.m_x;
-                m_y = rhs.m_y;
-                m_name = rhs.m_name;
-                m_colorSpace = rhs.m_colorSpace;
-                m_hasSelection = false;
-                m_selection = 0;
-                m_pixelSize = rhs.m_pixelSize;
-                m_nChannels = rhs.m_nChannels;
+    if (this != &rhs) {
+        m_owner = 0;
+        m_dcop = rhs.m_dcop;
+        if (rhs.m_datamanager) {
+            m_datamanager = new KisDataManager(*rhs.m_datamanager);
+            Q_CHECK_PTR(m_datamanager);
+        }
+        m_extentIsValid = rhs.m_extentIsValid;
+        m_x = rhs.m_x;
+        m_y = rhs.m_y;
+        m_colorSpace = rhs.m_colorSpace;
+        m_hasSelection = false;
+        m_selection = 0;
+        m_pixelSize = rhs.m_pixelSize;
+        m_nChannels = rhs.m_nChannels;
         }
 }
 
@@ -350,19 +345,6 @@ KNamedCommand * KisPaintDeviceImpl::moveCommand(Q_INT32 x, Q_INT32 y)
     cmd -> execute();
     return cmd;
 }
-
-
-QString KisPaintDeviceImpl::name() const
-{
-        return m_name;
-}
-
-void KisPaintDeviceImpl::setName(const QString& name)
-{
-        if (!name.isEmpty())
-                m_name = name;
-}
-
 
 void KisPaintDeviceImpl::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
@@ -581,7 +563,7 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 render
         return;
     }
 
-    KisPaintDeviceImpl dst(dstColorSpace, name());
+    KisPaintDeviceImpl dst(dstColorSpace);
     dst.setX(getX());
     dst.setY(getY());
 
@@ -744,7 +726,7 @@ KisSelectionSP KisPaintDeviceImpl::selection()
         m_selectionDeselected = false;
     }
     else if (!m_selection) {
-        m_selection = new KisSelection(this, "layer selection for: " + name());
+        m_selection = new KisSelection(this);
         Q_CHECK_PTR(m_selection);
         m_selection -> setX(m_x);
         m_selection -> setY(m_y);

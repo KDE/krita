@@ -157,7 +157,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace());
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -170,7 +170,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace(), "Fill Temporary Layer");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace());
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
@@ -241,7 +241,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return new KisSelection(m_device, "Fill Temporary Selection");
+        return new KisSelection(m_device);
 
     KisPaintDeviceImplSP sourceDevice = 0;
 
@@ -249,7 +249,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (m_sampleMerged) {
         if (!m_device -> image()) {
             kdDebug(DBG_AREA_CORE) << "No image to sample merged from associated with the device" << endl;
-            return new KisSelection(m_device, "Fill Temporary Selection");
+            return new KisSelection(m_device);
         }
         sourceDevice = m_device -> image() -> mergedImage();
     } else {
@@ -258,7 +258,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = new KisSelection(m_device, "Fill Temporary Selection");
+    KisSelectionSP selection = new KisSelection(m_device);
     KisColorSpace * colorSpace = selection -> colorSpace();
     KisColorSpace * devColorSpace = sourceDevice -> colorSpace();
 

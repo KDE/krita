@@ -81,7 +81,7 @@ bool KisToolFill::flood(int startX, int startY)
     KisPaintDeviceImplSP device = m_currentImage->activeDevice();
 
     if (m_fillOnlySelection) {
-        KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(device -> colorSpace(), "Temp");
+        KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(device -> colorSpace());
         KisFillPainter painter(filled);
         // XXX: The fillRect methods should either set the dirty rect or return it, 
         // so we don't have to blit over all of the image, but only the part that's 

@@ -385,8 +385,7 @@ void KisSelectionManager::copy()
           << r.width() << ", "
           << r.height() << "\n";
 
-    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(dev -> colorSpace(),
-                           "Copy from " + img -> activeLayer() -> name() );
+    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(dev -> colorSpace());
     Q_CHECK_PTR(clip);
 
     KisColorSpace * cs = clip->colorSpace();
@@ -582,7 +581,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
 
     KisSelectionSP selection = dev -> selection();
 
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(dev -> colorSpace(), "Temp");
+    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(dev -> colorSpace());
     KisFillPainter painter(filled);
 
     if (fillWithPattern) {

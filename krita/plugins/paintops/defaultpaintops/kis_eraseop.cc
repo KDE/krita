@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
 
-    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(device -> colorSpace(), "eraser_dab");
+    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(device -> colorSpace());
     Q_CHECK_PTR(dab);
 
     Q_INT32 maskWidth = mask -> width();

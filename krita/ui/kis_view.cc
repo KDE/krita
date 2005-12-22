@@ -376,7 +376,6 @@ void KisView::createLayerBox()
 
     connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
     connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
-    connect(m_layerBox, SIGNAL(itemToggleLinked()), this, SLOT(layerToggleLinked()));
     connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
     connect(m_layerBox, SIGNAL(actLayerVisChanged(int)), this, SLOT(actLayerVisChanged(int)));
     connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
@@ -575,7 +574,6 @@ void KisView::setupActions()
 
     m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
     m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
-    m_layerLink = new KAction(i18n("&Link/Unlink Layer"), 0, this, SLOT(layerToggleLinked()), actionCollection(), "link_layer");
     m_layerHide = new KAction(i18n("&Hide/Show Layer"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
     m_layerRaise = new KAction(i18n("Raise Layer"), "raiselayer", "Ctrl+]", this, SLOT(layerRaise()), actionCollection(), "raiselayer");
     m_layerLower = new KAction(i18n("Lower Layer"), "lowerlayer", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
@@ -1044,7 +1042,6 @@ void KisView::layerUpdateGUI(bool enable)
     enable = enable && img && layer && layer->visible() && !layer->locked();
     m_layerDup -> setEnabled(enable);
     m_layerRm -> setEnabled(enable);
-    m_layerLink -> setEnabled(enable);
     m_layerHide -> setEnabled(enable);
     m_layerProperties -> setEnabled(enable);
     m_layerSaveAs -> setEnabled(enable);

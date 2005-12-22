@@ -39,7 +39,7 @@ class KRITACORE_EXPORT KisSelection : public KisPaintDeviceImpl {
     typedef KisPaintDeviceImpl super;
 
 public:
-    KisSelection(KisPaintDeviceImplSP layer, const QString& name);
+    KisSelection(KisPaintDeviceImplSP layer);
 
     virtual ~KisSelection();
 

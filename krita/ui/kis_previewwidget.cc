@@ -54,22 +54,24 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     m_autoupdate = true;
     m_previewIsDisplayed = true;
 
-    kToolBar1->insertButton("viewmag+",0, true, "zoom+");
+    kToolBar1->insertButton("viewmag+",0, true, "Zoom In");
     connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
     
-    kToolBar1->insertButton("viewmag-",1, true, "zoom-");
+    kToolBar1->insertButton("viewmag-",1, true, "Zoom Out");
     connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
 
-    kToolBar1->insertLineSeparator();
-    kToolBar1->insertButton("reload",2, true, "update");
-    connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
-    
-    kToolBar1->insertButton("",3, true, "autoupdate");
-    connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
-    
-    kToolBar1->insertButton("",4, true, "switch");
-    connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));
-    kToolBar1->insertButton("",5, true, "popup original and preview");
+// these currently don't yet work, reenable when they do work :)  (TZ-12-2005)
+// TODO reenable these
+//   kToolBar1->insertLineSeparator();
+//   kToolBar1->insertButton("reload",2, true, "Update");
+//   connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
+
+//   kToolBar1->insertButton("",3, true, "Auto Update");
+//   connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
+
+//   kToolBar1->insertButton("",4, true, "Switch");
+//   connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));
+//   kToolBar1->insertButton("",5, true, "Popup Original and Preview");
 }
 
 void KisPreviewWidget::forceUpdate()
@@ -164,8 +166,8 @@ void KisPreviewWidget::zoomChanged()
     kdDebug() << "zoomChanged " << m_zoom << "\n";
     int w, h;
        
-    w = m_unscaledSource.width() * m_zoom;
-    h = m_unscaledSource.height() * m_zoom;
+    w = (int) (m_unscaledSource.width() * m_zoom + 0.5);
+    h = (int) (m_unscaledSource.height() * m_zoom + 0.5);
 
     kdDebug() << "   width: " << w << "\n";
     kdDebug() << "   height: " << h << "\n";

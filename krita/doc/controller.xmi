@@ -1575,7 +1575,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA." isSpecification="false" isLeaf="false" visibility="public" xmi.id="429" isRoot="false" isAbstract="false" name="KisGuide" >
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA." isSpecification="false" isLeaf="false" visibility="public" xmi.id="429" isRoot="false" isAbstract="false" name="KisGuide" >
      <UML:GeneralizableElement.generalization>
       <UML:Generalization xmi.idref="673" />
      </UML:GeneralizableElement.generalization>
@@ -1632,7 +1632,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA." isS
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 " isSpecification="false" isLeaf="false" visibility="public" xmi.id="437" isRoot="false" isAbstract="false" name="KisProfile" >
      <UML:GeneralizableElement.generalization>
       <UML:Generalization xmi.idref="917" />
@@ -1750,7 +1750,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //**
 An data extension mechanism for Krita.
 
@@ -1972,7 +1972,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //**
 Krita has a large number of extensible resources. Think:
 
@@ -2547,7 +2547,7 @@ Returns -1 if error, 0 otherwise." isSpecification="false" isLeaf="false" visibi
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //**
 The KisResource class provides a representation of Krita image resources.  This
 includes, but not limited to, brushes and patterns.
@@ -2708,7 +2708,7 @@ the resource has been saved." isSpecification="false" isLeaf="false" visibility=
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //** This class is meant to be used inside KisQuantum" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1160" isRoot="false" isAbstract="false" name="KisQuantumOperation" >
      <UML:Classifier.feature>
       <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="1161" isRoot="false" isAbstract="false" name="KisQuantumOperation" />
@@ -2782,7 +2782,7 @@ the resource has been saved." isSpecification="false" isLeaf="false" visibility=
 
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //**
 An editable wrapper around the byte values for a single colour channel." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1186" isRoot="false" isAbstract="false" name="KisQuantum" >
      <UML:Classifier.feature>
@@ -13094,7 +13094,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="429" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisGuide&amp;#010;Kivio - Visual Modelling and Flowcharting&amp;#010;Copyright (C) 2000-2001 theKompany.com &amp; Dave Marotti&amp;#010;Copyright (C) 2002 Patrick Julien &lt;freak@codepimps.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or&amp;#010;modify it under the terms of the GNU General Public License&amp;#010;as published by the Free Software Foundation; either version 2&amp;#010;of the License, or (at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA." />
+        <javacodedocumentation tag="" text="Class KisGuide&amp;#010;Kivio - Visual Modelling and Flowcharting&amp;#010;Copyright (C) 2000-2001 theKompany.com &amp; Dave Marotti&amp;#010;Copyright (C) 2002 Patrick Julien &lt;freak@codepimps.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or&amp;#010;modify it under the terms of the GNU General Public License&amp;#010;as published by the Free Software Foundation; either version 2&amp;#010;of the License, or (at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA." />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -13933,7 +13933,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="437" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisProfile&amp;#010; kis_profile.h - part of Krayon&amp;#010;&amp;#010; Copyright (c) 2000 Matthias Elter  &lt;elter@kde.org>&amp;#010;               2004 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;" />
+        <javacodedocumentation tag="" text="Class KisProfile&amp;#010; kis_profile.h - part of Krayon&amp;#010;&amp;#010; Copyright (c) 2000 Matthias Elter  &lt;elter@kde.org>&amp;#010;               2004 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -14967,7 +14967,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="445" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisAnnotation&amp;#010;This file is part of the KDE project&amp;#010;&amp;#010;Copyright (c) 2005 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or modify&amp;#010;it under the terms of the GNU General Public License as published by&amp;#010;the Free Software Foundation; either version 2 of the License, or&amp;#010;(at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;//**&amp;#010;An data extension mechanism for Krita.&amp;#010;&amp;#010;An annotation can be of something like a QByteArray or a QString op a more specific&amp;#010;datatype that can be attached to an image (or maybe later, if needed, to a layer)&amp;#010;and contains data that must be associated with an image for purposes of import/export." />
+        <javacodedocumentation tag="" text="Class KisAnnotation&amp;#010;This file is part of the KDE project&amp;#010;&amp;#010;Copyright (c) 2005 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or modify&amp;#010;it under the terms of the GNU General Public License as published by&amp;#010;the Free Software Foundation; either version 2 of the License, or&amp;#010;(at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;//**&amp;#010;An data extension mechanism for Krita.&amp;#010;&amp;#010;An annotation can be of something like a QByteArray or a QString op a more specific&amp;#010;datatype that can be attached to an image (or maybe later, if needed, to a layer)&amp;#010;and contains data that must be associated with an image for purposes of import/export." />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -17468,7 +17468,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="541" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisID&amp;#010;This file is part of the KDE project&amp;#010;&amp;#010;Copyright (c) 2005 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or modify&amp;#010;it under the terms of the GNU General Public License as published by&amp;#010;the Free Software Foundation; either version 2 of the License, or&amp;#010;(at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;//**&amp;#010;Krita has a large number of extensible resources. Think:&amp;#010;&amp;#010;- Brushes&amp;#010;- Palettes&amp;#010;- Patterns&amp;#010;- Gradients&amp;#010;- Color models&amp;#010;- Filters&amp;#010;- Composition operations&amp;#010;- Paint operations&amp;#010;- Tools&amp;#010;- Docker tabs&amp;#010;&amp;#010;and more...&amp;#010;&amp;#010;Many of these resources are stored in KisGenericRegistry-based&amp;#010;registries. If we store these resources with a descriptive string&amp;#010;as a key use the same string in our UI, then our UI will not be&amp;#010;localizable, because the identifications of particular resources&amp;#010;will be stored in files, and those files need to be exchangeable.&amp;#010;&amp;#010;So, instead we use and ID class that couples an identification&amp;#010;string that will be the same across all languages, an i18n-able&amp;#010;string that will be used in comboboxes and that has a fast equality&amp;#010;operator to make it well suited for use as key in a registry map.&amp;#010;&amp;#010;That last bit has not been solved yet.&amp;#010;" />
+        <javacodedocumentation tag="" text="Class KisID&amp;#010;This file is part of the KDE project&amp;#010;&amp;#010;Copyright (c) 2005 Boudewijn Rempt &lt;boud@valdyas.org>&amp;#010;&amp;#010;This program is free software; you can redistribute it and/or modify&amp;#010;it under the terms of the GNU General Public License as published by&amp;#010;the Free Software Foundation; either version 2 of the License, or&amp;#010;(at your option) any later version.&amp;#010;&amp;#010;This program is distributed in the hope that it will be useful,&amp;#010;but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010;GNU General Public License for more details.&amp;#010;&amp;#010;You should have received a copy of the GNU General Public License&amp;#010;along with this program; if not, write to the Free Software&amp;#010;Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;//**&amp;#010;Krita has a large number of extensible resources. Think:&amp;#010;&amp;#010;- Brushes&amp;#010;- Palettes&amp;#010;- Patterns&amp;#010;- Gradients&amp;#010;- Color models&amp;#010;- Filters&amp;#010;- Composition operations&amp;#010;- Paint operations&amp;#010;- Tools&amp;#010;- Docker tabs&amp;#010;&amp;#010;and more...&amp;#010;&amp;#010;Many of these resources are stored in KisGenericRegistry-based&amp;#010;registries. If we store these resources with a descriptive string&amp;#010;as a key use the same string in our UI, then our UI will not be&amp;#010;localizable, because the identifications of particular resources&amp;#010;will be stored in files, and those files need to be exchangeable.&amp;#010;&amp;#010;So, instead we use and ID class that couples an identification&amp;#010;string that will be the same across all languages, an i18n-able&amp;#010;string that will be used in comboboxes and that has a fast equality&amp;#010;operator to make it well suited for use as key in a registry map.&amp;#010;&amp;#010;That last bit has not been solved yet.&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -25935,7 +25935,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="868" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisResource&amp;#010; Copyright (c) 2003 Patrick Julien &lt;freak@codepimps.org>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;//**&amp;#010;The KisResource class provides a representation of Krita image resources.  This&amp;#010;includes, but not limited to, brushes and patterns.&amp;#010;&amp;#010;This replaces the KisKrayon facility that used to be present in Krayon." />
+        <javacodedocumentation tag="" text="Class KisResource&amp;#010; Copyright (c) 2003 Patrick Julien &lt;freak@codepimps.org>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;//**&amp;#010;The KisResource class provides a representation of Krita image resources.  This&amp;#010;includes, but not limited to, brushes and patterns.&amp;#010;&amp;#010;This replaces the KisKrayon facility that used to be present in Krayon." />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -28830,7 +28830,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1160" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisQuantumOperation&amp;#010; Copyright (c) 2004 Cyrille Berger &lt;cberger@cberger.net>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;//** This class is meant to be used inside KisQuantum" />
+        <javacodedocumentation tag="" text="Class KisQuantumOperation&amp;#010; Copyright (c) 2004 Cyrille Berger &lt;cberger@cberger.net>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;//** This class is meant to be used inside KisQuantum" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -29428,7 +29428,7 @@ XXX: for post 1.4: make sure we can drag &amp; drop widgets." isSpecification="f
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1186" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class KisQuantum&amp;#010; Copyright (c) 2004 Cyrille Berger &lt;cberger@cberger.net>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.&amp;#010;//**&amp;#010;An editable wrapper around the byte values for a single colour channel." />
+        <javacodedocumentation tag="" text="Class KisQuantum&amp;#010; Copyright (c) 2004 Cyrille Berger &lt;cberger@cberger.net>&amp;#010;&amp;#010; This program is free software; you can redistribute it and/or modify&amp;#010; it under the terms of the GNU General Public License as published by&amp;#010; the Free Software Foundation; either version 2 of the License, or&amp;#010; (at your option) any later version.&amp;#010;&amp;#010; This program is distributed in the hope that it will be useful,&amp;#010; but WITHOUT ANY WARRANTY; without even the implied warranty of&amp;#010; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&amp;#010; GNU General Public License for more details.&amp;#010;&amp;#010; You should have received a copy of the GNU General Public License&amp;#010; along with this program; if not, write to the Free Software&amp;#010; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&amp;#010;//**&amp;#010;An editable wrapper around the byte values for a single colour channel." />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >

@@ -49,7 +49,7 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 private:
-    void Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d);
+    void Emboss(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int d);
     inline int Lim_Max (int Now, int Up, int Max);
 };
 

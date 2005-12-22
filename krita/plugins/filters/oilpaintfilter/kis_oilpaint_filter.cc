@@ -68,7 +68,7 @@ void KisOilPaintFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
     Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
 
 
-    OilPaint(src, x, y, width, height, brushSize, smooth);
+    OilPaint(src, dst, x, y, width, height, brushSize, smooth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -85,7 +85,7 @@ void KisOilPaintFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, int x, int y, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness)
 {
     setProgressTotalSteps(h);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -94,17 +94,19 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, int x, int y, int w, 
 
     for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
 
-        KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, true);
+        KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, false);
+        KisHLineIteratorPixel dstIt = dst -> createHLineIterator(x, y + yOffset, w, true);
 
         while (!it.isDone() && !cancelRequested()) {
 
             if (it.isSelected()) {
 
                 uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-                src -> colorSpace() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), it.rawData());
+                dst -> colorSpace() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
             }
 
             ++it;
+            ++dstIt;
         }
 
         setProgress(yOffset);

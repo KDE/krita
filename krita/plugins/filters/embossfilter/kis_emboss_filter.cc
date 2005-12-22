@@ -65,7 +65,7 @@ void KisEmbossFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
     //the actual filter function from digikam. It needs a pointer to a Q_UINT8 array
     //with the actual pixel data.
 
-    Emboss(src, rect, embossdepth);
+    Emboss(src, dst, rect, embossdepth);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -82,7 +82,7 @@ void KisEmbossFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
  *                     increase it. After this, get the gray tone
  */
 
-void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
+void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int d)
 {
         float Depth = d / 10.0;
         int    R = 0, G = 0, B = 0;
@@ -95,9 +95,10 @@ void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-        KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+        KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), false);
+        KisHLineIteratorPixel dstIt = dst -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
 
-        for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it)
+        for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {
             if (it.isSelected()) {
 
@@ -116,7 +117,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, const QRect& rect, int d)
 
                 Gray = CLAMP((R + G + B) / 3, 0, Q_UINT8_MAX);
 
-                src -> colorSpace() -> fromQColor(QColor(Gray, Gray, Gray), it.rawData());
+                dst -> colorSpace() -> fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
             }
         }
 

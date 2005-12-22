@@ -50,7 +50,7 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 private:
-    void OilPaint(KisPaintDeviceImplSP src, int x, int y, int w, int h, int BrushSize, int Smoothness);
+    void OilPaint(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness);
     uint MostFrequentColor(KisPaintDeviceImplSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);
     // Function to calcule the color intensity and return the luminance (Y)
     // component of YIQ color model.

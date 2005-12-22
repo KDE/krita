@@ -99,6 +99,8 @@ void KCurve::keyPressEvent(QKeyEvent *e)
         m_grab_point = 0;
         repaint(false);
     }
+    else
+        QWidget::keyPressEvent(e);
 }
 
 void KCurve::paintEvent(QPaintEvent *)
@@ -314,10 +316,10 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         y += m_grabOffsetY;
         
         if (x <= m_leftmost)
-            return;
+            x = m_leftmost + 1E-4; // the addition so we can grab the dot later.
             
         if(x >= m_rightmost)
-            return;
+            x = m_rightmost - 1E-4;
         
         if(y > 1.0)
             y = 1.0;

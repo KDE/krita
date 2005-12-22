@@ -342,7 +342,7 @@ private slots:
     void slotSetFGQColor(const QColor & c);
     void slotSetBGQColor(const QColor & c);
 
-    void imgUpdated(KisImageSP img, const QRect& rc);
+    void imgUpdated(const QRect& rc);
     void imgResizeToActiveLayer();
 
     void canvasGotMoveEvent(KisMoveEvent *e);

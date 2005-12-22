@@ -2513,13 +2513,17 @@ void KisView::connectCurrentImg()
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
-            connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
-            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+            connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(const QRect&)),
+                    SLOT(imgUpdated(const QRect&)));
+            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
+                    SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
         } else 
 #endif
         {
-            connect(m_current, SIGNAL(sigImageUpdated(KisImageSP, const QRect&)), SLOT(imgUpdated(KisImageSP, const QRect&)));
-            connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
+            connect(m_current, SIGNAL(sigImageUpdated(const QRect&)),
+                    SLOT(imgUpdated(const QRect&)));
+            connect(m_current, SIGNAL(sigSizeChanged(KisImageSP, Q_INT32, Q_INT32)),
+                    SLOT(slotImageSizeChanged(KisImageSP, Q_INT32, Q_INT32)));
         }
     }
 }
@@ -2537,11 +2541,9 @@ void KisView::disconnectCurrentImg()
 #endif
 }
 
-void KisView::imgUpdated(KisImageSP img, const QRect& rc)
+void KisView::imgUpdated(const QRect& rc)
 {
-    if (img == currentImg()) {
-        updateCanvas(rc);
-    }
+    updateCanvas(rc);
 }
 
 void KisView::profileChanged(KisProfile *  /*profile*/)

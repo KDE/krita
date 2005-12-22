@@ -178,7 +178,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_layerBottom( 0 )
     , m_layerDup( 0 )
     , m_layerHide( 0 )
-    , m_layerLink( 0 )
     , m_layerLower( 0 )
     , m_layerProperties( 0 )
     , m_layerRaise( 0 )
@@ -778,7 +777,6 @@ void KisView::paintView(const KisRect& r)
 
             KisRect vr = windowToView(r);
             vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
-
             if (!vr.isNull()) {
 
                 QPainter gc;
@@ -798,12 +796,13 @@ void KisView::paintView(const KisRect& r)
                             QRect er = rects[i];
                             gc.fillRect(er, backgroundColor());
                         }
-
                         wr &= QRect(0, 0, img -> width(), img -> height());
+
+                        if(wr.isEmpty())
+                            return;
                     }
 
                     if (!wr.isNull()) {
-                        wr = wr.normalize();
                         if (zoom() < 1.0 || zoom() > 1.0) {
                             gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
                         }

@@ -434,7 +434,6 @@ private:
     KAction *m_layerBottom;
     KAction *m_layerDup;
     KAction *m_layerHide;
-    KAction *m_layerLink;
     KAction *m_layerLower;
     KAction *m_layerProperties;
     KAction *m_layerRaise;

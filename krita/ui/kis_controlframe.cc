@@ -57,7 +57,9 @@
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
-
+#ifdef HAVE_TEXT_BRUSH
+#include "kis_text_brush.h"
+#endif
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
     : QPopupMenu(parent, name)
 {
@@ -238,6 +240,13 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_brushesTab -> addTab( customBrushes, i18n("Custom Brush"));
     connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
             m_view, SLOT(brushActivated(KisResource*)));
+#ifdef HAVE_TEXT_BRUSH
+    KisTextBrush* textBrushes = new KisTextBrush(m_brushesTab, "textbrush",
+            i18n("Text Brush")/*, m_view*/);
+    m_brushesTab -> addTab( textBrushes, i18n("Text Brush"));
+    connect(textBrushes, SIGNAL(activatedResource(KisResource*)),
+            m_view, SLOT(brushActivated(KisResource*)));
+#endif
 
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);

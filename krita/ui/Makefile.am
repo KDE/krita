@@ -66,6 +66,7 @@ libkritaui_la_SOURCES = \
     kis_ruler.cc \
     kis_selection_manager.cc \
     kis_selection_options.cc \
+    kis_text_brush.cc \
     kis_tool.cc \
     kis_tool_dummy.cc \
     kis_tool_freehand.cc \
@@ -97,7 +98,8 @@ libkritaui_la_SOURCES = \
     wdgselectionoptions.ui \
     wdgshapeoptions.ui \
     wdgpressuresettings.ui \
-    wdgcustombrush.ui
+    wdgcustombrush.ui \
+    wdgtextbrush.ui
 
 noinst_HEADERS = \
     imageviewer.h \

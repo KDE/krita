@@ -76,7 +76,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisLayerSP layer = m_view -> getCanvasSubject() -> currentImg() -> activeLayer();
+    KisPaintDeviceImplSP layer = m_view -> getCanvasSubject() -> currentImg() -> activeDevice();
     if (!layer) return;
 
     DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");

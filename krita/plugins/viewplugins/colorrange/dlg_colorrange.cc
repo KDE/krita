@@ -189,7 +189,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceImplSP dev, QWidget 
     setMainWidget(m_page);
     resize(m_page -> sizeHint());
 
-    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev));
+    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
     Q_CHECK_PTR(m_transaction);
 
     if(! m_dev -> hasSelection())

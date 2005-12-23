@@ -5,7 +5,7 @@ endif
 
 
 SUBDIRS = \
-#    colorrange \
+    colorrange \
     colorspaceconversion \
     filtersgallery \
 #    histogram \

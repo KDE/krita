@@ -147,6 +147,8 @@
 #include "kopalettemanager.h"
 #include "kis_filter_manager.h"
 
+#include "kis_custom_palette.h"
+
 #define KISVIEW_MIN_ZOOM (1.0 / 16.0)
 #define KISVIEW_MAX_ZOOM 16.0
 
@@ -600,6 +602,13 @@ void KisView::setupActions()
     m_RulerAction->setWhatsThis( i18n("The rulers show the position and width of pages and of frames and can "
                                       "be used to position tabulators among others.<p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
+
+    // Add new palette
+    // FIXME this should be in some kind of 'Resources' dialog as a seperate tab, or so,
+    // merged with 'editing' of existing, writeable palettes
+    new KAction(i18n("Add new palette"), 0, this, SLOT(slotAddPalette()),
+                actionCollection(), "add_palette");
+
     showRuler();
 
 }
@@ -1263,6 +1272,11 @@ void KisView::slotInsertImageAsLayer()
 {
     if (importImage() > 0)
         m_doc -> setModified(true);
+}
+
+void KisView::slotAddPalette()
+{
+    (new KisCustomPalette(0, "add palette", i18n("Add palette"), this)) -> show();
 }
 
 void KisView::saveLayerAsImage()

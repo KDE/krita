@@ -55,6 +55,7 @@ libkritaui_la_SOURCES = \
     kis_opengl_canvas_painter.cc \
     kis_opengl_image_context.cc \
     kis_paintop_box.cc \
+    kis_palette_view.cc \
     kis_palette_widget.cc \
     kis_part_layer.cc \
     kis_pattern_chooser.cc \
@@ -80,6 +81,7 @@ libkritaui_la_SOURCES = \
     kis_view.cc \
     kis_view_iface.cc \
     kis_custom_brush.cc \
+    kis_custom_palette.cc \
     kis_custom_image_widget.cc\
     kis_view_iface.skel \
     kobirdeyepanel.cpp \
@@ -100,6 +102,7 @@ libkritaui_la_SOURCES = \
     wdgshapeoptions.ui \
     wdgpressuresettings.ui \
     wdgcustombrush.ui \
+    wdgcustompalette.ui \
     wdgtextbrush.ui
 
 noinst_HEADERS = \

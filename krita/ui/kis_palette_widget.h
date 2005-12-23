@@ -25,9 +25,9 @@ class QComboBox;
 class QLineEdit;
 class KListBox;
 class KisPalette;
-class KColorCells;
 class KisResource;
 class KisColor;
+class KisPaletteView;
 
 /**
  * A color palette in table form.
@@ -53,8 +53,6 @@ signals:
     void colorDoubleClicked( const KisColor &, const QString &);
 
 protected slots:
-    void slotColorCellSelected( int );
-    void slotColorCellDoubleClicked( int );
     void slotSetPalette( const QString &_paletteName );
 
 public slots:
@@ -65,11 +63,10 @@ protected:
     void readNamedColor( void );
 
 protected:
-
+    KisPaletteView* m_view;
     QDict<KisPalette> m_namedPaletteMap;
     KisPalette * m_currentPalette;
     QComboBox *combo;
-    KColorCells *cells;
     QScrollView *sv;
     int mMinWidth;
     int mCols;

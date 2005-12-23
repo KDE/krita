@@ -58,13 +58,13 @@
 #include "kis_palette_widget.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
+#include "kis_palette_view.h"
 
 KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
     : QWidget( parent ), mMinWidth(minWidth), mCols(cols)
 {
     init = false;
 
-    cells = 0;
     m_currentPalette = 0;
 
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -73,21 +73,17 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
     combo->setFocusPolicy( QWidget::ClickFocus );
     layout->addWidget(combo);
 
-    sv = new QScrollView( this );
-    QSize cellSize = QSize( mMinWidth, 120);
-    sv->setHScrollBarMode( QScrollView::AlwaysOff);
-    sv->setVScrollBarMode( QScrollView::AlwaysOn);
-    QSize minSize = QSize(sv->verticalScrollBar()->width(), 0);
-    minSize += QSize(sv->frameWidth(), 0);
-    minSize += QSize(cellSize);
-    sv->setMinimumSize(minSize);
-    sv->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
-    layout->addWidget(sv);
+    m_view = new KisPaletteView(this, 0, minWidth, cols);
+    layout->addWidget( m_view );
 
     //setFixedSize(sizeHint());
 
-    connect( combo, SIGNAL(activated(const QString &)),
-         this, SLOT(slotSetPalette( const QString &)));
+    connect(combo, SIGNAL(activated(const QString &)),
+            this, SLOT(slotSetPalette(const QString &)));
+    connect(m_view, SIGNAL(colorSelected(const KisColor &)),
+            this, SIGNAL(colorSelected(const KisColor &)));
+    connect(m_view, SIGNAL(colorDoubleClicked(const KisColor &, const QString &)),
+            this, SIGNAL(colorDoubleClicked(const KisColor &, const QString &)));
 }
 
 KisPaletteWidget::~KisPaletteWidget()
@@ -112,7 +108,7 @@ QString KisPaletteWidget::palette() const
 void KisPaletteWidget::slotSetPalette( const QString &_paletteName )
 {
     setPalette( _paletteName );
-    slotColorCellSelected(0); // FIXME: We need to save the current value!!
+    m_view -> slotColorCellSelected(0); // FIXME: We need to save the current value!!
 }
 
 
@@ -141,56 +137,8 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
         }
     }
 
-    delete cells;
-
-    int rows = (m_currentPalette -> nColors() + mCols -1 ) / mCols;
-
-    if (rows < 1) rows = 1;
-
-    cells = new KColorCells( sv->viewport(), rows, mCols);
-    Q_CHECK_PTR(cells);
-
-    cells->setShading(false);
-    cells->setAcceptDrags(false);
-
-    QSize cellSize = QSize( mMinWidth, mMinWidth * rows / mCols);
-    cells->setFixedSize( cellSize );
-
-    for( int i = 0; i < m_currentPalette -> nColors(); i++)
-    {
-        QColor c = m_currentPalette -> getColor(i).color;
-        cells->setColor( i, c );
-    }
-
-    connect( cells, SIGNAL( colorSelected( int ) ),
-         SLOT( slotColorCellSelected( int ) ) );
-
-    connect( cells, SIGNAL( colorDoubleClicked( int ) ),
-         SLOT( slotColorCellDoubleClicked( int ) ) );
-
-    sv->addChild( cells );
-    cells->show();
-    sv->updateScrollBars();
-
+    m_view -> setPalette(m_currentPalette);
 }
-
-void KisPaletteWidget::slotColorCellSelected( int col )
-{
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    if (!m_currentPalette || (col >= m_currentPalette->nColors()))
-        return;
-    emit colorSelected( KisColor(m_currentPalette->getColor(col).color, cs));
-
-}
-
-void KisPaletteWidget::slotColorCellDoubleClicked( int col )
-{
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
-        return;
-    emit colorDoubleClicked( KisColor(m_currentPalette->getColor(col).color, cs), m_currentPalette->getColor(col).name);
-}
-
 
 void KisPaletteWidget::slotAddPalette(KisResource * palette)
 {

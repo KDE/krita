@@ -38,6 +38,9 @@ class KisPaintDeviceImpl;
 struct KisPaletteEntry {
     QColor color;
     QString name;
+    bool operator==(const KisPaletteEntry& rhs) {
+        return color == rhs.color && name == rhs.name;
+    }
 };
 
 /**
@@ -70,6 +73,12 @@ public:
      * palette, a RIFF palette or a Photoshop palette.
      */
     KisPalette(const QString& filename);
+
+    /// Create an empty palette
+    KisPalette();
+
+    /// Explicit copy constructor (KisResource copy constructor is private)
+    KisPalette(const KisPalette& rhs);
 
     virtual ~KisPalette();
 

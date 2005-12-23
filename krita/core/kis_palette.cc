@@ -33,6 +33,7 @@
 #include <qpoint.h>
 #include <qvaluevector.h>
 #include <qfile.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -62,6 +63,7 @@ KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name
 
     // XXX: Implement
 
+    m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 KisPalette::KisPalette(const KisPaintDeviceImplSP device, Q_INT32 nColors, const QString & name)
@@ -73,6 +75,7 @@ KisPalette::KisPalette(const KisPaintDeviceImplSP device, Q_INT32 nColors, const
 
 
     // XXX: Implement
+    m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 
@@ -95,15 +98,37 @@ KisPalette::KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QStr
         e.name = "Untitled";
         add(e);
     }
+
+    m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 KisPalette::KisPalette(const QString& filename)
     : super(filename)
 {
     // Implemented in super class
+    m_columns = 0; // Set the default value that the GIMP uses...
 }
 
- 
+KisPalette::KisPalette()
+    : super("")
+{
+    m_columns = 0; // Set the default value that the GIMP uses...
+}
+
+/// Create an copied palette
+KisPalette::KisPalette(const KisPalette& rhs)
+    : super("")
+{
+    setFilename(rhs.filename());
+    m_ownData = false;
+    m_img = rhs.m_img;
+    m_name = rhs.m_name;
+    m_comment = rhs.m_comment;
+    m_columns = rhs.m_columns;
+    m_colors = rhs.m_colors;
+    setValid(true);
+}
+
 KisPalette::~KisPalette()
 {
 }
@@ -120,7 +145,26 @@ bool KisPalette::load()
 
 bool KisPalette::save()
 {
-    return false;
+    QFile file(filename());
+    file.open(IO_WriteOnly | IO_Truncate);
+
+    QTextStream stream(&file);
+    // Header: Magic\nName: <name>\nColumns: <no idea what this means, but default = 0>
+    // In any case, we don't use Columns...
+    stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
+
+    for (int i = 0; i < m_colors.size(); i++) {
+        const KisPaletteEntry& entry = m_colors.at(i);
+        QColor c = entry.color;
+        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
+        if (entry.name.isEmpty())
+            stream << "Untitled\n";
+        else
+            stream << entry.name << "\n";
+    }
+
+    file.close();
+    return true;
 }
 
 QImage KisPalette::img()
@@ -189,7 +233,7 @@ bool KisPalette::init()
         }
 
         // Loop over the rest of the lines
-        for (Q_UINT32 i = index; i < lines.size() - 1; i++) {
+        for (Q_UINT32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
                 m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
             }
@@ -231,7 +275,16 @@ void KisPalette::add(const KisPaletteEntry & c)
 
 void KisPalette::remove(const KisPaletteEntry & c)
 {
-    Q_UNUSED(c);
+    QValueVector<KisPaletteEntry>::iterator it = m_colors.begin();
+    QValueVector<KisPaletteEntry>::iterator end = m_colors.end();
+
+    while (it != end) {
+        if ((*it) == c) {
+            m_colors.erase(it);
+            return;
+        }
+        ++it;
+    }
 }
 
 KisPaletteEntry KisPalette::getColor(Q_UINT32 index)

@@ -16,6 +16,8 @@
   <Action name="fill_selection_pattern"/>
   <Separator/>
   <Action name="revert"/>
+  <Separator/>
+  <Action name="add_palette"/>
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>

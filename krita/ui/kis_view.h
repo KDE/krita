@@ -399,6 +399,8 @@ private slots:
     void slotInsertImageAsLayer();
     void profileChanged(KisProfile *  profile);
 
+    void slotAddPalette();
+
     void preferences();
 
     void slotAutoScroll(const QPoint &p);

@@ -11,7 +11,7 @@ SUBDIRS = \
 #    histogram \
 #    histogram_docker \
     history_docker \
-#    imagesize \
+    imagesize \
 #    performancetest \
     rotateimage \
     screenshot \

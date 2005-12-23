@@ -43,8 +43,10 @@ void KisFiltersListView::buildPreview()
 {
     // Check which filters support painting
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
-    KisLayerSP activeLayer = img->activeLayer();
-    m_thumb = new KisPaintLayer( * ((KisPaintLayer*)activeLayer.data()));
+    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>( img->activeLayer().data());
+    if(activeLayer == 0)
+        return; // TODO: warn the user and fix the filters engine
+    m_thumb = new KisPaintLayer( *activeLayer );
     m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->paintDevice()->colorSpace(), "thumbnail");
     m_imgthumb->addLayer(m_thumb.data(), m_imgthumb->rootLayer(), 0);
     double sx = 100./m_thumb->exactBounds().width();

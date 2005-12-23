@@ -1,18 +1,18 @@
 if compile_kross
-SCRIPTINGDIR = scripting
+#SCRIPTINGDIR = scripting
 endif
 
 
 
 SUBDIRS = \
-    colorrange \
+#    colorrange \
     colorspaceconversion \
     filtersgallery \
-    histogram \
-    histogram_docker \
+#    histogram \
+#    histogram_docker \
     history_docker \
-    imagesize \
-    performancetest \
+#    imagesize \
+#    performancetest \
     rotateimage \
     screenshot \
     shearimage \

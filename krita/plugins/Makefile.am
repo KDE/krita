@@ -1,4 +1,5 @@
 SUBDIRS = \
     filters \
     paintops \
-    tools
+    tools \
+    viewplugins 

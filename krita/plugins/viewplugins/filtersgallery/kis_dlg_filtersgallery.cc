@@ -27,7 +27,7 @@
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
 #include "kis_paint_device_impl.h"
-#include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_view.h"
@@ -53,7 +53,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 
     m_previewWidget = new KisPreviewWidget(frame);
     m_hlayout->addWidget(m_previewWidget);
-    m_previewWidget->slotSetLayer( m_view->getCanvasSubject()->currentImg()->activeLayer() );
+    m_previewWidget->slotSetDevice( ( (KisPaintLayer*) ( m_view->getCanvasSubject()->currentImg()->activeLayer().data() ) )->paintDevice() );
     connect(m_previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
 
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
@@ -75,8 +75,8 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
         m_currentConfigWidget = 0;
     }
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
-    KisLayerSP activeLayer = img->activeLayer();
-    m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),(KisPaintDeviceImplSP)activeLayer);
+    KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
+    m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),activeLayer->paintDevice());
     if(m_currentConfigWidget != 0)
     {
         m_hlayout->insertWidget(1, m_currentConfigWidget);
@@ -91,7 +91,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     if(m_currentFilter == 0)
         return;
     
-    KisLayerSP layer = m_previewWidget->getLayer();
+    KisPaintDeviceImplSP layer = m_previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());

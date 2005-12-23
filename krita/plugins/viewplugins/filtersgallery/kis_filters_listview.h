@@ -57,7 +57,7 @@ namespace FiltersGallery {
         private:
             KisView* m_view;
             KisImageSP m_imgthumb;
-            KisLayerSP m_thumb;
+            KisPaintLayerSP m_thumb;
     };
 
 }

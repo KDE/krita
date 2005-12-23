@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_image.h"
-#include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_filter.h"
 #include "kis_filter_strategy.h"
 
@@ -44,9 +44,9 @@ void KisFiltersListView::buildPreview()
     // Check which filters support painting
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisLayerSP activeLayer = img->activeLayer();
-    m_thumb = new KisLayer(*activeLayer);
-    m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->colorSpace(), "thumbnail");
-    m_imgthumb->add(m_thumb,0);
+    m_thumb = new KisPaintLayer( * ((KisPaintLayer*)activeLayer.data()));
+    m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->paintDevice()->colorSpace(), "thumbnail");
+    m_imgthumb->addLayer(m_thumb.data(), m_imgthumb->rootLayer(), 0);
     double sx = 100./m_thumb->exactBounds().width();
     double sy = 100./m_thumb->exactBounds().height();
     m_imgthumb->scale(sx, sy, 0, new KisMitchellFilterStrategy());
@@ -58,19 +58,18 @@ void KisFiltersListView::buildPreview()
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         
         if (f -> supportsPreview()) {
-            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb);
+            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb->paintDevice());
             // apply the filter
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
             {
                 KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorSpace(), "preview");
-                KisLayerSP thumbPreview = new KisLayer(*m_thumb/*imgthumbPreview,"",50*/);
-                imgthumbPreview->add(thumbPreview,0);
+                KisPaintLayerSP thumbPreview = new KisPaintLayer(*m_thumb/*imgthumbPreview,"",50*/);
+                imgthumbPreview->addLayer(thumbPreview.data(), imgthumbPreview->rootLayer(), 0);
                 f->disableProgress();
-                f->process((KisPaintDeviceImplSP)m_thumb, (KisPaintDeviceImplSP)thumbPreview,*itc, imgthumbPreview->bounds());
-                QImage qimg =  thumbPreview->convertToQImage(0);
-                new KisFiltersIconViewItem( this, (*it).name(),
-                                                                        QPixmap(qimg), *it, f, *itc );
+                f->process(m_thumb->paintDevice(), thumbPreview->paintDevice(),*itc, imgthumbPreview->bounds());
+                QImage qimg =  thumbPreview->paintDevice()->convertToQImage(0);
+                new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qimg), *it, f, *itc );
             }
             
         }

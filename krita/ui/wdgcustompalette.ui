@@ -86,6 +86,6 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kispaletteview.h</includehint>
+    <includehint>kis_palette_view.h</includehint>
 </includehints>
 </UI>

@@ -1093,11 +1093,9 @@ void KisDoc::slotIOProgress(Q_INT8 percentage)
 
 KisChildDoc * KisDoc::createChildDoc( const QRect & rect, KoDocument* childDoc )
 {
-/*LAYERREMOVE
     KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
     insertChild( ch );
     return ch;
-*/
 }
 
 void KisDoc::prepareForImport()

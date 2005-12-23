@@ -2198,7 +2198,6 @@ void KisView::layerAdd()
 
 void KisView::addPartLayer()
 {
-/*LAYERREMOVE
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -2216,12 +2215,10 @@ void KisView::addPartLayer()
     KisChildDoc * childDoc = m_doc->createChildDoc(QRect(0,0,255,255), doc);
     kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
-    KisPartLayer * partLayer = new KisPartLayer(img, childDoc);
-    img->layerAdd(partLayer, 0);
+    KisPartLayer* partLayer = new KisPartLayer(img, childDoc);
+    //    img->layerAdd(partLayer, 0); // LAYERREMOVE
 
     m_doc->setModified(true);
-*/
-
 }
 
 void KisView::slotChildActivated(bool a) {

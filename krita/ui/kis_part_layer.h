@@ -23,7 +23,7 @@
 #include <koDocument.h>
 #include <koDocumentChild.h>
 
-#include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_types.h"
 #include "kis_doc.h"
 
@@ -69,9 +69,9 @@ protected:
  * XXX At the moment, it is not actually embedded when you save this as a Krita Native File!
  * Only the RGBA8 data gets saved :(
  */
-class KisPartLayer : public KisLayer {
+class KisPartLayer : public KisPaintLayer {
     Q_OBJECT
-    typedef KisLayer super;
+    typedef KisPaintLayer super;
 public:
     KisPartLayer(KisImageSP img, KisChildDoc * doc);
     virtual ~KisPartLayer();
@@ -85,10 +85,10 @@ public:
     /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
     virtual KisChildDoc* childDoc() { return m_doc; }
 
-    /// Only override this one, super::move(const QPoint&) calls this one
-    virtual void move(Q_INT32 x, Q_INT32 y);
+    virtual void setX(Q_INT32 x);
+    virtual void setY(Q_INT32 y);
 
-    virtual void paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y);
+    //virtual void paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y);
 
 private slots:
     /// Repaints our device with the data from the embedded part

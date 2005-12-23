@@ -56,6 +56,7 @@ libkritaui_la_SOURCES = \
     kis_opengl_image_context.cc \
     kis_paintop_box.cc \
     kis_palette_widget.cc \
+    kis_part_layer.cc \
     kis_pattern_chooser.cc \
     kis_previewdialog.cc \
     kis_previewwidget.cc \

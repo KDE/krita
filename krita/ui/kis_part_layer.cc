@@ -55,8 +55,8 @@ KisChildDoc::~KisChildDoc ()
 
 
 KisPartLayer::KisPartLayer(KisImageSP img, KisChildDoc * doc)
-    : KisLayer(img, "embedded document", OPACITY_OPAQUE,
-               KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""))
+    : super(img, "embedded document", OPACITY_OPAQUE,
+            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""))
     , m_doc(doc)
 {
 }
@@ -81,17 +81,28 @@ void KisPartLayer::deactivate()
     repaint();
 }
 
-void KisPartLayer::move(Q_INT32 x, Q_INT32 y) {
+void KisPartLayer::setX(Q_INT32 x) {
     QRect rect = m_doc -> geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
     // since the part is not necesarily started at (0,0)
-    rect.moveBy(x - getX(), y - getY());
+    rect.moveBy(x - this -> x(), 0);
     m_doc -> setGeometry(rect);
 
-    super::move(x, y);
+    super::setX(x);
 }
 
+void KisPartLayer::setY(Q_INT32 y) {
+    QRect rect = m_doc -> geometry();
+
+    // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
+    // since the part is not necesarily started at (0,0)
+    rect.moveBy(0, y - this -> y());
+    m_doc -> setGeometry(rect);
+
+    super::setY(y);
+}
+/*
 void KisPartLayer::paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y) {
     // Maybe set rasterOp Not?
     QRect rect = childDoc() -> geometry();
@@ -102,7 +113,7 @@ void KisPartLayer::paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y) {
     painter.drawRect(rect);
     // XXX clean the painter to its original state!
 }
-
+*/
 void KisPartLayer::repaint() {
     if (!m_doc || !m_doc->document()) return;
 
@@ -127,8 +138,10 @@ void KisPartLayer::repaint() {
     m_doc -> document() -> paintEverything(painter, sizeRect, true);
 
     QImage qimg = pm.convertToImage();
-    convertFromQImage(qimg,"", rect.left(), rect.top()); //assume the part is sRGB for now
-                                                                              // And we need to paint offsetted
+
+    //assume the part is sRGB for now, and that "" is sRGB
+    // And we need to paint offsetted
+    paintDevice() -> convertFromQImage(qimg, "", rect.left(), rect.top());
 
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry

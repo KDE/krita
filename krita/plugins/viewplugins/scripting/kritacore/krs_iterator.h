@@ -57,10 +57,10 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
 
                     this->addFunction("get"+ci->name(),
                         new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
-                            this, &Iterator<_T_It>::getChannelUINT8, uint(ci->pos()) ) );
+                            this, &Iterator<_T_It>::getChannelUINT8, ci->pos() ) );
                     this->addFunction("set"+ci->name(),
                         new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
-                            this, &Iterator<_T_It>::setChannelUINT8, uint(ci->pos()) ) );
+                            this, &Iterator<_T_It>::setChannelUINT8, ci->pos() ) );
                     break;
                 case KisChannelInfo::UINT16:
                     kdDebug() << "UINT16 channel" << endl;

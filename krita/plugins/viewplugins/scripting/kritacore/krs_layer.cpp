@@ -44,7 +44,7 @@ Layer::Layer(KisLayerSP layer, KisDoc* doc)
     addFunction("getWidth", &Layer::getWidth);
     addFunction("getHeight", &Layer::getHeight);
     addFunction("createHistogram", &Layer::createHistogram, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("beginPainting", &Layer::beginPainting, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String", new Api::Variant("script") ) );
+    addFunction("beginPainting", &Layer::beginPainting, Kross::Api::ArgumentList() );
     addFunction("endPainting", &Layer::endPainting);
     addFunction("convertToColorspace", &Layer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
@@ -128,7 +128,7 @@ Kross::Api::Object::Ptr Layer::createHistogram(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Layer::beginPainting(Kross::Api::List::Ptr args)
 {
-    QString name = Kross::Api::Variant::toString(args->item(0));
+    QString name = args->count() > 0 ? Kross::Api::Variant::toString(args->item(0)) : "script";
     if(m_cmd != 0)
     {
         delete m_cmd;

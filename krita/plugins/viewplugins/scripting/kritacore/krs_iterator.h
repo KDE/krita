@@ -20,6 +20,7 @@
 #define KROSS_KRITACOREKRS_ITERATOR_H
 
 #include <api/class.h>
+#include <api/event.h>
 
 #include <kis_types.h>
 
@@ -36,12 +37,15 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
     public:
     Iterator(_T_It it, KisLayerSP layer) : Kross::Api::Class<Iterator<_T_It> >("KritaIterator"), m_it(it), nchannels(layer->nChannels())
     {
-        addFunction("next", &Iterator<_T_It>::next);
-        addFunction("isDone", &Iterator<_T_It>::isDone);
+        this->addFunction("next",
+            new Kross::Api::ConstFunction0< Iterator<_T_It> >(
+                this, &Iterator<_T_It>::next ) );
+        this->addFunction("isDone",
+            new Kross::Api::ConstFunction0< Iterator<_T_It> >(
+                this, &Iterator<_T_It>::isDone ) );
+
         QValueVector<KisChannelInfo *> channels = layer->colorSpace()->channels();
         kdDebug() << layer->colorSpace()->id().name() << endl;
-//         addFunction("getBlue", &Iterator<_T_It>::getChannelUINT8, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(0),true) );
-#if 1
         for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
         {
             KisChannelInfo * ci = *itC;
@@ -50,25 +54,39 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             {
                 case KisChannelInfo::UINT8:
                     kdDebug() << "UINT8 channel" << endl;
-                    addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelUINT8, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),false) );
-                    addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelUINT8,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant( ci->pos()),false));
+
+                    this->addFunction("get"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::getChannelUINT8, uint(ci->pos()) ) );
+                    this->addFunction("set"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::setChannelUINT8, uint(ci->pos()) ) );
                     break;
                 case KisChannelInfo::UINT16:
                     kdDebug() << "UINT16 channel" << endl;
-                    addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelUINT16,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),false));
-                    addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelUINT16,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),true));
+
+                    this->addFunction("get"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::getChannelUINT16, ci->pos() ) );
+                    this->addFunction("set"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::setChannelUINT16, ci->pos() ) );
                     break;
                 case KisChannelInfo::FLOAT32:
                     kdDebug() << "FLOAT32 channel" << endl;
-                    addFunction("get"+ci->name(), &Iterator<_T_It>::getChannelFLOAT,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Double", new Api::Variant(ci->pos()),false));
-                    addFunction("set"+ci->name(), &Iterator<_T_It>::setChannelFLOAT,  Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Double") << Kross::Api::Argument("Kross::Api::Variant::UInt", new Api::Variant(ci->pos()),true));
+
+                    this->addFunction("get"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::getChannelFLOAT, ci->pos() ) );
+                    this->addFunction("set"+ci->name(),
+                        new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            this, &Iterator<_T_It>::setChannelFLOAT, ci->pos() ) );
                     break;
                 default:
                     kdDebug() << "unsupported data format in scripts" << endl;
                     break;
             }
         }
-#endif
     }
 
     ~Iterator()
@@ -78,50 +96,44 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
         return "Kross::KritaCore::KrsDoc";
     };
     private:
-        Kross::Api::Object::Ptr next(Kross::Api::List::Ptr)
+        Kross::Api::Object::Ptr next()
         {
             ++m_it;
             return new Kross::Api::Variant(m_it.isDone());
         }
-        Kross::Api::Object::Ptr isDone(Kross::Api::List::Ptr)
+        Kross::Api::Object::Ptr isDone()
         {
             return new Kross::Api::Variant(m_it.isDone());
         }
-        Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(0));
             Q_UINT8* data = (Q_UINT8*)(m_it.rawData() + channelpos);
             return new Kross::Api::Variant( * data);
         }
-        Kross::Api::Object::Ptr setChannelUINT8(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr setChannelUINT8(Kross::Api::List::Ptr args, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(1));
-            Q_UINT8* data = (Q_UINT8*)(m_it.rawData() + channelpos);
+            Q_UINT8* data = (Q_UINT8*)(m_it.rawData() + channelpos); //*(uint*)channelpos);
             *data = Kross::Api::Variant::toUInt( args->item(0) );
             return 0;
         }
-        Kross::Api::Object::Ptr getChannelUINT16(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr getChannelUINT16(Kross::Api::List::Ptr, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(0));
             Q_UINT16* data = (Q_UINT16*)(m_it.rawData() + channelpos);
             return new Kross::Api::Variant( * data);
         }
-        Kross::Api::Object::Ptr setChannelUINT16(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr setChannelUINT16(Kross::Api::List::Ptr args, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(1));
             Q_UINT16* data = (Q_UINT16*)(m_it.rawData() + channelpos);
             *data =  Kross::Api::Variant::toUInt( args->item(0) );
             return 0;
         }
-        Kross::Api::Object::Ptr getChannelFLOAT(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr getChannelFLOAT(Kross::Api::List::Ptr, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(0));
             float* data = (float*)(m_it.rawData() + channelpos);
             return new Kross::Api::Variant( * data);
         }
-        Kross::Api::Object::Ptr setChannelFLOAT(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr setChannelFLOAT(Kross::Api::List::Ptr args, uint channelpos)
         {
-            uint channelpos = Kross::Api::Variant::toUInt(args->item(1));
             float* data = (float*)(m_it.rawData() + channelpos);
             *data = Kross::Api::Variant::toUInt( args->item(0) );
             return 0;

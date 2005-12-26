@@ -67,18 +67,6 @@ public:
     /// Returns the last child layer of this layer (if it supports that).
     virtual KisLayerSP lastChild() const { return 0; }
 
-    /**
-     * Returns the 'index' of this layer in the parent. This is mostly for speed in the internal
-     * implementations of layer methods, so you're not really supposed to use this, or it's
-     * accompanying setIndex(int). Return value is undefined when it's not a child of any layer
-     */
-    virtual int index() const { return m_index; }
-    /**
-     * Sets the 'index' of this layer. See index() for a warning and more explanations.
-     * This function must be called every time this layer is added to a layer as a child!
-     */
-    virtual void setIndex(int index) { m_index = index; }
-
 public:
     /// Called when the layer is made active
     virtual void activate() {};
@@ -150,6 +138,19 @@ private:
 
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;
+
+    /**
+     * Returns the 'index' of this layer in the parent. This is mostly for speed in the internal
+     * implementations of layer methods, so you're not really supposed to use this, or it's
+     * accompanying setIndex(int). Return value is undefined when it's not a child of any layer
+     */
+    virtual int index() const { return m_index; }
+    /**
+     * Sets the 'index' of this layer. See index() for a warning and more explanations.
+     * This function must be called every time this layer is added to a layer as a child!
+     */
+    virtual void setIndex(int index) { m_index = index; }
+    friend class KisGroupLayer;
 };
 
 #endif // KIS_LAYER_H_

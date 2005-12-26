@@ -121,8 +121,6 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual void accept(KisLayerVisitor &) = 0;
 
-    void setParent(KisGroupLayerSP parent);
-
 signals:
     void visibilityChanged(KisLayerSP device);
 
@@ -147,10 +145,16 @@ private:
     virtual int index() const { return m_index; }
     /**
      * Sets the 'index' of this layer. See index() for a warning and more explanations.
-     * This function must be called every time this layer is added to a layer as a child!
+     * This function must be called (by the grouplayer) every time this layer is added to a layer as a child!
      */
     virtual void setIndex(int index) { m_index = index; }
     friend class KisGroupLayer;
+
+    /**
+     * Sets the parent layer of this layer.
+     * This function must be called (by the grouplayer) every time this layer is added to a layer as a child!
+     */
+    void setParent(KisGroupLayerSP parent);
 };
 
 #endif // KIS_LAYER_H_

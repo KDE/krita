@@ -22,7 +22,6 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <qcolor.h>
-#include <koDocument.h> // XXX: We don't want to depend on KOffice in this lib!
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"

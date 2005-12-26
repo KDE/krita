@@ -152,10 +152,13 @@ public:
      */
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
-KisLayerSP layerAdd(const QString& name, Q_UINT8 opacity);
-KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy);
+    /// Adds a new layer, and return it
+    KisLayerSP layerAdd(const QString& name, Q_UINT8 opacity);
+    /// Adds a new layer, and return it
+    KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,
+                        Q_UINT8 opacity, KisColorSpace * colorstrategy);
 
-    // Get the active painting device
+    /// Get the active painting device
     KisPaintDeviceImplSP activeDevice();
 
     void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
@@ -170,7 +173,7 @@ KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UI
     /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Add layer
+    /// Add the layer
     bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer

@@ -294,6 +294,22 @@ KisGroupLayerSP KisLayer::parent() const
     return m_parent;
 }
 
+KisLayerSP KisLayer::prevSibling() const {
+    KisGroupLayerSP p = parent();
+    if (!p)
+        return 0;
+
+    return p -> prevSiblingOf(this);
+}
+
+KisLayerSP KisLayer::nextSibling() const {
+    KisGroupLayerSP p = parent();
+    if (!p)
+        return 0;
+
+    return p -> nextSiblingOf(this);
+}
+
 Q_UINT8 KisLayer::opacity() const
 {
     return m_opacity;

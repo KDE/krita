@@ -22,7 +22,10 @@
 #include "kis_types.h"
 
 /**
- * A KisLayer that bundles child layers into a single layer
+ * A KisLayer that bundles child layers into a single layer.
+ * Internally, the layers are ordered like this: first layer = top in layerbox = list.end()
+ * the index() calls of children will return values in accordance to this
+ * (firstChild -> index = m_layers.count() - 1; lastChild -> index = 0)
  **/
 class KisGroupLayer : public KisLayer {
     typedef KisLayer super;
@@ -56,11 +59,17 @@ public:
     virtual KisLayerSP lastChild() const;
 
     /**
-     * Add the specified layer above the specified layer (if aboveThis == 0, the bottom is used)
+     * Add the specified layer above the specified layer (if aboveThis == 0, or aboveThis is no
+     * child of this layer, the bottom is used)
      * Returns false if the layer already is a direct child of this group */
     bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
     /// Remove the layer from this group. If the layer is no child of this one, false is returned
     bool removeLayer(KisLayerSP layer);
+
+    /// returns the previous sibling of the child layer specified, conforming to what prevSibling expects (returns 0 if it is not a child)
+    virtual KisLayerSP prevSiblingOf(const KisLayer* layer) const;
+    /// returns the next sibling of the child layer specified, conforming to what nextSibling expects (returns 0 if it is not a child)
+    virtual KisLayerSP nextSiblingOf(const KisLayer* layer) const;
 
 private:
     vKisLayerSP m_layers; // Contains the list of all layers

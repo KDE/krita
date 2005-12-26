@@ -45,32 +45,45 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
     if (m_layers.contains(newLayer))
         return false;
 
-    if(aboveThis)
-    {
-        for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
-            if (m_layers[layerIndex] == aboveThis)
-            {
-                m_layers.insert(m_layers.begin() + layerIndex, newLayer);
-                newLayer->setParent(this);
-                return true;
-            }
+    newLayer -> setParent(this);
+
+    // We enter this loop even if aboveThis == 0, because we need to increment the layers
+    // above insertion pos their indices with 1 each
+    for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
+        KisLayerSP layer = m_layers[layerIndex];
+        if (layer == aboveThis)
+        {
+            // begin() + insertPosition -> insert BEFORE that (hence the + 1)
+            m_layers.insert(m_layers.begin() + (layerIndex + 1), newLayer);
+            newLayer -> setIndex(layerIndex + 1); // This is now the layer right above index
+            return true;
+        } else {
+            layer -> setIndex(layer -> index() + 1);
         }
-        // Falls through to be added on bottom
     }
+    // Falls through to be added on bottom
 
     //Add to bottom
-    m_layers.push_back(newLayer);
+    m_layers.insert(m_layers.begin(), newLayer);
+    newLayer -> setIndex(0);
+
     return true;
 }
 
 bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
+    if (!m_layers.contains(layer))
+        return false; // because we'll decrease indices incorrectly otherwise!
+
     for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
-        if (m_layers[layerIndex] == layer)
+        KisLayerSP current = m_layers[layerIndex];
+        if (current == layer)
         {
             m_layers.erase(m_layers.begin() + layerIndex);
             layer->setParent(0);
             return true;
+        } else {
+            current -> setIndex(layer -> index() - 1);
         }
     }
 
@@ -83,7 +96,7 @@ KisLayerSP KisGroupLayer::firstChild() const {
         return 0;
     }
 
-    return m_layers.at(0);
+    return m_layers.at(m_layers.count() - 1);
 }
 
 KisLayerSP KisGroupLayer::lastChild() const {
@@ -92,7 +105,29 @@ KisLayerSP KisGroupLayer::lastChild() const {
         return 0;
     }
 
-    return m_layers.at(m_layers.count() - 1);
+    return m_layers.at(0);
+}
+
+KisLayerSP KisGroupLayer::prevSiblingOf(const KisLayer* layer) const {
+    if (layer -> parent() != this)
+        return 0;
+
+    // previous sibling -> up in the layerbox -> index + 1
+    int index = layer -> index();
+    if (index == m_layers.count() - 1)
+        return 0;
+    return m_layers.at(index + 1);
+}
+
+KisLayerSP KisGroupLayer::nextSiblingOf(const KisLayer* layer) const {
+    if (layer -> parent() != this)
+        return 0;
+
+    // next sibling -> down in the layerbox -> index - 1
+    int index = layer -> index();
+    if (index == 0)
+        return 0;
+    return m_layers.at(index - 1);
 }
 
 #include "kis_group_layer.moc"

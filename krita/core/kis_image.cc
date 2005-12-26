@@ -925,11 +925,6 @@ Q_INT32 KisImage::height() const
 
 KisPaintDeviceImplSP KisImage::activeDevice()
 {
-/*LAYERREMOVE
-    if (m_activeLayer) {
-        return m_activeLayer.data();
-    }
-*/
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data()))
         return layer -> paintDevice();
     return 0;
@@ -937,9 +932,7 @@ KisPaintDeviceImplSP KisImage::activeDevice()
 
 KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
 {
-//LAYERREMOVE
-//    return layerAdd(name,,, devOpacity, colorSpace());
-return 0;
+    return layerAdd(name, COMPOSITE_OVER, devOpacity, colorSpace());
 }
 
 KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy)
@@ -952,7 +945,6 @@ KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& composi
     layer -> setVisible(true);
 
     addLayer(layer, m_activeLayer->parent().data(), m_activeLayer->nextSibling());
-    activate(layer);
 
     return layer;
 }
@@ -1027,6 +1019,16 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
         notify();
+
+        activate(layer);
+
+    /*LAYERREMOVE
+        QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+        csRegistry() -> paintDeviceActionsFor(cs);
+        for (uint i = 0; i < actions.count(); i++)
+        actions.at(i) -> act(layer.data(), img -> width(), img -> height());
+    */
+
         emit sigLayerAdded(layer);
     }
 

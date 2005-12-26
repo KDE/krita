@@ -57,15 +57,27 @@ public:
     /**
      * Returns the previous sibling of this layer in the parent's list. 0 is returned
      * if there is no parent, or if this child has no more previous siblings (== firstChild())*/
-    virtual KisLayerSP prevSibling() const{return 0;};
+    virtual KisLayerSP prevSibling() const;
     /**
      * Returns the next sibling of this layer in the parent's list. 0 is returned
      * if there is no parent, or if this child has no more next siblings (== lastChild())*/
-    virtual KisLayerSP nextSibling() const{return 0;};
-    /// Returns the first child layer of this layer (if it supports that). First means index=0
-    virtual KisLayerSP firstChild() const{return 0;};
+    virtual KisLayerSP nextSibling() const;
+    /// Returns the first child layer of this layer (if it supports that).
+    virtual KisLayerSP firstChild() const { return 0; }
     /// Returns the last child layer of this layer (if it supports that).
-    virtual KisLayerSP lastChild() const{return 0;};
+    virtual KisLayerSP lastChild() const { return 0; }
+
+    /**
+     * Returns the 'index' of this layer in the parent. This is mostly for speed in the internal
+     * implementations of layer methods, so you're not really supposed to use this, or it's
+     * accompanying setIndex(int). Return value is undefined when it's not a child of any layer
+     */
+    virtual int index() const { return m_index; }
+    /**
+     * Sets the 'index' of this layer. See index() for a warning and more explanations.
+     * This function must be called every time this layer is added to a layer as a child!
+     */
+    virtual void setIndex(int index) { m_index = index; }
 
 public:
     /// Called when the layer is made active
@@ -134,6 +146,7 @@ private:
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImage *m_image;
+    int m_index;
 
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;

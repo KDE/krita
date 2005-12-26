@@ -35,11 +35,14 @@ public:
     {
         m_img = img;
         m_gc = gc;
+        m_projection = 0;
 /*
         m_insertMergedAboveLayer = 0;
         m_haveFoundInsertionPlace = false;
 */
     }
+
+    void setProjection(KisPaintDeviceImplSP proj) { m_projection = proj; }
 
 public:
     virtual bool visit(KisPaintLayer *layer)
@@ -76,7 +79,11 @@ public:
 
     virtual bool visit(KisGroupLayer *layer)
     {
-        KisPaintDeviceImpl *dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
+        KisPaintDeviceImplSP dst;
+        if (m_projection)
+            dst = m_projection;
+        else
+            dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
         KisPainter painter(dst);
 
         KisMergeVisitor visitor(m_img, &painter);
@@ -106,12 +113,14 @@ public:
             child = child->prevSibling();
         }
 
-        Q_INT32 sx, sy, dx, dy, w, h;
+        if (!m_projection) {
+            Q_INT32 sx, sy, dx, dy, w, h;
 
-        dst ->extent(sx,sy,w,h);
-        dx = sx;
-        dy = sy;
-        m_gc->bitBlt(dx, dy, layer->compositeOp() , dst, layer->opacity(), sx, sy, w, h);
+            dst ->extent(sx,sy,w,h);
+            dx = sx;
+            dy = sy;
+            m_gc->bitBlt(dx, dy, layer->compositeOp() , dst, layer->opacity(), sx, sy, w, h);
+        }
 
         return true;
     }
@@ -129,6 +138,7 @@ public:
 private:
     KisImageSP m_img;
     KisPainter *m_gc;
+    KisPaintDeviceImplSP m_projection;
 /*
     KisLayerSP m_insertMergedAboveLayer;
     bool m_haveFoundInsertionPlace;

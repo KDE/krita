@@ -1367,7 +1367,8 @@ void KisImage::updateProjection(const QRect& rc)
 
     KisPainter painter(m_projection);
     KisMergeVisitor visitor(this, &painter);
-    m_rootLayer ->accept(visitor);
+    visitor.setProjection(m_projection);
+    m_rootLayer -> accept(visitor);
 
     m_renderinit = true;
 }

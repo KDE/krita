@@ -21,7 +21,9 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 
-
+/**
+ * A KisLayer that bundles child layers into a single layer
+ **/
 class KisGroupLayer : public KisLayer {
     typedef KisLayer super;
 
@@ -35,10 +37,8 @@ public:
     virtual KisLayerSP clone() const;
 public:
 
-    // Called when the layer is made active
     virtual void activate() {};
 
-    // Called when another layer is made active
     virtual void deactivate() {};
 
     virtual Q_INT32 x() const {return 0;};
@@ -55,7 +55,11 @@ public:
     virtual KisLayerSP firstChild() const;
     virtual KisLayerSP lastChild() const;
 
-    bool addLayer(KisLayerSP newLayer, KisLayerSP belowLayer);
+    /**
+     * Add the specified layer above the specified layer (if aboveThis == 0, the bottom is used)
+     * Returns false if the layer already is a direct child of this group */
+    bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
+    /// Remove the layer from this group. If the layer is no child of this one, false is returned
     bool removeLayer(KisLayerSP layer);
 
 private:

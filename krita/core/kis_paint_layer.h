@@ -22,7 +22,9 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 
-
+/**
+ * This layer is of a type that can be painted on.
+ */
 class KisPaintLayer : public KisLayer {
     typedef KisLayer super;
 
@@ -57,6 +59,7 @@ public:
 
     virtual void accept(KisLayerVisitor &v) { v.visit(this); };
 
+    /// Returns the paintDevice that accompanies this layer
     KisPaintDeviceImplSP paintDevice() { return m_paintdev; };
 
 private:

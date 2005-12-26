@@ -30,6 +30,14 @@ class QPainter;
 class KisUndoAdapter;
 class KisGroupLayer;
 
+/**
+ * Abstract class that represents the concept of a Layer in Krita. This is not related
+ * to the paint devices: this is merely an abstraction of how layers can be stacked and
+ * rendered differently.
+ * Regarding the previous-, first-, next- and lastChild() calls, first means that it the layer
+ * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
+ * whereas previous will go up to first again.
+ **/
 class KRITACORE_EXPORT KisLayer : public QObject, public KShared
 {
     Q_OBJECT
@@ -39,19 +47,31 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
+    /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
+    /**
+     * Returns the parent layer of a layer. This is 0 only for a root layer; otherwise
+     * this will be an actual GroupLayer */
     virtual KisGroupLayerSP parent() const;
+    /**
+     * Returns the previous sibling of this layer in the parent's list. 0 is returned
+     * if there is no parent, or if this child has no more previous siblings (== firstChild())*/
     virtual KisLayerSP prevSibling() const{return 0;};
+    /**
+     * Returns the next sibling of this layer in the parent's list. 0 is returned
+     * if there is no parent, or if this child has no more next siblings (== lastChild())*/
     virtual KisLayerSP nextSibling() const{return 0;};
+    /// Returns the first child layer of this layer (if it supports that). First means index=0
     virtual KisLayerSP firstChild() const{return 0;};
+    /// Returns the last child layer of this layer (if it supports that).
     virtual KisLayerSP lastChild() const{return 0;};
 
 public:
-    // Called when the layer is made active
+    /// Called when the layer is made active
     virtual void activate() {};
 
-    // Called when another layer is made active
+    /// Called when another layer is made active
     virtual void deactivate() {};
 
 public:
@@ -61,7 +81,9 @@ public:
     virtual Q_INT32 y() const = 0;
     virtual void setY(Q_INT32) = 0;
 
+    /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const = 0;
+    /// Returns the exact bounds of where the actual data resides in this layer
     virtual QRect exactBounds() const = 0;
 
     virtual const bool visible() const;
@@ -91,9 +113,12 @@ public:
 
     KisUndoAdapter *undoAdapter() const;
 
+    /// paints a mask where the selection on this layer resides
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+    /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual void accept(KisLayerVisitor &) = 0;
 
     void setParent(KisGroupLayerSP parent);

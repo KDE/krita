@@ -261,7 +261,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     dcopObject();
 
 
-    connect(m_doc, SIGNAL(imageListUpdated()), SLOT(docImageListUpdate()));
     connect(this, SIGNAL(autoScroll(const QPoint &)), SLOT(slotAutoScroll(const QPoint &)));
 
     setMouseTracking(true);
@@ -2136,11 +2135,6 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
             }
         }
     }
-}
-
-void KisView::docImageListUpdate()
-{
-    setCurrentImage(m_doc -> currentImage());
 }
 
 void KisView::layerProperties()

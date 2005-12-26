@@ -152,7 +152,6 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
     if (name)
         dcopObject();
-
 }
 
 KisDoc::~KisDoc()
@@ -184,17 +183,6 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     bool ok = false;
 
-        if (flags==KoDocument::InitDocEmpty)
-        {
-/*
-                if ((ok = slotNewImage()))
-                        emit imageListUpdated();
-                setModified(false);
-                KoDocument::setEmpty();
-                setUndo(true);
-                return ok;
-*/        }
-
     QString file;
     KoTemplateChooseDia::DialogType dlgtype;
 
@@ -215,22 +203,15 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if (ret == KoTemplateChooseDia::Template) {
         resetURL();
         ok = loadNativeFormat( file );
-        emit imageListUpdated();
         setEmpty();
         ok = true;
 
     } else if (ret == KoTemplateChooseDia::File) {
-
         KURL url( file );
         ok = openURL(url);
-
     } else if (ret == KoTemplateChooseDia::Empty) {
-/*
-        if ((ok = slotNewImage())) {
-            emit imageListUpdated();
-            setEmpty();
-        }
-*/
+        setEmpty();
+        ok = true;
     }
 
     setModified(false);
@@ -855,13 +836,13 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 
     if (m_undo)
         addCommand(new KisCommandImageMv(this, this, newName, oldName));
-
-    emit imageListUpdated();
 }
 
 
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy)
 {
+    if (!init())
+        return false;
     KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
     Q_CHECK_PTR(img);
     connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
@@ -886,6 +867,9 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
 bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution)
 {
+    if (!init())
+        return false;
+
     KisConfig cfg;
 
     Q_UINT8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();

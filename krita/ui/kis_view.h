@@ -359,8 +359,6 @@ private slots:
     void canvasGotDragEnterEvent(QDragEnterEvent*);
     void canvasGotDropEvent(QDropEvent*);
 
-    void docImageListUpdate();
-
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
 

@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_LOAD_VISITOR_H_
-#define KIS_LOAD_VISITOR_H_
+#ifndef KIS_SAVE_VISITOR_H_
+#define KIS_SAVE_VISITOR_H_
 
 #include <qrect.h>
 #include "kis_types.h"
@@ -27,11 +27,11 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-class KisLoadVisitor : public KisLayerVisitor {
+class KisSaveVisitor : public KisLayerVisitor {
 public:
-    KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayerSP, QString> &layerFilenames) :
+    KisSaveVisitor(KisImageSP img, KoStore *store, Q_UINT32 &count) :
         KisLayerVisitor(),
-        m_layerFilenames(layerFilenames)
+        m_count(count)
     {
         m_external = false;
         m_img = img;
@@ -50,11 +50,11 @@ public:
         //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
 
         QString location = m_external ? QString::null : m_uri;
-        location += m_img->name() + "/layers/" + m_layerFilenames[layer];
+        location += m_img->name() + QString("/layers/layer%1").arg(m_count);
 
         // Layer data
         if (m_store -> open(location)) {
-            if (!layer->paintDevice() -> read(m_store)) {
+            if (!layer->paintDevice() -> write(m_store)) {
                 layer->paintDevice() -> disconnect();
                 m_store -> close();
                 //IODone();
@@ -64,27 +64,28 @@ public:
             m_store -> close();
         }
 
-        // icc profile
-        location = m_external ? QString::null : m_uri;
-        location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".icc";
+        if (layer->paintDevice() -> colorSpace() -> getProfile()) {
+            KisAnnotationSP annotation = layer->paintDevice() -> colorSpace() -> getProfile() -> annotation();
 
-        if (m_store -> hasFile(location)) {
-            QByteArray data;
-            m_store -> open(location);
-            data = m_store -> read(m_store -> size());
-            m_store -> close();
-/*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
-                (*it2) -> colorSpace() -> colorSpaceType()));
-*/
-            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
+            if (annotation) {
+                // save layer profile
+                location = m_external ? QString::null : m_uri;
+                location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".icc";
+
+                if (m_store -> open(location)) {
+                    m_store -> write(annotation -> annotation());
+                    m_store -> close();
+                }
+            }
         }
 
+        m_count++;
         return true;
     }
 
     virtual bool visit(KisGroupLayer *layer)
     {
-        KisLoadVisitor visitor(m_img,m_store ,m_layerFilenames);
+        KisSaveVisitor visitor(m_img, m_store, m_count);
 
         if(m_external)
             visitor.setExternalUri(m_uri);
@@ -109,8 +110,8 @@ private:
     KoStore *m_store;
     bool m_external;
     QString m_uri;
-    QMap<KisLayerSP, QString> m_layerFilenames;
+    Q_UINT32 &m_count;
 };
 
-#endif // KIS_LOAD_VISITOR_H_
+#endif // KIS_SAVE_VISITOR_H_
 

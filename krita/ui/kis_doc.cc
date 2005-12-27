@@ -78,6 +78,8 @@
 #include "kis_paint_device_action.h"
 #include "kis_custom_image_widget.h"
 #include "kis_load_visitor.h"
+#include "kis_save_visitor.h"
+#include "kis_savexml_visitor.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -338,7 +340,6 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 {
     QDomElement image = doc.createElement("IMAGE");
-    vKisLayerSP layers;
 
     Q_ASSERT(img);
     image.setAttribute("name", img -> name());
@@ -353,20 +354,11 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("x-res", img -> xRes());
     image.setAttribute("y-res", img -> yRes());
 
-/*LAYERREMOVE create a KisSaveVisitor
-    layers = img -> layers();
+    Q_UINT32 count=0;
+    KisSaveXmlVisitor visitor(doc, image, count, true);
 
-    if (layers.size() > 0) {
-        QDomElement elem = doc.createElement("LAYERS");
+    m_currentImage->rootLayer()->accept(visitor);
 
-        image.appendChild(elem);
-
-        for (vKisLayerSP_it it = layers.begin(); it != layers.end(); ++it)
-            elem.appendChild(saveLayer(doc, *it));
-    }
-*/
-
-    // TODO Image colormap if any
     return image;
 }
 
@@ -387,7 +379,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     double yres;
     QString colorspacename;
     KisColorSpace * cs;
-
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
         if ((name = element.attribute("name")).isNull())
@@ -440,29 +431,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         img -> setDescription(description);
         img -> setResolution(xres, yres);
 
-        for (node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
-            if (node.isElement()) {
-                if (node.nodeName() == "LAYERS") {
-                    for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
-                        KisLayerSP layer = loadLayer(child.toElement(), img);
+        loadLayers(element, img, img -> rootLayer());
 
-                        if (!layer) {
-                            kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
-                            return 0;
-                        }
-                        img -> addLayer(layer, img -> rootLayer(), 0);
-                    }
-/*IMAGEREMOVE
-                    if (img -> nlayers()) {
-                        img -> activateLayer(0);
-
-                    }
-*/
-                } else if (node.nodeName() == "COLORMAP") {
-                    // TODO
-                }
-            }
-        }
     } else {
         // TODO Try to import it
     }
@@ -470,25 +440,27 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     return img;
 }
 
-QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
+void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisLayerSP parent)
 {
-    QDomElement layerElement = doc.createElement("layer");
+    QDomNode node = element.firstChild();
+    QDomNode child;
 
-    layerElement.setAttribute("name", layer -> name());
-    layerElement.setAttribute("x", layer->x());
-    layerElement.setAttribute("y", layer->y());
-    layerElement.setAttribute("opacity", layer -> opacity());
-    layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
-    layerElement.setAttribute("visible", layer -> visible());
-    layerElement.setAttribute("locked", layer -> locked());
-/*LAYERREMOVE
-    layerElement.setAttribute("colorspacename", layer -> colorSpace() -> id().id());
-    // XXX: Save profile as blob inside the layer, instead of the product name.
-    if (layer -> colorSpace() -> getProfile() && layer -> colorSpace() -> getProfile() -> valid()) {
-        layerElement.setAttribute("profile", layer -> colorSpace() -> getProfile() -> productName());
+    if(!node.isNull())
+    {
+        if (node.isElement()) {
+            if (node.nodeName() == "LAYERS") {
+                for (child = node.firstChild(); !child.isNull(); child = child.nextSibling()) {
+                    KisLayerSP layer = loadLayer(child.toElement(), img);
+
+                    if (!layer) {
+                        kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
+                        return;
+                    }
+                    img -> addLayer(layer, parent, 0);
+                }
+            }
+        }
     }
-*/
-    return layerElement;
 }
 
 KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
@@ -497,20 +469,15 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     // ALWAYS define a default value in case the property is not
     // present in the layer definition: this helps a LOT with backward
     // compatibilty.
-    kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
-
-    KisConfig cfg;
     QString attr;
-    QDomNode node;
-    QDomNode child;
     QString name;
     Q_INT32 x;
     Q_INT32 y;
     Q_INT32 opacity;
     bool visible;
     bool locked;
-    KisLayerSP layer;
-    KisColorSpace * cs;
+
+    kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
 
     if ((name = element.attribute("name")).isNull())
         return 0;
@@ -561,6 +528,31 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     locked = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
 
+    // Now find out the layer type and do specific handling
+    if ((attr = element.attribute("layertype")).isNull())
+        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp) ;
+
+    kdDebug(DBG_AREA_FILE) << "Has specified layertype " << attr << "\n";
+
+    if(attr == "paintlayer")
+        return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
+
+    if(attr == "grouplayer")
+        return loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
+
+    kdDebug(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
+    return 0;
+}
+
+
+KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
+    QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+{
+    kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
+    QString attr;
+    KisLayerSP layer;
+    KisColorSpace * cs;
+
     QString colorspacename;
     QString profileProductName;
 
@@ -591,8 +583,37 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
     layer -> setCompositeOp(compositeOp);
     layer -> setVisible(visible);
+    layer -> setLocked(locked);
     layer -> setX(x);
     layer -> setY(y);
+
+    if ((element.attribute("filename")).isNull())
+        m_layerFilenames[layer] = name;
+    else
+        m_layerFilenames[layer] = QString(element.attribute("filename"));
+    kdDebug(DBG_AREA_FILE) << "filename of layer: " << m_layerFilenames[layer]  << "\n";
+
+    return layer;
+}
+
+KisLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
+    QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+{
+    kdDebug(DBG_AREA_FILE) << "loadGroupLayer called\n";
+    QString attr;
+    KisLayerSP layer;
+
+    layer = new KisGroupLayer(img, name, opacity);
+    Q_CHECK_PTR(layer);
+
+    layer -> setCompositeOp(compositeOp);
+    layer -> setVisible(visible);
+    layer -> setLocked(locked);
+    layer -> setX(x);
+    layer -> setY(y);
+
+    loadLayers(element, img, layer);
+
     return layer;
 }
 
@@ -615,45 +636,16 @@ bool KisDoc::completeSaving(KoStore *store)
     img -> setName((m_currentImage) -> name());
 
     setIOSteps(totalSteps + 1);
-/*LAYERREMOVE
-    vKisLayerSP layers = (img) -> layers();
 
-    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
-        connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
-        location = external ? QString::null : uri;
-        location += (img) -> name() + "/layers/" + (*it2) -> name();
+    // Save the layers data
+    Q_UINT32 count=0;
+    KisSaveVisitor visitor(m_currentImage, store, count);
 
-        // Layer data
-        if (store -> open(location)) {
-            if (!(*it2) -> write(store)) {
-                (*it2) -> disconnect();
-                store -> close();
-                IODone();
-                return false;
-            }
+    if(external)
+        visitor.setExternalUri(uri);
 
-            store -> close();
-        }
+    m_currentImage->rootLayer()->accept(visitor);
 
-        if ((*it2) -> colorSpace() -> getProfile()) {
-            KisAnnotationSP annotation = (*it2) -> colorSpace() -> getProfile() -> annotation();
-
-            if (annotation) {
-                // save layer profile
-                location = external ? QString::null : uri;
-                location += (img) -> name() + "/layers/" + (*it2) -> name() + ".icc";
-
-                if (store -> open(location)) {
-                    store -> write(annotation -> annotation());
-                    store -> close();
-                }
-            }
-        }
-
-        IOCompletedStep();
-        (*it2) -> disconnect();
-    }
-*/
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
@@ -721,8 +713,8 @@ bool KisDoc::completeLoading(KoStore *store)
 
     setIOSteps(totalSteps);
 
-    Q_UINT32 count=0;
-    KisLoadVisitor visitor(m_currentImage, store, count);
+    // Load the layers data
+    KisLoadVisitor visitor(m_currentImage, store, m_layerFilenames);
 
     if(external)
         visitor.setExternalUri(uri);

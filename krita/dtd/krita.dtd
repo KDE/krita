@@ -51,7 +51,7 @@
         Attributes: none
 
 -->
-<!ELEMENT LAYERS (LAYER)+>
+<!ELEMENT LAYERS (layer)+>
 
 
 <!--
@@ -69,8 +69,8 @@
         filename:   The name of the binary file of the layer' data.
         layertype:   The type of layer. paintlayer is assumed if absent.
 -->
-<!ELEMENT LAYER (LAYERS)?>
-<!ATTLIST LAYER 
+<!ELEMENT layer (LAYERS)?>
+<!ATTLIST layer 
 	name      CDATA #REQUIRED
 	x         CDATA #REQUIRED
 	y         CDATA #REQUIRED

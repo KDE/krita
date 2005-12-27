@@ -44,6 +44,7 @@ class KisNameServer;
 class KisChildDoc;
 class KisColorSpace;
 class KisColor;
+class KisCompositeOp;
 
 class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
@@ -153,8 +154,14 @@ private slots:
 private:
     QDomElement saveImage(QDomDocument& doc, KisImageSP img);
     KisImageSP loadImage(const QDomElement& elem);
-    QDomElement saveLayer(QDomDocument& doc, KisLayerSP layer);
+    void loadLayers(const QDomElement& element, KisImageSP img, KisLayerSP parent);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
+    KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
+                QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                KisCompositeOp compositeOp);
+    KisLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
+                QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                KisCompositeOp compositeOp);
     bool init();
 
     void setIOSteps(Q_INT32 nsteps);
@@ -173,6 +180,7 @@ private:
     Q_INT32 m_conversionDepth;
     int m_ioProgressTotalSteps;
     int m_ioProgressBase;
+    QMap<KisLayerSP, QString> m_layerFilenames; // temp storage during load
 };
 
 #endif // KIS_DOC_H_

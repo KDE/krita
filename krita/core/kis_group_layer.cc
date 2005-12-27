@@ -92,7 +92,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
         m_layers.append(newLayer);
     else
         m_layers.insert(m_layers.begin() + reverseIndex(index) + 1, newLayer);
-    for (uint i = childCount(); i > index; i--)
+    for (uint i = childCount() - 1; i > index; i--)
         at(i) -> m_index++;
     newLayer -> m_parent = this;
     newLayer -> m_index = index;

@@ -7,7 +7,7 @@
 
 
 <!--   
-        A DOC element can contain one or many IMAGE elements.
+        A DOC element can contain only one IMAGE element.
 
         Attributes
 	
@@ -22,80 +22,65 @@
 	depth      CDATA #REQUIRED
 	syntaxVersion CDATA #REQUIRED>
 
-<!--	A image contains at most _one_ LAYERS element.
+<!--	An image contains at most _one_ LAYERS element.
 
         Attributes:
 
         mime:       The MIME type 
-				If this is 'application/x-kra', then search for and LAYERS and CHANNELS components.
-				Otherwise, this is a foreign file format embedded in the element.
-				The data is saved in external binary files when mime is not 'application/x-kra' and no LAYERS and CHANNELS element are present.
+				If this is 'application/x-kra', then search for LAYERS component.
+				The data is saved in external binary files 
         name:       Every image has a name.  This is also the in-store filename where to get the pixel data or foreign image.
         width:      The image with in pixels.
         height:     The image height in pixels.
-        colorspace: The image's color mode. See enumImgType in kis_global.h.
-                    This is used if and only mime is application/x-kra.
 -->
 
-<!ELEMENT IMAGE (LAYERS, CHANNELS, COLORMAP, GUIDE)>
+<!ELEMENT IMAGE (LAYERS)>
 <!ATTLIST IMAGE 
 	name       CDATA #REQUIRED
 	mime       CDATA #REQUIRED
 	width      CDATA #REQUIRED
 	height     CDATA #REQUIRED
-	colorspace CDATA #REQUIRED>
+	x-res      CDATA #REQUIRED
+	y-res     CDATA #REQUIRED
+	profile CDATA #REQUIRED
+	colorspacename CDATA #REQUIRED>
+
 
 <!--	The layers element holds the image's layers.
 
         Attributes: none
 
 -->
-<!ELEMENT LAYERS (LAYER)*>
+<!ELEMENT LAYERS (LAYER)+>
 
-<!--	A layer contains _one_ channels element.
 
+<!--
         The data is saved in external binary files.
         Attributes:
 
         name:       The channel's name.
-        x:          The channel's horizontal positon in the image.
-        y:          The channel's vertical position in the image.
-        width:      The channel's width in pixels.
-        height:     The channel's height in pixels.
-        opacity:    The channel's opactiy. A value betwenn 0 and 255.
-        visible   Is the channel visible? (yes or no)
-        linked    Is the channel linked? (yes or no)
+        x:             The layer's horizontal positon in the image.
+        y:             The layer's vertical position in the image.
+        width:       The layer's width in pixels OBSOLETE
+        height:      The layers height in pixels OBSOLETE
+        opacity:    The layer's opactiy. A value betwenn 0 and 255.
+        visible       Is the layer visible? (yes or no)
+        linked:       Is the layer linked? (yes or no) OBSOLETE
+        filename:   The name of the binary file of the layer' data.
+        layertype:   The type of layer. paintlayer is assumed if absent.
 -->
-<!ELEMENT LAYER EMPTY>
+<!ELEMENT LAYER (LAYERS)?>
 <!ATTLIST LAYER 
 	name      CDATA #REQUIRED
 	x         CDATA #REQUIRED
 	y         CDATA #REQUIRED
-	width     CDATA #REQUIRED
-	height    CDATA #REQUIRED
+	width     CDATA #IMPLIED
+	height    CDATA #IMPLIED
 	opacity   CDATA #REQUIRED
 	visible   CDATA #REQUIRED
-	linked    CDATA #REQUIRED>
-
-<!--	The channels element holds the layer's channels.
-
-        Attributes: none
-
--->
-<!ELEMENT CHANNELS (CHANNEL)*>
-
-<!--	
-        The data is saved in external binary files.
--->
-<!ELEMENT CHANNEL EMPTY>
-<!ATTLIST CHANNEL 
-	name      CDATA #REQUIRED
-	x         CDATA #REQUIRED
-	y         CDATA #REQUIRED
-	width     CDATA #REQUIRED
-	height    CDATA #REQUIRED
-	opacity   CDATA #REQUIRED>
-
-<!ELEMENT COLORMAP EMPTY*>
-<!ELEMENT GUIDE EMPTY*>
+	linked    CDATA #IMPLIED
+	colorspacename CDATA #REQUIRED
+	profile CDATA #REQUIRED
+	filename      CDATA #IMPLIED
+	layertype      CDATA "paintlayer">
 

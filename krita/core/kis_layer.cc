@@ -65,42 +65,6 @@ namespace {
         }
     }
 
-    class KisLayerLinkedCommand : public KisLayerCommand {
-        typedef KisLayerCommand super;
-
-    public:
-        KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked);
-
-        virtual void execute();
-        virtual void unexecute();
-
-    private:
-        bool m_oldLinked;
-        bool m_newLinked;
-    };
-
-    KisLayerLinkedCommand::KisLayerLinkedCommand(KisLayerSP layer, bool oldLinked, bool newLinked) :
-        super(i18n("Link Layer"), layer)
-    {
-        m_oldLinked = oldLinked;
-        m_newLinked = newLinked;
-    }
-
-    void KisLayerLinkedCommand::execute()
-    {
-        setUndo(false);
-        m_layer -> setLinked(m_newLinked);
-        notifyPropertyChanged();
-        setUndo(true);
-    }
-
-    void KisLayerLinkedCommand::unexecute()
-    {
-        setUndo(false);
-        m_layer -> setLinked(m_oldLinked);
-        notifyPropertyChanged();
-        setUndo(true);
-    }
 
     class KisLayerLockedCommand : public KisLayerCommand {
         typedef KisLayerCommand super;
@@ -259,7 +223,6 @@ KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     QObject(),
     KShared(),
     m_opacity(opacity),
-    m_linked(false),
     m_locked(false),
     m_visible(true),
     m_name(name),
@@ -275,7 +238,6 @@ KisLayer::KisLayer(const KisLayer& rhs) :
 {
     if (this != &rhs) {
         m_opacity = rhs.m_opacity;
-        m_linked = rhs.m_linked;
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
         m_name = rhs.m_name;
@@ -323,21 +285,6 @@ void KisLayer::setOpacity(Q_UINT8 val)
 KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
 {
     return new KisLayerOpacityCommand(this, opacity(), newOpacity);
-}
-
-bool KisLayer::linked() const
-{
-    return m_linked;
-}
-
-void KisLayer::setLinked(bool l)
-{
-    m_linked = l;
-}
-
-KNamedCommand *KisLayer::setLinkedCommand(bool newLinked)
-{
-    return new KisLayerLinkedCommand(this, linked(), newLinked);
 }
 
 const bool KisLayer::visible() const

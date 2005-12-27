@@ -77,7 +77,7 @@
 #include "kis_doc_iface.h"
 #include "kis_paint_device_action.h"
 #include "kis_custom_image_widget.h"
-#include "kis_part_layer.h"
+#include "kis_load_visitor.h"
 
 static const char *CURRENT_DTD_VERSION = "1.3";
 
@@ -480,7 +480,6 @@ QDomElement KisDoc::saveLayer(QDomDocument& doc, KisLayerSP layer)
     layerElement.setAttribute("opacity", layer -> opacity());
     layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
     layerElement.setAttribute("visible", layer -> visible());
-    layerElement.setAttribute("linked", layer -> linked());
     layerElement.setAttribute("locked", layer -> locked());
 /*LAYERREMOVE
     layerElement.setAttribute("colorspacename", layer -> colorSpace() -> id().id());
@@ -509,7 +508,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     Q_INT32 y;
     Q_INT32 opacity;
     bool visible;
-    bool linked;
     bool locked;
     KisLayerSP layer;
     KisColorSpace * cs;
@@ -557,12 +555,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     visible = attr == "0" ? false : true;
     kdDebug(DBG_AREA_FILE) << "Visible: " << visible << "\n";
 
-    if ((attr = element.attribute("linked")).isNull())
-        attr = "0";
-
-    linked = attr == "0" ? false : true;
-    kdDebug(DBG_AREA_FILE) << "Linked: " << linked << "\n";
-
     if ((attr = element.attribute("locked")).isNull())
         attr = "0";
 
@@ -598,7 +590,6 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     Q_CHECK_PTR(layer);
 
     layer -> setCompositeOp(compositeOp);
-    layer -> setLinked(linked);
     layer -> setVisible(visible);
     layer -> setX(x);
     layer -> setY(y);
@@ -730,44 +721,13 @@ bool KisDoc::completeLoading(KoStore *store)
 
     setIOSteps(totalSteps);
 
-/*LAYERREMOVE
-    vKisLayerSP layers = (m_currentImage) -> layers();
+    Q_UINT32 count=0;
+    KisLoadVisitor visitor(m_currentImage, store, count);
 
-    for (vKisLayerSP_it it2 = layers.begin(); it2 != layers.end(); ++it2) {
-        connect(*it2, SIGNAL(ioProgress(Q_INT8)), this, SLOT(slotIOProgress(Q_INT8)));
-        location = external ? QString::null : uri;
-        location += (m_currentImage) -> name() + "/layers/" + (*it2) -> name();
+    if(external)
+        visitor.setExternalUri(uri);
 
-        // Layer data
-        if (store -> open(location)) {
-            if (!(*it2) -> read(store)) {
-                (*it2) -> disconnect();
-                store -> close();
-                IODone();
-                return false;
-            }
-
-            store -> close();
-        }
-
-        // icc profile
-        location = external ? QString::null : uri;
-        location += (m_currentImage) -> name() + "/layers/" + (*it2) -> name() + ".icc";
-        if (store -> hasFile(location)) {
-            QByteArray data;
-            store -> open(location);
-            data = store -> read(store -> size());
-            store -> close();
-/*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
-                (*it2) -> colorSpace() -> colorSpaceType()));
-*/
-/*            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
-        }
-
-        IOCompletedStep();
-        (*it2) -> disconnect();
-    }
-*/
+    m_currentImage->rootLayer()->accept(visitor);
 
     // annotations
     // exif

@@ -94,10 +94,6 @@ public:
     void setOpacity(Q_UINT8 val);
     KNamedCommand *setOpacityCommand(Q_UINT8 val);
 
-    bool linked() const;
-    void setLinked(bool l);
-    KNamedCommand *setLinkedCommand(bool linked);
-
     bool locked() const;
     void setLocked(bool l);
     KNamedCommand *setLockedCommand(bool locked);
@@ -126,7 +122,6 @@ signals:
 
 private:
     Q_UINT8 m_opacity;
-    bool m_linked;
     bool m_locked;
     bool m_visible;
     QString m_name;

@@ -1,0 +1,124 @@
+/*
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#ifndef KIS_LOAD_VISITOR_H_
+#define KIS_LOAD_VISITOR_H_
+
+#include <qrect.h>
+#include "kis_types.h"
+#include "kis_layer_visitor.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_group_layer.h"
+
+class KisLoadVisitor : public KisLayerVisitor {
+public:
+    KisLoadVisitor(KisImageSP img, KoStore *store, Q_UINT32 &count) :
+        KisLayerVisitor(),
+        m_count(count)
+    {
+        m_newNaming = false;
+        m_external = false;
+        m_img = img;
+        m_store = store;
+    }
+
+public:
+    void setExternalUri(QString &uri)
+    {
+        m_external = true;
+        m_uri = uri;
+    }
+
+    virtual bool visit(KisPaintLayer *layer)
+    {
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+
+        QString location = m_external ? QString::null : m_uri;
+        if(m_newNaming)
+            location += m_img->name() + "/layers/layer" + m_count;
+        else
+            location += m_img->name() + "/layers/" +layer->name();
+
+        // Layer data
+        if (m_store -> open(location)) {
+            if (!layer->paintDevice() -> read(m_store)) {
+                layer->paintDevice() -> disconnect();
+                m_store -> close();
+                //IODone();
+                return false;
+            }
+
+            m_store -> close();
+        }
+
+        // icc profile
+        location = m_external ? QString::null : m_uri;
+        if(m_newNaming)
+            location += m_img->name() + "/layers/layer" + m_count + ".icc";
+        else
+            location += m_img->name() + "/layers/" +layer->name() + ".icc";
+
+        if (m_store -> hasFile(location)) {
+            QByteArray data;
+            m_store -> open(location);
+            data = m_store -> read(m_store -> size());
+            m_store -> close();
+/*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
+                (*it2) -> colorSpace() -> colorSpaceType()));
+*/
+            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
+        }
+
+        return true;
+    }
+
+    virtual bool visit(KisGroupLayer *layer)
+    {
+        KisLoadVisitor visitor(m_img,m_store ,m_count);
+
+        if(m_external)
+            visitor.setExternalUri(m_uri);
+
+        KisLayerSP child = layer->firstChild();
+
+        while(child)
+        {
+            child->accept(visitor);
+            child = child->nextSibling();
+        }
+        return true;
+    }
+
+    virtual bool visit(KisPartLayer *)
+    {
+        return true;
+    }
+
+private:
+    KisImageSP m_img;
+    KoStore *m_store;
+    bool m_external;
+    bool m_newNaming;
+    QString m_uri;
+    Q_UINT32 &m_count;
+};
+
+#endif // KIS_LOAD_VISITOR_H_
+

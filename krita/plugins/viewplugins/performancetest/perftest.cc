@@ -1092,14 +1092,14 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 
     report = report.append(QString("    painted a 512 x 512 image %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
 
-    img->layerAdd("layer 2", OPACITY_OPAQUE);
+    img->newLayer("layer 2", OPACITY_OPAQUE);
     l = img -> activeLayer();
 
     p.begin(l.data());
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
-    img->layerAdd("layer 3", OPACITY_OPAQUE);
+    img->newLayer("layer 3", OPACITY_OPAQUE);
     l = img -> activeLayer();
 
     p.begin(l.data());

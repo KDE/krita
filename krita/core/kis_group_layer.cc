@@ -17,6 +17,7 @@
  */
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <qimage.h>
 
 #include "kis_debug_areas.h"
@@ -40,94 +41,101 @@ KisGroupLayer::~KisGroupLayer()
 {
 }
 
+uint KisGroupLayer::childCount() const
+{
+    return m_layers.count();
+}
+
+KisLayerSP KisGroupLayer::firstChild() const
+{
+    return at(0);
+}
+
+KisLayerSP KisGroupLayer::lastChild() const
+{
+    return at(childCount() - 1);
+}
+
+KisLayerSP KisGroupLayer::at(int index) const
+{
+    if (childCount() && index >= 0 && kClamp(uint(index), uint(0), childCount() - 1) == uint(index))
+        return m_layers.at(reverseIndex(index));
+    return 0;
+}
+
+int KisGroupLayer::index(KisLayerSP layer) const
+{
+    if (layer -> parent().data() == this)
+        return layer -> index();
+    return -1;
+}
+
+void KisGroupLayer::setIndex(KisLayerSP layer, int index)
+{
+    if (layer -> parent().data() != this)
+        return;
+    //TODO optimize
+    removeLayer(layer);
+    addLayer(layer, index);
+}
+
+bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
+{
+    if (x < 0 || kClamp(uint(x), uint(0), childCount()) != uint(x) ||
+        newLayer -> parent() || m_layers.contains(newLayer))
+    {
+        kdWarning() << "invalid input to KisGroupLayer::addLayer()!" << endl;
+        return false;
+    }
+    uint index(x);
+    if (index == 0)
+        m_layers.append(newLayer);
+    else
+    {
+        m_layers.insert(m_layers.begin() + reverseIndex(index), newLayer);
+        for (uint i = childCount(); i > index; i--)
+            at(i) -> m_index++;
+    }
+    newLayer -> m_parent = this;
+    newLayer -> m_index = index;
+    return true;
+}
+
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
-    if (m_layers.contains(newLayer))
+    if (aboveThis && aboveThis -> parent().data() != this)
+    {
+        kdWarning() << "invalid input to KisGroupLayer::addLayer()!" << endl;
         return false;
-
-    newLayer -> setParent(this);
-
-    // We enter this loop even if aboveThis == 0, because we need to increment the layers
-    // above insertion pos their indices with 1 each
-    for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
-        KisLayerSP layer = m_layers[layerIndex];
-        if (layer == aboveThis)
-        {
-            // begin() + insertPosition -> insert BEFORE that (hence the + 1)
-            m_layers.insert(m_layers.begin() + (layerIndex + 1), newLayer);
-            newLayer -> setIndex(layerIndex + 1); // This is now the layer right above index
-            return true;
-        } else {
-            layer -> setIndex(layer -> index() + 1);
-        }
     }
-    // Falls through to be added on bottom
 
-    //Add to bottom
-    m_layers.insert(m_layers.begin(), newLayer);
-    newLayer -> setIndex(0);
+    return addLayer(newLayer, aboveThis ? aboveThis -> index() : childCount());
+}
 
-    return true;
+bool KisGroupLayer::removeLayer(int x)
+{
+    if (x >= 0 && kClamp(uint(x), uint(0), childCount() - 1) == uint(x))
+    {
+        uint index(x);
+        for (uint i = childCount() - 1; i > index; i--)
+            at(i) -> m_index--;
+        at(index) -> m_parent = 0;
+        at(index) -> m_index = -1;
+        m_layers.erase(m_layers.begin() + reverseIndex(index));
+        return true;
+    }
+    kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+    return false;
 }
 
 bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
-    if (!m_layers.contains(layer))
-        return false; // because we'll decrease indices incorrectly otherwise!
-
-    for (int layerIndex = m_layers.size() - 1; layerIndex >= 0; layerIndex--) {
-        KisLayerSP current = m_layers[layerIndex];
-        if (current == layer)
-        {
-            m_layers.erase(m_layers.begin() + layerIndex);
-            layer->setParent(0);
-            return true;
-        } else {
-            current -> setIndex(layer -> index() - 1);
-        }
+    if (layer -> parent().data() != this)
+    {
+        kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+        return false;
     }
-
-    return false;
-}
-
-KisLayerSP KisGroupLayer::firstChild() const {
-    if (m_layers.count() == 0) {
-        kdDebug() << "No children for firstChild!" << endl;
-        return 0;
-    }
-
-    return m_layers.at(m_layers.count() - 1);
-}
-
-KisLayerSP KisGroupLayer::lastChild() const {
-    if (m_layers.count() == 0) {
-        kdDebug() << "No children for lastChild!" << endl;
-        return 0;
-    }
-
-    return m_layers.at(0);
-}
-
-KisLayerSP KisGroupLayer::prevSiblingOf(const KisLayer* layer) const {
-    if (layer -> parent() != this)
-        return 0;
-
-    // previous sibling -> up in the layerbox -> index + 1
-    int index = layer -> index();
-    if (index == m_layers.count() - 1)
-        return 0;
-    return m_layers.at(index + 1);
-}
-
-KisLayerSP KisGroupLayer::nextSiblingOf(const KisLayer* layer) const {
-    if (layer -> parent() != this)
-        return 0;
-
-    // next sibling -> down in the layerbox -> index - 1
-    int index = layer -> index();
-    if (index == 0)
-        return 0;
-    return m_layers.at(index - 1);
+    return removeLayer(layer -> index());
 }
 
 #include "kis_group_layer.moc"

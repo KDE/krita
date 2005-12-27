@@ -930,21 +930,21 @@ KisPaintDeviceImplSP KisImage::activeDevice()
     return 0;
 }
 
-KisLayerSP KisImage::layerAdd(const QString& name, Q_UINT8 devOpacity)
-{
-    return layerAdd(name, COMPOSITE_OVER, devOpacity, colorSpace());
-}
-
-KisLayerSP KisImage::layerAdd(const QString& name, const KisCompositeOp& compositeOp, Q_UINT8 opacity, KisColorSpace * colorstrategy)
+KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
 {
     KisLayerSP layer;
-    layer = new KisPaintLayer(this, name, opacity, colorstrategy);
+    if (colorstrategy)
+        layer = new KisPaintLayer(this, name, opacity, colorstrategy);
+    else
+        layer = new KisPaintLayer(this, name, opacity);
     Q_CHECK_PTR(layer);
 
-    layer -> setCompositeOp(compositeOp);
+    if (compositeOp.isValid())
+        layer -> setCompositeOp(compositeOp);
     layer -> setVisible(true);
 
     addLayer(layer, m_activeLayer->parent().data(), m_activeLayer->nextSibling());
+    activate(layer);
 
     return layer;
 }
@@ -971,17 +971,12 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
     }
 }
 
-KisLayerSP KisImage::rootLayer()
+KisLayerSP KisImage::rootLayer() const
 {
     return m_rootLayer;
 }
 
-const KisLayerSP KisImage::activeLayer() const
-{
-    return m_activeLayer;
-}
-
-KisLayerSP KisImage::activeLayer()
+KisLayerSP KisImage::activeLayer() const
 {
     return m_activeLayer;
 }
@@ -1001,10 +996,14 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
     return layer;
 }
 
-KisLayerSP KisImage::findLayer(const QString& name)
+KisLayerSP KisImage::findLayer(const QString& name) const
 {
-//LAYERREMOVE
-    return 0;
+    return rootLayer() -> findLayer(name);
+}
+
+KisLayerSP KisImage::findLayer(int id) const
+{
+    return rootLayer() -> findLayer(id);
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)

@@ -120,10 +120,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
     if (!m_cancelRequested) {
         shadowLayer -> move (xoffset,yoffset);
         shadowLayer -> setOpacity(opacity);
-        image -> layerAdd( shadowLayer, -1 );
-        //XXX: fix this, the shadow layer should be behind the active layer and not behind all layers
-        image -> bottom( shadowLayer );
-        image -> notifyLayersChanged();
+        image -> addLayer( shadowLayer, image -> activeLayer() -> parent().data(), image -> activeLayer() );
 
         if (undo) undo -> addCommand(t);
 

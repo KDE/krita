@@ -50,22 +50,44 @@ public:
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
+    /// Returns the ID of the layer, which is guaranteed to be unique among all KisLayers.
+    int id() const { return m_id; }
+
+    /// Returns the index of the layer in its parent's list of child layers.
+    virtual int index() const;
+
+    /// Moves this layer to the specified index within its parent's list of child layers.
+    virtual void setIndex(int index);
+
     /**
      * Returns the parent layer of a layer. This is 0 only for a root layer; otherwise
      * this will be an actual GroupLayer */
     virtual KisGroupLayerSP parent() const;
+
     /**
      * Returns the previous sibling of this layer in the parent's list. 0 is returned
      * if there is no parent, or if this child has no more previous siblings (== firstChild())*/
     virtual KisLayerSP prevSibling() const;
+
     /**
      * Returns the next sibling of this layer in the parent's list. 0 is returned
      * if there is no parent, or if this child has no more next siblings (== lastChild())*/
     virtual KisLayerSP nextSibling() const;
+
+    /// Returns how many direct child layers this layer has (not recursive).
+    virtual uint childCount() const { return 0; }
+
     /// Returns the first child layer of this layer (if it supports that).
     virtual KisLayerSP firstChild() const { return 0; }
+
     /// Returns the last child layer of this layer (if it supports that).
     virtual KisLayerSP lastChild() const { return 0; }
+
+    /// Recursively searches this layer and any child layers for a layer with the specified name.
+    virtual KisLayerSP findLayer(const QString& name) const;
+
+    /// Recursively searches this layer and any child layers for a layer with the specified ID.
+    virtual KisLayerSP findLayer(int id) const;
 
 public:
     /// Called when the layer is made active
@@ -121,35 +143,19 @@ signals:
     void visibilityChanged(KisLayerSP device);
 
 private:
+    friend class KisGroupLayer;
+
+    int m_id;
+    int m_index;
     Q_UINT8 m_opacity;
     bool m_locked;
     bool m_visible;
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImage *m_image;
-    int m_index;
 
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;
-
-    /**
-     * Returns the 'index' of this layer in the parent. This is mostly for speed in the internal
-     * implementations of layer methods, so you're not really supposed to use this, or it's
-     * accompanying setIndex(int). Return value is undefined when it's not a child of any layer
-     */
-    virtual int index() const { return m_index; }
-    /**
-     * Sets the 'index' of this layer. See index() for a warning and more explanations.
-     * This function must be called (by the grouplayer) every time this layer is added to a layer as a child!
-     */
-    virtual void setIndex(int index) { m_index = index; }
-    friend class KisGroupLayer;
-
-    /**
-     * Sets the parent layer of this layer.
-     * This function must be called (by the grouplayer) every time this layer is added to a layer as a child!
-     */
-    void setParent(KisGroupLayerSP parent);
 };
 
 #endif // KIS_LAYER_H_

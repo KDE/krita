@@ -1354,7 +1354,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
 
                 layer -> setImage(current);
                 layer -> setName(current -> nextLayerName());
-                current->layerAdd(layer, 0);
+                current -> addLayer(layer, current -> rootLayer().data(), current -> rootLayer().firstChild());
                 #ifdef LAYERBOXDISABLE
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
                 #endif
@@ -2224,7 +2224,7 @@ void KisView::addPartLayer()
     kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
     KisPartLayer* partLayer = new KisPartLayer(img, childDoc);
-    //    img->layerAdd(partLayer, 0); // LAYERREMOVE
+    img -> addLayer(partLayer, img -> rootLayer().data(), img -> rootLayer() -> firstChild());
 
     m_doc->setModified(true);
 }

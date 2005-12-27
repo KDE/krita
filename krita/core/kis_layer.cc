@@ -65,7 +65,6 @@ namespace {
         }
     }
 
-
     class KisLayerLockedCommand : public KisLayerCommand {
         typedef KisLayerCommand super;
 
@@ -217,11 +216,18 @@ namespace {
 
 }
 
+static int getID()
+{
+    static int id = 1;
+    return id++;
+}
 
 
 KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     QObject(),
     KShared(),
+    m_id(getID()),
+    m_index(-1),
     m_opacity(opacity),
     m_locked(false),
     m_visible(true),
@@ -237,6 +243,8 @@ KisLayer::KisLayer(const KisLayer& rhs) :
     KShared(rhs)
 {
     if (this != &rhs) {
+        m_id = getID();
+        m_index = -1;
         m_opacity = rhs.m_opacity;
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
@@ -256,20 +264,50 @@ KisGroupLayerSP KisLayer::parent() const
     return m_parent;
 }
 
-KisLayerSP KisLayer::prevSibling() const {
-    KisGroupLayerSP p = parent();
-    if (!p)
+KisLayerSP KisLayer::prevSibling() const
+{
+    if (!parent())
         return 0;
-
-    return p -> prevSiblingOf(this);
+    return parent() -> at(index() - 1);
 }
 
-KisLayerSP KisLayer::nextSibling() const {
-    KisGroupLayerSP p = parent();
-    if (!p)
+KisLayerSP KisLayer::nextSibling() const
+{
+    if (!parent())
         return 0;
+    return parent() -> at(index() + 1);
+}
 
-    return p -> nextSiblingOf(this);
+int KisLayer::index() const
+{
+    return m_index;
+}
+
+void KisLayer::setIndex(int i)
+{
+    if (!parent())
+        return;
+    parent() -> setIndex(this, i);
+}
+
+KisLayerSP KisLayer::findLayer(const QString& n) const
+{
+    if (name() == n)
+        return const_cast<KisLayer*>(this); //HACK any less ugly way? findLayer() is conceptually const...
+    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
+        if (KisLayerSP found = layer -> findLayer(n))
+            return found;
+    return 0;
+}
+
+KisLayerSP KisLayer::findLayer(int i) const
+{
+    if (id() == i)
+        return const_cast<KisLayer*>(this); //HACK
+    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
+        if (KisLayerSP found = layer -> findLayer(i))
+            return found;
+    return 0;
 }
 
 Q_UINT8 KisLayer::opacity() const
@@ -350,11 +388,6 @@ void KisLayer::paintMaskInactiveLayers(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_IN
 
 void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 {
-}
-
-void KisLayer::setParent(KisGroupLayerSP parent)
-{
-    m_parent = parent;
 }
 
 #include "kis_layer.moc"

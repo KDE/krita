@@ -31,6 +31,7 @@
 
 #include "koUnit.h"
 
+#include "kis_composite_op.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_annotation.h"
@@ -46,7 +47,6 @@ class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
 class KCommand;
-class KisCompositeOp;
 class KisColor;
 class KisFilterStrategy;
 class KisImageIface;
@@ -152,28 +152,26 @@ public:
      */
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
-    /// Adds a new layer, and return it
-    KisLayerSP layerAdd(const QString& name, Q_UINT8 opacity);
-    /// Adds a new layer, and return it
-    KisLayerSP layerAdd(const QString& name, const KisCompositeOp& compositeOp,
-                        Q_UINT8 opacity, KisColorSpace * colorstrategy);
+    /// Adds a new layer with the specified properties and returns it.
+    KisLayerSP newLayer(const QString& name, Q_UINT8 opacity,
+                        const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
-    /// Get the active painting device
+    /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceImplSP activeDevice();
 
     void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
-    KisLayerSP rootLayer();
-    KisLayerSP activeLayer();
-    const KisLayerSP activeLayer() const;
+    KisLayerSP rootLayer() const;
+    KisLayerSP activeLayer() const;
 
     KisLayerSP activate(KisLayerSP layer);
-    KisLayerSP findLayer(const QString& name);
+    KisLayerSP findLayer(const QString& name) const;
+    KisLayerSP findLayer(int id) const;
 
     /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Add the layer
+    /// Add layer
     bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer

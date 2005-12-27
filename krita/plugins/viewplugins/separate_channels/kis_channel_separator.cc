@@ -232,7 +232,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             KisLayerSP layer = (*it);
 
             if (outputOps == TO_LAYERS) {
-                image->layerAdd( layer, -1);
+                image->addLayer( layer, image -> rootLayer(), 0);
             }
             else {
                 // To images

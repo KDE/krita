@@ -21,11 +21,12 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 
+
 /**
  * A KisLayer that bundles child layers into a single layer.
- * Internally, the layers are ordered like this: first layer = top in layerbox = list.end()
- * the index() calls of children will return values in accordance to this
- * (firstChild -> index = m_layers.count() - 1; lastChild -> index = 0)
+ * The top layer is firstChild(), with index 0; the bottommost lastChild() with index childCount() - 1.
+ * KisLayer::nextSibling() moves towards higher indices, from the top to the bottom layer; prevSibling() the reverse.
+ * (Implementation detail: internally, the indices are reversed, for speed.)
  **/
 class KisGroupLayer : public KisLayer {
     typedef KisLayer super;
@@ -55,23 +56,36 @@ public:
 
     virtual void accept(KisLayerVisitor &v) { v.visit(this); }
 
+    virtual uint childCount() const;
+
     virtual KisLayerSP firstChild() const;
     virtual KisLayerSP lastChild() const;
 
-    /**
-     * Add the specified layer above the specified layer (if aboveThis == 0, or aboveThis is no
-     * child of this layer, the bottom is used)
-     * Returns false if the layer already is a direct child of this group */
-    bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
-    /// Remove the layer from this group. If the layer is no child of this one, false is returned
-    bool removeLayer(KisLayerSP layer);
+    /// Returns the layer at the specified index.
+    virtual KisLayerSP at(int index) const;
 
-    /// returns the previous sibling of the child layer specified, conforming to what prevSibling expects (returns 0 if it is not a child)
-    virtual KisLayerSP prevSiblingOf(const KisLayer* layer) const;
-    /// returns the next sibling of the child layer specified, conforming to what nextSibling expects (returns 0 if it is not a child)
-    virtual KisLayerSP nextSiblingOf(const KisLayer* layer) const;
+    /// Returns the index of the layer if it's in this group, or -1 otherwise.
+    virtual int index(KisLayerSP layer) const;
+
+    /// Moves the specified layer to the specified index in the group, if it's already a member of this group.
+    virtual void setIndex(KisLayerSP layer, int index);
+
+    /** Adds the layer to this group at the specified index. childCount() is a valid index and appends to the end.
+        Fails and returns false if the layer is already in this group or any other (remove it first.) */
+    virtual bool addLayer(KisLayerSP newLayer, int index);
+
+    /**
+     * Add the specified layer above the specified layer (if aboveThis == 0, the bottom is used) */
+    virtual bool addLayer(KisLayerSP newLayer, KisLayerSP aboveThis);
+
+    /// Removes the layer at the specified index from the group.
+    virtual bool removeLayer(int index);
+
+    /// Removes the layer from this group. Fails if there's no such layer in this group.
+    virtual bool removeLayer(KisLayerSP layer);
 
 private:
+    inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
 };
 

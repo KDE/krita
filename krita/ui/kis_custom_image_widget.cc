@@ -51,8 +51,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
         this, SLOT(fillCmbProfiles(const KisID &)));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
 
-    // Temporary KisID; this will be matched to the translated ID in the current KisIDList.
-    kdDebug() << "CUrrent cs: " << cmbColorSpaces->currentText() << "\n";
     fillCmbProfiles(cmbColorSpaces->currentItem());
 
 }

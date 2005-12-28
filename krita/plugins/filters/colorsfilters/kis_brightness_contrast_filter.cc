@@ -44,7 +44,7 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 }
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-    : KisFilter( id(), "adjust", "&Brightness/contrast...")
+    : KisFilter( id(), "adjust", i18n("&Brightness/contrast..."))
 {
 
 }

@@ -114,7 +114,7 @@ private:
 
 };
 
-KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", "invert with &Threads")
+KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("Invert with &Threads"))
 {
 }
 

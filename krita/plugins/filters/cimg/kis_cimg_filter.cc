@@ -55,7 +55,7 @@ typedef unsigned char uchar;
 
 
 KisCImgFilter::KisCImgFilter() 
-    : KisFilter(id(), "", "&CImg Image Restoration..."),
+    : KisFilter(id(), "", i18n("&CImg Image Restoration...")),
       eigen(CImg<>(2,1), CImg<>(2,2))
 {
     restore = true;

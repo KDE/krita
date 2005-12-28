@@ -29,7 +29,7 @@
 #include <kis_paint_device_impl.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-    : KisFilter(id(), "enhance", "&Wavelet Noise Reducer")
+    : KisFilter(id(), "enhance", i18n("&Wavelet Noise Reducer"))
 {
 }
 

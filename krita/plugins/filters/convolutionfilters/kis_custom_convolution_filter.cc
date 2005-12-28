@@ -29,7 +29,7 @@
 #include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
-KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", "&Custom Convolution...")
+KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution..."))
 {
 
 }

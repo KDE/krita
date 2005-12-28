@@ -48,7 +48,7 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 }
 
 KisPerChannelFilter::KisPerChannelFilter()
-    : KisFilter( id(), "adjust", "&Color Adjustment...")
+    : KisFilter( id(), "adjust", i18n("&Color Adjustment..."))
 {
 
 }

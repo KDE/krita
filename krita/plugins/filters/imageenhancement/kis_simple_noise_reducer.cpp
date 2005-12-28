@@ -21,7 +21,7 @@
 #include "kis_multi_integer_filter_widget.h"
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), "enhance", "&Simple Noise Reduction")
+    : KisFilter(id(), "enhance", i18n("&Simple Noise Reduction"))
 {
 }
 

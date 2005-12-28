@@ -50,7 +50,7 @@
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_oilpaint_filter.h"
 
-KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", "&Oilpaint...")
+KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilpaint..."))
 {
 }
 

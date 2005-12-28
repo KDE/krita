@@ -55,7 +55,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", "&Small Tiles...")
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small Tiles..."))
 {
 }
 

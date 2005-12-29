@@ -310,6 +310,28 @@ KisLayerSP KisLayer::findLayer(int i) const
     return 0;
 }
 
+int KisLayer::numLayers(int flags) const
+{
+    int num = 0;
+    if (matchesFlags(flags)) num++;
+    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
+        num += layer -> numLayers(flags);
+    return num; 
+}
+
+bool KisLayer::matchesFlags(int flags) const
+{
+    if ((flags & Visible) && !visible())
+        return false;
+    if ((flags & Hidden) && visible())
+        return false;
+    if ((flags & Locked) && !locked())
+        return false;
+    if ((flags & Unlocked) && locked())
+        return false;
+    return true;
+}
+
 Q_UINT8 KisLayer::opacity() const
 {
     return m_opacity;

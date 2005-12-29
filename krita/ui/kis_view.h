@@ -84,9 +84,7 @@ class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
 class KisLabelProgress;
-#ifdef LAYERBOXDISABLE
 class KisLayerBox;
-#endif
 class KisMoveEvent;
 class KisPaletteWidget;
 class KisPattern;
@@ -309,9 +307,7 @@ private:
     void imgUpdateGUI();
 
     void layerUpdateGUI(bool enable);
-    #ifdef LAYERBOXDISABLE
     void createLayerBox();
-    #endif
     void createDockers();
 
     void paintView(const KisRect& rc);
@@ -334,10 +330,10 @@ private:
     Q_INT32 importImage(const KURL& url = KURL());
     virtual void updateCanvas(const KisRect& rc);
     KisFilterManager * filterManager() { return m_filterManager; }
-    void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
     void setCurrentImage(KisImageSP image);
 
 private slots:
+    void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 
     void slotSetFGQColor(const QColor & c);
     void slotSetBGQColor(const QColor & c);
@@ -369,7 +365,10 @@ private slots:
     void layerToggleLocked();
     void actLayerVisChanged(int show);
     void layerProperties();
+    void showLayerProperties(KisLayerSP layer);
     void layerAdd();
+    void addLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
     void addPartLayer();
     void layerRemove();
     void layerDuplicate();
@@ -467,9 +466,8 @@ private:
     QLabel *m_statusBarProfileLabel;
     KisLabelProgress *m_progress;
 
-#ifdef LAYERBOXDISABLE
+
     KisLayerBox *m_layerBox;
-#endif
     KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 

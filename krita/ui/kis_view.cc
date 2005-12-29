@@ -95,9 +95,7 @@
 #include "kis_group_layer.h"
 //#include "kis_guide.h"
 
-#ifdef LAYERBOXDISABLE
 #include "kis_layerbox.h"
-#endif
 
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
@@ -204,9 +202,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_statusBarSelectionLabel( 0 )
     , m_statusBarProfileLabel( 0 )
     , m_progress( 0 )
-    #ifdef LAYERBOXDISABLE
     , m_layerBox( 0 )
-    #endif
     , m_toolBox( 0 )
     , m_brush( 0 )
     , m_pattern( 0 )
@@ -221,9 +217,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
-    #ifdef LAYERBOXDISABLE
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
-    #endif
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
@@ -248,9 +242,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_fg = KisColor(Qt::black, cs);
     m_bg = KisColor(Qt::white, cs);
 
-    #ifdef LAYERBOXDISABLE
     createLayerBox();
-    #endif
 
     setupCanvas();
     setupRulers();
@@ -369,30 +361,24 @@ KoPaletteManager * KisView::paletteManager()
     return m_paletteManager;
 }
 
-#ifdef LAYERBOXDISABLE
 void KisView::createLayerBox()
 {
-    m_layerBox = new KisLayerBox(i18n("Layer"), KisLayerBox::SHOWALL, this);
+    m_layerBox = new KisLayerBox(this);
     m_layerBox -> setCaption(i18n("Layers"));
 
-    connect(m_layerBox, SIGNAL(itemToggleVisible()), this, SLOT(layerToggleVisible()));
-    connect(m_layerBox, SIGNAL(itemSelected(int)), this, SLOT(layerSelected(int)));
-    connect(m_layerBox, SIGNAL(itemToggleLocked()), this, SLOT(layerToggleLocked()));
-    connect(m_layerBox, SIGNAL(actLayerVisChanged(int)), this, SLOT(actLayerVisChanged(int)));
-    connect(m_layerBox, SIGNAL(itemProperties()), this, SLOT(layerProperties()));
-    connect(m_layerBox, SIGNAL(itemAdd()), this, SLOT(layerAdd()));
-    connect(m_layerBox, SIGNAL(itemRemove()), this, SLOT(layerRemove()));
-    connect(m_layerBox, SIGNAL(itemRaise()), this, SLOT(layerRaise()));
-    connect(m_layerBox, SIGNAL(itemLower()), this, SLOT(layerLower()));
-    connect(m_layerBox, SIGNAL(itemFront()), this, SLOT(layerFront()));
-    connect(m_layerBox, SIGNAL(itemBack()), this, SLOT(layerBack()));
-    connect(m_layerBox, SIGNAL(opacityChanged(int)), this, SLOT(layerOpacity(int)));
-    connect(m_layerBox, SIGNAL(itemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
+    m_layerBox -> setImage(currentImg());
+    connect(m_layerBox, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
+            this, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
+    connect(m_layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
+            this, SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+    connect(m_layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
+            this, SLOT(showLayerProperties(KisLayerSP)));
+    connect(m_layerBox, SIGNAL(sigOpacityChanged(int)), this, SLOT(layerOpacity(int)));
+    connect(m_layerBox, SIGNAL(sigItemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 
 }
-#endif
 
 DCOPObject* KisView::dcopObject()
 {
@@ -1036,35 +1022,28 @@ void KisView::layerUpdateGUI(bool enable)
     KisLayerSP layer;
     Q_INT32 nlayers = 0;
     Q_INT32 nvisible = 0;
-    Q_INT32 layerPos = 0;
 
     if (img) {
         layer = img -> activeLayer();
         nlayers = img -> nlayers();
         nvisible = nlayers - img -> nHiddenLayers();
     }
-/*LAYERREMOVE
-    if (layer)
-        layerPos = img->index(layer);
-*/
     enable = enable && img && layer && layer->visible() && !layer->locked();
     m_layerDup -> setEnabled(enable);
     m_layerRm -> setEnabled(enable);
     m_layerHide -> setEnabled(enable);
     m_layerProperties -> setEnabled(enable);
     m_layerSaveAs -> setEnabled(enable);
-//        m_layerTransform -> setEnabled(enable);
-/*
-    m_layerRaise -> setEnabled(enable && nlayers > 1 && layerPos);
-    m_layerLower -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-    m_layerTop -> setEnabled(enable && nlayers > 1 && layerPos);
-    m_layerBottom -> setEnabled(enable && nlayers > 1 && layerPos != nlayers - 1);
-*/
+//    m_layerTransform -> setEnabled(enable);
+    m_layerRaise -> setEnabled(enable && layer -> prevSibling());
+    m_layerLower -> setEnabled(enable && layer -> nextSibling());
+    m_layerTop -> setEnabled(enable && nlayers > 1 && layer != img -> rootLayer() -> firstChild());
+    m_layerBottom -> setEnabled(enable && nlayers > 1 && layer != img -> rootLayer() -> lastChild());
+
     // XXX these should be named layer instead of img
     m_imgFlatten -> setEnabled(nlayers > 1);
-
     m_imgMergeVisible -> setEnabled(nvisible > 1);
-    m_imgMergeLayer -> setEnabled(nlayers > 1 && layerPos < nlayers - 1);
+    m_imgMergeLayer -> setEnabled(nlayers > 1 && layer && layer -> nextSibling());
 
     m_selectionManager->updateGUI();
     m_filterManager->updateGUI();
@@ -1355,9 +1334,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 layer -> setImage(current);
                 layer -> setName(current -> nextLayerName());
                 current -> addLayer(layer, current -> rootLayer().data(), current -> rootLayer().firstChild());
-                #ifdef LAYERBOXDISABLE
                 m_layerBox->slotSetCurrentItem(img -> index(layer));
-                #endif
             }
 */
             resizeEvent(0);
@@ -2139,40 +2116,37 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 
 void KisView::layerProperties()
 {
-    KisImageSP img = currentImg();
+    if (currentImg() && currentImg() -> activeLayer())
+        showLayerProperties(currentImg() -> activeLayer());
+}
 
-    if (img) {
-        KisLayerSP layer = img -> activeLayer();
+void KisView::showLayerProperties(KisLayerSP layer)
+{
+    KisDlgLayerProperties dlg(layer -> name(),
+                              layer -> opacity(),
+                              layer -> compositeOp(),
+                              layer -> image() ->colorSpace()); // LAYERREMOVE used to be cs of layer
 
-        if (layer) {
-            KisDlgLayerProperties dlg(layer -> name(),
-                                     layer->opacity(),
-                                     layer->compositeOp(),
-                                     img->colorSpace()); // LAYERREMOVE used to be cs of layer
-
-            if (dlg.exec() == QDialog::Accepted) {
-                bool changed = layer -> name() != dlg.getName()
-                           || layer -> opacity() != dlg.getOpacity()
-                           || layer -> compositeOp() != dlg.getCompositeOp();
-
-                if (changed)
-                    m_adapter -> beginMacro(i18n("Property changes"));
-
-                if (layer -> name() != dlg.getName()
-                    || layer -> opacity() != dlg.getOpacity()
-                    || layer -> compositeOp() != dlg.getCompositeOp())
-                {
-                    img->setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
-                }
-
-                if (changed)
-                    m_adapter -> endMacro();
-            }
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        if (layer -> name() != dlg.getName() ||
+            layer -> opacity() != dlg.getOpacity() ||
+            layer -> compositeOp() != dlg.getCompositeOp())
+        {
+            m_adapter -> beginMacro(i18n("Property changes"));
+            layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+            m_adapter -> endMacro();
         }
     }
 }
 
 void KisView::layerAdd()
+{
+    if (KisImageSP img = currentImg())
+        addLayer(img -> activeLayer() -> parent(), img -> activeLayer());
+}
+
+void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     KisImageSP img = currentImg();
     if (img) {
@@ -2185,16 +2159,28 @@ void KisView::layerAdd()
             KisLayerSP layer = new KisPaintLayer(img, dlg.layerName(), dlg.opacity(), cs);
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
-                img->addLayer(layer, img->activeLayer()->parent().data(), img->activeLayer());
-/*LAYERREMOVE
-                QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-                        csRegistry() -> paintDeviceActionsFor(cs);
-                for (uint i = 0; i < actions.count(); i++)
-                    actions.at(i) -> act(layer.data(), img -> width(), img -> height());
-*/
-                #ifdef LAYERBOXDISABLE
-                m_layerBox->slotSetCurrentItem(img -> index(layer));
-                #endif
+                img->addLayer(layer, parent.data(), above);
+                resizeEvent(0);
+                updateCanvas(0, 0, img -> width(), img -> height());
+            } else {
+                KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
+            }
+        }
+    }
+}
+
+void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
+{
+    KisImageSP img = currentImg();
+    if (img) {
+        KisConfig cfg;
+        NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
+
+        if (dlg.exec() == QDialog::Accepted) {
+            KisLayerSP layer = new KisGroupLayer(img, dlg.layerName(), dlg.opacity());
+            if (layer) {
+                layer->setCompositeOp(dlg.compositeOp());
+                img->addLayer(layer, parent.data(), above);
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2251,9 +2237,6 @@ void KisView::layerRemove()
             //Q_INT32 n = img -> index(layer);
 
             img->removeLayer(layer);
-            #ifdef LAYERBOXDISABLE
-            m_layerBox->slotSetCurrentItem(n - 1);
-            #endif
             resizeEvent(0);
             updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2278,9 +2261,7 @@ void KisView::layerDuplicate()
     img->addLayer(dup, active->parent().data(), active);
 
     if (dup) {
-        #ifdef LAYERBOXDISABLE
-        m_layerBox->slotSetCurrentItem(img -> index(layer));
-        #endif
+        //        m_layerBox->slotSetCurrentItem(img -> index(layer)); // LAYERREMOVE
         resizeEvent(0);
         updateCanvas(0, 0, img -> width(), img -> height());
     } else {
@@ -2342,26 +2323,11 @@ void KisView::layersUpdated()
     KisImageSP img = currentImg();
     if (!img) return;
 
-    #ifdef LAYERBOXDISABLE
     KisLayerSP layer = img -> activeLayer();
 
     layerUpdateGUI(img && layer);
 
-    m_layerBox -> setUpdatesAndSignalsEnabled(false);
-    m_layerBox -> clear();
-
-    if (img) {
-         vKisLayerSP l = img -> layers();
-         for (int n = l.count() - 1; n >= 0; --n)
-              m_layerBox -> insertItem(l[n] -> name(), l[n] -> visible(), l[n] -> linked(), l[n] -> locked());
-
-        layerSelected( img -> index(layer) );
-        m_layerBox -> slotSetCurrentItem(img -> index(layer));
-    }
-
-    m_layerBox -> setUpdatesAndSignalsEnabled(true);
     m_layerBox -> updateAll();
-    #endif
     img->notify();
     notifyObservers();
 }
@@ -2397,33 +2363,6 @@ void KisView::actLayerVisChanged(int show)
 {
     m_actLayerVis = (show != 0);
 }
-/*LAYERREMOVE
-void KisView::layerSelected(int n)
-{
-    KisImageSP img = currentImg();
-    if (!img) return;
-
-    KisLayerSP l = img -> layer(n);
-    if (!l) return;
-
-    layerUpdateGUI(img -> activateLayer(n));
-    notifyObservers();
-
-    Q_INT32 opacity = l -> opacity();
-    opacity = opacity * 100 / 255;
-    if (opacity)
-        opacity++;
-
-    #ifdef LAYERBOXDISABLE
-    m_layerBox -> setOpacity(opacity);
-    m_layerBox -> setColorSpace(l -> colorSpace());
-    m_layerBox -> setCompositeOp(l -> compositeOp());
-    m_layerBox -> slotSetCurrentItem(n);
-    #endif
-
-    updateCanvas();
-}
-*/
 
 void KisView::scrollH(int value)
 {
@@ -2512,6 +2451,10 @@ void KisView::connectCurrentImg()
         connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
         connect(m_current, SIGNAL(sigLayersChanged()), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
@@ -2534,6 +2477,7 @@ void KisView::disconnectCurrentImg()
 {
     if (m_current) {
         m_current -> disconnect(this);
+        m_layerBox -> setImage(0);
     }
 
 #ifdef HAVE_GL
@@ -2912,6 +2856,7 @@ void KisView::setCurrentImage(KisImageSP image)
     }
 #endif
     connectCurrentImg();
+    m_layerBox -> setImage(m_current);
     m_current -> notify();
 
     zoomAroundPoint(0, 0, 1.0);
@@ -3072,9 +3017,7 @@ void KisView::createDockers()
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
 
     m_paletteManager->showWidget("hsvwidget");
-    #ifdef LAYERBOXDISABLE
     m_paletteManager->showWidget("layerbox");
-    #endif
     m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
 
 

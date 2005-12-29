@@ -37,168 +37,268 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kpopupmenu.h>
+#include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kpopupmenu.h>
-#include <klistbox.h>
 #include <knuminput.h>
 
 #include "layerlist.h"
-#include "kis_layerbox.h"
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
 #include "kis_colorspace.h"
+#include "kis_layer.h"
+#include "kis_group_layer.h"
+#include "kis_image.h"
 
-const int HEIGHT = 32;
+#include "kis_populate_visitor.h"
 
-KisLayerBox::KisLayerBox(const QString& label, flags f, QWidget *parent, const char *name)
-    : super(parent, name)
+#include "kis_layerbox.h"
+
+KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
+    : super(parent, name), m_image(0)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox -> setAutoAdd(true);
 
-    m_flags = f;
-
     m_lst = new WdgLayerBox(this);
     setMinimumSize(m_lst -> minimumSizeHint());
 
-    QToolTip::add(m_lst -> bnAdd, i18n("Create new %1").arg(label));
+    QToolTip::add(m_lst -> bnAdd, i18n("Create new layer"));
 
-    QToolTip::add(m_lst -> bnDelete, i18n("Remove current %1").arg(label));
+    QToolTip::add(m_lst -> bnDelete, i18n("Remove current layer"));
 
-    QToolTip::add(m_lst -> bnRaise, i18n("Upper current %1").arg(label));
+    QToolTip::add(m_lst -> bnRaise, i18n("Upper current layer"));
     m_lst -> bnRaise -> setEnabled(false);
 
     m_lst -> bnLower -> setEnabled(false);
-    QToolTip::add(m_lst -> bnLower, i18n("Lower current %1").arg(label));
+    QToolTip::add(m_lst -> bnLower, i18n("Lower current layer"));
 
-    QToolTip::add(m_lst -> bnProperties, i18n("Properties for %1").arg(label));
+    QToolTip::add(m_lst -> bnProperties, i18n("Properties for layer"));
 
     KIconLoader il( "krita" );
 
-    m_lst -> listLayers -> addProperty("visible", i18n("Visible"), SmallIconSet("button_ok", KIcon::SizeSmallMedium), true);
+    list() -> setFoldersCanBeActive(true);
 
-    m_lst -> listLayers -> addProperty("linked", i18n("Linked"), SmallIconSet("edit_add", KIcon::SizeSmallMedium));
+    list() -> addProperty("visible", i18n("Visible"), SmallIconSet("button_ok", KIcon::SizeSmallMedium), true);
 
-    m_lst -> listLayers -> addProperty("locked", i18n("Locked"), SmallIconSet("lock", KIcon::SizeSmallMedium));
+    list() -> addProperty("locked", i18n("Locked"), SmallIconSet("lock", KIcon::SizeSmallMedium));
 
 
-    connect(m_lst -> listLayers -> contextMenu(), SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
-    connect(m_lst -> listLayers, SIGNAL(propertyChanged(LayerItem*, const QString&, bool)),
-                               SLOT(slotPropertyChanged(LayerItem*, const QString&, bool)));
-    connect(m_lst -> listLayers, SIGNAL(requestLayerProperties(LayerItem*)), SLOT(slotRequestProperties(LayerItem*)));
-    connect(m_lst -> listLayers, SIGNAL(activated(LayerItem*)), SLOT(slotActivated(LayerItem*)));
-    connect(m_lst -> listLayers, SIGNAL(moved(QListViewItem*, QListViewItem*, QListViewItem*)),
-                               SLOT(moved(QListViewItem*, QListViewItem*, QListViewItem*)));
-    connect(m_lst -> listLayers, SIGNAL(requestNewLayer(LayerItem*, LayerItem*)),
-                               SLOT(slotNewLayer(LayerItem*, LayerItem*)));
-    connect(m_lst -> listLayers, SIGNAL(requestRemoveLayer(LayerItem*)), SLOT(slotRemoveLayer(LayerItem*)));
-
+    connect(list() -> contextMenu(), SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
+    connect(list(), SIGNAL(activated(LayerItem*)),
+                    SLOT(slotLayerActivated(LayerItem*)));
+    connect(list(), SIGNAL(displayNameChanged(LayerItem*, const QString&)),
+                    SLOT(slotLayerDisplayNameChanged(LayerItem*, const QString&)));
+    connect(list(), SIGNAL(propertyChanged(LayerItem*, const QString&, bool)),
+                    SLOT(slotLayerPropertyChanged(LayerItem*, const QString&, bool)));
+    connect(list(), SIGNAL(layerMoved(LayerItem*, LayerItem*, LayerItem*)),
+                    SLOT(slotLayerMoved(LayerItem*, LayerItem*, LayerItem*)));
+    connect(list(), SIGNAL(requestNewLayer(LayerItem*, LayerItem*)),
+                    SLOT(slotRequestNewLayer(LayerItem*, LayerItem*)));
+    connect(list(), SIGNAL(requestNewFolder(LayerItem*, LayerItem*)),
+                    SLOT(slotRequestNewFolder(LayerItem*, LayerItem*)));
+    connect(list(), SIGNAL(requestRemoveLayer(LayerItem*)),
+                    SLOT(slotRequestRemoveLayer(LayerItem*)));
+    connect(list(), SIGNAL(requestLayerProperties(LayerItem*)),
+                    SLOT(slotRequestLayerProperties(LayerItem*)));
 
     connect(m_lst -> bnAdd, SIGNAL(clicked()), SLOT(slotAddClicked()));
     connect(m_lst -> bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(m_lst -> bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(m_lst -> bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-    connect(m_lst -> bnProperties, SIGNAL(clicked()), SIGNAL(itemProperties()));
-    connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(opacityChanged(int)));
-    connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(itemComposite(const KisCompositeOp&)));
-    connect(m_lst -> chkActLayerVis, SIGNAL(stateChanged(int)), SIGNAL(actLayerVisChanged(int)));
+    connect(m_lst -> bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
+    connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigOpacityChanged(int)));
+    connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(sigItemComposite(const KisCompositeOp&)));
+    connect(m_lst -> chkActLayerVis, SIGNAL(stateChanged(int)), SIGNAL(sigActLayerVisChanged(int)));
 }
 
 KisLayerBox::~KisLayerBox()
 {
 }
 
-void KisLayerBox::slotMoved(QListViewItem* item, QListViewItem* afterBefore, QListViewItem*)
+LayerList* KisLayerBox::list() const
 {
-    const int indexNow = index(static_cast<LayerItem*>(item));
-    const int indexBefore = index(static_cast<LayerItem*>(afterBefore));
-
-    static_cast<LayerItem*>(item) -> setActive();
-    if (indexNow == 0)
-        emit itemFront();
-    else if (indexNow == m_lst -> listLayers -> childCount() - 1)
-        emit itemBack();
-    else if (indexNow > indexBefore)
-        for (int i = 0; i < (indexNow - indexBefore); ++i)
-            emit itemLower();
-    else if (indexNow < indexBefore)
-        for (int i = 0; i < (indexBefore - indexNow); ++i)
-            emit itemRaise();
-    slotUpdate();
+    return m_lst -> listLayers;
 }
 
-void KisLayerBox::slotRemoveLayer(LayerItem* item)
+void KisLayerBox::setImage(KisImageSP img)
 {
-    item -> setActive();
-    emit itemRemove();
-    slotUpdate();
+    if (m_image)
+        m_image -> disconnect(this);
+
+    m_image = img;
+
+    if (img)
+    {
+        connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
+        connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayerAdded(KisLayerSP)));
+        connect(img, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+                this, SLOT(slotLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
+        connect(img, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)),
+                this, SLOT(slotLayerPropertiesChanged(KisLayerSP)));
+        connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+                this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
+        connect(img, SIGNAL(sigLayersChanged(KisLayerSP)), this, SLOT(slotLayersChanged(KisLayerSP)));
+        slotLayersChanged(img -> rootLayer());
+    }
+
+    updateUI();
 }
 
-void KisLayerBox::slotNewLayer(LayerItem*, LayerItem*)
+void KisLayerBox::slotLayerActivated(KisLayerSP layer)
 {
-    emit itemAdd();
-    slotUpdate();
+    list() -> setActiveLayer(layer -> id());
+    updateUI();
 }
 
-void KisLayerBox::slotRequestProperties(LayerItem* item)
+void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 {
-    item->setActive();
-    emit itemProperties();
-    slotUpdate();
+    if (layer == m_image -> rootLayer() || list() -> layer(layer -> id()) < 0)
+        return;
+    if (layer -> parent() == m_image -> rootLayer())
+    {
+        KisPopulateVisitor visitor(list());
+        layer -> accept(visitor);
+    }
+    else
+    {
+        KisPopulateVisitor visitor(list() -> layer(layer -> parent() -> id()));
+        layer -> accept(visitor);
+    }
+
+    updateUI();
 }
 
-void KisLayerBox::slotActivated(LayerItem* active)
+void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
 {
-    emit itemSelected(index(active));
-    slotUpdate();
+    list() -> removeLayer(layer -> id());
+    updateUI();
 }
 
-void KisLayerBox::slotUpdate()
+void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
 {
-    m_lst -> bnDelete -> setEnabled(m_lst -> listLayers -> childCount());
-    m_lst -> bnRaise -> setEnabled(m_lst -> listLayers -> activeLayer() && m_lst -> listLayers ->
-                                   activeLayer() != m_lst -> listLayers -> firstChild());
-    m_lst -> bnLower -> setEnabled(m_lst -> listLayers -> activeLayer() && m_lst -> listLayers ->
-                                   activeLayer() != m_lst -> listLayers -> lastItem());
-    m_lst -> listLayers -> triggerUpdate();
+    const int parentID = layer -> parent() == m_image -> rootLayer() ? -1 : layer -> parent() -> id();
+    const int siblingID = layer -> prevSibling() ? layer -> prevSibling() -> id() : -1;
+    list() -> moveLayer(layer -> id(), parentID, siblingID);
+    updateUI();
+}
+
+void KisLayerBox::slotLayerPropertiesChanged(KisLayerSP layer)
+{
+    list() -> setLayerDisplayName(layer -> id(), layer -> name());
+    updateUI();
+}
+
+void KisLayerBox::slotLayersChanged(KisLayerSP rootLayer)
+{
+    list() -> clear();
+    KisPopulateVisitor visitor(list());
+    for (KisLayerSP layer = rootLayer -> firstChild(); layer; layer = layer -> nextSibling())
+        layer -> accept(visitor);
+    updateUI();
+}
+
+void KisLayerBox::slotLayerActivated(LayerItem* item)
+{
+    if (item)
+        m_image -> activate(m_image -> findLayer(item -> id()));
+    else
+        m_image -> activate(0);
+    updateUI();
+}
+
+void KisLayerBox::slotLayerDisplayNameChanged(LayerItem* item, const QString& displayName)
+{
+    if(KisLayerSP layer = m_image -> findLayer(item -> id()))
+        layer -> setName(displayName);
+    updateUI();
+}
+
+void KisLayerBox::slotLayerPropertyChanged(LayerItem* item, const QString& name, bool on)
+{
+    if (KisLayerSP layer = m_image -> findLayer(item -> id()))
+    {
+        if (name == "visible")
+            layer -> setVisible(on);
+        else if (name == "locked")
+            layer -> setLocked(on);
+    }
+    updateUI();
+}
+
+void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem* p, LayerItem*)
+{
+    KisLayerSP layer = m_image -> findLayer(item -> id());
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
+                                                             : m_image -> rootLayer().data() );
+    KisLayerSP above = item -> nextSibling() ? m_image -> findLayer(item -> nextSibling() -> id()) : 0;
+    if (layer)
+        m_image -> moveLayer(layer, parent.data(), above);
+    updateUI();
+}
+
+void KisLayerBox::slotRequestNewLayer(LayerItem* p, LayerItem* after)
+{
+    //goddamn, one of them using 'above' and the other 'after' is a pain in the ass...
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
+                                                             : m_image -> rootLayer().data() );
+    KisLayerSP above = (after && after -> nextSibling()) ? m_image -> findLayer(after -> nextSibling() -> id())
+                     :  after ? 0
+                     : (p && p -> firstChild()) ? parent -> firstChild()
+                     :  p ? 0
+                     :  m_image -> rootLayer() -> childCount() ? m_image -> rootLayer() -> firstChild()
+                     :  0;
+    emit sigRequestLayer(parent, above);
+}
+
+void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
+{
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
+                                                             : m_image -> rootLayer().data() );
+    KisLayerSP above = (after && after -> nextSibling()) ? m_image -> findLayer(after -> nextSibling() -> id())
+                     :  after ? 0
+                     : (p && p -> firstChild()) ? parent -> firstChild()
+                     :  p ? 0
+                     :  m_image -> rootLayer() -> childCount() ? m_image -> rootLayer() -> firstChild()
+                     :  0;
+    emit sigRequestGroupLayer(parent, above);
+}
+
+void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
+{
+    if (KisLayerSP layer = m_image -> findLayer(item -> id()))
+        layer -> parent() -> removeLayer(layer);
+    updateUI();
+}
+
+void KisLayerBox::slotRequestLayerProperties(LayerItem* item)
+{
+    if (KisLayerSP layer = m_image -> findLayer(item -> id()))
+        emit sigRequestLayerProperties(layer);
+}
+
+void KisLayerBox::updateUI()
+{
+    m_lst -> bnDelete -> setEnabled(list() -> activeLayer());
+    m_lst -> bnRaise -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> prevSibling());
+    m_lst -> bnLower -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> nextSibling());
 }
 
 void KisLayerBox::slotAboutToShow()
 {
-    m_lst -> listLayers -> contextMenu() -> setItemVisible(LayerList::MenuItems::NewFolder, false);
 }
 
-void KisLayerBox::slotPropertyChanged(LayerItem* layer, const QString& name, bool)
-{
-    layer->setActive();
-    if (name == "linked")
-        emit itemToggleLinked();
-    else if (name == "locked")
-        emit itemToggleLocked();
-    else if (name == "visible")
-        emit itemToggleVisible();
-    slotUpdate();
-}
-
-void KisLayerBox::slotSetCurrentItem(int n)
-{
-    itemAtIndex(n) -> setActive();
-    m_lst -> bnRaise -> setEnabled(n > 0);
-    m_lst -> bnLower -> setEnabled(n < m_lst -> listLayers -> childCount() - 1);
-}
-
-void KisLayerBox::setCompositeOp(const KisCompositeOp& compositeOp)
+void KisLayerBox::slotSetCompositeOp(const KisCompositeOp& compositeOp)
 {
     m_lst -> cmbComposite -> blockSignals(true);
     m_lst -> cmbComposite -> setCurrentItem(compositeOp);
     m_lst -> cmbComposite -> blockSignals(false);
 }
 
-void KisLayerBox::setColorSpace(const KisColorSpace * colorSpace)
+void KisLayerBox::slotSetColorSpace(const KisColorSpace * colorSpace)
 {
     m_lst -> cmbComposite -> blockSignals(true);
     m_lst -> cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
@@ -206,79 +306,55 @@ void KisLayerBox::setColorSpace(const KisColorSpace * colorSpace)
 }
 
 // range: 0-100
-void KisLayerBox::setOpacity(int opacity)
+void KisLayerBox::slotSetOpacity(int opacity)
 {
     m_lst -> intOpacity -> blockSignals(true);
     m_lst -> intOpacity -> setValue(opacity);
     m_lst -> intOpacity -> blockSignals(false);
 }
 
-void KisLayerBox::insertItem(const QString& name, bool visible, bool linked, bool locked)
-{
-    LayerItem* item = m_lst -> listLayers -> addLayer( name );
-    item -> setProperty("visible", visible);
-    item -> setProperty("linked", linked);
-    item -> setProperty("locked", locked);
-    item -> setActive();
-}
-
 void KisLayerBox::clear()
 {
-    m_lst -> listLayers -> clear();
+    list() -> clear();
+    updateUI();
 }
 
 void KisLayerBox::slotAddClicked()
 {
-    emit itemAdd();
-    slotUpdate();
+    KisGroupLayerSP root = dynamic_cast<KisGroupLayer*>(m_image -> rootLayer().data());
+    if (KisLayerSP active = m_image -> activeLayer())
+        emit sigRequestLayer(active -> parent() ? active -> parent() : root, active);
+    else
+        emit sigRequestLayer(root, m_image -> rootLayer() -> firstChild());
 }
 
 void KisLayerBox::slotRmClicked()
 {
-    emit itemRemove();
-    slotUpdate();
+    if (KisLayerSP active = m_image -> activeLayer())
+        m_image -> removeLayer(active);
+    updateUI();
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
-    emit itemRaise();
-    slotUpdate();
+    if (KisLayerSP active = m_image -> activeLayer())
+        if (active -> prevSibling())
+            m_image -> moveLayer(active, active -> parent().data(), active -> prevSibling());
+    updateUI();
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    emit itemLower();
-    slotUpdate();
+    if (LayerItem* active = list() -> activeLayer())
+        if (active -> nextSibling())
+            list() -> moveLayer(active, active -> parent(), active -> nextSibling());
+    updateUI();
 }
 
-int KisLayerBox::index(LayerItem* item) const
+void KisLayerBox::slotPropertiesClicked()
 {
-    int i = 0;
-    LayerItem* it;
-    for(it = m_lst -> listLayers -> firstChild(); it && it != item; it = it -> nextSibling())
-        i++;
-
-    if(it && it == item)
-        return i;
-    return -1;
-}
-
-LayerItem* KisLayerBox::itemAtIndex(int index) const
-{
-    LayerItem* item = m_lst -> listLayers -> firstChild();
-    for (int i = 0; item && i < index; ++i)
-        item = item->nextSibling();
-    return item;
-}
-
-int KisLayerBox::getCurrentItem() const
-{
-    return index(m_lst -> listLayers -> activeLayer());
-}
-
-void KisLayerBox::setSelected(int index)
-{
-    itemAtIndex(index) -> setActive();
+    if (KisLayerSP active = m_image -> activeLayer())
+        emit sigRequestLayerProperties(active);
 }
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
@@ -287,7 +363,7 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
     m_lst -> intOpacity -> setUpdatesEnabled(enable);
     m_lst -> cmbComposite -> setUpdatesEnabled(enable);
 
-    m_lst -> listLayers -> blockSignals(!enable);
+    list() -> blockSignals(!enable);
     m_lst -> intOpacity -> blockSignals(!enable);
     m_lst -> cmbComposite -> blockSignals(!enable);
 }
@@ -297,6 +373,7 @@ void KisLayerBox::updateAll()
     update();
     m_lst -> intOpacity -> update();
     m_lst -> cmbComposite -> update();
+    updateUI();
 }
 
 QIconSet KisLayerBox::loadIconSet(const QString& filename, KIconLoader&

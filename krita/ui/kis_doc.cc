@@ -144,6 +144,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     m_dcop = 0;
     m_cmdHistory = 0;
     m_nserver = 0;
+    m_currentImage = 0;
     m_currentMacro = 0;
     m_macroNestDepth = 0;
     m_ioProgressBase = 0;

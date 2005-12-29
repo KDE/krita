@@ -89,6 +89,11 @@ public:
     /// Recursively searches this layer and any child layers for a layer with the specified ID.
     virtual KisLayerSP findLayer(int id) const;
 
+    enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8 };
+
+    /// Returns the total number of layers in this layer, its child layers, and their child layers recursively, optionally ones with the specified properties Visible or Locked, which you can OR together.
+    virtual int numLayers(int type = 0) const;
+
 public:
     /// Called when the layer is made active
     virtual void activate() {};
@@ -144,6 +149,8 @@ signals:
 
 private:
     friend class KisGroupLayer;
+
+    bool matchesFlags(int flags) const;
 
     int m_id;
     int m_index;

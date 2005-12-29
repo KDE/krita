@@ -319,13 +319,13 @@ void LayerList::setActiveLayer( LayerItem *layer ) //SLOT
     if( !foldersCanBeActive() && layer && layer->isFolder() )
         return;
 
-    if( currentItem() != layer )
-        setCurrentItem( layer );
-
     if( d->activeLayer == layer )
         return;
 
     d->activeLayer = layer;
+
+    if( currentItem() != layer )
+        setCurrentItem( layer );
 
     emit activated( layer );
     if( layer )
@@ -452,7 +452,19 @@ void LayerList::moveLayer( LayerItem *layer, LayerItem *parent, LayerItem *after
     if( layer->parent() == parent && layer->prevSibling() == after )
         return;
 
-    moveItem( layer, parent, after );
+    if( after )
+        layer->moveItem( after );
+    else
+    {
+        if ( layer->parent() )
+            layer->parent()->takeItem( layer );
+        else
+            takeItem( layer );
+        if ( parent )
+            parent->insertItem( layer );
+        else
+            insertItem( layer );
+    }
     emit layerMoved( layer, parent, after );
     emit layerMoved( layer->id(), parent ? parent->id() : -1, after ? after->id() : -1 );
 }
@@ -660,6 +672,8 @@ void LayerItem::init()
 
 LayerItem::~LayerItem()
 {
+    if (listView()->activeLayer() == this)
+        listView()->setActiveLayer( static_cast<LayerItem*>( 0 ) );
     delete d;
 }
 

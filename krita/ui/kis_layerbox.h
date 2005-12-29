@@ -22,14 +22,9 @@
 #define KIS_LAYERBOX_H
 
 #include <qframe.h>
-#include <qpixmap.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-
 #include <kdebug.h>
-#include <klistbox.h>
 
+#include "kis_types.h"
 #include "kis_colorspace.h"
 
 class WdgLayerBox;
@@ -38,6 +33,7 @@ class QPainter;
 class QWidget;
 class KIconLoader;
 class KisCompositeOp;
+class LayerList;
 class LayerItem;
 
 // XXX: Add layer locking, previews
@@ -46,66 +42,59 @@ class KisLayerBox : public QFrame {
         Q_OBJECT
 
 public:
-    // XXX: Use a list of KAction for these, possibly wrapped with some extra flags for visible in a column number
-    enum action {VISIBLE, SELECTION, LINKING, PROPERTIES, ADD, REMOVE, ADDMASK, REMOVEMASK, RAISE, LOWER, FRONT, BACK, LOCKING};
-    enum flags {SHOWVISIBLE = 1, SHOWLINKED = (1 << 1), SHOWPREVIEW = (1 << 2), SHOWMASK = (1 << 3), SHOWALL = (SHOWPREVIEW|SHOWLINKED|SHOWVISIBLE)};
-
-    KisLayerBox(const QString& label, flags f = SHOWALL, QWidget *parent = 0, const char *name = 0);
+    KisLayerBox(QWidget *parent = 0, const char *name = 0);
     virtual ~KisLayerBox();
 
-    void insertItem(const QString& name, bool visible = true, bool linked = false, bool locked = false);
-    int getCurrentItem() const;
     void clear();
-    void setSelected(int index);
     void setUpdatesAndSignalsEnabled(bool enable);
     void updateAll();
+    void setImage(KisImageSP image);
 
 public slots:
+    // connect to KisImage signals
+    void slotLayerActivated(KisLayerSP layer);
+    void slotLayerAdded(KisLayerSP layer);
+    void slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
+    void slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
+    void slotLayerPropertiesChanged(KisLayerSP layer);
+    void slotLayersChanged(KisLayerSP rootLayer);
 
-    void slotSetCurrentItem(int n);
-    void setCompositeOp(const KisCompositeOp& compositeOp);
-    void setOpacity(int opacity);
-    void setColorSpace(const KisColorSpace * colorSpace);
+    void slotSetCompositeOp(const KisCompositeOp& compositeOp);
+    void slotSetOpacity(int opacity);
+    void slotSetColorSpace(const KisColorSpace * colorSpace);
 
 signals:
-    void itemToggleVisible();
-    void itemSelected(int n);
-    void itemToggleLinked();
-    void itemToggleLocked();
-    void itemProperties();
-    void itemAdd();
-    void itemRemove();
-    void itemAddMask(int n);
-    void itemRmMask(int n);
-    void itemLockMask(int n);
-    void itemRaise();
-    void itemLower();
-    void itemFront();
-    void itemBack();
-    void opacityChanged(int opacity);
-    void actLayerVisChanged(int visibility);
-    void itemComposite(const KisCompositeOp&);
+    void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void sigRequestLayerProperties(KisLayerSP layer);
+
+    void sigOpacityChanged(int opacity);
+    void sigActLayerVisChanged(int visibility);
+    void sigItemComposite(const KisCompositeOp&);
 
 private slots:
+    // connect to LayerList signals
+    void slotLayerActivated(LayerItem* layer);
+    void slotLayerDisplayNameChanged(LayerItem* layer, const QString& displayName);
+    void slotLayerPropertyChanged(LayerItem* layer, const QString& name, bool on);
+    void slotLayerMoved(LayerItem* layer, LayerItem* parent, LayerItem* after);
+    void slotRequestNewLayer(LayerItem* parent, LayerItem* after);
+    void slotRequestNewFolder(LayerItem* parent, LayerItem* after);
+    void slotRequestRemoveLayer(LayerItem* layer);
+    void slotRequestLayerProperties(LayerItem* layer);
+
     void slotAboutToShow();
-    void slotRequestProperties(LayerItem* item);
-    void slotActivated(LayerItem* item);
-    void slotUpdate();
-    void slotPropertyChanged(LayerItem* item, const QString& name, bool);
-    void slotMoved(QListViewItem* item, QListViewItem* afterBefore, QListViewItem*);
-    void slotRemoveLayer(LayerItem* item);
-    void slotNewLayer(LayerItem*, LayerItem* after);
     void slotAddClicked();
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
-
+    void slotPropertiesClicked();
 
 private:
+    void updateUI();
     QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
-    int index(LayerItem* item) const;
-    LayerItem* itemAtIndex(int index) const;
-    flags m_flags;
+    LayerList* list() const;
+    KisImageSP m_image;
     WdgLayerBox *m_lst;
 };
 

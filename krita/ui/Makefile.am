@@ -48,6 +48,7 @@ libkritaui_la_SOURCES = \
     kis_label_cursor_pos.cc \
     kis_label_progress.cc \
     kis_label_zoom.cc \
+    kis_layerbox.cc \
     kis_multi_bool_filter_widget.cc \
     kis_multi_double_filter_widget.cc \
     kis_multi_integer_filter_widget.cc \
@@ -87,6 +88,7 @@ libkritaui_la_SOURCES = \
     kobirdeyepanel.cpp \
     kis_matrix_widget.ui \
     kis_previewwidgetbase.ui \
+    layerlist.cpp \
     wdgapplyprofile.ui \
     wdgautobrush.ui \
     wdgautogradient.ui \
@@ -95,6 +97,7 @@ libkritaui_la_SOURCES = \
     wdgdisplaysettings.ui \
     wdggeneralsettings.ui \
     wdglayerproperties.ui \
+    wdglayerbox.ui \
     wdgmatrix.ui \
     wdgnewimage.ui \
     wdgperformancesettings.ui \
@@ -107,6 +110,7 @@ libkritaui_la_SOURCES = \
 
 noinst_HEADERS = \
     imageviewer.h \
+    layerlist.h \
     kcurve.h \
     kis_aboutdata.h \
     kis_autobrush.h \

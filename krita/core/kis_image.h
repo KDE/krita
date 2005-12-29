@@ -191,7 +191,6 @@ public:
 
     Q_INT32 nlayers() const;
     Q_INT32 nHiddenLayers() const;
-    Q_INT32 nLinkedLayers() const;
 
     KCommand *raiseLayerCommand(KisLayerSP layer);
     KCommand *lowerLayerCommand(KisLayerSP layer);
@@ -262,7 +261,7 @@ signals:
         @param parent the parent of the layer, before it was removed
         @param wasAboveThis the layer it was above, before it was removed.
     */
-    void sigLayerRemoved(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP wasAboveThis);
+    void sigLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
 
     /** Emitted after a layer is moved to a different position under its parent layer, or its parent changes.
 
@@ -275,7 +274,7 @@ signals:
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
     /// Emitted when the layers have changed completely
-    void sigLayersChanged();
+    void sigLayersChanged(KisLayerSP rootLayer);
 
     /**
      * Emitted whenever an action has caused the image to be recomposited. This happens

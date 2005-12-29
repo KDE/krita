@@ -1047,6 +1047,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             notify();
             emit sigLayerRemoved(layer, parent, wasAbove);
+            activate(wasAbove ? wasAbove : parent != rootLayer() ? parent.data() : rootLayer() -> firstChild());
         }
         return success;
     }
@@ -1085,6 +1086,9 @@ bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
     KisGroupLayerSP wasParent = layer -> parent();
     KisLayerSP wasAbove = layer -> nextSibling();
 
+    if (wasParent.data() == p.data() && wasAbove.data() == aboveThis.data())
+        return false;
+
     if (!wasParent -> removeLayer(layer))
         return false;
 
@@ -1109,20 +1113,12 @@ bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
 
 Q_INT32 KisImage::nlayers() const
 {
-//LAYERREMOVE
-    return 1;
+    return rootLayer() -> numLayers() - 1;
 }
 
 Q_INT32 KisImage::nHiddenLayers() const
 {
-//LAYERREMOVE
-    return 0;
-}
-
-Q_INT32 KisImage::nLinkedLayers() const
-{
-//LAYERREMOVE
-    return 0;
+    return rootLayer() -> numLayers(KisLayer::Hidden);
 }
 
 void KisImage::flatten()
@@ -1392,7 +1388,7 @@ void KisImage::notify(const QRect& rc)
 
 void KisImage::notifyLayersChanged()
 {
-    emit sigLayersChanged();
+    emit sigLayersChanged(rootLayer());
 }
 
 void KisImage::notifyPropertyChanged(KisLayerSP layer)

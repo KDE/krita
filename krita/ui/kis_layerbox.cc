@@ -273,7 +273,7 @@ void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
 void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 {
     if (KisLayerSP layer = m_image -> findLayer(item -> id()))
-        layer -> parent() -> removeLayer(layer);
+        m_image -> removeLayer(layer);
     updateUI();
 }
 
@@ -293,6 +293,8 @@ void KisLayerBox::updateUI()
         {
             if (m_image -> activeDevice())
                 slotSetColorSpace(m_image -> activeDevice() -> colorSpace());
+            else
+                slotSetColorSpace(m_image -> colorSpace());
             m_lst -> intOpacity -> setValue(active -> opacity());
             m_lst -> cmbComposite -> setCurrentItem(active -> compositeOp());
         }

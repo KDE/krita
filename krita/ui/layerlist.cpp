@@ -668,6 +668,9 @@ void LayerItem::init()
 
     for( int i = 0, n = listView()->d->properties.count(); i < n; ++i )
         d->properties.append( listView()->d->properties[i].defaultValue );
+
+    if( parent())
+        parent()->setOpen( true );
 }
 
 LayerItem::~LayerItem()

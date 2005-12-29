@@ -2455,6 +2455,7 @@ void KisView::connectCurrentImg()
         connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {

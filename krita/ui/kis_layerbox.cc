@@ -49,6 +49,7 @@
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
 #include "kis_colorspace.h"
+#include "kis_paint_device_impl.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
@@ -144,6 +145,8 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img, SIGNAL(sigLayersChanged(KisLayerSP)), this, SLOT(slotLayersChanged(KisLayerSP)));
         slotLayersChanged(img -> rootLayer());
     }
+    else
+        clear();
 
     updateUI();
 }
@@ -285,6 +288,14 @@ void KisLayerBox::updateUI()
     m_lst -> bnDelete -> setEnabled(list() -> activeLayer());
     m_lst -> bnRaise -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> prevSibling());
     m_lst -> bnLower -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> nextSibling());
+    if (m_image)
+        if (KisLayerSP active = m_image -> activeLayer())
+        {
+            if (m_image -> activeDevice())
+                slotSetColorSpace(m_image -> activeDevice() -> colorSpace());
+            m_lst -> intOpacity -> setValue(active -> opacity());
+            m_lst -> cmbComposite -> setCurrentItem(active -> compositeOp());
+        }
 }
 
 void KisLayerBox::slotAboutToShow()

@@ -672,7 +672,7 @@ void LayerItem::init()
 
 LayerItem::~LayerItem()
 {
-    if (listView()->activeLayer() == this)
+    if (listView() && listView()->activeLayer() == this)
         listView()->setActiveLayer( static_cast<LayerItem*>( 0 ) );
     delete d;
 }

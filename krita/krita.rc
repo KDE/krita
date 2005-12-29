@@ -158,7 +158,7 @@
 </ToolBar>
 
 <ToolBar name="BrushesAndStuff" position="top">
-     <Text>Brushes and stuff</Text>
+     <Text>Brushes and Stuff</Text>
      <Action name="brushes"/>
      <Action name="gradients"/>
      <Action name="patterns"/>

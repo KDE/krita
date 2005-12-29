@@ -108,7 +108,7 @@ layer, the current layer will be used.</string>
                         <cstring>textLabel4</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Elevation</string>
+                        <string>&amp;Elevation:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>dblElevation</cstring>

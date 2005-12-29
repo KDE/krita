@@ -74,7 +74,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("brushselect", i18n("Brush select tool")); }
+    virtual KisID id() { return KisID("brushselect", i18n("Brush Select Tool")); }
 };
 
 

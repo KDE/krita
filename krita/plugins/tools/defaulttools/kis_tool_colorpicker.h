@@ -70,7 +70,7 @@ public:
         t -> setup(ac); 
         return t;
     }
-    virtual KisID id() { return KisID("colorpicker", i18n("Color picker")); }
+    virtual KisID id() { return KisID("colorpicker", i18n("Color Picker")); }
 };
 
 

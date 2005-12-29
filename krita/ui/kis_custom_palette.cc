@@ -70,7 +70,7 @@ void KisCustomPalette::slotAddNew() {
 
     bool ok;
     QRegExpValidator validator(QRegExp(".*"), this);
-    QString name = KInputDialog::getText(i18n("Add color to palette"),
+    QString name = KInputDialog::getText(i18n("Add Color to Palette"),
                                          i18n("Color name (optional):"),
                                          QString::null, &ok,
                                          0, 0, &validator);

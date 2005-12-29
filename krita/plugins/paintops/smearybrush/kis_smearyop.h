@@ -32,7 +32,7 @@ public:
     virtual ~KisSmearyOpFactory() {}
 
     virtual KisPaintOp * createOp(KisPainter * painter);
-    virtual KisID id() { return KisID("paintSmeary", i18n("Smeary brush")); }
+    virtual KisID id() { return KisID("paintSmeary", i18n("Smeary Brush")); }
     virtual QString pixmap() { return ""; }
 
 };

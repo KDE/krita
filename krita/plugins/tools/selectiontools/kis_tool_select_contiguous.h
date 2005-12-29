@@ -87,7 +87,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous select tool")); }
+    virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous Select Tool")); }
 };
 
 

@@ -134,7 +134,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Relative colorimetric</string>
+                                    <string>Relative Colorimetric</string>
                                 </property>
                             </item>
                             <item>
@@ -144,7 +144,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Absolute colorimetric</string>
+                                    <string>Absolute Colorimetric</string>
                                 </property>
                             </item>
                             <property name="name">
@@ -254,7 +254,7 @@
                 <cstring>grpPasteBehaviour</cstring>
             </property>
             <property name="title">
-                <string>When pasting into Krita from other applications</string>
+                <string>When Pasting Into Krita From Other Applications</string>
             </property>
             <vbox>
                 <property name="name">

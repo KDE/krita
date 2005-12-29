@@ -87,7 +87,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical select tool")); }
+    virtual KisID id() { return KisID("ellipticalselect", i18n("Elliptical Select Tool")); }
 };
 
 

@@ -100,7 +100,7 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     m_font.setPointSize(cfg.dockerFontSize());
 
     m_brushWidget = new KisIconWidget(view, "brushes");
-    m_brushWidget->setTextLabel( i18n("Brush shapes") );
+    m_brushWidget->setTextLabel( i18n("Brush Shapes") );
     // XXX: An action without a slot -- that's silly, what kind of action could we use here?
     KAction * action = new KWidgetAction(m_brushWidget,
                                          i18n("&Brush"),
@@ -112,7 +112,7 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 
 
     m_patternWidget = new KisIconWidget(view, "patterns");
-    m_patternWidget->setTextLabel( i18n("Fill patterns") );
+    m_patternWidget->setTextLabel( i18n("Fill Patterns") );
     action = new KWidgetAction(m_patternWidget,
                                i18n("&Patterns"),
                                0,

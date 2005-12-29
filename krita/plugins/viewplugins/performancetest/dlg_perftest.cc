@@ -41,7 +41,7 @@ using namespace std;
 
 DlgPerfTest::DlgPerfTest( QWidget *  parent,
                 const char * name)
-    : super (parent, name, true, i18n("Performance test"), Ok | Cancel, Ok)
+    : super (parent, name, true, i18n("Performance Test"), Ok | Cancel, Ok)
 {
     m_lock = false;
 

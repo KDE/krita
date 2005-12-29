@@ -69,7 +69,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("text", i18n("Text tool")); }
+    virtual KisID id() { return KisID("text", i18n("Text Tool")); }
 };
 
 

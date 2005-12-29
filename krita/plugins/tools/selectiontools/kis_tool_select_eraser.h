@@ -71,7 +71,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("eraserselect", i18n("Eraser select tool")); }
+    virtual KisID id() { return KisID("eraserselect", i18n("Eraser Select Tool")); }
 };
 
 

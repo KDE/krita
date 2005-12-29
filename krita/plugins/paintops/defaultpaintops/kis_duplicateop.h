@@ -35,7 +35,7 @@ public:
     virtual ~KisDuplicateOpFactory() {}
 
     virtual KisPaintOp * createOp(KisPainter * painter);
-    virtual KisID id() { return KisID("duplicate", i18n("duplicate")); }
+    virtual KisID id() { return KisID("duplicate", i18n("Duplicate")); }
     virtual bool userVisible() { return false; }
 
 };

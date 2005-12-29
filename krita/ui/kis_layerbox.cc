@@ -395,7 +395,7 @@ QIconSet KisLayerBox::loadIconSet(const QString& filename, KIconLoader&
     QIconSet icon = il.loadIconSet(filename, KIcon::NoGroup, size);
 
     if (icon.isNull())
-        KMessageBox::error(0, i18n("Can't find %1").arg(filename),
+        KMessageBox::error(0, i18n("Cannot find %1.").arg(filename),
                            i18n("Canvas"));
 
     return icon;

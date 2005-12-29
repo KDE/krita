@@ -67,7 +67,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("pan", i18n("Pan tool")); }
+    virtual KisID id() { return KisID("pan", i18n("Pan Tool")); }
 };
 
 

@@ -190,7 +190,7 @@ KisPaintDeviceImplSP KisClipboard::clip()
         if(behaviour==2)
         {
             // Ask user each time
-            behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications data is supposed to be sRGB.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret the data?"),"As &Web","As on &monitor");
+            behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications data is supposed to be sRGB.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret the data?"),i18n("As &Web"),i18n("As on &Monitor"));
         }
 
         KisColorSpace * cs;

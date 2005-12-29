@@ -122,7 +122,7 @@ public:
         Q_CHECK_PTR(t);
         t -> setup(ac); return t;
     }
-    virtual KisID id() { return KisID("transform", i18n("Transform tool")); }
+    virtual KisID id() { return KisID("transform", i18n("Transform Tool")); }
 };
 
 

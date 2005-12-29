@@ -128,7 +128,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("LMSAF32", i18n("LMS cone space (32-bit float/channel)")); };
+    virtual KisID id() const { return KisID("LMSAF32", i18n("LMS Cone Space (32-bit float/channel)")); };
 
     /**
      * lcms colorspace type definition.

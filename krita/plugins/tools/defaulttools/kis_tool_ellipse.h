@@ -81,7 +81,7 @@ public:
         t -> setup(ac);
         return t; 
     }
-    virtual KisID id() { return KisID("ellipse", i18n("Ellipse tool")); }
+    virtual KisID id() { return KisID("ellipse", i18n("Ellipse Tool")); }
 };
 
 

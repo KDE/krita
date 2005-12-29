@@ -85,7 +85,7 @@ public:
         Q_CHECK_PTR(t);
         return t;
     }
-    virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular select tool")); }
+    virtual KisID id() { return KisID("rectangularselect", i18n("Rectangular Select Tool")); }
 };
 
 

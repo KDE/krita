@@ -148,7 +148,7 @@ bool KSnapshot::save( const KURL& url )
     if ( !ok ) {
         kdWarning() << "KSnapshot was unable to save the snapshot" << endl;
 
-        QString caption = i18n("Unable to save image");
+        QString caption = i18n("Unable to Save Image");
         QString text = i18n("KSnapshot was unable to save the image to\n%1.")
             .arg(url.prettyURL());
         KMessageBox::error(this, text, caption);

@@ -88,7 +88,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("polygon", i18n("Polygon tool")); }
+    virtual KisID id() { return KisID("polygon", i18n("Polygon Tool")); }
 };
 
 

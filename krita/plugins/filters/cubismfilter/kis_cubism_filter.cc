@@ -67,11 +67,11 @@ void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
         Q_INT32 height = rect.height();
-        
+
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
         Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
-        
+
         cubism(src, dst, rect, tileSize, tileSaturation);
 }
 
@@ -79,10 +79,10 @@ void KisCubismFilter::randomizeIndices (Q_INT32 count, Q_INT32* indices)
 {
         Q_INT32 index1, index2;
         Q_INT32 tmp;
-        
+
         //initialize random number generator with time
         srand(static_cast<unsigned int>(time(0)));
-        
+
         for (Q_INT32 i = 0; i < count * RANDOMNESS; i++)
         {
                 index1 = randomIntNumber(0, count);
@@ -120,9 +120,9 @@ double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNu
 }
 
 double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y)
-{       
+{
         double r;
-        
+
         if ( oneOverDist==0 )
                 return 1.0;
         else
@@ -144,7 +144,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
                 tmp = x2; x2 = x1; x1 = tmp;
         }
         Q_INT32 ydiff = (y2 - y1);
-        
+
         if (ydiff)
         {
                 double xinc = static_cast<double>(x2 - x1) / static_cast<double>(ydiff);
@@ -172,13 +172,13 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
         Q_INT32         i, j, x, y;
         double          xx, yy;
         double          vec[2];
-        Q_INT32         x1, y1, x2, y2;
+        Q_INT32         x1 = 0, y1 = 0, x2 = 0, y2 = 0;
         Q_INT32         selWidth, selHeight;
         Q_INT32         *vals, *valsIter, *valsEnd;
         Q_INT32         b;
         Q_INT32         xs, ys, xe, ye;
 
-        
+
         Q_INT32 sx = (*poly)[0].x();
         Q_INT32 sy = (*poly)[0].y();
         Q_INT32 ex = (*poly)[1].x();
@@ -196,7 +196,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
         {
                 oneOverDist = 0.0;
         }
-        
+
         Q_INT32 pixelSize = src -> pixelSize();
 
         //get the extents of the polygon
@@ -219,7 +219,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
                 minScanlines[i] = maxX * SUPERSAMPLE;
                 maxScanlines[i] = minX * SUPERSAMPLE;
         }
-        
+
         if ( poly -> numberOfPoints() )
         {
                 Q_INT32 polyNpts = poly -> numberOfPoints();
@@ -276,13 +276,13 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
                 if (! ((i + 1) % SUPERSAMPLE))
                 {
                         y = (i / SUPERSAMPLE) + minY;
-        
+
                         if (y >= y1 && y < y2)
                         {
                                 for (Q_INT32 j = 0; j < sizeX; j += SUPERSAMPLE)
                                 {
                                         x = (j / SUPERSAMPLE) + minX;
-        
+
                                         if (x >= x1 && x < x2)
                                         {
                                                 for (val = 0, valsIter = &vals[j], valsEnd = &valsIter[SUPERSAMPLE]; valsIter < valsEnd; valsIter++)
@@ -290,36 +290,36 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
                                                         val += *valsIter;
                                                 }
                                                 val /= SQR(SUPERSAMPLE);
-        
+
                                                 if (val > 0)
                                                 {
                                                         xx = static_cast<double>(j) / static_cast<double>(SUPERSAMPLE) + minX;
                                                         alpha = static_cast<Q_INT32>(val * calcAlphaBlend (vec, oneOverDist, xx - sx, yy - sy));
-                                                        
+
                                                         src -> readBytes(buf, x, y, 1, 1);
         #ifndef USE_READABLE_BUT_SLOW_CODE
                                                         Q_UINT8 *bufIter = buf,
                                                         *colIter = col,
                                                         *bufEnd = buf+pixelSize;
-        
+
                                                         for(; bufIter < bufEnd; bufIter++, colIter++)
                                                         *bufIter = (static_cast<Q_UINT8>(*colIter * alpha)
                                                                         + (static_cast<Q_UINT8>(*bufIter)
                                                                         * (256 - alpha))) >> 8;
-        #else // original, pre-ECL code 
+        #else // original, pre-ECL code
                                                         for (b = 0; b < pixelSize; b++)
                                                         {
                                                                 buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
                                                         }
-        #endif                                          
+        #endif
                                                         dst -> writeBytes(buf, x, y, 1, 1);
                                                 }
                                         }
                                 }
                         }
-                }       
-        } 
-      /*    
+                }
+        }
+      /*
   delete[] vals;
   delete[] minScanlines;
   delete[] maxScanlines;
@@ -345,8 +345,8 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
         Q_INT32 cols = ( rect.width() + tileSize - 1) / tileSize;
         Q_INT32 rows = ( rect.height() + tileSize - 1) / tileSize;
         Q_INT32 numTiles = (rows + 1) * (cols + 1);
- 
-        Q_INT32* randomIndices = new Q_INT32[numTiles];    
+
+        Q_INT32* randomIndices = new Q_INT32[numTiles];
         for (Q_INT32 i = 0; i < numTiles; i++)
         {
                 randomIndices[i] = i;
@@ -377,13 +377,13 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
                 poly -> addPoint( -width / 2.0, height / 2.0 );
                 poly -> rotate( theta );
                 poly -> translate ( x, y );
-                //  bounds check on x, y 
+                //  bounds check on x, y
                 ix = CLAMP (x, rect.x(), rect.x() + rect.width() - 1);
                 iy = CLAMP (y, rect.y(), rect.y() + rect.height() - 1);
-                
+
                 //read the pixel at ix, iy
                 src -> readBytes(srcPixel, ix, iy, 1, 1);
-                
+
                 if (!hasAlpha || srcPixel[pixelSize - 1])
                 {
                         fillPolyColor (src, dst, poly, srcPixel, dstPixel);

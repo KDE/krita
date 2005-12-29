@@ -75,7 +75,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("duplicate", i18n("Duplicate tool")); }
+    virtual KisID id() { return KisID("duplicate", i18n("Duplicate Tool")); }
 };
 
 

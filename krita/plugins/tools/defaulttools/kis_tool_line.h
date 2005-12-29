@@ -88,7 +88,7 @@ public:
         t -> setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("line", i18n("Line tool")); }
+    virtual KisID id() { return KisID("line", i18n("Line Tool")); }
 };
 
 

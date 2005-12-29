@@ -591,7 +591,7 @@ void KisView::setupActions()
     // Add new palette
     // FIXME this should be in some kind of 'Resources' dialog as a seperate tab, or so,
     // merged with 'editing' of existing, writeable palettes
-    new KAction(i18n("Add new palette"), 0, this, SLOT(slotAddPalette()),
+    new KAction(i18n("Add New Palette..."), 0, this, SLOT(slotAddPalette()),
                 actionCollection(), "add_palette");
 
     showRuler();
@@ -1254,7 +1254,7 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::slotAddPalette()
 {
-    (new KisCustomPalette(0, "add palette", i18n("Add palette"), this)) -> show();
+    (new KisCustomPalette(0, "add palette", i18n("Add Palette"), this)) -> show();
 }
 
 void KisView::saveLayerAsImage()
@@ -1493,8 +1493,8 @@ void KisView::flattenImage()
             int answer = KMessageBox::warningYesNo(this,
                                    i18n("The image contains hidden layers that will be lost."),
                                    i18n("Flatten Image"),
-                                   i18n("Flatten Image"),
-                                   i18n("Cancel"));
+                                   i18n("&Flatten Image"),
+                                   KStdGuiItem::cancel());
 
             if (answer != KMessageBox::Yes) {
                 doIt = false;

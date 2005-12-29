@@ -72,7 +72,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("filter", i18n("Filter tool")); }
+    virtual KisID id() { return KisID("filter", i18n("Filter Tool")); }
 };
 
 #endif //__KIS_TOOL_FILTER_H__

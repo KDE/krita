@@ -91,7 +91,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("polyline", i18n("Polyline tool")); }
+    virtual KisID id() { return KisID("polyline", i18n("Polyline Tool")); }
 };
 
 

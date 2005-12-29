@@ -12,9 +12,6 @@
             <height>306</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -32,7 +29,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Source</string>
+                        <string>Source:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="0" column="1">
@@ -55,7 +52,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Selection Mode</string>
+                        <string>Selection mode:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="1">
@@ -94,7 +91,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Style</string>
+                        <string>Style:</string>
                     </property>
                 </widget>
             </grid>
@@ -197,7 +194,7 @@
                         <cstring>addButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Add to predefined brushes</string>
+                        <string>Add to Predefined Brushes</string>
                     </property>
                 </widget>
             </vbox>

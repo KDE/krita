@@ -36,7 +36,7 @@ public:
     virtual ~KisConvolveOpFactory() {}
 
     virtual KisPaintOp * createOp(KisPainter * painter);
-    virtual KisID id() { return KisID("convolve", i18n("convolve")); }
+    virtual KisID id() { return KisID("convolve", i18n("Convolve")); }
 };
 
 

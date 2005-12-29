@@ -45,7 +45,7 @@ public:
     KisCubismFilter();
 public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("cubism", i18n("cubism")); };
+    static inline KisID id() { return KisID("cubism", i18n("Cubism")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return false; /* TODO: return true when cubism is stable enought */ }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )

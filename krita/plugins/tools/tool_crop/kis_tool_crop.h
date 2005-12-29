@@ -128,7 +128,7 @@ public:
         t -> setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("crop", i18n("Crop tool")); }
+    virtual KisID id() { return KisID("crop", i18n("Crop Tool")); }
 };
 
 

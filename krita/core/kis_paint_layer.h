@@ -60,7 +60,7 @@ public:
     virtual void accept(KisLayerVisitor &v) { v.visit(this); };
 
     /// Returns the paintDevice that accompanies this layer
-    KisPaintDeviceImplSP paintDevice() { return m_paintdev; };
+    inline KisPaintDeviceImplSP paintDevice() { return m_paintdev; };
 
 private:
     KisPaintDeviceImplSP m_paintdev;

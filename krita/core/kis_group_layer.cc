@@ -30,6 +30,10 @@ KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : super(rhs)
 {
+    for(vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); ++it)
+    {
+        m_layers.push_back( it->data()->clone() );
+    }
 }
 
 KisLayerSP KisGroupLayer::clone() const

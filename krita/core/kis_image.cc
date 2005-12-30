@@ -1111,6 +1111,7 @@ void KisImage::flatten()
     oldRootLayer ->accept(visitor);
 
     addLayer(dst, m_rootLayer, 0);
+    activate(dst); // LAYERREMOVE <- maybe addLayer should be the one to call activate but I don't understand the difference between addLayer and layerAdd </Cyrille>
 
     notify();
     notifyLayersChanged();

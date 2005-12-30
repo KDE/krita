@@ -75,8 +75,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
         Q_UINT8* bufRow; 
         Q_UINT8* buf;
         Q_INT32 count;                
-        bool hasAlpha = src -> hasAlpha();
-        Q_INT32 rowstride; 
+       Q_INT32 rowstride; 
 
         //calculate the total number of pixels
         Q_INT32 numX=0;
@@ -114,58 +113,23 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
 
                         //read
                         KisRectIteratorPixel srcIt = src->createRectIterator(x, y, w, h, false);
-                        if ( hasAlpha )
-                        {
-                                while( ! srcIt.isDone() )
+                        while( ! srcIt.isDone() ) {
+                            if(srcIt.isSelected())
                                 {
-                                        if(srcIt.isSelected())
-                                        {
-                                                Q_INT32 alpha = srcIt.oldRawData()[pixelSize-1];
-        
-                                                average[pixelSize-1] += alpha;
-                                                for (Q_INT32 i = 0; i < pixelSize-1; i++)
-                                                {        
-                                                        average[i] += srcIt.oldRawData()[i] * alpha;
-                                                }      
-                                                count++;
-                                        }
-                                        ++srcIt;
+                                    for (Q_INT32 i = 0; i < pixelSize; i++)
+                                        {        
+                                                average[i] += srcIt.oldRawData()[i];
+                                        }  
+                                    count++;
                                 }
-                        }
-                        else
-                        {
-                                while( ! srcIt.isDone() )
-                                {
-                                        if(srcIt.isSelected())
-                                        {
-                                                for (Q_INT32 i = 0; i < pixelSize; i++)
-                                                {        
-                                                        average[i] += srcIt.oldRawData()[i];
-                                                }  
-                                                count++;
-                                        }
-                                        ++srcIt;
-                                }
+                            ++srcIt;
                         }
 
                         //average
                         if (count > 0)
                         {
-                                if ( hasAlpha )
-                                        {
-                                        Q_INT32 alpha = average[pixelSize-1];
-
-                                        if ((average[pixelSize-1] = alpha / count))
-                                        {
-                                        for (Q_INT32 i = 0; i < pixelSize-1; i++)
-                                                average[i] /= alpha;
-                                        }
-                                }
-                                else
-                                {
-                                        for (Q_INT32 i = 0; i < pixelSize; i++)
-                                        average[i] /= count;
-                                }
+                            for (Q_INT32 i = 0; i < pixelSize; i++)
+                                average[i] /= count;
                         }
                         //write
                         srcIt = src->createRectIterator(x, y, w, h, false);

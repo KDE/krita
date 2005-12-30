@@ -1,8 +1,10 @@
 SUBDIRS = \
     defaulttools \
+    selectiontools \
+    tool_crop \
     tool_filter \
     tool_polygon \
     tool_polyline \
     tool_selectsimilar \
     tool_star \
-    selectiontools
+    tool_transform

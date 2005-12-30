@@ -40,10 +40,11 @@ public:
     ~KisTransformVisitor();
 
 public:
-	bool isCanceled() { return m_cancelRequested;};
-private:
+    bool isCanceled() { return m_cancelRequested;};
+
     bool visit(KisPainter& gc, KisPaintDeviceImpl *dev);
-    
+
+private:    
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
     template <class T> void transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
     

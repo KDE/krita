@@ -48,6 +48,7 @@
 #include <kis_progress_display_interface.h>
 #include <kis_paint_device_impl.h>
 #include <kis_filter_strategy.h>
+#include <kis_scale_visitor.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_small_tiles_filter.h"
@@ -76,7 +77,9 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDev
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
     KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl( *(src.data()) );
 
-    tmp -> scale( 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), m_progressDisplay, new KisMitchellFilterStrategy() );
+    KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
+    worker.run();
+
     QRect tmpRect = tmp -> exactBounds();
 
     for( Q_UINT32 i=0; i < numberOfTiles; i++ )

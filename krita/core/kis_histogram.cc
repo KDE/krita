@@ -20,18 +20,18 @@
 #include <kdebug.h>
 #include <qdatetime.h> // ### Debug
 
-#include "kis_histogram.h"
-#include "kis_layer.h"
 #include "kis_types.h"
+#include "kis_histogram.h"
+#include "kis_paint_layer.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
 #include "kis_debug_areas.h"
 
-KisHistogram::KisHistogram(KisLayerSP layer,
+KisHistogram::KisHistogram(KisPaintLayerSP layer,
                            KisHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-//LAYERREMOVE    m_dev = layer.data();
+    m_dev = layer->paintDevice();
     m_type = type;
     m_producer = producer;
     m_selection = false;

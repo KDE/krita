@@ -26,6 +26,7 @@
 #include "kis_painter.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 
 class KisMergeVisitor : public KisLayerVisitor {
@@ -125,7 +126,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer *layer)
+    virtual bool visit(KisPartLayer */*layer*/)
     {
         return true;
     }

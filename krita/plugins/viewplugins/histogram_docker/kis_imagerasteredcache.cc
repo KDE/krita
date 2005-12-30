@@ -45,7 +45,7 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
         return;
     }
 
-    imageSizeChanged(img, img -> width(), img -> height());
+    imageSizeChanged(img -> width(), img -> height());
 
     connect(img, SIGNAL(sigImageUpdated(const QRect&)),
             this, SLOT(imageUpdated(const QRect&)));
@@ -86,6 +86,9 @@ void KisImageRasteredCache::imageUpdated(const QRect& rc) {
 }
 
 void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
+
+    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+
     cleanUpElements();
 
     m_width = static_cast<int>(ceil(float(w) / float(m_rasterSize)));
@@ -108,7 +111,7 @@ void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
         rasterX++;
     }
 
-    imageUpdated(image, QRect(0,0, image -> width(), image -> height()));
+    imageUpdated(QRect(0,0, image -> width(), image -> height()));
 }
 
 void KisImageRasteredCache::timeOut() {

@@ -46,8 +46,6 @@ KritaHistoryDocker::KritaHistoryDocker(QObject *parent, const char *name, const 
     if ( parent->inherits("KisView") )
     {
         setInstance(KritaHistoryDockerFactory::instance());
-
-        KisView * view = (KisView*) parent;
         // Create history docker
         // Add the docker to the docker manager
         // Connect the undo system to the docker

@@ -265,8 +265,8 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
                                 centreOfRotation.x() * cosAngle - centreOfRotation.y() * sinAngle,
                                 centreOfRotation.x() * sinAngle + centreOfRotation.y() * cosAngle);
 
-    dst -> setX(dst -> getX() + centreOfRotation.x() - rotatedCentreOfRotation.x());
-    dst -> setY(dst -> getY() + centreOfRotation.y() - rotatedCentreOfRotation.y());
+    dst -> setX((Q_INT32)(dst -> getX() + centreOfRotation.x() - rotatedCentreOfRotation.x()));
+    dst -> setY((Q_INT32)(dst -> getY() + centreOfRotation.y() - rotatedCentreOfRotation.y()));
 
     setProgressDone();
 

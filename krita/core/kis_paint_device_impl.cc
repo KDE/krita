@@ -35,9 +35,6 @@
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
-#include "kis_scale_visitor.h"
-#include "kis_rotate_visitor.h"
-#include "kis_transform_visitor.h"
 #include "kis_profile.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
@@ -209,8 +206,8 @@ namespace {
 
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace) :
-    KShared()
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * name) :
+    QObject(0, name), KShared()
 {
     if (colorSpace == 0) {
         kdDebug() << "Cannot create paint device without colorstrategy!\n";
@@ -242,8 +239,8 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace) :
     m_selection = 0;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace) :
-    KShared()
+KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace, const char * name) :
+    QObject(0, name), KShared()
 {
     m_dcop = 0;
 
@@ -444,36 +441,6 @@ QRect KisPaintDeviceImpl::exactBounds() const
     return QRect(boundX, boundY, boundW, boundH);
 }
 
-void KisPaintDeviceImpl::accept(KisScaleVisitor& visitor)
-{
-        visitor.visitKisPaintDeviceImpl(this);
-}
-
-void KisPaintDeviceImpl::accept(KisRotateVisitor& visitor)
-{
-        visitor.visitKisPaintDeviceImpl(this);
-}
-
-void KisPaintDeviceImpl::scale(double xscale, double yscale, KisProgressDisplayInterface * progress, KisFilterStrategy *filterStrategy)
-{
-        KisScaleVisitor visitor;
-        accept(visitor);
-        visitor.scale(xscale, yscale, progress, filterStrategy);
-}
-
-void KisPaintDeviceImpl::rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface * progress)
-{
-        KisRotateVisitor visitor;
-        accept(visitor);
-        visitor.rotate(angle, rotateAboutImageCentre, progress);
-}
-
-void KisPaintDeviceImpl::shear(double angleX, double angleY, KisProgressDisplayInterface * progress)
-{
-        KisRotateVisitor visitor;
-        accept(visitor);
-        visitor.shear(angleX, angleY, progress);
-}
 
 void KisPaintDeviceImpl::mirrorX()
 {

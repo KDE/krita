@@ -55,9 +55,9 @@ DlgHistogram::~DlgHistogram()
     delete m_page;
 }
 
-void DlgHistogram::setLayer(KisLayerSP layer)
+void DlgHistogram::setPaintDevice(KisPaintDeviceImplSP dev)
 {
-    m_page -> setLayer(layer);
+    m_page -> setPaintDevice(dev);
 }
 
 void DlgHistogram::okClicked()

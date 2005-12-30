@@ -323,8 +323,8 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
 
     int k = 0;
     bytes.resize(width() * height() * 4);
-    for (Q_UINT32 y = 0; y < height(); y++) {
-        for (Q_UINT32 x = 0; x < width(); x++) {
+    for (Q_INT32 y = 0; y < height(); y++) {
+        for (Q_INT32 x = 0; x < width(); x++) {
             // order for gimp brushes, v2 is: RGBA
             QRgb pixel = m_img.pixel(x,y);
             bytes[k++] = static_cast<char>(qRed(pixel));
@@ -399,7 +399,7 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
     return outputMask;
 }
 
-KisPaintDeviceImplSP KisBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceImplSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();

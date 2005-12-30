@@ -37,40 +37,62 @@ const Q_INT32 STARTING_PAINTLOAD = 100;
 const Q_INT32 CANVAS_WETNESS = 10;
 const Q_INT32 NUMBER_OF_TUFTS = 16;
 
-class SmearyTuft {
+class KisSmearyOp::SmearyTuft {
 
 public:
 
-    KisPoint m_previousPos;
-    Q_INT32 m_paintLoad;
+    /**
+     * Create a new smeary tuft.
+     *
+     * @param distanceFromCenter how far this tuft is from the center of the brush
+     * @param paintload the initial amount of paint this tuft holds. May be replenished
+     *        by picking up paint from the canvas
+     * @param color the initial paint color. Will change through contact with color on the canvas
+     */
+    SmearyTuft(Q_INT32 distanceFromCenter, Q_INT32 paintload, KisColor color) 
+        : m_distanceFromCenter(distanceFromCenter)
+        , m_paintload(paintload)
+        , m_color(color) {};
+
+    /**
+     * Mix the current paint color with the color found
+     * at pos in dev.
+     */
+    void mixAt(const KisPoint & pos, double pressure, KisPaintDeviceImplSP dev)
+    {
+        // Get the image background color
+        // Get the color at pos
+        // if the color at pos is the same as the background color, don't mix
+        // else mix the color; the harder the pressure, the more mixed the color will be
+        // if the pressure is really hard, take the color from all layers under this layer
+        // if there's little paint on the brush, pick up some from the canvas
+    };
+
+    /**
+     * Paint the tuft footprint (calculated from the pressure) at the given position
+     */
+    void paintAt(const KisPoint & pos, double pressure, KisPaintDeviceImplSP dev)
+    {
+        // 
+    };
+
+public:
+    Q_INT32 m_distanceFromCenter;
+    Q_INT32 m_paintload;
     KisColor m_color;
 
 };
 
-/**
- * The smeary brush implements bidirectional paint transfer. It takes the
- * color at the footprint of the brush (unless it's the image color or
- * transparent and mixes it with the paint color, creating a new paint
- * color.
- *
- * A brush contains a number of tufts. Depending on pressure, the tufts
- * will be more or less concentrated around the paint position. Tufts
- * mix with the colour under each tuft and load the tuft with the mixture
- * for the next paint operation. The mixture is also dependent upon pressure.
- *
- * The paint load will run out after a certain number of paintAt's, depending
- * on pressure.
- */
-KisPaintOp * KisSmearyOpFactory::createOp(KisPainter * painter)
-{
-    KisPaintOp * op = new KisSmearyOp(painter);
-    Q_CHECK_PTR(op);
-    return op;
-}
+
 
 KisSmearyOp::KisSmearyOp(KisPainter * painter)
     : super(painter)
 {
+    for (int i = 0; i < NUMBER_OF_TUFTS / 2; ++i) {
+        m_leftTufts.append(new SmearyTuft(i, STARTING_PAINTLOAD, painter->paintColor()));
+        m_rightTufts.append(new SmearyTuft(i, STARTING_PAINTLOAD, painter->paintColor()));
+    }
+    
 }
 
 KisSmearyOp::~KisSmearyOp()
@@ -92,11 +114,24 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceImplSP device = m_painter -> device();
     KisColorSpace * colorSpace = device -> colorSpace();
-    Q_INT32 pixelSize = colorSpace->pixelSize();
     KisColor kc = m_painter -> paintColor();
     kc.convertTo(colorSpace);
 
+    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint pt = pos - hotSpot;
 
+    // Split the coordinates into integer plus fractional parts. The integer
+    // is where the dab will be positioned and the fractional part determines
+    // the sub-pixel positioning.
+    Q_INT32 x, y;
+    double xFraction, yFraction;
+
+    splitCoordinate(pt.x(), &x, &xFraction);
+    splitCoordinate(pt.y(), &y, &yFraction);
+
+    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(colorSpace);
+    Q_CHECK_PTR(dab);
+    
     m_painter -> setPressure(info.pressure);
 
     //kdDebug() << " Previous point: " << info.movement << "\n";
@@ -105,42 +140,36 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // perpendicular to the motion of the brush, i.e, the straight line between
     // the current position and the previous position.
     // The tufts are spread out through the pressure
+    
     KisPoint previousPoint = info.movement.toKisPoint();
     KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
     KisVector2D currentPointVector = KisVector2D(pos);
     brushVector.normalize();
+
+    KisVector2D vl, vr;
     
     for (int i = 0; i < (NUMBER_OF_TUFTS / 2); ++i) {
-        // Compute the positions on the new vector...
-        KisVector2D vl = currentPointVector + i * brushVector;
-        KisVector2D vr = currentPointVector - i * brushVector;
+        // Compute the positions on the new vector.
+        vl = currentPointVector + i * brushVector;
         KisPoint pl = vl.toKisPoint();
-        device->setPixel(pl.roundX(), pl.roundY(), Qt::red, OPACITY_OPAQUE);
+        dab->setPixel(pl.roundX(), pl.roundY(), kc);
+        
+        vr = currentPointVector - i * brushVector;
         KisPoint pr = vr.toKisPoint();
-        device->setPixel(pr.roundX(), pr.roundY(), Qt::red, OPACITY_OPAQUE);
+        dab->setPixel(pr.roundX(), pr.roundY(), kc);
     }
+
+    vr = vr - vl;
+    vr.normalize();
     
-
-
-//    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
-//    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-#if 0
-    KisImage * image = device -> image();
-
-    if (image != 0) {
-        dstRect &= image -> bounds();
-    }
-
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
-
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
-
-    //m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
-    m_painter -> addDirtyRect(dstRect);
-#endif    
+    m_painter -> bltSelection(x - 32, y - 32, m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), x - 32, y -32, 64, 64);
+    m_painter -> addDirtyRect(QRect(x -32, y -32, 64, 64));
 }
 
 
+KisPaintOp * KisSmearyOpFactory::createOp(KisPainter * painter)
+{
+    KisPaintOp * op = new KisSmearyOp(painter);
+    Q_CHECK_PTR(op);
+    return op;
+}

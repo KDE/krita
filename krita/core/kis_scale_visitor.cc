@@ -22,13 +22,12 @@
 
 #include "kis_paint_device_impl.h"
 #include "kis_scale_visitor.h"
-#include "kis_progress_display_interface.h"
 #include "kis_filter_strategy.h"
 
 
-void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInterface * progress, KisFilterStrategy *filterStrategy)
+void KisScaleWorker::run()
 {
-    double fwidth = filterStrategy->support();
+    double fwidth = m_filterStrategy->support();
 
     QRect rect = m_dev -> exactBounds();
     Q_INT32 width = rect.width();
@@ -36,11 +35,11 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     m_pixelSize=m_dev -> pixelSize();
 
     // compute size of target image
-    if ( xscale == 1.0F && yscale == 1.0F ) {
+    if ( m_sx == 1.0F && m_sy == 1.0F ) {
         return;
     }
-    Q_INT32 targetW = QABS( qRound( xscale * width ) );
-    Q_INT32 targetH = QABS( qRound( yscale * height ) );
+    Q_INT32 targetW = QABS( qRound( m_sx * width ) );
+    Q_INT32 targetH = QABS( qRound( m_sy * height ) );
 
     Q_UINT8* newData = new Q_UINT8[targetW * targetH * m_pixelSize ];
     Q_CHECK_PTR(newData);
@@ -69,10 +68,10 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
 
     //create array of pointers to intermediate rows that are actually used simultaneously and allocate memory for the rows
     Q_UINT8 **tmpRowsMem;
-    if(yscale < 1.0)
+    if(m_sy < 1.0)
     {
-        tmpRowsMem = new Q_UINT8*[ (int)(fwidth / yscale * 2 + 1) ];
-        for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
+        tmpRowsMem = new Q_UINT8*[ (int)(fwidth / m_sy * 2 + 1) ];
+        for(int i = 0; i < (int)(fwidth / m_sy * 2 + 1); i++)
         {
              tmpRowsMem[i] = new Q_UINT8[ width * m_pixelSize ];
              Q_CHECK_PTR(tmpRowsMem[i]);
@@ -87,31 +86,20 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
             Q_CHECK_PTR(tmpRowsMem[i]);
         }
     }
-    //progress info
-    m_cancelRequested = false;
-    if ( progress )
-        progress -> setSubject(this, true, true);
-    emit notifyProgressStage(i18n("Scaling layer..."),0);
 
     // build x weights
     contribX = new ContribList[ targetW ];
     for(int x = 0; x < targetW; x++)
     {
-        calcContrib(&contribX[x], xscale, fwidth, width, filterStrategy, x);
+        calcContrib(&contribX[x], m_sx, fwidth, width, m_filterStrategy, x);
     }
 
     QTime starttime = QTime::currentTime ();
 
     for(int y = 0; y < targetH; y++)
     {
-        //progress info
-        emit notifyProgress((y * 100) / targetH);
-        if (m_cancelRequested) {
-                break;
-        }
-
         // build y weights
-        calcContrib(&contribY, yscale, fwidth, height, filterStrategy, y);
+        calcContrib(&contribY, m_sy, fwidth, height, m_filterStrategy, y);
 
         //copy pixel data to temporary arrays
         for(int srcpos = 0; srcpos < contribY.n; srcpos++)
@@ -179,7 +167,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
              }
         } /* next dst row */
     } /* next dst column */
-    if(!m_cancelRequested){
+
+    // XXX: I'm thinking that we should be able to cancel earlier, in the look. 
+    if(!isCanceled()){
         m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
         m_dev -> crop(0, 0, targetW, targetH);
     }
@@ -196,9 +186,9 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
     delete[] weight;
     delete[] bPelDelta;
 
-    if(yscale < 1.0)
+    if(m_sy < 1.0)
     {
-        for(int i = 0; i < (int)(fwidth / yscale * 2 + 1); i++)
+        for(int i = 0; i < (int)(fwidth / m_sy * 2 + 1); i++)
         {
             delete[] tmpRowsMem[i];
         }
@@ -211,19 +201,16 @@ void KisScaleVisitor::scale(double xscale, double yscale, KisProgressDisplayInte
         }
     }
 
-    //progress info
-    emit notifyProgressDone();
-
     QTime stoptime = QTime::currentTime ();
     kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl;
 
     return;
 }
 
-int KisScaleVisitor::calcContrib(ContribList *contrib, double scale, double fwidth, int srcwidth, KisFilterStrategy* filterStrategy, Q_INT32 i)
+int KisScaleWorker::calcContrib(ContribList *contrib, double scale, double fwidth, int srcwidth, KisFilterStrategy* filterStrategy, Q_INT32 i)
 {
         //ContribList* contribX: receiver of contrib info
-        //double xscale: horizontal zooming scale
+        //double m_sx: horizontal zooming scale
         //double fwidth: Filter sampling width
         //int dstwidth: Target bitmap width
         //int srcwidth: Source bitmap width

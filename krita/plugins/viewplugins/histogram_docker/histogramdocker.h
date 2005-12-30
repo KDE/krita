@@ -56,7 +56,7 @@ private:
     KisImageRasteredCache* m_cache;
     QPopupMenu m_popup;
     KisHistogramSP m_histogram;
-    int m_currentProducerPos;
+    uint m_currentProducerPos;
 };
 
 class KisGenericRGBHistogramProducerFactory;

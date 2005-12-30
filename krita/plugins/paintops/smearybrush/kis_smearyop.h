@@ -37,6 +37,20 @@ public:
 
 };
 
+/**
+ * The smeary brush implements bidirectional paint transfer. It takes the
+ * color at the footprint of the brush (unless it's the image color or
+ * transparent and mixes it with the paint color, creating a new paint
+ * color.
+ *
+ * A brush contains a number of tufts. Depending on pressure, the tufts
+ * will be more or less concentrated around the paint position. Tufts
+ * mix with the colour under each tuft and load the tuft with the mixture
+ * for the next paint operation. The mixture is also dependent upon pressure.
+ *
+ * The paint load will run out after a certain number of paintAt's, depending
+ * on pressure.
+ */
 class KisSmearyOp : public KisPaintOp {
 
     typedef KisPaintOp super;
@@ -47,6 +61,13 @@ public:
     virtual ~KisSmearyOp();
 
     void paintAt(const KisPoint &pos, const KisPaintInformation& info);
+
+
+private:
+    class SmearyTuft;
+    
+    QPtrList<SmearyTuft> m_rightTufts;
+    QPtrList<SmearyTuft> m_leftTufts;
 
 };
 

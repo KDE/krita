@@ -2,6 +2,9 @@ kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = imagesize.rc
 EXTRA_DIST = $(kritarc_DATA)
 
+kde_services_DATA = kritaimagesize.desktop
+
+
 INCLUDES  =  -I$(srcdir)/../../../sdk \
 	-I$(srcdir)/../../../core \
 	-I$(srcdir)/../../../kritacolor/ \
@@ -9,12 +12,10 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
-kde_module_LTLIBRARIES = kritaimagesize.la
-
 kritaimagesize_la_SOURCES = wdg_imagesize.ui wdg_layersize.ui imagesize.cc dlg_imagesize.cc dlg_layersize.cc
 noinst_HEADERS = wdg_imagesize.h dlg_imagesize.h imagesize.h dlg_layersize.h
 
-kde_services_DATA = kritaimagesize.desktop
+kde_module_LTLIBRARIES = kritaimagesize.la
 
 kritaimagesize_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritaimagesize_la_LIBADD =  ../../../libkritacommon.la 

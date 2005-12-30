@@ -19,14 +19,23 @@
 #ifndef KIS_SCALE_VISITOR_H_
 #define KIS_SCALE_VISITOR_H_
 
-#include "kis_progress_subject.h"
+#include "klocale.h"
 
-class KisPaintDeviceImpl;
+#include "kis_progress_subject.h"
+#include "kis_progress_display_interface.h"
+#include "kis_thread.h"
+#include "kis_layer_visitor.h"
+#include "kis_types.h"
+#include "kis_layer.h"
+#include "kis_group_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_transaction.h"
+#include "kis_undo_adapter.h"
+
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
 
-class KisScaleVisitor : public KisProgressSubject {
-    typedef KisProgressSubject super;
+class KisScaleWorker : public KisThread {
 
     /* Structs for the image rescaling routine */
     class Contrib {
@@ -42,13 +51,25 @@ class KisScaleVisitor : public KisProgressSubject {
     };
 
 public:
-    KisScaleVisitor();
-    ~KisScaleVisitor();
-    void visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev);
-    void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
+
+    KisScaleWorker(KisPaintDeviceImplSP dev, double sx, double sy, 
+                   KisFilterStrategy *filterStrategy)
+        : KisThread()
+        , m_dev(dev)
+        , m_sx(sx)
+        , m_sy(sy)
+        , m_filterStrategy(filterStrategy) {};
+
+    virtual ~KisScaleWorker() {};
+
+    void run();
+
 private:
-    KisPaintDeviceImpl* m_dev;
     Q_INT32 m_pixelSize;
+    KisPaintDeviceImplSP m_dev;
+    double m_sx, m_sy;
+    KisFilterStrategy * m_filterStrategy;
+
 
     /**
      * calc_x_contrib()
@@ -58,27 +79,106 @@ private:
      *
      * Returns -1 if error, 0 otherwise.
      */
-
     int calcContrib(ContribList *contribX, double cale, double fwidth, int srcwidth, KisFilterStrategy *filterStrategy, Q_INT32 i);
 
     ContribList * contrib;  //array of contribution lists
 
-    // Implement KisProgressSubject
-    bool m_cancelRequested;
-    virtual void cancel() { m_cancelRequested = true; }
 
 };
 
-inline KisScaleVisitor::KisScaleVisitor()
-{
-}
 
-inline KisScaleVisitor::~KisScaleVisitor()
-{
-}
+class KisScaleVisitor : public KisLayerVisitor, KisProgressSubject {
 
-inline void KisScaleVisitor::visitKisPaintDeviceImpl(KisPaintDeviceImpl* dev)
-{
-    m_dev=dev;
-}
+public:
+
+    KisScaleVisitor(KisImageSP img,
+                    double sx, 
+                    double sy, 
+                    KisProgressDisplayInterface *progress, 
+                    KisFilterStrategy *filterStrategy) 
+        : KisLayerVisitor()
+        , m_img(img)
+        , m_sx(sx)
+        , m_sy(sy)
+        , m_progress(progress)
+        , m_filterStrategy(filterStrategy)
+    {
+        if ( progress )
+            progress -> setSubject(this, true, true);
+        emit notifyProgressStage(i18n("Scaling..."),0);
+    }
+
+    virtual ~KisScaleVisitor()
+    {
+        // Wait for all threads to finish
+        KisThread * t;
+        int threadcount = m_scalethreads.count();
+        int i = 0;
+        for ( t = m_scalethreads.first(); t; t = m_scalethreads.next()) {
+            //progress info
+            t->wait();
+            emit notifyProgress((100 / threadcount) * i);
+            ++i;
+
+        }
+        emit notifyProgressDone();
+        // Delete all threads
+        m_scalethreads.setAutoDelete(true);
+        m_scalethreads.clear();
+    }
+
+    bool visit(KisPaintLayer *layer) 
+    {
+        // XXX: If all is well, then the image's undoadapter will have started a macro for us
+        //      This will break in a more multi-threaded environment
+        if (m_img->undoAdapter() && m_img->undoAdapter()->undo()) {
+            KisTransaction * cmd = new KisTransaction("", layer->paintDevice());
+            m_img->undoAdapter()->addCommand(cmd);
+        }
+
+        KisThread * scaleThread = new KisScaleWorker(layer->paintDevice(),
+                                                     m_sx, m_sy, m_filterStrategy);
+        m_scalethreads.append(scaleThread);
+        scaleThread->start();
+        return true;
+    }
+
+    bool visit(KisGroupLayer *layer)
+    {
+        //KisScaleVisitor visitor (m_img, m_sx, m_sy, m_progress, m_filterStrategy);
+
+        KisLayerSP child = layer->firstChild();
+        while (child) {
+            child->accept(*this);
+            child = child->nextSibling();
+        }
+
+        return true;
+    }
+
+    bool visit(KisPartLayer */*layer*/)
+    {
+        return true;
+    }
+
+    // Implement KisProgressSubject
+    virtual void cancel() 
+    {
+        KisThread * t;
+        for ( t = m_scalethreads.first(); t; t = m_scalethreads.next()) {
+            t->cancel();
+        }      
+    }
+    
+
+private:
+
+    QPtrList<KisThread> m_scalethreads;
+    KisImageSP m_img;
+    double m_sx;
+    double m_sy;
+    KisProgressDisplayInterface * m_progress;
+    KisFilterStrategy * m_filterStrategy;
+};
+
 #endif // KIS_SCALE_VISITOR_H_

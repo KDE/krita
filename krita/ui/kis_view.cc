@@ -267,10 +267,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
 
     // Load all plugins
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
+    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"));//,
+//                                                         QString::fromLatin1("(Type == 'Service') and "
+//                                                                             "([X-KDE-Version] == 2)"));
     KTrader::OfferList::ConstIterator iter;
+    kdDebug() << "Found " << offers.count() << " view plugins\n";
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -280,6 +281,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         if ( plugin ) {
             kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
             insertChildClient(plugin);
+        }
+        else {
+            kdDebug() << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
         }
     }
 
@@ -1420,7 +1424,8 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
         Q_CHECK_PTR(t);
     }
 
-    dev -> scale(sx, sy, m_progress, filterStrategy);
+    KisScaleWorker worker (dev, sx, sy, filterStrategy);
+    worker.run();
 
     if (undo) undo -> addCommand(t);
 
@@ -1445,8 +1450,8 @@ void KisView::rotateLayer(double angle)
         Q_CHECK_PTR(t);
     }
 
-    // Rotate
-    dev -> rotate(angle, false, m_progress);
+    // Rotate XXX: LAYERREMOVE
+    // dev -> rotate(angle, false, m_progress);
 
     if (undo) undo -> addCommand(t);
 
@@ -1471,7 +1476,8 @@ void KisView::shearLayer(double angleX, double angleY)
         Q_CHECK_PTR(t);
     }
 
-    dev -> shear(angleX, angleY, m_progress);
+    // XXX LAYERREMOVE
+    //dev -> shear(angleX, angleY, m_progress);
 
     if (undo) undo -> addCommand(t);
 
@@ -2450,7 +2456,7 @@ void KisView::connectCurrentImg()
 
         connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_current, SIGNAL(sigLayersChanged()), SLOT(layersUpdated()));
+        //connect(m_current, SIGNAL(sigLayersChanged()), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));

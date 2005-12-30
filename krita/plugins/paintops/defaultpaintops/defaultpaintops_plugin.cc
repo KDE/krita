@@ -44,9 +44,9 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-           setInstance(DefaultPaintOpsPluginFactory::instance());
+     setInstance(DefaultPaintOpsPluginFactory::instance());
 
-     kdDebug(41006) << "DefaultPaintOpsPlugin. Class: "
+     kdDebug() << "DefaultPaintOpsPlugin. Class: "
            << className()
            << ", Parent: "
            << parent -> className()

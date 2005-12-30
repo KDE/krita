@@ -28,7 +28,6 @@
 #include "kis_colorspace.h"
 #include "kis_profile.h"
 #include "kis_colorspace_factory_registry.h"
-#include "kis_xyz_colorspace.h"
 #include "kis_alpha_colorspace.h"
 #include "kis_lab_colorspace.h"
 

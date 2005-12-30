@@ -48,10 +48,15 @@ public:
      * Doubles are in the 0-1 range, use the producer's positionToString function to display it.
      **/
     class Calculations {
+
         double m_max, m_min, m_mean, m_total, m_median, m_stddev;
+
         Q_UINT32 m_high, m_low, m_count;
+
         friend class KisHistogram;
+
     public:
+
         Calculations() : m_max(0.0), m_min(0.0), m_mean(0.0), m_total(0.0), m_median(0.0),
             m_stddev(0.0), m_high(0), m_low(0), m_count(0) {}
         double getMax() { return m_max; }
@@ -67,9 +72,10 @@ public:
         //Q_UINT8 getPercentile() { return m_percentile; } // What is this exactly? XXX
     };
 
-    KisHistogram(KisLayerSP layer, 
+    KisHistogram(KisPaintLayerSP layer, 
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);
+
     KisHistogram(KisPaintDeviceImplSP paintdev, 
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);

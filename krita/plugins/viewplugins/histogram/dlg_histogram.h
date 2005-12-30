@@ -42,7 +42,7 @@ public:
              const char* name = 0);
     ~DlgHistogram();
 
-    void setLayer(KisLayerSP layer);
+    void setPaintDevice(KisPaintDeviceImplSP dev);
 
 private slots:
     void okClicked();

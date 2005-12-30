@@ -92,7 +92,7 @@ namespace {
         KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
         for (int i = 0; i < w; ++i) {
             row[0] = csOrig->intensity8(origIt.rawData());
-            row[0] = lut[waterlevel + ((row[0] -  waterlevel) * origIt.pixel().alpha()) / 255];
+            row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->getAlpha(origIt.rawData())) / 255];
             
             ++row;
             ++origIt;
@@ -180,7 +180,11 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
 
 
      if (!config->bumpmap.isNull()) {
-         KisPaintDeviceImplSP bumplayer = src->image()->findLayer(config->bumpmap).data();
+/*  LAYERREMOVE
+         KisPaintDeviceImplSP bumplayer = src->image()->findLayer(config->bumpmap).paintDevice();
+*/
+         KisPaintDeviceImplSP bumplayer = 0;
+
          if (bumplayer) {
             bmRect = bumplayer->exactBounds();
             bumpmap = bumplayer;
@@ -388,12 +392,14 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     Q_ASSERT(m_device);
     
     m_page = new WdgBumpmap(this);
-        QHBoxLayout * l = new QHBoxLayout(this);
-        Q_CHECK_PTR(l);
+    QHBoxLayout * l = new QHBoxLayout(this);
+    Q_CHECK_PTR(l);
+    
+    l -> add(m_page);
+    m_filter -> setAutoUpdate(false);
 
-        l -> add(m_page);
-        m_filter -> setAutoUpdate(false);
-
+    // XXX LAYERRemove
+/*
     // Fill combobox with layers
     const KisImageSP img = dev->image();
     if (img) {
@@ -404,6 +410,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
             m_page->cmbLayer->insertItem(layer->name());
         }
     }
+*/
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 

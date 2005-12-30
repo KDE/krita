@@ -13,6 +13,7 @@ libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritaco
     $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT) $(GLLIB)
 
 libkritaui_la_SOURCES = \
+    kis_histogram_view.cc \
     imageviewer.cc \
     kcurve.cc \
     kis_autobrush.cc \

@@ -47,12 +47,15 @@
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
+#include <kis_crop_visitor.h>
 
 #include "kis_tool_crop.h"
 #include "wdg_tool_crop.h"
 
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
+
+
 
 KisToolCrop::KisToolCrop()
 {
@@ -81,8 +84,6 @@ void KisToolCrop::activate()
 {
     super::activate();
 
-//    if ( (m_startPos - m_endPos) != QPoint(0,0) )
-//        return;
     // No current crop rectangle, try to use the selection of the device to make a rectangle
     if (m_subject && m_subject -> currentImg() && m_subject -> currentImg() -> activeDevice()) {
         KisPaintDeviceImplSP device = m_subject -> currentImg() -> activeDevice();
@@ -93,7 +94,6 @@ void KisToolCrop::activate()
         m_startPos = extent.topLeft();
         m_endPos = extent.bottomRight();
         validateSelection();
-        //paintOutlineWithHandles();
         crop();
     }
 }
@@ -406,9 +406,6 @@ void KisToolCrop::crop() {
 
     KisImageSP img = m_subject -> currentImg();
 
-    if (img -> undoAdapter())
-        img -> undoAdapter() -> beginMacro(i18n("Crop"));
-
     if (!img)
         return;
 
@@ -430,23 +427,20 @@ void KisToolCrop::crop() {
     // We don't want the border of the 'rectangle' to be included in our selection
     rc.setSize(rc.size() - QSize(1,1));
 
+    // The visitor adds the undo steps to the macro
+
+    if (img -> undoAdapter())
+        img -> undoAdapter() -> beginMacro(i18n("Crop"));
 
     if (m_optWidget -> cmbType -> currentItem() == 0) {
-        KisLayerSP layer = img -> activeLayer();
-        cropLayer(layer, rc);
-        KNamedCommand * cmd = layer -> moveCommand(layer -> getX() - rc.x(), layer -> getY() - rc.y());
-        if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
+        KisCropVisitor v(rc);
+        KisLayerSP layer = img->activeLayer();
+        layer->accept(v);
         img -> notify();
     }
     else {
-        vKisLayerSP layers = img -> layers();
-        vKisLayerSP_it it;
-        for ( it = layers.begin(); it != layers.end(); ++it ) {
-            KisLayerSP layer = (*it);
-            cropLayer(layer, rc);
-            KNamedCommand * cmd = layer -> moveCommand(layer -> getX() - rc.x(), layer -> getY() - rc.y());
-            if (m_subject -> undoAdapter()) m_subject -> undoAdapter() -> addCommand(cmd);
-        }
+        KisCropVisitor v(rc);
+        img->rootLayer()->accept(v);
         img -> resize(rc);
         img -> notify(QRect(0, 0, rc.width(), rc.height()));
     }
@@ -589,17 +583,6 @@ void KisToolCrop::setOptionWidgetEndY(Q_INT32 y)
     m_optWidget -> intEndY -> blockSignals(false);
 }
 
-void KisToolCrop::cropLayer(KisLayerSP layer, QRect rc)
-{
-    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), layer.data());
-    Q_CHECK_PTR(t);
-
-    layer -> crop(rc);
-
-    m_subject -> undoAdapter() -> addCommand(t);
-
-}
-
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new WdgToolCrop(parent);
@@ -641,26 +624,31 @@ void KisToolCrop::setup(KActionCollection *collection)
     }
 }
 
+QRect toQRect(double x, double y, int w, int h)
+{
+    return QRect(int(x), int(y), w, h);
+}
+
 QRegion KisToolCrop::handles(QRect rect)
 {
     QRegion handlesRegion;
 
     //add handle at the lower right corner
-    handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0, QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( QABS( rect.width() ) - m_handleSize / 2.0, QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the upper right corner
-    handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( QABS( rect.width() ) - m_handleSize / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add rectangle at the lower left corner
-    handlesRegion += QRect( 0 - m_handleSize / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( 0 - m_handleSize / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add rectangle at the upper left corner
-    handlesRegion += QRect( 0 - m_handleSize / 2.0, 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( 0 - m_handleSize / 2.0, 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the lower edge of the rectangle
-    handlesRegion += QRect( ( QABS( rect.width() ) - m_handleSize ) / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( ( QABS( rect.width() ) - m_handleSize ) / 2.0 , QABS( rect.height() ) - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the right edge of the rectangle
-    handlesRegion += QRect( QABS( rect.width() ) - m_handleSize / 2.0 , ( QABS( rect.height() ) - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( QABS( rect.width() ) - m_handleSize / 2.0 , ( QABS( rect.height() ) - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
     //add handle at the upper edge of the rectangle
-    handlesRegion += QRect( ( QABS( rect.width() ) - m_handleSize ) / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( ( QABS( rect.width() ) - m_handleSize ) / 2.0 , 0 - m_handleSize / 2.0, m_handleSize, m_handleSize );
     //add handle at the left edge of the rectangle
-    handlesRegion += QRect( 0 - m_handleSize / 2.0, ( QABS( rect.height() ) - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
+    handlesRegion += toQRect( 0 - m_handleSize / 2.0, ( QABS( rect.height() ) - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
 
     //move the handles to the correct position
     if( rect.width() >= 0 && rect.height() >= 0)
@@ -714,7 +702,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         endy=start.y();
     }
 
-    if ( QRect ( startx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    if ( toQRect ( startx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -723,7 +711,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return UpperLeft;
     }
-    else if ( QRect ( startx - m_handleSize / 2.0, endy -  m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( startx - m_handleSize / 2.0, endy -  m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -732,7 +720,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return LowerLeft;
     }
-    else if ( QRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -741,7 +729,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return UpperRight;
     }
-    else if ( QRect ( endx - m_handleSize / 2.0, endy - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( endx - m_handleSize / 2.0, endy - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -750,7 +738,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return LowerRight;
     }
-    else if ( QRect ( startx + ( endx - startx - m_handleSize ) / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( startx + ( endx - startx - m_handleSize ) / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -758,7 +746,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return Upper;
     }
-    else if ( QRect ( startx + ( endx - startx - m_handleSize ) / 2.0, endy - m_handleSize / 2, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( startx + ( endx - startx - m_handleSize ) / 2.0, endy - m_handleSize / 2, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -766,7 +754,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return Lower;
     }
-    else if ( QRect ( startx - m_handleSize / 2.0, starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( startx - m_handleSize / 2.0, starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -774,7 +762,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return Left;
     }
-    else if ( QRect ( endx - m_handleSize / 2.0 , starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
+    else if ( toQRect ( endx - m_handleSize / 2.0 , starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
         if( !m_selecting )
         {
@@ -782,7 +770,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         }
         return Right;
     }
-    else if ( QRect ( startx , starty, endx - startx , endy - starty ).contains( currentViewPoint ) )
+    else if ( toQRect ( startx , starty, endx - startx , endy - starty ).contains( currentViewPoint ) )
     {
         return Inside;
     }

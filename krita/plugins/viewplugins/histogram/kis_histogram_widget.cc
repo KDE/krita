@@ -28,13 +28,15 @@
 #include <kdebug.h>
 
 #include "kis_channelinfo.h"
+#include "kis_histogram_view.h"
 #include "kis_histogram_widget.h"
 #include "kis_histogram.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 #include "kis_colorspace.h"
-#include "kis_histogram_view.h"
+
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
     : super(parent, name)
@@ -47,12 +49,12 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setLayer(KisLayerSP layer) 
+void KisHistogramWidget::setPaintDevice(KisPaintDeviceImplSP dev) 
 {
     grpType -> disconnect(this);
     cmbChannel -> disconnect(this);
 
-    m_histogramView -> setLayer(layer);
+    m_histogramView -> setPaintDevice(dev);
     setActiveChannel(0); // So we have the colored one if there are colors
 
     // The channels

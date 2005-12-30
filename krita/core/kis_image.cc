@@ -54,7 +54,7 @@
 #include "kis_background.h"
 #include "kis_nameserver.h"
 #include "kis_undo_adapter.h"
-#include "kis_merge.h"
+#include "kis_merge_visitor.h"
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
 #include "kis_profile.h"
@@ -667,17 +667,10 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
     notify();
 }
 
-// XXX: Find a better
-class ScaleThread : QThread
-{
-};
 
-void KisImage::scale(double , double , KisProgressDisplayInterface *, KisFilterStrategy *)
+void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
 {
-/*LAYERREMOVE
-void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy)
-{
-    if (m_layers.empty()) return; // Nothing to scale
+    if (nlayers() == 0) return; // Nothing to scale
 
     // New image size. XXX: Pass along to discourage rounding errors?
     Q_INT32 w, h;
@@ -690,24 +683,8 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
             m_adapter->beginMacro("Scale image");
         }
 
-        QPtrList<QThread *> scalethreads;
-
-        vKisLayerSP_it it;
-        for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-            KisLayerSP layer = (*it);
-            KisTransaction *cmd = 0;
-
-            if (m_adapter && m_adapter -> undo()) {
-                cmd = new KisTransaction("", layer.data());
-                Q_CHECK_PTR(cmd);
-            }
-
-            layer -> scale(sx, sy, m_progress, filterStrategy);
-
-            if (m_adapter && undoAdapter() -> undo()) {
-                m_adapter->addCommand(cmd);
-            }
-        }
+        KisScaleVisitor visitor (this, sx, sy, progress, filterStrategy);
+        m_rootLayer->accept(visitor);
 
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
@@ -716,17 +693,15 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *m_progre
         m_width = w;
         m_height = h;
 
-        m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
-        Q_CHECK_PTR(m_projection);
-
+        m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
+        
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
         notify();
-        emit sigSizeChanged(KisImageSP(this), w, h);
+        emit sigSizeChanged(w, h);
 
     }
-*/
 }
 
 void KisImage::rotate(double , KisProgressDisplayInterface *)
@@ -1213,7 +1188,7 @@ void KisImage::mergeLinkedLayers()
 */
 }
 
-void KisImage::mergeLayer(KisLayerSP l)
+void KisImage::mergeLayer(KisLayerSP /*l*/)
 {
 /*
     vKisLayerSP beforeLayers = m_layers;

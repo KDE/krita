@@ -222,7 +222,7 @@ public:
                                  Q_UINT32 numPixels,
                                  Q_INT32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
-//============================== Manipulation fucntions ==========================//
+//============================== Manipulation functions ==========================//
 
 
 //
@@ -321,12 +321,12 @@ public:
      *
      * (See the bumpmap filter)
      */
-   // virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const = 0;
+    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const = 0;
 
     /**
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
     */
-    //virtual Q_UINT8 intensity8(const Q_UINT8 * src) const = 0;
+    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const = 0;
     
     /**
      * Create a mathematical toolbox compatible with this colorspace

@@ -57,17 +57,17 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", "&Sobel...")
 
 void KisSobelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-        Q_INT32 x = rect.x(), y = rect.y();
-        Q_INT32 width = rect.width();
-        Q_INT32 height = rect.height();
+    Q_INT32 x = rect.x(), y = rect.y();
+    Q_INT32 width = rect.width();
+    Q_INT32 height = rect.height();
         
-        //read the filter configuration values from the KisFilterConfiguration object
-        bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
-        bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
+    //read the filter configuration values from the KisFilterConfiguration object
+    bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
+    bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
     bool keepSign = ((KisSobelFilterConfiguration*)configuration)->keepSign();
     bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
 
-        //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
+    //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
     sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
@@ -79,10 +79,10 @@ void KisSobelFilter::prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT
     src -> readBytes( data, x, y, w, 1 );
 
     for (Q_UINT32 b = 0; b < pixelSize; b++)
-    {
-        data[-(int)pixelSize + b] = data[b];
-        data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
-    }    
+        {
+            data[-(int)pixelSize + b] = data[b];
+            data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
+        }    
 }
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
@@ -96,10 +96,9 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
     Q_UINT32 width = rect.width();
     Q_UINT32 height = rect.height();
     Q_UINT32 pixelSize = src -> pixelSize();
-    bool hasAlpha = src -> hasAlpha();
 
     setProgressTotalSteps( height );
-        setProgressStage(i18n("Applying sobel filter..."),0);
+    setProgressStage(i18n("Applying sobel filter..."),0);
 
     /*  allocate row buffers  */
     Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
@@ -124,60 +123,52 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
     Q_INT32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution 
     for (Q_UINT32 row = 0; row < height; row++)
-    {
-        
-        // prepare the next row 
-        prepareRow (src, nr, x, row + 1, width, height);
-        d = dest;
-        
-        for (Q_UINT32 col = 0; col < width * pixelSize; col++)
         {
-            horGradient = (doHorizontal ?
-                    ((pr[col - pixelSize] +  2 * pr[col] + pr[col + pixelSize]) -
-                    (nr[col - pixelSize] + 2 * nr[col] + nr[col + pixelSize]))
-                    : 0);
-            
-            verGradient = (doVertical ?
-                    ((pr[col - pixelSize] + 2 * cr[col - pixelSize] + nr[col - pixelSize]) -
-                    (pr[col + pixelSize] + 2 * cr[col + pixelSize] + nr[col + pixelSize]))
-                    : 0);
-            gradient = (doVertical && doHorizontal) ?
-            (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 
-            : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
-            : (ROUND (QABS (horGradient + verGradient) / 4.0)));
-            
-            if (hasAlpha && (((col + 1) % pixelSize) == 0))
-            { // the alpha channel
-                *d++ = (counter == 0) ? 0 : 255;
-                counter = 0;
-            }
-            else
-            {
-                *d++ = gradient;
-                if (gradient > 10) counter ++;
-            }
-            }
         
-        //  shuffle the row pointers 
-        tmp = pr;
-        pr = cr;
-        cr = nr;
-        nr = tmp;
-            
-        //store the dest 
-        dst -> writeBytes(dest, x, row, width, 1);
+            // prepare the next row 
+            prepareRow (src, nr, x, row + 1, width, height);
+            d = dest;
         
-        if ( makeOpaque )
-        {
-            KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
-            while( ! dstIt.isDone() )
+            for (Q_UINT32 col = 0; col < width * pixelSize; col++)
+                {
+                    horGradient = (doHorizontal ?
+                                   ((pr[col - pixelSize] +  2 * pr[col] + pr[col + pixelSize]) -
+                                    (nr[col - pixelSize] + 2 * nr[col] + nr[col + pixelSize]))
+                                   : 0);
+            
+                    verGradient = (doVertical ?
+                                   ((pr[col - pixelSize] + 2 * cr[col - pixelSize] + nr[col - pixelSize]) -
+                                    (pr[col + pixelSize] + 2 * cr[col + pixelSize] + nr[col + pixelSize]))
+                                   : 0);
+                    gradient = (doVertical && doHorizontal) ?
+                        (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 
+                        : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
+                           : (ROUND (QABS (horGradient + verGradient) / 4.0)));
+            
+                    *d++ = gradient;
+                    if (gradient > 10) counter ++;
+                }
+        
+            //  shuffle the row pointers 
+            tmp = pr;
+            pr = cr;
+            cr = nr;
+            nr = tmp;
+            
+            //store the dest 
+            dst -> writeBytes(dest, x, row, width, 1);
+        
+            if ( makeOpaque )
+                {
+                    KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
+                    while( ! dstIt.isDone() )
                         {
-                dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
-                ++dstIt;
-            }
+                            dstIt.rawData()[pixelSize-1]=255; //XXXX: is the alpha channel always 8 bit? Otherwise this is wrong!
+                            ++dstIt;
+                        }
+                }
+            setProgress(row);        
         }
-        setProgress(row);        
-    }
     setProgressDone();
 
     delete[] prevRow;
@@ -201,9 +192,9 @@ KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget, KisPaint
 {
     KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
     if( widget == 0 )
-    {
-        return new KisSobelFilterConfiguration( true, true, true, true);
-    } else {
+        {
+            return new KisSobelFilterConfiguration( true, true, true, true);
+        } else {
         return new KisSobelFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ), widget->valueAt( 2 ), widget->valueAt( 3 ) );
     }
 }

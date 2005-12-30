@@ -49,9 +49,6 @@ class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
 class KNamedCommand;
-class KisRotateVisitor;
-class KisScaleVisitor;
-class KisFilterStrategy;
 
 
 /**
@@ -66,9 +63,10 @@ class KRITACORE_EXPORT KisPaintDeviceImpl
         Q_OBJECT
 
 public:
-    KisPaintDeviceImpl(KisColorSpace * colorSpace);
 
-    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace);
+    KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * name = 0);
+
+    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace, const char * name = 0);
 
     KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
     virtual ~KisPaintDeviceImpl();
@@ -288,14 +286,10 @@ public:
     virtual Q_INT32 nChannels() const;
 
     KisImage *image();
-        const KisImage *image() const;
-        void setImage(KisImage *image);
+    const KisImage *image() const;
+    void setImage(KisImage *image);
 
     KisUndoAdapter *undoAdapter() const;
-
-    void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
-        void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *m_progress);
-        void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
     /**
      * Mirror the device along the X axis
@@ -385,9 +379,6 @@ private:
     // Cached for quick access
     Q_INT32 m_pixelSize;
     Q_INT32 m_nChannels;
-
-    void accept(KisScaleVisitor &);
-    void accept(KisRotateVisitor &);
 
     // Whether the selection is active
     bool m_hasSelection;

@@ -213,7 +213,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
     }
 }
 
-KisColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KisColorSpace *imageColorSpace)
+KisColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KisColorSpace */*imageColorSpace*/)
 {
     return KisMetaRegistry::instance() -> csRegistry() -> getColorSpace(KisID("RGBA", ""), "");
 }
@@ -277,9 +277,9 @@ int KisOpenGLImageContext::imageTextureTileIndex(int x, int y) const
 
 GLuint KisOpenGLImageContext::imageTextureTile(int pixelX, int pixelY) const
 {
-    int textureTileIndex = imageTextureTileIndex(pixelX, pixelY);
+    Q_INT32 textureTileIndex = imageTextureTileIndex(pixelX, pixelY);
 
-    textureTileIndex = CLAMP(textureTileIndex, 0, m_imageTextureTiles.count() - 1);
+    textureTileIndex = CLAMP(textureTileIndex, 0, ((Q_INT32)m_imageTextureTiles.count()) - 1);
 
     return m_imageTextureTiles[textureTileIndex];
 }

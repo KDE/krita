@@ -1,2 +1,3 @@
 SUBDIRS = \
-    defaultpaintops
+    defaultpaintops \
+    smearybrush

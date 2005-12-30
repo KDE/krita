@@ -153,7 +153,7 @@ bool KisPalette::save()
     // In any case, we don't use Columns...
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
 
-    for (int i = 0; i < m_colors.size(); i++) {
+    for (uint i = 0; i < m_colors.size(); i++) {
         const KisPaletteEntry& entry = m_colors.at(i);
         QColor c = entry.color;
         stream << c.red() << " " << c.green() << " " << c.blue() << "\t";

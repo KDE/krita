@@ -97,7 +97,7 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 
     KisConfig cfg;
     m_font  = KGlobalSettings::generalFont();
-    m_font.setPointSize(cfg.dockerFontSize());
+    m_font.setPointSize((int)cfg.dockerFontSize());
 
     m_brushWidget = new KisIconWidget(view, "brushes");
     m_brushWidget->setTextLabel( i18n("Brush Shapes") );

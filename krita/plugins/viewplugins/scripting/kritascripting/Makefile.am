@@ -1,8 +1,8 @@
 kritarcdir = $(kde_datadir)/kritaplugins
 kritarc_DATA = scripting.rc
+EXTRA_DIST = $(kritarc_DATA)
 
 kde_services_DATA = kritascripting.desktop
-
 
 INCLUDES  =  -I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/core \

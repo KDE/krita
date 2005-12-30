@@ -43,6 +43,7 @@ class KisToolCrop : public KisToolNonPaint {
     Q_OBJECT
 
 public:
+
     KisToolCrop();
     virtual ~KisToolCrop();
 
@@ -62,10 +63,12 @@ public:
     virtual void doubleClick(KisDoubleClickEvent *);
 
 public slots:
+
     virtual void activate();
+
 private:
+
     void clearRect();
-    void cropLayer(KisLayerSP layer, QRect rc);
     QRegion handles(QRect rect);
     void paintOutlineWithHandles();
     void paintOutlineWithHandles(KisCanvasPainter& gc, const QRect& rc);
@@ -86,6 +89,7 @@ private slots:
     void setEndY(int y);
 
 private:
+
     KisCanvasSubject *m_subject;
     QPoint m_startPos;
     QPoint m_endPos;

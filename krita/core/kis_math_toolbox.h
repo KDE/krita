@@ -105,7 +105,7 @@ inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceImp
 
 inline uint KisMathToolbox::fastWaveletTotalSteps(const QRect& rect)
 {
-    uint size, steps;
+    int size, steps;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
     steps = 0;
     for(size = 2; size < maxrectsize; size *= 2) steps += size / 2; ;

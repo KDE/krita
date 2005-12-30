@@ -360,7 +360,6 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
         Q_INT32 pixelSize = src -> pixelSize();
         Q_UINT8 *srcPixel = new Q_UINT8[ pixelSize ];
         Q_UINT8 *dstPixel = 0;
-        bool hasAlpha = src -> hasAlpha();
         while (count < numTiles)
         {
                 i = randomIndices[count] / (cols + 1);
@@ -384,7 +383,7 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
                 //read the pixel at ix, iy
                 src -> readBytes(srcPixel, ix, iy, 1, 1);
 
-                if (!hasAlpha || srcPixel[pixelSize - 1])
+                if (srcPixel[pixelSize - 1])
                 {
                         fillPolyColor (src, dst, poly, srcPixel, dstPixel);
                 }

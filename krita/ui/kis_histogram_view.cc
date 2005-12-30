@@ -36,7 +36,7 @@
 #include "kis_colorspace.h"
 #include "kis_histogram_view.h"
 #include "kis_basic_histogram_producers.h"
-
+#include "kis_paint_device_impl.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, WFlags f)
     : QLabel(parent, name, f)
@@ -51,9 +51,9 @@ KisHistogramView::~KisHistogramView()
 {
 }
 
-void KisHistogramView::setLayer(KisLayerSP layer)
+void KisHistogramView::setPaintDevice(KisPaintDeviceImplSP dev)
 {
-    m_cs = layer -> colorSpace();
+    m_cs = dev->colorSpace();
 
     setChannels(); // Sets m_currentProducer to the first in the list
 
@@ -66,7 +66,7 @@ void KisHistogramView::setLayer(KisLayerSP layer)
     m_from = m_currentProducer -> viewFrom();
     m_width = m_currentProducer -> viewWidth();
 
-    m_histogram = new KisHistogram(layer, m_currentProducer, LINEAR);
+    m_histogram = new KisHistogram(dev, m_currentProducer, LINEAR);
 
     updateHistogram();
 }

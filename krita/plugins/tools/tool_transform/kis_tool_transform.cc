@@ -141,15 +141,15 @@ void KisToolTransform::activate()
             
         Q_INT32 x,y,w,h;
         KisImageSP img = m_subject -> currentImg();
-        KisLayerSP layer = img -> activeLayer();
-        if(layer->hasSelection())
+        KisPaintDeviceImplSP dev = img -> activeDevice();
+        if(dev->hasSelection())
         {
-            KisSelectionSP sel = layer->selection();
+            KisSelectionSP sel = dev->selection();
             QRect r = sel->selectedExactRect();
             r.rect(&x, &y, &w, &h);
         }
         else
-            layer->exactBounds(x,y,w,h);
+            dev->exactBounds(x,y,w,h);
         
         m_startPos = QPoint(x, y);
         m_endPos = QPoint(x+w-1, y+h-1);
@@ -650,12 +650,12 @@ printf("%f %f\n",tx,ty);
         m_transaction->unexecute();
         delete m_transaction;
     }    
-    m_transaction = new TransformCmd(img->activeLayer().data());
+    m_transaction = new TransformCmd(img->activeDevice().data());
     Q_CHECK_PTR(m_transaction);
     
     KisTransformVisitor t(m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
-    KisPainter gc(img->activeLayer());
-    t.visit(gc, img->activeLayer());
+    KisPainter gc(img->activeDevice());
+    t.visit(gc, img->activeDevice());
     
     if(t.isCanceled())
     {
@@ -665,7 +665,7 @@ printf("%f %f\n",tx,ty);
         activate();
         return;
     }
-    QRect rc = img->activeLayer()->extent();
+    QRect rc = img->activeDevice()->extent();
     rc = rc.normalize();
     
     img -> notify(rc);

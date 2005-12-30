@@ -69,7 +69,8 @@ noinst_HEADERS = \
     kis_datamanager.h \
     kis_filter_strategy.h \
     kis_iteratorpixeltrait.h \
-    kis_merge.h
+    kis_merge_visitor.h \
+    kis_thread.h
 
 #include_HEADERS = \
 #    kis_alpha_mask.h \

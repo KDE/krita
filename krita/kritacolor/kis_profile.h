@@ -62,6 +62,8 @@ public:
 
     bool valid() const { return m_valid; };
 
+    QString filename() const { return m_filename; }
+
 public:
 
     static KisProfile *  getScreenProfile(int screen = -1);

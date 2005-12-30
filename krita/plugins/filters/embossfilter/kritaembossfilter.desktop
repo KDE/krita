@@ -1,23 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
-Name[bg]=Релефен филтър
-Name[cy]=Hidlen Foglynnu
-Name[da]=Relieffilter
-Name[de]=Relief-Filter
-Name[eo]=Gravuraĵa filtrilo
-Name[es]=Filtro de realce
-Name[et]=Kohrutusfilter
-Name[fr]=Filtre gravure
-Name[it]=Filtro in rilievo
-Name[ja]=エンボスフィルター
-Name[pt]=Filtro de gravação
-Name[pt_BR]=Filtro de gravação
-Name[sr]=Рељефни филтер
-Name[sr@Latn]=Reljefni filter
-Name[sv]=Relieffilter
-Name[tr]=Kabartma Süzgeci
-Name[xx]=xxEmboss filterxx
 Comment=Emboss filter
 Comment[bg]=Релефен филтър
 Comment[cy]=Hidlen foglynnu

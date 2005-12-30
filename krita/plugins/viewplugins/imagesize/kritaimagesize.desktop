@@ -1,17 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Image Resize and Scale Plugin
-Name[da]=Plugin for størrelsesændring og skalering
-Name[de]=Bildgrößenänderungs- und Skalierungsplugin
-Name[es]=Extensiones para redimensionar y para escalar la imagen
-Name[it]=Plugin di ridimensionamento e riscalamento delle immagini
-Name[ja]=画像のサイズ変更とスケールのためのプラグイン
-Name[pt]='Plugin' de dimensionamento e escala da imagem
-Name[pt_BR]='Plugin' de dimensionamento e escala da imagem
-Name[sr]=Прикључак за промену величине и скалирање слика
-Name[sr@Latn]=Priključak za promenu veličine i skaliranje slika
-Name[sv]=Insticksprogram för storleksändring och skalning
-Name[xx]=xxImage resize and scale pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize

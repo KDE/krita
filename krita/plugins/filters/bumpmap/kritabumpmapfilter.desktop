@@ -1,24 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap Filter
-Name[bg]=Филтър Bumpmap
-Name[cy]=Hidlen chwyddfap
-Name[da]=Bumpkortfilter
-Name[de]=Bumpmap-Filter
-Name[eo]=Bumpmap-filtrilo
-Name[es]=Filtro de mapa de colisiones
-Name[et]=Kühmukaardi filter
-Name[fr]=Filtre bumpmap
-Name[ga]=Scagaire Bumpmap
-Name[it]=Filtro bumpmap
-Name[ja]=Bumpmapフィルター
-Name[pt]=Filtro de 'bumpmaps'
-Name[pt_BR]=Filtro de 'bumpmaps'
-Name[sr]=Филтер мапе рељефа
-Name[sr@Latn]=Filter mape reljefa
-Name[sv]=Bulkartefilter
-Name[tr]=Kabarcık haritası süzgeci
-Name[xx]=xxBumpmap filterxx
 Comment=Bumpmap filter
 Comment[bg]=Филтър Bumpmap
 Comment[cy]=Hidlen chwyddfap

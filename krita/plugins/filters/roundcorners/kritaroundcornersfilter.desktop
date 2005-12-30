@@ -1,24 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sobel Filter
-Name[bg]=Филтър Sobel
-Name[cy]=Hidlen Sobel
-Name[da]=Sobelfilter
-Name[de]=Sobel-Filter
-Name[eo]=Sobel-filtrilo
-Name[es]=Filtro Sobel
-Name[et]=Sobeli filter
-Name[fr]=Filtre de Sobel
-Name[ga]=Scagaire Sobel
-Name[it]=Filtro Sobel
-Name[ja]=ソーベルフィルタ
-Name[pt]=Filtro Sobel
-Name[pt_BR]=Filtro Sobel
-Name[sr]=Собелов филтер
-Name[sr@Latn]=Sobelov filter
-Name[sv]=Sobelfilter
-Name[tr]=Sobel süzgeci
-Name[xx]=xxSobel filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaroundcornersfilter

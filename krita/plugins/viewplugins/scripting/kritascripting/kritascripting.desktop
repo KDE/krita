@@ -1,18 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting Plugin
-Name[da]=Scriptplugin
-Name[de]=Skripting-Plugin
-Name[es]=Extensión para guiones
-Name[ga]=Breiseán scriptithe
-Name[it]=Plugin di scripting
-Name[ja]=スクリプトプラグイン
-Name[pt]='Plugin' de 'Scripts'
-Name[pt_BR]='Plugin' de 'Scripts'
-Name[sr]=Прикључак за скриптовање
-Name[sr@Latn]=Priključak za skriptovanje
-Name[sv]=Skriptinsticksprogram
-Name[xx]=xxScripting pluginxx
 Comment=Allow execution of scripts
 Comment[da]=Tillad kørsel af script
 Comment[de]=Ermöglicht das Ausführen von Skripten

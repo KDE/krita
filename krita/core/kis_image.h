@@ -152,7 +152,7 @@ public:
      */
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
-    /// Adds a new layer with the specified properties and returns it.
+    /// Creates a new layer with the specified properties, adds it to the image, and returns it.
     KisLayerSP newLayer(const QString& name, Q_UINT8 opacity,
                         const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
@@ -171,7 +171,7 @@ public:
     /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Add layer
+    /// Add already existing layer to image
     bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer

@@ -80,6 +80,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
                     this, SLOT(slotLayersChanged()));
             connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                     this, SLOT(slotLayersChanged()));
+            m_img = img;
         }
     }
 }
@@ -89,8 +90,7 @@ Histogram::~Histogram()
 }
 
 void Histogram::slotLayersChanged() {
-    KisImageSP img = dynamic_cast<KisImage*>(const_cast<QObject*>(sender())); //bah
-    m_action -> setEnabled(img && img -> activeLayer() && img -> activeLayer() -> visible());
+    m_action -> setEnabled(m_img && m_img -> activeLayer() && m_img -> activeLayer() -> visible());
 }
 
 void Histogram::slotActivated()

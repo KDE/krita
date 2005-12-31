@@ -25,6 +25,7 @@
 
 class KisView;
 class KAction;
+class KisImage;
 
 class Histogram : public KParts::Plugin
 {
@@ -38,6 +39,7 @@ class Histogram : public KParts::Plugin
         void slotLayersChanged();
 
     private:
+        KisImage* m_img;
         KisView * m_view;
         KisPainter * m_painter;
         KAction* m_action;

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting Plugin
+Name[da]=Scriptplugin
+Name[ga]=Breiseán Scriptithe
 Comment=Allow execution of scripts
 Comment[da]=Tillad kørsel af script
 Comment[de]=Ermöglicht das Ausführen von Skripten

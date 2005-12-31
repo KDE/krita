@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sobel Filter
+Name[da]=Sobelfilter
+Name[ga]=Scagaire Sobel
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter

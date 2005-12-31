@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorspace Conversion
+Name[da]=Farverumskonvertering
+Name[en_GB]=Colourspace Conversion
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion

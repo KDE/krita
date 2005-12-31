@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize Filter
+Name[da]=Billedpunktfilter
+Name[en_GB]=Pixelise Filter
+Name[ga]=Scagaire Picteilínithe
 Comment=Pixelize filter
 Comment[bg]=Филтър Pixelize
 Comment[cy]=Hidlen bicseleiddio

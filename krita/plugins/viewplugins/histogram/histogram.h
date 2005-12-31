@@ -35,7 +35,7 @@ class Histogram : public KParts::Plugin
     
     private slots:
         void slotActivated();
-        void slotLayersChanged(KisImageSP img);
+        void slotLayersChanged();
 
     private:
         KisView * m_view;

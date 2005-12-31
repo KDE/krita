@@ -71,13 +71,15 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
         m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 
         m_view = (KisView*) parent;
-        if (m_view -> getCanvasSubject() -> currentImg()) {
-            connect(m_view -> getCanvasSubject() -> currentImg(),
-                    SIGNAL(sigLayersChanged(KisImageSP)),
-                    this, SLOT(slotLayersChanged(KisImageSP)));
-            connect(m_view -> getCanvasSubject() -> currentImg(),
-                    SIGNAL(sigLayersUpdated(KisImageSP)),
-                    this, SLOT(slotLayersChanged(KisImageSP)));
+        if (KisImageSP img = m_view -> getCanvasSubject() -> currentImg()) {
+            connect(img, SIGNAL(sigLayersChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+                    this, SLOT(slotLayersChanged()));
+            connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+                    this, SLOT(slotLayersChanged()));
         }
     }
 }
@@ -86,7 +88,8 @@ Histogram::~Histogram()
 {
 }
 
-void Histogram::slotLayersChanged(KisImageSP img) {
+void Histogram::slotLayersChanged() {
+    KisImageSP img = dynamic_cast<KisImage*>(const_cast<QObject*>(sender())); //bah
     m_action -> setEnabled(img && img -> activeLayer() && img -> activeLayer() -> visible());
 }
 

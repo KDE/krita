@@ -273,7 +273,7 @@ signals:
     */
     void sigLayerMoved(KisLayerSP layer, KisGroupLayerSP previousParent, KisLayerSP wasAboveThis);
 
-    /// Emitted after a layer's properties (opacity, composite op, name) change
+    /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
     /// Emitted when the layers have changed completely

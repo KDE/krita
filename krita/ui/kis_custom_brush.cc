@@ -35,6 +35,7 @@
 #include "kis_custom_brush.h"
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
+#include "kis_paint_layer.h"
 
 KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView* view)
     : KisWdgCustomBrush(parent, name), m_view(view)
@@ -120,23 +121,25 @@ void KisCustomBrush::createBrush() {
 
     kdDebug() << "Creating animated!" << endl;
 
-/*LAYERREMOVE
     // For each layer in the current image, create a new image, and add it to the list
     QValueVector< QValueVector<KisPaintDeviceImpl*> > devices;
     devices.push_back(QValueVector<KisPaintDeviceImpl*>());
     int w = img -> width();
     int h = img -> height();
 
-    for (uint i = 0; i < img -> layers().count(); i++) {
-        if (!img -> layer(i) -> visible())
-            continue;
-        devices.at(0).push_back(img -> layer(i).data());
+    // We only loop over the rootLayer. Since we actually should have a layer selection
+    // list, no need to elaborate on that here and now
+    KisLayer* layer = img -> rootLayer() -> firstChild();
+    while (layer) {
+        KisPaintLayer* paint = 0;
+        if (layer -> visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
+            devices.at(0).push_back(paint -> paintDevice());
+        layer = layer -> nextSibling();
     }
     QValueVector<KisPipeBrushParasite::SelectionMode> modes;
     modes.push_back(KisPipeBrushParasite::Incremental); // FIXME
 
     m_brush = new KisImagePipeBrush(img -> name(), w, h, devices, modes);
-*/
 }
 
 

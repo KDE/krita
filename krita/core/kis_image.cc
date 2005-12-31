@@ -1001,12 +1001,15 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
 
         activate(layer);
 
-    /*LAYERREMOVE
-        QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-        csRegistry() -> paintDeviceActionsFor(cs);
-        for (uint i = 0; i < actions.count(); i++)
-        actions.at(i) -> act(layer.data(), img -> width(), img -> height());
-    */
+        KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
+        if (player != 0) {
+
+            QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+                csRegistry() -> paintDeviceActionsFor(cs);
+            for (uint i = 0; i < actions.count(); i++) {
+                actions.at(i) -> act(player.data(), img -> width(), img -> height());
+            }
+        }
 
         emit sigLayerAdded(layer);
     }
@@ -1116,7 +1119,7 @@ void KisImage::flatten()
     oldRootLayer ->accept(visitor);
 
     addLayer(dst, m_rootLayer, 0);
-    activate(dst); // LAYERREMOVE <- maybe addLayer should be the one to call activate but I don't understand the difference between addLayer and layerAdd </Cyrille>
+    activate(dst);
 
     notify();
     notifyLayersChanged();

@@ -197,7 +197,10 @@ public:
     KCommand *topLayerCommand(KisLayerSP layer);
     KCommand *bottomLayerCommand(KisLayerSP layer);
 
-    // Merge all visible layers and discard hidden ones.
+    /**
+     * Merge all visible layers and discard hidden ones.
+     * The resulting layer will be activated.
+     */
     void flatten();
 
     void mergeVisibleLayers();

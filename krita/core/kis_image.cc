@@ -44,6 +44,7 @@
 //#include "kis_guide.h"
 #include "kis_image.h"
 #include "kis_paint_device_impl.h"
+#include "kis_paint_device_action.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
@@ -1005,9 +1006,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
         if (player != 0) {
 
             QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-                csRegistry() -> paintDeviceActionsFor(cs);
+                csRegistry() -> paintDeviceActionsFor(player -> paintDevice() -> colorSpace());
             for (uint i = 0; i < actions.count(); i++) {
-                actions.at(i) -> act(player.data(), img -> width(), img -> height());
+                actions.at(i) -> act(player.data() -> paintDevice(), width(), height());
             }
         }
 

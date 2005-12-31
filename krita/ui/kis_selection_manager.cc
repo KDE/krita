@@ -443,7 +443,7 @@ KisLayerSP KisSelectionManager::paste()
         gc.begin(layer->paintDevice());
         gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
         gc.end();
-        img->addLayer(layer, img->rootLayer(), img -> index(layer));
+        img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
 
        //figure out where to position the clip
         KisCanvasController *cc = m_parent->getCanvasController();
@@ -493,7 +493,7 @@ void KisSelectionManager::pasteNew()
     KisPainter p(layer->paintDevice());
     p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p.end();
-    img->addLayer(layer, img->rootLayer, 0);
+    img->addLayer(layer, img->rootLayer(), 0);
     doc->setCurrentImage( img );
     KoMainWindow *win = new KoMainWindow( doc->instance() );
     win->show();

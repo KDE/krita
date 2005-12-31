@@ -762,12 +762,11 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 
 KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
     KoDocument* doc = super::hitTest(pos, matrix);
-/*LAYERREMOVE
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
         // is the currently active parts layer.
-        KisPartLayer* partLayer = dynamic_cast<KisPartLayer*>
-                (currentImage() -> activeLayer().data());
+        KisPartLayer* partLayer
+                = dynamic_cast<KisPartLayer*>(currentImage() -> activeLayer().data());
 
         if (!partLayer)
             return this;
@@ -779,7 +778,6 @@ KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
         kdDebug() << "Embedded part miss :-(" << endl;
         return this;
     }
-*/
     return doc;
 }
 

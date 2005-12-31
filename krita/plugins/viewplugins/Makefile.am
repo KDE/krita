@@ -13,5 +13,5 @@ SUBDIRS = \
     rotateimage \
     screenshot \
     shearimage \
-    variations $(SCRIPTINGDIR) \
+    variations \
     performancetest

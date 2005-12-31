@@ -918,8 +918,6 @@ KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCom
         layer -> setCompositeOp(compositeOp);
     layer -> setVisible(true);
 
-    kdDebug() << "active layer: " << m_activeLayer << "\n";
-    
     if (m_activeLayer != 0) {
         addLayer(layer, m_activeLayer->parent().data(), m_activeLayer->nextSibling());
     }

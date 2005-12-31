@@ -219,7 +219,7 @@ void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
     float width = static_cast<float>(m_width);
     float to = from + width;
     float factor = 255.0 / width;
-    kdDebug() << "from: " << from << "; to: " << to << endl;
+    //kdDebug() << "from: " << from << "; to: " << to << endl;
 
     Q_INT32 pSize = cs->pixelSize();
 
@@ -293,7 +293,7 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 
     float width = static_cast<float>(m_width);
     float to = from + width;
     float factor = 255.0 / width;
-    kdDebug() << "from: " << from << "; to: " << to << endl;
+    //kdDebug() << "from: " << from << "; to: " << to << endl;
 
     Q_INT32 pSize = cs->pixelSize();
     if ( selectionMask ) {

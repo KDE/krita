@@ -2478,6 +2478,8 @@ void KisView::connectCurrentImg()
                     SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         }
     }
+
+    m_layerBox -> setImage(m_current);
 }
 
 void KisView::disconnectCurrentImg()
@@ -2863,7 +2865,6 @@ void KisView::setCurrentImage(KisImageSP image)
     }
 #endif
     connectCurrentImg();
-    m_layerBox -> setImage(m_current);
     m_current -> notify();
 
     zoomAroundPoint(0, 0, 1.0);

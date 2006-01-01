@@ -159,7 +159,7 @@ void KisLayerBox::slotLayerActivated(KisLayerSP layer)
 
 void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 {
-    if (layer == m_image -> rootLayer() || list() -> layer(layer -> id()) < 0)
+    if (layer == m_image -> rootLayer() || list() -> layer(layer -> id()))
         return;
     if (layer -> parent() == m_image -> rootLayer())
     {

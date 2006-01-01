@@ -1031,7 +1031,15 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             notify();
             emit sigLayerRemoved(layer, parent, wasAbove);
-            activate(wasAbove ? wasAbove : parent != rootLayer() ? parent.data() : rootLayer() -> firstChild());
+            if (activeLayer() == layer)
+            {
+                if (wasAbove)
+                    activate(wasAbove);
+                else if (parent != rootLayer())
+                    activate(parent.data());
+                else
+                    activate(rootLayer() -> firstChild());
+            }
         }
         return success;
     }

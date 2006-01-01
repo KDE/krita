@@ -288,6 +288,8 @@ void KisLayerBox::updateUI()
     m_lst -> bnDelete -> setEnabled(list() -> activeLayer());
     m_lst -> bnRaise -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> prevSibling());
     m_lst -> bnLower -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> nextSibling());
+    m_lst -> intOpacity -> setEnabled(list() -> activeLayer());
+    m_lst -> cmbComposite -> setEnabled(list() -> activeLayer());
     if (m_image)
         if (KisLayerSP active = m_image -> activeLayer())
         {
@@ -295,7 +297,9 @@ void KisLayerBox::updateUI()
                 slotSetColorSpace(m_image -> activeDevice() -> colorSpace());
             else
                 slotSetColorSpace(m_image -> colorSpace());
-            m_lst -> intOpacity -> setValue(active -> opacity());
+
+            //isn't accurate, and gets into a loop feeding each other slightly different values
+            //m_lst -> intOpacity -> setValue(active -> opacity() * 100 / 255);
             m_lst -> cmbComposite -> setCurrentItem(active -> compositeOp());
         }
 }

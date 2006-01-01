@@ -90,7 +90,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setLocked(m_newLocked);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -98,7 +97,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setLocked(m_oldLocked);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -164,7 +162,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setVisible(m_newVisibility);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -172,7 +169,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setVisible(m_oldVisibility);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -357,6 +353,8 @@ void KisLayer::setVisible(bool v)
     if (m_visible != v) {
         m_visible = v;
         emit visibilityChanged(this);
+        if (image())
+            image() -> notifyPropertyChanged(this);
     }
 }
 
@@ -372,7 +370,12 @@ bool KisLayer::locked() const
 
 void KisLayer::setLocked(bool l)
 {
-    m_locked = l;
+    if (m_locked != l)
+    {
+        m_locked = l;
+        if (image())
+            image() -> notifyPropertyChanged(this);
+    }
 }
 
 KNamedCommand *KisLayer::setLockedCommand(bool newLocked)

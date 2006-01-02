@@ -84,6 +84,7 @@ libkritaui_la_SOURCES = \
     kis_view_iface.cc \
     kis_custom_brush.cc \
     kis_custom_palette.cc \
+    kis_custom_pattern.cc \
     kis_custom_image_widget.cc\
     kis_view_iface.skel \
     kobirdeyepanel.cpp \
@@ -107,6 +108,7 @@ libkritaui_la_SOURCES = \
     wdgpressuresettings.ui \
     wdgcustombrush.ui \
     wdgcustompalette.ui \
+    wdgcustompattern.ui \
     wdgtextbrush.ui
 
 noinst_HEADERS = \
@@ -175,6 +177,7 @@ noinst_HEADERS = \
     kis_view_iface.h \
     kobirdeyepanel.h \
     kis_custom_brush.h\
+    kis_custom_pattern.h \
     kis_custom_image_widget.h
 
 METASOURCES = AUTO

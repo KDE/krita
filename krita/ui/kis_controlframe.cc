@@ -57,6 +57,7 @@
 #include "kis_config.h"
 #include "kis_paintop_box.h"
 #include "kis_custom_brush.h"
+#include "kis_custom_pattern.h"
 #ifdef HAVE_TEXT_BRUSH
 #include "kis_text_brush.h"
 #endif
@@ -283,8 +284,16 @@ void KisControlFrame::createPatternsChooser(KisView * view)
     chooser->setMinimumSize(200, 150);
     m_patternsTab->addTab(chooser, i18n("Patterns"));
 
+    KisCustomPattern* customPatterns = new KisCustomPattern(m_patternsTab, "custompatterns",
+            i18n("Custom Pattern"), m_view);
+    customPatterns -> setFont(m_font);
+    m_patternsTab -> addTab( customPatterns, i18n("Custom Pattern"));
+
+
     m_patternMediator = new KisResourceMediator( chooser, view);
     connect( m_patternMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(patternActivated(KisResource*)));
+    connect(customPatterns, SIGNAL(activatedResource(KisResource*)),
+            view, SLOT(patternActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
@@ -293,6 +302,8 @@ void KisControlFrame::createPatternsChooser(KisView * view)
     KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
     chooser->setCurrent( 0 );
     m_patternMediator->setActiveItem( chooser->currentItem() );
+
+    customPatterns -> setResourceServer(rServer);
 }
 
 

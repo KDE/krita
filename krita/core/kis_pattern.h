@@ -29,6 +29,7 @@
 
 class QPoint;
 class QImage;
+class KisPaintDeviceImpl;
 
 class KisPattern : public KisResource {
     typedef KisResource super;
@@ -36,6 +37,7 @@ class KisPattern : public KisResource {
 
 public:
     KisPattern(const QString& file);
+    KisPattern(KisPaintDeviceImpl* image, int x, int y, int w, int h);
     virtual ~KisPattern();
 
     virtual bool load();
@@ -51,6 +53,10 @@ public:
     Q_INT32 width() const;
     Q_INT32 height() const;
 
+    void setImage(const QImage& img);
+
+    KisPattern* clone() const;
+
 protected:
     void setWidth(Q_INT32 w);
     void setHeight(Q_INT32 h);
@@ -62,6 +68,7 @@ private:
     QByteArray m_data;
     QImage m_img;
     QMap<QString, KisPaintDeviceImplSP> m_colorspaces;
+    bool m_hasFile;
 
     Q_INT32 m_width;
     Q_INT32 m_height;

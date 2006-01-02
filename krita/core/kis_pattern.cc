@@ -50,10 +50,22 @@ namespace {
         Q_UINT32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
         Q_UINT32 magic_number; /*  GIMP brush magic number  */
     };
+
+    // Yes! This is _NOT_ what my pat.txt file says. It's really not 'GIMP', but 'GPAT'
+    Q_UINT32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
-KisPattern::KisPattern(const QString& file) : super(file)
+KisPattern::KisPattern(const QString& file) : super(file), m_hasFile(true)
 {
+}
+
+KisPattern::KisPattern(KisPaintDeviceImpl* image, int x, int y, int w, int h)
+    : super(""), m_hasFile(false)
+{
+    // Forcefully convert to RGBA8
+    // XXX profile and exposure?
+    setImage(image -> convertToQImage(0, x, y, w, h));
+    setName(image -> name());
 }
 
 KisPattern::~KisPattern()
@@ -62,6 +74,9 @@ KisPattern::~KisPattern()
 
 bool KisPattern::load()
 {
+    if (!m_hasFile)
+        return true;
+
     QFile file(filename());
     file.open(IO_ReadOnly);
     QByteArray data = file.readAll();
@@ -77,7 +92,62 @@ bool KisPattern::load()
 
 bool KisPattern::save()
 {
-    return false;
+    QFile file(filename());
+    file.open(IO_WriteOnly | IO_Truncate);
+
+    QTextStream stream(&file);
+    // Header: header_size (24+name length),version,width,height,colourdepth of brush,magic,name
+    // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
+    // magic = "GPAT", as a single uint32, the docs are wrong here!
+    // name is UTF-8 (\0-terminated! The docs say nothing about this!)
+    // _All_ data in network order, it seems! (not mentioned in gimp-2.2.8/devel-docs/pat.txt!!)
+    // We only save RGBA at the moment
+    // Version is 1 for now...
+
+    GimpPatternHeader ph;
+    QCString utf8Name = name().utf8();
+    char const* name = utf8Name.data();
+    int nameLength = qstrlen(name);
+
+    ph.header_size = htonl(sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
+    ph.version = htonl(1);
+    ph.width = htonl(width());
+    ph.height = htonl(height());
+    ph.bytes = htonl(4);
+    ph.magic_number = htonl(GimpPatternMagic);
+
+    QByteArray bytes;
+    bytes.setRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+    int wrote = file.writeBlock(bytes);
+    bytes.resetRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+
+    if (wrote == -1)
+        return false;
+
+    wrote = file.writeBlock(name, nameLength + 1); // Trailing 0 apparantly!
+    if (wrote == -1)
+        return false;
+
+    int k = 0;
+    bytes.resize(width() * height() * 4);
+    for (Q_INT32 y = 0; y < height(); y++) {
+        for (Q_INT32 x = 0; x < width(); x++) {
+            // RGBA only
+            QRgb pixel = m_img.pixel(x,y);
+            bytes[k++] = static_cast<char>(qRed(pixel));
+            bytes[k++] = static_cast<char>(qGreen(pixel));
+            bytes[k++] = static_cast<char>(qBlue(pixel));
+            bytes[k++] = static_cast<char>(qAlpha(pixel));
+        }
+    }
+
+    wrote = file.writeBlock(bytes);
+    if (wrote == -1)
+        return false;
+
+    file.close();
+
+    return true;
 }
 
 QImage KisPattern::img()
@@ -240,6 +310,26 @@ Q_INT32 KisPattern::height() const
 void KisPattern::setHeight(Q_INT32 h)
 {
     m_height = h;
+}
+
+void KisPattern::setImage(const QImage& img)
+{
+    m_hasFile = false;
+    m_img = img;
+    m_img.detach();
+
+    setWidth(img.width());
+    setHeight(img.height());
+
+    setValid(true);
+}
+
+KisPattern* KisPattern::clone() const
+{
+    KisPattern* pattern = new KisPattern("");
+    pattern -> setImage(m_img);
+    pattern -> setName(name());
+    return pattern;
 }
 
 #include "kis_pattern.moc"

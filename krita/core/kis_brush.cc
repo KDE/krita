@@ -74,7 +74,7 @@ namespace {
     };
 
     // Needed, or the GIMP won't open it!
-    Q_UINT32 const GimpV2Magic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
+    Q_UINT32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 }
 
 #define DEFAULT_SPACING 0.25
@@ -305,7 +305,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     bh.width = htonl(width());
     bh.height = htonl(height());
     bh.bytes = htonl(4); // Hardcoded, 4 bytes RGBA!
-    bh.magic_number = htonl(GimpV2Magic);
+    bh.magic_number = htonl(GimpV2BrushMagic);
     bh.spacing = htonl(static_cast<Q_UINT32>(spacing() * 100.0));
 
     // Write header: first bh, then the name

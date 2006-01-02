@@ -987,7 +987,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
     const bool success = parent->addLayer(layer, aboveThis);
     if (success)
     {
-        if (m_adapter->undo()) {
+        if (m_adapter && m_adapter->undo()) {
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
         }
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());

@@ -43,7 +43,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 {
-    m_paintdev = rhs.m_paintdev;
+    m_paintdev = new KisPaintDeviceImpl( *rhs.m_paintdev.data() );
 }
 
 KisLayerSP KisPaintLayer::clone() const

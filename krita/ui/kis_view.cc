@@ -1600,7 +1600,7 @@ void KisView::layerOpacity(int opacity)
     KisLayerSP layer = img -> activeLayer();
     if (!layer) return;
 
-    opacity = opacity * 255 / 100;
+    opacity = int(float(opacity * 255) / 100 + 0.5);
     if (opacity > 255)
         opacity = 255;
 

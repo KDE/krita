@@ -147,8 +147,6 @@ void KisLayerBox::setImage(KisImageSP img)
     }
     else
         clear();
-
-    updateUI();
 }
 
 void KisLayerBox::slotLayerActivated(KisLayerSP layer)
@@ -319,8 +317,7 @@ void KisLayerBox::updateUI()
             else
                 slotSetColorSpace(m_image -> colorSpace());
 
-            //isn't accurate, and gets into a loop feeding each other slightly different values
-            //m_lst -> intOpacity -> setValue(active -> opacity() * 100 / 255);
+            m_lst -> intOpacity -> setValue(int(float(active -> opacity() * 100) / 255 + 0.5));
             m_lst -> cmbComposite -> setCurrentItem(active -> compositeOp());
         }
 }

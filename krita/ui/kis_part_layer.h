@@ -88,6 +88,8 @@ public:
     virtual void setX(Q_INT32 x);
     virtual void setY(Q_INT32 y);
 
+    virtual void accept(KisLayerVisitor& visitor) { visitor.visit(this); }
+
     //virtual void paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y);
 
 private slots:

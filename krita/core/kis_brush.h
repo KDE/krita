@@ -100,6 +100,8 @@ public:
     virtual void setUseColorAsMask(bool useColorAsMask) { m_useColorAsMask = useColorAsMask; }
     virtual bool useColorAsMask() const { return m_useColorAsMask; }
     virtual bool hasColor() const;
+
+    virtual void makeMaskImage();
     Q_INT32 width() const;
     Q_INT32 height() const;
 

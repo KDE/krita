@@ -22,6 +22,7 @@
 #include <qimage.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -52,6 +53,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
     connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(style, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
+    connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 }
 
 KisCustomBrush::~KisCustomBrush() {
@@ -116,6 +118,8 @@ void KisCustomBrush::createBrush() {
 
     if (style -> currentItem() == 0) {
         m_brush = new KisBrush(img -> mergedImage(), 0, 0, img -> width(), img -> height());
+        if (colorAsMask -> isChecked())
+            m_brush -> makeMaskImage();
         return;
     }
 
@@ -140,6 +144,8 @@ void KisCustomBrush::createBrush() {
     modes.push_back(KisPipeBrushParasite::Incremental); // FIXME
 
     m_brush = new KisImagePipeBrush(img -> name(), w, h, devices, modes);
+    if (colorAsMask -> isChecked())
+        m_brush -> makeMaskImage();
 }
 
 

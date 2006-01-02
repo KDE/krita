@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>329</width>
-            <height>306</height>
+            <width>345</width>
+            <height>334</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KisWdgCustomBrush</string>
     </property>
     <vbox>
         <property name="name">
@@ -18,43 +21,12 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout4</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Source:</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="0" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Regular</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Animated</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>style</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Selection mode:</string>
-                    </property>
-                </widget>
                 <widget class="QComboBox" row="1" column="1">
                     <item>
                         <property name="text">
@@ -66,6 +38,14 @@
                     </property>
                     <property name="enabled">
                         <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Style:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="2" column="1">
@@ -86,15 +66,46 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Style:</string>
+                        <string>Source:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Selection mode:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Regular</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Animated</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>style</cstring>
                     </property>
                 </widget>
             </grid>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>colorAsMask</cstring>
+            </property>
+            <property name="text">
+                <string>Use color as mask</string>
+            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">

@@ -304,7 +304,11 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     bh.version = htonl(2); // Only RGBA8 data needed atm, no cinepaint stuff
     bh.width = htonl(width());
     bh.height = htonl(height());
-    bh.bytes = htonl(4); // Hardcoded, 4 bytes RGBA!
+    // Hardcoded, 4 bytes RGBA or 1 byte GREY
+    if (!hasColor())
+        bh.bytes = htonl(1);
+    else
+        bh.bytes = htonl(4);
     bh.magic_number = htonl(GimpV2BrushMagic);
     bh.spacing = htonl(static_cast<Q_UINT32>(spacing() * 100.0));
 
@@ -322,15 +326,26 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
         return false;
 
     int k = 0;
-    bytes.resize(width() * height() * 4);
-    for (Q_INT32 y = 0; y < height(); y++) {
-        for (Q_INT32 x = 0; x < width(); x++) {
-            // order for gimp brushes, v2 is: RGBA
-            QRgb pixel = m_img.pixel(x,y);
-            bytes[k++] = static_cast<char>(qRed(pixel));
-            bytes[k++] = static_cast<char>(qGreen(pixel));
-            bytes[k++] = static_cast<char>(qBlue(pixel));
-            bytes[k++] = static_cast<char>(qAlpha(pixel));
+
+    if (!hasColor()) {
+        bytes.resize(width() * height());
+        for (Q_INT32 y = 0; y < height(); y++) {
+            for (Q_INT32 x = 0; x < width(); x++) {
+                QRgb c = m_img.pixel(x, y);
+                bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
+            }
+        }
+    } else {
+        bytes.resize(width() * height() * 4);
+        for (Q_INT32 y = 0; y < height(); y++) {
+            for (Q_INT32 x = 0; x < width(); x++) {
+                // order for gimp brushes, v2 is: RGBA
+                QRgb pixel = m_img.pixel(x,y);
+                bytes[k++] = static_cast<char>(qRed(pixel));
+                bytes[k++] = static_cast<char>(qGreen(pixel));
+                bytes[k++] = static_cast<char>(qBlue(pixel));
+                bytes[k++] = static_cast<char>(qAlpha(pixel));
+            }
         }
     }
 
@@ -1269,6 +1284,30 @@ KisBoundary KisBrush::boundary() {
     if (!m_boundary)
         generateBoundary();
     return *m_boundary;
+}
+
+void KisBrush::makeMaskImage() {
+    if (!hasColor())
+        return;
+
+    QImage img;
+    img.create(width(), height(), 32);
+
+    for (int x = 0; x < width(); x++) {
+        for (int y = 0; y < height(); y++) {
+            QRgb c = m_img.pixel(x, y);
+            int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
+            img.setPixel(x, y, qRgba(a, a, a, 255));
+        }
+    }
+
+    m_brushType = MASK;
+    m_hasColor = false;
+    m_useColorAsMask = false;
+    m_img = img;
+    delete m_boundary;
+    m_boundary = 0;
+    m_scaledBrushes.clear();
 }
 
 #include "kis_brush.moc"

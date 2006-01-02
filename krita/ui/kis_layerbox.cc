@@ -183,8 +183,14 @@ void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP
 
 void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
 {
-    const int parentID = layer -> parent() == m_image -> rootLayer() ? -1 : layer -> parent() -> id();
-    const int siblingID = layer -> prevSibling() ? layer -> prevSibling() -> id() : -1;
+    int parentID = layer -> parent() -> id();
+    if (layer -> parent() == m_image -> rootLayer())
+        parentID = -1;
+
+    int siblingID = -1;
+    if (layer -> prevSibling())
+        siblingID = layer -> prevSibling() -> id();
+
     list() -> moveLayer(layer -> id(), parentID, siblingID);
     updateUI();
 }
@@ -235,9 +241,13 @@ void KisLayerBox::slotLayerPropertyChanged(LayerItem* item, const QString& name,
 void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem* p, LayerItem*)
 {
     KisLayerSP layer = m_image -> findLayer(item -> id());
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
-                                                             : m_image -> rootLayer().data() );
-    KisLayerSP above = item -> nextSibling() ? m_image -> findLayer(item -> nextSibling() -> id()) : 0;
+    KisLayer* l = m_image -> rootLayer().data();
+    if (p)
+        l = m_image -> findLayer(p -> id()).data();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisLayerSP above = 0;
+    if (item -> nextSibling())
+        above = m_image -> findLayer(item -> nextSibling() -> id());
     if (layer)
         m_image -> moveLayer(layer, parent.data(), above);
     updateUI();
@@ -245,28 +255,39 @@ void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem* p, LayerItem*)
 
 void KisLayerBox::slotRequestNewLayer(LayerItem* p, LayerItem* after)
 {
-    //goddamn, one of them using 'above' and the other 'after' is a pain in the ass...
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
-                                                             : m_image -> rootLayer().data() );
-    KisLayerSP above = (after && after -> nextSibling()) ? m_image -> findLayer(after -> nextSibling() -> id())
-                     :  after ? 0
-                     : (p && p -> firstChild()) ? parent -> firstChild()
-                     :  p ? 0
-                     :  m_image -> rootLayer() -> childCount() ? m_image -> rootLayer() -> firstChild()
-                     :  0;
+    KisLayer* l = m_image -> rootLayer().data();
+    if (p)
+        l = m_image -> findLayer(p -> id()).data();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+
+    KisLayerSP above = 0;
+    if (after && after -> nextSibling())
+        above = m_image -> findLayer(after -> nextSibling() -> id());
+    else if (after)
+        above = 0;
+    else if (p && p -> firstChild())
+        above = parent -> firstChild();
+    else if (!p && m_image -> rootLayer() -> childCount())
+        above = m_image -> rootLayer() -> firstChild();
     emit sigRequestLayer(parent, above);
 }
 
 void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
 {
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>( p ? m_image -> findLayer(p -> id()).data()
-                                                             : m_image -> rootLayer().data() );
-    KisLayerSP above = (after && after -> nextSibling()) ? m_image -> findLayer(after -> nextSibling() -> id())
-                     :  after ? 0
-                     : (p && p -> firstChild()) ? parent -> firstChild()
-                     :  p ? 0
-                     :  m_image -> rootLayer() -> childCount() ? m_image -> rootLayer() -> firstChild()
-                     :  0;
+    KisLayer* l = m_image -> rootLayer().data();
+    if (p)
+        l = m_image -> findLayer(p -> id()).data();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+
+    KisLayerSP above = 0;
+    if (after && after -> nextSibling())
+        above = m_image -> findLayer(after -> nextSibling() -> id());
+    else if (after)
+        above = 0;
+    else if (p && p -> firstChild())
+        above = parent -> firstChild();
+    else if (!p && m_image -> rootLayer() -> childCount())
+        above = m_image -> rootLayer() -> firstChild();
     emit sigRequestGroupLayer(parent, above);
 }
 
@@ -340,7 +361,12 @@ void KisLayerBox::slotAddClicked()
 {
     KisGroupLayerSP root = dynamic_cast<KisGroupLayer*>(m_image -> rootLayer().data());
     if (KisLayerSP active = m_image -> activeLayer())
-        emit sigRequestLayer(active -> parent() ? active -> parent() : root, active);
+    {
+        KisGroupLayerSP p = root;
+        if (active -> parent())
+            p = active -> parent();
+        emit sigRequestLayer(p, active);
+    }
     else
         emit sigRequestLayer(root, m_image -> rootLayer() -> firstChild());
 }

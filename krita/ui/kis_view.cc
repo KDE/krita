@@ -228,7 +228,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     createDockers();
 
-    setInstance(KisFactory::instance());
+    setInstance(KisFactory::instance(), false);
     setClientBuilder( this );
 
     if (!doc -> isReadWrite())

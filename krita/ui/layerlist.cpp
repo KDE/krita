@@ -505,8 +505,6 @@ void LayerList::contentsMousePressEvent( QMouseEvent *e )
 void LayerList::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
     super::contentsMouseDoubleClickEvent( e );
-    if( KGlobalSettings::singleClick() )
-        return;
     if( LayerItem *layer = static_cast<LayerItem*>( itemAt( contentsToViewport( e->pos() ) ) ) )
     {
         if( !layer->iconsRect().contains( layer->mapFromListView( e->pos() ) ) )

@@ -19,6 +19,7 @@
  */
 
 #include <qthread.h>
+#include <qapplication.h>
 
 #include "kis_accumulating_producer.h"
 
@@ -88,7 +89,13 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 
     if (!m_stop) {
 //        kdDebug() << "And emitted completed" << endl;
+        // XXX: Emitting the signal causes the histogram docker widget to be updated
+        // but we are still in the thread's context, not the GUI thread's, so this
+        // breaks on SMP. The QApplication lock appears to prevent this, though
+        // I don't think it's 100%.
+        qApp -> lock();
         m_source -> emitCompleted();
+        qApp -> unlock();
     }
 }
 

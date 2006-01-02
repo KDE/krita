@@ -53,7 +53,8 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 
     m_previewWidget = new KisPreviewWidget(frame);
     m_hlayout->addWidget(m_previewWidget);
-    m_previewWidget->slotSetDevice( ( (KisPaintLayer*) ( m_view->getCanvasSubject()->currentImg()->activeLayer().data() ) )->paintDevice() );
+    if (m_view->getCanvasSubject()->currentImg() && m_view->getCanvasSubject()->currentImg()->activeLayer())
+        m_previewWidget->slotSetDevice( ( (KisPaintLayer*) ( m_view->getCanvasSubject()->currentImg()->activeLayer().data() ) )->paintDevice() );
     connect(m_previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
 
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
@@ -76,7 +77,8 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     }
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
-    m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),activeLayer->paintDevice());
+    if (activeLayer)
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),activeLayer->paintDevice());
     if(m_currentConfigWidget != 0)
     {
         m_hlayout->insertWidget(1, m_currentConfigWidget);

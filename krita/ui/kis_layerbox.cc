@@ -151,7 +151,10 @@ void KisLayerBox::setImage(KisImageSP img)
 
 void KisLayerBox::slotLayerActivated(KisLayerSP layer)
 {
-    list() -> setActiveLayer(layer -> id());
+    if (layer)
+        list() -> setActiveLayer(layer -> id());
+    else
+        list() -> setActiveLayer(-1);
     updateUI();
 }
 
@@ -371,8 +374,11 @@ void KisLayerBox::slotAddClicked()
 void KisLayerBox::slotRmClicked()
 {
     QValueList<int> l = list() -> selectedLayerIDs();
-    if (list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+    if (l.count() < 2 && list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+    {
+        l.clear();
         l.append(list() -> activeLayer() -> id());
+    }
 
     for (int i = 0, n = l.count(); i < n; ++i)
         m_image -> removeLayer(m_image -> findLayer(l[i]));
@@ -381,8 +387,11 @@ void KisLayerBox::slotRmClicked()
 void KisLayerBox::slotRaiseClicked()
 {
     QValueList<int> l = list() -> selectedLayerIDs();
-    if (list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+    if (l.count() < 2 && list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+    {
+        l.clear();
         l.append(list() -> activeLayer() -> id());
+    }
 
     for (int i = 0, n = l.count(); i < n; ++i)
         if (KisLayerSP layer = m_image -> findLayer(l[i]))
@@ -393,8 +402,11 @@ void KisLayerBox::slotRaiseClicked()
 void KisLayerBox::slotLowerClicked()
 {
     QValueList<LayerItem*> l = list() -> selectedLayers();
-    if (list() -> activeLayer() && !l.contains(list() -> activeLayer()))
+    if (l.count() < 2 && list() -> activeLayer() && !l.contains(list() -> activeLayer()))
+    {
+        l.clear();
         l.append(list() -> activeLayer());
+    }
 
     for (int i = 0, n = l.count(); i < n; ++i)
         if (LayerItem *layer = l[i])

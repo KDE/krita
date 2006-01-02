@@ -81,6 +81,11 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
         if (!sampleMerged) {
+            if (!img->activeLayer())
+            {
+                KMessageBox::information(0, i18n("Cannot pick the color as no layer is active"));
+                return;
+            }
             if (!img->activeLayer()-> visible()) {
                 KMessageBox::information(0, i18n("Cannot pick the color as the active layer is hidden."));
                 return;

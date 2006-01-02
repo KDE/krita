@@ -120,7 +120,10 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
     if (!m_cancelRequested) {
         shadowLayer -> move (xoffset,yoffset);
         shadowLayer -> setOpacity(opacity);
-        image -> addLayer( shadowLayer, image -> activeLayer() -> parent().data(), image -> activeLayer() );
+        KisLayerSP parent = image -> rootLayer();
+        if (image -> activeLayer())
+            parent = image -> activeLayer() -> parent().data();
+        image -> addLayer( shadowLayer, parent, image -> activeLayer() );
 
         if (undo) undo -> addCommand(t);
 

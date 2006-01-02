@@ -2148,8 +2148,11 @@ void KisView::showLayerProperties(KisLayerSP layer)
 
 void KisView::layerAdd()
 {
-    if (KisImageSP img = currentImg())
+    KisImageSP img = currentImg();
+    if (img && img -> activeLayer())
         addLayer(img -> activeLayer() -> parent(), img -> activeLayer());
+    else if (img)
+        addLayer(static_cast<KisGroupLayer*>(img -> rootLayer().data()), 0);
 }
 
 void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
@@ -2223,10 +2226,13 @@ void KisView::addPartLayer()
 
 void KisView::slotChildActivated(bool a) {
     // It should be so that the only part (child) we can activate, is the current layer:
-    if (a) {
-        currentImg() -> activeLayer() -> activate();
-    } else {
-        currentImg() -> activeLayer() -> deactivate();
+    if (currentImg() && currentImg() -> activeLayer())
+    {
+        if (a) {
+            currentImg() -> activeLayer() -> activate();
+        } else {
+            currentImg() -> activeLayer() -> deactivate();
+        }
     }
 
     super::slotChildActivated(a);

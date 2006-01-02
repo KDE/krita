@@ -433,10 +433,12 @@ void KisToolCrop::crop() {
         img -> undoAdapter() -> beginMacro(i18n("Crop"));
 
     if (m_optWidget -> cmbType -> currentItem() == 0) {
-        KisCropVisitor v(rc);
-        KisLayerSP layer = img->activeLayer();
-        layer->accept(v);
-        img -> notify();
+        if (KisLayerSP layer = img->activeLayer())
+        {
+            KisCropVisitor v(rc);
+            layer->accept(v);
+            img -> notify();
+        }
     }
     else {
         KisCropVisitor v(rc);

@@ -964,9 +964,6 @@ KisLayerSP KisImage::activeLayer() const
 
 KisLayerSP KisImage::activate(KisLayerSP layer)
 {
-    if ( !layer )
-        return 0;
-
     if (layer != m_activeLayer) {
         if (m_activeLayer) m_activeLayer->deactivate();
         m_activeLayer = layer;
@@ -1000,8 +997,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
         notify();
 
-        activate(layer);
-
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
         if (player != 0) {
 
@@ -1013,6 +1008,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
         }
 
         emit sigLayerAdded(layer);
+        activate(layer);
     }
 
     return success;
@@ -1027,6 +1023,8 @@ bool KisImage::removeLayer(KisLayerSP layer)
     {
 
         KisLayerSP wasAbove = layer -> nextSibling();
+        KisLayerSP wasBelow = layer -> prevSibling();
+        const bool wasActive = layer == activeLayer();
         const bool success = parent -> removeLayer(layer);
         if (success)
         {
@@ -1035,9 +1033,11 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             notify();
             emit sigLayerRemoved(layer, parent, wasAbove);
-            if (activeLayer() == layer)
+            if (wasActive)
             {
-                if (wasAbove)
+                if (wasBelow)
+                    activate(wasBelow);
+                else if (wasAbove)
                     activate(wasAbove);
                 else if (parent != rootLayer())
                     activate(parent.data());
@@ -1053,11 +1053,15 @@ bool KisImage::removeLayer(KisLayerSP layer)
 
 bool KisImage::raiseLayer(KisLayerSP layer)
 {
+    if (!layer)
+        return false;
     return moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
 }
 
 bool KisImage::lowerLayer(KisLayerSP layer)
 {
+    if (!layer)
+        return false;
     if (KisLayerSP next = layer -> nextSibling())
         return moveLayer(layer, layer -> parent().data(), next -> nextSibling());
     return false;
@@ -1065,11 +1069,15 @@ bool KisImage::lowerLayer(KisLayerSP layer)
 
 bool KisImage::toTop(KisLayerSP layer)
 {
+    if (!layer)
+        return false;
     return moveLayer(layer, rootLayer(), rootLayer() -> firstChild());
 }
 
 bool KisImage::toBottom(KisLayerSP layer)
 {
+    if (!layer)
+        return false;
     return moveLayer(layer, rootLayer(), 0);
 }
 

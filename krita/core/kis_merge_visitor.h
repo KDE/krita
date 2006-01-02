@@ -48,6 +48,9 @@ public:
 public:
     virtual bool visit(KisPaintLayer *layer)
     {
+        if (!layer -> visible())
+            return true;
+
         Q_INT32 sx, sy, dx, dy, w, h;
 
         layer ->paintDevice() -> extent(sx,sy,w,h);
@@ -80,6 +83,9 @@ public:
 
     virtual bool visit(KisGroupLayer *layer)
     {
+        if (!layer -> visible())
+            return true;
+
         KisPaintDeviceImplSP dst;
         if (m_projection)
             dst = m_projection;

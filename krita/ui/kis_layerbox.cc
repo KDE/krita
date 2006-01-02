@@ -370,25 +370,36 @@ void KisLayerBox::slotAddClicked()
 
 void KisLayerBox::slotRmClicked()
 {
-    if (KisLayerSP active = m_image -> activeLayer())
-        m_image -> removeLayer(active);
-    updateUI();
+    QValueList<int> l = list() -> selectedLayerIDs();
+    if (list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+        l.append(list() -> activeLayer() -> id());
+
+    for (int i = 0, n = l.count(); i < n; ++i)
+        m_image -> removeLayer(m_image -> findLayer(l[i]));
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
-    if (KisLayerSP active = m_image -> activeLayer())
-        if (active -> prevSibling())
-            m_image -> moveLayer(active, active -> parent().data(), active -> prevSibling());
-    updateUI();
+    QValueList<int> l = list() -> selectedLayerIDs();
+    if (list() -> activeLayer() && !l.contains(list() -> activeLayer() -> id()))
+        l.append(list() -> activeLayer() -> id());
+
+    for (int i = 0, n = l.count(); i < n; ++i)
+        if (KisLayerSP layer = m_image -> findLayer(l[i]))
+            if (layer -> prevSibling())
+                m_image -> moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    if (LayerItem* active = list() -> activeLayer())
-        if (active -> nextSibling())
-            list() -> moveLayer(active, active -> parent(), active -> nextSibling());
-    updateUI();
+    QValueList<LayerItem*> l = list() -> selectedLayers();
+    if (list() -> activeLayer() && !l.contains(list() -> activeLayer()))
+        l.append(list() -> activeLayer());
+
+    for (int i = 0, n = l.count(); i < n; ++i)
+        if (LayerItem *layer = l[i])
+            if (layer -> nextSibling())
+                list() -> moveLayer(layer, layer -> parent(), layer -> nextSibling());
 }
 
 void KisLayerBox::slotPropertiesClicked()

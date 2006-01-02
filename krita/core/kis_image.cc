@@ -1020,6 +1020,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
 
 bool KisImage::removeLayer(KisLayerSP layer)
 {
+    if (!layer || layer -> image() != this)
+        return false;
+
     if (KisGroupLayerSP parent = layer -> parent())
     {
 
@@ -1027,6 +1030,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
         const bool success = parent -> removeLayer(layer);
         if (success)
         {
+            layer -> setImage(0);
             if (m_adapter->undo())
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             notify();

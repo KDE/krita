@@ -52,7 +52,6 @@ class KisFilterStrategy;
 class KisImageIface;
 class KisProfile;
 class KisProgressDisplayInterface;
-class KisUndoAdapter;
 
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
@@ -108,7 +107,25 @@ public:
 
     QString nextLayerName() const;
 
-    void resize(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
+    /**
+     * Resize the image to the specified width and height. The resize
+     * method handles the creating on an undo step itself.
+     *
+     * @param w the new width of the image
+     * @param h the new height of the image
+     * @param x the x position of the crop on all layer if cropLayers is true
+     * @param y the y position of the crop on all layer if cropLayers is true
+     * @param cropLayers if true, all layers are cropped to the new size. 
+     */
+    void resize(Q_INT32 w, Q_INT32 h, Q_INT32 x = 0, Q_INT32 y = 0,  bool cropLayers = false);
+
+    /**
+     * Resize the image to the specified width and height. The resize
+     * method handles the creating on an undo step itself.
+     *
+     * @param rc the rect describing the new width and height of the image
+     * @param cropLayers if true, all layers are cropped to the new rect
+     */
     void resize(const QRect& rc, bool cropLayers = false);
 
     void scale(double sx, double sy, KisProgressDisplayInterface *m_progress, KisFilterStrategy *filterStrategy);
@@ -123,6 +140,12 @@ public:
     // Set the profile associated with this image
     void setProfile(const KisProfile * profile);
 
+    /**
+     * Replace the current undo adapter with the specified undo adapter.
+     * The current undo adapter will _not_ be deleted.
+     */
+    void setUndoAdapter(KisUndoAdapter * undoAdapter);
+    KisUndoAdapter *undoAdapter() const;
     void enableUndo(KoCommandHistory *history);
 
     // Tell the image it's modified; this emits the sigImageModified signal
@@ -171,7 +194,16 @@ public:
     /// Move layer to specified position
     bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
-    /// Add already existing layer to image
+    /**
+     * Add already existing layer to image
+     *
+     * @param layer the layer to be added
+     * @param parent the parent layer
+     * @param aboveThis in the list with child layers of the specified
+                        parent, add this layer above the specified sibling
+     *
+     * returns false if adding the layer didn't work, true if the layer got added
+     */
     bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer
@@ -222,7 +254,7 @@ public:
 
     void notifyPropertyChanged(KisLayerSP layer);
 
-    KisUndoAdapter *undoAdapter() const;
+
     //KisGuideMgr *guides() const;
 
     /**

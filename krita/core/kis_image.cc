@@ -23,7 +23,6 @@
 
 #include <qimage.h>
 #include <qpainter.h>
-#include <qpixmap.h>
 #include <qsize.h>
 #include <qtl.h>
 #include <qapplication.h>
@@ -58,6 +57,7 @@
 #include "kis_merge_visitor.h"
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
+#include "kis_crop_visitor.h"
 #include "kis_profile.h"
 
 #define DEBUG_IMAGES 0
@@ -479,6 +479,7 @@ namespace {
 }
 
 KisImage::KisImage(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
+    : QObject(0, name.latin1()), KShared()
 {
     init(adapter, width, height, colorSpace, name);
     setName(name);
@@ -623,14 +624,16 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 #endif
 }
 
-void KisImage::resize(Q_INT32 , Q_INT32 , bool )
-{
-/*LAYERREMOVE
-void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
+
+void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)
 {
     if (w != width() || h != height()) {
         if (m_adapter && m_adapter -> undo()) {
-            m_adapter -> beginMacro("Resize image");
+            if (cropLayers)
+                m_adapter->beginMacro("Crop Image");
+            else 
+                m_adapter -> beginMacro("Resize Image");
+
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
         }
 
@@ -641,31 +644,22 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, bool cropLayers)
         Q_CHECK_PTR(m_projection);
 
         if (cropLayers) {
-            vKisLayerSP_it it;
-            for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-                KisLayerSP layer = (*it);
-                KisTransaction * t = new KisTransaction("crop", layer.data());
-                Q_CHECK_PTR(t);
-                layer -> crop(0, 0, w, h);
-                if (m_adapter && m_adapter -> undo())
-                    m_adapter->addCommand(t);
-            }
+            KisCropVisitor v(QRect(x, y, w, h));
+            m_rootLayer->accept(v);
+
         }
 
         if (m_adapter && m_adapter -> undo()) {
             m_adapter -> endMacro();
         }
 
-        emit sigSizeChanged(KisImageSP(this), w, h);
-        notify();
+        emit sigSizeChanged(w, h);
     }
-*/
 }
 
 void KisImage::resize(const QRect& rc, bool cropLayers)
 {
-    resize(rc.width(), rc.height(), cropLayers);
-    notify();
+    resize(rc.width(), rc.height(), rc.x(), rc.y(), cropLayers);
 }
 
 
@@ -993,10 +987,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
     const bool success = parent->addLayer(layer, aboveThis);
     if (success)
     {
-        if (m_adapter->undo())
+        if (m_adapter->undo()) {
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-        notify();
-
+        }
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
         if (player != 0) {
 
@@ -1406,10 +1399,18 @@ QRect KisImage::bounds() const
     return QRect(0, 0, width(), height());
 }
 
+
+void KisImage::setUndoAdapter(KisUndoAdapter * adapter)
+{
+    m_adapter = adapter;
+}
+
+
 KisUndoAdapter* KisImage::undoAdapter() const
 {
     return m_adapter;
 }
+
 
 //KisGuideMgr *KisImage::guides() const
 //{

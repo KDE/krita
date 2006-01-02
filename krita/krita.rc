@@ -41,10 +41,6 @@
 
 
 <Menu name="Image"><text>&amp;Image</text>
-<Menu name="Adjust"><text>&amp;Adjust</text>
-	<Action name="adjust_filters"/>
-</Menu>
-
   <Action name="img_properties"/>
   <Action name="resizeimgtolayer"/>
   <Action name="duplicate_image"/>
@@ -113,6 +109,7 @@
 <Menu name="Filter"><text>Filte&amp;r</text>
 	<Action name="filter_apply_again"/>
 	<Separator/>
+    <Action name="adjust_filters"/>
 	<Action name="artistic_filters"/>
 	<Action name="blur_filters"/>
 	<Action name="color_filters"/>

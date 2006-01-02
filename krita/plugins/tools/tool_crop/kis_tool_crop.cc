@@ -429,26 +429,28 @@ void KisToolCrop::crop() {
 
     // The visitor adds the undo steps to the macro
 
-    if (img -> undoAdapter())
-        img -> undoAdapter() -> beginMacro(i18n("Crop"));
 
     if (m_optWidget -> cmbType -> currentItem() == 0) {
-        if (KisLayerSP layer = img->activeLayer())
-        {
-            KisCropVisitor v(rc);
-            layer->accept(v);
-            img -> notify();
-        }
+        // The layer(s) under the current layer will take care of adding
+        // undo information to the Crop macro.
+        if (img -> undoAdapter())
+            img -> undoAdapter() -> beginMacro(i18n("Crop"));
+
+        KisCropVisitor v(rc);
+        KisLayerSP layer = img->activeLayer();
+        layer->accept(v);
+        img -> notify();
+
+        if (img -> undoAdapter())
+            img -> undoAdapter() -> endMacro();
+
     }
     else {
-        KisCropVisitor v(rc);
-        img->rootLayer()->accept(v);
-        img -> resize(rc);
-        img -> notify(QRect(0, 0, rc.width(), rc.height()));
+        // Resize creates the undo macro itself
+        img -> resize(rc, true);
+        img -> notify();
     }
 
-    if (img -> undoAdapter())
-        img -> undoAdapter() -> endMacro();
 
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);

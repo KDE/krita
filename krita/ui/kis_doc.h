@@ -119,10 +119,16 @@ public:
      */
     KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
 
-    // Makes an otherwise empty document ready for import/export
+    /**
+     * Makes an otherwise empty document ready for import/export
+     */
     void prepareForImport();
 
     KisImageSP currentImage();
+
+    /**
+     * Set the current image to the specified image and turn undo on.
+     */
     void setCurrentImage(KisImageSP image);
 
     KisUndoAdapter * undoAdapter() { return this; }

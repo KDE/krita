@@ -327,6 +327,14 @@ private:
     void updateStatusBarZoomLabel();
     void updateStatusBarProfileLabel();
 
+    /**
+     * Import an image as a layer. If there is more than
+     * one layer in the image, import all of them as separate
+     * layers.
+     * 
+     * @param url the url to the image file
+     * @return the number of layers added
+     */
     Q_INT32 importImage(const KURL& url = KURL());
     virtual void updateCanvas(const KisRect& rc);
     KisFilterManager * filterManager() { return m_filterManager; }

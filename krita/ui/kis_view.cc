@@ -2462,7 +2462,7 @@ void KisView::connectCurrentImg()
 
         connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_current, SIGNAL(sigLayersChanged()), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayersChanged(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));

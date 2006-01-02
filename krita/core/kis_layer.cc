@@ -220,7 +220,7 @@ static int getID()
 
 
 KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
-    QObject(),
+    QObject(0, name.latin1()),
     KShared(),
     m_id(getID()),
     m_index(-1),

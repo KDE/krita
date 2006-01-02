@@ -28,6 +28,7 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_transaction.h"
+#include <kis_selected_transaction.h>
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;

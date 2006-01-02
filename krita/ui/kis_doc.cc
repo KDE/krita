@@ -675,30 +675,31 @@ bool KisDoc::completeSaving(KoStore *store)
 
     // Composite rendition of the entire image for easier kimgio loading
     // and to speed up loading the image into Krita: show the composite png first,
-    // then load the layers.
-    if (store -> open("composite.png")) {
+    // then load the layers. Don't do this if the image is too big.
+    if (m_currentImage->width() * m_currentImage->height() < 5000000) {
+        if (store -> open("composite.png")) {
+            
+            QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
+            QPainter gc(pix);
+            m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile(),
+                                              KisImage::PAINT_IMAGE_ONLY);
+            gc.end();
+            QImage composite = pix -> convertToImage();
+            
+            KoStoreDevice io (store);
+            
+            if (!composite.save(&io, "PNG")) {
+                store -> close();
+                IODone();
+                return false;
+            }
+            
+            delete pix;
 
-        QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
-        QPainter gc(pix);
-        m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile(),
-                                          KisImage::PAINT_IMAGE_ONLY);
-        gc.end();
-        QImage composite = pix -> convertToImage();
-
-        KoStoreDevice io (store);
-
-        if (!composite.save(&io, "PNG")) {
+            IOCompletedStep();
             store -> close();
-            IODone();
-            return false;
         }
-
-        delete pix;
-
-        IOCompletedStep();
-        store -> close();
     }
-
     IODone();
     return true;
 }
@@ -895,7 +896,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rc, bool transparent, 
 void KisDoc::slotImageUpdated()
 {
     emit docUpdated();
-    setModified( true );
+    setModified(true);
 }
 
 void KisDoc::slotImageUpdated(const QRect& rect)
@@ -981,8 +982,8 @@ void KisDoc::slotDocumentRestored()
 void KisDoc::slotCommandExecuted()
 {
     setModified(true);
-}
 
+}
 void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
     QRect rc(x, y, w, h);
@@ -1037,7 +1038,7 @@ void KisDoc::prepareForImport()
 {
     if (m_nserver == 0)
         init();
-
+    m_undo = false;
 }
 
 KisImageSP KisDoc::currentImage()
@@ -1048,6 +1049,7 @@ KisImageSP KisDoc::currentImage()
 void KisDoc::setCurrentImage(KisImageSP image)
 {
     m_currentImage = image;
+    m_undo = true;
 }
 
 #include "kis_doc.moc"

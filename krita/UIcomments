@@ -1,0 +1,222 @@
+From zander@kde.org Mon Jan  2 22:49:09 2006
+Return-Path: <kimageshop-bounces-+boud=valdyas.org@kde.org>
+Received: from ktown.kde.org (ktown.kde.org [131.246.120.250])
+	by calcifer.valdyas.org (8.12.7/8.12.7/SuSE Linux 0.6) with SMTP id k02LmiIb026428
+	for <boud@valdyas.org>; Mon, 2 Jan 2006 22:48:44 +0100
+Received: (qmail 19271 invoked by uid 72); 2 Jan 2006 21:50:44 -0000
+Received: (qmail 19263 invoked from network); 2 Jan 2006 21:50:42 -0000
+Received: from cc68231-a.ensch1.ov.home.nl (HELO
+	namlook.thomas.planescape.com) (217.123.137.115)
+	by ktown.kde.org with SMTP; 2 Jan 2006 21:50:41 -0000
+Received: from [192.168.0.65] (helo=dust.thomas.planescape.com)
+	by namlook.thomas.planescape.com with esmtp (Exim 3.35 #1 (Debian))
+	id 1EtXZ7-0006gs-00
+	for <kimageshop@kde.org>; Mon, 02 Jan 2006 22:50:05 +0100
+Received: from zander by dust.thomas.planescape.com with local (Exim 4.52)
+	id 1EtXYK-0002f2-EO
+	for kimageshop@kde.org; Mon, 02 Jan 2006 22:49:16 +0100
+From: Thomas Zander <zander@kde.org>
+To: "Krayon \(KImageShop\)" <kimageshop@kde.org>
+Subject: UI comments
+Date: Mon, 2 Jan 2006 22:49:09 +0100
+User-Agent: KMail/1.9
+MIME-Version: 1.0
+Message-Id: <200601022249.14386.zander@kde.org>
+X-BeenThere: kimageshop@kde.org
+X-Mailman-Version: 2.1.6
+Precedence: list
+Reply-To: "Krayon \(KImageShop\)" <kimageshop@kde.org>
+List-Id: "Krayon \(KImageShop\)" <kimageshop.kde.org>
+List-Unsubscribe: <https://mail.kde.org/mailman/listinfo/kimageshop>,
+	<mailto:kimageshop-request@kde.org?subject=unsubscribe>
+List-Archive: <http://mail.kde.org/pipermail/kimageshop>
+List-Post: <mailto:kimageshop@kde.org>
+List-Help: <mailto:kimageshop-request@kde.org?subject=help>
+List-Subscribe: <https://mail.kde.org/mailman/listinfo/kimageshop>,
+	<mailto:kimageshop-request@kde.org?subject=subscribe>
+Content-Type: multipart/mixed;
+  boundary="===============0435433529=="
+X-Spam-Checker-Version: SpamAssassin 3.0.2 (2004-11-16) on 
+	calcifer.valdyas.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,FORGED_RCVD_HELO 
+	autolearn=no version=3.0.2
+X-UIDL: ~3n!!AU8!!Tk~!!Ng)"!
+Status: R
+X-Status: NC
+X-KMail-EncryptionState:  
+X-KMail-SignatureState:  
+X-KMail-MDN-Sent:  
+
+--===============0435433529==
+Content-Type: multipart/signed;
+  boundary="nextPart18327526.nat8MTgmOe";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
+Content-Transfer-Encoding: 7bit
+
+--nextPart18327526.nat8MTgmOe
+Content-Type: text/plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+Statusbar;
+The coordinates of the pointer is not correctly clipped to the document;=20
+when I move my cursor to the menu bar I often have negative coordinates.
+When I move my cursor to the far right, outside of the image, I also see=20
+it continue to count. I find that confusing.
+
+Zoom is in for form of n:m.  This is not really a commonly used format and=
+=20
+many people will have less problems interpreting a percentage format.  So=20
+200% or 50% instead of 2:1 or 1:2 (respectively).
+
+The 'selection' part shows 'Selection Active' or 'No selection'.
+Apart from the missing capital S, I think we can put a little more=20
+information in there.  What about printing the selection size in pixels?
+
+The ruler keeps counting across the full size of the window, it should=20
+make a difference between image content and outside. I suggest to make it=20
+stop at the image edge. If you don't want that, you might want to make=20
+the ruler be white inside the image and gray outside.
+
+Zoom tool;  it zooms by 2-complement changes. So 1, 2, 4, 8 etc.
+This misses other well known nice looking zoom-levels. Like 33% Or, as=20
+krita displays it, 3-times zoom.
+I suggest making the zoom use 1, 2, 3, 4, 6, 8, 9 etc.
+Also; please unzoom the image to fit on screen at initial loading.
+
+Crop tool;
+The crop tool should have statusbar details like position and size, which=20
+are continuesly updated.
+The crop-options panel shows start and end coordinates. Please change that=
+=20
+to x/y and width/height ones. Additionally adding a 'keep aspect ratio'=20
+checkbox so users can type width=3D3 and height=3D2 to keep that aspect rat=
+io=20
+from then on.
+
+Overview palette:
+The zoom slider can zoom to 1600%, which makes the slider really hard to=20
+navigate around the < 100 % zoom area. I suggest either making the slider=20
+logoritmic or changing the maximum.
+Also; add a '%' suffix to the spinbox.
+Last; why is the space between the 'Zoom:' label and its slider soo much=20
+larger then the space betweenthe 'Exposure:' label and that slider ?
+
+Color palettes ;
+pressing the 'reset colors' icon directly under the foreground/background=20
+preview swatches does not change the background to white, as I would=20
+expect.
+You can drag a color from the preview swatches but it is changing the=20
+selected one at click and since dropping drops on the selected one, the=20
+concept of duplicating the foreground to the background by dragging is=20
+impossible.  I suggest to do selecting of foreground/background color on=20
+mouse release instead.
+=46or all the 'tracks' in the RGB and Gray palettes you can change the=20
+current position of the slider by clicking, but you can't keep updating=20
+it by dragging.  Please copy the behavior of any slider and continuesly=20
+update the value on click until the mouse is released again.  See QSlider=20
+behavior for how to handle mouse-drag events outside the widget=20
+boundaries.
+The HSV/RGB/Gray have labels in front of the color-sliders. Please follow=20
+the styleguide and let all such labels end with a colon ":"
+
+The Pan tool:
+This tool (and various others I'm not going to iterate) has no options. =20
+The tool-palette ends up empty, including the tab-name.  I expected the=20
+tab-name to be filled and a label 'This tool has no options' to be shown=20
+there.
+
+Color Picker tool:
+The 'Normalize integer values' should not be enabled by default.  I would=20
+also like to suggest it converts the values to percentages instead of=20
+values between 0 and 1.
+The label could then be renamed to something much less technical like=20
+'Colors in percentages'
+The 'update current color' checkbox indeed updates the color (painting=20
+something works just fine) but the HSV/RGB/etc palettes are not altered,=20
+I expected them to be updated continuesly.
+
+Autobrush selector (the one that pops up in its own window)
+The toolbar button preview seems to set the maximum size for the button=20
+shown on the autobrush tab. As the button is much larger then the maximum=20
+size of the preview painted on it, I would suggest the preview be allowed=20
+to get bigger. Almost as big as the button.width() itself.
+Using [tab] there seems to be no way to traverse focus between the=20
+different widgets on the panel (like the spinboxes). is that a bug that=20
+can be fixed?
+
+Shear image tool:
+Window has double margins around it, the outline of the groupbox don't=20
+match up with the button on the right.
+Please add degrees suffixes in the spinboxes
+
+Layer menu;
+Please look at the naming and icons of KWords equivalent of the=20
+'lower/raise' features (all 4 of them) I think that with just minor=20
+changes they can be shared between kword/kpresenter and krita.
+Add a 'disk' icon in front of the 'save layer as image'
+Layer properties dialog has a margin too many at the outside; the right=20
+does not line up with the cancel buttons right side.
+Histogram menu item should not have trailing ellipses (...) at the end=20
+since the action to show this is actually done immediately.
+
+Select:
+reselect is enabled when I startup krita with a loaded jpeg; I never=20
+selected anything yet. Looks like a bug.
+=46eather has '...' at the end suggesting there is going to be a dialog, bu=
+t=20
+there is none.  So either remove the ellipses, or provide a feather=20
+distance (I prefer the latter ;)
+Color Range shows a dialog that also has extra margins around them, the=20
+groupbox on the right does not line up with the cancel right-side.
+=46or the color range, I also fail to see what the dialog should do.
+=46eature request; hide selection visualization (but leave the selection in=
+=20
+place). Similar feature in Photoshop can be found under 'Ctrl-H'.
+When you did a 'select all' and then create a selection nothing happens=20
+since you can't select more then you already did.  For that reason I=20
+suggest to make select all and deselect lead to a similar situation where=20
+adding a selection or substracting one will be smart and do make the=20
+result of that select or deselect visible.  In either case selecting a=20
+part in both a fully selected and fully deselected image should lead to=20
+the same result.
+
+
+Misc:
+* Please make a circular brush be the default selected one.
+* Statusbar height is weird; on autosave the statusbar gets smaller and I=20
+find the normal size to be pretty tall for no good reason.
+
+=2D-=20
+Thomas Zander
+
+--nextPart18327526.nat8MTgmOe
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.1 (GNU/Linux)
+
+iD8DBQBDuZ/aCojCW6H2z/QRAjasAKCUM5FvcxSTm7wjddzx4ccKlWigGwCfX10Y
+zmxc37ggWIkgdwbwVRCiUcE=
+=FnZ7
+-----END PGP SIGNATURE-----
+
+--nextPart18327526.nat8MTgmOe--
+
+--===============0435433529==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+kimageshop mailing list
+kimageshop@kde.org
+https://mail.kde.org/mailman/listinfo/kimageshop
+
+--===============0435433529==--
+
+

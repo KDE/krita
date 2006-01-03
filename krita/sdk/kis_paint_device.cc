@@ -18,5 +18,5 @@
 
 #include "kis_paint_device.h"
 
-KisPaintDevice::KisPaintDevice() {};
-KisPaintDevice::~KisPaintDevice() {};
+KisPaintDevice::KisPaintDevice() {}
+KisPaintDevice::~KisPaintDevice() {}

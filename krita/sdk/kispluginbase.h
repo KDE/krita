@@ -39,6 +39,6 @@ namespace Krita {
 
     };
 
-};
+}
 
 #endif // KIS_PLUGIN_BASE

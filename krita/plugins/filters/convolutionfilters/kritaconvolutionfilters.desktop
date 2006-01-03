@@ -2,7 +2,11 @@
 Encoding=UTF-8
 Name=Convolution Filters
 Name[da]=Foldningsfilter
+Name[es]=Filtros de convolución
 Name[ga]=Scagairí Conbhlóide
+Name[pt]=Filtros de Convolução
+Name[pt_BR]=Filtros de Convolução
+Name[xx]=xxConvolution Filtersxx
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
 Comment[cy]=Hidlau cordeddiadau

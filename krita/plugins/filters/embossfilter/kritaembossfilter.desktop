@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Name=Emboss Filter
 Name[da]=Relieffilter
+Name[es]=Filtro de realce
+Name[pt]=Filtro de Gravação
+Name[pt_BR]=Filtro de Gravação
+Name[xx]=xxEmboss Filterxx
 Comment=Emboss filter
 Comment[bg]=Релефен филтър
 Comment[cy]=Hidlen foglynnu

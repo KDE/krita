@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Name=Raindrops Filter
 Name[da]=Regndråbefilter
+Name[es]=Filtro de gotas de lluvia
+Name[pt]=Filtro de Pingos de Chuva
+Name[pt_BR]=Filtro de Pingos de Chuva
+Name[xx]=xxRaindrops Filterxx
 Comment=Raindrops filter
 Comment[bg]=Филтър за дъждовни капки
 Comment[cy]=Hidlen ddiferion glaw

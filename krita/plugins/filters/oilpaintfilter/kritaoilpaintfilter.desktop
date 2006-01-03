@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Name=Oilpaint Filter
 Name[da]=Oliemalerifilter
+Name[es]=Filtro de pintura al óleo
+Name[pt]=Filtro de Pintura a Óleo
+Name[pt_BR]=Filtro de Pintura a Óleo
+Name[xx]=xxOilpaint Filterxx
 Comment=Oilpaint filter
 Comment[bg]=Филтър маслена боя
 Comment[cy]=Hidlen baent olew

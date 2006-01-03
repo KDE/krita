@@ -2,7 +2,11 @@
 Encoding=UTF-8
 Name=Sobel Filter
 Name[da]=Sobelfilter
+Name[es]=Filtro Sobel
 Name[ga]=Scagaire Sobel
+Name[pt]=Filtro Sobel
+Name[pt_BR]=Filtro Sobel
+Name[xx]=xxSobel Filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter

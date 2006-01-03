@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Name=Performance Test
 Name[da]=Ydelsestest
+Name[es]=Prueba de rendimiento
+Name[pt]=Teste de Performance
+Name[pt_BR]=Teste de Performance
+Name[xx]=xxPerformance Testxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaperftest

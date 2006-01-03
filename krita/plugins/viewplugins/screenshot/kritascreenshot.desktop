@@ -10,6 +10,7 @@ Name[it]=Schermata
 Name[pt]=Captura
 Name[pt_BR]=Captura
 Name[sv]=Skärmdump
+Name[xx]=xxScreenshotxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

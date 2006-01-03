@@ -78,11 +78,11 @@ void KisSobelFilter::prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT
 
     src -> readBytes( data, x, y, w, 1 );
 
-    for (Q_UINT32 b = 0; b < pixelSize; b++)
-        {
-            data[-(int)pixelSize + b] = data[b];
-            data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
-        }    
+    for (Q_UINT32 b = 0; b < pixelSize; b++) {
+        int offset = pixelSize - b;
+        data[-offset] = data[b];
+        data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
+    }
 }
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
@@ -131,14 +131,16 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
         
             for (Q_UINT32 col = 0; col < width * pixelSize; col++)
                 {
+                    int positive = col + pixelSize;
+                    int negative = col - pixelSize;
                     horGradient = (doHorizontal ?
-                                   ((pr[col - pixelSize] +  2 * pr[col] + pr[col + pixelSize]) -
-                                    (nr[col - pixelSize] + 2 * nr[col] + nr[col + pixelSize]))
+                                   ((pr[negative] +  2 * pr[col] + pr[positive]) -
+                                    (nr[negative] + 2 * nr[col] + nr[positive]))
                                    : 0);
             
                     verGradient = (doVertical ?
-                                   ((pr[col - pixelSize] + 2 * cr[col - pixelSize] + nr[col - pixelSize]) -
-                                    (pr[col + pixelSize] + 2 * cr[col + pixelSize] + nr[col + pixelSize]))
+                                   ((pr[negative] + 2 * cr[negative] + nr[negative]) -
+                                    (pr[positive] + 2 * cr[positive] + nr[positive]))
                                    : 0);
                     gradient = (doVertical && doHorizontal) ?
                         (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 

@@ -3029,12 +3029,6 @@ void KisView::createDockers()
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
-
-    m_paletteManager->showWidget("hsvwidget");
-    m_paletteManager->showWidget("layerbox");
-    m_paletteManager->showWidget(krita::TOOL_OPTION_WIDGET);
-
-
 }
 
 #include "kis_view.moc"

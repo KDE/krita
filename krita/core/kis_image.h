@@ -69,7 +69,7 @@ public:
         PAINT_BACKGROUND = 1,
         PAINT_SELECTION = 2,
         PAINT_MASKINACTIVELAYERS = 4,
-        PAINT_EMBEDDED_RECT = 8, /// If the current layer is an embedded part, draw a rect around it
+        PAINT_EMBEDDED_RECT = 8 // If the current layer is an embedded part draw a rect around it
     } PaintFlags;
 
     /// Paint the specified rect onto the painter, adjusting the colors using the

@@ -56,7 +56,7 @@ namespace KisProgress {
     };
 
 
-};
+}
 
 
 

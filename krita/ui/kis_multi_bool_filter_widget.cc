@@ -38,8 +38,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
 
     this->setCaption(caption);
 
-    QGridLayout *widgetLayout = new QGridLayout(this, m_nbboolWidgets + 1, 3);
-    widgetLayout -> setColStretch ( 1, 1 );
+    QVBoxLayout *widgetLayout = new QVBoxLayout(this, m_nbboolWidgets + 1);
 
     m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 
@@ -47,17 +46,12 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
     {
         m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
         m_boolWidgets[i] -> setChecked( iwparam[i].initvalue );
-
+        m_boolWidgets[i] -> setText( iwparam[i].name );
         connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
-
-        QLabel* lbl = new QLabel(iwparam[i].name+":", this);
-        widgetLayout -> addWidget( lbl, i , 0);
-
-        widgetLayout -> addWidget( m_boolWidgets[i], i , 1);
+        widgetLayout -> add( m_boolWidgets[i]);
     }
-    QSpacerItem * sp = new QSpacerItem(1, 1);
-    widgetLayout -> addItem(sp, m_nbboolWidgets, 0);
-
+//     QSpacerItem * sp = new QSpacerItem(1, 1);
+    widgetLayout -> addStretch();
 }
 
 #include "kis_multi_bool_filter_widget.moc"

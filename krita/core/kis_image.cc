@@ -1129,7 +1129,7 @@ void KisImage::flatten()
 
     KisPainter painter(dst->paintDevice());
 
-    KisMergeVisitor visitor(this, &painter);
+    KisMergeVisitor visitor(this, &painter, QRect(0,0,width(),height()));
     oldRootLayer ->accept(visitor);
 
     addLayer(dst, m_rootLayer, 0);
@@ -1361,7 +1361,7 @@ void KisImage::updateProjection(const QRect& rc)
     gc.end();
 
     KisPainter painter(m_projection);
-    KisMergeVisitor visitor(this, &painter);
+    KisMergeVisitor visitor(this, &painter, rc);
     visitor.setProjection(m_projection);
     m_rootLayer -> accept(visitor);
 

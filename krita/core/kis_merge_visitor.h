@@ -31,12 +31,13 @@
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
-    KisMergeVisitor(KisImageSP img,KisPainter *gc) :
+    KisMergeVisitor(KisImageSP img,KisPainter *gc, const QRect& rc) :
         KisLayerVisitor()
     {
         m_img = img;
         m_gc = gc;
         m_projection = 0;
+        m_rc = rc;
 /*
         m_insertMergedAboveLayer = 0;
         m_haveFoundInsertionPlace = false;
@@ -53,7 +54,12 @@ public:
 
         Q_INT32 sx, sy, dx, dy, w, h;
 
-        layer ->paintDevice() -> extent(sx,sy,w,h);
+        QRect rc = layer ->paintDevice() -> extent() & m_rc;
+
+        sx= rc.left();
+        sy = rc.top();
+        w = rc.width();
+        h = rc.height();
         dx = sx;
         dy = sy;
             
@@ -93,7 +99,7 @@ public:
             dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
         KisPainter painter(dst);
 
-        KisMergeVisitor visitor(m_img, &painter);
+        KisMergeVisitor visitor(m_img, &painter, m_rc);
         bool first = true;
 
         KisLayerSP child = layer->lastChild();
@@ -123,7 +129,11 @@ public:
         if (!m_projection) {
             Q_INT32 sx, sy, dx, dy, w, h;
 
-            dst ->extent(sx,sy,w,h);
+            QRect rc = dst ->extent() & rc;
+            sx= rc.left();
+            sy = rc.top();
+            w = rc.width();
+            h = rc.height();
             dx = sx;
             dy = sy;
             m_gc->bitBlt(dx, dy, layer->compositeOp() , dst, layer->opacity(), sx, sy, w, h);
@@ -146,6 +156,7 @@ private:
     KisImageSP m_img;
     KisPainter *m_gc;
     KisPaintDeviceImplSP m_projection;
+    QRect m_rc;
 /*
     KisLayerSP m_insertMergedAboveLayer;
     bool m_haveFoundInsertionPlace;

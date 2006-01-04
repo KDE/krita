@@ -78,7 +78,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
         {
             if(srcIt.isSelected())
             {
-                for( int i = 0; i < pixelSize; i++)
+                for( unsigned int i = 0; i < pixelSize; i++)
                 {
                     if ( i < pixelSize - 1 )
                     {

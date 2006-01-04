@@ -28,6 +28,7 @@ class KisFilter;
 class QIconViewItem;
 class QHBoxLayout;
 class KisPreviewWidget;
+class KisWdgFiltersGallery;
 
 namespace Krita {
 namespace Plugins {
@@ -50,9 +51,8 @@ class KisDlgFiltersGallery : public KDialogBase
         void refreshPreview();
         void selectionHasChanged ( QIconViewItem * item );
     private:
-        KisPreviewWidget* m_previewWidget;
+        KisWdgFiltersGallery* m_widget;
         KisView* m_view;
-        KisFiltersListView* m_kflw;
         QWidget* m_currentConfigWidget;
         KisFilter* m_currentFilter;
         QHBoxLayout* m_hlayout;

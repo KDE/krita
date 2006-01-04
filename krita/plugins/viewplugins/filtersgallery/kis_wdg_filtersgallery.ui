@@ -1,0 +1,118 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KisWdgFiltersGallery</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KisWdgFiltersGallery</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="Krita::Plugins::FiltersGallery::KisFiltersListView">
+            <property name="name">
+                <cstring>filtersList</cstring>
+            </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>configWidgetHolder</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="title">
+                <string>Configuration :</string>
+            </property>
+        </widget>
+        <widget class="KisPreviewWidget">
+            <property name="name">
+                <cstring>previewWidget</cstring>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KisPreviewWidget</class>
+        <header location="local">kis_previewwidget.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>moved(QPoint)</signal>
+        <signal>moving(QPoint)</signal>
+        <signal>startMoving(QPoint)</signal>
+        <slot access="public" specifier="">zoomIn()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">zoomOut()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slotMoving(QPoint)</slot>
+        <slot access="public" specifier="">slotMoved(QPoint)</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">slotStartMoving(QPoint)</slot>
+    </customwidget>
+    <customwidget>
+        <class>Krita::Plugins::FiltersGallery::KisFiltersListView</class>
+        <header location="local">kis_filters_listview.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image1</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="1122">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000042949444154388db5954d6c545514c77ff7de37eff1a6a550da994e5ba798868f948fc847a2a2911816c436b0a02ed0083161a1981877ee10d90aa94656063491882c5cd4c4b8103f20cd806909a98604da8482341de80cb69de9bcd799799d79efba980f1da3a80b4f727273939bdff99f9b93f3175a6b6a21849080020c4002a29a8f0a5dcd002803bed63a1035f0d0d0504b6f6fef51d7758fa4d3e98d8ee3fc03af128ee3303939399548242eb8aefb09300f78464de9f0f0f0d148cc7caf3d5424de97a7ec17104220242805520a44557bbd4b21f083801d33e63a6d1bc7bf19c6064e0319a35a58b9ae7ba43d54e4d7c54b64dc097c7f09d30ef04b36736983cc7c11b4456b9b492c5e20dc54a6540e00896a8268a7017010f8bcae1830d2e9f4c69ebe3c197782b2ce60d94ddc9b30f9feeb45ae5d7181c5ead35636ef08d3ffe26a76ee3208b4031a56d80aa00768fda362e9380e25bf80ef3b587613d7afc099533380a4b5dda46fcb5aa42998b9eb7173dce5e6788e434763ec7fc942532008ea436003660d2caa7f8d69c3bd8910674e4d033e83877ad8d36fb0aa4d6058658ac5358c5df6383bf480f31fdda5a3632bbbfb6da4ccd5c00a10b2012cc12fd97cfb5516f0187c25cee0619396480ec3ca909d0f3372d1e5f9fe66de3ad605587c712ec55256a2540d5519d19ae24a29057329839f7ecc138944d833102290f3184ae1e6d6f0e98739c61229e6d21eafbed1c9c8c5558c8f3ee4ceed76946a1c43d97091828585223e2eebfbc295f60d45de89707628cb58224577bc85a79e5d4d786581cddb9b0148259711b20145836221400416e0232d1f6595c9ce4538773ac7b54406f0b15784e8e80aa1ac2594190220d021e49f2437960156b70ba095e95f96f18acd8c263cc6122962b1167a7ba34cdd7ec8c977a699bed546722a8fc2a02b6e2185fff78ab586ce78894ddb9ab9f5738ed14b1e030756929d8ff2e4ae5544632b38f96e89a99b298ebd6950cc2d12ed0eb3618b26f520788462ad09877df60db600f0f1fb49c646f21c7ebd836dcf94e9d9b4c0db27d6d3bd36c6426a96bce731703046d7da129a4670836284a054869d4f1b1c7e2dca67676ef3c1898091ef5ad8bc358c3205c93bf7c9a40ad4c660f4728edd7bbb3142ea2fc1da711cfc200011e08b45f6bd1c261adbce9717928c5f9d63fc6a19f0014567773303073790f8214bd6f5282dfbb8b9fa1f6b40d7c1939393533b92e63ad9240990484aec7e41b27d579cbb531e0f67023492d86316ebb768ba1e0f786e6f37e56550c62237aee7011e54abd7c1412291b8a06de378b4d3c0b215da9708e5a3a442192085404a83d4accfecac067c0c43e13a70e3fa12e96409e0325000966bbb354465339d04a6f9dd15fe6dde07ce030780278088d05ad72cc9a6b2f2daaaa74d75a1f0e8d0d5f60b40868a8364ead6248430000b0857a126ffcdf396abf03ce089ffcb4c7f033046c6b4a995e7a00000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>krita::plugins::filtersgallery::kisfilterslistview.h</includehint>
+    <includehint>kispreviewwidget.h</includehint>
+</includehints>
+</UI>

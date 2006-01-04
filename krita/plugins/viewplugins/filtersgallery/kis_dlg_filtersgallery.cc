@@ -20,21 +20,21 @@
  */
 #include "kis_dlg_filtersgallery.h"
 
+#include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include "kis_filters_listview.h"
-#include "kis_filter.h"
-#include "kis_filter_config_widget.h"
-#include "kis_paint_device_impl.h"
-#include "kis_paint_layer.h"
-#include "kis_transaction.h"
-#include "kis_types.h"
-#include "kis_view.h"
-#include "kis_previewwidget.h"
+#include <kis_filter.h>
+#include <kis_filter_config_widget.h>
+#include <kis_filters_listview.h>
+#include <kis_paint_device_impl.h>
+#include <kis_paint_layer.h>
+#include <kis_previewwidget.h>
+#include <kis_transaction.h>
+#include <kis_types.h>
+#include <kis_view.h>
 
-class KisPreviewView;
-
+#include "kis_wdg_filtersgallery.h"
 
 namespace Krita {
 namespace Plugins {
@@ -44,21 +44,22 @@ namespace FiltersGallery {
 KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
   : KDialogBase(parent,name, true,i18n("Filters Gallery"), Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
 {
-    QFrame* frame = makeMainWidget();
-    m_hlayout = new QHBoxLayout(frame);
-
-    m_kflw = new KisFiltersListView(m_view, frame  );
-    m_hlayout->addWidget(m_kflw);
-    connect(m_kflw, SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
-
-    m_previewWidget = new KisPreviewWidget(frame);
-    m_hlayout->addWidget(m_previewWidget);
+    // Initialize main widget
+    m_widget = new KisWdgFiltersGallery(this);
+    m_widget->filtersList->setView(view);
+    setMainWidget(m_widget);
+    // Initialize filters list
+    connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
+    // Initialize configWidgetHolder
+//     m_hlayout = new QHBoxLayout( m_widget->configWidgetHolder->layout());
+    m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
+    // Initialize preview widget
     if (m_view->getCanvasSubject()->currentImg() && m_view->getCanvasSubject()->currentImg()->activeLayer())
-        m_previewWidget->slotSetDevice( ( (KisPaintLayer*) ( m_view->getCanvasSubject()->currentImg()->activeLayer().data() ) )->paintDevice() );
-    connect(m_previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
-
+    {
+        m_widget->previewWidget->slotSetDevice( m_view->getCanvasSubject()->currentImg()->activeDevice().data() );
+    }
+    connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
-
 }
 
 KisDlgFiltersGallery::~KisDlgFiltersGallery()
@@ -71,17 +72,19 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     m_currentFilter = kisitem->filter();
     if(m_currentConfigWidget != 0)
     {
-        m_hlayout->remove(m_currentConfigWidget);
+//         m_hlayout->remove(m_currentConfigWidget);
+        m_widget->configWidgetHolder->layout()->remove(m_currentConfigWidget);
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
     }
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
-    if (activeLayer)
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(mainWidget(),activeLayer->paintDevice());
+   if (activeLayer)
+       m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
     if(m_currentConfigWidget != 0)
     {
-        m_hlayout->insertWidget(1, m_currentConfigWidget);
+//         m_hlayout->insertWidget(0,m_currentConfigWidget);
+        m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(refreshPreview()));
     }
@@ -93,14 +96,14 @@ void KisDlgFiltersGallery::refreshPreview( )
     if(m_currentFilter == 0)
         return;
     
-    KisPaintDeviceImplSP layer = m_previewWidget->getDevice();
+    KisPaintDeviceImplSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());
 
     QRect rect = layer -> extent();
     m_currentFilter->process(layer.data(), layer.data(), config, rect);
-    m_previewWidget->slotUpdate();
+    m_widget->previewWidget->slotUpdate();
     cmd.unexecute();
 }
 

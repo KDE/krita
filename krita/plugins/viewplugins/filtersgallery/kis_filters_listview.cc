@@ -32,15 +32,32 @@ namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
 
+KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_view(0)
+{
+    init();
+}
+
 KisFiltersListView::KisFiltersListView(KisView* view, QWidget* parent) : KIconView(parent) , m_view(view)
 {
     buildPreview();
+    init();
+}
+void KisFiltersListView::init()
+{
     setItemsMovable(false);
     setSelectionMode(QIconView::Single);
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
+    setMinimumWidth(240);
+    if(layout ())
+    {
+        kdDebug() << " hassssssssssssssssssssssssssssssssssssssssssssss layooooooooooooooooouuuuuuuuuuuuuutttttttttttttttttt" << endl;
+    }
 }
 
 void KisFiltersListView::buildPreview()
 {
+    if(m_view == 0)
+        return;
     // Check which filters support painting
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>( img->activeLayer().data());
@@ -78,10 +95,6 @@ void KisFiltersListView::buildPreview()
     }
 
 }
-
-// KisImageSP KisFiltersListView::image() { return m_imgthumb; }
-// KisLayerSP KisFiltersListView::layer() { return m_thumb; }
-
 
 }
 }

@@ -42,7 +42,7 @@ namespace FiltersGallery {
             }
             inline KisID id() { return m_id; }
             inline KisFilter* filter() { return m_filter; }
-                        inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
+            inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
         private:
             KisID m_id;
             KisFilter* m_filter;
@@ -51,8 +51,18 @@ namespace FiltersGallery {
 
     class KisFiltersListView : public KIconView {
         public:
+            KisFiltersListView(QWidget* parent, const char* name="");
             KisFiltersListView(KisView * view, QWidget* parent);
+        private:
+            void init();
         public:
+            inline void setView(KisView* view) {
+                if(view != m_view)
+                {
+                    m_view = view;
+                    buildPreview();
+                }
+            }
             void buildPreview();
         private:
             KisView* m_view;

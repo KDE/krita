@@ -21,14 +21,19 @@
 
 #include "filters_gallery.h"
 
-#include <kdebug.h>
+#include <qapplication.h>
 
+#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 
-#include "kis_filters_listview.h"
-#include "kis_view.h"
-#include "kis_dlg_filtersgallery.h"
+#include <kis_dlg_filtersgallery.h>
+#include <kis_doc.h>
+#include <kis_filter.h>
+#include <kis_filters_listview.h>
+#include <kis_paint_device_impl.h>
+#include <kis_selection.h>
+#include <kis_view.h>
 
 namespace Krita {
 namespace Plugins {
@@ -69,9 +74,34 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
     KisDlgFiltersGallery dlg(m_view,m_view);
     if(dlg.exec())
     {
-        if(dlg.currentFilter() != 0 )
+        KisFilter* filter = dlg.currentFilter();
+        if(filter )
         {
+            KisImageSP img = m_view->getCanvasSubject()->currentImg();
+            KisPaintDeviceImplSP dev = img->activeDevice();
+            QRect r1 = dev -> extent();
+            QRect r2 = img -> bounds();
 
+            QRect rect = r1.intersect(r2);
+
+            if (dev->hasSelection()) {
+                QRect r3 = dev->selection()->selectedExactRect();
+                rect = rect.intersect(r3);
+            }
+            KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget(), dev);
+            KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
+            filter->process(dev,dev, config, rect);
+            delete config;
+            if (filter->cancelRequested()) {
+                cmd -> unexecute();
+                delete cmd;
+            } else {
+                img->undoAdapter()->addCommand(cmd);
+                m_view->getCanvasSubject()->document()->setModified(true);
+                img->notify();
+            }
+            filter->disableProgress();
+            QApplication::restoreOverrideCursor();
         }
     }
 }

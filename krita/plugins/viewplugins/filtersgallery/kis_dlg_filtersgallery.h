@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 class KisView;
 class KisFilter;
 class QIconViewItem;
+class QLabel;
 class QHBoxLayout;
 class KisPreviewWidget;
 class KisWdgFiltersGallery;
@@ -43,10 +44,10 @@ class KisDlgFiltersGallery : public KDialogBase
     Q_OBJECT
     public:
         KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name = "");
-
-                ~KisDlgFiltersGallery();
-        public:
-          inline KisFilter* currentFilter() { return m_currentFilter; };
+        ~KisDlgFiltersGallery();
+    public:
+        inline KisFilter* currentFilter() { return m_currentFilter; };
+        inline  QWidget* currentConfigWidget() { return m_currentConfigWidget; }
     private slots:
         void refreshPreview();
         void selectionHasChanged ( QIconViewItem * item );
@@ -55,7 +56,7 @@ class KisDlgFiltersGallery : public KDialogBase
         KisView* m_view;
         QWidget* m_currentConfigWidget;
         KisFilter* m_currentFilter;
-        QHBoxLayout* m_hlayout;
+        QLabel* m_labelNoCW;
 };
 
 }

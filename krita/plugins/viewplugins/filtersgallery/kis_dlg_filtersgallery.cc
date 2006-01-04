@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,7 +51,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     // Initialize configWidgetHolder
-//     m_hlayout = new QHBoxLayout( m_widget->configWidgetHolder->layout());
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
     // Initialize preview widget
     if (m_view->getCanvasSubject()->currentImg() && m_view->getCanvasSubject()->currentImg()->activeLayer())
@@ -60,6 +59,10 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
+    
+    m_labelNoCW = new QLabel(i18n("No configuration options are available for this widget."), m_widget->configWidgetHolder);
+    m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
+    m_labelNoCW->hide();
 }
 
 KisDlgFiltersGallery::~KisDlgFiltersGallery()
@@ -72,10 +75,11 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     m_currentFilter = kisitem->filter();
     if(m_currentConfigWidget != 0)
     {
-//         m_hlayout->remove(m_currentConfigWidget);
         m_widget->configWidgetHolder->layout()->remove(m_currentConfigWidget);
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
+    } else {
+        m_labelNoCW->hide();
     }
     KisImageSP img = m_view->getCanvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
@@ -83,10 +87,11 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
     if(m_currentConfigWidget != 0)
     {
-//         m_hlayout->insertWidget(0,m_currentConfigWidget);
         m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(refreshPreview()));
+    } else {
+        m_labelNoCW->show();
     }
     refreshPreview();
 }

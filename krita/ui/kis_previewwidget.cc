@@ -157,21 +157,21 @@ void KisPreviewWidget::needUpdate()
         m_groupBox->setTitle(i18n("Preview (needs update)"));
 }
 
-bool KisPreviewWidget::getAutoUpdate() {
+bool KisPreviewWidget::getAutoUpdate()  const {
     return m_autoupdate;
 }
 
-void KisPreviewWidget::zoomChanged()
+bool KisPreviewWidget::zoomChanged()
 {
     kdDebug() << "zoomChanged " << m_zoom << "\n";
     int w, h;
-       
     w = (int) (m_unscaledSource.width() * m_zoom + 0.5);
     h = (int) (m_unscaledSource.height() * m_zoom + 0.5);
 
     kdDebug() << "   width: " << w << "\n";
     kdDebug() << "   height: " << h << "\n";
-    
+    if( w == 0 || h == 0 )
+	   return false; 
     m_scaledPreview = m_unscaledSource.smoothScale(w, h, QImage::ScaleMax);
 
     m_image->resize(m_scaledPreview.width(), m_scaledPreview.height());
@@ -179,19 +179,24 @@ void KisPreviewWidget::zoomChanged()
     m_previewDevice->convertFromQImage(m_scaledPreview, ""); //should perhaps be m_profile->name
     
     emit updated();
+    return true;
  }
 
 void KisPreviewWidget::zoomIn() {
-    if (m_zoom * 1.5 < 8) {
+    double oldZoom = m_zoom;
+    if (m_zoom > 0 && m_zoom * 1.5 < 8) {
         m_zoom = m_zoom * 1.5;
-        zoomChanged();
+        if( !zoomChanged() )
+	    m_zoom = oldZoom;
     }
 }
 
 void KisPreviewWidget::zoomOut() {
-    if (m_zoom / 1.5 > 1/8) {
+    double oldZoom = m_zoom; 
+    if (m_zoom > 0 && m_zoom / 1.5 > 1/8) {
         m_zoom = m_zoom / 1.5;
-        zoomChanged();
+	if( !zoomChanged() )
+	   m_zoom = oldZoom;
    }
 }
 

@@ -50,7 +50,7 @@ public:
     KisPaintDeviceImplSP getDevice();
 
     /** returns if the preview is automatically updated */
-    bool getAutoUpdate();
+    bool getAutoUpdate() const;
 
 
 public slots:
@@ -88,7 +88,7 @@ private slots:
     
 private:
 
-    void zoomChanged();
+    bool zoomChanged();
     
     bool m_autoupdate, m_previewIsDisplayed;
 

@@ -24,13 +24,16 @@
 #include <api/qtobject.h>
 #include <main/manager.h>
 
-#include "kis_doc.h"
-#include "kis_script.h"
+#include <kis_brush.h>
+#include <kis_doc.h>
+#include <kis_resourceserver.h>
 
-#include "kis_scripts_registry.h"
+#include "kis_script_progress.h"
 
+#include "krs_brush.h"
+#include "krs_color.h"
 #include "krs_doc.h"
-#include "krs_script.h"
+#include "krs_script_progress.h"
 
 extern "C"
 {
@@ -47,8 +50,45 @@ extern "C"
 
 using namespace Kross::KritaCore;
 
+KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory", 0)
+{
+    addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
+{
+    Color* c = new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb);
+    kdDebug() << c->getName() << endl;
+    kdDebug() << "created" << endl;
+    return c;
+}
+Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args)
+{
+    return new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Hsv);
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
+{
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
+    QValueList<KisResource*> resources = rServer->resources();
+    
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    
+    for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
+    {
+        if((*it)->name() == name)
+        {
+            return new Brush((KisBrush*)*it);
+        }
+    }
+    return 0;
+}
+
+
 KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
-    : Kross::Api::Module("kritacore") , m_manager(manager)
+    : Kross::Api::Module("kritacore") , m_manager(manager), m_factory(new KritaCoreFactory())
 {
 
     QMap<QString, Object::Ptr> children = manager->getChildren();
@@ -70,35 +110,41 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
                 throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaDocument' published.") );
             }
          }
-   }
-   // Wrap script
-   KisScriptSP script = KisScriptsRegistry::instance()->getRunningScript();
-   if(script != 0)
-   {
-       addChild(new Script(script));
-   } else {
-       throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaScript' executed.") );
-   }
-   /*Kross::Api::Object::Ptr kritaview = ((Kross::Api::Object*)manager)->getChild("KritaView");
-   if(kritaview) {
-       Kross::Api::QtObject* kritaviewqt = (Kross::Api::QtObject*)( kritaview.data() );
-       if(kritaviewqt) {
-               ::KisView* view = (::KisView*)( kritaviewqt->getObject() );
-               if(view) {
-                   addChild( new View(view) );
-               } else {
-                   throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaView' published.") );
-               }
-       }
-}*/
+    }
+   // Wrap KritaScriptProgress
+    Kross::Api::Object::Ptr kritascriptprogress = ((Kross::Api::Object*)manager)->getChild("KritaScriptProgress");
+    if(kritadocument) {
+        Kross::Api::QtObject* kritascriptprogressqt = (Kross::Api::QtObject*)( kritascriptprogress.data() );
+        if(kritascriptprogressqt) {
+                ::KisScriptProgress* scriptprogress = (::KisScriptProgress*)( kritascriptprogressqt->getObject() );
+                scriptprogress->activateAsSubject();
+                if(scriptprogress) {
+                    addChild( new ScriptProgress(scriptprogress) );
+                } else {
+                    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KritaScriptProgress' published.") );
+                }
+        }
+    }
 }
 
 KritaCoreModule::~KritaCoreModule()
 {
+    delete m_factory;
 }
 
 
 const QString KritaCoreModule::getClassName() const
 {
     return "Kross::KritaCore::KritaCoreModule";
+}
+
+Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
+{
+    kdDebug() << "KritaCoreModule::call" << name << endl;
+    if( m_factory->isAFunction(name))
+    {
+        return m_factory->call(name, arguments);
+    } else {
+        return Kross::Api::Module::call(name, arguments);
+    }
 }

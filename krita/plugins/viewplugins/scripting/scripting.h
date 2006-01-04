@@ -1,7 +1,8 @@
 /*
- * This file is part of the KDE project
+ * This file is part of Krita
  *
  * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,31 +17,37 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef WDGSCRIPTSMANAGER_H
-#define WDGSCRIPTSMANAGER_H
 
-#include <wdgscriptsmanagerbase.h>
+#ifndef SCRIPTING_H
+#define SCRIPTING_H
 
-class Scripting;
+#include <kparts/plugin.h>
 
-/**
-@author Cyrille Berger
-*/
-class WdgScriptsManager : public WdgScriptsManagerBase
+class KisView;
+class KisScript;
+class KisScriptProgress;
+
+namespace Kross {
+    namespace Api {
+        class ScriptGUIClient;
+        class ScriptAction;
+    }
+}
+
+class Scripting : public KParts::Plugin
 {
     Q_OBJECT
     public:
-        WdgScriptsManager(Scripting* scr, QWidget* parent = 0, const char* name = 0, WFlags fl = 0);
-        ~WdgScriptsManager();
-    public slots:
-        void slotLoadScript();
-        void slotExecuteScript();
-        void slotRemoveScript();
+        Scripting(QObject *parent, const char *name, const QStringList &);
+        virtual ~Scripting();
+    private slots:
+        void executionStarted(Kross::Api::ScriptAction*);
+        void executionFinished(Kross::Api::ScriptAction*);
     private:
-        void fillScriptsList();
-    private:
-        QListViewItem* m_qlviScripts,* m_qlviFilters,* m_qlviTools;
-        Scripting* m_scripting;
+        KisView * m_view;
+        Kross::Api::ScriptGUIClient* m_scriptguiclient;
+        KisScriptProgress* m_scriptProgress;
 };
+
 
 #endif

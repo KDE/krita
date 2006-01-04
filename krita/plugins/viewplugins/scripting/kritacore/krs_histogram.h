@@ -34,7 +34,7 @@ namespace KritaCore {
 class Histogram : public Kross::Api::Class<Histogram>
 {
     public:
-        Histogram(KisLayerSP layer, KisHistogramProducerSP producer, const enumHistogramType type);
+        Histogram(KisPaintLayerSP layer, KisHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
         virtual const QString getClassName() const;
     public:

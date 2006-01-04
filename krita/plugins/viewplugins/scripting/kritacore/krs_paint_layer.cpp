@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "krs_layer.h"
+#include "krs_paint_layer.h"
 
 #include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
@@ -27,78 +27,80 @@
 
 #include "krs_iterator.h"
 #include "krs_histogram.h"
+#include "krs_painter.h"
 
 namespace Kross {
 
 namespace KritaCore {
 
-Layer::Layer(KisLayerSP layer, KisDoc* doc)
-    : Kross::Api::Class<Layer>("KritaLayer"), m_layer(layer), m_doc(doc), m_cmd(0)
+PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
+    : Kross::Api::Class<PaintLayer>("KritaLayer"), m_layer(layer), m_doc(doc), m_cmd(0)
 {
-    addFunction("createRectIterator", &Layer::createRectIterator,
+    addFunction("createRectIterator", &PaintLayer::createRectIterator,
                 Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("createHLineIterator", &Layer::createHLineIterator,
+    addFunction("createHLineIterator", &PaintLayer::createHLineIterator,
                 Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("createVLineIterator", &Layer::createVLineIterator,
+    addFunction("createVLineIterator", &PaintLayer::createVLineIterator,
                 Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("getWidth", &Layer::getWidth);
-    addFunction("getHeight", &Layer::getHeight);
-    addFunction("createHistogram", &Layer::createHistogram, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("beginPainting", &Layer::beginPainting, Kross::Api::ArgumentList() );
-    addFunction("endPainting", &Layer::endPainting);
-    addFunction("convertToColorspace", &Layer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("getWidth", &PaintLayer::getWidth);
+    addFunction("getHeight", &PaintLayer::getHeight);
+    addFunction("createHistogram", &PaintLayer::createHistogram, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("createPainter", &PaintLayer::createPainter);
+    addFunction("beginPainting", &PaintLayer::beginPainting, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String" ) );
+    addFunction("endPainting", &PaintLayer::endPainting);
+    addFunction("convertToColorspace", &PaintLayer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
 
 
-Layer::~Layer()
+PaintLayer::~PaintLayer()
 {
 }
 
-const QString Layer::getClassName() const {
-    return "Kross::KritaCore::Layer";
+const QString PaintLayer::getClassName() const {
+    return "Kross::KritaCore::PaintLayer";
 }
 
-Kross::Api::Object::Ptr Layer::createRectIterator(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createRectIterator(Kross::Api::List::Ptr args)
 {
     return new Iterator<KisRectIteratorPixel>(
-            m_layer->createRectIterator(Kross::Api::Variant::toUInt(args->item(0)),
+            paintLayer()->paintDevice()->createRectIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)),
                                         Kross::Api::Variant::toUInt(args->item(3)), true),
-            m_layer);
+            paintLayer());
 }
-Kross::Api::Object::Ptr Layer::createHLineIterator(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createHLineIterator(Kross::Api::List::Ptr args)
 {
     return new Iterator<KisHLineIteratorPixel>(
-            m_layer->createHLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
+            paintLayer()->paintDevice()->createHLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)), true),
-            m_layer);
+            paintLayer());
 }
-Kross::Api::Object::Ptr Layer::createVLineIterator(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createVLineIterator(Kross::Api::List::Ptr args)
 {
     return new Iterator<KisVLineIteratorPixel>(
-            m_layer->createVLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
+            paintLayer()->paintDevice()->createVLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)), true),
-            m_layer);
+            paintLayer());
 }
-Kross::Api::Object::Ptr Layer::getWidth(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr PaintLayer::getWidth(Kross::Api::List::Ptr)
 {
-    QRect r1 = m_layer->extent();
-    QRect r2 = m_layer->image()->bounds();
+    QRect r1 = paintLayer()->extent();
+    QRect r2 = paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
     return new Kross::Api::Variant(rect.width());
 }
-Kross::Api::Object::Ptr Layer::getHeight(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr PaintLayer::getHeight(Kross::Api::List::Ptr)
 {
-    QRect r1 = m_layer->extent();
-    QRect r2 = m_layer->image()->bounds();
+    QRect r1 = paintLayer()->extent();
+    QRect r2 = paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
     return new Kross::Api::Variant(rect.height());
 }
 
-Kross::Api::Object::Ptr Layer::createHistogram(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
 {
     KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(Kross::Api::Variant::toString(args->item(0)));
     
@@ -119,40 +121,45 @@ Kross::Api::Object::Ptr Layer::createHistogram(Kross::Api::List::Ptr args)
             type = LINEAR;
             break;
     }
-    if(factory && factory->isCompatibleWith( m_layer->colorSpace() ))
+    if(factory && factory->isCompatibleWith( paintLayer()->paintDevice()->colorSpace() ))
     {
-        return new Histogram( m_layer, factory->generate() , type);
+        return new Histogram( paintLayer().data(), factory->generate() , type);
     }
     return 0;
 }
 
-Kross::Api::Object::Ptr Layer::beginPainting(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createPainter(Kross::Api::List::Ptr args)
 {
-    QString name = args->count() > 0 ? Kross::Api::Variant::toString(args->item(0)) : "script";
+    return new Painter(paintLayer());
+}
+
+Kross::Api::Object::Ptr PaintLayer::beginPainting(Kross::Api::List::Ptr args)
+{
+    QString name = Kross::Api::Variant::toString(args->item(0));
     if(m_cmd != 0)
     {
         delete m_cmd;
     }
-    m_cmd = new KisTransaction(name, m_layer.data());
+    m_cmd = new KisTransaction(name, paintLayer()->paintDevice());
     Q_CHECK_PTR(m_cmd);
     return 0;
 }
 
-Kross::Api::Object::Ptr Layer::endPainting(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
 {
-    if(m_doc !=0)
+    if(doc() !=0)
     {
-        m_doc->setModified(true);
-        m_doc->currentImage()->notify();
+        doc()->setModified(true);
+        doc()->currentImage()->notify();
     }
     if(m_cmd != 0)
     {
-        m_layer->image()->undoAdapter()->addCommand(m_cmd);
+        paintLayer()->image()->undoAdapter()->addCommand(m_cmd);
     }
     return 0;
 }
 
-Kross::Api::Object::Ptr Layer::convertToColorspace(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr args)
 {
     KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(Kross::Api::Variant::toString(args->item(0)), ""), "");
     if(!dstCS)
@@ -161,7 +168,7 @@ Kross::Api::Object::Ptr Layer::convertToColorspace(Kross::Api::List::Ptr args)
         kdDebug() << Kross::Api::Variant::toString(args->item(0)) << " colorspace is not available, please check your installation." << endl;
         return 0;
     }
-    m_layer->convertTo(dstCS);
+    paintLayer()->paintDevice()->convertTo(dstCS);
     return 0;
 }
 

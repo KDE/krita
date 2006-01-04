@@ -18,13 +18,13 @@
 
 #include "krs_histogram.h"
 
-#include <kis_layer.h>
+#include <kis_paint_layer.h>
 
 namespace Kross {
 
 namespace KritaCore {
 
-Histogram::Histogram(KisLayerSP layer,
+Histogram::Histogram(KisPaintLayerSP layer,
                      KisHistogramProducerSP producer,
                      const enumHistogramType type)
  : Kross::Api::Class<Histogram>("KritaHistogram")

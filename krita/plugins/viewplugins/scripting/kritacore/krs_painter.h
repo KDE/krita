@@ -16,28 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRS_SCRIPT_H
-#define KROSS_KRITACOREKRS_SCRIPT_H
+#ifndef KROSS_KRITACOREKRS_PAINTER_H
+#define KROSS_KRITACOREKRS_PAINTER_H
 
 #include <api/class.h>
 
-class KisScript;
+#include <kis_types.h>
+
+class KisPainter;
 
 namespace Kross {
 
 namespace KritaCore {
 
-class Script : public Kross::Api::Class<Script> {
+class Painter : public Kross::Api::Class<Painter>
+{
     public:
-        Script(KisScript* Script);
-        ~Script();
+        explicit Painter(KisPaintLayerSP layer);
+        ~Painter();
+        Kross::Api::Object::Ptr paintAt(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setPaintColor(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setBrush(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setPaintOp(Kross::Api::List::Ptr args);
+    protected:
+        inline KisPaintLayerSP paintLayer() { return m_layer; }
     private:
-        Kross::Api::Object::Ptr setProgressTotalSteps(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr setProgress(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr incProgress(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr setProgressStage(Kross::Api::List::Ptr);
-    private:
-        KisScript* m_script;
+        KisPaintLayerSP m_layer;
+        KisPainter* m_painter;
 };
 
 }

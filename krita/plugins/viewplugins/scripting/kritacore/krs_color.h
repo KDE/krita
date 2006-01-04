@@ -16,36 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRSIMAGE_H
-#define KROSS_KRITACOREKRSIMAGE_H
+#ifndef KROSS_APIKRS_COLOR_H
+#define KROSS_APIKRS_COLOR_H
+
+#include <qcolor.h>
 
 #include <api/class.h>
-
-#include <kis_types.h>
-
-class KisDoc;
 
 namespace Kross {
 
 namespace KritaCore {
 
-/**
-@author Cyrille Berger
-*/
-    class Image : public Kross::Api::Class<Image>
+class Color : public Kross::Api::Class<Color>
 {
     public:
-        Image(KisImageSP image, KisDoc* doc = 0);
-        ~Image();
-        virtual const QString getClassName() const;
+        Color ( int x, int y, int z, QColor::Spec colorSpec );
+        Color ();
+
+        ~Color();
+    public:
+        inline const QString Color::getClassName() const
+        { return "Kross::Krita::Color"; };
+        inline QColor toQColor() { return m_color; };
     private:
-        Kross::Api::Object::Ptr getActivePaintLayer(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
-    private:
-        KisImageSP m_image;
-        KisDoc* m_doc;
+        QColor m_color;
 };
 
 }

@@ -16,40 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRSIMAGE_H
-#define KROSS_KRITACOREKRSIMAGE_H
+#ifndef _KIS_SCRIPT_PROGRESS_H_
+#define _KIS_SCRIPT_PROGRESS_H_
 
-#include <api/class.h>
+#include <kis_progress_subject.h>
 
-#include <kis_types.h>
+class KisView;
 
-class KisDoc;
-
-namespace Kross {
-
-namespace KritaCore {
-
-/**
-@author Cyrille Berger
-*/
-    class Image : public Kross::Api::Class<Image>
+class KisScriptProgress : public KisProgressSubject
 {
     public:
-        Image(KisImageSP image, KisDoc* doc = 0);
-        ~Image();
-        virtual const QString getClassName() const;
+        KisScriptProgress(KisView* view) : m_view(view) {};
+    public:
+        /**
+         * This function will set this class as the KisProgressSubject in view
+         */
+        void activateAsSubject();
+        virtual void cancel() {};
+    public:
+        void setProgressTotalSteps(Q_INT32 totalSteps);
+        void setProgress(Q_INT32 progress);
+        void incProgress();
+        void setProgressStage(const QString& stage, Q_INT32 progress);
+        void progressDone();
     private:
-        Kross::Api::Object::Ptr getActivePaintLayer(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
-    private:
-        KisImageSP m_image;
-        KisDoc* m_doc;
+        Q_INT32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
+        KisView * m_view;
 };
-
-}
-
-}
 
 #endif

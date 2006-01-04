@@ -25,20 +25,31 @@
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
 #include <api/module.h>
+#include <api/event.h>
 
 namespace Kross { namespace Api {
     class Manager;
 }}
 
 namespace Kross { namespace KritaCore {
-
+    /**
+     * This class contains functions use to create new Kross object in a script
+     */
+    class KritaCoreFactory : public Kross::Api::Event<KritaCoreFactory>
+    {
+        public:
+            KritaCoreFactory();
+        private:
+            Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr newHSVColor(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr getBrush(Kross::Api::List::Ptr);
+    };
     /**
      *
      */
     class KritaCoreModule : public Kross::Api::Module
     {
         public:
-
             /**
              * Constructor.
              */
@@ -51,11 +62,12 @@ namespace Kross { namespace KritaCore {
 
             /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-        private:
-            Kross::Api::Object::Ptr kikoo(Kross::Api::List::Ptr);
+            virtual Kross::Api::Object::Ptr call(const QString& name, Kross::Api::List::Ptr arguments);
         private:
             Kross::Api::Manager* m_manager;
+            KritaCoreFactory* m_factory;
     };
+    
 
 }}
 

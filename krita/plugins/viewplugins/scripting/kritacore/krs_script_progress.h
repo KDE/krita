@@ -16,36 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KROSS_KRITACOREKRSIMAGE_H
-#define KROSS_KRITACOREKRSIMAGE_H
+#ifndef KROSS_KRITACOREKRS_SCRIPTPROGRESS_H
+#define KROSS_KRITACOREKRS_SCRIPTPROGRESS_H
 
 #include <api/class.h>
 
-#include <kis_types.h>
-
-class KisDoc;
+class KisScriptProgress;
 
 namespace Kross {
 
 namespace KritaCore {
 
-/**
-@author Cyrille Berger
-*/
-    class Image : public Kross::Api::Class<Image>
-{
+class ScriptProgress : public Kross::Api::Class<ScriptProgress> {
     public:
-        Image(KisImageSP image, KisDoc* doc = 0);
-        ~Image();
-        virtual const QString getClassName() const;
+        ScriptProgress(KisScriptProgress* Script);
+        ~ScriptProgress();
     private:
-        Kross::Api::Object::Ptr getActivePaintLayer(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setProgressTotalSteps(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr setProgress(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr incProgress(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr setProgressStage(Kross::Api::List::Ptr);
     private:
-        KisImageSP m_image;
-        KisDoc* m_doc;
+        KisScriptProgress* m_script;
 };
 
 }

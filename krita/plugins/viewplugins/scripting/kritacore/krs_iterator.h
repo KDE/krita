@@ -22,6 +22,8 @@
 #include <api/class.h>
 #include <api/event.h>
 
+#include <kis_paint_layer.h>
+#include <kis_paint_device_impl.h>
 #include <kis_types.h>
 
 namespace Kross {
@@ -35,7 +37,7 @@ template<class _T_It>
 class Iterator : public Kross::Api::Class<Iterator<_T_It> >
 {
     public:
-    Iterator(_T_It it, KisLayerSP layer) : Kross::Api::Class<Iterator<_T_It> >("KritaIterator"), m_it(it), nchannels(layer->nChannels())
+    Iterator(_T_It it, KisPaintLayerSP layer) : Kross::Api::Class<Iterator<_T_It> >("KritaIterator"), m_it(it), nchannels(layer->paintDevice()->nChannels())
     {
         this->addFunction("next",
             new Kross::Api::ConstFunction0< Iterator<_T_It> >(
@@ -44,8 +46,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             new Kross::Api::ConstFunction0< Iterator<_T_It> >(
                 this, &Iterator<_T_It>::isDone ) );
 
-        QValueVector<KisChannelInfo *> channels = layer->colorSpace()->channels();
-        kdDebug() << layer->colorSpace()->id().name() << endl;
+        QValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
+        kdDebug() << layer->paintDevice()->colorSpace()->id().name() << endl;
         for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
         {
             KisChannelInfo * ci = *itC;

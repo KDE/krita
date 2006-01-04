@@ -33,11 +33,11 @@ namespace KritaCore {
 /**
 @author Cyrille Berger
 */
-class Layer : public Kross::Api::Class<Layer>
+class PaintLayer : public Kross::Api::Class<PaintLayer>
 {
     public:
-        explicit Layer(KisLayerSP layer, KisDoc* doc = 0);
-        virtual ~Layer();
+        explicit PaintLayer(KisPaintLayerSP layer, KisDoc* doc = 0);
+        virtual ~PaintLayer();
         virtual const QString getClassName() const;
     private:
         Kross::Api::Object::Ptr createRectIterator(Kross::Api::List::Ptr);
@@ -46,11 +46,15 @@ class Layer : public Kross::Api::Class<Layer>
         Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr createHistogram(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr createPainter(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
     private:
-        KisLayerSP m_layer;
+        inline KisPaintLayerSP paintLayer() { return m_layer; }
+        inline KisDoc* doc() { return m_doc; }
+    private:
+        KisPaintLayerSP m_layer;
         KisDoc* m_doc;
         KisTransaction* m_cmd;
 };

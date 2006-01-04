@@ -7,7 +7,7 @@ print "Before error\n"
 doc = Krosskritacore::get("KritaDocument")
 script = Krosskritacore::get("KritaScript")
 image = doc.getImage()
-layer = image.getActiveLayer()
+layer = image.getActivePaintLayer()
 width = layer.getWidth()
 print width
 height = layer.getHeight()

@@ -25,7 +25,7 @@ class Inverter:
         doc = krosskritacore.get("KritaDocument")
         script = krosskritacore.get("KritaScript")
         image = doc.getImage()
-        layer = image.getActiveLayer()
+        layer = image.getActivePaintLayer()
         width = layer.getWidth()
         height = layer.getHeight()
         script.setProgressTotalSteps(width * height)

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <vector>
 
+#include <qapplication.h>
 #include <qpoint.h>
 
 #include <kdebug.h>
@@ -41,10 +42,8 @@
 #include <kis_types.h>
 #include <kis_view.h>
 
-
-#include "kis_scripts_registry.h"
-#include "kis_script.h"
-#include "wdgscriptsmanager.h"
+#include <main/scriptguiclient.h>
+#include "kritascripting/kis_script_progress.h"
 
 typedef KGenericFactory<Scripting> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -63,15 +62,25 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(Scripting::instance());
-        setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
         m_view = (KisView*) parent;
+        m_scriptguiclient = new Kross::Api::ScriptGUIClient( m_view, m_view );
+//         m_scriptguiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
 
-        (void) new KAction(i18n("&Load Script"), 0, 0, this, SLOT(slotLoadScript()), actionCollection(), "loadscript");
-        (void) new KAction(i18n("Load && &Execute Script"), 0, 0, this, SLOT(slotLoadAndExecuteScript()), actionCollection(), "loadandexecutescript");
-        (void) new KAction(i18n("&Show Script Manager"), 0, 0, this, SLOT(slotShowManager()), actionCollection(), "showmanager");
+        //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
+        setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
+        new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
+        new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+        //END TODO
+        
+        connect(m_scriptguiclient, SIGNAL(executionStarted( Kross::Api::ScriptAction* )), this, SLOT(executionStarted(Kross::Api::ScriptAction*)));
+        connect(m_scriptguiclient, SIGNAL(executionFinished( Kross::Api::ScriptAction* )), this, SLOT(executionFinished(Kross::Api::ScriptAction*)));
         
         Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");
+        m_scriptProgress = new KisScriptProgress(m_view);
+        Kross::Api::Manager::scriptManager()->addQObject(m_scriptProgress, "KritaScriptProgress");
+
+        
     }
 
 }
@@ -80,49 +89,16 @@ Scripting::~Scripting()
 {
 }
 
-KisScript* Scripting::loadScript(bool exec)
+void Scripting::executionStarted(Kross::Api::ScriptAction*)
 {
-    KFileDialog* kfd = new KFileDialog(QString::null, "*.py *.rb", m_view, "", true);
-    kfd->setCaption("load a script");
-    if(kfd->exec())
-    {
-        KURL fn = kfd->selectedURL();
-        kdDebug() << fn << endl;
-        KisScriptSP ks;
-        if( KisScriptsRegistry::instance()->exists(fn.path()) )
-        {
-            // Scripts already exist, ask for reload
-            ks = KisScriptsRegistry::instance()->get(fn.path());
-            if( KMessageBox::questionYesNo( m_view, i18n("This scripts exists already, do you want to reload it ?"), i18n("Scripts already loaded") ) == KMessageBox::Yes)
-            {
-                ks->reload();
-            }
-        } else {
-            KisScriptsRegistry::instance()->add( ks = new KisScript(fn, m_view, exec) );
-        }
-        return ks;
-    }
-    return 0;
+    
 }
-
-
-void Scripting::slotLoadScript()
+void Scripting::executionFinished(Kross::Api::ScriptAction*)
 {
-    loadScript(false);
+    m_view->getCanvasSubject()->document()->setModified(true);
+    m_view->getCanvasSubject()->document()->currentImage()->notify();
+    m_scriptProgress->progressDone();
+    QApplication::restoreOverrideCursor();
 }
-void Scripting::slotLoadAndExecuteScript()
-{
-    loadScript(true);
-}
-
-void Scripting::slotShowManager()
-{
-    KDialogBase* kdb = new KDialogBase(m_view, "", true, i18n("Script Manager"), KDialogBase::Close);
-    WdgScriptsManager* wsm = new WdgScriptsManager(this, kdb);
-    kdb->setMainWidget(wsm);
-    kdb->show();
-}
-
-
 
 #include "scripting.moc"

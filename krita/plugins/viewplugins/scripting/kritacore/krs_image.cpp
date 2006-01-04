@@ -20,10 +20,10 @@
 
 #include <kis_colorspace_factory_registry.h>
 #include <kis_image.h>
-#include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 
-#include "krs_layer.h"
+#include "krs_paint_layer.h"
 
 namespace Kross {
 
@@ -32,7 +32,7 @@ namespace KritaCore {
     Image::Image(KisImageSP image, KisDoc* doc)
     : Kross::Api::Class<Image>("KritaImage"), m_image(image), m_doc(doc)
 {
-    addFunction("getActiveLayer", &Image::getActiveLayer);
+    addFunction("getActivePaintLayer", &Image::getActivePaintLayer);
     addFunction("getWidth", &Image::getWidth);
     addFunction("getHeight", &Image::getHeight);
     addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
@@ -47,9 +47,16 @@ const QString Image::getClassName() const {
     return "Kross::KritaCore::Image";
 }
 
-Kross::Api::Object::Ptr Image::getActiveLayer(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr Image::getActivePaintLayer(Kross::Api::List::Ptr)
 {
-    return new Layer(m_image->activeLayer(), m_doc);
+    KisPaintLayer* activePaintLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
+    if(activePaintLayer )
+    {
+        return new PaintLayer(activePaintLayer, m_doc);
+    } else {
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("The active layer is not paintable.") );
+        return 0;
+    }
 }
 Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
 {

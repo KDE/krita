@@ -743,7 +743,7 @@ void LayerItem::setProperty( const QString &name, bool on )
 
     const bool notify = ( on != d->properties[i] );
     d->properties[i] = on;
-    if( notify );
+    if( notify )
     {
         emit listView()->propertyChanged( this, name, on );
         emit listView()->propertyChanged( id(), name, on );

@@ -31,7 +31,7 @@ class KisID;
  * for a new empty image document.
  */
 class KisCustomImageWidget : public WdgNewImage {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     /**
      * Constructor. Please note that this class is being used/created by KisDoc.

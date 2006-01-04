@@ -58,11 +58,10 @@ public:
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), dev.data());
         Q_CHECK_PTR(t);
 
-        dev -> crop(m_rect);
+        dev->crop(m_rect);
 
         if (layer->undoAdapter()) {
             layer->undoAdapter()->addCommand(t);
-
             KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
             layer->undoAdapter()->addCommand(cmd);
         }
@@ -72,8 +71,6 @@ public:
 
     bool visit(KisGroupLayer *layer)
     {
-        //KisCropVisitor visitor (m_img, m_sx, m_sy, m_progress, m_filterStrategy);
-
         KisLayerSP child = layer->firstChild();
         while (child) {
             child->accept(*this);

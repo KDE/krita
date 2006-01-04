@@ -1049,7 +1049,7 @@ KisImageSP KisDoc::currentImage()
 void KisDoc::setCurrentImage(KisImageSP image)
 {
     m_currentImage = image;
-    m_undo = true;
+    setUndo(true);
 }
 
 #include "kis_doc.moc"

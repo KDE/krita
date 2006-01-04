@@ -54,7 +54,7 @@ public:
     virtual QRect extent() const {return QRect();};
     virtual QRect exactBounds() const {return QRect();};
 
-    virtual void accept(KisLayerVisitor &v) { v.visit(this); }
+    virtual bool accept(KisLayerVisitor &v) { return v.visit(this); }
 
     virtual uint childCount() const;
 

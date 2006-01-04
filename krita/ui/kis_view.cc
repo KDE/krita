@@ -136,7 +136,6 @@
 // Dialog boxes
 #include "kis_dlg_new_layer.h"
 #include "kis_dlg_layer_properties.h"
-#include "kis_dlg_transform.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_image_properties.h"
 
@@ -267,11 +266,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
 
     // Load all plugins
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"));//,
-//                                                         QString::fromLatin1("(Type == 'Service') and "
-//                                                                             "([X-KDE-Version] == 2)"));
+    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
+                                                         QString::fromLatin1("(Type == 'Service') and "
+                                                                             "([X-KDE-Version] == 2)"));
     KTrader::OfferList::ConstIterator iter;
-    kdDebug() << "Found " << offers.count() << " view plugins\n";
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -279,11 +277,11 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin ) {
-            kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << "\n";
             insertChildClient(plugin);
         }
         else {
-            kdDebug() << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(51006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
         }
     }
 
@@ -507,9 +505,9 @@ void KisView::setupStatusBar()
     if (sb) {
         QLabel *lbl;
 
-        lbl = new KisLabelCursorPos(sb);
-        connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
-        addStatusBarItem(lbl, 0);
+        //lbl = new KisLabelCursorPos(sb);
+        //connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
+        //addStatusBarItem(lbl, 0);
 
         m_statusBarZoomLabel = new QLabel(sb);
         addStatusBarItem(m_statusBarZoomLabel, 1);
@@ -1038,7 +1036,6 @@ void KisView::layerUpdateGUI(bool enable)
     m_layerHide -> setEnabled(enable);
     m_layerProperties -> setEnabled(enable);
     m_layerSaveAs -> setEnabled(enable);
-//    m_layerTransform -> setEnabled(enable);
     m_layerRaise -> setEnabled(enable && layer -> prevSibling());
     m_layerLower -> setEnabled(enable && layer -> nextSibling());
     m_layerTop -> setEnabled(enable && nlayers > 1 && layer != img -> rootLayer() -> firstChild());

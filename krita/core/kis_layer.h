@@ -143,7 +143,7 @@ public:
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
-    virtual void accept(KisLayerVisitor &) = 0;
+    virtual bool accept(KisLayerVisitor &) = 0;
 
 signals:
     void visibilityChanged(KisLayerSP device);

@@ -162,7 +162,6 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
-
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();
@@ -542,7 +541,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
         if (!m_conversionCache.resize( len, QGArray::SpeedOptim )) {
             kdDebug() << "Could not allocate enough memory for the conversion!\n";
             // XXX: We should do a slow, pixel by pixel bitblt here...
-            return;
+            abort();
         }
 
         for (Q_INT32 row = 0; row < rows; row++) {

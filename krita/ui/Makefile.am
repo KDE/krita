@@ -34,7 +34,6 @@ libkritaui_la_SOURCES = \
     kis_dlg_layer_properties.cc \
     kis_dlg_new_layer.cc \
     kis_dlg_preferences.cc \
-    kis_dlg_transform.cc \
     kis_doc.cc \
     kis_doc_iface.cc \
     kis_doc_iface.skel \
@@ -136,7 +135,6 @@ noinst_HEADERS = \
     kis_dlg_layer_properties.h \
     kis_dlg_new_layer.h \
     kis_dlg_preferences.h \
-    kis_dlg_transform.h \
     kis_doc.h \
     kis_doc_iface.h \
     kis_double_click_event.h \

@@ -184,7 +184,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_dev = dev;
     m_curves = new QSortedList<QPair<double,double> >[m_dev->colorSpace()->nColorChannels()];
     m_activeCh = 0;
-    for(int ch=0; ch <m_dev->colorSpace()->nColorChannels(); ch++)
+    for(unsigned int ch=0; ch <m_dev->colorSpace()->nColorChannels(); ch++)
     {
         m_curves[ch].append(new QPair<double,double>(0, 0));
         m_curves[ch].append(new QPair<double,double>(1, 1));
@@ -196,8 +196,8 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     // Fill in the channel chooser
     QValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
-    for(i=0; i < dev->colorSpace()->nColorChannels(); i++)
-        m_page->cmbChannel -> insertItem(channels.at(i)->name());
+    for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
+        m_page->cmbChannel -> insertItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // Create the horizontal gradient label

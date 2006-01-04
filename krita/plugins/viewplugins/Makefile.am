@@ -1,5 +1,5 @@
 if compile_kross
-#SCRIPTINGDIR = scripting
+SCRIPTINGDIR = scripting
 endif
 
 SUBDIRS = \
@@ -14,4 +14,5 @@ SUBDIRS = \
     screenshot \
     shearimage \
     variations \
-    performancetest
+    performancetest \
+    $(SCRIPTINGDIR)

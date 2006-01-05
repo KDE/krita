@@ -53,7 +53,7 @@ KisKernel * createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
     kernel->data[8] = i8;
 
     return kernel;
-};
+}
 
 
 

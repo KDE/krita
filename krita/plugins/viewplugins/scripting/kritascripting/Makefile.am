@@ -1,5 +1,3 @@
-EXTRA_DIST = $(kritarc_DATA)
-
 INCLUDES  =  -I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/core \
 	-I$(top_srcdir)/krita/kritacolor/ \

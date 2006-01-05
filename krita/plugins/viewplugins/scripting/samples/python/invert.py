@@ -1,6 +1,6 @@
 # This file is part of Krita
 #
-# Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+# Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -34,15 +34,11 @@ class Inverter:
         print "kikoo\n"
         finesh = it.isDone()
         while (not finesh) :
-            r = it.getRed()
-            nr = 255 - r
-            it.setRed(nr)
-            g = it.getGreen()
-            ng = 255 - g
-            it.setGreen(ng)
-            b = it.getBlue()
-            nb = 255-b
-            it.setBlue(nb)
+            p = it.getRGBA()
+            p[0] = 255 - p[0]
+            p[1] = 255 - p[1]
+            p[2] = 255 - p[2]
+            it.setRGBA(p)
             script.incProgress()
             finesh = it.next()
         layer.endPainting()

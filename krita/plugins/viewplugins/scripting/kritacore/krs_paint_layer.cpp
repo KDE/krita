@@ -128,7 +128,7 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     return 0;
 }
 
-Kross::Api::Object::Ptr PaintLayer::createPainter(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr PaintLayer::createPainter(Kross::Api::List::Ptr )
 {
     return new Painter(paintLayer());
 }

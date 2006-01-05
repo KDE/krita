@@ -72,8 +72,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
         //END TODO
         
-        connect(m_scriptguiclient, SIGNAL(executionStarted( Kross::Api::ScriptAction* )), this, SLOT(executionStarted(Kross::Api::ScriptAction*)));
-        connect(m_scriptguiclient, SIGNAL(executionFinished( Kross::Api::ScriptAction* )), this, SLOT(executionFinished(Kross::Api::ScriptAction*)));
+        connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
         
         Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");
@@ -89,11 +88,7 @@ Scripting::~Scripting()
 {
 }
 
-void Scripting::executionStarted(Kross::Api::ScriptAction*)
-{
-    
-}
-void Scripting::executionFinished(Kross::Api::ScriptAction*)
+void Scripting::executionFinished(const Kross::Api::ScriptAction*)
 {
     m_view->getCanvasSubject()->document()->setModified(true);
     m_view->getCanvasSubject()->document()->currentImage()->notify();

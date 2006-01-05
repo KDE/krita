@@ -41,8 +41,7 @@ class Scripting : public KParts::Plugin
         Scripting(QObject *parent, const char *name, const QStringList &);
         virtual ~Scripting();
     private slots:
-        void executionStarted(Kross::Api::ScriptAction*);
-        void executionFinished(Kross::Api::ScriptAction*);
+        void executionFinished(const Kross::Api::ScriptAction*);
     private:
         KisView * m_view;
         Kross::Api::ScriptGUIClient* m_scriptguiclient;

@@ -845,12 +845,11 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-/*LAYERREMOVE
     QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry() -> paintDeviceActionsFor(cs);
     for (uint i = 0; i < actions.count(); i++)
-        actions.at(i) -> act(layer.data(), img -> width(), img -> height());
-*/
+        actions.at(i) -> act(layer->paintDevice(), img -> width(), img -> height());
+
     img -> setBackgroundColor(bgColor);
     img -> addLayer(layer, img->rootLayer(), 0);
     img->activate(layer);

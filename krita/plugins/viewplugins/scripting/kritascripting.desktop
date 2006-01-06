@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting plugin
+Name[da]=Scriptplugin
+Name[es]=Extensión para guiones
+Name[pt]='Plugin' de programação
+Name[pt_BR]='Plugin' de programação
 Comment=Allow execution of scripts
 Comment[da]=Tillad kørsel af script
 Comment[de]=Ermöglicht das Ausführen von Skripten

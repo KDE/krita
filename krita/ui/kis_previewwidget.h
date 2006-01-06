@@ -92,14 +92,14 @@ private:
     
     bool m_autoupdate, m_previewIsDisplayed;
 
-    QImage m_unscaledSource;
+    QImage m_scaledOriginal;
     QImage m_scaledPreview;
     KisPaintDeviceImplSP m_previewDevice;
     
     double m_zoom;
     KisProfile * m_profile;
 
-    KisImageSP m_image;
+//     KisImageSP m_image;
     KisPaintDeviceImplSP m_origDevice;
 };
 

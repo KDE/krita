@@ -1,0 +1,112 @@
+Things To Do for 1.5
+
+Please update & commit this list with every fix you make
+
+A = Adrian Page
+B = Casper Boemann
+C = Cyrille Berger
+R = Boudewijn Rempt
+P = Bart Coppens
+G = Gábor Level
+S = Sander Koning
+TZ = Thomas Zander (to refer to his ui hints)
+
+There are still a couple of LAYERREMOVE's around!
+
+Filters
+
+C  * Fix filter preview
+?  * Fix crashes in filters
+R  * Check filters for colorspace problems
+R  * Implement warning when using filters that downgrade to another colorspace
+R  * Implement filter configuration class
+
+Colorspaces
+
+B  * Implement the last few colorspace dependencies in KisAbstractColorSpace
+?  * Implement LAB histogram producers
+?  * Optimize colorspace functions at least in 8 and 16 bit rgb where possible
+P  * Fix wet colorspace
+
+Core
+
+R  * Fix unittests for colorspaces
+P  * Fix part layers
+?  * Fix lock in histogram code
+?  * Make sure histograms for docker are only calculated when the docker is visible,
+     and not on every layer change. Maybe cache histograms for de-activated layers, too?
+
+User interface
+
+
+B  * Add layer preview to layer box
+B  * Add image preview to bird's eyeview box
+?  * Use KOffice library guides instead of our own guides
+G  * Add GUI to actually group layers
+R  * Finish separation plugin to separate to different images
+R  * Fix statusbar and put current cursor pos into bird's eyeview docker
+A  * Change zoom settings to a percentage everywhere
+A  * Make ruler stop at image boundaries. Put image in the middle of the window, not in the top-right corner
+A  * Zoom the image to fit on loading
+R  * Fix the zoom slider as per TZ
+?  * Lock all actions when layers are locked or invisible, not just filters
+and tools (#90456)
+G  * Polish UI of layerbox.
+R  * Fix layer menu according to TZ
+?  * Fix the color selectors (they are completely broken, details in TZ)
+C  * Fix autobrush according to TZ (the tab bug cannot be fixed because of
+     Qt focus issues, don't waste time on that. BDDT)
+?  * Fix selection handling according to TZ
+?  * Make circular (autobrush?) the default brush
+
+Files and Import/Export
+
+C  * Add layer export to tiff export filter. Finish tiff export in general
+R  * Finish raw importer
+?  * check use of EXIF data (#112727)
+
+Tools
+
+B  * Fix transform tool and re-enable the shear and rotate functionality
+?  * Fix crop tool according to Z's hints
+R  * add a dummy option widget for tools without an option widget
+P  * Add radius option to color picker tool. Fix color picker tool according to TZ
+R  * Fix shear tool according to TZ
+
+Plugins
+
+C  * finish, polish and document scripting support
+R  * document plugin API
+
+Release
+
+R  * develop thorough test plan and exercise it on several installations
+     before release
+S  * finish basic documentation to cover all of the UI (Sander, you can take
+     the full feature list I posted recently as an outline)
+
+Bugs
+
+I'm not saying all these bugs can be fixed for 1.5; but please take a good
+hard look at them. We can do without open bugs :-) (Wishlists excepted, but
+Cyrille, maybe you're interested in 119290 after the release? sounds like
+something that's absolutely your cup of cafe au lait.)
+
+   109971   ASSI     Crash trying to DND while krita is working 
+P  113086   NEW      krita crashes when resizing certain image
+R  116075   NEW      reproducible crash when trying cimg image restauration
+   117633   NEW      Krita crashed while trying to edit a picture's layer
+   117923   NEW      crash at opening a random file
+   117925   NEW      Crash when dragging psd to 'insert as new layer'
+   107348   ASSI      Layerbox behaves badly when there are many layers
+   112727   ASSI      If present, change the 'Orientation' meta data on
+rotatio...
+   115253   NEW      Resize to current layer forgets layer offset
+   118847   NEW      off by one bug in subtracting-selections
+   119401   ASSI      Action 'change image size' crops source image
+   
+And if there's time
+
+   * implement adjustment layers
+   * bidi color transfer paint op
+   * add gui to paint ops

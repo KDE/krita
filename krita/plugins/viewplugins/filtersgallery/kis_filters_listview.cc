@@ -48,10 +48,6 @@ void KisFiltersListView::init()
     setSelectionMode(QIconView::Single);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
     setMinimumWidth(240);
-    if(layout ())
-    {
-        kdDebug() << " hassssssssssssssssssssssssssssssssssssssssssssss layooooooooooooooooouuuuuuuuuuuuuutttttttttttttttttt" << endl;
-    }
 }
 
 void KisFiltersListView::buildPreview()
@@ -73,27 +69,30 @@ void KisFiltersListView::buildPreview()
     KisIDList l = KisFilterRegistry::instance()->listKeys();
     KisIDList::iterator it;
     it = l.begin();
+    // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
-        
+        // Check if filter support the preview
         if (f -> supportsPreview()) {
             std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb->paintDevice());
-            // apply the filter
+            // apply the filter for each of example of configuration
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
             {
+                // Creates a new image for this preview
                 KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorSpace(), "preview");
-                KisPaintLayerSP thumbPreview = new KisPaintLayer(*m_thumb/*imgthumbPreview,"",50*/);
+                // Creates a copy of the preview
+                KisPaintLayerSP thumbPreview = new KisPaintLayer(*m_thumb);
                 imgthumbPreview->addLayer(thumbPreview.data(), imgthumbPreview->rootLayer(), 0);
+                // Apply the filter
                 f->disableProgress();
                 f->process(m_thumb->paintDevice(), thumbPreview->paintDevice(),*itc, imgthumbPreview->bounds());
+                // Add the preview to the list
                 QImage qimg =  thumbPreview->paintDevice()->convertToQImage(0);
                 new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qimg), *it, f, *itc );
             }
-            
         }
     }
-
 }
 
 }

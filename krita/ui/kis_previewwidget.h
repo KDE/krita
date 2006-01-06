@@ -66,11 +66,8 @@ public slots:
     /** Enables or disables the automatically updating of the preview */
     void slotSetAutoUpdate(bool set);
 
-    /** Toggle the automatically update of the preview */
-    void toggleAutoUpdate();
-
     /** Toggle between display preview and display original */
-    void toggleImageDisplayed();
+    void setPreviewDisplayed(bool v);
     
     /** use to indicate that the preview need to be updated. */
     void needUpdate();

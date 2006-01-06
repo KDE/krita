@@ -19,6 +19,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+ 
+#include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qpushbutton.h>
@@ -28,8 +31,8 @@
 #include <qgroupbox.h>
 
 #include <kdebug.h>
-#include <ktoolbarbutton.h>
-#include <ktoolbar.h>
+#include <kiconloader.h>
+#include <kpushbutton.h>
 
 #include <kis_colorspace.h>
 #include <kis_colorspace_factory_registry.h>
@@ -52,17 +55,27 @@
 KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     : PreviewWidgetBase( parent, name )/*, m_image(0)*/
 {
-//     m_image = new KisImage(0, 0, 0, KisMetaRegistry::instance()->csRegistry()->getRGB8(), "preview image");
     m_autoupdate = true;
     m_previewIsDisplayed = true;
-
-    kToolBar1->insertButton("viewmag+",0, true, "Zoom In");
-    connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
     
-    kToolBar1->insertButton("viewmag-",1, true, "Zoom Out");
-    connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
+    btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", KIcon::MainToolbar, 16 ));
+    connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    btnZoomOut->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", KIcon::MainToolbar, 16 ));
+    connect(btnZoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
+    btnUpdate->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "reload", KIcon::MainToolbar, 16 ));
+    connect(btnUpdate, SIGNAL(clicked()), this, SLOT(forceUpdate()));
+    
+    connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
+    
+    connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
+    
+//     kToolBar1->insertButton("viewmag+",0, true, "Zoom In");
+//     connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
+    
+//     kToolBar1->insertButton("viewmag-",1, true, "Zoom Out");
+//     connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
 
-    kToolBar1->insertLineSeparator();
+/*    kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, "Update");
     connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
     
@@ -70,7 +83,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
     
     kToolBar1->insertButton("",4, true, "Switch");
-    connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));
+    connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));*/
 // these currently don't yet work, reenable when they do work :)  (TZ-12-2005)
 // TODO reenable these
 //   kToolBar1->insertButton("",5, true, "Popup Original and Preview");
@@ -117,7 +130,7 @@ KisPaintDeviceImplSP KisPreviewWidget::getDevice()
 
 void KisPreviewWidget::slotUpdate()
 {
-    kdDebug() << "slotUpdate\n";
+//     kdDebug() << "slotUpdate\n";
     QRect r = m_previewDevice->exactBounds();
     m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
     if(m_zoom > 1.0)
@@ -134,28 +147,22 @@ void KisPreviewWidget::slotUpdate()
 }
 
 void KisPreviewWidget::slotSetAutoUpdate(bool set) {
-    //kdDebug() << "slotSetAutoUpdate\n";
+//     kdDebug() << "slotSetAutoUpdate : " << set  << endl;
     m_autoupdate = set;
 }
 
-void KisPreviewWidget::toggleAutoUpdate()
-{
-    //kdDebug() << "m_autoupdate = " << m_autoupdate << endl;
-    m_autoupdate = !m_autoupdate;
-}
-
-void KisPreviewWidget::toggleImageDisplayed()
+void KisPreviewWidget::setPreviewDisplayed(bool v)
 {
     //kdDebug() << "toggleImageDisplayed\n";
+    m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(i18n("Original : ") + m_origDevice->name());
-        m_preview->setImage(m_scaledOriginal);
-    } else {
         m_groupBox->setTitle(i18n("Preview : ") + m_origDevice->name());
         m_preview->setImage(m_scaledPreview);
+    } else {
+        m_groupBox->setTitle(i18n("Original : ") + m_origDevice->name());
+        m_preview->setImage(m_scaledOriginal);
     }
-    m_previewIsDisplayed = !m_previewIsDisplayed;
 }
 
 void KisPreviewWidget::needUpdate()

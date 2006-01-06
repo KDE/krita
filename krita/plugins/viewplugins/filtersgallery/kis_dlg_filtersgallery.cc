@@ -89,18 +89,26 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     {
         m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
         m_currentConfigWidget->show();
-        connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(refreshPreview()));
+        connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
     } else {
         m_labelNoCW->show();
     }
     refreshPreview();
 }
 
+void KisDlgFiltersGallery::slotConfigChanged()
+{
+    if(m_widget->previewWidget->getAutoUpdate())
+    {
+        refreshPreview();
+    } else {
+        m_widget->previewWidget->needUpdate();
+    }
+}
+
+
 void KisDlgFiltersGallery::refreshPreview( )
 {
-    if(m_currentFilter == 0)
-        return;
-    
     KisPaintDeviceImplSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());

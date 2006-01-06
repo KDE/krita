@@ -24,6 +24,7 @@
 #include <api/qtobject.h>
 #include <main/manager.h>
 
+#include <kis_autobrush_resource.h>
 #include <kis_brush.h>
 #include <kis_doc.h>
 #include <kis_resourceserver.h>
@@ -55,6 +56,8 @@ KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("Krit
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
@@ -84,6 +87,29 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
         }
     }
     return 0;
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)
+{
+    uint w = QMAX(1, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = QMAX(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint hf = Kross::Api::Variant::toUInt(args->item(2));
+    uint vf = Kross::Api::Variant::toUInt(args->item(3));
+    KisAutobrushShape* kas = new KisAutobrushCircleShape(w, h, hf, vf);
+    QImage* brsh = new QImage();
+    kas->createBrush(brsh);
+    return new Brush(new KisAutobrushResource(*brsh));
+}
+Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr args)
+{
+    uint w = QMAX(1, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = QMAX(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint hf = Kross::Api::Variant::toUInt(args->item(2));
+    uint vf = Kross::Api::Variant::toUInt(args->item(3));
+    KisAutobrushShape* kas = new KisAutobrushRectShape(w, h, hf, vf);
+    QImage* brsh = new QImage();
+    kas->createBrush(brsh);
+    return new Brush(new KisAutobrushResource(*brsh));;
 }
 
 

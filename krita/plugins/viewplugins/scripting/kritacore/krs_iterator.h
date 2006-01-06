@@ -84,7 +84,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             }
         }
         initiales = initiales.upper();
-        addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+        addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
         addFunction("get" + initiales, &Iterator::getPixel);
         kdDebug() << ( "get" + initiales ) << endl;
     }

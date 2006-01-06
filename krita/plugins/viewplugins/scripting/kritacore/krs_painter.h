@@ -21,6 +21,7 @@
 
 #include <api/class.h>
 
+#include <kis_point.h>
 #include <kis_types.h>
 
 class KisPainter;
@@ -34,12 +35,30 @@ class Painter : public Kross::Api::Class<Painter>
     public:
         explicit Painter(KisPaintLayerSP layer);
         ~Painter();
+        Kross::Api::Object::Ptr paintPolyline(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr paintLine(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr paintBezierCurve(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr paintEllipse(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr paintPolygon(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr paintRect(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintAt(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setPaintColor(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setBrush(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setPaintOp(Kross::Api::List::Ptr args);
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
+    private:
+        inline vKisPoint createPointsVector( QValueList<QVariant> xs, QValueList<QVariant> ys)
+        {
+            vKisPoint a;
+            QValueList<QVariant>::iterator itx = xs.begin();
+            QValueList<QVariant>::iterator ity = ys.begin();
+            for(; itx != xs.end(); ++itx, ++ity)
+            {
+                a.push_back(KisPoint( (*itx).toDouble(), (*ity).toDouble()));
+            }
+            return a;
+        }
     private:
         KisPaintLayerSP m_layer;
         KisPainter* m_painter;

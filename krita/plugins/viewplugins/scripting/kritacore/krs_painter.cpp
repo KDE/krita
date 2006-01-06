@@ -32,6 +32,12 @@ namespace KritaCore {
 Painter::Painter(KisPaintLayerSP layer)
     : Kross::Api::Class<Painter>("KritaPainter"), m_layer(layer),m_painter(new KisPainter(layer->paintDevice()))
 {
+    addFunction("paintPolyline", &Painter::paintPolyline, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
+    addFunction("paintLine", &Painter::paintLine, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("paintBezierCurve", &Painter::paintBezierCurve, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("paintEllipse", &Painter::paintEllipse, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("paintPolygon", &Painter::paintPolygon, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
+    addFunction("paintRect", &Painter::paintRect, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("paintAt", &Painter::paintAt, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("setPaintColor", &Painter::setPaintColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
     addFunction("setBrush", &Painter::setBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Brush") );
@@ -44,9 +50,86 @@ Painter::~Painter()
     delete m_painter;
 }
 
+Kross::Api::Object::Ptr Painter::paintPolyline(Kross::Api::List::Ptr args)
+{
+    QValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
+    QValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
+    if(pointsX.size() != pointsY.size())
+    {
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );
+    }
+    m_painter->paintPolyline( createPointsVector( pointsX, pointsY));
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::paintLine(Kross::Api::List::Ptr args)
+{
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
+    double x2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
+    double y2 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
+    double p2 = Kross::Api::Variant::toVariant(args->item(5)).toDouble();
+    m_painter->paintLine(KisPoint( x1, y1), p1, 0.0, 0.0, KisPoint( x2, y2 ), p2, 0.0, 0.0 );
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::paintBezierCurve(Kross::Api::List::Ptr args)
+{
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
+    double cx1 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
+    double cy1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
+    double cx2 = Kross::Api::Variant::toVariant(args->item(5)).toDouble();
+    double cy2 = Kross::Api::Variant::toVariant(args->item(6)).toDouble();
+    double x2 = Kross::Api::Variant::toVariant(args->item(7)).toDouble();
+    double y2 = Kross::Api::Variant::toVariant(args->item(8)).toDouble();
+    double p2 = Kross::Api::Variant::toVariant(args->item(9)).toDouble();
+    m_painter->paintBezierCurve( KisPoint(x1,y1), p1, 0.0, 0.0, KisPoint(cx1,cy1), KisPoint(cx2,cy2), KisPoint(x2,y2), p2, 0.0, 0.0);
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::paintEllipse(Kross::Api::List::Ptr args)
+{
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    double x2 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
+    double y2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
+    double p1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
+    m_painter->paintEllipse( KisPoint(x1,y1), KisPoint(x2,y2), p1, 0.0, 0.0 );
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::paintPolygon(Kross::Api::List::Ptr args)
+{
+    QValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
+    QValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
+    if(pointsX.size() != pointsY.size())
+    {
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );
+    }
+    m_painter->paintPolygon( createPointsVector(pointsX, pointsY));
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::paintRect(Kross::Api::List::Ptr args)
+{
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    double x2 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
+    double y2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
+    double p1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
+    m_painter->paintRect( KisPoint(x1, y1), KisPoint(x2,y2), p1, 0, 0);
+    return 0;
+}
+
 Kross::Api::Object::Ptr Painter::paintAt(Kross::Api::List::Ptr args)
 {
-    m_painter->paintAt( KisPoint( Kross::Api::Variant::toVariant(args->item(0)).toDouble(), Kross::Api::Variant::toVariant(args->item(1)).toDouble() ), Kross::Api::Variant::toVariant(args->item(2)).toDouble(), 0.0, 0.0);
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
+    m_painter->paintAt( KisPoint( x1, y1 ), p1, 0.0, 0.0);
     return 0;
 }
 

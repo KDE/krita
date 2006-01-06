@@ -415,4 +415,9 @@ void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 {
 }
 
+QImage KisLayer::createThumbnail(Q_INT32, Q_INT32)
+{
+    return 0;
+}
+
 #include "kis_layer.moc"

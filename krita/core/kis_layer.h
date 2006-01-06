@@ -142,6 +142,10 @@ public:
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+    /// Returns a thumbnail in requested size. The QImage may have transparent parts.
+    /// May also return 0
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 

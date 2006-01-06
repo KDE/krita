@@ -26,18 +26,24 @@
 
 class KisSobelFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisSobelFilterConfiguration(bool doHorizontally, bool doVertically, bool keepSign, bool makeOpaque) : m_doHorizontally(doHorizontally), m_doVertically(doVertically), m_keepSign(keepSign), m_makeOpaque(makeOpaque) {};
-    public:
-                inline bool doHorizontally() { return m_doHorizontally; };
-                inline bool doVertically() {return m_doVertically; };
-        inline bool keepSign() {return m_keepSign; };
-        inline bool makeOpaque() {return m_makeOpaque; };
-    private:
-                bool m_doHorizontally;
-                bool m_doVertically;
-        bool m_keepSign;
-        bool m_makeOpaque;
+public:
+    KisSobelFilterConfiguration(bool doHorizontally, bool doVertically, bool keepSign, bool makeOpaque)
+        : KisFilterConfiguration( "sobel", 1 )
+        , m_doHorizontally(doHorizontally)
+        , m_doVertically(doVertically)
+        , m_keepSign(keepSign)
+        , m_makeOpaque(makeOpaque)
+        {};
+public:
+    inline bool doHorizontally() { return m_doHorizontally; };
+    inline bool doVertically() {return m_doVertically; };
+    inline bool keepSign() {return m_keepSign; };
+    inline bool makeOpaque() {return m_makeOpaque; };
+private:
+    bool m_doHorizontally;
+    bool m_doVertically;
+    bool m_keepSign;
+    bool m_makeOpaque;
 };
 
 class KisSobelFilter : public KisFilter
@@ -50,7 +56,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }
+        { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);

@@ -27,7 +27,7 @@
 #include "kis_rgb_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_color.h"
-#include "kis_layer.h"
+#include "kis_paint_layer.h"
 
 using namespace KUnitTest;
 
@@ -36,13 +36,7 @@ KUNITTEST_MODULE_REGISTER_TESTER(KisImageTester);
 
 void KisImageTester::allTests()
 {
-    if (qApp != 0) {
-
-        mergeTests();
-
-    } else {
-        SKIP("Skipping KisImage tests because we are being run from the command line. KisImage contains a QPixmap which requires a gui to be available. Use kunittestguimodrunner.");
-    }
+    mergeTests();
 }
 
 #define IMAGE_WIDTH 1
@@ -63,10 +57,10 @@ void KisImageTester::mergeTests()
 
     CHECK(opacity, OPACITY_TRANSPARENT);
 
-    KisLayerSP layer = new KisLayer(image, "layer 1", OPACITY_OPAQUE);
-    image -> add(layer, 0);
+    KisPaintLayer * layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
+    image->addLayer(layer, image->rootLayer(), 0);
 
-    layer -> setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
+    layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
 
     mergedPixel = image -> mergedPixel(0, 0);
     mergedPixel.toQColor(&colour, &opacity);
@@ -76,10 +70,10 @@ void KisImageTester::mergeTests()
     CHECK(colour.green(), 128);
     CHECK(colour.blue(), 64);
 
-    layer = new KisLayer(image, "layer 2", OPACITY_OPAQUE / 2);
-    image -> add(layer, 0);
+    KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
+    image -> addLayer(layer2, image->rootLayer(), layer);
 
-    layer -> setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
+    layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
 
     mergedPixel = image -> mergedPixel(0, 0);
     mergedPixel.toQColor(&colour, &opacity);

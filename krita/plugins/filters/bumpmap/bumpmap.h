@@ -72,8 +72,8 @@ public:
     virtual bool supportsPreview() { return false; }
     virtual bool supportsIncrementalPainting() { return false; }
 
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-        virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
 
 };
 

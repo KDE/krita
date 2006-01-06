@@ -93,12 +93,12 @@ namespace {
         for (int i = 0; i < w; ++i) {
             row[0] = csOrig->intensity8(origIt.rawData());
             row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->getAlpha(origIt.rawData())) / 255];
-            
+
             ++row;
             ++origIt;
         }
     }
-    
+
 }
 
 void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* cfg, const QRect& rect)
@@ -109,7 +109,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     if (!rect.isValid()) return;
     if (rect.isNull()) return;
     if (rect.isEmpty()) return;
-    
+
     KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
     Q_INT32 lx, ly;       /* X and Y components of light vector */
@@ -133,7 +133,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     /* Calculate the light vector */
     lx = (Q_INT32)(cos(azimuth) * cos(elevation) * 255.0);
     ly = (Q_INT32)(sin(azimuth) * cos(elevation) * 255.0);
-    
+
     lz = (Q_INT32)(sin(elevation) * 255.0);
 
     /* Calculate constant Z component of surface normal */
@@ -156,19 +156,19 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
             n = i / 255.0 - 1.0;
             lut[i] = (int) (255.0 * sqrt(1.0 - n * n) + 0.5);
             break;
-            
+
         case SINUSOIDAL:
             n = i / 255.0;
             lut[i] = (int) (255.0 *
                     (sin((-M_PI / 2.0) + M_PI * n) + 1.0) /
                     2.0 + 0.5);
             break;
-            
+
         case LINEAR:
             default:
             lut[i] = i;
         }
-        
+
         if (config->invert)
             lut[i] = 255 - lut[i];
     }
@@ -204,11 +204,11 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     Q_INT32 sel_w = rect.width();
     Q_INT32 sel_x = rect.x();
     Q_INT32 sel_y = rect.y();
-    
+
     Q_INT32 bm_h = bmRect.height();
     Q_INT32 bm_w = bmRect.width();
     Q_INT32 bm_x = bmRect.x();
-    
+
     setProgressTotalSteps(sel_h);
 
     // ------------------- Map the bumps
@@ -228,7 +228,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     }
 
     // ---------------------- Load initial three bumpmap scanlines
-    
+
     KisColorSpace * srcCs = src->colorSpace();
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
 
@@ -241,7 +241,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
     convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
     convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
     convertRow(bumpmap, bm_row3, bm_x, yofs3, bm_w, lut, config->waterlevel);
-    
+
     bool row_in_bumpmap;
 
     Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
@@ -250,7 +250,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
         row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
 
         // Bumpmap
-        
+
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
         KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
 
@@ -264,7 +264,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
                 // Calculate surface normal from bumpmap
                 if (config->tiled || row_in_bumpmap &&
                     x >= - tmp&& x < - tmp + bm_w) {
-    
+
                     if (config->tiled) {
                         xofs1 = MOD (xofs2 - 1, bm_w);
                         xofs3 = MOD (xofs2 + 1, bm_w);
@@ -278,22 +278,22 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
                         bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
                     ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
                         bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
-    
-                    
+
+
                 }
                 else {
                     nx = 0;
                     ny = 0;
                 }
-    
+
                 // Shade
-    
+
                 if ((nx == 0) && (ny == 0)) {
                     shade = background;
                 }
                 else {
                     ndotl = (nx * lx) + (ny * ly) + nzlz;
-    
+
                     if (ndotl < 0) {
                         shade = (Q_INT32)(compensation * config->ambient);
                     }
@@ -302,7 +302,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
                         shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
                     }
                 }
-    
+
                 // Paint
                 srcCs->darken(srcIt.rawData(), dstIt.rawData(), shade, config->compensate, compensation, 1);
             }
@@ -320,7 +320,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
             bm_row1 = bm_row2;
             bm_row2 = bm_row3;
             bm_row3 = tmp_row;
-            
+
             if (++yofs2 == bm_h) {
                 yofs2 = 0;
             }
@@ -336,7 +336,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
 
         incProgress();
     }
-    
+
     delete [] bm_row1;
     delete [] bm_row2;
     delete [] bm_row3;
@@ -352,7 +352,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
     return w;
 }
 
-KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceImplSP) 
+KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceImplSP)
 {
 
     KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);
@@ -367,6 +367,7 @@ KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDe
 
 
 KisBumpmapConfiguration::KisBumpmapConfiguration()
+    : KisFilterConfiguration( "bumpmap", 1 )
 {
     bumpmap = QString();
     azimuth = 135.0;
@@ -390,11 +391,11 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
 {
     Q_ASSERT(m_filter);
     Q_ASSERT(m_device);
-    
+
     m_page = new WdgBumpmap(this);
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
-    
+
     l -> add(m_page);
     m_filter -> setAutoUpdate(false);
 
@@ -404,7 +405,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     const KisImageSP img = dev->image();
     if (img) {
         vKisLayerSP layers = img->layers();
-        
+
         for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
             const KisLayerSP& layer = *it;
             m_page->cmbLayer->insertItem(layer->name());
@@ -429,7 +430,7 @@ KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
         cfg->invert = m_page->chkInvert->isChecked();
     cfg->tiled = m_page->chkTiled->isChecked();
     cfg->type = (enumBumpmapType)m_page->grpType->selectedId();
-    
+
     return cfg;
 }
 

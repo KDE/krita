@@ -26,15 +26,25 @@
 
 class KisOilPaintFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisOilPaintFilterConfiguration(Q_UINT32 brushSize, Q_UINT32 smooth) : m_brushSize(brushSize), m_smooth(smooth) {};
-    public:
-                inline Q_UINT32 brushSize() { return m_brushSize; };
-                inline Q_UINT32 smooth() {return m_smooth; };
-        private:
-                Q_UINT32 m_brushSize;
-                Q_UINT32 m_smooth;
+
+public:
+
+    KisOilPaintFilterConfiguration(Q_UINT32 brushSize, Q_UINT32 smooth)
+        : KisFilterConfiguration( "oilpaint", 1 )
+        , m_brushSize(brushSize),
+          m_smooth(smooth)
+        {};
+public:
+
+    inline Q_UINT32 brushSize() { return m_brushSize; };
+    inline Q_UINT32 smooth() {return m_smooth; };
+
+private:
+
+    Q_UINT32 m_brushSize;
+    Q_UINT32 m_smooth;
 };
+
 
 class KisOilPaintFilter : public KisFilter
 {

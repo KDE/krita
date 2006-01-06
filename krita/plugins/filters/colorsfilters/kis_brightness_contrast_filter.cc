@@ -40,6 +40,7 @@
 #include "kis_basic_histogram_producers.h"
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
+    : KisFilterConfiguration( "brightnesscontrast", 1 )
 {
 }
 

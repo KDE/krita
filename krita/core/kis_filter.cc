@@ -1,4 +1,4 @@
-    /*
+/*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,16 +17,10 @@
  */
 #include "kis_filter.h"
 
-#include "kis_filter_registry.h"
-#include "kis_transaction.h"
-#include "kis_undo_adapter.h"
-#include "kis_painter.h"
-#include "kis_selection.h"
-#include "kis_id.h"
-#include "kis_canvas_subject.h"
-#include "kis_progress_display_interface.h"
+#include <qstring.h>
+
 #include "kis_types.h"
-#include "kis_filter_config_widget.h"
+#include "kis_filter_configuration.h"
 
 KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
     m_id(id),

@@ -26,7 +26,9 @@ class KisKernel;
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 public:
-    KisConvolutionConfiguration(KisKernel * matrix) : m_matrix(matrix) {};
+    KisConvolutionConfiguration(const QString & name, KisKernel * matrix)
+        : KisFilterConfiguration( name, 1 )
+        , m_matrix(matrix) {};
 public:
     inline KisKernel * matrix() { return m_matrix; };
 private:

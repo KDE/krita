@@ -20,6 +20,7 @@
 
 #include "layerlist.h"
 
+#include <qtooltip.h>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <qimage.h>
@@ -124,6 +125,8 @@ LayerList::LayerList( QWidget *parent, const char *name )
     setItemsMovable( true );
     addColumn( QString() );
     header()->hide();
+
+    QToolTip::add(this, i18n("Right-click to create folders. Click on the layername to change the layer's name. Click and drag to move layers."));
 
     setNumRows( 2 );
 

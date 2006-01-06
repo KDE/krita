@@ -29,14 +29,17 @@ class KisPolygon;
 
 class KisCubismFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisCubismFilterConfiguration(Q_UINT32 tileSize, Q_UINT32 tileSaturation) : m_tileSize(tileSize), m_tileSaturation(tileSaturation) {};
-    public:
-                inline Q_UINT32 tileSize() { return m_tileSize; };
-                inline Q_UINT32 tileSaturation() {return m_tileSaturation; };
-        private:
-                Q_UINT32 m_tileSize;
-                Q_UINT32 m_tileSaturation;
+public:
+    KisCubismFilterConfiguration(Q_UINT32 tileSize, Q_UINT32 tileSaturation)
+        : KisFilterConfiguration( "cubism", 1 )
+        , m_tileSize(tileSize)
+        , m_tileSaturation(tileSaturation) {};
+public:
+    inline Q_UINT32 tileSize() { return m_tileSize; };
+    inline Q_UINT32 tileSaturation() {return m_tileSaturation; };
+private:
+    Q_UINT32 m_tileSize;
+    Q_UINT32 m_tileSaturation;
 };
 
 class KisCubismFilter : public KisFilter

@@ -27,7 +27,10 @@
 class KisRainDropsFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisRainDropsFilterConfiguration(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes) : m_dropSize(dropSize), m_number(number), m_fishEyes(fishEyes) {};
+    KisRainDropsFilterConfiguration(Q_UINT32 dropSize, Q_UINT32 number, Q_UINT32 fishEyes)
+        : KisFilterConfiguration( "raindrops", 1 )
+        , m_dropSize(dropSize), m_number(number), m_fishEyes(fishEyes)
+        {};
 public:
     inline Q_UINT32 dropSize() { return m_dropSize; };
     inline Q_UINT32 number() {return m_number; };

@@ -29,9 +29,12 @@
 class KisWaveletNoiseReductionConfiguration
     : public KisFilterConfiguration
 {
-    public:
-        KisWaveletNoiseReductionConfiguration(double nt) : threshold(nt) { }
-        double threshold;
+public:
+    KisWaveletNoiseReductionConfiguration(double nt)
+        : KisFilterConfiguration( "waveletnoisereducer",  1 )
+        , threshold(nt)
+        {}
+    double threshold;
 };
 
 
@@ -44,12 +47,12 @@ public:
     KisWaveletNoiseReduction();
 
     ~KisWaveletNoiseReduction();
-    
+
 public:
     virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
     virtual KisFilterConfiguration* configuration(QWidget* nwidget, KisPaintDeviceImplSP dev);
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    
+
     static inline KisID id() { return KisID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }

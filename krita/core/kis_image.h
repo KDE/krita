@@ -115,7 +115,7 @@ public:
      * @param h the new height of the image
      * @param x the x position of the crop on all layer if cropLayers is true
      * @param y the y position of the crop on all layer if cropLayers is true
-     * @param cropLayers if true, all layers are cropped to the new size. 
+     * @param cropLayers if true, all layers are cropped to the new size.
      */
     void resize(Q_INT32 w, Q_INT32 h, Q_INT32 x = 0, Q_INT32 y = 0,  bool cropLayers = false);
 
@@ -132,6 +132,9 @@ public:
     void rotate(double angle, KisProgressDisplayInterface *m_progress);
     void shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress);
 
+    /**
+     * Convert the image and all its layers to the dstColorSpace
+     */
     void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
@@ -379,7 +382,7 @@ private:
 #endif
 
     bool m_renderinit;
-    
+
     class KisImagePrivate;
     KisImagePrivate * m_private;
 };

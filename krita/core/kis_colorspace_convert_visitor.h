@@ -50,8 +50,14 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 {
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisGroupLayer *)
+bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
+    KisLayerSP child = layer->firstChild();
+    while (child) {
+        child->accept(*this);
+        child = child->nextSibling();
+    }
+
     return true;
 }
 

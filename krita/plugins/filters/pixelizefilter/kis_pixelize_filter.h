@@ -26,14 +26,18 @@
 
 class KisPixelizeFilterConfiguration : public KisFilterConfiguration
 {
-    public:
-                KisPixelizeFilterConfiguration(Q_UINT32 pixelWidth, Q_UINT32 pixelHeight) : m_pixelWidth(pixelWidth), m_pixelHeight(pixelHeight) {};
-    public:
-                inline Q_UINT32 pixelWidth() { return m_pixelWidth; };
-                inline Q_UINT32 pixelHeight() {return m_pixelHeight; };
-        private:
-                Q_UINT32 m_pixelWidth;
-                Q_UINT32 m_pixelHeight;
+public:
+    KisPixelizeFilterConfiguration(Q_UINT32 pixelWidth, Q_UINT32 pixelHeight)
+        : KisFilterConfiguration( "pixelize", 1 )
+        , m_pixelWidth(pixelWidth)
+        , m_pixelHeight(pixelHeight)
+        {};
+public:
+    inline Q_UINT32 pixelWidth() { return m_pixelWidth; };
+    inline Q_UINT32 pixelHeight() {return m_pixelHeight; };
+private:
+    Q_UINT32 m_pixelWidth;
+    Q_UINT32 m_pixelHeight;
 };
 
 class KisPixelizeFilter : public KisFilter
@@ -46,7 +50,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
-    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
+        { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);

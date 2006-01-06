@@ -27,7 +27,9 @@
 class KisEmbossFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisEmbossFilterConfiguration(Q_UINT32 depth) : m_depth(depth) {};
+    KisEmbossFilterConfiguration(Q_UINT32 depth)
+        : KisFilterConfiguration( "emboss", 1 )
+        , m_depth(depth) {};
 public:
     inline Q_UINT32 depth() { return m_depth; };
 private:

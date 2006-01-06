@@ -515,6 +515,8 @@ bool KisPaintDeviceImpl::read(KoStore *store)
 
 void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 {
+    kdDebug(41004) << "Converting " << name() << " to " << dstColorSpace->id().id() << " from "
+              << m_colorSpace->id().id() << "\n";
     if ( (colorSpace() -> id() == dstColorSpace -> id()) )
     {
         return;
@@ -587,7 +589,7 @@ void KisPaintDeviceImpl::convertFromQImage(const QImage& image, const QString &s
 
     // Krita likes bgra (convertDepth returns *this is the img is alread 32 bits)
     img = img.convertDepth( 32 );
-#if 0    
+#if 0
     // XXX: Apply import profile
     if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());

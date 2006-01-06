@@ -29,6 +29,7 @@
 #include "kis_filter_registry.h"
 #include "kis_id.h"
 #include "kis_progress_subject.h"
+#include "kis_filter_configuration.h"
 
 #include "koffice_export.h"
 
@@ -36,13 +37,6 @@ class KisPreviewDialog;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
 class QWidget;
-
-/**
- * Empty interface for passing filter configuration data
- * from the configuration widget to the filter.
- */
-class KisFilterConfiguration {
-};
 
 /**
  * Basic interface of a Krita filter.

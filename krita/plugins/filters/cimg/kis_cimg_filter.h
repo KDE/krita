@@ -30,7 +30,7 @@ class KisCImgFilterConfiguration : public KisFilterConfiguration
 
 public:
 
-    KisCImgFilterConfiguration() {};
+    KisCImgFilterConfiguration() : KisFilterConfiguration( "cimg", 1 ){};
 
 public:
 

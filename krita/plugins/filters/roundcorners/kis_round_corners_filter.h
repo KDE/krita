@@ -27,7 +27,9 @@
 class KisRoundCornersFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisRoundCornersFilterConfiguration(Q_INT32 radius) : m_radius(radius){};
+    KisRoundCornersFilterConfiguration(Q_INT32 radius)
+        : KisFilterConfiguration( "roundcorners", 1 )
+        , m_radius(radius){};
 public:
     inline Q_INT32 radius() { return m_radius; };
 private:

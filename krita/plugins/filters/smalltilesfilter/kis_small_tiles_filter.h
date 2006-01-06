@@ -27,7 +27,9 @@
 class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles) : m_numberOfTiles(numberOfTiles) {};
+    KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles)
+        : KisFilterConfiguration( "smalltiles", 1 )
+        , m_numberOfTiles(numberOfTiles) {};
 
 public:
     inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };

@@ -35,6 +35,7 @@
 
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
+    : KisFilterConfiguration( "perchannel", 1 )
 {
     for(int i=0;i<n;i++)
          transfers[i] = new Q_UINT16[256];
@@ -222,7 +223,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KisIDList keys = 
+    KisIDList keys =
         KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
     KisHistogramProducerFactory *hpf;
     hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(0)));

@@ -28,7 +28,10 @@ class KisSimpleNoiseReducerConfiguration
     : public KisFilterConfiguration
 {
     public:
-        KisSimpleNoiseReducerConfiguration(int nt, int ws) : threshold(nt), windowsize(ws) { }
+        KisSimpleNoiseReducerConfiguration(int nt, int ws)
+            : KisFilterConfiguration( "simplenoicereducer", 1 )
+            , threshold(nt)
+            , windowsize(ws) { }
         int threshold;
         int windowsize;
 };

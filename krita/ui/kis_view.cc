@@ -118,7 +118,6 @@
 #include "kis_undo_adapter.h"
 #include "kis_view.h"
 #include "kis_view_iface.h"
-#include "kis_label_cursor_pos.h"
 #include "kis_label_progress.h"
 #include "kis_opengl_image_context.h"
 #include "kis_background.h"
@@ -504,10 +503,6 @@ void KisView::setupStatusBar()
 
     if (sb) {
         QLabel *lbl;
-
-        //lbl = new KisLabelCursorPos(sb);
-        //connect(this, SIGNAL(cursorPosition(Q_INT32, Q_INT32)), lbl, SLOT(updatePos(Q_INT32, Q_INT32)));
-        //addStatusBarItem(lbl, 0);
 
         m_statusBarZoomLabel = new QLabel(sb);
         addStatusBarItem(m_statusBarZoomLabel, 1);

@@ -31,7 +31,7 @@ class KisKernel;
 
 class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
 public:
-    KisCustomConvolutionConfiguration(KisKernel* matrix) : KisConvolutionConfiguration(matrix) {};
+    KisCustomConvolutionConfiguration(KisKernel* matrix) : KisConvolutionConfiguration("custom convolution", matrix) {};
     ~KisCustomConvolutionConfiguration();
 private:
     KisKernel* m_matrix;

@@ -29,6 +29,7 @@
 
 class QPoint;
 class QImage;
+class KisColorSpace;
 class KisPaintDeviceImpl;
 
 class KisPattern : public KisResource {

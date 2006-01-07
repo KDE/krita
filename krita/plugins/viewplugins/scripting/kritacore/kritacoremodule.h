@@ -42,6 +42,7 @@ namespace Kross { namespace KritaCore {
         private:
             Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newHSVColor(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr getPattern(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr getBrush(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newCircleBrush(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newRectBrush(Kross::Api::List::Ptr);

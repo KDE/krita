@@ -7,8 +7,8 @@ INCLUDES = -I$(top_srcdir)/core -I$(top_srcdir)/krita/plugins/viewplugins/script
 kde_module_LTLIBRARIES = krosskritacore.la
 
 krosskritacore_la_SOURCES = kritacoremodule.cpp krs_doc.cpp krs_paint_layer.cpp \
-				krs_image.cpp krs_histogram.cpp krs_script_progress.cpp krs_painter.cpp krs_color.cpp \
-				krs_brush.cpp
+					krs_image.cpp krs_histogram.cpp krs_script_progress.cpp krs_painter.cpp krs_color.cpp \
+					krs_brush.cpp krs_pattern.cpp
 
 krosskritacore_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 krosskritacore_la_LIBADD = \

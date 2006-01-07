@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -16,19 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "krs_brush.h"
+#include "krs_pattern.h"
 
-#include <kis_brush.h>
+#include <kis_pattern.h>
 
 namespace Kross {
 
 namespace KritaCore {
 
-Brush::Brush(KisBrush* brush) : Kross::Api::Class<Brush>("KritaBrush"), m_brush(brush)
+Pattern::Pattern(KisPattern* pattern) : Kross::Api::Class<Pattern>("KritaPattern"), m_pattern(pattern)
 {
 }
 
-Brush::~Brush()
+Pattern::~Pattern()
 {
 }
 

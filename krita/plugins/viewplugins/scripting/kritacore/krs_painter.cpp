@@ -24,6 +24,7 @@
 
 #include "krs_brush.h"
 #include "krs_color.h"
+#include "krs_pattern.h"
 
 namespace Kross {
 
@@ -39,15 +40,74 @@ Painter::Painter(KisPaintLayerSP layer)
     addFunction("paintPolygon", &Painter::paintPolygon, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
     addFunction("paintRect", &Painter::paintRect, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("paintAt", &Painter::paintAt, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setBackgroundColor", &Painter::setBackgroundColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
     addFunction("setPaintColor", &Painter::setPaintColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
+    addFunction("setPattern", &Painter::setPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Pattern") );
     addFunction("setBrush", &Painter::setBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Brush") );
     addFunction("setPaintOp", &Painter::setPaintOp, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("setDuplicateOffset", &Painter::setDuplicateOffset, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setOpacity", &Painter::setOpacity, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setStrokeStyle", &Painter::setStrokeStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setFillStyle", &Painter::setFillStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
 }
 
 
 Painter::~Painter()
 {
     delete m_painter;
+}
+
+Kross::Api::Object::Ptr Painter::setStrokeStyle(Kross::Api::List::Ptr args)
+{
+    uint style = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
+    KisPainter::StrokeStyle strokestyle;
+    switch(style)
+    {
+        case 1:
+            strokestyle = KisPainter::StrokeStyleBrush;
+            break;
+        default:
+            strokestyle = KisPainter::StrokeStyleNone;
+    }
+    m_painter->setStrokeStyle(strokestyle);
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::setFillStyle(Kross::Api::List::Ptr args)
+{
+    uint style = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
+    KisPainter::FillStyle fillstyle;
+    switch(style)
+    {
+        case 1:
+            fillstyle = KisPainter::FillStyleForegroundColor;
+            break;
+        case 2:
+            fillstyle = KisPainter::FillStyleBackgroundColor;
+            break;
+        case 3:
+            fillstyle = KisPainter::FillStylePattern;
+            break;
+        default:
+            fillstyle = KisPainter::FillStyleNone;
+    }
+    m_painter->setFillStyle(fillstyle);
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::setOpacity(Kross::Api::List::Ptr args)
+{
+    Q_UINT8 opacity = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
+    m_painter->setOpacity(opacity);
+    return 0;
+}
+
+Kross::Api::Object::Ptr Painter::setDuplicateOffset(Kross::Api::List::Ptr args)
+{
+    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
+    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    m_painter->setDuplicateOffset(KisPoint(x1,y1));
+    return 0;
 }
 
 Kross::Api::Object::Ptr Painter::paintPolyline(Kross::Api::List::Ptr args)
@@ -133,13 +193,27 @@ Kross::Api::Object::Ptr Painter::paintAt(Kross::Api::List::Ptr args)
     return 0;
 }
 
+Kross::Api::Object::Ptr Painter::setBackgroundColor(Kross::Api::List::Ptr args)
+{
+    Color* c = (Color*)args->item(0).data();
+    m_painter->setBackgroundColor( KisColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
+    return 0;
+}
+
 Kross::Api::Object::Ptr Painter::setPaintColor(Kross::Api::List::Ptr args)
 {
-//     kdDebug() << "setPaintColor : " << args->item(0)->getClassName() << endl;
     Color* c = (Color*)args->item(0).data();
     m_painter->setPaintColor( KisColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
     return 0;
 }
+
+Kross::Api::Object::Ptr Painter::setPattern(Kross::Api::List::Ptr args)
+{
+    Pattern* p = (Pattern*)args->item(0).data();
+    m_painter->setPattern( p->getPattern());
+    return 0;
+}
+
 
 Kross::Api::Object::Ptr Painter::setBrush(Kross::Api::List::Ptr args)
 {

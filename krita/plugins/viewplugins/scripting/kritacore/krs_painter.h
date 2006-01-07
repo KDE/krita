@@ -35,6 +35,7 @@ class Painter : public Kross::Api::Class<Painter>
     public:
         explicit Painter(KisPaintLayerSP layer);
         ~Painter();
+        // Painting operations
         Kross::Api::Object::Ptr paintPolyline(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintLine(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintBezierCurve(Kross::Api::List::Ptr args);
@@ -42,9 +43,19 @@ class Painter : public Kross::Api::Class<Painter>
         Kross::Api::Object::Ptr paintPolygon(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintRect(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintAt(Kross::Api::List::Ptr args);
+        // Color operations
         Kross::Api::Object::Ptr setPaintColor(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setBackgroundColor(Kross::Api::List::Ptr args);
+        // How is painting done operations
+        Kross::Api::Object::Ptr setPattern(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setBrush(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setPaintOp(Kross::Api::List::Ptr args);
+        // Spetial settings
+        Kross::Api::Object::Ptr setDuplicateOffset(Kross::Api::List::Ptr args);
+        // Style operation
+        Kross::Api::Object::Ptr setOpacity(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setStrokeStyle(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr setFillStyle(Kross::Api::List::Ptr args);
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
     private:

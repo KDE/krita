@@ -19,6 +19,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_pattern.h"
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -37,7 +38,6 @@
 #include <klocale.h>
 
 #include "kis_color.h"
-#include "kis_pattern.h"
 #include "kis_layer.h"
 #include "kis_paint_device_impl.h"
 

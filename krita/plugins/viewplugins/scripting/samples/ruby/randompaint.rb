@@ -1,3 +1,8 @@
+def randomizeStyle(painter)
+    painter.setFillStyle(4 *rand)
+    painter.setStrokeStyle(2 *rand)
+end
+
 require "krosskritacore"
 
 doc = Krosskritacore::get("KritaDocument")
@@ -25,6 +30,12 @@ brush =  Krosskritacore::getBrush("Circle (05)")
 # define the brush
 painter.setBrush(brush)
 
+# get the pattern
+pattern = Krosskritacore::getPattern("Bricks")
+
+# set the pattern
+painter.setPattern(pattern)
+
 # define the paint operation
 painter.setPaintOp("paintbrush")
 
@@ -40,7 +51,9 @@ end
 for i in 1..100
     # set painting color
     painter.setPaintColor( Krosskritacore::newRGBColor(rand*255,rand*255,rand*255) )
-    # set the brush
+    painter.setBackgroundColor( Krosskritacore::newRGBColor(rand*255,rand*255,rand*255) )
+    painter.setOpacity( rand*255 )
+# set the brush
     if(rand < 0.5)
         painter.setBrush( Krosskritacore::newRectBrush(rand*20,rand*20,rand*10,rand*10) )
     else
@@ -48,6 +61,7 @@ for i in 1..100
     end
     # paint a point
     shape = rand * 7
+    painter.setStrokeStyle(1)
     if( shape < 1 )
         painter.paintAt(rand * width , rand * height,1.1)
     elsif(shape < 2 )
@@ -63,6 +77,7 @@ for i in 1..100
     elsif(shape < 4)
         painter.paintBezierCurve(rand * width, rand * height, 1.1, rand * width, rand * height, rand * width , rand * height, rand * width, rand * height, 1.1)
     elsif(shape < 5)
+        randomizeStyle(painter)
         painter.paintEllipse(rand * width, rand * height, rand * width, rand * height, 1.1)
     elsif(shape < 6)
         xs = Array.new
@@ -71,8 +86,10 @@ for i in 1..100
             xs[i] = rand*width
             ys[i] = rand*height
         end
+        randomizeStyle(painter)
         painter.paintPolygon(xs, ys)
     elsif(shape < 7)
+        randomizeStyle(painter)
         painter.paintRect(rand * width, rand * height, rand * width, rand * height, 1.1)
     end
     script.incProgress()

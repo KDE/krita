@@ -27,6 +27,7 @@
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
 #include <kis_doc.h>
+#include <kis_pattern.h>
 #include <kis_resourceserver.h>
 
 #include "kis_script_progress.h"
@@ -34,6 +35,7 @@
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_doc.h"
+#include "krs_pattern.h"
 #include "krs_script_progress.h"
 
 extern "C"
@@ -55,6 +57,7 @@ KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("Krit
 {
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("getPattern", &KritaCoreFactory::getPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
@@ -72,6 +75,25 @@ Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args
     return new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Hsv);
 }
 
+Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
+{
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
+    QValueList<KisResource*> resources = rServer->resources();
+    
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    
+    for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
+    {
+        if((*it)->name() == name)
+        {
+            return new Pattern(dynamic_cast<KisPattern*>(*it));
+        }
+    }
+    return 0;
+    
+}
+
+
 Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
@@ -83,7 +105,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
     {
         if((*it)->name() == name)
         {
-            return new Brush((KisBrush*)*it);
+            return new Brush(dynamic_cast<KisBrush*>(*it));
         }
     }
     return 0;

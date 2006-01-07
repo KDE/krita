@@ -194,6 +194,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_vScroll( 0 )
     , m_scrollX( 0 )
     , m_scrollY( 0 )
+    , m_canvasXOffset( 0)
+    , m_canvasYOffset( 0)
 //    , m_currentGuide( 0 )
     , m_adapter( adapter )
     , m_statusBarZoomLabel( 0 )
@@ -630,9 +632,6 @@ void KisView::resizeEvent(QResizeEvent *)
             drawW -= scrollBarExtent;
     }
 
-    m_hRuler -> setGeometry(m_rulerThickness, 0, drawW, m_rulerThickness);
-    m_vRuler -> setGeometry(0, m_rulerThickness, m_rulerThickness, drawH);
-
     m_vScroll -> setEnabled(docH > drawH);
     m_hScroll -> setEnabled(docW > drawW);
 
@@ -682,6 +681,18 @@ void KisView::resizeEvent(QResizeEvent *)
         m_hScrollBarExtent = scrollBarExtent;
     }
 
+    if (docW < drawW) {
+        m_canvasXOffset = (drawW - docW) / 2;
+    } else {
+        m_canvasXOffset = 0;
+    }
+
+    if (docH < drawH) {
+        m_canvasYOffset = (drawH - docH) / 2;
+    } else {
+        m_canvasYOffset = 0;
+    }
+
     //Check if rulers are visible
     if( m_RulerAction->isChecked() )
         m_canvas -> setGeometry(m_rulerThickness, m_rulerThickness, drawW, drawH);
@@ -689,27 +700,24 @@ void KisView::resizeEvent(QResizeEvent *)
         m_canvas -> setGeometry(0, 0, drawW, drawH);
     m_canvas -> show();
 
-    Q_INT32 oldWidth = m_canvasPixmap.width();
-    Q_INT32 oldHeight = m_canvasPixmap.height();
-
     m_canvasPixmap.resize(drawW, drawH);
 
-    if (!m_canvasPixmap.isNull()) {
-        if (drawW > oldWidth) {
-            KisRect drawRect(oldWidth, 0, drawW - oldWidth, drawH);
-            paintView(viewToWindow(drawRect));
-        }
+    if (!m_canvas -> isOpenGLCanvas()) {
+        if (!m_canvasPixmap.isNull()) {
+            KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
 
-        if (drawH > oldHeight) {
-            KisRect drawRect(0, oldHeight, drawW, drawH - oldHeight);
-            paintView(viewToWindow(drawRect));
+            paintView(viewToWindow(rc));
         }
     }
+
     int fontheight = QFontMetrics(KGlobalSettings::generalFont()).height() * 3;
     m_vScroll -> setPageStep(drawH);
     m_vScroll -> setLineStep(fontheight);
     m_hScroll -> setPageStep(drawW);
     m_hScroll -> setLineStep(fontheight);
+
+    m_hRuler -> setGeometry(m_rulerThickness + m_canvasXOffset, 0, QMIN(docW, drawW), m_rulerThickness);
+    m_vRuler -> setGeometry(0, m_rulerThickness + m_canvasYOffset, m_rulerThickness, QMIN(docH, drawH));
 
     if (m_vScroll -> isVisible())
         m_vRuler -> updateVisibleArea(0, m_vScroll -> value());
@@ -729,8 +737,20 @@ void KisView::resizeEvent(QResizeEvent *)
     else {
         m_hRuler -> hide();
         m_vRuler -> hide();
-
     }
+}
+
+void KisView::styleChange(QStyle& oldStyle)
+{
+    Q_UNUSED(oldStyle);
+    m_canvas -> updateGeometry();
+    updateCanvas();
+}
+
+void KisView::paletteChange(const QPalette& oldPalette)
+{
+    Q_UNUSED(oldPalette);
+    updateCanvas();
 }
 
 void KisView::updateReadWrite(bool readwrite)
@@ -749,13 +769,15 @@ void KisView::clearCanvas(const QRect& rc)
 
 Q_INT32 KisView::horzValue() const
 {
-    return m_hScroll -> value();
+    return m_hScroll -> value() - m_canvasXOffset;
 }
 
 Q_INT32 KisView::vertValue() const
 {
-    return m_vScroll -> value();
+    return m_vScroll -> value() - m_canvasYOffset;
 }
+
+#define EPSILON 1e-6
 
 void KisView::paintView(const KisRect& r)
 {
@@ -768,7 +790,8 @@ void KisView::paintView(const KisRect& r)
 
             KisRect vr = windowToView(r);
             vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
-            if (!vr.isNull()) {
+
+            if (!vr.isEmpty()) {
 
                 QPainter gc;
 
@@ -785,37 +808,29 @@ void KisView::paintView(const KisRect& r)
 
                         for (unsigned int i = 0; i < rects.count(); i++) {
                             QRect er = rects[i];
-                            gc.fillRect(er, backgroundColor());
+                            gc.fillRect(er, colorGroup().mid());
                         }
                         wr &= QRect(0, 0, img -> width(), img -> height());
-
-                        if(wr.isEmpty())
-                            return;
                     }
 
-                    if (!wr.isNull()) {
-                        if (zoom() < 1.0 || zoom() > 1.0) {
-                            gc.setViewport(0, 0, static_cast<Q_INT32>(m_canvasPixmap.width() * zoom()), static_cast<Q_INT32>(m_canvasPixmap.height() * zoom()));
-                        }
-                        gc.translate((-horzValue()) / zoom(), (-vertValue()) / zoom());
+                    if (!wr.isEmpty()) {
 
-                        if(m_actLayerVis)
-                            m_current -> renderToPainter(wr.left(), wr.top(),
-                                wr.right(), wr.bottom(), gc, monitorProfile(),
-                                (KisImage::PaintFlags)(
-                                         KisImage::PAINT_BACKGROUND
-                                        |KisImage::PAINT_SELECTION
-                                        |KisImage::PAINT_MASKINACTIVELAYERS
-                                        |KisImage::PAINT_EMBEDDED_RECT
-                                                      ), HDRExposure());
-                        else
-                            m_current -> renderToPainter(wr.left(), wr.top(),
-                                wr.right(), wr.bottom(), gc, monitorProfile(),
-                                (KisImage::PaintFlags)(
-                                         KisImage::PAINT_BACKGROUND
-                                        |KisImage::PAINT_SELECTION
-                                        |KisImage::PAINT_EMBEDDED_RECT
-                                                      ), HDRExposure());
+                        gc.setWorldXForm(true);
+                        gc.translate(-horzValue(), -vertValue());
+
+                        if (zoom() < 1.0 - EPSILON || zoom() > 1.0 + EPSILON) {
+                            gc.scale(zoomFactor(), zoomFactor());
+                        }
+
+                        KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION);
+
+                        if (m_actLayerVis) {
+                            paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
+                        }
+
+                        m_current -> renderToPainter(wr.left(), wr.top(),
+                            wr.right(), wr.bottom(), gc, monitorProfile(),
+                            paintFlags, HDRExposure());
                     }
 
 //                    paintGuides();
@@ -841,7 +856,7 @@ void KisView::paintOpenGLView(const KisRect& r)
 
     glDrawBuffer(GL_BACK);
 
-    QColor widgetBackgroundColor = eraseColor();
+    QColor widgetBackgroundColor = colorGroup().mid();
 
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -865,6 +880,8 @@ void KisView::paintOpenGLView(const KisRect& r)
 
             glBindTexture(GL_TEXTURE_2D, m_OpenGLImageContext -> backgroundTexture());
 
+            glTranslatef(m_canvasXOffset, m_canvasYOffset, 0.0);
+
             glEnable(GL_TEXTURE_2D);
             glBegin(GL_QUADS);
 
@@ -883,7 +900,9 @@ void KisView::paintOpenGLView(const KisRect& r)
 
             glEnd();
 
-            glTranslatef(-m_scrollX, -m_scrollY, 0.0);
+            glTranslatef(-m_canvasXOffset, -m_canvasYOffset, 0.0);
+
+            glTranslatef(-horzValue(), -vertValue(), 0.0);
             glScalef(zoomFactor(), zoomFactor(), 1.0);
 
             glEnable(GL_BLEND);
@@ -1882,8 +1901,8 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 
     KisImageSP img = currentImg();
 
-    m_hRuler -> updatePointer(e -> pos().floorX(), e -> pos().floorY());
-    m_vRuler -> updatePointer(e -> pos().floorX(), e -> pos().floorY());
+    m_hRuler -> updatePointer(e -> pos().floorX() - m_canvasXOffset, e -> pos().floorY() - m_canvasYOffset);
+    m_vRuler -> updatePointer(e -> pos().floorX() - m_canvasXOffset, e -> pos().floorY() - m_canvasYOffset);
 
     KisPoint wp = viewToWindow(e -> pos());
 

@@ -193,6 +193,8 @@ public:
 protected:
 
     virtual void resizeEvent(QResizeEvent*); // From QWidget
+    virtual void styleChange(QStyle& oldStyle); // From QWidget
+    virtual void paletteChange(const QPalette& oldPalette); // From QWidget
 
 protected slots:
     virtual void slotChildActivated(bool a); // from KoView
@@ -465,6 +467,8 @@ private:
     QScrollBar *m_vScroll; // is not right yet.
     int m_scrollX;
     int m_scrollY;
+    int m_canvasXOffset;
+    int m_canvasYOffset;
 //    KisGuideSP m_currentGuide;
 //    QPoint m_lastGuidePoint;
     KisUndoAdapter *m_adapter;

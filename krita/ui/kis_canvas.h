@@ -220,6 +220,8 @@ public:
     void repaint(const QRect& r, bool erase = true);
     void repaint(const QRegion& r, bool erase = true);
 
+    void updateGeometry();
+
 signals:
     void sigGotPaintEvent(QPaintEvent*);
     void sigGotEnterEvent(QEvent*);

@@ -922,6 +922,12 @@ void KisCanvas::setUpdatesEnabled(bool updatesEnabled)
     dynamic_cast<QWidget *>(m_canvasWidget) -> setUpdatesEnabled(updatesEnabled);
 }
 
+void KisCanvas::updateGeometry()
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> updateGeometry();
+}
+
 void KisCanvas::setFocusPolicy(QWidget::FocusPolicy focusPolicy)
 {
     Q_ASSERT(m_canvasWidget);

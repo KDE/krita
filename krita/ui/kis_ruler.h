@@ -49,11 +49,12 @@ public slots:
     void hide();
     void show();
 
-public:
+protected:
     virtual void paintEvent(QPaintEvent *e);
     virtual void resizeEvent(QResizeEvent *e);
+    virtual void styleChange(QStyle& oldStyle);
+    virtual void paletteChange(const QPalette& oldPalette);
 
-protected:
     void recalculateSize();
     void drawRuler();
     void initMarker(Q_INT32 w, Q_INT32 h);

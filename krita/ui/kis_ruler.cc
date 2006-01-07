@@ -185,8 +185,8 @@ void KisRuler::drawRuler()
         return;
 
     p.begin(m_pixmapBuffer);
-    p.setPen(QColor(0x70, 0x70, 0x70));
-    p.setBackgroundColor(colorGroup().background());
+    p.setPen(colorGroup().text());
+    p.setBackgroundColor(colorGroup().base());
     p.eraseRect(0, 0, m_pixmapBuffer -> width(), m_pixmapBuffer -> height());
 
     switch (m_unit) {
@@ -284,6 +284,19 @@ void KisRuler::resizeEvent(QResizeEvent *)
     recalculateSize();
 }
 
+void KisRuler::styleChange(QStyle& oldStyle)
+{
+    Q_UNUSED(oldStyle);
+    updateGeometry();
+    drawRuler();
+}
+
+void KisRuler::paletteChange(const QPalette& oldPalette)
+{
+    Q_UNUSED(oldPalette);
+    drawRuler();
+}
+
 void KisRuler::show()
 {
     if (m_orientation == Qt::Horizontal) {
@@ -299,10 +312,13 @@ void KisRuler::show()
 
 void KisRuler::hide()
 {
+    /*
     if (m_orientation == Qt::Horizontal)
         setFixedHeight(1);
     else
         setFixedWidth(1);
+        */
+    super::hide();
 }
 
 void KisRuler::drawNums(QPainter *p, Q_INT32 x, Q_INT32 y, QString& num, bool orientationHoriz)

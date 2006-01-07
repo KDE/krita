@@ -82,7 +82,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="LayerList">
+        <widget class="KisLayerList">
             <property name="name">
                 <cstring>listLayers</cstring>
             </property>
@@ -269,8 +269,8 @@
         <pixmap>image4</pixmap>
     </customwidget>
     <customwidget>
-        <class>LayerList</class>
-        <header location="local">layerlist.h</header>
+        <class>KisLayerList</class>
+        <header location="local">kis_layerlist.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>
@@ -305,7 +305,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kis_cmb_composite.h</includehint>
-    <includehint>layerlist.h</includehint>
+    <includehint>kis_layerlist.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

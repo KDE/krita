@@ -100,9 +100,9 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         Q_INT32 height = boundingRect.height();
         Q_INT32 width = boundingRect.width();
         KisPaintLayer *layer = new KisPaintLayer(img, '"' + text + '"', OPACITY_OPAQUE);
-        KisLayerSP parent = img->rootLayer().data();
+        KisGroupLayerSP parent = img->rootLayer();
         if (img->activeLayer())
-            parent = img->activeLayer()->parent().data();
+            parent = img->activeLayer()->parent();
         img->addLayer(layer, parent, img->activeLayer());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

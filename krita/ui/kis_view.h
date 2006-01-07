@@ -63,6 +63,7 @@ class KToggleAction;
 class KToolBar;
 
 class KoPartSelectAction;
+class KoDocumentEntry;
 class KoIconItem;
 class KoTabBar;
 class KoPaletteManager;
@@ -380,6 +381,7 @@ private slots:
     void addLayer(KisGroupLayerSP parent, KisLayerSP above);
     void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
     void addPartLayer();
+    void addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void layerRemove();
     void layerDuplicate();
     void layerRaise();

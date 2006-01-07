@@ -374,6 +374,8 @@ void KisView::createLayerBox()
             this, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
     connect(m_layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
             this, SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+    connect(m_layerBox, SIGNAL(sigRequestPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)),
+            this, SLOT(addPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)));
     connect(m_layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
             this, SLOT(showLayerProperties(KisLayerSP)));
     connect(m_layerBox, SIGNAL(sigOpacityChanged(int)), this, SLOT(layerOpacity(int)));
@@ -2215,9 +2217,15 @@ void KisView::addPartLayer()
     KisImageSP img = currentImg();
     if (!img) return;
 
-    KoDocumentEntry  e = m_actionPartLayer->documentEntry();
+    addPartLayer(img -> rootLayer(), img -> rootLayer() -> firstChild(), m_actionPartLayer -> documentEntry());
+}
 
-    KoDocument* doc = e.createDoc(m_doc);
+void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry)
+{
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+    KoDocument* doc = entry.createDoc(m_doc);
     if ( !doc )
         return;
 
@@ -2230,7 +2238,7 @@ void KisView::addPartLayer()
     kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
     KisPartLayer* partLayer = new KisPartLayer(img, childDoc);
-    img -> addLayer(partLayer, img -> rootLayer().data(), img -> rootLayer() -> firstChild());
+    img -> addLayer(partLayer, parent, above);
 
     m_doc->setModified(true);
 }
@@ -2473,7 +2481,7 @@ void KisView::connectCurrentImg()
 
         connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_current, SIGNAL(sigLayersChanged(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_current, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));

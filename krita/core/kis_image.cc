@@ -128,7 +128,7 @@ namespace {
 
     public:
         KisChangeLayersCmd(KisUndoAdapter *adapter, KisImageSP img,
-                           KisLayerSP oldRootLayer, KisLayerSP newRootLayer, const QString& name)
+                           KisGroupLayerSP oldRootLayer, KisGroupLayerSP newRootLayer, const QString& name)
             : super(name)
             {
                 m_adapter = adapter;
@@ -166,8 +166,8 @@ namespace {
     private:
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
-        KisLayerSP m_oldRootLayer;
-        KisLayerSP m_newRootLayer;
+        KisGroupLayerSP m_oldRootLayer;
+        KisGroupLayerSP m_newRootLayer;
     };
 
 
@@ -259,7 +259,7 @@ namespace {
         typedef KisImageCommand super;
 
     public:
-        KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis) : super(name, image)
+        KisLayerPositionCommand(const QString& name, KisImageSP image, KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis) : super(name, image)
             {
                 m_layer = layer;
                 m_oldParent = layer->parent();
@@ -284,9 +284,9 @@ namespace {
 
     private:
         KisLayerSP m_layer;
-        KisLayerSP m_oldParent;
+        KisGroupLayerSP m_oldParent;
         KisLayerSP m_oldAboveThis;
-        KisLayerSP m_newParent;
+        KisGroupLayerSP m_newParent;
         KisLayerSP m_newAboveThis;
     };
 
@@ -509,7 +509,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
         Q_CHECK_PTR(m_projection);
 
-        m_rootLayer = rhs.m_rootLayer->clone();
+        m_rootLayer = static_cast<KisGroupLayer*>(rhs.m_rootLayer->clone().data());
 
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
@@ -946,7 +946,7 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
     }
 }
 
-KisLayerSP KisImage::rootLayer() const
+KisGroupLayerSP KisImage::rootLayer() const
 {
     return m_rootLayer;
 }
@@ -978,9 +978,8 @@ KisLayerSP KisImage::findLayer(int id) const
     return rootLayer() -> findLayer(id);
 }
 
-bool KisImage::addLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
+bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(p.data());
     if (!parent)
         return false;
 
@@ -1074,16 +1073,15 @@ bool KisImage::toBottom(KisLayerSP layer)
     return moveLayer(layer, rootLayer(), 0);
 }
 
-bool KisImage::moveLayer(KisLayerSP layer, KisLayerSP p, KisLayerSP aboveThis)
+bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
 {
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(p.data());
     if (!parent)
         return false;
 
     KisGroupLayerSP wasParent = layer -> parent();
     KisLayerSP wasAbove = layer -> nextSibling();
 
-    if (wasParent.data() == p.data() && wasAbove.data() == aboveThis.data())
+    if (wasParent.data() == parent.data() && wasAbove.data() == aboveThis.data())
         return false;
 
     if (!wasParent -> removeLayer(layer))
@@ -1120,7 +1118,7 @@ Q_INT32 KisImage::nHiddenLayers() const
 
 void KisImage::flatten()
 {
-    KisLayerSP oldRootLayer = m_rootLayer;
+    KisGroupLayerSP oldRootLayer = m_rootLayer;
 
     m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
 

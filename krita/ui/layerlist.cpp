@@ -43,7 +43,9 @@ class LayerItemIterator: public QListViewItemIterator
 {
 public:
     LayerItemIterator( LayerList *list ): QListViewItemIterator( list ) { }
+    LayerItemIterator( LayerList *list, IteratorFlag flags ): QListViewItemIterator( list, flags ) { }
     LayerItemIterator( LayerItem *item ): QListViewItemIterator( item ) { }
+    LayerItemIterator( LayerItem *item, IteratorFlag flags ): QListViewItemIterator( item, flags ) { }
     LayerItem *operator*() { return static_cast<LayerItem*>( QListViewItemIterator::operator*() ); }
 };
 
@@ -455,19 +457,7 @@ void LayerList::moveLayer( LayerItem *layer, LayerItem *parent, LayerItem *after
     if( layer->parent() == parent && layer->prevSibling() == after )
         return;
 
-    if( after )
-        layer->moveItem( after );
-    else
-    {
-        if ( layer->parent() )
-            layer->parent()->takeItem( layer );
-        else
-            takeItem( layer );
-        if ( parent )
-            parent->insertItem( layer );
-        else
-            insertItem( layer );
-    }
+    moveItem( layer, parent, after );
     emit layerMoved( layer, parent, after );
     emit layerMoved( layer->id(), parent ? parent->id() : -1, after ? after->id() : -1 );
 }
@@ -538,15 +528,21 @@ void LayerList::findDrop( const QPoint &pos, QListViewItem *&parent, QListViewIt
 void LayerList::showContextMenu()
 {
     LayerItem *layer = static_cast<LayerItem*>( itemAt( viewport()->mapFromGlobal( QCursor::pos() ) ) );
-
+    if( layer )
+        setCurrentItem( layer );
     d->contextMenu.clear();
+    constructMenu( layer );
+    menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
+}
+
+void LayerList::constructMenu( LayerItem *layer )
+{
     if( layer )
     {
-        layer->setSelected( true );
         for( int i = 0, n = d->properties.count(); i < n; ++i )
             if( !layer->isFolder() || d->properties[i].validForFolders )
                 d->contextMenu.insertItem( d->properties[i].icon.pixmap( QIconSet::Small, layer->d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ), d->properties[i].displayName, MenuItems::COUNT + i );
-        d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties" ), MenuItems::LayerProperties );
+        d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties..." ), MenuItems::LayerProperties );
         d->contextMenu.insertSeparator();
         d->contextMenu.insertItem( SmallIconSet( "editdelete" ),
             selectedLayers().count() > 1 ? i18n( "Remove Layers" )
@@ -555,8 +551,6 @@ void LayerList::showContextMenu()
     }
     d->contextMenu.insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer" ), MenuItems::NewLayer );
     d->contextMenu.insertItem( SmallIconSet( "folder" ), i18n( "New &Folder" ), MenuItems::NewFolder );
-
-    menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
 }
 
 void LayerList::menuActivated( int id, LayerItem *layer )
@@ -639,6 +633,12 @@ void LayerList::slotItemMoved( QListViewItem *item, QListViewItem *afterBefore, 
 void LayerList::setCurrentItem( QListViewItem *item )
 {
     super::setCurrentItem( item );
+    int n = 0;
+    for( LayerItemIterator it( this, LayerItemIterator::Selected ); *it; ++it ) { n++; }
+    if( n == 1 )
+        (*LayerItemIterator( this, LayerItemIterator::Selected ))->setSelected( false );
+    if( n <= 1 && item )
+        item->setSelected( true );
     if( activeLayer() != item )
         setActiveLayer( static_cast<LayerItem*>(item) );
 }

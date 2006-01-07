@@ -45,7 +45,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "layerlist.h"
+#include "kis_layerlist.h"
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
 #include "kis_colorspace.h"
@@ -101,6 +101,8 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
                     SLOT(slotRequestNewLayer(LayerItem*, LayerItem*)));
     connect(list(), SIGNAL(requestNewFolder(LayerItem*, LayerItem*)),
                     SLOT(slotRequestNewFolder(LayerItem*, LayerItem*)));
+    connect(list(), SIGNAL(requestNewObjectLayer(LayerItem*, LayerItem*, const KoDocumentEntry&)),
+                    SLOT(slotRequestNewObjectLayer(LayerItem*, LayerItem*, const KoDocumentEntry&)));
     connect(list(), SIGNAL(requestRemoveLayer(LayerItem*)),
                     SLOT(slotRequestRemoveLayer(LayerItem*)));
     connect(list(), SIGNAL(requestLayerProperties(LayerItem*)),
@@ -120,7 +122,7 @@ KisLayerBox::~KisLayerBox()
 {
 }
 
-LayerList* KisLayerBox::list() const
+KisLayerList* KisLayerBox::list() const
 {
     return m_lst -> listLayers;
 }
@@ -142,7 +144,7 @@ void KisLayerBox::setImage(KisImageSP img)
                 this, SLOT(slotLayerPropertiesChanged(KisLayerSP)));
         connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
-        connect(img, SIGNAL(sigLayersChanged(KisLayerSP)), this, SLOT(slotLayersChanged(KisLayerSP)));
+        connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
         slotLayersChanged(img -> rootLayer());
     }
     else
@@ -160,7 +162,7 @@ void KisLayerBox::slotLayerActivated(KisLayerSP layer)
 
 void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 {
-    if (layer == m_image -> rootLayer() || list() -> layer(layer -> id()))
+    if (layer.data() == m_image -> rootLayer().data() || list() -> layer(layer -> id()))
         return;
     if (layer -> parent() == m_image -> rootLayer())
     {
@@ -202,7 +204,7 @@ void KisLayerBox::slotLayerPropertiesChanged(KisLayerSP layer)
     updateUI();
 }
 
-void KisLayerBox::slotLayersChanged(KisLayerSP rootLayer)
+void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
 {
     list() -> clear();
     KisPopulateVisitor visitor(list());
@@ -290,6 +292,25 @@ void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
     else if (!p && m_image -> rootLayer() -> childCount())
         above = m_image -> rootLayer() -> firstChild();
     emit sigRequestGroupLayer(parent, above);
+}
+
+void KisLayerBox::slotRequestNewObjectLayer(LayerItem* p, LayerItem* after, const KoDocumentEntry& entry)
+{
+    KisLayer* l = m_image -> rootLayer().data();
+    if (p)
+        l = m_image -> findLayer(p -> id()).data();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+
+    KisLayerSP above = 0;
+    if (after && after -> nextSibling())
+        above = m_image -> findLayer(after -> nextSibling() -> id());
+    else if (after)
+        above = 0;
+    else if (p && p -> firstChild())
+        above = parent -> firstChild();
+    else if (!p && m_image -> rootLayer() -> childCount())
+        above = m_image -> rootLayer() -> firstChild();
+    emit sigRequestPartLayer(parent, above, entry);
 }
 
 void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)

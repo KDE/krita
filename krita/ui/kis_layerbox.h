@@ -32,8 +32,9 @@ class QButton;
 class QPainter;
 class QWidget;
 class KIconLoader;
+class KoDocumentEntry;
 class KisCompositeOp;
-class LayerList;
+class KisLayerList;
 class LayerItem;
 
 // XXX: Add layer locking, previews
@@ -57,7 +58,7 @@ public slots:
     void slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
     void slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
     void slotLayerPropertiesChanged(KisLayerSP layer);
-    void slotLayersChanged(KisLayerSP rootLayer);
+    void slotLayersChanged(KisGroupLayerSP rootLayer);
 
     void slotSetCompositeOp(const KisCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
@@ -66,6 +67,7 @@ public slots:
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void sigRequestPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(int opacity);
@@ -80,6 +82,7 @@ private slots:
     void slotLayerMoved(LayerItem* layer, LayerItem* parent, LayerItem* after);
     void slotRequestNewLayer(LayerItem* parent, LayerItem* after);
     void slotRequestNewFolder(LayerItem* parent, LayerItem* after);
+    void slotRequestNewObjectLayer(LayerItem* parent, LayerItem* item, const KoDocumentEntry& entry);
     void slotRequestRemoveLayer(LayerItem* layer);
     void slotRequestLayerProperties(LayerItem* layer);
 
@@ -93,7 +96,7 @@ private slots:
 private:
     void updateUI();
     QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
-    LayerList* list() const;
+    KisLayerList* list() const;
     KisImageSP m_image;
     WdgLayerBox *m_lst;
 };

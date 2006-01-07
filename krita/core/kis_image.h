@@ -187,7 +187,7 @@ public:
 
     void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
-    KisLayerSP rootLayer() const;
+    KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;
 
     KisLayerSP activate(KisLayerSP layer);
@@ -195,7 +195,7 @@ public:
     KisLayerSP findLayer(int id) const;
 
     /// Move layer to specified position
-    bool moveLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
+    bool moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /**
      * Add already existing layer to image
@@ -207,7 +207,7 @@ public:
      *
      * returns false if adding the layer didn't work, true if the layer got added
      */
-    bool addLayer(KisLayerSP layer, KisLayerSP parent, KisLayerSP aboveThis);
+    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer
     bool removeLayer(KisLayerSP layer);
@@ -312,7 +312,7 @@ signals:
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
     /// Emitted when the layers have changed completely
-    void sigLayersChanged(KisLayerSP rootLayer);
+    void sigLayersChanged(KisGroupLayerSP rootLayer);
 
     /**
      * Emitted whenever an action has caused the image to be recomposited. This happens
@@ -366,7 +366,7 @@ private:
     KisBackgroundSP m_bkg;
     KisPaintDeviceImplSP m_projection;
 
-    KisLayerSP m_rootLayer; // The layers are contained in here
+    KisGroupLayerSP m_rootLayer; // The layers are contained in here
     KisLayerSP m_activeLayer;
 
     KisNameServer *m_nserver;

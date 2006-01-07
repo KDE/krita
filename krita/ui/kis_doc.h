@@ -160,12 +160,12 @@ private slots:
 private:
     QDomElement saveImage(QDomDocument& doc, KisImageSP img);
     KisImageSP loadImage(const QDomElement& elem);
-    void loadLayers(const QDomElement& element, KisImageSP img, KisLayerSP parent);
+    void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
                 QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                 KisCompositeOp compositeOp);
-    KisLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
+    KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
                 QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                 KisCompositeOp compositeOp);
     bool init();

@@ -138,7 +138,7 @@ public: //convenience
     LayerItem *lastChild() const;
 
 protected slots:
-    virtual void showContextMenu();
+    virtual void constructMenu( LayerItem *layer );
     virtual void menuActivated( int id, LayerItem *layer );
 
 private:
@@ -151,6 +151,7 @@ private:
 private slots:
     void slotItemRenamed( QListViewItem *item, const QString &text, int col );
     void slotItemMoved( QListViewItem *item, QListViewItem*, QListViewItem* );
+    void showContextMenu();
 
 public: //reimplemented for internal reasons
     virtual void setCurrentItem( QListViewItem *i );

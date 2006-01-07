@@ -432,7 +432,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         img -> setDescription(description);
         img -> setResolution(xres, yres);
 
-        loadLayers(element, img, img -> rootLayer());
+        loadLayers(element, img, img -> rootLayer().data());
 
     } else {
         // TODO Try to import it
@@ -441,7 +441,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     return img;
 }
 
-void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisLayerSP parent)
+void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent)
 {
     QDomNode node = element.firstChild();
     QDomNode child;
@@ -539,7 +539,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
         return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
 
     if(attr == "grouplayer")
-        return loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
+        return loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
 
     kdDebug(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return 0;
@@ -597,12 +597,12 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
     return layer;
 }
 
-KisLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
+KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
     QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
 {
     kdDebug(DBG_AREA_FILE) << "loadGroupLayer called\n";
     QString attr;
-    KisLayerSP layer;
+    KisGroupLayerSP layer;
 
     layer = new KisGroupLayer(img, name, opacity);
     Q_CHECK_PTR(layer);

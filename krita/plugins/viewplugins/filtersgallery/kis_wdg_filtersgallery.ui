@@ -43,7 +43,7 @@
                 </size>
             </property>
             <property name="title">
-                <string>Configuration :</string>
+                <string>Configuration</string>
             </property>
         </widget>
         <widget class="KisPreviewWidget">

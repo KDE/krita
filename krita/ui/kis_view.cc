@@ -2131,7 +2131,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
             layer -> opacity() != dlg.getOpacity() ||
             layer -> compositeOp() != dlg.getCompositeOp())
         {
-            m_adapter -> beginMacro(i18n("Property changes"));
+            m_adapter -> beginMacro(i18n("Property Changes"));
             layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
             m_adapter -> endMacro();
         }

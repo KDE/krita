@@ -114,7 +114,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 
     QRect r = dev->exactBounds();
     
-    m_groupBox->setTitle(i18n("Preview : ") + dev->name());
+    m_groupBox->setTitle(i18n("Preview: ") + dev->name());
     m_previewIsDisplayed = true;
 
     m_zoom = (double)m_preview->width() / (double)r.width();
@@ -157,10 +157,10 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(i18n("Preview : ") + m_origDevice->name());
+        m_groupBox->setTitle(i18n("Preview: ") + m_origDevice->name());
         m_preview->setImage(m_scaledPreview);
     } else {
-        m_groupBox->setTitle(i18n("Original : ") + m_origDevice->name());
+        m_groupBox->setTitle(i18n("Original: ") + m_origDevice->name());
         m_preview->setImage(m_scaledOriginal);
     }
 }

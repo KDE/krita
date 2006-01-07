@@ -26,9 +26,6 @@
             <height>0</height>
         </size>
     </property>
-    <property name="caption">
-        <string>PreviewWidgetBase</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -63,10 +60,7 @@
                                 <cstring>radioBtnPreview</cstring>
                             </property>
                             <property name="text">
-                                <string>pr&amp;eview</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+E</string>
+                                <string>Pr&amp;eview</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -77,10 +71,7 @@
                                 <cstring>radioBtnOriginal</cstring>
                             </property>
                             <property name="text">
-                                <string>or&amp;iginal</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+I</string>
+                                <string>Or&amp;iginal</string>
                             </property>
                         </widget>
                     </hbox>
@@ -147,10 +138,7 @@
                                 <cstring>checkBoxAutoUpdate</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;autoupdate</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
+                                <string>&amp;Autoupdate</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -182,7 +170,7 @@
                 <cstring>m_groupBox</cstring>
             </property>
             <property name="title">
-                <string>preview</string>
+                <string>Preview</string>
             </property>
             <vbox>
                 <property name="name">

@@ -40,6 +40,8 @@ public:
     virtual void constructMenu( LayerItem *layer );
     virtual void menuActivated( int id, LayerItem *layer );
 
+    KoPartSelectAction *partLayerAction() const { return m_partLayerAction; }
+
 private:
     KoPartSelectAction *m_partLayerAction;
 };

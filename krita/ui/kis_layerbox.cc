@@ -45,6 +45,8 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include <koPartSelectAction.h>
+
 #include "kis_layerlist.h"
 #include "kis_cmb_composite.h"
 #include "wdglayerbox.h"
@@ -108,7 +110,17 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     connect(list(), SIGNAL(requestLayerProperties(LayerItem*)),
                     SLOT(slotRequestLayerProperties(LayerItem*)));
 
-    connect(m_lst -> bnAdd, SIGNAL(clicked()), SLOT(slotAddClicked()));
+    m_newLayerMenu = new KPopupMenu(this);
+    m_lst -> bnAdd -> setPopup(m_newLayerMenu);
+    m_lst -> bnAdd -> setPopupDelay(1);
+    m_newLayerMenu -> insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), 1 );
+    m_newLayerMenu -> insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), 2 );
+    list() -> partLayerAction() -> plug( m_newLayerMenu );
+    connect(list() -> partLayerAction(), SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
+    connect(m_newLayerMenu, SIGNAL(aboutToShow()), this, SLOT(slotAddMenuAboutToShow()));
+    connect(m_newLayerMenu, SIGNAL(activated(int)), this, SLOT(slotAddMenuActivated(int)));
+
+
     connect(m_lst -> bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(m_lst -> bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(m_lst -> bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
@@ -378,18 +390,44 @@ void KisLayerBox::clear()
     updateUI();
 }
 
-void KisLayerBox::slotAddClicked()
+void KisLayerBox::slotAddMenuAboutToShow()
 {
-    KisGroupLayerSP root = dynamic_cast<KisGroupLayer*>(m_image -> rootLayer().data());
+    list() -> partLayerAction() -> setText(i18n("New &Object Layer..."));
+}
+
+void KisLayerBox::slotAddMenuActivated(int id)
+{
+    if(id == -1)
+        return;
+
+    KisGroupLayerSP root = m_image -> rootLayer();
+    KisGroupLayerSP parent;
+    KisLayerSP above;
     if (KisLayerSP active = m_image -> activeLayer())
     {
-        KisGroupLayerSP p = root;
+        parent = root;
+        above = active;
         if (active -> parent())
-            p = active -> parent();
-        emit sigRequestLayer(p, active);
+            parent = active -> parent();
     }
     else
-        emit sigRequestLayer(root, m_image -> rootLayer() -> firstChild());
+    {
+        parent = root;
+        above = m_image -> rootLayer() -> firstChild();
+    }
+
+    switch (id)
+    {
+        case 1:
+            emit sigRequestLayer(parent, above);
+            break;
+        case 2:
+            emit sigRequestGroupLayer(parent, above);
+            break;
+        case 3:
+        default: //goddamned Qt doesn't emit activated for default-assigned IDs, so this does nothing
+            emit sigRequestPartLayer(parent, above, list() -> partLayerAction() -> documentEntry());
+    }
 }
 
 void KisLayerBox::slotRmClicked()

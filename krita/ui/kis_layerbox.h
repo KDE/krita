@@ -32,6 +32,7 @@ class QButton;
 class QPainter;
 class QWidget;
 class KIconLoader;
+class KPopupMenu;
 class KoDocumentEntry;
 class KisCompositeOp;
 class KisLayerList;
@@ -87,7 +88,8 @@ private slots:
     void slotRequestLayerProperties(LayerItem* layer);
 
     void slotAboutToShow();
-    void slotAddClicked();
+    void slotAddMenuAboutToShow();
+    void slotAddMenuActivated(int id = 3);
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
@@ -97,6 +99,8 @@ private:
     void updateUI();
     QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
     KisLayerList* list() const;
+
+    KPopupMenu *m_newLayerMenu;
     KisImageSP m_image;
     WdgLayerBox *m_lst;
 };

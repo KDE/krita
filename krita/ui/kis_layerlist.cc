@@ -54,7 +54,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
     else
     {
         contextMenu()->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), MenuItems::NewLayer );
-        contextMenu()->insertItem( SmallIconSet( "foldernew" ), i18n( "New &Group Layer..." ), MenuItems::NewFolder );
+        contextMenu()->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), MenuItems::NewFolder );
         m_partLayerAction->setText( i18n( "New &Object Layer..." ) );
         m_partLayerAction->plug( contextMenu() );
     }

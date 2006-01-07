@@ -522,7 +522,7 @@ private:
     KisPaletteWidget *m_palettewidget;
 
 private:
-    KisImageSP m_current;
+    KisImageSP m_image;
 
 protected:
 

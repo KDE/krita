@@ -224,7 +224,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
 
     // This needs to be set before the dockers are created.
-    m_current = m_doc -> currentImage();
+    m_image = m_doc -> currentImage();
 
     createDockers();
 
@@ -287,7 +287,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     }
 
     // Set the current image for real now everything is ready to go.
-    setCurrentImage(m_current);
+    setCurrentImage(m_image);
 }
 
 KisView::~KisView()
@@ -830,7 +830,7 @@ void KisView::paintView(const KisRect& r)
                             paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
                         }
 
-                        m_current -> renderToPainter(wr.left(), wr.top(),
+                        m_image -> renderToPainter(wr.left(), wr.top(),
                             wr.right(), wr.bottom(), gc, monitorProfile(),
                             paintFlags, HDRExposure());
                     }
@@ -1565,7 +1565,7 @@ void KisView::preferences()
 
             //XXX: Need to notify other views that this global setting has changed.
             if (cfg.useOpenGL()) {
-                m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_current, monitorProfile());
+                m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(m_image, monitorProfile());
                 m_canvas -> createOpenGLCanvas(m_OpenGLImageContext -> sharedContextWidget());
             } else
             {
@@ -2476,17 +2476,17 @@ void KisView::setupCanvas()
 
 void KisView::connectCurrentImg()
 {
-    if (m_current) {
-        connect(m_current, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+    if (m_image) {
+        connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
 
-        connect(m_current, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
+        connect(m_image, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_current, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
-        connect(m_current, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_current, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_current, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_current, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_current, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
@@ -2497,20 +2497,20 @@ void KisView::connectCurrentImg()
         } else 
 #endif
         {
-            connect(m_current, SIGNAL(sigImageUpdated(const QRect&)),
+            connect(m_image, SIGNAL(sigImageUpdated(const QRect&)),
                     SLOT(imgUpdated(const QRect&)));
-            connect(m_current, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
+            connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
                     SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         }
     }
 
-    m_layerBox -> setImage(m_current);
+    m_layerBox -> setImage(m_image);
 }
 
 void KisView::disconnectCurrentImg()
 {
-    if (m_current) {
-        m_current -> disconnect(this);
+    if (m_image) {
+        m_image -> disconnect(this);
         m_layerBox -> setImage(0);
     }
 
@@ -2865,21 +2865,13 @@ void KisView::notifyObservers()
 
 KisImageSP KisView::currentImg() const
 {
-    if (m_current != m_doc -> currentImage())
-    {
-        //setCurrentImage(m_doc -> currentImage());
-        //m_current = m_doc -> currentImage();
-        //m_current -> notify();
-        //connectCurrentImg();
-    }
-
-    return m_current;
+    return m_image;
 }
 
 void KisView::setCurrentImage(KisImageSP image)
 {
     disconnectCurrentImg();
-    m_current = image;
+    m_image = image;
 
     KisConfig cfg;
 
@@ -2890,7 +2882,7 @@ void KisView::setCurrentImage(KisImageSP image)
     }
 #endif
     connectCurrentImg();
-    m_current -> notify();
+    m_image -> notify();
 
     zoomAroundPoint(0, 0, 1.0);
     resizeEvent(0);

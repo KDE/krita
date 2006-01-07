@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>277</width>
-            <height>198</height>
+            <width>373</width>
+            <height>200</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -19,6 +19,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>KisWdgAutobrush</string>
     </property>
     <grid>
         <property name="name">
@@ -83,6 +86,9 @@
                                     <property name="focusPolicy">
                                         <enum>ClickFocus</enum>
                                     </property>
+                                    <property name="maxValue">
+                                        <number>9999</number>
+                                    </property>
                                     <property name="value">
                                         <number>30</number>
                                     </property>
@@ -104,6 +110,9 @@
                                     </property>
                                     <property name="focusPolicy">
                                         <enum>ClickFocus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>9999</number>
                                     </property>
                                     <property name="value">
                                         <number>30</number>
@@ -190,6 +199,9 @@
                                     <property name="focusPolicy">
                                         <enum>ClickFocus</enum>
                                     </property>
+                                    <property name="maxValue">
+                                        <number>9999</number>
+                                    </property>
                                     <property name="value">
                                         <number>5</number>
                                     </property>
@@ -211,6 +223,9 @@
                                     </property>
                                     <property name="focusPolicy">
                                         <enum>ClickFocus</enum>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>9999</number>
                                     </property>
                                     <property name="value">
                                         <number>5</number>
@@ -259,23 +274,6 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer row="0" column="2">
-            <property name="name">
-                <cstring>spacer5</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout6</cstring>
@@ -306,7 +304,7 @@
                         <string></string>
                     </property>
                     <property name="usesBigPixmap">
-                        <bool>false</bool>
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -340,7 +338,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>58</height>
+                            <height>0</height>
                         </size>
                     </property>
                 </spacer>

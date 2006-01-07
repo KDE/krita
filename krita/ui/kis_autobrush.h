@@ -42,6 +42,9 @@ private slots:
     void linkSizeToggled(bool);
     void linkFadeToggled(bool);
 
+protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
 private:
     QImage* m_brsh;
     bool m_linkSize;

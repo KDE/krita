@@ -54,9 +54,15 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
 
     paramChanged();
 
-    
+
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
 
+}
+
+void KisAutobrush::resizeEvent ( QResizeEvent * )
+{
+    brushPreview->setMinimumHeight(brushPreview->width()); // dirty hack !
+    brushPreview->setMaximumHeight(brushPreview->width()); // dirty hack !
 }
 
 void KisAutobrush::activate()
@@ -83,7 +89,24 @@ void KisAutobrush::paramChanged()
     kas->createBrush(m_brsh);
 
     QPixmap p;
-    p.convertFromImage(*m_brsh);
+    QImage pi(*m_brsh);
+    double coeff = 1.0;
+    int bPw = brushPreview->width()-3;
+    if(pi.width() > bPw)
+    {
+        coeff =  bPw /(double)pi.width();
+    }
+    int bPh = brushPreview->height()-3;
+    if(pi.height() > coeff * bPh)
+    {
+        coeff = bPh /(double)pi.height();
+    }
+    if( coeff < 1.0)
+    {
+        pi = pi.smoothScale( (int)(coeff * pi.width()) , (int)(coeff * pi.height()));
+    }
+    
+    p.convertFromImage(pi);
     brushPreview->setPixmap(p);
     KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
     Q_CHECK_PTR(resource);

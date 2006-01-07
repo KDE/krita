@@ -93,6 +93,7 @@ void DlgPerfTest::setAllTestCheckBoxes(bool checked)
     m_page -> chkWriteBytes -> setChecked(checked);
     m_page -> chkIterators -> setChecked(checked);
     m_page -> chkPaintView -> setChecked(checked);
+    m_page -> chkPaintViewFPS -> setChecked(checked);
 }
 
 void DlgPerfTest::selectAllClicked()

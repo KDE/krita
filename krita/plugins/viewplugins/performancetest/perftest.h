@@ -57,6 +57,7 @@ private:
     QString writeBytesTest(Q_UINT32 testCount);
     QString iteratorTest(Q_UINT32 testCount);
     QString paintViewTest(Q_UINT32 testCount);
+    QString paintViewFPSTest();
 
     QString doBlit(const KisCompositeOp& op, 
                KisID cspace,

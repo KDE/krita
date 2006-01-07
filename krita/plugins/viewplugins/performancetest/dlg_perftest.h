@@ -39,7 +39,7 @@ public:
 private slots:
 
     void okClicked();
-        void selectAllClicked();
+    void selectAllClicked();
     void deselectAllClicked();
 
     void setAllTestCheckBoxes(bool checked);

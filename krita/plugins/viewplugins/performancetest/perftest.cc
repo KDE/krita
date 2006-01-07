@@ -217,6 +217,12 @@ void PerfTest::slotPerfTest()
             report = report.append(s);
             kdDebug() << s << "\n";
         }
+        if (dlgPerfTest -> page() -> chkPaintViewFPS -> isChecked()) {
+            kdDebug() << "paint current view (fps) test\n";
+            QString s = paintViewFPSTest();
+            report = report.append(s);
+            kdDebug() << s << "\n";
+        }
         KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
         Q_CHECK_PTR(d);
 
@@ -1113,6 +1119,34 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
     }
 
     report = report.append(QString("    painted a 512 x 512 image with 3 layers %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
+
+    return report;
+}
+
+QString PerfTest::paintViewFPSTest()
+{
+    QString report = QString("* paintView (fps) test\n\n");
+
+    QTime t;
+    t.restart();
+
+#if USE_CALLGRIND
+    CALLGRIND_ZERO_STATS();
+#endif
+
+    int numViewsPainted = 0;
+    const int millisecondsPerSecond = 1000;
+
+    while (t.elapsed() < millisecondsPerSecond) {
+        m_view -> getCanvasController() -> updateCanvas();
+        numViewsPainted++;
+    }
+
+#if USE_CALLGRIND
+    CALLGRIND_DUMP_STATS();
+#endif
+
+    report = report.append(QString("    painted current view at %1 frames per second\n").arg(numViewsPainted));
 
     return report;
 }

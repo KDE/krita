@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>377</width>
-            <height>509</height>
+            <height>566</height>
         </rect>
     </property>
     <property name="caption">
@@ -231,7 +231,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="17" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="18" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>layout5</cstring>
                     </property>
@@ -256,6 +256,17 @@
                             </property>
                         </widget>
                     </hbox>
+                </widget>
+                <widget class="QCheckBox" row="17" column="0">
+                    <property name="name">
+                        <cstring>chkPaintViewFPS</cstring>
+                    </property>
+                    <property name="text">
+                        <string>PaintView (fps)</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
                 </widget>
             </grid>
         </widget>

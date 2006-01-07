@@ -1,0 +1,12 @@
+We did a rethink on channels, selections and masks last summer.
+
+Traditionally, a mask is seen as an extra channel for an image, analogous
+to the alpha channel. We want to do away with that idea.
+
+A layer can have a number of permanent selections associated with it.
+Such a selection can handle a composite method (determining the composition method
+for the selected pixels) or a filter (making it an adjustment layer). 
+
+Of course, a selection is just an 8-bit per pixel single channel layer that
+belongs to a layer, so all filters can work automatically on a selection,
+except that we don't have the ui for that yet.

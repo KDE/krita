@@ -131,7 +131,7 @@ QString KisU16BaseColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel
     const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
     Q_UINT32 channelPosition = m_channels[channelIndex] -> pos() / sizeof(Q_UINT16);
 
-    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
+    return QString().setNum(100.0 * static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 
 Q_UINT8 KisU16BaseColorSpace::scaleToU8(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)

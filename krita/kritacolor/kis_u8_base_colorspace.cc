@@ -100,7 +100,7 @@ QString KisU8BaseColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_
     Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
     Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
 
-    return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
+    return QString().setNum(100.0 * static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 
 

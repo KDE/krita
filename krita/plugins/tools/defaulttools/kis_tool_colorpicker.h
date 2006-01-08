@@ -46,12 +46,16 @@ public:
 public slots:
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);
+    void slotSetAddPalette(bool);
+    void slotChangeRadius(int);
 
 private:
     void displayPickedColor();
 
     bool m_updateColor;
+    bool m_addPalette;
     bool m_normaliseValues;
+    int m_radius;
     KisColor m_pickedColor;
 
     ColorPickerOptionsWidget *m_optionsWidget;

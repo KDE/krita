@@ -343,6 +343,16 @@ private:
     KisFilterManager * filterManager() { return m_filterManager; }
     void setCurrentImage(KisImageSP image);
 
+    /**
+     * Returns the next zoom level when zooming in from the current level.
+     */
+    double nextZoomInLevel() const;
+
+    /**
+     * Returns the next zoom level when zooming out from the current level.
+     */
+    double nextZoomOutLevel() const;
+
 private slots:
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 

@@ -145,9 +145,6 @@
 
 #include "kis_custom_palette.h"
 
-#define KISVIEW_MIN_ZOOM (1.0 / 16.0)
-#define KISVIEW_MAX_ZOOM 16.0
-
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
 // sent to a receiver if it does not accept the tablet event.
@@ -1082,6 +1079,69 @@ void KisView::imgUpdateGUI()
     updateStatusBarProfileLabel();
 }
 
+static const double zoomLevels[] = {
+    1.0 / 500,
+    1.0 / 333.333333,
+    1.0 / 250,
+    1.0 / 200,
+    1.0 / 150,
+    1.0 / 100,
+    1.0 / 66.666667,
+    1.0 / 50,
+    1.0 / 33.333333,
+    1.0 / 25,
+    1.0 / 20,
+    1.0 / 16,
+    1.0 / 12,
+    1.0 / 8,
+    1.0 / 6,
+    1.0 / 4,
+    1.0 / 3,
+    1.0 / 2,
+    1.0 / 1.5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    12,
+    16
+};
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+#define NUM_ZOOM_LEVELS ARRAY_SIZE(zoomLevels)
+
+#define FIRST_ZOOM_LEVEL_INDEX 0
+#define LAST_ZOOM_LEVEL_INDEX (NUM_ZOOM_LEVELS - 1)
+
+#define KISVIEW_MIN_ZOOM (zoomLevels[FIRST_ZOOM_LEVEL_INDEX])
+#define KISVIEW_MAX_ZOOM (zoomLevels[LAST_ZOOM_LEVEL_INDEX])
+
+double KisView::nextZoomInLevel() const
+{
+    int zoomLevelIndex = FIRST_ZOOM_LEVEL_INDEX;
+
+    while (zoom() >= zoomLevels[zoomLevelIndex] && zoomLevelIndex < LAST_ZOOM_LEVEL_INDEX) {
+        zoomLevelIndex++;
+    }
+
+    return zoomLevels[zoomLevelIndex];
+}
+
+double KisView::nextZoomOutLevel() const
+{
+    int zoomLevelIndex = LAST_ZOOM_LEVEL_INDEX;
+
+    while (zoom() <= zoomLevels[zoomLevelIndex] && zoomLevelIndex > FIRST_ZOOM_LEVEL_INDEX) {
+        zoomLevelIndex--;
+    }
+
+    return zoomLevels[zoomLevelIndex];
+}
+
 void KisView::zoomAroundPoint(double x, double y, double zf)
 {
     // Disable updates while we change the scrollbar settings.
@@ -1123,8 +1183,8 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
 
     updateStatusBarZoomLabel ();
 
-    m_zoomIn -> setEnabled(zf <= KISVIEW_MAX_ZOOM);
-    m_zoomOut -> setEnabled(zf >= KISVIEW_MIN_ZOOM);
+    m_zoomIn -> setEnabled(zf < KISVIEW_MAX_ZOOM);
+    m_zoomOut -> setEnabled(zf > KISVIEW_MIN_ZOOM);
     resizeEvent(0);
 
     m_hRuler -> setZoom(zf);
@@ -1184,14 +1244,12 @@ void KisView::zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
 {
-    if (zoom() <= KISVIEW_MAX_ZOOM)
-        zoomAroundPoint(x, y, zoom() * 2);
+    zoomAroundPoint(x, y, nextZoomInLevel());
 }
 
 void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
 {
-    if (zoom() >= KISVIEW_MIN_ZOOM)
-        zoomAroundPoint(x, y, zoom() / 2);
+    zoomAroundPoint(x, y, nextZoomOutLevel());
 }
 
 void KisView::zoomIn()
@@ -1206,14 +1264,12 @@ void KisView::zoomOut()
 
 void KisView::slotZoomIn()
 {
-    if (zoom() <= KISVIEW_MAX_ZOOM)
-        zoomAroundPoint(-1, -1, zoom() * 2);
+    zoomIn(-1, -1);
 }
 
 void KisView::slotZoomOut()
 {
-    if (zoom() >= KISVIEW_MIN_ZOOM)
-        zoomAroundPoint(-1, -1, zoom() / 2);
+    zoomOut(-1, -1);
 }
 
 void KisView::slotActualPixels()

@@ -331,6 +331,15 @@ void LayerList::setActiveLayer( LayerItem *layer ) //SLOT
 
     if( currentItem() != layer )
         setCurrentItem( layer );
+    else
+    {
+        int n = 0;
+        for( LayerItemIterator it( this, LayerItemIterator::Selected ); n < 2 && (*it); ++it ) { n++; }
+        if( n == 1 )
+            (*LayerItemIterator( this, LayerItemIterator::Selected ))->setSelected( false );
+        if( layer )
+            layer->setSelected( true );
+    }
 
     emit activated( layer );
     if( layer )
@@ -632,13 +641,15 @@ void LayerList::slotItemMoved( QListViewItem *item, QListViewItem *afterBefore, 
 
 void LayerList::setCurrentItem( QListViewItem *item )
 {
+    if( !item )
+        return;
+
     super::setCurrentItem( item );
     int n = 0;
-    for( LayerItemIterator it( this, LayerItemIterator::Selected ); *it; ++it ) { n++; }
+    for( LayerItemIterator it( this, LayerItemIterator::Selected ); n < 2 && (*it); ++it ) { n++; }
     if( n == 1 )
         (*LayerItemIterator( this, LayerItemIterator::Selected ))->setSelected( false );
-    if( n <= 1 && item )
-        item->setSelected( true );
+    item->setSelected( true );
     if( activeLayer() != item )
         setActiveLayer( static_cast<LayerItem*>(item) );
 }
@@ -1078,6 +1089,13 @@ void LayerItem::setup()
 {
     super::setup();
     setHeight( listView()->d->itemHeight );
+}
+
+void LayerItem::setSelected( bool selected )
+{
+    if( !selected && ( isActive() || this == listView()->currentItem() ) )
+        return;
+    super::setSelected( selected );
 }
 
 

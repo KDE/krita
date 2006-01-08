@@ -240,6 +240,7 @@ public: //reimplemented for internal reasons
     virtual int width( const QFontMetrics &fm, const QListView *lv, int c ) const;
     virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
     virtual void setup();
+    virtual void setSelected( bool selected );
 };
 
 class LayerFolder: public LayerItem

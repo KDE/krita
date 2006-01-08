@@ -13,6 +13,7 @@ INCLUDES  = \
 lib_LTLIBRARIES = libkritaimage.la
 
 libkritaimage_la_SOURCES = \
+    kis_adjustment_layer.cc \
     kis_alpha_mask.cc \
     kis_autobrush_resource.cc \
     kis_autogradient_resource.cc \
@@ -74,6 +75,7 @@ noinst_HEADERS = \
     kis_thread.h
 
 #include_HEADERS = \
+#    kis_adjustment_layer.h \
 #    kis_alpha_mask.h \
 #    kis_autobrush_resource.h \
 #    kis_autogradient_resource.h \

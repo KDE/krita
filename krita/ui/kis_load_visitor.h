@@ -103,7 +103,12 @@ public:
     {
         return true;
     }
-
+    
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        return true;
+    }
+    
 private:
     KisImageSP m_img;
     KoStore *m_store;

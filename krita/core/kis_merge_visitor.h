@@ -147,6 +147,12 @@ public:
         return true;
     }
 
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        return true;
+    }
+    
+    
 /*
     // The layer the merged layer should be inserted above, or 0 if
     // the merged layer should go to the bottom of the stack.

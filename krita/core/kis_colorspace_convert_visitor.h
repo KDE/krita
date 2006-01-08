@@ -33,7 +33,8 @@ public:
     virtual bool visit(KisPaintLayer *layer);
     virtual bool visit(KisGroupLayer *layer);
     virtual bool visit(KisPartLayer *layer);
-
+    virtual bool visit(KisAdjustmentLayer* layer);
+    
 private:
     KisColorSpace *m_dstColorSpace;
     Q_INT32 m_renderingIntent;
@@ -68,6 +69,12 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisPartLayer *)
+{
+    return true;
+}
+
+
+bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer *)
 {
     return true;
 }

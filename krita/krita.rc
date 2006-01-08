@@ -50,6 +50,7 @@
   <Menu name="LayerNew"><text>New</text>
   	<Action name="insert_layer"/>
 	<Action name="insert_part_layer"/>
+        <Action name="insert_adjustment_layer"/>
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>

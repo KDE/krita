@@ -99,6 +99,7 @@ class KoToolBox;
 class KisToolControllerInterface;
 class KisToolManager;
 class KisUndoAdapter;
+class KisFilterConfiguration;
 
 
 class KRITA_EXPORT KisView
@@ -392,6 +393,8 @@ private slots:
     void addGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
     void addPartLayer();
     void addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
+    void addAdjustmentLayer();
+    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, KisFilterConfiguration * filter, KisSelectionSP selection = 0);
     void layerRemove();
     void layerDuplicate();
     void layerRaise();
@@ -451,6 +454,7 @@ private:
     KAction *m_imgScan;
 
     KoPartSelectAction * m_actionPartLayer;
+    KAction * m_actionAdjustmentLayer;
     KAction *m_layerAdd;
     KAction *m_layerBottom;
     KAction *m_layerDup;

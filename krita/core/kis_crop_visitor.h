@@ -85,6 +85,12 @@ public:
         return true;
     };
 
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        return true;
+    }
+    
+
 private:
     QRect m_rect;
 };

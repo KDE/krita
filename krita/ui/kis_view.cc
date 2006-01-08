@@ -122,6 +122,7 @@
 #include "kis_opengl_image_context.h"
 #include "kis_background.h"
 #include "kis_paint_device_action.h"
+#include "kis_filter_configuration.h"
 
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
@@ -556,6 +557,12 @@ void KisView::setupActions()
     m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
                                                     this, SLOT( addPartLayer() ),
                                                     actionCollection(), "insert_part_layer" );
+
+
+    m_actionAdjustmentLayer = new KoPartSelectAction( i18n( "&Adjustment Layer" ), 0,
+            this, SLOT( addAdjustmentLayer() ),
+            actionCollection(), "insert_adjustment_layer" );
+
 
     m_layerRm = new KAction(i18n("&Remove Layer"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
     m_layerDup = new KAction(i18n("Duplicate Layer"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
@@ -2197,11 +2204,19 @@ void KisView::layerProperties()
 
 void KisView::showLayerProperties(KisLayerSP layer)
 {
+    KisColorSpace * cs = 0;
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
+    if ( pl ) {
+        cs = pl->paintDevice()->colorSpace();
+    }
+    else {
+        cs = layer->image()->colorSpace();
+    }
+
     KisDlgLayerProperties dlg(layer -> name(),
                               layer -> opacity(),
                               layer -> compositeOp(),
-                              layer -> image() ->colorSpace()); // LAYERREMOVE used to be cs of layer
-
+                              cs);
     if (dlg.exec() == QDialog::Accepted)
     {
         if (layer -> name() != dlg.getName() ||
@@ -2297,6 +2312,22 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     img -> addLayer(partLayer, parent, above);
 
     m_doc->setModified(true);
+}
+
+void KisView::addAdjustmentLayer()
+{
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+    KisFilterConfiguration * filter = 0;
+    //XXX: Show filter gallery with current layer and get the filterconfig back
+    KisSelectionSP selection = img->activeDevice()->selection();
+
+    addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer(), filter, selection);
+}
+
+void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, KisFilterConfiguration * filter, KisSelectionSP selection)
+{
 }
 
 void KisView::slotChildActivated(bool a) {
@@ -2550,7 +2581,7 @@ void KisView::connectCurrentImg()
                     SLOT(imgUpdated(const QRect&)));
             connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
                     SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
-        } else 
+        } else
 #endif
         {
             connect(m_image, SIGNAL(sigImageUpdated(const QRect&)),
@@ -3067,7 +3098,7 @@ void KisView::createDockers()
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
-    
+
     m_rgbwidget = new KoRGBWidget(this, "rgb");
     m_rgbwidget -> setCaption(i18n("RGB"));
     connect(m_rgbwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
@@ -3075,7 +3106,7 @@ void KisView::createDockers()
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
-    
+
     m_graywidget = new KoGrayWidget(this, "gray");
     m_graywidget -> setCaption(i18n("Gray"));
     connect(m_graywidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));

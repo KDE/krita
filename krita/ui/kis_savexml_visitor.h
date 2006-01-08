@@ -109,6 +109,11 @@ public:
         return true;
     }
 
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        return true;
+    }
+
 private:
     QDomDocument m_doc;
     QDomElement m_elem;

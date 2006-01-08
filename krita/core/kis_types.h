@@ -52,6 +52,9 @@ typedef KSharedPtr<KisPartLayer> KisPartLayerSP;
 class KisPaintLayer;
 typedef KSharedPtr<KisPaintLayer> KisPaintLayerSP;
 
+class KisAdjustmentLayer;
+typedef KSharedPtr<KisAdjustmentLayer> KisAdjustmentLayerSP;
+
 class KisGroupLayer;
 typedef KSharedPtr<KisGroupLayer> KisGroupLayerSP;
 

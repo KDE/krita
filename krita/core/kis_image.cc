@@ -984,7 +984,7 @@ KisLayerSP KisImage::findLayer(int id) const
 }
 
 
-bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
+bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
 {
     return addLayer(layer, parent, parent->firstChild());
 }

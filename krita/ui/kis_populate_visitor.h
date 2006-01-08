@@ -63,6 +63,12 @@ class KisPopulateVisitor: public KisLayerVisitor
             return true;
         }
 
+        virtual bool visit(KisAdjustmentLayer* layer)
+        {
+            return true;
+        }
+    
+
     private:
         LayerList* m_widget;
         LayerItem* m_parent;

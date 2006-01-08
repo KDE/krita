@@ -161,6 +161,12 @@ public:
         return true;
     }
 
+    virtual bool visit(KisAdjustmentLayer* layer)
+    {
+        return true;
+    }
+    
+    
     // Implement KisProgressSubject
     virtual void cancel() 
     {

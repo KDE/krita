@@ -31,6 +31,7 @@ class KisPaintLayer : public KisLayer {
     Q_OBJECT
 
 public:
+    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceImplSP dev);
     KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity);
     KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);

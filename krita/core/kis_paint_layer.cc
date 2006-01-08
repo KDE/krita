@@ -29,6 +29,13 @@
 #include "kis_paint_device_impl.h"
 
 
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceImplSP dev)
+    : super(img, name, opacity)
+{
+    m_paintdev = dev;
+}
+
+
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity)
     : super(img, name, opacity)
 {

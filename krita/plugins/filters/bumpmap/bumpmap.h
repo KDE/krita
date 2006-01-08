@@ -84,18 +84,43 @@ class KisBumpmapConfiguration : public KisFilterConfiguration {
 public:
 
     KisBumpmapConfiguration();
-    QString bumpmap;
-    double  azimuth;
-    double  elevation;
-    double  depth;
-    Q_INT32 xofs;
-    Q_INT32 yofs;
-    Q_INT32 waterlevel;
-    Q_INT32 ambient;
-    bool    compensate;
-    bool    invert;
-    bool    tiled;
-    enumBumpmapType type;
+    
+    QString bumpmap();
+    void setBumpmap(QString bumpmap);
+    
+    double  azimuth();
+    void setAzimuth(double azimuth);
+    
+    double  elevation();
+    void setElevation(double);
+    
+    double  depth();
+    void setDepth(double depth);
+    
+    Q_INT32 xofs();
+    void setXofs(Q_INT32 xofs);
+    
+    Q_INT32 yofs();
+    void setYofs(Q_INT32 yofs);
+    
+    Q_INT32 waterlevel();
+    void setWaterlevel(Q_INT32 waterlevel);
+    
+    Q_INT32 ambient();
+    void setAmbient(Q_INT32 ambient);
+    
+    bool compensate();
+    void setCompensate(bool compensate);
+    
+    bool invert();
+    void setInvert(bool invert);
+    
+    bool tiled();
+    void setTiled(bool tiled);
+    
+    enumBumpmapType type();
+    void setType(enumBumpmapType type);
+    
 };
 
 

@@ -48,10 +48,8 @@ public:
 
     /**
      * Create the filter config from the serialized representation.
-     * Checks the serialized representation whether name and version
-     * are correct.
      */
-    KisFilterConfiguration(const QString & name, Q_INT32 version, const QString &);
+    KisFilterConfiguration(const QString &);
 
 public:
 

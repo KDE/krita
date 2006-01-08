@@ -1,5 +1,4 @@
 SUBDIRS = \
-    bumpmap \
     cimg \
     colorsfilters \
     convolutionfilters \

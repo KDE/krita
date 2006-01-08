@@ -956,6 +956,11 @@ KisLayerSP KisImage::activeLayer() const
     return m_activeLayer;
 }
 
+KisPaintDeviceImplSP KisImage::projection() const
+{
+    return m_projection;
+}
+
 KisLayerSP KisImage::activate(KisLayerSP layer)
 {
     if (layer != m_activeLayer) {
@@ -976,6 +981,12 @@ KisLayerSP KisImage::findLayer(const QString& name) const
 KisLayerSP KisImage::findLayer(int id) const
 {
     return rootLayer() -> findLayer(id);
+}
+
+
+bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
+{
+    return addLayer(layer, parent, parent->firstChild());
 }
 
 bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
@@ -1325,6 +1336,8 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
 
+    // XXX: Can we count on the projection always containing all of the image?
+    //      I'm not so sure... BSAR
     QImage img = m_projection->convertToQImage(profile, x1, y1, w, h, exposure);
 
     if (!img.isNull()) {

@@ -28,6 +28,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_color.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 
 using namespace KUnitTest;
 

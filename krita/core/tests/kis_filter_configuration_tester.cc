@@ -34,8 +34,6 @@ void KisFilterConfigurationTester::allTests()
 {
     testCreation();
     testSetGetProperty();
-    testSerialization();
-    testDeserialization();
     testRoundTrip();
 }
 
@@ -50,26 +48,18 @@ void KisFilterConfigurationTester::testCreation()
     success("testCreation success");
 }
 
-void KisFilterConfigurationTester::testSerialization()
+void KisFilterConfigurationTester::testRoundTrip()
 {
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
-    CHECK(kfc->toString(), QString("<filterconfig version=\"1\" name=\"test\" />\n"));
-    kdDebug() << kfc->toString() << "\n";
+    CHECK(kfc->version(), 1);
+    CHECK(kfc->name(), QString("test"));
+    QString s = kfc->toString();
     delete kfc;
-    success("testSerialization success");
-}
-
-void KisFilterConfigurationTester::testDeserialization()
-{
-    KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1, "<filterconfig version=\"1\" name=\"test\" />");
+    kfc = new KisFilterConfiguration(s);
     CHECK(kfc->version(), 1);
     CHECK(kfc->name(), QString("test"));
     delete kfc;
     success("testDeserializaton success");
-}
-
-void KisFilterConfigurationTester::testRoundTrip()
-{
 }
 
 void KisFilterConfigurationTester::testSetGetProperty()

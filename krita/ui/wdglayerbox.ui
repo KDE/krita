@@ -201,7 +201,7 @@
                         <cstring>chkActLayerVis</cstring>
                     </property>
                     <property name="text">
-                        <string>Active layer visualisation</string>
+                        <string>Visualize active</string>
                     </property>
                 </widget>
                 <spacer>

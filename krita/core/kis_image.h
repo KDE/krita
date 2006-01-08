@@ -190,6 +190,10 @@ public:
     KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;
 
+    /// Return the projection; that is, the complete, composited representation
+    /// of this image.
+    KisPaintDeviceImplSP projection() const;
+    
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name) const;
     KisLayerSP findLayer(int id) const;
@@ -198,12 +202,22 @@ public:
     bool moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /**
+     * Add an already existing layer to the image. The layer is put on top
+     * of the layers in the specified layergroup
+     * @param layer the layer to be added
+     * @param parent the parent layer
+     */
+    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
+    
+    /**
      * Add already existing layer to image
      *
      * @param layer the layer to be added
      * @param parent the parent layer
      * @param aboveThis in the list with child layers of the specified
-                        parent, add this layer above the specified sibling
+     *                  parent, add this layer above the specified sibling.
+     *                  if 0, the layer is put in the lowermost position in
+     *                  its group.
      *
      * returns false if adding the layer didn't work, true if the layer got added
      */

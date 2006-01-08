@@ -32,14 +32,24 @@
 #include "kis_filter_config_widget.h"
 
 
-KisFilterConfiguration::KisFilterConfiguration(const QString & name, Q_INT32 version, const QString & s )
-    : m_name( name )
-    , m_version( version )
+KisFilterConfiguration::KisFilterConfiguration(const QString & s )
 {
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
+    kdDebug() << e.text() << "\n";
+    
     QDomNode n = e.firstChild();
+
+    while (!n.isNull()) {
+        // We don't nest elements in filter configuration. For now...
+        QDomElement e = n.toElement();
+        if (!e.isNull()) {
+            kdDebug() << e.text() << "\n";
+            
+        }
+        n = n.nextSibling();
+    }
 }
 
 QString KisFilterConfiguration::toString()

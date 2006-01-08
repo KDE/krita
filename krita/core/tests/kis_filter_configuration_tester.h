@@ -26,8 +26,6 @@ class KisFilterConfigurationTester : public KUnitTest::Tester
 public:
     void allTests();
     void testCreation();
-    void testSerialization();
-    void testDeserialization();
     void testRoundTrip();
     void testSetGetProperty();
 };

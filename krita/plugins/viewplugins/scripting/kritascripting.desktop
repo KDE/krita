@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Scripting plugin
 Name[da]=Scriptplugin
 Name[es]=Extensión para guiones
+Name[ga]=Breiseán scriptithe
 Name[pt]='Plugin' de programação
 Name[pt_BR]='Plugin' de programação
 Comment=Allow execution of scripts

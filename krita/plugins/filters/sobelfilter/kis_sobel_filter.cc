@@ -60,7 +60,7 @@ void KisSobelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
     Q_INT32 x = rect.x(), y = rect.y();
     Q_INT32 width = rect.width();
     Q_INT32 height = rect.height();
-        
+
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontally = ((KisSobelFilterConfiguration*)configuration)->doHorizontally();
     bool doVertically = ((KisSobelFilterConfiguration*)configuration)->doVertically();
@@ -116,19 +116,19 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
 
     prepareRow (src, pr, x, y - 1, width, height);
     prepareRow (src, cr, x, y, width, height);
-  
+
     Q_UINT32 counter =0;
     Q_UINT8* d;
     Q_UINT8* tmp;
     Q_INT32 gradient, horGradient, verGradient;
-    // loop through the rows, applying the sobel convolution 
+    // loop through the rows, applying the sobel convolution
     for (Q_UINT32 row = 0; row < height; row++)
         {
-        
-            // prepare the next row 
+
+            // prepare the next row
             prepareRow (src, nr, x, row + 1, width, height);
             d = dest;
-        
+
             for (Q_UINT32 col = 0; col < width * pixelSize; col++)
                 {
                     int positive = col + pixelSize;
@@ -137,29 +137,29 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
                                    ((pr[negative] +  2 * pr[col] + pr[positive]) -
                                     (nr[negative] + 2 * nr[col] + nr[positive]))
                                    : 0);
-            
+
                     verGradient = (doVertical ?
                                    ((pr[negative] + 2 * cr[negative] + nr[negative]) -
                                     (pr[positive] + 2 * cr[positive] + nr[positive]))
                                    : 0);
                     gradient = (doVertical && doHorizontal) ?
-                        (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0 
+                        (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
                         : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
                            : (ROUND (QABS (horGradient + verGradient) / 4.0)));
-            
+
                     *d++ = gradient;
                     if (gradient > 10) counter ++;
                 }
-        
-            //  shuffle the row pointers 
+
+            //  shuffle the row pointers
             tmp = pr;
             pr = cr;
             cr = nr;
             nr = tmp;
-            
-            //store the dest 
+
+            //store the dest
             dst -> writeBytes(dest, x, row, width, 1);
-        
+
             if ( makeOpaque )
                 {
                     KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, row, width, true);
@@ -169,7 +169,7 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
                             ++dstIt;
                         }
                 }
-            setProgress(row);        
+            setProgress(row);
         }
     setProgressDone();
 
@@ -190,7 +190,7 @@ KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* paren
     return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget)
 {
     KisMultiBoolFilterWidget* widget = (KisMultiBoolFilterWidget*) nwidget;
     if( widget == 0 )

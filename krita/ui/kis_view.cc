@@ -93,6 +93,7 @@
 #include "kis_factory.h"
 #include "kis_gradient.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
@@ -138,6 +139,7 @@
 #include "kis_dlg_layer_properties.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_image_properties.h"
+#include "kis_dlg_adjustment_layer.h"
 
 // Action managers
 #include "kis_selection_manager.h"
@@ -568,7 +570,7 @@ void KisView::setupActions()
                                                     actionCollection(), "insert_part_layer" );
 
 
-    m_actionAdjustmentLayer = new KoPartSelectAction( i18n( "&Adjustment Layer" ), 0,
+    m_actionAdjustmentLayer = new KAction( i18n( "&Adjustment Layer" ), 0,
             this, SLOT( addAdjustmentLayer() ),
             actionCollection(), "insert_adjustment_layer" );
 
@@ -2385,15 +2387,26 @@ void KisView::addAdjustmentLayer()
     KisImageSP img = currentImg();
     if (!img) return;
 
-    KisFilterConfiguration * filter = 0;
-    //XXX: Show filter gallery with current layer and get the filterconfig back
-    KisSelectionSP selection = img->activeDevice()->selection();
-
-    addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer(), filter, selection);
+    KisDlgAdjustmentLayer dlg(img, i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
+    if (dlg.exec() == QDialog::Accepted) {
+        //XXX: Show filter gallery with current layer and get the filterconfig back
+        KisSelectionSP selection = img->activeDevice()->selection();
+        KisFilterConfiguration * filter = dlg.filterConfiguration();
+        QString name = dlg.layerName();
+        
+        addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer(), name, filter, selection);
+    }
 }
 
-void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, KisFilterConfiguration * filter, KisSelectionSP selection)
+void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection)
 {
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+    KisAdjustmentLayer * l = new KisAdjustmentLayer(img.data(), name);
+    l->setFilter( filter );
+    l->setSelection( selection );
+    img->addLayer(l, img->activeLayer()->parent(), img->activeLayer());
 }
 
 void KisView::slotChildActivated(bool a) {
@@ -2512,7 +2525,7 @@ void KisView::layersUpdated()
     layerUpdateGUI(img && layer);
 
     m_layerBox -> updateAll();
-    img->notify();
+    //img->notify(); // XXX: Is this causing the recalc of the histogram? Is it actually needed?
     notifyObservers();
 }
 

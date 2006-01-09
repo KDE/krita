@@ -46,7 +46,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 {
     // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
-    m_widget->filtersList->setView(view);
+    m_widget->filtersList->setLayer(view->getCanvasSubject()->currentImg()->activeLayer());
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
@@ -60,7 +60,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
     
-    m_labelNoCW = new QLabel(i18n("No configuration options are available for this widget."), m_widget->configWidgetHolder);
+    m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
     m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
     m_labelNoCW->hide();
 }

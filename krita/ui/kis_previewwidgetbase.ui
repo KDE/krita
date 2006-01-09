@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>408</width>
-            <height>414</height>
+            <width>435</width>
+            <height>500</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -26,14 +26,55 @@
             <height>0</height>
         </size>
     </property>
-    <vbox>
+    <property name="caption">
+        <string>PreviewWidgetBase</string>
+    </property>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>m_groupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Preview</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="ImageViewer">
+                    <property name="name">
+                        <cstring>m_preview</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>150</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>1000</width>
+                            <height>1000</height>
+                        </size>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
                 <cstring>layout12</cstring>
             </property>
@@ -62,8 +103,14 @@
                             <property name="text">
                                 <string>Pr&amp;eview</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+E</string>
+                            </property>
                             <property name="checked">
                                 <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Preview modified layer</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -72,6 +119,12 @@
                             </property>
                             <property name="text">
                                 <string>Or&amp;iginal</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+I</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Show original layer</string>
                             </property>
                         </widget>
                     </hbox>
@@ -130,6 +183,9 @@
                                     <property name="accel">
                                         <string></string>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Update preview</string>
+                                    </property>
                                 </widget>
                             </hbox>
                         </widget>
@@ -140,8 +196,14 @@
                             <property name="text">
                                 <string>&amp;Autoupdate</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+A</string>
+                            </property>
                             <property name="checked">
                                 <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Automatically update the preview whenever the filter settings change</string>
                             </property>
                         </widget>
                     </vbox>
@@ -165,45 +227,7 @@
                 </spacer>
             </hbox>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>m_groupBox</cstring>
-            </property>
-            <property name="title">
-                <string>Preview</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="ImageViewer">
-                    <property name="name">
-                        <cstring>m_preview</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>150</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>1000</width>
-                            <height>1000</height>
-                        </size>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-    </vbox>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>
@@ -242,9 +266,9 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>imageviewer.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

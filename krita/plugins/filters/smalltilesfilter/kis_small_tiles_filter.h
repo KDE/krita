@@ -54,7 +54,7 @@ public:
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 
 private:
     void createSmallTiles(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 numberOfTiles);

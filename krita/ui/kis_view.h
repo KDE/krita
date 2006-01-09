@@ -371,6 +371,7 @@ private:
     void setInitialZoomLevel();
 
 private slots:
+    
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 
     void slotSetFGQColor(const QColor & c);
@@ -410,7 +411,7 @@ private slots:
     void addPartLayer();
     void addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void addAdjustmentLayer();
-    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, KisFilterConfiguration * filter, KisSelectionSP selection = 0);
+    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection = 0);
     void layerRemove();
     void layerDuplicate();
     void layerRaise();

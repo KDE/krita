@@ -146,7 +146,7 @@ KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisRoundCornersFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisRoundCornersFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

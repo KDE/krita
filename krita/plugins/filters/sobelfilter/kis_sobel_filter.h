@@ -59,7 +59,7 @@ public:
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     void prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
     void sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);

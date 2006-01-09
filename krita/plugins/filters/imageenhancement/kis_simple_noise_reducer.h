@@ -43,7 +43,7 @@ class KisSimpleNoiseReducer : public KisFilter
         ~KisSimpleNoiseReducer();
     public:
         virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
-        virtual KisFilterConfiguration* configuration(QWidget* nwidget, KisPaintDeviceImplSP dev);
+        virtual KisFilterConfiguration* configuration(QWidget* nwidget);
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
 
         static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reduceer")); };

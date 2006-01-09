@@ -38,7 +38,7 @@ KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisSimpleNoiseReducer::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisSimpleNoiseReducer::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )
@@ -74,7 +74,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
     int lastx = extends.width() - windowsize;
     int lasty = extends.height() - windowsize;
     int* means = new int[depth];
-    
+
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
     while( ! srcIt.isDone() )

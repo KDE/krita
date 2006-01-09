@@ -53,7 +53,7 @@ public:
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     void pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };

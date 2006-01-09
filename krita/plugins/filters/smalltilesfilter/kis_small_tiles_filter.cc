@@ -117,7 +117,7 @@ KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* 
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisSmallTilesFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

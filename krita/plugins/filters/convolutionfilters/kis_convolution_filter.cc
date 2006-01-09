@@ -57,7 +57,7 @@ KisConvolutionConstFilter::~KisConvolutionConstFilter()
 {
 }
 
-KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*, KisPaintDeviceImplSP /*dev*/)
+KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)
 {
     return new KisConvolutionConfiguration( id().id(), m_matrix );
 }

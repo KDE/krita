@@ -30,11 +30,11 @@ class QLabel;
 class QHBoxLayout;
 class KisPreviewWidget;
 class KisWdgFiltersGallery;
-
+class KisFiltersListView;
+    
 namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
-    class KisFiltersListView;
 
 /**
 @author Cyrille Berger

@@ -635,7 +635,7 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
             f -> enableProgress();
-            f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data()), l.data()), QRect(0, 0, 1000, 1000));
+            f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
             f -> disableProgress();
             report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 

@@ -399,7 +399,7 @@ KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisCubismFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

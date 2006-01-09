@@ -85,6 +85,7 @@ private slots:
     
 private:
 
+    /// XXX: What does this bool signify?
     bool zoomChanged();
     
     bool m_autoupdate, m_previewIsDisplayed;

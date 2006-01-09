@@ -352,7 +352,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
     return w;
 }
 
-KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w, KisPaintDeviceImplSP)
+KisFilterConfiguration * KisFilterBumpmap::configuration(QWidget * w)
 {
 
     KisBumpmapConfigWidget * widget = dynamic_cast<KisBumpmapConfigWidget *>(w);

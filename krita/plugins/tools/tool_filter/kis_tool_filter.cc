@@ -93,7 +93,7 @@ void KisToolFilter::initPaint(KisEvent *e)
     // to go into the tool options widget, and just the data carried over to the filter.
     // I've got a bit of a problem with core classes having too much GUI about them.
     // BSAR.
-    dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget, m_source ) );
+    dynamic_cast<KisFilterOp *>(op) -> setFilterConfiguration( m_filter -> configuration( m_filterConfigurationWidget) );
 }
 
 QWidget* KisToolFilter::createOptionWidget(QWidget* parent)

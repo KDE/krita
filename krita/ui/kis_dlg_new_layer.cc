@@ -83,14 +83,14 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
     slotSetColorSpace(colorSpaceID);
 
-        connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
+    connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
     connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorSpace(const KisID &)));
-        slotNameChanged( m_name->text() );
+            slotNameChanged( m_name->text() );
 }
 
-void NewLayerDialog::slotNameChanged( const QString &_text )
+void NewLayerDialog::slotNameChanged( const QString & text )
 {
-    enableButtonOK( !_text.isEmpty() );
+    enableButtonOK( ! text.isEmpty() );
 }
 
 int NewLayerDialog::opacity() const

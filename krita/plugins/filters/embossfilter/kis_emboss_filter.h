@@ -49,7 +49,7 @@ public:
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisEmbossFilterConfiguration(100)); return list; }
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     void Emboss(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int d);
     inline int Lim_Max (int Now, int Up, int Max);

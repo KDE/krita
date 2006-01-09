@@ -59,7 +59,7 @@ KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget, KisPaintDeviceImplSP)
+KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
 {
     KisPerChannelConfigWidget* widget = (KisPerChannelConfigWidget*)nwidget;
 

@@ -55,7 +55,7 @@ KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(Q
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget, KisPaintDeviceImplSP)
+KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwidget)
 {
     KisBrightnessContrastConfigWidget* widget = (KisBrightnessContrastConfigWidget*)nwidget;
 

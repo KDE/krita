@@ -60,11 +60,11 @@ void KisPixelizeFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
         Q_INT32 height = rect.height();
-        
+
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
         Q_UINT32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
-        
+
         pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 }
 
@@ -72,15 +72,15 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
 {
         Q_INT32 pixelSize = src -> pixelSize();
         QMemArray<Q_INT32> average(  pixelSize );
-        Q_UINT8* bufRow; 
+        Q_UINT8* bufRow;
         Q_UINT8* buf;
-        Q_INT32 count;                
-       Q_INT32 rowstride; 
+        Q_INT32 count;
+       Q_INT32 rowstride;
 
         //calculate the total number of pixels
         Q_INT32 numX=0;
         Q_INT32 numY=0;
-        
+
         for (Q_INT32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
         {
                 numX++;
@@ -88,13 +88,13 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
         for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
         {
                 numY++;
-        }       
-        
+        }
+
         setProgressTotalSteps( numX * numY );
         setProgressStage(i18n("Applying pixelize filter..."),0);
-        
+
         Q_INT32 numberOfPixelsProcessed = 0;
-        
+
         for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
         {
                 Q_INT32 h = pixelHeight - (y % pixelHeight);
@@ -104,7 +104,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
                 {
                         Q_INT32 w = pixelWidth - (x % pixelWidth);
                         w = MIN(w, startx + width - x);
-                        
+
                         for (Q_INT32 i = 0; i < pixelSize; i++)
                         {
                                 average[i] = 0;
@@ -117,9 +117,9 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
                             if(srcIt.isSelected())
                                 {
                                     for (Q_INT32 i = 0; i < pixelSize; i++)
-                                        {        
+                                        {
                                                 average[i] += srcIt.oldRawData()[i];
-                                        }  
+                                        }
                                     count++;
                                 }
                             ++srcIt;
@@ -150,7 +150,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
                 setProgress(numberOfPixelsProcessed);
                 }
         }
-        
+
     setProgressDone();
 }
 
@@ -162,7 +162,7 @@ KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

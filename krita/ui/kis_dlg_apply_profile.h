@@ -44,7 +44,5 @@ private:
     WdgApplyProfile * m_page;
 };
 
-
-
 #endif // KIS_DLG_APPLY_PROFILE_H_
 

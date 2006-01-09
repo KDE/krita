@@ -29,8 +29,8 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
 
-KisAdjustmentLayer::KisAdjustmentLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
-    KisLayer (img, name, opacity)
+KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name) :
+    KisLayer (img, name, OPACITY_OPAQUE)
 {
 }
 
@@ -40,13 +40,14 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
 }
 
 
-KisAdjustmentLayerSP KisAdjustmentLayer::clone()
+KisAdjustmentLayer::~KisAdjustmentLayer()
 {
 }
 
 
-KisAdjustmentLayer::~KisAdjustmentLayer()
+KisLayerSP KisAdjustmentLayer::clone() const
 {
+    return new KisAdjustmentLayer(*this);
 }
 
 
@@ -92,6 +93,11 @@ QRect KisAdjustmentLayer::extent() const
     
 QRect KisAdjustmentLayer::exactBounds() const
 {
+}
+
+bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
+{
+    return v.visit( this );
 }
 
 #include "kis_adjustment_layer.moc"

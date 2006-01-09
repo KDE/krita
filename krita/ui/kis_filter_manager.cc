@@ -170,7 +170,7 @@ bool KisFilterManager::apply()
     QApplication::setOverrideCursor( Qt::waitCursor );
 
     //Apply the filter
-    m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget, dev);
+    m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget);
 
     QRect r1 = dev -> extent();
     QRect r2 = img -> bounds();
@@ -293,7 +293,7 @@ void KisFilterManager::refreshPreview( )
     KisPaintDeviceImplSP dev = m_lastDialog -> previewWidget()->getDevice();
     if (!dev) return;
     
-    KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget, dev);
+    KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget);
     
     QRect rect = dev -> extent();
     KisTransaction cmd("Temporary transaction", dev);

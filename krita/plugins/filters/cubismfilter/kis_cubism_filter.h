@@ -55,7 +55,7 @@ public:
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 private:
     //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
         void randomizeIndices (Q_INT32 count, Q_INT32* indices);

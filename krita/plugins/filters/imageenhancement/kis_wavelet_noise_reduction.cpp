@@ -45,7 +45,7 @@ KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWid
     return new KisMultiDoubleFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget, KisPaintDeviceImplSP )
+KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget )
 {
     KisMultiDoubleFilterWidget* widget = (KisMultiDoubleFilterWidget*) nwidget;
     if( widget == 0 )
@@ -58,7 +58,7 @@ KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget
 
 void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-    
+
     float threshold;
     if(config !=0)
     {
@@ -68,25 +68,25 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceI
         threshold = 1.0;
     }
 
-    
+
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    
+
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
     for(size = 2; size < maxrectsize; size *= 2) ;
-    
+
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( src->colorSpace()->mathToolboxID() );
     setProgressTotalSteps(mathToolbox->fastWaveletTotalSteps(rect) * 2 + size*size*depth );
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
-            
-    
+
+
     kdDebug() << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
-    
+
     kdDebug() << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = mathToolbox->initWavelet(src, rect);
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
-    
+
     kdDebug() << "Thresholding..." << endl;
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
     setProgressStage( i18n("Thresholding") ,progress());
@@ -102,15 +102,15 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceI
         }
         incProgress();
     }
-    
+
     kdDebug() << "Untransforming..." << endl;
-    
+
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, rect, wav, buff);
-    
+
     delete wav;
     delete buff;
     disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
-    
+
     setProgressDone(); // Must be called even if you don't really support progression
 }

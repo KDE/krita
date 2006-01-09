@@ -50,7 +50,7 @@ public:
 
 public:
     virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
-    virtual KisFilterConfiguration* configuration(QWidget* nwidget, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget* nwidget);
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
 
     static inline KisID id() { return KisID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };

@@ -11,11 +11,11 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
-kritafiltersgallery_la_SOURCES = filters_gallery.cc kis_filters_listview.cc \
+kritafiltersgallery_la_SOURCES = filters_gallery.cc \
 		kis_dlg_filtersgallery.cc kis_wdg_filtersgallery.ui
 
 kde_module_LTLIBRARIES = kritafiltersgallery.la
-noinst_HEADERS = filters_gallery.h kis_filters_listview.h kis_dlg_filtersgallery.h
+noinst_HEADERS = filters_gallery.h kis_dlg_filtersgallery.h
 
 kde_services_DATA = kritafiltersgallery.desktop
 

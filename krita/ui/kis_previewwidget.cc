@@ -69,29 +69,29 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
     
-//     kToolBar1->insertButton("viewmag+",0, true, "Zoom In");
+//     kToolBar1->insertButton("viewmag+",0, true, i18n("Zoom In"));
 //     connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
     
-//     kToolBar1->insertButton("viewmag-",1, true, "Zoom Out");
+//     kToolBar1->insertButton("viewmag-",1, true, i18n("Zoom Out"));
 //     connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
 
 /*    kToolBar1->insertLineSeparator();
-    kToolBar1->insertButton("reload",2, true, "Update");
+    kToolBar1->insertButton("reload",2, true, i18n("Update"));
     connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
     
-    kToolBar1->insertButton("",3, true, "Auto Update");
+    kToolBar1->insertButton("",3, true, i18n("Auto Update"));
     connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
     
-    kToolBar1->insertButton("",4, true, "Switch");
+    kToolBar1->insertButton("",4, true, i18n("Switch"));
     connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));*/
 // these currently don't yet work, reenable when they do work :)  (TZ-12-2005)
 // TODO reenable these
-//   kToolBar1->insertButton("",5, true, "Popup Original and Preview");
+//   kToolBar1->insertButton("",5, true, i18n("Popup Original and Preview"));
 }
 
 void KisPreviewWidget::forceUpdate()
 {
-    kdDebug() << "forceUpdate\n";
+    if (!m_origDevice) return;
     if(m_previewIsDisplayed)
     {
         m_groupBox->setTitle(m_origDevice->name());
@@ -153,6 +153,10 @@ void KisPreviewWidget::slotSetAutoUpdate(bool set) {
 
 void KisPreviewWidget::setPreviewDisplayed(bool v)
 {
+    if (!m_origDevice) return;
+    if (!m_preview) return;
+    if (m_scaledPreview == 0) return;
+    
     //kdDebug() << "toggleImageDisplayed\n";
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
@@ -178,6 +182,8 @@ bool KisPreviewWidget::getAutoUpdate()  const {
 
 bool KisPreviewWidget::zoomChanged()
 {
+    if (!m_origDevice) return false;
+    
 //     kdDebug() << "zoomChanged " << m_zoom << "\n";
     QRect r = m_origDevice->exactBounds();
     int w = (int) ceil(r.width() * m_zoom );

@@ -231,7 +231,7 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 
-KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP /*dev*/)
+KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

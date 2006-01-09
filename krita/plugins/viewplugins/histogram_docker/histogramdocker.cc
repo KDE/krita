@@ -178,7 +178,7 @@ HistogramDockerUpdater::HistogramDockerUpdater(KisHistogramSP h, KisHistogramVie
 
 void HistogramDockerUpdater::updated() {
     // We don't [!] do m_histogram -> updateHistogram();, because that will try to compute
-    // the histogram synchronously, while we wan't is asynchronously.
+    // the histogram synchronously, while we want it asynchronously.
     m_producer -> addRegionsToBinAsync();
 }
 

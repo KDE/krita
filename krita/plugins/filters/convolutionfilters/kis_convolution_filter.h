@@ -54,7 +54,7 @@ public:
     KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) : KisConvolutionFilter(id, category, entry) { } ;
     virtual ~KisConvolutionConstFilter();
 public:
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*);
 protected:
     KisKernel * m_matrix;
 };

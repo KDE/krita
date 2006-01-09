@@ -40,13 +40,12 @@ class KRITACORE_EXPORT KisAdjustmentLayer : public KisLayer
     Q_OBJECT
 
 public:
-    KisAdjustmentLayer(KisImage *img, const QString &name, Q_UINT8 opacity);
+    KisAdjustmentLayer(KisImageSP img, const QString &name);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
     /// Return a copy of this layer
-    virtual KisAdjustmentLayerSP clone();
-
+    virtual KisLayerSP clone() const;
 
 public:
     
@@ -56,9 +55,7 @@ public:
     KisSelectionSP selection();
     void setSelection(KisSelectionSP selection);
     
-    
 public:
-
     
     virtual Q_INT32 x() const;
     virtual void setX(Q_INT32);
@@ -72,6 +69,7 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     virtual QRect exactBounds() const;
 
+    virtual bool accept(KisLayerVisitor &);
 private:
 
     KisFilterConfiguration * m_filterConfig;

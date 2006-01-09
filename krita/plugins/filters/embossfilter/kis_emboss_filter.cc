@@ -103,7 +103,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
             if (it.isSelected()) {
 
 // XXX: COLORSPACE_INDEPENDENCE
-                
+
                 QColor color1;
                 src -> colorSpace() -> toQColor(it.rawData(), &color1);
 
@@ -161,7 +161,7 @@ KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* pare
     return w;
 }
 
-KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP dev)
+KisFilterConfiguration* KisEmbossFilter::configuration(QWidget* nwidget)
 {
     KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
     if( widget == 0 )

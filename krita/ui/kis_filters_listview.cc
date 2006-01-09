@@ -22,22 +22,20 @@
 #include "kis_filters_listview.h"
 
 #include "kis_types.h"
-#include "kis_view.h"
+#include "kis_image.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 #include "kis_filter.h"
 #include "kis_filter_strategy.h"
 
-namespace Krita {
-namespace Plugins {
-namespace FiltersGallery {
 
-KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_view(0)
+KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_layer(0)
 {
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisView* view, QWidget* parent) : KIconView(parent) , m_view(view)
+KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name) : KIconView(parent, name) , m_layer(layer)
 {
     buildPreview();
     init();
@@ -52,20 +50,23 @@ void KisFiltersListView::init()
 
 void KisFiltersListView::buildPreview()
 {
-    if(m_view == 0)
+    
+    if(m_layer== 0)
         return;
+    
     // Check which filters support painting
-    KisImageSP img = m_view->getCanvasSubject()->currentImg();
-    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>( img->activeLayer().data());
-    if(activeLayer == 0)
-        return; // TODO: warn the user and fix the filters engine
-    m_thumb = new KisPaintLayer( *activeLayer );
+
+    // Create a paint layer -- if this is not a paint layer, exit. This very ugly, refactore for 2.0. XXX
+    m_thumb = new KisPaintLayer( *dynamic_cast<KisPaintLayer*>(m_layer.data()) );
+    if (m_thumb == 0)
+        return;
+    
     m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->paintDevice()->colorSpace(), "thumbnail");
     m_imgthumb->addLayer(m_thumb.data(), m_imgthumb->rootLayer(), 0);
     double sx = 100./m_thumb->exactBounds().width();
     double sy = 100./m_thumb->exactBounds().height();
     m_imgthumb->scale(sx, sy, 0, new KisMitchellFilterStrategy());
-    
+
     KisIDList l = KisFilterRegistry::instance()->listKeys();
     KisIDList::iterator it;
     it = l.begin();
@@ -80,21 +81,18 @@ void KisFiltersListView::buildPreview()
                          itc != configlist.end(); itc++)
             {
                 // Creates a new image for this preview
-                KisImageSP imgthumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorSpace(), "preview");
+                KisImageSP m_imagethumbPreview = new KisImage(0, m_imgthumb->width(), m_imgthumb->height(), m_imgthumb->colorSpace(), "preview");
                 // Creates a copy of the preview
                 KisPaintLayerSP thumbPreview = new KisPaintLayer(*m_thumb);
-                imgthumbPreview->addLayer(thumbPreview.data(), imgthumbPreview->rootLayer(), 0);
+                m_imagethumbPreview->addLayer(thumbPreview.data(), m_imagethumbPreview->rootLayer(), 0);
                 // Apply the filter
                 f->disableProgress();
-                f->process(m_thumb->paintDevice(), thumbPreview->paintDevice(),*itc, imgthumbPreview->bounds());
+                f->process(m_thumb->paintDevice(), thumbPreview->paintDevice(),*itc, m_imagethumbPreview->bounds());
                 // Add the preview to the list
-                QImage qimg =  thumbPreview->paintDevice()->convertToQImage(0);
-                new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qimg), *it, f, *itc );
+                QImage qm_image =  thumbPreview->paintDevice()->convertToQImage(0);
+                new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qm_image), *it, f, *itc );
             }
         }
     }
 }
 
-}
-}
-}

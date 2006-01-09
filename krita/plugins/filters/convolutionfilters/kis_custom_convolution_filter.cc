@@ -45,7 +45,7 @@ KisCustomConvolutionConfiguration::~KisCustomConvolutionConfiguration()
     delete m_matrix;
 }
 
-KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget, KisPaintDeviceImplSP /*dev*/)
+KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget)
 {
     KisCustomConvolutionFilterConfigurationWidget* widget = (KisCustomConvolutionFilterConfigurationWidget*) nwidget;
 

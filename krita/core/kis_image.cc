@@ -1136,13 +1136,15 @@ void KisImage::flatten()
     KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
 
+    blockSignals(true);
+    addLayer(dst, m_rootLayer, 0);
+    activate(dst);
+    blockSignals(false);
+
     KisPainter painter(dst->paintDevice());
 
     KisMergeVisitor visitor(this, &painter, QRect(0,0,width(),height()));
     oldRootLayer ->accept(visitor);
-
-    addLayer(dst, m_rootLayer, 0);
-    activate(dst);
 
     notify();
     notifyLayersChanged();

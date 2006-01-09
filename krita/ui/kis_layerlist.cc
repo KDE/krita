@@ -22,6 +22,7 @@
 #include <kpopupmenu.h>
 #include <koPartSelectAction.h>
 
+#include "kis_layer.h"
 #include "kis_layerlist.h"
 
 
@@ -114,5 +115,54 @@ void KisLayerList::menuActivated( int id, LayerItem *layer )
             }
     }
 }
+
+KisLayerItem::KisLayerItem( LayerList* parent, KisLayer* layer )
+    : super( layer->name(),
+             parent,
+             layer->prevSibling() ? parent->layer( layer->prevSibling()->id() ) : 0,
+             layer->id() )
+    , m_layer( layer )
+{
+    init();
+}
+
+KisLayerItem::KisLayerItem( LayerItem* parent, KisLayer* layer )
+    : super( layer->name(),
+             parent,
+             layer->prevSibling() ? parent->listView()->layer( layer->prevSibling()->id() ) : 0,
+             layer->id() )
+    , m_layer( layer )
+{
+    init();
+}
+
+void KisLayerItem::init()
+{
+    setPreviewImage( &m_preview );
+    sync();
+}
+
+KisLayer* KisLayerItem::layer() const
+{
+    return m_layer;
+}
+
+void KisLayerItem::sync()
+{
+    setProperty( "visible", layer()->visible() );
+    setProperty( "locked", layer()->locked() );
+    setDisplayName( layer()->name() );
+    update();
+}
+
+void KisLayerItem::updatePreview()
+{
+    m_preview = m_layer->createThumbnail( height()*2, height()*2 );
+    previewChanged();
+}
+
+//QString KisLayerItem::tooltip() const;
+
+//void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
 
 #include "kis_layerlist.moc"

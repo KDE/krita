@@ -25,18 +25,19 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_part_layer.h"
-#include "layerlist.h"
+#include "kis_adjustment_layer.h"
+#include "kis_layerlist.h"
 
 
 class KisPopulateVisitor: public KisLayerVisitor
 {
     public:
-        KisPopulateVisitor(LayerList* widget)
+        KisPopulateVisitor(KisLayerList* widget)
             : m_widget(widget)
             , m_parent(0)
             { }
 
-        KisPopulateVisitor(LayerItem* parent)
+        KisPopulateVisitor(KisLayerItem* parent)
             : m_widget(parent -> listView())
             , m_parent(parent)
             { }
@@ -53,9 +54,15 @@ class KisPopulateVisitor: public KisLayerVisitor
             return true;
         }
 
+        virtual bool visit(KisAdjustmentLayer* layer)
+        {
+            add(layer) -> setPixmap(0, SmallIcon("filter", 16));
+            return true;
+        }
+
         virtual bool visit(KisGroupLayer* layer)
         {
-            LayerItem* item = add(layer);
+            KisLayerItem* item = add(layer);
             item -> makeFolder();
             KisPopulateVisitor visitor(item);
             for (KisLayerSP l = layer -> firstChild(); l; l = l -> nextSibling())
@@ -63,26 +70,17 @@ class KisPopulateVisitor: public KisLayerVisitor
             return true;
         }
 
-        virtual bool visit(KisAdjustmentLayer* layer)
-        {
-            return true;
-        }
-    
-
     private:
         LayerList* m_widget;
-        LayerItem* m_parent;
+        KisLayerItem* m_parent;
 
-        LayerItem* add(KisLayer* layer)
+        KisLayerItem* add(KisLayer* layer)
         {
-            const int siblingID = layer -> prevSibling() ? layer -> prevSibling() -> id() : -1;
-            LayerItem *item;
+            KisLayerItem *item;
             if (m_parent)
-                item = m_widget -> addLayerToParent(layer -> name(), m_parent -> id(), siblingID, layer -> id());
+                item = new KisLayerItem(m_parent, layer);
             else
-                item = m_widget -> addLayer(layer -> name(), siblingID, layer -> id());
-            item -> setProperty("visible", layer -> visible());
-            item -> setProperty("locked", layer -> locked());
+                item = new KisLayerItem(m_widget, layer);
             if (layer == layer -> image() -> activeLayer())
                 item -> setActive();
             return item;

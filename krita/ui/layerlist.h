@@ -144,6 +144,7 @@ protected slots:
 private:
     typedef KListView super;
     friend class LayerItem;
+    friend class LayerToolTIp;
 
     class Private;
     Private* const d;
@@ -152,6 +153,7 @@ private slots:
     void slotItemRenamed( QListViewItem *item, const QString &text, int col );
     void slotItemMoved( QListViewItem *item, QListViewItem*, QListViewItem* );
     void showContextMenu();
+    void hideTip();
 
 public: //reimplemented for internal reasons
     virtual void setCurrentItem( QListViewItem *i );
@@ -227,14 +229,17 @@ protected:
 
     virtual bool mousePressEvent( QMouseEvent *e );
 
+    virtual QString tooltip() const;
+
 private:
     typedef KListViewItem super;
     friend class LayerList;
-
-    void init();
+    friend class LayerToolTip;
 
     class Private;
     Private* const d;
+
+    void init();
 
 public: //reimplemented for internal reasons
     virtual int width( const QFontMetrics &fm, const QListView *lv, int c ) const;

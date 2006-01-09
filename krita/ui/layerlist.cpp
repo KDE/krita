@@ -27,7 +27,9 @@
 #include <qheader.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qsimplerichtext.h>
 #include <qtimer.h>
+#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -77,8 +79,9 @@ public:
     int itemHeight;
     QValueList<LayerProperty> properties;
     KPopupMenu contextMenu;
+    LayerToolTip *tooltip;
 
-    Private(): activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 ) { }
+    Private( QWidget *parent, LayerList *list );
 };
 
 class LayerItem::Private
@@ -96,6 +99,161 @@ public:
     { }
 };
 
+static const int MAX_SIZE = 256;
+class LayerToolTip: public QToolTip, public QFrame
+{
+    LayerList *m_list;
+    LayerItem *m_item;
+    QPoint m_pos;
+    QTimer m_timer;
+
+public:
+    LayerToolTip( QWidget *parent, LayerList *list )
+        : QToolTip( parent ),
+          QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WStyle_StaysOnTop | WX11BypassWM ),
+          m_list( list )
+    {
+        QFrame::setPalette( QToolTip::palette() );
+        connect( &m_timer, SIGNAL( timeout() ), m_list, SLOT( hideTip() ) );
+        qApp->installEventFilter( this );
+    }
+
+    void maybeTip( const QPoint &pos )
+    {
+        m_pos = pos;
+        m_item = static_cast<LayerItem*>(m_list->itemAt( m_pos ));
+        if( isVisible() )
+            return;
+        if( QToolTip::parentWidget() && m_list->showToolTips() && m_item )
+            showTip();
+        else
+            hideTip();
+    }
+
+    void showTip()
+    {
+        position();
+        m_timer.start( 15000, true );
+        show();
+    }
+
+    void hideTip()
+    {
+        QFrame::hide();
+        QToolTip::hide();
+        m_timer.stop();
+        m_list->triggerUpdate();
+        m_item = 0;
+    }
+
+    virtual void drawContents( QPainter *painter )
+    {
+        QPixmap buf( width(), height() );
+        QPainter p( &buf );
+        buf.fill( colorGroup().background() );
+
+        //p.translate( 10, 10 );
+        if( QPixmap *pix = m_item->d->previewPixmap )
+        {
+            if( pix->width() <= MAX_SIZE && pix->height() <= MAX_SIZE )
+            {
+                p.drawPixmap( 0, 0, *pix );
+                p.translate( pix->width() + 10, 0 );
+            }
+            else
+            {
+                QImage img = pix->convertToImage().scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
+                p.drawImage( 0, 0, img );
+                p.translate( img.width() + 10, 0 );
+            }
+        }
+        else if( QImage *img = m_item->d->previewImage )
+        {
+            if( img->width() <= MAX_SIZE && img->height() <= MAX_SIZE )
+            {
+                p.drawImage( 0, 0, *img );
+                p.translate( img->width() + 10, 0 );
+            }
+            else
+            {
+                QImage img2 = img->scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
+                p.drawImage( 0, 0, img2 );
+                p.translate( img2.width() + 10, 0 );
+            }
+        }
+
+        QSimpleRichText( m_item->tooltip(), QToolTip::font() ).draw( &p, 0, 0, rect(), colorGroup() );
+
+        painter->drawPixmap( 0, 0, buf );
+    }
+
+    virtual QSize sizeHint() const
+    {
+        if( !m_item )
+            return QSize( 0, 0 );
+
+        QSimpleRichText text( m_item->tooltip(), QToolTip::font() );
+
+        int width = text.width();
+        if( m_item->d->previewImage )
+            width += kMin( m_item->d->previewImage->width(), MAX_SIZE ) + 10;
+        else if( m_item->d->previewPixmap )
+            width += kMin( m_item->d->previewPixmap->width(), MAX_SIZE ) + 10;
+        width += 10;
+
+        int height = text.height();
+        if( m_item->d->previewImage && kMin( m_item->d->previewImage->height(), MAX_SIZE ) > height )
+            height = kMin( m_item->d->previewImage->height(), MAX_SIZE );
+        else if( m_item->d->previewPixmap && kMin( m_item->d->previewPixmap->height(), MAX_SIZE ) > height )
+            height = kMin( m_item->d->previewPixmap->height(), MAX_SIZE );
+        height += 10;
+
+        return QSize( width, height );
+    }
+
+    void position()
+    {
+        const QRect drect = QApplication::desktop()->availableGeometry( QToolTip::parentWidget() );
+        const QSize size = sizeHint();
+        const int width = size.width(), height = size.height();
+
+        int y;
+        if( m_list->mapToGlobal( m_item->rect().bottomRight() ).y() + height < drect.bottom() )
+            y = m_list->mapToGlobal( m_item->rect().bottomRight() ).y();
+        else
+            y = kMax( drect.top(), m_list->mapToGlobal( m_item->rect().topLeft() ).y() - height );
+
+        int x = kMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
+        if( x + width > drect.right() )
+            x = drect.right() - width;
+
+        move( x, y );
+    }
+
+    bool eventFilter( QObject *, QEvent *e )
+    {
+        switch ( e->type() )
+        {
+            case QEvent::KeyPress:
+            case QEvent::KeyRelease:
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonRelease:
+            //case QEvent::MouseMove:
+            case QEvent::FocusIn:
+            case QEvent::FocusOut:
+            case QEvent::Wheel:
+            case QEvent::Leave:
+                hideTip();
+            default: break;
+        }
+
+        return false;
+    }
+};
+
+LayerList::Private::Private( QWidget *parent, LayerList *list )
+    : activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 ),
+      tooltip( new LayerToolTip( parent, list ) ) { }
 
 static int getID()
 {
@@ -111,7 +269,7 @@ static QSize iconSize() { return QIconSet::iconSize( QIconSet::Small ); }
 ///////////////
 
 LayerList::LayerList( QWidget *parent, const char *name )
-    : super( parent, name ), d( new Private )
+    : super( parent, name ), d( new Private( viewport(), this ) )
 {
     setSelectionMode( QListView::Extended );
     setRootIsDecorated( true );
@@ -136,6 +294,8 @@ LayerList::LayerList( QWidget *parent, const char *name )
                  SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
     connect( this, SIGNAL( moved( QListViewItem*, QListViewItem*, QListViewItem* ) ),
              SLOT( slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* ) ) );
+    connect( this, SIGNAL( onItem( QListViewItem* ) ), SLOT( hideTip() ) );
+    connect( this, SIGNAL( onViewport() ), SLOT( hideTip() ) );
 }
 
 LayerList::~LayerList()
@@ -542,6 +702,11 @@ void LayerList::showContextMenu()
     d->contextMenu.clear();
     constructMenu( layer );
     menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
+}
+
+void LayerList::hideTip()
+{
+    d->tooltip->hideTip();
 }
 
 void LayerList::constructMenu( LayerItem *layer )
@@ -1033,6 +1198,21 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
     }
 
     return false;
+}
+
+QString LayerItem::tooltip() const
+{
+    QString tip = QString("<center><b>%1</b></center>").arg( displayName() );
+    for( int i = 0, n = listView()->d->properties.count(); i < n; ++i )
+        if( !isFolder() || listView()->d->properties[i].validForFolders )
+        {
+            if( d->properties[i] )
+                tip += i18n( "%1: Yes" ).arg( listView()->d->properties[i].displayName );
+            else
+                tip += i18n( "%1: No" ).arg( listView()->d->properties[i].displayName );
+            tip += "<br>";
+        }
+    return tip;
 }
 
 int LayerItem::width( const QFontMetrics &fm, const QListView *lv, int c ) const

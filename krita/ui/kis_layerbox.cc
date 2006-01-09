@@ -183,7 +183,7 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
     }
     else
     {
-        KisPopulateVisitor visitor(list() -> layer(layer -> parent() -> id()));
+        KisPopulateVisitor visitor(static_cast<KisLayerItem*>(list() -> layer(layer -> parent() -> id())));
         layer -> accept(visitor);
     }
 
@@ -212,8 +212,12 @@ void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
 
 void KisLayerBox::slotLayerPropertiesChanged(KisLayerSP layer)
 {
-    list() -> setLayerDisplayName(layer -> id(), layer -> name());
-    updateUI();
+    if (KisLayerItem* item = dynamic_cast<KisLayerItem*>(list() -> layer(layer -> id())))
+    {
+        Q_ASSERT(item -> layer() == layer.data());
+        item -> sync();
+        updateUI();
+    }
 }
 
 void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)

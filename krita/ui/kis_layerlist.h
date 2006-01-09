@@ -20,10 +20,12 @@
 #ifndef KIS_LAYERLIST_H
 #define KIS_LAYERLIST_H
 
+#include <qimage.h>
 #include "layerlist.h"
 
 class KoPartSelectAction;
 class KoDocumentEntry;
+class KisLayer;
 
 class KisLayerList: public LayerList
 {
@@ -44,6 +46,30 @@ public:
 
 private:
     KoPartSelectAction *m_partLayerAction;
+};
+
+class KisLayerItem: public LayerItem
+{
+    typedef LayerItem super;
+
+public:
+    KisLayerItem( LayerList* parent, KisLayer* layer );
+    KisLayerItem( LayerItem* parent, KisLayer* layer );
+
+    KisLayer* layer() const;
+
+    void sync();
+
+    void updatePreview();
+
+    //virtual QString tooltip() const;
+
+    //virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
+
+private:
+    void init();
+    QImage m_preview;
+    KisLayer *m_layer;
 };
 
 #endif

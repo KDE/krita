@@ -281,6 +281,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         }
         else {
             kdDebug(51006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+	    if( errCode == KParts::ComponentFactory::ErrNoLibrary)
+	    {
+		kdDebug(51006) << " Error was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+	    }
         }
     }
 

@@ -59,6 +59,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     m_page = new WdgBirdEye(this);
     m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()), 10, true);
     m_page->zoom->setValue(100);
+    m_page->zoom->setSuffix("%");
     
     m_page->toolbar->setIconSize(16);
     m_page->view->installEventFilter(this);

@@ -437,16 +437,14 @@ void KisView::setupRulers()
     }
 }
 
+#define EPSILON 1e-6
+
 void KisView::updateStatusBarZoomLabel ()
 {
-    if (zoom () >= 1)
-        m_statusBarZoomLabel->setText(i18n ("Zoom %1:1").arg (zoom ()));
-    else if (zoom () > 0)
-        m_statusBarZoomLabel->setText(i18n ("Zoom 1:%1").arg (1 / zoom ()));
-    else
-    {
-        kdError () << "KisView::updateStatusBarZoomLabel() with 0 zoom" << endl;
-        m_statusBarZoomLabel->setText(QString::null);
+    if (zoom() < 1 - EPSILON) {
+        m_statusBarZoomLabel -> setText(i18n("Zoom %1%").arg(zoom() * 100, 0, 'g', 4));
+    } else {
+        m_statusBarZoomLabel -> setText(i18n("Zoom %1%").arg(zoom() * 100, 0, 'f', 0));
     }
 }
 
@@ -804,8 +802,6 @@ Q_INT32 KisView::vertValue() const
 {
     return m_vScroll -> value() - m_canvasYOffset;
 }
-
-#define EPSILON 1e-6
 
 void KisView::paintView(const KisRect& r)
 {

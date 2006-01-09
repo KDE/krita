@@ -28,6 +28,8 @@
 // ruler is not quite suited to Krita. Also: start units with 0,
 // print every 100 units.
 
+#define RULER_THICKNESS 20
+
 class QPainter;
 
 class KisRuler : public QFrame {

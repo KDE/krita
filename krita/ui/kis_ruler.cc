@@ -24,8 +24,7 @@
 #include "kis_ruler.h"
 
 #define MARKER_WIDTH 1
-#define MARKER_HEIGHT 20
-#define RULER_SIZE 20
+#define MARKER_HEIGHT RULER_THICKNESS
 
 const char *KisRuler::m_nums[] = {
     "70 7 2 1",
@@ -54,10 +53,10 @@ KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name) : super
     m_currentPosition = -1;
 
     if (m_orientation == Qt::Horizontal) {
-        setFixedHeight(RULER_SIZE);
+        setFixedHeight(RULER_THICKNESS);
         initMarker(MARKER_WIDTH, MARKER_HEIGHT);
     } else {
-        setFixedWidth(RULER_SIZE);
+        setFixedWidth(RULER_THICKNESS);
         initMarker(MARKER_HEIGHT, MARKER_WIDTH);
     }
 }
@@ -91,9 +90,9 @@ void KisRuler::recalculateSize()
 
     if (m_orientation == Qt::Horizontal) {
         w = width();
-        h = RULER_SIZE;
+        h = RULER_THICKNESS;
     } else {
-        w = RULER_SIZE;
+        w = RULER_THICKNESS;
         h = height();
     }
 
@@ -229,16 +228,16 @@ void KisRuler::drawRuler()
             pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
-                p.drawLine(pos, RULER_SIZE - 9, pos, RULER_SIZE);
+                p.drawLine(pos, RULER_THICKNESS - 9, pos, RULER_THICKNESS);
 
             if (s3 && start % st3 == 0)
-                p.drawLine(pos, RULER_SIZE - 9, pos, RULER_SIZE);
+                p.drawLine(pos, RULER_THICKNESS - 9, pos, RULER_THICKNESS);
 
             if (s2 && start % st2 == 0)
-                p.drawLine(pos, RULER_SIZE - 7, pos, RULER_SIZE);
+                p.drawLine(pos, RULER_THICKNESS - 7, pos, RULER_THICKNESS);
 
             if (s1 && start % st1 == 0)
-                p.drawLine(pos, RULER_SIZE - 5, pos, RULER_SIZE);
+                p.drawLine(pos, RULER_THICKNESS - 5, pos, RULER_THICKNESS);
 
             if (start % step == 0) {
                 buf.setNum(QABS(start));
@@ -256,16 +255,16 @@ void KisRuler::drawRuler()
             pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
-                p.drawLine(RULER_SIZE - 9, pos, RULER_SIZE, pos);
+                p.drawLine(RULER_THICKNESS - 9, pos, RULER_THICKNESS, pos);
 
             if (s3 && start % st3 == 0)
-                p.drawLine(RULER_SIZE - 9, pos, RULER_SIZE, pos);
+                p.drawLine(RULER_THICKNESS - 9, pos, RULER_THICKNESS, pos);
 
             if (s2 && start % st2 == 0)
-                p.drawLine(RULER_SIZE - 7, pos, RULER_SIZE, pos);
+                p.drawLine(RULER_THICKNESS - 7, pos, RULER_THICKNESS, pos);
 
             if (s1 && start % st1 == 0)
-                p.drawLine(RULER_SIZE - 5, pos, RULER_SIZE, pos);
+                p.drawLine(RULER_THICKNESS - 5, pos, RULER_THICKNESS, pos);
 
             if (start % step == 0) {
                 buf.setNum(QABS(start));
@@ -300,10 +299,10 @@ void KisRuler::paletteChange(const QPalette& oldPalette)
 void KisRuler::show()
 {
     if (m_orientation == Qt::Horizontal) {
-        setFixedHeight(RULER_SIZE);
+        setFixedHeight(RULER_THICKNESS);
         initMarker(MARKER_WIDTH, MARKER_HEIGHT);
     } else {
-        setFixedWidth(RULER_SIZE);
+        setFixedWidth(RULER_THICKNESS);
         initMarker(MARKER_HEIGHT, MARKER_WIDTH);
     }
 

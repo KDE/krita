@@ -197,6 +197,7 @@ protected:
     virtual void resizeEvent(QResizeEvent*); // From QWidget
     virtual void styleChange(QStyle& oldStyle); // From QWidget
     virtual void paletteChange(const QPalette& oldPalette); // From QWidget
+    virtual void showEvent(QShowEvent *);
 
 protected slots:
     virtual void slotChildActivated(bool a); // from KoView
@@ -354,6 +355,21 @@ private:
      */
     double nextZoomOutLevel() const;
 
+    /**
+     * Returns the next zoom level when zooming out from the given level.
+     */
+    double nextZoomOutLevel(double zoomLevel) const;
+
+    /**
+     * Returns the zoom level that fits the image to the canvas.
+     */
+    double fitToCanvasZoomLevel() const;
+
+    /**
+     * Set the zoom level on first creating the view.
+     */
+    void setInitialZoomLevel();
+
 private slots:
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 
@@ -413,6 +429,8 @@ private slots:
     void slotZoomOut();
     void slotActualPixels();
     void slotActualSize();
+    void slotFitToCanvas();
+
     void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
 
     void scrollH(int value);
@@ -470,6 +488,7 @@ private:
     KAction *m_zoomOut;
     KAction *m_actualPixels;
     KAction *m_actualSize;
+    KAction *m_fitToCanvas;
 
     KAction *m_fullScreen;
     KAction *m_imgProperties;
@@ -485,6 +504,10 @@ private:
     int m_scrollY;
     int m_canvasXOffset;
     int m_canvasYOffset;
+
+    bool m_initialZoomSet;
+    bool m_guiActivateEventReceived;
+
 //    KisGuideSP m_currentGuide;
 //    QPoint m_lastGuidePoint;
     KisUndoAdapter *m_adapter;
@@ -514,6 +537,7 @@ private:
     QTabletEvent::TabletDevice m_lastTabletEventDevice;
 
     QPixmap m_canvasPixmap;
+    bool m_toolIsPainting;
 
 #ifdef HAVE_GL
     // OpenGL context for the current image, containing textures

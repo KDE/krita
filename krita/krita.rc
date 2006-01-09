@@ -31,6 +31,7 @@
   <Action name="zoom_out"/>
   <Action name="actual_pixels"/>
   <Action name="actual_size"/>
+  <Action name="fit_to_canvas"/>
   <Separator/>
   <Action name="view_ruler"/>
   <Separator/>

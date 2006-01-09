@@ -184,6 +184,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_zoomOut( 0 )
     , m_actualPixels( 0 )
     , m_actualSize( 0 )
+    , m_fitToCanvas( 0 )
     , m_fullScreen( 0 )
     , m_imgProperties( 0 )
     , m_RulerAction( 0 )
@@ -194,6 +195,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_scrollY( 0 )
     , m_canvasXOffset( 0)
     , m_canvasYOffset( 0)
+    , m_initialZoomSet( false )
+    , m_guiActivateEventReceived( false )
 //    , m_currentGuide( 0 )
     , m_adapter( adapter )
     , m_statusBarZoomLabel( 0 )
@@ -205,6 +208,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_brush( 0 )
     , m_pattern( 0 )
     , m_gradient( 0 )
+    , m_toolIsPainting( false )
     , m_monitorProfile( 0 )
     , m_HDRExposure( 0 )
     , m_inputDevice ( INPUT_DEVICE_MOUSE )
@@ -554,6 +558,7 @@ void KisView::setupActions()
     m_actualPixels = new KAction(i18n("Actual Pixels"), "Ctrl+0", this, SLOT(slotActualPixels()), actionCollection(), "actual_pixels");
     m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
     m_actualSize->setEnabled(false);
+    m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
 
     // layer actions
     m_layerAdd = new KAction(i18n("&Add Layer..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
@@ -624,7 +629,7 @@ void KisView::resizeEvent(QResizeEvent *)
     docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
     docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
 
-    m_rulerThickness = m_RulerAction -> isChecked() ? 20 : 0;
+    m_rulerThickness = m_RulerAction -> isChecked() ? RULER_THICKNESS : 0;
     drawH = height() - m_rulerThickness;
     drawW = width() - m_rulerThickness;
 
@@ -704,7 +709,7 @@ void KisView::resizeEvent(QResizeEvent *)
     }
 
     //Check if rulers are visible
-    if( m_RulerAction->isChecked() )
+    if( m_RulerAction -> isChecked() )
         m_canvas -> setGeometry(m_rulerThickness, m_rulerThickness, drawW, drawH);
     else
         m_canvas -> setGeometry(0, 0, drawW, drawH);
@@ -761,6 +766,17 @@ void KisView::paletteChange(const QPalette& oldPalette)
 {
     Q_UNUSED(oldPalette);
     updateCanvas();
+}
+
+void KisView::showEvent(QShowEvent *)
+{
+    if (!m_initialZoomSet && m_guiActivateEventReceived && isVisible()) {
+
+        kdDebug() << "Set zoom on SHOW\n";
+
+        setInitialZoomLevel();
+        m_initialZoomSet = true;
+    }
 }
 
 void KisView::updateReadWrite(bool readwrite)
@@ -1142,15 +1158,20 @@ double KisView::nextZoomInLevel() const
     return zoomLevels[zoomLevelIndex];
 }
 
-double KisView::nextZoomOutLevel() const
+double KisView::nextZoomOutLevel(double zoomLevel) const
 {
     int zoomLevelIndex = LAST_ZOOM_LEVEL_INDEX;
 
-    while (zoom() <= zoomLevels[zoomLevelIndex] && zoomLevelIndex > FIRST_ZOOM_LEVEL_INDEX) {
+    while (zoomLevel <= zoomLevels[zoomLevelIndex] && zoomLevelIndex > FIRST_ZOOM_LEVEL_INDEX) {
         zoomLevelIndex--;
     }
 
     return zoomLevels[zoomLevelIndex];
+}
+
+double KisView::nextZoomOutLevel() const
+{
+    return nextZoomOutLevel(zoom());
 }
 
 void KisView::zoomAroundPoint(double x, double y, double zf)
@@ -1292,6 +1313,44 @@ void KisView::slotActualSize()
 {
     //XXX later this should be update to take screen res and image res into consideration
     zoomAroundPoint(-1, -1, 1.0);
+}
+
+double KisView::fitToCanvasZoomLevel() const
+{
+    int fullCanvasWidth = width();
+
+    if (m_vRuler -> isVisible()) {
+        fullCanvasWidth -= m_vRuler -> width();
+    }
+
+    int fullCanvasHeight = height();
+
+    if (m_hRuler -> isVisible()) {
+        fullCanvasHeight -= m_hRuler -> height();
+    }
+
+    double xZoomLevel = static_cast<double>(fullCanvasWidth) / m_image -> width();
+    double yZoomLevel = static_cast<double>(fullCanvasHeight) / m_image -> height();
+
+    return QMIN(xZoomLevel, yZoomLevel);
+}
+
+void KisView::slotFitToCanvas()
+{
+    zoomAroundPoint(-1, -1, fitToCanvasZoomLevel());
+}
+
+void KisView::setInitialZoomLevel()
+{
+    double zoomLevel = fitToCanvasZoomLevel();
+
+    if (zoomLevel > 1) {
+        zoomLevel = 1;
+    } else {
+        zoomLevel = nextZoomOutLevel(zoomLevel);
+    }
+
+    zoomAroundPoint(-1, -1, zoomLevel);
 }
 
 void KisView::imgResizeToActiveLayer()
@@ -1873,13 +1932,16 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
         updateCanvas(event -> rect());
     }
 
-    if (m_toolManager->currentTool()) {
+    if (m_toolManager->currentTool() && !m_toolIsPainting) {
         KisCanvasPainter gc(m_canvas);
 
         gc.setClipRegion(event -> region());
         gc.setClipping(true);
 
+        // Prevent endless loop if the tool needs to have the canvas repainted
+        m_toolIsPainting = true;
         m_toolManager->currentTool()->paint(gc, event -> rect());
+        m_toolIsPainting = false;
     }
 }
 
@@ -2785,8 +2847,16 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
         sb -> show();
 
     super::guiActivateEvent(event);
-}
 
+    if (!m_initialZoomSet && isVisible()) {
+        kdDebug() << "Set zoom in GUI activate event\n";
+
+        setInitialZoomLevel();
+        m_initialZoomSet = true;
+    }
+
+    m_guiActivateEventReceived = true;
+}
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
 {

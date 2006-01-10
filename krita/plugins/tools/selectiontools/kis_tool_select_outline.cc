@@ -48,7 +48,7 @@
 #include "kis_canvas_painter.h"
 
 KisToolSelectOutline::KisToolSelectOutline()
-    : super()
+    : super(i18n("Select Outline"))
 {
     setName("tool_select_outline");
     setCursor(KisCursor::selectCursor());

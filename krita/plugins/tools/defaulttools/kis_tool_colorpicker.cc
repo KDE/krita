@@ -51,6 +51,7 @@ namespace {
 }
 
 KisToolColorPicker::KisToolColorPicker()
+    : super (i18n("Color Picker"))
 {
     setName("tool_colorpicker");
     setCursor(KisCursor::pickerCursor());

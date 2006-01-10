@@ -10,5 +10,5 @@ SUBDIRS = rgb_u8 rgb_u16 rgb_f32 \
 	lms_f32 \
 	$(HALF_SUBDIRS) \
 	wet
-#test wetsticky
+#wet wetsticky
 

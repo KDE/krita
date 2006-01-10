@@ -16,6 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <qwidget.h>
+#include <qstring.h>
+#include <kaction.h>
+#include <qlabel.h>
+
 #include <kaction.h>
 #include <klocale.h>
 
@@ -28,6 +33,7 @@
 #include "kis_move_event.h"
 
 KisToolDummy::KisToolDummy()
+    : super("No active tool")
 {
     setName("tool_dummy");
     m_subject = 0;
@@ -85,5 +91,20 @@ void KisToolDummy::setup(KActionCollection *collection)
         m_ownAction = true;
     }
 }
+
+
+QWidget* KisToolDummy::createOptionWidget(QWidget* parent)
+{
+    m_optionWidget = new QLabel(i18n("Layer is locked or invisible."), parent);
+    m_optionWidget->setCaption("No active tool");
+    m_optionWidget->setAlignment(Qt::AlignCenter);
+    return m_optionWidget;
+}
+
+QWidget* KisToolDummy::optionWidget()
+{
+    return m_optionWidget;
+}
+
 
 #include "kis_tool_dummy.moc"

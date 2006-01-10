@@ -58,6 +58,7 @@
 
 
 KisToolCrop::KisToolCrop()
+    : super(i18n("Crop"))
 {
     setName("tool_crop");
     setCursor(KisCursor::selectCursor());

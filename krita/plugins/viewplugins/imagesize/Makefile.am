@@ -12,7 +12,8 @@ INCLUDES  =  -I$(srcdir)/../../../sdk \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)
 
-kritaimagesize_la_SOURCES = wdg_imagesize.ui wdg_layersize.ui imagesize.cc dlg_imagesize.cc dlg_layersize.cc
+kritaimagesize_la_SOURCES = wdg_imagesize.ui wdg_layersize.ui imagesize.cc dlg_imagesize.cc dlg_layersize.cc wdg_resolution.ui
+
 noinst_HEADERS = wdg_imagesize.h dlg_imagesize.h imagesize.h dlg_layersize.h
 
 kde_module_LTLIBRARIES = kritaimagesize.la

@@ -39,6 +39,7 @@
 #include "kis_paint_device_impl.h"
 
 KisToolPaint::KisToolPaint(const QString& UIName)
+    : super(UIName)
 {
     m_subject = 0;
 

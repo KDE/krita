@@ -1,0 +1,215 @@
+Krita Features
+
+The following is a comprehensive list of all Krita's features
+that are or will be implemented for version 1.5.
+
+* Plugins
+
+Krita is extensible through plugins. There are tools, colorspaces,
+paint operations, filters and kpart-based user interface plugins.
+It is intended to make layer types plugins, too.
+
+* Scriptable
+
+Krita is scriptable in Python and Ruby. The scripting is
+compatible with using the PyQt/KDE and Korundum for adding
+GUI items.
+
+* File
+
+Import: png, tiff, jpeg, dicom, xcf, psd (up to version 6,
+from version 7 on, the photoshop file format is closed and it
+is impossible to get the spec to implement support in a
+free software application), gif, raw, bmp, xpm, targa, rgb, ico,
+openEXR.
+
+Export: png, tiff, jpeg, dicom, xcf, psd (up to version 6,
+from version 7 on, the photoshop file format is closed and it
+is impossible to get the spec to implement support in a
+free software application), gif, bmp, xpm, targa, rgb, openEXR.
+
+Embedded icc profiles and exif information are preserved on
+export to supporting file formats.
+
+Krita's native file format stores icc and exif information.
+
+* Color models
+
+Krita uses lcms for a dependable color workflow using icc profiles
+for importing, exporting, selecting paint colors, printing,
+cutting and pasting.
+
+** 8 bit/channel rgb, cmyk, grayscale, wet watercolors
+** 16 bit/channel rgb, cmyk, grayscale, l*a*b, xyz (xyz may be removed)
+** "half" rgb
+** 32 bit float rgb (HDR), lms
+** Colors can be selected from a color wheel, rgb or grayscale sliders
+   or with a palette
+
+* Editing
+
+** Unlimited undo and redo
+** Cut, copy and paste with conversion through icc profiles if necessary
+** paste into a new image
+
+** Viewing
+
+** Use OpenGL for display when possible
+** View fullscreen
+** Multiple views on one image
+** Rulers
+** zooming
+** show or hide all palette windows in one go
+** palette windows position is kept between sessions
+** When maximized, Krita is usable on a 1024x768 screen with all
+   palettes open.
+** Permanently accurate histogram palette
+** Exposure slider for HDR images
+** Optional "greening-out" of inactive layers to assist with artistic
+   workflow.
+** Bird's eyeview of image and zooming (not sure this will be done in time)
+
+* Images
+
+** mirror, shear, rotate and scale images
+** change the size of the canvas
+** change the resolution of the image
+** convert images between colorspaces
+** set image properties (name, comments, profile, resolution)
+** Combine layers in different colorspaces. The bottom-most
+   layer determines the image colorspace.
+** Separate the channels of an image into grayscale (8 or 16 bits)
+   layers or images.
+   
+* Layers
+
+** Embed KOffice documents as layers into an image
+** Group layers
+** Adjustment layers (not sure whether this'll make it)
+** Lock layers (tools and filters cannot change the layer, but not all
+   destructive operations are disabled yet)
+** Make layers invisible
+** Add and remove layers
+** Change the position of layers in the layer stack
+** Mirror, shear, rotate and scale layers
+** Save layer as image
+** Composite layers with supported composite options, like
+   over, in, out, atop, xor, plus, minus, add, subtract, diff,
+   mult, divide, dodge, burn, bumpmap, copy, copy one channel,
+   clear, dissolve, displace, darken, lighten, hue, saturation, value,
+   color, colorize, luminize, screen, overlay, erase. (Not all colorspaces
+   support all composite operations).
+** Change layer properties like name, position, colorspace
+** Create a drop shadow behind the layer
+** View the histogram of a layer; 16 bits or wider images have zoomable
+   histograms
+** Insert screenshot as layer
+
+
+* Selections
+
+** Select by colorrange
+** Feather selection
+** Invert selection
+
+* Tools
+
+Throught the innovative paintOp plugin system, all painting tools
+(brush, ellipse, line, etc.) can paint aliased, anti-aliased,
+erase, airbrush and more.
+
+** paintbrush
+** colorpicker
+** duplicate
+** ellipse
+** anti-aliased bucket fill and selection fill with color, patterns
+   or gradients.
+** gradient
+** line
+** layer or selection move
+** canvas pan
+** rectangle
+** text
+** zoom
+** crop
+** paint with filters (to be integrated in the paintop system)
+** polygons
+** polylines
+** stars
+** transform selection/layer
+** select similar colors
+** select by painting
+** select contiguous areas
+** select ellipse
+** deselect by erasing
+** select by painting outline
+** select polygonal
+** select rectangular
+
+* Filters
+
+Krita can multithread the operation of some filters. Krita's
+filters can be previewed in the filter gallery.
+
+** Apply previous filter again
+** bumpmap
+** image restoration with cimg
+** brightness/contrast
+** color adjustment per channel
+** autocontrast
+** desaturate
+** gaussian blur
+** sharpen
+** remove mean
+** emboss (laplacian, all directions, horizontal, vertical, horizontal and
+vertical)
+** edge detection (top, right, bottom, left)
+** custom convolution
+** cubism (converts to 8 bit rgba and back)
+** invert
+** reduce noise (simple and with wavelets)
+** oilpaint (converts to 8 bit rgba and back)
+** pixelize (converts to 8 bit rgba and back)
+** raindrops (converts to 8 bit rgba and back)
+** round corners
+** small tiles (converts to 8 bit rgba and back)
+** sobel (converts to 8 bit rgba and back)
+
+* Paint operations
+
+Krita's paint operations are usable with all painting tools.
+
+PaintOps can support composite options, like
+over, in, out, atop, xor, plus, minus, add, subtract, diff,
+mult, divide, dodge, burn, bumpmap, copy, copy one channel,
+clear, dissolve, displace, darken, lighten, hue, saturation, value,
+color, colorize, luminize, screen, overlay, erase. (Not all colorspaces
+support all composite operations).
+
+PaintOps can support opacity settings and use the pressure value
+of a tablet. Tilt and rotation is not yet supported.
+
+** airbrush
+** eraser
+** anti-aliased brush
+** convolve
+** duplicate
+** aliased brush (pen tool)
+** smeary brush (not sure whether this will get finished in time)
+** paint with a tablet stylus. The pressure sensitivity
+   characteristics can be set.
+
+* Brushes
+
+** gimp brush shapes. Support for colored and grayscale brushes and
+   pipe brushes. Support from Gimp parasites in brushes.
+** custom brush shapes
+** text brush shapes
+** brushes created from layers or images. These brushes can be saved
+** colored brushes can also be used as masks
+
+* Fills
+
+** gimp-style patterns
+** gimp-style gradients
+** custom gradients

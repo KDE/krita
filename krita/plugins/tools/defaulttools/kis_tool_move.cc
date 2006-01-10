@@ -38,6 +38,7 @@
 #include "kis_layer.h"
 
 KisToolMove::KisToolMove()
+    : super(i18n("Move Tool"))
 {
     setName("tool_move");
     m_subject = 0;

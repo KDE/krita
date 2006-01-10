@@ -88,6 +88,7 @@ void selectByColor(KisPaintDeviceImplSP dev, KisSelectionSP selection, const Q_U
 
 
 KisToolSelectSimilar::KisToolSelectSimilar()
+    : super(i18n("Select Similar Colors"))
 {
     setName("tool_select_similar");
     setCursor(KisCursor::pickerCursor());

@@ -48,7 +48,7 @@
 #include "kis_canvas_painter.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal()
-    : super()
+    : super(i18n("Select Polygonal"))
 {
     setName("tool_select_polygonal");
     setCursor(KisCursor::selectCursor());

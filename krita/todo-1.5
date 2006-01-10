@@ -39,7 +39,7 @@ Colorspaces
 B  * Implement the last few colorspace dependencies in KisAbstractColorSpace
 ?  * Implement LAB histogram producers
 ?  * Optimize colorspace functions at least in 8 and 16 bit rgb where possible
-P  * Fix wet colorspace
+P  * Fix wet colorspace (doesn't compile even, right now)
 
 Core
 
@@ -57,7 +57,7 @@ B  * Add image preview to bird's eyeview box
 ?  * Use KOffice library guides instead of our own guides
 G  * Add GUI to actually group layers
 R  * Finish separation plugin to separate to different images
-R  * Fix statusbar and put current cursor pos into bird's eyeview docker
+R  * Put current cursor pos into bird's eyeview docker
 A  * Fix display glitches when resizing image or view
 R  * Fix the zoom slider as per TZ
 ?  * Lock all actions when layers are locked or invisible, not just filters
@@ -69,6 +69,7 @@ R  * Fix layer menu according to TZ
 ?  * Make circular (autobrush?) the default brush
 ?  * Always focus one point of the curve in the curve box so the delete key always
      works. After deleting, focus the most nearby point
+R  * Add dialog for resolution
 
 Files and Import/Export
 
@@ -81,7 +82,6 @@ Tools
 
 B  * Fix transform tool and re-enable the shear and rotate functionality
 ?  * Fix crop tool according to Z's hints
-R  * add a dummy option widget for tools without an option widget
 P  * Add radius option to color picker tool. Fix color picker tool according to TZ
 R  * Fix shear tool according to TZ
 

@@ -42,7 +42,7 @@ class KRITACORE_EXPORT KisToolNonPaint : public KisTool {
     typedef KisTool super;
 
 public:
-    KisToolNonPaint();
+    KisToolNonPaint(const QString & UIName);
     virtual ~KisToolNonPaint();
 
 // CanvasObserver
@@ -81,7 +81,6 @@ protected:
 
 private:
     QCursor m_cursor;
-    QWidget m_optWidget;
 };
 
 #endif // KIS_TOOL_NON_PAINT_H_

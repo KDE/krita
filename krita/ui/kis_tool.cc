@@ -17,8 +17,12 @@
  */
 
 #include <qwidget.h>
-
+#include <qstring.h>
 #include <kaction.h>
+#include <qlabel.h>
+
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_tool.h"
 #include "kis_tool.moc"
@@ -27,15 +31,18 @@
 class KisTool::KisToolPrivate 
 {
 public:
-
-    QWidget * optionWidget;
+    QString uiname;
+    QLabel * optionWidget;
 };
 
-KisTool::KisTool()
+KisTool::KisTool(const QString & name)
 {
+    kdDebug() << "Tool created " << name << "\n";
     m_action = 0;
     m_ownAction = false;
     d = new KisToolPrivate();
+    d->uiname = name;
+    d->optionWidget = 0;
 }
 
 KisTool::~KisTool()
@@ -48,12 +55,17 @@ KisTool::~KisTool()
 
 QWidget* KisTool::createOptionWidget(QWidget* parent)
 {
-    d->optionWidget = new QWidget(parent);
+    kdDebug() << "Create option widget d pointer " << d << "\n";
+    
+    d->optionWidget = new QLabel(i18n("No options for %1.").arg(d->uiname), parent);
+    d->optionWidget->setCaption(d->uiname);
+    d->optionWidget->setAlignment(Qt::AlignCenter);
     return d->optionWidget;
 }
 
 QWidget* KisTool::optionWidget()
 {
+    kdDebug() << "Get option widget d pointer " << d << "\n";
     return d->optionWidget;
 }
 

@@ -89,6 +89,7 @@ namespace {
 }
 
 KisToolTransform::KisToolTransform()
+    : super("Transform")
 {
     setName("tool_transform");
     setCursor(KisCursor::selectCursor());

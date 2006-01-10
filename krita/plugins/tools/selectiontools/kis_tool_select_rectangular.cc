@@ -48,6 +48,7 @@
 #include "kis_canvas_painter.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular()
+    : super(i18n("Rectangular Select Tool"))
 {
     setName("tool_select_rectangular");
     setCursor(KisCursor::selectCursor());

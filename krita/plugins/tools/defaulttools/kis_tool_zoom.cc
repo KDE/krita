@@ -32,6 +32,7 @@
 #include "kis_image.h"
 
 KisToolZoom::KisToolZoom()
+    : super(i18n("Zoom Tool"))
 {
     setName("tool_zoom");
     m_subject = 0;

@@ -46,6 +46,7 @@
 #include "kis_canvas_painter.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical()
+    : super(i18n("Elliptical Select"))
 {
     setName("tool_select_elliptical");
     setCursor(KisCursor::selectCursor());

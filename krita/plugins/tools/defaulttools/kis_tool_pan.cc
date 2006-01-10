@@ -28,6 +28,7 @@
 #include "kis_move_event.h"
 
 KisToolPan::KisToolPan()
+    : super(i18n("Pan Tool"))
 {
     setName("tool_pan");
     m_subject = 0;

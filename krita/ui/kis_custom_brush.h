@@ -35,6 +35,9 @@ public:
     KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView* view);
     virtual ~KisCustomBrush();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
+    
+public slots:
+    void slotUseBrush();
 
 signals:
     void activatedResource(KisResource *);
@@ -45,7 +48,6 @@ protected:
 private slots:
     void slotExport();
     void slotAddPredefined();
-    void slotUseBrush();
     void slotUpdateCurrentBrush(int); // To connect with activated(int)
 
 private:

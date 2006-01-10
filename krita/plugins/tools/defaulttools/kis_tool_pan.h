@@ -27,7 +27,8 @@
 class KisCanvasSubject;
 class KisPoint;
 
-class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint {
+class KRITATOOL_EXPORT KisToolPan : public KisToolNonPaint
+{
 
     typedef KisToolNonPaint super;
     Q_OBJECT

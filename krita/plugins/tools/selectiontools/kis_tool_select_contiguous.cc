@@ -52,7 +52,7 @@
 
 #include "kis_tool_select_contiguous.h"
 
-KisToolSelectContiguous::KisToolSelectContiguous() : super()
+KisToolSelectContiguous::KisToolSelectContiguous() : super(i18n("Contiguous Select"))
 {
     setName("tool_select_contiguous");
     m_subject = 0;

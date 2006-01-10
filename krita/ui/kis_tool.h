@@ -21,6 +21,7 @@
 #define KIS_TOOL_H_
 
 #include <qobject.h>
+#include <qstring.h>
 
 #include <ksharedptr.h>
 #include <kaction.h>
@@ -61,7 +62,7 @@ class KisTool : public QObject, public KisCanvasObserver, public KShared {
     Q_OBJECT
 
 public:
-    KisTool();
+    KisTool(const QString & name);
     virtual ~KisTool();
 
 public:

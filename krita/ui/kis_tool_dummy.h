@@ -25,6 +25,7 @@
 
 #include "kis_point.h"
 
+class QLabel;
 class KisCanvasSubject;
 
 /**
@@ -51,7 +52,11 @@ public:
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
+    virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* optionWidget();
+    
 private:
+    QLabel * m_optionWidget;
     KisCanvasSubject *m_subject;
     KisPoint m_dragPos;
     Q_INT32 m_origScrollX;

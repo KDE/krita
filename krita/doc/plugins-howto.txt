@@ -1,0 +1,107 @@
+Developing Krita Plugins
+
+Krita is infinitely extensible with plugins. Tools, filters, large chunks
+of the user interface and even colorspaces are plugins. In fact, Krita
+recognizes these six types of plugins:
+
+* colorspaces
+* tools
+* paint operations
+* image filters
+* viewplugins
+* import/export filters
+
+Krita itself consists of three layered libraries and a directory with
+some common support classes.
+
+KritaColor
+
+The first library is kritacolor. This library loads the colorspace
+plugins.  A colorspace plugin should implement the KisColorSpace abstract
+class or, if the basic capabilities of the new colorspace will be
+implemented by lcms, extend KisAbstractColorSpace. The kritacolor library
+could be used from other applications and does not depend on KOffice.
+
+KritaImage
+
+The libkritaimage library loads the filter and paintop plugins and is
+responsible for working with image data: changing pixels, compositing and
+painting. Brushes, palettes, gradients and patterns are also loaded by
+libkritaimage. It is our stated goal to make libkritaimage independent
+of KOffice, but we currently share the gradient loading code with KOffice.
+
+It is not easy at the moment to add new types of resources such as
+brushes, palettes, gradients or patterns to Krita.
+
+Krita filters must extend and implement the abstract class KisFilter,
+KisFilterConfiguration and possibly KisFilterConfigurationWidget.
+An example of a new filter could be Unsharp Mask.
+
+Paint operations or paintops are the set of operations painting tools
+suchs as freehand or circle have access to. Examples of paintops are pen,
+airbrush or eraser. Paintops should extend the KisPaintop base class.
+Examples of new paintops could be a chalk brush, an oilpaint brush
+or a programmable brush.
+
+KritaUI
+
+The libkritaui library loads the tool and viewplugins. This library is
+a KOffice Part, but also contains a number of widgets that are useful
+for graphics applications. Maybe we will have to split this library in
+kritapart and kritaui in the 2.0 release. For now, script writers are
+not given access to this library and plugin writers are only allowed to
+use this library when writing tools or viewplugins.
+
+Tools are derived from KisTool or one of the specialized tool base
+classes such as KisToolPaint, KisToolNonPaint or KisToolFreehand. A new
+tool could be a foreground object selection tool. Painting tools (and
+that includes tools that paint on the selection) can use any paintop to
+determine the way pixels are changed.
+
+Viewplugins are ordinary kparts that use kxmlgui to insinuate themselves
+into Krita's user interface. Menu options, dialogs, toolbars -- any
+kind of user interface extension can be a viewplugin. In fact, important
+functionality like Krita's scripting support is written as a viewplugin.
+
+
+Import/Export filters
+
+Import/Export filters are KOffice filters, subclasses of KoFilter. Filters
+read and write image data in any of the myriad image formats in existence.
+And example of a new Krita import/export filter could be a PDF filter. Filters
+are loaded by the KOffice libraries.
+
+Creating plugins
+
+Plugins are written in C++ and can use all of KDE and Qt and the Krita
+developer API. Only viewplugins should use the KOffice API. If you do not
+want to use C++, you can write scripts in Python or Ruby; that is a different
+thing altogether, though, and you cannot write tools, colorspaces, paintops
+or image filters as scripts.
+
+Your distribution should have either installed the relevant header files with
+Krita itself, or might have split the header files into either a KOffice dev or
+a Krita dev package. You can find the api documentation for Krita's public
+API at XXX.
+
+Plugins are kde modules and should be tagged as such in their Makefile.am.
+Filters, tools, paintops, colorspaces and import/export filters need .desktop
+files; viewplugins need a kxmlgui .rc file in addition.
+
+
+Colorspaces
+
+
+Filters
+
+
+Paintops
+
+
+Tools
+
+
+Viewplugins
+
+
+Import/Export filters

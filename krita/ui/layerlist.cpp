@@ -29,7 +29,6 @@
 #include <qpixmap.h>
 #include <qsimplerichtext.h>
 #include <qtimer.h>
-#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kdebug.h>

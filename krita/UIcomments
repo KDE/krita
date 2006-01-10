@@ -1,159 +1,117 @@
 Statusbar;
-The coordinates of the pointer is not correctly clipped to the document;=20
+The coordinates of the pointer is not correctly clipped to the document; 
 when I move my cursor to the menu bar I often have negative coordinates.
-When I move my cursor to the far right, outside of the image, I also see=20
+When I move my cursor to the far right, outside of the image, I also see 
 it continue to count. I find that confusing.
 
-Zoom is in for form of n:m.  This is not really a commonly used format and=
-=20
-many people will have less problems interpreting a percentage format.  So=20
+Zoom is in for form of n:m.  This is not really a commonly used format and
+many people will have less problems interpreting a percentage format.  So 
 200% or 50% instead of 2:1 or 1:2 (respectively).
 
 The 'selection' part shows 'Selection Active' or 'No selection'.
-Apart from the missing capital S, I think we can put a little more=20
+Apart from the missing capital S, I think we can put a little more 
 information in there.  What about printing the selection size in pixels?
 
-The ruler keeps counting across the full size of the window, it should=20
-make a difference between image content and outside. I suggest to make it=20
-stop at the image edge. If you don't want that, you might want to make=20
-the ruler be white inside the image and gray outside.
-
 Zoom tool;  it zooms by 2-complement changes. So 1, 2, 4, 8 etc.
-This misses other well known nice looking zoom-levels. Like 33% Or, as=20
+This misses other well known nice looking zoom-levels. Like 33% Or, as 
 krita displays it, 3-times zoom.
 I suggest making the zoom use 1, 2, 3, 4, 6, 8, 9 etc.
 Also; please unzoom the image to fit on screen at initial loading.
 
 Crop tool;
-The crop tool should have statusbar details like position and size, which=20
+The crop tool should have statusbar details like position and size, which 
 are continuesly updated.
-The crop-options panel shows start and end coordinates. Please change that=
-=20
-to x/y and width/height ones. Additionally adding a 'keep aspect ratio'=20
-checkbox so users can type width=3D3 and height=3D2 to keep that aspect rat=
-io=20
+The crop-options panel shows start and end coordinates. Please change that
+to x/y and width/height ones. Additionally adding a 'keep aspect ratio' 
+checkbox so users can type width=3D3 and height=3D2 to keep that aspect ratio 
 from then on.
 
 Overview palette:
-The zoom slider can zoom to 1600%, which makes the slider really hard to=20
-navigate around the < 100 % zoom area. I suggest either making the slider=20
+The zoom slider can zoom to 1600%, which makes the slider really hard to 
+navigate around the < 100 % zoom area. I suggest either making the slider 
 logoritmic or changing the maximum.
 Also; add a '%' suffix to the spinbox.
-Last; why is the space between the 'Zoom:' label and its slider soo much=20
+Last; why is the space between the 'Zoom:' label and its slider soo much 
 larger then the space betweenthe 'Exposure:' label and that slider ?
 
 Color palettes ;
-pressing the 'reset colors' icon directly under the foreground/background=20
-preview swatches does not change the background to white, as I would=20
+pressing the 'reset colors' icon directly under the foreground/background 
+preview swatches does not change the background to white, as I would 
 expect.
-You can drag a color from the preview swatches but it is changing the=20
-selected one at click and since dropping drops on the selected one, the=20
-concept of duplicating the foreground to the background by dragging is=20
-impossible.  I suggest to do selecting of foreground/background color on=20
+You can drag a color from the preview swatches but it is changing the 
+selected one at click and since dropping drops on the selected one, the 
+concept of duplicating the foreground to the background by dragging is 
+impossible.  I suggest to do selecting of foreground/background color on 
 mouse release instead.
-=46or all the 'tracks' in the RGB and Gray palettes you can change the=20
-current position of the slider by clicking, but you can't keep updating=20
-it by dragging.  Please copy the behavior of any slider and continuesly=20
-update the value on click until the mouse is released again.  See QSlider=20
-behavior for how to handle mouse-drag events outside the widget=20
+=46or all the 'tracks' in the RGB and Gray palettes you can change the 
+current position of the slider by clicking, but you can't keep updating 
+it by dragging.  Please copy the behavior of any slider and continuesly 
+update the value on click until the mouse is released again.  See QSlider 
+behavior for how to handle mouse-drag events outside the widget 
 boundaries.
-The HSV/RGB/Gray have labels in front of the color-sliders. Please follow=20
+The HSV/RGB/Gray have labels in front of the color-sliders. Please follow 
 the styleguide and let all such labels end with a colon ":"
 
-The Pan tool:
-This tool (and various others I'm not going to iterate) has no options. =20
-The tool-palette ends up empty, including the tab-name.  I expected the=20
-tab-name to be filled and a label 'This tool has no options' to be shown=20
-there.
 
 Color Picker tool:
-The 'Normalize integer values' should not be enabled by default.  I would=20
-also like to suggest it converts the values to percentages instead of=20
+The 'Normalize integer values' should not be enabled by default.  I would 
+also like to suggest it converts the values to percentages instead of 
 values between 0 and 1.
-The label could then be renamed to something much less technical like=20
+The label could then be renamed to something much less technical like 
 'Colors in percentages'
-The 'update current color' checkbox indeed updates the color (painting=20
-something works just fine) but the HSV/RGB/etc palettes are not altered,=20
+The 'update current color' checkbox indeed updates the color (painting 
+something works just fine) but the HSV/RGB/etc palettes are not altered, 
 I expected them to be updated continuesly.
 
 Autobrush selector (the one that pops up in its own window)
-The toolbar button preview seems to set the maximum size for the button=20
-shown on the autobrush tab. As the button is much larger then the maximum=20
-size of the preview painted on it, I would suggest the preview be allowed=20
+The toolbar button preview seems to set the maximum size for the button 
+shown on the autobrush tab. As the button is much larger then the maximum 
+size of the preview painted on it, I would suggest the preview be allowed 
 to get bigger. Almost as big as the button.width() itself.
-Using [tab] there seems to be no way to traverse focus between the=20
-different widgets on the panel (like the spinboxes). is that a bug that=20
+Using [tab] there seems to be no way to traverse focus between the 
+different widgets on the panel (like the spinboxes). is that a bug that 
 can be fixed?
 
 Shear image tool:
-Window has double margins around it, the outline of the groupbox don't=20
+Window has double margins around it, the outline of the groupbox don't 
 match up with the button on the right.
 Please add degrees suffixes in the spinboxes
 
 Layer menu;
-Please look at the naming and icons of KWords equivalent of the=20
-'lower/raise' features (all 4 of them) I think that with just minor=20
+Please look at the naming and icons of KWords equivalent of the 
+'lower/raise' features (all 4 of them) I think that with just minor 
 changes they can be shared between kword/kpresenter and krita.
 Add a 'disk' icon in front of the 'save layer as image'
-Layer properties dialog has a margin too many at the outside; the right=20
+Layer properties dialog has a margin too many at the outside; the right 
 does not line up with the cancel buttons right side.
-Histogram menu item should not have trailing ellipses (...) at the end=20
+Histogram menu item should not have trailing ellipses (...) at the end 
 since the action to show this is actually done immediately.
 
 Select:
-reselect is enabled when I startup krita with a loaded jpeg; I never=20
+reselect is enabled when I startup krita with a loaded jpeg; I never 
 selected anything yet. Looks like a bug.
 =46eather has '...' at the end suggesting there is going to be a dialog, bu=
-t=20
-there is none.  So either remove the ellipses, or provide a feather=20
+t 
+there is none.  So either remove the ellipses, or provide a feather 
 distance (I prefer the latter ;)
-Color Range shows a dialog that also has extra margins around them, the=20
+Color Range shows a dialog that also has extra margins around them, the 
 groupbox on the right does not line up with the cancel right-side.
 =46or the color range, I also fail to see what the dialog should do.
 =46eature request; hide selection visualization (but leave the selection in=
-=20
+ 
 place). Similar feature in Photoshop can be found under 'Ctrl-H'.
-When you did a 'select all' and then create a selection nothing happens=20
-since you can't select more then you already did.  For that reason I=20
-suggest to make select all and deselect lead to a similar situation where=20
-adding a selection or substracting one will be smart and do make the=20
-result of that select or deselect visible.  In either case selecting a=20
-part in both a fully selected and fully deselected image should lead to=20
+When you did a 'select all' and then create a selection nothing happens 
+since you can't select more then you already did.  For that reason I 
+suggest to make select all and deselect lead to a similar situation where 
+adding a selection or substracting one will be smart and do make the 
+result of that select or deselect visible.  In either case selecting a 
+part in both a fully selected and fully deselected image should lead to 
 the same result.
 
 
 Misc:
 * Please make a circular brush be the default selected one.
-* Statusbar height is weird; on autosave the statusbar gets smaller and I=20
-find the normal size to be pretty tall for no good reason.
 
-=2D-=20
 Thomas Zander
-
---nextPart18327526.nat8MTgmOe
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.1 (GNU/Linux)
-
-iD8DBQBDuZ/aCojCW6H2z/QRAjasAKCUM5FvcxSTm7wjddzx4ccKlWigGwCfX10Y
-zmxc37ggWIkgdwbwVRCiUcE=
-=FnZ7
------END PGP SIGNATURE-----
-
---nextPart18327526.nat8MTgmOe--
-
---===============0435433529==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-kimageshop mailing list
-kimageshop@kde.org
-https://mail.kde.org/mailman/listinfo/kimageshop
-
---===============0435433529==--
 
 

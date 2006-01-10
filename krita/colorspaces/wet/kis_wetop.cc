@@ -64,7 +64,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush -> canPaintFor(info) )
         return;
 
-    KisLayerSP dab = 0;
+    KisPaintDeviceImplSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
         dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), info);

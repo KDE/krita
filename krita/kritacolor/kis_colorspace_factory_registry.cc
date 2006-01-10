@@ -58,7 +58,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
 /* XXX where to put this
     KisHistogramProducerFactoryRegistry::instance() -> add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("LABAHISTO", i18n("L*a*b Histogram")), new KisLabColorSpace(this, 0);) );
+                (KisID("LABAHISTO", i18n("L*a*b* Histogram")), new KisLabColorSpace(this, 0);) );
 */
 
     // Load all colorspace modules

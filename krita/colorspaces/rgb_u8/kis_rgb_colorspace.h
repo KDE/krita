@@ -102,7 +102,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("RGBA", i18n("RGB (8 bits/channel)")); };
+    virtual KisID id() const { return KisID("RGBA", i18n("RGB (8-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.

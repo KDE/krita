@@ -154,6 +154,7 @@ private slots:
     void slotItemMoved( QListViewItem *item, QListViewItem*, QListViewItem* );
     void showContextMenu();
     void hideTip();
+    void maybeTip();
 
 public: //reimplemented for internal reasons
     virtual void setCurrentItem( QListViewItem *i );

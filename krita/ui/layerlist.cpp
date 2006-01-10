@@ -120,12 +120,17 @@ public:
         qApp->installEventFilter( this );
     }
 
-    void maybeTip( const QPoint &pos )
+    virtual void maybeTip( const QPoint &pos )
     {
         m_pos = pos;
+        LayerItem *prev = m_item;
         m_item = static_cast<LayerItem*>(m_list->itemAt( m_pos ));
         if( QToolTip::parentWidget() && m_list->showToolTips() && m_item )
+        {
+            if( m_item != prev )
+                hideTip();
             showTip();
+        }
         else
             hideTip();
     }
@@ -150,7 +155,6 @@ public:
         QToolTip::hide();
         m_timer.stop();
         m_list->triggerUpdate();
-        m_item = 0;
     }
 
     virtual void drawContents( QPainter *painter )
@@ -158,6 +162,8 @@ public:
         QPixmap buf( width(), height() );
         QPainter p( &buf );
         buf.fill( colorGroup().background() );
+        p.setPen( colorGroup().foreground() );
+        p.drawRect( buf.rect() );
 
         //p.translate( 10, 10 );
         if( QPixmap *pix = m_item->d->previewPixmap )
@@ -237,7 +243,7 @@ public:
         move( x, y );
     }
 
-    bool eventFilter( QObject *, QEvent *e )
+    virtual bool eventFilter( QObject *, QEvent *e )
     {
         if( isVisible() )
             switch ( e->type() )
@@ -721,6 +727,11 @@ void LayerList::showContextMenu()
 void LayerList::hideTip()
 {
     d->tooltip->hideTip();
+}
+
+void LayerList::maybeTip()
+{
+    d->tooltip->maybeTip( d->tooltip->QToolTip::parentWidget()->mapFromGlobal( QCursor::pos() ) );
 }
 
 void LayerList::constructMenu( LayerItem *layer )

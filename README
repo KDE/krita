@@ -1,6 +1,6 @@
 KOffice is based on KDE ( http://www.kde.org ) which is needed to run KOffice.
 You need kdelibs and kdebase installed if you want to compile and run
-koffice. Look in the kdelibs sourcedir for the file COMPILING for help. Also
+KOffice. Look in the kdelibs sourcedir for the file COMPILING for help. Also
 look at the website as there are many helpfiles available.
 
 KOffice is a collection of office applications linked together by a common
@@ -24,9 +24,9 @@ The applications currently included in KOffice are:
 - Kivio
   Flowcharting program
 - Kexi
-  a database management tool
+  Integrated data management
 - Krita
-  a pixel graphics tool
+  A pixel graphics tool
 - KOffice Workspace
   A combination of all of the above
 
@@ -42,7 +42,7 @@ this is done is because those developers want to have a good office suite, and
 they don't mind sharing it with you.
 
 If you feel you found a bug or missing feature you can always contact the
-developers of koffice (via http://www.koffice.org ) or delve into the software
+developers of KOffice (via http://www.koffice.org ) or delve into the software
 yourself.
 
 The part that is shared between all KOffice applications can be found in the lib
@@ -61,7 +61,7 @@ The main document in XML format can be read with a text editor (after having
 unzip-ped it from the ZIP file.) XML itself is simply a set of tags,
 where the application can define the meaning of these tags. The definition of
 the document type is therefore different for each KOffice application (as you
-will most likely not find a curved line in a kword document). The Document Type
+will most likely not find a curved line in a KWord document). The Document Type
 Definition can be found in every application's source directory in the
 directory '(application)/dtd.'
 
@@ -82,7 +82,7 @@ Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
 If you have questions about this README file or about KOffice in general,
-please mail to the koffice mailing list: mailto:koffice@kde.org
+please mail to the KOffice mailing list: mailto:koffice@kde.org
 
 
 

@@ -382,6 +382,8 @@ void KisView::createLayerBox()
             this, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
     connect(m_layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
             this, SLOT(addGroupLayer(KisGroupLayerSP, KisLayerSP)));
+    connect(m_layerBox, SIGNAL(sigRequestAdjustmentLayer(KisGroupLayerSP, KisLayerSP)),
+            this, SLOT(addAdjustmentLayer(KisGroupLayerSP, KisLayerSP)));
     connect(m_layerBox, SIGNAL(sigRequestPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)),
             this, SLOT(addPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)));
     connect(m_layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
@@ -2268,6 +2270,7 @@ void KisView::layerProperties()
 
 void KisView::showLayerProperties(KisLayerSP layer)
 {
+    kdDebug() << "4 " << layer << endl;
     KisColorSpace * cs = 0;
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
     if ( pl ) {
@@ -2277,19 +2280,32 @@ void KisView::showLayerProperties(KisLayerSP layer)
         cs = layer->image()->colorSpace();
     }
 
-    KisDlgLayerProperties dlg(layer -> name(),
-                              layer -> opacity(),
-                              layer -> compositeOp(),
-                              cs);
-    if (dlg.exec() == QDialog::Accepted)
+
+    if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
     {
-        if (layer -> name() != dlg.getName() ||
-            layer -> opacity() != dlg.getOpacity() ||
-            layer -> compositeOp() != dlg.getCompositeOp())
+        KisDlgAdjustmentLayer dlg(currentImg(), i18n("Adjustment Layer Properties"), this, "dlgadjustmentlayer");
+        if (dlg.exec() == QDialog::Accepted)
         {
-            m_adapter -> beginMacro(i18n("Property Changes"));
-            layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
-            m_adapter -> endMacro();
+            alayer -> setName( dlg.layerName() );
+            alayer -> setFilter( dlg.filterConfiguration() );
+        }
+    }
+    else
+    {
+        KisDlgLayerProperties dlg(layer -> name(),
+                                  layer -> opacity(),
+                                  layer -> compositeOp(),
+                                  cs);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            if (layer -> name() != dlg.getName() ||
+                layer -> opacity() != dlg.getOpacity() ||
+                layer -> compositeOp() != dlg.getCompositeOp())
+            {
+                m_adapter -> beginMacro(i18n("Property Changes"));
+                layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+                m_adapter -> endMacro();
+            }
         }
     }
 }
@@ -2383,14 +2399,23 @@ void KisView::addAdjustmentLayer()
     KisImageSP img = currentImg();
     if (!img) return;
 
+    addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer() );
+}
+
+void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
+{
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+
     KisDlgAdjustmentLayer dlg(img, i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         //XXX: Show filter gallery with current layer and get the filterconfig back
         KisSelectionSP selection = img->activeDevice()->selection();
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
-        
-        addAdjustmentLayer( img->activeLayer()->parent(), img->activeLayer(), name, filter, selection);
+
+        addAdjustmentLayer( parent, above, name, filter, selection);
     }
 }
 

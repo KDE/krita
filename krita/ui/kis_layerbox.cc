@@ -105,6 +105,8 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
                     SLOT(slotRequestNewLayer(LayerItem*, LayerItem*)));
     connect(list(), SIGNAL(requestNewFolder(LayerItem*, LayerItem*)),
                     SLOT(slotRequestNewFolder(LayerItem*, LayerItem*)));
+    connect(list(), SIGNAL(requestNewAdjustmentLayer(LayerItem*, LayerItem*)),
+                    SLOT(slotRequestNewAdjustmentLayer(LayerItem*, LayerItem*)));
     connect(list(), SIGNAL(requestNewObjectLayer(LayerItem*, LayerItem*, const KoDocumentEntry&)),
                     SLOT(slotRequestNewObjectLayer(LayerItem*, LayerItem*, const KoDocumentEntry&)));
     connect(list(), SIGNAL(requestRemoveLayer(LayerItem*)),
@@ -115,8 +117,9 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     m_newLayerMenu = new KPopupMenu(this);
     m_lst -> bnAdd -> setPopup(m_newLayerMenu);
     m_lst -> bnAdd -> setPopupDelay(1);
-    m_newLayerMenu -> insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), 1 );
-    m_newLayerMenu -> insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), 2 );
+    m_newLayerMenu -> insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
+    m_newLayerMenu -> insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), GROUP_LAYER );
+    m_newLayerMenu -> insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
     list() -> partLayerAction() -> plug( m_newLayerMenu );
     connect(list() -> partLayerAction(), SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
     connect(m_newLayerMenu, SIGNAL(aboutToShow()), this, SLOT(slotAddMenuAboutToShow()));
@@ -310,7 +313,7 @@ void KisLayerBox::slotRequestNewLayer(LayerItem* p, LayerItem* after)
 
 void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
 {
-    KisLayer* l = m_image -> rootLayer().data();
+    KisLayer* l = m_image -> rootLayer().data(); //FIXME I hate copy-pasting like this.
     if (p)
         l = m_image -> findLayer(p -> id()).data();
     KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
@@ -327,9 +330,28 @@ void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
     emit sigRequestGroupLayer(parent, above);
 }
 
+void KisLayerBox::slotRequestNewAdjustmentLayer(LayerItem* p, LayerItem* after)
+{
+    KisLayer* l = m_image -> rootLayer().data(); //FIXME here too.
+    if (p)
+        l = m_image -> findLayer(p -> id()).data();
+    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+
+    KisLayerSP above = 0;
+    if (after && after -> nextSibling())
+        above = m_image -> findLayer(after -> nextSibling() -> id());
+    else if (after)
+        above = 0;
+    else if (p && p -> firstChild())
+        above = parent -> firstChild();
+    else if (!p && m_image -> rootLayer() -> childCount())
+        above = m_image -> rootLayer() -> firstChild();
+    emit sigRequestAdjustmentLayer(parent, above);
+}
+
 void KisLayerBox::slotRequestNewObjectLayer(LayerItem* p, LayerItem* after, const KoDocumentEntry& entry)
 {
-    KisLayer* l = m_image -> rootLayer().data();
+    KisLayer* l = m_image -> rootLayer().data(); //FIXME and here.
     if (p)
         l = m_image -> findLayer(p -> id()).data();
     KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
@@ -356,8 +378,12 @@ void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 
 void KisLayerBox::slotRequestLayerProperties(LayerItem* item)
 {
+    kdDebug() << "2 " << item << endl;
     if (KisLayerSP layer = m_image -> findLayer(item -> id()))
+    {
+        kdDebug() << "3 " << layer << endl;
         emit sigRequestLayerProperties(layer);
+    }
 }
 
 void KisLayerBox::updateUI()
@@ -417,9 +443,9 @@ void KisLayerBox::slotAddMenuAboutToShow()
     list() -> partLayerAction() -> setText(i18n("New &Object Layer..."));
 }
 
-void KisLayerBox::slotAddMenuActivated(int id)
+void KisLayerBox::slotAddMenuActivated(int type)
 {
-    if(id == -1)
+    if(type == -1)
         return;
 
     KisGroupLayerSP root = m_image -> rootLayer();
@@ -438,15 +464,18 @@ void KisLayerBox::slotAddMenuActivated(int id)
         above = m_image -> rootLayer() -> firstChild();
     }
 
-    switch (id)
+    switch (type)
     {
-        case 1:
+        case PAINT_LAYER:
             emit sigRequestLayer(parent, above);
             break;
-        case 2:
+        case GROUP_LAYER:
             emit sigRequestGroupLayer(parent, above);
             break;
-        case 3:
+        case ADJUSTMENT_LAYER:
+            emit sigRequestAdjustmentLayer(parent, above);
+            break;
+        case OBJECT_LAYER:
         default: //goddamned Qt doesn't emit activated for default-assigned IDs, so this does nothing
             emit sigRequestPartLayer(parent, above, list() -> partLayerAction() -> documentEntry());
     }

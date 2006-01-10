@@ -34,6 +34,8 @@ KisLayerList::KisLayerList( QWidget *parent, const char *name )
                                                 this, "insert_part_layer" );
 }
 
+static const int ADJUSTMENT_LAYER = 5384; //hack?
+
 void KisLayerList::constructMenu( LayerItem *layer )
 {
     super::constructMenu( layer );
@@ -48,6 +50,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
         submenu.clear();
         submenu.insertItem( SmallIconSet( "file" ), i18n( "&Layer..." ), MenuItems::NewLayer );
         submenu.insertItem( SmallIconSet( "folder" ), i18n( "&Group Layer..." ), MenuItems::NewFolder );
+        submenu.insertItem( SmallIconSet( "filter" ), i18n( "&Adjustment Layer..." ), ADJUSTMENT_LAYER );
         m_partLayerAction->setText( i18n( "&Object Layer..." ) );
         m_partLayerAction->plug( &submenu );
 
@@ -57,6 +60,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
     {
         contextMenu()->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), MenuItems::NewLayer );
         contextMenu()->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), MenuItems::NewFolder );
+        contextMenu()->insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
         m_partLayerAction->setText( i18n( "New &Object Layer..." ) );
         m_partLayerAction->plug( contextMenu() );
     }
@@ -84,6 +88,10 @@ void KisLayerList::menuActivated( int id, LayerItem *layer )
         case MenuItems::NewFolder:
             emit requestNewFolder( parent, after );
             emit requestNewFolder( parent ? parent->id() : -1, after ? after->id() : -1 );
+            break;
+        case ADJUSTMENT_LAYER:
+            emit requestNewAdjustmentLayer( parent, after );
+            emit requestNewAdjustmentLayer( parent ? parent->id() : -1, after ? after->id() : -1 );
             break;
         case MenuItems::RemoveLayer:
             {

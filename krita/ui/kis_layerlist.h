@@ -35,6 +35,8 @@ class KisLayerList: public LayerList
 signals:
     void requestNewObjectLayer( LayerItem *parent, LayerItem *after, const KoDocumentEntry &entry );
     void requestNewObjectLayer( int parentID, int afterID, const KoDocumentEntry &entry );
+    void requestNewAdjustmentLayer( LayerItem *parent, LayerItem *after );
+    void requestNewAdjustmentLayer( int parentID, int afterID );
 
 public:
     KisLayerList( QWidget *parent = 0, const char *name = 0 );

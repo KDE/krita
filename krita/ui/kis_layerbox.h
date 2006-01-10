@@ -70,11 +70,15 @@ public slots:
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestGroupLayer(KisGroupLayerSP parent, KisLayerSP above);
+    void sigRequestAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
     void sigRequestPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(int opacity);
     void sigItemComposite(const KisCompositeOp&);
+
+private:
+    enum LayerTypes { PAINT_LAYER, GROUP_LAYER, ADJUSTMENT_LAYER, OBJECT_LAYER };
 
 private slots:
     // connect to LayerList signals
@@ -84,13 +88,14 @@ private slots:
     void slotLayerMoved(LayerItem* layer, LayerItem* parent, LayerItem* after);
     void slotRequestNewLayer(LayerItem* parent, LayerItem* after);
     void slotRequestNewFolder(LayerItem* parent, LayerItem* after);
+    void slotRequestNewAdjustmentLayer(LayerItem* parent, LayerItem* after);
     void slotRequestNewObjectLayer(LayerItem* parent, LayerItem* item, const KoDocumentEntry& entry);
     void slotRequestRemoveLayer(LayerItem* layer);
     void slotRequestLayerProperties(LayerItem* layer);
 
     void slotAboutToShow();
     void slotAddMenuAboutToShow();
-    void slotAddMenuActivated(int id = 3);
+    void slotAddMenuActivated(int type = OBJECT_LAYER);
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
@@ -99,6 +104,7 @@ private slots:
     void updateThumbnails();
 
 private:
+
     void updateUI();
     QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
     KisLayerList* list() const;

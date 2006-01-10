@@ -141,8 +141,9 @@ public:
             update();
             return;
         }
-        position();
         m_timer.start( 15000, true );
+        resize( sizeHint() );
+        position();
         show();
     }
 
@@ -194,7 +195,9 @@ public:
             }
         }
 
-        QSimpleRichText( m_item->tooltip(), QToolTip::font() ).draw( &p, 0, 0, rect(), colorGroup() );
+        QSimpleRichText text( m_item->tooltip(), QToolTip::font() );
+        text.setWidth( QCOORD_MAX );
+        text.draw( &p, 0, 0, rect(), colorGroup() );
 
         painter->drawPixmap( 0, 0, buf );
     }
@@ -205,8 +208,9 @@ public:
             return QSize( 0, 0 );
 
         QSimpleRichText text( m_item->tooltip(), QToolTip::font() );
+        text.setWidth( QCOORD_MAX );
 
-        int width = text.width();
+        int width = text.widthUsed();
         if( m_item->d->previewImage )
             width += kMin( m_item->d->previewImage->width(), MAX_SIZE ) + 10;
         else if( m_item->d->previewPixmap )
@@ -1226,16 +1230,19 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
 
 QString LayerItem::tooltip() const
 {
-    QString tip = QString("<center><b>%1</b></center>").arg( displayName() );
+    QString tip;
+    tip += "<table cellspacing=\"0\" cellpadding=\"0\">";
+    tip += QString("<tr><td colspan=\"2\" align=\"center\"><b>%1</b></td></tr>").arg( displayName() );
+    QString row = "<tr><td>%1</td><td>%2</td></tr>";
     for( int i = 0, n = listView()->d->properties.count(); i < n; ++i )
         if( !isFolder() || listView()->d->properties[i].validForFolders )
         {
             if( d->properties[i] )
-                tip += i18n( "%1: Yes" ).arg( listView()->d->properties[i].displayName );
+                tip += row.arg( i18n( "%1:" ).arg( listView()->d->properties[i].displayName ) ).arg( i18n( "Yes" ) );
             else
-                tip += i18n( "%1: No" ).arg( listView()->d->properties[i].displayName );
-            tip += "<br>";
+                tip += row.arg( i18n( "%1:" ).arg( listView()->d->properties[i].displayName ) ).arg( i18n( "No" ) );
         }
+    tip += "</table>";
     return tip;
 }
 

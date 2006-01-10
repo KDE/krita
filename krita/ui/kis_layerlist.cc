@@ -23,6 +23,7 @@
 #include <koPartSelectAction.h>
 
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_layerlist.h"
 
 
@@ -161,7 +162,19 @@ void KisLayerItem::updatePreview()
     previewChanged();
 }
 
-//QString KisLayerItem::tooltip() const;
+QString KisLayerItem::tooltip() const
+{
+    QString text = super::tooltip();
+    text = text.left( text.length() - 8 ); //HACK -- strip the </table>
+    QString row = "<tr><td>%1</td><td>%2</td></tr>";
+    text += row.arg( i18n( "Opacity:" ) ).arg( "%1%" ).arg( int( float( m_layer->opacity() * 100 ) / 255 + 0.5 ) );
+    text += row.arg( i18n( "Composite Mode:" ) ).arg( m_layer->compositeOp().id().name() );
+    if( KisPaintLayer *player = dynamic_cast<KisPaintLayer*>( m_layer ) )
+        text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->id().name() );
+    text += "</table>";
+
+    return text;
+}
 
 //void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
 

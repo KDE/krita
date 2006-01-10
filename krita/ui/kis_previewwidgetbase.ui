@@ -26,9 +26,6 @@
             <height>0</height>
         </size>
     </property>
-    <property name="caption">
-        <string>PreviewWidgetBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -103,9 +100,6 @@
                             <property name="text">
                                 <string>Pr&amp;eview</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+E</string>
-                            </property>
                             <property name="checked">
                                 <bool>true</bool>
                             </property>
@@ -119,9 +113,6 @@
                             </property>
                             <property name="text">
                                 <string>Or&amp;iginal</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+I</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Show original layer</string>
@@ -195,9 +186,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Autoupdate</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>

@@ -50,10 +50,16 @@
                     <property name="name">
                         <cstring>intWidth</cstring>
                     </property>
+                    <property name="suffix">
+                        <string> "</string>
+                    </property>
                 </widget>
                 <widget class="KIntNumInput" row="1" column="1">
                     <property name="name">
                         <cstring>intHeight</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string> "</string>
                     </property>
                 </widget>
             </grid>
@@ -114,10 +120,16 @@
                     <property name="name">
                         <cstring>intXRes</cstring>
                     </property>
+                    <property name="suffix">
+                        <string> dpi</string>
+                    </property>
                 </widget>
                 <widget class="KIntNumInput" row="2" column="1">
                     <property name="name">
                         <cstring>intYRes</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string> dpi</string>
                     </property>
                 </widget>
             </grid>
@@ -128,6 +140,10 @@
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

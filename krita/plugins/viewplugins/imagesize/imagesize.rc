@@ -3,6 +3,7 @@
 <MenuBar>
     <Menu name="Image"><text>Image</text>
 	<Action name="imagesize"/>
+	<Action name="imageresolution"/>
     </Menu>
     <Menu name="Layer"><text>Layer</text>
 	<Action name="layersize"/>

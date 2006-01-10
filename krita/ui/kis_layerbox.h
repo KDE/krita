@@ -72,7 +72,6 @@ signals:
     void sigRequestLayerProperties(KisLayerSP layer);
 
     void sigOpacityChanged(int opacity);
-    void sigActLayerVisChanged(int visibility);
     void sigItemComposite(const KisCompositeOp&);
 
 private slots:

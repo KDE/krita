@@ -196,14 +196,6 @@
                         <string>View or change the layer properties</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>chkActLayerVis</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Visualize active</string>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer3</cstring>
@@ -216,7 +208,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>50</width>
+                            <width>20</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -256,8 +248,8 @@
         <class>KisCmbComposite</class>
         <header location="local">kis_cmb_composite.h</header>
         <sizehint>
-            <width>-1</width>
-            <height>-1</height>
+            <width>1</width>
+            <height>24</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
@@ -305,7 +297,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kis_cmb_composite.h</includehint>
-    <includehint>kis_layerlist.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kis_layerlist.h</includehint>
 </includehints>
 </UI>

@@ -127,7 +127,6 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     connect(m_lst -> bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigOpacityChanged(int)));
     connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(sigItemComposite(const KisCompositeOp&)));
-    connect(m_lst -> chkActLayerVis, SIGNAL(stateChanged(int)), SIGNAL(sigActLayerVisChanged(int)));
 }
 
 KisLayerBox::~KisLayerBox()

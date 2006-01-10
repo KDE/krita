@@ -70,6 +70,7 @@ struct LayerProperty
         { }
 };
 
+class LayerToolTip;
 class LayerList::Private
 {
 public:

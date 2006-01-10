@@ -83,6 +83,7 @@ public:
     LayerToolTip *tooltip;
 
     Private( QWidget *parent, LayerList *list );
+    ~Private();
 };
 
 class LayerItem::Private
@@ -123,8 +124,6 @@ public:
     {
         m_pos = pos;
         m_item = static_cast<LayerItem*>(m_list->itemAt( m_pos ));
-        if( isVisible() )
-            return;
         if( QToolTip::parentWidget() && m_list->showToolTips() && m_item )
             showTip();
         else
@@ -133,6 +132,11 @@ public:
 
     void showTip()
     {
+        if( isVisible() )
+        {
+            update();
+            return;
+        }
         position();
         m_timer.start( 15000, true );
         show();
@@ -140,6 +144,8 @@ public:
 
     void hideTip()
     {
+        if( !isVisible() )
+            return;
         QFrame::hide();
         QToolTip::hide();
         m_timer.stop();
@@ -233,20 +239,21 @@ public:
 
     bool eventFilter( QObject *, QEvent *e )
     {
-        switch ( e->type() )
-        {
-            case QEvent::KeyPress:
-            case QEvent::KeyRelease:
-            case QEvent::MouseButtonPress:
-            case QEvent::MouseButtonRelease:
-            //case QEvent::MouseMove:
-            case QEvent::FocusIn:
-            case QEvent::FocusOut:
-            case QEvent::Wheel:
-            case QEvent::Leave:
-                hideTip();
-            default: break;
-        }
+        if( isVisible() )
+            switch ( e->type() )
+            {
+                case QEvent::KeyPress:
+                case QEvent::KeyRelease:
+                case QEvent::MouseButtonPress:
+                case QEvent::MouseButtonRelease:
+                //case QEvent::MouseMove:
+                case QEvent::FocusIn:
+                case QEvent::FocusOut:
+                case QEvent::Wheel:
+                case QEvent::Leave:
+                    hideTip();
+                default: break;
+            }
 
         return false;
     }
@@ -255,6 +262,12 @@ public:
 LayerList::Private::Private( QWidget *parent, LayerList *list )
     : activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 ),
       tooltip( new LayerToolTip( parent, list ) ) { }
+
+LayerList::Private::~Private()
+{
+    delete tooltip;
+    tooltip = 0;
+}
 
 static int getID()
 {

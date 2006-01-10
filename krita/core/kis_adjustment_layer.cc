@@ -53,6 +53,7 @@ KisLayerSP KisAdjustmentLayer::clone() const
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()
 {
+    return 0;
 }
 
 
@@ -63,6 +64,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 
 KisSelectionSP KisAdjustmentLayer::selection()
 {
+    return 0;
 }
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
@@ -73,6 +75,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 
 Q_INT32 KisAdjustmentLayer::x() const
 {
+    return 0;
 }
 
 void KisAdjustmentLayer::setX(Q_INT32)
@@ -81,6 +84,7 @@ void KisAdjustmentLayer::setX(Q_INT32)
 
 Q_INT32 KisAdjustmentLayer::y() const
 {
+    return 0;
 }
 
 void KisAdjustmentLayer::setY(Q_INT32)
@@ -89,10 +93,12 @@ void KisAdjustmentLayer::setY(Q_INT32)
 
 QRect KisAdjustmentLayer::extent() const
 {
+    return QRect();
 }
     
 QRect KisAdjustmentLayer::exactBounds() const
 {
+    return QRect();
 }
 
 bool KisAdjustmentLayer::accept(KisLayerVisitor & v)

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>222</width>
-            <height>303</height>
+            <width>263</width>
+            <height>307</height>
         </rect>
     </property>
     <property name="caption">
@@ -57,13 +57,28 @@
                 <string>Update current color</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>cbPalette</cstring>
+                <cstring>layout2</cstring>
             </property>
-            <property name="text">
-                <string>Add to current palette</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbPalette</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add to palette</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>cmbPalette</cstring>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="QCheckBox">
             <property name="name">

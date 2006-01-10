@@ -30,6 +30,7 @@
 #include <kcolordialog.h>
 #include <kinputdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kis_view.h"
 #include "kis_palette.h"
@@ -105,7 +106,11 @@ void KisCustomPalette::slotAddPredefined() {
 
     // Save it to that file 
     m_palette -> setFilename(file.name());
-    kdDebug() << "Saving: " << m_palette -> save() << endl;
+    if (!m_palette -> save()) {
+        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is write-only.")
+                                   .arg(file.name()), i18n("Palette"));
+        return;
+    }
 
     // Add it to the palette server, so that it automatically gets to the mediators, and
     // so to the other choosers can pick it up, if they want to

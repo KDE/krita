@@ -41,6 +41,8 @@
 #include "kis_canvas_subject.h"
 #include "kis_iterators_pixel.h"
 #include "kis_color.h"
+#include "kis_resourceserver.h"
+#include "kis_palette.h"
 #include "wdgcolorpicker.h"
 
 namespace {
@@ -163,6 +165,20 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             else
                 m_subject -> setBGColor(m_pickedColor);
         }
+
+        if (m_addPalette) {
+            // Convert to RGB to add to palette, we ought to have our own format :(
+            KisPaletteEntry ent;
+            ent.color = m_pickedColor.toQColor();
+            // We don't ask for a name, too intrusive here
+
+            KisPalette* palette = m_palettes.at(m_optionsWidget-> cmbPalette -> currentItem());
+            palette -> add(ent);
+
+            if (!palette -> save()) {
+                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is write-only.").arg(palette -> filename()), i18n("Palette"));
+            }
+        }
     }
 }
 
@@ -232,6 +248,27 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     connect(m_optionsWidget -> radius, SIGNAL(valueChanged(int)),
             SLOT(slotChangeRadius(int)));
 
+    KisResourceServerBase* srv = KisResourceServerRegistry::instance() -> get("PaletteServer");
+
+    if (!srv) {
+        kdDebug() << "No PaletteServer found for KisToolColorPicker" << endl;
+        return m_optionsWidget;
+    }
+
+    QValueList<KisResource*> palettes = srv -> resources();
+
+    for(uint i = 0; i < palettes.count(); i++) {
+        KisPalette* palette = dynamic_cast<KisPalette*>(*palettes.at(i));
+        if (!palette) {
+            kdDebug() << palette -> name() << " was not a palette!" << endl;
+        }
+
+        m_optionsWidget -> cmbPalette -> insertItem(palette -> name());
+        m_palettes.append(palette);
+    }
+
+    connect(srv, SIGNAL(resourceAdded(KisResource*)), this, SLOT(slotAddPalette(KisResource*)));
+
     return m_optionsWidget;
 }
 
@@ -259,3 +296,14 @@ void KisToolColorPicker::slotSetAddPalette(bool state) {
 void KisToolColorPicker::slotChangeRadius(int value) {
     m_radius = value;
 }
+
+void KisToolColorPicker::slotAddPalette(KisResource* resource) {
+    KisPalette* palette = dynamic_cast<KisPalette*>(resource);
+    if (!palette) {
+        kdDebug() << palette -> name() << " was not a palette!" << endl;
+    }
+
+    m_optionsWidget-> cmbPalette -> insertItem(palette -> name());
+    m_palettes.append(palette);
+}
+

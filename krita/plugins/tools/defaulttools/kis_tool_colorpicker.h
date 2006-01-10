@@ -22,8 +22,11 @@
 
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
+#include "qvaluevector.h"
 
 class ColorPickerOptionsWidget;
+class KisResource;
+class KisPalette;
 
 class KisToolColorPicker : public KisToolNonPaint {
 
@@ -48,6 +51,7 @@ public slots:
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
+    void slotAddPalette(KisResource* resource);
 
 private:
     void displayPickedColor();
@@ -60,6 +64,7 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
     KisCanvasSubject *m_subject;
+    QValueVector<KisPalette*> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KisToolFactory {

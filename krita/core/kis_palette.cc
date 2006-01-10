@@ -146,7 +146,9 @@ bool KisPalette::load()
 bool KisPalette::save()
 {
     QFile file(filename());
-    file.open(IO_WriteOnly | IO_Truncate);
+    if (!file.open(IO_WriteOnly | IO_Truncate)) {
+        return false;
+    }
 
     QTextStream stream(&file);
     // Header: Magic\nName: <name>\nColumns: <no idea what this means, but default = 0>

@@ -83,6 +83,8 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
 
     KIconLoader il( "krita" );
 
+    list() -> setPreviewsShown(true);
+
     list() -> setFoldersCanBeActive(true);
 
     list() -> addProperty("visible", i18n("Visible"), SmallIconSet("button_ok", KIcon::SizeSmallMedium), true);
@@ -127,6 +129,8 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     connect(m_lst -> bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigOpacityChanged(int)));
     connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(sigItemComposite(const KisCompositeOp&)));
+
+    connect(&m_thumbnailerTimer, SIGNAL( timeout() ), SLOT( updateThumbnails() ) );
 }
 
 KisLayerBox::~KisLayerBox()
@@ -156,10 +160,15 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
         connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
+        connect(img, SIGNAL(sigImageUpdated(const QRect&)), this, SLOT(slotImageUpdated()));
         slotLayersChanged(img -> rootLayer());
+        m_thumbnailerTimer.start(1000);
     }
     else
+    {
+        m_thumbnailerTimer.stop();
         clear();
+    }
 }
 
 void KisLayerBox::slotLayerActivated(KisLayerSP layer)
@@ -192,6 +201,7 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
 {
     list() -> removeLayer(layer -> id());
+    m_modified.remove(layer -> id());
     updateUI();
 }
 
@@ -226,6 +236,14 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
     for (KisLayerSP layer = rootLayer -> firstChild(); layer; layer = layer -> nextSibling())
         layer -> accept(visitor);
     updateUI();
+}
+
+void KisLayerBox::slotImageUpdated()
+{
+    if (list() -> activeLayer() && m_image -> activeLayer())
+        Q_ASSERT(list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
+    if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
+        m_modified.append(list() -> activeLayer() -> id());
 }
 
 void KisLayerBox::slotLayerActivated(LayerItem* item)
@@ -332,6 +350,7 @@ void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 {
     if (KisLayerSP layer = m_image -> findLayer(item -> id()))
         m_image -> removeLayer(layer);
+    m_modified.remove(item -> id());
     updateUI();
 }
 
@@ -443,7 +462,10 @@ void KisLayerBox::slotRmClicked()
     }
 
     for (int i = 0, n = l.count(); i < n; ++i)
+    {
+        m_modified.remove(l[i]);
         m_image -> removeLayer(m_image -> findLayer(l[i]));
+    }
 }
 
 void KisLayerBox::slotRaiseClicked()
@@ -480,6 +502,29 @@ void KisLayerBox::slotPropertiesClicked()
 {
     if (KisLayerSP active = m_image -> activeLayer())
         emit sigRequestLayerProperties(active);
+}
+
+void KisLayerBox::updateThumbnails()
+{
+    //update every 2 seconds, but speed it up to 1 if there are multiple layers pending
+    static bool odd = false;
+    odd = !odd;
+    if (!m_modified.count())
+        return;
+    if (odd || m_modified.count() > 1)
+    {
+        bool again = true;
+        while (again)
+        {
+            again = false;
+            KisLayerItem* item = static_cast<KisLayerItem*>(list() -> layer(m_modified.last()));
+            m_modified.pop_back();
+            if (item)
+                item -> updatePreview();
+            else if (m_modified.count())
+                again = true;
+        }
+    }
 }
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)

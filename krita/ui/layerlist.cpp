@@ -165,18 +165,27 @@ public:
         p.setPen( colorGroup().foreground() );
         p.drawRect( buf.rect() );
 
-        //p.translate( 10, 10 );
+        QSimpleRichText text( m_item->tooltip(), QToolTip::font() );
+        text.setWidth( QCOORD_MAX );
+
+        p.translate( 5, 5 );
         if( QPixmap *pix = m_item->d->previewPixmap )
         {
             if( pix->width() <= MAX_SIZE && pix->height() <= MAX_SIZE )
             {
-                p.drawPixmap( 0, 0, *pix );
+                int y = 0;
+                if( pix->height() < text.height() )
+                    y = text.height()/2 - pix->height()/2;
+                p.drawPixmap( 0, y, *pix );
                 p.translate( pix->width() + 10, 0 );
             }
             else
             {
                 QImage img = pix->convertToImage().scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
-                p.drawImage( 0, 0, img );
+                int y = 0;
+                if( img.height() < text.height() )
+                    y = text.height()/2 - img.height()/2;
+                p.drawImage( 0, y, img );
                 p.translate( img.width() + 10, 0 );
             }
         }
@@ -184,19 +193,23 @@ public:
         {
             if( img->width() <= MAX_SIZE && img->height() <= MAX_SIZE )
             {
-                p.drawImage( 0, 0, *img );
+                int y = 0;
+                if( img->height() < text.height() )
+                    y = text.height()/2 - img->height()/2;
+                p.drawImage( 0, y, *img );
                 p.translate( img->width() + 10, 0 );
             }
             else
             {
                 QImage img2 = img->scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
-                p.drawImage( 0, 0, img2 );
+                int y = 0;
+                if( img2.height() < text.height() )
+                    y = text.height()/2 - img2.height()/2;
+                p.drawImage( 0, y, img2 );
                 p.translate( img2.width() + 10, 0 );
             }
         }
 
-        QSimpleRichText text( m_item->tooltip(), QToolTip::font() );
-        text.setWidth( QCOORD_MAX );
         text.draw( &p, 0, 0, rect(), colorGroup() );
 
         painter->drawPixmap( 0, 0, buf );

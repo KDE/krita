@@ -158,7 +158,7 @@ void KisLayerItem::sync()
 
 void KisLayerItem::updatePreview()
 {
-    m_preview = m_layer->createThumbnail( height()*2, height()*2 );
+    m_preview = m_layer->createThumbnail( 200, 200 );
     previewChanged();
 }
 

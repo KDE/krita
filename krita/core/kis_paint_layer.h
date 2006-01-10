@@ -58,6 +58,8 @@ public:
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+
     virtual bool accept(KisLayerVisitor &v) { return v.visit(this); };
 
     /// Returns the paintDevice that accompanies this layer

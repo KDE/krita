@@ -23,6 +23,7 @@
 
 #include <qframe.h>
 #include <kdebug.h>
+#include <qtimer.h>
 
 #include "kis_types.h"
 #include "kis_colorspace.h"
@@ -60,6 +61,7 @@ public slots:
     void slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
     void slotLayerPropertiesChanged(KisLayerSP layer);
     void slotLayersChanged(KisGroupLayerSP rootLayer);
+    void slotImageUpdated();
 
     void slotSetCompositeOp(const KisCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
@@ -94,6 +96,8 @@ private slots:
     void slotLowerClicked();
     void slotPropertiesClicked();
 
+    void updateThumbnails();
+
 private:
     void updateUI();
     QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
@@ -101,6 +105,8 @@ private:
 
     KPopupMenu *m_newLayerMenu;
     KisImageSP m_image;
+    QValueList<int> m_modified;
+    QTimer m_thumbnailerTimer;
     WdgLayerBox *m_lst;
 };
 

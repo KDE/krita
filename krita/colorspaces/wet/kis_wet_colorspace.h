@@ -93,6 +93,18 @@ public:
     KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisWetColorSpace();
 
+
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8 || independence == TO_LAB16)
+                return true;
+            else
+                return false;
+        };
+
+
+
+
 public:
 
     // Semi-clever: we have only fifteen wet paint colors that are mapped to the

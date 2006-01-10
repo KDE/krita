@@ -32,6 +32,11 @@ public:
     KisGrayColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisGrayColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            return false;
+        };
+
 public:
 
     void setPixel(Q_UINT8 *pixel, Q_UINT8 gray, Q_UINT8 alpha) const;

@@ -35,6 +35,12 @@ class KisMathToolbox;
 struct KisColorAdjustment;
 
 
+enum ColorSpaceIndependence {
+    FULLY_INDEPENDENT,
+    TO_LAB16,
+    TO_RGBA8
+};
+
 /**
  * A colorspace is the definition of a certain color model
  * in Krita. This is the definition of the public API for
@@ -119,6 +125,18 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() = 0;
 
+    /**
+     * If false, images in this colorspace will degrade considerably by
+     * functions, tools and filters that have the given measure of colorspace
+     * independence.
+     *
+     * @param independence the measure to which this colorspace will suffer
+     *                     from the manipulations of the tool or filter asking
+     * @return false if no degradation will take place, true if degradation will
+     *         take place
+     */
+    virtual bool willDegrade(ColorSpaceIndependence independence) = 0;
+    
     //========== Capabilities =================================================//
 
     /**

@@ -37,6 +37,15 @@ public:
     KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisLmsF32ColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8 || independence == TO_LAB16)
+                return true;
+            else
+                return false;
+        };
+
+
 public:
     void setPixel(Q_UINT8 *pixel, float longWave, float middleWave, float shortWave, float alpha) const;
     void getPixel(const Q_UINT8 *pixel, float *longWave, float *middleWave, float *shortWave, float *alpha) const;
@@ -105,7 +114,7 @@ private:
     {
         return 0.0241*UINT8_TO_FLOAT(r) + 0.1288*UINT8_TO_FLOAT(g) + 0.8444*UINT8_TO_FLOAT(b);
     }
-    
+
     friend class KisLmsF32ColorSpaceTester;
 
     static const Q_UINT8 PIXEL_LONGWAVE = 0;

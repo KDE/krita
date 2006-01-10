@@ -37,7 +37,6 @@ public:
 
 KisTool::KisTool(const QString & name)
 {
-    kdDebug() << "Tool created " << name << "\n";
     m_action = 0;
     m_ownAction = false;
     d = new KisToolPrivate();
@@ -55,7 +54,6 @@ KisTool::~KisTool()
 
 QWidget* KisTool::createOptionWidget(QWidget* parent)
 {
-    kdDebug() << "Create option widget d pointer " << d << "\n";
     
     d->optionWidget = new QLabel(i18n("No options for %1.").arg(d->uiname), parent);
     d->optionWidget->setCaption(d->uiname);
@@ -65,7 +63,6 @@ QWidget* KisTool::createOptionWidget(QWidget* parent)
 
 QWidget* KisTool::optionWidget()
 {
-    kdDebug() << "Get option widget d pointer " << d << "\n";
     return d->optionWidget;
 }
 

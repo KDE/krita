@@ -30,7 +30,7 @@
 #include "kis_id.h"
 #include "kis_progress_subject.h"
 #include "kis_filter_configuration.h"
-
+#include "kis_colorspace.h"
 #include "koffice_export.h"
 
 class KisPreviewDialog;
@@ -75,20 +75,34 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
 
-    // Can this filter work incrementally when painting, or do we need to work
-    // on the state as it was before painting started. The former is faster.
+    /**
+     * Can this filter work incrementally when painting, or do we need to work
+     * on the state as it was before painting started. The former is faster.
+     */
     virtual bool supportsIncrementalPainting() { return true; };
 
-    // This filter supports cutting up the work area and filtering
-    // each chunk in a separate thread. Filters that need access to the
-    // whole area for correct computations should return false.
+    /**
+     * This filter supports cutting up the work area and filtering
+     * each chunk in a separate thread. Filters that need access to the
+     * whole area for correct computations should return false.
+     */
     virtual bool supportsThreading() { return true; };
 
-    // Used when threading is used -- the overlap margin is passed to the
-    // filter to use to compute pixels, but the margin is not pasted into the
-    // resulting image.
-    virtual int  overlapMarginNeeded() { return 0; };
+    /**
+     * Used when threading is used -- the overlap margin is passed to the
+     * filter to use to compute pixels, but the margin is not pasted into the
+     * resulting image.
+     */
+    virtual int overlapMarginNeeded() { return 0; };
 
+    /**
+     * Determine the colorspace independence of this filter.
+     * @see ColorSpaceIndependence
+     * 
+     * @return the degree of independence
+     */
+    virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_RGBA8; };
+    
     virtual void enableProgress();
     virtual void disableProgress();
 

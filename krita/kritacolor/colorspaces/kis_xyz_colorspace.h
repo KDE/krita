@@ -47,6 +47,13 @@ public:
                      KisProfile *p);
     virtual ~KisXyzColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8)
+                return true;
+            else
+                return false;
+        };
 public:
     // Pixel manipulation
     virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);

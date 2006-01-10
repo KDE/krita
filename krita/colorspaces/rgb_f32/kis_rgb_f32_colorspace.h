@@ -36,6 +36,16 @@ public:
     KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF32ColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8 || independence == TO_LAB16)
+                return true;
+            else
+                return false;
+        };
+
+
+
 public:
     void setPixel(Q_UINT8 *pixel, float red, float green, float blue, float alpha) const;
     void getPixel(const Q_UINT8 *pixel, float *red, float *green, float *blue, float *alpha) const;
@@ -89,7 +99,7 @@ protected:
     void compositeValue(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
     void compositeColor(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
     void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
-    
+
 private:
     friend class KisRgbF32ColorSpaceTester;
 

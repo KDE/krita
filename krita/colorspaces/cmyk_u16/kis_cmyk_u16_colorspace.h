@@ -42,6 +42,14 @@ public:
     KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisCmykU16ColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8)
+                return true;
+            else
+                return false;
+        };
+
 public:
 
     virtual QValueVector<KisChannelInfo *> channels() const;

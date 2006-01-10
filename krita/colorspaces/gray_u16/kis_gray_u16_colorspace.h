@@ -36,6 +36,15 @@ public:
         Q_UINT16 alpha;
     };
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8)
+                return true;
+            else
+                return false;
+        };
+
+
 public:
     KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisGrayU16ColorSpace();

@@ -34,6 +34,15 @@ public:
     KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF16HalfColorSpace();
 
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8 || independence == TO_LAB16)
+                return true;
+            else
+                return false;
+        };
+
+
 public:
     void setPixel(Q_UINT8 *pixel, half red, half green, half blue, half alpha) const;
     void getPixel(const Q_UINT8 *pixel, half *red, half *green, half *blue, half *alpha) const;

@@ -151,7 +151,10 @@ public:
     KisUndoAdapter *undoAdapter() const;
     void enableUndo(KoCommandHistory *history);
 
-    // Tell the image it's modified; this emits the sigImageModified signal
+    /**
+     * Tell the image it's modified; this emits the sigImageModified signal. This happens
+     *  when the image needs to be saved
+     */
     void setModified();
 
     KisColorSpace * colorSpace() const;

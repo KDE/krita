@@ -21,6 +21,8 @@
 #include <qframe.h>
 #include <qcursor.h>
 #include <qapplication.h>
+#include <kmessagebox.h>
+#include <kguiitem.h>
 
 #include "kaction.h"
 
@@ -230,6 +232,29 @@ void KisFilterManager::slotApplyFilter(int i)
     KisPaintDeviceImplSP dev = img->activeDevice();
     if (!dev) return;
 
+    if (dev->colorSpace()->willDegrade(m_lastFilter->colorSpaceIndendendence())) {
+        // Warning bells!
+        if (m_lastFilter->colorSpaceIndendendence() == TO_LAB16) {
+            if (KMessageBox::warningContinueCancel(m_view,
+                                               i18n("The %1 filter will convert your %2 data to 16 bit L*A*B* and back. ")
+                                                       .arg(m_lastFilter->id().name())
+                                                       .arg(dev->colorSpace()->id().name()),
+                                               i18n("Filters wants to convert your layer data"),
+                                               KGuiItem(i18n("Continue")),
+                                               "lab16degradation") != KMessageBox::Continue) return;
+                                               
+        }
+        else if (m_lastFilter->colorSpaceIndendendence() == TO_RGBA8) {
+            if (KMessageBox::warningContinueCancel(m_view,
+                                               i18n("The %1 filter will convert your %2 data to 8 bit RGBA and back. ")
+                                                       .arg(m_lastFilter->id().name())
+                                                       .arg(dev->colorSpace()->id().name()),
+                                               i18n("Filter wants to convert your layer data"),
+                                               KGuiItem(i18n("Continue")),
+                                               "rgba8degradation") != KMessageBox::Continue) return;
+        }
+    }
+    
     m_lastFilter->disableProgress();
 
     // Create the config dialog
@@ -245,7 +270,6 @@ void KisFilterManager::slotApplyFilter(int i)
         m_lastDialog->previewWidget()->slotSetDevice( dev );
 
         connect(m_lastDialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
-        
         
         QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_lastDialog->container(), 1, 1);
         

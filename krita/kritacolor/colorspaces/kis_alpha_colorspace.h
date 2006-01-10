@@ -34,6 +34,11 @@ public:
     virtual ~KisAlphaColorSpace();
 
 public:
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            return false;
+        };
+
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
     virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
 

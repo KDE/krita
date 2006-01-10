@@ -34,6 +34,15 @@ public:
     virtual ~KisLabColorSpace();
 
 public:
+
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8) 
+                return true;
+            else
+                return false;
+        };
+
     virtual QValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
@@ -117,7 +126,7 @@ public:
     virtual Q_UINT32 colorSpaceType() { return (COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)); };
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; };
-
+    
     virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisLabColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; };

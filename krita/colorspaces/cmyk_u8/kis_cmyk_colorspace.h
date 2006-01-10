@@ -30,6 +30,17 @@ public:
     KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisCmykColorSpace();
 
+
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8)
+                return true;
+            else
+                return false;
+        };
+
+
+
 public:
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;

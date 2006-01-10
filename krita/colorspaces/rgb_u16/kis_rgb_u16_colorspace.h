@@ -37,10 +37,19 @@ public:
         Q_UINT16 red;
         Q_UINT16 alpha;
     };
-
 public:
     KisRgbU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbU16ColorSpace();
+
+    virtual bool willDegrade(ColorSpaceIndependence independence)
+        {
+            if (independence == TO_RGBA8)
+                return true;
+            else
+                return false;
+        };
+
+
 
 public:
     void setPixel(Q_UINT8 *pixel, Q_UINT16 red, Q_UINT16 green, Q_UINT16 blue, Q_UINT16 alpha) const;

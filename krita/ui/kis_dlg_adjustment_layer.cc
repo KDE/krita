@@ -28,7 +28,6 @@
 #include "kis_transaction.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
-#include "wdgadjustmentlayer.h"
 #include "kis_dlg_adjustment_layer.h"
 #include "kis_filters_listview.h"
 #include "kis_image.h"

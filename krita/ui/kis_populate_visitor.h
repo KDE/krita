@@ -76,13 +76,21 @@ class KisPopulateVisitor: public KisLayerVisitor
 
         KisLayerItem* add(KisLayer* layer)
         {
+            if (!layer) return 0;
+
+            KisImageSP img = layer->image();
+            if (!img) return 0;
+                        
             KisLayerItem *item;
-            if (m_parent)
+            if (m_parent) {
                 item = new KisLayerItem(m_parent, layer);
-            else
-                item = new KisLayerItem(m_widget, layer);
-            if (layer == layer -> image() -> activeLayer())
+            }
+            else {
+                item = new KisLayerItem(m_widget, layer); 
+            }
+            if (layer == img->activeLayer()) {
                 item -> setActive();
+            }
             return item;
         }
 };

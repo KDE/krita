@@ -345,7 +345,6 @@ void KisLayer::setVisible(bool v)
 {
     if (m_visible != v) {
         m_visible = v;
-        emit visibilityChanged(this);
         notifyPropertyChanged();
         notify();
     }

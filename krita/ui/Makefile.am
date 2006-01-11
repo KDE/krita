@@ -54,7 +54,7 @@ noinst_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
 	kis_ruler.h kis_selection_manager.h kis_selection_options.h kis_tool_controller.h \
 	kis_tool_dummy.h kis_tool_manager.h kis_tool_registry.h kis_view.h kis_view_iface.h \
 	kobirdeyepanel.h kis_custom_brush.h kis_custom_pattern.h kis_custom_image_widget.h \
-	kis_dlg_adjustment_layer.h kis_filters_listview.h
+	kis_dlg_adjustment_layer.h kis_filters_listview.h kis_int_spinbox.h
 
 METASOURCES = AUTO
 

@@ -149,9 +149,6 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-signals:
-    void visibilityChanged(KisLayerSP device);
-
 private:
     friend class KisGroupLayer;
 

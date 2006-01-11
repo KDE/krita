@@ -95,6 +95,7 @@ public:
     QPixmap *previewPixmap;
     bool previewChanged;
     QPixmap scaledPreview;
+    QSize previewSize;
 
     Private( int pid ): isFolder( false ), id( pid ), previewImage( 0 ), previewPixmap( 0 ), previewChanged( false )
     { }
@@ -1150,27 +1151,21 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
     if( !showPreview() )
         return;
 
-    if( d->previewChanged || r.size() != d->scaledPreview.size() )
+    static QPoint offset;
+
+    if( d->previewChanged || r.size() != d->previewSize )
     {
-        d->scaledPreview = QPixmap( r.size() );
-        QBitmap b( r.size() );
-        b.fill( Qt::color0 );
-        QPainter bp( &b );
-        bp.setBrush( Qt::color1 );
-        QPainter p( &(d->scaledPreview) );
         QImage i = ( d->previewImage ? d->previewImage->smoothScale( r.size(), QImage::ScaleMin )
                    : d->previewPixmap->convertToImage().smoothScale( r.size(), QImage::ScaleMin ) );
-        p.drawImage( r.width() / 2 - i.width() / 2, r.height() / 2 - i.height() / 2, i );
-        bp.drawRect( r.width() / 2 - i.width() / 2, r.height() / 2 - i.height() / 2, i.width(), i.height() );
-        bp.end();
-        p.end();
-        d->scaledPreview.setMask( b );
-        //argh! there has to be a simpler way to do this!
+        d->scaledPreview.convertFromImage( i );
+        offset.setX( r.width()/2 - i.width()/2 );
+        offset.setY( r.height()/2 - i.height()/2 );
 
         d->previewChanged = false;
+        d->previewSize = r.size();
     }
 
-    p->drawPixmap( r.topLeft(), d->scaledPreview );
+    p->drawPixmap( r.topLeft() + offset, d->scaledPreview );
 }
 
 bool LayerItem::showPreview() const

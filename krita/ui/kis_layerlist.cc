@@ -167,6 +167,7 @@ void KisLayerItem::sync()
 bool KisLayerItem::updatePreview()
 {
     m_preview = m_layer->createThumbnail( 200, 200 );
+    m_preview.setAlphaBuffer( true );
     previewChanged();
     return !m_preview.isNull();
 }

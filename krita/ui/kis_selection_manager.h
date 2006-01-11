@@ -46,6 +46,12 @@ public:
 
     void addSelectionAction(KAction * action);
 
+public:
+    /**
+     * This function return if the selection should be displayed
+     */
+    bool displaySelection();
+    
 public slots:
 
     void updateGUI();
@@ -76,6 +82,7 @@ public slots:
     void transform();
     void load();
     void save();
+    void toggleDisplaySelection();
 
 private:
     void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
@@ -109,6 +116,7 @@ private:
     KAction *m_fillForegroundColor;
     KAction *m_fillBackgroundColor;
     KAction *m_fillPattern;
+    KToggleAction *m_toggleDisplaySelection;
 
     QPtrList<KAction> m_pluginActions;
 

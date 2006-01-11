@@ -853,10 +853,15 @@ void KisView::paintView(const KisRect& r)
                             gc.scale(zoomFactor(), zoomFactor());
                         }
 
-                        KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)(KisImage::PAINT_BACKGROUND|KisImage::PAINT_SELECTION);
+                        KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)KisImage::PAINT_BACKGROUND;
 
                         if (m_actLayerVis) {
                             paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
+                        }
+                        
+                        if (m_selectionManager->displaySelection())
+                        {
+                            paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_SELECTION);
                         }
 
                         m_image -> renderToPainter(wr.left(), wr.top(),

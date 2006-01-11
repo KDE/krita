@@ -178,6 +178,9 @@ void KisSelectionManager::setup(KActionCollection * collection)
                                              collection,
                                              "fill_selection_pattern");
 
+    m_toggleDisplaySelection = new KToggleAction(i18n("Hide Selection"), "", this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
+    m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Display Selection")));
+    
 #if 0 // Not implemented yet
     m_border =
         new KAction(i18n("Border..."),
@@ -747,6 +750,15 @@ void KisSelectionManager::feather()
     dev -> emitSelectionChanged();
 }
 
+void KisSelectionManager::toggleDisplaySelection()
+{
+    m_parent->canvasRefresh();
+}
+
+bool KisSelectionManager::displaySelection()
+{
+    return m_toggleDisplaySelection->isChecked();
+}
 // XXX: Maybe move these esoteric functions to plugins?
 void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}

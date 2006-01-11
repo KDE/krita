@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="9">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="10">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -109,6 +109,8 @@
    <Separator/>
    <Action name="load_selection"/>
    <Action name="save_selection"/>
+   <Separator/>
+   <Action name="toggle_display_selection"/>
 </Menu>
 
 <Menu name="Filter"><text>Filte&amp;r</text>
@@ -122,7 +124,8 @@
 	<Action name="edge_filters"/>
 	<Action name="enhance_filters"/>
 	<Action name="emboss_filters"/>
-	<Action name="map_filters"/>
+    <Action name="map_filters"/>
+    <Action name="nonphotorealistic_filters"/>
 	<Action name="misc_filters"/>
 </Menu>
 

@@ -603,8 +603,8 @@ void KisView::setupActions()
     m_RulerAction->setChecked(cfg.showRulers());
     m_RulerAction->setCheckedState(i18n("Hide Rulers"));
     m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
-    m_RulerAction->setWhatsThis( i18n("The rulers show the position and width of pages and of frames and can "
-                                      "be used to position tabulators among others.<p>Uncheck this to disable "
+    m_RulerAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
+                                      "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
 
     m_guideAction = new KToggleAction( i18n( "Guide Lines" ), 0, this, SLOT( viewGuideLines() ), actionCollection(), "view_guidelines" );

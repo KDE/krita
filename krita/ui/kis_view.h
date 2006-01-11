@@ -207,7 +207,7 @@ protected slots:
 // -------------------------------------------------------------------------//
 public:
 
-    KisCanvasSubject * getCanvasSubject() { return this; };
+    KisCanvasSubject * canvasSubject() { return this; };
 
 private:
 

@@ -59,7 +59,7 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 
 void KisSeparateChannelsPlugin::slotSeparate()
 {
-    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
     KisLayerSP l = image->activeLayer();
@@ -78,7 +78,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
         
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->getCanvasSubject()->progressDisplay(), 
+        separator.separate(m_view->canvasSubject()->progressDisplay(), 
                            dlgSeparate->getAlphaOptions(), 
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

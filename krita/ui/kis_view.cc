@@ -225,7 +225,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
-    m_toolManager = new KisToolManager(getCanvasSubject(), getCanvasController());
+    m_toolManager = new KisToolManager(canvasSubject(), getCanvasController());
 
     // This needs to be set before the dockers are created.
     m_image = m_doc -> currentImage();

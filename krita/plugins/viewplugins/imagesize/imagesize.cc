@@ -78,7 +78,7 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
         // Selection manager takes ownership?
         KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
         Q_CHECK_PTR(a);
-        m_view ->getCanvasSubject()-> selectionManager() -> addSelectionAction(a);
+        m_view ->canvasSubject()-> selectionManager() -> addSelectionAction(a);
     }
 }
 
@@ -89,7 +89,7 @@ ImageSize::~ImageSize()
 
 void ImageSize::slotImageSize()
 {
-    KisImageSP image = m_view -> getCanvasSubject()->currentImg();
+    KisImageSP image = m_view -> canvasSubject()->currentImg();
 
     if (!image) return;
 
@@ -124,7 +124,7 @@ void ImageSize::slotImageSize()
 
 void ImageSize::slotLayerSize()
 {
-    KisImageSP image = m_view -> getCanvasSubject()->currentImg();
+    KisImageSP image = m_view -> canvasSubject()->currentImg();
 
     if (!image) return;
 
@@ -154,7 +154,7 @@ void ImageSize::slotSelectionScale()
     // XXX: figure out a way to add selection actions to the selection
     // manager to enable/disable
 
-    KisImageSP image = m_view -> getCanvasSubject()->currentImg();
+    KisImageSP image = m_view -> canvasSubject()->currentImg();
 
     if (!image) return;
 

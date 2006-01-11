@@ -157,7 +157,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
             this, SLOT(cutToNewLayer()),
             collection, "cut_selection_to_new_layer");
 
-    m_feather = new KAction(i18n("Feather..."),
+    m_feather = new KAction(i18n("Feather"),
                 0, "Ctrl+Alt+D",
                 this, SLOT(feather()),
                 collection, "feather");
@@ -690,6 +690,7 @@ void KisSelectionManager::cutToNewLayer()
 
 
 // XXX Krita post 1.4: Make feather radius configurable
+// XXX This has just become post 1.5, I'm afaid
 void KisSelectionManager::feather()
 {
     KisImageSP img = m_parent -> currentImg();

@@ -74,7 +74,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
         
-        Kross::Api::Manager::scriptManager()->addQObject(m_view->getCanvasSubject()->document(), "KritaDocument");
+        Kross::Api::Manager::scriptManager()->addQObject(m_view->canvasSubject()->document(), "KritaDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");
         m_scriptProgress = new KisScriptProgress(m_view);
         Kross::Api::Manager::scriptManager()->addQObject(m_scriptProgress, "KritaScriptProgress");
@@ -90,8 +90,8 @@ Scripting::~Scripting()
 
 void Scripting::executionFinished(const Kross::Api::ScriptAction*)
 {
-    m_view->getCanvasSubject()->document()->setModified(true);
-    m_view->getCanvasSubject()->document()->currentImage()->notify();
+    m_view->canvasSubject()->document()->setModified(true);
+    m_view->canvasSubject()->document()->currentImage()->notify();
     m_scriptProgress->progressDone();
     QApplication::restoreOverrideCursor();
 }

@@ -65,7 +65,7 @@ KisDropshadowPlugin::~KisDropshadowPlugin()
 
 void KisDropshadowPlugin::slotDropshadow()
 {
-    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
     KisLayerSP l = image->activeLayer();
@@ -79,7 +79,7 @@ void KisDropshadowPlugin::slotDropshadow()
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 
         KisDropshadow dropshadow(m_view);
-        dropshadow.dropshadow(m_view->getCanvasSubject()->progressDisplay(),
+        dropshadow.dropshadow(m_view->canvasSubject()->progressDisplay(),
                            dlgDropshadow->getXOffset(),
                            dlgDropshadow->getYOffset(),
                            dlgDropshadow->getBlurRadius(),

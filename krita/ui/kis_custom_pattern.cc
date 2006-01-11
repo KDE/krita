@@ -62,7 +62,7 @@ void KisCustomPattern::showEvent(QShowEvent *) {
 
 void KisCustomPattern::slotUpdateCurrentPattern(int) {
     delete m_pattern;
-    if (m_view -> getCanvasSubject() && m_view -> getCanvasSubject() -> currentImg()) {
+    if (m_view -> canvasSubject() && m_view -> canvasSubject() -> currentImg()) {
         createPattern();
         preview -> setPixmap(QPixmap(m_pattern -> img()));
     } else {
@@ -107,7 +107,7 @@ void KisCustomPattern::slotUsePattern() {
 }
 
 void KisCustomPattern::createPattern() {
-    KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+    KisImageSP img = m_view -> canvasSubject() -> currentImg();
 
     if (!img)
         return;

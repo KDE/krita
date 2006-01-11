@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>185</width>
-            <height>217</height>
+            <width>190</width>
+            <height>198</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -27,7 +27,7 @@
     </property>
     <property name="layoutSpacing" stdset="0">
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -37,74 +37,90 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="KToolBar" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="KToolBar">
             <property name="name">
                 <cstring>toolbar</cstring>
             </property>
-        </widget>
-        <spacer row="1" column="2">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
+            <property name="maximumSize">
                 <size>
-                    <width>20</width>
-                    <height>20</height>
+                    <width>32767</width>
+                    <height>32</height>
                 </size>
-            </property>
-        </spacer>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>67</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QFrame" row="1" column="1">
-            <property name="name">
-                <cstring>view</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>50</height>
-                </size>
-            </property>
-            <property name="mouseTracking">
-                <bool>true</bool>
-            </property>
-            <property name="frameShape">
-                <enum>Box</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>30</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>view</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>75</width>
+                            <height>75</height>
+                        </size>
+                    </property>
+                    <property name="mouseTracking">
+                        <bool>true</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout5</cstring>
             </property>
@@ -127,18 +143,84 @@
                     <property name="label">
                         <string></string>
                     </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
-    </grid>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>lblX</cstring>
+                    </property>
+                    <property name="text">
+                        <string>X:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>txtX</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string>00000</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>lblY</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Y:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>txtY</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="text">
+                        <string>00000</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
         <class>KToolBar</class>
         <header location="local">ktoolbar.h</header>
         <sizehint>
-            <width>-1</width>
-            <height>-1</height>
+            <width>20</width>
+            <height>100</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
@@ -167,6 +249,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>ktoolbar.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

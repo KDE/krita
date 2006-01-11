@@ -186,4 +186,59 @@ public:
     virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
     virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
 };
+
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to LAB, and then does its counting on the A channel also known as Argb.
+ * It isCompatibleWith all colorspaces
+ **/
+class KisGenericAHistogramProducer : public KisBasicHistogramProducer {
+    public:
+        KisGenericAHistogramProducer();
+        virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+        virtual QString positionToString(double pos) const;
+        virtual double maximalZoom() const;
+        virtual QValueVector<KisChannelInfo *> channels();
+    protected:
+        QValueVector<KisChannelInfo *> m_channelsList;
+};
+
+/** KisGenericAHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericAHistogramProducerFactory : public KisHistogramProducerFactory {
+    public:
+        KisGenericAHistogramProducerFactory()
+    : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", i18n("Generic Lab A Histogram"))) {}
+        virtual ~KisGenericAHistogramProducerFactory() {}
+        virtual KisHistogramProducerSP generate() { return new KisGenericAHistogramProducer(); }
+        virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+        virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
+};
+
+/**
+ * This is a Producer (with associated factory) that converts the pixels of the colorspace
+ * to LAB, and then does its counting on the B channel also known as Brgb.
+ * It isCompatibleWith all colorspaces
+ **/
+class KisGenericBHistogramProducer : public KisBasicHistogramProducer {
+    public:
+        KisGenericBHistogramProducer();
+        virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+        virtual QString positionToString(double pos) const;
+        virtual double maximalZoom() const;
+        virtual QValueVector<KisChannelInfo *> channels();
+    protected:
+        QValueVector<KisChannelInfo *> m_channelsList;
+};
+
+/** KisGenericBHistogramProducer his special Factory that isCompatibleWith everything. */
+class KisGenericBHistogramProducerFactory : public KisHistogramProducerFactory {
+    public:
+        KisGenericBHistogramProducerFactory()
+    : KisHistogramProducerFactory(KisID("GENLIGHTHISTO", i18n("Generic Lab B Histogram"))) {}
+        virtual ~KisGenericBHistogramProducerFactory() {}
+        virtual KisHistogramProducerSP generate() { return new KisGenericBHistogramProducer(); }
+        virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
+        virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
+};
+
 #endif // _KIS_BASIC_HISTOGRAM_PRODUCERS_

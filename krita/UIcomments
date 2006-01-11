@@ -30,7 +30,6 @@ Overview palette:
 The zoom slider can zoom to 1600%, which makes the slider really hard to 
 navigate around the < 100 % zoom area. I suggest either making the slider 
 logoritmic or changing the maximum.
-Also; add a '%' suffix to the spinbox.
 Last; why is the space between the 'Zoom:' label and its slider soo much 
 larger then the space betweenthe 'Exposure:' label and that slider ?
 
@@ -90,10 +89,7 @@ since the action to show this is actually done immediately.
 Select:
 reselect is enabled when I startup krita with a loaded jpeg; I never 
 selected anything yet. Looks like a bug.
-=46eather has '...' at the end suggesting there is going to be a dialog, bu=
-t 
-there is none.  So either remove the ellipses, or provide a feather 
-distance (I prefer the latter ;)
+
 Color Range shows a dialog that also has extra margins around them, the 
 groupbox on the right does not line up with the cancel right-side.
 =46or the color range, I also fail to see what the dialog should do.

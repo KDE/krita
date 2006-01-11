@@ -168,6 +168,8 @@ public slots:
      */
     void slotCanvasZoomChanged(int);
     
+    void cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos);
+
     void zoomMinus();
     void zoomPlus();
 
@@ -184,7 +186,7 @@ protected slots:
 
     void updateVisibleArea();
     void zoomValueChanged(int zoom);
-
+    
 protected:
     
     void updateView();

@@ -180,7 +180,7 @@ DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceImplSP dev, QWidget 
     m_dev = dev;
     m_view = view;
 
-    m_subject = view -> getCanvasSubject();
+    m_subject = view -> canvasSubject();
 
     m_page = new WdgColorRange(this, "color_range");
     Q_CHECK_PTR(m_page);

@@ -33,7 +33,6 @@
 #include "kis_colorspace.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-#include "kis_paint_device.h"
 
 #include <koffice_export.h>
 
@@ -56,7 +55,6 @@ class KNamedCommand;
  */
 class KRITACORE_EXPORT KisPaintDeviceImpl
     : public QObject
-    , public KisPaintDevice
     , public KShared
 {
 

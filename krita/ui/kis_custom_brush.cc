@@ -66,7 +66,7 @@ void KisCustomBrush::showEvent(QShowEvent *) {
 
 void KisCustomBrush::slotUpdateCurrentBrush(int) {
     delete m_brush;
-    if (m_view -> getCanvasSubject() && m_view -> getCanvasSubject() -> currentImg()) {
+    if (m_view -> canvasSubject() && m_view -> canvasSubject() -> currentImg()) {
         createBrush();
         preview -> setPixmap(QPixmap(m_brush -> img()));
     } else {
@@ -111,7 +111,7 @@ void KisCustomBrush::slotUseBrush() {
 }
 
 void KisCustomBrush::createBrush() {
-    KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+    KisImageSP img = m_view -> canvasSubject() -> currentImg();
 
     if (!img)
         return;

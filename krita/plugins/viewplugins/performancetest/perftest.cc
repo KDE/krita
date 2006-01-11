@@ -106,7 +106,7 @@ PerfTest::~PerfTest()
 
 void PerfTest::slotPerfTest()
 {
-    KisImageSP image = m_view -> getCanvasSubject() -> currentImg();
+    KisImageSP image = m_view -> canvasSubject() -> currentImg();
 
     if (!image) return;
 
@@ -244,7 +244,7 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 {
     QString report = QString("* bitBlt test\n");
 
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
@@ -407,7 +407,7 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 {
     QString report = QString("* Fill test\n");
 
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
@@ -533,7 +533,7 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
 {
     QString report = QString("* pixel/setpixel test\n");
 
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
 
 
@@ -619,7 +619,7 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
     QString report = QString("* Filter test\n");
 
     KisIDList filters = KisFilterRegistry::instance()->listKeys();
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
 
@@ -651,7 +651,7 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
     QString report = QString("* Read bytes test\n\n");
 
     // On default tiles
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisImageSP img = doc -> newImage("Readbytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),""));
     KisPaintDeviceImplSP l = img -> activeDevice();
 
@@ -693,7 +693,7 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
     QString report = QString("* Write bytes test");
 
     // On default tiles
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
     KisImageSP img = doc -> newImage("Writebytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceImplSP l = img -> activeDevice();
     KisFillPainter p(l.data());
@@ -1043,7 +1043,7 @@ QString PerfTest::iteratorTest(Q_UINT32 testCount)
 {
     QString report = "Iterator test";
 
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
 
     report = report.append(hlineRODefault(doc, testCount));
     report = report.append(hlineRO(doc, testCount));
@@ -1069,7 +1069,7 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 {
     QString report = QString("* paintView test\n\n");
 
-    KisDoc * doc = m_view -> getCanvasSubject() -> document();
+    KisDoc * doc = m_view -> canvasSubject() -> document();
 
     KisImageSP img = doc->currentImage();
     img->resize(512,512);

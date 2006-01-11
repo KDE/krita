@@ -36,13 +36,11 @@
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_profile.h"
-#include "kis_canvas_controller.h"
 #include "kis_color.h"
 #include "kis_integer_maths.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_selection.h"
 
-#include "kis_paint_device.h"
 #include "kis_paint_device_iface.h"
 #include "kis_paint_device_impl.h"
 
@@ -271,7 +269,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     m_extentIsValid = true;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KisPaintDevice(), KShared(rhs)
+KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KShared(rhs)
 {
     if (this != &rhs) {
         m_owner = 0;

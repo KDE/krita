@@ -55,7 +55,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         setInstance(KritaHistogramDockerFactory::instance());
         setXMLFile(locate("data","kritaplugins/kritahistogramdocker.rc"), true);
 
-        KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+        KisImageSP img = m_view -> canvasSubject() -> currentImg();
         if (!img) {
             m_cache = 0;
             return;
@@ -84,7 +84,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
                 this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
-        m_view -> getCanvasSubject() -> paletteManager() -> addWidget(
+        m_view -> canvasSubject() -> paletteManager() -> addWidget(
             m_hview, "histodocker", krita::CONTROL_PALETTE);
     } else {
         m_cache = 0;

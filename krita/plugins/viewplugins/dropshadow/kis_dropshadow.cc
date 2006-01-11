@@ -67,7 +67,7 @@ KisDropshadow::KisDropshadow(KisView * view)
 
 void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool allowResize)
 {
-    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
     KisLayerSP src = image->activeLayer();
@@ -135,7 +135,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
             image->resize( width, height );
         }
 
-        m_view->getCanvasSubject()->document()->setModified(true);
+        m_view->canvasSubject()->document()->setModified(true);
 
     }
 

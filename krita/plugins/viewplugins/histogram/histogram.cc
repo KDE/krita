@@ -71,7 +71,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
         m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 
         m_view = (KisView*) parent;
-        if (KisImageSP img = m_view -> getCanvasSubject() -> currentImg()) {
+        if (KisImageSP img = m_view -> canvasSubject() -> currentImg()) {
             connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
@@ -98,7 +98,7 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisPaintDeviceImplSP dev = m_view -> getCanvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceImplSP dev = m_view -> canvasSubject() -> currentImg() -> activeDevice();
     if (dev)
         dlgHistogram -> setPaintDevice(dev);
 

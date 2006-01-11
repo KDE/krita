@@ -46,16 +46,16 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
 {
     // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
-    m_widget->filtersList->setLayer(view->getCanvasSubject()->currentImg()->activeLayer());
+    m_widget->filtersList->setLayer(view->canvasSubject()->currentImg()->activeLayer());
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     // Initialize configWidgetHolder
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
     // Initialize preview widget
-    if (m_view->getCanvasSubject()->currentImg() && m_view->getCanvasSubject()->currentImg()->activeLayer())
+    if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeLayer())
     {
-        m_widget->previewWidget->slotSetDevice( m_view->getCanvasSubject()->currentImg()->activeDevice().data() );
+        m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice().data() );
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
@@ -81,7 +81,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
     } else {
         m_labelNoCW->hide();
     }
-    KisImageSP img = m_view->getCanvasSubject()->currentImg();
+    KisImageSP img = m_view->canvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
    if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());

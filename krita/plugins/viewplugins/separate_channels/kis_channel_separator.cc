@@ -61,7 +61,7 @@ KisChannelSeparator::KisChannelSeparator(KisView * view)
 
 void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
-    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
     KisLayerSP src = image->activeLayer();
@@ -244,7 +244,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         if (undo) undo -> addCommand(t);
 
-        m_view->getCanvasSubject()->document()->setModified(true);
+        m_view->canvasSubject()->document()->setModified(true);
 
     }
 

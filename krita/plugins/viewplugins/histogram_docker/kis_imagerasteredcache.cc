@@ -38,7 +38,7 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
     m_rasterSize = 64;
     m_timeOutMSec = 250;
 
-    KisImageSP img = view -> getCanvasSubject() -> currentImg();
+    KisImageSP img = view -> canvasSubject() -> currentImg();
 
     if (!img) {
         kdDebug() << "No image for rasteredcache" << endl;
@@ -87,7 +87,7 @@ void KisImageRasteredCache::imageUpdated(const QRect& rc) {
 
 void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
 
-    KisImageSP image = m_view->getCanvasSubject()->currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     cleanUpElements();
 
@@ -116,7 +116,7 @@ void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
 
 void KisImageRasteredCache::timeOut() {
     m_busy = true;
-    KisImageSP img = m_view -> getCanvasSubject() -> currentImg();
+    KisImageSP img = m_view -> canvasSubject() -> currentImg();
     while(!m_queue.isEmpty()) {
         KisPaintDeviceImplSP dev = img -> mergedImage(); // Just returns a pointer to projection
         m_queue.front() -> observer -> regionUpdated(dev);

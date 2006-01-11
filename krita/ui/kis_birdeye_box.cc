@@ -26,7 +26,7 @@
 #include LCMS_HEADER
 #include "klocale.h"
 
-#include "kis_canvas_subject.h"
+#include "kis_view.h"
 #include "kis_canvas_controller.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"
@@ -135,17 +135,19 @@ namespace {
 
 }
 
-KisBirdEyeBox::KisBirdEyeBox(KisCanvasSubject * canvasSubject, QWidget* parent, const char* name)
+KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     : QWidget(parent, name)
-    , m_canvasSubject(canvasSubject)
+        , m_view(view)
+        , m_subject(view->canvasSubject())
 {
     QVBoxLayout * l = new QVBoxLayout(this);
 
-    KoZoomAdapter * kzl = new ZoomListener(canvasSubject->canvasController());
-    KoThumbnailAdapter * ktp = new ThumbnailProvider(canvasSubject->currentImg(), canvasSubject);
-    KoCanvasAdapter * kpc = new CanvasAdapter(m_canvasSubject);
+    KoZoomAdapter * kzl = new ZoomListener(m_subject->canvasController());
+    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_subject->currentImg(), m_subject);
+    KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);
 
     m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, kpc, this);
+    connect(view, SIGNAL(cursorPosition( Q_INT32, Q_INT32 )), m_birdEyePanel, SLOT(cursorPosChanged( Q_INT32, Q_INT32 )));
     l->addWidget(m_birdEyePanel);
 
     QHBoxLayout * hl = new QHBoxLayout(l);
@@ -176,7 +178,7 @@ KisBirdEyeBox::~KisBirdEyeBox()
 void KisBirdEyeBox::exposureValueChanged(double exposure)
 {
     if (!m_draggingExposureSlider) {
-        m_canvasSubject->setHDRExposure(exposure);
+        m_subject->setHDRExposure(exposure);
     }
 }
 

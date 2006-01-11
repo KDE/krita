@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qframe.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -81,6 +82,12 @@ void KoBirdEyePanel::zoomValueChanged(int zoom)
     center = m_canvas->visibleArea().center();
 
     m_zoomListener->zoomTo(center.x(), center.y(), zoom / 100.0);
+}
+
+void KoBirdEyePanel::cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos)
+{
+    m_page->txtX->setText(QString("%L1").arg(xpos, 5));
+    m_page->txtY->setText(QString("%L1").arg(ypos, 5));
 }
 
 KoBirdEyePanel::~KoBirdEyePanel()

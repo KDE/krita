@@ -27,6 +27,7 @@ libkritaimage_la_SOURCES = \
     kis_filter_registry.cc \
     kis_filter_strategy.cc \
     kis_filter_configuration.cc \
+    kis_filter_config_widget.cc \
     kis_gradient.cc \
     kis_gradient_painter.cc \
     kis_histogram.cc \
@@ -112,6 +113,7 @@ noinst_HEADERS = \
 #    kis_transaction.h \
 #    kis_types.h \
 #    kis_vec.h \
+#    kis_filter_config_widget.h \
 #    kis_filter_configuration.h
 
 libkritaimage_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)

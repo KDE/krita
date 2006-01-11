@@ -65,7 +65,7 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
         setInstance(ColorRangeFactory::instance());
         setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
         m_view = dynamic_cast<KisView*>(parent);
-        m_view -> getCanvasSubject() -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
+        m_view -> canvasSubject() -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
     }
 }
@@ -76,7 +76,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisPaintDeviceImplSP layer = m_view -> getCanvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceImplSP layer = m_view -> canvasSubject() -> currentImg() -> activeDevice();
     if (!layer) return;
 
     DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");

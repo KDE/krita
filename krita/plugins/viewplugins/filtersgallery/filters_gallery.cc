@@ -77,7 +77,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
         KisFilter* filter = dlg.currentFilter();
         if(filter )
         {
-            KisImageSP img = m_view->getCanvasSubject()->currentImg();
+            KisImageSP img = m_view->canvasSubject()->currentImg();
             KisPaintDeviceImplSP dev = img->activeDevice();
             QRect r1 = dev -> extent();
             QRect r2 = img -> bounds();
@@ -97,7 +97,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 delete cmd;
             } else {
                 img->undoAdapter()->addCommand(cmd);
-                m_view->getCanvasSubject()->document()->setModified(true);
+                m_view->canvasSubject()->document()->setModified(true);
                 img->notify();
             }
             filter->disableProgress();

@@ -23,7 +23,7 @@
 
 void KisScriptProgress::activateAsSubject()
 {
-    m_view->getCanvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
+    m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
 }
 
 void KisScriptProgress::setProgressTotalSteps(Q_INT32 totalSteps)

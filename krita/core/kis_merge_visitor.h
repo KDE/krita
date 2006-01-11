@@ -113,10 +113,15 @@ public:
                     // Copy the lowest layer rather than compositing it with the background
                     // or an empty image. This means the layer's composite op is ignored, 
                     // which is consistent with Photoshop and gimp.
-                    KisCompositeOp cop = child->compositeOp();
+                    const KisCompositeOp cop = child->compositeOp();
+                    const bool block = child->signalsBlocked();
+                    child->blockSignals(true);
                     child->setCompositeOp(COMPOSITE_COPY);
+                    child->blockSignals(block);
                     child->accept(visitor);
+                    child->blockSignals(true);
                     child->setCompositeOp(cop);
+                    child->blockSignals(block);
                     first = false;
                 }
                 else

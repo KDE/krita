@@ -129,7 +129,7 @@ public:
     virtual void setName(const QString& name);
 
     KisCompositeOp compositeOp() { return m_compositeOp; }
-    void setCompositeOp(const KisCompositeOp& compositeOp) { m_compositeOp = compositeOp; }
+    void setCompositeOp(const KisCompositeOp& compositeOp);
     KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
 
     KisImage *image() const { return m_image; }
@@ -156,6 +156,8 @@ private:
     friend class KisGroupLayer;
 
     bool matchesFlags(int flags) const;
+    void notifyPropertyChanged();
+    void notify();
 
     int m_id;
     int m_index;

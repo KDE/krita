@@ -164,10 +164,11 @@ void KisLayerItem::sync()
     update();
 }
 
-void KisLayerItem::updatePreview()
+bool KisLayerItem::updatePreview()
 {
     m_preview = m_layer->createThumbnail( 200, 200 );
     previewChanged();
+    return !m_preview.isNull();
 }
 
 QString KisLayerItem::tooltip() const

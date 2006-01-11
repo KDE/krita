@@ -147,6 +147,9 @@ KisLayerList* KisLayerBox::list() const
 
 void KisLayerBox::setImage(KisImageSP img)
 {
+    if (m_image == img)
+        return;
+
     if (m_image)
         m_image -> disconnect(this);
 
@@ -164,7 +167,9 @@ void KisLayerBox::setImage(KisImageSP img)
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
         connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
         connect(img, SIGNAL(sigImageUpdated(const QRect&)), this, SLOT(slotImageUpdated()));
+        connect(img, SIGNAL(sigNonActiveLayersUpdated()), this, SLOT(slotNonActiveLayersUpdated()));
         slotLayersChanged(img -> rootLayer());
+        slotNonActiveLayersUpdated();
         m_thumbnailerTimer.start(1000);
     }
     else
@@ -247,6 +252,13 @@ void KisLayerBox::slotImageUpdated()
         Q_ASSERT(list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
     if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
         m_modified.append(list() -> activeLayer() -> id());
+}
+
+void KisLayerBox::slotNonActiveLayersUpdated()
+{
+    m_modified.clear();
+    for (QListViewItemIterator it(list() -> lastItem()); *it; --it)
+        m_modified.append(static_cast<LayerItem*>(*it) -> id());
 }
 
 void KisLayerBox::slotLayerActivated(LayerItem* item)
@@ -548,9 +560,7 @@ void KisLayerBox::updateThumbnails()
             again = false;
             KisLayerItem* item = static_cast<KisLayerItem*>(list() -> layer(m_modified.last()));
             m_modified.pop_back();
-            if (item)
-                item -> updatePreview();
-            else if (m_modified.count())
+            if ((!item || !item -> updatePreview()) && m_modified.count())
                 again = true;
         }
     }

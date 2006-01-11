@@ -62,7 +62,8 @@ public:
 
     void sync();
 
-    void updatePreview();
+    /// returns whether any preview was retrieved
+    bool updatePreview();
 
     virtual QString tooltip() const;
 

@@ -438,6 +438,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         // TODO Try to import it
     }
 
+    img -> notifyImageLoaded();
+
     return img;
 }
 
@@ -1049,6 +1051,7 @@ void KisDoc::setCurrentImage(KisImageSP image)
 {
     m_currentImage = image;
     setUndo(true);
+    image->notifyImageLoaded();
 }
 
 #include "kis_doc.moc"

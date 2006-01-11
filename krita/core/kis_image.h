@@ -266,13 +266,12 @@ public:
 
     QRect bounds() const;
 
-    void notify();
-    void notify(const QRect& rc);
-
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
     void notifyPropertyChanged(KisLayerSP layer);
+
+    void notifyImageLoaded();
 
 
     //KisGuideMgr *guides() const;
@@ -328,7 +327,10 @@ signals:
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
     void sigLayerPropertiesChanged(KisLayerSP layer);
 
-    /// Emitted when the layers have changed completely
+    /** Emitted when the list of layers has changed completely.
+        This means e.g. when the image is flattened, but not when it is rotated,
+        as the layers only change internally then.
+    */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
 
     /**
@@ -339,8 +341,11 @@ signals:
      */
     void sigImageUpdated(const QRect& rc);
 
+    /// Emmitted when layers other than the active one have changed, for example when rotating the whole image.
+    void sigNonActiveLayersUpdated();
+
     /**
-     * Emitted whenever the image has been changed.
+     * Emitted whenever the image has been modified, so that it doesn't match with the version saved on disk.
      */
     void sigImageModified();
 
@@ -352,6 +357,8 @@ signals:
 public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
+    void notify();
+    void notify(const QRect& rc);
 
 protected:
     void updateProjection(const QRect& rc);

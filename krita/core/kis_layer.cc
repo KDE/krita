@@ -41,7 +41,6 @@ namespace {
 
     protected:
         void setUndo(bool undo);
-        void notifyPropertyChanged();
 
         KisLayerSP m_layer;
     };
@@ -55,13 +54,6 @@ namespace {
     {
         if (m_layer -> undoAdapter()) {
             m_layer -> undoAdapter() -> setUndo(undo);
-        }
-    }
-
-    void KisLayerCommand::notifyPropertyChanged()
-    {
-        if (m_layer -> image()) {
-            m_layer -> image() -> notifyPropertyChanged(m_layer);
         }
     }
 
@@ -125,7 +117,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setOpacity(m_newOpacity);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -133,7 +124,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setOpacity(m_oldOpacity);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -198,7 +188,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setCompositeOp(m_newCompositeOp);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -206,7 +195,6 @@ namespace {
     {
         setUndo(false);
         m_layer -> setCompositeOp(m_oldCompositeOp);
-        notifyPropertyChanged();
         setUndo(true);
     }
 
@@ -335,7 +323,12 @@ Q_UINT8 KisLayer::opacity() const
 
 void KisLayer::setOpacity(Q_UINT8 val)
 {
-    m_opacity = val;
+    if (m_opacity != val)
+    {
+        m_opacity = val;
+        notifyPropertyChanged();
+        notify();
+    }
 }
 
 KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
@@ -353,8 +346,8 @@ void KisLayer::setVisible(bool v)
     if (m_visible != v) {
         m_visible = v;
         emit visibilityChanged(this);
-        if (image())
-            image() -> notifyPropertyChanged(this);
+        notifyPropertyChanged();
+        notify();
     }
 }
 
@@ -373,8 +366,7 @@ void KisLayer::setLocked(bool l)
     if (m_locked != l)
     {
         m_locked = l;
-        if (image())
-            image() -> notifyPropertyChanged(this);
+        notifyPropertyChanged();
     }
 }
 
@@ -390,8 +382,21 @@ QString KisLayer::name() const
 
 void KisLayer::setName(const QString& name)
 {
-        if (!name.isEmpty())
-                m_name = name;
+    if (!name.isEmpty() && m_name != name)
+    {
+        m_name = name;
+        notifyPropertyChanged();
+    }
+}
+
+void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
+{
+    if (m_compositeOp != compositeOp)
+    {
+        m_compositeOp = compositeOp;
+        notifyPropertyChanged();
+        notify();
+    }
 }
 
 KNamedCommand *KisLayer::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
@@ -418,6 +423,18 @@ void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 QImage KisLayer::createThumbnail(Q_INT32, Q_INT32)
 {
     return 0;
+}
+
+void KisLayer::notifyPropertyChanged()
+{
+    if(image() && !signalsBlocked())
+        image() -> notifyPropertyChanged(this);
+}
+
+void KisLayer::notify()
+{
+    if(image() && !signalsBlocked())
+        image() -> notify();
 }
 
 #include "kis_layer.moc"

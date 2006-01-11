@@ -245,12 +245,14 @@ public:
         const QRect drect = QApplication::desktop()->availableGeometry( QToolTip::parentWidget() );
         const QSize size = sizeHint();
         const int width = size.width(), height = size.height();
+        const QRect tmp = m_item->rect();
+        const QRect irect( m_list->viewport()->mapToGlobal( m_list->contentsToViewport(tmp.topLeft()) ), tmp.size() );
 
         int y;
-        if( m_list->mapToGlobal( m_item->rect().bottomRight() ).y() + height < drect.bottom() )
-            y = m_list->mapToGlobal( m_item->rect().bottomRight() ).y();
+        if( irect.bottom() + height < drect.bottom() )
+            y = irect.bottom();
         else
-            y = kMax( drect.top(), m_list->mapToGlobal( m_item->rect().topLeft() ).y() - height );
+            y = kMax( drect.top(), irect.top() - height );
 
         int x = kMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
         if( x + width > drect.right() )

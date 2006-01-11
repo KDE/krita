@@ -622,6 +622,8 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
                                               INTENT_PERCEPTUAL,
                                               0);
 #endif
+
+    connect(this, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SIGNAL(sigNonActiveLayersUpdated()));
 }
 
 
@@ -852,6 +854,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     setColorSpace(dstColorSpace);
 
     notify();
+    emit sigNonActiveLayersUpdated();
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -1405,6 +1408,11 @@ void KisImage::notifyLayersChanged()
 void KisImage::notifyPropertyChanged(KisLayerSP layer)
 {
     emit sigLayerPropertiesChanged(layer);
+}
+
+void KisImage::notifyImageLoaded()
+{
+    emit sigNonActiveLayersUpdated();
 }
 
 QRect KisImage::bounds() const

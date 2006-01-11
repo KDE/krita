@@ -62,6 +62,7 @@ public slots:
     void slotLayerPropertiesChanged(KisLayerSP layer);
     void slotLayersChanged(KisGroupLayerSP rootLayer);
     void slotImageUpdated();
+    void slotNonActiveLayersUpdated();
 
     void slotSetCompositeOp(const KisCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);

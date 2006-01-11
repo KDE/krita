@@ -94,7 +94,11 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
 
 QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 {
-    return paintDevice()->convertToQImage(0).scale( w, h, QImage::ScaleMin );
+    QSize size = paintDevice()->extent().size();
+    if (size.width() <= w && size.height() <= h )
+        return paintDevice()->convertToQImage(0);
+    else
+        return paintDevice()->convertToQImage(0).scale( w, h, QImage::ScaleMin );
 }
 
 #include "kis_paint_layer.moc"

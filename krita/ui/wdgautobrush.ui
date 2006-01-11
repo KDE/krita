@@ -20,6 +20,9 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
+    <property name="caption">
+        <string>KisWdgAutobrush</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -87,7 +90,7 @@
                                         <number>9999</number>
                                     </property>
                                     <property name="value">
-                                        <number>30</number>
+                                        <number>5</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel" row="1" column="0">
@@ -112,7 +115,7 @@
                                         <number>9999</number>
                                     </property>
                                     <property name="value">
-                                        <number>30</number>
+                                        <number>5</number>
                                     </property>
                                 </widget>
                             </grid>
@@ -200,7 +203,7 @@
                                         <number>9999</number>
                                     </property>
                                     <property name="value">
-                                        <number>5</number>
+                                        <number>1</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel" row="1" column="0">
@@ -225,7 +228,7 @@
                                         <number>9999</number>
                                     </property>
                                     <property name="value">
-                                        <number>5</number>
+                                        <number>1</number>
                                     </property>
                                 </widget>
                             </grid>

@@ -71,11 +71,6 @@ Using [tab] there seems to be no way to traverse focus between the
 different widgets on the panel (like the spinboxes). is that a bug that 
 can be fixed?
 
-Shear image tool:
-Window has double margins around it, the outline of the groupbox don't 
-match up with the button on the right.
-Please add degrees suffixes in the spinboxes
-
 Select:
 reselect is enabled when I startup krita with a loaded jpeg; I never 
 selected anything yet. Looks like a bug.

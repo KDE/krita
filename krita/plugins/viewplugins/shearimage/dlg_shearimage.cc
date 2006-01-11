@@ -29,6 +29,7 @@ using namespace std;
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -45,6 +46,7 @@ DlgShearImage::DlgShearImage( QWidget *  parent,
     m_lock = false;
 
     m_page = new WdgShearImage(this, "shear_image");
+    m_page->layout()->setMargin(0);
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);

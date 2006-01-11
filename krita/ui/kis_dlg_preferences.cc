@@ -269,7 +269,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", KIcon::SizeMedium ));
     m_displaySettings = new DisplaySettingsTab( vbox );
 
-    vbox = addVBoxPage( i18n( "Colormanagement"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "Color Management"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
 
     vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", KIcon::SizeMedium ));

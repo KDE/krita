@@ -174,7 +174,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Current colormodel:</string>
+                <string>Current color model:</string>
             </property>
         </widget>
     </grid>

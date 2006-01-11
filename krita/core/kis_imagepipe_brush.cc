@@ -419,5 +419,37 @@ bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
     return true;
 }
 
+void KisImagePipeBrush::makeMaskImage() {
+    for (uint i = 0; i < m_brushes.count(); i++)
+        m_brushes.at(i) -> makeMaskImage();
+
+    setBrushType(PIPE_MASK);
+    setUseColorAsMask(false);
+}
+
+KisImagePipeBrush* KisImagePipeBrush::clone() const {
+    KisImagePipeBrush* c = new KisImagePipeBrush("");
+    c -> m_name = m_name;
+    c -> setWidth(width());
+    c -> setHeight(height());
+    c -> setSpacing(spacing());
+    c -> m_parasiteString = m_parasiteString;
+    c -> m_parasite = m_parasite;
+    c -> m_numOfBrushes = m_numOfBrushes;
+    c -> m_currentBrush = 0;
+    c -> m_brushType = m_brushType;
+
+    for (uint i = 0; i < m_brushes.count(); i++) {
+        c -> m_brushes.append(m_brushes.at(i) -> clone());
+        kdDebug() << "appended " << c -> m_brushes.at(i) -> name() << endl;
+    }
+
+    c -> setImage(c -> m_brushes.at(0) -> img());
+
+    c -> setValid(true);
+
+    return c;
+}
+
 #include "kis_imagepipe_brush.moc"
 

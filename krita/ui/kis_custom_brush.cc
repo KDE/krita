@@ -99,11 +99,11 @@ void KisCustomBrush::slotAddPredefined() {
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_server)
-        m_server -> addResource(new KisBrush(m_brush -> img(), m_brush -> name()));
+        m_server -> addResource(m_brush -> clone());
 }
 
 void KisCustomBrush::slotUseBrush() {
-    KisBrush* copy = new KisBrush(m_brush -> img(), m_brush -> name());
+    KisBrush* copy = m_brush -> clone();
 
     Q_CHECK_PTR(copy);
 

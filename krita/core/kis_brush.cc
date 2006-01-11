@@ -1293,21 +1293,40 @@ void KisBrush::makeMaskImage() {
     QImage img;
     img.create(width(), height(), 32);
 
-    for (int x = 0; x < width(); x++) {
-        for (int y = 0; y < height(); y++) {
-            QRgb c = m_img.pixel(x, y);
-            int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
-            img.setPixel(x, y, qRgba(a, a, a, 255));
+    if (m_img.width() == img.width() && m_img.height() == img.height()) {
+        for (int x = 0; x < width(); x++) {
+            for (int y = 0; y < height(); y++) {
+                QRgb c = m_img.pixel(x, y);
+                int a = (qGray(c) * qAlpha(c)) / 255; // qGray(black) = 0
+                img.setPixel(x, y, qRgba(a, a, a, 255));
+            }
         }
+
+        m_img = img;
     }
 
     m_brushType = MASK;
     m_hasColor = false;
     m_useColorAsMask = false;
-    m_img = img;
     delete m_boundary;
     m_boundary = 0;
     m_scaledBrushes.clear();
+}
+
+KisBrush* KisBrush::clone() const {
+    KisBrush* c = new KisBrush("");
+    c -> m_spacing = m_spacing;
+    c -> m_useColorAsMask = m_useColorAsMask;
+    c -> m_hasColor = m_useColorAsMask;
+    c -> m_img = m_img;
+    c -> m_width = m_width;
+    c -> m_height = m_height;
+    c -> m_ownData = false;
+    c -> m_hotSpot = m_hotSpot;
+    c -> m_brushType = m_brushType;
+    c -> setValid(true);
+
+    return c;
 }
 
 #include "kis_brush.moc"

@@ -116,6 +116,8 @@ public:
      **/
     virtual bool canPaintFor(const KisPaintInformation& /*info*/) { return true; }
 
+    virtual KisBrush* clone() const;
+
 protected:
     void setWidth(Q_INT32 w);
     void setHeight(Q_INT32 h);

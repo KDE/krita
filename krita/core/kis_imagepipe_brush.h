@@ -143,6 +143,10 @@ public:
     
     virtual bool canPaintFor(const KisPaintInformation& info);
 
+    virtual void makeMaskImage();
+
+    virtual KisImagePipeBrush* clone() const;
+
 private:
     bool init();
     void setParasiteString(const QString& parasite);

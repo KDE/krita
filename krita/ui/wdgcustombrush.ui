@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>345</width>
-            <height>334</height>
+            <width>274</width>
+            <height>341</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KisWdgCustomBrush</string>
     </property>
     <vbox>
         <property name="name">
@@ -54,6 +57,21 @@
                     <item>
                         <property name="text">
                             <string>Random</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Incremental</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Pressure</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Angular</string>
                         </property>
                     </item>
                     <property name="name">

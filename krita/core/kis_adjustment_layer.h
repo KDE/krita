@@ -40,7 +40,11 @@ class KRITACORE_EXPORT KisAdjustmentLayer : public KisLayer
     Q_OBJECT
 
 public:
-    KisAdjustmentLayer(KisImageSP img, const QString &name);
+    /**
+     * Create a new adjustment layer with the given configuration and selection.
+     * Note that the selection will be _copied_. 
+     */
+    KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
@@ -53,6 +57,8 @@ public:
     void setFilter(KisFilterConfiguration * filterConfig);
 
     KisSelectionSP selection();
+    
+    /// Set the selction of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
     
 public:
@@ -70,6 +76,7 @@ public:
     virtual QRect exactBounds() const;
 
     virtual bool accept(KisLayerVisitor &);
+
 private:
 
     KisFilterConfiguration * m_filterConfig;

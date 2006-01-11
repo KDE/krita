@@ -51,6 +51,11 @@ public:
      */
     KisFilterConfiguration(const QString &);
 
+    /**
+     * Deep copy the filter configFile
+     */
+    KisFilterConfiguration(const KisFilterConfiguration & rhs);
+            
 public:
 
     /**

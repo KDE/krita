@@ -52,6 +52,13 @@ KisFilterConfiguration::KisFilterConfiguration(const QString & s )
     }
 }
 
+KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
+{
+    m_name = rhs.m_name;
+    m_version = rhs.m_version;
+    m_properties = rhs.m_properties;
+}
+
 QString KisFilterConfiguration::toString()
 {
     QDomDocument doc = QDomDocument("filterconfig");

@@ -470,7 +470,7 @@ void KisView::updateStatusBarSelectionLabel()
         }
     }
 
-    m_statusBarSelectionLabel -> setText(i18n("No selection"));
+    m_statusBarSelectionLabel -> setText(i18n("No Selection"));
 }
 
 void KisView::updateStatusBarProfileLabel()

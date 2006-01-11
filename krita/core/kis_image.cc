@@ -49,6 +49,7 @@
 #include "kis_fill_painter.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_background.h"
@@ -900,6 +901,8 @@ KisPaintDeviceImplSP KisImage::activeDevice()
 {
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data()))
         return layer -> paintDevice();
+    else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data()))
+        return layer -> selection().data();
     return 0;
 }
 

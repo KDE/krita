@@ -29,19 +29,24 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
 
-KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name) :
+KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection) :
     KisLayer (img, name, OPACITY_OPAQUE)
 {
+    m_filterConfig = kfc;
+    m_selection = new KisSelection( *selection.data() );
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     : KisLayer(rhs)
 {
+    m_filterConfig = rhs.m_filterConfig;
+    m_selection = new KisSelection( *rhs.m_selection.data() );
 }
 
 
 KisAdjustmentLayer::~KisAdjustmentLayer()
 {
+    delete m_filterConfig;
 }
 
 
@@ -53,42 +58,45 @@ KisLayerSP KisAdjustmentLayer::clone() const
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()
 {
-    return 0;
+    return m_filterConfig;
 }
 
 
 void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
+    m_filterConfig = filterConfig;
 }
 
 
 KisSelectionSP KisAdjustmentLayer::selection()
 {
-    return 0;
+    return m_selection;
 }
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
+    m_selection = new KisSelection( *selection.data() );
 }
-
 
 
 Q_INT32 KisAdjustmentLayer::x() const
 {
-    return 0;
+    return m_selection->getX();
 }
 
-void KisAdjustmentLayer::setX(Q_INT32)
+void KisAdjustmentLayer::setX(Q_INT32 x)
 {
+    m_selection->setX(x);
 }
 
 Q_INT32 KisAdjustmentLayer::y() const
 {
-    return 0;
+    return m_selection->getY();
 }
 
-void KisAdjustmentLayer::setY(Q_INT32)
+void KisAdjustmentLayer::setY(Q_INT32 y)
 {
+    m_selection->setY(y);
 }
 
 QRect KisAdjustmentLayer::extent() const

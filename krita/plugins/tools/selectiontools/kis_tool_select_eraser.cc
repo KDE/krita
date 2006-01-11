@@ -75,7 +75,10 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceImplSP dev;
+    KisPaintDeviceImplSP dev = m_currentImage->activeDevice();
+    
+    if (dev == 0) return;
+    
     if (m_painter)
         delete m_painter;
     if(! dev -> hasSelection())

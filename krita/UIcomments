@@ -11,6 +11,7 @@ many people will have less problems interpreting a percentage format.  So
 The 'selection' part shows 'Selection Active' or 'No selection'.
 Apart from the missing capital S, I think we can put a little more 
 information in there.  What about printing the selection size in pixels?
+    --> Maybe a little too costly.
 
 Zoom tool;  it zooms by 2-complement changes. So 1, 2, 4, 8 etc.
 This misses other well known nice looking zoom-levels. Like 33% Or, as 
@@ -62,14 +63,6 @@ The 'update current color' checkbox indeed updates the color (painting
 something works just fine) but the HSV/RGB/etc palettes are not altered, 
 I expected them to be updated continuesly.
 
-Autobrush selector (the one that pops up in its own window)
-The toolbar button preview seems to set the maximum size for the button 
-shown on the autobrush tab. As the button is much larger then the maximum 
-size of the preview painted on it, I would suggest the preview be allowed 
-to get bigger. Almost as big as the button.width() itself.
-Using [tab] there seems to be no way to traverse focus between the 
-different widgets on the panel (like the spinboxes). is that a bug that 
-can be fixed?
 
 Select:
 reselect is enabled when I startup krita with a loaded jpeg; I never 

@@ -177,7 +177,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             palette -> add(ent);
 
             if (!palette -> save()) {
-                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is write-only.").arg(palette -> filename()), i18n("Palette"));
+                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.").arg(palette -> filename()), i18n("Palette"));
             }
         }
     }

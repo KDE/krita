@@ -109,6 +109,7 @@
 #include "kis_profile.h"
 #include "kis_rect.h"
 #include "kis_resource.h"
+#include "kis_palette.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
 #include "kotoolbox.h"
@@ -147,6 +148,7 @@
 #include "kis_filter_manager.h"
 
 #include "kis_custom_palette.h"
+#include "wdgpalettechooser.h"
 
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
@@ -605,10 +607,10 @@ void KisView::setupActions()
                                       "the rulers from being displayed." ) );
 
     // Add new palette
-    // FIXME this should be in some kind of 'Resources' dialog as a seperate tab, or so,
-    // merged with 'editing' of existing, writeable palettes
     new KAction(i18n("Add New Palette..."), 0, this, SLOT(slotAddPalette()),
                 actionCollection(), "add_palette");
+    new KAction(i18n("Edit Palette..."), 0, this, SLOT(slotEditPalette()),
+                actionCollection(), "edit_palette");
 
     showRuler();
 
@@ -1398,6 +1400,43 @@ void KisView::slotInsertImageAsLayer()
 void KisView::slotAddPalette()
 {
     (new KisCustomPalette(0, "add palette", i18n("Add Palette"), this)) -> show();
+}
+
+void KisView::slotEditPalette()
+{
+    KisPaletteChooser chooser(this);
+    KisResourceServerBase* srv = KisResourceServerRegistry::instance() -> get("PaletteServer");
+    if (!srv) {
+        kdDebug() << "No PaletteServer found for KisToolColorPicker" << endl;
+        return;
+    }
+    QValueList<KisResource*> resources = srv -> resources();
+    QValueList<KisPalette*> palettes;
+
+    for(uint i = 0; i < resources.count(); i++) {
+        KisPalette* palette = dynamic_cast<KisPalette*>(*resources.at(i));
+        if (!palette) {
+            kdDebug() << palette -> name() << " was not a palette!" << endl;
+        }
+
+        chooser.paletteList -> insertItem(palette -> name());
+        palettes.append(palette);
+    }
+
+    if (chooser.exec() != QDialog::Accepted ) {
+        return;
+    }
+
+    int index = chooser.paletteList -> currentItem();
+    if (index < 0) {
+        KMessageBox::error(this, i18n("No palette selected."), i18n("Palette"));
+        return;
+    }
+
+    KisCustomPalette* cp = new KisCustomPalette(0, "edit palette", i18n("Edit Palette"),this);
+    cp -> setEditMode(true);
+    cp -> setPalette(*palettes.at(index));
+    cp -> show();
 }
 
 void KisView::saveLayerAsImage()

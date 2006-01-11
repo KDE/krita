@@ -45,9 +45,11 @@ KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QStr
     Q_ASSERT(m_view);
     m_mediator = 0;
     m_server = 0;
+    m_editMode = false;
     setCaption(caption);
 
     m_palette = new KisPalette();
+    m_ownPalette = true;
     this -> view -> setPalette(m_palette);
 
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));
@@ -56,7 +58,26 @@ KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QStr
 }
 
 KisCustomPalette::~KisCustomPalette() {
-    delete m_palette;
+    if (m_ownPalette)
+        delete m_palette;
+}
+
+void KisCustomPalette::setPalette(KisPalette* p) {
+    if (m_ownPalette)
+        delete m_palette;
+    m_ownPalette = false;
+    m_palette = p;
+    view -> setPalette(m_palette);
+}
+
+void KisCustomPalette::setEditMode(bool b) {
+    m_editMode = b;
+
+    if (m_editMode) {
+        addPalette -> setText(i18n("Save changes"));
+    } else {
+        addPalette -> setText(i18n("Add to Predefined Palettes"));
+    }
 }
 
 void KisCustomPalette::slotAddNew() {
@@ -95,20 +116,25 @@ void KisCustomPalette::slotRemoveCurrent() {
 void KisCustomPalette::slotAddPredefined() {
     m_palette -> setName(palettename -> text());
 
-    // Save in the directory that is likely to be: ~/.kde/share/apps/krita/palettes
-    // a unique file with this palettename
-    QString dir = KGlobal::dirs() -> saveLocation("data", "krita/palettes");
-    QString extension;
+    if (!m_editMode) {
+        // Save in the directory that is likely to be: ~/.kde/share/apps/krita/palettes
+        // a unique file with this palettename
+        QString dir = KGlobal::dirs() -> saveLocation("data", "krita/palettes");
+        QString extension;
 
-    extension = ".gpl";
-    KTempFile file(dir, extension);
-    file.close(); // If we don't, and palette -> save first, it might get truncated!
+        extension = ".gpl";
+        KTempFile file(dir, extension);
+        file.close(); // If we don't, and palette -> save first, it might get truncated!
 
-    // Save it to that file 
-    m_palette -> setFilename(file.name());
+        // Save it to that file 
+        m_palette -> setFilename(file.name());
+    } else {
+        // The filename is already set
+    }
+
     if (!m_palette -> save()) {
-        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is write-only.")
-                                   .arg(file.name()), i18n("Palette"));
+        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.")
+                                   .arg(m_palette -> filename()), i18n("Palette"));
         return;
     }
 

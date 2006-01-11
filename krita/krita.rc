@@ -17,7 +17,10 @@
   <Separator/>
   <Action name="revert"/>
   <Separator/>
-  <Action name="add_palette"/>
+  <Menu name="Resources"><text>&amp;Resources</text>
+   <Action name="add_palette"/>
+   <Action name="edit_palette"/>
+  </Menu>
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>

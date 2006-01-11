@@ -442,6 +442,7 @@ private slots:
     void profileChanged(KisProfile *  profile);
 
     void slotAddPalette();
+    void slotEditPalette();
 
     void preferences();
 

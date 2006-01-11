@@ -36,6 +36,9 @@ public:
     KisCustomPalette(QWidget *parent, const char* name, const QString& caption, KisView* view);
     virtual ~KisCustomPalette();
     void setResourceServer(KisResourceServerBase* server) { m_server = server; }
+    void setEditMode(bool b);
+    bool editMode() const { return m_editMode; }
+    void setPalette(KisPalette* p);
 
 signals:
     void activatedResource(KisResource *);
@@ -46,6 +49,8 @@ private slots:
     void slotRemoveCurrent();
 
 private:
+    bool m_ownPalette;
+    bool m_editMode;
     KisView* m_view;
     KisPalette* m_palette;
     KisResourceMediator* m_mediator;

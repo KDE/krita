@@ -262,8 +262,9 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     KisControlFrame::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
-
     customBrushes -> setResourceServer(rServer);
+
+    m_autobrush->activate();
 }
 
 void KisControlFrame::createPatternsChooser(KisView * view)

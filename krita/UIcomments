@@ -76,15 +76,6 @@ Window has double margins around it, the outline of the groupbox don't
 match up with the button on the right.
 Please add degrees suffixes in the spinboxes
 
-Layer menu;
-Please look at the naming and icons of KWords equivalent of the 
-'lower/raise' features (all 4 of them) I think that with just minor 
-changes they can be shared between kword/kpresenter and krita.
--> the krita shortcuts are better, because conform to other apps, and 
-   don't take valuable letter keys. Krita now uses the same icons. Back
-   and front don't work with layers, which are stacked bottom to top.
-   I've removed a couple of instances of the word "layer in the menu"
-
 Select:
 reselect is enabled when I startup krita with a loaded jpeg; I never 
 selected anything yet. Looks like a bug.

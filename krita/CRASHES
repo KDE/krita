@@ -1,97 +1,65 @@
-A little too enthousiastic undoing after using the filter painter with sharpen.
-Not easily reproducible,though.
+New crash in the palette manager
 
-#4  0xb644cd5d in QValueVector<KSharedPtr<KisLayer> >::detach (this=0x94a2484)
-    at qvaluevector.h:479
-#5  0xb644c0d5 in QValueVector<KSharedPtr<KisLayer> >::end (this=0x94a2484)
-    at qvaluevector.h:326
-#6  0xb6449097 in KisImage::rm (this=0x94a23e0, layer={ptr = 0x94a2ef0})
-    at ../../../koffice/krita/core/kis_image.cc:826
-#7  0xb6450396 in (anonymous namespace)::KisChangeLayersCmd::unexecute (
-    this=0x9237f60) at ../../../koffice/krita/core/kis_image.cc:148
-#8  0xb5d93748 in KoCommandHistory::undo () from /usr/lib/libkofficeui.so.2
-#9  0xb5d95133 in KoCommandHistory::qt_invoke ()
-   from /usr/lib/libkofficeui.so.2
-#10 0xb73de067 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
-#11 0xb73ddeae in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
-#12 0xb6ecf711 in KAction::activated () from /usr/lib/libkdeui.so.4
-#13 0xb6ecef18 in KAction::slotActivated () from /usr/lib/libkdeui.so.4
-#14 0xb6ecf042 in KAction::slotPopupActivated () from /usr/lib/libkdeui.so.4
-#15 0xb6ecf9e2 in KAction::qt_invoke () from /usr/lib/libkdeui.so.4
-#16 0xb6ee4693 in KToolBarPopupAction::qt_invoke ()
-   from /usr/lib/libkdeui.so.4
-#17 0xb73de067 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
-#18 0xb76f91a5 in QSignal::signal () from /usr/lib/libqt-mt.so.3
-#19 0xb73f6ca9 in QSignal::activate () from /usr/lib/libqt-mt.so.3
-#20 0xb74d5c50 in QPopupMenu::accelActivated () from /usr/lib/libqt-mt.so.3
-#21 0xb770d880 in QPopupMenu::qt_invoke () from /usr/lib/libqt-mt.so.3
-#22 0xb6ebe842 in KPopupMenu::qt_invoke () from /usr/lib/libkdeui.so.4
-#23 0xb73de067 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
-#24 0xb73de1be in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
-#25 0xb76f1b10 in QAccel::activated () from /usr/lib/libqt-mt.so.3
-#26 0xb73803bc in QAccelPrivate::activate () from /usr/lib/libqt-mt.so.3
-#27 0xb737ef1e in QAccelManager::dispatchAccelEvent ()
-   from /usr/lib/libqt-mt.so.3
-#28 0xb737e0a4 in qt_dispatchAccelEvent () from /usr/lib/libqt-mt.so.3
-#29 0xb73859eb in QApplication::notify () from /usr/lib/libqt-mt.so.3
-#30 0xb78d6960 in KApplication::notify () from /usr/lib/libkdecore.so.4
-#31 0xb6ee7884 in KMenuBar::eventFilter () from /usr/lib/libkdeui.so.4
-#32 0xb73dbb01 in QObject::activate_filters () from /usr/lib/libqt-mt.so.3
-#33 0xb73dba5d in QObject::event () from /usr/lib/libqt-mt.so.3
-#34 0xb741176f in QWidget::event () from /usr/lib/libqt-mt.so.3
-#35 0xb74c85f4 in QMainWindow::event () from /usr/lib/libqt-mt.so.3
-#36 0xb7386370 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
-#37 0xb73859d4 in QApplication::notify () from /usr/lib/libqt-mt.so.3
-#38 0xb78d6960 in KApplication::notify () from /usr/lib/libkdecore.so.4
-#39 0xb737e5d8 in QAccelManager::tryAccelEvent () from /usr/lib/libqt-mt.so.3
-#40 0xb737e016 in qt_tryAccelEvent () from /usr/lib/libqt-mt.so.3
-#41 0xb7321549 in QETWidget::translateKeyEvent () from /usr/lib/libqt-mt.so.3
-#42 0xb731cee1 in QApplication::x11ProcessEvent () from /usr/lib/libqt-mt.so.3
-#43 0xb7332ec2 in QEventLoop::processEvents () from /usr/lib/libqt-mt.so.3
-#44 0xb739774c in QEventLoop::enterLoop () from /usr/lib/libqt-mt.so.3
-#45 0xb739760e in QEventLoop::exec () from /usr/lib/libqt-mt.so.3
-#46 0xb738657b in QApplication::exec () from /usr/lib/libqt-mt.so.3
-#47 0xb7fe5465 in kdemain (argc=1, argv=0x8145af8)
-    at ../../koffice/krita/main.cc:40
-#48 0xb7fe7996 in kdeinitmain () from /usr/lib/kde3/krita.so
-
--------------------------------------
-
-On exiting the last window of Krita after opening three images and resizing them all.
-See also notes in kis_doc.cc: 281
-
-#4  0x00000000 in ?? ()
-#5  0xb7f65960 in KShared::_KShared_unref (this=0xc17ee60) at ksharedptr.h:68
-#6  0xb643ed50 in ~KSharedPtr (this=0xb990554) at ksharedptr.h:126
-#7  0xb6442e6c in ~KisChangeLayersCmd (this=0xb990548)
-    at ../../../koffice/krita/core/kis_image.cc:122
-#8  0xb7953ddc in QPtrList<KCommand>::deleteItem () from /usr/lib/libkdeui.so.4
-#9  0xb71e25cc in QGList::clear () from /usr/lib/libqt-mt.so.3
-#10 0xb795286d in QPtrList<KCommand>::~QPtrList () from /usr/lib/libkdeui.so.4
-#11 0xb5d7b7f7 in ~KoCommandHistory (this=0xa8592a0)
-    at ../../../koffice/lib/kofficeui/kocommandhistory.cpp:142
-#12 0xb6443aa8 in ~KisDoc (this=0xa5c7c90)
-    at ../../../koffice/krita/core/kis_doc.cc:281
-#13 0xb7f75c05 in KoMainWindow::setRootDocument (this=0xb00e260, doc=0x0)
-    at ../../../koffice/lib/kofficecore/koMainWindow.cc:370
-#14 0xb7f78a31 in KoMainWindow::closeEvent (this=0xb00e260, e=0xbfffef60)
-    at ../../../koffice/lib/kofficecore/koMainWindow.cc:938
-#15 0xb6f7b974 in QWidget::event () from /usr/lib/libqt-mt.so.3
-#16 0xb70325f4 in QMainWindow::event () from /usr/lib/libqt-mt.so.3
-#17 0xb6ef0370 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
-#18 0xb6eef9d4 in QApplication::notify () from /usr/lib/libqt-mt.so.3
-#19 0xb750f960 in KApplication::notify () from /usr/lib/libkdecore.so.4
-#20 0xb6f7b274 in QWidget::close () from /usr/lib/libqt-mt.so.3
-#21 0xb6e8c39c in QETWidget::translateCloseEvent () from /usr/lib/libqt-mt.so.3
-#22 0xb6e869c7 in QApplication::x11ClientMessage () from /usr/lib/libqt-mt.so.3
-#23 0xb6e8798a in QApplication::x11ProcessEvent () from /usr/lib/libqt-mt.so.3
-#24 0xb6e9cec2 in QEventLoop::processEvents () from /usr/lib/libqt-mt.so.3
-#25 0xb6f0174c in QEventLoop::enterLoop () from /usr/lib/libqt-mt.so.3
-#26 0xb6f0160e in QEventLoop::exec () from /usr/lib/libqt-mt.so.3
-#27 0xb6ef057b in QApplication::exec () from /usr/lib/libqt-mt.so.3
-#28 0xb7fe7465 in kdemain (argc=2, argv=0xbffff504)
-    at ../../koffice/krita/main.cc:40
-#29 0x0804872b in main ()
-
-
+#4  0xb6e21389 in QWidget::caption () from /usr/lib/libqt-mt.so.3
+#5  0xb5cbcf97 in KoPaletteManager::addWidget (this=0x8f9c980, 
+    widget=0x746c75, name=@0xb62e1748, paletteName=@0xb62e1744, position=-1, 
+    style=PALETTE_DOCKER)
+    at /home/boud/koffice/lib/kopalette/kopalettemanager.cc:165
+#6  0xb625db67 in KisToolManager::setCurrentTool (this=0x8ffc310, 
+    tool=0x8e1e8a0) at /home/boud/koffice/krita/ui/kis_tool_manager.cc:182
+#7  0xb625ce48 in KisToolManager::updateGUI (this=0x8ffc310)
+    at /home/boud/koffice/krita/ui/kis_tool_manager.cc:143
+#8  0xb6271875 in KisView::layerUpdateGUI (this=0x8f9b2b8, enable=false)
+    at /home/boud/koffice/krita/ui/kis_view.cc:1092
+#9  0xb62719f3 in KisView::layersUpdated (this=0x8f9b2b8)
+    at /home/boud/koffice/krita/ui/kis_view.cc:2584
+#10 0xb627ccb8 in KisView::qt_invoke (this=0x8f9b2b8, _id=68, _o=0xbf843608)
+    at kis_view.moc:547
+#11 0xb6deca56 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#12 0xb60d0012 in KisImage::sigLayerPropertiesChanged (this=0x8e6fc18, 
+    t0=@0xbf843660) at kis_image.moc:259
+#13 0xb60d0074 in KisImage::notifyPropertyChanged (this=0x8e6fc18, 
+    layer=@0xbf843690) at /home/boud/koffice/krita/core/kis_image.cc:1410
+#14 0xb60e1b7e in KisLayer::notifyPropertyChanged (this=0x8e6f9a8)
+    at /home/boud/koffice/krita/core/kis_layer.cc:430
+#15 0xb60e1ef2 in KisLayer::setVisible (this=0x8e6f9a8, v=false)
+    at /home/boud/koffice/krita/core/kis_layer.cc:348
+#16 0xb62302c7 in KisLayerBox::slotLayerPropertyChanged (this=0x8fcfd88, 
+    item=0x8f7cce0, name=@0x8e677e8, on=false)
+    at /home/boud/koffice/krita/ui/kis_layerbox.cc:280
+#17 0xb6231f14 in KisLayerBox::qt_invoke (this=0x8fcfd88, _id=58, 
+    _o=0xbf8437d0) at kis_layerbox.moc:360
+#18 0xb6dec929 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#19 0xb628f3de in LayerList::propertyChanged (this=0x8f886a8, t0=0x8f7cce0, 
+    t1=@0x8e38f80, t2=false) at layerlist.moc:482
+#20 0xb6291179 in LayerItem::toggleProperty (this=0x8f7cce0, name=@0x8e38f80)
+    at /home/boud/koffice/krita/ui/layerlist.cpp:989
+#21 0xb629380f in LayerList::menuActivated (this=0x8f886a8, id=4, 
+    layer=0x8f7cce0) at /home/boud/koffice/krita/ui/layerlist.cpp:821
+#22 0xb6235d6b in KisLayerList::menuActivated (this=0x8f886a8, id=4, 
+    layer=0x8f7cce0) at /home/boud/koffice/krita/ui/kis_layerlist.cc:107
+#23 0xb628ba32 in LayerList::showContextMenu (this=0x8f886a8)
+    at /home/boud/koffice/krita/ui/layerlist.cpp:746
+#24 0xb6292b75 in LayerList::qt_invoke (this=0x8f886a8, _id=142, _o=0xbf843aa8)
+    at layerlist.moc:692
+#25 0xb62356d1 in KisLayerList::requestNewObjectLayer (this=0x8f886a8, t0=142, 
+    t1=-1081853272, t2=@0xb6e2b635) at kis_layerlist.moc:130
+#26 0xb6dec929 in QObject::activate_signal () from /usr/lib/libqt-mt.so.3
+#27 0xb714be92 in QSignal::signal () from /usr/lib/libqt-mt.so.3
+#28 0xb6e0a344 in QSignal::activate () from /usr/lib/libqt-mt.so.3
+#29 0xb6e11e88 in QSingleShotTimer::event () from /usr/lib/libqt-mt.so.3
+#30 0xb6d83f80 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
+#31 0xb6d84172 in QApplication::notify () from /usr/lib/libqt-mt.so.3
+#32 0xb74cdc3c in KApplication::notify () from /usr/lib/libkdecore.so.4
+#33 0xb7e96743 in QApplication::sendEvent (receiver=0x8941920, 
+    event=0xbf843e08) at qapplication.h:491
+#34 0xb6d7599b in QEventLoop::activateTimers () from /usr/lib/libqt-mt.so.3
+#35 0xb6d28a84 in QEventLoop::processEvents () from /usr/lib/libqt-mt.so.3
+#36 0xb6d9bcfb in QEventLoop::enterLoop () from /usr/lib/libqt-mt.so.3
+#37 0xb6d9bc1e in QEventLoop::exec () from /usr/lib/libqt-mt.so.3
+#38 0xb6d82c13 in QApplication::exec () from /usr/lib/libqt-mt.so.3
+#39 0xb7f2d1e3 in kdemain (argc=1, argv=0xbf844214)
+    at /home/boud/koffice/krita/main.cc:41
+#40 0x08048732 in main (argc=1, argv=0xbf844214)
+    at ../krita/kdeinit_krita.cpp:2
 

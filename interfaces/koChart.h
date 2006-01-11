@@ -21,7 +21,7 @@
 
 #include <koDocument.h>
 #include <KDChartTable.h>
-#include <KDChartData.h>
+
 #include <koffice_export.h>
 namespace KoChart
 {

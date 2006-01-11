@@ -177,6 +177,7 @@ public:
                 int y = 0;
                 if( pix->height() < text.height() )
                     y = text.height()/2 - pix->height()/2;
+                p.drawRect( -1, y-1, pix->width()+2, pix->height()+2 );
                 p.drawPixmap( 0, y, *pix );
                 p.translate( pix->width() + 10, 0 );
             }
@@ -187,9 +188,10 @@ public:
                 if( img.height() < text.height() )
                     y = text.height()/2 - img.height()/2;
                 p.drawImage( 0, y, img );
+                p.drawRect( -1, y-1, img.width()+2, img.height()+2 );
                 p.translate( img.width() + 10, 0 );
             }
-        }
+        }                                                         //FIXME way too much copy-pasting
         else if( QImage *img = m_item->d->previewImage )
         {
             if( img->width() <= MAX_SIZE && img->height() <= MAX_SIZE )
@@ -198,6 +200,7 @@ public:
                 if( img->height() < text.height() )
                     y = text.height()/2 - img->height()/2;
                 p.drawImage( 0, y, *img );
+                p.drawRect( -1, y-1, img->width()+2, img->height()+2 );
                 p.translate( img->width() + 10, 0 );
             }
             else
@@ -207,6 +210,7 @@ public:
                 if( img2.height() < text.height() )
                     y = text.height()/2 - img2.height()/2;
                 p.drawImage( 0, y, img2 );
+                p.drawRect( -1, y-1, img2.width()+2, img2.height()+2 );
                 p.translate( img2.width() + 10, 0 );
             }
         }

@@ -45,6 +45,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor("Cyrille Berger", 0, "cyb@lepi.org");
     aboutData->addAuthor("Dirk Schoenberger", 0, "dirk.schoenberger@sz-online.de");
     aboutData->addAuthor("Danny Allen", 0 , "danny@dannyallen.co.uk");
+    aboutData->addAuthor("Gábor Lehel", 0, "<illissius@gmail.com>");
     aboutData->addAuthor("John Califf",0, "jcaliff@compuzone.net");
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
     aboutData->addAuthor("Matthias Elter", 0, "me@kde.org");

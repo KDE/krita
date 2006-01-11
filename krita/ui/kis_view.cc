@@ -192,6 +192,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_fullScreen( 0 )
     , m_imgProperties( 0 )
     , m_RulerAction( 0 )
+    , m_guideAction( 0 )
     , m_dcop( 0 )
     , m_hScroll( 0 )
     , m_vScroll( 0 )
@@ -605,6 +606,8 @@ void KisView::setupActions()
     m_RulerAction->setWhatsThis( i18n("The rulers show the position and width of pages and of frames and can "
                                       "be used to position tabulators among others.<p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
+
+    m_guideAction = new KToggleAction( i18n( "Guide Lines" ), 0, this, SLOT( viewGuideLines() ), actionCollection(), "view_guidelines" );
 
     // Add new palette
     new KAction(i18n("Add New Palette..."), 0, this, SLOT(slotAddPalette()),
@@ -3066,6 +3069,10 @@ void KisView::updateGuides()
     paintGuides();
 }
 #endif
+
+void KisView::viewGuideLines()
+{
+}
 
 QPoint KisView::mapToScreen(const QPoint& pt)
 {

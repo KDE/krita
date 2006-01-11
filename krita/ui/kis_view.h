@@ -309,6 +309,8 @@ private:
 //    void eraseGuides();
 //    void paintGuides();
 //    void updateGuides();
+    void viewGuideLines();
+
     void imgUpdateGUI();
 
     void layerUpdateGUI(bool enable);
@@ -497,6 +499,7 @@ private:
     KAction *m_imgProperties;
 
     KToggleAction *m_RulerAction;
+    KToggleAction *m_guideAction;
 
     DCOPObject *m_dcop;
 

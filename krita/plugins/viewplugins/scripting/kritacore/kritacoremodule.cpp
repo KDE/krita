@@ -27,6 +27,8 @@
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
 #include <kis_doc.h>
+#include <kis_filter.h>
+#include <kis_filter_registry.h>
 #include <kis_pattern.h>
 #include <kis_resourceserver.h>
 
@@ -35,6 +37,7 @@
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_doc.h"
+#include "krs_filter.h"
 #include "krs_pattern.h"
 #include "krs_script_progress.h"
 
@@ -59,6 +62,7 @@ KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("Krit
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("getPattern", &KritaCoreFactory::getPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("getFilter", &KritaCoreFactory::getFilter, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
 }
@@ -109,6 +113,13 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
         }
     }
     return 0;
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
+{
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    KisFilter* filter = KisFilterRegistry::instance()->get(name);
+    return new Filter(filter);
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)

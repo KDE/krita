@@ -35,6 +35,7 @@ class Painter : public Kross::Api::Class<Painter>
     public:
         explicit Painter(KisPaintLayerSP layer);
         ~Painter();
+    private:
         // Painting operations
         Kross::Api::Object::Ptr paintPolyline(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintLine(Kross::Api::List::Ptr args);

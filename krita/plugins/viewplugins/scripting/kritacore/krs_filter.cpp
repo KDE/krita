@@ -1,0 +1,64 @@
+/*
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Library General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "krs_filter.h"
+
+#include <kis_filter.h>
+#include <kis_paint_layer.h>
+
+#include "krs_filter_configuration.h"
+#include "krs_paint_layer.h"
+
+namespace Kross {
+namespace KritaCore {
+
+Filter::Filter(KisFilter* filter)
+    : Kross::Api::Class<Filter>("KritaFilter"), m_filter(filter), m_config(new FilterConfiguration( m_filter->id().id(), 1 ) )
+{
+    addFunction("process", &Filter::process, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("getFilterConfiguration", &Filter::getFilterConfiguration);
+
+}
+
+Filter::~Filter()
+{
+}
+
+const QString Filter::getClassName() const {
+    return "Kross::KritaCore::Filter";
+}
+
+Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
+{
+     return m_config;
+}
+
+Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
+{
+    uint x = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
+    uint y = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
+    uint w = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
+    uint h = Kross::Api::Variant::toVariant(args->item(5)).toUInt();
+    PaintLayer* src = (PaintLayer*)args->item(0).data();
+    PaintLayer* dst = (PaintLayer*)args->item(1).data();
+    m_filter->process( src->paintLayer()->paintDevice(), dst->paintLayer()->paintDevice(), m_config->filterConfiguration(), QRect(x, y, w, h));
+    return 0;
+}
+
+}
+}

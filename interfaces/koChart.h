@@ -19,18 +19,23 @@
 #ifndef __koffice_kchart_h__
 #define __koffice_kchart_h__
 
+#include <qvariant.h>
+
 #include <koDocument.h>
 #include <KDChartTable.h>
 
 #include <koffice_export.h>
+
 namespace KoChart
 {
     class Part;
 
-    // KDChartData is either a double (interpreted as a value), a
-    // QString (interpreted as a label), a QDateTime (interpreted as a
-    // date/time value) or empty.
-    typedef KDChartData Value;
+    // KDChartData is either:
+    //  - a double (interpreted as a value)
+    //  - a QString (interpreted as a label)
+    //  - a QDateTime (interpreted as a date/time value)
+    //  - empty.
+    typedef QVariant         Value;
     typedef KDChartTableData Data;
 
     class KOCHARTINTERFACE_EXPORT WizardExtension : public QObject

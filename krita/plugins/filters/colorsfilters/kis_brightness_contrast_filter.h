@@ -54,7 +54,10 @@ public:
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
 
+    virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
+
 };
+
 
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 

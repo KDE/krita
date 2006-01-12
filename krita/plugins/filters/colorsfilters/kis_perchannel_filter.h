@@ -59,6 +59,8 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
+
+    virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
 private:
 };
 

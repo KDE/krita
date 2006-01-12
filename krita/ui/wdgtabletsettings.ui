@@ -12,9 +12,6 @@
             <height>268</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgPressureSettings</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

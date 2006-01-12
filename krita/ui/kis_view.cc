@@ -464,7 +464,8 @@ void KisView::updateStatusBarSelectionLabel()
         KisPaintDeviceImplSP dev = img->activeDevice();
         if (dev) {
             if (dev -> hasSelection()) {
-                m_statusBarSelectionLabel -> setText(i18n("Selection Active"));
+                QRect r = dev->selection()->selectedExactRect();
+                m_statusBarSelectionLabel -> setText( i18n("Selection Active: x = %1 y = %1 width = %1 height = %1").arg(r.x(), r.y(), r.width(), r.height()) );
                 return;
             }
         }
@@ -2472,9 +2473,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
     KisImageSP img = currentImg();
     if (!img) return;
 
-    KisAdjustmentLayer * l = new KisAdjustmentLayer(img.data(), name);
-    l->setFilter( filter );
-    l->setSelection( selection );
+    KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addLayer(l, img->activeLayer()->parent(), img->activeLayer());
 }
 

@@ -236,7 +236,7 @@ void KisFilterManager::slotApplyFilter(int i)
         // Warning bells!
         if (m_lastFilter->colorSpaceIndendendence() == TO_LAB16) {
             if (KMessageBox::warningContinueCancel(m_view,
-                                               i18n("The %1 filter will convert your %2 data to 16-bit L*A*B* and vice versa. ")
+                                               i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ")
                                                        .arg(m_lastFilter->id().name())
                                                        .arg(dev->colorSpace()->id().name()),
                                                i18n("Filter will convert your layer data"),

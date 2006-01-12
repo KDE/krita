@@ -35,7 +35,7 @@
 #include "kis_integer_maths.h"
 
 KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p)
-    : KisAbstractColorSpace(KisID("LABA", i18n("L*A*B* (16-bit integer/channel)")),
+    : KisAbstractColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")),
         COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1),
          icSigLabData, parent, p)
 

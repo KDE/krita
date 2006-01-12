@@ -465,7 +465,7 @@ void KisView::updateStatusBarSelectionLabel()
         if (dev) {
             if (dev -> hasSelection()) {
                 QRect r = dev->selection()->selectedExactRect();
-                m_statusBarSelectionLabel -> setText( i18n("Selection Active: x = %1 y = %1 width = %1 height = %1").arg(r.x(), r.y(), r.width(), r.height()) );
+                m_statusBarSelectionLabel -> setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4").arg(r.x()).arg(r.y()).arg( r.width()).arg( r.height()));
                 return;
             }
         }

@@ -30,6 +30,7 @@
 #include "kis_integer_maths.h"
 #include "kis_channelinfo.h"
 #include "kis_colorspace.h"
+#include "kis_lab_colorspace.h"
 
 KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs)
     : m_channels(channels),
@@ -408,12 +409,15 @@ void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
 
 // ------------ Generic L*a*b* ---------------------
 KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("L*a*b* Histogram")), 1, 256, 0) {
+    : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
     m_channelsList.append(new KisChannelInfo(i18n("L*"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
     m_channelsList.append(new KisChannelInfo(i18n("a*"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
     m_channelsList.append(new KisChannelInfo(i18n("b*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+
+    KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
+    m_colorSpace = new KisLabColorSpace(0, labProfile);
 }
 
 QValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {

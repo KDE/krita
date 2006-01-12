@@ -55,7 +55,7 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const char *name, cons
         setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView*) parent;
-        (void) new KAction(i18n("Add Dropshadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
+        (void) new KAction(i18n("Add Drop Shadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
     }
 }
 
@@ -74,7 +74,7 @@ void KisDropshadowPlugin::slotDropshadow()
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(l->colorSpace()->id().name(), image->colorSpace()->id().name(), m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
-    dlgDropshadow->setCaption(i18n("Dropshadow"));
+    dlgDropshadow->setCaption(i18n("Drop Shadow"));
 
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 

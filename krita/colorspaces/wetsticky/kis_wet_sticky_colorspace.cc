@@ -81,7 +81,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
     m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Absorbancy"), ++pos, SUBSTRATE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Absorbency"), ++pos, SUBSTRATE, 1));
     m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
     m_alphaPos = 3;

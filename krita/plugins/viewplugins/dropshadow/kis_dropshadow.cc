@@ -76,12 +76,12 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
     m_cancelRequested = false;
     if ( progress )
         progress -> setSubject(this, true, true);
-    emit notifyProgressStage(i18n("Add dropshadow..."), 0);
+    emit notifyProgressStage(i18n("Add drop shadow..."), 0);
 
     KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
     if ((undo = image->undoAdapter())) {
-        t = new KisTransaction(i18n("Add Dropshadow"), src.data());
+        t = new KisTransaction(i18n("Add Drop Shadow"), src.data());
     }
 
     KisLayerSP shadowLayer = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");

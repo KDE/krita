@@ -73,7 +73,7 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
 
     QToolTip::add(m_lst -> bnDelete, i18n("Remove current layer"));
 
-    QToolTip::add(m_lst -> bnRaise, i18n("Upper current layer"));
+    QToolTip::add(m_lst -> bnRaise, i18n("Raise current layer"));
     m_lst -> bnRaise -> setEnabled(false);
 
     m_lst -> bnLower -> setEnabled(false);

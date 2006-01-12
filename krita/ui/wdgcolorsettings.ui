@@ -281,7 +281,7 @@
                         <cstring>radioPasteAsk</cstring>
                     </property>
                     <property name="text">
-                        <string>Ask user each time</string>
+                        <string>Ask each time</string>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -289,7 +289,7 @@
                         <cstring>textLabel1_2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Note: When copy/pasting inside Krita color info is always preserved.</string>
+                        <string>Note: When copying/pasting inside Krita color info is always preserved.</string>
                     </property>
                 </widget>
             </vbox>

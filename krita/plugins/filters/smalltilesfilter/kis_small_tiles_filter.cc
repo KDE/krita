@@ -113,7 +113,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDev
 KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of Tiles") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles") ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

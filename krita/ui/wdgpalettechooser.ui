@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Choose a palette</string>
+        <string>Choose Palette</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>

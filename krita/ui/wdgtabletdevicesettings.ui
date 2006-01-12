@@ -129,7 +129,7 @@
                                 <cstring>textLabel1_2_3</cstring>
                             </property>
                             <property name="text">
-                                <string>X Tilt:</string>
+                                <string>X tilt:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox">
@@ -152,7 +152,7 @@
                                 <cstring>textLabel1_2_6</cstring>
                             </property>
                             <property name="text">
-                                <string>Y Tilt:</string>
+                                <string>Y tilt:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox">

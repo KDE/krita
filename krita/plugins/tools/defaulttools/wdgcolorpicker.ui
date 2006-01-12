@@ -101,7 +101,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Sample radius</string>
+                        <string>Sample radius:</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox">

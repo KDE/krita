@@ -52,14 +52,8 @@ public:
         layerElement.setAttribute("locked", layer -> locked());
         layerElement.setAttribute("layertype", "paintlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
+        layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id().id());
 
-    /*LAYERREMOVE
-        layerElement.setAttribute("colorspacename", dev->colorSpace()->id().id());
-        // XXX: Save profile as blob inside the layer, instead of the product name.
-        if (dev->colorSpace()->getProfile() && dev->colorSpace()->getProfile()->valid()) {
-            layerElement.setAttribute("profile", layer -> colorSpace() -> getProfile() -> productName());
-        }
-    */
         m_elem.appendChild(layerElement);
 
         m_count++;

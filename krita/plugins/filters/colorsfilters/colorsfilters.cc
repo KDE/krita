@@ -90,7 +90,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", i18n("&Auto Contr
 void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     // initialize
-    KisHistogramProducerSP producer = new KisGenericLightnessHistogramProducer();
+    KisHistogramProducerSP producer = new KisGenericLabHistogramProducer();
     KisHistogram histogram(src, producer, LINEAR);
     int minvalue = int(255*histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255*histogram.calculations().getMax() + 0.5);

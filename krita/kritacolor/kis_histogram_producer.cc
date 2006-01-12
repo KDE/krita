@@ -32,7 +32,7 @@ KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::instan
     if(KisHistogramProducerFactoryRegistry::m_singleton == 0) {
         KisHistogramProducerFactoryRegistry::m_singleton
                 = new KisHistogramProducerFactoryRegistry();
-        m_singleton->add( new KisGenericLightnessHistogramProducerFactory() );
+        m_singleton->add( new KisGenericLabHistogramProducerFactory() );
     }
     return KisHistogramProducerFactoryRegistry::m_singleton;
 }

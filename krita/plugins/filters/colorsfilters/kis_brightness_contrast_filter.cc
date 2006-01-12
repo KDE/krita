@@ -171,7 +171,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KisHistogramProducerSP producer = new KisGenericLightnessHistogramProducer();
+    KisHistogramProducerSP producer = new KisGenericLabHistogramProducer();
     KisHistogram histogram(dev, producer, LINEAR);
     QPixmap pix(256, height);
     pix.fill();

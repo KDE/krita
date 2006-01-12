@@ -406,71 +406,9 @@ void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
     }
 }
 
-// ------------ Generic Lightness ---------------------
-KisGenericLightnessHistogramProducer::KisGenericLightnessHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENLIGHTHISTO", i18n("Generic Lightness Histogram")), 1, 256, 0) {
-    /* we set 0 as colorspece, because we are not based on a specific colorspace. This
-       is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("L*"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-}
-
-QValueVector<KisChannelInfo *> KisGenericLightnessHistogramProducer::channels() {
-    return m_channelsList;
-}
-
-QString KisGenericLightnessHistogramProducer::positionToString(double pos) const {
-    return QString("%1").arg(static_cast<Q_UINT16>(pos * UINT16_MAX));
-}
-
-double KisGenericLightnessHistogramProducer::maximalZoom() const {
-    return 1.0;
-}
-
-
-void KisGenericLightnessHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels,  KisColorSpace *cs)
-{
-    for (int i = 0; i < m_channels; i++) {
-        m_outRight.at(i) = 0;
-        m_outLeft.at(i) = 0;
-    }
-
-    QColor c;
-    Q_INT32 pSize = cs->pixelSize();
-
-    if (selectionMask) {
-        while (nPixels > 0) {
-            if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
-/*
-  cs -> toQColor(pixels, &c);
-  m_bins.at(0).at(c.red())++;
-*/
-                m_count++;
-            }
-            pixels += pSize;
-            selectionMask++;
-            nPixels--;
-        }
-    }
-    else {
-        while (nPixels > 0) {
-            if ( !(m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT))  {
-/*
-  cs -> toQColor(pixels, &c);
-  m_bins.at(0).at(c.red())++;
-*/
-                m_count++;
-            }
-            pixels += pSize;
-            selectionMask++;
-            nPixels--;
-        }
-
-    }
-}
-
 // ------------ Generic L*a*b* ---------------------
 KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("Generic L*a*b* Histogram")), 1, 256, 0) {
+    : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("L*a*b* Histogram")), 1, 256, 0) {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
     m_channelsList.append(new KisChannelInfo(i18n("L*"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
@@ -518,12 +456,12 @@ void KisGenericLabHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
     else {
         while (nPixels > 0) {
             if ( !(m_skipTransparent && cs -> getAlpha(pixels) == OPACITY_TRANSPARENT))  {
-/*
-  cs -> convertPixels(pixels, dst, labCs, 1);
-  m_bins.at(0).at(labCS->scaleToU8(dst, 0))++;
-  m_bins.at(1).at(labCS->scaleToU8(dst, 1))++;
-  m_bins.at(2).at(labCS->scaleToU8(dst, 2))++;
-*/
+
+  cs -> convertPixelsTo(pixels, dst, m_colorSpace, 1);
+  m_bins.at(0).at(m_colorSpace->scaleToU8(dst, 0))++;
+  m_bins.at(1).at(m_colorSpace->scaleToU8(dst, 1))++;
+  m_bins.at(2).at(m_colorSpace->scaleToU8(dst, 2))++;
+
                 m_count++;
             }
             pixels += pSize;

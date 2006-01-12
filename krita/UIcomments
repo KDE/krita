@@ -8,11 +8,6 @@ Zoom is in for form of n:m.  This is not really a commonly used format and
 many people will have less problems interpreting a percentage format.  So 
 200% or 50% instead of 2:1 or 1:2 (respectively).
 
-The 'selection' part shows 'Selection Active' or 'No selection'.
-Apart from the missing capital S, I think we can put a little more 
-information in there.  What about printing the selection size in pixels?
-    --> Maybe a little too costly.
-
 Zoom tool;  it zooms by 2-complement changes. So 1, 2, 4, 8 etc.
 This misses other well known nice looking zoom-levels. Like 33% Or, as 
 krita displays it, 3-times zoom.

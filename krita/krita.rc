@@ -37,6 +37,7 @@
   <Action name="fit_to_canvas"/>
   <Separator/>
   <Action name="view_ruler"/>
+  <Action name="view_guidelines"/>
   <Separator/>
   <Action name="view_palette_action_menu"/>
   <Separator/>

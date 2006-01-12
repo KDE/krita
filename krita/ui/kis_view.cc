@@ -1409,7 +1409,10 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::slotAddPalette()
 {
-    (new KisCustomPalette(0, "add palette", i18n("Add Palette"), this)) -> show();
+    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Add Palette"), KDialogBase::Ok);
+    KisCustomPalette* p = new KisCustomPalette(base, "add palette", i18n("Add Palette"), this);
+    base -> setMainWidget(p);
+    base -> show();
 }
 
 void KisView::slotEditPalette()
@@ -1443,10 +1446,13 @@ void KisView::slotEditPalette()
         return;
     }
 
-    KisCustomPalette* cp = new KisCustomPalette(0, "edit palette", i18n("Edit Palette"),this);
+    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Edit Palette") , KDialogBase::Ok);
+    KisCustomPalette* cp = new KisCustomPalette(base, "edit palette",
+            i18n("Edit Palette"), this);
     cp -> setEditMode(true);
     cp -> setPalette(*palettes.at(index));
-    cp -> show();
+    base -> setMainWidget(cp);
+    base -> show();
 }
 
 void KisView::saveLayerAsImage()

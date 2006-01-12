@@ -1,0 +1,81 @@
+Krita documentation outline
+
+Last edited 2006-01-12 (Sander Koning)
+
+Changelog
+2006-01-12: ASK: add status, and put in SVN for others to enjoy ;)
+2005-08-31: ASK: adhere to KDE style
+2005-08-30: ASK: initial version
+
+This document tries to give a suitable outline for Krita's documentation. It
+is based on the Krita manual in SVN (koffice/krita/doc/manual/krita.kwd) as of
+2005-07-08, the KDE documentation template, and furthermore contains my own
+thoughts about what the documentation for a graphics application such as this
+should look like.  Comments, suggestions, ideas etc. are more than welcome.
+Especially the real content still needs a lot of "shaving".
+
+An outline of the manual content as in krita.kwd, included here for reference:
+
+- Introduction
+  - About the manual
+  - About the author
+- Showing Off
+  - Intro tutorial
+- On the face of it
+  - Layout
+  - Menus
+- Files
+- Serious about color
+  - Colour theory
+- Selections
+  - Creating selections (select, unselect, wand)
+- Messing with images
+- Painting
+- Layers
+- Filters
+- Hacking Krita
+- Configuring Krita
+- Help!
+  - Help contact info
+
+New outline:
+
+- Introduction
+  - What is Krita
+  - Key features
+    - Color management
+	- [TODO] File formats
+  - About this maunal
+  - About the application author
+- Tutorial
+  - Starting to know Krita [up to a new document]
+  - A Small Selections and Layer Tutorial
+  - Quick Starts for Dummies
+    - Crop an image and save as New
+	- Draw a rectangle on you picture
+  - [TODO] Fills (colors, patterns and gradients)
+  - [TODO] Using tool options
+  - [TODO] Editing image properties
+- Using Krita
+  - [TODO] Painting
+    - Intro, tools + options, colours, ...
+  - [TODO] Viewing
+    - Fullscreen, multiple views, rulers, zooming, ...
+  - Selections
+  - Filters
+  - [TODO] Layers
+    - Create, transform, combine, layerbox (hide/lock/...) , composite,
+	  histograms, ...
+  - [TODO] Colorspaces
+    - Intro, list of, properties, converting, ...
+- Commands
+  - General layout
+  - Menus
+  - Toolbars
+  - Palettes
+  - Dialogs
+- [TODO] Settings
+- [TODO] Developers
+- FAQ
+- Credits
+- Installation

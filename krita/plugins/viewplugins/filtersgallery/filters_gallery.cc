@@ -88,7 +88,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 QRect r3 = dev->selection()->selectedExactRect();
                 rect = rect.intersect(r3);
             }
-            KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget(), dev);
+            KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget());
             KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
             filter->process(dev,dev, config, rect);
             delete config;

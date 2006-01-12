@@ -34,7 +34,7 @@
 #include <qtextedit.h>
 #include <koUnitWidgets.h>
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defHeight, Q_INT32 defWidth, double resolution, QString defColorSpaceName, QString imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {
     m_doc = doc;
 

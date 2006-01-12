@@ -1003,7 +1003,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
     const bool success = parent->addLayer(layer, aboveThis);
     if (success)
     {
-        if (m_adapter && m_adapter->undo()) {
+        if (!layer->temporary() && m_adapter && m_adapter->undo()) {
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
         }
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
@@ -1016,8 +1016,10 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             }
         }
 
-        emit sigLayerAdded(layer);
-        activate(layer);
+        if (!layer->temporary()) {
+            emit sigLayerAdded(layer);
+            activate(layer);
+        }
     }
 
     return success;
@@ -1028,30 +1030,30 @@ bool KisImage::removeLayer(KisLayerSP layer)
     if (!layer || layer -> image() != this)
         return false;
 
-    if (KisGroupLayerSP parent = layer -> parent())
-    {
+    if (KisGroupLayerSP parent = layer -> parent()) {
 
         KisLayerSP wasAbove = layer -> nextSibling();
         KisLayerSP wasBelow = layer -> prevSibling();
         const bool wasActive = layer == activeLayer();
         const bool success = parent -> removeLayer(layer);
-        if (success)
-        {
+        if (success) {
             layer -> setImage(0);
-            if (m_adapter->undo())
+            if (!layer->temporary() && m_adapter->undo()) {
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
-            notify();
-            emit sigLayerRemoved(layer, parent, wasAbove);
-            if (wasActive)
-            {
-                if (wasBelow)
-                    activate(wasBelow);
-                else if (wasAbove)
-                    activate(wasAbove);
-                else if (parent != rootLayer())
-                    activate(parent.data());
-                else
-                    activate(rootLayer() -> firstChild());
+            }
+            if (!layer->temporary()) {
+                notify();
+                emit sigLayerRemoved(layer, parent, wasAbove);
+                if (wasActive) {
+                    if (wasBelow)
+                        activate(wasBelow);
+                    else if (wasAbove)
+                        activate(wasAbove);
+                    else if (parent != rootLayer())
+                        activate(parent.data());
+                    else
+                        activate(rootLayer() -> firstChild());
+                }
             }
         }
         return success;

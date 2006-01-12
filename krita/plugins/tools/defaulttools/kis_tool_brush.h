@@ -30,6 +30,8 @@ class KisPoint;
 class QHBoxLayout;
 class QPainter;
 class QRect;
+class QCheckBox;
+class QGridLayout;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
     Q_OBJECT
@@ -42,7 +44,7 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual Q_UINT32 priority() { return 0; }
-
+    QWidget* createOptionWidget(QWidget* parent);
 
 protected:
     
@@ -53,11 +55,15 @@ protected:
 
 private slots:
 
-    virtual void timeoutPaint();
-    
+    void timeoutPaint();
+    void slotSetPaintingMode( int mode );
+
 private:
+    
     Q_INT32 m_rate;
     QTimer * m_timer;
+    QGridLayout* m_optionLayout;
+    QCheckBox * m_chkDirect;
 };
 
 class KisToolBrushFactory : public KisToolFactory {

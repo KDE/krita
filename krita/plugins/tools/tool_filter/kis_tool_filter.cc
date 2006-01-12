@@ -81,8 +81,8 @@ void KisToolFilter::initPaint(KisEvent *e)
     // Some filters want to paint directly on the current state of
     // the canvas, others cannot handle that and need a temporary layer
     // so they can work on the old data before painting started.
-    setUseTempLayer( !m_filter -> supportsIncrementalPainting() );
-
+    m_paintIncremental = m_filter -> supportsIncrementalPainting();
+    
     super::initPaint(e);
     KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
     op -> setSource ( m_source );

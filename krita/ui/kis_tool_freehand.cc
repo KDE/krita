@@ -55,8 +55,8 @@ KisToolFreehand::KisToolFreehand(QString transactionText)
 {
     m_painter = 0;
     m_currentImage = 0;
-
-    m_useTempLayer = false;
+    m_tempLayer = 0;
+    m_paintIncremental = true;
     m_paintedOutline = false;
 }
 
@@ -132,27 +132,30 @@ void KisToolFreehand::initPaint(KisEvent *)
     if (m_currentImage && (device = m_currentImage -> activeDevice())) {
         if (m_painter)
             delete m_painter;
-        if (m_useTempLayer) {
+        if (!m_paintIncremental) {
             if (m_currentImage -> undoAdapter())
                 m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
 
-            // XXX ugly! hacky!
-            m_tempLayer = new KisPaintLayer(m_currentImage, "temp", OPACITY_OPAQUE);
-            m_target= m_tempLayer->paintDevice();
+            //if (m_tempLayer == 0) {
+                // XXX ugly! hacky! We'd like to cache the templayer, but that makes sure
+                // the layer is never really removed from its parent group because of shared pointers
+                m_tempLayer = new KisPaintLayer(m_currentImage, "temp", OPACITY_OPAQUE);
+                m_tempLayer->setTemporary(true);
+                // Yuck, what an ugly cast!
+                m_target = (dynamic_cast<KisPaintLayer*>(m_tempLayer.data()))->paintDevice();
+            //}
 
-            m_tempLayer -> setCompositeOp(m_compositeOp);
+            m_tempLayer -> setCompositeOp( m_compositeOp );
+            m_tempLayer -> setOpacity( m_opacity );
 
             if (device -> hasSelection()) {
                 m_target -> addSelection(device -> selection());
             }
 
-           m_tempLayer -> setVisible(true);
+            m_tempLayer -> setVisible(true);
 
-            // XXX doesn't look very good I'm afraid
             currentImage() -> addLayer(m_tempLayer, m_currentImage -> activeLayer()->parent().data(), m_currentImage -> activeLayer());
 
-            currentImage() -> activate(m_tempLayer);
-            currentImage() -> notify();
         } else {
             m_target = device;
         }
@@ -166,20 +169,16 @@ void KisToolFreehand::initPaint(KisEvent *)
     m_painter -> setBackgroundColor(m_subject -> bgColor());
     m_painter -> setBrush(m_subject -> currentBrush());
 
-    m_painter -> setOpacity(m_opacity);
 
     // if you're drawing on a temporary layer, the layer already sets this
-    if (m_useTempLayer) {
-        m_painter -> setCompositeOp(COMPOSITE_OVER);
-    } else {
+    if (m_paintIncremental) {
         m_painter -> setCompositeOp(m_compositeOp);
-    }
+        m_painter -> setOpacity(m_opacity);
+    } else {
+        m_painter -> setCompositeOp(COMPOSITE_OVER);
+        m_painter -> setOpacity( OPACITY_OPAQUE );
 
-#if 0
-    // Setting cursors has no effect until the tool is selected again; this
-    // should be fixed.
-    setCursor(KisCursor::brushCursor());
-#endif
+    }
 }
 
 void KisToolFreehand::endPaint()
@@ -190,17 +189,23 @@ void KisToolFreehand::endPaint()
         if (adapter && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
-            if (m_useTempLayer) {
+            if (!m_paintIncremental) {
                 m_painter -> endTransaction();
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
                 painter.beginTransaction(m_transactionText);
-                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, OPACITY_OPAQUE,
+                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, m_opacity,
                            m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
                 adapter -> addCommand(painter.endTransaction());
                 m_currentImage->removeLayer(m_tempLayer);
-                currentImage() -> activate(dynamic_cast<KisLayer*>(m_source.data()));
+                
+                // The shared ptr layer vector in the group keeps the layer from being
+                // being removed if it isn't removed here. It would be much faster to
+                // keep the layer and clear it, but that isn't possible. Replacing the
+                // old templayer with a new one at the end of paint prevents at least
+                // the pause when painting again.
+                //m_target->clear();
                 adapter -> endMacro();
             } else {
                 adapter -> addCommand(m_painter->endTransaction());
@@ -238,9 +243,6 @@ KisImageSP KisToolFreehand::currentImage()
     return m_currentImage;
 }
 
-void KisToolFreehand::setUseTempLayer(bool u) {
-    m_useTempLayer = u;
-}
 
 void KisToolFreehand::paintOutline(const KisPoint& point) {
     if (!m_subject) {
@@ -263,7 +265,7 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
     KisBrush *brush = m_subject -> currentBrush();
     // There may not be a brush present, and we shouldn't crash in that case
     if (brush) {
-        KisCanvasPainter gc(canvas);    
+        KisCanvasPainter gc(canvas);
         QPen pen(Qt::SolidLine);
 
         KisPoint hotSpot = brush -> hotSpot();

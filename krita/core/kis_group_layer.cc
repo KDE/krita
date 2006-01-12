@@ -88,7 +88,10 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     if (x < 0 || kClamp(uint(x), uint(0), childCount()) != uint(x) ||
         newLayer -> parent() || m_layers.contains(newLayer))
     {
-        kdWarning() << "invalid input to KisGroupLayer::addLayer()!" << endl;
+        kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
+        //kdDebug() << "layer: " << newLayer << ", x: " << x
+        //        << ", parent: " << newLayer->parent() << ", contains: " << m_layers.contains(newLayer)
+        //          << " stack: " << kdBacktrace() << "\n";
         return false;
     }
     uint index(x);
@@ -107,7 +110,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
     if (aboveThis && aboveThis -> parent().data() != this)
     {
-        kdWarning() << "invalid input to KisGroupLayer::addLayer()!" << endl;
+        kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
         return false;
     }
 

@@ -22,6 +22,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -131,7 +132,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
-    if (!quickHelp().isEmpty()) {
+   if (!quickHelp().isEmpty()) {
         m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 3, 0, 6);
 
         m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
@@ -140,6 +141,8 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
 
+        m_optionWidgetLayout -> addWidget(m_chkDirect, 2, 0);
+        
         // XXX make this a picture of a '?', like you see everywhere
         QPushButton* push = new QPushButton("?", m_optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
@@ -152,6 +155,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
+
     }
 
     m_optionWidgetLayout -> setRowSpacing(3, 6);

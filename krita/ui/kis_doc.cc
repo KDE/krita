@@ -922,7 +922,7 @@ void KisDoc::endMacro()
 {
     if (m_undo) {
         Q_ASSERT(m_macroNestDepth > 0);
-
+        
         if (m_macroNestDepth > 0) {
             m_macroNestDepth--;
 

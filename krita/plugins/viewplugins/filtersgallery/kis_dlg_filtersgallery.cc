@@ -112,7 +112,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     KisPaintDeviceImplSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());
-    KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget, layer.data());
+    KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer -> extent();
     m_currentFilter->process(layer.data(), layer.data(), config, rect);

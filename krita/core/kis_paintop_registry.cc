@@ -76,6 +76,10 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter) const
 {
+    if (painter == 0) {
+        kdWarning() << " KisPaintOpRegistry::paintOp painter is null";
+        return 0;
+    }
     KisPaintOpFactorySP f = get(id);
     if (f) {
         return f -> createOp(painter);

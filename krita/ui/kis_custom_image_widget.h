@@ -38,7 +38,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defHeight, Q_INT32 defWidth, double resolution, QString defColorSpaceName, QString imageName);
+    KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName);
 
 private slots:
     void buttonClicked();

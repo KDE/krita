@@ -25,6 +25,7 @@
 #include <qpushbutton.h>
 #include <qpainter.h>
 #include <qrect.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -78,16 +79,21 @@ void KisToolBrush::update(KisCanvasSubject *subject)
     setCursor(KisCursor::brushCursor());
 }
 
-void KisToolBrush::initPaint(KisEvent *e) 
+void KisToolBrush::initPaint(KisEvent *e)
 {
     super::initPaint(e);
 
+    if (!m_painter) {
+        kdWarning() << "Didn't create a painter! Something is wrong!\n";
+        return;
+    }
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
+    if (!op) return;
     
     m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
 
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
-    
+
     if (op->incremental()) {
         m_timer -> start( m_rate );
     }
@@ -103,7 +109,7 @@ void KisToolBrush::endPaint()
 
 void KisToolBrush::setup(KActionCollection *collection)
 {
-    
+
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
@@ -128,6 +134,34 @@ void KisToolBrush::leave(QEvent *e) {
     m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
 }
 
+
+void KisToolBrush::slotSetPaintingMode( int mode )
+{
+    if (mode == QButton::On) {
+        // Direct painting
+        m_paintIncremental = true;
+    }
+    else {
+        m_paintIncremental = false;
+    }
+}
+
+
+QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
+{
+    QWidget *widget = super::createOptionWidget(parent);
+    m_chkDirect = new QCheckBox(i18n("Paint Direct"), widget, "chkDirect");
+    m_chkDirect->setChecked(true);
+    connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
+    
+    m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
+    Q_CHECK_PTR(m_optionLayout);
+
+    super::addOptionWidgetLayout(m_optionLayout);
+    m_optionLayout -> addWidget(m_chkDirect, 0, 0);
+
+    return widget;
+}
 
 #include "kis_tool_brush.moc"
 

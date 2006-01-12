@@ -300,7 +300,7 @@ int KisLayer::numLayers(int flags) const
     if (matchesFlags(flags)) num++;
     for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
         num += layer -> numLayers(flags);
-    return num; 
+    return num;
 }
 
 bool KisLayer::matchesFlags(int flags) const
@@ -367,6 +367,16 @@ void KisLayer::setLocked(bool l)
         m_locked = l;
         notifyPropertyChanged();
     }
+}
+
+bool KisLayer::temporary() const
+{
+    return m_temporary;
+}
+
+void KisLayer::setTemporary(bool t)
+{
+    m_temporary = t;
 }
 
 KNamedCommand *KisLayer::setLockedCommand(bool newLocked)

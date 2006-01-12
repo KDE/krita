@@ -29,6 +29,10 @@
 #include "kis_layerlist.h"
 
 
+/**
+ * This visitor walks over the layer tree to fill
+ * the layer box.
+ */
 class KisPopulateVisitor: public KisLayerVisitor
 {
     public:
@@ -44,7 +48,7 @@ class KisPopulateVisitor: public KisLayerVisitor
 
         virtual bool visit(KisPaintLayer* layer)
         {
-            add(layer);
+            if (!layer->temporary()) add(layer);
             return true;
         }
 

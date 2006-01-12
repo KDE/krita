@@ -125,6 +125,9 @@ public:
     void setLocked(bool l);
     KNamedCommand *setLockedCommand(bool locked);
 
+    bool temporary() const;
+    void setTemporary(bool t);
+
     virtual QString name() const;
     virtual void setName(const QString& name);
 
@@ -161,6 +164,7 @@ private:
     Q_UINT8 m_opacity;
     bool m_locked;
     bool m_visible;
+    bool m_temporary;
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImage *m_image;

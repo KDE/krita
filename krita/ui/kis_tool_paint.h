@@ -27,8 +27,10 @@
 #include "kis_tool.h"
 #include "kis_composite_op.h"
 
+class QCheckBox;
 class QEvent;
 class QKeyEvent;
+class QComboBox;
 class QPaintEvent;
 class QRect;
 class QGridLayout;
@@ -111,6 +113,7 @@ private:
     KIntNumInput *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
+    QCheckBox * m_chkDirect;
 };
 
 #endif // KIS_TOOL_PAINT_H_

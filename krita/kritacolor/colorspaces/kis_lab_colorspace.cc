@@ -41,8 +41,8 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
 
 {
     m_channels.push_back(new KisChannelInfo(i18n("Lightness"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("a"), 2, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("b"), 4, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 6, KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
     init();
@@ -180,13 +180,14 @@ void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                     if (srcBlend == U16_OPACITY_OPAQUE) {
                         memcpy(dst, src, sizeof(Pixel));
                     } else {
-printf("blend is %d\n", srcBlend);
+/*printf("blend is %d\n", srcBlend);
 printf("%d %d %d\n", src->lightness, src->a, src->b);
 printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
+*/
                         dst->lightness = UINT16_BLEND(src->lightness, dst->lightness, srcBlend);
                         dst->a = INT16_BLEND(src->a, dst->a, srcBlend);
                         dst->b = INT16_BLEND(src->b, dst->b, srcBlend);
-printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
+//printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
                     }
                 }
             }

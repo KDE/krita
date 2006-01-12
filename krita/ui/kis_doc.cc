@@ -759,7 +759,7 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 {
     KisConfig cfg;
 
-    return new KisCustomImageWidget(parent, this,cfg.defImgWidth(), cfg.defImgHeight(), cfg.defImgResolution(), cfg.workingColorSpace(),"foobar");
+    return new KisCustomImageWidget(parent, this, cfg.defImgWidth(), cfg.defImgHeight(), cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
 }
 
 

@@ -1362,6 +1362,10 @@ void KisView::setInitialZoomLevel()
         zoomLevel = nextZoomOutLevel(zoomLevel);
     }
 
+    // XXX: 
+    if (zoomLevel < 0.1) {
+        zoomLevel = 1.0;
+    }
     zoomAroundPoint(-1, -1, zoomLevel);
 }
 

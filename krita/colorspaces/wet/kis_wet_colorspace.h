@@ -148,6 +148,16 @@ public:
     void setPaintWetness(bool b) { m_paintwetness = b; } // XXX this needs better design!
     bool paintWetness() { return m_paintwetness; }
     void resetPhase() { phase = phasebig++; phasebig &= 3; }
+
+    void combinePixels(WetPix* dst, WetPix const* src1, WetPix const* src2) const {
+        dst->rd = src1->rd + src2->rd;
+        dst->rw = src1->rw + src2->rw;
+        dst->gd = src1->gd + src2->gd;
+        dst->gw = src1->gw + src2->gw;
+        dst->bd = src1->bd + src2->bd;
+        dst->bw = src1->bw + src2->bw;
+        dst->w = src1->w + src2->w;
+    }
 protected:
     virtual void bitBlt(Q_UINT8 *dst,
             Q_INT32 dstRowSize,

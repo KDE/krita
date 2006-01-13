@@ -125,10 +125,10 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 press = -1;
 
             // XXX - 192 is probably only useful for paper with a texture...
-            eff_height = (currentData.h + currentPix.w - 192) * (1.0 / 255);
+            eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
             contact = (press + eff_height) * 0.2;
             if (contact > 0.5)
-                contact = 1 - 0.5 * exp(-2.0 * contact - 1);
+                contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
             if (contact > 0.0001) {
                 int v;
                 double rnd = rand() * (1.0 / RAND_MAX);

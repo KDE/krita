@@ -339,7 +339,7 @@ void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
                   Q_UINT8 /*opacity*/,
                   Q_INT32 rows,
                   Q_INT32 cols,
-                  const KisCompositeOp& /*op*/)
+                  const KisCompositeOp& op)
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -347,12 +347,30 @@ void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
     Q_UINT8 *d;
     const Q_UINT8 *s;
 
-    // Just copy the src onto the dst, we don't do fancy things here,
-    // we do those in the paint op, because we need pressure to determine
-    // paint deposition.
     Q_INT32 linesize = pixelSize() * cols;
     d = dst;
     s = src;
+
+    // Do as if we 'stack' them atop of each other
+    if (op == COMPOSITE_OVER) {
+        while (rows-- > 0) {
+            for (int i = 0; i < cols; i++) {
+                WetPack* dstPack = &(reinterpret_cast<WetPack*>(d))[i];
+                const WetPack* srcPack = &(reinterpret_cast<const WetPack*>(s))[i];
+                combinePixels(&(dstPack -> paint), &(dstPack -> paint), &(srcPack -> paint));
+                combinePixels(&(dstPack -> adsorb), &(dstPack -> adsorb), &(srcPack -> adsorb));
+            }
+            d += dstRowSize; // size??
+            s += srcRowStride;
+        }
+
+        return;
+    }
+
+    // Just copy the src onto the dst, we don't do fancy things here,
+    // we do those in the paint op, because we need pressure to determine
+    // paint deposition.
+
     while (rows-- > 0) {
         memcpy(d, s, linesize);
         d += dstRowSize; // size??

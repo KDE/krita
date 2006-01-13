@@ -118,6 +118,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kis_filters_listview.h</includehint>
-    <includehint>kis_preview_widget.h</includehint>
+    <includehint>kis_previewwidget.h</includehint>
 </includehints>
 </UI>

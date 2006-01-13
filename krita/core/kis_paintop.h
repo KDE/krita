@@ -38,8 +38,8 @@
 class KisPoint;
 class KisAlphaMask;
 class KisPainter;
-class KisPaintBox;
 class KisColorSpace;
+class QWidget;
 
 /**
  * This class keeps information that can be used in the painting process, for example by
@@ -74,6 +74,7 @@ public:
      */
     virtual bool incremental() { return false; }
 
+
 protected:
 
     virtual KisPaintDeviceImplSP computeDab(KisAlphaMaskSP mask);
@@ -89,6 +90,11 @@ protected:
     KisPaintDeviceImplSP m_source; // use this layer as source layer for the operation
 };
 
+/**
+ * The paintop factory is responsible for creating paintops of the specified class.
+ * If there is an optionWidget, the derived paintop itself must support settings,
+ * and it's up to the factory to do that.
+ */
 class KisPaintOpFactory  : public KShared
 {
 
@@ -112,9 +118,14 @@ public:
     virtual bool userVisible(KisColorSpace*) { return true; }
 
     /**
-     * Slot the paint op into the relevant toolbox, if so desired. It's
-     * up to the paintop to decide whether it want to so something with this
+     * Create and return a widget with options for this paintop.
      */
-    virtual void slot(KisPaintBox * box) { Q_UNUSED(box); };
+    virtual QWidget* createOptionWidget(QWidget* parent);
+
+    /**
+     * @return the earlier-created option widget
+     */
+    virtual QWidget* optionWidget();
+
 };
 #endif // KIS_PAINTOP_H_

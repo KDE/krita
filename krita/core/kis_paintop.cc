@@ -19,7 +19,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include "qwidget.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_types.h"
@@ -104,3 +104,8 @@ void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *frac
 void KisPaintOp::setSource(KisPaintDeviceImplSP p) {
     m_source = p;
 }
+
+
+QWidget* KisPaintOpFactory::createOptionWidget(QWidget* parent) { return 0; }
+QWidget* KisPaintOpFactory::optionWidget() { return 0; }
+

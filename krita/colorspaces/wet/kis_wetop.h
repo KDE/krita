@@ -22,20 +22,26 @@
 #include "kis_paintop.h"
 #include "kis_types.h"
 #include "kis_colorspace.h"
+#include "wdgpressure.h"
 
 class KisPoint;
 class KisPainter;
 
 
 class KisWetOpFactory : public KisPaintOpFactory  {
-
+    WetPaintOptions* m_optWidget;
 public:
-    KisWetOpFactory() {}
+    KisWetOpFactory() : m_optWidget(0) {}
     virtual ~KisWetOpFactory() {}
 
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
+    virtual QWidget* createOptionWidget(QWidget* parent) {
+        m_optWidget = new WetPaintOptions();
+        return m_optWidget;
+    }
+    virtual QWidget* optionWidget() { return m_optWidget; }
 };
 
 class KisWetOp : public KisPaintOp {

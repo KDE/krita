@@ -156,5 +156,5 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         }
     }
 
-    m_painter -> addDirtyRect(QRect(xStart, yStart, xStart + maskW, yStart + maskH));
+    m_painter -> addDirtyRect(QRect(xStart, yStart, maskW, maskH));
 }

@@ -215,6 +215,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     m_opacity(opacity),
     m_locked(false),
     m_visible(true),
+    m_temporary(false),
     m_name(name),
     m_parent(0),
     m_image(img),
@@ -232,6 +233,7 @@ KisLayer::KisLayer(const KisLayer& rhs) :
         m_opacity = rhs.m_opacity;
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
+        m_temporary = rhs.m_temporary;
         m_name = rhs.m_name;
         m_image = rhs.m_image;
         m_parent = 0;

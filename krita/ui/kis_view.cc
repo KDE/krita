@@ -2329,7 +2329,6 @@ void KisView::layerProperties()
 
 void KisView::showLayerProperties(KisLayerSP layer)
 {
-    kdDebug() << "4 " << layer << endl;
     KisColorSpace * cs = 0;
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
     if ( pl ) {
@@ -2466,11 +2465,16 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisImageSP img = currentImg();
     if (!img) return;
 
+    KisPaintDeviceImplSP dev = img->activeDevice();
+    if (!dev) return;
 
     KisDlgAdjustmentLayer dlg(img, i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         //XXX: Show filter gallery with current layer and get the filterconfig back
-        KisSelectionSP selection = img->activeDevice()->selection();
+        KisSelectionSP selection = 0;
+        if (dev->hasSelection()) {
+            KisSelectionSP selection = dev->selection();
+        }
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
 

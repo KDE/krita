@@ -776,6 +776,13 @@ void KisPaintDeviceImpl::applySelectionMask(KisSelectionSP mask)
     }
 }
 
+KisSelectionSP KisPaintDeviceImpl::setSelection( KisSelectionSP selection)
+{
+    KisSelectionSP oldSelection = m_selection;
+    m_selection = selection;
+    return oldSelection;
+}
+
 bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);

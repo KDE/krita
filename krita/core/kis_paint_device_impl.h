@@ -350,6 +350,13 @@ public:
      */
     void applySelectionMask(KisSelectionSP mask);
 
+    /**
+     * Sets the selection of this paint device to the new selection,
+     * returns the old selection, if there was an old selection,
+     * otherwise 0
+     */
+    KisSelectionSP setSelection(KisSelectionSP selection);
+    
 signals:
         void positionChanged(KisPaintDeviceImplSP device);
         void ioProgress(Q_INT8 percentage);

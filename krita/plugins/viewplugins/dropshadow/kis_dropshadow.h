@@ -50,7 +50,10 @@ public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
 
 private:
-    void gaussianblur (KisLayerSP src, KisLayerSP dst, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay);
+    void gaussianblur (KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
+                       QRect& rect, double horz, double vert,
+                       BlurMethod method,
+                       KisProgressDisplayInterface * progressDisplay);
     //gaussian blur helper functions
     void find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double  std_dev);
     void transfer_pixels(double *src1, double *src2, Q_UINT8  *dest, Q_INT32 bytes, Q_INT32 width);

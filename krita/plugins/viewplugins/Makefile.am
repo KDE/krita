@@ -13,7 +13,7 @@ SUBDIRS = \
     rotateimage \
     screenshot \
     shearimage \
+    dropshadow \
     $(SCRIPTINGDIR)
 
 #    separate_channels 
-#    dropshadow 

@@ -28,6 +28,9 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_filter.h"
+#include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
@@ -36,7 +39,7 @@ public:
     {
         m_img = img;
         m_gc = gc;
-        m_projection = 0;
+        m_projection = 0; // XXX: Is this the full projection of all groups, or just the projection for the current layer group?
         m_rc = rc;
 /*
         m_insertMergedAboveLayer = 0;
@@ -154,7 +157,13 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
-        return true;
+        KisFilterConfiguration * cfg = layer->filter();
+        kdDebug() << "Going to do adjustment layer magick! " << cfg->name() << endl;
+        KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
+        KisSelectionSP selection = layer->selection();
+        KisSelectionSP oldSelection = m_projection->setSelection(selection);
+        f->process(m_projection, m_projection, cfg, m_rc);
+        
     }
     
     

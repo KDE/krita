@@ -62,8 +62,8 @@ public:
 
         if (layer->undoAdapter()) {
             layer->undoAdapter()->addCommand(t);
-            KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-            layer->undoAdapter()->addCommand(cmd);
+//             KNamedCommand * cmd = dev -> moveCommand(layer->x() + m_rect.x(), layer->y() + m_rect.y());
+//             layer->undoAdapter()->addCommand(cmd);
         }
 
         return true;

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgToolCrop</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,181 +8,138 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>415</width>
-            <height>128</height>
+            <width>334</width>
+            <height>119</height>
         </rect>
     </property>
     <property name="caption">
         <string>Crop</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout11</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>layout7</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout1</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Start X:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbX</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intStartX</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout2</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>End X:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbWidth</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intEndX</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
+                    <property name="text">
+                        <string>X:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>isbX</cstring>
+                    </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="KIntSpinBox" row="0" column="1">
                     <property name="name">
-                        <cstring>layout8</cstring>
+                        <cstring>intX</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout3</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Start Y:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbY</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intStartY</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout4</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel4</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>End Y:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbHeight</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intEndY</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
+                    <property name="maxValue">
+                        <number>1000000000</number>
+                    </property>
                 </widget>
-            </hbox>
+                <widget class="KIntSpinBox" row="1" column="3">
+                    <property name="name">
+                        <cstring>intHeight</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000000</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="2">
+                    <property name="name">
+                        <cstring>boolWidth</cstring>
+                    </property>
+                    <property name="text">
+                        <string>W&amp;idth:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+I</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Will keep the width of the crop constant</string>
+                    </property>
+                </widget>
+                <widget class="KIntSpinBox" row="0" column="3">
+                    <property name="name">
+                        <cstring>intWidth</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000000</number>
+                    </property>
+                </widget>
+                <widget class="KIntSpinBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>intY</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000000</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="2">
+                    <property name="name">
+                        <cstring>boolHeight</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Height:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Will keep the height of the crop constant</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Y:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>isbY</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="2" column="3">
+                    <property name="name">
+                        <cstring>doubleRatio</cstring>
+                    </property>
+                    <property name="precision">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>boolRatio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>R&amp;atio:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Will keep the ratio constant</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout9</cstring>
             </property>
@@ -215,21 +172,45 @@
                     <property name="text">
                         <string>&amp;Crop</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
-    </grid>
+        <spacer>
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
-    <tabstop>intStartX</tabstop>
-    <tabstop>intStartY</tabstop>
-    <tabstop>intEndX</tabstop>
-    <tabstop>intEndY</tabstop>
+    <tabstop>intX</tabstop>
+    <tabstop>intY</tabstop>
+    <tabstop>intWidth</tabstop>
+    <tabstop>intHeight</tabstop>
     <tabstop>cmbType</tabstop>
     <tabstop>bnCrop</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

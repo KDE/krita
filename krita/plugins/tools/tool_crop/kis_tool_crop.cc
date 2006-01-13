@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,11 +21,12 @@
  */
 
 
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpushbutton.h>
-#include <qobject.h>
-#include <qcombobox.h>
 #include <qrect.h>
 
 #include <kdebug.h>
@@ -64,8 +66,7 @@ KisToolCrop::KisToolCrop()
     setCursor(KisCursor::selectCursor());
     m_subject = 0;
     m_selecting = false;
-    m_startPos = QPoint(0, 0);
-    m_endPos = QPoint(0, 0);
+    m_rectCrop = QRect(0, 0, 0, 0);
     m_handleSize = 13;
     m_haveCropSelection = false;
     m_optWidget = 0;
@@ -91,9 +92,7 @@ void KisToolCrop::activate()
         if (!device -> hasSelection())
             return;
 
-        QRect extent = device -> selection() -> exactBounds();
-        m_startPos = extent.topLeft();
-        m_endPos = extent.bottomRight();
+        m_rectCrop = device -> selection() -> exactBounds();
         validateSelection();
         crop();
     }
@@ -119,14 +118,9 @@ void KisToolCrop::clearRect()
 
         controller -> kiscanvas() -> update();
 
-        m_startPos = QPoint(0, 0);
-        m_endPos = QPoint(0, 0);
+        m_rectCrop = QRect(0,0,0,0);
 
-        setOptionWidgetStartX(m_startPos.x());
-        setOptionWidgetStartY(m_startPos.y());
-        setOptionWidgetEndX(m_endPos.x());
-        setOptionWidgetEndY(m_endPos.y());
-
+        updateWidgetValues();
         m_selecting = false;
     }
 }
@@ -144,9 +138,8 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
 
                 if( !m_haveCropSelection ) //if the selection is not set
                 {
-                    m_startPos = e -> pos().floorQPoint();
-                    m_endPos = e -> pos().floorQPoint();
-
+                    QPoint p = e -> pos().floorQPoint();
+                    m_rectCrop = QRect( p.x(), p.y(), 0, 0);
                     paintOutlineWithHandles();
                 }
                 else
@@ -156,10 +149,7 @@ void KisToolCrop::buttonPress(KisButtonPressEvent *e)
                     m_dragStart = e -> pos().floorQPoint();
                 }
 
-                setOptionWidgetStartX(m_startPos.x());
-                setOptionWidgetStartY(m_startPos.y());
-                setOptionWidgetEndX(m_endPos.x());
-                setOptionWidgetEndY(m_endPos.y());
+                updateWidgetValues();
             }
         }
     }
@@ -175,12 +165,12 @@ void KisToolCrop::move(KisMoveEvent *e)
             {
                 paintOutlineWithHandles();
 
-                m_endPos = e -> pos().floorQPoint();
+                m_rectCrop.setBottomRight( e->pos().floorQPoint());
 
                 KisImageSP image = m_subject -> currentImg();
 
-                m_endPos.setX(CLAMP(m_endPos.x(), 0, image -> width()));
-                m_endPos.setY(CLAMP(m_endPos.y(), 0, image -> height()));
+                m_rectCrop.setRight( QMIN(m_rectCrop.right(), image -> width()));
+                m_rectCrop.setBottom( QMIN(m_rectCrop.bottom(), image -> width()));
 
                 paintOutlineWithHandles();
             }
@@ -189,65 +179,150 @@ void KisToolCrop::move(KisMoveEvent *e)
                 m_dragStop = e -> pos().floorQPoint();
                 if (m_mouseOnHandleType != None && m_dragStart != m_dragStop ) {
 
-                    QPoint pos = e -> pos().floorQPoint();
 
                     Q_INT32 imageWidth = m_subject -> currentImg() -> width();
                     Q_INT32 imageHeight = m_subject -> currentImg() -> height();
 
                     paintOutlineWithHandles();
 
-                    switch (m_mouseOnHandleType)
+                    QPoint pos = e -> pos().floorQPoint();
+                    if( m_mouseOnHandleType == Inside )
                     {
-                    case (UpperLeft):
-                        m_startPos.setX( pos.x() + m_dx );
-                        m_startPos.setY( pos.y() + m_dy );
-                        break;
-                    case (LowerRight):
-                        m_endPos.setX( pos.x() + m_dx );
-                        m_endPos.setY( pos.y() + m_dy );
-                        break;
-                    case (UpperRight):
-                        m_endPos.setX( pos.x() + m_dx );
-                        m_startPos.setY( pos.y() + m_dy );
-                        break;
-                    case (LowerLeft):
-                        m_startPos.setX( pos.x() + m_dx );
-                        m_endPos.setY( pos.y() + m_dy );
-                        break;
-                    case (Upper):
-                        m_startPos.setY( pos.y() + m_dy );
-                        break;
-                    case (Lower):
-                        m_endPos.setY( pos.y() + m_dy );
-                        break;
-                    case (Left):
-                        m_startPos.setX( pos.x() + m_dx );
-                        break;
-                    case (Right):
-                        m_endPos.setX( pos.x() + m_dx );
-                        break;
-                    case (Inside):
-                        m_startPos.setX( m_startPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
-                        m_endPos.setX( m_endPos.x() - ( m_dragStart.x() - m_dragStop.x() ) );
-                        m_startPos.setY( m_startPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
-                        m_endPos.setY( m_endPos.y() - ( m_dragStart.y() - m_dragStop.y() ) );
-                        break;
+                        m_rectCrop.moveBy( ( m_dragStop.x() - m_dragStart.x() ),  ( m_dragStop.y() - m_dragStart.y() ) );
+                    } else if(m_optWidget->boolRatio->isChecked())
+                    {
+                        QPoint drag = m_dragStop - m_dragStart;
+                        if( ! m_optWidget->boolWidth->isChecked() && !m_optWidget->boolHeight->isChecked() )
+                        {
+                            switch (m_mouseOnHandleType)
+                            {
+                            case (UpperLeft):
+                            {
+                                Q_INT32 dep = (drag.x() + drag.y()) / 2;
+                                m_rectCrop.setTop( m_rectCrop.top() + dep  );
+                                m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                            }
+                                break;
+                            case (LowerRight):
+                            {
+                                Q_INT32 dep = (drag.x() + drag.y()) / 2;
+                                m_rectCrop.setBottom( m_rectCrop.bottom() + dep );
+                                m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                break;
+                            }
+                            case (UpperRight):
+                            {
+                                Q_INT32 dep = (drag.x() - drag.y()) / 2;
+                                m_rectCrop.setTop( m_rectCrop.top() - dep  );
+                                m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                break;
+                            }
+                            case (LowerLeft):
+                            {
+                                Q_INT32 dep = (drag.x() - drag.y()) / 2;
+                                m_rectCrop.setBottom( m_rectCrop.bottom() - dep );
+                                m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                break;
+                            }
+                            case (Upper):
+                                m_rectCrop.setTop( pos.y() + m_dy );
+                                m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
+                                break;
+                            case (Lower):
+                                m_rectCrop.setBottom( pos.y() + m_dy );
+                                m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
+                                break;
+                            case (Left):
+                                m_rectCrop.setLeft( pos.x() + m_dx );
+                                m_rectCrop.setHeight( (int) (m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
+                                break;
+                            case (Right):
+                                m_rectCrop.setRight( pos.x() + m_dx );
+                                m_rectCrop.setHeight( (int) (m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
+                                break;
+                            case (Inside): // never happen
+                                break;
+                            }
+                        }
+                    } else {
+                        if( m_optWidget->boolWidth->isChecked() )
+                        {
+                            m_rectCrop.setWidth( m_optWidget->intWidth->value() );
+                        } else {
+                            switch (m_mouseOnHandleType)
+                            {
+                                case (LowerLeft):
+                                case (Left):
+                                case (UpperLeft):
+                                    m_rectCrop.setLeft( pos.x() + m_dx );
+                                    break;
+                                case (Right):
+                                case (UpperRight):
+                                case (LowerRight):
+                                    m_rectCrop.setRight( pos.x() + m_dx );
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if( m_optWidget->boolHeight->isChecked() )
+                        {
+                            m_rectCrop.setHeight( m_optWidget->intHeight->value() );
+                        } else {
+                            switch (m_mouseOnHandleType)
+                            {
+                                case (UpperLeft):
+                                case (Upper):
+                                case (UpperRight):
+                                    m_rectCrop.setTop( pos.y() + m_dy );
+                                    break;
+                                case (LowerRight):
+                                case (LowerLeft):
+                                case (Lower):
+                                    m_rectCrop.setBottom( pos.y() + m_dy );
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
-
-
-                    m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth));
-                    m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight));
-                    m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth));
-                    m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight));
+                    if( m_rectCrop.width() > imageWidth)
+                    {
+                        m_rectCrop.setLeft( 0 );
+                        m_rectCrop.setWidth( imageWidth );
+                    } else if( m_rectCrop.width() < 0) {
+                        m_rectCrop.setWidth( 0 );
+                    } else {
+                        if( m_rectCrop.left() < 0 )
+                        {
+                            m_rectCrop.moveLeft( 0 );
+                        }
+                        if( m_rectCrop.right() > imageWidth )
+                        {
+                            m_rectCrop.moveRight( imageWidth );
+                        }
+                    }
+                    if( m_rectCrop.height() > imageHeight)
+                    {
+                        m_rectCrop.setTop( 0 );
+                        m_rectCrop.setHeight( imageHeight );
+                    } else if( m_rectCrop.height() < 0) {
+                        m_rectCrop.setHeight( 0 );
+                    } else {
+                        if( m_rectCrop.top() < 0 )
+                        {
+                            m_rectCrop.moveTop( 0 );
+                        }
+                        if( m_rectCrop.bottom() > imageHeight )
+                        {
+                            m_rectCrop.moveBottom( imageHeight );
+                        }
+                    }
                     m_dragStart = e -> pos().floorQPoint();
                     paintOutlineWithHandles();
                 }
             }
-
-            setOptionWidgetStartX(QMIN(m_startPos.x(), m_endPos.x()));
-            setOptionWidgetStartY(QMIN(m_startPos.y(), m_endPos.y()));
-            setOptionWidgetEndX(QMAX(m_startPos.x(), m_endPos.x()));
-            setOptionWidgetEndY(QMAX(m_startPos.y(), m_endPos.y()));
+            updateWidgetValues();
         }
         else //if we are not selecting
         {
@@ -260,6 +335,16 @@ void KisToolCrop::move(KisMoveEvent *e)
             }
         }
     }
+}
+
+void KisToolCrop::updateWidgetValues(bool updateratio)
+{
+    setOptionWidgetX(m_rectCrop.x());
+    setOptionWidgetY(m_rectCrop.y());
+    setOptionWidgetWidth(m_rectCrop.width());
+    setOptionWidgetHeight(m_rectCrop.height());
+    if(updateratio && !m_optWidget->boolRatio->isChecked() )
+        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
 }
 
 void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
@@ -280,7 +365,7 @@ void KisToolCrop::doubleClick(KisDoubleClickEvent *)
     if (m_haveCropSelection) crop();
 }
 
-void KisToolCrop::validateSelection(void)
+void KisToolCrop::validateSelection(bool updateratio)
 {
     if (m_subject) {
         KisImageSP image = m_subject -> currentImg();
@@ -288,28 +373,12 @@ void KisToolCrop::validateSelection(void)
         if (image) {
             Q_INT32 imageWidth = image -> width();
             Q_INT32 imageHeight = image -> height();
+            m_rectCrop.setLeft(QMAX(0, m_rectCrop.left()));
+            m_rectCrop.setTop(QMAX(0, m_rectCrop.top()));
+            m_rectCrop.setRight(QMIN(imageWidth, m_rectCrop.right()));
+            m_rectCrop.setBottom(QMIN(imageHeight, m_rectCrop.bottom()));
 
-            m_startPos.setX(CLAMP(m_startPos.x(), 0, imageWidth));
-            m_startPos.setY(CLAMP(m_startPos.y(), 0, imageHeight));
-            m_endPos.setX(CLAMP(m_endPos.x(), 0, imageWidth));
-            m_endPos.setY(CLAMP(m_endPos.y(), 0, imageHeight));
-
-            if (m_startPos.x() > m_endPos.x()) {
-                Q_INT32 startX = m_startPos.x();
-                m_startPos.setX(m_endPos.x());
-                m_endPos.setX(startX);
-            }
-
-            if (m_startPos.y() > m_endPos.y()) {
-                Q_INT32 startY = m_startPos.y();
-                m_startPos.setY(m_endPos.y());
-                m_endPos.setY(startY);
-            }
-
-            setOptionWidgetStartX(m_startPos.x());
-            setOptionWidgetStartY(m_startPos.y());
-            setOptionWidgetEndX(m_endPos.x());
-            setOptionWidgetEndY(m_endPos.y());
+            updateWidgetValues(updateratio);
         }
     }
 }
@@ -338,8 +407,8 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
         QPoint end;
 
         Q_ASSERT(controller);
-        start = controller -> windowToView(m_startPos);
-        end = controller -> windowToView(m_endPos);
+        start = controller -> windowToView(m_rectCrop.topLeft());
+        end = controller -> windowToView(m_rectCrop.bottomRight());
 
         gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
@@ -410,20 +479,7 @@ void KisToolCrop::crop() {
     if (!img)
         return;
 
-    if (m_endPos.y() < 0)
-        m_endPos.setY(0);
-
-    if (m_endPos.y() > img -> height())
-        m_endPos.setY(img -> height());
-
-    if (m_endPos.x() < 0)
-        m_endPos.setX(0);
-
-    if (m_endPos.x() > img -> width())
-        m_endPos.setX(img -> width());
-
-    QRect rc(m_startPos, m_endPos);
-    rc = rc.normalize();
+    QRect rc = m_rectCrop.normalize();
 
     // We don't want the border of the 'rectangle' to be included in our selection
     rc.setSize(rc.size() - QSize(1,1));
@@ -453,140 +509,155 @@ void KisToolCrop::crop() {
     }
 
 
-    m_startPos = QPoint(0, 0);
-    m_endPos = QPoint(0, 0);
+    m_rectCrop = QRect(0,0,0,0);
 
-    setOptionWidgetStartX(0);
-    setOptionWidgetStartY(0);
-    setOptionWidgetEndX(0);
-    setOptionWidgetEndY(0);
+    updateWidgetValues();
 }
 
-void KisToolCrop::setStartX(int x)
+void KisToolCrop::setCropX(int x)
 {
-    if (x <= m_endPos.x() || m_startPos.x() == m_endPos.x()) {
+    if (!m_haveCropSelection) {
+        m_haveCropSelection = true;
+    }
+    else {
+        paintOutlineWithHandles(); // remove outlines
+    }
 
+    m_rectCrop.setX(x);
+
+    validateSelection();
+    paintOutlineWithHandles();
+}
+
+void KisToolCrop::setCropY(int y)
+{
+    if (!m_haveCropSelection) {
+        m_haveCropSelection = true;
+    }
+    else {
+        paintOutlineWithHandles(); // remove outlines
+    }
+
+    m_rectCrop.setY(y);
+
+    validateSelection();
+    paintOutlineWithHandles();
+
+}
+
+void KisToolCrop::setCropWidth(int w)
+{
+    if (!m_haveCropSelection) {
+        m_haveCropSelection = true;
+    }
+    else {
+        paintOutlineWithHandles(); // remove outlines
+    }
+
+    m_rectCrop.setWidth(w);
+
+    if( m_optWidget->boolRatio->isChecked() )
+    {
+        m_rectCrop.setHeight( (int) ( w / m_optWidget->doubleRatio->value() ) );
+    } else {
+        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
+    }
+    
+    validateSelection();
+    paintOutlineWithHandles();
+
+}
+
+void KisToolCrop::setCropHeight(int h)
+{
+    if (!m_haveCropSelection) {
+        m_haveCropSelection = true;
+    }
+    else {
+        paintOutlineWithHandles(); // remove outlines
+    }
+
+    m_rectCrop.setHeight(h);
+
+    if( m_optWidget->boolRatio->isChecked() )
+    {
+        m_rectCrop.setWidth( (int) ( h * m_optWidget->doubleRatio->value() ) );
+    } else {
+        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
+    }
+    
+    validateSelection();
+    paintOutlineWithHandles();
+
+}
+
+void KisToolCrop::setRatio(double )
+{
+    if( ! (m_optWidget->boolWidth->isChecked() && m_optWidget->boolHeight->isChecked() ))
+    {
         if (!m_haveCropSelection) {
             m_haveCropSelection = true;
         }
         else {
-            paintOutlineWithHandles();
+            paintOutlineWithHandles(); // remove outlines
         }
-
-        m_startPos.setX(x);
-
-        if (m_endPos.x() < x) {
-            m_endPos.setX(x);
+        if( m_optWidget->boolWidth->isChecked() )
+        {
+            m_rectCrop.setHeight( (int) ( m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
+            setOptionWidgetHeight( m_rectCrop.height() );
+        } else if(m_optWidget->boolHeight->isChecked()) {
+            m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
+            setOptionWidgetWidth( m_rectCrop.width() );
+        } else {
+            int newwidth = (int) (m_optWidget->doubleRatio->value() * m_rectCrop.height());
+            newwidth = (newwidth + m_rectCrop.width()) / 2;
+            m_rectCrop.setWidth( newwidth );
+            setOptionWidgetWidth( newwidth );
+            m_rectCrop.setHeight( (int) (newwidth / m_optWidget->doubleRatio->value()) );
+            setOptionWidgetHeight( m_rectCrop.height() );
         }
-
-        validateSelection();
+        validateSelection(false);
         paintOutlineWithHandles();
-    } else {
-        setOptionWidgetStartX(m_startPos.x());
     }
 }
 
-void KisToolCrop::setStartY(int y)
-{
-    if (y <= m_endPos.y() || m_startPos.y() == m_endPos.y()) {
-
-        if (!m_haveCropSelection) {
-            m_haveCropSelection = true;
-        }
-        else {
-            paintOutlineWithHandles();
-        }
-
-        m_startPos.setY(y);
-
-        if (m_endPos.y() < y) {
-            m_endPos.setY(y);
-        }
-
-        validateSelection();
-        paintOutlineWithHandles();
-    } else {
-        setOptionWidgetStartY(m_startPos.y());
-    }
-}
-
-void KisToolCrop::setEndX(int x)
-{
-    if (x >= m_startPos.x() || m_startPos.x() == m_endPos.x()) {
-
-        if (!m_haveCropSelection) {
-            m_haveCropSelection = true;
-        }
-        else {
-            paintOutlineWithHandles();
-        }
-
-        m_endPos.setX(x);
-
-        if (m_startPos.x() > x) {
-            m_startPos.setX(x);
-        }
-
-        validateSelection();
-        paintOutlineWithHandles();
-    } else {
-        setOptionWidgetEndX(m_endPos.x());
-    }
-}
-
-void KisToolCrop::setEndY(int y)
-{
-    if (y >= m_startPos.y() || m_startPos.y() == m_endPos.y()) {
-
-        if (!m_haveCropSelection) {
-            m_haveCropSelection = true;
-        }
-        else {
-            paintOutlineWithHandles();
-        }
-
-        m_endPos.setY(y);
-
-        if (m_startPos.y() > y) {
-            m_startPos.setY(y);
-        }
-
-        validateSelection();
-        paintOutlineWithHandles();
-    } else {
-        setOptionWidgetEndY(m_endPos.y());
-    }
-}
-
-void KisToolCrop::setOptionWidgetStartX(Q_INT32 x)
+void KisToolCrop::setOptionWidgetX(Q_INT32 x)
 {
     // Disable signals otherwise we get the valueChanged signal, which we don't want
     // to go through the logic for setting values that way.
-    m_optWidget -> intStartX -> blockSignals(true);
-    m_optWidget -> intStartX -> setValue(x);
-    m_optWidget -> intStartX -> blockSignals(false);
+    m_optWidget -> intX -> blockSignals(true);
+    m_optWidget -> intX -> setValue(x);
+    m_optWidget -> intX -> blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetStartY(Q_INT32 y)
+void KisToolCrop::setOptionWidgetY(Q_INT32 y)
 {
-    m_optWidget -> intStartY -> blockSignals(true);
-    m_optWidget -> intStartY -> setValue(y);
-    m_optWidget -> intStartY -> blockSignals(false);
+    m_optWidget -> intY -> blockSignals(true);
+    m_optWidget -> intY -> setValue(y);
+    m_optWidget -> intY -> blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetEndX(Q_INT32 x)
+void KisToolCrop::setOptionWidgetWidth(Q_INT32 x)
 {
-    m_optWidget -> intEndX -> blockSignals(true);
-    m_optWidget -> intEndX -> setValue(x);
-    m_optWidget -> intEndX -> blockSignals(false);
+    m_optWidget -> intWidth -> blockSignals(true);
+    m_optWidget -> intWidth -> setValue(x);
+    m_optWidget -> intWidth -> blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetEndY(Q_INT32 y)
+void KisToolCrop::setOptionWidgetHeight(Q_INT32 y)
 {
-    m_optWidget -> intEndY -> blockSignals(true);
-    m_optWidget -> intEndY -> setValue(y);
-    m_optWidget -> intEndY -> blockSignals(false);
+    m_optWidget -> intHeight -> blockSignals(true);
+    m_optWidget -> intHeight -> setValue(y);
+    m_optWidget -> intHeight -> blockSignals(false);
 }
+
+void KisToolCrop::setOptionWidgetRatio(double ratio)
+{
+    m_optWidget -> doubleRatio -> blockSignals(true);
+    m_optWidget -> doubleRatio -> setValue(ratio);
+    m_optWidget -> doubleRatio -> blockSignals(false);
+}
+
 
 QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 {
@@ -595,10 +666,11 @@ QWidget* KisToolCrop::createOptionWidget(QWidget* parent)
 
     connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-    connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
-    connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
-    connect(m_optWidget -> intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
-    connect(m_optWidget -> intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
+    connect(m_optWidget -> intX, SIGNAL(valueChanged(int)), this, SLOT(setCropX(int)));
+    connect(m_optWidget -> intY, SIGNAL(valueChanged(int)), this, SLOT(setCropY(int)));
+    connect(m_optWidget -> intWidth, SIGNAL(valueChanged(int)), this, SLOT(setCropWidth(int)));
+    connect(m_optWidget -> intHeight, SIGNAL(valueChanged(int)), this, SLOT(setCropHeight(int)));
+    connect(m_optWidget -> doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(setRatio( double )));
 
     return m_optWidget;
 }
@@ -679,8 +751,8 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
 {
     KisCanvasController *controller = m_subject -> canvasController();
     Q_ASSERT(controller);
-    QPoint start = controller -> windowToView(m_startPos);
-    QPoint end = controller -> windowToView(m_endPos);
+    QPoint start = controller -> windowToView(m_rectCrop.topLeft());
+    QPoint end = controller -> windowToView(m_rectCrop.bottomRight());
 
     Q_INT32 startx;
     Q_INT32 starty;

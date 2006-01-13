@@ -74,25 +74,28 @@ private:
     void paintOutlineWithHandles(KisCanvasPainter& gc, const QRect& rc);
     Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
     void setMoveResizeCursor (Q_INT32 handle);
-    void validateSelection(void);
-    void setOptionWidgetStartX(Q_INT32 x);
-    void setOptionWidgetStartY(Q_INT32 y);
-    void setOptionWidgetEndX(Q_INT32 x);
-    void setOptionWidgetEndY(Q_INT32 y);
+    void validateSelection(bool updateratio = true);
+    void setOptionWidgetX(Q_INT32 x);
+    void setOptionWidgetY(Q_INT32 y);
+    void setOptionWidgetWidth(Q_INT32 x);
+    void setOptionWidgetHeight(Q_INT32 y);
+    void setOptionWidgetRatio(double ratio);
 
 private slots:
 
     void crop();
-    void setStartX(int x);
-    void setStartY(int y);
-    void setEndX(int x);
-    void setEndY(int y);
+    void setCropX(int x);
+    void setCropY(int y);
+    void setCropWidth(int x);
+    void setCropHeight(int y);
+    void setRatio(double ratio);
 
 private:
-
+    void updateWidgetValues(bool updateratio = true);
     KisCanvasSubject *m_subject;
-    QPoint m_startPos;
-    QPoint m_endPos;
+    QRect m_rectCrop;
+//     QPoint m_startPos;
+//     QPoint m_endPos;
     bool m_selecting;
     QPoint m_dragStart;
     QPoint m_dragStop;

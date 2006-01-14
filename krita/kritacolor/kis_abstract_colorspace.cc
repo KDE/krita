@@ -222,10 +222,10 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
     // Last resort fallback. This will be removed when this class is renamed KisLCMSColorSpace after 1.5.
     while (numPixels > 0) {
         QColor color;
-        QUANTUM opacity;
+        Q_UINT8 opacity;
 
         toQColor(src, &color, &opacity);
-        dstColorStrategy -> nativeColor(color, opacity, dst);
+        dstColorSpace -> fromQColor(color, opacity, dst);
 
         src += srcPixelSize;
         dst += dstPixelSize;

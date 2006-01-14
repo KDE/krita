@@ -67,9 +67,6 @@
                     <property name="text">
                         <string>W&amp;idth:</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+I</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Will keep the width of the crop constant</string>
                     </property>
@@ -96,9 +93,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Height:</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+H</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Will keep the height of the crop constant</string>
@@ -129,9 +123,6 @@
                     </property>
                     <property name="text">
                         <string>R&amp;atio:</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Will keep the ratio constant</string>
@@ -171,9 +162,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Crop</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>

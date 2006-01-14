@@ -37,13 +37,14 @@
 #include <qgl.h>
 #endif
 
+#include <kcombobox.h>
+#include <kcolorbutton.h>
+#include <kfiledialog.h>
+#include <kiconloader.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kfiledialog.h>
 #include <kurlrequester.h>
-#include <klineedit.h>
-#include <kiconloader.h>
-#include <kcombobox.h>
 
 #include <kis_meta_registry.h>
 #include "kis_factory.h"
@@ -257,6 +258,40 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 }
 
 //---------------------------------------------------------------------------------------------------
+GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
+{
+    KisConfig cfg;
+    selectMainStyle->setCurrentItem(cfg.getGridMainStyle());
+    selectSubdivisionStyle->setCurrentItem(cfg.getGridSubdivisionStyle());
+    
+    colorMain->setColor(cfg.getGridMainColor());
+    colorSubdivision->setColor(cfg.getGridSubdivisionColor());
+    
+    intHSpacing->setValue( cfg.getGridHSpacing() );
+    intVSpacing->setValue( cfg.getGridVSpacing() );
+    intSubdivision->setValue( cfg.getGridSubdivisions());
+    intOffsetX->setValue( cfg.getGridOffsetX());
+    intOffsetY->setValue( cfg.getGridOffsetY());
+    
+}
+
+void GridSettingsTab::setDefault()
+{
+    KisConfig cfg;
+    selectMainStyle->setCurrentItem(0);
+    selectSubdivisionStyle->setCurrentItem(1);
+    
+    colorMain->setColor(QColor(99,99,99));
+    colorSubdivision->setColor(QColor(199,199,199));
+    
+    intHSpacing->setValue( 10 );
+    intVSpacing->setValue( 10 );
+    intSubdivision->setValue( 1 );
+    intOffsetX->setValue( 0 );
+    intOffsetY->setValue( 0 );
+}
+
+//---------------------------------------------------------------------------------------------------
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
@@ -278,6 +313,9 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = addVBoxPage ( i18n( "Pressure" ), i18n( "Pressure" ), BarIcon( "tablet", KIcon::SizeMedium ));
     m_pressureSettings = new PressureSettingsTab( vbox );
 
+    vbox = addVBoxPage ( i18n( "Grid" ), i18n( "Grid" ), BarIcon( "grid", KIcon::SizeMedium ));
+    m_gridSettings = new GridSettingsTab( vbox );
+
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -291,6 +329,7 @@ void PreferencesDialog::slotDefault()
     m_pressureSettings -> setDefault();
     m_performanceSettings -> setDefault();
     m_displaySettings -> setDefault();
+    m_gridSettings->setDefault();
 }
 
 bool PreferencesDialog::editPreferences()
@@ -327,6 +366,20 @@ bool PreferencesDialog::editPreferences()
 
         cfg.setUseOpenGL(dialog -> m_displaySettings -> cbUseOpenGL -> isChecked());
         cfg.setUseOpenGLShaders(dialog -> m_displaySettings -> cbUseOpenGLShaders -> isChecked());
+    
+        // Grid settings
+        cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentItem() );
+        cfg.setGridSubdivisionStyle( dialog->m_gridSettings->selectSubdivisionStyle->currentItem() );
+
+        cfg.setGridMainColor( dialog->m_gridSettings->colorMain->color() );
+        cfg.setGridSubdivisionColor(dialog->m_gridSettings->colorSubdivision->color() );
+
+        cfg.setGridHSpacing( dialog->m_gridSettings->intHSpacing->value( ));
+        cfg.setGridVSpacing( dialog->m_gridSettings->intVSpacing->value( ));
+        cfg.setGridSubdivisions( dialog->m_gridSettings->intSubdivision->value( ));
+        cfg.setGridOffsetX( dialog->m_gridSettings->intOffsetX->value( ));
+        cfg.setGridOffsetY( dialog->m_gridSettings->intOffsetY->value( ));
+
     }
         delete dialog;
         return baccept;

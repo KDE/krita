@@ -146,6 +146,7 @@
 #include "kis_selection_manager.h"
 #include "kopalettemanager.h"
 #include "kis_filter_manager.h"
+#include "kis_grid_manager.h"
 
 #include "kis_custom_palette.h"
 #include "wdgpalettechooser.h"
@@ -163,6 +164,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_popup( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
+    , m_gridManager( 0 )
     , m_paletteManager( 0 )
     , m_toolManager( 0 )
     , m_actLayerVis( false )
@@ -230,7 +232,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
     m_toolManager = new KisToolManager(canvasSubject(), getCanvasController());
-
+    m_gridManager = new KisGridManager(this);
+    
     // This needs to be set before the dockers are created.
     m_image = m_doc -> currentImage();
 
@@ -547,6 +550,7 @@ void KisView::setupActions()
 
     m_selectionManager->setup(actionCollection());
     m_filterManager->setup(actionCollection());
+    m_gridManager->setup(actionCollection());
 
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
@@ -865,7 +869,7 @@ void KisView::paintView(const KisRect& r)
                             wr.right(), wr.bottom(), gc, monitorProfile(),
                             paintFlags, HDRExposure());
                     }
-
+                    m_gridManager->drawGrid( wr, gc );
 //                    paintGuides();
                 }
 
@@ -1097,6 +1101,7 @@ void KisView::layerUpdateGUI(bool enable)
     m_selectionManager->updateGUI();
     m_filterManager->updateGUI();
     m_toolManager->updateGUI();
+    m_gridManager->updateGUI();
 
     if (img -> activeDevice())
         emit currentColorSpaceChanged(img -> activeDevice() -> colorSpace());

@@ -96,6 +96,27 @@ public:
     float getDefaultDockerFontSize();
     void setDockerFontSize(float);
 
+    
+    Q_UINT32 getGridMainStyle();
+    void setGridMainStyle(Q_UINT32 v);
+    Q_UINT32 getGridSubdivisionStyle();
+    void setGridSubdivisionStyle(Q_UINT32 v);
+    QColor getGridMainColor();
+    void setGridMainColor(QColor v);
+    QColor getGridSubdivisionColor();
+    void setGridSubdivisionColor(QColor v);
+    Q_UINT32 getGridHSpacing();
+    void setGridHSpacing(Q_UINT32 v);
+    Q_UINT32 getGridVSpacing();
+    void setGridVSpacing(Q_UINT32 v);
+    Q_UINT32 getGridSubdivisions();
+    void setGridSubdivisions(Q_UINT32 v);
+    Q_UINT32 getGridOffsetX();
+    void setGridOffsetX(Q_UINT32 v);
+    Q_UINT32 getGridOffsetY();
+    void setGridOffsetY(Q_UINT32 v);
+
+    
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

@@ -31,6 +31,7 @@
 #include "wdgpressuresettings.h"
 #include "wdgperformancesettings.h"
 #include "wdgdisplaysettings.h"
+#include "wdggridsettings.h"
 
 class QLineEdit;
 class QCheckBox;
@@ -133,6 +134,19 @@ protected slots:
 
 
 /**
+ *  Grid settings tab for preferences dialog
+ */
+class GridSettingsTab : public WdgGridSettingsBase {
+    public:
+        GridSettingsTab(QWidget* parent);
+    public:
+        void setDefault();
+};
+
+//=======================
+
+
+/**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
 class PreferencesDialog : public KDialogBase
@@ -156,6 +170,7 @@ protected:
     PerformanceTab* m_performanceSettings;
     PressureSettingsTab * m_pressureSettings;
     DisplaySettingsTab * m_displaySettings;
+    GridSettingsTab* m_gridSettings;
 
 protected slots:
 

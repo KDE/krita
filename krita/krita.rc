@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="10">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="11">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -38,6 +38,16 @@
   <Separator/>
   <Action name="view_ruler"/>
   <Action name="view_guidelines"/>
+  <Separator/>
+  <Action name="view_toggle_grid" />
+  <Menu name="view_fast_grid_config"><text>Fast grid configuration</text>
+   <Action name="view_fast_grid_1x1" />
+   <Action name="view_fast_grid_2x2" />
+   <Action name="view_fast_grid_5x5" />
+   <Action name="view_fast_grid_10x10" />
+   <Action name="view_fast_grid_20x20" />
+   <Action name="view_fast_grid_40x40" />
+  </Menu>
   <Separator/>
   <Action name="view_palette_action_menu"/>
   <Separator/>

@@ -85,6 +85,7 @@ class KisDoubleClickEvent;
 class KisFilterManager;
 class KisFilterStrategy;
 class KisGradient;
+class KisGridManager;
 class KisLabelProgress;
 class KisLayerBox;
 class KisMoveEvent;
@@ -243,7 +244,9 @@ private:
 
     virtual KisDoc * document() const;
 
-    KisSelectionManager * selectionManager() { return m_selectionManager; }
+    inline KisGridManager * gridManager() { return m_gridManager; }
+    
+    inline KisSelectionManager * selectionManager() { return m_selectionManager; }
 
     KoPaletteManager * paletteManager();
 
@@ -457,6 +460,7 @@ private:
     KisCanvas *m_canvas;
     QPopupMenu * m_popup;
     
+    KisGridManager * m_gridManager;
     KisSelectionManager * m_selectionManager;
     KisFilterManager * m_filterManager;
     KoPaletteManager * m_paletteManager;
@@ -574,7 +578,7 @@ protected:
 
     friend class KisSelectionManager;
     friend class KisFilterManager;
-
+    friend class KisGridManager;
 };
 
 #endif // KIS_VIEW_H_

@@ -286,3 +286,101 @@ void KisConfig::setDockerFontSize(float size)
 {
     m_cfg->writeEntry("palettefontsize", size);
 }
+
+Q_UINT32 KisConfig::getGridMainStyle()
+{
+    Q_UINT32 v = m_cfg->readNumEntry("gridmainstyle", 0);
+    return CLAMP( v, 0, 2);
+}
+
+void KisConfig::setGridMainStyle(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridmainstyle", v);
+}
+
+Q_UINT32 KisConfig::getGridSubdivisionStyle()
+{
+    Q_UINT32 v = m_cfg->readNumEntry("gridsubdivisionstyle", 1);
+    return CLAMP( v, 0, 2);
+}
+
+void KisConfig::setGridSubdivisionStyle(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridsubdivisionstyle", v);
+}
+
+QColor KisConfig::getGridMainColor()
+{
+    return m_cfg->readColorEntry("gridmaincolor", new QColor(99,99,99));
+}
+
+void KisConfig::setGridMainColor(QColor v)
+{
+    m_cfg->writeEntry("gridmaincolor", v);
+}
+
+QColor KisConfig::getGridSubdivisionColor()
+{
+    return m_cfg->readColorEntry("gridsubdivisioncolor", new QColor(150,150,150));
+}
+
+void KisConfig::setGridSubdivisionColor(QColor v)
+{
+    m_cfg->writeEntry("gridsubdivisioncolor", v);
+}
+
+Q_UINT32 KisConfig::getGridHSpacing()
+{
+    Q_INT32 v = m_cfg->readNumEntry("gridhspacing", 10);
+    return (Q_UINT32)QMAX(1, v );
+}
+
+void KisConfig::setGridHSpacing(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridhspacing", v);
+}
+
+Q_UINT32 KisConfig::getGridVSpacing()
+{
+    Q_INT32 v = m_cfg->readNumEntry("gridvspacing", 10);
+    return (Q_UINT32)QMAX(1, v );
+}
+
+void KisConfig::setGridVSpacing(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridvspacing", v);
+}
+
+Q_UINT32 KisConfig::getGridSubdivisions()
+{
+    Q_INT32 v = m_cfg->readNumEntry("gridsubsivisons", 2);
+    return (Q_UINT32)QMAX(1, v );
+}
+
+void KisConfig::setGridSubdivisions(Q_UINT32 v)
+{
+    return m_cfg->writeEntry("gridsubsivisons", v);
+}
+
+Q_UINT32 KisConfig::getGridOffsetX()
+{
+    Q_INT32 v = m_cfg->readNumEntry("gridoffsetx", 0);
+    return (Q_UINT32)QMAX(0, v );
+}
+
+void KisConfig::setGridOffsetX(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridoffsetx", v);
+}
+
+Q_UINT32 KisConfig::getGridOffsetY()
+{
+    Q_INT32 v = m_cfg->readNumEntry("gridoffsety", 0);
+    return (Q_UINT32)QMAX(0, v );
+}
+
+void KisConfig::setGridOffsetY(Q_UINT32 v)
+{
+    m_cfg->writeEntry("gridoffsety", v);
+}
+

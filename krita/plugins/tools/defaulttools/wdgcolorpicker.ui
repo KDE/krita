@@ -70,7 +70,7 @@
                         <cstring>cbPalette</cstring>
                     </property>
                     <property name="text">
-                        <string>Add to palette</string>
+                        <string>Add to palette:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox">

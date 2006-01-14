@@ -120,12 +120,7 @@ public:
     /**
      * Create and return a widget with options for this paintop.
      */
-    virtual QWidget* createOptionWidget(QWidget* parent);
-
-    /**
-     * @return the earlier-created option widget
-     */
-    virtual QWidget* optionWidget();
+    virtual QWidget* optionWidget(QWidget* parent);
 
 };
 #endif // KIS_PAINTOP_H_

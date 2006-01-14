@@ -21,9 +21,11 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
+#include <qwidget.h>
 #include <qcombobox.h>
 #include <qvaluelist.h>
 
+class KWidgetAction;
 class KisView;
 class KisID;
 class QString;
@@ -39,11 +41,11 @@ class KisColorSpace;
  *
  * XXX: instead of text, use pretty pictures.
  */
-class KisPaintopBox : public QComboBox {
+class KisPaintopBox : public QWidget {
 
     Q_OBJECT
 
-    typedef QComboBox super;
+    typedef QWidget super;
 
 public:
     KisPaintopBox (KisView * view,  QWidget * parent, const char * name = 0);
@@ -65,10 +67,15 @@ private slots:
 
 private:
     KisView * m_view;
-
+    QComboBox * m_cmbPaintops;
+    QHBoxLayout * m_layout;
+    QWidget * m_optionWidget;
+    
     QValueList<KisID> * m_paintops;
     QValueList<KisID> * m_displayedOps;
+    
     KisID m_currentID;
+
 };
 
 

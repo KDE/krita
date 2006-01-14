@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qpixmap.h>
+#include <qwidget.h>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -81,7 +82,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter)
         return 0;
     }
     KisPaintOpFactorySP f = get(id);
-    if (f) {
+   if (f) {
         return f -> createOp(painter);
     }
     else {
@@ -92,6 +93,12 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter)
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painter) const
 {
     return paintOp(KisID(id, ""), painter);
+}
+
+QWidget * KisPaintOpRegistry::configWidget(const KisID& id, QWidget * parent) const
+{
+    KisPaintOpFactory*  f = get(id);
+    return f->optionWidget( parent );
 }
 
 bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const

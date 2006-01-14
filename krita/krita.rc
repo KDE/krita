@@ -170,6 +170,21 @@
      <Action name="patterns"/>
      <Separator/>
      <Action name="paintops"/>
+     <Action name="paintop_options"/>
 </ToolBar>
+
+<Menu name="image_popup">
+ <Action name="select_all"/>
+ <Action name="deselect"/>
+ <Action name="invert"/>
+ <Separator/>
+ <Action name="koffice_undo"/>
+ <Action name="koffice_redo"/>
+ <Separator/>
+ <Action name="cut"/>
+ <Action name="copy"/>
+ <Action name="paste"/>
+ <Action name="paste_new"/>
+</Menu>
 
 </kpartgui>

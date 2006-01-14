@@ -25,9 +25,11 @@
 
 #include "kis_paintop.h"
 
+#include "qlabel.h"
+#include <qwidget.h>
+
 class KisPoint;
 class KisPainter;
-
 
 class KisBrushOpFactory : public KisPaintOpFactory  {
 
@@ -38,7 +40,7 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
-
+    //virtual QWidget * optionWidget(QWidget * parent) { return new QLabel("brushop", parent); }
 };
 
 class KisBrushOp : public KisPaintOp {

@@ -26,7 +26,6 @@
 #include "kis_point.h"
 #include "koffice_export.h"
 
-class QWidget;
 class KisPainter;
 class KisBrush;
 class KisEvent;

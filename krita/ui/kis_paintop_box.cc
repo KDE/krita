@@ -21,8 +21,10 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qpixmap.h>
+#include <qlayout.h>
 
 #include <klocale.h>
+#include <kactioncollection.h>
 
 #include <kis_id.h>
 #include <kis_paintop_registry.h>
@@ -38,11 +40,16 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
       m_view(view)
 {
     setCaption(i18n("Painter's Toolchest"));
+    m_optionWidget = 0;
     m_paintops = new QValueList<KisID>();
     m_displayedOps = new QValueList<KisID>();
 
+    m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
+    m_layout = new QHBoxLayout(this, 1, 1);
+    m_layout->addWidget(m_cmbPaintops);
+    
     connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
-    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
+    connect(m_cmbPaintops, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
     KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
@@ -71,6 +78,15 @@ void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 void KisPaintopBox::slotItemSelected(int index)
 {
     KisID id = *m_paintops->at(index);
+    if (m_optionWidget != 0) {
+        m_layout->remove(m_optionWidget);
+    }
+    QWidget * m_optionWidget = KisPaintOpRegistry::instance()->configWidget( id, this );
+    
+    if (m_optionWidget != 0) {
+        m_layout->addWidget(m_optionWidget);
+    }
+    
     m_currentID = id;
     emit selected(id);
 }
@@ -80,7 +96,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     QValueList<KisID>::iterator it = m_paintops -> begin();
     QValueList<KisID>::iterator end = m_paintops -> end();
     m_displayedOps -> clear();
-    clear();
+    m_cmbPaintops->clear();
 
     for ( ; it != end; ++it ) {
         if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
@@ -89,16 +105,16 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
             if (pm.isNull()) {
                 QPixmap p = QPixmap( 16, 16 );
                 p.fill();
-                insertItem(p,  (*it).name());
+                m_cmbPaintops->insertItem(p,  (*it).name());
             }
             else {
-                insertItem(pm, (*it).name());
+                m_cmbPaintops->insertItem(pm, (*it).name());
             }
             m_displayedOps -> append(*it);
         }
     }
 
-    setCurrentItem( m_displayedOps -> findIndex ( m_currentID ) );
+    m_cmbPaintops->setCurrentItem( m_displayedOps->findIndex ( m_currentID ) );
 }
 
 #include "kis_paintop_box.moc"

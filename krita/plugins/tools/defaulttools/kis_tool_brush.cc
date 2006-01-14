@@ -88,6 +88,7 @@ void KisToolBrush::initPaint(KisEvent *e)
         return;
     }
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
+    kdDebug() << "Paintop : " << op << "\n";
     if (!op) return;
     
     m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline

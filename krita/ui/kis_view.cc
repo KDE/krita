@@ -160,6 +160,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , KXMLGUIBuilder( shell() )
     , m_doc( doc )
     , m_canvas( 0 )
+    , m_popup( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
     , m_paletteManager( 0 )
@@ -599,7 +600,6 @@ void KisView::setupActions()
     m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), "Ctrl+R", this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
     m_RulerAction->setChecked(cfg.showRulers());
     m_RulerAction->setCheckedState(i18n("Hide Rulers"));
-    m_RulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
     m_RulerAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
                                       "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
@@ -1892,6 +1892,7 @@ void KisView::gradientActivated(KisResource *gradient)
 
 void KisView::paintopActivated(const KisID & paintop)
 {
+    kdDebug() << "paintop activated: " << paintop.id() << "\n";
 
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
@@ -2051,8 +2052,15 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //            }
 //        }
 //    }
+    if (e->button() == Qt::RightButton) {
 
-    if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
+        if (m_popup == 0) {
+            Q_ASSERT(factory());
+            m_popup = (QPopupMenu *)factory()->container("image_popup", this);
+        }
+        m_popup->popup(e->globalPos().roundQPoint());
+    }
+    else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
         // somewhat of a hack: we should actually test if we intersect with the scrollers,
         // but the globalPos seems to be off by a few pixels

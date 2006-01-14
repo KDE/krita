@@ -140,8 +140,6 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
-
-        m_optionWidgetLayout -> addWidget(m_chkDirect, 2, 0);
         
         // XXX make this a picture of a '?', like you see everywhere
         QPushButton* push = new QPushButton("?", m_optionWidget);

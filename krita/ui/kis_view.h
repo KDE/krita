@@ -54,6 +54,7 @@ class QLabel;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
+class QPopup;
 
 class DCOPObject;
 class KAction;
@@ -454,7 +455,8 @@ private:
 
     KisDoc *m_doc;
     KisCanvas *m_canvas;
-
+    QPopupMenu * m_popup;
+    
     KisSelectionManager * m_selectionManager;
     KisFilterManager * m_filterManager;
     KoPaletteManager * m_paletteManager;

@@ -358,8 +358,8 @@ public:
     KisSelectionSP setSelection(KisSelectionSP selection);
     
 signals:
-        void positionChanged(KisPaintDeviceImplSP device);
-        void ioProgress(Q_INT8 percentage);
+    void positionChanged(KisPaintDeviceImplSP device);
+    void ioProgress(Q_INT8 percentage);
     void profileChanged(KisProfile *  profile);
 
 private:

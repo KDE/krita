@@ -25,7 +25,9 @@
 #include "kis_generic_registry.h"
 #include <koffice_export.h>
 
+class QWidget;
 class QStringList;
+
 class KisPaintOp;
 class KisPainter;
 class KisColorSpace;
@@ -38,9 +40,23 @@ class KRITACORE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericReg
 public:
     virtual ~KisPaintOpRegistry();
 
+    /**
+     * Return a newly created paintop
+     */
     KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
+
+    /**
+     * Return a newly created paintopd
+     */
     KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
 
+    /**
+     * Return or create and return a configuration widhget
+     * for the specified paintop with the specified parent
+     * as widget parent.
+     */
+    QWidget * configWidget(const KisID& id, QWidget * parent) const;
+    
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KisID & id, KisColorSpace* cs) const;
 

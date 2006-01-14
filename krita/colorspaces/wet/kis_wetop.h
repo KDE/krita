@@ -37,11 +37,11 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
-    virtual QWidget* createOptionWidget(QWidget* parent) {
-        m_optWidget = new WetPaintOptions();
+    virtual QWidget* optionWidget(QWidget* parent) {
+        if (!m_optWidget)
+            m_optWidget = new WetPaintOptions();
         return m_optWidget;
     }
-    virtual QWidget* optionWidget() { return m_optWidget; }
 };
 
 class KisWetOp : public KisPaintOp {

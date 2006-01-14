@@ -39,7 +39,6 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id(){ return KisID("pen", i18n("Pixel Pencil")); }
     virtual QString pixmap() { return "pencil.png"; }
-    //virtual QWidget * optionWidget(QWidget * parent) { return new QLabel("penop", parent); }
 };
 
 

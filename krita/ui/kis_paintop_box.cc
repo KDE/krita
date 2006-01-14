@@ -80,11 +80,16 @@ void KisPaintopBox::slotItemSelected(int index)
     KisID id = *m_paintops->at(index);
     if (m_optionWidget != 0) {
         m_layout->remove(m_optionWidget);
+        m_optionWidget->hide();
+        m_layout->invalidate();
     }
-    QWidget * m_optionWidget = KisPaintOpRegistry::instance()->configWidget( id, this );
-    
+
+    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( id, this );
+
     if (m_optionWidget != 0) {
         m_layout->addWidget(m_optionWidget);
+        updateGeometry();
+        m_optionWidget->show();
     }
     
     m_currentID = id;

@@ -163,7 +163,6 @@ public:
         KisSelectionSP selection = layer->selection();
         KisSelectionSP oldSelection = m_projection->setSelection(selection);
         f->process(m_projection, m_projection, cfg, m_rc);
-        
     }
     
     

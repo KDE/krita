@@ -509,8 +509,10 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     KisCompositeOp compositeOp;
 
     if (compositeOpName.isNull()) {
+    kdDebug(DBG_AREA_FILE) << "no compositeOpName. Setting COMPOSITE_OVER \n";
         compositeOp = COMPOSITE_OVER;
     } else {
+    kdDebug(DBG_AREA_FILE) << "compositeOpName: " << compositeOpName << "\n";
         compositeOp = KisCompositeOp(compositeOpName);
     }
 
@@ -560,26 +562,10 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
     QString profileProductName;
 
     if ((colorspacename = element.attribute("colorspacename")).isNull())
-    {
         cs = img -> colorSpace();
-    }
     else
-    {
-        if ((profileProductName = element.attribute("profile")).isNull()) {
-            // no mention of profile so get default profile
-            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename,"");
-        }
-        else {
-            cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename, profileProductName);
-        }
-
-        if (cs == 0) {
-            kdDebug(DBG_AREA_FILE) << "Could not open ColorSpace of layer " << colorspacename << "\n";
-            return 0;
-
-        kdDebug(DBG_AREA_FILE) << "ColorSpace of layer: " << colorspacename << "\n";
-        }
-    }
+        // use default profile - it will be replaced later in completLoading
+        cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorspacename,"");
 
     layer = new KisPaintLayer(img, name, opacity, cs);
     Q_CHECK_PTR(layer);

@@ -29,6 +29,8 @@
 #include "wdglayerproperties.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_cmb_composite.h"
+#include "kis_cmb_idlist.h"
+#include "kis_profile.h"
 #include "kis_colorspace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
@@ -52,7 +54,12 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->editName->setText(deviceName);
     connect( m_page->editName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    m_page->lblColorSpace->setText( colorSpace->id().name() );
+    m_page->cmbColorSpaces->setCurrent(colorSpace->id());
+    m_page->cmbColorSpaces->setEnabled(false);
+
+    QString profilename = const_cast<KisColorSpace *>(colorSpace)->getProfile()->productName();
+    m_page->cmbProfile->insertItem(profilename);
+    m_page->cmbProfile->setEnabled(false);
 
     m_page->intOpacity -> setRange(0, 100, 13, true);
     m_page->intOpacity -> setValue(opacity);

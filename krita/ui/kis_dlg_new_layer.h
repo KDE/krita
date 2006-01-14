@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2000 Michael Koch <koch@kde.org>
  *  Copyright (c) 2000 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,15 +25,9 @@
 #include "kis_composite_op.h"
 #include <kis_global.h>
 
-class QSpinBox;
 class QWidget;
-class KIntSpinBox;
-class KLineEdit;
 class KisPaintDeviceImpl;
-class KIntNumInput;
-class KisCmbComposite;
-class KisCmbImageType;
-class KisCmbIDList;
+class WdgLayerProperties;
 
 class NewLayerDialog : public KDialogBase {
     typedef KDialogBase super;
@@ -40,6 +35,7 @@ class NewLayerDialog : public KDialogBase {
 
 public:
     NewLayerDialog(const KisID colorSpace,
+               const QString & profilename,
                const QString & deviceName,
                QWidget *parent = 0,
                const char *name = 0);
@@ -47,20 +43,15 @@ public:
     QString layerName() const;
     KisCompositeOp compositeOp() const;
     Q_INT32 opacity() const;
-    QPoint position() const;
     KisID colorSpaceID() const;
+    QString profileName() const;
 
 private slots:
-    void slotSetColorSpace(const KisID &colorSpaceId);
-
-protected slots:
-    void slotNameChanged( const QString & );
+    void fillCmbProfiles(const KisID & s);
+    void fillCmbComposite(const KisID & s);
 
 private:
-    KLineEdit *m_name;
-    KIntNumInput *m_opacity;
-    KisCmbComposite *m_cmbComposite;
-    KisCmbIDList *m_cmbImageType;
+    WdgLayerProperties * m_page;
 };
 
 #endif // KIS_DLG_NEW_LAYER_H_

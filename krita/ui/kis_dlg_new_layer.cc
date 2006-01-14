@@ -2,6 +2,7 @@
  *  Copyright (c) 2000 Michael Koch <koch@kde.org>
  *  Copyright (c) 2000 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Remot <boud@valdyas.org>
+ *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,69 +34,90 @@
 #include "kis_dlg_new_layer.h"
 #include <kis_meta_registry.h>
 #include "kis_colorspace_factory_registry.h"
+#include "kis_profile.h"
 #include "kis_colorspace.h"
+#include "wdglayerproperties.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
+                   const QString & profilename,
                    const QString & deviceName,
                    QWidget *parent,
                    const char *name)
     : super(parent, name, true, "", Ok | Cancel)
 {
-    QWidget *page = new QWidget(this);
-
-    QGridLayout *grid;
-    QLabel *lbl;
+    m_page = new WdgLayerProperties(this);
+    m_page->layout()->setMargin(0);
 
     setCaption(i18n("New Layer"));
 
-    setMainWidget(page);
-    grid = new QGridLayout(page, 8, 2, 0, 6);
+    setMainWidget(m_page);
 
     // Name
-    lbl = new QLabel(i18n("Name:"), page);
-    m_name = new KLineEdit(deviceName, page);
-    grid -> addWidget(lbl, 0, 0);
-    grid -> addWidget(m_name, 0, 1);
+    m_page->editName->setText(deviceName);
 
     // Opacity
-    lbl = new QLabel(i18n("Opacity:"), page);
-    m_opacity = new KIntNumInput(page);
-    m_opacity -> setRange(0, 100, 13, true);
-    m_opacity -> setValue(100);
-    m_opacity -> setSuffix("%");
-    grid -> addWidget(lbl, 1, 0);
-    grid -> addWidget(m_opacity, 1, 1);
+    m_page->intOpacity -> setRange(0, 100, 13, true);
+    m_page->intOpacity -> setValue(100);
+    m_page->intOpacity -> setSuffix("%");
 
-    // Composite mode
-    lbl = new QLabel(i18n("Composite mode:"), page);
-    m_cmbComposite = new KisCmbComposite(page);
-    grid -> addWidget(lbl, 2, 0);
-    grid -> addWidget(m_cmbComposite, 2, 1);
+    // ColorSpace
+    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
+    m_page->cmbColorSpaces->setCurrentText(colorSpaceID.id());
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
+        this, SLOT(fillCmbProfiles(const KisID &)));
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
+        this, SLOT(fillCmbComposite(const KisID &)));
 
-    // Layer type
-    lbl = new QLabel(i18n("Layer type:"), page);
-    m_cmbImageType = new KisCmbIDList(page);
-    m_cmbImageType -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
-    m_cmbImageType -> setCurrent(colorSpaceID);
+    // Init profiles
+    fillCmbProfiles(m_page->cmbColorSpaces->currentItem());
+    m_page->cmbProfile->setCurrentText(profilename);
 
-    grid -> addWidget(lbl, 3, 0);
-    grid -> addWidget(m_cmbImageType, 3, 1);
+    // Init composite op
+    fillCmbComposite(m_page->cmbColorSpaces->currentItem());
 
-    slotSetColorSpace(colorSpaceID);
+/*
+    connect( m_page->editName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    connect( m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
-    connect(m_cmbImageType, SIGNAL(activated(const KisID &)), this, SLOT(slotSetColorSpace(const KisID &)));
-            slotNameChanged( m_name->text() );
+    slotNameChanged( m_page->editName->text() );
+*/
 }
 
-void NewLayerDialog::slotNameChanged( const QString & text )
+void NewLayerDialog::fillCmbProfiles(const KisID & s)
 {
-    enableButtonOK( ! text.isEmpty() );
+    m_page->cmbProfile -> clear();
+
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+        return;
+    }
+
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    if (csf == 0) return;
+
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        QValueVector<KisProfile *> ::iterator it;
+        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
+            m_page->cmbProfile->insertItem((*it)->productName());
+    }
+    m_page->cmbProfile->setCurrentText(csf->defaultProfile());
+}
+
+void NewLayerDialog::fillCmbComposite(const KisID & s)
+{
+    m_page->cmbComposite -> clear();
+
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
+        return;
+    }
+
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(s,"");
+    if (cs) {
+        m_page->cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
+    }
 }
 
 int NewLayerDialog::opacity() const
 {
-    Q_INT32 opacity = m_opacity -> value();
+    Q_INT32 opacity = m_page->intOpacity -> value();
 
     if (!opacity)
         return 0;
@@ -106,25 +128,22 @@ int NewLayerDialog::opacity() const
 
 KisCompositeOp NewLayerDialog::compositeOp() const
 {
-    return m_cmbComposite -> currentItem();
+    return m_page->cmbComposite -> currentItem();
 }
 
 KisID NewLayerDialog::colorSpaceID() const
 {
-    return m_cmbImageType -> currentItem();
+    return m_page->cmbColorSpaces->currentItem();
 }
 
 QString NewLayerDialog::layerName() const
 {
-    return m_name -> text();
+    return m_page->editName -> text();
 }
 
-void NewLayerDialog::slotSetColorSpace(const KisID &colorSpaceId)
+QString NewLayerDialog::profileName() const
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(colorSpaceId,"");
-    if (cs) {
-        m_cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
-    }
+    return m_page->cmbProfile-> currentText();
 }
 
 #include "kis_dlg_new_layer.moc"

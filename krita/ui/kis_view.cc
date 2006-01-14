@@ -518,17 +518,13 @@ void KisView::setupStatusBar()
     KStatusBar *sb = statusBar();
 
     if (sb) {
-        QLabel *lbl;
-
         m_statusBarZoomLabel = new QLabel(sb);
         addStatusBarItem(m_statusBarZoomLabel, 1);
         updateStatusBarZoomLabel();
 
-
         m_statusBarSelectionLabel = new QLabel(sb);
         addStatusBarItem(m_statusBarSelectionLabel, 2);
         updateStatusBarSelectionLabel();
-
 
         m_statusBarProfileLabel = new QLabel(sb);
         addStatusBarItem(m_statusBarProfileLabel, 3);
@@ -2382,11 +2378,14 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisImageSP img = currentImg();
     if (img) {
         KisConfig cfg;
-        NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
+        QString profilename;
+        if(img->colorSpace()->getProfile())
+            profilename = img->colorSpace()->getProfile()->productName();
+        NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
             KisColorSpace* cs = KisMetaRegistry::instance() ->  csRegistry() ->
-                    getColorSpace(dlg.colorSpaceID(),"");
+                    getColorSpace(dlg.colorSpaceID(),dlg.profileName());
             KisLayerSP layer = new KisPaintLayer(img, dlg.layerName(), dlg.opacity(), cs);
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
@@ -2405,7 +2404,7 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisImageSP img = currentImg();
     if (img) {
         KisConfig cfg;
-        NewLayerDialog dlg(img->colorSpace()->id(), img->nextLayerName(), this);
+        NewLayerDialog dlg(img->colorSpace()->id(), "", img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
             KisLayerSP layer = new KisGroupLayer(img, dlg.layerName(), dlg.opacity());

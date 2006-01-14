@@ -73,8 +73,10 @@ public:
             m_store -> open(location);
             data = m_store -> read(m_store -> size());
             m_store -> close();
-/*PROFILEMERGE            (*it2) -> setProfile(new KisProfile(data,
-                (*it2) -> colorSpace() -> colorSpaceType()));
+            // Create a colorspace with the embedded profile
+/*            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(layer->paintDevice()->colorSpace()->id(), new KisProfile(data));
+            // replace the old colorspace
+            layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
 */
             kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }

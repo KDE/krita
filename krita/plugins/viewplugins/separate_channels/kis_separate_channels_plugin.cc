@@ -65,13 +65,17 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisLayerSP l = image->activeLayer();
     if (!l) return;
 
-    DlgSeparate * dlgSeparate = new DlgSeparate(l->colorSpace()->id().name(), image->colorSpace()->id().name(), m_view, "Separate");
+    KisPaintDeviceImplSP dev = image->activeDevice();
+    if (!dev) return;
+    
+    DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->id().name(),
+                                                image->colorSpace()->id().name(), m_view, "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));
 
     // If we're 8-bits, disable the downscale option
-    if (l->pixelSize() == l->nChannels()) {
+    if (dev->pixelSize() == dev->nChannels()) {
 	dlgSeparate->enableDownscale(false);
     }
 

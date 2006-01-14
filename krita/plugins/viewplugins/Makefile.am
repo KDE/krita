@@ -14,6 +14,6 @@ SUBDIRS = \
     screenshot \
     shearimage \
     dropshadow \
+    separate_channels \
     $(SCRIPTINGDIR)
 
-#    separate_channels 

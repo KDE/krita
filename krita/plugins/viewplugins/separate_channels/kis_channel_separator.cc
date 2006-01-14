@@ -64,7 +64,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
-    KisLayerSP src = image->activeLayer();
+    KisLayerSP layer = image->activeLayer();
+    if (!layer) return;
+
+    KisPaintDeviceImplSP src = image->activeDevice();
     if (!src) return;
 
     m_cancelRequested = false;
@@ -78,13 +81,11 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         t = new KisTransaction(i18n("Separate Image"), src.data());
     }
 
-
     KisColorSpace * dstCs = 0;
 
     Q_UINT32 numberOfChannels = src->nChannels();
     KisColorSpace * srcCs  = src->colorSpace();
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
-    Q_INT32 srcAlphaPos = srcCs->alphaPos();
 
     // Flatten the image first, if required
     switch(sourceOps) {
@@ -99,10 +100,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             break;
     }
 
-    // We're working on this layer, flattened, merged or original
-    src = image->activeLayer();
-
-    vKisLayerSP layers;
+    vKisPaintDeviceImplSP layers;
 
     QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
     QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
@@ -125,17 +123,17 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         Q_INT32 channelPos = ch->pos();
         Q_INT32 destSize = 1;
 
-        KisLayerSP dev;
+        KisPaintDeviceImplSP dev;
         if (toColor) {
             // We don't downscale if we separate to color channels
-            dev = new KisLayer(srcCs, ch->name());
+            dev = new KisPaintDeviceImpl(srcCs);
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ), ch->name());
+                dev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ));
             }
             else {
-                dev = new KisLayer( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ), ch->name());
+                dev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ));
                 destSize = 2;
             }
         }
@@ -157,8 +155,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                         // Copy the complete channel. We know we are using the same color strategy
                         memcpy(dstIt.rawData() + channelPos, srcIt.rawData() + channelPos, channelSize);
 
-                        if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                            dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                        if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
+                            //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                            dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
                         }
                         else {
                             dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
@@ -175,8 +174,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 1);
 
-                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                                dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
+                                //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
+                                dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
@@ -188,8 +188,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                             memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 2);
 
-                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS && srcCs->hasAlpha()) {
-                                memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
+                            if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
+                                //memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
+                                dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
                             }
                             else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
@@ -224,15 +225,23 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
     }
 
-    vKisLayerSP_it it;
+    vKisPaintDeviceImplSP_it deviceIt = layers.begin();
 
     if (!m_cancelRequested) {
 
-        for ( it = layers.begin(); it != layers.end(); ++it ) {
-            KisLayerSP layer = (*it);
+        for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
+        {
+
+            KisChannelInfo * ch = (*it);
+
+            if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
+            // Don't make an separate separation of the alpha channel if the user didn't ask for it.
+                continue;
+            }
 
             if (outputOps == TO_LAYERS) {
-                image->addLayer( layer, image -> rootLayer(), 0);
+                KisPaintLayerSP l = new KisPaintLayer(image, ch->name(), OPACITY_OPAQUE);
+                image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
             }
             else {
                 // To images
@@ -245,6 +254,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         if (undo) undo -> addCommand(t);
 
         m_view->canvasSubject()->document()->setModified(true);
+        
+        ++deviceIt;
 
     }
 

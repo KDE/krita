@@ -119,6 +119,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisPaintDeviceImplSP dev = image -> activeDevice();
     if (!dev) return;
 
+    
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 

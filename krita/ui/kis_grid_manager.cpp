@@ -41,8 +41,8 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KActionCollection * collection)
 {
-    m_toggleGrid = new KToggleAction(i18n("Show grid"), "", this, SLOT(toggleGrid()), collection, "view_toggle_grid");
-    m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide grid")));
+    m_toggleGrid = new KToggleAction(i18n("Show Grid"), "", this, SLOT(toggleGrid()), collection, "view_toggle_grid");
+    m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_toggleGrid->setChecked(false);
 
     // Fast grid config

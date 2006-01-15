@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgPressureSettings</class>
+<class>WdgTabletSettings</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>WdgPressureSettings</cstring>
+        <cstring>WdgTabletSettings</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -11,6 +11,9 @@
             <width>510</width>
             <height>268</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgTabletSettings</string>
     </property>
     <grid>
         <property name="name">

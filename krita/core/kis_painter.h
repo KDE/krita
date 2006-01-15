@@ -266,6 +266,7 @@ public:
 
     /// Set the color that will be used to paint with
     void setPaintColor(const KisColor& color) { m_paintColor = color;}
+    
     /// Returns the color that will be used to paint with
     KisColor paintColor() const { return m_paintColor; }
 

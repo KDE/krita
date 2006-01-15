@@ -25,21 +25,28 @@
 
 #include "kis_paintop.h"
 
-#include "qlabel.h"
-#include <qwidget.h>
-
+class QWidget;
+class QCheckBox;
 class KisPoint;
 class KisPainter;
 
 class KisBrushOpFactory : public KisPaintOpFactory  {
 
 public:
-    KisBrushOpFactory() {}
+    KisBrushOpFactory() : m_optionWidget(0), m_size(0), m_opacity(0), m_darken(0) {}
     virtual ~KisBrushOpFactory() {}
 
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
+    virtual QWidget * optionWidget(QWidget * parent);
+    
+
+private:
+    QWidget * m_optionWidget;
+    QCheckBox * m_size;
+    QCheckBox * m_opacity;
+    QCheckBox * m_darken;
 };
 
 class KisBrushOp : public KisPaintOp {
@@ -48,11 +55,16 @@ class KisBrushOp : public KisPaintOp {
 
 public:
 
-    KisBrushOp(KisPainter * painter);
+    KisBrushOp(KisPainter * painter, bool size = true, bool opacity = false, bool darken = false);
     virtual ~KisBrushOp();
 
     void paintAt(const KisPoint &pos, const KisPaintInformation& info);
 
+private:
+
+    bool m_pressureSize;
+    bool m_pressureOpacity;
+    bool m_pressureDarken;
 };
 
 #endif // KIS_BRUSHOP_H_

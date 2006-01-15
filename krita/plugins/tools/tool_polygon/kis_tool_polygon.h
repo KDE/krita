@@ -55,7 +55,9 @@ public:
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-
+    virtual QString quickHelp() const {
+        return i18n("Shift-click will end the polygon.");
+    }
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);

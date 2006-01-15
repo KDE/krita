@@ -86,7 +86,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event -> pos();
                 draw();
             }
-        } else if (event -> button() == RightButton) {
+        } else if (event -> state() == ShiftButton) {
             // erase old lines on canvas
             draw();
             m_dragging = false;
@@ -223,7 +223,7 @@ void KisToolPolygon::setup(KActionCollection *collection)
                         name());
         Q_CHECK_PTR(m_action);
 
-        m_action -> setToolTip(i18n("Draw a polygon"));
+        m_action -> setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
         }

@@ -86,7 +86,7 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event -> pos();
                 draw();
             }
-        } else if (event -> button() == RightButton) {
+        } else if (event -> state() == Qt::ShiftButton ) {
             // erase old lines on canvas
             draw();
             m_dragging = false;
@@ -231,10 +231,15 @@ void KisToolPolyline::setup(KActionCollection *collection)
                         name());
         Q_CHECK_PTR(m_action);
 
-        m_action -> setToolTip(i18n("Draw a polyline"));
+        m_action -> setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
         }
+}
+
+QString KisToolPolyline::quickHelp() const
+{
+    return i18n("Press shift-mouseclick to end the polyline.");
 }
 
 #include "kis_tool_polyline.moc"

@@ -123,8 +123,6 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         KisPainter painter (device);
         painter.beginTransaction (i18n ("Rectangle"));
         
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
-        painter.setPaintOp(op);
         painter.setPaintColor(m_subject -> fgColor());
         painter.setBackgroundColor(m_subject -> bgColor());
         painter.setFillStyle(fillStyle());
@@ -132,6 +130,8 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         painter.setPattern(m_subject -> currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
+        painter.setPaintOp(op);
 
         painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
         m_currentImage -> notify( painter.dirtyRect() );

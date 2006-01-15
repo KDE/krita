@@ -22,6 +22,7 @@
 #define KIS_TOOL_POLYLINE_H_
 
 #include <qvaluevector.h>
+#include <qstring.h>
 
 #include "kis_tool_paint.h"
 #include "kis_point.h"
@@ -58,7 +59,8 @@ public:
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-
+    virtual QString quickHelp() const;
+    
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);

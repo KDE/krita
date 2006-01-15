@@ -21,6 +21,10 @@
  */
 
 #include <qrect.h>
+#include <qwidget.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 
@@ -41,8 +45,26 @@ KisPaintOp * KisBrushOpFactory::createOp(KisPainter * painter)
     return op;
 }
 
-KisBrushOp::KisBrushOp(KisPainter * painter)
+QWidget * KisBrushOpFactory::optionWidget(QWidget * parent)
+{
+    if (m_optionWidget == 0) {
+        m_optionWidget = new QWidget(parent, "brush option widget");
+        QHBoxLayout * l = new QHBoxLayout(m_optionWidget);
+        l->setAutoAdd(true);
+        new QLabel(i18n("Pressure variation: "), m_optionWidget);
+        m_size =  new QCheckBox(i18n("size"), m_optionWidget);
+        m_size->setChecked(true);
+        m_opacity = new QCheckBox(i18n("opacity"), m_optionWidget);
+        m_darken = new QCheckBox(i18n("darken"), m_optionWidget);
+    }
+    return m_optionWidget;
+}
+
+KisBrushOp::KisBrushOp(KisPainter * painter, bool size, bool opacity, bool darken)
     : super(painter)
+    , m_pressureSize(size)
+    , m_pressureOpacity(opacity)
+    , m_pressureDarken(darken)
 {
 }
 

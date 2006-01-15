@@ -42,6 +42,7 @@
 #include "krs_doc.h"
 #include "krs_filter.h"
 #include "krs_image.h"
+#include "krs_kernel.h"
 #include "krs_pattern.h"
 #include "krs_script_progress.h"
 
@@ -62,6 +63,7 @@ using namespace Kross::KritaCore;
 
 KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory", 0)
 {
+    addFunction("newKernel", &KritaCoreFactory::newKernel);
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("getPattern", &KritaCoreFactory::getPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
@@ -70,6 +72,11 @@ KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("Krit
     addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newImage", &KritaCoreFactory::newImage, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::String") );
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::newKernel(Kross::Api::List::Ptr)
+{
+    return new Kernel();
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)

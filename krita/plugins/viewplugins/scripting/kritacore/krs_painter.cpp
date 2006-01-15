@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -18,12 +18,15 @@
 
 #include "krs_painter.h"
 
+#include <kis_convolution_painter.h>
+#include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 #include <kis_painter.h>
 
 #include "krs_brush.h"
 #include "krs_color.h"
+#include "krs_kernel.h"
 #include "krs_pattern.h"
 
 namespace Kross {
@@ -31,8 +34,15 @@ namespace Kross {
 namespace KritaCore {
 
 Painter::Painter(KisPaintLayerSP layer)
-    : Kross::Api::Class<Painter>("KritaPainter"), m_layer(layer),m_painter(new KisPainter(layer->paintDevice()))
+    : Kross::Api::Class<Painter>("KritaPainter"), m_layer(layer),m_painter(new KisPainter(layer->paintDevice())),m_threshold(1)
 {
+    // 
+    // Fill specific
+    addFunction("setFillThreshold", &Painter::setFillThreshold);
+    addFunction("fillColor", &Painter::fillColor);
+    addFunction("fillPattern", &Painter::fillPattern);
+
+    // Painting operations
     addFunction("paintPolyline", &Painter::paintPolyline, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
     addFunction("paintLine", &Painter::paintLine, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("paintBezierCurve", &Painter::paintBezierCurve, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
@@ -42,10 +52,17 @@ Painter::Painter(KisPaintLayerSP layer)
     addFunction("paintAt", &Painter::paintAt, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("setBackgroundColor", &Painter::setBackgroundColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
     addFunction("setPaintColor", &Painter::setPaintColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
+    
+    // Color operations
     addFunction("setPattern", &Painter::setPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Pattern") );
     addFunction("setBrush", &Painter::setBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Brush") );
+    
+    // How is painting done operations
     addFunction("setPaintOp", &Painter::setPaintOp, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    // Special settings
     addFunction("setDuplicateOffset", &Painter::setDuplicateOffset, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    
+    // Style operation
     addFunction("setOpacity", &Painter::setOpacity, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("setStrokeStyle", &Painter::setStrokeStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("setFillStyle", &Painter::setFillStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
@@ -55,6 +72,56 @@ Painter::Painter(KisPaintLayerSP layer)
 Painter::~Painter()
 {
     delete m_painter;
+}
+
+Kross::Api::Object::Ptr Painter::applyConvolution(Kross::Api::List::Ptr args)
+{
+    KisConvolutionPainter* cp = new KisConvolutionPainter(m_painter->device());
+    uint x = Kross::Api::Variant::toUInt(args->item(0));
+    uint y = Kross::Api::Variant::toUInt(args->item(1));
+    uint w = Kross::Api::Variant::toUInt(args->item(2));
+    uint h = Kross::Api::Variant::toUInt(args->item(3));
+    KisKernel* kernel = ((Kernel*)args->item(4).data())->kernel();
+    uint borderop = Kross::Api::Variant::toUInt(args->item(5));
+    uint channelsFlag = Kross::Api::Variant::toUInt(args->item(6));
+    cp->applyMatrix(kernel, x, y, w, h, (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
+    return 0;
+}
+
+
+KisFillPainter* Painter::createFillPainter()
+{
+    KisFillPainter* fp = new KisFillPainter(m_painter->device());
+    fp->setBrush( m_painter->brush() );
+    fp->setFillColor( m_painter->fillColor() );
+    fp->setPaintColor( m_painter->paintColor() );
+    fp->setFillStyle( m_painter->fillStyle() );
+    fp->setOpacity( m_painter->opacity() );
+    fp->setPattern( m_painter->pattern() );
+    return fp;
+}
+
+Kross::Api::Object::Ptr Painter::setFillThreshold(Kross::Api::List::Ptr args)
+{
+    m_threshold = Kross::Api::Variant::toInt(args->item(0));
+    return 0;
+}
+Kross::Api::Object::Ptr Painter::fillColor(Kross::Api::List::Ptr args)
+{
+    KisFillPainter* fp = createFillPainter();
+    uint x = Kross::Api::Variant::toUInt(args->item(0));
+    uint y = Kross::Api::Variant::toUInt(args->item(1));
+
+    fp->fillColor( x, y );
+    return 0;
+}
+Kross::Api::Object::Ptr Painter::fillPattern(Kross::Api::List::Ptr args)
+{
+    KisFillPainter* fp = createFillPainter();
+    uint x = Kross::Api::Variant::toUInt(args->item(0));
+    uint y = Kross::Api::Variant::toUInt(args->item(1));
+    fp->fillPattern(x, y);
+    return 0;
 }
 
 Kross::Api::Object::Ptr Painter::setStrokeStyle(Kross::Api::List::Ptr args)

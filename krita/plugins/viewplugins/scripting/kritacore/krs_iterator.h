@@ -108,8 +108,9 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             bool compensate = Kross::Api::Variant::toBool( args->item(1) );
             double compensation = Kross::Api::Variant::toDouble( args->item(2) );
             m_layer->paintDevice()->colorSpace()->darken(m_it.rawData(), m_it.rawData(), shade, compensate, compensation, 1);
+            return 0;
         }
-        Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr args)
+        Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr )
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it.rawData(), 1);
             return 0;

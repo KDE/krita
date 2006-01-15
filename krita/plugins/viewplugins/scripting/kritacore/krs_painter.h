@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
@@ -25,6 +25,7 @@
 #include <kis_types.h>
 
 class KisPainter;
+class KisFillPainter;
 
 namespace Kross {
 
@@ -36,6 +37,12 @@ class Painter : public Kross::Api::Class<Painter>
         explicit Painter(KisPaintLayerSP layer);
         ~Painter();
     private:
+        // Convolution
+        Kross::Api::Object::Ptr applyConvolution(Kross::Api::List::Ptr args);
+        // Fill specific
+        Kross::Api::Object::Ptr setFillThreshold(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr fillColor(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr fillPattern(Kross::Api::List::Ptr args);
         // Painting operations
         Kross::Api::Object::Ptr paintPolyline(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr paintLine(Kross::Api::List::Ptr args);
@@ -51,7 +58,7 @@ class Painter : public Kross::Api::Class<Painter>
         Kross::Api::Object::Ptr setPattern(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setBrush(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr setPaintOp(Kross::Api::List::Ptr args);
-        // Spetial settings
+        // Special settings
         Kross::Api::Object::Ptr setDuplicateOffset(Kross::Api::List::Ptr args);
         // Style operation
         Kross::Api::Object::Ptr setOpacity(Kross::Api::List::Ptr args);
@@ -71,9 +78,11 @@ class Painter : public Kross::Api::Class<Painter>
             }
             return a;
         }
+        inline KisFillPainter* createFillPainter();
     private:
         KisPaintLayerSP m_layer;
         KisPainter* m_painter;
+        int m_threshold;
 };
 
 }

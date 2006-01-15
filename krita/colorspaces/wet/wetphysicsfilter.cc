@@ -32,7 +32,10 @@
 
 
 WetPhysicsFilter::WetPhysicsFilter()
+#if 0
     : KisFilter(id(), "artistic", i18n("Dry the Paint (25 times)"))
+#endif
+    : KisFilter(id(), "artistic", i18n("Dry the Paint"))
 {
     m_adsorbCount = 0;
 }
@@ -140,11 +143,11 @@ void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
                 /* smooth out the flow a bit */
                 flow_t[ix] = CLAMP(0.1 * (10 + ft * 0.75 - fb * 0.25), 0, 1);
 
-                flow_b[ix] = CLAMP(0.1 * (10 + fb * 0.75 - ft * 0.25), 0, 1);
+                //flow_b[ix] = CLAMP(0.1 * (10 + fb * 0.75 - ft * 0.25), 0, 1);
 
-                flow_l[ix] = CLAMP(0.1 * (10 + fl * 0.75 - fr * 0.25), 0, 1);
+                //flow_l[ix] = CLAMP(0.1 * (10 + fl * 0.75 - fr * 0.25), 0, 1);
 
-                flow_r[ix] = CLAMP(0.1 * (10 + fr * 0.75 - fl * 0.25), 0, 1);
+                //flow_r[ix] = CLAMP(0.1 * (10 + fr * 0.75 - fl * 0.25), 0, 1);
 
                 outflow[ix] = 0;
             }
@@ -170,12 +173,12 @@ void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
                 /* reduce flow in dry areas */
                 flow_t[ix] *= fluid[ix] * fluid[ix - rs];
                 outflow[ix - rs] += flow_t[ix];
-                flow_b[ix] *= fluid[ix] * fluid[ix + rs];
+                /*flow_b[ix] *= fluid[ix] * fluid[ix + rs];
                 outflow[ix + rs] += flow_b[ix];
                 flow_l[ix] *= fluid[ix] * fluid[ix - 1];
                 outflow[ix - 1] += flow_l[ix];
                 flow_r[ix] *= fluid[ix] * fluid[ix + 1];
-                outflow[ix + 1] += flow_r[ix];
+                outflow[ix + 1] += flow_r[ix];*/
             }
             ++srcIt;
             ix++;
@@ -205,16 +208,16 @@ void WetPhysicsFilter::flow(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, 
 
             if ((reinterpret_cast<WetPix*>(srcIt.rawData())) -> w > 0) {
                 reducePixel(&wet_mix, &current, 1 - outflow[ix]);
-
                 reducePixel(&wet_tmp, &up, flow_t[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
+                /*
                 reducePixel(&wet_tmp, &down, flow_b[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
                 reducePixel(&wet_tmp, &left, flow_l[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
                 reducePixel(&wet_tmp, &right, flow_r[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-
+                */
                 WetPix* target = reinterpret_cast<WetPix*>(dstIt.rawData());
                 wetPixFromDouble(target, &wet_mix);
             }

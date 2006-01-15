@@ -237,6 +237,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     
     // This needs to be set before the dockers are created.
     m_image = m_doc -> currentImage();
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    m_fg = KisColor(Qt::black, cs);
+    m_bg = KisColor(Qt::white, cs);
 
     createDockers();
 
@@ -249,10 +252,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         setXMLFile("krita.rc");
 
     KStdAction::keyBindings( mainWindow()->guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
-
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    m_fg = KisColor(Qt::black, cs);
-    m_bg = KisColor(Qt::white, cs);
 
     createLayerBox();
 
@@ -3299,6 +3298,10 @@ void KisView::createDockers()
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_graywidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_graywidget, SLOT(setBgColor(const QColor &)));
     m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
+
+    //make sure the color chooser get right default values
+    emit sigFGQColorChanged(m_fg.toQColor());
+    emit sigBGQColorChanged(m_bg.toQColor());
 
     m_palettewidget = new KisPaletteWidget(this);
     m_palettewidget -> setCaption(i18n("Palettes"));

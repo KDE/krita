@@ -24,12 +24,10 @@
 #include <qspinbox.h>
 #include <qslider.h>
 #include <qpopupmenu.h>
-#include <qlayout.h>
 
 #include <knumvalidator.h>
 
 class QLabel;
-class QSlider;
 class QLineEdit;
 class QLayout;
 class QValidator;
@@ -53,14 +51,10 @@ public:
     KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Orientation orientation, QWidget * parent, const char * name = 0) 
         : QPopupMenu(parent, name)
     {
-        QHBoxLayout *l = new QHBoxLayout(this);
         m_slider = new QSlider(minValue, maxValue, pageStep, value, orientation, this, name);
-   setMinimumSize(200, 150);
-        l->addWidget(m_slider);
+        insertItem(m_slider);
         connect(m_slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
-
-        layout();
-   }
+    }
     void setTickInterval(int i) { m_slider->setTickInterval(i); }
     void setRange(int minValue, int maxValue) { m_slider->setRange(minValue, maxValue); }
     void setValue(int val) { m_slider->setValue(val); }

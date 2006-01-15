@@ -1,2 +1,8 @@
-scriptsdir = $(kde_datadir)/krita/scripts
-scripts_SCRIPTS = invert.rb changecs.rb randompaint.rb
+scriptsinvertdir = $(kde_datadir)/krita/scripts/invertruby
+scriptsinvert_SCRIPTS = invert.rb invertruby.rc
+
+scriptschangecsdir = $(kde_datadir)/krita/scripts/changecs
+scriptschangecs_SCRIPTS = changecs.rb changecs.rc
+
+scriptsrandompaintdir = $(kde_datadir)/krita/scripts/randompaint
+scriptsrandompaint_SCRIPTS = randompaint.rb randompaint.rc

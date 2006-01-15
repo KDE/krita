@@ -1,0 +1,8 @@
+<KrossScripting>
+    <ScriptAction
+      name="Invert (python)"
+      text="Invert the pixel of an image (python)"
+      icon=""
+      interpreter="python"
+      file="invert.py" />
+</KrossScripting>

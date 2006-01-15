@@ -1,0 +1,8 @@
+<KrossScripting>
+    <ScriptAction
+      name="Random paint"
+      text="Demonstrate how to use the Painter script API and paint random shape on screen"
+      icon=""
+      interpreter="ruby"
+      file="randompaint.rb" />
+</KrossScripting>

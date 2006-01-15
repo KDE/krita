@@ -18,8 +18,11 @@
 
 #include "krs_image.h"
 
+#include <klocale.h>
+
 #include <kis_colorspace_factory_registry.h>
 #include <kis_image.h>
+#include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 
@@ -36,6 +39,7 @@ namespace KritaCore {
     addFunction("getWidth", &Image::getWidth);
     addFunction("getHeight", &Image::getHeight);
     addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("createPaintLayer", &Image::createPaintLayer, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
 
 
@@ -72,13 +76,33 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     if(!dstCS)
     {
         // FIXME: inform user
-        kdDebug() << Kross::Api::Variant::toString(args->item(0)) << " colorspace is not available, please check your installation." << endl;
+        kdDebug() << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0)) ) << endl;
         return 0;
     }
     m_image->convertTo(dstCS);
     return 0;
 }
 
+Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
+{
+    QString name = Kross::Api::Variant::toString(args->item(0));
+    int opacity = Kross::Api::Variant::toInt(args->item(1));
+    opacity = CLAMP(opacity, 0, 255);
+    QString csname = Kross::Api::Variant::toString(args->item(2));
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
+    KisPaintLayer* layer;
+    if(cs)
+    {
+        layer = new KisPaintLayer(m_image, name, opacity, cs);
+    } else {
+        layer = new KisPaintLayer(m_image, name, opacity);
+    }
+    layer -> setVisible(true);
+
+    m_image->addLayer(layer, m_image->rootLayer(), 0);
+    return new PaintLayer(layer);
+
+}
 
 }
 

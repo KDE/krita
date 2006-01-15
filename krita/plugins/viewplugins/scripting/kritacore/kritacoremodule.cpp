@@ -26,9 +26,12 @@
 
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
+#include <kis_image.h>
+#include <kis_meta_registry.h>
 #include <kis_pattern.h>
 #include <kis_resourceserver.h>
 
@@ -38,6 +41,7 @@
 #include "krs_color.h"
 #include "krs_doc.h"
 #include "krs_filter.h"
+#include "krs_image.h"
 #include "krs_pattern.h"
 #include "krs_script_progress.h"
 
@@ -65,13 +69,12 @@ KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("Krit
     addFunction("getFilter", &KritaCoreFactory::getFilter, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("newImage", &KritaCoreFactory::newImage, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::String") );
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
 {
     Color* c = new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb);
-    kdDebug() << c->getName() << endl;
-    kdDebug() << "created" << endl;
     return c;
 }
 Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args)
@@ -93,6 +96,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
             return new Pattern(dynamic_cast<KisPattern*>(*it));
         }
     }
+    kdDebug() << i18n("Unknown pattern") << endl; // FIXME
     return 0;
     
 }
@@ -112,6 +116,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
             return new Brush(dynamic_cast<KisBrush*>(*it));
         }
     }
+    kdDebug() << i18n("Unknown brush") << endl; // FIXME
     return 0;
 }
 
@@ -143,6 +148,28 @@ Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr arg
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
     return new Brush(new KisAutobrushResource(*brsh));;
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
+{
+    int w = Kross::Api::Variant::toInt(args->item(0));
+    int h = Kross::Api::Variant::toInt(args->item(1));
+    QString csname = Kross::Api::Variant::toString(args->item(2));
+    QString name = Kross::Api::Variant::toString(args->item(3));
+    if( w < 0 || h < 0)
+    {
+        kdDebug() << i18n("Invalid image size") << endl; // FIXME
+        return 0;
+    }
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
+    if(!cs)
+    {
+        // FIXME: inform user
+        kdDebug() << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) << endl;
+        return 0;
+    }
+
+    return new Image(new KisImage(0,w,h, cs, name));
 }
 
 

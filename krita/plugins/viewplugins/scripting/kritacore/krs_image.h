@@ -43,6 +43,7 @@ namespace KritaCore {
         Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr createPaintLayer(Kross::Api::List::Ptr args);
     private:
         KisImageSP m_image;
         KisDoc* m_doc;

@@ -23,6 +23,8 @@
 #include <qwidget.h>
 #include <qspinbox.h>
 #include <qslider.h>
+#include <qpopupmenu.h>
+#include <qlayout.h>
 
 #include <knumvalidator.h>
 

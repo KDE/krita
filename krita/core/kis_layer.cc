@@ -340,7 +340,7 @@ KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
 
 const bool KisLayer::visible() const
 {
-    return m_visible && m_opacity != OPACITY_TRANSPARENT; //XXX hmm is this right?
+    return m_visible; //XXX hmm is this right?
 }
 
 void KisLayer::setVisible(bool v)

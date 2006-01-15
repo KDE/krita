@@ -54,6 +54,7 @@ KisFiltersListView::KisFiltersListView(KisPaintDeviceImplSP device, QWidget* par
 
 void KisFiltersListView::init()
 {
+    setCaption(i18n("Filters List"));
     setItemsMovable(false);
     setSelectionMode(QIconView::Single);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));

@@ -66,13 +66,13 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
         (void) new KAction(i18n("&Filters Gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
 
         // Add a docker with the list of filters
-        QImage img;
-        if(img.load(locate("data","krita/images/previewfilter.png")))
-        {
-           KisPaintDeviceImplSP preview = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
-           preview->convertFromQImage(img,"");
-           m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
-        }
+//         QImage img;
+//         if(img.load(locate("data","krita/images/previewfilter.png")))
+//         {
+//            KisPaintDeviceImplSP preview = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
+//            preview->convertFromQImage(img,"");
+//            m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
+//         }
 
     }
 

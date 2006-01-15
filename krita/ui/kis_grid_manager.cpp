@@ -145,7 +145,7 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
         QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
         QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
         Q_UINT32 i = 0;
-        for( Q_UINT32 x = offsetx; x < (Q_UINT32)wr.right(); x +=hspacing)
+        for( Q_UINT32 x = offsetx; x <= (Q_UINT32)wr.right(); x +=hspacing)
         {
             if( i == subdivision )
             {
@@ -155,14 +155,14 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
                 p.setPen(subdivisionPen);
                 i++;
             }
-            if( x > wr.x() )
+            if( x >= wr.x() )
             {
                 p.drawLine(x, wr.top(), x, wr.bottom());
             }
         }
         // Draw vertical line
         i = 0;
-        for( Q_UINT32 y = offsetx; y < (Q_UINT32)wr.bottom(); y +=vspacing)
+        for( Q_UINT32 y = offsetx; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
         {
             if( i == subdivision )
             {
@@ -172,7 +172,7 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
                 p.setPen(subdivisionPen);
                 i++;
             }
-            if( y > wr.y() )
+            if( y >= wr.y() )
             {
                 p.drawLine(wr.left(), y, wr.right(), y);
             }

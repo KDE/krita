@@ -18,16 +18,20 @@
 
 #include "krs_paint_layer.h"
 
+#include <klocale.h>
+
 #include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_iterators_pixel.h>
 #include <kis_transaction.h>
+#include <kis_math_toolbox.h>
 
 #include "krs_iterator.h"
 #include "krs_histogram.h"
 #include "krs_painter.h"
+#include "krs_wavelet.h"
 
 namespace Kross {
 
@@ -49,6 +53,8 @@ PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
     addFunction("beginPainting", &PaintLayer::beginPainting, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String" ) );
     addFunction("endPainting", &PaintLayer::endPainting);
     addFunction("convertToColorspace", &PaintLayer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("fastWaveletTransformation", &PaintLayer::fastWaveletTransformation);
+    addFunction("fastWaveletUntransformation", &PaintLayer::fastWaveletUntransformation);
 }
 
 
@@ -102,7 +108,8 @@ Kross::Api::Object::Ptr PaintLayer::getHeight(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
 {
-    KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(Kross::Api::Variant::toString(args->item(0)));
+    QString histoname = Kross::Api::Variant::toString(args->item(0));
+    KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(histoname);
     
 /*    KisIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
     for(KisIDList::iterator it = listID.begin(); it != listID.end(); it++)
@@ -124,6 +131,9 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     if(factory && factory->isCompatibleWith( paintLayer()->paintDevice()->colorSpace() ))
     {
         return new Histogram( paintLayer().data(), factory->generate() , type);
+    } else {
+        kdDebug() << i18n("An error has occured in %1").arg("createHistogram") << endl;
+        kdDebug() << i18n("The histogram %1 is not available").arg(histoname) << endl;
     }
     return 0;
 }
@@ -165,12 +175,30 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
     if(!dstCS)
     {
         // FIXME: inform user
-        kdDebug() << Kross::Api::Variant::toString(args->item(0)) << " colorspace is not available, please check your installation." << endl;
+        kdDebug() << i18n("An error has occured in %1").arg("convertToColorspace") << endl;
+        kdDebug() << i18n("Colorspace %1 is not available, please check your installation.").arg(Kross::Api::Variant::toString(args->item(0))) << endl;
         return 0;
     }
     paintLayer()->paintDevice()->convertTo(dstCS);
     return 0;
 }
+
+Kross::Api::Object::Ptr PaintLayer::fastWaveletTransformation(Kross::Api::List::Ptr )
+{
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
+    QRect rect = paintLayer()->exactBounds();
+    KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintLayer()->paintDevice(), rect);
+    return new Wavelet(wav);
+}
+Kross::Api::Object::Ptr PaintLayer::fastWaveletUntransformation(Kross::Api::List::Ptr args)
+{
+    Wavelet* wav = (Wavelet*)args->item(0).data();
+    KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
+    QRect rect = paintLayer()->exactBounds();
+    mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
+    return 0;
+}
+
 
 }
 

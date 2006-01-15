@@ -50,6 +50,8 @@ class PaintLayer : public Kross::Api::Class<PaintLayer>
         Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr fastWaveletTransformation(Kross::Api::List::Ptr args);
+        Kross::Api::Object::Ptr fastWaveletUntransformation(Kross::Api::List::Ptr args);
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
         inline KisDoc* doc() { return m_doc; }

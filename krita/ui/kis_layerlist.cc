@@ -184,7 +184,11 @@ QString KisLayerItem::tooltip() const
     text += row.arg( i18n( "Opacity:" ) ).arg( "%1%" ).arg( int( float( m_layer->opacity() * 100 ) / 255 + 0.5 ) );
     text += row.arg( i18n( "Composite mode:" ) ).arg( m_layer->compositeOp().id().name() );
     if( KisPaintLayer *player = dynamic_cast<KisPaintLayer*>( m_layer ) )
+    {
         text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->id().name() );
+        if( KisProfile *profile = player->paintDevice()->colorSpace()->getProfile() )
+            text += row.arg( i18n( "Profile:" ) ).arg( profile->productName() );
+    }
     if( KisAdjustmentLayer *alayer = dynamic_cast<KisAdjustmentLayer*>( m_layer ) )
         text += row.arg( i18n( "Filter: " ) ).arg( alayer->filter()->name() );
     if( KisPartLayer *player = dynamic_cast<KisPartLayer*>( m_layer ) )

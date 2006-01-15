@@ -43,12 +43,12 @@
 #include <kiconloader.h>
 #include <kicontheme.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 #include <koPartSelectAction.h>
 
 #include "kis_layerlist.h"
 #include "kis_cmb_composite.h"
+#include "kis_int_spinbox.h"
 #include "wdglayerbox.h"
 #include "kis_colorspace.h"
 #include "kis_paint_device_impl.h"

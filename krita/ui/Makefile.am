@@ -19,7 +19,7 @@ libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
 			kis_dlg_apply_profile.cc kis_dlg_image_properties.cc kis_dlg_layer_properties.cc \
 			kis_dlg_new_layer.cc kis_dlg_preferences.cc kis_doc.cc kis_doc_iface.cc kis_doc_iface.skel \
 			kis_double_widget.cc kis_factory.cc kis_filter_manager.cc kis_gradient_chooser.cc \
-			kis_gradient_slider_widget.cc kis_icon_item.cc kis_iconwidget.cc kis_itemchooser.cc \
+			kis_gradient_slider_widget.cc kis_icon_item.cc kis_iconwidget.cc  kis_int_spinbox.cc kis_itemchooser.cc \
 			kis_label_cursor_pos.cc kis_label_progress.cc kis_label_zoom.cc kis_layerbox.cc \
 			kis_layerlist.cc kis_multi_bool_filter_widget.cc kis_multi_double_filter_widget.cc \
 			kis_multi_integer_filter_widget.cc kis_opengl_canvas.cc kis_opengl_canvas_painter.cc \
@@ -48,7 +48,7 @@ noinst_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
 		kis_double_click_event.h kis_double_widget.h kis_event.h kis_factory.h kis_filter_manager.h \
 		kis_gradient_chooser.h kis_gradient_slider_widget.h kis_histogram_view.h kis_icon_item.h \
 		kis_iconwidget.h kis_itemchooser.h kis_label_cursor_pos.h kis_label_progress.h \
-		kis_label_zoom.h kis_layerbox.h kis_layerlist.h kis_matrix_widget.ui.h kis_move_event.h \
+		kis_label_zoom.h kis_int_spinbox.h kis_layerbox.h kis_layerlist.h kis_matrix_widget.ui.h kis_move_event.h \
 		kis_multi_bool_filter_widget.h kis_multi_double_filter_widget.h kis_multi_integer_filter_widget.h \
 		kis_paintop_box.h kis_palette_widget.h kis_part_layer.h kis_pattern_chooser.h \
 		kis_previewdialog.h kis_previewwidget.h kis_resource_mediator.h kis_resourceserver.h \

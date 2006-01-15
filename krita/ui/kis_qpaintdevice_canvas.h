@@ -40,6 +40,10 @@ public:
 
     virtual KisCanvasWidgetPainter *createPainter();
 
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+    virtual void selectTabletDeviceEvents();
+#endif
+
 protected:
     virtual void paintEvent(QPaintEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

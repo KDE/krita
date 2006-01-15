@@ -37,8 +37,8 @@ libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
 			wdgnewimage.ui wdgperformancesettings.ui wdgselectionoptions.ui wdgshapeoptions.ui \
 			wdgpressuresettings.ui wdgcustombrush.ui wdgcustompalette.ui wdgcustompattern.ui \
 			wdgtextbrush.ui kis_dlg_adjustment_layer.cc kis_filters_listview.cc \
-		wdgpalettechooser.ui wdggridsettings.ui kis_grid_manager.cpp \
-		wdgtabletdevicesettings.ui wdgtabletsettings.ui
+			wdgpalettechooser.ui wdggridsettings.ui kis_grid_manager.cpp \
+			wdgtabletdevicesettings.ui wdgtabletsettings.ui kis_input_device.cc
 
 noinst_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
 		kis_autobrush.h kis_autogradient.h kis_birdeye_box.h kis_brush_chooser.h \
@@ -56,7 +56,7 @@ noinst_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
 		kis_ruler.h kis_selection_manager.h kis_selection_options.h kis_tool_controller.h \
 		kis_tool_dummy.h kis_tool_manager.h kis_tool_registry.h kis_view.h kis_view_iface.h \
 		kobirdeyepanel.h kis_custom_brush.h kis_custom_pattern.h kis_custom_image_widget.h \
-		kis_dlg_adjustment_layer.h kis_filters_listview.h kis_grid_manager.h
+		kis_dlg_adjustment_layer.h kis_filters_listview.h kis_grid_manager.h kis_input_device.h
 
 METASOURCES = AUTO
 

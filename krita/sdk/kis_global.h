@@ -40,14 +40,6 @@ const Q_UINT8 MAX_SELECTED = UCHAR_MAX;
 const Q_UINT8 MIN_SELECTED = 0;
 const Q_UINT8 SELECTION_THRESHOLD = 1;
 
-enum enumInputDevice {
-    INPUT_DEVICE_UNKNOWN,
-    INPUT_DEVICE_MOUSE,    // Standard mouse
-    INPUT_DEVICE_STYLUS,    // Wacom stylus
-    INPUT_DEVICE_ERASER,    // Wacom eraser
-    INPUT_DEVICE_PUCK    // Wacom puck
-};
-
 enum enumCursorStyle {
     CURSOR_STYLE_TOOLICON = 0,
     CURSOR_STYLE_CROSSHAIR = 1,

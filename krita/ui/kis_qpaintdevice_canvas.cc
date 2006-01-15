@@ -110,3 +110,10 @@ KisCanvasWidgetPainter *KisQPaintDeviceCanvasWidget::createPainter()
     return new KisQPaintDeviceCanvasPainter(this);
 }
 
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+void KisQPaintDeviceCanvasWidget::selectTabletDeviceEvents()
+{
+    KisCanvasWidget::selectTabletDeviceEvents(this);
+}
+#endif
+

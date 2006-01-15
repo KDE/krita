@@ -19,9 +19,9 @@
 #define KIS_EVENT_H_
 
 #include <qevent.h>
-#include "kis_global.h"
 
 #include "kis_point.h"
+#include "kis_input_device.h"
 
 class KisEvent {
 public:
@@ -33,11 +33,11 @@ public:
         DoubleClickEvent
     };
 
-    KisEvent() : m_type(UnknownEvent), m_device(INPUT_DEVICE_UNKNOWN) {}
-    KisEvent(enumEventType type, enumInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), m_xTilt(xTilt), m_yTilt(yTilt), m_state(state) {}
+    KisEvent() : m_type(UnknownEvent), m_device(KisInputDevice::unknown()) {}
+    KisEvent(enumEventType type, KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), m_xTilt(xTilt), m_yTilt(yTilt), m_state(state) {}
 
     enumEventType type() const { return m_type; }
-    enumInputDevice device() const { return m_device; }
+    KisInputDevice device() const { return m_device; }
     KisPoint pos() const { return m_pos; }
     double x() const { return m_pos.x(); }
     double y() const { return m_pos.y(); }
@@ -49,7 +49,7 @@ public:
 
 protected:
     enumEventType m_type;
-    enumInputDevice m_device;
+    KisInputDevice m_device;
     KisPoint m_pos;
     KisPoint m_globalPos;
     double m_pressure;

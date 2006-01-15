@@ -116,5 +116,12 @@ KisCanvasWidgetPainter *KisOpenGLCanvasWidget::createPainter()
     return new KisOpenGLCanvasPainter(this);
 }
 
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+void KisOpenGLCanvasWidget::selectTabletDeviceEvents()
+{
+    KisCanvasWidget::selectTabletDeviceEvents(this);
+}
+#endif
+
 #endif // HAVE_GL
 

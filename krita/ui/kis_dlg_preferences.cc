@@ -56,6 +56,7 @@
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
 #include "kis_profile.h"
+#include "kis_canvas.h"
 #include "wdgcolorsettings.h"
 #include "wdgperformancesettings.h"
 #include "wdggeneralsettings.h"
@@ -208,20 +209,411 @@ void PerformanceTab::setDefault()
 
 //---------------------------------------------------------------------------------------------------
 
-PressureSettingsTab::PressureSettingsTab( QWidget *parent, const char *name)
-    : WdgPressureSettings( parent, name )
+TabletSettingsTab::TabletSettingsTab( QWidget *parent, const char *name)
+    : WdgTabletSettings( parent, name )
 {
     KisConfig cfg;
     // XXX: Bad me -- hard-coded constant.
     slPressure->setValue( 100 - cfg.getPressureCorrection() );
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+    initTabletDevices();
+#else
+    grpTabletDevices -> hide();
+#endif
 }
 
-void PressureSettingsTab::setDefault()
+void TabletSettingsTab::setDefault()
 {
     KisConfig cfg;
     // XXX: Bad me -- hard-coded constant.
     slPressure->setValue(100 - cfg.getDefaultPressureCorrection());
 }
+
+void TabletSettingsTab::applySettings()
+{
+    KisConfig cfg;
+
+    // Pressure sensitivity setting == between 0 and 99
+    cfg.setPressureCorrection(100 - slPressure -> value());
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+    applyTabletDeviceSettings();
+#endif
+}
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+TabletSettingsTab::DeviceSettings::DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled,
+                                                  Q_INT32 xAxis, Q_INT32 yAxis, Q_INT32 pressureAxis, 
+                                                  Q_INT32 xTiltAxis, Q_INT32 yTiltAxis, Q_INT32 wheelAxis,
+                                                  Q_INT32 toolIDAxis, Q_INT32 serialNumberAxis)
+    : m_tabletDevice(tabletDevice),
+      m_enabled(enabled),
+      m_xAxis(xAxis),
+      m_yAxis(yAxis),
+      m_pressureAxis(pressureAxis),
+      m_xTiltAxis(xTiltAxis),
+      m_yTiltAxis(yTiltAxis),
+      m_wheelAxis(wheelAxis),
+      m_toolIDAxis(toolIDAxis),
+      m_serialNumberAxis(serialNumberAxis)
+{
+}
+
+TabletSettingsTab::DeviceSettings::DeviceSettings()
+    : m_tabletDevice(0),
+      m_enabled(false),
+      m_xAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_yAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_pressureAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_xTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_yTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_wheelAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_toolIDAxis(KisCanvasWidget::X11TabletDevice::NoAxis),
+      m_serialNumberAxis(KisCanvasWidget::X11TabletDevice::NoAxis)
+{
+}
+
+void TabletSettingsTab::DeviceSettings::applySettings()
+{
+    m_tabletDevice -> setEnabled(enabled());
+    m_tabletDevice -> setXAxis(xAxis());
+    m_tabletDevice -> setYAxis(yAxis());
+    m_tabletDevice -> setPressureAxis(pressureAxis());
+    m_tabletDevice -> setXTiltAxis(xTiltAxis());
+    m_tabletDevice -> setYTiltAxis(yTiltAxis());
+    m_tabletDevice -> setWheelAxis(wheelAxis());
+    m_tabletDevice -> setToolIDAxis(toolIDAxis());
+    m_tabletDevice -> setSerialNumberAxis(serialNumberAxis());
+    m_tabletDevice -> writeSettingsToConfig();
+}
+
+void TabletSettingsTab::DeviceSettings::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
+bool TabletSettingsTab::DeviceSettings::enabled() const
+{
+    return m_enabled;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::numAxes() const
+{
+    return m_tabletDevice -> numAxes();
+}
+
+void TabletSettingsTab::DeviceSettings::setXAxis(Q_INT32 axis)
+{
+    m_xAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setYAxis(Q_INT32 axis)
+{
+    m_yAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setPressureAxis(Q_INT32 axis)
+{
+    m_pressureAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setXTiltAxis(Q_INT32 axis)
+{
+    m_xTiltAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setYTiltAxis(Q_INT32 axis)
+{
+    m_yTiltAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setWheelAxis(Q_INT32 axis)
+{
+    m_wheelAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setToolIDAxis(Q_INT32 axis)
+{
+    m_toolIDAxis = axis;
+}
+
+void TabletSettingsTab::DeviceSettings::setSerialNumberAxis(Q_INT32 axis)
+{
+    m_serialNumberAxis = axis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::xAxis() const
+{
+    return m_xAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::yAxis() const
+{
+    return m_yAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::pressureAxis() const
+{
+    return m_pressureAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::xTiltAxis() const
+{
+    return m_xTiltAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::yTiltAxis() const
+{
+    return m_yTiltAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::wheelAxis() const
+{
+    return m_wheelAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::toolIDAxis() const
+{
+    return m_toolIDAxis;
+}
+
+Q_INT32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
+{
+    return m_serialNumberAxis;
+}
+
+TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings, 
+                                                                          QWidget *parent, const char *name)
+    : super(parent, name, true, "", Ok | Cancel)
+{
+    setCaption(i18n("Configure %1").arg(deviceName));
+
+    m_page = new WdgTabletDeviceSettings(this);
+
+    setMainWidget(m_page);
+    resize(m_page -> sizeHint());
+
+    for (Q_INT32 axis = 0; axis < settings.numAxes(); axis++) {
+        QString axisString;
+
+        axisString.setNum(axis);
+
+        m_page -> cbX -> insertItem(axisString);
+        m_page -> cbY -> insertItem(axisString);
+        m_page -> cbPressure -> insertItem(axisString);
+        m_page -> cbXTilt -> insertItem(axisString);
+        m_page -> cbYTilt -> insertItem(axisString);
+        m_page -> cbWheel -> insertItem(axisString);
+        m_page -> cbToolID -> insertItem(axisString);
+        m_page -> cbSerialNumber -> insertItem(axisString);
+    }
+
+    m_page -> cbX -> insertItem(i18n("None"));
+    m_page -> cbY -> insertItem(i18n("None"));
+    m_page -> cbPressure -> insertItem(i18n("None"));
+    m_page -> cbXTilt -> insertItem(i18n("None"));
+    m_page -> cbYTilt -> insertItem(i18n("None"));
+    m_page -> cbWheel -> insertItem(i18n("None"));
+    m_page -> cbToolID -> insertItem(i18n("None"));
+    m_page -> cbSerialNumber -> insertItem(i18n("None"));
+
+    if (settings.xAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbX -> setCurrentItem(settings.xAxis());
+    } else {
+        m_page -> cbX -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.yAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbY -> setCurrentItem(settings.yAxis());
+    } else {
+        m_page -> cbY -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.pressureAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbPressure -> setCurrentItem(settings.pressureAxis());
+    } else {
+        m_page -> cbPressure -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.xTiltAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbXTilt -> setCurrentItem(settings.xTiltAxis());
+    } else {
+        m_page -> cbXTilt -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.yTiltAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbYTilt -> setCurrentItem(settings.yTiltAxis());
+    } else {
+        m_page -> cbYTilt -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.wheelAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbWheel -> setCurrentItem(settings.wheelAxis());
+    } else {
+        m_page -> cbWheel -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.toolIDAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbToolID -> setCurrentItem(settings.toolIDAxis());
+    } else {
+        m_page -> cbToolID -> setCurrentItem(settings.numAxes());
+    }
+
+    if (settings.serialNumberAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+        m_page -> cbSerialNumber -> setCurrentItem(settings.serialNumberAxis());
+    } else {
+        m_page -> cbSerialNumber -> setCurrentItem(settings.numAxes());
+    }
+
+    m_settings = settings;
+}
+
+TabletSettingsTab::TabletDeviceSettingsDialog::~TabletDeviceSettingsDialog()
+{
+    delete m_page;
+}
+
+TabletSettingsTab::DeviceSettings TabletSettingsTab::TabletDeviceSettingsDialog::settings()
+{
+    const Q_INT32 noAxis = m_settings.numAxes();
+
+    if (m_page -> cbX -> currentItem() != noAxis ) {
+        m_settings.setXAxis(m_page -> cbX -> currentItem());
+    } else {
+        m_settings.setXAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbY -> currentItem() != noAxis ) {
+        m_settings.setYAxis(m_page -> cbY -> currentItem());
+    } else {
+        m_settings.setYAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbPressure -> currentItem() != noAxis ) {
+        m_settings.setPressureAxis(m_page -> cbPressure -> currentItem());
+    } else {
+        m_settings.setPressureAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbXTilt -> currentItem() != noAxis ) {
+        m_settings.setXTiltAxis(m_page -> cbXTilt -> currentItem());
+    } else {
+        m_settings.setXTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbYTilt -> currentItem() != noAxis ) {
+        m_settings.setYTiltAxis(m_page -> cbYTilt -> currentItem());
+    } else {
+        m_settings.setYTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbWheel -> currentItem() != noAxis ) {
+        m_settings.setWheelAxis(m_page -> cbWheel -> currentItem());
+    } else {
+        m_settings.setWheelAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbToolID -> currentItem() != noAxis ) {
+        m_settings.setToolIDAxis(m_page -> cbToolID -> currentItem());
+    } else {
+        m_settings.setToolIDAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    if (m_page -> cbSerialNumber -> currentItem() != noAxis ) {
+        m_settings.setSerialNumberAxis(m_page -> cbSerialNumber -> currentItem());
+    } else {
+        m_settings.setSerialNumberAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+    }
+
+    return m_settings;
+}
+
+void TabletSettingsTab::initTabletDevices()
+{
+    connect(cbTabletDevice, SIGNAL(activated(int)), SLOT(slotActivateDevice(int)));
+    connect(chkEnableTabletDevice, SIGNAL(toggled(bool)), SLOT(slotSetDeviceEnabled(bool)));
+    connect(btnConfigureTabletDevice, SIGNAL(clicked()), SLOT(slotConfigureDevice()));
+
+    KisCanvasWidget::X11XIDTabletDeviceMap& tabletDevices = KisCanvasWidget::tabletDeviceMap();
+
+    cbTabletDevice -> clear();
+
+    if (!tabletDevices.empty()) {
+        KisCanvasWidget::X11XIDTabletDeviceMap::iterator it;
+
+        for (it = tabletDevices.begin(); it != tabletDevices.end(); ++it) {
+            KisCanvasWidget::X11TabletDevice& device = (*it).second;
+
+            m_deviceSettings.append(DeviceSettings(&device, device.enabled(), device.xAxis(), device.yAxis(), 
+                                                   device.pressureAxis(), device.xTiltAxis(), device.yTiltAxis(), device.wheelAxis(),
+                                                   device.toolIDAxis(), device.serialNumberAxis()));
+            cbTabletDevice -> insertItem(device.name());
+        }
+        slotActivateDevice(0);
+    } else {
+        cbTabletDevice -> insertItem(i18n("No devices detected"));
+        cbTabletDevice -> setEnabled(false);
+        chkEnableTabletDevice -> setEnabled(false);
+        btnConfigureTabletDevice -> setEnabled(false);
+    }
+}
+
+void TabletSettingsTab::slotActivateDevice(int deviceIndex)
+{
+    bool deviceEnabled = m_deviceSettings[deviceIndex].enabled();
+
+    chkEnableTabletDevice -> setChecked(deviceEnabled);
+    slotSetDeviceEnabled(deviceEnabled);
+}
+
+void TabletSettingsTab::slotSetDeviceEnabled(bool enabled)
+{
+    btnConfigureTabletDevice -> setEnabled(enabled);
+    m_deviceSettings[cbTabletDevice -> currentItem()].setEnabled(enabled);
+}
+
+void TabletSettingsTab::slotConfigureDevice()
+{
+    TabletDeviceSettingsDialog dialog(cbTabletDevice -> currentText(), m_deviceSettings[cbTabletDevice -> currentItem()],
+                                      this, "TabletDeviceSettings");
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_deviceSettings[cbTabletDevice -> currentItem()] = dialog.settings();
+    }
+}
+
+void TabletSettingsTab::applyTabletDeviceSettings()
+{
+    for (Q_UINT32 deviceIndex = 0; deviceIndex < m_deviceSettings.count(); ++deviceIndex) {
+        m_deviceSettings[deviceIndex].applySettings();
+    }
+}
+
+#else // EXTENDED_X11_TABLET_SUPPORT
+
+// Fix compilation. moc seems to not see the undefined symbol needed
+// for these slots to be declared.
+void TabletSettingsTab::slotActivateDevice(int /*deviceIndex*/)
+{
+}
+
+void TabletSettingsTab::slotSetDeviceEnabled(bool /*enabled*/)
+{
+}
+
+void TabletSettingsTab::slotConfigureDevice()
+{
+}
+
+void TabletSettingsTab::applyTabletDeviceSettings()
+{
+}
+
+#endif
+
+//---------------------------------------------------------------------------------------------------
 
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
@@ -231,15 +623,15 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
 
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL -> setEnabled(false);
-        cbUseOpenGLShaders -> setEnabled(false);
+        //cbUseOpenGLShaders -> setEnabled(false);
     } else {
         cbUseOpenGL -> setChecked(cfg.useOpenGL());
-        cbUseOpenGLShaders -> setChecked(cfg.useOpenGLShaders());
-        cbUseOpenGLShaders -> setEnabled(cfg.useOpenGL());
+        //cbUseOpenGLShaders -> setChecked(cfg.useOpenGLShaders());
+        //cbUseOpenGLShaders -> setEnabled(cfg.useOpenGL());
     }
 #else
     cbUseOpenGL -> setEnabled(false);
-    cbUseOpenGLShaders -> setEnabled(false);
+    //cbUseOpenGLShaders -> setEnabled(false);
 #endif
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
@@ -248,13 +640,13 @@ DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     cbUseOpenGL -> setChecked(false);
-    cbUseOpenGLShaders -> setChecked(false);
-    cbUseOpenGLShaders -> setEnabled(false);
+    //cbUseOpenGLShaders -> setChecked(false);
+    //cbUseOpenGLShaders -> setEnabled(false);
 }
 
-void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
+void DisplaySettingsTab::slotUseOpenGLToggled(bool /*isChecked*/)
 {
-    cbUseOpenGLShaders -> setEnabled(isChecked);
+    //cbUseOpenGLShaders -> setEnabled(isChecked);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -310,8 +702,8 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", KIcon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
 
-    vbox = addVBoxPage ( i18n( "Pressure" ), i18n( "Pressure" ), BarIcon( "tablet", KIcon::SizeMedium ));
-    m_pressureSettings = new PressureSettingsTab( vbox );
+    vbox = addVBoxPage ( i18n( "Tablet" ), i18n( "Tablet" ), BarIcon( "tablet", KIcon::SizeMedium ));
+    m_tabletSettings = new TabletSettingsTab( vbox );
 
     vbox = addVBoxPage ( i18n( "Grid" ), i18n( "Grid" ), BarIcon( "grid", KIcon::SizeMedium ));
     m_gridSettings = new GridSettingsTab( vbox );
@@ -326,7 +718,7 @@ void PreferencesDialog::slotDefault()
 {
     m_general -> setDefault();
     m_colorSettings -> setDefault();
-    m_pressureSettings -> setDefault();
+    m_tabletSettings -> setDefault();
     m_performanceSettings -> setDefault();
     m_displaySettings -> setDefault();
     m_gridSettings->setDefault();
@@ -361,11 +753,10 @@ bool PreferencesDialog::editPreferences()
         // let the tile manager know
         KisTileManager::instance() -> configChanged();
 
-        // Pressure sensitivity setting == between 0 and 99
-        cfg.setPressureCorrection( 100 - dialog->m_pressureSettings->slPressure->value() );
+        dialog -> m_tabletSettings -> applySettings();
 
         cfg.setUseOpenGL(dialog -> m_displaySettings -> cbUseOpenGL -> isChecked());
-        cfg.setUseOpenGLShaders(dialog -> m_displaySettings -> cbUseOpenGLShaders -> isChecked());
+        //cfg.setUseOpenGLShaders(dialog -> m_displaySettings -> cbUseOpenGLShaders -> isChecked());
     
         // Grid settings
         cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentItem() );

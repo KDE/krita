@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>363</width>
-            <height>285</height>
+            <height>386</height>
         </rect>
     </property>
     <property name="caption">
-        <string>WdgPressureSettings</string>
+        <string>Configure Tablet Device</string>
     </property>
     <grid>
         <property name="name">
@@ -65,7 +65,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2</cstring>
+                                <cstring>cbX</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -88,7 +88,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2_4</cstring>
+                                <cstring>cbY</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -111,7 +111,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2_2</cstring>
+                                <cstring>cbPressure</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -134,7 +134,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2_3</cstring>
+                                <cstring>cbXTilt</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -157,7 +157,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2_6</cstring>
+                                <cstring>cbYTilt</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -180,7 +180,53 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox2_5</cstring>
+                                <cstring>cbWheel</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4_5_2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_5_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Tool ID:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>cbToolID</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4_5_3</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_5_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Serial number:</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>cbSerialNumber</cstring>
                             </property>
                         </widget>
                     </hbox>

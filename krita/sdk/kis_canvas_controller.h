@@ -23,13 +23,13 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include "kis_types.h"
-#include "kis_global.h"
 
 class QWidget;
 class KisTool;
 class KisRect;
 class KisPoint;
 class KisCanvas;
+class KisInputDevice;
 
 /**
  * Interface for classes that implement a canvas; i.e., a widget where KisImages
@@ -183,12 +183,12 @@ public:
      *
      * @param inputDevice the new input device
      */
-    virtual void setInputDevice(enumInputDevice inputDevice) = 0;
+    virtual void setInputDevice(KisInputDevice inputDevice) = 0;
 
     /**
      * @return the current input device, such as a mouse or a stylus
      */
-    virtual enumInputDevice currentInputDevice() const = 0;
+    virtual KisInputDevice currentInputDevice() const = 0;
 
 
 private:

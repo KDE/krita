@@ -219,10 +219,16 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_toolIsPainting( false )
     , m_monitorProfile( 0 )
     , m_HDRExposure( 0 )
-    , m_inputDevice ( INPUT_DEVICE_MOUSE )
 {
 
     setFocusPolicy( QWidget::StrongFocus );
+
+    // Must come before input devices are referenced as this detects them.
+#ifdef Q_WS_X11
+    KisCanvasWidget::initX11Support();
+#endif
+
+    m_inputDevice = KisInputDevice::mouse();
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
@@ -995,7 +1001,7 @@ void KisView::paintOpenGLView(const KisRect& r)
 #endif
 }
 
-void KisView::setInputDevice(enumInputDevice inputDevice)
+void KisView::setInputDevice(KisInputDevice inputDevice)
 {
     if (inputDevice != m_inputDevice) {
         m_inputDevice = inputDevice;
@@ -1006,7 +1012,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
         // On initialisation for an input device, set to eraser if the current input device
         // is a wacom eraser, else to brush.
         if (m_toolManager->currentTool() == 0) {
-            if (m_inputDevice == INPUT_DEVICE_ERASER) {
+            if (m_inputDevice == KisInputDevice::eraser()) {
                 m_paintop = KisID("eraser", "");
                 // XXX: Set the right entry in the paintop box
             } else {
@@ -1023,7 +1029,7 @@ void KisView::setInputDevice(enumInputDevice inputDevice)
 
 }
 
-enumInputDevice KisView::currentInputDevice() const
+KisInputDevice KisView::currentInputDevice() const
 {
     return m_inputDevice;
 }
@@ -1773,6 +1779,11 @@ void KisView::preferences()
         if (m_toolManager->currentTool()) {
             setCanvasCursor(m_toolManager->currentTool() -> cursor());
         }
+
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+        m_canvas -> selectTabletDeviceEvents();
+#endif
+
     }
 }
 
@@ -2007,15 +2018,15 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e -> device() != INPUT_DEVICE_MOUSE) {
+    if (e -> device() != KisInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e -> device() != currentInputDevice()) {
-        if (e -> device() == INPUT_DEVICE_MOUSE) {
+        if (e -> device() == KisInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(INPUT_DEVICE_MOUSE);
+                setInputDevice(KisInputDevice::mouse());
             }
         } else {
             setInputDevice(e -> device());
@@ -2080,15 +2091,15 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e -> device() != INPUT_DEVICE_MOUSE) {
+    if (e -> device() != KisInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e -> device() != currentInputDevice()) {
-        if (e -> device() == INPUT_DEVICE_MOUSE) {
+        if (e -> device() == KisInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(INPUT_DEVICE_MOUSE);
+                setInputDevice(KisInputDevice::mouse());
             }
         } else {
             setInputDevice(e -> device());
@@ -2167,15 +2178,15 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e -> device() != INPUT_DEVICE_MOUSE) {
+    if (e -> device() != KisInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e -> device() != currentInputDevice()) {
-        if (e -> device() == INPUT_DEVICE_MOUSE) {
+        if (e -> device() == KisInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(INPUT_DEVICE_MOUSE);
+                setInputDevice(KisInputDevice::mouse());
             }
         } else {
             setInputDevice(e -> device());
@@ -2202,15 +2213,15 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 {
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     // The event filter doesn't see tablet events going to the canvas.
-    if (e -> device() != INPUT_DEVICE_MOUSE) {
+    if (e -> device() != KisInputDevice::mouse()) {
         m_tabletEventTimer.start();
     }
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
     if (e -> device() != currentInputDevice()) {
-        if (e -> device() == INPUT_DEVICE_MOUSE) {
+        if (e -> device() == KisInputDevice::mouse()) {
             if (m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-                setInputDevice(INPUT_DEVICE_MOUSE);
+                setInputDevice(KisInputDevice::mouse());
             }
         } else {
             setInputDevice(e -> device());
@@ -2972,19 +2983,19 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
     case QEvent::TabletRelease:
     {
         QTabletEvent *te = static_cast<QTabletEvent *>(e);
-        enumInputDevice device;
+        KisInputDevice device;
 
         switch (te -> device()) {
         default:
         case QTabletEvent::NoDevice:
         case QTabletEvent::Stylus:
-            device = INPUT_DEVICE_STYLUS;
+            device = KisInputDevice::stylus();
             break;
         case QTabletEvent::Puck:
-            device = INPUT_DEVICE_PUCK;
+            device = KisInputDevice::puck();
             break;
         case QTabletEvent::Eraser:
-            device = INPUT_DEVICE_ERASER;
+            device = KisInputDevice::eraser();
             break;
         }
 
@@ -2999,8 +3010,8 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
     case QEvent::MouseButtonPress:
     case QEvent::MouseMove:
     case QEvent::MouseButtonRelease:
-        if (currentInputDevice() != INPUT_DEVICE_MOUSE && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
-            setInputDevice(INPUT_DEVICE_MOUSE);
+        if (currentInputDevice() != KisInputDevice::mouse() && m_tabletEventTimer.elapsed() > MOUSE_CHANGE_EVENT_DELAY) {
+            setInputDevice(KisInputDevice::mouse());
         }
         break;
     default:
@@ -3067,6 +3078,29 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 
     return super::eventFilter(o, e);
 }
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+bool KisView::x11Event(XEvent *event)
+{
+    /* Disabled seeking better solution.
+    KisInputDevice inputDevice = KisCanvasWidget::inputDevice(event);
+
+    if (inputDevice == KisInputDevice::unknown() || inputDevice == KisInputDevice::mouse()) {
+        return false;
+    }
+
+    setInputDevice(inputDevice);
+
+    // We ignore device change due to mouse events for a short duration
+    // after a tablet event, since these are almost certainly mouse events
+    // sent to receivers that don't accept the tablet event.
+    m_tabletEventTimer.start();
+
+    return true;
+    */
+    return false;
+}
+#endif // EXTENDED_X11_TABLET_SUPPORT
 
 #if 0
 void KisView::eraseGuides()

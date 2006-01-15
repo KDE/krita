@@ -28,7 +28,7 @@ public:
 protected:
     KisButtonEvent() {}
     KisButtonEvent(enumEventType type,
-                   enumInputDevice device,
+                   KisInputDevice device,
                    const KisPoint& pos,
                    const KisPoint& globalPos,
                    double pressure,

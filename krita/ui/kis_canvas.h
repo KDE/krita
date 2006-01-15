@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004-2006 Adrian Page <adrian@pagenet.plus.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "kis_global.h"
 #include "kis_point.h"
 #include "kis_vec.h"
+#include "kis_input_device.h"
 
 #ifdef Q_WS_X11
 
@@ -51,7 +52,6 @@
 #endif
 
 #endif // Q_WS_X11
-
 
 class KisEvent;
 class KisMoveEvent;
@@ -73,6 +73,15 @@ public:
     void enableMoveEventCompressionHint(bool enableMoveCompression) { m_enableMoveEventCompressionHint = enableMoveCompression; }
 
     virtual KisCanvasWidgetPainter *createPainter() = 0;
+
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+    static KisInputDevice inputDevice(XEvent *event);
+    virtual void selectTabletDeviceEvents() = 0;
+#endif
+
+#ifdef Q_WS_X11
+    static void initX11Support();
+#endif
 
 signals:
     void sigGotPaintEvent(QPaintEvent*);
@@ -118,7 +127,6 @@ protected:
     // is unable to keep up with them. We override this behaviour so that
     // we receive all move events, so that painting follows the mouse's motion
     // accurately.
-    static void initX11Support();
     bool x11Event(XEvent *event, Display *x11Display, WId winId, QPoint widgetOriginPos);
     static Qt::ButtonState translateX11ButtonState(int state);
     static Qt::ButtonState translateX11Button(unsigned int button);
@@ -134,36 +142,76 @@ protected:
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
 
+public:
     class X11TabletDevice
     {
     public:
         X11TabletDevice();
         X11TabletDevice(const XDeviceInfo *deviceInfo);
 
+        bool mightBeTabletDevice() const { return m_mightBeTabletDevice; }
+
         XID id() const { return m_deviceId; }
-        enumInputDevice device() const { return m_device; }
+        QString name() const { return m_name; }
+
+        KisInputDevice inputDevice() const { return m_inputDevice; }
+        void setInputDevice(KisInputDevice inputDevice) { m_inputDevice = inputDevice; }
+
+        void setEnabled(bool enabled);
+        bool enabled() const;
+
+        Q_INT32 numAxes() const;
+
+        void setXAxis(Q_INT32 axis);
+        void setYAxis(Q_INT32 axis);
+        void setPressureAxis(Q_INT32 axis);
+        void setXTiltAxis(Q_INT32 axis);
+        void setYTiltAxis(Q_INT32 axis);
+        void setWheelAxis(Q_INT32 axis);
+        void setToolIDAxis(Q_INT32 axis);
+        void setSerialNumberAxis(Q_INT32 axis);
+
+        static const Q_INT32 NoAxis = -1;
+        static const Q_INT32 DefaultAxis = -2;
+
+        Q_INT32 xAxis() const;
+        Q_INT32 yAxis() const;
+        Q_INT32 pressureAxis() const;
+        Q_INT32 xTiltAxis() const;
+        Q_INT32 yTiltAxis() const;
+        Q_INT32 wheelAxis() const;
+        Q_INT32 toolIDAxis() const;
+        Q_INT32 serialNumberAxis() const;
+
+        void readSettingsFromConfig();
+        void writeSettingsToConfig();
 
         // These return -1 if the device does not support the event
         int buttonPressEvent() const { return m_buttonPressEvent; }
         int buttonReleaseEvent() const { return m_buttonReleaseEvent; }
         int motionNotifyEvent() const { return m_motionNotifyEvent; }
 
+        void enableEvents(QWidget *widget) const;
+        void disableEvents(QWidget *widget) const;
+
         class State
         {
         public:
             State() {}
-            State(const KisPoint& pos, double pressure, const KisVector2D& tilt);
+            State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel);
 
-            // Position and pressure are normalised to 0 - 1
+            // Position, pressure and wheel are normalised to 0 - 1
             KisPoint pos() const { return m_pos; }
             double pressure() const { return m_pressure; }
             // Tilt is normalised to -1 -> +1
             KisVector2D tilt() const { return m_tilt; }
+            double wheel() const { return m_wheel; }
 
         private:
             KisPoint m_pos;
             double m_pressure;
             KisVector2D m_tilt;
+            double m_wheel;
         };
 
         State translateAxisData(const int *axisData) const;
@@ -172,23 +220,43 @@ protected:
         double translateAxisValue(int value, const XAxisInfo& axisInfo) const;
 
         XID m_deviceId;
-        enumInputDevice m_device;
-        XAxisInfo m_xInfo;
-        XAxisInfo m_yInfo;
-        XAxisInfo m_pressureInfo;
-        XAxisInfo m_tiltXInfo;
-        XAxisInfo m_tiltYInfo;
+        QString m_name;
+
+        bool m_mightBeTabletDevice;
+        KisInputDevice m_inputDevice;
+
+        bool m_enabled;
+
+        Q_INT32 m_xAxis;
+        Q_INT32 m_yAxis;
+        Q_INT32 m_pressureAxis;
+        Q_INT32 m_xTiltAxis;
+        Q_INT32 m_yTiltAxis;
+        Q_INT32 m_wheelAxis;
+        Q_INT32 m_toolIDAxis;
+        Q_INT32 m_serialNumberAxis;
+
+        QValueVector<XAxisInfo> m_axisInfo;
+
         int m_motionNotifyEvent;
         int m_buttonPressEvent;
         int m_buttonReleaseEvent;
+
+        QValueVector<XEventClass> m_eventClassList;
     };
+
+    typedef std::map<XID, X11TabletDevice> X11XIDTabletDeviceMap;
+    static X11XIDTabletDeviceMap& tabletDeviceMap();
+
+protected:
+    static void selectTabletDeviceEvents(QWidget *widget);
 
     static int X11DeviceMotionNotifyEvent;
     static int X11DeviceButtonPressEvent;
     static int X11DeviceButtonReleaseEvent;
 
-    typedef std::map<XID, X11TabletDevice> X11XIDTabletDeviceMap;
     static X11XIDTabletDeviceMap X11TabletDeviceMap;
+
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
 #endif // Q_WS_X11
@@ -221,6 +289,10 @@ public:
     void repaint(const QRegion& r, bool erase = true);
 
     void updateGeometry();
+
+#if defined(EXTENDED_X11_TABLET_SUPPORT)
+    void selectTabletDeviceEvents();
+#endif
 
 signals:
     void sigGotPaintEvent(QPaintEvent*);

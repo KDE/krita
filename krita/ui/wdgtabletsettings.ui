@@ -12,6 +12,9 @@
             <height>268</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>Tablet</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -95,7 +98,7 @@
                         </widget>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>comboBox3</cstring>
+                                <cstring>cbTabletDevice</cstring>
                             </property>
                         </widget>
                     </hbox>
@@ -110,7 +113,7 @@
                         </property>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>checkBox1</cstring>
+                                <cstring>chkEnableTabletDevice</cstring>
                             </property>
                             <property name="text">
                                 <string>Enable</string>
@@ -118,7 +121,7 @@
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
-                                <cstring>pushButton1</cstring>
+                                <cstring>btnConfigureTabletDevice</cstring>
                             </property>
                             <property name="text">
                                 <string>Configure...</string>

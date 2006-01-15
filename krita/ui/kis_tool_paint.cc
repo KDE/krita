@@ -53,6 +53,7 @@ KisToolPaint::KisToolPaint(const QString& UIName)
     m_slOpacity = 0;
     m_lbComposite= 0;
     m_cmbComposite = 0;
+    m_chkDirect = 0;
 
     m_opacity = OPACITY_OPAQUE;
     m_compositeOp = COMPOSITE_OVER;
@@ -140,6 +141,10 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
+
+        if (m_chkDirect) {
+            m_optionWidgetLayout -> addWidget(m_chkDirect, 2, 0);
+        }
         
         // XXX make this a picture of a '?', like you see everywhere
         QPushButton* push = new QPushButton("?", m_optionWidget);

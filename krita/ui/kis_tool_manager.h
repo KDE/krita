@@ -25,6 +25,7 @@
 #include "kis_tool_controller.h"
 #include "kis_global.h"
 #include "kis_tool_types.h"
+#include "kis_input_device.h"
 
 class KoView;
 class KisCanvasSubject;
@@ -62,9 +63,9 @@ public:
     
     virtual KisTool *currentTool() const;
     
-    void setToolForInputDevice(enumInputDevice oldDevice, enumInputDevice newDevice);
+    void setToolForInputDevice(KisInputDevice oldDevice, KisInputDevice newDevice);
 
-    KisTool *findTool(const QString &toolName, enumInputDevice inputDevice = INPUT_DEVICE_UNKNOWN) const;
+    KisTool *findTool(const QString &toolName, KisInputDevice inputDevice = KisInputDevice::unknown()) const;
 
     void activateCurrentTool();
 
@@ -74,8 +75,8 @@ private:
     
 private:
 
-    typedef std::map<enumInputDevice, KisTool *> InputDeviceToolMap;
-    typedef std::map<enumInputDevice, vKisTool> InputDeviceToolSetMap;
+    typedef std::map<KisInputDevice, KisTool *> InputDeviceToolMap;
+    typedef std::map<KisInputDevice, vKisTool> InputDeviceToolSetMap;
 
     InputDeviceToolMap m_inputDeviceToolMap;
     InputDeviceToolSetMap m_inputDeviceToolSetMap;

@@ -48,6 +48,7 @@
 #include "kis_id.h"
 #include "koffice_export.h"
 #include "kis_color.h"
+#include "kis_input_device.h"
 
 class QButton;
 class QLabel;
@@ -201,6 +202,10 @@ protected:
     virtual void paletteChange(const QPalette& oldPalette); // From QWidget
     virtual void showEvent(QShowEvent *);
 
+#ifdef EXTENDED_X11_TABLET_SUPPORT
+    virtual bool x11Event(XEvent *event);
+#endif // Q_WS_X11
+
 protected slots:
     virtual void slotChildActivated(bool a); // from KoView
 
@@ -298,8 +303,8 @@ private:
 
     virtual QCursor setCanvasCursor(const QCursor & cursor);
 
-    void setInputDevice(enumInputDevice inputDevice);
-    enumInputDevice currentInputDevice() const;
+    void setInputDevice(KisInputDevice inputDevice);
+    KisInputDevice currentInputDevice() const;
 
 // -------------------------------------------------------------------------//
 //                      KisView internals
@@ -563,7 +568,7 @@ private:
     float m_HDRExposure;
 
     // Currently active input device (mouse, stylus, eraser...)
-    enumInputDevice m_inputDevice;
+    KisInputDevice m_inputDevice;
 
     KisBirdEyeBox * m_birdEyeBox;
     KoHSVWidget *m_hsvwidget;

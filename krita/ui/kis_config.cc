@@ -256,6 +256,26 @@ Q_INT32 KisConfig::getDefaultPressureCorrection()
     return DEFAULT_PRESSURE_CORRECTION;
 }
 
+bool KisConfig::tabletDeviceEnabled(const QString& tabletDeviceName) const
+{
+    return m_cfg -> readBoolEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
+}
+
+void KisConfig::setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled)
+{
+    m_cfg -> writeEntry("TabletDevice" + tabletDeviceName + "Enabled", enabled);
+}
+
+Q_INT32 KisConfig::tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 defaultAxis) const
+{
+    return m_cfg -> readNumEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
+}
+
+void KisConfig::setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 axis) const
+{
+    m_cfg -> writeEntry("TabletDevice" + tabletDeviceName + axisName, axis);
+}
+
 void KisConfig::setDockability( Q_INT32 dockability )
 {
     m_cfg->writeEntry( "palettesdockability", dockability );

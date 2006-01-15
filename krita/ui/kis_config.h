@@ -88,6 +88,12 @@ public:
     void setPressureCorrection( Q_INT32 correction);
     Q_INT32 getDefaultPressureCorrection();
 
+    bool tabletDeviceEnabled(const QString& tabletDeviceName) const;
+    void setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled);
+
+    Q_INT32 tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 defaultAxis) const;
+    void setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 axis) const;
+
     Q_INT32 dockability();
     Q_INT32 getDefaultDockability();
     void setDockability( Q_INT32 dockability);

@@ -28,6 +28,7 @@
 #include "kotoolbox.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_input_device.h"
 
 KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller)
     : m_subject(parent),
@@ -62,12 +63,13 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
     if (!m_dummyTool)
         m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
 
-    m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
-    m_inputDeviceToolSetMap[INPUT_DEVICE_STYLUS] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
-    m_inputDeviceToolSetMap[INPUT_DEVICE_ERASER] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
-    m_inputDeviceToolSetMap[INPUT_DEVICE_PUCK] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+    QValueVector<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
 
-    m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
+    for (Q_UINT32 inputDevice = 0; inputDevice < inputDevices.count(); inputDevice++) {
+        m_inputDeviceToolSetMap[inputDevices[inputDevice]] = KisToolRegistry::instance() -> createTools(actionCollection, m_subject);
+    }
+
+    m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisTool * t = *it;
         if (!t) continue;
@@ -95,7 +97,7 @@ void KisToolManager::resetToolBox(KoToolBox * toolbox)
 {
     m_toolBox = toolbox;
 
-    m_tools = m_inputDeviceToolSetMap[INPUT_DEVICE_MOUSE];
+    m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
         KisTool * t = *it;
         if (!t) continue;
@@ -221,7 +223,7 @@ KisTool * KisToolManager::currentTool() const
 }
 
 
-void KisToolManager::setToolForInputDevice(enumInputDevice oldDevice, enumInputDevice newDevice)
+void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDevice newDevice)
 {
     InputDeviceToolSetMap::iterator vit = m_inputDeviceToolSetMap.find(oldDevice);
 
@@ -262,9 +264,9 @@ void KisToolManager::activateCurrentTool()
     }
 }
 
-KisTool * KisToolManager::findTool(const QString &toolName, enumInputDevice inputDevice) const
+KisTool * KisToolManager::findTool(const QString &toolName, KisInputDevice inputDevice) const
 {
-    if (inputDevice == INPUT_DEVICE_UNKNOWN) {
+    if (inputDevice == KisInputDevice::unknown()) {
         inputDevice = m_controller->currentInputDevice();
     }
 

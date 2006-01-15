@@ -71,7 +71,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
         {
            KisPaintDeviceImplSP preview = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
            preview->convertFromQImage(img,"");
-           m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),i18n("Filters list"),krita::EFFECTSBOX, 0);
+           m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
         }
 
     }

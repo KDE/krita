@@ -26,6 +26,7 @@
 #include "kis_id.h"
 #include "kis_types.h"
 #include "kis_layer.h"
+#include "kis_paint_device_impl.h"
 
 class KisView;
 class KisFilter;

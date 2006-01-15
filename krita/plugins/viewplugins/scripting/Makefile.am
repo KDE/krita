@@ -10,6 +10,7 @@ INCLUDES  =  -I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/core \
 	-I$(top_srcdir)/krita/kritacolor/ \
 	-I$(top_srcdir)/krita/ui \
+        -I$(top_builddir)/lib/kross/main \
 	$(KROSS_INCLUDES) \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes)

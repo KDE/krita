@@ -35,7 +35,7 @@ class Color : public Kross::Api::Class<Color>
 
         ~Color();
     public:
-        inline const QString Color::getClassName() const
+        inline const QString getClassName() const
         { return "Kross::Krita::Color"; };
         inline QColor toQColor() { return m_color; };
     private:

@@ -39,6 +39,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
     public:
     Iterator(_T_It it, KisPaintLayerSP layer) : Kross::Api::Class<Iterator<_T_It> >("KritaIterator"), m_it(it), nchannels(layer->paintDevice()->nChannels()), m_layer(layer)
     {
+        // navigate in the iterator
         this->addFunction("next",
             new Kross::Api::ConstFunction0< Iterator<_T_It> >(
                 this, &Iterator<_T_It>::next ) );
@@ -46,6 +47,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             new Kross::Api::ConstFunction0< Iterator<_T_It> >(
                 this, &Iterator<_T_It>::isDone ) );
 
+        // get/set value
         QValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
         QString initiales = "";
         for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
@@ -84,9 +86,13 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
             }
         }
         initiales = initiales.upper();
+        // set/get general
         addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
         addFunction("get" + initiales, &Iterator::getPixel);
         kdDebug() << ( "get" + initiales ) << endl;
+        // Various colorSpace
+        addFunction("invertColor", &Iterator::invertColor);
+        addFunction("darken", &Iterator::darken);
     }
 
     ~Iterator()
@@ -96,6 +102,18 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
         return "Kross::KritaCore::KrsDoc";
     };
     private:
+        Kross::Api::Object::Ptr darken(Kross::Api::List::Ptr args)
+        {
+            Q_INT32 shade = Kross::Api::Variant::toUInt( args->item(0) );
+            bool compensate = Kross::Api::Variant::toBool( args->item(1) );
+            double compensation = Kross::Api::Variant::toDouble( args->item(2) );
+            m_layer->paintDevice()->colorSpace()->darken(m_it.rawData(), m_it.rawData(), shade, compensate, compensation, 1);
+        }
+        Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr args)
+        {
+            m_layer->paintDevice()->colorSpace()->invertColor(m_it.rawData(), 1);
+            return 0;
+        }
         Kross::Api::Object::Ptr next()
         {
             ++m_it;
@@ -158,7 +176,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
-                        kdDebug() << "unsupported data format in scripts" << endl;
+                        kdDebug() << i18n("An error has occured in %1").arg("getPixel") << endl;
+                        kdDebug() << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }
@@ -185,7 +204,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
                         *((float*) data) = pixel[i].toDouble();
                         break;
                     default:
-                        kdDebug() << "unsupported data format in scripts" << endl;
+                        kdDebug() << i18n("An error has occured in %1").arg("setPixel") << endl;
+                        kdDebug() << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }

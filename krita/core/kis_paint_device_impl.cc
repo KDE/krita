@@ -699,6 +699,11 @@ bool KisPaintDeviceImpl::hasSelection()
     return m_hasSelection;
 }
 
+bool KisPaintDeviceImpl::selectionDeselected()
+{
+    return m_selectionDeselected;
+}
+
 
 void KisPaintDeviceImpl::deselect()
 {

@@ -58,11 +58,6 @@ The 'update current color' checkbox indeed updates the color (painting
 something works just fine) but the HSV/RGB/etc palettes are not altered, 
 I expected them to be updated continuesly.
 
-
-Select:
-reselect is enabled when I startup krita with a loaded jpeg; I never 
-selected anything yet. Looks like a bug.
-
 Color Range shows a dialog that also has extra margins around them, the 
 groupbox on the right does not line up with the cancel right-side.
 =46or the color range, I also fail to see what the dialog should do.

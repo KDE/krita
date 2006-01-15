@@ -335,6 +335,9 @@ public:
     /** Whether there is a valid selection for this paintdevice. */
     bool hasSelection();
 
+   /** Whether the previous selection was deselected. */
+    bool KisPaintDeviceImpl::selectionDeselected();
+
     /** Deselect the selection for this paintdevice. */
     void deselect();
 

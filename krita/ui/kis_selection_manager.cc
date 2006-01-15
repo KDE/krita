@@ -283,6 +283,9 @@ void KisSelectionManager::updateGUI()
         dev = img -> activeDevice();
 
         enable = l && dev&& dev -> hasSelection() && !l -> locked() && l -> visible();
+
+        if(dev)
+            m_reselect -> setEnabled( dev -> selectionDeselected() );
     }
 
     m_cut -> setEnabled(enable);
@@ -293,7 +296,6 @@ void KisSelectionManager::updateGUI()
     m_fillForegroundColor -> setEnabled(enable);
     m_fillBackgroundColor -> setEnabled(enable);
     m_fillPattern -> setEnabled(enable);
-    m_reselect -> setEnabled( ! enable);
     m_invert -> setEnabled(enable);
 
     m_feather -> setEnabled(enable);

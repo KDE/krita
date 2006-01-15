@@ -33,7 +33,7 @@
 #include "kis_move_event.h"
 
 KisToolDummy::KisToolDummy()
-    : super("No active tool")
+    : super("No Active Tool")
 {
     setName("tool_dummy");
     m_subject = 0;
@@ -96,7 +96,7 @@ void KisToolDummy::setup(KActionCollection *collection)
 QWidget* KisToolDummy::createOptionWidget(QWidget* parent)
 {
     m_optionWidget = new QLabel(i18n("Layer is locked or invisible."), parent);
-    m_optionWidget->setCaption("No active tool");
+    m_optionWidget->setCaption("No Active Tool");
     m_optionWidget->setAlignment(Qt::AlignCenter);
     return m_optionWidget;
 }

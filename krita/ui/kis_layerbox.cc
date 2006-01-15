@@ -452,7 +452,7 @@ void KisLayerBox::clear()
 
 void KisLayerBox::slotAddMenuAboutToShow()
 {
-    list() -> partLayerAction() -> setText(i18n("New &Object Layer..."));
+    list() -> partLayerAction() -> setText(i18n("New &Object Layer"));
 }
 
 void KisLayerBox::slotAddMenuActivated(int type)

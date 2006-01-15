@@ -51,7 +51,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
         submenu.insertItem( SmallIconSet( "file" ), i18n( "&Layer..." ), MenuItems::NewLayer );
         submenu.insertItem( SmallIconSet( "folder" ), i18n( "&Group Layer..." ), MenuItems::NewFolder );
         submenu.insertItem( SmallIconSet( "filter" ), i18n( "&Adjustment Layer..." ), ADJUSTMENT_LAYER );
-        m_partLayerAction->setText( i18n( "&Object Layer..." ) );
+        m_partLayerAction->setText( i18n( "&Object Layer" ) );
         m_partLayerAction->plug( &submenu );
 
         contextMenu()->insertItem( SmallIconSet( "filenew" ), i18n( "&New" ), &submenu );
@@ -61,7 +61,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
         contextMenu()->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), MenuItems::NewLayer );
         contextMenu()->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), MenuItems::NewFolder );
         contextMenu()->insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
-        m_partLayerAction->setText( i18n( "New &Object Layer..." ) );
+        m_partLayerAction->setText( i18n( "New &Object Layer" ) );
         m_partLayerAction->plug( contextMenu() );
     }
 }
@@ -178,7 +178,7 @@ QString KisLayerItem::tooltip() const
     text = text.left( text.length() - 8 ); //HACK -- strip the </table>
     QString row = "<tr><td>%1</td><td>%2</td></tr>";
     text += row.arg( i18n( "Opacity:" ) ).arg( "%1%" ).arg( int( float( m_layer->opacity() * 100 ) / 255 + 0.5 ) );
-    text += row.arg( i18n( "Composite Mode:" ) ).arg( m_layer->compositeOp().id().name() );
+    text += row.arg( i18n( "Composite mode:" ) ).arg( m_layer->compositeOp().id().name() );
     if( KisPaintLayer *player = dynamic_cast<KisPaintLayer*>( m_layer ) )
         text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->id().name() );
     text += "</table>";

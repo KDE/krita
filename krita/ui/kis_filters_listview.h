@@ -50,21 +50,23 @@ private:
 class KisFiltersListView : public KIconView {
 public:
     KisFiltersListView(QWidget* parent, const char* name = 0);
-    KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0);
+    KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0) KDE_DEPRECATED;
+    KisFiltersListView(KisPaintDeviceImplSP layer, QWidget* parent, const char * name = 0);
     
 private:
     void init();
 public:
-    inline void setLayer(KisLayerSP layer) {
-        if(layer!= m_layer)
+    void setLayer(KisLayerSP layer) KDE_DEPRECATED;
+    inline void setPaintDevice(KisPaintDeviceImplSP pd) {
+        if( pd != m_original)
         {
-            m_layer = layer;
+            m_original = pd;
             buildPreview();
         }
     }
     void buildPreview();
 private:
-    KisLayerSP m_layer;
+    KisPaintDeviceImplSP m_original;
     KisImageSP m_imgthumb;
     KisPaintLayerSP m_thumb;
 };

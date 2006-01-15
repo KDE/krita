@@ -30,16 +30,28 @@
 #include "kis_filter_strategy.h"
 
 
-KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_layer(0)
+KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_original(0)
 {
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name) : KIconView(parent, name) , m_layer(layer)
+KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(0)
+{
+    KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
+    if(pl != 0)
+    {
+        m_original = pl->paintDevice();
+        buildPreview();
+    }
+    init();
+}
+
+KisFiltersListView::KisFiltersListView(KisPaintDeviceImplSP device, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(device)
 {
     buildPreview();
     init();
 }
+
 void KisFiltersListView::init()
 {
     setItemsMovable(false);
@@ -48,20 +60,36 @@ void KisFiltersListView::init()
     setMinimumWidth(240);
 }
 
+void KisFiltersListView::setLayer(KisLayerSP layer) {
+    KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
+    if(pl == 0)
+        return;
+    KisPaintDeviceImplSP npd = pl->paintDevice();
+    if(npd!= m_original)
+    {
+        m_original = npd;
+        buildPreview();
+    }
+}
+
+
 void KisFiltersListView::buildPreview()
 {
     
-    if(m_layer== 0)
+    if(m_original== 0)
         return;
     
     // Check which filters support painting
 
     // Create a paint layer -- if this is not a paint layer, exit. This very ugly, refactore for 2.0. XXX
-    m_thumb = new KisPaintLayer( *dynamic_cast<KisPaintLayer*>(m_layer.data()) );
-    if (m_thumb == 0)
-        return;
+//     m_thumb = new KisPaintLayer( *dynamic_cast<KisPaintLayer*>(m_layer.data()) );
+//     if (m_thumb == 0)
+//         return;
     
-    m_imgthumb = new KisImage(0, m_thumb->exactBounds().width(), m_thumb->exactBounds().height(), m_thumb->paintDevice()->colorSpace(), "thumbnail");
+    m_imgthumb = new KisImage(0, m_original->exactBounds().width(), m_original->exactBounds().height(), m_original->colorSpace(), "thumbnail");
+    m_thumb = new KisPaintLayer( m_imgthumb, "thumbnail", 255, new KisPaintDeviceImpl(*m_original));
+    
+    
     m_imgthumb->addLayer(m_thumb.data(), m_imgthumb->rootLayer(), 0);
     double sx = 100./m_thumb->exactBounds().width();
     double sy = 100./m_thumb->exactBounds().height();

@@ -27,10 +27,14 @@
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 
+#include <kopalettemanager.h>
+
+#include <kis_colorspace_factory_registry.h>
 #include <kis_dlg_filtersgallery.h>
 #include <kis_doc.h>
 #include <kis_filter.h>
 #include <kis_filters_listview.h>
+#include <kis_meta_registry.h>
 #include <kis_paint_device_impl.h>
 #include <kis_selection.h>
 #include <kis_view.h>
@@ -60,6 +64,16 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
         m_view = (KisView*) parent;
 
         (void) new KAction(i18n("&Filters Gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
+
+        // Add a docker with the list of filters
+        QImage img;
+        if(img.load(locate("data","krita/images/previewfilter.png")))
+        {
+           KisPaintDeviceImplSP preview = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
+           preview->convertFromQImage(img,"");
+           m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),i18n("Filters list"),krita::EFFECTSBOX, 0);
+        }
+
     }
 
 

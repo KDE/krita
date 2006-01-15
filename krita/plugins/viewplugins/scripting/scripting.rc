@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritascripting" version="2">
+<kpartgui library="kritascripting" version="3">
   <MenuBar>
     <Menu name="Scripts"><text>Sc&amp;ripts</text>
       <Separator/>

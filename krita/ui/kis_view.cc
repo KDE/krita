@@ -228,6 +228,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
+    m_paletteManager->createPalette( krita::EFFECTSBOX, i18n("Effects"));
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);

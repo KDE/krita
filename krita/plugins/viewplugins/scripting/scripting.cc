@@ -36,13 +36,16 @@
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <main/manager.h>
+#include <main/scriptguiclient.h>
+#include <main/wdgscriptsmanager.h>
+
+#include <kopalettemanager.h>
 
 #include <kis_doc.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
 
-#include <main/scriptguiclient.h>
 #include "kritascripting/kis_script_progress.h"
 
 typedef KGenericFactory<Scripting> KritaScriptingFactory;
@@ -54,7 +57,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
     setInstance(KritaScriptingFactory::instance());
 
 
-    kdDebug(41006) << "Scripting plugin. Class: "
+    kdDebug() << "Scripting plugin. Class: "
           << className()
           << ", Parent: "
           << parent -> className()
@@ -65,12 +68,14 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         m_view = (KisView*) parent;
         m_scriptguiclient = new Kross::Api::ScriptGUIClient( m_view, m_view );
 //         m_scriptguiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
-
+        kdDebug() << "Setup actions for scripting !" << endl;
         //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
         setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
         new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
         //END TODO
+        
+        m_view->canvasSubject()->paletteManager()->addWidget(new Kross::Api::WdgScriptsManager(m_scriptguiclient, m_view),i18n("Scripts Manager"),krita::EFFECTSBOX, 0);
         
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
         

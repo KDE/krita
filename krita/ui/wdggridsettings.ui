@@ -12,9 +12,6 @@
             <height>233</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>WdgGridSettingsBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -44,7 +41,7 @@
                 <cstring>groupBox9</cstring>
             </property>
             <property name="title">
-                <string>Colors:</string>
+                <string>Colors</string>
             </property>
             <grid>
                 <property name="name">
@@ -94,7 +91,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>subdivision:</string>
+                        <string>Subdivision:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -102,7 +99,7 @@
                         <cstring>textLabel2_4</cstring>
                     </property>
                     <property name="text">
-                        <string>main:</string>
+                        <string>Main:</string>
                     </property>
                 </widget>
                 <widget class="KColorButton" row="1" column="1">
@@ -134,7 +131,7 @@
                 <cstring>groupBox5</cstring>
             </property>
             <property name="title">
-                <string>Styles:</string>
+                <string>Styles</string>
             </property>
             <grid>
                 <property name="name">

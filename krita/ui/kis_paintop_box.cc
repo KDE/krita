@@ -25,8 +25,14 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kglobalsettings.h>
+#include <kaccelmanager.h>
+#include <kconfig.h>
 
-#include <kis_id.h>
+
 #include <kis_paintop_registry.h>
 #include <kis_view.h>
 #include <kis_painter.h>
@@ -39,6 +45,10 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     : super (parent, name),
       m_view(view)
 {
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
+    KAcceleratorManager::setNoAccel(this);
+#endif
+
     setCaption(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
     m_paintops = new QValueList<KisID>();

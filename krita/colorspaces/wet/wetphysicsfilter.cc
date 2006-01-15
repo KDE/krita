@@ -32,7 +32,7 @@
 
 
 WetPhysicsFilter::WetPhysicsFilter()
-    : KisFilter(id(), "artistic", i18n("Dry the paint (25 times)"))
+    : KisFilter(id(), "artistic", i18n("Dry the Paint (25 times)"))
 {
     m_adsorbCount = 0;
 }

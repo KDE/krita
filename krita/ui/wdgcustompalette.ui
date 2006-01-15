@@ -34,7 +34,7 @@
                 <cstring>addColor</cstring>
             </property>
             <property name="text">
-                <string>Add New Color</string>
+                <string>Add New Color...</string>
             </property>
         </widget>
         <widget class="QPushButton">

@@ -30,7 +30,7 @@
 KisLayerList::KisLayerList( QWidget *parent, const char *name )
     : super( parent, name )
 {
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer..." ), "gear",
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear",
                                                 this, "insert_part_layer" );
 }
 

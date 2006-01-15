@@ -765,7 +765,7 @@ void LayerList::constructMenu( LayerItem *layer )
         for( int i = 0, n = d->properties.count(); i < n; ++i )
             if( !layer->isFolder() || d->properties[i].validForFolders )
                 d->contextMenu.insertItem( d->properties[i].icon.pixmap( QIconSet::Small, layer->d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ), d->properties[i].displayName, MenuItems::COUNT + i );
-        d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties..." ), MenuItems::LayerProperties );
+        d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties" ), MenuItems::LayerProperties );
         d->contextMenu.insertSeparator();
         d->contextMenu.insertItem( SmallIconSet( "editdelete" ),
             selectedLayers().count() > 1 ? i18n( "Remove Layers" )

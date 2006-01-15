@@ -202,7 +202,6 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
         KisPopulateVisitor visitor(static_cast<KisLayerItem*>(list() -> layer(layer -> parent() -> id())));
         layer -> accept(visitor);
     }
-
     updateUI();
 }
 
@@ -286,7 +285,6 @@ void KisLayerBox::slotLayerPropertyChanged(LayerItem* item, const QString& name,
         else if (name == "locked")
             layer -> setLocked(on);
     }
-    updateUI();
 }
 
 void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem* p, LayerItem*)
@@ -412,9 +410,8 @@ void KisLayerBox::updateUI()
                 slotSetColorSpace(m_image -> activeDevice() -> colorSpace());
             else
                 slotSetColorSpace(m_image -> colorSpace());
-
-            m_lst -> intOpacity -> setValue(int(float(active -> opacity() * 100) / 255 + 0.5));
-            m_lst -> cmbComposite -> setCurrentItem(active -> compositeOp());
+            slotSetOpacity(int(float(active -> opacity() * 100) / 255 + 0.5));
+            slotSetCompositeOp(active -> compositeOp());
         }
 }
 
@@ -575,14 +572,6 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
     list() -> blockSignals(!enable);
     m_lst -> intOpacity -> blockSignals(!enable);
     m_lst -> cmbComposite -> blockSignals(!enable);
-}
-
-void KisLayerBox::updateAll()
-{
-    update();
-    m_lst -> intOpacity -> update();
-    m_lst -> cmbComposite -> update();
-    updateUI();
 }
 
 QIconSet KisLayerBox::loadIconSet(const QString& filename, KIconLoader&

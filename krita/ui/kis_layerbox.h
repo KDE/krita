@@ -50,7 +50,6 @@ public:
 
     void clear();
     void setUpdatesAndSignalsEnabled(bool enable);
-    void updateAll();
     void setImage(KisImageSP image);
 
 public slots:

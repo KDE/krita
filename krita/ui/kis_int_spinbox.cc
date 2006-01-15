@@ -46,11 +46,6 @@
 #include "knumvalidator.h"
 #include "kis_int_spinbox.h"
 
-static inline int calcDiffByTen( int x, int y ) {
-    // calculate ( x - y ) / 10 without overflowing ints:
-    return ( x / 10 ) - ( y / 10 )  +  ( x % 10 - y % 10 ) / 10;
-}
-
 class KisIntSpinbox::KisIntSpinboxPrivate {
 public:
 
@@ -77,17 +72,17 @@ void KisIntSpinbox::init(int val)
     d = new KisIntSpinboxPrivate( );
     QBoxLayout * l = new QHBoxLayout( this );
 
-    d->m_numinput = new QLineEdit(this, "KisIntSpinbox::KNumInput");
+    d->m_numinput = new QLineEdit(this, "KisIntSpinbox::QLineEdit");
+    d->m_numinput->setInputMask("000%");
+    d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
+    d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
     l->addWidget( d->m_numinput );
 
-    connect(d->m_numinput, SIGNAL(valueChanged(int)), SLOT(numValueChanged(int)));
+    connect(d->m_numinput, SIGNAL(textChanged(const QString &)), SLOT(numValueChanged(const QString &)));
 
     //d->m_slider = new KisPopupSlider(INT_MIN, INT_MAX, 1, val, QSlider::Horizontal, this);
     d->m_slider = new KisPopupSlider(0, 100, 1, val, QSlider::Horizontal, this);
-    d->m_slider->setTickmarks(QSlider::Below);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    d->m_slider->setMargin(10);
-    d->m_slider->setLineWidth(3);
     connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
 
     d->m_arrow = new KArrowButton(this,Qt::DownArrow);
@@ -99,8 +94,9 @@ void KisIntSpinbox::init(int val)
     layout();
 }
 
-void KisIntSpinbox::numValueChanged(int val)
+void KisIntSpinbox::numValueChanged(const QString &text)
 {
+    int val = text.left(text.length()-1).toInt();
     d->m_slider->blockSignals(true);
     d->m_slider->setValue(val);
     d->m_slider->blockSignals(false);
@@ -110,6 +106,11 @@ void KisIntSpinbox::numValueChanged(int val)
 
 void KisIntSpinbox::sliderValueChanged(int val)
 {
+    d->m_numinput->blockSignals(true);
+    QString valstr = QString("%1%%").arg(val);
+    d->m_numinput->setText(valstr);
+    d->m_numinput->blockSignals(false);
+
     emit valueChanged(val);
 }
 
@@ -118,13 +119,6 @@ void KisIntSpinbox::setRange(int lower, int upper, int step)
     upper = kMax(upper, lower);
     lower = kMin(upper, lower);
     d->m_slider->setRange(lower, upper);
-
-    // calculate (upper-lower)/10 without overflowing int's:
-    int major = calcDiffByTen( upper, lower );
-    if ( major==0 )
-        major = step; // #### workaround Qt bug in 2.1-beta4
-
-    d->m_slider->setTickInterval(major);
 
     layout();
 }

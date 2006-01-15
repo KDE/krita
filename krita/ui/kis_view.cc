@@ -2627,8 +2627,6 @@ void KisView::layersUpdated()
 
     layerUpdateGUI(img && layer);
 
-    m_layerBox -> updateAll();
-
     notifyObservers();
 }
 

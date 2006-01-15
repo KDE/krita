@@ -32,17 +32,6 @@ class QLineEdit;
 class QLayout;
 class QValidator;
 
-/**
- * @short An input widget for integer numbers, consisting of a spinbox and
- * a dropdown slider.
- *
- * KisIntSpinbox combines a QSpinBox and a dropdown QSlider
- * to make an easy to use control for setting some integer
- * parameter.
- *
- *
- */
-
 class KisPopupSlider : public QPopupMenu {
     Q_OBJECT
 
@@ -70,6 +59,16 @@ signals:
 
 };
 
+/**
+ * @short An input widget for integer numbers, consisting of a spinbox and
+ * a dropdown slider.
+ *
+ * KisIntSpinbox combines a QSpinBox and a dropdown QSlider
+ * to make an easy to use control for setting some integer
+ * parameter.
+ *
+ *
+ */
 class KisIntSpinbox : public QWidget
 {
 
@@ -77,7 +76,6 @@ class KisIntSpinbox : public QWidget
     Q_PROPERTY( int value READ value WRITE setValue )
     Q_PROPERTY( int minValue READ minValue WRITE setMinValue )
     Q_PROPERTY( int maxValue READ maxValue WRITE setMaxValue )
-    Q_PROPERTY( QString specialValueText READ specialValueText WRITE setSpecialValueText )
 
 public:
 
@@ -154,7 +152,7 @@ public slots:
     void setValue(int);
 
 
-    void numValueChanged(int val);
+    void numValueChanged(const QString &text);
     void sliderValueChanged(int val);
 
 signals:

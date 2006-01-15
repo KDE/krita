@@ -17,6 +17,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <kaboutdata.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -24,6 +25,9 @@
 
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_part_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_filter_configuration.h"
 #include "kis_layerlist.h"
 
 
@@ -181,6 +185,10 @@ QString KisLayerItem::tooltip() const
     text += row.arg( i18n( "Composite mode:" ) ).arg( m_layer->compositeOp().id().name() );
     if( KisPaintLayer *player = dynamic_cast<KisPaintLayer*>( m_layer ) )
         text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->id().name() );
+    if( KisAdjustmentLayer *alayer = dynamic_cast<KisAdjustmentLayer*>( m_layer ) )
+        text += row.arg( i18n( "Filter: " ) ).arg( alayer->filter()->name() );
+    if( KisPartLayer *player = dynamic_cast<KisPartLayer*>( m_layer ) )
+        text += row.arg( i18n( "Document type: " ) ).arg( player->childDoc()->document()->instance()->aboutData()->programName() );
     text += "</table>";
 
     return text;

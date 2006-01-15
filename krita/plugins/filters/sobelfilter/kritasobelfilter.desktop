@@ -10,6 +10,7 @@ Name[it]=Filtro Sobel
 Name[ja]=ソーベルフィルタ
 Name[pt]=Filtro Sobel
 Name[pt_BR]=Filtro Sobel
+Name[sv]=Sobelfilter
 Name[xx]=xxSobel Filterxx
 ServiceTypes=Krita/Filter
 Type=Service

@@ -10,6 +10,7 @@ Name[it]=Conversione dello spazio dei colori
 Name[ja]=カラースペース変換
 Name[pt]=Conversão de Espaços de Cores
 Name[pt_BR]=Conversão de Espaços de Cores
+Name[sv]=Färgrymdskonvertering
 Name[xx]=xxColorspace Conversionxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

@@ -10,6 +10,7 @@ Name[it]=Plugin di scripting
 Name[ja]=スクリプトプラグイン
 Name[pt]='Plugin' de programação
 Name[pt_BR]='Plugin' de programação
+Name[sv]=Skriptinsticksprogram
 Comment=Allow execution of scripts
 Comment[da]=Tillad kørsel af script
 Comment[de]=Ermöglicht das Ausführen von Skripten

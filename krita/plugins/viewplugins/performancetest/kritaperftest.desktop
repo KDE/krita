@@ -9,6 +9,7 @@ Name[it]=Prova delle prestazioni
 Name[ja]=パフォーマンステスト
 Name[pt]=Teste de Performance
 Name[pt_BR]=Teste de Performance
+Name[sv]=Prestandatest
 Name[xx]=xxPerformance Testxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

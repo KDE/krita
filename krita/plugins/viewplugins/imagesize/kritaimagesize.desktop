@@ -9,6 +9,7 @@ Name[it]=Plugin di ridimensionamento e riscalamento delle immagini
 Name[ja]=画像 リサイズ/スケール プラグイン
 Name[pt]='Plugin' de Dimensionamento e Escala da Imagem
 Name[pt_BR]='Plugin' de Dimensionamento e Escala da Imagem
+Name[sv]=Insticksprogram för bildstorleksändring och skalning
 Name[xx]=xxImage Resize and Scale Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

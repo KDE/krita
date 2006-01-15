@@ -49,7 +49,7 @@
 #include <kis_vec.h>
 
 KisToolFilter::KisToolFilter()
-    : super(i18n("Filter tool")), m_filterConfigurationWidget(0)
+    : super(i18n("Filter Brush")), m_filterConfigurationWidget(0)
 {
     setName("tool_filter");
     m_subject = 0;

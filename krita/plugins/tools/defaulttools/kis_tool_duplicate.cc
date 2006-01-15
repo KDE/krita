@@ -41,7 +41,7 @@
 #include "kis_boundary_painter.h"
 
 KisToolDuplicate::KisToolDuplicate() 
-    : super(i18n("Duplicate")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
+    : super(i18n("Duplicate Brush")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
 {
     setName("tool_duplicate");
     m_subject = 0;
@@ -77,11 +77,11 @@ void KisToolDuplicate::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Duplicate"),
+        m_action = new KRadioAction(i18n("&Duplicate Brush"),
                         "stamp", Qt::Key_C, this,
                         SLOT(activate()), collection,
                         name());
-        m_action -> setToolTip(i18n("Duplicate parts of an image"));
+        m_action -> setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
     }

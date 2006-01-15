@@ -85,7 +85,7 @@
                 <cstring>cbNormaliseValues</cstring>
             </property>
             <property name="text">
-                <string>Colors in percentages</string>
+                <string>Show colors as percentages</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">

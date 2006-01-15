@@ -107,7 +107,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             bool hasSelection = dev -> hasSelection();
 
             //XXX: Fix string
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Selection Polygons"), dev);
+            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
             KisSelectionSP selection = dev -> selection();
 
             if (!hasSelection)
@@ -246,7 +246,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Polygonal Select"),
+        m_action = new KRadioAction(i18n("&Polygonal Selection"),
                         "tool_polygonal_selection" ,
                         0,
                         this,
@@ -265,7 +265,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Selection Polygons"));
+    m_optWidget -> setCaption(i18n("Polygonal Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

@@ -275,7 +275,7 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Rectangular Select"),
+        m_action = new KRadioAction(i18n("&Rectangular Selection"),
                         "tool_rect_selection",
                         Qt::Key_R,
                         this,
@@ -293,7 +293,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Select Rectangles"));
+    m_optWidget -> setCaption(i18n("Rectangular Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

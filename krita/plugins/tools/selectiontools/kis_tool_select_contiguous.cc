@@ -108,7 +108,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         fillpainter.setSampleMerged(m_sampleMerged);
         KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
         
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Select Contiguous Areas"), dev);
+        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
         
         if (!dev -> hasSelection()) {
             dev->selection()->clear();
@@ -143,7 +143,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Contiguous Select"),
+        m_action = new KRadioAction(i18n("&Contiguous Area Selection"),
                         "tool_contiguous_selection" ,
                         0,
                         this,
@@ -188,7 +188,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new QWidget(parent);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Select Contiguous Areas"));
+    m_optWidget -> setCaption(i18n("Contiguous Area Selection"));
 
     QVBoxLayout * l = new QVBoxLayout(m_optWidget);
     Q_CHECK_PTR(l);

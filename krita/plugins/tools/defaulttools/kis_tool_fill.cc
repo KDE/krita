@@ -109,7 +109,7 @@ bool KisToolFill::flood(int startX, int startY)
     }
 
     KisFillPainter painter(device);
-    painter.beginTransaction(i18n("Floodfill"));
+    painter.beginTransaction(i18n("Flood Fill"));
     painter.setPaintColor(m_subject -> fgColor());
     painter.setOpacity(m_opacity);
     painter.setFillThreshold(m_threshold);

@@ -85,6 +85,9 @@ public:
     /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
     virtual KisChildDoc* childDoc() { return m_doc; }
 
+    void setDocType(const QString& type) { m_docType = type; }
+    QString docType() const { return m_docType; }
+
     virtual void setX(Q_INT32 x);
     virtual void setY(Q_INT32 y);
 
@@ -99,6 +102,7 @@ private slots:
 private:
     KoFrame * m_frame; // The widget that holds the editable view of the embedded part
     KisChildDoc * m_doc; // The sub-document
+    QString m_docType;
 };
 
 #endif // _KIS_PART_LAYER_

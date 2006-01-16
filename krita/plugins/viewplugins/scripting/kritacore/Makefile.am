@@ -1,8 +1,8 @@
 
 INCLUDES = -I$(top_srcdir)/core -I$(top_srcdir)/krita/plugins/viewplugins/scripting/kritascripting \
-	-I$(top_srcdir)/krita $(KOFFICECORE_INCLUDES) $(KROSS_INCLUDES) $(all_includes) \
+	-I$(top_srcdir)/krita $(KOFFICECORE_INCLUDES) $(KROSS_INCLUDES) \
 	-I$(top_srcdir)/krita/ui -I$(top_srcdir)/krita/core -I$(top_srcdir)/krita/sdk \
-	-I$(top_srcdir)/krita/kritacolor
+	-I$(top_srcdir)/krita/kritacolor $(all_includes)
 
 kde_module_LTLIBRARIES = krosskritacore.la
 

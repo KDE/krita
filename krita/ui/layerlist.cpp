@@ -1240,6 +1240,9 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
         return true;
     }
 
+    if ( !(e->state() & Qt::ControlButton) && !(e->state() & Qt::ShiftButton) )
+        setActive();
+
     return false;
 }
 

@@ -2509,7 +2509,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
     if (!img) return;
 
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
-    img->addLayer(l, img->activeLayer()->parent(), img->activeLayer());
+    img->addLayer(l, parent, above);
 }
 
 void KisView::slotChildActivated(bool a) {

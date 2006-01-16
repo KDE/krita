@@ -33,7 +33,8 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     KisLayer (img, name, OPACITY_OPAQUE)
 {
     m_filterConfig = kfc;
-    m_selection = new KisSelection( *selection.data() );
+    if (selection)
+        m_selection = new KisSelection( *selection.data() );
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)

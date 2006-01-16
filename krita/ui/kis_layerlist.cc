@@ -27,7 +27,9 @@
 #include "kis_paint_layer.h"
 #include "kis_part_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_filter.h"
 #include "kis_filter_configuration.h"
+#include "kis_filter_registry.h"
 #include "kis_layerlist.h"
 
 
@@ -190,7 +192,7 @@ QString KisLayerItem::tooltip() const
             text += row.arg( i18n( "Profile:" ) ).arg( profile->productName() );
     }
     if( KisAdjustmentLayer *alayer = dynamic_cast<KisAdjustmentLayer*>( m_layer ) )
-        text += row.arg( i18n( "Filter: " ) ).arg( alayer->filter()->name() );
+        text += row.arg( i18n( "Filter: " ) ).arg( KisFilterRegistry::instance()->get( alayer->filter()->name() )->id().name() );
     if( KisPartLayer *player = dynamic_cast<KisPartLayer*>( m_layer ) ) {
         QString type = player->docType();
 

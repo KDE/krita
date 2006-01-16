@@ -160,8 +160,8 @@ public:
         KisFilterConfiguration * cfg = layer->filter();
         kdDebug() << "Going to do adjustment layer magick! " << cfg->name() << endl;
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
-        KisSelectionSP selection = layer->selection();
-        KisSelectionSP oldSelection = m_projection->setSelection(selection);
+        if (KisSelectionSP selection = layer->selection())
+            KisSelectionSP oldSelection = m_projection->setSelection(selection);
         f->process(m_projection, m_projection, cfg, m_rc);
         return true;
     }

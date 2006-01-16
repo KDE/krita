@@ -113,7 +113,6 @@ private:
     KIntNumInput *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
-    QCheckBox * m_chkDirect;
 };
 
 #endif // KIS_TOOL_PAINT_H_

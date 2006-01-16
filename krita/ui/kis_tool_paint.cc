@@ -53,7 +53,6 @@ KisToolPaint::KisToolPaint(const QString& UIName)
     m_slOpacity = 0;
     m_lbComposite= 0;
     m_cmbComposite = 0;
-    m_chkDirect = 0;
 
     m_opacity = OPACITY_OPAQUE;
     m_compositeOp = COMPOSITE_OVER;
@@ -134,7 +133,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
    if (!quickHelp().isEmpty()) {
-        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 3, 0, 6);
+        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 5, 3, 0, 6);
 
         m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
         m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
@@ -142,16 +141,14 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
 
-        if (m_chkDirect) {
-            m_optionWidgetLayout -> addWidget(m_chkDirect, 2, 0);
-        }
-        
+        m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
+
         // XXX make this a picture of a '?', like you see everywhere
         QPushButton* push = new QPushButton("?", m_optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
         m_optionWidgetLayout -> addWidget(push, 0, 2);
     } else {
-        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 4, 2, 0, 6);
+        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 5, 2, 0, 6);
 
         m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
         m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
@@ -159,6 +156,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
 
+        m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
     }
 
     m_optionWidgetLayout -> setRowSpacing(3, 6);

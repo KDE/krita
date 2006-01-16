@@ -37,6 +37,7 @@
  */
 template<typename _T>
 class KisGenericRegistry {
+protected:
     typedef std::map<KisID, _T> storageMap;
 public:
     KisGenericRegistry() { };

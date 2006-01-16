@@ -36,6 +36,7 @@ public:
 public:
     virtual void execute();
     virtual void unexecute();
+    virtual void unexecuteNoUpdate();
 
 public:
 

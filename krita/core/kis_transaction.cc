@@ -83,6 +83,15 @@ void KisTransaction::unexecute()
         img -> notify(rc);
 }
 
+void KisTransaction::unexecuteNoUpdate()
+{
+    Q_ASSERT(m_private->m_memento != 0);
+
+    KisImageSP img = m_private->m_device -> image();
+
+    m_private->m_device -> rollback(m_private->m_memento);
+}
+
 QString KisTransaction::name() const
 {
     return m_private->m_name;

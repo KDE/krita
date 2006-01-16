@@ -60,3 +60,15 @@ void KisSelectedTransaction::unexecute()
         m_device->deselect();
     m_device->emitSelectionChanged();
 }
+
+void KisSelectedTransaction::unexecuteNoUpdate()
+{
+    m_redoHasSelection = m_device->hasSelection();
+
+    super::unexecuteNoUpdate();
+    m_selTransaction->unexecuteNoUpdate();
+    if(m_hadSelection)
+        m_device->selection();
+    else
+        m_device->deselect();
+}

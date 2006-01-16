@@ -648,7 +648,7 @@ void KisToolTransform::transform() {
 printf("%f %f\n",tx,ty);
     if(m_transaction)
     {
-        m_transaction->unexecute();
+        m_transaction->unexecuteNoUpdate();
         delete m_transaction;
     }    
     m_transaction = new TransformCmd(img->activeDevice().data());

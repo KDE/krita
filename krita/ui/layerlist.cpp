@@ -1212,6 +1212,8 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
 {
     if( e->button() == Qt::RightButton )
     {
+        if ( !(e->state() & Qt::ControlButton) && !(e->state() & Qt::ShiftButton) )
+            setActive();
         QTimer::singleShot( 0, listView(), SLOT( showContextMenu() ) );
         return false;
     }

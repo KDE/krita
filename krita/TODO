@@ -5,10 +5,10 @@ Code organization
       with delegation here? Go through patterns book.
 
 Bugs
+
     * On opening a second image after loading first image but not changing it,
       the second image should be loaded in a second view and not replace the 
       first image in the first view.
-    * F9 and single hiding/showing of dockers don't interact correctly
 
 Transform tool (CBR)
 
@@ -31,16 +31,13 @@ Integration
 	* A krita document embedded in KWord has the wrong scaling and transparency
 	* A krita document embedded in another document prints at the wrong place
 	* Embedded KOffice objects don't paint themselves correctly
-	
 	* write the Krita handbook. Split into chapters for easier concurrent editing.
-	
 	* There is currently no kimgio module for Krita images: implement one by
 	  saving a rendered png image into the krita file and extracting that from
 	  kimgio. (Saving of a png image in .kra files is done; now we just need to 
           add the kimgio file)
         * There is no easy way to get back from editing an embedded document (if the image is larger
           than the window)
-        
 	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
 
 Colorspace independence (found with the test colorstrategy)

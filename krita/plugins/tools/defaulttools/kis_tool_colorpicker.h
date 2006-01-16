@@ -43,8 +43,8 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
-    virtual enumToolType toolType() { return TOOL_CANVAS; }
-    virtual Q_UINT32 priority() { return 4; }
+    virtual enumToolType toolType() { return TOOL_FILL; }
+    virtual Q_UINT32 priority() { return 3; }
 
 public slots:
     void slotSetUpdateColor(bool);

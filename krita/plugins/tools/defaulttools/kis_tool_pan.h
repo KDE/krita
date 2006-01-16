@@ -40,7 +40,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
 
     virtual void setup(KActionCollection *collection);
-        virtual enumToolType toolType() { return TOOL_CANVAS; }
+        virtual enumToolType toolType() { return TOOL_VIEW; }
 
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);

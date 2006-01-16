@@ -51,7 +51,7 @@ enum enumToolType {
     TOOL_FREEHAND = 1, // Freehand drawing tools
     TOOL_TRANSFORM = 2, // Tools that transform the layer
     TOOL_FILL = 3, // Tools that fill parts of the canvas
-    TOOL_CANVAS = 4,   // Tools that affect the canvas: pan, zoom, etc.
+    TOOL_VIEW = 4,   // Tools that affect the canvas: pan, zoom, etc.
     TOOL_SELECT = 5
 
 };

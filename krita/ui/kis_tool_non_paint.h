@@ -68,7 +68,7 @@ public:
     virtual QCursor cursor();
     virtual void setCursor(const QCursor& cursor);
 
-    virtual enumToolType toolType() { return TOOL_CANVAS; }
+    virtual enumToolType toolType() { return TOOL_VIEW; }
 
 public slots:
     virtual void activate();

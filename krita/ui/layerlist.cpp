@@ -98,6 +98,7 @@ public:
     bool previewChanged;
     QPixmap scaledPreview;
     QSize previewSize;
+    QPoint previewOffset;
 
     Private( int pid ): isFolder( false ), id( pid ), previewImage( 0 ), previewPixmap( 0 ), previewChanged( false )
     { }
@@ -1162,21 +1163,19 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
     if( !showPreview() )
         return;
 
-    static QPoint offset;
-
     if( d->previewChanged || r.size() != d->previewSize )
     {
         QImage i = ( d->previewImage ? d->previewImage->smoothScale( r.size(), QImage::ScaleMin )
                    : d->previewPixmap->convertToImage().smoothScale( r.size(), QImage::ScaleMin ) );
         d->scaledPreview.convertFromImage( i );
-        offset.setX( r.width()/2 - i.width()/2 );
-        offset.setY( r.height()/2 - i.height()/2 );
+        d->previewOffset.setX( r.width()/2 - i.width()/2 );
+        d->previewOffset.setY( r.height()/2 - i.height()/2 );
 
         d->previewChanged = false;
         d->previewSize = r.size();
     }
 
-    p->drawPixmap( r.topLeft() + offset, d->scaledPreview );
+    p->drawPixmap( r.topLeft() + d->previewOffset, d->scaledPreview );
 }
 
 bool LayerItem::showPreview() const

@@ -493,7 +493,7 @@ void KisToolCrop::crop() {
         if (img -> undoAdapter())
             img -> undoAdapter() -> beginMacro(i18n("Crop"));
 
-        KisCropVisitor v(rc);
+        KisCropVisitor v(rc, false);
         KisLayerSP layer = img->activeLayer();
         layer->accept(v);
         img -> notify();

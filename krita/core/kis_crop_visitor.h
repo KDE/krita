@@ -37,9 +37,9 @@ class KisCropVisitor : public KisLayerVisitor {
 
 public:
 
-    KisCropVisitor( const QRect & rc) 
+    KisCropVisitor( const QRect & rc, bool movelayers = true) 
         : KisLayerVisitor()
-        , m_rect(rc)
+        , m_rect(rc), m_movelayers(movelayers)
     {
     }
 
@@ -62,8 +62,13 @@ public:
 
         if (layer->undoAdapter()) {
             layer->undoAdapter()->addCommand(t);
-//             KNamedCommand * cmd = dev -> moveCommand(layer->x() + m_rect.x(), layer->y() + m_rect.y());
-//             layer->undoAdapter()->addCommand(cmd);
+	}
+	if(m_movelayers)
+	{
+	    KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
+	    if(layer->undoAdapter()) {
+  	        layer->undoAdapter()->addCommand(cmd);
+	    }
         }
 
         return true;
@@ -93,6 +98,7 @@ public:
 
 private:
     QRect m_rect;
+    bool m_movelayers;
 };
 
 

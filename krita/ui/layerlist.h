@@ -40,6 +40,8 @@ public:
 
     void addProperty( const QString &name, const QString &displayName, const QIconSet &icon = QIconSet(),
                       bool defaultValue = false, bool validForFolders = true );
+    void addProperty( const QString &name, const QString &displayName, QPixmap enabled, QPixmap disabled,
+                      bool defaultValue = false, bool validForFolders = true );
 
     bool foldersCanBeActive() const;
     bool previewsShown() const;

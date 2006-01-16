@@ -87,9 +87,11 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
 
     list() -> setFoldersCanBeActive(true);
 
-    list() -> addProperty("visible", i18n("Visible"), SmallIconSet("button_ok", KIcon::SizeSmallMedium), true);
+    list() -> addProperty("visible", i18n("Visible"), loadPixmap("visible.png", il, KIcon::SizeSmallMedium),
+                                                      loadPixmap("novisible.png", il, KIcon::SizeSmallMedium), true);
 
-    list() -> addProperty("locked", i18n("Locked"), SmallIconSet("lock", KIcon::SizeSmallMedium));
+    list() -> addProperty("locked", i18n("Locked"), loadPixmap("locked.png", il, KIcon::SizeSmallMedium),
+                                                    loadPixmap("unlocked.png", il, KIcon::SizeSmallMedium));
 
 
     connect(list() -> contextMenu(), SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
@@ -574,16 +576,17 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
     m_lst -> cmbComposite -> blockSignals(!enable);
 }
 
-QIconSet KisLayerBox::loadIconSet(const QString& filename, KIconLoader&
+
+QPixmap KisLayerBox::loadPixmap(const QString& filename, const KIconLoader&
                                     il, int size)
 {
-    QIconSet icon = il.loadIconSet(filename, KIcon::NoGroup, size);
+    QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup, size);
 
-    if (icon.isNull())
-        KMessageBox::error(0, i18n("Cannot find %1.").arg(filename),
+    if (pixmap.isNull())
+        KMessageBox::error(0, i18n("Can't find %1").arg(filename),
                            i18n("Canvas"));
 
-    return icon;
+    return pixmap;
 }
 
 #include "kis_layerbox.moc"

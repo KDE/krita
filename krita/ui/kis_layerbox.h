@@ -106,7 +106,7 @@ private slots:
 private:
 
     void updateUI();
-    QIconSet loadIconSet(const QString& filename, KIconLoader& il, int size);
+    QPixmap loadPixmap(const QString& filename, const KIconLoader& il, int size);
     KisLayerList* list() const;
 
     KPopupMenu *m_newLayerMenu;

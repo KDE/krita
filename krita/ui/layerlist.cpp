@@ -54,16 +54,18 @@ struct LayerProperty
 {
     QString name;
     QString displayName;
-    QIconSet icon;
+    QPixmap enabledIcon;
+    QPixmap disabledIcon;
     bool defaultValue;
     bool validForFolders;
 
     LayerProperty(): defaultValue( false ), validForFolders( true ) { }
-    LayerProperty( const QString &pname, const QString &pdisplayName, const QIconSet &picon,
+    LayerProperty( const QString &pname, const QString &pdisplayName, const QPixmap &enabled, const QPixmap &disabled,
                    bool pdefaultValue, bool pvalidForFolders )
         : name( pname ),
           displayName( pdisplayName ),
-          icon( picon ),
+          enabledIcon( enabled ),
+          disabledIcon( disabled ),
           defaultValue( pdefaultValue ),
           validForFolders( pvalidForFolders )
         { }
@@ -349,7 +351,13 @@ LayerList::~LayerList()
 void LayerList::addProperty( const QString &name, const QString &displayName, const QIconSet &icon,
                              bool defaultValue, bool validForFolders )
 {
-    d->properties.append( LayerProperty( name, displayName, icon, defaultValue, validForFolders ) );
+    addProperty( name, displayName, icon.pixmap( QIconSet::Small, QIconSet::Normal ), icon.pixmap( QIconSet::Small, QIconSet::Disabled ), defaultValue, validForFolders );
+}
+
+void LayerList::addProperty( const QString &name, const QString &displayName, QPixmap enabled, QPixmap disabled,
+                             bool defaultValue, bool validForFolders )
+{
+    d->properties.append( LayerProperty( name, displayName, enabled, disabled, defaultValue, validForFolders ) );
 
     for( LayerItemIterator it( this ); *it; ++it )
         (*it)->d->properties.append( defaultValue );
@@ -764,7 +772,7 @@ void LayerList::constructMenu( LayerItem *layer )
     {
         for( int i = 0, n = d->properties.count(); i < n; ++i )
             if( !layer->isFolder() || d->properties[i].validForFolders )
-                d->contextMenu.insertItem( d->properties[i].icon.pixmap( QIconSet::Small, layer->d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ), d->properties[i].displayName, MenuItems::COUNT + i );
+                d->contextMenu.insertItem( layer->d->properties[i] ? d->properties[i].enabledIcon : d->properties[i].disabledIcon, d->properties[i].displayName, MenuItems::COUNT + i );
         d->contextMenu.insertItem( SmallIconSet( "info" ), i18n( "&Properties" ), MenuItems::LayerProperties );
         d->contextMenu.insertSeparator();
         d->contextMenu.insertItem( SmallIconSet( "editdelete" ),
@@ -1104,7 +1112,7 @@ QRect LayerItem::iconsRect() const
     const QValueList<LayerProperty> &lp = listView()->d->properties;
     int propscount = 0;
     for( int i = 0, n = lp.count(); i < n; ++i )
-        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+        if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
             propscount++;
 
     const int iconswidth = propscount * iconSize().width() + (propscount - 1) * listView()->itemMargin();
@@ -1139,11 +1147,10 @@ void LayerItem::drawIcons( QPainter *p, const QColorGroup &/*cg*/, const QRect &
     int x = 0;
     const QValueList<LayerProperty> &lp = listView()->d->properties;
     for( int i = 0, n = lp.count(); i < n; ++i )
-        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+        if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
         {
             if( !isFolder() || lp[i].validForFolders )
-                p->drawPixmap( x, 0, lp[i].icon.pixmap( QIconSet::Small,
-                                                 d->properties[i] ? QIconSet::Normal : QIconSet::Disabled ) );
+                p->drawPixmap( x, 0, d->properties[i] ? lp[i].enabledIcon : lp[i].disabledIcon );
             x += iconSize().width() + listView()->itemMargin();
         }
 
@@ -1221,7 +1228,7 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
             int p = -1;
             for( int i = 0, n = lp.count(); i < n; ++i )
             {
-                if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+                if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
                     x -= iconWidth + listView()->itemMargin();
                 p += 1;
                 if( x < 0 )
@@ -1272,7 +1279,7 @@ int LayerItem::width( const QFontMetrics &fm, const QListView *lv, int c ) const
     const QValueList<LayerProperty> &lp = listView()->d->properties;
     int propscount = 0;
     for( int i = 0, n = d->properties.count(); i < n; ++i )
-        if( !lp[i].icon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
+        if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
             propscount++;
 
     const int iconswidth = propscount * iconSize().width() + (propscount - 1) * listView()->itemMargin();

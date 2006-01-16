@@ -33,6 +33,7 @@
 #include "kis_colorspace.h"
 #include "koffice_export.h"
 
+class KisColorSpace;
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
@@ -102,6 +103,12 @@ public:
      * @return the degree of independence
      */
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_RGBA8; };
+    
+    /**
+     * Determine if this filter can work with this colorSpace
+     * @param colorsSpace
+     */
+    virtual bool workWith(KisColorSpace*) { return true; }
     
     virtual void enableProgress();
     virtual void disableProgress();

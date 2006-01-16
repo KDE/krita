@@ -103,6 +103,9 @@ void KisFilterManager::setup(KActionCollection * ac)
     am = new KActionMenu(i18n("Map"), ac, "map_filters");
     m_filterActionMenus.insert("map", am);    
 
+//     am = new KActionMenu(i18n("Non-photorealistic"), ac, "nonphotorealistic_filters");
+//     m_filterActionMenus.insert("nonphotorealistic", am);
+
     am = new KActionMenu(i18n("Other"), ac, "misc_filters");
     m_filterActionMenus.insert("", am);
     
@@ -144,12 +147,23 @@ void KisFilterManager::updateGUI()
     if (!layer) return;
 
     bool enable =  !(layer->locked() || !layer->visible());
-
+    KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>( layer.data());
+    if(!player)
+    {
+        enable = false;
+    }
     m_reapplyAction->setEnabled(enable);
 
     KAction * a;
-    for (a = m_filterActions.first(); a; a = m_filterActions.next()) {
-        a->setEnabled(enable);
+    int i = 0;
+    for (a = m_filterActions.first(); a; a = m_filterActions.next() , i++) {
+        KisFilter* filter = KisFilterRegistry::instance()->get(m_filterList[i]);
+        if(player && filter->workWith( player->paintDevice()->colorSpace()))
+        {
+            a->setEnabled(enable);
+        } else {
+            a->setEnabled(false);
+        }
     }
     
 }

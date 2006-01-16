@@ -102,8 +102,8 @@ void KisFiltersListView::buildPreview()
     // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
-        // Check if filter support the preview
-        if (f -> supportsPreview()) {
+        // Check if filter support the preview and work with the current colorspace
+        if (f -> supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
             std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb->paintDevice());
             // apply the filter for each of example of configuration
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();

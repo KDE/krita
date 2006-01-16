@@ -31,7 +31,9 @@ public:
     static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
+    
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
+    virtual bool workWith(KisColorSpace* cs);
 };
 
 class KisAutoContrast : public KisFilter {
@@ -45,6 +47,7 @@ public:
     virtual bool supportsThreading() { return false; };
 
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
+    virtual bool workWith(KisColorSpace* cs);
 
 };
 

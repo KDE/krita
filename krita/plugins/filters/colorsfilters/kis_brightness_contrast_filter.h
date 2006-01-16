@@ -55,7 +55,7 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
-
+    virtual bool workWith(KisColorSpace* cs);
 };
 
 

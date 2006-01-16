@@ -86,7 +86,11 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", i18n("&Auto Contr
 {
 }
 
-// XXX: This filter should write to dst, too!
+bool KisAutoContrast::workWith(KisColorSpace* cs)
+{
+    return (cs->getProfile() != 0);
+}
+
 void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     // initialize
@@ -215,6 +219,11 @@ void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 KisDesaturateFilter::KisDesaturateFilter()
     : KisFilter(id(), "adjust", i18n("&Desaturate"))
 {
+}
+
+bool KisDesaturateFilter::workWith(KisColorSpace* cs)
+{
+    return (cs->getProfile() != 0);
 }
 
 void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)

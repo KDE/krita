@@ -75,13 +75,17 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
     return list;
 }
 
+bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
+{
+    return (cs->getProfile() != 0);
+}
+
 
 void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
     KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
-
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());

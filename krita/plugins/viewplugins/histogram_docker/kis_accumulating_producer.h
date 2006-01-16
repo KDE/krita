@@ -63,12 +63,10 @@ signals:
     void completed();
 
 protected:
+    virtual void customEvent(QCustomEvent* e);
     /// source already converts external to internal
     virtual int externalToInternal(int ext) { return ext; }
     KisCachedHistogramObserver::Producers* m_source;
-
-    /// To be called from the thread, to be on the safe site with multithreading
-    void emitCompleted() { emit completed(); }
 
     class ThreadedProducer;
     friend class ThreadedProducer;

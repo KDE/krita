@@ -20,8 +20,11 @@
 
 #include <qthread.h>
 #include <qapplication.h>
+#include <qevent.h>
 
 #include "kis_accumulating_producer.h"
+
+static const int EmitCompletedType = QEvent::User + 1;
 
 /**
  * The threaded producer definition in c++ file because this is really an internal affair.
@@ -89,13 +92,14 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 
     if (!m_stop) {
 //        kdDebug() << "And emitted completed" << endl;
-        // XXX: Emitting the signal causes the histogram docker widget to be updated
-        // but we are still in the thread's context, not the GUI thread's, so this
-        // breaks on SMP. The QApplication lock appears to prevent this, though
-        // I don't think it's 100%.
-        qApp -> lock();
-        m_source -> emitCompleted();
-        qApp -> unlock();
+        // This function is thread-safe; and it takes ownership of the event
+        QApplication::postEvent(m_source, new QCustomEvent(EmitCompletedType));
+    }
+}
+
+void KisAccumulatingHistogramProducer::customEvent(QCustomEvent* e) {
+    if (e -> type() == EmitCompletedType) {
+        emit completed();
     }
 }
 

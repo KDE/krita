@@ -162,9 +162,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_doc( doc )
     , m_canvas( 0 )
     , m_popup( 0 )
+    , m_gridManager( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
-    , m_gridManager( 0 )
     , m_paletteManager( 0 )
     , m_toolManager( 0 )
     , m_actLayerVis( false )
@@ -1167,7 +1167,7 @@ static const double zoomLevels[] = {
 
 double KisView::nextZoomInLevel() const
 {
-    int zoomLevelIndex = FIRST_ZOOM_LEVEL_INDEX;
+    uint zoomLevelIndex = FIRST_ZOOM_LEVEL_INDEX;
 
     while (zoom() >= zoomLevels[zoomLevelIndex] && zoomLevelIndex < LAST_ZOOM_LEVEL_INDEX) {
         zoomLevelIndex++;
@@ -1640,7 +1640,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
     canvasRefresh();
 }
 
-void KisView::rotateLayer(double angle)
+void KisView::rotateLayer(double /*angle*/)
 {
     if (!currentImg()) return;
 
@@ -1666,7 +1666,7 @@ void KisView::rotateLayer(double angle)
     canvasRefresh();
 }
 
-void KisView::shearLayer(double angleX, double angleY)
+void KisView::shearLayer(double /*angleX*/, double /*angleY*/)
 {
     if (!currentImg()) return;
 
@@ -3078,7 +3078,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 }
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-bool KisView::x11Event(XEvent *event)
+bool KisView::x11Event(XEvent */*event*/)
 {
     /* Disabled seeking better solution.
     KisInputDevice inputDevice = KisCanvasWidget::inputDevice(event);

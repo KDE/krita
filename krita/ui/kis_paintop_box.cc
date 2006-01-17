@@ -57,9 +57,9 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
     m_layout = new QHBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
-    
+
     connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
-    connect(m_cmbPaintops, SIGNAL(highlighted(int)), this, SLOT(slotItemSelected(int)));
+    connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
     KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
@@ -129,7 +129,9 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
         }
     }
 
-    m_cmbPaintops->setCurrentItem( m_displayedOps->findIndex ( m_currentID ) );
+    const int index = m_displayedOps->findIndex ( m_currentID );
+    m_cmbPaintops->setCurrentItem( index );
+    slotItemSelected( index );
 }
 
 #include "kis_paintop_box.moc"

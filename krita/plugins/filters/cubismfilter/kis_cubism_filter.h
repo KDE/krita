@@ -50,9 +50,10 @@ public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("cubism", i18n("Cubism")); };
     virtual bool supportsPainting() { return true; }
-    virtual bool supportsPreview() { return false; /* TODO: return true when cubism is stable enought */ }
+    virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
+    virtual bool workWith(KisColorSpace* cs);
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
@@ -62,8 +63,8 @@ private:
         Q_INT32 randomIntNumber(Q_INT32 lowestNumber, Q_INT32 highestNumber);
         double randomDoubleNumber(double lowestNumber, double highestNumber);
         double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y);
-        void convertSegment(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max);
-        void fillPolyColor(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisPolygon* poly, Q_UINT8* col, Q_UINT8* dest);
+        void convertSegment(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max, Q_INT32 xmin, Q_INT32 xmax);
+        void fillPolyColor(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisPolygon* poly, const Q_UINT8* col, Q_UINT8* dest, QRect rect);
         void cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation);
 
 };

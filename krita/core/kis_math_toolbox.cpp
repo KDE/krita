@@ -162,3 +162,5 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceImplSP dst, KisFloatRepresent
         }
     }
 }
+
+#include "kis_math_toolbox.moc"

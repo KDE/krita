@@ -89,9 +89,6 @@ public slots:
     void setLayerPreviewImage( LayerItem *layer, QImage *image );
     void setLayerPreviewImage( int id, QImage *image );
 
-    void setLayerPreviewPixmap( LayerItem *layer, QPixmap *pixmap );
-    void setLayerPreviewPixmap( int id, QPixmap *pixmap );
-
     void layerPreviewChanged( LayerItem *layer );
     void layerPreviewChanged( int id );
 
@@ -190,7 +187,6 @@ public:
     void toggleProperty( const QString &name );
 
     void setPreviewImage( QImage *image );
-    void setPreviewPixmap( QPixmap *pixmap );
     void previewChanged();
 
     LayerItem *addLayer( const QString &displayName, LayerItem *after = 0, int id = -1 );
@@ -233,6 +229,9 @@ protected:
     virtual bool mousePressEvent( QMouseEvent *e );
 
     virtual QString tooltip() const;
+
+    virtual QImage *previewImage() const;
+    virtual QImage tooltipPreview() const;
 
 private:
     typedef KListViewItem super;

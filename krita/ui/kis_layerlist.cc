@@ -207,6 +207,13 @@ QString KisLayerItem::tooltip() const
     return text;
 }
 
+QImage KisLayerItem::tooltipPreview() const
+{
+    QImage img = m_layer->createThumbnail( 400, 400 );
+    img.setAlphaBuffer( true );
+    return img.smoothScale( 200, 200, QImage::ScaleMin );
+}
+
 //void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
 
 #include "kis_layerlist.moc"

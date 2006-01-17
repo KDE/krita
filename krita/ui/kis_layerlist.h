@@ -66,6 +66,7 @@ public:
     bool updatePreview();
 
     virtual QString tooltip() const;
+    virtual QImage tooltipPreview() const;
 
     //virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
 

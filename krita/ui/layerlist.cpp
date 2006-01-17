@@ -94,13 +94,12 @@ public:
     int id;
     QValueList<bool> properties;
     QImage *previewImage;
-    QPixmap *previewPixmap;
     bool previewChanged;
     QPixmap scaledPreview;
     QSize previewSize;
     QPoint previewOffset;
 
-    Private( int pid ): isFolder( false ), id( pid ), previewImage( 0 ), previewPixmap( 0 ), previewChanged( false )
+    Private( int pid ): isFolder( false ), id( pid ), previewImage( 0 ), previewChanged( false )
     { }
 };
 
@@ -111,6 +110,7 @@ class LayerToolTip: public QToolTip, public QFrame
     LayerItem *m_item;
     QPoint m_pos;
     QTimer m_timer;
+    QImage m_img;
 
 public:
     LayerToolTip( QWidget *parent, LayerList *list )
@@ -140,15 +140,17 @@ public:
 
     void showTip()
     {
-        if( isVisible() )
-        {
-            update();
-            return;
-        }
+        m_img = m_item->tooltipPreview();
         m_timer.start( 15000, true );
-        resize( sizeHint() );
-        position();
-        show();
+        if( !isVisible() || sizeHint() != size() )
+        {
+            resize( sizeHint() );
+            position();
+        }
+        if( !isVisible() )
+            show();
+        else
+            update();
     }
 
     void hideTip()
@@ -158,6 +160,7 @@ public:
         QFrame::hide();
         QToolTip::hide();
         m_timer.stop();
+        m_img.reset();
         m_list->triggerUpdate();
     }
 
@@ -173,49 +176,16 @@ public:
         text.setWidth( QCOORD_MAX );
 
         p.translate( 5, 5 );
-        if( QPixmap *pix = m_item->d->previewPixmap )
+        if( !m_img.isNull() )
         {
-            if( pix->width() <= MAX_SIZE && pix->height() <= MAX_SIZE )
-            {
-                int y = 0;
-                if( pix->height() < text.height() )
-                    y = text.height()/2 - pix->height()/2;
-                p.drawRect( -1, y-1, pix->width()+2, pix->height()+2 );
-                p.drawPixmap( 0, y, *pix );
-                p.translate( pix->width() + 10, 0 );
-            }
-            else
-            {
-                QImage img = pix->convertToImage().scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
-                int y = 0;
-                if( img.height() < text.height() )
-                    y = text.height()/2 - img.height()/2;
-                p.drawImage( 0, y, img );
-                p.drawRect( -1, y-1, img.width()+2, img.height()+2 );
-                p.translate( img.width() + 10, 0 );
-            }
-        }                                                         //FIXME way too much copy-pasting
-        else if( QImage *img = m_item->d->previewImage )
-        {
-            if( img->width() <= MAX_SIZE && img->height() <= MAX_SIZE )
-            {
-                int y = 0;
-                if( img->height() < text.height() )
-                    y = text.height()/2 - img->height()/2;
-                p.drawImage( 0, y, *img );
-                p.drawRect( -1, y-1, img->width()+2, img->height()+2 );
-                p.translate( img->width() + 10, 0 );
-            }
-            else
-            {
-                QImage img2 = img->scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
-                int y = 0;
-                if( img2.height() < text.height() )
-                    y = text.height()/2 - img2.height()/2;
-                p.drawImage( 0, y, img2 );
-                p.drawRect( -1, y-1, img2.width()+2, img2.height()+2 );
-                p.translate( img2.width() + 10, 0 );
-            }
+            if( m_img.width() > MAX_SIZE || m_img.height() > MAX_SIZE )
+                m_img = m_img.scale( MAX_SIZE, MAX_SIZE, QImage::ScaleMin );
+            int y = 0;
+            if( m_img.height() < text.height() )
+                y = text.height()/2 - m_img.height()/2;
+            p.drawImage( 0, y, m_img );
+            p.drawRect( -1, y-1, m_img.width()+2, m_img.height()+2 );
+            p.translate( m_img.width() + 10, 0 );
         }
 
         text.draw( &p, 0, 0, rect(), colorGroup() );
@@ -232,17 +202,13 @@ public:
         text.setWidth( QCOORD_MAX );
 
         int width = text.widthUsed();
-        if( m_item->d->previewImage )
-            width += kMin( m_item->d->previewImage->width(), MAX_SIZE ) + 10;
-        else if( m_item->d->previewPixmap )
-            width += kMin( m_item->d->previewPixmap->width(), MAX_SIZE ) + 10;
+        if( !m_img.isNull() )
+            width += kMin( m_img.width(), MAX_SIZE ) + 10;
         width += 10;
 
         int height = text.height();
-        if( m_item->d->previewImage && kMin( m_item->d->previewImage->height(), MAX_SIZE ) > height )
-            height = kMin( m_item->d->previewImage->height(), MAX_SIZE );
-        else if( m_item->d->previewPixmap && kMin( m_item->d->previewPixmap->height(), MAX_SIZE ) > height )
-            height = kMin( m_item->d->previewPixmap->height(), MAX_SIZE );
+        if( !m_img.isNull() && kMin( m_img.height(), MAX_SIZE ) > height )
+            height = kMin( m_img.height(), MAX_SIZE );
         height += 10;
 
         return QSize( width, height );
@@ -615,19 +581,6 @@ void LayerList::setLayerPreviewImage( LayerItem *layer, QImage *image )
 void LayerList::setLayerPreviewImage( int id, QImage *image )
 {
     setLayerPreviewImage( layer( id ), image );
-}
-
-void LayerList::setLayerPreviewPixmap( LayerItem *layer, QPixmap *pixmap )
-{
-    if( !layer )
-        return;
-
-    layer->setPreviewPixmap( pixmap );
-}
-
-void LayerList::setLayerPreviewPixmap( int id, QPixmap *pixmap )
-{
-    setLayerPreviewPixmap( layer( id ), pixmap );
 }
 
 void LayerList::layerPreviewChanged( LayerItem *layer )
@@ -1007,15 +960,7 @@ void LayerItem::toggleProperty( const QString &name )
 
 void LayerItem::setPreviewImage( QImage *image )
 {
-    d->previewPixmap = 0;
     d->previewImage = image;
-    previewChanged();
-}
-
-void LayerItem::setPreviewPixmap( QPixmap *pixmap )
-{
-    d->previewImage = 0;
-    d->previewPixmap = pixmap;
     previewChanged();
 }
 
@@ -1165,8 +1110,7 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
 
     if( d->previewChanged || r.size() != d->previewSize )
     {
-        QImage i = ( d->previewImage ? d->previewImage->smoothScale( r.size(), QImage::ScaleMin )
-                   : d->previewPixmap->convertToImage().smoothScale( r.size(), QImage::ScaleMin ) );
+        const QImage i = previewImage()->smoothScale( r.size(), QImage::ScaleMin );
         d->scaledPreview.convertFromImage( i );
         d->previewOffset.setX( r.width()/2 - i.width()/2 );
         d->previewOffset.setY( r.height()/2 - i.height()/2 );
@@ -1180,8 +1124,7 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
 
 bool LayerItem::showPreview() const
 {
-    return listView()->previewsShown() && ( ( d->previewImage  && !d->previewImage->isNull()  ) ||
-                                            ( d->previewPixmap && !d->previewPixmap->isNull() )    );
+    return listView()->previewsShown() && previewImage() && !previewImage()->isNull();
 }
 
 bool LayerItem::multiline() const
@@ -1270,6 +1213,18 @@ QString LayerItem::tooltip() const
         }
     tip += "</table>";
     return tip;
+}
+
+QImage *LayerItem::previewImage() const
+{
+    return d->previewImage;
+}
+
+QImage LayerItem::tooltipPreview() const
+{
+    if( previewImage() )
+        return *previewImage();
+    return QImage();
 }
 
 int LayerItem::width( const QFontMetrics &fm, const QListView *lv, int c ) const

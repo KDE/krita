@@ -172,7 +172,7 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img, SIGNAL(sigNonActiveLayersUpdated()), this, SLOT(slotNonActiveLayersUpdated()));
         slotLayersChanged(img -> rootLayer());
         slotNonActiveLayersUpdated();
-        m_thumbnailerTimer.start(1000);
+        m_thumbnailerTimer.start(0, true);
     }
     else
     {
@@ -253,6 +253,8 @@ void KisLayerBox::slotImageUpdated()
         Q_ASSERT(list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
     if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
         m_modified.append(list() -> activeLayer() -> id());
+    m_thumbnailerTimer.stop();
+    m_thumbnailerTimer.start(1000, true);
 }
 
 void KisLayerBox::slotNonActiveLayersUpdated()
@@ -260,6 +262,8 @@ void KisLayerBox::slotNonActiveLayersUpdated()
     m_modified.clear();
     for (QListViewItemIterator it(list() -> lastItem()); *it; --it)
         m_modified.append(static_cast<LayerItem*>(*it) -> id());
+    m_thumbnailerTimer.stop();
+    m_thumbnailerTimer.start(1000, true);
 }
 
 void KisLayerBox::slotLayerActivated(LayerItem* item)
@@ -546,23 +550,18 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::updateThumbnails()
 {
-    //update every 2 seconds, but speed it up to 1 if there are multiple layers pending
-    static bool odd = false;
-    odd = !odd;
-    if (!m_modified.count())
-        return;
-    if (odd || m_modified.count() > 1)
+    bool again = true;
+    while (m_modified.count() && again)
     {
-        bool again = true;
-        while (again)
-        {
-            again = false;
-            KisLayerItem* item = static_cast<KisLayerItem*>(list() -> layer(m_modified.last()));
-            m_modified.pop_back();
-            if ((!item || !item -> updatePreview()) && m_modified.count())
-                again = true;
-        }
+        again = false;
+        KisLayerItem* item = static_cast<KisLayerItem*>(list() -> layer(m_modified.last()));
+        m_modified.pop_back();
+        if (!item || !item -> updatePreview())
+            again = true;
     }
+
+    if (m_modified.count())
+        m_thumbnailerTimer.start(1000, true);
 }
 
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)

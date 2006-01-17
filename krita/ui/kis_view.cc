@@ -1383,7 +1383,7 @@ void KisView::imgResizeToActiveLayer()
 
     if (img && (layer = img -> activeLayer())) {
         QRect r = layer -> exactBounds();
-        img -> resize(r.width(), r.height());
+        img -> resize(r.width(), r.height(), r.x(), r.y(), true);
     }
 }
 

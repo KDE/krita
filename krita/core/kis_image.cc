@@ -696,8 +696,8 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
-        notify();
         emit sigSizeChanged(w, h);
+        notify();
 
     }
 }
@@ -854,8 +854,8 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
     setColorSpace(dstColorSpace);
 
-    notify();
     emit sigNonActiveLayersUpdated();
+    notify();
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -948,7 +948,6 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
         }
 
         notify();
-        emit sigLayerPropertiesChanged(layer);
     }
 }
 
@@ -1042,7 +1041,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             }
             if (!layer->temporary()) {
-                notify();
                 emit sigLayerRemoved(layer, parent, wasAbove);
                 if (wasActive) {
                     if (wasBelow)
@@ -1054,6 +1052,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
                     else
                         activate(rootLayer() -> firstChild());
                 }
+                notify();
             }
         }
         return success;
@@ -1111,15 +1110,15 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     {
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerMoveCmd(m_adapter, this, layer, wasParent, wasAbove));
-        notify();
         emit sigLayerMoved(layer, wasParent, wasAbove);
+        notify();
     }
     else //we already removed the layer above, but re-adding it failed, so...
     {
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, wasParent, wasAbove));
-        notify();
         emit sigLayerRemoved(layer, wasParent, wasAbove);
+        notify();
     }
 
     return success;
@@ -1152,10 +1151,11 @@ void KisImage::flatten()
     KisPainter painter(dst->paintDevice());
 
     KisMergeVisitor visitor(this, &painter, QRect(0,0,width(),height()));
+    visitor.setProjection(dst -> paintDevice());
     oldRootLayer ->accept(visitor);
 
-    notify();
     notifyLayersChanged();
+    notify();
 
     if (m_adapter && m_adapter -> undo()) {
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, oldRootLayer, m_rootLayer, i18n("Flatten Image")));
@@ -1190,8 +1190,8 @@ void KisImage::mergeVisibleLayers()
 
     add(dst, insertIndex);
 
-    notify();
     notifyLayersChanged();
+    notify();
 
     if (m_adapter && m_adapter -> undo()) {
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Visible Layers")));
@@ -1221,8 +1221,8 @@ void KisImage::mergeLinkedLayers()
 
     add(dst, insertIndex);
 
-    notify();
     notifyLayersChanged();
+    notify();
 
     if (m_adapter && m_adapter -> undo()) {
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("Merge Linked Layers")));
@@ -1252,8 +1252,8 @@ void KisImage::mergeLayer(KisLayerSP /*l*/)
 
     add(dst, insertIndex);
 
-    notify();
     notifyLayersChanged();
+    notify();
 
     if (m_adapter && m_adapter -> undo())
     {
@@ -1446,8 +1446,8 @@ KisUndoAdapter* KisImage::undoAdapter() const
 void KisImage::slotSelectionChanged()
 {
 //     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
-    notify();
     emit sigActiveSelectionChanged(KisImageSP(this));
+    notify();
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
@@ -1455,8 +1455,8 @@ void KisImage::slotSelectionChanged(const QRect& r)
 //     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
-    notify(r2);
     emit sigActiveSelectionChanged(KisImageSP(this));
+    notify(r2);
 }
 
 KisColorSpace * KisImage::colorSpace() const

@@ -103,6 +103,7 @@ public:
         KisPainter painter(dst);
 
         KisMergeVisitor visitor(m_img, &painter, m_rc);
+        visitor.setProjection(dst);
         bool first = true;
 
         KisLayerSP child = layer->lastChild();

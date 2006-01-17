@@ -49,7 +49,7 @@ public:
     virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
-    virtual bool supportsPreview() { return false; }
+    virtual bool supportsPreview() { return true; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);

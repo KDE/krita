@@ -36,8 +36,7 @@
 KisLayerList::KisLayerList( QWidget *parent, const char *name )
     : super( parent, name )
 {
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear",
-                                                this, "insert_part_layer" );
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
 }
 
 static const int ADJUSTMENT_LAYER = 5384; //hack?
@@ -210,6 +209,8 @@ QString KisLayerItem::tooltip() const
 QImage KisLayerItem::tooltipPreview() const
 {
     QImage img = m_layer->createThumbnail( 400, 400 );
+    if( img.isNull() )
+        return img; //so Qt doesn't complain
     img.setAlphaBuffer( true );
     return img.smoothScale( 200, 200, QImage::ScaleMin );
 }

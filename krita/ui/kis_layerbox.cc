@@ -122,8 +122,9 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     m_newLayerMenu -> insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
     m_newLayerMenu -> insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), GROUP_LAYER );
     m_newLayerMenu -> insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
-    list() -> partLayerAction() -> plug( m_newLayerMenu );
-    connect(list() -> partLayerAction(), SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
+    m_partLayerAction -> plug( m_newLayerMenu );
+    connect(m_partLayerAction, SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
     connect(m_newLayerMenu, SIGNAL(aboutToShow()), this, SLOT(slotAddMenuAboutToShow()));
     connect(m_newLayerMenu, SIGNAL(activated(int)), this, SLOT(slotAddMenuActivated(int)));
 
@@ -451,11 +452,6 @@ void KisLayerBox::clear()
 {
     list() -> clear();
     updateUI();
-}
-
-void KisLayerBox::slotAddMenuAboutToShow()
-{
-    list() -> partLayerAction() -> setText(i18n("New &Object Layer"));
 }
 
 void KisLayerBox::slotAddMenuActivated(int type)

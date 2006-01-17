@@ -94,7 +94,6 @@ private slots:
     void slotRequestLayerProperties(LayerItem* layer);
 
     void slotAboutToShow();
-    void slotAddMenuAboutToShow();
     void slotAddMenuActivated(int type = OBJECT_LAYER);
     void slotRmClicked();
     void slotRaiseClicked();
@@ -110,6 +109,7 @@ private:
     KisLayerList* list() const;
 
     KPopupMenu *m_newLayerMenu;
+    KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
     QValueList<int> m_modified;
     QTimer m_thumbnailerTimer;

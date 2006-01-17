@@ -66,7 +66,7 @@ void KisToolFilter::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Filter Brush"),
-                        "filter", 0, this,
+                        "tool_filter", 0, this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);

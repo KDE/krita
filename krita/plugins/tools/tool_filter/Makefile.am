@@ -28,3 +28,9 @@ kritatoolfilter_la_LIBADD =  ../../../libkritacommon.la
 kritatoolfilter_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_filter.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

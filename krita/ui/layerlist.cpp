@@ -1109,8 +1109,9 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
         return;
 
     if( d->previewChanged || r.size() != d->previewSize )
-    {
-        const QImage i = previewImage()->smoothScale( r.size(), QImage::ScaleMin );
+    {      //TODO handle width() != height()
+        const int size = kMin( r.width(), kMax( previewImage()->width(), previewImage()->height() ) );
+        const QImage i = previewImage()->smoothScale( size, size, QImage::ScaleMin );
         d->scaledPreview.convertFromImage( i );
         d->previewOffset.setX( r.width()/2 - i.width()/2 );
         d->previewOffset.setY( r.height()/2 - i.height()/2 );

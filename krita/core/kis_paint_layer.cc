@@ -94,10 +94,21 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
 
 QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 {
+    if (w > image()->width())
+    {
+        w = image()->width();
+        h = Q_INT32(double(image()->width()) / w * h);
+    }
+    if (h > image()->height())
+    {
+        h = image()->height();
+        w = Q_INT32(double(image()->height()) / h * w);
+    }
+
     if (image()->width() > image()->height())
         h = Q_INT32(double(image()->height()) / image()->width() * w);
     else if (image()->height() > image()->width())
-        w = Q_INT32(double(image()->width()) / image()->height() * h );
+        w = Q_INT32(double(image()->width()) / image()->height() * h);
 
     QColor c;
     Q_UINT8 opacity;

@@ -18,6 +18,7 @@
 */
 
 #include <kaboutdata.h>
+#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -212,7 +213,8 @@ QImage KisLayerItem::tooltipPreview() const
     if( img.isNull() )
         return img; //so Qt doesn't complain
     img.setAlphaBuffer( true );
-    return img.smoothScale( 200, 200, QImage::ScaleMin );
+    const int size = kMin( 200, kMax( img.width(), img.height() ) );
+    return img.smoothScale( size, size, QImage::ScaleMin );
 }
 
 //void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );

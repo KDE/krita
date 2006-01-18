@@ -654,9 +654,8 @@ printf("%f %f\n",tx,ty);
     m_transaction = new TransformCmd(img->activeDevice().data());
     Q_CHECK_PTR(m_transaction);
     
-    KisTransformVisitor t(m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
-    KisPainter gc(img->activeDevice());
-    t.visit(gc, img->activeDevice());
+    KisTransformWorker t(img->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
+    t.run();
     
     if(t.isCanceled())
     {

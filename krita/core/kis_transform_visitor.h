@@ -29,20 +29,20 @@ class KisHLineIteratorPixel;
 class KisVLineIteratorPixel;
 class KisFilterStrategy;
 
-class KisTransformVisitor : public KisProgressSubject {
+class KisTransformWorker : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
-    KisTransformVisitor(double  xscale, double  yscale, 
+    KisTransformWorker(KisPaintDeviceImplSP dev, double  xscale, double  yscale,
         double  xshear, double  yshear, double rotation,
         Q_INT32  xtranslate, Q_INT32  ytranslate,
         KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
-    ~KisTransformVisitor();
+    ~KisTransformWorker();
 
 public:
     bool isCanceled() { return m_cancelRequested;};
 
-    bool visit(KisPainter& gc, KisPaintDeviceImpl *dev);
+    bool run();
 
 private:    
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
@@ -53,6 +53,7 @@ private:
     void rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
 
 private:
+    KisPaintDeviceImplSP m_dev;
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     Q_INT32  m_xtranslate, m_ytranslate;
@@ -66,7 +67,7 @@ private:
 };
 
 
-inline KisTransformVisitor::~KisTransformVisitor()
+inline KisTransformWorker::~KisTransformWorker()
 {
 }
 

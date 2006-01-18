@@ -28,11 +28,12 @@
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 
-KisTransformVisitor::KisTransformVisitor(double xscale, double yscale,
+KisTransformWorker::KisTransformWorker(KisPaintDeviceImplSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
                     Q_INT32 xtranslate, Q_INT32 ytranslate,
                     KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
 {
+    m_dev= dev;
     m_xscale = xscale;
     m_yscale = yscale;
     m_xshear = xshear;
@@ -44,7 +45,7 @@ KisTransformVisitor::KisTransformVisitor(double xscale, double yscale,
     m_filter = filter;
 }
 
-void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -81,7 +82,7 @@ void KisTransformVisitor::rotateRight90(KisPaintDeviceImplSP src, KisPaintDevice
     }
 }
 
-void KisTransformVisitor::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -122,7 +123,7 @@ void KisTransformVisitor::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceI
     }
 }
 
-void KisTransformVisitor::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -201,7 +202,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
 }
 
 
-template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
+template <class T> void KisTransformWorker::transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
 {
     Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;    /* filter calculation variables */
@@ -358,7 +359,7 @@ template <class T> void KisTransformVisitor::transformPass(KisPaintDeviceImpl *s
     delete [] weight;
 }
 
-bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
+bool KisTransformWorker::run()
 {
         //progress info
         m_cancelRequested = false;
@@ -366,14 +367,14 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
     m_progressTotalSteps = 0;
     m_progressStep = 0;
     QRect r;
-    if(dev->hasSelection())
-        r = dev->selection()->selectedExactRect();
+    if(m_dev->hasSelection())
+        r = m_dev->selection()->selectedExactRect();
     else
-        r = dev->exactBounds();
+        r = m_dev->exactBounds();
 
-    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(dev->colorSpace());;
-    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(dev->colorSpace());;
-    KisPaintDeviceImplSP srcdev = dev;
+    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(m_dev->colorSpace());;
+    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(m_dev->colorSpace());;
+    KisPaintDeviceImplSP srcdev = m_dev;
 
     double xscale = m_xscale;
     double yscale = m_yscale;
@@ -429,8 +430,8 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
 
     transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
 //printf("time taken first pass %d\n",time.restart());
-    if(dev->hasSelection())
-        dev->selection()->clear();
+    if(m_dev->hasSelection())
+        m_dev->selection()->clear();
 //printf("time taken to clear selection %d\n",time.restart());
 
     if ( m_cancelRequested) {
@@ -438,7 +439,7 @@ bool KisTransformVisitor::visit(KisPainter &/*gc*/, KisPaintDeviceImpl *dev)
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(tmpdev2, dev, xscale, xshear, xtranslate, m_filter);
+    transformPass <KisHLineIteratorPixel>(tmpdev2, m_dev, xscale, xshear, xtranslate, m_filter);
 
 //printf("time taken second pass %d\n",time.elapsed());
 //printf("%d %d\n",xtranslate, ytranslate);

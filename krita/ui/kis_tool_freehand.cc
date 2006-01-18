@@ -89,11 +89,13 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
         m_prevXTilt = e -> xTilt();
         m_prevYTilt = e -> yTilt();
 
-         QRect r = m_painter -> dirtyRect();
-         if ( r.isValid() ) {
-             m_dirtyRect = r;
-             m_currentImage -> notify(r);
-         }
+        QRect r = m_painter -> dirtyRect();
+        if ( r.isValid() ) {
+            m_dirtyRect = r;
+
+            r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+            m_currentImage -> notify(r);
+        }
     }
 }
 
@@ -116,6 +118,8 @@ void KisToolFreehand::move(KisMoveEvent *e)
 
         QRect r = m_painter -> dirtyRect();
         m_dirtyRect |= r;
+
+        r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
         m_currentImage -> notify(r);
     }
 }

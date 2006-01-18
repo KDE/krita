@@ -150,7 +150,7 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
     uchar *j = img.bits();
 
     for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
-        KisHLineIteratorPixel it = createHLineIterator(x, y2, w+2, false);
+        KisHLineIteratorPixel it = createHLineIterator(x-1, y2, w+2, false);
         Q_UINT8 preS = *(it.rawData());
         ++it;
         x2 = 0;
@@ -158,14 +158,16 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
         KisHLineIteratorPixel nextLineIt = createHLineIterator(x, y2+1, w, false);
         while (!it.isDone() && x2<w) {
             Q_UINT8 s = *(it.rawData());
-            ++it;
+            ++it; //so that it will become the posvalue
             if(s!=MAX_SELECTED)
             {
+                // this is where we come if the pixels should be blue or bluish
 
                 Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
 
                 if(s==MIN_SELECTED)
                 {
+                    //this is where we come if the pixels should be blue (or red outline)
                     *(j+0) = 165+g ;
                     *(j+1) = 128+g;
                     *(j+2) = 128+g;

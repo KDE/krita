@@ -461,6 +461,7 @@ void KisView::updateStatusBarZoomLabel ()
     } else {
         m_statusBarZoomLabel -> setText(i18n("Zoom %1%").arg(zoom() * 100, 0, 'f', 0));
     }
+    m_statusBarZoomLabel->setMaximumWidth(m_statusBarZoomLabel->fontMetrics().width(i18n("Zoom %1%").arg("0.8888  ")));
 }
 
 void KisView::updateStatusBarSelectionLabel()
@@ -529,22 +530,23 @@ void KisView::setupStatusBar()
 
     if (sb) {
         m_statusBarZoomLabel = new QLabel(sb);
-        addStatusBarItem(m_statusBarZoomLabel, 1);
+        addStatusBarItem(m_statusBarZoomLabel,1);
         updateStatusBarZoomLabel();
 
         m_statusBarSelectionLabel = new QLabel(sb);
-        addStatusBarItem(m_statusBarSelectionLabel, 2);
+        addStatusBarItem(m_statusBarSelectionLabel,2);
         updateStatusBarSelectionLabel();
 
         m_statusBarProfileLabel = new QLabel(sb);
-        addStatusBarItem(m_statusBarProfileLabel, 3);
+        addStatusBarItem(m_statusBarProfileLabel,3);
         updateStatusBarProfileLabel();
+
+        int height = m_statusBarProfileLabel -> height();
 
         m_progress = new KisLabelProgress(this);
         m_progress -> setMaximumWidth(225);
-        m_progress -> setMaximumHeight(sb -> height());
-
-        addStatusBarItem(m_progress, 4, true);
+        m_progress -> setMaximumHeight(height);
+        addStatusBarItem(m_progress, 2, true);
 
         m_progress -> hide();
     }

@@ -23,6 +23,7 @@
 
 #include <kis_point.h>
 #include <kis_types.h>
+#include <kis_paint_layer.h>
 
 class KisPainter;
 class KisFillPainter;

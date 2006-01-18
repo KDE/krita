@@ -22,6 +22,7 @@
 #include <api/class.h>
 
 #include <kis_types.h>
+#include <kis_paint_layer.h>
 
 class KisDoc;
 class KisTransaction;

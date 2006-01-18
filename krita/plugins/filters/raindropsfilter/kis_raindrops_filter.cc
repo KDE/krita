@@ -67,7 +67,7 @@ void KisRainDropsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
     Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
 
 
-    rainDrops(src, rect, dropSize, number, fishEyes);
+    rainDrops(src, dst, rect, dropSize, number, fishEyes);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -89,7 +89,7 @@ void KisRainDropsFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
  *                     and after this, a blur function will finish the effect.
  */
 
-void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, int DropSize, int Amount, int Coeff)
+void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int DropSize, int Amount, int Coeff)
 {
     setProgressTotalSteps(Amount);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -274,7 +274,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            cs -> fromQColor(newColor, src -> writablePixel(rect.x() + n, rect.y() + m));
+                            cs -> fromQColor(newColor, dst -> writablePixel(rect.x() + n, rect.y() + m));
                         }
                     }
                 }
@@ -303,7 +303,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
                             if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
                             {
                                 QColor color;
-                                cs -> toQColor(src -> pixel(rect.x() + n, rect.y() + m),
+                                cs -> toQColor(dst -> pixel(rect.x() + n, rect.y() + m),
                                                    &color);
 
                                 R += color.red();
@@ -321,7 +321,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-                        cs -> fromQColor(color, src -> writablePixel(rect.x() + n, rect.y() + m));
+                        cs -> fromQColor(color, dst -> writablePixel(rect.x() + n, rect.y() + m));
                                         }
                                 }
                         }
@@ -330,14 +330,15 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, const QRect& rect, 
         setProgress(NumBlurs);
         }
 
-    KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+    KisRectIteratorPixel srcIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisRectIteratorPixel dstIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
-    while (!it.isDone()) {
+    while (!srcIt.isDone()) {
 
-        if (!it.isSelected()) {
-            memcpy(it.rawData(), it.oldRawData(), src -> pixelSize());
+        if (!srcIt.isSelected()) {
+            memcpy(dstIt.rawData(), srcIt.oldRawData(), src -> pixelSize());
         }
-        ++it;
+        ++srcIt;
     }
 
         FreeBoolArray (BoolMatrix, Width);

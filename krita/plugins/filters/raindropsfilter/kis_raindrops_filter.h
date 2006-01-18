@@ -50,11 +50,14 @@ public:
     static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
+    { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }
+
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-    void   rainDrops(KisPaintDeviceImplSP src, const QRect& rect, int DropSize, int Amount, int Coeff);
+    void   rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int DropSize, int Amount, int Coeff);
     bool** CreateBoolArray (uint Columns, uint Rows);
     void   FreeBoolArray (bool** lpbArray, uint Columns);
     uchar  LimitValues (int ColorValue);

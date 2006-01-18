@@ -50,6 +50,7 @@ KisFilterConfiguration::KisFilterConfiguration(const QString & s )
         }
         n = n.nextSibling();
     }
+    init();
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)

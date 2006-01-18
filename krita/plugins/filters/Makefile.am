@@ -1,4 +1,5 @@
 SUBDIRS = \
+    bumpmap \
     cimg \
     colorsfilters \
     convolutionfilters \
@@ -11,5 +12,5 @@ SUBDIRS = \
     raindropsfilter \
     roundcorners \
     smalltilesfilter \
-    sobelfilter \
-    threadtest 
+    sobelfilter
+

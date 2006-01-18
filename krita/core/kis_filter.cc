@@ -32,7 +32,7 @@ KisFilter::KisFilter(const KisID& id, const QString & category, const QString & 
 
 KisFilterConfiguration * KisFilter::configuration(QWidget*)
 {
-    return 0;
+    return new KisFilterConfiguration(m_id.id(), 0);
 }
 
 KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceImplSP)

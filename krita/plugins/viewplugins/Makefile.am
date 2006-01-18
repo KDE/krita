@@ -5,15 +5,17 @@ endif
 SUBDIRS = \
     colorrange \
     colorspaceconversion \
+    dropshadow \
     filtersgallery \
     histogram \
     histogram_docker \
     imagesize \
-    performancetest \
     rotateimage \
     screenshot \
-    shearimage \
-    dropshadow \
     separate_channels \
+    shearimage \
     $(SCRIPTINGDIR)
 
+# variations
+# performancetest
+# history_docker

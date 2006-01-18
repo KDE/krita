@@ -44,7 +44,7 @@ public:
      */
     KisFilterConfiguration(const QString & name, Q_INT32 version)
         : m_name(name)
-        , m_version(version) {};
+        , m_version(version) { init(); }
 
     /**
      * Create the filter config from the serialized representation.
@@ -59,9 +59,16 @@ public:
 public:
 
     /**
+     * This is called after construction to perform any subclass
+     * specific initialization, such as filling variables from
+     * the map
+     */
+    virtual bool init() { return true; }
+    
+    /**
      * Create a serialized version of this filter config
      */
-    QString toString();
+    virtual QString toString();
 
     /**
      * Get the unique, language independent name of the filter.
@@ -76,13 +83,13 @@ public:
     /**
      * Set the property with name to value.
      */
-    void setProperty(const QString & name, const QVariant & value);
+    virtual void setProperty(const QString & name, const QVariant & value);
 
     /**
      * Set value to the value associated with property name
      * @return false if the specified property did not exist.
      */
-    bool getProperty(const QString & name, QVariant & value);
+    virtual bool getProperty(const QString & name, QVariant & value);
 
 private:
 
@@ -92,6 +99,7 @@ private:
 protected:
 
     QMap<QString, QVariant> m_properties;
+    
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

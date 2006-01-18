@@ -308,6 +308,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     // Set the current image for real now everything is ready to go.
     setCurrentImage(m_image);
+    m_paletteManager->showWidget( "layerbox" );
 }
 
 KisView::~KisView()

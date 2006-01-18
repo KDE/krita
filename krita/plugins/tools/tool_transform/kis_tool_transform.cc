@@ -49,7 +49,7 @@
 #include <kis_cmb_idlist.h>
 #include <kis_id.h>
 #include <kis_tool_controller.h>
-#include <kis_transform_visitor.h>
+#include <kis_transform_worker.h>
 
 #include "kis_tool_transform.h"
 #include "wdg_tool_transform.h"

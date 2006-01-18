@@ -53,7 +53,7 @@ libkritaimage_la_SOURCES = \
     kis_selection.cc \
     kis_strategy_move.cc \
     kis_transaction.cc \
-    kis_transform_visitor.cc \
+    kis_transform_worker.cc \
     kis_vec.cc \
     kis_paint_device_impl.cc \
     kis_paint_device_iface.cc \
@@ -68,7 +68,7 @@ noinst_HEADERS = \
     kis_scale_visitor.h \
     kis_selected_transaction.h \
     kis_strategy_move.h \
-    kis_transform_visitor.h \
+    kis_transform_worker.h \
     kis_datamanager.h \
     kis_filter_strategy.h \
     kis_iteratorpixeltrait.h \

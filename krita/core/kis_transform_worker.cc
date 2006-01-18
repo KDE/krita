@@ -23,7 +23,7 @@
 #include "kis_debug_areas.h"
 #include "kis_paint_device_impl.h"
 #include "kis_selection.h"
-#include "kis_transform_visitor.h"
+#include "kis_transform_worker.h"
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"

@@ -94,9 +94,25 @@ void KCurve::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace)
     {
+        QPair<double,double> *closest_point=NULL;
         if(m_grab_point)
+        {
+            //first find closest point to get focus afterwards
+            QPair<double,double> *p = m_points.first();
+            double distance = 1000; // just a big number
+            while(p)
+            {
+                if(p!=m_grab_point)
+                if (fabs (m_grab_point->first - p->first) < distance)
+                {
+                    distance = fabs(m_grab_point->first - p->first);
+                    closest_point = p;
+                }
+                p = m_points.next();
+            }
             m_points.remove(m_grab_point);
-        m_grab_point = 0;
+        }
+        m_grab_point = closest_point;
         repaint(false);
     }
     else

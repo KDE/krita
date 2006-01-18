@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritascripting" version="3">
   <MenuBar>
-    <Menu name="Scripts"><text>Sc&amp;ripts</text>
+    <Menu name="Scripts"><text>S&amp;cripts</text>
       <Separator/>
       <Action name="executescriptfile"/>
       <Action name="configurescripts"/>

@@ -389,7 +389,6 @@ void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 {
     if (KisLayerSP layer = m_image -> findLayer(item -> id()))
         m_image -> removeLayer(layer);
-    m_modified.remove(item -> id());
     updateUI();
 }
 

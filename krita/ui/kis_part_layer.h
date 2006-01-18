@@ -91,9 +91,11 @@ public:
     virtual void setX(Q_INT32 x);
     virtual void setY(Q_INT32 y);
 
-    virtual bool accept(KisLayerVisitor& visitor) { return visitor.visit(this); }
+    virtual bool accept(KisLayerVisitor& visitor) {
+        return visitor.visit(static_cast<KisPaintLayer*>(this));
+    }
 
-    //virtual void paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y);
+    virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private slots:
     /// Repaints our device with the data from the embedded part

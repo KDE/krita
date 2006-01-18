@@ -59,6 +59,7 @@ KisPartLayer::KisPartLayer(KisImageSP img, KisChildDoc * doc)
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""))
     , m_doc(doc)
 {
+    repaint();
 }
 
 KisPartLayer::~KisPartLayer()
@@ -69,15 +70,13 @@ KisPartLayer::~KisPartLayer()
 void KisPartLayer::activate()
 {
     kdDebug() << "Activate object layer\n";
-    // Create a child widget
-    // Show
+    repaint();
 }
 
 // Called when another layer is made inactive
 void KisPartLayer::deactivate()
 {
     kdDebug() << "Deactivate object layer: going to render onto paint device.\n";
-
     repaint();
 }
 
@@ -102,20 +101,29 @@ void KisPartLayer::setY(Q_INT32 y) {
 
     super::setY(y);
 }
-/*
-void KisPartLayer::paintBoundingRect(QPainter& painter, Q_INT32 x, Q_INT32 y) {
-    // Maybe set rasterOp Not?
-    QRect rect = childDoc() -> geometry();
-    rect.moveBy(-x, -y);
 
-    QPen pen(Qt::SolidLine);
-    painter.setPen(pen);
-    painter.drawRect(rect);
-    // XXX clean the painter to its original state!
+void KisPartLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
+    uchar *j = img.bits();
+    QRect rect = m_doc -> geometry();
+
+    for (int y2 = y; y2 < h + y; ++y2) {
+        for (int x2 = x; x2 < w + x; ++x2) {
+            if (!rect.contains(x2, y2)) {
+                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+                *(j+0) = 165+g;
+                *(j+1) = 128+g;
+                *(j+2) = 128+g;
+            }
+            j+=4;
+        }
+    }
+
 }
-*/
+
 void KisPartLayer::repaint() {
     if (!m_doc || !m_doc->document()) return;
+
+    paintDevice() -> clear();
 
     // XXX: zoom!
 

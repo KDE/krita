@@ -769,6 +769,8 @@ void KisView::resizeEvent(QResizeEvent *)
         m_hRuler -> hide();
         m_vRuler -> hide();
     }
+
+    emit viewTransformationsChanged();
 }
 
 void KisView::styleChange(QStyle& oldStyle)
@@ -1261,6 +1263,9 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
     m_vScroll -> setUpdatesEnabled(true);
     m_hScroll -> update();
     m_vScroll -> update();
+
+    
+
     canvasRefresh();
 }
 
@@ -2694,6 +2699,11 @@ void KisView::scrollH(int value)
                 m_canvas -> repaint();
             }
     }
+
+    if (xShift != 0) {
+        // XXX do sth with the childframe or so
+    }
+    emit viewTransformationsChanged();
 }
 
 void KisView::scrollV(int value)
@@ -2724,6 +2734,11 @@ void KisView::scrollV(int value)
             }
         }
     }
+
+    if (yShift != 0) {
+        // XXX do sth with the childframe or so
+    }
+    emit viewTransformationsChanged();
 }
 
 
@@ -3350,6 +3365,37 @@ void KisView::createDockers()
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
+}
+
+QPoint KisView::applyViewTransformations(const QPoint& p) const {
+    QPoint point(p.x() + m_canvasXOffset, p.y() + m_canvasYOffset);
+/*
+    if (m_hRuler -> isShown())
+        point.ry() -= m_hRuler -> height();
+    if (m_vRuler -> isShown())
+        point.rx() -= m_hRuler -> width();
+*/
+    return QPoint(qRound(point.x() * zoomFactor()), qRound(point.y() * zoomFactor()));
+}
+
+QPoint KisView::reverseViewTransformations(const QPoint& p) const {
+    // Since we now zoom ourselves, the only thing super::~ does is nothing anymore.
+    // Hence, zoom ourselves, like super would
+    QPoint point(qRound(p.x() / zoomFactor()), qRound(p.y() / zoomFactor()));
+    point.rx() -= m_canvasXOffset;
+    point.ry() -= m_canvasYOffset;
+/*
+    if (m_hRuler -> isShown())
+        point.ry() += m_hRuler -> height();
+    if (m_vRuler -> isShown())
+        point.rx() += m_hRuler -> width();
+*/
+    return point;
+}
+
+void KisView::canvasAddChild(KoViewChild *child) {
+    super::canvasAddChild(child);
+    connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
 }
 
 #include "kis_view.moc"

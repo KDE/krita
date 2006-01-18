@@ -150,6 +150,10 @@ public: // KoView implementation
 
     void updateStatusBarSelectionLabel();
 
+    virtual QPoint applyViewTransformations(const QPoint& p) const;
+    virtual QPoint reverseViewTransformations( const QPoint& p) const;
+    virtual void canvasAddChild(KoViewChild *child);
+
 signals:
 
     void brushChanged(KisBrush * brush);
@@ -165,6 +169,9 @@ signals:
 
     void sigFGQColorChanged(const QColor &);
     void sigBGQColorChanged(const QColor &);
+
+    /// for KoViewChild
+    void viewTransformationsChanged();
 
 public slots:
 

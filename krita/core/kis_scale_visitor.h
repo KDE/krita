@@ -161,7 +161,7 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
+    virtual bool visit(KisAdjustmentLayer* /*layer*/)
     {
         return true;
     }

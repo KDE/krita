@@ -105,7 +105,13 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_RGBA8; };
     
     /**
-     * Determine if this filter can work with this colorSpace
+     * Determine if this filter can work with this colorSpace. For instance, some
+     * colorspaces don't depend on lcms, and cannot do certain tasks. The colorsfilters
+     * are problems here.
+     * BSAR: I'm still not convinced that this is the right approach. I think that every
+     * colorspace should implement the api fully; and that the filter should simply call
+     * that api. After all, you don't need lcms to desaturate.
+     * 
      * @param colorsSpace
      */
     virtual bool workWith(KisColorSpace*) { return true; }

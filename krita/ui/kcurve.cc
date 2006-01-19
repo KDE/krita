@@ -66,8 +66,7 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
 
 KCurve::~KCurve()
 {
-    if(m_pix)
-        delete m_pix;
+    if (m_pix) delete m_pix;
 }
 
 void KCurve::reset(void)
@@ -86,6 +85,7 @@ void KCurve::setCurveGuide(QColor color)
 
 void KCurve::setPixmap(QPixmap pix)
 {
+    if (m_pix) delete m_pix;
     m_pix = new QPixmap(pix);
     repaint(false);
 }

@@ -57,7 +57,9 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbColorSpaces->setCurrent(colorSpace->id());
     m_page->cmbColorSpaces->setEnabled(false);
 
-    QString profilename = const_cast<KisColorSpace *>(colorSpace)->getProfile()->productName();
+    QString profilename;
+    if (KisProfile* profile = const_cast<KisColorSpace *>(colorSpace)->getProfile())
+        profilename = profile->productName();
     m_page->cmbProfile->insertItem(profilename);
     m_page->cmbProfile->setEnabled(false);
 

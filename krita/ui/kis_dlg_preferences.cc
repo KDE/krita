@@ -686,7 +686,7 @@ void GridSettingsTab::setDefault()
 //---------------------------------------------------------------------------------------------------
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
-    : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default | Apply, Ok, parent, name, true, true )
+    : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
 {
     QVBox *vbox;
 

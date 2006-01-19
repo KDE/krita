@@ -162,7 +162,7 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
         }
         // Draw vertical line
         i = 0;
-        for( Q_UINT32 y = offsetx; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
+        for( Q_UINT32 y = offsety; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
         {
             if( i == subdivision )
             {

@@ -54,7 +54,15 @@ public:
     virtual QRect extent() const {return QRect();};
     virtual QRect exactBounds() const {return QRect();};
 
-    virtual bool accept(KisLayerVisitor &v) { return v.visit(this); }
+    virtual bool accept(KisLayerVisitor &v)
+        {
+            kdDebug(41001) << "Visiting on group layer " << name()
+                    << ", " << m_layers.count() << " children "
+                    << ", projection: " << m_projection << "\n";
+            return v.visit(this);
+        };
+
+    virtual KisPaintDeviceImplSP projection() { return m_projection; }
 
     virtual uint childCount() const;
 
@@ -87,6 +95,7 @@ public:
 private:
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
+    KisPaintDeviceImplSP m_projection; // The cached composition of all layers in this group
 };
 
 #endif // KIS_GROUP_LAYER_H_

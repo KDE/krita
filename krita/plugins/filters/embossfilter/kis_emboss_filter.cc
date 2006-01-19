@@ -84,9 +84,9 @@ void KisEmbossFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
 
 void KisEmbossFilter::Emboss(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int d)
 {
-        float Depth = d / 10.0;
-        int    R = 0, G = 0, B = 0;
-        uchar  Gray = 0;
+    float Depth = d / 10.0;
+    int    R = 0, G = 0, B = 0;
+    uchar  Gray = 0;
     int Width = rect.width();
     int Height = rect.height();
 

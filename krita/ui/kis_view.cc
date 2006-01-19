@@ -2508,6 +2508,8 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
         QString name = dlg.layerName();
 
         addAdjustmentLayer( parent, above, name, filter, selection);
+        
+        img->notify();
     }
 }
 
@@ -2516,6 +2518,10 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
     KisImageSP img = currentImg();
     if (!img) return;
 
+    kdDebug() << "New adjustment layer name: "
+            << name << ", filter: "
+            << filter->name() << ", selection: "
+            << selection << "\n";
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addLayer(l, parent, above);
 }

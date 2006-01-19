@@ -32,6 +32,7 @@
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection) :
     KisLayer (img, name, OPACITY_OPAQUE)
 {
+    Q_ASSERT(kfc);
     m_filterConfig = kfc;
     if (selection)
         m_selection = new KisSelection( *selection.data() );
@@ -112,6 +113,10 @@ QRect KisAdjustmentLayer::exactBounds() const
 
 bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
 {
+    kdDebug(41001) << "Visiting on adjustment layer " << name()
+            << ", selection: " << m_selection
+            << ", filter: " << m_filterConfig->name() << "\n";
+    
     return v.visit( this );
 }
 

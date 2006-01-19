@@ -60,7 +60,16 @@ public:
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
 
-    virtual bool accept(KisLayerVisitor &v) { return v.visit(this); };
+    virtual bool accept(KisLayerVisitor &v)
+        {
+            kdDebug(41001) << "Visiting on paint layer " << name()
+                    << ", colorspace: " << m_paintdev->colorSpace()->id().name()
+                    << ", opacity: " << opacity()
+                    << ", composite op: " << compositeOp().id().name() << "\n";
+    
+            return v.visit(this);
+        };
+
 
     /// Returns the paintDevice that accompanies this layer
     inline KisPaintDeviceImplSP paintDevice() { return m_paintdev; };

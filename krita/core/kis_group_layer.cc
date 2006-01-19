@@ -20,12 +20,17 @@
 #include <kglobal.h>
 #include <qimage.h>
 
+#include "kis_layer.h"
+#include "kis_layer_visitor.h"
 #include "kis_debug_areas.h"
+#include "kis_image.h"
+#include "kis_paint_device_impl.h"
 #include "kis_group_layer.h"
 
 KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     super(img, name, opacity)
 {
+    m_projection = new KisPaintDeviceImpl(img, img->colorSpace());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : super(rhs)
@@ -34,6 +39,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : super(rhs)
     {
         m_layers.push_back( it->data()->clone() );
     }
+    m_projection = rhs.m_projection;
 }
 
 KisLayerSP KisGroupLayer::clone() const
@@ -142,5 +148,6 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
     }
     return removeLayer(layer -> index());
 }
+
 
 #include "kis_group_layer.moc"

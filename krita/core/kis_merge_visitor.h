@@ -34,20 +34,17 @@
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
-    KisMergeVisitor(KisImageSP img,KisPainter *gc, const QRect& rc) :
+    KisMergeVisitor(KisImageSP img, KisPaintDeviceImplSP projection, const QRect& rc) :
         KisLayerVisitor()
     {
         m_img = img;
-        m_gc = gc;
-        m_projection = 0; // XXX: Is this the full projection of all groups, or just the projection for the current layer group?
+        m_projection = projection; // XXX: Is this the full projection of all groups, or just the projection for the current layer group?
         m_rc = rc;
 /*
         m_insertMergedAboveLayer = 0;
         m_haveFoundInsertionPlace = false;
 */
     }
-
-    void setProjection(KisPaintDeviceImplSP proj) { m_projection = proj; }
 
 public:
     virtual bool visit(KisPaintLayer *layer)
@@ -65,8 +62,9 @@ public:
         h = rc.height();
         dx = sx;
         dy = sy;
-            
-        m_gc->bitBlt(dx, dy, layer->compositeOp() , layer->paintDevice(), layer->opacity(), sx, sy, w, h);
+
+        KisPainter gc(m_projection);
+        gc.bitBlt(dx, dy, layer->compositeOp() , layer->paintDevice(), layer->opacity(), sx, sy, w, h);
 
 /*
             if (!m_haveFoundInsertionPlace) {
@@ -95,14 +93,21 @@ public:
         if (!layer -> visible())
             return true;
 
-        KisPaintDeviceImplSP dst;
-        if (m_projection)
-            dst = m_projection;
-        else
-            dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
-        KisPainter painter(dst);
+        //KisPaintDeviceImplSP dst;
+        //if (m_projection)
+        //    dst = m_projection;
+        //else
+        //    dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
+        //KisPainter painter(dst);
 
-        KisMergeVisitor visitor(m_img, &painter, m_rc);
+        // XXX Check if any of the layers in the group are changed; if not, don't visit
+
+        KisFillPainter gc;
+        gc.begin(layer->projection());
+        gc.eraseRect(m_rc);
+        gc.end();
+        
+        KisMergeVisitor visitor(m_img, layer->projection(), m_rc);
         bool first = true;
 
         KisLayerSP child = layer->lastChild();
@@ -134,18 +139,21 @@ public:
             child = child->prevSibling();
         }
 
-        if (!m_projection) {
-            Q_INT32 sx, sy, dx, dy, w, h;
+        //if (!m_projection) {
+            //Q_INT32 sx, sy, dx, dy, w, h;
 
-            QRect rc = dst ->extent() & rc;
-            sx= rc.left();
-            sy = rc.top();
-            w = rc.width();
-            h = rc.height();
-            dx = sx;
-            dy = sy;
-            m_gc->bitBlt(dx, dy, layer->compositeOp() , dst, layer->opacity(), sx, sy, w, h);
-        }
+            //QRect rc = layer->projection()->extent() & rc;
+            //sx= rc.left();
+            //sy = rc.top();
+            //w = rc.width();
+            //h = rc.height();
+            //dx = sx;
+            //dy = sy;
+            KisPainter gc2(m_projection);
+            gc2.bitBlt(m_rc.left(), m_rc.top(), layer->compositeOp(), layer->projection(), layer->opacity(), m_rc.left(),
+                      m_rc.top(), m_rc.width(), m_rc.height());
+            gc2.end();
+        //}
 
         return true;
     }
@@ -158,7 +166,9 @@ public:
     virtual bool visit(KisAdjustmentLayer* layer)
     {
         KisFilterConfiguration * cfg = layer->filter();
-        kdDebug() << "Going to do adjustment layer magick! " << cfg->name() << endl;
+        kdDebug() << "Going to do adjustment layer magick " << cfg->name()
+                << " projection layer " << m_projection
+                << endl;
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
         if (KisSelectionSP selection = layer->selection())
             KisSelectionSP oldSelection = m_projection->setSelection(selection);

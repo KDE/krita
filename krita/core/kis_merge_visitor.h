@@ -165,6 +165,9 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        if (!layer->visible())
+            return true;
+
         KisFilterConfiguration * cfg = layer->filter();
         kdDebug() << "Going to do adjustment layer magick " << cfg->name()
                 << " projection layer " << m_projection

@@ -157,7 +157,7 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
             }
             if( x >= wr.x() )
             {
-                p.drawLine(x, wr.top(), x, wr.bottom());
+                p.drawLine(x, wr.top(), x, wr.bottom()+1);
             }
         }
         // Draw vertical line
@@ -174,7 +174,7 @@ void KisGridManager::drawGrid(QRect wr, QPainter& p)
             }
             if( y >= wr.y() )
             {
-                p.drawLine(wr.left(), y, wr.right(), y);
+                p.drawLine(wr.left(), y, wr.right()+1, y);
             }
         }
     }

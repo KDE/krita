@@ -634,7 +634,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
         if (m_adapter && m_adapter -> undo()) {
             if (cropLayers)
                 m_adapter->beginMacro("Crop Image");
-            else 
+            else
                 m_adapter -> beginMacro("Resize Image");
 
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
@@ -692,7 +692,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         m_height = h;
 
         m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
-        
+
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
@@ -854,6 +854,8 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
     setColorSpace(dstColorSpace);
 
+    notifyLayersChanged();
+
     emit sigNonActiveLayersUpdated();
     notify();
 }
@@ -867,7 +869,7 @@ void KisImage::setProfile(const KisProfile * profile)
 {
     KisColorSpace * dstSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(), profile);
     //convertTo( dstSpace ); // XXX: We shouldn't convert here -- if you want to convert, use the conversion function.
-    setColorSpace(dstSpace); 
+    setColorSpace(dstSpace);
     emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
 }
 

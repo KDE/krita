@@ -75,8 +75,10 @@ public:
     virtual KisCanvasWidgetPainter *createPainter() = 0;
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-    static KisInputDevice inputDevice(XEvent *event);
+    static KisInputDevice findActiveInputDevice();
     virtual void selectTabletDeviceEvents() = 0;
+
+    static void selectTabletDeviceEvents(QWidget *widget);
 #endif
 
 #ifdef Q_WS_X11
@@ -152,6 +154,7 @@ public:
         bool mightBeTabletDevice() const { return m_mightBeTabletDevice; }
 
         XID id() const { return m_deviceId; }
+        XDevice *xDevice() const { return m_XDevice; }
         QString name() const { return m_name; }
 
         KisInputDevice inputDevice() const { return m_inputDevice; }
@@ -190,15 +193,17 @@ public:
         int buttonPressEvent() const { return m_buttonPressEvent; }
         int buttonReleaseEvent() const { return m_buttonReleaseEvent; }
         int motionNotifyEvent() const { return m_motionNotifyEvent; }
+        int proximityInEvent() const { return m_proximityInEvent; }
+        int proximityOutEvent() const { return m_proximityOutEvent; }
 
         void enableEvents(QWidget *widget) const;
-        void disableEvents(QWidget *widget) const;
 
         class State
         {
         public:
             State() {}
-            State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel);
+            State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
+                  Q_UINT32 toolID, Q_UINT32 serialNumber);
 
             // Position, pressure and wheel are normalised to 0 - 1
             KisPoint pos() const { return m_pos; }
@@ -206,12 +211,17 @@ public:
             // Tilt is normalised to -1 -> +1
             KisVector2D tilt() const { return m_tilt; }
             double wheel() const { return m_wheel; }
+            // Wacom tool id and serial number of device.
+            Q_UINT32 toolID() const { return m_toolID; }
+            Q_UINT32 serialNumber() const { return m_serialNumber; }
 
         private:
             KisPoint m_pos;
             double m_pressure;
             KisVector2D m_tilt;
             double m_wheel;
+            Q_UINT32 m_toolID;
+            Q_UINT32 m_serialNumber;
         };
 
         State translateAxisData(const int *axisData) const;
@@ -220,6 +230,8 @@ public:
         double translateAxisValue(int value, const XAxisInfo& axisInfo) const;
 
         XID m_deviceId;
+        XDevice *m_XDevice;
+
         QString m_name;
 
         bool m_mightBeTabletDevice;
@@ -241,6 +253,8 @@ public:
         int m_motionNotifyEvent;
         int m_buttonPressEvent;
         int m_buttonReleaseEvent;
+        int m_proximityInEvent;
+        int m_proximityOutEvent;
 
         QValueVector<XEventClass> m_eventClassList;
     };
@@ -249,11 +263,11 @@ public:
     static X11XIDTabletDeviceMap& tabletDeviceMap();
 
 protected:
-    static void selectTabletDeviceEvents(QWidget *widget);
-
     static int X11DeviceMotionNotifyEvent;
     static int X11DeviceButtonPressEvent;
     static int X11DeviceButtonReleaseEvent;
+    static int X11ProximityInEvent;
+    static int X11ProximityOutEvent;
 
     static X11XIDTabletDeviceMap X11TabletDeviceMap;
 

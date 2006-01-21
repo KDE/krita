@@ -86,6 +86,8 @@ long KisCanvasWidget::X11MetaMask = 0;
 int KisCanvasWidget::X11DeviceMotionNotifyEvent = -1;
 int KisCanvasWidget::X11DeviceButtonPressEvent = -1;
 int KisCanvasWidget::X11DeviceButtonReleaseEvent = -1;
+int KisCanvasWidget::X11ProximityInEvent = -1;
+int KisCanvasWidget::X11ProximityOutEvent = -1;
 
 //X11XIDTabletDeviceMap KisCanvasWidget::X11TabletDeviceMap;
 std::map<XID, KisCanvasWidget::X11TabletDevice> KisCanvasWidget::X11TabletDeviceMap;
@@ -370,6 +372,11 @@ void KisCanvasWidget::initX11Support()
     const XDeviceInfo *devices = XListInputDevices(x11Display, &numDevices);
 
     if (devices != NULL) {
+        XID lastStylusSeen;
+        XID lastEraserSeen;
+        bool foundStylus = false;
+        bool foundEraser = false;
+
         for (int i = 0; i < numDevices; i++) {
 
             const XDeviceInfo *device = devices + i;
@@ -379,15 +386,19 @@ void KisCanvasWidget::initX11Support()
 
                 tabletDevice.readSettingsFromConfig();
 
-                #if 0
-                tabletDevice.setInputDevice(KisInputDevice::allocateInputDevice());
-                #else
-                if (tabletDevice.name().lower().contains("eraser")) {
-                    tabletDevice.setInputDevice(KisInputDevice::eraser());
-                } else {
-                    tabletDevice.setInputDevice(KisInputDevice::stylus());
+                QString lowerCaseName = tabletDevice.name().lower();
+
+                // Find the devices that Qt will use as its stylus and eraser devices.
+                if (!foundStylus || !foundEraser) {
+                    if (lowerCaseName.startsWith("stylus") || lowerCaseName.startsWith("pen")) {
+                        lastStylusSeen = device -> id;
+                        foundStylus = true;
+                    }
+                    else if (lowerCaseName.startsWith("eraser")) {
+                        lastEraserSeen = device -> id;
+                        foundEraser = true;
+                    }
                 }
-                #endif
 
                 X11TabletDeviceMap[device -> id] = tabletDevice;
 
@@ -402,6 +413,26 @@ void KisCanvasWidget::initX11Support()
                 if (tabletDevice.motionNotifyEvent() >= 0) {
                     X11DeviceMotionNotifyEvent = tabletDevice.motionNotifyEvent();
                 }
+                if (tabletDevice.proximityInEvent() >= 0) {
+                    X11ProximityInEvent = tabletDevice.proximityInEvent();
+                }
+                if (tabletDevice.proximityOutEvent() >= 0) {
+                    X11ProximityOutEvent = tabletDevice.proximityOutEvent();
+                }
+            }
+        }
+
+        // Allocate input devices.
+        for (X11XIDTabletDeviceMap::iterator it = X11TabletDeviceMap.begin(); it != X11TabletDeviceMap.end(); ++it) {
+
+            X11TabletDevice& tabletDevice = (*it).second;
+
+            if (foundStylus && tabletDevice.id() == lastStylusSeen) {
+                tabletDevice.setInputDevice(KisInputDevice::stylus());
+            } else if (foundEraser && tabletDevice.id() == lastEraserSeen) {
+                tabletDevice.setInputDevice(KisInputDevice::eraser());
+            } else {
+                tabletDevice.setInputDevice(KisInputDevice::allocateInputDevice());
             }
         }
 
@@ -471,6 +502,8 @@ KisCanvasWidget::X11TabletDevice::X11TabletDevice()
     m_buttonPressEvent = -1;
     m_buttonReleaseEvent = -1;
     m_motionNotifyEvent = -1;
+    m_proximityInEvent = -1;
+    m_proximityOutEvent = -1;
 }
 
 KisCanvasWidget::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
@@ -519,29 +552,39 @@ KisCanvasWidget::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
     m_buttonPressEvent = -1;
     m_buttonReleaseEvent = -1;
     m_motionNotifyEvent = -1;
+    m_proximityInEvent = -1;
+    m_proximityOutEvent = -1;
 
-    XDevice *device = XOpenDevice(QApplication::desktop() -> x11Display(), m_deviceId);
+    m_XDevice = XOpenDevice(QApplication::desktop() -> x11Display(), m_deviceId);
 
-    if (device != NULL) {
-        for (int i = 0; i < device -> num_classes; i++) {
+    if (m_XDevice != NULL) {
+        for (int i = 0; i < m_XDevice -> num_classes; i++) {
 
             XEventClass eventClass;
 
-            if (device -> classes[i].input_class == ButtonClass) {
-                DeviceButtonPress(device, m_buttonPressEvent, eventClass);
+            if (m_XDevice -> classes[i].input_class == ButtonClass) {
+                DeviceButtonPress(m_XDevice, m_buttonPressEvent, eventClass);
                 m_eventClassList.append(eventClass);
 
-                DeviceButtonRelease(device, m_buttonReleaseEvent, eventClass);
+                DeviceButtonRelease(m_XDevice, m_buttonReleaseEvent, eventClass);
                 m_eventClassList.append(eventClass);
             }
             else
-            if (device -> classes[i].input_class == ValuatorClass) {
-                DeviceMotionNotify(device, m_motionNotifyEvent, eventClass);
+            if (m_XDevice -> classes[i].input_class == ValuatorClass) {
+                DeviceMotionNotify(m_XDevice, m_motionNotifyEvent, eventClass);
+                m_eventClassList.append(eventClass);
+            }
+            else
+            if (m_XDevice -> classes[i].input_class == ProximityClass) {
+                ProximityIn(m_XDevice, m_proximityInEvent, eventClass);
+                m_eventClassList.append(eventClass);
+
+                ProximityOut(m_XDevice, m_proximityOutEvent, eventClass);
                 m_eventClassList.append(eventClass);
             }
         }
 
-        // Note: We don't XCloseDevice() since Qt will have already opened
+        // Note: We don't XCloseXDevice() since Qt will have already opened
         // it, and only one XCloseDevice() call closes it for all opens.
     }
 
@@ -721,22 +764,12 @@ void KisCanvasWidget::X11TabletDevice::writeSettingsToConfig()
 void KisCanvasWidget::X11TabletDevice::enableEvents(QWidget *widget) const
 {
     if (!m_eventClassList.isEmpty()) {
-        int result = XSelectExtensionEvent(widget -> x11AppDisplay(), widget -> handle(), const_cast<XEventClass*>(&m_eventClassList[0]), m_eventClassList.count());
-
+        int result = XSelectExtensionEvent(widget -> x11AppDisplay(), widget -> handle(), 
+                                           const_cast<XEventClass*>(&m_eventClassList[0]), 
+                                           m_eventClassList.count());
+    
         if (result != Success) {
             kdDebug() << "Failed to select extension events for " << m_name << endl;
-        }
-    }
-}
-
-void KisCanvasWidget::X11TabletDevice::disableEvents(QWidget *widget) const
-{
-    if (!m_eventClassList.isEmpty()) {
-        int result = XSelectExtensionEvent(widget -> x11AppDisplay(), widget -> handle(), const_cast<XEventClass*>(&m_eventClassList[0]), 0);
-
-        // XXX: This doesn't work so we still have to ignore events for a disabled device. Maybe there is a way.
-        if (result != Success) {
-            kdDebug() << "Failed to select no extension events for " << m_name << endl;
         }
     }
 }
@@ -756,11 +789,14 @@ double KisCanvasWidget::X11TabletDevice::translateAxisValue(int value, const XAx
     return translatedValue;
 }
 
-KisCanvasWidget::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel)
+KisCanvasWidget::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
+                                               Q_UINT32 toolID, Q_UINT32 serialNumber)
     : m_pos(pos), 
       m_pressure(pressure), 
       m_tilt(tilt),
-      m_wheel(wheel)
+      m_wheel(wheel),
+      m_toolID(toolID),
+      m_serialNumber(serialNumber)
 {
 }
 
@@ -780,22 +816,42 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
     }
 
     KisVector2D tilt = KisVector2D(0, 0);
+    Q_UINT32 toolID = 0;
+    Q_UINT32 serialNumber = 0;
 
     if (m_xTiltAxis != NoAxis) {
-        tilt.setX(translateAxisValue(axisData[m_xTiltAxis], m_axisInfo[m_xTiltAxis]));
+        // Latest wacom driver returns the tool id and serial number in 
+        // the upper 16 bits of the x and y tilts and wheel.
+        int xTiltAxisValue = (Q_INT16)(axisData[m_xTiltAxis] & 0xffff);
+        toolID = ((Q_UINT32)axisData[m_xTiltAxis] >> 16) & 0xffff;
+
+        tilt.setX(translateAxisValue(xTiltAxisValue, m_axisInfo[m_xTiltAxis]));
     }
 
     if (m_yTiltAxis != NoAxis) {
-        tilt.setY(translateAxisValue(axisData[m_yTiltAxis], m_axisInfo[m_yTiltAxis]));
+        int yTiltAxisValue = (Q_INT16)(axisData[m_yTiltAxis] & 0xffff);
+        serialNumber = (Q_UINT32)axisData[m_yTiltAxis] & 0xffff0000;
+
+        tilt.setY(translateAxisValue(yTiltAxisValue, m_axisInfo[m_yTiltAxis]));
     }
 
     double wheel = 0;
 
     if (m_wheelAxis != NoAxis) {
-        wheel = translateAxisValue(axisData[m_wheelAxis], m_axisInfo[m_wheelAxis]);
+        int wheelAxisValue = (Q_INT16)(axisData[m_wheelAxis] & 0xffff);
+        serialNumber |= ((Q_UINT32)axisData[m_wheelAxis] >> 16) & 0xffff;
+
+        wheel = translateAxisValue(wheelAxisValue, m_axisInfo[m_wheelAxis]);
     }
 
-    return State(pos, pressure, tilt, wheel);
+    //kdDebug() << "Xtilt " << tilt.x() << " yTilt " << tilt.y() << " wheel " << wheel << endl;
+
+    //QString ids;
+    //ids.sprintf("Tool ID: %8x Serial Number: %8x", toolID, serialNumber);
+
+    //kdDebug() << ids << endl;
+
+    return State(pos, pressure, tilt, wheel, toolID, serialNumber);
 }
 
 KisCanvasWidget::X11XIDTabletDeviceMap& KisCanvasWidget::tabletDeviceMap()
@@ -811,8 +867,6 @@ void KisCanvasWidget::selectTabletDeviceEvents(QWidget *widget)
 
         if (device.enabled()) {
             device.enableEvents(widget);
-        } else {
-            device.disableEvents(widget);
         }
     }
 }
@@ -849,7 +903,7 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
     else
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
     if (event -> type == X11DeviceMotionNotifyEvent || event -> type == X11DeviceButtonPressEvent || event -> type == X11DeviceButtonReleaseEvent) {
-        // Tablet event
+        // Tablet event.
         int deviceId;
         const int *axisData;
         Qt::ButtonState button;
@@ -988,44 +1042,44 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
 }
 
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
-KisInputDevice KisCanvasWidget::inputDevice(XEvent *event)
+
+KisInputDevice KisCanvasWidget::findActiveInputDevice()
 {
-    if (event -> type == X11DeviceMotionNotifyEvent || event -> type == X11DeviceButtonPressEvent ||
-        event -> type == X11DeviceButtonReleaseEvent) {
+    X11XIDTabletDeviceMap::const_iterator it;
 
-        // Tablet event
+    for (it = X11TabletDeviceMap.begin(); it != X11TabletDeviceMap.end(); ++it) {
+        const X11TabletDevice& tabletDevice = (*it).second;
 
-        int deviceId;
+        XDeviceState *deviceState = XQueryDeviceState(QApplication::desktop() -> x11Display(),
+                                                      tabletDevice.xDevice());
+        const XInputClass *inputClass = deviceState -> data;
+        bool deviceIsInProximity = false;
 
-        if (event -> type == X11DeviceMotionNotifyEvent) {
-            const XDeviceMotionEvent *motion = reinterpret_cast<const XDeviceMotionEvent *>(event);
+        for (int i = 0; i < deviceState -> num_classes; i++) {
 
-            deviceId = motion -> deviceid;
-        }
-        else
-        if (event -> type == X11DeviceButtonPressEvent) {
-            const XDeviceButtonPressedEvent *buttonPressed = reinterpret_cast<const XDeviceButtonPressedEvent *>(event);
-            deviceId = buttonPressed -> deviceid;
-        }
-        else {
-            const XDeviceButtonReleasedEvent *buttonReleased = reinterpret_cast<const XDeviceButtonReleasedEvent *>(event);
-            deviceId = buttonReleased -> deviceid;
-        }
+            if (inputClass -> c_class == ValuatorClass) {
 
-        X11XIDTabletDeviceMap::const_iterator it = X11TabletDeviceMap.find(deviceId);
+                const XValuatorState *valuatorState = reinterpret_cast<const XValuatorState *>(inputClass);
 
-        if (it != X11TabletDeviceMap.end()) {
-
-            const X11TabletDevice& tabletDevice = (*it).second;
-
-            if (tabletDevice.enabled()) {
-                return tabletDevice.inputDevice();
+                if ((valuatorState -> mode & ProximityState) == InProximity) {
+                    deviceIsInProximity = true;
+                    break;
+                }
             }
+
+            inputClass = reinterpret_cast<const XInputClass *>(reinterpret_cast<const char *>(inputClass) + inputClass -> length);
+        }
+
+        XFreeDeviceState(deviceState);
+
+        if (deviceIsInProximity && tabletDevice.enabled()) {
+            return tabletDevice.inputDevice();
         }
     }
 
-    return KisInputDevice::unknown();
+    return KisInputDevice::mouse();
 }
+
 #endif // EXTENDED_X11_TABLET_SUPPORT
 
 

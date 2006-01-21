@@ -405,8 +405,8 @@ TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const 
         m_page -> cbXTilt -> insertItem(axisString);
         m_page -> cbYTilt -> insertItem(axisString);
         m_page -> cbWheel -> insertItem(axisString);
-        m_page -> cbToolID -> insertItem(axisString);
-        m_page -> cbSerialNumber -> insertItem(axisString);
+//         m_page -> cbToolID -> insertItem(axisString);
+//         m_page -> cbSerialNumber -> insertItem(axisString);
     }
 
     m_page -> cbX -> insertItem(i18n("None"));
@@ -415,8 +415,8 @@ TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const 
     m_page -> cbXTilt -> insertItem(i18n("None"));
     m_page -> cbYTilt -> insertItem(i18n("None"));
     m_page -> cbWheel -> insertItem(i18n("None"));
-    m_page -> cbToolID -> insertItem(i18n("None"));
-    m_page -> cbSerialNumber -> insertItem(i18n("None"));
+//     m_page -> cbToolID -> insertItem(i18n("None"));
+//     m_page -> cbSerialNumber -> insertItem(i18n("None"));
 
     if (settings.xAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
         m_page -> cbX -> setCurrentItem(settings.xAxis());
@@ -454,17 +454,17 @@ TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const 
         m_page -> cbWheel -> setCurrentItem(settings.numAxes());
     }
 
-    if (settings.toolIDAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page -> cbToolID -> setCurrentItem(settings.toolIDAxis());
-    } else {
-        m_page -> cbToolID -> setCurrentItem(settings.numAxes());
-    }
-
-    if (settings.serialNumberAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page -> cbSerialNumber -> setCurrentItem(settings.serialNumberAxis());
-    } else {
-        m_page -> cbSerialNumber -> setCurrentItem(settings.numAxes());
-    }
+//     if (settings.toolIDAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+//         m_page -> cbToolID -> setCurrentItem(settings.toolIDAxis());
+//     } else {
+//         m_page -> cbToolID -> setCurrentItem(settings.numAxes());
+//     }
+//
+//     if (settings.serialNumberAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
+//         m_page -> cbSerialNumber -> setCurrentItem(settings.serialNumberAxis());
+//     } else {
+//         m_page -> cbSerialNumber -> setCurrentItem(settings.numAxes());
+//     }
 
     m_settings = settings;
 }
@@ -514,17 +514,17 @@ TabletSettingsTab::DeviceSettings TabletSettingsTab::TabletDeviceSettingsDialog:
         m_settings.setWheelAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page -> cbToolID -> currentItem() != noAxis ) {
-        m_settings.setToolIDAxis(m_page -> cbToolID -> currentItem());
-    } else {
-        m_settings.setToolIDAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
-    }
-
-    if (m_page -> cbSerialNumber -> currentItem() != noAxis ) {
-        m_settings.setSerialNumberAxis(m_page -> cbSerialNumber -> currentItem());
-    } else {
-        m_settings.setSerialNumberAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
-    }
+//     if (m_page -> cbToolID -> currentItem() != noAxis ) {
+//         m_settings.setToolIDAxis(m_page -> cbToolID -> currentItem());
+//     } else {
+//         m_settings.setToolIDAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+//     }
+//
+//     if (m_page -> cbSerialNumber -> currentItem() != noAxis ) {
+//         m_settings.setSerialNumberAxis(m_page -> cbSerialNumber -> currentItem());
+//     } else {
+//         m_settings.setSerialNumberAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
+//     }
 
     return m_settings;
 }

@@ -209,10 +209,6 @@ protected:
     virtual void paletteChange(const QPalette& oldPalette); // From QWidget
     virtual void showEvent(QShowEvent *);
 
-#ifdef EXTENDED_X11_TABLET_SUPPORT
-    virtual bool x11Event(XEvent *event);
-#endif // Q_WS_X11
-
 protected slots:
     virtual void slotChildActivated(bool a); // from KoView
 

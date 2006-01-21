@@ -31,7 +31,7 @@ namespace KritaCore {
 class Kernel : public Kross::Api::Class<Kernel>
 {
     public:
-        Kernel();
+        Kernel(uint w, uint h);
        ~Kernel();
     public:
         KisKernel* kernel() { return m_kernel; }

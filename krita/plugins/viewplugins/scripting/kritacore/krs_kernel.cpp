@@ -18,18 +18,28 @@
 
 #include "krs_kernel.h"
 
+#include <kis_convolution_painter.h>
+
 namespace Kross {
 
 namespace KritaCore {
 
-Kernel::Kernel()
+Kernel::Kernel(uint w, uint h)
  : Kross::Api::Class<Kernel>("KritaKernel")
 {
+/*    m_kernel = new KisKernel();
+    m_kernel.width = w;
+    m_kernel.height = h;
+    m_kernel.offset = 0;
+    m_kernel.factor = 0;
+    m_kernel.data = new[] Q_INT32[width*height];*/
 }
 
 
 Kernel::~Kernel()
 {
+//     delete[] m_kernel.data;
+    delete m_kernel;
 }
 
 

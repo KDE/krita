@@ -40,7 +40,6 @@ namespace Kross { namespace KritaCore {
         public:
             KritaCoreFactory();
         private:
-            Kross::Api::Object::Ptr newKernel(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newImage(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr newHSVColor(Kross::Api::List::Ptr);

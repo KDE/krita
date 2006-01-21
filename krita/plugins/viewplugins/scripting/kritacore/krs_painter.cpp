@@ -81,10 +81,50 @@ Kross::Api::Object::Ptr Painter::applyConvolution(Kross::Api::List::Ptr args)
     uint y = Kross::Api::Variant::toUInt(args->item(1));
     uint w = Kross::Api::Variant::toUInt(args->item(2));
     uint h = Kross::Api::Variant::toUInt(args->item(3));
-    KisKernel* kernel = ((Kernel*)args->item(4).data())->kernel();
-    uint borderop = Kross::Api::Variant::toUInt(args->item(5));
-    uint channelsFlag = Kross::Api::Variant::toUInt(args->item(6));
-    cp->applyMatrix(kernel, x, y, w, h, (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
+//     KisKernel* kernel = ((Kernel*)args->item(4).data())->kernel();
+    KisKernel kernel;
+    QValueList<QVariant> kernelH = Kross::Api::Variant::toList( args->item(0) );
+    
+    QVariant firstlineVariant = *kernelH.begin();
+    if(firstlineVariant.type() != QVariant::List)
+    {
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
+    }
+    
+    QValueList<QVariant> firstline = firstlineVariant.toList();
+    
+    kernel.height = kernelH.size();
+    kernel.width = firstline.size();
+    
+    kernel.data = new Q_INT32[kernel.height * kernel.width];
+    
+    uint i = 0;
+    for(QValueList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ )
+    {
+        QVariant lineVariant = *kernelH.begin();
+        if(lineVariant.type() != QVariant::List)
+        {
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
+        }
+        QValueList<QVariant> line = firstlineVariant.toList();
+        if(line.size() != kernel.width)
+        {
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
+        }
+        uint j = 0;
+        for(QValueList<QVariant>::iterator itLine = line.begin(); itLine != line.end(); itLine++, j ++ )
+        {
+            kernel.data[ j + i * kernel.width ] = (*itLine).toInt();
+        }
+    }
+    kernel.factor = Kross::Api::Variant::toInt(args->item(5));
+    kernel.offset = Kross::Api::Variant::toInt(args->item(6));
+    
+    uint borderop = Kross::Api::Variant::toUInt(args->item(7));
+    uint channelsFlag = Kross::Api::Variant::toUInt(args->item(8));
+    cp->applyMatrix(&kernel, x, y, w, h, (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
+    
+    delete[] kernel.data;
     return 0;
 }
 

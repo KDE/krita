@@ -1,8 +1,9 @@
 Krita documentation outline
 
-Last edited 2006-01-12 (Sander Koning)
+Last edited 2006-01-21 (Sander Koning)
 
 Changelog
+2006-01-21: ASK: update and make consistent
 2006-01-12: ASK: add status, and put in SVN for others to enjoy ;)
 2005-08-31: ASK: adhere to KDE style
 2005-08-30: ASK: initial version
@@ -44,11 +45,11 @@ New outline:
   - What is Krita
   - Key features
     - Color management
-	- [TODO] File formats
-  - About this maunal
+	- File formats
+  - About this manual
   - About the application author
 - Tutorial
-  - Starting to know Krita [up to a new document]
+  - Starting to know Krita (up to a new document)
   - A Small Selections and Layer Tutorial
   - Quick Starts for Dummies
     - Crop an image and save as New

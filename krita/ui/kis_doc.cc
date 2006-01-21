@@ -258,7 +258,7 @@ bool KisDoc::init()
 
     connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
     connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
-    m_undo = true;
+    setUndo(true);
 
     m_nserver = new KisNameServer(i18n("Image %1"), 1);
     Q_CHECK_PTR(m_nserver);
@@ -321,6 +321,8 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
         // No children == empty file == show create dialog
         return false; // XXX used to be: return slotNewImage();
     }
+
+    setUndo(false);
 
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         kdDebug(DBG_AREA_FILE) << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
@@ -774,7 +776,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
     (m_currentImage) -> setName(newName);
 
-    if (m_undo)
+    if (undo())
         addCommand(new KisCommandImageMv(this, this, newName, oldName));
 }
 
@@ -783,6 +785,9 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 {
     if (!init())
         return false;
+
+    setUndo(false);
+
     KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
     Q_CHECK_PTR(img);
     connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
@@ -802,6 +807,9 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     img->notify();
 
     m_currentImage = img;
+
+    setUndo(true);
+
     return img;
 }
 
@@ -817,6 +825,8 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     KisPaintLayer *layer;
 
     if (!cs) return false;
+
+    setUndo(false);
 
     img = new KisImage(this, width, height, cs, name);
     Q_CHECK_PTR(img);
@@ -848,6 +858,8 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     cfg.defImgWidth(width);
     cfg.defImgHeight(height);
     cfg.defImgResolution(imgResolution);
+
+    setUndo(true);
 
     return true;
 }
@@ -1025,7 +1037,7 @@ void KisDoc::prepareForImport()
 {
     if (m_nserver == 0)
         init();
-    m_undo = false;
+    setUndo(false);
 }
 
 KisImageSP KisDoc::currentImage()

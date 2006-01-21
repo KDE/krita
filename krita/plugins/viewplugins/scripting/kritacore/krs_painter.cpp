@@ -26,7 +26,6 @@
 
 #include "krs_brush.h"
 #include "krs_color.h"
-#include "krs_kernel.h"
 #include "krs_pattern.h"
 
 namespace Kross {

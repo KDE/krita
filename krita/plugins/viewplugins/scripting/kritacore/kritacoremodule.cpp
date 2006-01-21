@@ -42,7 +42,6 @@
 #include "krs_doc.h"
 #include "krs_filter.h"
 #include "krs_image.h"
-#include "krs_kernel.h"
 #include "krs_pattern.h"
 #include "krs_script_progress.h"
 

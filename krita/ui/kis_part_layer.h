@@ -26,6 +26,8 @@
 #include "kis_paint_layer.h"
 #include "kis_types.h"
 #include "kis_doc.h"
+#include "kis_part_layer_iface.h"
+#include "kis_view.h"
 
 class KoFrame;
 class KoDocument;
@@ -69,18 +71,21 @@ protected:
  * XXX At the moment, it is not actually embedded when you save this as a Krita Native File!
  * Only the RGBA8 data gets saved :(
  */
-class KisPartLayer : public KisPaintLayer {
+class KisPartLayerImpl : public KisPartLayer {
     Q_OBJECT
-    typedef KisPaintLayer super;
+    typedef KisPartLayer super;
 public:
-    KisPartLayer(KisImageSP img, KisChildDoc * doc);
-    virtual ~KisPartLayer();
+    /// KisView param is a hack, see commented out code in impl
+    KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc);
+    virtual ~KisPartLayerImpl();
+
+    virtual KisLayerSP clone() const;
 
     /// Called when the layer is made active
-    virtual void activate();
+    virtual void activate() {}
 
     /// Called when another layer is made inactive
-    virtual void deactivate();
+    virtual void deactivate() {}
 
     /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
     virtual KisChildDoc* childDoc() { return m_doc; }
@@ -90,21 +95,40 @@ public:
 
     virtual void setX(Q_INT32 x);
     virtual void setY(Q_INT32 y);
+    virtual Q_INT32 x() const { return m_doc -> geometry() . x(); }
+    virtual Q_INT32 y() const { return m_doc -> geometry() . y(); } //m_paintLayer -> y(); }
+    virtual QRect extent() const { return m_doc -> geometry(); }
+    virtual QRect exactBounds() const { return m_doc -> geometry(); }
+
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h) {
+        return QImage(); //m_paintLayer -> createThumbnail(w, h);
+    }
 
     virtual bool accept(KisLayerVisitor& visitor) {
-        return visitor.visit(static_cast<KisPaintLayer*>(this));
+        return visitor.visit(this);
     }
+
+    //virtual KisPaintLayerSP paintLayer() { return m_paintLayer; }
+
+    virtual KisPaintDeviceImplSP prepareProjection(KisPaintDeviceImplSP projection);
 
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private slots:
     /// Repaints our device with the data from the embedded part
-    void repaint();
+    //void repaint();
+    /// When we activate the embedding, we clear ourselves
+    void childActivated(KoDocumentChild* child);
+    void childDeactivated(KoDocumentChild* child);
+
 
 private:
+    // KisPaintLayerSP m_paintLayer;
+    KisPaintDeviceImplSP m_cache;
     KoFrame * m_frame; // The widget that holds the editable view of the embedded part
     KisChildDoc * m_doc; // The sub-document
     QString m_docType;
+    bool m_activated;
 };
 
 #endif // _KIS_PART_LAYER_

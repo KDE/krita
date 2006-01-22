@@ -28,6 +28,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_part_layer_iface.h"
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
@@ -158,8 +159,35 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer */*layer*/)
+    virtual bool visit(KisPartLayer* layer)
     {
+        kdDebug() << "Mergin parts layer" << endl;
+
+        if (!m_projection) {
+            kdDebug() << "No projection to paint above, abort" << endl;
+            return false;
+        }
+        if (!layer -> visible())
+            return true;
+
+        KisPaintDeviceImplSP dev(layer -> prepareProjection(m_projection));
+        if (!dev)
+            return true;
+
+        Q_INT32 sx, sy, dx, dy, w, h;
+
+        QRect rc = dev -> extent() & m_rc;
+
+        sx= rc.left();
+        sy = rc.top();
+        w = rc.width();
+        h = rc.height();
+        dx = sx;
+        dy = sy;
+
+        KisPainter gc(m_projection);
+        gc.bitBlt(dx, dy, layer->compositeOp() , dev, layer->opacity(), sx, sy, w, h);
+
         return true;
     }
 

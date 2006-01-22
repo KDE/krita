@@ -193,7 +193,7 @@ QString KisLayerItem::tooltip() const
     }
     if( KisAdjustmentLayer *alayer = dynamic_cast<KisAdjustmentLayer*>( m_layer ) )
         text += row.arg( i18n( "Filter: " ) ).arg( KisFilterRegistry::instance()->get( alayer->filter()->name() )->id().name() );
-    if( KisPartLayer *player = dynamic_cast<KisPartLayer*>( m_layer ) ) {
+    if( KisPartLayerImpl *player = dynamic_cast<KisPartLayerImpl*>( m_layer ) ) {
         QString type = player->docType();
 
         if( type.isEmpty() ) {

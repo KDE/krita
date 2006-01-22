@@ -2476,7 +2476,7 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     KisChildDoc * childDoc = m_doc->createChildDoc(QRect(0,0,255,255), doc);
     kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
-    KisPartLayer* partLayer = new KisPartLayer(img, childDoc);
+    KisPartLayerImpl* partLayer = new KisPartLayerImpl(this, img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
     img -> addLayer(partLayer, parent, above);
 

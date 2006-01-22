@@ -756,8 +756,8 @@ KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
         // is the currently active parts layer.
-        KisPartLayer* partLayer
-                = dynamic_cast<KisPartLayer*>(currentImage() -> activeLayer().data());
+        KisPartLayerImpl* partLayer
+                = dynamic_cast<KisPartLayerImpl*>(currentImage() -> activeLayer().data());
 
         if (!partLayer)
             return this;

@@ -21,15 +21,19 @@
 #include "qimage.h"
 #include "qpainter.h"
 
+#include <klocale.h>
+
 #include "koDocument.h"
 #include "koDocumentChild.h"
 #include "koFrame.h"
+#include "koView.h"
 
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_part_layer.h"
 #include "kis_factory.h"
+#include "kis_paint_device_impl.h"
 #include <kis_meta_registry.h>
 
 KisChildDoc::KisChildDoc ( KisDoc * kisDoc, const QRect & rect, KoDocument * childDoc )
@@ -54,33 +58,65 @@ KisChildDoc::~KisChildDoc ()
 }
 
 
-KisPartLayer::KisPartLayer(KisImageSP img, KisChildDoc * doc)
-    : super(img, "embedded document", OPACITY_OPAQUE,
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""))
-    , m_doc(doc)
+KisPartLayerImpl::KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc)
+    : super(img, i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
-    repaint();
+    m_cache = new KisPaintDeviceImpl(
+            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
+    m_activated = true; //false;
+    image() -> notify(m_doc -> geometry());
+
+    // XXX Waiting for dfaure...
+    /*QPtrList<KoView> views = doc -> document() -> views();
+    for (uint i = 0; i < views.count(); i++) {
+        connect(views.at(i), SIGNAL(childActivated(KoDocumentChild*)),
+                this, SLOT(childActivated(KoDocumentChild*)));
+        connect(views.at(i), SIGNAL(childDeactivated(KoDocumentChild*)),
+                this, SLOT(childDeactivated(KoDocumentChild*)));
+}*/
+    connect(v, SIGNAL(childActivated(KoDocumentChild*)),
+            this, SLOT(childDeactivated(KoDocumentChild*)));
+    connect(v, SIGNAL(childDeactivated(KoDocumentChild*)),
+            this, SLOT(childActivated(KoDocumentChild*)));
+    connect(v, SIGNAL(childUnselected(KoDocumentChild*)),
+            this, SLOT(childActivated(KoDocumentChild*)));
 }
 
-KisPartLayer::~KisPartLayer()
+KisPartLayerImpl::~KisPartLayerImpl()
 {
 }
 
-// Called when the layer is made active: this is essentially a duplication of the code in KoView::partActivateEvent( KParts::PartActivateEvent *event )
-void KisPartLayer::activate()
+KisLayerSP KisPartLayerImpl::clone() const {
+    kdDebug() << "Whoops, clone for partlayers, how do I do that best?" << endl;
+    return 0;
+}
+
+// Called when the layer is made active
+void KisPartLayerImpl::childActivated(KoDocumentChild* child)
 {
     kdDebug() << "Activate object layer\n";
-    repaint();
+
+    // Clear the image, so that if we move the part while activated, no ghosts show up
+    //if (!m_activated /*&& child == childDoc()*/) {
+        QRect rect = extent();
+        m_activated = true;
+        image() -> notify(rect);
+    //}
 }
 
 // Called when another layer is made inactive
-void KisPartLayer::deactivate()
+void KisPartLayerImpl::childDeactivated(KoDocumentChild* child)
 {
     kdDebug() << "Deactivate object layer: going to render onto paint device.\n";
-    repaint();
+    // We probably changed, notify the image that it needs to repaint where we currently updated
+    // We use the original geometry
+    //if (m_activated/* && child == childDoc()*/) {
+    //    m_activated = false;
+        image() -> notify(m_doc -> geometry());
+    //}
 }
 
-void KisPartLayer::setX(Q_INT32 x) {
+void KisPartLayerImpl::setX(Q_INT32 x) {
     QRect rect = m_doc -> geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
@@ -88,10 +124,10 @@ void KisPartLayer::setX(Q_INT32 x) {
     rect.moveBy(x - this -> x(), 0);
     m_doc -> setGeometry(rect);
 
-    super::setX(x);
+//    m_paintLayer -> setX(x);
 }
 
-void KisPartLayer::setY(Q_INT32 y) {
+void KisPartLayerImpl::setY(Q_INT32 y) {
     QRect rect = m_doc -> geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
@@ -99,10 +135,10 @@ void KisPartLayer::setY(Q_INT32 y) {
     rect.moveBy(0, y - this -> y());
     m_doc -> setGeometry(rect);
 
-    super::setY(y);
+//    m_paintLayer -> setY(y);
 }
 
-void KisPartLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
+void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
     uchar *j = img.bits();
     QRect rect = m_doc -> geometry();
 
@@ -120,10 +156,10 @@ void KisPartLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, 
 
 }
 
-void KisPartLayer::repaint() {
-    if (!m_doc || !m_doc->document()) return;
-
-    paintDevice() -> clear();
+//void KisPartLayerImpl::repaint() {
+// XXX maybe add x,y,w,h params and use them
+KisPaintDeviceImplSP KisPartLayerImpl::prepareProjection(KisPaintDeviceImplSP projection) {
+    if (!m_doc || !m_doc->document() || !m_activated) return 0;
 
     // XXX: zoom!
 
@@ -133,9 +169,8 @@ void KisPartLayer::repaint() {
     QRect sizeRect = rect;
     sizeRect.moveTopLeft(QPoint(0,0));
 
-    QPixmap pm(sizeRect.width(), sizeRect.height());
-    pm.fill(QColor(qRgba(255,255,255,255)));
-
+    QPixmap pm(projection -> convertToQImage(0 /*srgb XXX*/,
+                                             x(), y(), sizeRect.width(), sizeRect.height()));
     QPainter painter(&pm);
 
     // KWord's KWPartFrameSet::drawFrameContents has some interesting remarks concerning
@@ -149,11 +184,10 @@ void KisPartLayer::repaint() {
 
     //assume the part is sRGB for now, and that "" is sRGB
     // And we need to paint offsetted
-    paintDevice() -> convertFromQImage(qimg, "", rect.left(), rect.top());
+    m_cache -> clear();
+    m_cache -> convertFromQImage(qimg, "", rect.left(), rect.top());
 
-    // We probably changed, notify the image that it needs to repaint where we currently updated
-    // We use the original geometry
-    image() -> notify(rect);
+    return m_cache;
 }
 
 #include "kis_part_layer.moc"

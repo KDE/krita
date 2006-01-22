@@ -94,7 +94,6 @@ void KisCustomBrush::slotAddPredefined() {
 
     // Save it to that file 
     m_brush -> setFilename(file.name());
-    kdDebug() << "Saving: " << m_brush -> save() << endl;
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
@@ -122,8 +121,6 @@ void KisCustomBrush::createBrush() {
             m_brush -> makeMaskImage();
         return;
     }
-
-    kdDebug() << "Creating animated!" << endl;
 
     // For each layer in the current image, create a new image, and add it to the list
     QValueVector< QValueVector<KisPaintDeviceImpl*> > devices;

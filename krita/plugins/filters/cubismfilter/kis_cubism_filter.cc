@@ -68,17 +68,18 @@ bool KisCubismFilter::workWith(KisColorSpace* cs)
 }
 
 
-void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
+                               KisFilterConfiguration* configuration, const QRect& rect)
 {
-//         Q_INT32 x = rect.x(), y = rect.y();
-//         Q_INT32 width = rect.width();
-//         Q_INT32 height = rect.height();
+    Q_ASSERT(src);
+    Q_ASSERT(dst);
+    Q_ASSERT(configuration);
+    
+    //read the filter configuration values from the KisFilterConfiguration object
+    Q_UINT32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
+    Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
 
-        //read the filter configuration values from the KisFilterConfiguration object
-        Q_UINT32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
-        Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
-
-        cubism(src, dst, rect, tileSize, tileSaturation);
+    cubism(src, dst, rect, tileSize, tileSaturation);
 }
 
 void KisCubismFilter::randomizeIndices (Q_INT32 count, Q_INT32* indices)
@@ -341,6 +342,9 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
 
 void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)
 {
+    Q_ASSERT(src);
+    Q_ASSERT(dst);
+    
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
         Q_INT32 depth = src -> colorSpace() -> nColorChannels();

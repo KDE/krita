@@ -56,11 +56,6 @@ k_dcop:
      */
     DCOPRef colorSpace() const;
 
-    /**
-     * Set the colorspace of this image
-     */
-    void setColorSpace(DCOPRef colorSpace);
-
 
 private:
 

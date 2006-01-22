@@ -18,6 +18,8 @@
 #ifndef KIS_GROUP_LAYER_H_
 #define KIS_GROUP_LAYER_H_
 
+#include <ksharedptr.h>
+
 #include "kis_layer.h"
 #include "kis_types.h"
 
@@ -61,13 +63,16 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-            kdDebug(41001) << "Visiting on group layer " << name()
+            kdDebug(41001) << "GROUP\t\t" << name()
+                    << " dirty: " << dirty()
                     << ", " << m_layers.count() << " children "
-                    << ", projection: " << m_projection << "\n";
+                    << ", projection: " << m_projection
+                    << "\n";
             return v.visit(this);
         };
 
-    virtual KisPaintDeviceImplSP projection() { return m_projection; }
+    virtual void resetProjection();
+    virtual KisPaintDeviceImplSP projection() const { return m_projection; }
 
     virtual uint childCount() const;
 

@@ -323,9 +323,6 @@ public:
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();
 
-    /** Set the specified selection as the active selection for this paintdevice */
-    //void setSelection(KisSelectionSP selection);
-
     /** Adds the specified selection to the currently active selection for this paintdevice */
     void addSelection(KisSelectionSP selection);
 

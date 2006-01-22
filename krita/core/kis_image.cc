@@ -507,11 +507,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         m_bkg = new KisBackground();
         Q_CHECK_PTR(m_bkg);
 
-        m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
-        Q_CHECK_PTR(m_projection);
-
         m_rootLayer = static_cast<KisGroupLayer*>(rhs.m_rootLayer->clone().data());
-
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
         m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
@@ -600,9 +596,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_bkg = new KisBackground();
     Q_CHECK_PTR(m_bkg);
 
-    m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
-    Q_CHECK_PTR(m_projection);
-
     m_rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
     Q_CHECK_PTR(m_rootLayer);
 
@@ -642,9 +635,6 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         m_width = w;
         m_height = h;
-
-        m_projection = new KisPaintDeviceImpl(this, colorSpace(), "projection");
-        Q_CHECK_PTR(m_projection);
 
         if (cropLayers) {
             KisCropVisitor v(QRect(x, y, w, h));
@@ -690,8 +680,6 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
         m_width = w;
         m_height = h;
-
-        m_projection = new KisPaintDeviceImpl(this, m_colorSpace);
 
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
@@ -750,9 +738,6 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
 
     m_width = w;
     m_height = h;
-
-    m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
-    Q_CHECK_PTR(m_projection);
 
     undoAdapter()->endMacro();
 
@@ -817,9 +802,6 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         m_width = w;
         m_height = h;
 
-        m_projection = new KisLayer(this, "projection", OPACITY_OPAQUE);
-        Q_CHECK_PTR(m_projection);
-
         undoAdapter()->endMacro();
 
         emit sigSizeChanged(KisImageSP(this), w, h);
@@ -837,13 +819,13 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     }
 
     if (undoAdapter() && m_adapter->undo()) {
-        m_adapter->beginMacro(i18n("Convert Image Type")); //XXX: fix when string freeze over
+        m_adapter->beginMacro(i18n("Convert Image Type"));
     }
+
+    setColorSpace(dstColorSpace);
 
     KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_rootLayer->accept(visitor);
-
-    m_projection->convertTo(dstColorSpace, renderingIntent);
 
     if (undoAdapter() && m_adapter->undo()) {
 
@@ -851,13 +833,11 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
                                                          m_colorSpace, dstColorSpace));
         m_adapter->endMacro();
     }
-
-    setColorSpace(dstColorSpace);
-
-    notifyLayersChanged();
-
-    emit sigNonActiveLayersUpdated();
-    notify();
+    emit sigLayerPropertiesChanged( m_activeLayer );
+    emit sigNonActiveLayersUpdated(); // This makes sure the
+                                      // thumbnails are updated
+    notify(); // This makes sure Krita updates the rendered
+              // image.currentColorSpaceChanged
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -965,7 +945,7 @@ KisLayerSP KisImage::activeLayer() const
 
 KisPaintDeviceImplSP KisImage::projection() const
 {
-    return m_projection;
+    return m_rootLayer->projection();
 }
 
 KisLayerSP KisImage::activate(KisLayerSP layer)
@@ -1021,6 +1001,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             emit sigLayerAdded(layer);
             activate(layer);
         }
+        layer->setDirty(true);
         notify(layer->extent());
     }
 
@@ -1124,6 +1105,7 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
         notify();
     }
 
+    layer->setDirty(true);
     return success;
 }
 
@@ -1139,6 +1121,7 @@ Q_INT32 KisImage::nHiddenLayers() const
 
 void KisImage::flatten()
 {
+
     KisGroupLayerSP oldRootLayer = m_rootLayer;
 
     m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
@@ -1164,6 +1147,7 @@ void KisImage::flatten()
 
 void KisImage::mergeVisibleLayers()
 {
+    // XXX: Simply bltCopy the projection onto the new layer and remove the old layers
 /*
     vKisLayerSP beforeLayers = m_layers;
 
@@ -1285,9 +1269,6 @@ void KisImage::renderToPainter(Q_INT32 x1,
 {
 
 
-//    QRect r = m_projection->extent();
-//    kdDebug() << "projection extent: " << r.x() << ", " << r.y() << ", " << r.width() << ", " << r.height() << "...\n";
-
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
 
@@ -1297,7 +1278,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
         updateProjection(rc);
     }
 
-    QImage img = m_projection -> convertToQImage(monitorProfile, x1, y1, w, h, exposure);
+    QImage img = m_rootLayer->projection()->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
 #ifdef __BIG_ENDIAN__
         //cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
@@ -1346,9 +1327,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
 
-    // XXX: Can we count on the projection always containing all of the image?
-    //      I'm not so sure... BSAR
-    QImage img = m_projection->convertToQImage(profile, x1, y1, w, h, exposure);
+    QImage img = m_rootLayer->projection()->convertToQImage(profile, x1, y1, w, h, exposure);
 
     if (!img.isNull()) {
 
@@ -1363,25 +1342,21 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
 
 KisPaintDeviceImplSP KisImage::mergedImage()
 {
-    return m_projection;
+    return m_rootLayer->projection();
 }
 
 KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 {
-    return m_projection -> colorAt(x, y);
+    return m_rootLayer->projection()->colorAt(x, y);
 }
 
 void KisImage::updateProjection(const QRect& rc)
 {
+    // kdDebug() << kdBacktrace() << "\n";
+
     QRect rect = rc & QRect(0, 0, width(), height());
 
-    // Composite the image
-    KisFillPainter gc;
-    gc.begin(m_projection);
-    gc.eraseRect(rect);
-    gc.end();
-
-    KisMergeVisitor visitor(this, m_projection, rc);
+    KisMergeVisitor visitor(this, m_rootLayer->projection(), rc);
     m_rootLayer -> accept(visitor);
 
     m_renderinit = true;
@@ -1395,7 +1370,8 @@ void KisImage::notify()
 void KisImage::notify(const QRect& rc)
 {
     QRect rect = rc & QRect(0, 0, width(), height());
-
+    if (m_activeLayer)
+        m_activeLayer->setDirty(true); // Shouldn't do that here, but where we modify each layer.
     updateProjection(rect);
 
     if (rect.isValid()) {
@@ -1465,13 +1441,7 @@ KisColorSpace * KisImage::colorSpace() const
 void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
-
-    m_projection = new KisPaintDeviceImpl(this, colorSpace);
-    Q_CHECK_PTR(m_projection);
-
     emit sigColorSpaceChanged(colorSpace);
-
-    notify();
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

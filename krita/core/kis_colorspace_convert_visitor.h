@@ -23,6 +23,8 @@
 #include "kis_layer_visitor.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device_impl.h"
+#include "kis_adjustment_layer.h"
+#include "kis_group_layer.h"
 
 class KisColorSpaceConvertVisitor :public KisLayerVisitor {
 public:
@@ -53,18 +55,24 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 
 bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
+    // Clear the projection, we will have to re-render everything.
+    // The image is already set to the new colorspace, so this'll work.
+    layer->resetProjection();
+    
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
         child = child->nextSibling();
     }
-
+    layer->setDirty(true);
     return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
-    layer -> paintDevice() -> convertTo(m_dstColorSpace, m_renderingIntent);
+    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
+
+    layer->setDirty(true);
     return true;
 }
 
@@ -74,8 +82,10 @@ bool KisColorSpaceConvertVisitor::visit(KisPartLayer *)
 }
 
 
-bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer *)
+bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
+    layer->resetCache();
+    layer->setDirty(true);
     return true;
 }
 

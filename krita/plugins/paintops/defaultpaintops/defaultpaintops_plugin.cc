@@ -46,7 +46,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, 
 {
      setInstance(DefaultPaintOpsPluginFactory::instance());
 
-     kdDebug() << "DefaultPaintOpsPlugin. Class: "
+     kdDebug(41006) << "DefaultPaintOpsPlugin. Class: "
            << className()
            << ", Parent: "
            << parent -> className()

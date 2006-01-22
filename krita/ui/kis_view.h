@@ -321,7 +321,7 @@ private:
 //    void eraseGuides();
 //    void paintGuides();
 //    void updateGuides();
-    void viewGuideLines();
+//    void viewGuideLines();
 
     void imgUpdateGUI();
 

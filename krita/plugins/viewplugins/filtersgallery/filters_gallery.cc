@@ -50,7 +50,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
         : KParts::Plugin(parent, name)
 {
 
-    kdDebug() << "FiltersGallery plugin. Class: "
+    kdDebug(41006) << "FiltersGallery plugin. Class: "
           << className()
           << ", Parent: "
           << parent -> className()

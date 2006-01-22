@@ -115,8 +115,8 @@ void KisHistogramWidget::slotZoomOut() {
 }
 
 void KisHistogramWidget::slide(int val) {
-    kdDebug() << "slided to " << val << " viewing from: "
-            << ((static_cast<double>(val) / 100.0) * (1.0 - m_width)) << endl;
+    //kdDebug() << "slided to " << val << " viewing from: "
+    //        << ((static_cast<double>(val) / 100.0) * (1.0 - m_width)) << endl;
     // Beware: at the END (e.g. 100), we want to still view m_width:
     setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
 }

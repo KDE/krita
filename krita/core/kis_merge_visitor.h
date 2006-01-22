@@ -35,11 +35,18 @@
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
+    /**
+     * Don't even _think_ of creating a merge visitor without a projection; without a projection,
+     * the adjustmentlayers won't work.
+     */
     KisMergeVisitor(KisImageSP img, KisPaintDeviceImplSP projection, const QRect& rc) :
         KisLayerVisitor()
     {
+        Q_ASSERT(img);
+        Q_ASSERT(projection);
+
         m_img = img;
-        m_projection = projection; // XXX: Is this the full projection of all groups, or just the projection for the current layer group?
+        m_projection = projection;
         m_rc = rc;
 /*
         m_insertMergedAboveLayer = 0;
@@ -86,6 +93,7 @@ public:
             m_img -> rm(layer);
         }
 */
+        layer->setDirty( false );
         return true;
     }
 
@@ -94,24 +102,74 @@ public:
         if (!layer -> visible())
             return true;
 
-        //KisPaintDeviceImplSP dst;
-        //if (m_projection)
-        //    dst = m_projection;
-        //else
-        //    dst = new KisPaintDeviceImpl(m_img, m_img->colorSpace());
-        //KisPainter painter(dst);
+        // No layers in this group are dirty, we're not
+        // dirty, we're not going to recomposite. Our
+        // projection is up to date.
+        if (!layer->dirty())
+            return true;
+        
+        // Get the first layer in this group to start compositing with
+        KisLayerSP child = layer->lastChild();
+        KisLayerSP startWith = layer->lastChild();
+        KisAdjustmentLayerSP adjLayer = 0;
 
-        // XXX Check if any of the layers in the group are changed; if not, don't visit
+        // Look through all the layer, searching for the first dirty layer
+        // if it's found, and if we have an adj. layer, composite from the
+        // first adjustment layer searching back from the first dirty layer
+        while (child) {
+            KisAdjustmentLayerSP tmpAdjLayer = dynamic_cast<KisAdjustmentLayer*>(child.data());
+            if (tmpAdjLayer) {
 
-        KisFillPainter gc;
-        gc.begin(layer->projection());
-        gc.eraseRect(m_rc);
+                // If this adjustment layer is dirty, start compositing with the
+                // previous adj. layer, if there's one.
+                if (tmpAdjLayer->dirty() && adjLayer != 0) {
+                    startWith = adjLayer->prevSibling();
+                    break;
+                }
+                else {
+                    // This is the first adj. layer that is not dirty -- the perfect starting point
+                    adjLayer = tmpAdjLayer;
+                }
+            }
+            else {
+                // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
+                // with a cache, we'll start from there.
+                if (child->dirty()) {
+                    if (adjLayer != 0) {
+                        // the first layer on top of the adj. layer
+                        startWith = adjLayer->prevSibling();
+                    }
+                    // break here: if there's no adj layer, we'll start with the layer->lastChild
+                    break;
+                }
+            }
+            child = child->prevSibling();
+        }
+
+        if (startWith == 0) {
+            // The projection is apparently still up to date, but why was it marked dirty, then?
+            return true;
+        }
+
+        bool first = true; // The first layer in a stack needs special compositing
+
+        // Fill the projection either with the cached data, or erase it.
+        KisFillPainter gc(layer->projection());
+        if (adjLayer != 0) {
+            gc.bitBlt(m_rc.left(), m_rc.top(),
+                       COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
+                       m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+            first = false;
+        }
+        else {
+            gc.eraseRect(m_rc);
+            first = true;
+        }
         gc.end();
         
         KisMergeVisitor visitor(m_img, layer->projection(), m_rc);
-        bool first = true;
 
-        KisLayerSP child = layer->lastChild();
+        child = startWith;
 
         while(child)
         {
@@ -140,31 +198,22 @@ public:
             child = child->prevSibling();
         }
 
-        //if (!m_projection) {
-            //Q_INT32 sx, sy, dx, dy, w, h;
-
-            //QRect rc = layer->projection()->extent() & rc;
-            //sx= rc.left();
-            //sy = rc.top();
-            //w = rc.width();
-            //h = rc.height();
-            //dx = sx;
-            //dy = sy;
+        // If this is the root layer, the entire stack is composited onto the projection of the root layer,
+        // else composite the contents of the projection of this group layer
+        // onto the projection of the visitor
+        if (m_projection != layer->projection()) {
             KisPainter gc2(m_projection);
-            gc2.bitBlt(m_rc.left(), m_rc.top(), layer->compositeOp(), layer->projection(), layer->opacity(), m_rc.left(),
+            gc2.bitBlt(m_rc.left(), m_rc.top(), layer->compositeOp(), layer->projection(), OPACITY_OPAQUE, m_rc.left(),
                       m_rc.top(), m_rc.width(), m_rc.height());
             gc2.end();
-        //}
-
+        }
+        layer->setDirty(false);
         return true;
     }
 
     virtual bool visit(KisPartLayer* layer)
     {
-        kdDebug() << "Mergin parts layer" << endl;
-
-        if (!m_projection) {
-            kdDebug() << "No projection to paint above, abort" << endl;
+        if (m_projection == 0) {
             return false;
         }
         if (!layer -> visible())
@@ -193,17 +242,39 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        Q_ASSERT(m_projection);
+        Q_ASSERT(layer->cachedPaintDevice());
+
+        if (m_projection == 0) {
+            return true;
+        }
+        
         if (!layer->visible())
             return true;
 
         KisFilterConfiguration * cfg = layer->filter();
-        kdDebug() << "Going to do adjustment layer magick " << cfg->name()
-                << " projection layer " << m_projection
-                << endl;
+        Q_ASSERT(cfg);
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
-        if (KisSelectionSP selection = layer->selection())
-            KisSelectionSP oldSelection = m_projection->setSelection(selection);
-        f->process(m_projection, m_projection, cfg, m_rc);
+        Q_ASSERT(f);
+        
+        KisSelectionSP selection = layer->selection();
+        if (selection != 0) {
+            m_projection->setSelection(selection);
+        }
+        
+        // Filter onto the cached paint device
+
+        f->process(m_projection, layer->cachedPaintDevice(), cfg, m_rc);
+
+        KisPainter gc(m_projection);
+
+        // Copy the cached paint device onto the projection
+        gc.bitBlt(m_rc.left(), m_rc.top(),
+                  COMPOSITE_COPY, layer->cachedPaintDevice(), OPACITY_OPAQUE,
+                  m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+
+        m_projection->deselect();
+        layer->setDirty(false);
         return true;
     }
     

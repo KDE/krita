@@ -167,7 +167,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
     Q_INT32 srcPixelSize = pixelSize();
     Q_INT32 dstPixelSize = dstColorSpace -> pixelSize();
 
-//    kdDebug() << "src space: " << id().name() << ", src profile " << srcProfile->productName()
+//    kdDebug(41004) << "src space: " << id().name() << ", src profile " << srcProfile->productName()
 //              << ", dst space: " << dstColorSpace->id().name() << ", dst profile " << dstProfile->productName()
 //              << ", number of pixels: " << numPixels << "\n";
 
@@ -185,7 +185,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 				 dstColorSpace->getProfile(),
 				 renderingIntent);
             if (tf) {
-//                  kdDebug() << "Going to add transform to cache "
+//                  kdDebug(41004) << "Going to add transform to cache "
 //                            << " m_profile: " << m_profile->productName()
 //                            << " dstProfile " << dstColorSpace->getProfile()->productName() << "\n";
 		// XXX: Should we clear the transform cache if it gets too big?
@@ -551,7 +551,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
 
         // If our conversion cache is too small, extend it.
         if (!m_conversionCache.resize( len, QGArray::SpeedOptim )) {
-            kdDebug() << "Could not allocate enough memory for the conversion!\n";
+            kdWarning() << "Could not allocate enough memory for the conversion!\n";
             // XXX: We should do a slow, pixel by pixel bitblt here...
             abort();
         }

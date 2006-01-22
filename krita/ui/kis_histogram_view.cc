@@ -60,9 +60,6 @@ void KisHistogramView::setPaintDevice(KisPaintDeviceImplSP dev)
     if (!m_currentProducer)
         return;
 
-    kdDebug() << "Histogram using the Histogram Producer "
-              << m_currentProducer -> id().name() << endl;
-
     m_from = m_currentProducer -> viewFrom();
     m_width = m_currentProducer -> viewWidth();
 
@@ -230,8 +227,7 @@ void KisHistogramView::setChannels()
     KisIDList list = KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
 
     if (list.count() == 0) {
-        kdDebug() << "Attention! No native histogram for this colorspace. Using converted RGB"
-                  << endl;
+        // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning
         KisGenericRGBHistogramProducerFactory f;
         addProducerChannels(f.generate());
     } else {
@@ -270,8 +266,7 @@ void KisHistogramView::updateHistogram()
     Q_UINT32 height = this -> height();
     int selFrom, selTo; // from - to in bins
 
-    if (!m_currentProducer) { // Something's very wrong
-        kdDebug() << "No producer for this colorspace to update histogram with!!" << endl;
+    if (!m_currentProducer) { // Something's very wrong: no producer for this colorspace to update histogram with!
         return;
     }
 

@@ -156,7 +156,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
         return;
     }
 
-//     kdDebug() << "KisPainter::bitBlt rect "
+//     kdDebug(41001) << "KisPainter::bitBlt rect "
 //               << " dx: " << dx
 //               << " dy: " << dy
 //               << " sx: " << sx

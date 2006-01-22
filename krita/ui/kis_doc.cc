@@ -318,7 +318,6 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
     m_conversionDepth = attr.toInt();
 
     if (!root.hasChildNodes()) {
-        // No children == empty file == show create dialog
         return false; // XXX used to be: return slotNewImage();
     }
 
@@ -763,10 +762,8 @@ KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
             return this;
 
         if (doc == partLayer -> childDoc() -> document()) {
-            kdDebug() << "Embedded part hit!" << endl;
             return doc;
         }
-        kdDebug() << "Embedded part miss :-(" << endl;
         return this;
     }
     return doc;
@@ -804,7 +801,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
     img->addLayer(layer, img->rootLayer(),0);
     img->activate(layer);
-    img->notify();
+    //img->notify();
 
     m_currentImage = img;
 
@@ -848,10 +845,10 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     for (uint i = 0; i < actions.count(); i++)
         actions.at(i) -> act(layer->paintDevice(), img -> width(), img -> height());
 
-    img -> setBackgroundColor(bgColor);
-    img -> addLayer(layer, img->rootLayer(), 0);
+    img->setBackgroundColor(bgColor);
+    img->addLayer(layer, img->rootLayer(), 0);
     img->activate(layer);
-    img -> notify();
+    //img->notify();
 
     m_currentImage = img;
 
@@ -866,7 +863,6 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
 
 KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-    kdDebug() << "Going to create the view\n";
     KisView * v = new KisView(this, this, parent, name);
     Q_CHECK_PTR(v);
 
@@ -1050,6 +1046,13 @@ void KisDoc::setCurrentImage(KisImageSP image)
     m_currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();
+}
+
+void KisDoc::initEmpty()
+{
+    KisConfig cfg;
+    KisColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 
 #include "kis_doc.moc"

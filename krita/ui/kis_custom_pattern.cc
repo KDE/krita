@@ -88,7 +88,6 @@ void KisCustomPattern::slotAddPredefined() {
 
     // Save it to that file 
     m_pattern -> setFilename(file.name());
-    kdDebug() << "Saving: " << m_pattern -> save() << endl;
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to

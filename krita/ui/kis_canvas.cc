@@ -769,7 +769,7 @@ void KisCanvasWidget::X11TabletDevice::enableEvents(QWidget *widget) const
                                            m_eventClassList.count());
     
         if (result != Success) {
-            kdDebug() << "Failed to select extension events for " << m_name << endl;
+            kdDebug(41001) << "Failed to select extension events for " << m_name << endl;
         }
     }
 }
@@ -844,12 +844,8 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
         wheel = translateAxisValue(wheelAxisValue, m_axisInfo[m_wheelAxis]);
     }
 
-    //kdDebug() << "Xtilt " << tilt.x() << " yTilt " << tilt.y() << " wheel " << wheel << endl;
-
     //QString ids;
     //ids.sprintf("Tool ID: %8x Serial Number: %8x", toolID, serialNumber);
-
-    //kdDebug() << ids << endl;
 
     return State(pos, pressure, tilt, wheel, toolID, serialNumber);
 }
@@ -918,7 +914,6 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             if (XCheckTypedWindowEvent(x11Display, winId, MotionNotify, &mouseEvent)) {
                 if (motion -> time == mouseEvent.xmotion.time) {
                     // Do nothing
-                    //  kdDebug() << "Consumed core event" << endl;
                 } else {
                     XPutBackEvent(x11Display, &mouseEvent);
                 }
@@ -939,7 +934,6 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
                     // Look for an accompanying core event.
                     if (!XCheckTypedWindowEvent(x11Display, winId, MotionNotify, &coreMotionEvent)) {
                         // Do nothing
-                        // kdDebug() << "Didn't find an expected core move event" << endl;
                     }
                 }
             }
@@ -964,7 +958,6 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             if (XCheckTypedWindowEvent(x11Display, winId, ButtonPress, &mouseEvent)) {
                 if (buttonPressed -> time == mouseEvent.xbutton.time) {
                     // Do nothing
-                    // kdDebug() << "Consumed core event" << endl;
                 }
                 else {
                     XPutBackEvent(x11Display, &mouseEvent);
@@ -1117,7 +1110,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     useOpenGL = false;
 #else
     if (useOpenGL && !QGLFormat::hasOpenGL()) {
-        kdDebug() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        kdDebug(41001) << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         useOpenGL = false;
     }
 

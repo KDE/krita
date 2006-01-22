@@ -87,14 +87,14 @@ KisPartLayerImpl::~KisPartLayerImpl()
 }
 
 KisLayerSP KisPartLayerImpl::clone() const {
-    kdDebug() << "Whoops, clone for partlayers, how do I do that best?" << endl;
+    kdDebug(41001) << "Whoops, clone for partlayers, how do I do that best?" << endl;
     return 0;
 }
 
 // Called when the layer is made active
 void KisPartLayerImpl::childActivated(KoDocumentChild* child)
 {
-    kdDebug() << "Activate object layer\n";
+    kdDebug(41001) << "Activate object layer\n";
 
     // Clear the image, so that if we move the part while activated, no ghosts show up
     //if (!m_activated /*&& child == childDoc()*/) {
@@ -107,7 +107,7 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
 // Called when another layer is made inactive
 void KisPartLayerImpl::childDeactivated(KoDocumentChild* child)
 {
-    kdDebug() << "Deactivate object layer: going to render onto paint device.\n";
+    kdDebug(41001) << "Deactivate object layer: going to render onto paint device.\n";
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry
     //if (m_activated/* && child == childDoc()*/) {

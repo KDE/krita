@@ -232,7 +232,6 @@ void KisFilterManager::slotApplyFilter(int i)
     KisFilterConfiguration * oldConfig = m_lastFilterConfig;
     KisFilter * oldFilter = m_lastFilter;
 
-    //kdDebug() << "With index " << i << " found filter: " << m_filterList[i].name() << "\n";
     m_lastFilter = KisFilterRegistry::instance()->get(m_filterList[i]);
 
     if (!m_lastFilter) {

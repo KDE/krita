@@ -95,7 +95,7 @@ QValueList<KisResource*> KisResourceServerBase::resources()
 void KisResourceServerBase::addResource(KisResource* resource)
 {
     if (!resource -> valid()) {
-        kdDebug() << "Tried to add an invalid resource!" << endl;
+        kdDebug(41001) << "Tried to add an invalid resource!" << endl;
         return;
     }
 
@@ -113,15 +113,15 @@ public:
         , m_server(server)
         , m_fileNames( files )
     {
-        //kdDebug() << "Created resource loader thread " << m_server->type() << "\n";
+        kdDebug(41001) << "Created resource loader thread " << m_server->type() << "\n";
     }
 
 
     void run()
     {
-        //kdDebug() << "Started resource loader thread " << m_server->type() << "\n";
+        kdDebug(41001) << "Started resource loader thread " << m_server->type() << "\n";
         m_server->loadResources(m_fileNames);
-        //kdDebug() << "Done resource loader thread " << m_server->type() << "\n";
+        kdDebug(41001) << "Done resource loader thread " << m_server->type() << "\n";
     }
 
 private:
@@ -139,7 +139,7 @@ QStringList getFileNames( QString extensions, QString type )
     QStringList::Iterator it;
     for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
         QString s = (*it);
-        //kdDebug() << "Going to find resources for " << type << ", " << s << "\n";
+        kdDebug(41001) << "Going to find resources for " << type << ", " << s << "\n";
         fileNames += KisFactory::instance()->dirs() -> findAllResources(type.ascii(), (*it));
     }
     return fileNames;

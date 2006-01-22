@@ -125,7 +125,6 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
     m_partLayerAction -> plug( m_newLayerMenu );
     connect(m_partLayerAction, SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
-    connect(m_newLayerMenu, SIGNAL(aboutToShow()), this, SLOT(slotAddMenuAboutToShow()));
     connect(m_newLayerMenu, SIGNAL(activated(int)), this, SLOT(slotAddMenuActivated(int)));
 
 
@@ -250,8 +249,12 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
 
 void KisLayerBox::slotImageUpdated()
 {
-    Q_ASSERT(list() -> activeLayer() && m_image -> activeLayer() && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
-    if (!(list() -> activeLayer() && m_image -> activeLayer() && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
+    Q_ASSERT(list() -> activeLayer()
+            && m_image -> activeLayer()
+            && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
+    if (!(list() -> activeLayer()
+           && m_image -> activeLayer()
+           && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
         return;
     if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
         m_modified.append(list() -> activeLayer() -> id());
@@ -395,10 +398,8 @@ void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 
 void KisLayerBox::slotRequestLayerProperties(LayerItem* item)
 {
-    kdDebug() << "2 " << item << endl;
     if (KisLayerSP layer = m_image -> findLayer(item -> id()))
     {
-        kdDebug() << "3 " << layer << endl;
         emit sigRequestLayerProperties(layer);
     }
 }

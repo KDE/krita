@@ -676,7 +676,6 @@ void LayerList::contentsMouseDoubleClickEvent( QMouseEvent *e )
     {
         if( !layer->iconsRect().contains( layer->mapFromListView( e->pos() ) ) )
         {
-            kdDebug() << "1 " << layer << endl;
             emit requestLayerProperties( layer );
             emit requestLayerProperties( layer->id() );
         }

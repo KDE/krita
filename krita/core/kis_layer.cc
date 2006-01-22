@@ -216,6 +216,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     m_locked(false),
     m_visible(true),
     m_temporary(false),
+    m_dirty(false), // XXX: is a layer dirty on creation, or on adding to an image?
     m_name(name),
     m_parent(0),
     m_image(img),
@@ -234,6 +235,7 @@ KisLayer::KisLayer(const KisLayer& rhs) :
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
         m_temporary = rhs.m_temporary;
+        m_dirty = rhs.m_dirty;
         m_name = rhs.m_name;
         m_image = rhs.m_image;
         m_parent = 0;
@@ -243,6 +245,13 @@ KisLayer::KisLayer(const KisLayer& rhs) :
 
 KisLayer::~KisLayer()
 {
+}
+
+void KisLayer::setDirty(bool dirty)
+{
+    // If we're dirty, our parent is dirty, if we've got a parent
+    if (m_parent && dirty) m_parent->setDirty();
+    m_dirty = dirty;
 }
 
 KisGroupLayerSP KisLayer::parent() const

@@ -202,7 +202,7 @@ void KisScaleWorker::run()
     }
 
     QTime stoptime = QTime::currentTime ();
-    kdDebug() << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl;
+    kdDebug(41001) << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl;
 
     return;
 }

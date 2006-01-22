@@ -86,12 +86,7 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
         }
     }
 
-//    kdDebug() << "Ran Thread" << endl;
-//    kdDebug() << "Bin 0 @ channel 0: " << bins.at(0).at(0) << endl;
-//    kdDebug() << "Bin MAX @ channel 0: " << bins.at(0).at(nrOfBins-1) << endl;
-
     if (!m_stop) {
-//        kdDebug() << "And emitted completed" << endl;
         // This function is thread-safe; and it takes ownership of the event
         QApplication::postEvent(m_source, new QCustomEvent(EmitCompletedType));
     }

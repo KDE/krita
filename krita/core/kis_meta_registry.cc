@@ -28,7 +28,6 @@ KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
 
 KisMetaRegistry::KisMetaRegistry()
 {
-    kdDebug() << "meta registry constructed\n";
     // Create the colorspaces and load the profiles
 
     KGlobal::instance() -> dirs() -> addResourceType("kis_profiles",

@@ -51,14 +51,14 @@ KisOpenGLImageContext::KisOpenGLImageContext()
 
 KisOpenGLImageContext::~KisOpenGLImageContext()
 {
-    kdDebug() << "Destroyed KisOpenGLImageContext\n";
+    kdDebug(41001) << "Destroyed KisOpenGLImageContext\n";
 
     --SharedContextWidgetRefCount;
-    kdDebug() << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
+    kdDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
 
     if (SharedContextWidgetRefCount == 0) {
 
-        kdDebug() << "Deleting shared context widget\n";
+        kdDebug(41001) << "Deleting shared context widget\n";
         delete SharedContextWidget;
         SharedContextWidget = 0;
     }
@@ -68,21 +68,21 @@ KisOpenGLImageContext::~KisOpenGLImageContext()
 
 KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile)
 {
-    kdDebug() << "Created KisOpenGLImageContext\n";
+    kdDebug(41001) << "Created KisOpenGLImageContext\n";
 
     m_image = image;
     m_monitorProfile = monitorProfile;
     m_exposure = 0;
 
     if (SharedContextWidget == 0) {
-        kdDebug() << "Creating shared context widget\n";
+        kdDebug(41001) << "Creating shared context widget\n";
 
         SharedContextWidget = new QGLWidget(KisOpenGLCanvasFormat);
     }
 
     ++SharedContextWidgetRefCount;
 
-    kdDebug() << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
+    kdDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
 
     SharedContextWidget -> makeCurrent();
     glGenTextures(1, &m_backgroundTexture);
@@ -112,7 +112,7 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
 
         if (it != imageContextMap.end()) {
 
-            kdDebug() << "Sharing image context from map\n";
+            kdDebug(41001) << "Sharing image context from map\n";
 
             KisOpenGLImageContextSP context = (*it).second;
             context -> setMonitorProfile(monitorProfile);
@@ -122,12 +122,12 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
             KisOpenGLImageContext *imageContext = new KisOpenGLImageContext(image, monitorProfile);
             imageContextMap[image] = imageContext;
 
-            kdDebug() << "Added shareable context to map\n";
+            kdDebug(41001) << "Added shareable context to map\n";
 
             return imageContext;
         }
     } else {
-        kdDebug() << "Creating non-shareable image context\n";
+        kdDebug(41001) << "Creating non-shareable image context\n";
 
         return new KisOpenGLImageContext(image, monitorProfile);
     }
@@ -189,7 +189,6 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                 }
 
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
-                    //kdDebug() << "TexImage " << tileUpdateRect << endl;
 
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
                           GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
@@ -197,7 +196,6 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                     int xOffset = tileUpdateRect.x() - tileRect.x();
                     int yOffset = tileUpdateRect.y() - tileRect.y();
 
-                    //kdDebug() << "TexSubImage " << tileUpdateRect << endl;
                     glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, tileUpdateRect.width(), tileUpdateRect.height(),
                                     GL_BGRA, GL_UNSIGNED_BYTE, tileUpdateImage.bits());
                 }
@@ -206,7 +204,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
                 if (error != GL_NO_ERROR)
                 {
-                    kdDebug() << "Error loading texture: " << endl;
+                    kdDebug(41001) << "Error loading texture: " << endl;
                 }
             }
         }
@@ -340,7 +338,6 @@ void KisOpenGLImageContext::destroyImageTextureTiles()
 void KisOpenGLImageContext::slotImageUpdated(const QRect& rc)
 {
     QRect r = rc & m_image -> bounds();
-    //kdDebug() << "Slot image updated " << r << endl;
 
     updateImageTextureTiles(r);
     emit sigImageUpdated(r);
@@ -348,8 +345,6 @@ void KisOpenGLImageContext::slotImageUpdated(const QRect& rc)
 
 void KisOpenGLImageContext::slotImageSizeChanged(Q_INT32 w, Q_INT32 h)
 {
-    kdDebug() << "Slot image resized\n";
-
     createImageTextureTiles();
     updateImageTextureTiles(m_image -> bounds());
 

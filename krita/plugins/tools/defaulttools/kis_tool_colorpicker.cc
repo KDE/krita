@@ -252,7 +252,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     KisResourceServerBase* srv = KisResourceServerRegistry::instance() -> get("PaletteServer");
 
     if (!srv) {
-        kdDebug() << "No PaletteServer found for KisToolColorPicker" << endl;
+        kdDebug(41001) << "No PaletteServer found for KisToolColorPicker" << endl;
         return m_optionsWidget;
     }
 
@@ -260,12 +260,10 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 
     for(uint i = 0; i < palettes.count(); i++) {
         KisPalette* palette = dynamic_cast<KisPalette*>(*palettes.at(i));
-        if (!palette) {
-            kdDebug() << palette -> name() << " was not a palette!" << endl;
+        if (palette) {
+            m_optionsWidget -> cmbPalette -> insertItem(palette -> name());
+            m_palettes.append(palette);
         }
-
-        m_optionsWidget -> cmbPalette -> insertItem(palette -> name());
-        m_palettes.append(palette);
     }
 
     connect(srv, SIGNAL(resourceAdded(KisResource*)), this, SLOT(slotAddPalette(KisResource*)));
@@ -300,11 +298,9 @@ void KisToolColorPicker::slotChangeRadius(int value) {
 
 void KisToolColorPicker::slotAddPalette(KisResource* resource) {
     KisPalette* palette = dynamic_cast<KisPalette*>(resource);
-    if (!palette) {
-        kdDebug() << palette -> name() << " was not a palette!" << endl;
+    if (palette) {
+        m_optionsWidget-> cmbPalette -> insertItem(palette -> name());
+        m_palettes.append(palette);
     }
-
-    m_optionsWidget-> cmbPalette -> insertItem(palette -> name());
-    m_palettes.append(palette);
 }
 

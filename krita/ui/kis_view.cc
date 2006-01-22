@@ -222,6 +222,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_HDRExposure( 0 )
 {
 
+    Q_ASSERT(doc);
+    Q_ASSERT(adapter);
+    Q_ASSERT(parent);
+    
     setFocusPolicy( QWidget::StrongFocus );
 
     // Must come before input devices are referenced as this detects them.
@@ -355,7 +359,6 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
         m_toolBox -> setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 
-        kdDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
         Dock dock = stringToDock( element.attribute( "position" ).lower() );
 
         mainWindow()->addDockWindow( m_toolBox, dock, false);
@@ -368,6 +371,8 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 
 void KisView::removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id )
 {
+    Q_ASSERT(container);
+
     if( shell() && container == m_toolBox )
     {
         delete m_toolBox;
@@ -618,7 +623,7 @@ void KisView::setupActions()
                                       "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to disable "
                                       "the rulers from being displayed." ) );
 
-    m_guideAction = new KToggleAction( i18n( "Guide Lines" ), 0, this, SLOT( viewGuideLines() ), actionCollection(), "view_guidelines" );
+    //m_guideAction = new KToggleAction( i18n( "Guide Lines" ), 0, this, SLOT( viewGuideLines() ), actionCollection(), "view_guidelines" );
 
     // Add new palette
     new KAction(i18n("Add New Palette..."), 0, this, SLOT(slotAddPalette()),
@@ -791,9 +796,6 @@ void KisView::paletteChange(const QPalette& oldPalette)
 void KisView::showEvent(QShowEvent *)
 {
     if (!m_initialZoomSet && m_guiActivateEventReceived && isVisible()) {
-
-        kdDebug() << "Set zoom on SHOW\n";
-
         setInitialZoomLevel();
         m_initialZoomSet = true;
     }
@@ -1084,6 +1086,7 @@ void KisView::canvasRefresh()
 void KisView::layerUpdateGUI(bool enable)
 {
     KisImageSP img = currentImg();
+
     KisLayerSP layer;
     Q_INT32 nlayers = 0;
     Q_INT32 nvisible = 0;
@@ -1115,7 +1118,7 @@ void KisView::layerUpdateGUI(bool enable)
     m_toolManager->updateGUI();
     m_gridManager->updateGUI();
 
-    if (img -> activeDevice())
+    if (img && img -> activeDevice())
         emit currentColorSpaceChanged(img -> activeDevice() -> colorSpace());
 
     imgUpdateGUI();
@@ -1357,10 +1360,16 @@ double KisView::fitToCanvasZoomLevel() const
         fullCanvasHeight -= m_hRuler -> height();
     }
 
-    double xZoomLevel = static_cast<double>(fullCanvasWidth) / m_image -> width();
-    double yZoomLevel = static_cast<double>(fullCanvasHeight) / m_image -> height();
+    KisImageSP img = currentImg();
+    if (img) {
+        double xZoomLevel = static_cast<double>(fullCanvasWidth) / img -> width();
+        double yZoomLevel = static_cast<double>(fullCanvasHeight) / img -> height();
 
-    return QMIN(xZoomLevel, yZoomLevel);
+        return QMIN(xZoomLevel, yZoomLevel);
+    }
+    else {
+        return 1;
+    }
 }
 
 void KisView::slotFitToCanvas()
@@ -1440,7 +1449,7 @@ void KisView::slotEditPalette()
     KisPaletteChooser chooser(this);
     KisResourceServerBase* srv = KisResourceServerRegistry::instance() -> get("PaletteServer");
     if (!srv) {
-        kdDebug() << "No PaletteServer found for KisToolColorPicker" << endl;
+        kdDebug(41001) << "No PaletteServer found for KisToolColorPicker" << endl;
         return;
     }
     QValueList<KisResource*> resources = srv -> resources();
@@ -1449,7 +1458,7 @@ void KisView::slotEditPalette()
     for(uint i = 0; i < resources.count(); i++) {
         KisPalette* palette = dynamic_cast<KisPalette*>(*resources.at(i));
         if (!palette) {
-            kdDebug() << palette -> name() << " was not a palette!" << endl;
+            kdDebug(41001) << palette -> name() << " was not a palette!" << endl;
         }
 
         chooser.paletteList -> insertItem(palette -> name());
@@ -2384,6 +2393,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
         KisDlgAdjustmentLayer dlg(currentImg(), i18n("Adjustment Layer Properties"), this, "dlgadjustmentlayer");
         if (dlg.exec() == QDialog::Accepted)
         {
+            alayer -> setDirty( true );
             alayer -> setName( dlg.layerName() );
             alayer -> setFilter( dlg.filterConfiguration() );
         }
@@ -2402,6 +2412,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
             {
                 m_adapter -> beginMacro(i18n("Property Changes"));
                 layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
+                layer -> setDirty( true );
                 m_adapter -> endMacro();
             }
         }
@@ -2484,10 +2495,10 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     if ( !doc->showEmbedInitDialog(this) )
         return;
 
-    kdDebug() << "AddPartLayer: KoDocument is " << doc << endl;
+    kdDebug(41001) << "AddPartLayer: KoDocument is " << doc << endl;
     //img->bounds()
     KisChildDoc * childDoc = m_doc->createChildDoc(QRect(0,0,255,255), doc);
-    kdDebug() << "AddPartLayer: KisChildDoc is " << childDoc << endl;
+    kdDebug(41001) << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
     KisPartLayerImpl* partLayer = new KisPartLayerImpl(this, img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
@@ -2506,6 +2517,9 @@ void KisView::addAdjustmentLayer()
 
 void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
+    Q_ASSERT(parent);
+    Q_ASSERT(above);
+    
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -2528,15 +2542,16 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     }
 }
 
-void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection)
+void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name,
+                                 KisFilterConfiguration * filter, KisSelectionSP selection)
 {
+    Q_ASSERT(parent);
+    Q_ASSERT(above);
+    Q_ASSERT(filter);
+    
     KisImageSP img = currentImg();
     if (!img) return;
 
-    kdDebug() << "New adjustment layer name: "
-            << name << ", filter: "
-            << filter->name() << ", selection: "
-            << selection << "\n";
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addLayer(l, parent, above);
 }
@@ -2661,7 +2676,6 @@ void KisView::layersUpdated()
 
 void KisView::layerToggleVisible()
 {
-    kdDebug() << "toggle layer visible\n";
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -2995,16 +3009,16 @@ void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 
 void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 {
+    Q_ASSERT(event);
+    
     KStatusBar *sb = statusBar();
 
     if (sb)
         sb -> show();
 
     super::guiActivateEvent(event);
-
+    
     if (!m_initialZoomSet && isVisible()) {
-        kdDebug() << "Set zoom in GUI activate event\n";
-
         setInitialZoomLevel();
         m_initialZoomSet = true;
     }
@@ -3014,6 +3028,9 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
 {
+    Q_ASSERT(o);
+    Q_ASSERT(e);
+    
     switch (e -> type()) {
     case QEvent::TabletMove:
     case QEvent::TabletPress:
@@ -3180,9 +3197,9 @@ void KisView::updateGuides()
 }
 #endif
 
-void KisView::viewGuideLines()
-{
-}
+//void KisView::viewGuideLines()
+//{
+//}
 
 QPoint KisView::mapToScreen(const QPoint& pt)
 {
@@ -3195,16 +3212,20 @@ QPoint KisView::mapToScreen(const QPoint& pt)
 
 void KisView::attach(KisCanvasObserver *observer)
 {
+    Q_ASSERT(observer);
     if (observer)
         m_observers.push_back(observer);
 }
 
 void KisView::detach(KisCanvasObserver *observer)
 {
-    vKisCanvasObserver_it it = std::find(m_observers.begin(), m_observers.end(), observer);
+    Q_ASSERT(observer);
+    if (observer) {
+        vKisCanvasObserver_it it = std::find(m_observers.begin(), m_observers.end(), observer);
 
-    if (it != m_observers.end())
-        m_observers.erase(it);
+        if (it != m_observers.end())
+            m_observers.erase(it);
+    }
 }
 
 void KisView::notifyObservers()
@@ -3221,6 +3242,7 @@ KisImageSP KisView::currentImg() const
 
 void KisView::setCurrentImage(KisImageSP image)
 {
+    Q_ASSERT(image);
     disconnectCurrentImg();
     m_image = image;
 

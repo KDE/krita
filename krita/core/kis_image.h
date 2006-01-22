@@ -158,7 +158,6 @@ public:
     void setModified();
 
     KisColorSpace * colorSpace() const;
-    void setColorSpace(KisColorSpace * colorSpace);
 
     // Resolution of the image == XXX: per inch?
     double xRes();
@@ -272,7 +271,8 @@ public:
     void notifyPropertyChanged(KisLayerSP layer);
 
     void notifyImageLoaded();
-
+    
+    void setColorSpace(KisColorSpace * colorSpace);
 
     //KisGuideMgr *guides() const;
 
@@ -357,7 +357,18 @@ signals:
 public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
+
+    /**
+     * notify is called whenever we have changed something to one or more layers.
+     * The entire image will be recomposited and made ready for redisplay.
+     * XXX: Note that this also sets the currently active layer dirty; we don't want that.
+     */
     void notify();
+
+    /**
+     * The specified rect will be composited and made ready for redisplay.
+     * XXX: Note that this also sets the currently active layer dirty; we don't want that.
+     */
     void notify(const QRect& rc);
 
 protected:
@@ -388,7 +399,6 @@ private:
     QRect m_dirtyRect;
 
     KisBackgroundSP m_bkg;
-    KisPaintDeviceImplSP m_projection;
 
     KisGroupLayerSP m_rootLayer; // The layers are contained in here
     KisLayerSP m_activeLayer;

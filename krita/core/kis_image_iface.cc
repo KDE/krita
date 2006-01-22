@@ -94,9 +94,3 @@ DCOPRef KisImageIface::colorSpace() const
                         cs->dcopObject()->objId(),
                         "KisColorSpaceIface" );
 }
-
-void KisImageIface::setColorSpace(DCOPRef /*colorSpace*/)
-{
-    // XXX: Figure out how to get the correct object from
-    //      the dcopref
-}

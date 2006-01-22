@@ -37,7 +37,7 @@
   <Action name="fit_to_canvas"/>
   <Separator/>
   <Action name="view_ruler"/>
-  <Action name="view_guidelines"/>
+  <!--Action name="view_guidelines"/-->
   <Separator/>
   <Action name="view_toggle_grid" />
   <Menu name="view_fast_grid_config"><text>Grid Spacing</text>
@@ -89,8 +89,6 @@
   <Action name="mirrorLayerY"/>
   <Separator/>
   <Action name="layer_properties"/>
-  <Menu name="Mode"><text>&amp;Mode</text>
-  </Menu>
   <Separator/>
   <Action name="merge_layer"/>
   <Action name="merge_visible_layers"/>
@@ -106,20 +104,10 @@
     <Action name="invert"/>
     <Separator/>
     <Action name="feather"/>
-    <Menu name="Modify"><text>&amp;Modify</text>
-            <Action name="border"/>
-            <Action name="smooth"/>
-            <Action name="expand"/>
-            <Action name="contract"/>
-   </Menu>
-   <Separator/>
    <Action name = "grow"/>
    <Action name = "similar"/>
    <Separator/>
    <Action name="transform_selection"/>
-   <Separator/>
-   <Action name="load_selection"/>
-   <Action name="save_selection"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
 </Menu>

@@ -41,7 +41,6 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
     KisImageSP img = view -> canvasSubject() -> currentImg();
 
     if (!img) {
-        kdDebug() << "No image for rasteredcache" << endl;
         return;
     }
 

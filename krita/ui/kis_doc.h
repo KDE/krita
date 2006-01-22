@@ -80,6 +80,15 @@ public:
 
     virtual QDomDocument saveXML();
 
+public slots:
+            
+        
+    /**
+     * Initialize an empty document using default values
+     * @since 1.5
+     */
+     virtual void initEmpty();
+
 private: // Undo adapter
     virtual void addCommand(KCommand *cmd);
     virtual void setUndo(bool undo);

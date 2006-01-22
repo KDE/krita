@@ -80,14 +80,14 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceI
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
-    kdDebug() << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
+    kdDebug(41005) << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
 
-    kdDebug() << "Transforming..." << endl;
+    kdDebug(41005) << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = mathToolbox->initWavelet(src, rect);
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
 
-    kdDebug() << "Thresholding..." << endl;
+    kdDebug(41005) << "Thresholding..." << endl;
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
     setProgressStage( i18n("Thresholding") ,progress());
     for(float* it = wav->coeffs + wav->depth; it < fin; it++)
@@ -103,7 +103,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceI
         incProgress();
     }
 
-    kdDebug() << "Untransforming..." << endl;
+    kdDebug(41005) << "Untransforming..." << endl;
 
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, rect, wav, buff);

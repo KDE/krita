@@ -183,7 +183,6 @@ void HistogramDockerUpdater::updated() {
 }
 
 void HistogramDockerUpdater::completed() {
-    kdDebug() << "Histogram Update Completed" << endl;
     m_histogram -> computeHistogram();
     m_view -> updateHistogram();
 }

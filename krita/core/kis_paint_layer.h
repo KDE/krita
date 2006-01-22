@@ -64,11 +64,8 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-            kdDebug(41001) << "Visiting on paint layer " << name()
-                    << ", colorspace: " << m_paintdev->colorSpace()->id().name()
-                    << ", opacity: " << opacity()
-                    << ", composite op: " << compositeOp().id().name() << "\n";
-    
+            kdDebug(41001) << "\tPAINT\t" << name()
+                    << " dirty: " << dirty() << "\n";
             return v.visit(this);
         };
 

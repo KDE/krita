@@ -21,18 +21,18 @@
 #include <qimage.h>
 
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_layer_visitor.h"
 #include "kis_debug_areas.h"
 #include "kis_image.h"
 #include "kis_paint_device_impl.h"
-#include "kis_group_layer.h"
 
 KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     super(img, name, opacity),
     m_x(0),
     m_y(0)
 {
-    m_projection = new KisPaintDeviceImpl(img, img->colorSpace());
+    m_projection = new KisPaintDeviceImpl(img->colorSpace());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : 
@@ -54,6 +54,12 @@ KisLayerSP KisGroupLayer::clone() const
 
 KisGroupLayer::~KisGroupLayer()
 {
+}
+
+
+void KisGroupLayer::resetProjection()
+{
+    m_projection = new KisPaintDeviceImpl(image()->colorSpace());
 }
 
 uint KisGroupLayer::childCount() const
@@ -100,7 +106,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
         newLayer -> parent() || m_layers.contains(newLayer))
     {
         kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
-        //kdDebug() << "layer: " << newLayer << ", x: " << x
+        //kdDebug(41001) << "layer: " << newLayer << ", x: " << x
         //        << ", parent: " << newLayer->parent() << ", contains: " << m_layers.contains(newLayer)
         //          << " stack: " << kdBacktrace() << "\n";
         return false;

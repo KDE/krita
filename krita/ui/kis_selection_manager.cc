@@ -479,8 +479,6 @@ KisLayerSP KisSelectionManager::paste()
 
 void KisSelectionManager::pasteNew()
 {
-    kdDebug() << "Paste new!\n";
-
     KisPaintDeviceImplSP clip = m_clipboard -> clip();
     if (!clip) return;
 

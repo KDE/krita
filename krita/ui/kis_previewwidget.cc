@@ -101,7 +101,6 @@ void KisPreviewWidget::forceUpdate()
 
 void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 {
-    //kdDebug() << "slotSetLayer\n";
     Q_ASSERT(dev);
     if (!dev) return;
 
@@ -124,13 +123,11 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 
 KisPaintDeviceImplSP KisPreviewWidget::getDevice()
 {
-    //kdDebug() << "getLayer\n";
     return m_previewDevice;
 }
 
 void KisPreviewWidget::slotUpdate()
 {
-//     kdDebug() << "slotUpdate\n";
     QRect r = m_previewDevice->exactBounds();
     m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
     if(m_zoom > 1.0)
@@ -147,7 +144,6 @@ void KisPreviewWidget::slotUpdate()
 }
 
 void KisPreviewWidget::slotSetAutoUpdate(bool set) {
-//     kdDebug() << "slotSetAutoUpdate : " << set  << endl;
     m_autoupdate = set;
 }
 
@@ -157,7 +153,6 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
     if (!m_preview) return;
     if (m_scaledPreview == 0) return;
     
-    //kdDebug() << "toggleImageDisplayed\n";
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
     {
@@ -171,7 +166,6 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
 
 void KisPreviewWidget::needUpdate()
 {
-    //kdDebug() << "needUpdate\n";
     if(m_previewIsDisplayed)
         m_groupBox->setTitle(i18n("Preview (needs update)"));
 }
@@ -184,13 +178,10 @@ bool KisPreviewWidget::zoomChanged()
 {
     if (!m_origDevice) return false;
     
-//     kdDebug() << "zoomChanged " << m_zoom << "\n";
     QRect r = m_origDevice->exactBounds();
     int w = (int) ceil(r.width() * m_zoom );
     int h = (int) ceil(r.height() * m_zoom );
 
-//     kdDebug() << "   width: " << w << "\n";
-//     kdDebug() << "   height: " << h << "\n";
     if( w == 0 || h == 0 )
         return false; 
 

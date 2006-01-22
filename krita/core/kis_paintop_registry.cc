@@ -56,7 +56,7 @@ KisPaintOpRegistry::KisPaintOpRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << "\n";
     }
 
 }

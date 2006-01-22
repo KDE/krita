@@ -208,7 +208,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * 
     QObject(0, name), KShared()
 {
     if (colorSpace == 0) {
-        kdDebug() << "Cannot create paint device without colorstrategy!\n";
+        kdDebug(41001) << "Cannot create paint device without colorstrategy!\n";
         return;
     }
 
@@ -581,7 +581,7 @@ void KisPaintDeviceImpl::convertFromQImage(const QImage& image, const QString &s
 
     // Krita is little-endian inside.
     if (img.bitOrder() == QImage::LittleEndian) {
-	kdDebug() << "source was littleendian\n";
+	kdDebug(41010) << "source was littleendian\n";
 	img = img.convertBitOrder(QImage::BigEndian);
     }
 
@@ -783,9 +783,13 @@ void KisPaintDeviceImpl::applySelectionMask(KisSelectionSP mask)
 
 KisSelectionSP KisPaintDeviceImpl::setSelection( KisSelectionSP selection)
 {
-    KisSelectionSP oldSelection = m_selection;
-    m_selection = selection;
-    return oldSelection;
+    if (selection) {
+        KisSelectionSP oldSelection = m_selection;
+        m_selection = selection;
+        m_hasSelection = true;
+        return oldSelection;
+    }
+    else return 0;
 }
 
 bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)

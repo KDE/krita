@@ -134,8 +134,6 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     
     m_painter -> setPressure(info.pressure);
 
-    //kdDebug() << " Previous point: " << info.movement << "\n";
-
     // Compute the position of the tufts. The tufts are arranged in a line
     // perpendicular to the motion of the brush, i.e, the straight line between
     // the current position and the previous position.

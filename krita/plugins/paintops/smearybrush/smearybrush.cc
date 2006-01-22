@@ -38,7 +38,7 @@ SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(SmearyBrushFactory::instance());
 
-    kdDebug() << "SmearyBrush. Class: "
+    kdDebug(41006) << "SmearyBrush. Class: "
                    << className()
                    << ", Parent: "
                    << parent -> className()

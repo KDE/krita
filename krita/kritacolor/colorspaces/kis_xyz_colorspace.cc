@@ -95,11 +95,9 @@ void KisXyzColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
     while (nPixels--)
     {
         Q_UINT16 * p = reinterpret_cast<Q_UINT16 *>(src);
-        //kdDebug() << "Before X " << p[PIXEL_X] << ", Y " << p[PIXEL_Y] << ", z " << p[PIXEL_Z] << "\n";
         p[PIXEL_X] = UINT16_MAX - p[PIXEL_X];
         p[PIXEL_Y] = UINT16_MAX - p[PIXEL_Y];
         p[PIXEL_Z] = UINT16_MAX - p[PIXEL_Z];
-        //kdDebug() << "After X " << p[PIXEL_X] << ", Y " << p[PIXEL_Y] << ", z " << p[PIXEL_Z] << "\n";
         src += pSize;
     }
 }

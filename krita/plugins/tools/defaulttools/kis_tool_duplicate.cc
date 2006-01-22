@@ -61,7 +61,6 @@ void KisToolDuplicate::activate()
 void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
 {
     if (e->state() == ShiftButton) {
-        kdDebug() << "Shift button pressed, going to set htis place for duplicate\n";
         m_position = e->pos();
         m_isOffsetNotUptodate = true;
     } else {

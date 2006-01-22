@@ -93,17 +93,16 @@ KisTile::~KisTile()
         KisTileManager::instance() -> dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
-    if (readers()) { kdDebug() << "argh, still " << readers() << endl; m_nReadlock /= 0; }
+    if (readers()) { kdDebug(41000) << "argh, still " << readers() << endl; m_nReadlock /= 0; }
 }
 
 void KisTile::allocate()
 {
     if (m_data == 0) {
         if (readers()) {
-            kdDebug() << "arghll, still " << readers() << endl;
+            kdDebug(41000) << "arghll, still " << readers() << endl;
             m_nReadlock /= 0;
         }
-        //m_data = new Q_UINT8[WIDTH * HEIGHT * m_pixelSize];
         m_data = KisTileManager::instance() -> requestTileData(m_pixelSize);
         Q_CHECK_PTR(m_data);
     }
@@ -143,7 +142,7 @@ void KisTile::addReader()
     if (m_nReadlock++ == 0)
         KisTileManager::instance() -> ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
-        kdDebug() << m_nReadlock << endl;
+        kdDebug(41000) << m_nReadlock << endl;
         m_nReadlock /= 0;
     }
 }

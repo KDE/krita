@@ -44,7 +44,7 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char
 {
 
     if ( parent->inherits("KisView") ) {
-        kdDebug () << "instantiating separate channels plugin\n";
+        kdDebug (41006) << "Separate channels plugin\n";
 
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
         setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);

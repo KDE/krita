@@ -58,7 +58,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    kdDebug() << "Imagesize plugin. Class: "
+    kdDebug(41006) << "Imagesize plugin. Class: "
            << className()
            << ", Parent: "
            << parent -> className()

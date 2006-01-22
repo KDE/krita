@@ -68,7 +68,6 @@ void WetnessVisualisationFilter::slotActivated() {
 }
 
 void WetnessVisualisationFilter::slotTimeout() {
-    kdDebug() << "repaint" << endl;
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
             KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("WET", ""),"") );
     Q_ASSERT(cs);

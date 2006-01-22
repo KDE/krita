@@ -185,8 +185,6 @@ void KisDropshadow::gaussianblur (KisPaintDeviceImplSP srcDev, KisPaintDeviceImp
     x2 = x1 + width;
     y2 = y1 + height;
 
-    kdDebug() << "Dropshadow: x1: " << x1 << " x2: " << x2 << " width: " << width << " height: " << height << endl;
-
     if (width < 1 || height < 1) return;
 
     emit notifyProgressStage(i18n("Blur..."), 0);

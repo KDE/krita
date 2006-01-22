@@ -29,8 +29,10 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
+#include "kis_selection.h"
 
 class KisProgressDisplayInterface;
 class KisFilterStrategy;
@@ -52,7 +54,7 @@ class KisScaleWorker : public KisThread {
 
 public:
 
-    KisScaleWorker(KisPaintDeviceImplSP dev, double sx, double sy, 
+    KisScaleWorker(KisPaintDeviceImpl * dev, double sx, double sy,
                    KisFilterStrategy *filterStrategy)
         : KisThread()
         , m_dev(dev)
@@ -66,7 +68,7 @@ public:
 
 private:
     Q_INT32 m_pixelSize;
-    KisPaintDeviceImplSP m_dev;
+    KisPaintDeviceImpl * m_dev;
     double m_sx, m_sy;
     KisFilterStrategy * m_filterStrategy;
 
@@ -116,7 +118,8 @@ public:
         int i = 0;
         for ( t = m_scalethreads.first(); t; t = m_scalethreads.next()) {
             //progress info
-            t->wait();
+            if (t)
+                t->wait();
             emit notifyProgress((100 / threadcount) * i);
             ++i;
 
@@ -140,12 +143,18 @@ public:
                                                      m_sx, m_sy, m_filterStrategy);
         m_scalethreads.append(scaleThread);
         scaleThread->start();
+        layer->setDirty(true);
         return true;
     }
 
     bool visit(KisGroupLayer *layer)
     {
         //KisScaleVisitor visitor (m_img, m_sx, m_sy, m_progress, m_filterStrategy);
+
+        // XXX: Maybe faster to scale the projection and do something clever to avoid 
+	//      recompositing everything?
+	layer->resetProjection(); 
+       
 
         KisLayerSP child = layer->firstChild();
         while (child) {
@@ -161,8 +170,13 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* /*layer*/)
+    virtual bool visit(KisAdjustmentLayer* layer)
     {
+        KisThread * scaleThread = new KisScaleWorker(layer->selection().data(), m_sx, m_sy, m_filterStrategy);
+        m_scalethreads.append(scaleThread);
+        scaleThread->start();
+        layer->resetCache();
+        layer->setDirty(true);
         return true;
     }
     

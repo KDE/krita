@@ -27,6 +27,7 @@
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
+#include "kis_adjustment_layer.h"
 #include "kis_transaction.h"
 #include <kis_selected_transaction.h>
 
@@ -70,18 +71,20 @@ public:
   	        layer->undoAdapter()->addCommand(cmd);
 	    }
         }
-
+        layer->setDirty(true);
         return true;
     };
 
     bool visit(KisGroupLayer *layer)
     {
+	layer->resetProjection();
+
         KisLayerSP child = layer->firstChild();
         while (child) {
             child->accept(*this);
             child = child->nextSibling();
         }
-
+        layer->setDirty(true);
         return true;
     };
 
@@ -92,6 +95,7 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        layer->resetCache();
         return true;
     }
     

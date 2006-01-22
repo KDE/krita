@@ -47,6 +47,17 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
+    /// If the layer has been changed and not been composited yet, this returns true
+    virtual bool dirty() { return m_dirty; }
+
+    /**
+     * Set the dirty flag. This also sets the dirty flag of the parent(s)
+     * The dirty flag is set to true only when the layer has been composited,
+     * i.e., passed through the merge visitor. Note that we may want to replace
+     * this with a list of dirty rects in the future.
+     */
+    virtual void setDirty(bool dirty = true);
+    
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
@@ -165,6 +176,7 @@ private:
     bool m_locked;
     bool m_visible;
     bool m_temporary;
+    bool m_dirty;
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImage *m_image;

@@ -32,6 +32,8 @@
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceImplSP dev)
     : super(img, name, opacity)
 {
+    Q_ASSERT(img);
+    Q_ASSERT(dev);
     m_paintdev = dev;
 }
 
@@ -39,12 +41,15 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity)
     : super(img, name, opacity)
 {
+    Q_ASSERT(img);
     m_paintdev = new KisPaintDeviceImpl(img, img -> colorSpace());
 }
 
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
     : super(img, name, opacity)
 {
+    Q_ASSERT(img);
+    Q_ASSERT(colorSpace);
     m_paintdev = new KisPaintDeviceImpl(img, colorSpace);
 }
 

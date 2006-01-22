@@ -95,7 +95,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     if (image->colorSpace()->willDegrade(TO_LAB16)) {
         if (KMessageBox::warningContinueCancel(m_view,
             i18n("This conversion will convert your %1 image through 16-bit L*a*b* and back.\n"
-                    "Watercolor and openEXR colorspaces will even converted through 8 bit RGB.\n")
+                    "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n")
                     .arg(image->colorSpace()->id().name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
@@ -133,8 +133,8 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
     if (dev->colorSpace()->willDegrade(TO_LAB16)) {
         if (KMessageBox::warningContinueCancel(m_view,
-            i18n("This conversion will convert your %1 layer through 16-bit L*a*b* and vice back.\n"
-                 "Watercolor and openEXR colorspaces will even converted through 8 bit RGB.\n")
+            i18n("This conversion will convert your %1 layer through 16-bit L*a*b* and back.\n"
+                    "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n")
                     .arg(dev->colorSpace()->id().name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),

@@ -32,7 +32,7 @@
                         <string>Maximum number of tiles kept in memory:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle big images, a bigger value here might be useful.
+                        <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
 Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
                     </property>
                 </widget>
@@ -47,7 +47,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                         <number>0</number>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle big images, a bigger value here might be useful.
+                        <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
 Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
                     </property>
                 </widget>
@@ -86,9 +86,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                         <string>Swappiness:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>This configures how much Krita likes to use the swap
-                            file. Move the slider to the left, and Krita will not use the swap file at
- all. Move it to the right and Krita will use the swap file a lot.</string>
+                        <string>This configures how much Krita will use the swap file. If you move the slider all the way to the left, Krita will not use the swap file at all. If you move it all the way to the right, Krita will make maximum use of the swap file.</string>
                     </property>
                 </widget>
                 <widget class="QSlider">

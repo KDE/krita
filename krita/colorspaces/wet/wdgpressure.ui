@@ -24,7 +24,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Pressure affects:</string>
+                <string>Pressure effects:</string>
             </property>
         </widget>
         <widget class="QCheckBox">

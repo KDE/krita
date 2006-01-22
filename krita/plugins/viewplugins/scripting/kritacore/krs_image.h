@@ -52,6 +52,11 @@ class Image : public Kross::Api::Class<Image>
          * Convert the image to a colorspace.
          * This function takes one argument :
          *  - the name of the destination colorspace
+         * 
+         * For example (in Ruby) :
+         * @code
+         * image.convertToColorspace("CMYK")
+         * @endcode
          */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
         /**

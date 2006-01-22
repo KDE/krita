@@ -41,17 +41,84 @@ class PaintLayer : public Kross::Api::Class<PaintLayer>
         virtual ~PaintLayer();
         virtual const QString getClassName() const;
     private:
+        /**
+         * Create an iterator over a layer, it will iterate on a rectangle area.
+         * This function takes four arguments :
+         *  - x
+         *  - y
+         *  - width of the rectangle
+         *  - height of the rectangle
+         */
         Kross::Api::Object::Ptr createRectIterator(Kross::Api::List::Ptr);
+        /**
+         * Create an iterator over a layer, it will iterate on a row.
+         * This function takes three arguments :
+         *  - x start in the row
+         *  - y vertical position of the row
+         *  - width of the row
+         */
         Kross::Api::Object::Ptr createHLineIterator(Kross::Api::List::Ptr);
+        /**
+         * Create an iterator over a layer, it will iterate on a column.
+         * This function takes three arguments :
+         *  - x horizontal position of the column
+         *  - y start in the column
+         *  - height of the column
+         */
         Kross::Api::Object::Ptr createVLineIterator(Kross::Api::List::Ptr);
+        /**
+         * Return the width of the layer
+         */
         Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
+        /**
+         * Return the height of the layer
+         */
         Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
+        /**
+         * This function creates an Histogram for this layer.
+         * It takes two arguments :
+         *  - the type of the histogram ("RGB8HISTO")
+         *  - 0 if the histogram is linear, or 1 if it is logarithmic
+         */
         Kross::Api::Object::Ptr createHistogram(Kross::Api::List::Ptr);
+        /**
+         * This function create a Painter which will allow you to some painting on the layer.
+         */
         Kross::Api::Object::Ptr createPainter(Kross::Api::List::Ptr);
+        /**
+         * Uses this function to create a new undo entry.
+         */
         Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
+        /**
+         * Uses this function to close the current undo entry and add it to the history.
+         */
         Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
+        /**
+         * Convert the image to a colorspace.
+         * This function takes one argument :
+         *  - the name of the destination colorspace
+         * 
+         * For example (in Ruby) :
+         * @code
+         * image.convertToColorspace("CMYK")
+         * @endcode
+         */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        /**
+         * Return the fast wavelet transformed of the layer
+         */
         Kross::Api::Object::Ptr fastWaveletTransformation(Kross::Api::List::Ptr args);
+        /**
+         * Untransform a fast wavelet into this layer
+         * It takes one argument :
+         *  - a wavelet object
+         * 
+         * For example (in Ruby) :
+         * @code
+         * wavelet = layer.fastWaveletTransformation()
+         * layer.fastWaveletUntransformation(wavelet)
+         * @endcode
+         */
         Kross::Api::Object::Ptr fastWaveletUntransformation(Kross::Api::List::Ptr args);
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }

@@ -35,7 +35,8 @@ namespace KritaCore {
 Painter::Painter(KisPaintLayerSP layer)
     : Kross::Api::Class<Painter>("KritaPainter"), m_layer(layer),m_painter(new KisPainter(layer->paintDevice())),m_threshold(1)
 {
-    // 
+    // convolution
+    addFunction("convolve", &Painter::convolve);
     // Fill specific
     addFunction("setFillThreshold", &Painter::setFillThreshold);
     addFunction("fillColor", &Painter::fillColor);
@@ -73,15 +74,37 @@ Painter::~Painter()
     delete m_painter;
 }
 
-Kross::Api::Object::Ptr Painter::applyConvolution(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
 {
     KisConvolutionPainter* cp = new KisConvolutionPainter(m_painter->device());
-    uint x = Kross::Api::Variant::toUInt(args->item(0));
-    uint y = Kross::Api::Variant::toUInt(args->item(1));
-    uint w = Kross::Api::Variant::toUInt(args->item(2));
-    uint h = Kross::Api::Variant::toUInt(args->item(3));
-//     KisKernel* kernel = ((Kernel*)args->item(4).data())->kernel();
+    QRect rect;
     KisKernel kernel;
+    kernel.factor = Kross::Api::Variant::toInt(args->item(1));
+    kernel.offset = Kross::Api::Variant::toInt(args->item(2));
+    
+    uint borderop = 3;
+    if( args.count() > 3 )
+    {
+        borderop = Kross::Api::Variant::toUInt(args->item(3));
+    }
+    uint channelsFlag = KisChannelInfo::FLAG_COLOR;
+    if( args.count() > 4 )
+    {
+        channelsFlag = Kross::Api::Variant::toUInt(args->item(4));
+    }
+    if( args.count() > 5)
+    {
+        uint x = Kross::Api::Variant::toUInt(args->item(5));
+        uint y = Kross::Api::Variant::toUInt(args->item(6));
+        uint w = Kross::Api::Variant::toUInt(args->item(7));
+        uint h = Kross::Api::Variant::toUInt(args->item(8));
+        rect = QRect(x,y,w,h);
+    } else {
+        QRect r1 = paintLayer()->paintDevice()->extent();
+        QRect r2 = paintLayer()->image()->bounds();
+        rect = r1.intersect(r2);
+    }
+    
     QValueList<QVariant> kernelH = Kross::Api::Variant::toList( args->item(0) );
     
     QVariant firstlineVariant = *kernelH.begin();
@@ -116,12 +139,7 @@ Kross::Api::Object::Ptr Painter::applyConvolution(Kross::Api::List::Ptr args)
             kernel.data[ j + i * kernel.width ] = (*itLine).toInt();
         }
     }
-    kernel.factor = Kross::Api::Variant::toInt(args->item(5));
-    kernel.offset = Kross::Api::Variant::toInt(args->item(6));
-    
-    uint borderop = Kross::Api::Variant::toUInt(args->item(7));
-    uint channelsFlag = Kross::Api::Variant::toUInt(args->item(8));
-    cp->applyMatrix(&kernel, x, y, w, h, (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
+    cp->applyMatrix(&kernel, rect.x(), rect.y(), rect.width(), rect.height(), (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
     
     delete[] kernel.data;
     return 0;

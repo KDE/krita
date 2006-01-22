@@ -38,12 +38,45 @@ class Wavelet : public Kross::Api::Class<Wavelet>
         Wavelet(KisMathToolbox::KisWavelet* wavelet);
         ~Wavelet();
     private:
+        /**
+         * Return the value of the Nth coefficient
+         * The function takes one argument :
+         * - the index of the coefficient
+         */
         Kross::Api::Object::Ptr getNCoeff(Kross::Api::List::Ptr);
+        /**
+         * Set the value of the Nth coefficient
+         * The function takes two arguments :
+         * - the index of the coefficient
+         * - the new value of the coefficient
+         */
         Kross::Api::Object::Ptr setNCoeff(Kross::Api::List::Ptr);
+        /**
+         * Return the value of a coefficient
+         * The function takes two arguments :
+         *  - x
+         *  - y
+         */
         Kross::Api::Object::Ptr getXYCoeff(Kross::Api::List::Ptr);
+        /**
+         * Set the value of a coefficient
+         * The function takes three arguments :
+         * - x
+         * - y
+         * - the new value of the coefficient
+         */
         Kross::Api::Object::Ptr setXYCoeff(Kross::Api::List::Ptr);
+        /**
+         * Return the depth of the layer
+         */
         Kross::Api::Object::Ptr getDepth(Kross::Api::List::Ptr);
+        /**
+         * Return the size of the wavelet (size = width = height)
+         */
         Kross::Api::Object::Ptr getSize(Kross::Api::List::Ptr);
+        /**
+         * Return the number of coefficients in this wavelet (= size * size * depth)
+         */
         Kross::Api::Object::Ptr getNumCoeffs(Kross::Api::List::Ptr);
     public:
         KisMathToolbox::KisWavelet* wavelet() { return m_wavelet; }

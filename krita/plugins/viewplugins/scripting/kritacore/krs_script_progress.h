@@ -27,14 +27,44 @@ namespace Kross {
 
 namespace KritaCore {
 
+/**
+ * ScriptProgress is used to manage the progress bar of the status bar in krita
+ * 
+ * For example (in ruby) :
+ * @code
+ * script = Krosskritacore::get("KritaScript")
+ * script.setProgressTotalSteps(1000)
+ * script.setProgressStage("progressive", 0)
+ * for i in 1..900
+ *   script.incProgress()
+ * end
+ * script.setProgressStage("brutal", 1000)
+ * @endcode
+ */
 class ScriptProgress : public Kross::Api::Class<ScriptProgress> {
     public:
         ScriptProgress(KisScriptProgress* Script);
         ~ScriptProgress();
     private:
+        /**
+         * This function set the number of steps that the script will require.
+         * It takes one argument :
+         * - maximum value of the progress
+         */
         Kross::Api::Object::Ptr setProgressTotalSteps(Kross::Api::List::Ptr);
+        /**
+         * This function set the value of progress.
+         * It takes one argument :
+         * - value of the progress
+         */
         Kross::Api::Object::Ptr setProgress(Kross::Api::List::Ptr);
+        /**
+         * This function increment of one step the position of the progress.
+         */
         Kross::Api::Object::Ptr incProgress(Kross::Api::List::Ptr);
+        /**
+         * This function set the value of the progress and display the text 
+         */
         Kross::Api::Object::Ptr setProgressStage(Kross::Api::List::Ptr);
     private:
         KisScriptProgress* m_script;

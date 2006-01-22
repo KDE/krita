@@ -250,8 +250,9 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
 
 void KisLayerBox::slotImageUpdated()
 {
-    if (list() -> activeLayer() && m_image -> activeLayer())
-        Q_ASSERT(list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
+    Q_ASSERT(list() -> activeLayer() && m_image -> activeLayer() && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
+    if (!(list() -> activeLayer() && m_image -> activeLayer() && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
+        return;
     if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
         m_modified.append(list() -> activeLayer() -> id());
     m_thumbnailerTimer.stop();
@@ -487,7 +488,7 @@ void KisLayerBox::slotAddMenuActivated(int type)
             break;
         case OBJECT_LAYER:
         default: //goddamned Qt doesn't emit activated for default-assigned IDs, so this does nothing
-            emit sigRequestPartLayer(parent, above, list() -> partLayerAction() -> documentEntry());
+            emit sigRequestPartLayer(parent, above, m_partLayerAction -> documentEntry());
     }
 }
 

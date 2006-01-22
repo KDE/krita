@@ -75,8 +75,7 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(Kross::Api::Variant::toString(args->item(0)), ""), "");
     if(!dstCS)
     {
-        // FIXME: inform user
-        kdDebug(41011) << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0)) ) << endl;
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0))) ) );
         return 0;
     }
     m_image->convertTo(dstCS);

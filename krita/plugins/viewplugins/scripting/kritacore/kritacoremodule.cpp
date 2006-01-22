@@ -96,7 +96,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
             return new Pattern(dynamic_cast<KisPattern*>(*it));
         }
     }
-    kdDebug(41011) << i18n("Unknown pattern") << endl; // FIXME
+    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(  i18n("Unknown pattern") ) );
     return 0;
 
 }
@@ -116,7 +116,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
             return new Brush(dynamic_cast<KisBrush*>(*it));
         }
     }
-    kdDebug(41011) << i18n("Unknown brush") << endl; // FIXME
+    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
     return 0;
 }
 
@@ -168,14 +168,13 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     QString name = Kross::Api::Variant::toString(args->item(3));
     if( w < 0 || h < 0)
     {
-        kdDebug(41011) << i18n("Invalid image size") << endl; // FIXME
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Invalid image size") ) );
         return 0;
     }
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
     if(!cs)
     {
-        // FIXME: inform user
-        kdDebug(41011) << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) << endl;
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) ) );
         return 0;
     }
 

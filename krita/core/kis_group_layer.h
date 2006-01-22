@@ -21,6 +21,8 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 
+#include "kis_paint_layer.h"
+
 
 /**
  * A KisLayer that bundles child layers into a single layer.

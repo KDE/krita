@@ -32,6 +32,15 @@ class Doc : public Kross::Api::Class<Doc>
         virtual ~Doc();
         virtual const QString getClassName() const;
     private:
+        /**
+         * This function return the Image associated with this Doc.
+         * 
+         * Example (in Ruby) :
+         * @code
+         * doc = krosskritacore::get("KritaDocument")
+         * image = doc.getImage()
+         * @endcode
+         */
         Kross::Api::Object::Ptr getImage(Kross::Api::List::Ptr);
     private:
         KisDoc* m_doc;

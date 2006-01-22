@@ -26,16 +26,43 @@ class KisFilter;
 namespace Kross {
 namespace KritaCore {
     class FilterConfiguration;
-/**
-	@author Cyrille Berger <cberger@cberger.net>
-*/
+
 class Filter : public Kross::Api::Class<Filter>
 {
     public:
         Filter(KisFilter*);
         ~Filter();
     private:
+        /**
+         * This function return the FilterConfiguration associated with this filter
+         */
         Kross::Api::Object::Ptr getFilterConfiguration(Kross::Api::List::Ptr args);
+        /**
+         * This function will apply the filter.
+         * It takes at least two arguments :
+         *  - the source layer
+         *  - the destination layer
+         * You can also use this four aguments :
+         *  - x
+         *  - y
+         *  - width
+         *  - height
+         * 
+         * (x,y, width, height) defines the rectangular area on which the filter will be computed.
+         * If the rectangle is not defined, then the filter will be apply on alll the source layer.
+         * 
+         * For example (in ruby)
+         * @code
+         * doc = Krosskritacore::get("KritaDocument")
+         * image = doc.getImage()
+         * layer = image.getActivePaintLayer()
+         * width = layer.getWidth()
+         * height = layer.getHeight()
+         * filter = Krosskritacore::getFilter("invert")
+         * filter.process(layer, layer)
+         * filter.process(layer, layer, 10, 10, 20, 20 )
+         * @endcode
+         */
         Kross::Api::Object::Ptr process(Kross::Api::List::Ptr args);
     public:
         virtual const QString getClassName() const;

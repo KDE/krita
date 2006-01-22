@@ -38,7 +38,18 @@ class FilterConfiguration : public Kross::Api::Class<FilterConfiguration>
         virtual const QString getClassName() const;
         inline KisFilterConfiguration* filterConfiguration() { return m_fConfig; };
     private:
+        /**
+         * This function define a parameter of the associated Filter.
+         * It takes two arguments :
+         *  - the name of the parameter
+         *  - the value, whose type depends of the Filter
+         */
         Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr args);
+        /**
+         * This function return the value of a parameter of the associated Filter.
+         * It takes one argument :
+         *  - the name of the parameter
+         */
         Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr args);
     private:
         KisFilterConfiguration* m_fConfig;

@@ -40,14 +40,123 @@ namespace Kross { namespace KritaCore {
         public:
             KritaCoreFactory();
         private:
+            /**
+             * This function return a new Image.
+             * It takes four arguments :
+             *  - width
+             *  - height
+             *  - colorspace id
+             *  - name of the image
+             *
+             * And in return you get an Image object.
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::newImage(10,20, "RGBA", "kikoo")
+             * @endcode
+             */
             Kross::Api::Object::Ptr newImage(Kross::Api::List::Ptr);
+            /**
+             * This function return a new Color with the given RGB triplet
+             * It takes three arguments :
+             *  - red color (0 to 255)
+             *  - blue color (0 to 255)
+             *  - green color (0 to 255)
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::newRGBColor(255,0,0) # create a red color
+             * Krosskritacore::newRGBColor(255,255,255) # create a white color
+             * @endcode
+             */
             Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
+            /**
+             * This function return a new Color with the given HSV triplet
+             * It takes three arguments :
+             *  - hue color (0 to 255)
+             *  - saturation color (0 to 255)
+             *  - value color (0 to 255)
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::newRGBColor(255,125,0)
+             * @endcode
+             */
             Kross::Api::Object::Ptr newHSVColor(Kross::Api::List::Ptr);
+            /**
+             * This function return a Pattern taken from the list of ressources
+             * of krita
+             * It takes one argument :
+             *  - the name of the pattern
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::getPattern("Bricks")
+             * @endcode
+             */
             Kross::Api::Object::Ptr getPattern(Kross::Api::List::Ptr);
+            /**
+             * This function return a Brush taken from the list of ressources
+             * of krita
+             * It takes one argument :
+             *  - the name of the pattern
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::getBrush("Circle (05)")
+             * @endcode
+             */
             Kross::Api::Object::Ptr getBrush(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr getFilter(Kross::Api::List::Ptr);
+            /**
+             * This function return a Brush with a circular shape
+             * It takes at least two arguments :
+             *  - width
+             *  - height
+             * 
+             * It can takes two other arguments :
+             *  - width of the shading
+             *  - height of the shading
+             * 
+             * If the shading isn't specified, no shading will be used.
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::newCircleBrush(10,20) # create a plain circle
+             * Krosskritacore::newCircleBrush(10,20,5,10) # create a gradient
+             * @endcode
+             */
             Kross::Api::Object::Ptr newCircleBrush(Kross::Api::List::Ptr);
+            /**
+             * This function return a Brush with a rectangular shape
+             * It takes at least two arguments :
+             *  - width
+             *  - height
+             * 
+             * It can takes two other arguments :
+             *  - width of the shading
+             *  - height of the shading
+             * 
+             * If the shading isn't specified, no shading will be used.
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::newRectBrush(10,20) # create a plain rectangle
+             * Krosskritacore::newRectBrush(10,20,5,10) # create a gradient
+             * @endcode
+             */
             Kross::Api::Object::Ptr newRectBrush(Kross::Api::List::Ptr);
+            /**
+             * This function return a Filter taken from the list of ressources
+             * of krita
+             * It takes one argument :
+             *  - the name of the filter
+             * 
+             * For example (in ruby) :
+             * @code
+             * Krosskritacore::getFilter("invert")
+             * @endcode
+             */
+            Kross::Api::Object::Ptr getFilter(Kross::Api::List::Ptr);
     };
     /**
      *

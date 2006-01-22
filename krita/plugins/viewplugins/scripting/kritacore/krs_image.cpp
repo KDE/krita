@@ -88,7 +88,13 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     QString name = Kross::Api::Variant::toString(args->item(0));
     int opacity = Kross::Api::Variant::toInt(args->item(1));
     opacity = CLAMP(opacity, 0, 255);
-    QString csname = Kross::Api::Variant::toString(args->item(2));
+    QString csname;
+    if(args->count() > 2)
+    {
+        csname = Kross::Api::Variant::toString(args->item(2));
+    } else {
+        csname = m_image->colorSpace()->id().id();
+    }
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
     KisPaintLayer* layer;
     if(cs)

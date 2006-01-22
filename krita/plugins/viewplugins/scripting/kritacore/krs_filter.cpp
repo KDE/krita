@@ -50,13 +50,22 @@ Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
 
 Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 {
-    uint x = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
-    uint y = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
-    uint w = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
-    uint h = Kross::Api::Variant::toVariant(args->item(5)).toUInt();
     PaintLayer* src = (PaintLayer*)args->item(0).data();
     PaintLayer* dst = (PaintLayer*)args->item(1).data();
-    m_filter->process( src->paintLayer()->paintDevice(), dst->paintLayer()->paintDevice(), m_config->filterConfiguration(), QRect(x, y, w, h));
+    QRect rect;
+    if( args->count() >2)
+    {
+        uint x = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
+        uint y = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
+        uint w = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
+        uint h = Kross::Api::Variant::toVariant(args->item(5)).toUInt();
+        rect = QRect(x, y, w, h);
+    } else {
+        QRect r1 = src->paintLayer()->paintDevice()->extent();
+        QRect r2 = src->paintLayer()->image()->bounds();
+        rect = r1.intersect(r2);
+    }
+    m_filter->process( src->paintLayer()->paintDevice(), dst->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
     return 0;
 }
 

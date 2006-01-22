@@ -6,3 +6,6 @@ scriptschangecs_SCRIPTS = changecs.rb changecs.rc
 
 scriptsrandompaintdir = $(kde_datadir)/krita/scripts/randompaint
 scriptsrandompaint_SCRIPTS = randompaint.rb randompaint.rc
+
+scriptsfilterstestdir = $(kde_datadir)/krita/scripts/filterstestdir
+scriptsfilterstest_SCRIPTS = filterstest.rb filterstest.rc

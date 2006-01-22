@@ -51,8 +51,11 @@ public:
     virtual Q_INT32 y() const {return 0;};
     virtual void setY(Q_INT32) {};
 
-    virtual QRect extent() const {return QRect();};
-    virtual QRect exactBounds() const {return QRect();};
+    // Sets this layer and all its descendants' owner image to the given image.
+    virtual void setImage(KisImage *image);
+
+    virtual QRect extent() const;
+    virtual QRect exactBounds() const;
 
     virtual bool accept(KisLayerVisitor &v)
         {

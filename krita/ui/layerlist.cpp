@@ -863,7 +863,7 @@ void LayerItem::init()
 
 LayerItem::~LayerItem()
 {
-    if (listView() && listView()->activeLayer() == this)
+    if (listView() && (listView()->activeLayer() == this || contains(listView()->activeLayer())))
         listView()->setActiveLayer( static_cast<LayerItem*>( 0 ) );
     delete d;
 }
@@ -879,6 +879,19 @@ void LayerItem::makeFolder()
 bool LayerItem::isFolder() const
 {
     return d->isFolder;
+}
+
+bool LayerItem::contains(const LayerItem *item)
+{
+    QListViewItemIterator it(this);
+
+    while (it.current()) {
+        if (it.current() == item) {
+            return true;
+        }
+        ++it;
+    }
+    return false;
 }
 
 int LayerItem::id() const

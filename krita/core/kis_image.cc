@@ -1021,6 +1021,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             emit sigLayerAdded(layer);
             activate(layer);
         }
+        notify(layer->extent());
     }
 
     return success;

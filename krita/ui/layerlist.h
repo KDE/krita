@@ -174,6 +174,10 @@ public:
     void makeFolder();
     bool isFolder() const;
 
+    // Returns true if this item is the given item or the tree rooted at
+    // this item contains the given item.
+    bool contains(const LayerItem *item);
+
     int id() const;
 
     QString displayName() const;

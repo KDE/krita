@@ -1517,6 +1517,12 @@ void KisView::saveLayerAsImage()
 
 Q_INT32 KisView::importImage(const KURL& urlArg)
 {
+    KisImageSP current = currentImg();
+
+    if (!current) {
+        return 0;
+    }
+
     KURL::List urls;
     Q_INT32 rc = 0;
 
@@ -1530,40 +1536,47 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
     if (urls.empty())
         return 0;
 
-    KisImageSP img;
-
     for (KURL::List::iterator it = urls.begin(); it != urls.end(); ++it) {
         KURL url = *it;
         KisDoc d;
         d.import(url);
-        img = d.currentImage();
+        KisImageSP img = d.currentImage();
 
-        if (currentImg()) {
-/*LAYERREMOVE
-            vKisLayerSP v = img -> layers();
-            KisImageSP current = currentImg();
+        if (img) {
+            KisLayerSP importImageLayer = img->rootLayer().data();
 
-            rc += v.size();
-            current -> activeLayer() -> deselect();
+            if (importImageLayer != 0) {
 
-            for (vKisLayerSP_it it = v.begin(); it != v.end(); ++it) {
-                KisLayerSP layer = *it;
+                if (importImageLayer->numLayers() == 2) {
+                    // Don't import the root if this is not a layered image (1 group layer
+                    // plus 1 other).
+                    importImageLayer = importImageLayer->firstChild();
+                    importImageLayer->parent()->removeLayer(importImageLayer);
+                }
 
-                layer -> setImage(current);
-                layer -> setName(current -> nextLayerName());
-                current -> addLayer(layer, current -> rootLayer().data(), current -> rootLayer().firstChild());
-                m_layerBox->slotSetCurrentItem(img -> index(layer));
+                importImageLayer->setName(url.prettyURL());
+
+                KisGroupLayerSP parent = 0;
+                KisLayerSP currentActiveLayer = current->activeLayer();
+
+                if (currentActiveLayer) {
+                    parent = currentActiveLayer->parent();
+                }
+
+                if (parent == 0) {
+                    parent = current->rootLayer();
+                }
+
+                current->addLayer(importImageLayer.data(), parent, currentActiveLayer);
+                rc += importImageLayer->numLayers();
             }
-*/
-            resizeEvent(0);
-            updateCanvas();
         }
-
     }
+
+    updateCanvas();
 
     return rc;
 }
-
 
 void KisView::rotateLayer180()
 {

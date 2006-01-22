@@ -136,7 +136,7 @@ public:
     KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
 
     KisImage *image() const { return m_image; }
-    void setImage(KisImage *image) { m_image = image; }
+    virtual void setImage(KisImage *image) { m_image = image; }
 
     KisUndoAdapter *undoAdapter() const;
 

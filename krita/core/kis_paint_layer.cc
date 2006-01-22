@@ -127,5 +127,10 @@ QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
     return img;
 }
 
+void KisPaintLayer::setImage(KisImage *image)
+{
+    super::setImage(image);
+    m_paintdev->setImage(image);
+}
 
 #include "kis_paint_layer.moc"

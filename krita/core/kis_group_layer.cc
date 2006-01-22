@@ -109,6 +109,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
         at(i) -> m_index++;
     newLayer -> m_parent = this;
     newLayer -> m_index = index;
+    newLayer -> setImage(image());
     return true;
 }
 
@@ -149,5 +150,37 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
     return removeLayer(layer -> index());
 }
 
+void KisGroupLayer::setImage(KisImage *image)
+{
+    super::setImage(image);
+    for (vKisLayerSP_it it = m_layers.begin(); it != m_layers.end(); ++it)
+    {
+        (*it)->setImage(image);
+    }
+}
+
+QRect KisGroupLayer::extent() const
+{
+    QRect groupExtent;
+
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
+    {
+        groupExtent |= (*it)->extent();
+    }
+
+    return groupExtent;
+}
+
+QRect KisGroupLayer::exactBounds() const
+{
+    QRect groupExactBounds;
+
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
+    {
+        groupExactBounds |= (*it)->exactBounds();
+    }
+
+    return groupExactBounds;
+}
 
 #include "kis_group_layer.moc"

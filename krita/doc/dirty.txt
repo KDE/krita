@@ -1,0 +1,53 @@
+Dirty marking and rendering
+
+Krita organizes layers in the form of a tree, with a grouplayer at the root:
+
+group1 == image->rootLayer()
+    layer2
+    layer3
+    layer4
+    group2
+        layer6
+        layer7
+        adjustmentlayer 1
+        layer9
+    group3
+        adjustmentlayer 2
+        layer10
+        layer11
+        group4
+            layer12
+            layer13
+
+
+In this example, group1 is the rootlayer; layer13 is group3 is shown topmost
+in the layerbox, with group4 right under that, and layer13 is the "highest"
+paint layer in the complete tree.
+
+Compositing
+
+At every group level, a projection layer caches the result of compositing
+the layerstack in a projection paint device. The cached projection is then
+composited with the layers of that level, etc, until everything is composited
+onto the projection or the root layer. The image does _not_ have a projection
+anymore.
+
+We composite from layer2 downwards onto the projection of rootLayer, group1.
+
+
+Dirty marking
+
+In order to do the least possible amount of work (which is very important,
+especially with large amounts of layers and adjustment layers), we keep track
+of which layer is dirty. Groups without dirty layers are not recomposited; this
+dirtiness of course travels upwards, meaning that the rootlayer will always be
+dirty.
+
+XXX: Should we keep a structure with dirty rects for every layer, so we
+can determine whether the changed rect in a layer is actually in the area
+we are recompositing? I don't think so, since we should always try to keep
+
+Adjustment layers also keep a copy of the result of their work; if in group 2,
+layer 9 is adjusted, we do not want to composite layer 6 and 7 and filter the
+result through adjustmentlayer 1; we want to composite the changes in layer 9
+directly onto the cached result of the adjustment layer.

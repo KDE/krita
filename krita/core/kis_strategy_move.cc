@@ -16,12 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <stdlib.h>
 #include <qpoint.h>
+#include <qcolor.h>
+
 #include <kaction.h>
 #include <kcommand.h>
 #include <klocale.h>
-#include <qcolor.h>
+#include <kdebug.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
@@ -47,7 +48,7 @@ namespace {
     private:
         KisCanvasController *m_controller;
         KisLayerSP m_device;
-        QRect m_deviceBounds;
+        QRect m_updateRect;
         QPoint m_oldPos;
         QPoint m_newPos;
         KisImageSP m_img;
@@ -61,7 +62,12 @@ namespace {
         m_device = device;
         m_oldPos = oldpos;
         m_newPos = newpos;
-        m_deviceBounds = m_device->exactBounds();
+
+        QRect currentBounds = m_device->exactBounds();
+        QRect oldBounds = currentBounds;
+        oldBounds.moveBy(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
+
+        m_updateRect = currentBounds | oldBounds;
     }
 
     MoveCommand::~MoveCommand()
@@ -82,9 +88,7 @@ namespace {
     {
        m_device -> setX(pos.x());
        m_device -> setY(pos.y());
-       m_deviceBounds |= QRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
-       m_img -> notify(m_deviceBounds);
-       m_deviceBounds.setRect(pos.x(), pos.y(), m_deviceBounds.width(), m_deviceBounds.height());
+       m_img -> notify(m_updateRect);
     }
 }
 

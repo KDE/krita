@@ -47,11 +47,11 @@ public:
 
     virtual void deactivate() {};
 
-    virtual Q_INT32 x() const {return 0;};
-    virtual void setX(Q_INT32) {};
+    virtual Q_INT32 x() const;
+    virtual void setX(Q_INT32);
 
-    virtual Q_INT32 y() const {return 0;};
-    virtual void setY(Q_INT32) {};
+    virtual Q_INT32 y() const;
+    virtual void setY(Q_INT32);
 
     // Sets this layer and all its descendants' owner image to the given image.
     virtual void setImage(KisImage *image);
@@ -101,6 +101,9 @@ private:
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
     KisPaintDeviceImplSP m_projection; // The cached composition of all layers in this group
+
+    Q_INT32 m_x;
+    Q_INT32 m_y;
 };
 
 #endif // KIS_GROUP_LAYER_H_

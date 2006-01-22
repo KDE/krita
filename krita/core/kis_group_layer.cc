@@ -28,12 +28,17 @@
 #include "kis_group_layer.h"
 
 KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
-    super(img, name, opacity)
+    super(img, name, opacity),
+    m_x(0),
+    m_y(0)
 {
     m_projection = new KisPaintDeviceImpl(img, img->colorSpace());
 }
 
-KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : super(rhs)
+KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : 
+    super(rhs),
+    m_x(rhs.m_x),
+    m_y(rhs.m_y)
 {
     for(vKisLayerSP_cit it = rhs.m_layers.begin(); it != rhs.m_layers.end(); ++it)
     {
@@ -181,6 +186,42 @@ QRect KisGroupLayer::exactBounds() const
     }
 
     return groupExactBounds;
+}
+
+Q_INT32 KisGroupLayer::x() const
+{
+    return m_x;
+}
+
+void KisGroupLayer::setX(Q_INT32 x)
+{
+    Q_INT32 delta = x - m_x;
+
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
+    {
+        KisLayerSP layer = *it;
+        layer->setX(layer->x() + delta);
+    }
+
+    m_x = x;
+}
+
+Q_INT32 KisGroupLayer::y() const
+{
+    return m_y;
+}
+
+void KisGroupLayer::setY(Q_INT32 y)
+{
+    Q_INT32 delta = y - m_y;
+
+    for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
+    {
+        KisLayerSP layer = *it;
+        layer->setY(layer->y() + delta);
+    }
+
+    m_y = y;
 }
 
 #include "kis_group_layer.moc"

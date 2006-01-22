@@ -76,7 +76,7 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     if(!dstCS)
     {
         // FIXME: inform user
-        kdDebug() << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0)) ) << endl;
+        kdDebug(41011) << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0)) ) << endl;
         return 0;
     }
     m_image->convertTo(dstCS);

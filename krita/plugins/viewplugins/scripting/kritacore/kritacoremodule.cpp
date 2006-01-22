@@ -86,9 +86,9 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
     QValueList<KisResource*> resources = rServer->resources();
-    
+
     QString name = Kross::Api::Variant::toString(args->item(0));
-    
+
     for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
     {
         if((*it)->name() == name)
@@ -96,9 +96,9 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
             return new Pattern(dynamic_cast<KisPattern*>(*it));
         }
     }
-    kdDebug() << i18n("Unknown pattern") << endl; // FIXME
+    kdDebug(41011) << i18n("Unknown pattern") << endl; // FIXME
     return 0;
-    
+
 }
 
 
@@ -106,9 +106,9 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
     QValueList<KisResource*> resources = rServer->resources();
-    
+
     QString name = Kross::Api::Variant::toString(args->item(0));
-    
+
     for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
     {
         if((*it)->name() == name)
@@ -116,7 +116,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
             return new Brush(dynamic_cast<KisBrush*>(*it));
         }
     }
-    kdDebug() << i18n("Unknown brush") << endl; // FIXME
+    kdDebug(41011) << i18n("Unknown brush") << endl; // FIXME
     return 0;
 }
 
@@ -168,14 +168,14 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     QString name = Kross::Api::Variant::toString(args->item(3));
     if( w < 0 || h < 0)
     {
-        kdDebug() << i18n("Invalid image size") << endl; // FIXME
+        kdDebug(41011) << i18n("Invalid image size") << endl; // FIXME
         return 0;
     }
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
     if(!cs)
     {
         // FIXME: inform user
-        kdDebug() << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) << endl;
+        kdDebug(41011) << QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) << endl;
         return 0;
     }
 
@@ -188,12 +188,12 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
 {
 
     QMap<QString, Object::Ptr> children = manager->getChildren();
-    kdDebug() << " there are " << children.size() << endl;
+    kdDebug(41011) << " there are " << children.size() << endl;
     for(QMap<QString, Object::Ptr>::const_iterator it = children.begin(); it != children.end(); it++)
     {
-        kdDebug() << it.key() << " " << it.data() << endl;
+        kdDebug(41011) << it.key() << " " << it.data() << endl;
     }
-    
+
     // Wrap doc
     Kross::Api::Object::Ptr kritadocument = ((Kross::Api::Object*)manager)->getChild("KritaDocument");
     if(kritadocument) {
@@ -236,7 +236,7 @@ const QString KritaCoreModule::getClassName() const
 
 Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
-    kdDebug() << "KritaCoreModule::call" << name << endl;
+    kdDebug(41011) << "KritaCoreModule::call" << name << endl;
     if( m_factory->isAFunction(name))
     {
         return m_factory->call(name, arguments);

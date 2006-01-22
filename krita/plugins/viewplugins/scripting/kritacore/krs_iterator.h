@@ -81,7 +81,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
                             this, &Iterator<_T_It>::setChannelFLOAT, ci->pos() ) );
                     break;
                 default:
-                    kdDebug() << "unsupported data format in scripts" << endl;
+                    kdDebug(41011) << "unsupported data format in scripts" << endl;
                     break;
             }
         }
@@ -89,7 +89,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
         // set/get general
         addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
         addFunction("get" + initiales, &Iterator::getPixel);
-        kdDebug() << ( "get" + initiales ) << endl;
+        kdDebug(41011) << ( "get" + initiales ) << endl;
         // Various colorSpace
         addFunction("invertColor", &Iterator::invertColor);
         addFunction("darken", &Iterator::darken);
@@ -177,8 +177,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
-                        kdDebug() << i18n("An error has occurred in %1").arg("getPixel") << endl;
-                        kdDebug() << i18n("unsupported data format in scripts") << endl;
+                        kdDebug(41011) << i18n("An error has occurred in %1").arg("getPixel") << endl;
+                        kdDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }
@@ -205,8 +205,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
                         *((float*) data) = pixel[i].toDouble();
                         break;
                     default:
-                        kdDebug() << i18n("An error has occurred in %1").arg("setPixel") << endl;
-                        kdDebug() << i18n("unsupported data format in scripts") << endl;
+                        kdDebug(41011) << i18n("An error has occurred in %1").arg("setPixel") << endl;
+                        kdDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }

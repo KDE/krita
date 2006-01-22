@@ -52,8 +52,8 @@ Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
     Q_UINT32 n = Kross::Api::Variant::toUInt(args->item(0));
     if( n > m_numCoeff)
     {
-        kdDebug() << i18n("An error has occured in %1").arg("getNCoeff") << endl;
-        kdDebug() << i18n("Index out of bound") << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("getNCoeff") << endl;
+        kdDebug(41011) << i18n("Index out of bound") << endl;
     }
     return new Kross::Api::Variant(*(m_wavelet->coeffs + n ));
 }
@@ -64,8 +64,8 @@ Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
     double v = Kross::Api::Variant::toDouble(args->item(1));
     if( n > m_numCoeff)
     {
-        kdDebug() << i18n("An error has occured in %1").arg("setNCoeff") << endl;
-        kdDebug() << i18n("Index out of bound") << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("setNCoeff") << endl;
+        kdDebug(41011) << i18n("Index out of bound") << endl;
     }
     *(m_wavelet->coeffs + n ) = v;
     return 0;
@@ -77,8 +77,8 @@ Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
     Q_UINT32 y = Kross::Api::Variant::toUInt(args->item(1));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {
-        kdDebug() << i18n("An error has occured in %1").arg("getXYCoeff") << endl;
-        kdDebug() << i18n("Index out of bound") << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("getXYCoeff") << endl;
+        kdDebug(41011) << i18n("Index out of bound") << endl;
     }
     return new Kross::Api::Variant(*(m_wavelet->coeffs  + (x + y * m_wavelet->size ) * m_wavelet->depth ));
 }
@@ -90,8 +90,8 @@ Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
     double v = Kross::Api::Variant::toDouble(args->item(2));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {
-        kdDebug() << i18n("An error has occured in %1").arg("setXYCoeff") << endl;
-        kdDebug() << i18n("Index out of bound") << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("setXYCoeff") << endl;
+        kdDebug(41011) << i18n("Index out of bound") << endl;
     }
     *(m_wavelet->coeffs + (x + y * m_wavelet->size ) * m_wavelet->depth ) = v;
     return 0;

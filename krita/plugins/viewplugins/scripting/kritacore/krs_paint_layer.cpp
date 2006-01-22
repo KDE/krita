@@ -110,13 +110,13 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
 {
     QString histoname = Kross::Api::Variant::toString(args->item(0));
     KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(histoname);
-    
+
 /*    KisIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
     for(KisIDList::iterator it = listID.begin(); it != listID.end(); it++)
     {
-        kdDebug() << (*it).name() << " " << (*it).id() << endl;
+        kdDebug(41011) << (*it).name() << " " << (*it).id() << endl;
     }*/
-    
+
     enumHistogramType type ;
     switch( Kross::Api::Variant::toUInt(args->item(1)) )
     {
@@ -132,8 +132,8 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     {
         return new Histogram( paintLayer().data(), factory->generate() , type);
     } else {
-        kdDebug() << i18n("An error has occured in %1").arg("createHistogram") << endl;
-        kdDebug() << i18n("The histogram %1 is not available").arg(histoname) << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("createHistogram") << endl;
+        kdDebug(41011) << i18n("The histogram %1 is not available").arg(histoname) << endl;
     }
     return 0;
 }
@@ -175,8 +175,8 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
     if(!dstCS)
     {
         // FIXME: inform user
-        kdDebug() << i18n("An error has occured in %1").arg("convertToColorspace") << endl;
-        kdDebug() << i18n("Colorspace %1 is not available, please check your installation.").arg(Kross::Api::Variant::toString(args->item(0))) << endl;
+        kdDebug(41011) << i18n("An error has occured in %1").arg("convertToColorspace") << endl;
+        kdDebug(41011) << i18n("Colorspace %1 is not available, please check your installation.").arg(Kross::Api::Variant::toString(args->item(0))) << endl;
         return 0;
     }
     paintLayer()->paintDevice()->convertTo(dstCS);

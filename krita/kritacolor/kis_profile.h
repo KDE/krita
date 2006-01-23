@@ -48,21 +48,23 @@ public:
     virtual bool load();
     virtual bool save();
 
-    icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
-    icProfileClassSignature deviceClass() const { return m_deviceClass; }
-    QString productName() const { return m_productName; }
-    QString productDescription() const { return m_productDescription; }
-    QString productInfo() const { return m_productInfo; }
-    QString manufacturer() const { return m_manufacturer; }
+    inline icColorSpaceSignature colorSpaceSignature() const { return m_colorSpaceSignature; }
+    inline icProfileClassSignature deviceClass() const { return m_deviceClass; }
+    inline QString productName() const { return m_productName; }
+    inline QString productDescription() const { return m_productDescription; }
+    inline QString productInfo() const { return m_productInfo; }
+    inline QString manufacturer() const { return m_manufacturer; }
     cmsHPROFILE profile();
 
     KisAnnotationSP annotation() const;
 
     friend inline bool operator==( const KisProfile &,  const KisProfile & );
 
-    bool valid() const { return m_valid; };
+    inline bool valid() const { return m_valid; };
+    
+    inline bool isSuitableForOutput() { return m_suitableForOutput; };
 
-    QString filename() const { return m_filename; }
+    inline QString filename() const { return m_filename; }
 
 public:
 
@@ -84,6 +86,7 @@ private:
     QString m_name;
     QString m_filename;
     bool m_valid;
+    bool m_suitableForOutput;
 
 };
 

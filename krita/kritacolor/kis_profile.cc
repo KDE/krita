@@ -42,7 +42,8 @@
 KisProfile::KisProfile(QByteArray rawData)
     : m_rawData(rawData),
       m_filename( QString() ),
-      m_valid( false )
+      m_valid( false ),
+      m_suitableForOutput(false)
 {
     m_profile = cmsOpenProfileFromMem(rawData.data(), (DWORD)rawData.size());
     init();
@@ -50,7 +51,8 @@ KisProfile::KisProfile(QByteArray rawData)
 
 KisProfile::KisProfile(const QString& file)
     : m_filename(file),
-      m_valid( false )
+      m_valid( false ),
+      m_suitableForOutput( false )
 {
 }
 
@@ -103,6 +105,14 @@ bool KisProfile::init()
         m_productDescription = cmsTakeProductDesc(m_profile);
         m_productInfo = cmsTakeProductInfo(m_profile);
         m_valid = true;
+        
+        // Check if the profile can convert (something -> this)
+        LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
+        if( OutMatShaper )
+        {
+            m_suitableForOutput = true;
+        }
+        
 #if 0
     // XXX: It wasn't that easy to save a little memory: thsi gives an lcms error
         // Okay, we know enough. Free the memory; we'll load it again if needed.

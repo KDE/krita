@@ -1526,9 +1526,9 @@ void KisView::saveLayerAsImage()
 
 Q_INT32 KisView::importImage(const KURL& urlArg)
 {
-    KisImageSP current = currentImg();
+    KisImageSP img = currentImg();
 
-    if (!current) {
+    if (!img) {
         return 0;
     }
 
@@ -1566,17 +1566,18 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 importImageLayer->setName(url.prettyURL());
 
                 KisGroupLayerSP parent = 0;
-                KisLayerSP currentActiveLayer = current->activeLayer();
+                KisLayerSP currentActiveLayer = img->activeLayer();
 
                 if (currentActiveLayer) {
                     parent = currentActiveLayer->parent();
                 }
 
                 if (parent == 0) {
-                    parent = current->rootLayer();
+                    parent = img->rootLayer();
                 }
 
-                current->addLayer(importImageLayer.data(), parent, currentActiveLayer);
+                img->addLayer(importImageLayer.data(), parent, currentActiveLayer);
+                img->notify(importImageLayer->extent());
                 rc += importImageLayer->numLayers();
             }
         }
@@ -2390,11 +2391,10 @@ void KisView::showLayerProperties(KisLayerSP layer)
 
     if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
     {
-        KisDlgAdjustmentLayer dlg(currentImg(), i18n("Adjustment Layer Properties"), this, "dlgadjustmentlayer");
+        KisDlgAdjustmentLayer dlg(currentImg(), alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjustmentlayer");
         if (dlg.exec() == QDialog::Accepted)
         {
             alayer -> setDirty( true );
-            alayer -> setName( dlg.layerName() );
             alayer -> setFilter( dlg.filterConfiguration() );
         }
     }
@@ -2413,6 +2413,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
                 m_adapter -> beginMacro(i18n("Property Changes"));
                 layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
                 layer -> setDirty( true );
+                layer->image()->notify(layer->extent());
                 m_adapter -> endMacro();
             }
         }
@@ -2422,8 +2423,9 @@ void KisView::showLayerProperties(KisLayerSP layer)
 void KisView::layerAdd()
 {
     KisImageSP img = currentImg();
-    if (img && img -> activeLayer())
+    if (img && img -> activeLayer()) {
         addLayer(img -> activeLayer() -> parent(), img -> activeLayer());
+    }
     else if (img)
         addLayer(static_cast<KisGroupLayer*>(img -> rootLayer().data()), 0);
 }
@@ -2445,6 +2447,7 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
+                img->notify(layer->extent());
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2466,6 +2469,7 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
+                img->notify(layer->extent());
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2503,7 +2507,7 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     KisPartLayerImpl* partLayer = new KisPartLayerImpl(this, img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
     img -> addLayer(partLayer, parent, above);
-
+    img->notify(partLayer->extent());
     m_doc->setModified(true);
 }
 
@@ -2526,7 +2530,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisPaintDeviceImplSP dev = img->activeDevice();
     if (!dev) return;
 
-    KisDlgAdjustmentLayer dlg(img, i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         //XXX: Show filter gallery with current layer and get the filterconfig back
         KisSelectionSP selection = 0;
@@ -2554,6 +2558,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
 
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addLayer(l, parent, above);
+    img->notify(l->extent());
 }
 
 void KisView::slotChildActivated(bool a) {
@@ -2581,6 +2586,7 @@ void KisView::layerRemove()
             //Q_INT32 n = img -> index(layer);
 
             img->removeLayer(layer);
+            img->notify(layer->extent());
             resizeEvent(0);
             updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2603,7 +2609,7 @@ void KisView::layerDuplicate()
     KisLayerSP dup = active->clone();
     dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
     img->addLayer(dup, active->parent().data(), active);
-
+    img->notify(dup->extent());
     if (dup) {
         //        m_layerBox->slotSetCurrentItem(img -> index(layer)); // LAYERREMOVE
         resizeEvent(0);

@@ -203,7 +203,7 @@ void KisToolFreehand::endPaint()
 
                 adapter -> addCommand(painter.endTransaction());
                 m_currentImage->removeLayer(m_tempLayer);
-                
+                m_currentImage->notify(m_tempLayer->extent());
                 // The shared ptr layer vector in the group keeps the layer from being
                 // being removed if it isn't removed here. It would be much faster to
                 // keep the layer and clear it, but that isn't possible. Replacing the

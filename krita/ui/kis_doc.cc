@@ -801,7 +801,6 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
 
     img->addLayer(layer, img->rootLayer(),0);
     img->activate(layer);
-    //img->notify();
 
     m_currentImage = img;
 
@@ -848,7 +847,6 @@ bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisCol
     img->setBackgroundColor(bgColor);
     img->addLayer(layer, img->rootLayer(), 0);
     img->activate(layer);
-    //img->notify();
 
     m_currentImage = img;
 

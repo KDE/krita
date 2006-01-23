@@ -212,7 +212,14 @@ public:
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
     
     /**
-     * Add already existing layer to image
+     * Add already existing layer to image. The image is _not_ automatically
+     * recompited, you need to call notify(layer.extent()) yourself. This means
+     * that you add a bunchaton of layers without recompositing the image again
+     * for every layer, which in turn means you can add layers much faster.
+     * 
+     * So, don't forget to call notify() when you're done adding layers (or
+     * postpone it if you're going to do other things to the image afterwards,
+     * before displaying).
      *
      * @param layer the layer to be added
      * @param parent the parent layer

@@ -836,8 +836,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     emit sigLayerPropertiesChanged( m_activeLayer );
     emit sigNonActiveLayersUpdated(); // This makes sure the
                                       // thumbnails are updated
-    notify(); // This makes sure Krita updates the rendered
-              // image.currentColorSpaceChanged
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -928,8 +926,6 @@ void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCo
             layer -> setOpacity(opacity);
             layer -> setCompositeOp(compositeOp);
         }
-
-        notify();
     }
 }
 
@@ -1002,7 +998,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             activate(layer);
         }
         layer->setDirty(true);
-        notify(layer->extent());
     }
 
     return success;
@@ -1036,7 +1031,6 @@ bool KisImage::removeLayer(KisLayerSP layer)
                     else
                         activate(rootLayer() -> firstChild());
                 }
-                notify();
             }
         }
         return success;

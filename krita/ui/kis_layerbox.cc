@@ -391,8 +391,10 @@ void KisLayerBox::slotRequestNewObjectLayer(LayerItem* p, LayerItem* after, cons
 
 void KisLayerBox::slotRequestRemoveLayer(LayerItem* item)
 {
-    if (KisLayerSP layer = m_image -> findLayer(item -> id()))
+    if (KisLayerSP layer = m_image -> findLayer(item -> id())) {
         m_image -> removeLayer(layer);
+        m_image->notify(layer->extent());
+    }
     updateUI();
 }
 
@@ -506,6 +508,7 @@ void KisLayerBox::slotRmClicked()
     {
         m_modified.remove(l[i]);
         m_image -> removeLayer(m_image -> findLayer(l[i]));
+        m_image->notify();
     }
 }
 

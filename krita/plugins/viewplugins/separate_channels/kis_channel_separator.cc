@@ -252,7 +252,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             }
         }
         if (undo) undo -> addCommand(t);
-
+        image->notify();
         m_view->canvasSubject()->document()->setModified(true);
         
         ++deviceIt;

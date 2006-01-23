@@ -114,7 +114,8 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        image->convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        image->notify();
         QApplication::restoreOverrideCursor();
         image -> setProfile(cs->getProfile());
     }

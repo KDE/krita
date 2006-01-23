@@ -112,12 +112,18 @@ void KisAdjustmentLayer::setY(Q_INT32 y)
 
 QRect KisAdjustmentLayer::extent() const
 {
-    return QRect();
+    if (m_selection)
+        return m_selection->extent();
+    else
+        return image()->bounds();
 }
     
 QRect KisAdjustmentLayer::exactBounds() const
 {
-    return QRect();
+    if (m_selection)
+        return m_selection->exactBounds();
+    else
+        return image()->bounds();
 }
 
 bool KisAdjustmentLayer::accept(KisLayerVisitor & v)

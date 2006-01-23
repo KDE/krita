@@ -470,7 +470,7 @@ KisLayerSP KisSelectionManager::paste()
                 layer -> convertTo(img -> colorSpace());
 */
 
-        img -> notify();
+        img -> notify(layer->extent());
 
         return layer;
     }

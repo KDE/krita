@@ -41,6 +41,7 @@ class KisDlgAdjustmentLayer : public KDialogBase
 public:
     
     KisDlgAdjustmentLayer(KisImage * img,
+                          const QString & layerName,
                           const QString & caption,
                           QWidget *parent = 0,
                           const char *name = 0);

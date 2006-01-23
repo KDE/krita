@@ -37,6 +37,7 @@
 #include "kis_paint_layer.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
+                                             const QString & layerName,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
@@ -52,6 +53,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     grid->addWidget(lblName, 0, 0);
 
     m_layerName = new KLineEdit(page, "m_layerName");
+    m_layerName->setText(layerName);
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 

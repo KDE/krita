@@ -107,8 +107,14 @@ bool KisProfile::init()
         m_valid = true;
         
         // Check if the profile can convert (something -> this)
-        LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
-        if( OutMatShaper )
+//         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
+//         if( OutMatShaper )
+//         {
+//             m_suitableForOutput = true;
+//         }
+        cmsCIEXYZTRIPLE Primaries;
+
+        if (cmsTakeColorants(&Primaries, m_profile))
         {
             m_suitableForOutput = true;
         }

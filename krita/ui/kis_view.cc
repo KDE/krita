@@ -2316,7 +2316,15 @@ void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 
 void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
 {
-    event -> accept(KURLDrag::canDecode(event));
+    bool accept = false;
+
+    // Only accept drag if we're not busy, particularly as we may
+    // be showing a progress bar and calling qApp->processEvents().
+    if (KURLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
+        accept = true;
+    }
+    
+    event -> accept(accept);
 }
 
 void KisView::canvasGotDropEvent(QDropEvent *event)

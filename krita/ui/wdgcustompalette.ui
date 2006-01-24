@@ -42,7 +42,7 @@
                 <cstring>removeColor</cstring>
             </property>
             <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
             </property>
             <property name="text">
                 <string>Remove Selected Color</string>

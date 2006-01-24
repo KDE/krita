@@ -21,6 +21,7 @@
 #define __KIS_PALETTE_VIEW_H__
 
 #include <qscrollview.h>
+#include "kis_palette.h"
 
 class KListBox;
 class KisPalette;
@@ -39,6 +40,8 @@ public:
     virtual ~KisPaletteView();
 
     KisPalette* palette() const;
+    /// Might return the default constructed entry...
+    KisPaletteEntry currentEntry() const { return m_currentEntry; }
 
 public slots:
     void setPalette(KisPalette* p);
@@ -54,6 +57,7 @@ protected slots:
 protected:
     KisPalette* m_currentPalette;
     KColorCells* m_cells;
+    KisPaletteEntry m_currentEntry;
     int mMinWidth;
     int mCols;
 

@@ -20,6 +20,7 @@
 #define __KIS_PALETTE_WIDGET_H__
 
 #include <qdict.h>
+#include "kis_palette_view.h"
 
 class QComboBox;
 class QLineEdit;
@@ -27,7 +28,6 @@ class KListBox;
 class KisPalette;
 class KisResource;
 class KisColor;
-class KisPaletteView;
 
 /**
  * A color palette in table form.
@@ -44,6 +44,7 @@ public:
     virtual ~KisPaletteWidget();
 
     QString palette() const;
+    KisPaletteEntry currentEntry() const { return m_view -> currentEntry(); }
 
 public slots:
     void setPalette(const QString &paletteName);

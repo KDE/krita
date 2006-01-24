@@ -110,7 +110,9 @@ void KisCustomPalette::slotAddNew() {
 }
 
 void KisCustomPalette::slotRemoveCurrent() {
-    // stub
+    m_palette -> remove(view -> currentEntry());
+    // Just reload the palette completely for the view updating
+    view -> setPalette(m_palette);
 }
 
 void KisCustomPalette::slotAddPredefined() {

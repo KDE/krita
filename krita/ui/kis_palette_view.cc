@@ -131,6 +131,7 @@ void KisPaletteView::slotColorCellSelected( int col )
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
+    m_currentEntry = m_currentPalette -> getColor(col);
     emit colorSelected(KisColor(m_currentPalette -> getColor(col).color, cs));
 }
 

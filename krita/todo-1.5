@@ -58,6 +58,8 @@ B  * Add image preview to bird's eyeview box
 G  * Add GUI to actually group layers
 R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
+A  * Display grid in OpenGL mode
+A  * Coordinate rounding problem painting pixels
 R  * Fix the zoom slider as per TZ
 ?  * Lock all actions when layers are locked or invisible, not just filters
 and tools (#90456)
@@ -99,12 +101,10 @@ hard look at them. We can do without open bugs :-) (Wishlists excepted, but
 Cyrille, maybe you're interested in 119290 after the release? sounds like
 something that's absolutely your cup of cafe au lait.)
 
-   109971   ASSI     Crash trying to DND while krita is working 
 P  113086   NEW      krita crashes when resizing certain image
 R  116075   NEW      reproducible crash when trying cimg image restauration
    117633   NEW      Krita crashed while trying to edit a picture's layer
    117923   NEW      crash at opening a random file
-   117925   NEW      Crash when dragging psd to 'insert as new layer'
    107348   ASSI      Layerbox behaves badly when there are many layers
    118847   NEW      off by one bug in subtracting-selections
    119401   ASSI      Action 'change image size' crops source image

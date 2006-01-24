@@ -89,9 +89,7 @@ KisSelectionSP KisAdjustmentLayer::selection()
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     
-    kdDebug() << "Setting selection " << selection << "\n";
     m_selection = new KisSelection( *selection.data() );
-    kdDebug() << "Selection copied to " << m_selection << "\n";
 }
 
 

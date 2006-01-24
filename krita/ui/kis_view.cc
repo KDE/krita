@@ -2529,6 +2529,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     if (!img) return;
 
     KisLayerSP l = img->activeLayer();
+    
     KisPaintDeviceImplSP dev;
 
     //  Argh! I hate having to cast, cast and cast again to see what kind of a layer I've got!
@@ -2542,7 +2543,6 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
             dev = gl->projection();
         }
         else {
-            kdDebug() << "Nothing to preview!\n"; // XXX: Maybe also use part layers?
             return;
         }
     }
@@ -2550,9 +2550,8 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = 0;
-        kdDebug() << "The current layer " << l->name() << " selection: " << dev->hasSelection() << "\n";
         if (dev->hasSelection()) {
-            KisSelectionSP selection = dev->selection();
+            selection = dev->selection();
         }
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();

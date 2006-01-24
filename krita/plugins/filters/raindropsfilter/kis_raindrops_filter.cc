@@ -94,76 +94,76 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplS
     setProgressTotalSteps(Amount);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
 
-        if (Coeff <= 0) Coeff = 1;
+    if (Coeff <= 0) Coeff = 1;
 
-        if (Coeff > 100) Coeff = 100;
+    if (Coeff > 100) Coeff = 100;
 
     int Width = rect.width();
     int Height = rect.height();
 
-        bool** BoolMatrix = CreateBoolArray (Width, Height);
+    bool** BoolMatrix = CreateBoolArray (Width, Height);
 
-        int       i, j, k, l, m, n;                 // loop variables
-        int       Bright;                           // Bright value for shadows and highlights
-        int       x, y;                             // center coordinates
-        int       Counter = 0;                      // Counter (duh !)
-        int       NewSize;                          // Size of current raindrop
-        int       halfSize;                         // Half of the current raindrop
-        int       Radius;                           // Maximum radius for raindrop
-        int       BlurRadius;                       // Blur Radius
-        int       BlurPixels;
+    int       i, j, k, l, m, n;                 // loop variables
+    int       Bright;                           // Bright value for shadows and highlights
+    int       x, y;                             // center coordinates
+    int       Counter = 0;                      // Counter (duh !)
+    int       NewSize;                          // Size of current raindrop
+    int       halfSize;                         // Half of the current raindrop
+    int       Radius;                           // Maximum radius for raindrop
+    int       BlurRadius;                       // Blur Radius
+    int       BlurPixels;
 
-        double    r, a;                             // polar coordinates
-        double    OldRadius;                        // Radius before processing
-        double    NewCoeff = (double)Coeff * 0.01;  // FishEye Coefficients
-        double    s;
-        double    R, G, B;
+    double    r, a;                             // polar coordinates
+    double    OldRadius;                        // Radius before processing
+    double    NewCoeff = (double)Coeff * 0.01;  // FishEye Coefficients
+    double    s;
+    double    R, G, B;
 
-        bool      FindAnother = false;              // To search for good coordinates
+    bool      FindAnother = false;              // To search for good coordinates
 
     KisColorSpace * cs = src -> colorSpace();
 
-        QDateTime dt = QDateTime::currentDateTime();
-        QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
+    QDateTime dt = QDateTime::currentDateTime();
+    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
 
-        srand ((uint) dt.secsTo(Y2000));
+    srand ((uint) dt.secsTo(Y2000));
 
-        // Init booleen Matrix.
+    // Init booleen Matrix.
 
-        for (i = 0 ; !cancelRequested() && (i < Width) ; ++i)
+    for (i = 0 ; !cancelRequested() && (i < Width) ; ++i)
+    {
+        for (j = 0 ; !cancelRequested() && (j < Height) ; ++j)
         {
-                for (j = 0 ; !cancelRequested() && (j < Height) ; ++j)
-                {
-                        BoolMatrix[i][j] = false;
-                }
+            BoolMatrix[i][j] = false;
+        }
     }
 
-        for (int NumBlurs = 0 ; !cancelRequested() && (NumBlurs <= Amount) ; ++NumBlurs)
+    for (int NumBlurs = 0 ; !cancelRequested() && (NumBlurs <= Amount) ; ++NumBlurs)
+    {
+        NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
+        halfSize = NewSize / 2;
+        Radius = halfSize;
+        s = Radius / log (NewCoeff * Radius + 1);
+
+        Counter = 0;
+
+        do
         {
-                NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
-                halfSize = NewSize / 2;
-                Radius = halfSize;
-                s = Radius / log (NewCoeff * Radius + 1);
+            FindAnother = false;
+            y = (int)(rand() * ((double)( Width - 1) / RAND_MAX));
+            x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
 
-                Counter = 0;
-
-                do
-                {
-                        FindAnother = false;
-                        y = (int)(rand() * ((double)( Width - 1) / RAND_MAX));
-                        x = (int)(rand() * ((double)(Height - 1) / RAND_MAX));
-
-                        if (BoolMatrix[y][x])
+            if (BoolMatrix[y][x])
+                FindAnother = true;
+            else
+                for (i = x - halfSize ; !cancelRequested() && (i <= x + halfSize) ; i++)
+                    for (j = y - halfSize ; !cancelRequested() && (j <= y + halfSize) ; j++)
+                        if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
+                            if (BoolMatrix[j][i])
                                 FindAnother = true;
-                        else
-                                for (i = x - halfSize ; !cancelRequested() && (i <= x + halfSize) ; i++)
-                                        for (j = y - halfSize ; !cancelRequested() && (j <= y + halfSize) ; j++)
-                                                if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
-                                                        if (BoolMatrix[j][i])
-                                                                FindAnother = true;
 
-                        Counter++;
-                }
+            Counter++;
+        }
         while (!cancelRequested() && (FindAnother && (Counter < 10000)) );
 
         if (Counter >= 10000)
@@ -304,7 +304,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplS
                             {
                                 QColor color;
                                 cs -> toQColor(dst -> pixel(rect.x() + n, rect.y() + m),
-                                                   &color);
+                                               &color);
 
                                 R += color.red();
                                 G += color.green();
@@ -313,22 +313,22 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplS
                             }
                         }
 
-                                        m = x + i;
-                                        n = y + j;
+                    m = x + i;
+                    n = y + j;
 
-                                        if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
-                                        {
+                    if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width))
+                    {
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
                         cs -> fromQColor(color, dst -> writablePixel(rect.x() + n, rect.y() + m));
-                                        }
-                                }
-                        }
+                    }
                 }
+            }
+        }
 
         setProgress(NumBlurs);
-        }
+    }
 
     KisRectIteratorPixel srcIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     KisRectIteratorPixel dstIt = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
@@ -341,7 +341,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplS
         ++srcIt;
     }
 
-        FreeBoolArray (BoolMatrix, Width);
+    FreeBoolArray (BoolMatrix, Width);
 
     setProgressDone();
 }
@@ -357,10 +357,10 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplS
  */
 void KisRainDropsFilter::FreeBoolArray (bool** lpbArray, uint Columns)
 {
-        for (uint i = 0; i < Columns; ++i)
-                free (lpbArray[i]);
+    for (uint i = 0; i < Columns; ++i)
+        free (lpbArray[i]);
 
-        free (lpbArray);
+    free (lpbArray);
 }
 
 /* Function to create a bidimentional dinamic boolean array
@@ -373,23 +373,23 @@ void KisRainDropsFilter::FreeBoolArray (bool** lpbArray, uint Columns)
  */
 bool** KisRainDropsFilter::CreateBoolArray (uint Columns, uint Rows)
 {
-        bool** lpbArray = NULL;
-        lpbArray = (bool**) malloc (Columns * sizeof (bool*));
+    bool** lpbArray = NULL;
+    lpbArray = (bool**) malloc (Columns * sizeof (bool*));
 
-        if (lpbArray == NULL)
-                return (NULL);
+    if (lpbArray == NULL)
+        return (NULL);
 
-        for (uint i = 0; i < Columns; ++i)
+    for (uint i = 0; i < Columns; ++i)
+    {
+        lpbArray[i] = (bool*) malloc (Rows * sizeof (bool));
+        if (lpbArray[i] == NULL)
         {
-                lpbArray[i] = (bool*) malloc (Rows * sizeof (bool));
-                if (lpbArray[i] == NULL)
-                {
-                        FreeBoolArray (lpbArray, Columns);
-                        return (NULL);
-                }
+            FreeBoolArray (lpbArray, Columns);
+            return (NULL);
         }
+    }
 
-        return (lpbArray);
+    return (lpbArray);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -405,11 +405,11 @@ bool** KisRainDropsFilter::CreateBoolArray (uint Columns, uint Rows)
 
 uchar KisRainDropsFilter::LimitValues (int ColorValue)
 {
-        if (ColorValue > 255)        // MAX = 255
-                ColorValue = 255;
-        if (ColorValue < 0)          // MIN = 0
-                ColorValue = 0;
-        return ((uchar) ColorValue);
+    if (ColorValue > 255)        // MAX = 255
+        ColorValue = 255;
+    if (ColorValue < 0)          // MIN = 0
+        ColorValue = 0;
+    return ((uchar) ColorValue);
 }
 
 KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)

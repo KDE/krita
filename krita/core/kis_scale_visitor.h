@@ -118,9 +118,7 @@ public:
         int i = 0;
         for ( t = m_scalethreads.first(); t; t = m_scalethreads.next()) {
             //progress info
-            kdDebug() << "T = " << t << "\n";
-            if (t && t->running())
-                t->wait();
+            if (t) t->wait();
             emit notifyProgress((100 / threadcount) * i);
             ++i;
 

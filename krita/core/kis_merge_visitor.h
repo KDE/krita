@@ -259,7 +259,6 @@ public:
         Q_ASSERT(f);
         
         KisSelectionSP selection = layer->selection();
-        kdDebug() << "Selection: " << selection << "\n";
         if (selection != 0) {
             m_projection->setSelection(selection);
         }

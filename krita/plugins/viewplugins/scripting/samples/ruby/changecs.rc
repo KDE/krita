@@ -1,7 +1,8 @@
 <KrossScripting>
     <ScriptAction
-      name="Change colorspace"
-      text="Demonstrate how to change the colorspace in a script"
+      name="ChangeColorspaceRuby"
+      text="Change colorspace"
+      description="Demonstrate how to change the colorspace in a script"
       icon=""
       interpreter="ruby"
       file="changecs.rb" />

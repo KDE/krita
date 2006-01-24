@@ -34,8 +34,9 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 {
     Q_ASSERT(kfc);
     m_filterConfig = kfc;
-    if (selection)
-        m_selection = new KisSelection( *selection.data() );
+    if (selection) {
+        setSelection( selection );
+    }
     m_cachedPaintDev = new KisPaintDeviceImpl( img->colorSpace(), "cached paint device for adjustmentlayer");
     Q_ASSERT(m_cachedPaintDev);
 }
@@ -44,7 +45,8 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     : KisLayer(rhs)
 {
     m_filterConfig = rhs.m_filterConfig;
-    m_selection = new KisSelection( *rhs.m_selection.data() );
+    if (rhs.m_selection)
+        m_selection = new KisSelection( *rhs.m_selection.data() );
     m_cachedPaintDev = new KisPaintDeviceImpl( *rhs.m_cachedPaintDev.data() );
 }
 
@@ -86,7 +88,10 @@ KisSelectionSP KisAdjustmentLayer::selection()
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
+    
+    kdDebug() << "Setting selection " << selection << "\n";
     m_selection = new KisSelection( *selection.data() );
+    kdDebug() << "Selection copied to " << m_selection << "\n";
 }
 
 
@@ -128,8 +133,8 @@ QRect KisAdjustmentLayer::exactBounds() const
 
 bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
 {
-    kdDebug(41001) << "ADJUSTMENT\t\t" << name()
-            << ", dirty: " << dirty() << "\n";
+//    kdDebug(41001) << "ADJUSTMENT\t\t" << name()
+//            << ", dirty: " << dirty() << "\n";
     
     return v.visit( this );
 }

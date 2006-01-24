@@ -20,7 +20,9 @@
  */
 
 #include "kis_filters_listview.h"
+#include <qapplication.h>
 
+#include "kis_cursor.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_image.h"
@@ -79,6 +81,8 @@ void KisFiltersListView::buildPreview()
     
     if(m_original== 0)
         return;
+
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
     
     // Check which filters support painting
 
@@ -123,5 +127,7 @@ void KisFiltersListView::buildPreview()
             }
         }
     }
+
+    QApplication::restoreOverrideCursor();
 }
 

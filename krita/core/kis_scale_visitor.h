@@ -118,7 +118,8 @@ public:
         int i = 0;
         for ( t = m_scalethreads.first(); t; t = m_scalethreads.next()) {
             //progress info
-            if (t)
+            kdDebug() << "T = " << t << "\n";
+            if (t && t->running())
                 t->wait();
             emit notifyProgress((100 / threadcount) * i);
             ++i;
@@ -139,10 +140,11 @@ public:
             m_img->undoAdapter()->addCommand(cmd);
         }
 
-        KisThread * scaleThread = new KisScaleWorker(layer->paintDevice(),
+        KisScaleWorker * scaleThread = new KisScaleWorker(layer->paintDevice(),
                                                      m_sx, m_sy, m_filterStrategy);
         m_scalethreads.append(scaleThread);
-        scaleThread->start();
+        //scaleThread->start();
+        scaleThread->run();
         layer->setDirty(true);
         return true;
     }

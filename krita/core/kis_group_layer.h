@@ -63,11 +63,11 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-            kdDebug(41001) << "GROUP\t\t" << name()
-                    << " dirty: " << dirty()
-                    << ", " << m_layers.count() << " children "
-                    << ", projection: " << m_projection
-                    << "\n";
+//            kdDebug(41001) << "GROUP\t\t" << name()
+//                    << " dirty: " << dirty()
+//                    << ", " << m_layers.count() << " children "
+//                    << ", projection: " << m_projection
+//                    << "\n";
             return v.visit(this);
         };
 

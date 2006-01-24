@@ -234,6 +234,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * 
     m_colorSpace = colorSpace;
 
     m_hasSelection = false;
+    m_selectionDeselected = false;
     m_selection = 0;
 }
 
@@ -246,6 +247,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     m_y = 0;
 
     m_hasSelection = false;
+    m_selectionDeselected = false;
     m_selection = 0;
 
     m_owner = img;

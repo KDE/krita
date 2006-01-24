@@ -35,6 +35,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device_impl.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const QString & layerName,
@@ -44,11 +45,29 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     : KDialogBase(parent, name, true, "", Ok | Cancel)
     , m_image(img)
 {
+    KisPaintDeviceImplSP dev = 0;
+    
+    if(m_image) {
+        KisLayerSP l = img->activeLayer();
+        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
+        if (pl) {
+            dev = pl->paintDevice();
+        }
+        else {
+            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
+            if (gl) {
+                dev = gl->projection();
+            }
+        }
+    }
+
+    if (!dev) return;
+
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
     QGridLayout * grid = new QGridLayout(page, 3, 2, 0, 6);
     setMainWidget(page);
-    
+
     QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
     grid->addWidget(lblName, 0, 0);
 
@@ -57,14 +76,14 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    m_filtersList = new KisFiltersListView(img->activeLayer(), page, "dlgadjustment.filtersList");
+    m_filtersList = new KisFiltersListView(dev, page, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
 
+    
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
-    if(m_image && m_image->activeLayer()) {
-        m_preview->slotSetDevice( img->activeDevice().data() );
-    }
+    m_preview->slotSetDevice( dev );
+    
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     grid->addWidget(m_preview, 1, 1);
     

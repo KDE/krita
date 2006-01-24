@@ -95,6 +95,7 @@
 #include "kis_gradient.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_paint_device_impl.h"
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
@@ -397,7 +398,6 @@ void KisView::createLayerBox()
     m_layerBox = new KisLayerBox(this);
     m_layerBox -> setCaption(i18n("Layers"));
 
-    m_layerBox -> setImage(currentImg());
     connect(m_layerBox, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
             this, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
     connect(m_layerBox, SIGNAL(sigRequestGroupLayer(KisGroupLayerSP, KisLayerSP)),
@@ -631,7 +631,8 @@ void KisView::setupActions()
     new KAction(i18n("Edit Palette..."), 0, this, SLOT(slotEditPalette()),
                 actionCollection(), "edit_palette");
 
-    showRuler();
+    // XXX: This triggers a repaint of the image, but way too early
+    //showRuler();
 
 }
 
@@ -2527,13 +2528,29 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     KisImageSP img = currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img->activeDevice();
-    if (!dev) return;
+    KisLayerSP l = img->activeLayer();
+    KisPaintDeviceImplSP dev;
+
+    //  Argh! I hate having to cast, cast and cast again to see what kind of a layer I've got!
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
+    if (pl) {
+        dev = pl->paintDevice();
+    }
+    else {
+        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
+        if (gl) {
+            dev = gl->projection();
+        }
+        else {
+            kdDebug() << "Nothing to preview!\n"; // XXX: Maybe also use part layers?
+            return;
+        }
+    }
 
     KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
-        //XXX: Show filter gallery with current layer and get the filterconfig back
         KisSelectionSP selection = 0;
+        kdDebug() << "The current layer " << l->name() << " selection: " << dev->hasSelection() << "\n";
         if (dev->hasSelection()) {
             KisSelectionSP selection = dev->selection();
         }
@@ -3261,6 +3278,7 @@ void KisView::setCurrentImage(KisImageSP image)
     }
 #endif
     connectCurrentImg();
+    m_layerBox -> setImage(currentImg());
     m_image -> notify();
 
     zoomAroundPoint(0, 0, 1.0);

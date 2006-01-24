@@ -64,8 +64,8 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-            kdDebug(41001) << "\tPAINT\t" << name()
-                    << " dirty: " << dirty() << "\n";
+//            kdDebug(41001) << "\tPAINT\t" << name()
+//                    << " dirty: " << dirty() << "\n";
             return v.visit(this);
         };
 

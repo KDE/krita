@@ -176,7 +176,7 @@ QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
                                          Q_INT32 renderingIntent, float /*exposure*/)
 
 {
-
+    Q_ASSERT(data);
     QImage img = QImage(const_cast<Q_UINT8 *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
     img.setAlphaBuffer(true);
     // XXX: The previous version of this code used the quantum data directly

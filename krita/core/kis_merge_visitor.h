@@ -20,6 +20,7 @@
 #define KIS_MERGE_H_
 
 #include <qrect.h>
+
 #include "kis_types.h"
 #include "kis_paint_device_impl.h"
 #include "kis_layer_visitor.h"
@@ -258,23 +259,25 @@ public:
         Q_ASSERT(f);
         
         KisSelectionSP selection = layer->selection();
+        kdDebug() << "Selection: " << selection << "\n";
         if (selection != 0) {
             m_projection->setSelection(selection);
         }
         
         // Filter onto the cached paint device
 
-        f->process(m_projection, layer->cachedPaintDevice(), cfg, m_rc);
+        f->process(m_projection, m_projection, cfg, m_rc);
 
-        KisPainter gc(m_projection);
+        KisPainter gc(layer->cachedPaintDevice());
 
-        // Copy the cached paint device onto the projection
+        // Cache the projection
         gc.bitBlt(m_rc.left(), m_rc.top(),
-                  COMPOSITE_COPY, layer->cachedPaintDevice(), OPACITY_OPAQUE,
+                  COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
 
         m_projection->deselect();
         layer->setDirty(false);
+        
         return true;
     }
     

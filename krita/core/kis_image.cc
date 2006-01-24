@@ -1346,8 +1346,6 @@ KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 
 void KisImage::updateProjection(const QRect& rc)
 {
-    // kdDebug() << kdBacktrace() << "\n";
-
     QRect rect = rc & QRect(0, 0, width(), height());
 
     KisMergeVisitor visitor(this, m_rootLayer->projection(), rc);

@@ -106,7 +106,6 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 
     m_origDevice = dev;
     
-    
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     m_profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);

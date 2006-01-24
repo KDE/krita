@@ -882,7 +882,8 @@ KisPaintDeviceImplSP KisImage::activeDevice()
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data()))
         return layer -> paintDevice();
     else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data()))
-        return layer -> selection().data();
+        if (layer->selection())
+            return layer -> selection().data();
     return 0;
 }
 

@@ -1526,9 +1526,9 @@ void KisView::saveLayerAsImage()
 
 Q_INT32 KisView::importImage(const KURL& urlArg)
 {
-    KisImageSP img = currentImg();
+    KisImageSP currentImage = currentImg();
 
-    if (!img) {
+    if (!currentImage) {
         return 0;
     }
 
@@ -1549,36 +1549,36 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
         KURL url = *it;
         KisDoc d;
         d.import(url);
-        KisImageSP img = d.currentImage();
+        KisImageSP importedImage = d.currentImage();
 
-        if (img) {
-            KisLayerSP importImageLayer = img->rootLayer().data();
+        if (importedImage) {
+            KisLayerSP importedImageLayer = importedImage->rootLayer().data();
 
-            if (importImageLayer != 0) {
+            if (importedImageLayer != 0) {
 
-                if (importImageLayer->numLayers() == 2) {
+                if (importedImageLayer->numLayers() == 2) {
                     // Don't import the root if this is not a layered image (1 group layer
                     // plus 1 other).
-                    importImageLayer = importImageLayer->firstChild();
-                    importImageLayer->parent()->removeLayer(importImageLayer);
+                    importedImageLayer = importedImageLayer->firstChild();
+                    importedImageLayer->parent()->removeLayer(importedImageLayer);
                 }
 
-                importImageLayer->setName(url.prettyURL());
+                importedImageLayer->setName(url.prettyURL());
 
                 KisGroupLayerSP parent = 0;
-                KisLayerSP currentActiveLayer = img->activeLayer();
+                KisLayerSP currentActiveLayer = currentImage->activeLayer();
 
                 if (currentActiveLayer) {
                     parent = currentActiveLayer->parent();
                 }
 
                 if (parent == 0) {
-                    parent = img->rootLayer();
+                    parent = currentImage->rootLayer();
                 }
 
-                img->addLayer(importImageLayer.data(), parent, currentActiveLayer);
-                img->notify(importImageLayer->extent());
-                rc += importImageLayer->numLayers();
+                currentImage->addLayer(importedImageLayer.data(), parent, currentActiveLayer);
+                currentImage->notify(importedImageLayer->extent());
+                rc += importedImageLayer->numLayers();
             }
         }
     }

@@ -153,6 +153,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     setInstance( KisFactory::instance(), false );
     setTemplateType( "krita_template" );
 
+    init();
+
     if (name)
         dcopObject();
 }

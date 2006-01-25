@@ -256,8 +256,16 @@ void KisLayerBox::slotImageUpdated()
            && m_image -> activeLayer()
            && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
         return;
-    if (list() -> activeLayer() && !m_modified.contains(list() -> activeLayer() -> id()))
-        m_modified.append(list() -> activeLayer() -> id());
+    LayerItem *l = list() -> activeLayer();
+    QValueList<int> v;
+    while (l)
+    {
+        v.append(l -> id());
+        l = l -> parent();
+    }
+    for (int i = v.count() - 1; i >= 0; --i)
+        if (!m_modified.contains(v[i]))
+            m_modified.append(v[i]);
     m_thumbnailerTimer.stop();
     m_thumbnailerTimer.start(1000, true);
 }

@@ -97,45 +97,15 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
     }
 }
 
-QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
-{
-    if (w > image()->width())
-    {
-        w = image()->width();
-        h = Q_INT32(double(image()->width()) / w * h);
-    }
-    if (h > image()->height())
-    {
-        h = image()->height();
-        w = Q_INT32(double(image()->height()) / h * w);
-    }
-
-    if (image()->width() > image()->height())
-        h = Q_INT32(double(image()->height()) / image()->width() * w);
-    else if (image()->height() > image()->width())
-        w = Q_INT32(double(image()->width()) / image()->height() * h);
-
-    QColor c;
-    Q_UINT8 opacity;
-    QImage img(w,h,32);
-
-    for (Q_INT32 y=0; y < h; ++y) {
-        Q_INT32 iY = (y * image()->height() ) / h;
-        for (Q_INT32 x=0; x < w; ++x) {
-            Q_INT32 iX = (x * image()->width() ) / w;
-            paintDevice()->pixel(iX, iY, &c, &opacity);
-            const QRgb rgb = c.rgb();
-            img.setPixel(x, y, qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), opacity));
-        }
-    }
-
-    return img;
-}
-
 void KisPaintLayer::setImage(KisImage *image)
 {
     super::setImage(image);
     m_paintdev->setImage(image);
+}
+
+QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
+{
+    return m_paintdev->createThumbnail(w, h);
 }
 
 #include "kis_paint_layer.moc"

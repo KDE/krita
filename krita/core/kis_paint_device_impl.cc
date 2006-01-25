@@ -642,6 +642,54 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1,
     return image;
 }
 
+QImage KisPaintDeviceImpl::createThumbnail(Q_INT32 w, Q_INT32 h)
+{
+    int srcw, srch;
+    if( image() )
+    {
+        srcw = image()->width();
+        srch = image()->height();
+    }
+    else
+    {
+        const QRect e = extent();
+        srcw = e.width();
+        srch = e.height();
+    }
+
+    if (w > srcw)
+    {
+        w = srcw;
+        h = Q_INT32(double(srcw) / w * h);
+    }
+    if (h > srch)
+    {
+        h = srch;
+        w = Q_INT32(double(srch) / h * w);
+    }
+
+    if (srcw > srch)
+        h = Q_INT32(double(srch) / srcw * w);
+    else if (srch > srcw)
+        w = Q_INT32(double(srcw) / srch * h);
+
+    QColor c;
+    Q_UINT8 opacity;
+    QImage img(w,h,32);
+
+    for (Q_INT32 y=0; y < h; ++y) {
+        Q_INT32 iY = (y * srch ) / h;
+        for (Q_INT32 x=0; x < w; ++x) {
+            Q_INT32 iX = (x * srcw ) / w;
+            pixel(iX, iY, &c, &opacity);
+            const QRgb rgb = c.rgb();
+            img.setPixel(x, y, qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), opacity));
+        }
+    }
+
+    return img;
+}
+
 KisRectIteratorPixel KisPaintDeviceImpl::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
 {
     if(hasSelection())

@@ -102,6 +102,8 @@ public:
     /// Removes the layer from this group. Fails if there's no such layer in this group.
     virtual bool removeLayer(KisLayerSP layer);
 
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+
 private:
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers

@@ -80,6 +80,7 @@ void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst
     Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
 
     cubism(src, dst, rect, tileSize, tileSaturation);
+    setProgressDone(); // Must be called even if you don't really support progression
 }
 
 void KisCubismFilter::randomizeIndices (Q_INT32 count, Q_INT32* indices)

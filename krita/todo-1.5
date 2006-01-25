@@ -30,6 +30,7 @@ Filters
 C  * Fix crashes in filters
 R  * Check filters for colorspace problems
 R  * Implement filter configuration class
+?  * Fix buttons in brightness/contrast
 
 Colorspaces
 
@@ -45,11 +46,11 @@ R  * Fix unittests for colorspaces
 P  * Fix part layers
 R  * Resize image to size of layer: move layer to 0,0 in this image
 R  * Selections are no longer updated when switching layers
-R  * remove duplicate and filter paintops from the paintop box
 R  * disable everything necessary when the current layer is wet.
 ?  * update the plugin .desktop and plugin loader required versions (and maybe change the name to X-Krita-Version instead of X-KDE-Version)
 ?  * set the headers to install
 R  * check whether we indeed support the CREATE spec
+?  * Use the right profile and colorspace when loading layers. The code in kis_load_visitor.h is commented out
 
 User interface
 

@@ -128,19 +128,18 @@ double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNu
 
 double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y)
 {
-        double r;
 
         if ( oneOverDist==0 )
-                return 1.0;
+            return 1.0;
         else
         {
-                r = (vec[0] * x + vec[1] * y) * oneOverDist;
-                if (r < 0.2)
-                        r = 0.2;
-                else if (r > 1.0)
-                        r = 1.0;
+            double r = (vec[0] * x + vec[1] * y) * oneOverDist;
+            if (r < 0.2)
+                r = 0.2;
+            else if (r > 1.0)
+                r = 1.0;
+            return r;
         }
-        return r;
 }
 
 void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max, Q_INT32 xmin, Q_INT32 xmax)
@@ -158,7 +157,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
                 double xstart = x1 + 0.5 * xinc;
                 for (Q_INT32 y = y1 ; y < y2; y++)
                 {
-                    if(xstart > xmin && xstart < xmax)
+                    if(xstart >= xmin && xstart <= xmax)
                     {
                         if (xstart < min[y - offset])
                         {
@@ -254,17 +253,20 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
                 {
                         xs = static_cast<Q_INT32>((*it).x());
                         ys = static_cast<Q_INT32>((*it).y());
-
                         ++it;
-                        xe = static_cast<Q_INT32>((*it).x());
-                        ye = static_cast<Q_INT32>((*it).y());
+                        
+                        if( it != poly->end() )
+                        {
+                            xe = static_cast<Q_INT32>((*it).x());
+                            ye = static_cast<Q_INT32>((*it).y());
 
-                        xs *= SUPERSAMPLE;
-                        ys *= SUPERSAMPLE;
-                        xe *= SUPERSAMPLE;
-                        ye *= SUPERSAMPLE;
+                            xs *= SUPERSAMPLE;
+                            ys *= SUPERSAMPLE;
+                            xe *= SUPERSAMPLE;
+                            ye *= SUPERSAMPLE;
 
-                        convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
+                            convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
+                        }
                 }
         }
 
@@ -288,13 +290,13 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
                 if (! ((i + 1) % SUPERSAMPLE))
                 {
                         y = (i / SUPERSAMPLE) + minY;
-                        if (y >= y1 && y < y2)
+                        if (y >= y1 && y <= y2)
                         {
                                 for (Q_INT32 j = 0; j < sizeX; j += SUPERSAMPLE)
                                 {
                                         x = (j / SUPERSAMPLE) + minX;
 
-                                        if (x >= x1 && x < x2)
+                                        if (x >= x1 && x <= x2)
                                         {
                                                 for (val = 0, valsIter = &vals[j], valsEnd = &valsIter[SUPERSAMPLE]; valsIter < valsEnd; valsIter++)
                                                 {

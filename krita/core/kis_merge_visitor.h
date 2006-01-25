@@ -262,12 +262,24 @@ public:
         if (selection != 0) {
             m_projection->setSelection(selection);
         }
-        
+
+        KisPainter gc(layer -> cachedPaintDevice());
+        gc.bitBlt(m_rc.left(), m_rc.top(),
+                  COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
+                  m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+        gc.end();
+
         // Filter onto the cached paint device
+        f->process(layer -> cachedPaintDevice(), layer -> cachedPaintDevice(), cfg, m_rc);
 
-        f->process(m_projection, m_projection, cfg, m_rc);
+        gc.begin(m_projection);
+        gc.bltSelection(m_rc.left(), m_rc.top(),
+                        COMPOSITE_OVER, layer -> cachedPaintDevice(),
+                        selection, OPACITY_OPAQUE,
+                        m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+        gc.end();
 
-        KisPainter gc(layer->cachedPaintDevice());
+        gc.begin(layer -> cachedPaintDevice());
 
         // Cache the projection
         gc.bitBlt(m_rc.left(), m_rc.top(),

@@ -275,9 +275,9 @@ public:
 
         // Copy the filtered bits onto the projection 
         KisPainter gc(m_projection);
-        gc.bitBlt(m_rc.left(), m_rc.top(),
-                  COMPOSITE_OVER, tmp, layer->opacity(),
-                  m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+        gc.bltSelection(m_rc.left(), m_rc.top(),
+                        COMPOSITE_OVER, tmp, selection, layer->opacity(),
+                        m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
         gc.end();
 
         // Copy the finished projection onto the cache

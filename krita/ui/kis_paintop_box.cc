@@ -87,7 +87,11 @@ void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 
 void KisPaintopBox::slotItemSelected(int index)
 {
-    KisID id = *m_paintops->at(index);
+    if ((uint)index > m_displayedOps->count()) {
+        return;
+    }
+    KisID id = *m_displayedOps->at(index);
+    
     if (m_optionWidget != 0) {
         m_layout->remove(m_optionWidget);
         m_optionWidget->hide();
@@ -112,10 +116,9 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     QValueList<KisID>::iterator end = m_paintops -> end();
     m_displayedOps -> clear();
     m_cmbPaintops->clear();
-
+    kdDebug() << "CS: " << cs->id().id() << "\n";
     for ( ; it != end; ++it ) {
         if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
-
             QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(*it);
             if (pm.isNull()) {
                 QPixmap p = QPixmap( 16, 16 );

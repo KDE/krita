@@ -546,13 +546,17 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if(attr == "grouplayer")
         return loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
 
+    if(attr == "adjustmentlayer")
+        return loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
+    
     kdDebug(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return 0;
 }
 
 
 KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
-    QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+                                  QString name, Q_INT32 x, Q_INT32 y,
+                                  Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
 {
     kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
     QString attr;
@@ -587,7 +591,8 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 }
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
-    QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+                                       QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                       KisCompositeOp compositeOp)
 {
     kdDebug(DBG_AREA_FILE) << "loadGroupLayer called\n";
     QString attr;
@@ -607,6 +612,43 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
     return layer;
 }
 
+KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
+                                             QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                             KisCompositeOp compositeOp)
+{
+    kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
+    QString attr;
+    KisAdjustmentLayerSP layer;
+    KisFilterConfiguration * config;
+    QString filtername;
+    
+    if ((filtername = element.attribute("filtername")).isNull()) {
+        // XXX: Invalid adjustmentlayer! We should warn about it!
+        return 0;
+    }
+        
+    KisFilter * f = KisFilterRegistry::instance()->get(filtername);
+    if (!f) return 0; // XXX: We don't have this filter. We should warn about it!
+    
+    // We'll load the selection later. 
+    layer = new KisAdjustmentLayer(img, name, config, 0);
+    Q_CHECK_PTR(layer);
+
+    layer -> setCompositeOp(compositeOp);
+    layer -> setVisible(visible);
+    layer -> setLocked(locked);
+    layer -> setX(x);
+    layer -> setY(y);
+    layer -> setOpacity(opacity);
+    
+    if ((element.attribute("filename")).isNull())
+        m_layerFilenames[layer.data()] = name;
+    else
+        m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
+    kdDebug(DBG_AREA_FILE) << "filename of adjustment layer: " << m_layerFilenames[layer.data()]  << "\n";
+    
+    return layer;
+}
 
 bool KisDoc::completeSaving(KoStore *store)
 {

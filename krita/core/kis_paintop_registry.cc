@@ -98,7 +98,10 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painte
 QWidget * KisPaintOpRegistry::configWidget(const KisID& id, QWidget * parent) const
 {
     KisPaintOpFactory*  f = get(id);
-    return f->optionWidget( parent );
+    if (f)
+        return f->optionWidget( parent );
+
+    return 0;
 }
 
 bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
@@ -109,7 +112,6 @@ bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
         kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return false;
     }
-
     return f->userVisible(cs);
 
 }

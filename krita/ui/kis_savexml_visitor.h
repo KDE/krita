@@ -26,6 +26,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
 
 class KisSaveXmlVisitor : public KisLayerVisitor {
 public:
@@ -105,6 +106,21 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        QDomElement layerElement = m_doc.createElement("layer");
+
+        layerElement.setAttribute("name", layer -> name());
+        layerElement.setAttribute("filtername", layer->filter()->name());
+        layerElement.setAttribute("filterversion", layer->filter()->version());
+        layerElement.setAttribute("opacity", layer -> opacity());
+        layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
+        layerElement.setAttribute("visible", layer -> visible());
+        layerElement.setAttribute("locked", layer -> locked());
+        layerElement.setAttribute("layertype", "adjustmentlayer");
+        layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
+        
+        m_elem.appendChild(layerElement);
+
+        m_count++;
         return true;
     }
 

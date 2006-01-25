@@ -1,5 +1,4 @@
-/*
- * This file is part of KimageShop^WKrayon^WKrita
+/* This file is part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
@@ -2610,6 +2609,7 @@ void KisView::layerRemove()
             //Q_INT32 n = img -> index(layer);
 
             img->removeLayer(layer);
+            img->activeLayer()->setDirty(true);
             img->notify(layer->extent());
             resizeEvent(0);
             updateCanvas();

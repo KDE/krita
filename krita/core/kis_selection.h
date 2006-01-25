@@ -39,8 +39,19 @@ class KRITACORE_EXPORT KisSelection : public KisPaintDeviceImpl {
     typedef KisPaintDeviceImpl super;
 
 public:
-    KisSelection(KisPaintDeviceImplSP layer);
+    /**
+     * Create a new KisSelection
+    * @param dev the parent paint device. The selection will never be bigger than the parent
+     *              paint device.
+     */
+    KisSelection(KisPaintDeviceImplSP dev);
 
+    /**
+     * Create a new KisSelection
+     * @param img the parent image. This selection will not have a parent paint device
+     */
+    KisSelection(KisImageSP img);
+    
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates
@@ -76,7 +87,7 @@ public:
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private:
-    KisPaintDeviceImplSP m_parentLayer;
+    KisPaintDeviceImplSP m_parentPaintDevice;
 };
 
 #endif // KIS_SELECTION_H_

@@ -68,6 +68,8 @@
         linked:       Is the layer linked? (yes or no) OBSOLETE
         filename:   The name of the binary file of the layer' data.
         layertype:   The type of layer. paintlayer is assumed if absent.
+        filtername  The name of the filter in case the layer is an adjustmentlayer
+        filterversion The version of the filter in case the layer is an adjustmentlayer
 -->
 <!ELEMENT layer (LAYERS)?>
 <!ATTLIST layer 
@@ -82,5 +84,10 @@
 	colorspacename CDATA #REQUIRED
 	profile CDATA #REQUIRED
 	filename      CDATA #IMPLIED
-	layertype      CDATA "paintlayer">
+	layertype      CDATA "paintlayer"
+        filtername CDATA ""
+        filterversion CDATA ""
+>
+
+<!ELEMENT FILTERCONFIG (filterconfig)>
 

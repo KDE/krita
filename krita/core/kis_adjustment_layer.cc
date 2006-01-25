@@ -29,14 +29,12 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
 
-KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection) :
-    KisLayer (img, name, OPACITY_OPAQUE)
+KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
+    : KisLayer (img, name, OPACITY_OPAQUE)
 {
     Q_ASSERT(kfc);
     m_filterConfig = kfc;
-    if (selection) {
-        setSelection( selection );
-    }
+    setSelection( selection );
     m_cachedPaintDev = new KisPaintDeviceImpl( img->colorSpace(), "cached paint device for adjustmentlayer");
     Q_ASSERT(m_cachedPaintDev);
 }
@@ -88,8 +86,8 @@ KisSelectionSP KisAdjustmentLayer::selection()
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
-    
-    m_selection = new KisSelection( *selection.data() );
+    if (selection)
+        m_selection = new KisSelection( *selection.data() );
 }
 
 

@@ -1045,6 +1045,12 @@ KisInputDevice KisCanvasWidget::findActiveInputDevice()
 
         XDeviceState *deviceState = XQueryDeviceState(QApplication::desktop() -> x11Display(),
                                                       tabletDevice.xDevice());
+
+        // If your the laptop sleeps, and you remove the mouse from the usb
+        // port, then on wake-up Krita can crash because the above call will
+        // return 0. 
+        if (!deviceState) continue;
+        
         const XInputClass *inputClass = deviceState -> data;
         bool deviceIsInProximity = false;
 

@@ -223,7 +223,10 @@ Q_UINT8 KisRgbColorSpace::intensity8(const Q_UINT8 * src) const
 
 
 
-void KisRgbColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+void KisRgbColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
+                                     const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
+                                     const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride,
+                                     Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     while (rows > 0) {
 

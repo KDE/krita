@@ -52,13 +52,14 @@ public:
 
     ~KisPaintopBox();
 
-public slots:
-
-    void addItem(const KisID & paintop, const QString & category = "");
-
+    
 signals:
 
-    void selected(const KisID & id);
+   void selected(const KisID & id);
+
+private slots:
+
+    void addItem(const KisID & paintop, const QString & category = "");
 
 private slots:
 

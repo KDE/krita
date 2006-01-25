@@ -177,6 +177,9 @@ private:
     KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
                 QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                 KisCompositeOp compositeOp);
+    KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
+                                             QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                             KisCompositeOp compositeOp);
     bool init();
 
     void setIOSteps(Q_INT32 nsteps);

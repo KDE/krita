@@ -158,8 +158,8 @@ public:
         KisFillPainter gc(layer->projection());
         if (adjLayer != 0) {
             gc.bitBlt(m_rc.left(), m_rc.top(),
-                       COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
-                       m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+                      COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
+                      m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
             first = false;
         }
         else {
@@ -259,34 +259,33 @@ public:
         Q_ASSERT(f);
         
         KisSelectionSP selection = layer->selection();
+        kdDebug() << "Do we have a selection: " << selection << "?\n";
+    
+        // Copy of the projection -- use the copy-on-write trick.
+        KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl(layer->image()->colorSpace());
+
+        // If there's a selection, only keep the selected bits
         if (selection != 0) {
             m_projection->setSelection(selection);
         }
+        
+        // Filter the temporary paint device -- remember, these are only the selected bits,
+        // if there was a selection.
+        f->process(m_projection, tmp, cfg, m_rc);
 
-        KisPainter gc(layer -> cachedPaintDevice());
+        // Copy the filtered bits onto the projection 
+        KisPainter gc(m_projection);
         gc.bitBlt(m_rc.left(), m_rc.top(),
-                  COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
+                  COMPOSITE_OVER, tmp, layer->opacity(),
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
         gc.end();
 
-        // Filter onto the cached paint device
-        f->process(layer -> cachedPaintDevice(), layer -> cachedPaintDevice(), cfg, m_rc);
-
-        gc.begin(m_projection);
-        gc.bltSelection(m_rc.left(), m_rc.top(),
-                        COMPOSITE_OVER, layer -> cachedPaintDevice(),
-                        selection, OPACITY_OPAQUE,
-                        m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
-        gc.end();
-
-        gc.begin(layer -> cachedPaintDevice());
-
-        // Cache the projection
+        // Copy the finished projection onto the cache
+        gc.begin(layer->cachedPaintDevice());
         gc.bitBlt(m_rc.left(), m_rc.top(),
                   COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
 
-        m_projection->deselect();
         layer->setDirty(false);
         
         return true;

@@ -107,6 +107,35 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+
+        QString location = m_external ? QString::null : m_uri;
+        location += m_img->name() + QString("/layers/layer%1").arg(m_count);
+
+        if (layer->selection()) {
+            // Layer data
+            if (m_store -> open(location)) {
+                if (!layer->selection() -> write(m_store)) {
+                    layer->selection() -> disconnect();
+                    m_store -> close();
+                    //IODone();
+                    return false;
+                }
+                m_store -> close();
+            }
+        }
+
+        if (layer->filter()) {
+            QString lcoation = m_external ? QString::null : m_uri;
+            location = m_external ? QString::null : m_uri;
+            location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
+
+            if (m_store -> open(location)) {
+                QString s = layer->filter()->toString();
+                m_store -> write(s.utf8());
+                m_store -> close();
+            }            
+        }
+        m_count++;
         return true;
     }
     

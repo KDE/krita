@@ -1,15 +1,5 @@
 Code organization
 
-    * Separate all interfaces from the implementations and place them in krita/sdk. Use these interfaces for DCOP.
-      Problem: what to do when it is useful for plugins to derive from a base class with some default functionality. Composition
-      with delegation here? Go through patterns book.
-
-Bugs
-
-    * On opening a second image after loading first image but not changing it,
-      the second image should be loaded in a second view and not replace the 
-      first image in the first view.
-
 Transform tool (CBR)
 
 	* Implement native integer versions for bell, bspline, lanczos3 and mitchell filters
@@ -67,18 +57,11 @@ Core
 	  the layer they are linked to, these do not store actual
 	  image data, except for an occasional mask) These should work on object
           layers (embedded KOFfice objects), too. (BSAR)
-	* Mask layers (mask layers created from selection -- vv) (BSAR)
-	* Layer groups or even better: a hierachy of collapsable folders with layers (with d&d) 
-	* Loading and saving of selections 
+	* Loading and saving of selections
 	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
-	* Link/unlink layer sets a nice icon. but doesn't actually link the
-          layer to anything. Linking should: link a group of layers together. move, transform,
-          merge linked, apply filter.
-	* Long painter operations (e.g., convolution painter) should use the 
+	* Long painter operations (e.g., convolution painter) should use the
           progressbar and be cancelable.
-	* On copying paint devices, do not actually copy the tiles, but only create
-	  new tiles when there is change. Also create a memory pool for creating new tiles (BART)
     * Color adjustment filters seem to have a problem with partially selected pixels
 
 File Format:
@@ -199,12 +182,10 @@ Tools
 Plugins
 
 	* As many filters as possible :-)
-	* What's the difference between gamma correction and colour
-	  adjustment? -> explained by Cyrille's mail, put this in handbook.
 
 Modules
 
-	* Add color models for LAB, HSV, YUV etc.
+	* Add color models for HSV, YUV etc.
 	* Add Wet & Sticky model (in progress already)
 	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
 	* The composite ops in RGB -> composite.h do not take mask into account

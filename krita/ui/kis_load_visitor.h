@@ -23,9 +23,11 @@
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_image.h"
+#include "kis_selection.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_filter_configuration.h"
 
 class KisLoadVisitor : public KisLayerVisitor {
 public:
@@ -46,8 +48,7 @@ public:
     }
 
     virtual bool visit(KisPaintLayer *layer)
-    {
-        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+    {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
 
         QString location = m_external ? QString::null : m_uri;
         location += m_img->name() + "/layers/" + m_layerFilenames[layer];
@@ -82,6 +83,7 @@ public:
         }
 
         return true;
+
     }
 
     virtual bool visit(KisGroupLayer *layer)
@@ -108,7 +110,40 @@ public:
     
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+
+        QString location = m_external ? QString::null : m_uri;
+        location += m_img->name() + "/layers/" + m_layerFilenames[layer];
+
+        // The selection -- if present. If not, we simply cannot open the dratted thing.
+        if (m_store -> open(location)) {
+            KisSelectionSP selection = new KisSelection(m_img);
+            if (!selection->read(m_store)) {
+                selection -> disconnect();
+                m_store -> close();
+            }
+            else {
+                layer->setSelection( selection );
+            }
+            m_store -> close();
+        }
+
+        // filter configuration
+        location = m_external ? QString::null : m_uri;
+        location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
+
+        if (m_store -> hasFile(location)) {
+            QByteArray data;
+            m_store -> open(location);
+            data = m_store -> read(m_store -> size());
+            m_store -> close();
+            // XXX: Transform the data to a string and create the filter config
+            KisFilterConfiguration * kfc = new KisFilterConfiguration(QString(data));
+            layer->setFilter( kfc );
+        }
+
         return true;
+
     }
     
 private:

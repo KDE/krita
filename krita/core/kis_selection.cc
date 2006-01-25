@@ -30,13 +30,21 @@
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
+#include "kis_image.h"
 
-KisSelection::KisSelection(KisPaintDeviceImplSP layer)
-     : super(layer -> image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())
+KisSelection::KisSelection(KisPaintDeviceImplSP dev)
+    : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())
+    , m_parentPaintDevice(dev)
 {
-    m_parentLayer = layer;
+    Q_ASSERT(dev);
 }
 
+KisSelection::KisSelection(KisImageSP img)
+    : super(img, KisMetaRegistry::instance()->csRegistry()->getAlpha8())
+    , m_parentPaintDevice(0)
+{
+    Q_ASSERT(img);
+}
 
 KisSelection::~KisSelection()
 {
@@ -62,22 +70,34 @@ void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, Q_UINT8 s)
 
 QImage KisSelection::maskImage()
 {
-        Q_INT32 x, y, w, h, y2, x2;
-        m_parentLayer -> exactBounds(x, y, w, h);
-        QImage img = QImage(w, h, 32);;
-
-        for (y2 = y; y2 < h - y; ++y2) {
-                KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
-                x2 = 0;
-                while (!it.isDone()) {
-                        Q_UINT8 s = MAX_SELECTED - *(it.rawData());
-                        Q_INT32 c = qRgb(s, s, s);
-                        img.setPixel(x2, y2, c);
-                        ++x2;
-                        ++it;
-                }
-        }
-        return img;
+    // If part of a KisAdjustmentLayer, there may be no parent device.
+    QImage img;
+    Q_INT32 x, y, w, h, y2, x2;
+    if (m_parentPaintDevice) {
+    
+        m_parentPaintDevice -> exactBounds(x, y, w, h);
+        img = QImage(w, h, 32);
+    }
+    else {
+        x = 0;
+        y = 0;
+        w = image()->width();
+        h = image()->width();
+        img = QImage(w, h, 32);
+    }
+    
+    for (y2 = y; y2 < h - y; ++y2) {
+            KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
+            x2 = 0;
+            while (!it.isDone()) {
+                    Q_UINT8 s = MAX_SELECTED - *(it.rawData());
+                    Q_INT32 c = qRgb(s, s, s);
+                    img.setPixel(x2, y2, c);
+                    ++x2;
+                    ++it;
+            }
+    }
+    return img;
 }
 void KisSelection::select(QRect r)
 {
@@ -130,18 +150,18 @@ bool KisSelection::isTotallyUnselected(QRect r)
 
 QRect KisSelection::selectedRect()
 {
-    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
+    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return extent();
-    else
-        return extent().unite(m_parentLayer->extent());
+    else 
+        return extent().unite(m_parentPaintDevice->extent());
 }
 
 QRect KisSelection::selectedExactRect()
 {
-    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED)
+    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return exactBounds();
     else
-        return exactBounds().unite(m_parentLayer->exactBounds());
+        return exactBounds().unite(m_parentPaintDevice->exactBounds());
 }
 
 void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)

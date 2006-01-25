@@ -32,6 +32,7 @@
 #include "kis_types.h"
 #include "kis_id.h"
 #include "kis_vec.h"
+#include "kis_colorspace.h"
 
 #include <koffice_export.h>
 
@@ -115,7 +116,7 @@ public:
      * in various tools. If false, it won't show up in the toolchest.
      * The KisColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KisColorSpace*) { return true; }
+    virtual bool userVisible(KisColorSpace * cs = 0) { return cs -> id() != KisID("WET", ""); }
 
     /**
      * Create and return a widget with options for this paintop.

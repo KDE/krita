@@ -33,6 +33,7 @@ public:
 
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("paintSmeary", i18n("Smeary Brush")); }
+    virtual bool userVisible(KisColorSpace * ) { return false; }
     virtual QString pixmap() { return ""; }
 
 };

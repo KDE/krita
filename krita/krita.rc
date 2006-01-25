@@ -152,11 +152,6 @@
   <Action name="zoom_out"/>
 </ToolBar>
 
-<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
-	<Action name="mirrorLayerX"/>
-	<Action name="mirrorLayerY"/>
-</ToolBar>
-
 <ToolBar name="ToolBox" position="left">
     <Text>Krita</Text>
 </ToolBar>

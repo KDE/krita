@@ -22,9 +22,4 @@
     </Menu>
 </MenuBar>
 
-<ToolBar name="transform_tools" position="top"><Text>Transformation Tools</Text>
-    <Action name="rotateImageCW90"/>
-    <Action name="rotateImageCCW90"/>
-</ToolBar>
-
 </kpartgui>

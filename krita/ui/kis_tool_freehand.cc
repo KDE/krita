@@ -280,7 +280,16 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
                        static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
         gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
                         (- controller -> vertValue()) / m_subject -> zoomFactor());
-        gc.translate(point.floorX() - hotSpot.floorX(), point.floorY() - hotSpot.floorY());
+
+        KisPoint topLeft = point - hotSpot;
+
+        if (m_subject -> currentPaintop().id() == "pen") {
+            // Pen paints on whole pixels only.
+            topLeft = topLeft.roundQPoint();
+        }
+
+        gc.translate(topLeft.x(), topLeft.y());
+
         KisBoundaryPainter::paint(brush -> boundary(), gc);
         m_paintedOutline = true;
     }

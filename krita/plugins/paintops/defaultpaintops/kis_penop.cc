@@ -69,16 +69,8 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    Q_INT32 x;
-    double xFraction;
-    Q_INT32 y;
-    double yFraction;
-
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
+    Q_INT32 x = pt.roundX();
+    Q_INT32 y = pt.roundY();
 
     KisPaintDeviceImplSP dab = 0;
     if (brush -> brushType() == IMAGE || 
@@ -121,7 +113,6 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
         ++pixelIt;
     }
-
 
     Q_INT32 sx = dstRect.x() - x;
     Q_INT32 sy = dstRect.y() - y;

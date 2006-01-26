@@ -106,6 +106,7 @@
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
+#include "kis_part_layer_handler.h"
 #include "kis_pattern.h"
 #include "kis_profile.h"
 #include "kis_rect.h"
@@ -220,6 +221,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_toolIsPainting( false )
     , m_monitorProfile( 0 )
     , m_HDRExposure( 0 )
+    , m_partHandler( 0 )
 {
 
     Q_ASSERT(doc);
@@ -2497,6 +2499,33 @@ void KisView::addPartLayer()
 
 void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry)
 {
+    delete m_partHandler; // Only one at a time
+    m_partHandler = new KisPartLayerHandler(this, entry, parent, above);
+
+    disconnect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)), this, 0);
+    disconnect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, 0);
+
+    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)),
+            m_partHandler, SLOT(gotButtonPressEvent(KisButtonPressEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
+            m_partHandler, SLOT(gotButtonReleaseEvent(KisButtonReleaseEvent*)));
+    connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
+            m_partHandler, SLOT(gotMoveEvent(KisMoveEvent*)));
+    connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
+            m_partHandler, SLOT(gotKeyPressEvent(QKeyEvent*)));
+
+    connect(m_partHandler, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
+            this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+    connect(m_partHandler, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
+            this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
+    connect(m_partHandler, SIGNAL(handlerDone()),
+            this, SLOT(reconnectAfterPartInsert()));
+}
+
+void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
+                         KisGroupLayerSP parent, KisLayerSP above) {
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -2507,9 +2536,11 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     if ( !doc->showEmbedInitDialog(this) )
         return;
 
+    QRect rect = viewToWindow(viewRect);
+
     kdDebug(41001) << "AddPartLayer: KoDocument is " << doc << endl;
-    //img->bounds()
-    KisChildDoc * childDoc = m_doc->createChildDoc(QRect(0,0,255,255), doc);
+    kdDebug(41001) << "Rect is " << rect << " (converted from " << viewRect << ")" << endl;
+    KisChildDoc * childDoc = m_doc->createChildDoc(rect, doc);
     kdDebug(41001) << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
     KisPartLayerImpl* partLayer = new KisPartLayerImpl(this, img, childDoc);
@@ -2517,6 +2548,22 @@ void KisView::addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDoc
     img -> addLayer(partLayer, parent, above);
     img->notify(partLayer->extent());
     m_doc->setModified(true);
+
+    reconnectAfterPartInsert();
+}
+
+void KisView::reconnectAfterPartInsert() {
+    connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)),
+            this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
+    connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)),
+            this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
+    connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)),
+            this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
+    connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)),
+            this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
+
+    delete m_partHandler;
+    m_partHandler = 0;
 }
 
 void KisView::addAdjustmentLayer()

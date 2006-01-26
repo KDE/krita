@@ -64,7 +64,7 @@ KisPartLayerImpl::KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc
     m_cache = new KisPaintDeviceImpl(
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
     m_activated = true; //false;
-    image() -> notify(m_doc -> geometry());
+    //image() -> notify(m_doc -> geometry());
 
     // XXX Waiting for dfaure...
     /*QPtrList<KoView> views = doc -> document() -> views();

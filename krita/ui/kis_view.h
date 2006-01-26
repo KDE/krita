@@ -103,6 +103,7 @@ class KisToolControllerInterface;
 class KisToolManager;
 class KisUndoAdapter;
 class KisFilterConfiguration;
+class KisPartLayerHandler;
 
 
 class KRITA_EXPORT KisView
@@ -200,6 +201,9 @@ public:
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateCurrentImage(double angle);
     void shearCurrentImage(double angleX, double angleY);
+
+    void insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
+                    KisGroupLayerSP parent, KisLayerSP above);
 
 
 protected:
@@ -385,7 +389,6 @@ private:
     void setInitialZoomLevel();
 
 private slots:
-    
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 
     void slotSetFGQColor(const QColor & c);
@@ -407,6 +410,8 @@ private slots:
     void canvasGotKeyReleaseEvent(QKeyEvent*);
     void canvasGotDragEnterEvent(QDragEnterEvent*);
     void canvasGotDropEvent(QDropEvent*);
+
+    void reconnectAfterPartInsert();
 
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
@@ -467,7 +472,8 @@ private:
     KisDoc *m_doc;
     KisCanvas *m_canvas;
     QPopupMenu * m_popup;
-    
+    KisPartLayerHandler* m_partHandler;
+
     KisGridManager * m_gridManager;
     KisSelectionManager * m_selectionManager;
     KisFilterManager * m_filterManager;

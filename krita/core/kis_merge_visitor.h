@@ -49,10 +49,6 @@ public:
         m_img = img;
         m_projection = projection;
         m_rc = rc;
-/*
-        m_insertMergedAboveLayer = 0;
-        m_haveFoundInsertionPlace = false;
-*/
     }
 
 public:
@@ -75,25 +71,6 @@ public:
         KisPainter gc(m_projection);
         gc.bitBlt(dx, dy, layer->compositeOp() , layer->paintDevice(), layer->opacity(), sx, sy, w, h);
 
-/*
-            if (!m_haveFoundInsertionPlace) {
-
-                if (m_img -> index(layer) != m_img -> nlayers() - 1) {
-                    m_insertMergedAboveLayer = m_img -> layer(m_img -> index(layer) + 1);
-                }
-                else {
-                    m_insertMergedAboveLayer = 0;
-                }
-
-                m_haveFoundInsertionPlace = true;
-            }
-        }
-
-
-        if (m_removeTest(layer.data())) {
-            m_img -> rm(layer);
-        }
-*/
         layer->setDirty( false );
         return true;
     }
@@ -174,29 +151,26 @@ public:
 
         while(child)
         {
-            if(true)//test(child)) // LAYERREMOVE
+            if(first)
             {
-                if(first)
-                {
-                    // Copy the lowest layer rather than compositing it with the background
-                    // or an empty image. This means the layer's composite op is ignored, 
-                    // which is consistent with Photoshop and gimp.
-                    const KisCompositeOp cop = child->compositeOp();
-                    const bool block = child->signalsBlocked();
-                    child->blockSignals(true);
-                    child->setCompositeOp(COMPOSITE_COPY);
-                    child->blockSignals(block);
-                    child->accept(visitor);
-                    child->blockSignals(true);
-                    child->setCompositeOp(cop);
-                    child->blockSignals(block);
-                    first = false;
-                }
-                else
-                    child->accept(visitor);
-
+                // Copy the lowest layer rather than compositing it with the background
+                // or an empty image. This means the layer's composite op is ignored, 
+                // which is consistent with Photoshop and gimp.
+                const KisCompositeOp cop = child->compositeOp();
+                const bool block = child->signalsBlocked();
+                child->blockSignals(true);
+                child->setCompositeOp(COMPOSITE_COPY);
+                child->blockSignals(block);
+                child->accept(visitor);
+                child->blockSignals(true);
+                child->setCompositeOp(cop);
+                child->blockSignals(block);
+                first = false;
             }
-            child = child->prevSibling();
+            else
+                child->accept(visitor);
+
+           child = child->prevSibling();
         }
 
         // If this is the root layer, the entire stack is composited onto the projection of the root layer,
@@ -260,7 +234,7 @@ public:
         
         KisSelectionSP selection = layer->selection();
         kdDebug() << "Do we have a selection: " << selection << "?\n";
-    
+
         // Copy of the projection -- use the copy-on-write trick.
         KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl(layer->image()->colorSpace());
 
@@ -287,25 +261,15 @@ public:
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
 
         layer->setDirty(false);
-        
+
         return true;
     }
-    
-    
-/*
-    // The layer the merged layer should be inserted above, or 0 if
-    // the merged layer should go to the bottom of the stack.
-    KisLayerSP insertMergedAboveLayer() const { return m_insertMergedAboveLayer; }
-*/
+
 private:
     KisImageSP m_img;
     KisPainter *m_gc;
     KisPaintDeviceImplSP m_projection;
     QRect m_rc;
-/*
-    KisLayerSP m_insertMergedAboveLayer;
-    bool m_haveFoundInsertionPlace;
-*/
 };
 
 #endif // KIS_MERGE_H_

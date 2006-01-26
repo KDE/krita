@@ -50,6 +50,8 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceI
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
     QRect r;
+    KisColorSpace *cs = src->colorSpace();
+
     if(src->hasSelection())
     {
         r = src->selection()->selectedExactRect();
@@ -70,9 +72,8 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceI
             if (hit.isSelected())  {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
 
-                // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
-                // but for now this will do
-                *(hit.rawData()+3) = 0;
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(hit.rawData(), 0, 1);
             }
             *(dstSelIt.rawData()) = hit.selectedness();
             ++hit;
@@ -87,6 +88,8 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceIm
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
     QRect r;
+    KisColorSpace *cs = src->colorSpace();
+
     if(src->hasSelection())
     {
         r = src->selection()->selectedExactRect();
@@ -110,9 +113,8 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceIm
             if (hit.isSelected()) {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
 
-                // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
-                // but for now this will do
-                *(hit.rawData()+3) = 0;
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(hit.rawData(), 0, 1);
             }
             *(dstSelIt.rawData()) = hit.selectedness();
             --hit;
@@ -128,6 +130,8 @@ void KisTransformWorker::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplS
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
     QRect r;
+    KisColorSpace *cs = src->colorSpace();
+
     if(src->hasSelection())
     {
         r = src->selection()->selectedExactRect();
@@ -149,9 +153,8 @@ void KisTransformWorker::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplS
             if (srcIt.isSelected())  {
                 memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
 
-                // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
-                // but for now this will do
-                *(srcIt.rawData()+3) = 0;
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(srcIt.rawData(), 0, 1);
             }
             *(dstSelIt.rawData()) = srcIt.selectedness();
             --srcIt;
@@ -285,9 +288,8 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDeviceImpl *sr
                 data = srcIt.rawData();
                 memcpy(&tmpLine[i*pixelSize], data, pixelSize);
 
-                // XXX: Find a way to colorstrategy independently set alpha = alpha*(1-selectedness)
-                // but for now this will do
-                *(data+3) = 0;
+                // XXX: Should set alpha = alpha*(1-selectedness)
+                cs->setAlpha(data, 0, 1);
 
                 tmpSel[i] = 255;
             }

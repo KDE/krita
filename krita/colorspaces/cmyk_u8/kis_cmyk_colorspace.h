@@ -50,9 +50,6 @@ public:
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;
 
-    virtual void adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const;
-
-
 virtual void bitBlt(Q_UINT8 *dst,
             Q_INT32 dstRowSize,
             const Q_UINT8 *src,

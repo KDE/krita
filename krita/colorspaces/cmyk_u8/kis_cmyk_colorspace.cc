@@ -57,6 +57,51 @@ KisCmykColorSpace::~KisCmykColorSpace()
 
 void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
+    Q_UINT32 totalCyan = 0, totalMagenta = 0, totalYellow = 0, totalK = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        Q_UINT32 alpha = (*colors)[4];
+        Q_UINT32 alphaTimesWeight = alpha * *weights;
+
+        totalCyan += (*colors)[0] * alphaTimesWeight;
+        totalMagenta += (*colors)[1] * alphaTimesWeight;
+        totalYellow += (*colors)[2] * alphaTimesWeight;
+        totalK += (*colors)[3] * alphaTimesWeight;
+        totalAlpha += alphaTimesWeight;
+
+        weights++;
+        colors++;
+    }
+
+    //Q_ASSERT(newAlpha <= 255*255);
+    if (totalAlpha > 255*255) totalAlpha = 255*255;
+
+    // Divide by 255.
+    dst[4] =(((totalAlpha + 0x80)>>8)+totalAlpha) >>8;
+
+    if (totalAlpha > 0) {
+        totalCyan = totalCyan / totalAlpha;
+        totalMagenta = totalMagenta / totalAlpha;
+        totalYellow = totalYellow / totalAlpha;
+        totalK = totalK / totalAlpha;
+    } // else the values are already 0 too
+
+    Q_UINT32 dstCyan = totalCyan;
+    if (dstCyan > 255) dstCyan = 255;
+    dst[0] = dstCyan;
+
+    Q_UINT32 dstMagenta = totalMagenta;
+    if (dstMagenta > 255) dstMagenta = 255;
+    dst[1] = dstMagenta;
+
+    Q_UINT32 dstYellow = totalYellow;
+    if (dstYellow > 255) dstYellow = 255;
+    dst[2] = dstYellow;
+
+    Q_UINT32 dstK = totalK;
+    if (dstK > 255) dstK = 255;
+    dst[3] = dstK;
 }
 
 QValueVector<KisChannelInfo *> KisCmykColorSpace::channels() const
@@ -78,13 +123,6 @@ Q_UINT32 KisCmykColorSpace::pixelSize() const
 {
     return cmyk::MAX_CHANNEL_CMYKA;
 }
-
-
-void KisCmykColorSpace::adjustBrightness(Q_UINT8 *src1, Q_INT8 adjust) const
-{
-    //XXX does nothing for now
-}
-
 
 
 void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,

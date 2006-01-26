@@ -65,6 +65,11 @@ private slots:
 
     void slotItemSelected(int index);
     void colorSpaceChanged(KisColorSpace *cs);
+    void slotInputDeviceChanged(const KisInputDevice & inputDevice);
+
+private:
+    QPixmap paintopPixmap(const KisID & paintop);
+    void updateOptionWidget();
 
 private:
     KisView * m_view;

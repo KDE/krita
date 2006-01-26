@@ -40,6 +40,7 @@ class KisPoint;
 class KisAlphaMask;
 class KisPainter;
 class KisColorSpace;
+class KisInputDevice;
 class QWidget;
 
 /**
@@ -119,9 +120,10 @@ public:
     virtual bool userVisible(KisColorSpace * cs = 0) { return cs -> id() != KisID("WET", ""); }
 
     /**
-     * Create and return a widget with options for this paintop.
+     * Create and return a widget with options for this paintop when used with the 
+     * specified input device.
      */
-    virtual QWidget* optionWidget(QWidget* parent);
+    virtual QWidget* optionWidget(QWidget* parent, const KisInputDevice& inputDevice);
 
 };
 #endif // KIS_PAINTOP_H_

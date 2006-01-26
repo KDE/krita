@@ -31,6 +31,7 @@ class QStringList;
 class KisPaintOp;
 class KisPainter;
 class KisColorSpace;
+class KisInputDevice;
 
 class KRITACORE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
 {
@@ -51,17 +52,17 @@ public:
     KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
 
     /**
-     * Return or create and return a configuration widhget
-     * for the specified paintop with the specified parent
-     * as widget parent.
+     * Return or create and return a configuration widget
+     * for using the specified paintop with the specified input device,
+     * with the specified parent as widget parent.
      */
-    QWidget * configWidget(const KisID& id, QWidget * parent) const;
+    QWidget * configWidget(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
     
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KisID & id, KisColorSpace* cs) const;
 
-    // Get the pixmap to show in the toolchest
-    QPixmap getPixmap(const KisID & id) const;
+    // Get the name of the icon to show in the toolchest
+    QString pixmap(const KisID & id) const;
 
 
 public:

@@ -1036,6 +1036,8 @@ void KisView::setInputDevice(KisInputDevice inputDevice)
             m_toolManager->setCurrentTool(m_toolManager->currentTool());
         }
         m_toolManager->activateCurrentTool();
+
+        emit sigInputDeviceChanged(inputDevice);
     }
 
 }

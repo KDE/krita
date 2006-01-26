@@ -95,11 +95,11 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painte
     return paintOp(KisID(id, ""), painter);
 }
 
-QWidget * KisPaintOpRegistry::configWidget(const KisID& id, QWidget * parent) const
+QWidget * KisPaintOpRegistry::configWidget(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const
 {
     KisPaintOpFactory*  f = get(id);
     if (f)
-        return f->optionWidget( parent );
+        return f->optionWidget( parent, inputDevice );
 
     return 0;
 }
@@ -116,24 +116,16 @@ bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
 
 }
 
-QPixmap KisPaintOpRegistry::getPixmap(const KisID & id) const
+QString KisPaintOpRegistry::pixmap(const KisID & id) const
 {
     KisPaintOpFactorySP f = get(id);
 
     if (!f) {
         kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
-        return QPixmap();
+        return "";
     }
 
-    QString pname = f->pixmap();
-
-    if (pname.isEmpty() /*|| pname.isNull() || pname == ""*/) {
-        return QPixmap();
-    }
-
-    QString fname = KGlobal::dirs()->findResource("kis_images", pname);
-
-    return QPixmap(fname);
+    return f->pixmap();
 }
 
 #include "kis_paintop_registry.moc"

@@ -35,6 +35,7 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
+#include "kis_input_device.h"
 
 #include "kis_brushop.h"
 
@@ -45,18 +46,31 @@ KisPaintOp * KisBrushOpFactory::createOp(KisPainter * painter)
     return op;
 }
 
-QWidget * KisBrushOpFactory::optionWidget(QWidget * parent)
+QWidget * KisBrushOpFactory::optionWidget(QWidget * parent, const KisInputDevice& inputDevice)
 {
     if (m_optionWidget == 0) {
         m_optionWidget = new QWidget(parent, "brush option widget");
         QHBoxLayout * l = new QHBoxLayout(m_optionWidget);
         l->setAutoAdd(true);
-        new QLabel(i18n("Pressure variation: "), m_optionWidget);
+        m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionWidget);
         m_size =  new QCheckBox(i18n("size"), m_optionWidget);
         m_size->setChecked(true);
         m_opacity = new QCheckBox(i18n("opacity"), m_optionWidget);
         m_darken = new QCheckBox(i18n("darken"), m_optionWidget);
     }
+
+    if (inputDevice != KisInputDevice::mouse()) {
+        m_pressureVariation->show();
+        m_size->show();
+        m_opacity->show();
+        m_darken->show();
+    } else {
+        m_pressureVariation->hide();
+        m_size->hide();
+        m_opacity->hide();
+        m_darken->hide();
+    }
+
     return m_optionWidget;
 }
 

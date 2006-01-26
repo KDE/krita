@@ -26,7 +26,7 @@
 
 class KisPoint;
 class KisPainter;
-
+class KisInputDevice;
 
 class KisWetOpFactory : public KisPaintOpFactory  {
     WetPaintOptions* m_optWidget;
@@ -37,7 +37,7 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
-    virtual QWidget* optionWidget(QWidget* parent) {
+    virtual QWidget* optionWidget(QWidget* parent, const KisInputDevice& /*inputDevice*/) {
         if (!m_optWidget)
             m_optWidget = new WetPaintOptions();
         return m_optWidget;

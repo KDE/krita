@@ -171,6 +171,8 @@ signals:
     void sigFGQColorChanged(const QColor &);
     void sigBGQColorChanged(const QColor &);
 
+    void sigInputDeviceChanged(const KisInputDevice& inputDevice);
+
     /// for KoViewChild
     void viewTransformationsChanged();
 

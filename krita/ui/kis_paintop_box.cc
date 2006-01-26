@@ -31,13 +31,14 @@
 #include <kglobalsettings.h>
 #include <kaccelmanager.h>
 #include <kconfig.h>
-
+#include <kstandarddirs.h>
 
 #include <kis_paintop_registry.h>
 #include <kis_view.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <kis_layer.h>
+#include <kis_factory.h>
 
 #include "kis_paintop_box.h"
 
@@ -72,6 +73,8 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     connect(m_view, SIGNAL(currentColorSpaceChanged(KisColorSpace*)),
             this, SLOT(colorSpaceChanged(KisColorSpace*)));
+    connect(m_view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
+            this, SLOT(slotInputDeviceChanged(const KisInputDevice&)));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -90,24 +93,11 @@ void KisPaintopBox::slotItemSelected(int index)
     if ((uint)index > m_displayedOps->count()) {
         return;
     }
-    KisID id = *m_displayedOps->at(index);
-    
-    if (m_optionWidget != 0) {
-        m_layout->remove(m_optionWidget);
-        m_optionWidget->hide();
-        m_layout->invalidate();
-    }
 
-    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( id, this );
+    m_currentID = *m_displayedOps->at(index);
+    updateOptionWidget();
 
-    if (m_optionWidget != 0) {
-        m_layout->addWidget(m_optionWidget);
-        updateGeometry();
-        m_optionWidget->show();
-    }
-    
-    m_currentID = id;
-    emit selected(id);
+    emit selected(m_currentID);
 }
 
 void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
@@ -119,7 +109,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     kdDebug() << "CS: " << cs->id().id() << "\n";
     for ( ; it != end; ++it ) {
         if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
-            QPixmap pm = KisPaintOpRegistry::instance()->getPixmap(*it);
+            QPixmap pm = paintopPixmap(*it);
             if (pm.isNull()) {
                 QPixmap p = QPixmap( 16, 16 );
                 p.fill();
@@ -135,6 +125,45 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     const int index = m_displayedOps->findIndex ( m_currentID );
     m_cmbPaintops->setCurrentItem( index );
     slotItemSelected( index );
+}
+
+QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
+{
+    QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
+
+    if (pixmapName.isEmpty() /*|| pixmapName.isNull() || pixmapName == ""*/) {
+        return QPixmap();
+    }
+
+    QString fname = KisFactory::instance()->dirs()->findResource("kis_images", pixmapName);
+
+    return QPixmap(fname);
+}
+
+void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & /*inputDevice*/)
+{
+    updateOptionWidget();
+}
+
+void KisPaintopBox::updateOptionWidget()
+{
+    if (m_optionWidget != 0) {
+        m_layout->remove(m_optionWidget);
+        m_optionWidget->hide();
+        m_layout->invalidate();
+    }
+
+    KisCanvasController *canvasController = m_view->getCanvasController();
+    Q_ASSERT(canvasController != 0);
+    KisInputDevice inputDevice = canvasController->currentInputDevice();
+
+    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( m_currentID, this, inputDevice );
+
+    if (m_optionWidget != 0) {
+        m_layout->addWidget(m_optionWidget);
+        updateGeometry();
+        m_optionWidget->show();
+    }
 }
 
 #include "kis_paintop_box.moc"

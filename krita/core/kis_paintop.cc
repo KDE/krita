@@ -106,5 +106,5 @@ void KisPaintOp::setSource(KisPaintDeviceImplSP p) {
 }
 
 
-QWidget* KisPaintOpFactory::optionWidget(QWidget* parent) { return 0; }
+QWidget* KisPaintOpFactory::optionWidget(QWidget* /*parent*/, const KisInputDevice& /*inputDevice*/) { return 0; }
 

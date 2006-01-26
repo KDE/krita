@@ -27,6 +27,7 @@
 
 class QWidget;
 class QCheckBox;
+class QLabel;
 class KisPoint;
 class KisPainter;
 
@@ -39,11 +40,12 @@ public:
     virtual KisPaintOp * createOp(KisPainter * painter);
     virtual KisID id() { return KisID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
-    virtual QWidget * optionWidget(QWidget * parent);
+    virtual QWidget * optionWidget(QWidget * parent, const KisInputDevice& inputDevice);
     
 
 private:
     QWidget * m_optionWidget;
+    QLabel * m_pressureVariation;
     QCheckBox * m_size;
     QCheckBox * m_opacity;
     QCheckBox * m_darken;

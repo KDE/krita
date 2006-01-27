@@ -204,17 +204,19 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
         KisPopulateVisitor visitor(static_cast<KisLayerItem*>(list() -> layer(layer -> parent() -> id())));
         layer -> accept(visitor);
     }
+    markModified(layer);
     updateUI();
 }
 
-void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
+void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP)
 {
     list() -> removeLayer(layer -> id());
     m_modified.remove(layer -> id());
+    markModified(wasParent);
     updateUI();
 }
 
-void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
+void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP)
 {
     int parentID = layer -> parent() -> id();
     if (layer -> parent() == m_image -> rootLayer())
@@ -225,6 +227,9 @@ void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP, KisLayerSP)
         siblingID = layer -> prevSibling() -> id();
 
     list() -> moveLayer(layer -> id(), parentID, siblingID);
+
+    markModified(layer -> parent());
+    markModified(wasParent);
     updateUI();
 }
 
@@ -244,6 +249,11 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
     KisPopulateVisitor visitor(list());
     for (KisLayerSP layer = rootLayer -> firstChild(); layer; layer = layer -> nextSibling())
         layer -> accept(visitor);
+    m_modified.clear();
+    for (QListViewItemIterator it(list() -> lastItem()); *it; --it)
+        m_modified.append(static_cast<LayerItem*>(*it) -> id());
+    m_thumbnailerTimer.stop();
+    m_thumbnailerTimer.start(1000, true);
     updateUI();
 }
 
@@ -256,18 +266,7 @@ void KisLayerBox::slotImageUpdated()
            && m_image -> activeLayer()
            && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
         return;
-    LayerItem *l = list() -> activeLayer();
-    QValueList<int> v;
-    while (l)
-    {
-        v.append(l -> id());
-        l = l -> parent();
-    }
-    for (int i = v.count() - 1; i >= 0; --i)
-        if (!m_modified.contains(v[i]))
-            m_modified.append(v[i]);
-    m_thumbnailerTimer.stop();
-    m_thumbnailerTimer.start(1000, true);
+    markModified(m_image -> activeLayer());
 }
 
 void KisLayerBox::slotNonActiveLayersUpdated()
@@ -599,6 +598,25 @@ QPixmap KisLayerBox::loadPixmap(const QString& filename, const KIconLoader&
                            i18n("Canvas"));
 
     return pixmap;
+}
+
+void KisLayerBox::markModified(KisLayer* layer)
+{
+    if( !layer )
+        return;
+
+    QValueList<int> v;
+    while (layer && layer != m_image -> rootLayer().data())
+    {
+        v.append(layer -> id());
+        layer = layer -> parent();
+    }
+    for (int i = v.count() - 1; i >= 0; --i)
+        if (!m_modified.contains(v[i]))
+            m_modified.append(v[i]);
+    m_thumbnailerTimer.stop();
+    m_thumbnailerTimer.start(1000, true);
+
 }
 
 void KisLayerBox::printKritaLayers() const

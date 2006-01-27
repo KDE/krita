@@ -103,10 +103,10 @@ private slots:
     void updateThumbnails();
 
 private:
-
     void updateUI();
     QPixmap loadPixmap(const QString& filename, const KIconLoader& il, int size);
     KisLayerList* list() const;
+    void markModified(KisLayer *layer);
 
     KPopupMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
@@ -114,6 +114,7 @@ private:
     QValueList<int> m_modified;
     QTimer m_thumbnailerTimer;
     WdgLayerBox *m_lst;
+
     void printKritaLayers() const;
     void printLayerboxLayers() const;
 };

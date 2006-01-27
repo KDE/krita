@@ -126,7 +126,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
         Kross::Api::Object::Ptr darken(Kross::Api::List::Ptr args)
         {
             Q_INT32 shade = Kross::Api::Variant::toUInt( args->item(0) );
-            bool compensate = (args->count == 2);
+            bool compensate = (args->count() == 2);
             double compensation = compensate ? Kross::Api::Variant::toDouble( args->item(2) ) : 0.;
             m_layer->paintDevice()->colorSpace()->darken(m_it.rawData(), m_it.rawData(), shade, compensate, compensation, 1);
             return 0;

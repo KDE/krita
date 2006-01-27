@@ -276,6 +276,7 @@ public:
     void notifyImageLoaded();
     
     void setColorSpace(KisColorSpace * colorSpace);
+    void setRootLayer(KisGroupLayerSP rootLayer);
 
     //KisGuideMgr *guides() const;
 

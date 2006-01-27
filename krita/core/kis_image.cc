@@ -151,8 +151,7 @@ namespace {
         virtual void execute()
             {
                 m_adapter -> setUndo(false);
-
-// XXX LAYERREMOVE
+                m_img -> setRootLayer(m_newRootLayer);
                 m_adapter -> setUndo(true);
                 m_img -> notifyLayersChanged();
                 m_img -> notify();
@@ -161,9 +160,7 @@ namespace {
         virtual void unexecute()
             {
                 m_adapter -> setUndo(false);
-
-// XXX LAYERREMOVE
-
+                m_img -> setRootLayer(m_oldRootLayer);
                 m_adapter -> setUndo(true);
                 m_img -> notifyLayersChanged();
                 m_img -> notify();
@@ -1121,21 +1118,22 @@ Q_INT32 KisImage::nHiddenLayers() const
 
 void KisImage::flatten()
 {
-
     KisGroupLayerSP oldRootLayer = m_rootLayer;
-
-    m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
 
     KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
+
+    QRect rc = mergedImage() -> extent();
+
+    KisPainter gc(dst->paintDevice());
+    gc.bitBlt(0, 0, COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
+
+    m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
 
     blockSignals(true);
     addLayer(dst, m_rootLayer, 0);
     activate(dst);
     blockSignals(false);
-
-    KisMergeVisitor visitor(this, dst -> paintDevice(), QRect(0,0,width(),height()));
-    oldRootLayer ->accept(visitor);
 
     notifyLayersChanged();
     notify();
@@ -1372,6 +1370,11 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
     emit sigColorSpaceChanged(colorSpace);
+}
+
+void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
+{
+    m_rootLayer = rootLayer;
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

@@ -31,8 +31,21 @@ namespace Kross {
 namespace KritaCore {
 
 /**
-@author Cyrille Berger
-*/
+ * This object allow to change the value of pixel one by one.
+ * The name of some function depends of the colorspace, for instance, if
+ * the colorspace of the layer is RGB, you will have setR, setG, setB... and for CMYK,
+ * setC, setM, setY, setK. In the doc bellow we will consider the colorspace is called ABC with
+ * three channels : A, B and C.
+ * 
+ * Function: setA setB setC
+ * Those functions take one argument:
+ *  - the new value of one of the channel of this pixel
+ * 
+ * Function: setABC
+ * Set the value of all channels.
+ * This function take one argument:
+ *  - an array with the new value for all channels
+ */
 template<class _T_It>
 class Iterator : public Kross::Api::Class<Iterator<_T_It> >
 {
@@ -102,24 +115,41 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >
         return "Kross::KritaCore::KrsDoc";
     };
     private:
+        /**
+         * Darken a pixel.
+         * This functions at least one argument:
+         *  - shade amount use to darken all color channels
+         * 
+         * This function can take the following optional argument:
+         *  - compensation to limit the darkening
+         */
         Kross::Api::Object::Ptr darken(Kross::Api::List::Ptr args)
         {
             Q_INT32 shade = Kross::Api::Variant::toUInt( args->item(0) );
-            bool compensate = Kross::Api::Variant::toBool( args->item(1) );
-            double compensation = Kross::Api::Variant::toDouble( args->item(2) );
+            bool compensate = (args->count == 2);
+            double compensation = compensate ? Kross::Api::Variant::toDouble( args->item(2) ) : 0.;
             m_layer->paintDevice()->colorSpace()->darken(m_it.rawData(), m_it.rawData(), shade, compensate, compensation, 1);
             return 0;
         }
+        /**
+         * Invert the color of a pixel.
+         */
         Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr )
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it.rawData(), 1);
             return 0;
         }
+        /**
+         * Increment the positon, and go to the next pixel.
+         */
         Kross::Api::Object::Ptr next()
         {
             ++m_it;
             return new Kross::Api::Variant(m_it.isDone());
         }
+        /**
+         * Return true if the iterator is at the end, and that no more pixels are available.
+         */
         Kross::Api::Object::Ptr isDone()
         {
             return new Kross::Api::Variant(m_it.isDone());

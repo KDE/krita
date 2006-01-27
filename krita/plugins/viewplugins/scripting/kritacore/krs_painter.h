@@ -61,13 +61,13 @@ class Painter : public Kross::Api::Class<Painter>
         Kross::Api::Object::Ptr convolve(Kross::Api::List::Ptr args);
         // Fill specific
         /**
-         * Set the threshold the fill threshold
+         * Set the threshold the fill threshold.
          * It takes one argument :
          *  - threshold
          */
         Kross::Api::Object::Ptr setFillThreshold(Kross::Api::List::Ptr args);
         /**
-         * start filling color
+         * Start filling color.
          * It takes two argument :
          *  - x
          *  - y
@@ -82,7 +82,7 @@ class Painter : public Kross::Api::Class<Painter>
         Kross::Api::Object::Ptr fillPattern(Kross::Api::List::Ptr args);
         // Painting operations
         /**
-         * This function will paint a polygon.
+         * This function will paint a polyline.
          * It takes two arguments :
          *  - a list of x position
          *  - a list of y position
@@ -113,7 +113,7 @@ class Painter : public Kross::Api::Class<Painter>
          *  - p2
          * 
          * Where (x1,y1) is the start position, p1 is the pressure at the start,
-         * (x2,y2) is the ending position, p2 is the end position. (cx1,cy1) and (cx2,cy2)
+         * (x2,y2) is the ending position, p2 is the pressure at the end. (cx1,cy1) and (cx2,cy2)
          * are the position of the control points.
          */
         Kross::Api::Object::Ptr paintBezierCurve(Kross::Api::List::Ptr args);

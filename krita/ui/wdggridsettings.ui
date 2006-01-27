@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>414</width>
+            <width>422</width>
             <height>233</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgGridSettingsBase</string>
     </property>
     <grid>
         <property name="name">
@@ -298,7 +301,7 @@
                         </widget>
                         <widget class="QToolButton">
                             <property name="name">
-                                <cstring>bnLinkSize</cstring>
+                                <cstring>bnLinkSpacing</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>

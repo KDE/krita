@@ -219,10 +219,17 @@ protected slots:
  *  Grid settings tab for preferences dialog
  */
 class GridSettingsTab : public WdgGridSettingsBase {
+    Q_OBJECT
     public:
         GridSettingsTab(QWidget* parent);
     public:
         void setDefault();
+    private slots:
+        void linkSpacingToggled(bool);
+        void spinBoxHSpacingChanged(int );
+        void spinBoxVSpacingChanged(int );
+    private:
+        bool m_linkSpacing;
 };
 
 //=======================

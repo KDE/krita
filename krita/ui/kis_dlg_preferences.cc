@@ -22,23 +22,27 @@
 #include <config.h>
 #endif
 
-#include <qvbox.h>
+#include <qbitmap.h>
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcursor.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
 #include <qpixmap.h>
-#include <qbitmap.h>
-#include <qbuttongroup.h>
+#include <qpushbutton.h>
 #include <qslider.h>
+#include <qtoolbutton.h>
+#include <qvbox.h>
+
 #ifdef HAVE_GL
 #include <qgl.h>
 #endif
 
-#include <kcombobox.h>
+#include <koImageResource.h>
+
 #include <kcolorbutton.h>
+#include <kcombobox.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klineedit.h>
@@ -46,17 +50,19 @@
 #include <knuminput.h>
 #include <kurlrequester.h>
 
-#include <kis_meta_registry.h>
-#include "kis_factory.h"
+#include "kis_cmb_idlist.h"
+#include "kis_colorspace.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_colorspace.h"
+#include "kis_factory.h"
 #include "kis_id.h"
-#include "kis_cmb_idlist.h"
+#include "kis_meta_registry.h"
 #include "kis_profile.h"
+
 #include "kis_canvas.h"
+
 #include "wdgcolorsettings.h"
 #include "wdgperformancesettings.h"
 #include "wdggeneralsettings.h"
@@ -665,6 +671,13 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     intOffsetX->setValue( cfg.getGridOffsetX());
     intOffsetY->setValue( cfg.getGridOffsetY());
     
+    linkSpacingToggled(true);
+    connect(bnLinkSpacing, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled( bool )));
+    
+    connect(intHSpacing, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHSpacingChanged(int)));
+    connect(intVSpacing, SIGNAL(valueChanged(int)),this,SLOT(spinBoxVSpacingChanged(int)));
+
+    
 }
 
 void GridSettingsTab::setDefault()
@@ -682,6 +695,37 @@ void GridSettingsTab::setDefault()
     intOffsetX->setValue( 0 );
     intOffsetY->setValue( 0 );
 }
+
+void GridSettingsTab::spinBoxHSpacingChanged(int v)
+{
+    if(m_linkSpacing)
+    {
+        intVSpacing->setValue(v);
+    }
+}
+
+void GridSettingsTab::spinBoxVSpacingChanged(int v )
+{
+    if(m_linkSpacing)
+    {
+        intHSpacing->setValue(v);
+    }
+}
+
+
+void GridSettingsTab::linkSpacingToggled(bool b)
+{
+    m_linkSpacing = b;
+    
+    KoImageResource kir;
+    if (b) {
+        bnLinkSpacing->setPixmap(kir.chain());
+    }
+    else {
+        bnLinkSpacing->setPixmap(kir.chainBroken());
+    }
+}
+
 
 //---------------------------------------------------------------------------------------------------
 

@@ -33,7 +33,7 @@ KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(
 {
 
 }
-KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP)
+KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     KisCustomConvolutionFilterConfigurationWidget* ccfcw = new KisCustomConvolutionFilterConfigurationWidget(this,parent, "custom convolution config widget");
     Q_CHECK_PTR(ccfcw);

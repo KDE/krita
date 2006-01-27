@@ -30,7 +30,7 @@
 #include <kis_view.h>
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_layer.h>
 
 #include "kis_dropshadow_plugin.h"
@@ -68,7 +68,7 @@ void KisDropshadowPlugin::slotDropshadow()
     KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
-    KisPaintDeviceImplSP dev = image->activeDevice();
+    KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->id().name(), 

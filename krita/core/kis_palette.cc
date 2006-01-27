@@ -66,7 +66,7 @@ KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
-KisPalette::KisPalette(const KisPaintDeviceImplSP device, Q_INT32 nColors, const QString & name)
+KisPalette::KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QString & name)
     : super(QString("")),
       m_name(name)
 {

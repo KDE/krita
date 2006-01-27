@@ -61,7 +61,7 @@ namespace {
         typedef KisSelectedTransaction super;
 
     public:
-        TransformCmd(KisPaintDeviceImplSP device);
+        TransformCmd(KisPaintDeviceSP device);
         virtual ~TransformCmd();
 
     public:
@@ -69,7 +69,7 @@ namespace {
         virtual void unexecute();
     };
 
-    TransformCmd::TransformCmd(KisPaintDeviceImplSP device) : super(i18n("Transform"), device)
+    TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device)
     {
     }
 
@@ -142,7 +142,7 @@ void KisToolTransform::activate()
             
         Q_INT32 x,y,w,h;
         KisImageSP img = m_subject -> currentImg();
-        KisPaintDeviceImplSP dev = img -> activeDevice();
+        KisPaintDeviceSP dev = img -> activeDevice();
         if(dev->hasSelection())
         {
             KisSelectionSP sel = dev->selection();

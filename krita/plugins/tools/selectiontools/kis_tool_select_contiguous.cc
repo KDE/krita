@@ -37,12 +37,12 @@
 #include <kis_canvas_subject.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_button_press_event.h>
 #include <kis_canvas_subject.h>
 #include <kis_selection_options.h>
 #include <kis_selection.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 #include <kis_selection_options.h>
 #include <kis_canvas_observer.h>
@@ -86,7 +86,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         KisImageSP img;
-        KisPaintDeviceImplSP dev;
+        KisPaintDeviceSP dev;
         QPoint pos;
 
         if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)

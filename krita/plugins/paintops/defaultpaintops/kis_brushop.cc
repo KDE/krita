@@ -30,7 +30,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
@@ -109,7 +109,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush -> canPaintFor(info) )
         return;
     
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
 
     KisPoint hotSpot = brush -> hotSpot(info);
     KisPoint pt = pos - hotSpot;
@@ -125,7 +125,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceImplSP dab = 0;
+    KisPaintDeviceSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
         dab = brush -> image(device -> colorSpace(), info, xFraction, yFraction);

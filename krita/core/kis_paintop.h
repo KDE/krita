@@ -68,7 +68,7 @@ public:
     virtual ~KisPaintOp();
 
     virtual void paintAt(const KisPoint &pos, const KisPaintInformation& info) = 0;
-    void setSource(KisPaintDeviceImplSP p);
+    void setSource(KisPaintDeviceSP p);
 
     /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
@@ -79,8 +79,8 @@ public:
 
 protected:
 
-    virtual KisPaintDeviceImplSP computeDab(KisAlphaMaskSP mask);
-    virtual KisPaintDeviceImplSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
+    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask);
+    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
 
 
     /**
@@ -89,7 +89,7 @@ protected:
     virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
 
     KisPainter * m_painter;
-    KisPaintDeviceImplSP m_source; // use this layer as source layer for the operation
+    KisPaintDeviceSP m_source; // use this layer as source layer for the operation
 };
 
 /**

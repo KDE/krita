@@ -41,7 +41,7 @@ class KisConvolutionFilter : public KisFilter {
 public:
     KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry);
 public:
-    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     virtual bool supportsIncrementalPainting() { return false; }
 };
 

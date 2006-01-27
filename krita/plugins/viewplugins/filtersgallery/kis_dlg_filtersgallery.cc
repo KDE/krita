@@ -27,7 +27,7 @@
 #include <kis_filter.h>
 #include <kis_filter_config_widget.h>
 #include <kis_filters_listview.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_previewwidget.h>
 #include <kis_transaction.h>
@@ -109,7 +109,7 @@ void KisDlgFiltersGallery::slotConfigChanged()
 
 void KisDlgFiltersGallery::refreshPreview( )
 {
-    KisPaintDeviceImplSP layer =  m_widget->previewWidget->getDevice();
+    KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);

@@ -63,7 +63,7 @@ public:
          const QByteArray & data,
          Q_UINT32 & dataPos);
     /// Load brush from the specified paint device, in the specified region
-    KisBrush(KisPaintDeviceImpl* image, int x, int y, int w, int h);
+    KisBrush(KisPaintDevice* image, int x, int y, int w, int h);
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisBrush(const QImage& image, const QString& name = QString(""));
 
@@ -82,7 +82,7 @@ public:
     virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisPaintDeviceImplSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(KisPoint);
@@ -147,7 +147,7 @@ private:
 
 
     bool init();
-    bool initFromPaintDev(KisPaintDeviceImpl* image, int x, int y, int w, int h);
+    bool initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int h);
     void createScaledBrushes() const;
 
     KisAlphaMaskSP scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const;

@@ -30,7 +30,7 @@
 #include "KoStoreDrag.h"
 
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_config.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_factory.h"
@@ -70,7 +70,7 @@ KisClipboard* KisClipboard::instance()
     return KisClipboard::m_singleton;
 }
 
-void KisClipboard::setClip(KisPaintDeviceImplSP selection)
+void KisClipboard::setClip(KisPaintDeviceSP selection)
 {
     m_clip = selection;
 
@@ -137,7 +137,7 @@ void KisClipboard::setClip(KisPaintDeviceImplSP selection)
     m_pushedClipboard = true;
 }
 
-KisPaintDeviceImplSP KisClipboard::clip()
+KisPaintDeviceSP KisClipboard::clip()
 {
     QClipboard *cb = QApplication::clipboard();
     QCString mimeType("application/x-krita-selection");
@@ -167,7 +167,7 @@ KisPaintDeviceImplSP KisClipboard::clip()
 
         KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
 
-        m_clip = new KisPaintDeviceImpl(cs);
+        m_clip = new KisPaintDevice(cs);
 
         if (store -> hasFile("layerdata")) {
             store -> open("layerdata");
@@ -199,7 +199,7 @@ KisPaintDeviceImplSP KisClipboard::clip()
             profileName = cfg.monitorProfile();
 
         cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""), profileName);
-        m_clip = new KisPaintDeviceImpl(cs);
+        m_clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(m_clip);
         m_clip -> convertFromQImage(qimg, profileName);
     }

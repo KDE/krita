@@ -45,7 +45,7 @@
 #include <kis_types.h>
 #include "kis_meta_registry.h"
 #include <kis_view.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_cmb_idlist.h>
 
@@ -128,7 +128,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisImageSP image = m_view -> canvasSubject() -> currentImg();
     if (!image) return;
 
-    KisPaintDeviceImplSP dev = image -> activeDevice();
+    KisPaintDeviceSP dev = image -> activeDevice();
     if (!dev) return;
 
     if (dev->colorSpace()->willDegrade(TO_LAB16)) {

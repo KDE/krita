@@ -18,12 +18,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 
 #include "kis_cachedhistogram.h"
 
-void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceImplSP dev) {
+void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
     m_producer -> clear();
     KisRectIteratorPixel srcIt = dev -> createRectIterator(m_x, m_y, m_w, m_h, false);
     int i;

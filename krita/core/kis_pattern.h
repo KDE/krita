@@ -30,7 +30,7 @@
 class QPoint;
 class QImage;
 class KisColorSpace;
-class KisPaintDeviceImpl;
+class KisPaintDevice;
 
 class KisPattern : public KisResource {
     typedef KisResource super;
@@ -38,7 +38,7 @@ class KisPattern : public KisResource {
 
 public:
     KisPattern(const QString& file);
-    KisPattern(KisPaintDeviceImpl* image, int x, int y, int w, int h);
+    KisPattern(KisPaintDevice* image, int x, int y, int w, int h);
     virtual ~KisPattern();
 
     virtual bool load();
@@ -46,10 +46,10 @@ public:
     virtual QImage img();
 
     /**
-     * returns a KisPaintDeviceImplSP made with colorSpace as the ColorSpace strategy
+     * returns a KisPaintDeviceSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisPaintDeviceImplSP image(KisColorSpace * colorSpace);
+    KisPaintDeviceSP image(KisColorSpace * colorSpace);
 
     Q_INT32 width() const;
     Q_INT32 height() const;
@@ -68,7 +68,7 @@ private:
 private:
     QByteArray m_data;
     QImage m_img;
-    QMap<QString, KisPaintDeviceImplSP> m_colorspaces;
+    QMap<QString, KisPaintDeviceSP> m_colorspaces;
     bool m_hasFile;
 
     Q_INT32 m_width;

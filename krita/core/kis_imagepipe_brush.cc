@@ -44,7 +44,7 @@
 #include <kapplication.h>
 
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
@@ -154,7 +154,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
-                                     QValueVector< QValueVector<KisPaintDeviceImpl*> > devices,
+                                     QValueVector< QValueVector<KisPaintDevice*> > devices,
                                      QValueVector<KisPipeBrushParasite::SelectionMode> modes)
     : super("")
 {
@@ -322,7 +322,7 @@ KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double s
     return m_brushes.at(m_currentBrush) -> mask(info, subPixelX, subPixelY);
 }
 
-KisPaintDeviceImplSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
     selectNextBrush(info);

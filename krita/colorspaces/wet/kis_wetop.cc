@@ -22,7 +22,7 @@
 
 #include <kis_brush.h>
 #include <kis_debug_areas.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
@@ -54,7 +54,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_painter) return;
 
     if (!m_painter -> device()) return;
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
 
     if (!m_painter -> device()) return;
 
@@ -64,7 +64,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush -> canPaintFor(info) )
         return;
 
-    KisPaintDeviceImplSP dab = 0;
+    KisPaintDeviceSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
         dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), info);

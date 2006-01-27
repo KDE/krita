@@ -51,7 +51,7 @@ public:
 
     KisWSEngineFilter();
 
-    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* cfg, const QRect& rc);
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
 
     static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
     virtual bool supportsPainting() { return false; }
@@ -59,8 +59,8 @@ public:
     virtual bool supportsIncrementalPainting() { return false; }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
+    virtual KisFilterConfiguration* configuration(QWidget*, KisPaintDeviceSP dev);
 
 
 private:
@@ -68,8 +68,8 @@ private:
 private:
 
     KisWSEngineFilterConfiguration * m_cfg;
-    KisPaintDeviceImplSP m_src;
-    KisPaintDeviceImplSP m_dst;
+    KisPaintDeviceSP m_src;
+    KisPaintDeviceSP m_dst;
     QRect m_rect;
 
 };

@@ -23,7 +23,7 @@
 #include "kis_strategy_colorspace_rgb_u16_tester.h"
 #include "kis_rgb_u16_colorspace.h"
 #include "kis_integer_maths.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 using namespace KUnitTest;
 
@@ -94,7 +94,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     CHECK(channels[3] -> size(), CHANNEL_SIZE);
     CHECK(channels[3] -> channelType(), ALPHA);
 
-    KisPaintDeviceImplSP pd = new KisPaintDeviceImpl(cs, "test");
+    KisPaintDeviceSP pd = new KisPaintDevice(cs, "test");
 
     KisRgbU16ColorSpace::Pixel defaultPixel;
 

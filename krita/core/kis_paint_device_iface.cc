@@ -25,25 +25,25 @@
 #include "kis_colorspace_iface.h"
 #include "kis_colorspace.h"
 
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
-KisPaintDeviceImplIface::KisPaintDeviceImplIface( KisPaintDeviceImpl * parent )
+KisPaintDeviceIface::KisPaintDeviceIface( KisPaintDevice * parent )
     : DCOPObject("paintdevice")
 {
     m_parent = parent;
 }
 
-Q_INT32 KisPaintDeviceImplIface::pixelSize() const
+Q_INT32 KisPaintDeviceIface::pixelSize() const
 {
     return m_parent->pixelSize();
 }
 
-Q_INT32 KisPaintDeviceImplIface::nChannels() const
+Q_INT32 KisPaintDeviceIface::nChannels() const
 {
     return m_parent->nChannels();
 }
 
-QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+QByteArray KisPaintDeviceIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     QByteArray b (w * h * m_parent->pixelSize());
 
@@ -51,12 +51,12 @@ QByteArray KisPaintDeviceImplIface::readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
     return b;
 }
 
-void KisPaintDeviceImplIface::writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisPaintDeviceIface::writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_parent->writeBytes((Q_UINT8*)bytes.data(), x, y, w, h);
 }
 
-DCOPRef KisPaintDeviceImplIface::colorSpace() const
+DCOPRef KisPaintDeviceIface::colorSpace() const
 {
     KisColorSpace * cs = m_parent->colorSpace();
     if ( !cs )
@@ -67,7 +67,7 @@ DCOPRef KisPaintDeviceImplIface::colorSpace() const
                         "KisColorSpaceIface" );
 }
 
-void KisPaintDeviceImplIface::setColorSpace(DCOPRef)
+void KisPaintDeviceIface::setColorSpace(DCOPRef)
 {
     // XXX: Figure out how to get the correct object from
     //      the dcopref

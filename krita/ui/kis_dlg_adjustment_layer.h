@@ -39,10 +39,22 @@ class KisDlgAdjustmentLayer : public KDialogBase
     Q_OBJECT
 
 public:
-    
+
+    /**
+     * Create a new adjustmentlayer dialog
+     *
+     * @param img the current image
+     * @param layername the name of the adjustment layer
+     * @param caption the caption for the dialog -- create or properties
+     * @param create if true, set the dialog up for creating a new adj. layer, if false, edit the
+     *               propeties of the current adj. layer
+     * @param parent the widget parent of this dialog
+     * @param name the QObject name, if any
+     */
     KisDlgAdjustmentLayer(KisImage * img,
                           const QString & layerName,
                           const QString & caption,
+                          bool create,
                           QWidget *parent = 0,
                           const char *name = 0);
 

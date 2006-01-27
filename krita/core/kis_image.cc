@@ -42,7 +42,7 @@
 #include "kis_types.h"
 //#include "kis_guide.h"
 #include "kis_image.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_paint_device_action.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
@@ -72,6 +72,11 @@ static int numImages = 0;
 class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
+
+#ifdef __BIG_ENDIAN__
+    cmsHTRANSFORM bigEndianTransform;
+#endif
+    
 };
 
 
@@ -609,7 +614,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 #ifdef __BIG_ENDIAN__
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    m_bigEndianTransform = cmsCreateTransform(hProfile ,
+    m_private->bigEndianTransform = cmsCreateTransform(hProfile ,
                                               TYPE_ABGR_8,
                                               hProfile ,
                                               TYPE_RGBA_8,
@@ -877,7 +882,7 @@ Q_INT32 KisImage::height() const
     return m_height;
 }
 
-KisPaintDeviceImplSP KisImage::activeDevice()
+KisPaintDeviceSP KisImage::activeDevice()
 {
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data()))
         return layer -> paintDevice();
@@ -940,7 +945,7 @@ KisLayerSP KisImage::activeLayer() const
     return m_activeLayer;
 }
 
-KisPaintDeviceImplSP KisImage::projection() const
+KisPaintDeviceSP KisImage::projection() const
 {
     return m_rootLayer->projection();
 }
@@ -1208,7 +1213,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
     QImage img = m_rootLayer->projection()->convertToQImage(monitorProfile, x1, y1, w, h, exposure);
 
 #ifdef __BIG_ENDIAN__
-        //cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+        //cmsDoTransform(m_private->bigEndianTransform, img.bits(), img.bits(), w * h);
 	uchar * data = img.bits();
 	for (int i = 0; i < w * h; ++i) {
 	    uchar r, g, b, a;
@@ -1259,7 +1264,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     if (!img.isNull()) {
 
 #ifdef __BIG_ENDIAN__
-        cmsDoTransform(m_bigEndianTransform, img.bits(), img.bits(), w * h);
+        cmsDoTransform(m_private->bigEndianTransform, img.bits(), img.bits(), w * h);
 #endif
         return img;
     }
@@ -1267,7 +1272,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     return QImage();
 }
 
-KisPaintDeviceImplSP KisImage::mergedImage()
+KisPaintDeviceSP KisImage::mergedImage()
 {
     return m_rootLayer->projection();
 }

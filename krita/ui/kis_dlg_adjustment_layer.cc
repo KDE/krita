@@ -33,36 +33,77 @@
 #include "kis_image.h"
 #include "kis_previewwidget.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_filter.h"
+#include "kis_filter_configuration.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const QString & layerName,
                                              const QString & caption,
+                                             bool create,
                                              QWidget *parent,
                                              const char *name)
     : KDialogBase(parent, name, true, "", Ok | Cancel)
     , m_image(img)
 {
-    KisPaintDeviceImplSP dev = 0;
+    Q_ASSERT(img);
     
-    if(m_image) {
-        KisLayerSP l = img->activeLayer();
-        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
-        if (pl) {
-            dev = pl->paintDevice();
+    KisLayerSP activeLayer = 0;
+    KisFilterConfiguration * kfc = 0;
+    KisFilter * filter = 0;
+    KisAdjustmentLayer * adjustmentLayer = 0;
+    
+    if (create) {
+        activeLayer = img->activeLayer();
+    } else {
+        adjustmentLayer = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());
+        if (adjustmentLayer) {
+            KisLayerSP next = adjustmentLayer->nextSibling();
+            if (!next) {
+                create = true;
+                activeLayer = img->activeLayer();
+            }
+
+            kfc = adjustmentLayer->filter();
+            filter = KisFilterRegistry::instance()->get(kfc->name());
+            if (!filter) {
+                create = true; // XXX: warning after message freeze
+                activeLayer = img->activeLayer();
+            }
         }
         else {
-            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
-            if (gl) {
-                dev = gl->projection();
-            }
+            create = true;
+            activeLayer = img->activeLayer();
         }
     }
 
-    if (!dev) return;
+    kdDebug() << "Create: " << create << ", layer: " << activeLayer->name() << ", adj: " << adjustmentLayer << "\n";
+    
+    KisPaintDeviceSP dev = 0;
 
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(activeLayer.data());
+    if (pl) {
+        dev = pl->paintDevice();
+    }
+    else {
+        KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(activeLayer.data());
+        if (gl) {
+            dev = gl->projection();
+        }
+        else {
+            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());
+            if (al) {
+                dev = al->cachedPaintDevice();
+            }
+        }
+    }
+    kdDebug() << "Paint device: " << dev << "\n";
+    
+    // XXX: Do the rest of the property setting stuff
+    
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
     QGridLayout * grid = new QGridLayout(page, 3, 2, 0, 6);
@@ -79,7 +120,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_filtersList = new KisFiltersListView(dev, page, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
-
     
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( dev );
@@ -101,6 +141,11 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_currentConfigWidget = 0;
 
     enableButtonOK( !m_layerName->text().isEmpty() );
+
+    if (!create) {
+        m_filtersList->setCurrentFilter(filter->id());
+    }
+    
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
@@ -130,7 +175,7 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
 
 void KisDlgAdjustmentLayer::refreshPreview()
 {
-    KisPaintDeviceImplSP layer =  m_preview->getDevice();
+    KisPaintDeviceSP layer =  m_preview->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer.data());
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);

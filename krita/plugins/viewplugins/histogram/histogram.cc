@@ -38,7 +38,7 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
@@ -98,7 +98,7 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisPaintDeviceImplSP dev = m_view -> canvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = m_view -> canvasSubject() -> currentImg() -> activeDevice();
     if (dev)
         dlgHistogram -> setPaintDevice(dev);
 

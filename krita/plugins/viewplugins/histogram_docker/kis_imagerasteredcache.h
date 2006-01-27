@@ -26,7 +26,7 @@
 #include <qvaluelist.h>
 #include <qtimer.h>
 
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 
 class KisView;
 
@@ -37,7 +37,7 @@ public:
     class Observer {
     public:
         virtual Observer* createNew(int x, int y, int w, int h) = 0;
-        virtual void regionUpdated(KisPaintDeviceImplSP dev) = 0;
+        virtual void regionUpdated(KisPaintDeviceSP dev) = 0;
         virtual ~Observer() {}
     };
 

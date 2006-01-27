@@ -23,7 +23,7 @@
 #include "kis_types.h"
 #include "kis_progress_subject.h"
 
-class KisPaintDeviceImpl;
+class KisPaintDevice;
 class KisProgressDisplayInterface;
 class KisHLineIteratorPixel;
 class KisVLineIteratorPixel;
@@ -33,7 +33,7 @@ class KisTransformWorker : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
-    KisTransformWorker(KisPaintDeviceImplSP dev, double  xscale, double  yscale,
+    KisTransformWorker(KisPaintDeviceSP dev, double  xscale, double  yscale,
         double  xshear, double  yshear, double rotation,
         Q_INT32  xtranslate, Q_INT32  ytranslate,
         KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
@@ -46,14 +46,14 @@ public:
 
 private:    
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-    template <class T> void transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
+    template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
     
-    void rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
-    void rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
-    void rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst);
+    void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    void rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst);
 
 private:
-    KisPaintDeviceImplSP m_dev;
+    KisPaintDeviceSP m_dev;
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     Q_INT32  m_xtranslate, m_ytranslate;

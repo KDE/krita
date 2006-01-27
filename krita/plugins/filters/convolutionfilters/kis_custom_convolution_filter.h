@@ -47,7 +47,7 @@ public:
     virtual bool supportsIncrementalPainting() { return true; }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 protected:
     virtual KisKernel* matrix() { return m_matrix; };

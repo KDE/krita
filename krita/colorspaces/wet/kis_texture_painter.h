@@ -29,7 +29,7 @@ class KisTexturePainter : public KisPainter
 public:
 
     KisTexturePainter();
-    KisTexturePainter(KisPaintDeviceImplSP device);
+    KisTexturePainter(KisPaintDeviceSP device);
 
     void createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 

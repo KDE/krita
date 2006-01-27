@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
@@ -77,7 +77,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (!m_painter) return;
     
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
     if (!device) return;
 
     KisBrush *brush = m_painter -> brush();
@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
 
-    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(device -> colorSpace());
+    KisPaintDeviceSP dab = new KisPaintDevice(device -> colorSpace());
     Q_CHECK_PTR(dab);
 
     Q_INT32 maskWidth = mask -> width();

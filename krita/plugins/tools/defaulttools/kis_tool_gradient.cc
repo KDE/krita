@@ -138,7 +138,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
             m_endPos = e -> pos();
         }
 
-        KisPaintDeviceImplSP device;
+        KisPaintDeviceSP device;
 
         if (img && (device = img -> activeDevice())) {
 

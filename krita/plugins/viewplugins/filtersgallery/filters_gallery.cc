@@ -35,7 +35,7 @@
 #include <kis_filter.h>
 #include <kis_filters_listview.h>
 #include <kis_meta_registry.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_view.h>
 
@@ -69,7 +69,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
 //         QImage img;
 //         if(img.load(locate("data","krita/images/previewfilter.png")))
 //         {
-//            KisPaintDeviceImplSP preview = new KisPaintDeviceImpl(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
+//            KisPaintDeviceSP preview = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
 //            preview->convertFromQImage(img,"");
 //            m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
 //         }
@@ -92,7 +92,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
         if(filter )
         {
             KisImageSP img = m_view->canvasSubject()->currentImg();
-            KisPaintDeviceImplSP dev = img->activeDevice();
+            KisPaintDeviceSP dev = img->activeDevice();
             QRect r1 = dev -> extent();
             QRect r2 = img -> bounds();
 

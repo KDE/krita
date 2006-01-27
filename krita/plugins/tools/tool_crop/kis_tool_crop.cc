@@ -88,7 +88,7 @@ void KisToolCrop::activate()
 
     // No current crop rectangle, try to use the selection of the device to make a rectangle
     if (m_subject && m_subject -> currentImg() && m_subject -> currentImg() -> activeDevice()) {
-        KisPaintDeviceImplSP device = m_subject -> currentImg() -> activeDevice();
+        KisPaintDeviceSP device = m_subject -> currentImg() -> activeDevice();
         if (!device -> hasSelection())
             return;
 
@@ -470,7 +470,7 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
 }
 
 void KisToolCrop::crop() {
-    // XXX: Should cropping be part of KisImage/KisPaintDeviceImpl's API?
+    // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
 
     m_haveCropSelection = false;
 

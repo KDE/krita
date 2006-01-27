@@ -39,7 +39,7 @@
 
 #include "kis_color.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 namespace {
     struct GimpPatternHeader {
@@ -59,7 +59,7 @@ KisPattern::KisPattern(const QString& file) : super(file), m_hasFile(true)
 {
 }
 
-KisPattern::KisPattern(KisPaintDeviceImpl* image, int x, int y, int w, int h)
+KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
     : super(""), m_hasFile(false)
 {
     // Forcefully convert to RGBA8
@@ -275,14 +275,14 @@ bool KisPattern::init()
     return true;
 }
 
-KisPaintDeviceImplSP KisPattern::image(KisColorSpace * colorSpace) {
+KisPaintDeviceSP KisPattern::image(KisColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
-    QMap<QString, KisPaintDeviceImplSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
+    QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
     if (it != m_colorspaces.end())
         return (*it);
 
     // If not, create one
-    KisPaintDeviceImplSP layer = new KisPaintDeviceImpl(colorSpace);
+    KisPaintDeviceSP layer = new KisPaintDevice(colorSpace);
 
     Q_CHECK_PTR(layer);
 

@@ -51,7 +51,7 @@
 #include <kis_colorspace.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_view.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_channelinfo.h>
 #include <kis_convolution_painter.h>
 
@@ -73,7 +73,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
     KisLayerSP src = image->activeLayer();
     if (!src) return;
 
-    KisPaintDeviceImplSP dev = image->activeDevice();
+    KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
 
     m_cancelRequested = false;
@@ -87,8 +87,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         t = new KisTransaction(i18n("Add Drop Shadow"), dev.data());
     }
 
-    KisPaintDeviceImplSP shadowDev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
-    KisPaintDeviceImplSP bShadowDev;
+    KisPaintDeviceSP shadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
+    KisPaintDeviceSP bShadowDev;
 
     QRect rect = dev->exactBounds();
     Q_UINT32 pixelSize = dev -> pixelSize();
@@ -115,7 +115,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
     if( blurradius > 0 )
     {
-        bShadowDev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
+        bShadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
         gaussianblur(shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progress);
         shadowDev = bShadowDev;
     }
@@ -147,7 +147,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
 }
 
-void KisDropshadow::gaussianblur (KisPaintDeviceImplSP srcDev, KisPaintDeviceImplSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay)
+void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay)
 {
     Q_INT32          width, height;
     Q_INT32          bytes;

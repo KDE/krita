@@ -116,7 +116,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_currentImage)
             return;
 
-        KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
+        KisPaintDeviceSP device = m_currentImage->activeDevice ();;
         KisPainter painter (device);
         painter.beginTransaction (i18n("Star"));
 

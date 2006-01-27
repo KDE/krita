@@ -30,7 +30,7 @@
 #include <kis_view.h>
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_layer.h>
 
 #include "kis_separate_channels_plugin.h"
@@ -65,7 +65,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisLayerSP l = image->activeLayer();
     if (!l) return;
 
-    KisPaintDeviceImplSP dev = image->activeDevice();
+    KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
     
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->id().name(),

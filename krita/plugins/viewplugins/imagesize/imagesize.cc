@@ -158,7 +158,7 @@ void ImageSize::slotSelectionScale()
 
     if (!image) return;
 
-    KisPaintDeviceImplSP layer = image -> activeDevice();
+    KisPaintDeviceSP layer = image -> activeDevice();
 
     if (!layer) return;
 

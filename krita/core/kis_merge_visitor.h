@@ -22,7 +22,7 @@
 #include <qrect.h>
 
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer_visitor.h"
 #include "kis_painter.h"
 #include "kis_image.h"
@@ -40,7 +40,7 @@ public:
      * Don't even _think_ of creating a merge visitor without a projection; without a projection,
      * the adjustmentlayers won't work.
      */
-    KisMergeVisitor(KisImageSP img, KisPaintDeviceImplSP projection, const QRect& rc) :
+    KisMergeVisitor(KisImageSP img, KisPaintDeviceSP projection, const QRect& rc) :
         KisLayerVisitor()
     {
         Q_ASSERT(img);
@@ -194,7 +194,7 @@ public:
         if (!layer -> visible())
             return true;
 
-        KisPaintDeviceImplSP dev(layer -> prepareProjection(m_projection));
+        KisPaintDeviceSP dev(layer -> prepareProjection(m_projection));
         if (!dev)
             return true;
 
@@ -236,22 +236,27 @@ public:
         kdDebug() << "Do we have a selection: " << selection << "?\n";
 
         // Copy of the projection -- use the copy-on-write trick.
-        KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl(layer->image()->colorSpace());
+        KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
 
         // If there's a selection, only keep the selected bits
         if (selection != 0) {
-            m_projection->setSelection(selection);
+            tmp->setSelection(selection);
         }
         
         // Filter the temporary paint device -- remember, these are only the selected bits,
         // if there was a selection.
-        f->process(m_projection, tmp, cfg, m_rc);
+        f->process(tmp, tmp, cfg, m_rc);
 
         // Copy the filtered bits onto the projection 
         KisPainter gc(m_projection);
-        gc.bltSelection(m_rc.left(), m_rc.top(),
-                        COMPOSITE_OVER, tmp, selection, layer->opacity(),
-                        m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+        if (selection)
+            gc.bltSelection(m_rc.left(), m_rc.top(),
+                            COMPOSITE_OVER, tmp, selection, layer->opacity(),
+                            m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+        else
+            gc.bitBlt(m_rc.left(), m_rc.top(),
+                      COMPOSITE_OVER, tmp, layer->opacity(),
+                      m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
         gc.end();
 
         // Copy the finished projection onto the cache
@@ -268,7 +273,7 @@ public:
 private:
     KisImageSP m_img;
     KisPainter *m_gc;
-    KisPaintDeviceImplSP m_projection;
+    KisPaintDeviceSP m_projection;
     QRect m_rc;
 };
 

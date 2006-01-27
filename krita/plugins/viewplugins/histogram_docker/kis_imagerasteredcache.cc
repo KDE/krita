@@ -117,7 +117,7 @@ void KisImageRasteredCache::timeOut() {
     m_busy = true;
     KisImageSP img = m_view -> canvasSubject() -> currentImg();
     while(!m_queue.isEmpty()) {
-        KisPaintDeviceImplSP dev = img -> mergedImage(); // Just returns a pointer to projection
+        KisPaintDeviceSP dev = img -> mergedImage(); // Just returns a pointer to projection
         m_queue.front() -> observer -> regionUpdated(dev);
         m_queue.front() -> valid = true;
         m_queue.pop_front();

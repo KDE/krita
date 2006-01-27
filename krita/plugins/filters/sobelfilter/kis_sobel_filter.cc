@@ -55,7 +55,7 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", "&Sobel...")
 {
 }
 
-void KisSobelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_INT32 x = rect.x(), y = rect.y();
     Q_INT32 width = rect.width();
@@ -71,7 +71,7 @@ void KisSobelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
     sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
-void KisSobelFilter::prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
     y = CLAMP (y, 0, h - 1);
     Q_UINT32 pixelSize = src -> pixelSize();
@@ -88,7 +88,7 @@ void KisSobelFilter::prepareRow (KisPaintDeviceImplSP src, Q_UINT8* data, Q_UINT
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
+void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
     QRect rect = src -> exactBounds();
     Q_UINT32 x = rect.x();
@@ -180,7 +180,7 @@ void KisSobelFilter::sobel(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, b
 }
 
 
-KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     vKisBoolWidgetParam param;
     param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally") ) );

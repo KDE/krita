@@ -60,7 +60,7 @@ void fromDouble(Q_UINT8* data, int channelpos, double v )
 typedef void (*PtrFromDouble)(Q_UINT8*, int, double);
 
 
-void KisMathToolbox::transformToFR(KisPaintDeviceImplSP src, KisFloatRepresentation* fr, const QRect& rect)
+void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {
     Q_INT32 depth = src->colorSpace()->nColorChannels();
     QMemArray<PtrToDouble> f(depth);
@@ -112,7 +112,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceImplSP src, KisFloatRepresentat
     }
 }
 
-void KisMathToolbox::transformFromFR(KisPaintDeviceImplSP dst, KisFloatRepresentation* fr, const QRect& rect)
+void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
 {
     Q_INT32 depth = dst -> colorSpace() -> nColorChannels();
     QMemArray<PtrFromDouble> f(depth);

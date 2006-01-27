@@ -29,7 +29,7 @@
 #include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_pattern.h"
 #include "kis_custom_pattern.h"
 #include "kis_resource_mediator.h"

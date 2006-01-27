@@ -20,7 +20,7 @@
 #include "kis_selected_transaction.h"
 #include "kis_selection.h"
 
-KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceImplSP device) :
+KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDeviceSP device) :
     KisTransaction(name, device),
     m_device(device),
     m_hadSelection(device->hasSelection())

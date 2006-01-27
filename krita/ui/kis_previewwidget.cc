@@ -99,7 +99,7 @@ void KisPreviewWidget::forceUpdate()
     }
 }
 
-void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
+void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 {
     Q_ASSERT(dev);
     if (!dev) return;
@@ -120,7 +120,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceImplSP dev)
 }
 
 
-KisPaintDeviceImplSP KisPreviewWidget::getDevice()
+KisPaintDeviceSP KisPreviewWidget::getDevice()
 {
     return m_previewDevice;
 }
@@ -193,7 +193,7 @@ bool KisPreviewWidget::zoomChanged()
     }
 
     // Scale the preview
-    m_previewDevice = new KisPaintDeviceImpl( *m_origDevice );
+    m_previewDevice = new KisPaintDevice( *m_origDevice );
     if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
     {
         KisScaleWorker scaleWorker(m_previewDevice, m_zoom, m_zoom, new KisMitchellFilterStrategy());

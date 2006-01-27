@@ -91,7 +91,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
             draw();
             m_dragging = false;
 
-            KisPaintDeviceImplSP device = m_currentImage->activeDevice ();;
+            KisPaintDeviceSP device = m_currentImage->activeDevice ();;
             KisPainter painter (device);
             painter.beginTransaction (i18n ("Polygon"));
 

@@ -30,7 +30,7 @@
 #include "kis_view.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
 #include "kis_custom_brush.h"
@@ -123,8 +123,8 @@ void KisCustomBrush::createBrush() {
     }
 
     // For each layer in the current image, create a new image, and add it to the list
-    QValueVector< QValueVector<KisPaintDeviceImpl*> > devices;
-    devices.push_back(QValueVector<KisPaintDeviceImpl*>());
+    QValueVector< QValueVector<KisPaintDevice*> > devices;
+    devices.push_back(QValueVector<KisPaintDevice*>());
     int w = img -> width();
     int h = img -> height();
 

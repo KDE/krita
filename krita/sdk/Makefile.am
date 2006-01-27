@@ -7,13 +7,11 @@ noinst_LTLIBRARIES = libkritasdk.la
 libkritasdk_la_SOURCES = kis_progress_subject.cc
 libkritasdk_la_METASOURCES = AUTO
 
-noinst_HEADERS = \
+include_HEADERS = \
     kis_annotation.h \
     kis_canvas_controller.h \
     kis_canvas_observer.h \
     kis_canvas_subject.h \
-    kis_debug_areas.h \
-    kis_generic_registry.h \
     kis_global.h \
     kis_id.h \
     kis_integer_maths.h \

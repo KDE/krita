@@ -27,7 +27,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "klocale.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
@@ -59,7 +59,7 @@ KisPenOp::~KisPenOp()
 void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
     if (!device) return;
     KisBrush * brush = m_painter -> brush();
     if (!brush) return;
@@ -72,7 +72,7 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 x = pt.roundX();
     Q_INT32 y = pt.roundY();
 
-    KisPaintDeviceImplSP dab = 0;
+    KisPaintDeviceSP dab = 0;
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
         dab = brush -> image(device -> colorSpace(), info);

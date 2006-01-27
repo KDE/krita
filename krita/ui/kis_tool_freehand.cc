@@ -132,7 +132,7 @@ void KisToolFreehand::initPaint(KisEvent *)
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceImplSP device;
+    KisPaintDeviceSP device;
     if (m_currentImage && (device = m_currentImage -> activeDevice())) {
         if (m_painter)
             delete m_painter;

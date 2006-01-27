@@ -109,7 +109,7 @@ public:
      * devices. The fact that it's a vector of a vector, is to support multidimensional
      * brushes (not yet supported!) */
     KisImagePipeBrush(const QString& name, int w, int h,
-                      QValueVector< QValueVector<KisPaintDeviceImpl*> > devices,
+                      QValueVector< QValueVector<KisPaintDevice*> > devices,
                       QValueVector<KisPipeBrushParasite::SelectionMode> modes);
     virtual ~KisImagePipeBrush();
 
@@ -128,7 +128,7 @@ public:
     */
     virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
-    virtual KisPaintDeviceImplSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;

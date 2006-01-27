@@ -48,7 +48,7 @@
 #include "kis_debug_areas.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
@@ -71,7 +71,7 @@ KisPainter::KisPainter()
     init();
 }
 
-KisPainter::KisPainter(KisPaintDeviceImplSP device)
+KisPainter::KisPainter(KisPaintDeviceSP device)
 {
     init();
     Q_ASSERT(device);
@@ -100,7 +100,7 @@ KisPainter::~KisPainter()
         end();
 }
 
-void KisPainter::begin(KisPaintDeviceImplSP device)
+void KisPainter::begin(KisPaintDeviceSP device)
 {
     if (m_transaction)
         delete m_transaction;
@@ -147,7 +147,7 @@ QRect KisPainter::dirtyRect() {
 
 void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
                         const KisCompositeOp& op,
-                        KisPaintDeviceImplSP srcdev,
+                        KisPaintDeviceSP srcdev,
                         Q_UINT8 opacity,
                         Q_INT32 sx, Q_INT32 sy,
                         Q_INT32 sw, Q_INT32 sh)
@@ -244,7 +244,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   const KisCompositeOp &op, 
-                  KisPaintDeviceImplSP srcdev,
+                  KisPaintDeviceSP srcdev,
                   KisSelectionSP seldev,
                   Q_UINT8 opacity,
                   Q_INT32 sx, Q_INT32 sy, 
@@ -345,7 +345,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
 void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   const KisCompositeOp& op, 
-                  KisPaintDeviceImplSP srcdev,
+                  KisPaintDeviceSP srcdev,
                   Q_UINT8 opacity,
                   Q_INT32 sx, Q_INT32 sy, 
                   Q_INT32 sw, Q_INT32 sh)
@@ -780,7 +780,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceImplSP polygon = new KisPaintDeviceImpl(m_device -> colorSpace());
+    KisPaintDeviceSP polygon = new KisPaintDevice(m_device -> colorSpace());
     Q_CHECK_PTR(polygon);
     polygon -> setX(m_device -> getX());
     polygon -> setY(m_device -> getY());

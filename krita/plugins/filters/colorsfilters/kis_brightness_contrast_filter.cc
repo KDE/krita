@@ -32,7 +32,7 @@
 #include "kis_brightness_contrast_filter.h"
 #include "wdg_brightness_contrast.h"
 #include "kis_colorspace.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kcurve.h"
@@ -50,7 +50,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
@@ -67,7 +67,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwid
     }
 }
 
-std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceImplSP /*dev*/)
+std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
 {
 //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
@@ -81,7 +81,7 @@ bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
 }
 
 
-void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
@@ -140,7 +140,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceImplSP src, KisPaintDevi
     setProgressDone();
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name, WFlags f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     int i;

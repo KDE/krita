@@ -46,13 +46,13 @@ public:
 
 public:
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget *);
-    virtual void process(KisPaintDeviceImplSP, KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
     virtual bool workWith(KisColorSpace* cs);
@@ -62,7 +62,7 @@ public:
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name = 0, WFlags f = 0 );
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, WFlags f = 0 );
     virtual ~KisBrightnessContrastConfigWidget() {};
 
     KisBrightnessContrastFilterConfiguration * config();

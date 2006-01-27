@@ -165,7 +165,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
         freeInfo -> pointer = tile -> m_data;
         freeInfo -> filePos = info -> filePos;
         freeInfo -> size = info -> fsize;
-        int pixelSize = (info -> size / m_tileSize);
+        uint pixelSize = (info -> size / m_tileSize);
         if (m_freeLists.capacity() <= pixelSize)
             m_freeLists.resize(pixelSize + 1);
         m_freeLists[pixelSize].push_back(freeInfo);
@@ -257,7 +257,7 @@ void KisTileManager::toSwap(TileInfo* info) {
         // ### check return values of mmap functions!
         KisTile *tile = info -> tile;
         Q_UINT8* data = 0;
-        int pixelSize = (info -> size / m_tileSize);
+        uint pixelSize = (info -> size / m_tileSize);
         if (m_freeLists.capacity() > pixelSize) {
             if (!m_freeLists[pixelSize].empty()) {
                 // found one
@@ -319,16 +319,16 @@ void KisTileManager::doSwapping()
 {
     m_swapMutex->lock();
 
-    if (m_currentInMem <= m_maxInMem) {
+        if (m_currentInMem <= m_maxInMem) {
         m_swapMutex->unlock();
         return;
     }
 
 #if 1 // enable this to enable swapping
 
-    Q_INT32 count = QMIN(m_swappableList.size(), m_swappiness);
+    Q_UINT32 count = QMIN(m_swappableList.size(), m_swappiness);
 
-    for (Q_INT32 i = 0; i < count; i++) {
+    for (Q_UINT32 i = 0; i < count; i++) {
         toSwap(m_swappableList.front());
         m_swappableList.front() -> validNode = false;
         m_swappableList.pop_front();
@@ -345,7 +345,7 @@ void KisTileManager::printInfo()
     kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
     kdDebug(DBG_AREA_TILES) << "Freelists information\n";
-    for (int i = 0; i < m_freeLists.capacity(); i++) {
+    for (uint i = 0; i < m_freeLists.capacity(); i++) {
         if ( ! m_freeLists[i].empty() ) {
             kdDebug(DBG_AREA_TILES) << m_freeLists[i].size()
                     << " elements in the freelist for pixelsize " << i << "\n";

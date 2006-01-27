@@ -42,7 +42,7 @@ libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
 			wdgtabletdevicesettings.ui wdgtabletsettings.ui kis_input_device.cc \
 			kis_part_layer_handler.cc
 
-noinst_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
+include_HEADERS = imageviewer.h layerlist.h kcurve.h kis_aboutdata.h \
 		kis_autobrush.h kis_autogradient.h kis_birdeye_box.h kis_brush_chooser.h \
 		kis_button_event.h kis_button_press_event.h kis_button_release_event.h kis_canvas.h \
 		kis_clipboard.h kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \

@@ -33,7 +33,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_part_layer.h"
 #include "kis_factory.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include <kis_meta_registry.h>
 
 KisChildDoc::KisChildDoc ( KisDoc * kisDoc, const QRect & rect, KoDocument * childDoc )
@@ -61,7 +61,7 @@ KisChildDoc::~KisChildDoc ()
 KisPartLayerImpl::KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc)
     : super(img, i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
-    m_cache = new KisPaintDeviceImpl(
+    m_cache = new KisPaintDevice(
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
     m_activated = true; //false;
     //image() -> notify(m_doc -> geometry());
@@ -158,7 +158,7 @@ void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32
 
 //void KisPartLayerImpl::repaint() {
 // XXX maybe add x,y,w,h params and use them
-KisPaintDeviceImplSP KisPartLayerImpl::prepareProjection(KisPaintDeviceImplSP projection) {
+KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection) {
     if (!m_doc || !m_doc->document() || !m_activated) return 0;
 
     // XXX: zoom!

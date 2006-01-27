@@ -70,7 +70,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("&Invert"))
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);

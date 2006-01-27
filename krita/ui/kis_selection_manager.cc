@@ -42,7 +42,7 @@
 #include "kis_iteratorpixeltrait.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_channelinfo.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
@@ -275,7 +275,7 @@ void KisSelectionManager::updateGUI()
 
     KisImageSP img = m_parent -> currentImg();
     KisLayerSP l = 0;
-    KisPaintDeviceImplSP dev = 0;
+    KisPaintDeviceSP dev = 0;
 
     bool enable = false;
     if (img) {
@@ -347,7 +347,7 @@ void KisSelectionManager::cut()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) return;
@@ -376,7 +376,7 @@ void KisSelectionManager::copy()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) return;
@@ -391,7 +391,7 @@ void KisSelectionManager::copy()
           << r.width() << ", "
           << r.height() << "\n";
 
-    KisPaintDeviceImplSP clip = new KisPaintDeviceImpl(dev -> colorSpace());
+    KisPaintDeviceSP clip = new KisPaintDevice(dev -> colorSpace());
     Q_CHECK_PTR(clip);
 
     KisColorSpace * cs = clip->colorSpace();
@@ -438,7 +438,7 @@ KisLayerSP KisSelectionManager::paste()
         KisImageSP img = m_parent -> currentImg();
         if (!img) return 0;
 
-    KisPaintDeviceImplSP clip = m_clipboard -> clip();
+    KisPaintDeviceSP clip = m_clipboard -> clip();
 
     if (clip) {
         KisPaintLayer *layer = new KisPaintLayer(img, img -> nextLayerName() + "(pasted)", OPACITY_OPAQUE);
@@ -479,7 +479,7 @@ KisLayerSP KisSelectionManager::paste()
 
 void KisSelectionManager::pasteNew()
 {
-    KisPaintDeviceImplSP clip = m_clipboard -> clip();
+    KisPaintDeviceSP clip = m_clipboard -> clip();
     if (!clip) return;
 
     QRect r = clip->exactBounds();
@@ -519,7 +519,7 @@ void KisSelectionManager::selectAll()
         KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Select &All"), dev);
@@ -539,7 +539,7 @@ void KisSelectionManager::deselect()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Deselect"), dev);
@@ -559,7 +559,7 @@ void KisSelectionManager::clear()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) return;
@@ -582,14 +582,14 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) return;
 
     KisSelectionSP selection = dev -> selection();
 
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(dev -> colorSpace());
+    KisPaintDeviceSP filled = new KisPaintDevice(dev -> colorSpace());
     KisFillPainter painter(filled);
 
     if (fillWithPattern) {
@@ -633,7 +633,7 @@ void KisSelectionManager::reselect()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img ->activeDevice();
+    KisPaintDeviceSP dev = img ->activeDevice();
     if (!dev) return;
 
     KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Reselect"), dev);
@@ -653,7 +653,7 @@ void KisSelectionManager::invert()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (dev -> hasSelection()) {
@@ -680,7 +680,7 @@ void KisSelectionManager::copySelectionToNewLayer()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     copy();
@@ -692,7 +692,7 @@ void KisSelectionManager::cutToNewLayer()
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     cut();
@@ -706,7 +706,7 @@ void KisSelectionManager::feather()
 {
     KisImageSP img = m_parent -> currentImg();
     if (!img) return;
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (!dev -> hasSelection()) {

@@ -42,16 +42,16 @@
 #include "kis_selection.h"
 
 #include "kis_paint_device_iface.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 namespace {
 
-    class KisPaintDeviceImplCommand : public KNamedCommand {
+    class KisPaintDeviceCommand : public KNamedCommand {
         typedef KNamedCommand super;
 
     public:
-        KisPaintDeviceImplCommand(const QString& name, KisPaintDeviceImplSP paintDevice);
-        virtual ~KisPaintDeviceImplCommand() {}
+        KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
+        virtual ~KisPaintDeviceCommand() {}
 
         virtual void execute() = 0;
         virtual void unexecute() = 0;
@@ -59,15 +59,15 @@ namespace {
     protected:
         void setUndo(bool undo);
 
-        KisPaintDeviceImplSP m_paintDevice;
+        KisPaintDeviceSP m_paintDevice;
     };
 
-    KisPaintDeviceImplCommand::KisPaintDeviceImplCommand(const QString& name, KisPaintDeviceImplSP paintDevice) :
+    KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
         super(name), m_paintDevice(paintDevice)
     {
     }
 
-    void KisPaintDeviceImplCommand::setUndo(bool undo)
+    void KisPaintDeviceCommand::setUndo(bool undo)
     {
         if (m_paintDevice -> undoAdapter()) {
             m_paintDevice -> undoAdapter() -> setUndo(undo);
@@ -78,7 +78,7 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        MoveCommand(KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos);
+        MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos);
         virtual ~MoveCommand();
 
         virtual void execute();
@@ -90,12 +90,12 @@ namespace {
         void undoOn();
 
     private:
-        KisPaintDeviceImplSP m_device;
+        KisPaintDeviceSP m_device;
         QPoint m_oldPos;
         QPoint m_newPos;
     };
 
-    MoveCommand::MoveCommand(KisPaintDeviceImplSP device, const QPoint& oldpos, const QPoint& newpos) :
+    MoveCommand::MoveCommand(KisPaintDeviceSP device, const QPoint& oldpos, const QPoint& newpos) :
         super(i18n("Move Layer"))
     {
         m_device = device;
@@ -148,7 +148,7 @@ namespace {
         typedef KNamedCommand super;
 
     public:
-        KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceImplSP paintDevice,
+        KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
                        KisDataManagerSP beforeData, KisColorSpace * beforeColorSpace,
                        KisDataManagerSP afterData, KisColorSpace * afterColorSpace
                 ) : super(i18n("Convert Layer Type"))
@@ -193,7 +193,7 @@ namespace {
     private:
         KisUndoAdapter *m_adapter;
 
-        KisPaintDeviceImplSP m_paintDevice;
+        KisPaintDeviceSP m_paintDevice;
 
         KisDataManagerSP m_beforeData;
         KisColorSpace * m_beforeColorSpace;
@@ -204,7 +204,7 @@ namespace {
 
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * name) :
+KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
     if (colorSpace == 0) {
@@ -238,7 +238,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * 
     m_selection = 0;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace, const char * name) :
+KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
     m_dcop = 0;
@@ -271,7 +271,7 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(KisImage *img, KisColorSpace * colorSpace
     m_extentIsValid = true;
 }
 
-KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(), KShared(rhs)
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
     if (this != &rhs) {
         m_owner = 0;
@@ -291,22 +291,22 @@ KisPaintDeviceImpl::KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs) : QObject(
         }
 }
 
-KisPaintDeviceImpl::~KisPaintDeviceImpl()
+KisPaintDevice::~KisPaintDevice()
 {
     delete m_dcop;
 }
 
-DCOPObject *KisPaintDeviceImpl::dcopObject()
+DCOPObject *KisPaintDevice::dcopObject()
 {
     if (!m_dcop) {
-        m_dcop = new KisPaintDeviceImplIface(this);
+        m_dcop = new KisPaintDeviceIface(this);
         Q_CHECK_PTR(m_dcop);
     }
     return m_dcop;
 }
 
 
-void KisPaintDeviceImpl::move(Q_INT32 x, Q_INT32 y)
+void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
     m_x = x;
     m_y = y;
@@ -320,12 +320,12 @@ void KisPaintDeviceImpl::move(Q_INT32 x, Q_INT32 y)
         emit positionChanged(this);
 }
 
-void KisPaintDeviceImpl::move(const QPoint& pt)
+void KisPaintDevice::move(const QPoint& pt)
 {
         move(pt.x(), pt.y());
 }
 
-KNamedCommand * KisPaintDeviceImpl::moveCommand(Q_INT32 x, Q_INT32 y)
+KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)
 {
     KNamedCommand * cmd = new MoveCommand(this, QPoint(m_x, m_y), QPoint(x, y));
     Q_CHECK_PTR(cmd);
@@ -333,31 +333,31 @@ KNamedCommand * KisPaintDeviceImpl::moveCommand(Q_INT32 x, Q_INT32 y)
     return cmd;
 }
 
-void KisPaintDeviceImpl::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
     m_datamanager -> extent(x, y, w, h);
     x += m_x;
     y += m_y;
 }
 
-QRect KisPaintDeviceImpl::extent() const
+QRect KisPaintDevice::extent() const
 {
     Q_INT32 x, y, w, h;
     extent(x, y, w, h);
     return QRect(x, y, w, h);
 }
 
-bool KisPaintDeviceImpl::extentIsValid() const
+bool KisPaintDevice::extentIsValid() const
 {
     return m_extentIsValid;
 }
 
-void KisPaintDeviceImpl::setExtentIsValid(bool isValid)
+void KisPaintDevice::setExtentIsValid(bool isValid)
 {
     m_extentIsValid = isValid;
 }
 
-void KisPaintDeviceImpl::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+void KisPaintDevice::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
     QRect r = exactBounds();
     x = r.x();
@@ -366,7 +366,7 @@ void KisPaintDeviceImpl::exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32
     h = r.height();
 }
 
-QRect KisPaintDeviceImpl::exactBounds() const
+QRect KisPaintDevice::exactBounds() const
 {
     Q_INT32 x, y, w, h, boundX, boundY, boundW, boundH;
     extent(x, y, w, h);
@@ -380,7 +380,7 @@ QRect KisPaintDeviceImpl::exactBounds() const
     bool found = false;
 
     for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
-        KisHLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createHLineIterator(x, y2, w, false);
+        KisHLineIterator it = const_cast<KisPaintDevice *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundY = y2;
@@ -395,7 +395,7 @@ QRect KisPaintDeviceImpl::exactBounds() const
     found = false;
 
     for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
-        KisHLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createHLineIterator(x, y2, w, false);
+        KisHLineIterator it = const_cast<KisPaintDevice *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundH = y2 - boundY + 1;
@@ -409,7 +409,7 @@ QRect KisPaintDeviceImpl::exactBounds() const
     found = false;
 
     for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
-        KisVLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createVLineIterator(x2, y, h, false);
+        KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundX = x2;
@@ -425,7 +425,7 @@ QRect KisPaintDeviceImpl::exactBounds() const
 
     // Loog for right edge )
     for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
-        KisVLineIterator it = const_cast<KisPaintDeviceImpl *>(this)->createVLineIterator(x2, y, h, false);
+        KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
                 boundW = x2 - boundX + 1;
@@ -442,7 +442,7 @@ QRect KisPaintDeviceImpl::exactBounds() const
 }
 
 
-void KisPaintDeviceImpl::mirrorX()
+void KisPaintDevice::mirrorX()
 {
     QRect r;
     if (hasSelection()) {
@@ -470,7 +470,7 @@ void KisPaintDeviceImpl::mirrorX()
     }
 }
 
-void KisPaintDeviceImpl::mirrorY()
+void KisPaintDevice::mirrorY()
 {
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
@@ -497,7 +497,7 @@ void KisPaintDeviceImpl::mirrorY()
     }
 }
 
-bool KisPaintDeviceImpl::write(KoStore *store)
+bool KisPaintDevice::write(KoStore *store)
 {
     bool retval = m_datamanager->write(store);
     emit ioProgress(100);
@@ -505,7 +505,7 @@ bool KisPaintDeviceImpl::write(KoStore *store)
         return retval;
 }
 
-bool KisPaintDeviceImpl::read(KoStore *store)
+bool KisPaintDevice::read(KoStore *store)
 {
     bool retval = m_datamanager->read(store);
     emit ioProgress(100);
@@ -513,7 +513,7 @@ bool KisPaintDeviceImpl::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
+void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 {
     kdDebug(41004) << "Converting " << name() << " to " << dstColorSpace->id().id() << " from "
               << m_colorSpace->id().id() << "\n";
@@ -522,7 +522,7 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 render
         return;
     }
 
-    KisPaintDeviceImpl dst(dstColorSpace);
+    KisPaintDevice dst(dstColorSpace);
     dst.setX(getX());
     dst.setY(getY());
 
@@ -560,7 +560,7 @@ void KisPaintDeviceImpl::convertTo(KisColorSpace * dstColorSpace, Q_INT32 render
 
 }
 
-void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
+void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
 {
     m_datamanager = data;
     m_colorSpace = colorSpace;
@@ -568,7 +568,7 @@ void KisPaintDeviceImpl::setData(KisDataManagerSP data, KisColorSpace * colorSpa
     m_nChannels = m_colorSpace -> nChannels();
 }
 
-KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
+KisUndoAdapter *KisPaintDevice::undoAdapter() const
 {
     if (m_owner) {
         return m_owner -> undoAdapter();
@@ -576,7 +576,7 @@ KisUndoAdapter *KisPaintDeviceImpl::undoAdapter() const
     return 0;
 }
 
-void KisPaintDeviceImpl::convertFromQImage(const QImage& image, const QString &srcProfileName,
+void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,
                                            Q_INT32 offsetX, Q_INT32 offsetY)
 {
     QImage img = image;
@@ -603,7 +603,7 @@ void KisPaintDeviceImpl::convertFromQImage(const QImage& image, const QString &s
 //    }
 }
 
-QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, float exposure)
+QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, float exposure)
 {
     Q_INT32 x1;
     Q_INT32 y1;
@@ -624,7 +624,7 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, float expos
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
-QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
+QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
 {
     if (w < 0)
         w = 0;
@@ -642,7 +642,7 @@ QImage KisPaintDeviceImpl::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1,
     return image;
 }
 
-QImage KisPaintDeviceImpl::createThumbnail(Q_INT32 w, Q_INT32 h)
+QImage KisPaintDevice::createThumbnail(Q_INT32 w, Q_INT32 h)
 {
     int srcw, srch;
     if( image() )
@@ -690,7 +690,7 @@ QImage KisPaintDeviceImpl::createThumbnail(Q_INT32 w, Q_INT32 h)
     return img;
 }
 
-KisRectIteratorPixel KisPaintDeviceImpl::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
+KisRectIteratorPixel KisPaintDevice::createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable)
 {
     if(hasSelection())
         return KisRectIteratorPixel(this, m_datamanager, m_selection->m_datamanager, left, top, w, h, m_x, m_y, writable);
@@ -698,7 +698,7 @@ KisRectIteratorPixel KisPaintDeviceImpl::createRectIterator(Q_INT32 left, Q_INT3
         return KisRectIteratorPixel(this, m_datamanager, NULL, left, top, w, h, m_x, m_y, writable);
 }
 
-KisHLineIteratorPixel  KisPaintDeviceImpl::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
+KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable)
 {
     if(hasSelection())
         return KisHLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, w, m_x, m_y, writable);
@@ -706,7 +706,7 @@ KisHLineIteratorPixel  KisPaintDeviceImpl::createHLineIterator(Q_INT32 x, Q_INT3
         return KisHLineIteratorPixel(this, m_datamanager, NULL, x, y, w, m_x, m_y, writable);
 }
 
-KisVLineIteratorPixel  KisPaintDeviceImpl::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
+KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable)
 {
     if(hasSelection())
         return KisVLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, h, m_x, m_y, writable);
@@ -716,18 +716,18 @@ KisVLineIteratorPixel  KisPaintDeviceImpl::createVLineIterator(Q_INT32 x, Q_INT3
 }
 
 
-void KisPaintDeviceImpl::emitSelectionChanged() {
+void KisPaintDevice::emitSelectionChanged() {
     if(m_owner)
         m_owner -> slotSelectionChanged();
 }
 
-void KisPaintDeviceImpl::emitSelectionChanged(const QRect& r) {
+void KisPaintDevice::emitSelectionChanged(const QRect& r) {
     if(m_owner)
         m_owner -> slotSelectionChanged(r);
 }
 
 
-KisSelectionSP KisPaintDeviceImpl::selection()
+KisSelectionSP KisPaintDevice::selection()
 {
     if ( m_selectionDeselected && m_selection ) {
         m_selectionDeselected = false;
@@ -744,18 +744,18 @@ KisSelectionSP KisPaintDeviceImpl::selection()
 }
 
 
-bool KisPaintDeviceImpl::hasSelection()
+bool KisPaintDevice::hasSelection()
 {
     return m_hasSelection;
 }
 
-bool KisPaintDeviceImpl::selectionDeselected()
+bool KisPaintDevice::selectionDeselected()
 {
     return m_selectionDeselected;
 }
 
 
-void KisPaintDeviceImpl::deselect()
+void KisPaintDevice::deselect()
 {
     if (m_selection && m_hasSelection) {
         m_hasSelection = false;
@@ -763,13 +763,13 @@ void KisPaintDeviceImpl::deselect()
     }
 }
 
-void KisPaintDeviceImpl::reselect()
+void KisPaintDevice::reselect()
 {
     m_hasSelection = true;
     m_selectionDeselected = false;
 }
 
-void KisPaintDeviceImpl::addSelection(KisSelectionSP selection) {
+void KisPaintDevice::addSelection(KisSelectionSP selection) {
     KisPainter painter(this -> selection().data());
     Q_INT32 x, y, w, h;
     selection -> extent(x, y, w, h);
@@ -777,7 +777,7 @@ void KisPaintDeviceImpl::addSelection(KisSelectionSP selection) {
     painter.end();
 }
 
-void KisPaintDeviceImpl::subtractSelection(KisSelectionSP selection) {
+void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
     Q_INT32 x, y, w, h;
     KisPainter painter(this -> selection().data());
     selection -> invert();
@@ -787,7 +787,7 @@ void KisPaintDeviceImpl::subtractSelection(KisSelectionSP selection) {
     painter.end();
 }
 
-void KisPaintDeviceImpl::clearSelection()
+void KisPaintDevice::clearSelection()
 {
     if (!hasSelection()) return;
 
@@ -810,7 +810,7 @@ void KisPaintDeviceImpl::clearSelection()
     }
 }
 
-void KisPaintDeviceImpl::applySelectionMask(KisSelectionSP mask)
+void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 {
     QRect r = mask -> extent();
     crop(r);
@@ -831,7 +831,7 @@ void KisPaintDeviceImpl::applySelectionMask(KisSelectionSP mask)
     }
 }
 
-KisSelectionSP KisPaintDeviceImpl::setSelection( KisSelectionSP selection)
+KisSelectionSP KisPaintDevice::setSelection( KisSelectionSP selection)
 {
     if (selection) {
         KisSelectionSP oldSelection = m_selection;
@@ -842,7 +842,7 @@ KisSelectionSP KisPaintDeviceImpl::setSelection( KisSelectionSP selection)
     else return 0;
 }
 
-bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
@@ -856,7 +856,7 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity
 }
 
 
-bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
+bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
@@ -869,12 +869,12 @@ bool KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
     return true;
 }
 
-KisColor KisPaintDeviceImpl::colorAt(Q_INT32 x, Q_INT32 y)
+KisColor KisPaintDevice::colorAt(Q_INT32 x, Q_INT32 y)
 {
     return KisColor(m_datamanager -> pixel(x - m_x, y - m_y), m_colorSpace);
 }
 
-bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
@@ -883,7 +883,7 @@ bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8
     return true;
 }
 
-bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
+bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
 {
     Q_UINT8 * pix;
     if (kc.colorSpace() != m_colorSpace) {
@@ -901,43 +901,43 @@ bool KisPaintDeviceImpl::setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc)
 }
 
 
-Q_INT32 KisPaintDeviceImpl::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
+Q_INT32 KisPaintDevice::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
 {
     return m_datamanager -> numContiguousColumns(x - m_x, minY - m_y, maxY - m_y);
 }
 
-Q_INT32 KisPaintDeviceImpl::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
+Q_INT32 KisPaintDevice::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
 {
     return m_datamanager -> numContiguousRows(y - m_y, minX - m_x, maxX - m_x);
 }
 
-Q_INT32 KisPaintDeviceImpl::rowStride(Q_INT32 x, Q_INT32 y)
+Q_INT32 KisPaintDevice::rowStride(Q_INT32 x, Q_INT32 y)
 {
     return m_datamanager -> rowStride(x - m_x, y - m_y);
 }
 
-const Q_UINT8* KisPaintDeviceImpl::pixel(Q_INT32 x, Q_INT32 y)
+const Q_UINT8* KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y)
 {
     return m_datamanager -> pixel(x - m_x, y - m_y);
 }
 
-Q_UINT8* KisPaintDeviceImpl::writablePixel(Q_INT32 x, Q_INT32 y)
+Q_UINT8* KisPaintDevice::writablePixel(Q_INT32 x, Q_INT32 y)
 {
     return m_datamanager -> writablePixel(x - m_x, y - m_y);
 }
 
-void KisPaintDeviceImpl::setX(Q_INT32 x)
+void KisPaintDevice::setX(Q_INT32 x)
 {
     m_x = x;
     if(m_selection)
         m_selection->setX(x);
 }
 
-void KisPaintDeviceImpl::setY(Q_INT32 y)
+void KisPaintDevice::setY(Q_INT32 y)
 {
     m_y = y;
     if(m_selection)
         m_selection->setY(y);
 }
 
-#include "kis_paint_device_impl.moc"
+#include "kis_paint_device.moc"

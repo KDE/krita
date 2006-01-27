@@ -68,7 +68,7 @@ bool KisCubismFilter::workWith(KisColorSpace* cs)
 }
 
 
-void KisCubismFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
+void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
                                KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_ASSERT(src);
@@ -175,7 +175,7 @@ void KisCubismFilter::convertSegment (Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT3
 
 #define USE_READABLE_BUT_SLOW_CODE
 
-void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisPolygon* poly, const Q_UINT8* col, Q_UINT8* /*s*/, QRect rect)
+void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const Q_UINT8* col, Q_UINT8* /*s*/, QRect rect)
 {
         Q_INT32         val;
         Q_INT32         alpha;
@@ -343,7 +343,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceImplSP src, KisPaintDeviceImp
         */
 }
 
-void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)
+void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);
@@ -411,7 +411,7 @@ void KisCubismFilter::cubism(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
         }
 }
 
-KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP /*dev*/)
+KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );

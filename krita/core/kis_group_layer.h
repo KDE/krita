@@ -72,7 +72,7 @@ public:
         };
 
     virtual void resetProjection();
-    virtual KisPaintDeviceImplSP projection() const { return m_projection; }
+    virtual KisPaintDeviceSP projection() const { return m_projection; }
 
     virtual uint childCount() const;
 
@@ -107,7 +107,7 @@ public:
 private:
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
-    KisPaintDeviceImplSP m_projection; // The cached composition of all layers in this group
+    KisPaintDeviceSP m_projection; // The cached composition of all layers in this group
 
     Q_INT32 m_x;
     Q_INT32 m_y;

@@ -88,7 +88,7 @@ public:
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);
 
-    KisHistogram(KisPaintDeviceImplSP paintdev, 
+    KisHistogram(KisPaintDeviceSP paintdev, 
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);
 
@@ -132,7 +132,7 @@ private:
     QValueVector<Calculations> calculateForRange(double from, double to);
     Calculations calculateSingleRange(int channel, double from, double to);
 
-    KisPaintDeviceImplSP m_device;
+    KisPaintDeviceSP m_device;
     KisHistogramProducerSP m_producer;
 
     enumHistogramType m_type;
@@ -141,7 +141,7 @@ private:
     double m_selFrom, m_selTo;
     bool m_selection;
 
-    KisPaintDeviceImplSP m_dev;
+    KisPaintDeviceSP m_dev;
 
     QValueVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };

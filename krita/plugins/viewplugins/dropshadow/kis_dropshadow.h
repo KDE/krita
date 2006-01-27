@@ -22,7 +22,7 @@
 #define _KIS_DROPSHADOW_H_
 
 #include <kis_progress_subject.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 
 typedef enum
 {
@@ -50,7 +50,7 @@ public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
 
 private:
-    void gaussianblur (KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst,
+    void gaussianblur (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                        QRect& rect, double horz, double vert,
                        BlurMethod method,
                        KisProgressDisplayInterface * progressDisplay);

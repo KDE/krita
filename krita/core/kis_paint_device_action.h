@@ -18,7 +18,7 @@
 #ifndef KIS_PAINTDEV_ACTION_H_
 #define KIS_PAINTDEV_ACTION_H_
 
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 class QString;
 
 /**
@@ -33,7 +33,7 @@ public:
      * up a dialog to choose a texture. The width and height are added because these may
      * be needed in some cases.
      */
-    virtual void act(KisPaintDeviceImplSP paintDev, Q_INT32 w = 0, Q_INT32 h = 0) const = 0;
+    virtual void act(KisPaintDeviceSP paintDev, Q_INT32 w = 0, Q_INT32 h = 0) const = 0;
     /// The name of the action, to be displayed in the GUI
     virtual QString name() const = 0;
     /// A description of the action, to be displayed in the GUI

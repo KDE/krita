@@ -24,7 +24,7 @@
 
 #include "kis_point.h"
 
-class KisPaintDeviceImpl;
+class KisPaintDevice;
 
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
@@ -36,13 +36,13 @@ class KisPaintDeviceImpl;
  **/
 class KRITACORE_EXPORT KisBoundary {
 public:
-    KisBoundary(KisPaintDeviceImpl* dev);
+    KisBoundary(KisPaintDevice* dev);
     void generateBoundary(int w, int h);
 
 private:
     typedef QPair<KisPoint, int> PointPair; // int -> length
     bool isDark(Q_UINT8 val);
-    KisPaintDeviceImpl* m_device;
+    KisPaintDevice* m_device;
     int m_fuzzyness;
 
     typedef QValueList<PointPair> PointPairList;

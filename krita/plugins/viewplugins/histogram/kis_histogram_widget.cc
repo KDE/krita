@@ -34,7 +34,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_colorspace.h"
 
 
@@ -49,7 +49,7 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setPaintDevice(KisPaintDeviceImplSP dev) 
+void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev) 
 {
     grpType -> disconnect(this);
     cmbChannel -> disconnect(this);

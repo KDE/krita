@@ -31,7 +31,9 @@ libkritaimage. It is our stated goal to make libkritaimage independent
 of KOffice, but we currently share the gradient loading code with KOffice.
 
 It is not easy at the moment to add new types of resources such as
-brushes, palettes, gradients or patterns to Krita.
+brushes, palettes, gradients or patterns to Krita. Adding new brushes,
+palettes, gradients and patterns is easy, of course. Krita follows
+the guidelines of the Create project for these.
 
 Krita filters must extend and implement the abstract class KisFilter,
 KisFilterConfiguration and possibly KisFilterConfigurationWidget.
@@ -91,8 +93,63 @@ files; viewplugins need a kxmlgui .rc file in addition.
 
 Colorspaces
 
+Colorspaces implement the KisColorSpace pure virtual class. There are two
+types of colorspaces: those that can use lcms for transformations between
+colorspaces, and those that are too weird for lcms to handle. Examples of
+the first are cmyk, rgb, yuv. An example of the latter is watercolor or
+wet & sticky. Colorspaces that use lcms can be derived from KisAbstractColorSpace,
+or of one of the base classes that are specialized for a certain number of bits
+per channel.
+
+Implementing a colorspace is pretty easy. The general principle is that
+colorspaces work on a simple array of bytes. The interpretation of these
+bytes is up to the colorspace. For instance, a pixel in 16-bit GrayA consists
+of four bytes: two bytes for the gray value and two bytes for the alpha value.
+You're free to use a struct to work with the memory layout of a pixel in your
+colorspace implementation.
+
+Filters and paintops make use of the rich set of methods offered by KisColorSpace
+to do their work. In many cases, the default implementation in KisAbstractColorSpace
+will work, but more slowly than a custom implementation in your own colorspace
+because KisAbstractColorSpace will convert all pixels to 16-bit L*a*b and back.
+
 
 Filters
+
+Filters are plugins that examine the pixels in a layer and them make changes
+to them. Although Krita uses an efficient tiled memory backend to store pixels,
+filter writers do not have to bother with that. When writing a filter plugin
+for the Java imaging api, Photoshop or the Gimp you need to take care of tile
+edges and "cobble" tiles together.
+
+Krita uses iterators to read and write pixel values. Alternatively, you can
+read a block of pixels into a memory buffer, mess with it and then write it
+back as a block. But that is not necessarily more efficient; it may just be
+more convenient.
+
+Krita images are composed of layers, of which there are four kinds: paint
+layers, group layers, adjustment layers and part layers. Filters always operate
+on paint layers. Paint layers contain paint devices, KisPaintDevice. A paint
+device in its turn gives access to the actual pixels.
+
+PaintDevices are generally passed around wrapped in shared pointers. A shared
+pointer keeps track of in how many places the paint device is currently used
+and deletes the paint device when it is no longer used anywhere. You recognize
+the shared pointer version of a paint device through its SP suffix.
+
+Let's examine a very simple filter, one that inverts every pixel. The code for
+filter is in the koffice/krita/plugins/filters/exampe directory. The main method
+is KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+KisFilterConfiguration* /*config*/, const QRect& rect).
+
+The function gets passed two paint devices, a configuration object (which is not
+used in this simple filter) and a rect. The rect describes the area of the paint
+device which the filter should act on. This area is described by integers, which
+means no sub-pixel accuracy.
+
+The src paint device is for reading from, the dst paint device for writing to.
+These parameters may point to the same actual paint device, or be two different
+paint devices. (Note: this may change in the future
 
 
 Paintops

@@ -30,7 +30,7 @@ class KisTransactionPrivate;
 
 class KisTransaction : public KCommand {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceImplSP device);
+    KisTransaction(const QString& name, KisPaintDeviceSP device);
     virtual ~KisTransaction();
 
 public:

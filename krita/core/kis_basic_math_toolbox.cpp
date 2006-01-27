@@ -112,7 +112,7 @@ void KisBasicMathToolbox::waveuntrans(KisMathToolbox::KisWavelet* wav, KisMathTo
     }
 }
 
-KisMathToolbox::KisWavelet* KisBasicMathToolbox::fastWaveletTransformation(KisPaintDeviceImplSP src, const QRect& rect,  KisWavelet* buff)
+KisMathToolbox::KisWavelet* KisBasicMathToolbox::fastWaveletTransformation(KisPaintDeviceSP src, const QRect& rect,  KisWavelet* buff)
 {
     if(buff == 0)
     {
@@ -125,7 +125,7 @@ KisMathToolbox::KisWavelet* KisBasicMathToolbox::fastWaveletTransformation(KisPa
     return wav;
 }
 
-void KisBasicMathToolbox::fastWaveletUntransformation(KisPaintDeviceImplSP dst, const QRect& rect, KisWavelet* wav, KisWavelet* buff)
+void KisBasicMathToolbox::fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect& rect, KisWavelet* wav, KisWavelet* buff)
 {
     if(buff == 0)
     {

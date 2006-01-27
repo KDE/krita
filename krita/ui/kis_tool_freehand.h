@@ -82,9 +82,9 @@ protected:
 
     bool m_paintIncremental;
     
-    KisPaintDeviceImplSP m_target;
+    KisPaintDeviceSP m_target;
     KisLayerSP m_tempLayer;
-    KisPaintDeviceImplSP m_source;
+    KisPaintDeviceSP m_source;
 
     QString m_transactionText;
     enumBrushMode m_mode;

@@ -26,7 +26,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
@@ -57,7 +57,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 {
     if (!m_painter) return;
     
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
     if (m_source) device = m_source;
     if (!device) return;
 
@@ -81,7 +81,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    KisPaintDeviceImplSP dab = 0;
+    KisPaintDeviceSP dab = 0;
 
     if (brush -> brushType() == IMAGE || 
         brush -> brushType() == PIPE_IMAGE) {
@@ -107,7 +107,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceImplSP srcdev = new KisPaintDeviceImpl(dab -> colorSpace());
+    KisPaintDeviceSP srcdev = new KisPaintDevice(dab -> colorSpace());
     Q_CHECK_PTR(srcdev);
 
     // First, copy the source data on the temporary device:
@@ -124,7 +124,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copySelection.end();
 
     // copy the seldev onto a new device, after applying the dab selection
-    KisPaintDeviceImplSP target = new KisPaintDeviceImpl(srcdev -> colorSpace());
+    KisPaintDeviceSP target = new KisPaintDevice(srcdev -> colorSpace());
     copyPainter.begin(target);
     copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev -> selection(),
                              OPACITY_OPAQUE, 0, 0, sw, sh);

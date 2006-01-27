@@ -25,7 +25,7 @@
 #include "kis_color.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_point.h"
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
@@ -41,7 +41,7 @@ class KisPattern;
 
 /**
  * KisPainter contains the graphics primitives necessary to draw on a
- * KisPaintDeviceImpl. This is the same kind of abstraction as used in Qt
+ * KisPaintDevice. This is the same kind of abstraction as used in Qt
  * itself, where you have QPainter and QPaintDevice.
  *
  * However, KisPainter works on a tiled image and supports different
@@ -60,7 +60,7 @@ public:
     /// Construct painter without a device
     KisPainter();
     /// Construct a painter, and begin painting on the device
-    KisPainter(KisPaintDeviceImplSP device);
+    KisPainter(KisPaintDeviceSP device);
     virtual ~KisPainter();
 
 private:
@@ -71,7 +71,7 @@ public:
     /**
      * Start painting on the specified device. Not undoable.
      */
-    void begin(KisPaintDeviceImplSP device);
+    void begin(KisPaintDeviceSP device);
 
     /**
      * Finish painting on the current device
@@ -92,7 +92,7 @@ public:
 
 
     /// Returns the current paint device.
-    KisPaintDeviceImplSP device() const { return m_device; }
+    KisPaintDeviceSP device() const { return m_device; }
 
 
     // -----------------------------------------------------------------
@@ -104,7 +104,7 @@ public:
      */
     void bitBlt(Q_INT32 dx, Q_INT32 dy,
                 const KisCompositeOp& op,
-                KisPaintDeviceImplSP src,
+                KisPaintDeviceSP src,
                 Q_INT32 sx, Q_INT32 sy,
                 Q_INT32 sw, Q_INT32 sh)
     {
@@ -117,7 +117,7 @@ public:
      */
     void bitBlt(Q_INT32 dx, Q_INT32 dy,
                 const KisCompositeOp& op,
-                KisPaintDeviceImplSP src,
+                KisPaintDeviceSP src,
                 Q_UINT8 opacity,
                 Q_INT32 sx, Q_INT32 sy,
                 Q_INT32 sw, Q_INT32 sh);
@@ -129,7 +129,7 @@ public:
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
                       const KisCompositeOp &op,
-                      KisPaintDeviceImplSP src,
+                      KisPaintDeviceSP src,
                       KisSelectionSP selMask,
                       Q_UINT8 opacity,
                       Q_INT32 sx, Q_INT32 sy,
@@ -143,7 +143,7 @@ public:
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
                       const KisCompositeOp &op,
-                      KisPaintDeviceImplSP src,
+                      KisPaintDeviceSP src,
                       Q_UINT8 opacity,
                       Q_INT32 sx, Q_INT32 sy,
                       Q_INT32 sw, Q_INT32 sh);
@@ -348,9 +348,9 @@ public:
     KisPaintOp * paintOp() const { return m_paintOp; }
 
     /// Set a current 'dab'. This usually is a paint device containing a rendered brush
-    void setDab(KisPaintDeviceImplSP dab) { m_dab = dab; }
+    void setDab(KisPaintDeviceSP dab) { m_dab = dab; }
     /// Get the currently set dab
-    KisPaintDeviceImplSP dab() const { return m_dab; }
+    KisPaintDeviceSP dab() const { return m_dab; }
 
     /// Is cancel Requested by the KisProgressSubject for this painter
     bool cancelRequested() const { return m_cancelRequested; }
@@ -368,7 +368,7 @@ protected:
     void fillPolygon(const vKisPoint& points, FillStyle fillStyle);
 
 protected:
-    KisPaintDeviceImplSP m_device;
+    KisPaintDeviceSP m_device;
     KisTransaction  *m_transaction;
 
     QRect m_dirtyRect;
@@ -390,7 +390,7 @@ protected:
     Q_INT32 m_pixelSize;
     KisColorSpace * m_colorSpace;
     KisProfile *  m_profile;
-    KisPaintDeviceImplSP m_dab;
+    KisPaintDeviceSP m_dab;
 
 };
 

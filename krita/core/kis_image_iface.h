@@ -27,7 +27,7 @@
 #include <qstring.h>
 
 class KisImage;
-class KisPaintDeviceImplIface;
+class KisPaintDeviceIface;
 
 class KisImageIface : virtual public DCOPObject
 {

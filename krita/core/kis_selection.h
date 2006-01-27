@@ -21,7 +21,7 @@
 #include <qrect.h>
 
 #include "kis_types.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include <koffice_export.h>
 
 enum enumSelectionMode {
@@ -34,9 +34,9 @@ enum enumSelectionMode {
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
  */
-class KRITACORE_EXPORT KisSelection : public KisPaintDeviceImpl {
+class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
 
-    typedef KisPaintDeviceImpl super;
+    typedef KisPaintDevice super;
 
 public:
     /**
@@ -44,7 +44,7 @@ public:
     * @param dev the parent paint device. The selection will never be bigger than the parent
      *              paint device.
      */
-    KisSelection(KisPaintDeviceImplSP dev);
+    KisSelection(KisPaintDeviceSP dev);
 
     /**
      * Create a new KisSelection
@@ -87,7 +87,7 @@ public:
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
 private:
-    KisPaintDeviceImplSP m_parentPaintDevice;
+    KisPaintDeviceSP m_parentPaintDevice;
 };
 
 #endif // KIS_SELECTION_H_

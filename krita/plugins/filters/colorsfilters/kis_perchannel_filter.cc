@@ -27,7 +27,7 @@
 #include "kis_perchannel_filter.h"
 #include "wdg_perchannel.h"
 #include "kis_colorspace.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
@@ -54,7 +54,7 @@ KisPerChannelFilter::KisPerChannelFilter()
 
 }
 
-KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
     return new KisPerChannelConfigWidget(parent, dev);
 }
@@ -71,7 +71,7 @@ KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
     }
 }
 
-std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceImplSP /*dev*/)
+std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
 {
 //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
@@ -80,7 +80,7 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 }
 
 
-void KisPerChannelFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
 
@@ -173,7 +173,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_page->kCurve->setPixmap(pix);
 }
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name, WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     int i;

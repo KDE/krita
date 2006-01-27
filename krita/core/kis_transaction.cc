@@ -22,18 +22,18 @@
 #include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_memento.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 
 class KisTransactionPrivate {
 public:
     QString m_name;
-    KisPaintDeviceImplSP m_device;
+    KisPaintDeviceSP m_device;
     KisMementoSP m_memento;
 
 };
 
-KisTransaction::KisTransaction(const QString& name, KisPaintDeviceImplSP device)
+KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 {
     m_private = new KisTransactionPrivate;
 

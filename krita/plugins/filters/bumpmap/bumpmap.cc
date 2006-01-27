@@ -85,7 +85,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
 }
 
 namespace {
-    void convertRow(KisPaintDeviceImplSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
+    void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
     {
         KisColorSpace * csOrig = orig->colorSpace();
 
@@ -101,7 +101,7 @@ namespace {
 
 }
 
-void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* cfg, const QRect& rect)
+void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rect)
 {
     if (!src) return;
     if (!dst) return;
@@ -176,14 +176,14 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
 
     // Crate a grayscale layer from the bumpmap layer.
     QRect bmRect;
-    KisPaintDeviceImplSP bumpmap;
+    KisPaintDeviceSP bumpmap;
 
 
      if (!config->bumpmap.isNull()) {
 /*  LAYERREMOVE
-         KisPaintDeviceImplSP bumplayer = src->image()->findLayer(config->bumpmap).paintDevice();
+         KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).paintDevice();
 */
-         KisPaintDeviceImplSP bumplayer = 0;
+         KisPaintDeviceSP bumplayer = 0;
 
          if (bumplayer) {
             bmRect = bumplayer->exactBounds();
@@ -344,7 +344,7 @@ void KisFilterBumpmap::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP ds
 
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(this, dev, parent);
 
@@ -384,7 +384,7 @@ KisBumpmapConfiguration::KisBumpmapConfiguration()
 }
 
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceImplSP dev, QWidget * parent, const char * name, WFlags f)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
     : KisFilterConfigWidget(parent, name, f),
       m_filter(filter),
       m_device(dev)

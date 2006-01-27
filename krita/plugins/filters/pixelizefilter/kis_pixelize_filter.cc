@@ -55,7 +55,7 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "blur", "&Pixelize...")
 {
 }
 
-void KisPixelizeFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
     Q_ASSERT( src );
     Q_ASSERT( dst );
@@ -73,7 +73,7 @@ void KisPixelizeFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
     pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 }
 
-void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
+void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int startx, int starty, int width, int height, int pixelWidth, int pixelHeight)
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);
@@ -165,7 +165,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width") ) );

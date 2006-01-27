@@ -56,7 +56,7 @@ public:
 
     virtual void setProgressDisplay(KisProgressDisplayInterface * progressDisplay);
 
-    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&) = 0;
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
     virtual KisFilterConfiguration* configuration(QWidget*);
@@ -73,7 +73,7 @@ public:
      * Return a list of default configuration to demonstrates the use of the filter
      * @return a list with a null element if the filter do not use a configuration
      */
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), 0); return list; }
 
     /**
@@ -136,7 +136,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, KisPaintDeviceSP dev);
 
     virtual void cancel() { m_cancelRequested = true; }
 

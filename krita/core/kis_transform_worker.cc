@@ -21,14 +21,14 @@
 #include <klocale.h>
 
 #include "kis_debug_areas.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_transform_worker.h"
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
 
-KisTransformWorker::KisTransformWorker(KisPaintDeviceImplSP dev, double xscale, double yscale,
+KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
                     Q_INT32 xtranslate, Q_INT32 ytranslate,
                     KisProgressDisplayInterface *progress, KisFilterStrategy *filter)
@@ -45,7 +45,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceImplSP dev, double xscale, 
     m_filter = filter;
 }
 
-void KisTransformWorker::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -83,7 +83,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceImplSP src, KisPaintDeviceI
     }
 }
 
-void KisTransformWorker::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -125,7 +125,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceImplSP src, KisPaintDeviceIm
     }
 }
 
-void KisTransformWorker::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst)
+void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src -> pixelSize();
@@ -164,24 +164,24 @@ void KisTransformWorker::rotate180(KisPaintDeviceImplSP src, KisPaintDeviceImplS
     }
 }
 
-template <class iter> iter createIterator(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
+template <class iter> iter createIterator(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len);
 
 template <> KisHLineIteratorPixel createIterator <KisHLineIteratorPixel>
-(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
 {
     return dev->createHLineIterator(start, lineNum, len, true);
 }
 
 template <> KisVLineIteratorPixel createIterator <KisVLineIteratorPixel>
-(KisPaintDeviceImpl *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
+(KisPaintDevice *dev, Q_INT32 start, Q_INT32 lineNum, Q_INT32 len)
 {
     return dev->createVLineIterator(lineNum, start, len, true);
 }
 
-template <class iter> void calcDimensions (KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines);
+template <class iter> void calcDimensions (KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines);
 
 template <> void calcDimensions <KisHLineIteratorPixel>
-(KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
+(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
     if(dev->hasSelection())
     {
@@ -193,7 +193,7 @@ template <> void calcDimensions <KisHLineIteratorPixel>
 }
 
 template <> void calcDimensions <KisVLineIteratorPixel>
-(KisPaintDeviceImpl *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
+(KisPaintDevice *dev, Q_INT32 &srcStart, Q_INT32 &srcLen, Q_INT32 &firstLine, Q_INT32 &numLines)
 {
     if(dev->hasSelection())
     {
@@ -205,7 +205,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
 }
 
 
-template <class T> void KisTransformWorker::transformPass(KisPaintDeviceImpl *src, KisPaintDeviceImpl *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
+template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
 {
     Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
         Q_INT32 center, begin, end;    /* filter calculation variables */
@@ -374,9 +374,9 @@ bool KisTransformWorker::run()
     else
         r = m_dev->exactBounds();
 
-    KisPaintDeviceImplSP tmpdev1 = new KisPaintDeviceImpl(m_dev->colorSpace());;
-    KisPaintDeviceImplSP tmpdev2 = new KisPaintDeviceImpl(m_dev->colorSpace());;
-    KisPaintDeviceImplSP srcdev = m_dev;
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace());;
+    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace());;
+    KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;
     double yscale = m_yscale;

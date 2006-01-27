@@ -30,7 +30,7 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_selection.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject)
     : super(parent),
@@ -60,7 +60,7 @@ void KisSelectionOptions::slotActivated()
     if (!m_subject) return;
     KisImageSP img = m_subject -> currentImg();
     if (!img) return;
-    KisPaintDeviceImplSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
     if (dev -> hasSelection()) {

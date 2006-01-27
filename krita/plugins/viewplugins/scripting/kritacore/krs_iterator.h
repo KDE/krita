@@ -23,7 +23,7 @@
 #include <api/event.h>
 
 #include <kis_paint_layer.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_types.h>
 
 namespace Kross {

@@ -26,7 +26,7 @@
 #include "kis_id.h"
 #include "kis_types.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 class KisView;
 class KisFilter;
@@ -52,13 +52,13 @@ class KisFiltersListView : public KIconView {
 public:
     KisFiltersListView(QWidget* parent, const char* name = 0);
     KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0) KDE_DEPRECATED;
-    KisFiltersListView(KisPaintDeviceImplSP layer, QWidget* parent, const char * name = 0);
+    KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, const char * name = 0);
     
 private:
     void init();
 public:
     void setLayer(KisLayerSP layer) KDE_DEPRECATED;
-    inline void setPaintDevice(KisPaintDeviceImplSP pd) {
+    inline void setPaintDevice(KisPaintDeviceSP pd) {
         if( pd != m_original)
         {
             m_original = pd;
@@ -66,8 +66,9 @@ public:
         }
     }
     void buildPreview();
+    void setCurrentFilter(KisID filter);
 private:
-    KisPaintDeviceImplSP m_original;
+    KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
     KisPaintLayerSP m_thumb;
 };

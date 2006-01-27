@@ -31,7 +31,7 @@
 #include "kis_doc.h"
 #include "kis_filter.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_filter_manager.h"
 #include "kis_filter_config_widget.h"
 #include "kis_previewwidget.h"
@@ -180,7 +180,7 @@ bool KisFilterManager::apply()
     KisImageSP img = m_view->currentImg();
     if (!img) return false;
 
-    KisPaintDeviceImplSP dev = img->activeDevice();
+    KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return false;
     
     QApplication::setOverrideCursor( Qt::waitCursor );
@@ -242,7 +242,7 @@ void KisFilterManager::slotApplyFilter(int i)
     KisImageSP img = m_view->currentImg();
     if (!img) return;
 
-    KisPaintDeviceImplSP dev = img->activeDevice();
+    KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
     if (dev->colorSpace()->willDegrade(m_lastFilter->colorSpaceIndendendence())) {
@@ -327,7 +327,7 @@ void KisFilterManager::refreshPreview( )
     if( m_lastDialog == 0 )
         return;
         
-    KisPaintDeviceImplSP dev = m_lastDialog -> previewWidget()->getDevice();
+    KisPaintDeviceSP dev = m_lastDialog -> previewWidget()->getDevice();
     if (!dev) return;
     
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget);

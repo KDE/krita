@@ -49,9 +49,9 @@ public:
     ~KisWaveletNoiseReduction();
 
 public:
-    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
     virtual KisFilterConfiguration* configuration(QWidget* nwidget);
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
     static inline KisID id() { return KisID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
     virtual bool supportsPainting() { return true; }

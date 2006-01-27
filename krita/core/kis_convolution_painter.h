@@ -48,7 +48,7 @@ class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 public:
 
     KisConvolutionPainter();
-    KisConvolutionPainter(KisPaintDeviceImplSP device);
+    KisConvolutionPainter(KisPaintDeviceSP device);
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all

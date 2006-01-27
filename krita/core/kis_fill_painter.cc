@@ -44,7 +44,7 @@
 #include "kis_debug_areas.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
@@ -70,7 +70,7 @@ KisFillPainter::KisFillPainter()
     m_fuzzy = false;
 }
 
-KisFillPainter::KisFillPainter(KisPaintDeviceImplSP device) : super(device)
+KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 {
     m_width = m_height = -1;
     m_sampleMerged = false;
@@ -115,7 +115,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
     if (!m_device) return;
 
 
-    KisPaintDeviceImplSP patternLayer = pattern -> image(m_device->colorSpace());
+    KisPaintDeviceSP patternLayer = pattern -> image(m_device->colorSpace());
 
     int sx, sy, sw, sh;
 
@@ -157,7 +157,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace());
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace());
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -170,7 +170,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceImplSP filled = new KisPaintDeviceImpl(m_device->colorSpace());
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace());
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
@@ -199,7 +199,7 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
     m_selection = createFloodSelection(startX, startY);
 }
 
-void KisFillPainter::genericFillEnd(KisPaintDeviceImplSP filled) {
+void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
     if (m_cancelRequested) {
         m_width = m_height = -1;
         return;
@@ -243,7 +243,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
         return new KisSelection(m_device);
 
-    KisPaintDeviceImplSP sourceDevice = 0;
+    KisPaintDeviceSP sourceDevice = 0;
 
     // sample merged?
     if (m_sampleMerged) {

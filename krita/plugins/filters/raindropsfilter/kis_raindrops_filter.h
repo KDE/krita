@@ -46,18 +46,18 @@ class KisRainDropsFilter : public KisFilter
 public:
     KisRainDropsFilter();
 public:
-    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-    void   rainDrops(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, int DropSize, int Amount, int Coeff);
+    void   rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, int DropSize, int Amount, int Coeff);
     bool** CreateBoolArray (uint Columns, uint Rows);
     void   FreeBoolArray (bool** lpbArray, uint Columns);
     uchar  LimitValues (int ColorValue);

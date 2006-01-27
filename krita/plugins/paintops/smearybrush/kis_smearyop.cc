@@ -22,7 +22,7 @@
 
 #include "kis_brush.h"
 #include "kis_global.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
@@ -58,7 +58,7 @@ public:
      * Mix the current paint color with the color found
      * at pos in dev.
      */
-    void mixAt(const KisPoint & pos, double pressure, KisPaintDeviceImplSP dev)
+    void mixAt(const KisPoint & pos, double pressure, KisPaintDeviceSP dev)
     {
         // Get the image background color
         // Get the color at pos
@@ -71,7 +71,7 @@ public:
     /**
      * Paint the tuft footprint (calculated from the pressure) at the given position
      */
-    void paintAt(const KisPoint & pos, double pressure, KisPaintDeviceImplSP dev)
+    void paintAt(const KisPoint & pos, double pressure, KisPaintDeviceSP dev)
     {
         // 
     };
@@ -112,7 +112,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush -> canPaintFor(info) )
         return;
 
-    KisPaintDeviceImplSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter -> device();
     KisColorSpace * colorSpace = device -> colorSpace();
     KisColor kc = m_painter -> paintColor();
     kc.convertTo(colorSpace);
@@ -129,7 +129,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceImplSP dab = new KisPaintDeviceImpl(colorSpace);
+    KisPaintDeviceSP dab = new KisPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);
     
     m_painter -> setPressure(info.pressure);

@@ -51,7 +51,7 @@ public:
     KisHistogramView(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
     virtual ~KisHistogramView();
 
-    void setPaintDevice(KisPaintDeviceImplSP dev);
+    void setPaintDevice(KisPaintDeviceSP dev);
     void setHistogram(KisHistogramSP histogram);
     void setView(double from, double size);
     KisHistogramProducerSP currentProducer();

@@ -81,7 +81,7 @@ private:
     FreeListList m_freeLists;
     Q_INT32 m_maxInMem;
     Q_INT32 m_currentInMem;
-    Q_INT32 m_swappiness;
+    Q_UINT32 m_swappiness;
     Q_INT32 m_tileSize; // size of a tile if it used 1 byte per pixel
     unsigned long m_bytesInMem;
     unsigned long m_bytesTotal;

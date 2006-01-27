@@ -24,7 +24,6 @@
 #include <qmutex.h>
 
 #include <config.h>
-#include LCMS_HEADER
 
 #include <ksharedptr.h>
 #include <kurl.h>
@@ -173,7 +172,7 @@ public:
      *  returns a paintdevice that contains the merged layers of this image, within
      * the bounds of this image (with the colorspace and profile of this image)
      */
-    KisPaintDeviceImplSP mergedImage();
+    KisPaintDeviceSP mergedImage();
 
     /*
      * Returns the colour of the merged image at pixel (x, y).
@@ -185,7 +184,7 @@ public:
                         const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
-    KisPaintDeviceImplSP activeDevice();
+    KisPaintDeviceSP activeDevice();
 
     void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
@@ -194,7 +193,7 @@ public:
 
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
-    KisPaintDeviceImplSP projection() const;
+    KisPaintDeviceSP projection() const;
     
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name) const;
@@ -414,10 +413,6 @@ private:
     DCOPObject *m_dcop;
 
     vKisAnnotationSP m_annotations;
-
-#ifdef __BIG_ENDIAN__
-    cmsHTRANSFORM m_bigEndianTransform;
-#endif
 
     bool m_renderinit;
 

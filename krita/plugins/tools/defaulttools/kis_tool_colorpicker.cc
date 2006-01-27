@@ -34,7 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_canvas_subject.h"
 #include "kis_image.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_colorpicker.moc"
 #include "kis_button_press_event.h"
@@ -85,7 +85,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
         if (!m_subject || !(img = m_subject -> currentImg()))
             return;
 
-        KisPaintDeviceImplSP dev = img -> activeDevice();
+        KisPaintDeviceSP dev = img -> activeDevice();
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
         if (!sampleMerged) {

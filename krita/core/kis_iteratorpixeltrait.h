@@ -21,13 +21,13 @@
 #define KIS_ITERATORPIXELTRAIT_H_
 
 #include "kis_iterator.h"
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 
 template< typename _iTp>
 class KisIteratorPixelTrait
 {
 public:
-    KisIteratorPixelTrait(KisPaintDeviceImpl * ndevice, _iTp *underlyingIterator)
+    KisIteratorPixelTrait(KisPaintDevice * ndevice, _iTp *underlyingIterator)
     :    m_device(ndevice),
         m_underlyingIterator(underlyingIterator)
     {
@@ -117,7 +117,7 @@ public:
 
 
 protected:
-    KisPaintDeviceImpl *m_device;
+    KisPaintDevice *m_device;
 
     inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);};
 

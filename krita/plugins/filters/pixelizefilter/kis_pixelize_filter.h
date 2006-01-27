@@ -45,17 +45,17 @@ class KisPixelizeFilter : public KisFilter
 public:
     KisPixelizeFilter();
 public:
-    virtual void process(KisPaintDeviceImplSP,KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP )
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 private:
-    void pixelize(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
+    void pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int pixelWidth, int pixelHeight);
 };
 
 #endif

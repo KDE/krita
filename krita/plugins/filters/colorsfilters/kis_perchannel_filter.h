@@ -52,13 +52,13 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter();
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
-    virtual void process(KisPaintDeviceImplSP, KisPaintDeviceImplSP, KisFilterConfiguration* , const QRect&);
+    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("perchannel", i18n("Color Adjustment")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
-    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceImplSP dev);
+    virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
 private:
@@ -70,7 +70,7 @@ class KisPerChannelConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceImplSP dev, const char * name = 0, WFlags f = 0 );
+    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, WFlags f = 0 );
     virtual ~KisPerChannelConfigWidget() {};
 
     KisPerChannelFilterConfiguration * config();
@@ -80,7 +80,7 @@ private slots:
 
 private:
     WdgPerChannel * m_page;
-    KisPaintDeviceImplSP m_dev;
+    KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
     QPtrList<QPair<double,double> > *m_curves;
     int m_activeCh;

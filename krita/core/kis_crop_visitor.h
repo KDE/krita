@@ -54,7 +54,7 @@ public:
      */
     bool visit(KisPaintLayer *layer) 
     {
-        KisPaintDeviceImplSP dev = layer->paintDevice();
+        KisPaintDeviceSP dev = layer->paintDevice();
 
         KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), dev.data());
         Q_CHECK_PTR(t);

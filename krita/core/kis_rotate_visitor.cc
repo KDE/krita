@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_rotate_visitor.h"
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
@@ -43,7 +43,7 @@ void KisRotateVisitor::rotate(double angle, bool rotateAboutImageCentre, KisProg
 
     m_progress = progress;
 
-    KisPaintDeviceImplSP rotated = rotate(m_dev, angle, centreOfRotation);
+    KisPaintDeviceSP rotated = rotate(m_dev, angle, centreOfRotation);
 
     if (!m_dev -> hasSelection()) {
         // Clear everything
@@ -78,10 +78,10 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
     initProgress(xShearSteps + yShearSteps);
 
 
-    KisPaintDeviceImplSP sheared;
+    KisPaintDeviceSP sheared;
 
     if (m_dev -> hasSelection()) {
-        sheared = new KisPaintDeviceImpl(m_dev -> colorSpace());
+        sheared = new KisPaintDevice(m_dev -> colorSpace());
         KisPainter p1(sheared);
         p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
         p1.end();
@@ -109,9 +109,9 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
     setProgressDone();
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
+KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorSpace());
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -137,9 +137,9 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateRight90(KisPaintDeviceImplSP src)
     return dst;
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
+KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorSpace());
 
     Q_INT32 pixelSize = src -> pixelSize();
     QRect r = src -> exactBounds();
@@ -165,9 +165,9 @@ KisPaintDeviceImplSP KisRotateVisitor::rotateLeft90(KisPaintDeviceImplSP src)
     return dst;
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::rotate180(KisPaintDeviceImplSP src)
+KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorSpace());
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -192,7 +192,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate180(KisPaintDeviceImplSP src)
     return dst;
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double angle, KisPoint centreOfRotation)
+KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, KisPoint centreOfRotation)
 {
     const double pi = 3.1415926535897932385;
 
@@ -208,7 +208,7 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
     const int yShearSteps = r.width();
     const int fixedRotateSteps = r.height();
 
-    KisPaintDeviceImplSP dst;
+    KisPaintDeviceSP dst;
 
     if (angle == 90) {
         initProgress(fixedRotateSteps);
@@ -273,9 +273,9 @@ KisPaintDeviceImplSP KisRotateVisitor::rotate(KisPaintDeviceImplSP src, double a
     return dst;
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double shearX)
+KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorSpace());
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 
@@ -321,9 +321,9 @@ KisPaintDeviceImplSP KisRotateVisitor::xShear(KisPaintDeviceImplSP src, double s
     return dst;
 }
 
-KisPaintDeviceImplSP KisRotateVisitor::yShear(KisPaintDeviceImplSP src, double shearY)
+KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 {
-    KisPaintDeviceImplSP dst = new KisPaintDeviceImpl(src -> colorSpace());
+    KisPaintDeviceSP dst = new KisPaintDevice(src -> colorSpace());
     dst -> setX(src -> getX());
     dst -> setY(src -> getY());
 

@@ -38,7 +38,7 @@ class KRITACORE_EXPORT KisGradientPainter : public KisPainter
 public:
 
         KisGradientPainter();
-        KisGradientPainter(KisPaintDeviceImplSP device);
+        KisGradientPainter(KisPaintDeviceSP device);
 
 
     enum enumGradientShape {

@@ -129,7 +129,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             m_endPos = straightLine(e -> pos());
         } else m_endPos = e -> pos();
 
-        KisPaintDeviceImplSP device;
+        KisPaintDeviceSP device;
         if (m_currentImage &&
             (device = m_currentImage -> activeDevice()) &&
             m_subject &&

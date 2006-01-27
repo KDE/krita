@@ -110,7 +110,7 @@ public:
 
     //virtual KisPaintLayerSP paintLayer() { return m_paintLayer; }
 
-    virtual KisPaintDeviceImplSP prepareProjection(KisPaintDeviceImplSP projection);
+    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection);
 
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
@@ -124,7 +124,7 @@ private slots:
 
 private:
     // KisPaintLayerSP m_paintLayer;
-    KisPaintDeviceImplSP m_cache;
+    KisPaintDeviceSP m_cache;
     KoFrame * m_frame; // The widget that holds the editable view of the embedded part
     KisChildDoc * m_doc; // The sub-document
     QString m_docType;

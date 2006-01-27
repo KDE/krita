@@ -56,7 +56,7 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "decor", i18n("
 {
 }
 
-void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 radius = ((KisRoundCornersFilterConfiguration*)configuration)->radius();
@@ -139,7 +139,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImpl
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius") ) );

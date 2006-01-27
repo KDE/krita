@@ -54,7 +54,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilp
 {
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
     Q_UNUSED(dst);
@@ -85,7 +85,7 @@ void KisOilPaintFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP d
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness)
+void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness)
 {
     setProgressTotalSteps(h);
     setProgressStage(i18n("Applying oilpaint filter..."),0);
@@ -131,7 +131,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceImplSP src, KisPaintDeviceImplSP 
  *                     the center of this matrix and find the most frequenty color
  */
 
-uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceImplSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
+uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bounds, int X, int Y, int Radius, int Intensity)
 {
         uint color;
     uint I;
@@ -223,7 +223,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceImplSP src, const QRect
 }
 
 
-KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP /*dev*/)
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size") ) );
@@ -242,7 +242,7 @@ KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)
     }
 }
 
-std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceImplSP )
+std::list<KisFilterConfiguration*> KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
 {
     std::list<KisFilterConfiguration*> list;
     list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));

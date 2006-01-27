@@ -46,7 +46,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_progress_display_interface.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_filter_strategy.h>
 #include <kis_scale_visitor.h>
 
@@ -60,7 +60,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small
 {
 }
 
-void KisSmallTilesFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* configuration, const QRect& rect)
+void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         Q_INT32 x = rect.x(), y = rect.y();
         Q_INT32 width = rect.width();
@@ -72,10 +72,10 @@ void KisSmallTilesFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
+void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    KisPaintDeviceImplSP tmp = new KisPaintDeviceImpl( *(src.data()) );
+    KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
 
     KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
     worker.run();
@@ -110,7 +110,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceImplSP src, KisPaintDev
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles") ) );

@@ -26,7 +26,7 @@
 #include <kis_math_toolbox.h>
 #include <kis_meta_registry.h>
 #include <kis_multi_double_filter_widget.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
     : KisFilter(id(), "enhance", i18n("&Wavelet Noise Reducer"))
@@ -38,7 +38,7 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 {
 }
 
-KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP )
+KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP )
 {
     vKisDoubleWidgetParam param;
     param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold") ) );
@@ -56,7 +56,7 @@ KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget
     }
 }
 
-void KisWaveletNoiseReduction::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
 
     float threshold;

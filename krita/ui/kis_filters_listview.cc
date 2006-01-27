@@ -48,7 +48,7 @@ KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const 
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisPaintDeviceImplSP device, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(device)
+KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(device)
 {
     buildPreview();
     init();
@@ -67,7 +67,7 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
     KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
     if(pl == 0)
         return;
-    KisPaintDeviceImplSP npd = pl->paintDevice();
+    KisPaintDeviceSP npd = pl->paintDevice();
     if(npd!= m_original)
     {
         m_original = npd;
@@ -75,7 +75,14 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
     }
 }
 
-
+void KisFiltersListView::setCurrentFilter(KisID filter)
+{
+    
+    kdDebug() << "Current is: " << currentItem() << ", Set current to: " << filter.name() << "\n";
+    setCurrentItem(findItem(filter.name()));
+    kdDebug() << "Current is now: " << currentItem() << "\n";
+    
+}
 void KisFiltersListView::buildPreview()
 {
     
@@ -84,15 +91,8 @@ void KisFiltersListView::buildPreview()
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     
-    // Check which filters support painting
-
-    // Create a paint layer -- if this is not a paint layer, exit. This very ugly, refactore for 2.0. XXX
-//     m_thumb = new KisPaintLayer( *dynamic_cast<KisPaintLayer*>(m_layer.data()) );
-//     if (m_thumb == 0)
-//         return;
-    
     m_imgthumb = new KisImage(0, m_original->exactBounds().width(), m_original->exactBounds().height(), m_original->colorSpace(), "thumbnail");
-    m_thumb = new KisPaintLayer( m_imgthumb, "thumbnail", 255, new KisPaintDeviceImpl(*m_original));
+    m_thumb = new KisPaintLayer( m_imgthumb, "thumbnail", 255, new KisPaintDevice(*m_original));
     
     
     m_imgthumb->addLayer(m_thumb.data(), m_imgthumb->rootLayer(), 0);
@@ -108,7 +108,7 @@ void KisFiltersListView::buildPreview()
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         // Check if filter support the preview and work with the current colorspace
         if (f -> supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
-            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceImplSP)m_thumb->paintDevice());
+            std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration((KisPaintDeviceSP)m_thumb->paintDevice());
             // apply the filter for each of example of configuration
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)

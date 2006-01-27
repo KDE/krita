@@ -30,7 +30,7 @@
 #include <math.h>
 #include "kis_types.h"
 #include "kis_filter_registry.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_filter.h"
 
 KisFilterRegistry *KisFilterRegistry::m_singleton = 0;

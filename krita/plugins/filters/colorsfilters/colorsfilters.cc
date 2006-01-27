@@ -91,7 +91,7 @@ bool KisAutoContrast::workWith(KisColorSpace* cs)
     return (cs->getProfile() != 0);
 }
 
-void KisAutoContrast::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* , const QRect& rect)
+void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     // initialize
     KisHistogramProducerSP producer = new KisGenericLabHistogramProducer();
@@ -226,7 +226,7 @@ bool KisDesaturateFilter::workWith(KisColorSpace* cs)
     return (cs->getProfile() != 0);
 }
 
-void KisDesaturateFilter::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     KisColorAdjustment *adj = src->colorSpace()->createDesaturateAdjustment();
 

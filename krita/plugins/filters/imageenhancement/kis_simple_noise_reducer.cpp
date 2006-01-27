@@ -30,7 +30,7 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev)
+KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold") ) );
@@ -55,7 +55,7 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     int threshold, windowsize;
     if(config !=0)

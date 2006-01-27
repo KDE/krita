@@ -23,7 +23,7 @@
 
 #include "kis_boundary.h"
 
-KisBoundary::KisBoundary(KisPaintDeviceImpl* dev) {
+KisBoundary::KisBoundary(KisPaintDevice* dev) {
     m_device = dev;
     m_fuzzyness = 255 / 2;
 }

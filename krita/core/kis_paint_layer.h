@@ -18,7 +18,7 @@
 #ifndef KIS_PAINT_LAYER_H_
 #define KIS_PAINT_LAYER_H_
 
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_types.h"
 
@@ -31,7 +31,7 @@ class KisPaintLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceImplSP dev);
+    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceSP dev);
     KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity);
     KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
@@ -71,10 +71,10 @@ public:
 
 
     /// Returns the paintDevice that accompanies this layer
-    inline KisPaintDeviceImplSP paintDevice() { return m_paintdev; };
+    inline KisPaintDeviceSP paintDevice() { return m_paintdev; };
 
 private:
-    KisPaintDeviceImplSP m_paintdev;
+    KisPaintDeviceSP m_paintdev;
 };
 
 #endif // KIS_PAINT_LAYER_H_

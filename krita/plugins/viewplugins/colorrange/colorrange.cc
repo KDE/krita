@@ -38,7 +38,7 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
@@ -76,7 +76,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisPaintDeviceImplSP layer = m_view -> canvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceSP layer = m_view -> canvasSubject() -> currentImg() -> activeDevice();
     if (!layer) return;
 
     DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");

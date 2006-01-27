@@ -32,7 +32,7 @@
 #include "kis_integer_maths.h"
 #include "kis_image.h"
 
-KisSelection::KisSelection(KisPaintDeviceImplSP dev)
+KisSelection::KisSelection(KisPaintDeviceSP dev)
     : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())
     , m_parentPaintDevice(dev)
 {

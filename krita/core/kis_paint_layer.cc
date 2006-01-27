@@ -26,10 +26,10 @@
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_iterators_pixel.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceImplSP dev)
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceSP dev)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -42,7 +42,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
-    m_paintdev = new KisPaintDeviceImpl(img, img -> colorSpace());
+    m_paintdev = new KisPaintDevice(img, img -> colorSpace());
 }
 
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
@@ -50,12 +50,12 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
 {
     Q_ASSERT(img);
     Q_ASSERT(colorSpace);
-    m_paintdev = new KisPaintDeviceImpl(img, colorSpace);
+    m_paintdev = new KisPaintDevice(img, colorSpace);
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 {
-    m_paintdev = new KisPaintDeviceImpl( *rhs.m_paintdev.data() );
+    m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
 }
 
 KisLayerSP KisPaintLayer::clone() const

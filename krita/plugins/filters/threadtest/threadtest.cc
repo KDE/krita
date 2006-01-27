@@ -74,7 +74,7 @@ class InversionThread : public QThread
 
 public:
 
-    InversionThread(const QString & name, KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, const QRect& rect)
+    InversionThread(const QString & name, KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect)
         : QThread()
         , m_name(name)
         , m_src(src)
@@ -108,8 +108,8 @@ public:
 
 private:
     QString m_name;
-    KisPaintDeviceImplSP m_src;
-    KisPaintDeviceImplSP m_dst;
+    KisPaintDeviceSP m_src;
+    KisPaintDeviceSP m_dst;
     QRect m_rect;
 
 };
@@ -118,7 +118,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("Invert with
 {
 }
 
-void KisFilterInvert::process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
     kdDebug() << "Going to invert " << rect << "\n";
     int h2 = rect.height() / 2;

@@ -40,7 +40,7 @@ KisHistogram::KisHistogram(KisPaintLayerSP layer,
     updateHistogram();
 }
 
-KisHistogram::KisHistogram(KisPaintDeviceImplSP paintdev,
+KisHistogram::KisHistogram(KisPaintDeviceSP paintdev,
                            KisHistogramProducerSP producer,
                            const enumHistogramType type)
 {

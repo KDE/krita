@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_paint_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 

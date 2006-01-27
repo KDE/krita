@@ -42,7 +42,7 @@ public:
     virtual Observer* createNew(int x, int y, int w, int h)
         { return new KisCachedHistogramObserver(m_producers, m_factory, x, y, w, h); }
         
-    virtual void regionUpdated(KisPaintDeviceImplSP dev);
+    virtual void regionUpdated(KisPaintDeviceSP dev);
 private:
     Producers* m_producers;
     KisHistogramProducerFactory* m_factory;

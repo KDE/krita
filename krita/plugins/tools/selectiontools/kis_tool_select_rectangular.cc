@@ -183,7 +183,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
             if (img) {
 
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisPaintDeviceImplSP dev = img -> activeDevice();
+                KisPaintDeviceSP dev = img -> activeDevice();
                 bool hasSelection = dev -> hasSelection();
 
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);

@@ -36,7 +36,7 @@
 #include "kis_colorspace.h"
 #include "kis_histogram_view.h"
 #include "kis_basic_histogram_producers.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, WFlags f)
     : QLabel(parent, name, f)
@@ -51,7 +51,7 @@ KisHistogramView::~KisHistogramView()
 {
 }
 
-void KisHistogramView::setPaintDevice(KisPaintDeviceImplSP dev)
+void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev)
 {
     m_cs = dev->colorSpace();
 

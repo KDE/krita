@@ -115,7 +115,7 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
         if (img) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceImplSP dev = img -> activeDevice();
+            KisPaintDeviceSP dev = img -> activeDevice();
             bool hasSelection = dev -> hasSelection();
 
             //XXX: Fix string

@@ -30,7 +30,7 @@
 class KRITACORE_EXPORT KisSelectedTransaction : public KisTransaction {
     typedef KisTransaction super;
 public:
-    KisSelectedTransaction(const QString& name, KisPaintDeviceImplSP device);
+    KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);
     virtual ~KisSelectedTransaction();
 
 public:
@@ -41,7 +41,7 @@ public:
 public:
 
 private:
-    KisPaintDeviceImplSP m_device;
+    KisPaintDeviceSP m_device;
     KisTransaction *m_selTransaction;
     bool m_hadSelection;
     bool m_redoHasSelection;

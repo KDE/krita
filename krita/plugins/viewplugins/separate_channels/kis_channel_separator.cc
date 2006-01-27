@@ -49,7 +49,7 @@
 #include <kis_colorspace.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_view.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_channelinfo.h>
 
 #include "kis_channel_separator.h"
@@ -67,7 +67,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     KisLayerSP layer = image->activeLayer();
     if (!layer) return;
 
-    KisPaintDeviceImplSP src = image->activeDevice();
+    KisPaintDeviceSP src = image->activeDevice();
     if (!src) return;
 
     m_cancelRequested = false;
@@ -97,7 +97,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             break;
     }
 
-    vKisPaintDeviceImplSP layers;
+    vKisPaintDeviceSP layers;
 
     QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
     QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
@@ -120,17 +120,17 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         Q_INT32 channelPos = ch->pos();
         Q_INT32 destSize = 1;
 
-        KisPaintDeviceImplSP dev;
+        KisPaintDeviceSP dev;
         if (toColor) {
             // We don't downscale if we separate to color channels
-            dev = new KisPaintDeviceImpl(srcCs);
+            dev = new KisPaintDevice(srcCs);
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ));
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ));
             }
             else {
-                dev = new KisPaintDeviceImpl( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ));
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ));
                 destSize = 2;
             }
         }
@@ -222,7 +222,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
     }
 
-    vKisPaintDeviceImplSP_it deviceIt = layers.begin();
+    vKisPaintDeviceSP_it deviceIt = layers.begin();
 
     if (!m_cancelRequested) {
 

@@ -25,14 +25,14 @@
 #include "kis_layer_visitor.h"
 #include "kis_debug_areas.h"
 #include "kis_image.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     super(img, name, opacity),
     m_x(0),
     m_y(0)
 {
-    m_projection = new KisPaintDeviceImpl(img, img->colorSpace());
+    m_projection = new KisPaintDevice(img, img->colorSpace());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) : 
@@ -59,7 +59,7 @@ KisGroupLayer::~KisGroupLayer()
 
 void KisGroupLayer::resetProjection()
 {
-    m_projection = new KisPaintDeviceImpl(image(), image()->colorSpace());
+    m_projection = new KisPaintDevice(image(), image()->colorSpace());
 }
 
 uint KisGroupLayer::childCount() const

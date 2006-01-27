@@ -78,13 +78,13 @@ public:
     virtual bool accept(KisLayerVisitor &);
 
     virtual void resetCache();
-    virtual KisPaintDeviceImplSP cachedPaintDevice() { return m_cachedPaintDev; }
+    virtual KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
     
 private:
 
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
-    KisPaintDeviceImplSP m_cachedPaintDev;
+    KisPaintDeviceSP m_cachedPaintDev;
 };
 
 #endif // KIS_ADJUSTMENT_LAYER_H_

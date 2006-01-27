@@ -36,7 +36,7 @@
 #include <kis_canvas_subject.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_paint_device_impl.h>
+#include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_types.h>
@@ -174,7 +174,7 @@ Q_UINT32 matchColors(const QColor & c, enumAction action)
 
 
 
-DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceImplSP dev, QWidget *  parent, const char * name)
+DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
     : super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
 {
     m_dev = dev;

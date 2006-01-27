@@ -43,14 +43,14 @@ class KRITACORE_EXPORT KisFillPainter : public KisPainter
 public:
 
     /**
-     * Construct an empty painter. Use the begin(KisPaintDeviceImplSP) method to attach
+     * Construct an empty painter. Use the begin(KisPaintDeviceSP) method to attach
      * to a paint device
      */
     KisFillPainter();
     /**
      * Start painting on the specified paint device
      */
-    KisFillPainter(KisPaintDeviceImplSP device);
+    KisFillPainter(KisPaintDeviceSP device);
 
     /**
      * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
@@ -143,7 +143,7 @@ public:
 private:
     // for floodfill
     void genericFillStart(int startX, int startY);
-    void genericFillEnd(KisPaintDeviceImplSP filled);
+    void genericFillEnd(KisPaintDeviceSP filled);
 
     KisSelectionSP m_selection;
 

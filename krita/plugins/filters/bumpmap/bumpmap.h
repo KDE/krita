@@ -66,13 +66,13 @@ class KisFilterBumpmap : public KisFilter
 public:
     KisFilterBumpmap();
 public:
-    virtual void process(KisPaintDeviceImplSP src, KisPaintDeviceImplSP dst, KisFilterConfiguration*, const QRect&);
+    virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
     static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
     virtual bool supportsIncrementalPainting() { return false; }
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceImplSP dev);
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
 
 };
@@ -108,7 +108,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceImplSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
+    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {};
 
     KisBumpmapConfiguration * config();
@@ -118,7 +118,7 @@ public:
 private:
 
     KisFilter * m_filter;
-    KisPaintDeviceImplSP m_device;
+    KisPaintDeviceSP m_device;
 
 };
 

@@ -51,9 +51,11 @@ class KNamedCommand;
 
 
 /**
- * Class modelled on QPaintDevice.
+ * A paint device contains the actual pixel data and offers methods
+ * to read and write pixels. A paint device has an integer x,y position
+ * (i.e., are not positioned on the image with sub-pixel accuracy).
  */
-class KRITACORE_EXPORT KisPaintDeviceImpl
+class KRITACORE_EXPORT KisPaintDevice
     : public QObject
     , public KShared
 {
@@ -62,28 +64,65 @@ class KRITACORE_EXPORT KisPaintDeviceImpl
 
 public:
 
-    KisPaintDeviceImpl(KisColorSpace * colorSpace, const char * name = 0);
+    /**
+     * Create a new paint device with the specified colorspace.
+     *
+     * @param colorSpace the colorspace of this paint device
+     * @param nname for debugging purposes
+     */
+    KisPaintDevice(KisColorSpace * colorSpace, const char * name = 0);
 
-    KisPaintDeviceImpl(KisImage *img,  KisColorSpace * colorSpace, const char * name = 0);
+    /**
+     * Create a new paint device with the specified colorspace. The image
+     * will be notified whenever the selection on this paint device changes.
+     *
+     * @param colorSpace the colorspace of this paint device
+     * @param nname for debugging purposes
+     */
+    KisPaintDevice(KisImage *img,  KisColorSpace * colorSpace, const char * name = 0);
 
-    KisPaintDeviceImpl(const KisPaintDeviceImpl& rhs);
-    virtual ~KisPaintDeviceImpl();
+    KisPaintDevice(const KisPaintDevice& rhs);
+    virtual ~KisPaintDevice();
     virtual DCOPObject *dcopObject();
 
 public:
 
+    /**
+     * Write the pixels of this paint device into the specified file store.
+     */
     virtual bool write(KoStore *store);
+
+    /**
+     * Fill this paint device with the pixels from the specified file store.
+     */
     virtual bool read(KoStore *store);
 
 public:
 
-    /// Moves the device to these new coordinates (so no incremental move or so)
+    /**
+     * Moves the device to these new coordinates (so no incremental move or so)
+     */
     virtual void move(Q_INT32 x, Q_INT32 y);
-    /// Convenience method for the above
+
+    /**
+     * Convenience method for the above
+     */
     virtual void move(const QPoint& pt);
+
+    /**
+     * Move the paint device to the specified location and make it possible to
+     * undo the move.
+     */
     virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
 
+    /**
+     * Returns true of x,y is within the extent of this paint device
+     */
     bool contains(Q_INT32 x, Q_INT32 y) const;
+
+    /**
+     * Convenience method for the above
+     */
     bool contains(const QPoint& pt) const;
 
     /**
@@ -103,6 +142,8 @@ public:
      * default tile but it will return an empty extent.
      */
     bool extentIsValid() const;
+
+    /// Convience method for the above
     void setExtentIsValid(bool isValid);
 
     /**
@@ -112,7 +153,12 @@ public:
     void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
     virtual QRect exactBounds() const;
 
+    /**
+     * Cut the paint device down to the specified rect
+     */
     void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x - m_x, y - m_y, w, h); };
+
+    /// Convience method for the above
     void crop(QRect r) { r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r); };
 
     /**
@@ -128,12 +174,12 @@ public:
      * Since this is a copy, you need to make sure you have enough memory.
      *
      * Reading from areas not previously initialized will read the default
-     * pixel value into data.
+     * pixel value into data but not initialize that region.
      */
     virtual void readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
     /**
-     * Copy the bytes in data into the rect specified by x, y, w, h. If there
+     * Copy the bytes in data into the rect specified by x, y, w, h. If the
      * data is too small or uninitialized, Krita will happily read parts of
      * memory you never wanted to be read.
      *
@@ -221,9 +267,18 @@ public:
      *
      * @return true if the operation was succesful.
      */
-
     bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
 
+
+    /**
+     * Fill kc with the values found at x and y. This method differs
+     * from the above in using KisColor, which can be of any colorspace
+     *
+     * The color values will be transformed from the profile of
+     * this paint device to the display profile.
+     *
+     * @return true if the operation was succesful.
+     */
     bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
 
     /**
@@ -294,8 +349,6 @@ public:
     const KisImage *image() const;
     void setImage(KisImage *image);
 
-    KisUndoAdapter *undoAdapter() const;
-
     /**
      * Mirror the device along the X axis
      */
@@ -308,6 +361,7 @@ public:
     KisMementoSP getMemento() { return m_datamanager -> getMemento(); };
     void rollback(KisMementoSP memento) { m_datamanager -> rollback(memento); };
     void rollforward(KisMementoSP memento) { m_datamanager -> rollforward(memento); };
+
     /**
      * This function return an iterator which points to the first pixel of an rectangle
      */
@@ -323,9 +377,6 @@ public:
      */
     KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 
-    /** make owning image emit a selectionChanged */
-    void emitSelectionChanged();
-    void emitSelectionChanged(const QRect& r);
 
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();
@@ -363,14 +414,30 @@ public:
      * otherwise 0
      */
     KisSelectionSP setSelection(KisSelectionSP selection);
+
+    /**
+     * Notify the owning image that the current selection has changed.
+     */
+    void emitSelectionChanged();
+
+    /**
+     * Notify the owning image that the current selection has changed.
+     *
+     * @param r the area for which the selection has changed
+     */
+    void emitSelectionChanged(const QRect& r);
+
     
+    KisUndoAdapter *undoAdapter() const;
+
 signals:
-    void positionChanged(KisPaintDeviceImplSP device);
+    void positionChanged(KisPaintDeviceSP device);
     void ioProgress(Q_INT8 percentage);
     void profileChanged(KisProfile *  profile);
 
 private:
-    KisPaintDeviceImpl& operator=(const KisPaintDeviceImpl&);
+    KisPaintDevice& operator=(const KisPaintDevice&);
+
 
 protected:
     KisDataManagerSP m_datamanager;
@@ -404,57 +471,57 @@ private:
 
 };
 
-inline Q_INT32 KisPaintDeviceImpl::pixelSize() const
+inline Q_INT32 KisPaintDevice::pixelSize() const
 {
     Q_ASSERT(m_pixelSize > 0);
     return m_pixelSize;
 }
 
-inline Q_INT32 KisPaintDeviceImpl::nChannels() const
+inline Q_INT32 KisPaintDevice::nChannels() const
 {
     Q_ASSERT(m_nChannels > 0);
     return m_nChannels;
 ;
 }
 
-inline KisColorSpace * KisPaintDeviceImpl::colorSpace() const
+inline KisColorSpace * KisPaintDevice::colorSpace() const
 {
     Q_ASSERT(m_colorSpace != 0);
         return m_colorSpace;
 }
 
 
-inline Q_INT32 KisPaintDeviceImpl::getX() const
+inline Q_INT32 KisPaintDevice::getX() const
 {
     return m_x;
 }
 
-inline Q_INT32 KisPaintDeviceImpl::getY() const
+inline Q_INT32 KisPaintDevice::getY() const
 {
     return m_y;
 }
 
-inline KisImage *KisPaintDeviceImpl::image()
+inline KisImage *KisPaintDevice::image()
 {
         return m_owner;
 }
 
-inline const KisImage *KisPaintDeviceImpl::image() const
+inline const KisImage *KisPaintDevice::image() const
 {
         return m_owner;
 }
 
-inline void KisPaintDeviceImpl::setImage(KisImage *image)
+inline void KisPaintDevice::setImage(KisImage *image)
 {
         m_owner = image;
 }
 
-inline void KisPaintDeviceImpl::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_datamanager -> readBytes(data, x - m_x, y - m_y, w, h);
 }
 
-inline void KisPaintDeviceImpl::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }

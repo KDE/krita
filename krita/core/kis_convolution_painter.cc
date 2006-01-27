@@ -45,7 +45,7 @@
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
@@ -62,7 +62,7 @@ KisConvolutionPainter::KisConvolutionPainter()
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceImplSP device) : super(device)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(device)
 {
 }
 

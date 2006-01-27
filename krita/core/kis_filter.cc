@@ -35,7 +35,7 @@ KisFilterConfiguration * KisFilter::configuration(QWidget*)
     return new KisFilterConfiguration(m_id.id(), 0);
 }
 
-KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceImplSP)
+KisFilterConfigWidget * KisFilter::createConfigurationWidget(QWidget *, KisPaintDeviceSP)
 {
     return 0;
 }

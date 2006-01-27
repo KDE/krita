@@ -35,7 +35,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     Q_ASSERT(kfc);
     m_filterConfig = kfc;
     setSelection( selection );
-    m_cachedPaintDev = new KisPaintDeviceImpl( img->colorSpace(), "cached paint device for adjustmentlayer");
+    m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), "cached paint device for adjustmentlayer");
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -45,7 +45,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     m_filterConfig = rhs.m_filterConfig;
     if (rhs.m_selection)
         m_selection = new KisSelection( *rhs.m_selection.data() );
-    m_cachedPaintDev = new KisPaintDeviceImpl( *rhs.m_cachedPaintDev.data() );
+    m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
 }
 
 
@@ -63,7 +63,7 @@ KisLayerSP KisAdjustmentLayer::clone() const
 
 void KisAdjustmentLayer::resetCache()
 {
-    m_cachedPaintDev = new KisPaintDeviceImpl(image()->colorSpace(), "cached paint device for adjustmentlayer");
+    m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), "cached paint device for adjustmentlayer");
 }
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()

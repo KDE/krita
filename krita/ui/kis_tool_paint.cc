@@ -37,7 +37,7 @@
 #include "kis_tool_paint.h"
 #include "kis_cmb_composite.h"
 #include "kis_image.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 KisToolPaint::KisToolPaint(const QString& UIName)
     : super(UIName)
@@ -232,7 +232,7 @@ void KisToolPaint::updateCompositeOpComboBox()
         KisImageSP img = m_subject -> currentImg();
 
         if (img) {
-            KisPaintDeviceImplSP device = img -> activeDevice();
+            KisPaintDeviceSP device = img -> activeDevice();
 
             if (device) {
                 KisCompositeOpList compositeOps = device -> colorSpace() -> userVisiblecompositeOps();

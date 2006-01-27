@@ -54,7 +54,7 @@ class KisScaleWorker : public KisThread {
 
 public:
 
-    KisScaleWorker(KisPaintDeviceImpl * dev, double sx, double sy,
+    KisScaleWorker(KisPaintDevice * dev, double sx, double sy,
                    KisFilterStrategy *filterStrategy)
         : KisThread()
         , m_dev(dev)
@@ -68,7 +68,7 @@ public:
 
 private:
     Q_INT32 m_pixelSize;
-    KisPaintDeviceImpl * m_dev;
+    KisPaintDevice * m_dev;
     double m_sx, m_sy;
     KisFilterStrategy * m_filterStrategy;
 

@@ -34,7 +34,7 @@ class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTr
 
 public:
 
-    KisHLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
+    KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
                            Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety,
                            bool writable);
     
@@ -66,7 +66,7 @@ protected:
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
-    KisVLineIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
+    KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
                            Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety,
                            bool writable);
                            
@@ -94,7 +94,7 @@ protected:
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
-    KisRectIteratorPixel( KisPaintDeviceImpl *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
+    KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
                           Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety,
                           bool writable);
     

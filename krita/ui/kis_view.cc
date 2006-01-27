@@ -94,7 +94,7 @@
 #include "kis_gradient.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
@@ -102,7 +102,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_move_event.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
 #include "kis_part_layer.h"
@@ -479,7 +479,7 @@ void KisView::updateStatusBarSelectionLabel()
 
     KisImageSP img = currentImg();
     if (img) {
-        KisPaintDeviceImplSP dev = img->activeDevice();
+        KisPaintDeviceSP dev = img->activeDevice();
         if (dev) {
             if (dev -> hasSelection()) {
                 QRect r = dev->selection()->selectedExactRect();
@@ -1607,7 +1607,7 @@ void KisView::rotateLayerRight90()
 void KisView::mirrorLayerX()
 {
     if (!currentImg()) return;
-    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = currentImg() -> activeDevice();
     if (!dev) return;
 
     KisUndoAdapter * undo = 0;
@@ -1629,7 +1629,7 @@ void KisView::mirrorLayerX()
 void KisView::mirrorLayerY()
 {
     if (!currentImg()) return;
-    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = currentImg() -> activeDevice();
     if (!dev) return;
 
     KisUndoAdapter * undo = 0;
@@ -1652,7 +1652,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
 {
     if (!currentImg()) return;
 
-    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = currentImg() -> activeDevice();
     if (!dev) return;
 
     KisUndoAdapter * undo = 0;
@@ -1678,7 +1678,7 @@ void KisView::rotateLayer(double /*angle*/)
 {
     if (!currentImg()) return;
 
-    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = currentImg() -> activeDevice();
     if (!dev) return;
 
     KisUndoAdapter * undo = 0;
@@ -1704,7 +1704,7 @@ void KisView::shearLayer(double /*angleX*/, double /*angleY*/)
 {
     if (!currentImg()) return;
 
-    KisPaintDeviceImplSP dev = currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = currentImg() -> activeDevice();
     if (!dev) return;
 
     KisUndoAdapter * undo = 0;
@@ -2391,7 +2391,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
 
     if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
     {
-        KisDlgAdjustmentLayer dlg(currentImg(), alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjustmentlayer");
+        KisDlgAdjustmentLayer dlg(currentImg(), alayer->name(), i18n("Adjustment Layer Properties"), false, this, "dlgadjustmentlayer");
         if (dlg.exec() == QDialog::Accepted)
         {
             alayer -> setDirty( true );
@@ -2574,7 +2574,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
 
     KisLayerSP l = img->activeLayer();
     
-    KisPaintDeviceImplSP dev;
+    KisPaintDeviceSP dev;
 
     //  Argh! I hate having to cast, cast and cast again to see what kind of a layer I've got!
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
@@ -2587,11 +2587,17 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
             dev = gl->projection();
         }
         else {
-            return;
+            KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
+            if (al) {
+                dev = al->cachedPaintDevice();
+            }
+            else {
+                return;
+            }
         }
     }
 
-    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), true, this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = 0;
         if (dev->hasSelection()) {

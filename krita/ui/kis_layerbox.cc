@@ -306,13 +306,14 @@ void KisLayerBox::slotLayerPropertyChanged(LayerItem* item, const QString& name,
     }
 }
 
-void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem* p, LayerItem*)
+void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem*, LayerItem*)
 {
     KisLayerSP layer = m_image -> findLayer(item -> id());
-    KisLayer* l = m_image -> rootLayer().data();
-    if (p)
-        l = m_image -> findLayer(p -> id()).data();
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisGroupLayerSP parent;
+    if( item -> parent() )
+        parent = dynamic_cast<KisGroupLayer*>(m_image -> findLayer(item -> parent() -> id()).data());
+    if( !parent )
+        parent = m_image -> rootLayer();
     KisLayerSP above = 0;
     if (item -> nextSibling())
         above = m_image -> findLayer(item -> nextSibling() -> id());
@@ -431,6 +432,10 @@ void KisLayerBox::updateUI()
             slotSetOpacity(int(float(active -> opacity() * 100) / 255 + 0.5));
             slotSetCompositeOp(active -> compositeOp());
         }
+    /*kdDebug() << "--- layerbox ---" << endl;
+    printLayerboxLayers();
+    kdDebug() << "--- krita ---" << endl;
+    printKritaLayers();*/
 }
 
 void KisLayerBox::slotAboutToShow()
@@ -594,6 +599,62 @@ QPixmap KisLayerBox::loadPixmap(const QString& filename, const KIconLoader&
                            i18n("Canvas"));
 
     return pixmap;
+}
+
+void KisLayerBox::printKritaLayers() const
+{
+    static int indent = 0;
+    static KisLayer *root = 0;
+    if( !root )
+        root = m_image -> rootLayer();
+    if( !root )
+        return;
+    QString s = root -> name();
+    if( dynamic_cast<KisGroupLayer*>( root ) )
+        s = QString("[%1]").arg( s );
+    if( m_image -> activeLayer().data() == root )
+        s.prepend("*");
+    kdDebug() << (QString().fill(' ', indent) +  s) << endl;
+    for (KisLayer* layer = root -> firstChild(); layer; layer = layer -> nextSibling())
+    {
+        indent += 2;
+        root = layer;
+        printKritaLayers();
+        indent -= 2;
+        root = layer -> parent();
+    }
+}
+
+void KisLayerBox::printLayerboxLayers() const
+{
+    static int indent = 0;
+    static LayerItem *root = 0;
+    if( !root )
+    {
+        for (LayerItem* layer = list() -> firstChild(); layer; layer = layer -> nextSibling())
+        {
+            indent += 2;
+            root = layer;
+            printLayerboxLayers();
+            indent -= 2;
+            root = layer -> parent();
+        }
+        return;
+    }
+    QString s = root -> displayName();
+    if( root -> isFolder() )
+        s = QString("[%1]").arg( s );
+    if( list() -> activeLayer() == root )
+        s.prepend("*");
+    kdDebug() << (QString().fill(' ', indent) +  s) << endl;
+    for (LayerItem* layer = root -> firstChild(); layer; layer = layer -> nextSibling())
+    {
+        indent += 2;
+        root = layer;
+        printLayerboxLayers();
+        indent -= 2;
+        root = layer -> parent();
+    }
 }
 
 #include "kis_layerbox.moc"

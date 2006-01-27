@@ -304,8 +304,8 @@ LayerList::LayerList( QWidget *parent, const char *name )
 
     connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString&, int ) ),
                  SLOT( slotItemRenamed( QListViewItem*, const QString&, int ) ) );
-    connect( this, SIGNAL( moved( QListViewItem*, QListViewItem*, QListViewItem* ) ),
-             SLOT( slotItemMoved( QListViewItem*, QListViewItem*, QListViewItem* ) ) );
+    connect( this, SIGNAL( moved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& ) ),
+             SLOT( slotItemMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& ) ) );
     connect( this, SIGNAL( onItem( QListViewItem* ) ), SLOT( hideTip() ) );
     connect( this, SIGNAL( onViewport() ), SLOT( hideTip() ) );
 }
@@ -798,20 +798,20 @@ void LayerList::slotItemRenamed( QListViewItem *item, const QString &text, int c
     emit displayNameChanged( static_cast<LayerItem*>( item )->id(), text );
 }
 
-void LayerList::slotItemMoved( QListViewItem *item, QListViewItem *afterBefore, QListViewItem *afterNow )
+void LayerList::slotItemMoved( QPtrList<QListViewItem> &items, QPtrList<QListViewItem> &afterBefore, QPtrList<QListViewItem> &afterNow )
 {
-    LayerItem *l = static_cast<LayerItem*>( item ), *a = static_cast<LayerItem*>( afterNow );
-    if( !l || ( afterNow && !a ) )
-        return;
+    for( int i = 0, n = items.count(); i < n; ++i )
+    {
+        LayerItem *l = static_cast<LayerItem*>( items.at(i) ), *a = static_cast<LayerItem*>( afterNow.at(i) );
+        if( !l )
+            continue;
 
-    if( l->parent() )
-        l->parent()->setOpen( true );
+        if( l->parent() )
+            l->parent()->setOpen( true );
 
-    if( afterBefore == afterNow )
-        return;
-
-    emit layerMoved( l, l->parent(), a );
-    emit layerMoved( l->id(), l->parent() ? l->parent()->id() : -1, a ? a->id() : -1 );
+        emit layerMoved( l, l->parent(), a );
+        emit layerMoved( l->id(), l->parent() ? l->parent()->id() : -1, a ? a->id() : -1 );
+    }
 }
 
 void LayerList::setCurrentItem( QListViewItem *item )

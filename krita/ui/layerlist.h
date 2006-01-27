@@ -29,6 +29,7 @@ class QString;
 class KPopupMenu;
 class LayerItem;
 class LayerFolder;
+template<class T> class QPtrList;
 
 class LayerList: public KListView
 {
@@ -150,7 +151,7 @@ private:
 
 private slots:
     void slotItemRenamed( QListViewItem *item, const QString &text, int col );
-    void slotItemMoved( QListViewItem *item, QListViewItem*, QListViewItem* );
+    void slotItemMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& );
     void showContextMenu();
     void hideTip();
     void maybeTip();

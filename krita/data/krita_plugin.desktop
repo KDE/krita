@@ -18,5 +18,6 @@ Comment[sr]=Функционалност GUI-ја за Krita-у
 Comment[sr@Latn]=Funkcionalnost GUI-ja za Krita-u
 Comment[sv]=Grafisk gränssnittsfunktion för Krita
 Comment[xx]=xxGUI functionality for Kritaxx
+Comment[zh_CN]=Krita 的图形界面模块
 [PropertyDef::X-KDE-Version]
 Type=int

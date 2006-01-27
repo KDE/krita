@@ -15,6 +15,7 @@ Name[pt]=Captura
 Name[pt_BR]=Captura
 Name[sv]=Skärmdump
 Name[xx]=xxScreenshotxx
+Name[zh_CN]=抓图
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

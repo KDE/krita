@@ -16,5 +16,6 @@ Comment[sr]=Прикључак за сликарске операције за K
 Comment[sr@Latn]=Priključak za slikarske operacije za Krita-u
 Comment[sv]=Insticksprogram med målningsåtgärder för Krita
 Comment[xx]=xxPaint operation plugin for Kritaxx
+Comment[zh_CN]=Krita 的绘画操作插件
 [PropertyDef::X-KDE-Version]
 Type=int

@@ -26,6 +26,9 @@
             <height>0</height>
         </size>
     </property>
+    <property name="caption">
+        <string>PreviewWidgetBase</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -112,7 +115,7 @@
                                 <cstring>radioBtnOriginal</cstring>
                             </property>
                             <property name="text">
-                                <string>Or&amp;iginal</string>
+                                <string>Ori&amp;ginal</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Show original layer</string>

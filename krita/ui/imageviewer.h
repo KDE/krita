@@ -22,6 +22,8 @@
 #include <qscrollview.h>
 #include <qimage.h>
 
+class QLabel;
+
 class ImageViewer : public QScrollView {
     Q_OBJECT
 
@@ -30,19 +32,15 @@ public:
 
     void setImage(QImage & image);
     
-    // The size of this widget that requires no scrollbars
-    QSize maximalSize();
-
-    void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
-
     void contentsMousePressEvent(QMouseEvent *event);
     void contentsMouseReleaseEvent(QMouseEvent *event);
     void contentsMouseMoveEvent(QMouseEvent *event);
 
 private:
+    QLabel* m_label;
     bool m_isDragging;
     QPoint m_currentPos;
-    QImage m_image;
+    QPixmap m_image;
 };
 
 #endif

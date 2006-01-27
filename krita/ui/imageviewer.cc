@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2005 Eyal Lotem <eyal.lotem@gmail.com>                  *
  *   Copyright (C) 2005 Alexandre Oliveira <aleprj@gmail.com>              *
+ *   Copyright (C) 2006 Cyrille Berger <cberger@cberger.net>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +20,8 @@
  ***************************************************************************/
 #include "imageviewer.h"
 
+#include <qlabel.h>
+
 #include <kapplication.h>
 #include <kdebug.h>
 
@@ -28,23 +31,18 @@
 ImageViewer::ImageViewer(QWidget *widget, const char * name)
     : QScrollView(widget, name)
     , m_isDragging(false)
-    , m_image(QImage())
+    , m_image(QPixmap())
 {
-    resizeContents(0, 0);
+    m_label = new QLabel( viewport());
+    addChild(m_label);
 }
 
 void ImageViewer::setImage(QImage & image)
 {
-    m_image = image;
+    m_image = QPixmap(image);
+    m_label->setPixmap(m_image);
     resizeContents( m_image.width(), m_image.height() );
     repaintContents(false);
-}    
-
-void ImageViewer::drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph )
-{
-    p->drawImage(QPoint(clipx, clipy),
-                 m_image,
-                 QRect(clipx, clipy, clipw, cliph));
 }
 
 void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
@@ -70,11 +68,6 @@ void ImageViewer::contentsMouseMoveEvent(QMouseEvent *event)
         scrollBy(delta.x(), delta.y());
         m_currentPos = event->globalPos();
     }
-}
-
-QSize ImageViewer::maximalSize()
-{
-    return m_image.size().boundedTo( KApplication::desktop()->size() ) + size() - viewport()->size();
 }
 
 #include "imageviewer.moc"

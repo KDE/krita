@@ -34,7 +34,7 @@ class Filter : public Kross::Api::Class<Filter>
         ~Filter();
     private:
         /**
-         * This function return the FilterConfiguration associated with this filter
+         * This function return the FilterConfiguration associated with this filter.
          */
         Kross::Api::Object::Ptr getFilterConfiguration(Kross::Api::List::Ptr args);
         /**

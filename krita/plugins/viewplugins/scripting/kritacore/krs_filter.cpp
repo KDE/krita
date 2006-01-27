@@ -51,7 +51,6 @@ Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
 Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 {
     PaintLayer* src = (PaintLayer*)args->item(0).data();
-    PaintLayer* dst = (PaintLayer*)args->item(1).data();
     QRect rect;
     if( args->count() >2)
     {
@@ -65,7 +64,7 @@ Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
         QRect r2 = src->paintLayer()->image()->bounds();
         rect = r1.intersect(r2);
     }
-    m_filter->process( src->paintLayer()->paintDevice(), dst->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
+    m_filter->process( src->paintLayer()->paintDevice(), src->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
     return 0;
 }
 

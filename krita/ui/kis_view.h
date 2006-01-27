@@ -441,7 +441,6 @@ private slots:
     void layerFront();
     void layerBack();
     void flattenImage();
-    void mergeVisibleLayers();
     void mergeLayer();
     void saveLayerAsImage();
 
@@ -492,7 +491,6 @@ private:
 
     // Actions
     KAction *m_imgFlatten;
-    KAction *m_imgMergeVisible;
     KAction *m_imgMergeLayer;
     KAction *m_imgRename;
     KAction *m_imgResizeToLayer;

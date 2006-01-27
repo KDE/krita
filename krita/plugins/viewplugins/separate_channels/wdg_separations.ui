@@ -9,8 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>570</width>
-            <height>362</height>
+            <height>350</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgSeparations</string>
     </property>
     <grid>
         <property name="name">
@@ -100,14 +103,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QRadioButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>radioFlattenAllVisible</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Flatten all visible layers before separation</string>
-                    </property>
-                </widget>
                 <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
                         <cstring>radioCurrentLayer</cstring>

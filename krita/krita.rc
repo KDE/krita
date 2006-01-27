@@ -91,8 +91,6 @@
   <Action name="layer_properties"/>
   <Separator/>
   <Action name="merge_layer"/>
-  <Action name="merge_visible_layers"/>
-  <Action name="merge_linked_layers"/>
   <Action name="flatten_image"/>
 </Menu>
 

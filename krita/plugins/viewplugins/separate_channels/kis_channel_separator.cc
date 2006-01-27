@@ -93,9 +93,6 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         case(ALL_LAYERS):
             image->flatten();
             break;
-        case(VISIBLE_LAYERS):
-            image->mergeVisibleLayers();
-            break;
         default:
             break;
     }

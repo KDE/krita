@@ -261,9 +261,6 @@ public:
      */
     void flatten();
 
-    void mergeVisibleLayers();
-    void mergeLinkedLayers();
-
     /**
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.

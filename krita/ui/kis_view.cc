@@ -173,7 +173,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_hRuler( 0 )
     , m_vRuler( 0 )
     , m_imgFlatten( 0 )
-    , m_imgMergeVisible( 0 )
     , m_imgMergeLayer( 0 )
     , m_imgRename( 0 )
     , m_imgResizeToLayer( 0 )
@@ -610,9 +609,8 @@ void KisView::setupActions()
     (void)new KAction(i18n("Flip on &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
     // image actions
-    m_imgMergeVisible = new KAction(i18n("Merge &Visible Layers"), "Ctrl+Shift+E", this, SLOT(mergeVisibleLayers()), actionCollection(), "merge_visible_layers");
+    m_imgFlatten = new KAction(i18n("&Flatten image"), "Ctrl+Shift+E", this, SLOT(flattenImage()), actionCollection(), "flatten_image");
     m_imgMergeLayer = new KAction(i18n("&Merge Layer"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
-    m_imgFlatten = new KAction(i18n("Merge &All Layers"), 0, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
 
     // setting actions
     KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
@@ -1113,7 +1111,6 @@ void KisView::layerUpdateGUI(bool enable)
 
     // XXX these should be named layer instead of img
     m_imgFlatten -> setEnabled(nlayers > 1);
-    m_imgMergeVisible -> setEnabled(nvisible > 1);
     m_imgMergeLayer -> setEnabled(nlayers > 1 && layer && layer -> nextSibling());
 
     
@@ -1751,15 +1748,6 @@ void KisView::flattenImage()
         if (doIt) {
             img -> flatten();
         }
-    }
-}
-
-void KisView::mergeVisibleLayers()
-{
-    KisImageSP img = currentImg();
-
-    if (img) {
-        img -> mergeVisibleLayers();
     }
 }
 

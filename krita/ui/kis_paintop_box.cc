@@ -44,11 +44,13 @@
 
 KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name)
     : super (parent, name),
-      m_view(view)
+      m_canvasController(view->getCanvasController())
 {
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
     KAcceleratorManager::setNoAccel(this);
 #endif
+
+    Q_ASSERT(m_canvasController != 0);
 
     setCaption(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
@@ -59,7 +61,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     m_layout = new QHBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 
-    connect(this, SIGNAL(selected(const KisID &)), m_view, SLOT(paintopActivated(const KisID &)));
+    connect(this, SIGNAL(selected(const KisID &)), view, SLOT(paintopActivated(const KisID &)));
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
@@ -69,12 +71,12 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
         addItem(*it);
     }
 
-    m_currentID = KisID("paintbrush","");
-
-    connect(m_view, SIGNAL(currentColorSpaceChanged(KisColorSpace*)),
+    connect(view, SIGNAL(currentColorSpaceChanged(KisColorSpace*)),
             this, SLOT(colorSpaceChanged(KisColorSpace*)));
-    connect(m_view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
+    connect(view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
             this, SLOT(slotInputDeviceChanged(const KisInputDevice&)));
+
+    setCurrentPaintop(defaultPaintop(m_canvasController->currentInputDevice()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -94,10 +96,9 @@ void KisPaintopBox::slotItemSelected(int index)
         return;
     }
 
-    m_currentID = *m_displayedOps->at(index);
-    updateOptionWidget();
+    KisID paintop = *m_displayedOps->at(index);
 
-    emit selected(m_currentID);
+    setCurrentPaintop(paintop);
 }
 
 void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
@@ -122,7 +123,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
         }
     }
 
-    const int index = m_displayedOps->findIndex ( m_currentID );
+    const int index = m_displayedOps->findIndex(currentPaintop());
     m_cmbPaintops->setCurrentItem( index );
     slotItemSelected( index );
 }
@@ -140,9 +141,20 @@ QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
     return QPixmap(fname);
 }
 
-void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & /*inputDevice*/)
+void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
 {
-    updateOptionWidget();
+    KisID paintop;
+    InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
+
+    if (it == m_currentID.end()) {
+        paintop = defaultPaintop(inputDevice);
+    } else {
+        paintop = (*it).second;
+    }
+
+    const int index = m_displayedOps->findIndex(paintop);
+    m_cmbPaintops->setCurrentItem(index);
+    setCurrentPaintop(paintop);
 }
 
 void KisPaintopBox::updateOptionWidget()
@@ -153,16 +165,35 @@ void KisPaintopBox::updateOptionWidget()
         m_layout->invalidate();
     }
 
-    KisCanvasController *canvasController = m_view->getCanvasController();
-    Q_ASSERT(canvasController != 0);
-    KisInputDevice inputDevice = canvasController->currentInputDevice();
-
-    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( m_currentID, this, inputDevice );
+    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( currentPaintop(), this, m_canvasController->currentInputDevice() );
 
     if (m_optionWidget != 0) {
         m_layout->addWidget(m_optionWidget);
         updateGeometry();
         m_optionWidget->show();
+    }
+}
+
+const KisID& KisPaintopBox::currentPaintop()
+{
+    return m_currentID[m_canvasController->currentInputDevice()];
+}
+
+void KisPaintopBox::setCurrentPaintop(const KisID & paintop)
+{
+    m_currentID[m_canvasController->currentInputDevice()] = paintop;
+
+    updateOptionWidget();
+
+    emit selected(paintop);
+}
+
+KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
+{
+    if (inputDevice == KisInputDevice::eraser()) {
+        return KisID("eraser","");
+    } else {
+        return KisID("paintbrush","");
     }
 }
 

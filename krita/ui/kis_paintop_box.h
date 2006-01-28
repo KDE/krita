@@ -21,14 +21,20 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
+#include <map>
+
 #include <qwidget.h>
 #include <qcombobox.h>
 #include <qvaluelist.h>
 
+#include "kis_input_device.h"
+
+class QString;
+
 class KWidgetAction;
 class KisView;
+class KisCanvasController;
 class KisID;
-class QString;
 class KisColorSpace;
 
 /**
@@ -70,18 +76,21 @@ private slots:
 private:
     QPixmap paintopPixmap(const KisID & paintop);
     void updateOptionWidget();
+    const KisID & currentPaintop();
+    void setCurrentPaintop(const KisID & paintop);
+    KisID defaultPaintop(const KisInputDevice& inputDevice);
 
 private:
-    KisView * m_view;
+    KisCanvasController *m_canvasController;
     QComboBox * m_cmbPaintops;
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
     
     QValueList<KisID> * m_paintops;
     QValueList<KisID> * m_displayedOps;
-    
-    KisID m_currentID;
 
+    typedef std::map<KisInputDevice, KisID> InputDevicePaintopMap;
+    InputDevicePaintopMap m_currentID;
 };
 
 

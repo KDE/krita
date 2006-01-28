@@ -1017,17 +1017,7 @@ void KisView::setInputDevice(KisInputDevice inputDevice)
 
         m_toolManager->setToolForInputDevice(m_inputDevice, inputDevice);
 
-        // XXX: This is incorrect
-        // On initialisation for an input device, set to eraser if the current input device
-        // is a wacom eraser, else to brush.
         if (m_toolManager->currentTool() == 0) {
-            if (m_inputDevice == KisInputDevice::eraser()) {
-                m_paintop = KisID("eraser", "");
-                // XXX: Set the right entry in the paintop box
-            } else {
-                m_paintop = KisID("paintbrush", "");
-                // XXX: Set the right entry in the paintop box
-            }
             m_toolManager->setCurrentTool(m_toolManager->findTool("tool_brush", m_inputDevice));
         }
         else {

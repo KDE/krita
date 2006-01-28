@@ -73,7 +73,7 @@ namespace KoChart
 	// The new interface.
 	virtual void resizeData( int rows, int columns ) = 0 ;
 	virtual void setCellData( int row, int column, const QVariant &) = 0;
-	virtual void analyzeData( ) = 0;
+	virtual void analyzeHeaders( ) = 0;
 #endif
         virtual void setCanChangeValue(bool b )=0;
 

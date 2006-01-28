@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WdgCImg</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,14 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QPushButton" row="0" column="0">
-            <property name="name">
-                <cstring>bnRefresh</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Refresh Preview</string>
-            </property>
-        </widget>
         <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>textLabel1_2</cstring>
@@ -123,7 +115,7 @@
                         <cstring>chkNormalize</cstring>
                     </property>
                     <property name="text">
-                        <string>Normalize picture</string>
+                        <string>&amp;Normalize picture</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -134,7 +126,7 @@
                         <cstring>chkLinearInterpolation</cstring>
                     </property>
                     <property name="text">
-                        <string>Use linear interpolation</string>
+                        <string>&amp;Use linear interpolation</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -286,6 +278,14 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

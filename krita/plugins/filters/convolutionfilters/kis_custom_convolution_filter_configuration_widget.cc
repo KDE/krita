@@ -18,10 +18,8 @@
 
 #include "kis_custom_convolution_filter_configuration_widget.h"
 
-#include <qlabel.h>
 #include <qlayout.h>
-#include <qtabwidget.h>
-#include <qpushbutton.h>
+#include <qspinbox.h>
 
 #include <klocale.h>
 
@@ -56,6 +54,8 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 
 //     connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
     connect( m_ccfcws->matrixWidget, SIGNAL(valueChanged()), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_ccfcws->spinBoxFactor, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_ccfcws->spinBoxOffset, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 #include "kis_custom_convolution_filter_configuration_widget.moc"

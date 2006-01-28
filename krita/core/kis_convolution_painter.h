@@ -18,6 +18,8 @@
 #ifndef KIS_CONVOLUTION_PAINTER_H_
 #define KIS_CONVOLUTION_PAINTER_H_
 
+#include <qimage.h>
+
 #include "kis_types.h"
 #include "kis_painter.h"
 
@@ -38,6 +40,7 @@ struct KisKernel {
     Q_INT32 offset;
     Q_INT32 factor;
     Q_INT32 * data;
+    static KisKernel* fromQImage(const QImage& img);
 };
 
 class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter

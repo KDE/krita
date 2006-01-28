@@ -56,6 +56,25 @@
 #include "kis_convolution_painter.h"
 
 
+KisKernel* KisKernel::fromQImage(const QImage& img)
+{
+    KisKernel* k = new KisKernel;
+    k->width = img.width();
+    k->height = img.height();
+    k->offset = 0;
+    uint count = k->width * k->height;
+    k->data = new Q_INT32[count];
+    Q_INT32* itData = k->data;
+    Q_UINT8* itImg = img.bits();
+    k->factor = 0;
+    for(uint i = 0; i < count; ++i , ++itData, ++itImg)
+    {
+        *itData = *itImg;
+        k->factor += *itData;
+    }
+    return k;
+}
+
 
 KisConvolutionPainter::KisConvolutionPainter()
     : super()
@@ -117,7 +136,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
     QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
-    pixelPtrCache.fill(0);
+//     pixelPtrCache.fill(0);
 
     // row == the y position of the pixel we want to change in the paint device
     for (int row = y; row < y + h; ++row) {
@@ -126,30 +145,46 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
         int col = x;
 
         KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
-
+        bool needFull = true;
         while (!hit.isDone()) {
             if (hit.isSelected()) {
 
                 // Iterate over all contributing pixels that are covered by the kernel
                 // krow = the y position in the kernel matrix
-                Q_INT32 i = 0;
-                for (Q_INT32 krow = 0; krow <  kh; ++krow) {
-
-                    // col - kd = the left starting point of the kernel as centered on our pixel
-                    // krow - kd = the offset for the top of the kernel as centered on our pixel
-                    // kw = the width of the kernel
-
-                    // Fill the cache with pointers to the pixels under the kernel
-                    KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+                if(needFull)
+                {
+                    Q_INT32 i = 0;
+                    for (Q_INT32 krow = 0; krow <  kh; ++krow) {
+    
+                        // col - kd = the left starting point of the kernel as centered on our pixel
+                        // krow - kd = the offset for the top of the kernel as centered on our pixel
+                        // kw = the width of the kernel
+    
+                        // Fill the cache with pointers to the pixels under the kernel
+                        KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+                        while (!kit.isDone()) {
+                            pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            ++kit;
+                            ++i;
+                        }
+                    }
+                    needFull = false;
+                Q_ASSERT (i==kw*kh);
+                } else {
+                    for (Q_INT32 krow = 0; krow <  kh; ++krow) {
+                        Q_UINT8** d = pixelPtrCache.data() + krow * kw;
+                        memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
+                    }
+                    Q_INT32 i = kw - 1;
+                    KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + kd, row - kd, kh, false);
                     while (!kit.isDone()) {
                         pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
                         ++kit;
-                        ++i;
+                        i += kw ;
                     }
                 }
-                Q_ASSERT (i==kw*kh);
                 cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
-                pixelPtrCache.fill(0);
+//                 pixelPtrCache.fill(0);
             }
             ++col;
             ++hit;

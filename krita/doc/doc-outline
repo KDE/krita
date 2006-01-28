@@ -1,8 +1,8 @@
 Krita documentation outline
 
-Last edited 2006-01-21 (Sander Koning)
+Last edited 2006-01-28 (Sander Koning)
 
-Changelog
+Changelog (of major updates)
 2006-01-26: ASK: split the "Using Krita" chapter
 2006-01-21: ASK: update and make consistent
 2006-01-12: ASK: add status, and put in SVN for others to enjoy ;)
@@ -70,7 +70,7 @@ New outline:
 - Selections
 - Filters
 - Colorspaces
-  - Intro,
+  - Intro
   - List of
   - [TODO] properties, converting, ...
 - Commands
@@ -79,7 +79,7 @@ New outline:
   - Toolbars
   - Palettes
   - Dialogs
-- [TODO] Settings
+- Settings
 - Scripting
 - [TODO] Developers
 - FAQ

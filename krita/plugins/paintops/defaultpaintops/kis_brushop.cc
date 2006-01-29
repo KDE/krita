@@ -41,7 +41,13 @@
 
 KisPaintOp * KisBrushOpFactory::createOp(KisPainter * painter)
 {
-    KisPaintOp * op = new KisBrushOp(painter);
+    KisPaintOp * op = 0;
+    if (m_optionWidget && m_size -> isVisible() /* bah */) {
+        op = new KisBrushOp(painter, m_size -> isChecked(), m_opacity -> isChecked(),
+                            m_darken -> isChecked());
+    } else {
+        op = new KisBrushOp(painter);
+    }
     Q_CHECK_PTR(op);
     return op;
 }
@@ -88,6 +94,11 @@ KisBrushOp::~KisBrushOp()
 
 void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
+    KisPaintInformation adjustedInfo(info);
+    if (!m_pressureSize)
+        adjustedInfo.pressure = PRESSURE_DEFAULT;
+
+
     // Painting should be implemented according to the following algorithm:
     // retrieve brush
     // if brush == mask
@@ -106,12 +117,12 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     
     Q_ASSERT(brush);
     if (!brush) return;
-    if (! brush -> canPaintFor(info) )
+    if (! brush -> canPaintFor(adjustedInfo) )
         return;
     
     KisPaintDeviceSP device = m_painter -> device();
 
-    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint hotSpot = brush -> hotSpot(adjustedInfo);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -127,16 +138,32 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = 0;
 
+    Q_UINT8 origOpacity = m_painter -> opacity();
+    KisColor origColor = m_painter -> paintColor();
+
+    if (m_pressureOpacity)
+        m_painter -> setOpacity(origOpacity * info.pressure);
+
+    if (m_pressureDarken) {
+        KisColor darkened = origColor;
+        // Darken docs aren't really clear about what exactly the amount param can have as value...
+        darkened.colorSpace() -> darken(origColor.data(), darkened.data(),
+                                        255  - 75 * info.pressure, false, 0.0, 1);
+        m_painter -> setPaintColor(darkened);
+    }
+
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), info, xFraction, yFraction);
+        dab = brush -> image(device -> colorSpace(), adjustedInfo, xFraction, yFraction);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
+        KisAlphaMaskSP mask = brush -> mask(adjustedInfo, xFraction, yFraction);
         dab = computeDab(mask);
     }
-    m_painter -> setPressure(info.pressure);
 
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
+    m_painter -> setPressure(adjustedInfo.pressure);
+
+    QRect dabRect = QRect(0, 0, brush -> maskWidth(adjustedInfo),
+                          brush -> maskHeight(adjustedInfo));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device -> image();
@@ -154,4 +181,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
     m_painter -> addDirtyRect(dstRect);
+
+    m_painter -> setOpacity(origOpacity);
+    m_painter -> setPaintColor(origColor);
 }

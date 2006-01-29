@@ -51,7 +51,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
-    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
+//    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
     connect(style, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 }
@@ -138,7 +138,15 @@ void KisCustomBrush::createBrush() {
         layer = layer -> nextSibling();
     }
     QValueVector<KisPipeBrushParasite::SelectionMode> modes;
-    modes.push_back(KisPipeBrushParasite::Incremental); // FIXME
+
+    switch(comboBox2 -> currentItem()) {
+        case 0: modes.push_back(KisPipeBrushParasite::Constant); break;
+        case 1: modes.push_back(KisPipeBrushParasite::Random); break;
+        case 2: modes.push_back(KisPipeBrushParasite::Incremental); break;
+        case 3: modes.push_back(KisPipeBrushParasite::Pressure); break;
+        case 4: modes.push_back(KisPipeBrushParasite::Angular); break;
+        default: modes.push_back(KisPipeBrushParasite::Incremental);
+    }
 
     m_brush = new KisImagePipeBrush(img -> name(), w, h, devices, modes);
     if (colorAsMask -> isChecked())

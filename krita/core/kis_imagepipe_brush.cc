@@ -49,6 +49,9 @@
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
 #include "kis_layer.h"
+#include "kis_meta_registry.h"
+#include "kis_colorspace_factory_registry.h"
+
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
@@ -427,25 +430,24 @@ void KisImagePipeBrush::makeMaskImage() {
 }
 
 KisImagePipeBrush* KisImagePipeBrush::clone() const {
-    KisImagePipeBrush* c = new KisImagePipeBrush("");
-    c -> m_name = m_name;
-    c -> setWidth(width());
-    c -> setHeight(height());
-    c -> setSpacing(spacing());
-    c -> m_parasiteString = m_parasiteString;
-    c -> m_parasite = m_parasite;
-    c -> m_numOfBrushes = m_numOfBrushes;
-    c -> m_currentBrush = 0;
-    c -> m_brushType = m_brushType;
+    // The obvious way of cloning each brush in this one doesn't work for some reason...
 
-    for (uint i = 0; i < m_brushes.count(); i++) {
-        c -> m_brushes.append(m_brushes.at(i) -> clone());
-        kdDebug(41001) << "appended " << c -> m_brushes.at(i) -> name() << endl;
+    // XXX Multidimensionals not supported yet, change together with the constructor...
+    QValueVector< QValueVector<KisPaintDevice*> > devices;
+    QValueVector<KisPipeBrushParasite::SelectionMode> modes;
+
+    devices.push_back(QValueVector<KisPaintDevice*>());
+    modes.push_back(m_parasite.selection[0]);
+
+    for (int i = 0; i < m_brushes.count(); i++) {
+        KisPaintDevice* pd = new KisPaintDevice(
+                KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
+        pd -> convertFromQImage(m_brushes.at(i) -> img(), "");
+        devices.at(0).append(pd);
     }
 
-    c -> setImage(c -> m_brushes.at(0) -> img());
-
-    c -> setValid(true);
+    KisImagePipeBrush* c = new KisImagePipeBrush(name(), width(), height(), devices, modes);
+    // XXX clean up devices
 
     return c;
 }

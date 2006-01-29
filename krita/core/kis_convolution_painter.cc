@@ -105,13 +105,17 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     }
 
     // Determine the kernel's extent from the center pixel
-    Q_INT32 kw, kh, kd;
+    Q_INT32 kw, kh, khalfWidth, khalfHeight, widthMinuskhw, heightMinuskhh;
     kw = kernel->width;
     kh = kernel->height;
-    kd = (kw - 1) / 2;
+    khalfWidth = (kw - 1) / 2;
+    khalfHeight = (kh - 1) / 2;
 
+    widthMinuskhw = (w - khalfWidth);
+    heightMinuskhh = (h - khalfHeight);
+    
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || kw != kh || kw&1 == 0 ) return;
+    if (w < kw || h < kh || kw&1 == 0 ) return;
 
     m_cancelRequested = false;
     int lastProgressPercent = 0;
@@ -123,12 +127,14 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     switch (borderOp) {
         case BORDER_DEFAULT_FILL :
             break;
-        case BORDER_WRAP:
         case BORDER_REPEAT:
+            applyMatrixRepeat(kernel, x, y, w, h, channelFlags);
+            return;
+        case BORDER_WRAP:
         case BORDER_AVOID:
         default :
-            x += (kw - 1) / 2;
-            y += (kh - 1) / 2;
+            x += khalfWidth;
+            y += khalfHeight;
             w -= kw - 1;
             h -= kh - 1;
     }
@@ -139,7 +145,9 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
 //     pixelPtrCache.fill(0);
 
     // row == the y position of the pixel we want to change in the paint device
-    for (int row = y; row < y + h; ++row) {
+    int row = y;
+    
+    for (; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
         int col = x;
@@ -156,12 +164,12 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
                     Q_INT32 i = 0;
                     for (Q_INT32 krow = 0; krow <  kh; ++krow) {
     
-                        // col - kd = the left starting point of the kernel as centered on our pixel
-                        // krow - kd = the offset for the top of the kernel as centered on our pixel
+                        // col - khalfWidth = the left starting point of the kernel as centered on our pixel
+                        // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
                         // kw = the width of the kernel
     
                         // Fill the cache with pointers to the pixels under the kernel
-                        KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - kd, (row - kd) + krow, kw, false);
+                        KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - khalfWidth, (row - khalfHeight) + krow, kw, false);
                         while (!kit.isDone()) {
                             pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
                             ++kit;
@@ -169,22 +177,194 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
                         }
                     }
                     needFull = false;
-                Q_ASSERT (i==kw*kh);
+                    Q_ASSERT (i==kw*kh);
                 } else {
-                    for (Q_INT32 krow = 0; krow <  kh; ++krow) {
+                    for (Q_INT32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                         Q_UINT8** d = pixelPtrCache.data() + krow * kw;
                         memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
                     }
                     Q_INT32 i = kw - 1;
-                    KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + kd, row - kd, kh, false);
+                    KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, row - khalfHeight, kh, false);
                     while (!kit.isDone()) {
                         pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
                         ++kit;
-                        i += kw ;
+                        i += kw;
                     }
                 }
                 cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
 //                 pixelPtrCache.fill(0);
+            }
+            ++col;
+            ++hit;
+        }
+
+        int progressPercent = 100 - ((((y + h) - row) * 100) / h);
+
+        if (progressPercent > lastProgressPercent) {
+            emit notifyProgress(progressPercent);
+            lastProgressPercent = progressPercent;
+
+            if (m_cancelRequested) {
+                return;
+            }
+        }
+
+    }
+
+    addDirtyRect(QRect(x, y, w, h));
+
+    emit notifyProgressDone();
+}
+
+void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+                           KisChannelInfo::enumChannelFlags channelFlags)
+{
+    int lastProgressPercent = 0;
+    // Determine the kernel's extent from the center pixel
+    Q_INT32 kw, kh, khalfWidth, khalfHeight, widthMinuskhw, heightMinuskhh;
+    kw = kernel->width;
+    kh = kernel->height;
+    khalfWidth = (kw - 1) / 2;
+    khalfHeight = (kh - 1) / 2;
+
+    widthMinuskhw = (w - khalfWidth);
+    heightMinuskhh = (h - khalfHeight);
+
+    KisColorSpace * cs = m_device->colorSpace();
+
+    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
+
+    QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
+    
+    // row == the y position of the pixel we want to change in the paint device
+    int row = y;
+    
+    for (; row < y + h; ++row) {
+
+        // col = the x position of the pixel we want to change
+        int col = x;
+
+        KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
+        bool needFull = true;
+        while (!hit.isDone()) {
+            if (hit.isSelected()) {
+
+                // Iterate over all contributing pixels that are covered by the kernel
+                // krow = the y position in the kernel matrix
+                if(needFull) // The cache has not been fill, so we need to fill it
+                {
+                    Q_INT32 i = 0;
+                    Q_INT32 krow = 0;
+                    if( row < khalfHeight )
+                    {
+                        // We are just outside the layer, all the row in the cache will be identical
+                        // so we need to create them only once, and then to copy them
+                        if( x < khalfWidth)
+                        { // the left pixels are outside of the layer, in the corner
+                            uint kcol = 0;
+                            KisHLineIteratorPixel kit = m_device -> createHLineIterator(0, 0, kw, false);
+                            for(; kcol < (khalfWidth - x) + 1; ++kcol)
+                            { // First copy the address of the topleft pixel
+                                pixelPtrCache[kcol] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            }
+                            for(; kcol < kw; ++kcol)
+                            { // Then copy the address of the rest of the line
+                                ++kit;
+                                pixelPtrCache[kcol] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            }
+                        } else {
+                            uint kcol = 0;
+                            KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - khalfWidth, 0, kw, false);
+                            while (!kit.isDone()) {
+                                pixelPtrCache[kcol] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                                ++kit;
+                                ++kcol;
+                            }
+                        }
+                        krow = 1; // we have allready done the first krow
+                        for(;krow < (khalfHeight - row); ++krow)
+                        {
+                            memcpy( pixelPtrCache.data() + krow * kw, pixelPtrCache.data(), kw*sizeof(Q_UINT8*)); //    Copy the first line in the current line
+                        }
+                        i = krow * kw;
+                    }
+                    Q_INT32 itH = kh;
+                    if(row + khalfHeight > heightMinuskhh)
+                    {
+                        itH += heightMinuskhh - row - khalfHeight;
+                    }
+                    for (; krow <  itH; ++krow) {
+    
+                        // col - khalfWidth = the left starting point of the kernel as centered on our pixel
+                        // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
+                        // kw = the width of the kernel
+    
+                        // Fill the cache with pointers to the pixels under the kernel
+                        Q_INT32 itHStart = col - khalfWidth;
+                        Q_INT32 itW = kw;
+                        if(itHStart < 0)
+                        {
+                            itW += itHStart;
+                            itHStart = 0;
+                        }
+                        KisHLineIteratorPixel kit = m_device -> createHLineIterator(itHStart, (row - khalfHeight) + krow, itW, false);
+                        if( col < khalfWidth )
+                        {
+                            for(; i <  krow * kw + ( kw - itW ); i+= 1)
+                            {
+                                pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            }
+                        }
+                        while (!kit.isDone()) {
+                            pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            ++kit;
+                            ++i;
+                        }
+                    }
+                    Q_INT32 lastvalid = i - kw;
+                    for(; krow < kh; ++krow) {
+                        memcpy( pixelPtrCache.data() + krow * kw, pixelPtrCache.data() + lastvalid, kw*sizeof(Q_UINT8*)); // Copy the last valid line in the current line
+                    }
+                    needFull = false;
+                } else {
+                    for (Q_INT32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
+                        Q_UINT8** d = pixelPtrCache.data() + krow * kw;
+                        memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
+                    }
+                    if(col < widthMinuskhw)
+                    {
+                        Q_INT32 i = kw - 1;
+                        Q_INT32 itStart = row - khalfHeight;
+                        Q_INT32 itH = kh;
+                        if(itStart < 0)
+                        {
+                            itH += itStart;
+                            itStart = 0;
+                        } else if(itStart + kh > heightMinuskhh)
+                        {
+                            itH -= itStart + kh - heightMinuskhh;
+                        }
+                        KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);
+                        if( row < khalfHeight )
+                        {
+                            for(; i < (khalfHeight- row ) * kw; i+=kw)
+                            {
+                                pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            }
+                        }
+                        while (!kit.isDone()) {
+                            pixelPtrCache[i] = const_cast<Q_UINT8 *>(kit.oldRawData());
+                            ++kit;
+                            i += kw;
+                        }
+                        Q_INT32 lastvalid = i - kw;
+                        for(;i < kw*kh; i+=kw)
+                        {
+                            pixelPtrCache[i] = pixelPtrCache[lastvalid];
+                        }
+                    }
+                }
+                cs->convolveColors(pixelPtrCache.data(), kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
             }
             ++col;
             ++hit;

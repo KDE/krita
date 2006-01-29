@@ -44,7 +44,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
         m_progressDisplay->setSubject( &painter, true, true );
 
     KisKernel * kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
-    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height());
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
         cancel();

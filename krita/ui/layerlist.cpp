@@ -743,13 +743,10 @@ void LayerList::menuActivated( int id, LayerItem *layer )
 
     LayerItem *parent = ( layer && layer->isFolder() ) ? layer : 0;
     LayerItem *after = 0;
-    if( !parent && layer )
+    if( layer && !parent )
     {
         parent = layer->parent();
-        if( parent && after != parent->firstChild() )
-            after = parent->firstChild();
-        while( after && after->nextSibling() != layer )
-            after = after->nextSibling();
+        after = layer->prevSibling();
     }
     switch( id )
     {
@@ -994,7 +991,7 @@ LayerItem *LayerItem::prevSibling() const
     LayerItem *item = parent() ? parent()->firstChild() : listView()->firstChild();
     if( !item || this == item )
         return 0;
-    for(; item && this != item; item = item->nextSibling() );
+    for(; item && this != item->nextSibling(); item = item->nextSibling() );
     return item;
 }
 

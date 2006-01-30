@@ -21,6 +21,7 @@ Name[tr]=Geçmiş Modülü
 Name[xx]=xxHistory Dockerxx
 Comment=Command history docker for Krita
 Comment[bg]=Основната функционалност на Krita
+Comment[ca]=Amarrador d'història de comanda per a Krita
 Comment[cy]=Bachydd yr hanes gorchmynion ar gyfer Krita
 Comment[da]=Dokning af kommandohistorik for Krita
 Comment[de]=Befehlsverlauf-Docker für Krita

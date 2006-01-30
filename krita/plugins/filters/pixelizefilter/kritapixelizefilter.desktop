@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize Filter
+Name[ca]=Filtre de pixelació
 Name[da]=Billedpunktfilter
 Name[de]=Pixelize-Filter
 Name[en_GB]=Pixelise Filter
@@ -16,6 +17,7 @@ Name[sv]=Bildpunktsfilter
 Name[xx]=xxPixelize Filterxx
 Comment=Pixelize filter
 Comment[bg]=Филтър Pixelize
+Comment[ca]=Filtre de pixelació
 Comment[cy]=Hidlen bicseleiddio
 Comment[da]=Billedpunktfilter
 Comment[de]=Pixelize-Filter

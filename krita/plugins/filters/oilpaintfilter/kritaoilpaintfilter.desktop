@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Oilpaint Filter
+Name[ca]=Filtre de pintura a l'oli
 Name[da]=Oliemalerifilter
 Name[de]=Ölgemälde-Filter
 Name[es]=Filtro de pintura al óleo
@@ -15,6 +16,7 @@ Name[sv]=Oljemålningsfilter
 Name[xx]=xxOilpaint Filterxx
 Comment=Oilpaint filter
 Comment[bg]=Филтър маслена боя
+Comment[ca]=Filtre de pintura a l'oli
 Comment[cy]=Hidlen baent olew
 Comment[da]=Oliemalerifilter
 Comment[de]=Ölgemälde-Filter

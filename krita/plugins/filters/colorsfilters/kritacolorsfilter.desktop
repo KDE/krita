@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color Filters
+Name[ca]=Filtres de color
 Name[da]=Farvefilter
 Name[de]=Farbfilter
 Name[en_GB]=Colour Filters
@@ -17,6 +18,7 @@ Name[sv]=Färgfilter
 Name[xx]=xxColor Filtersxx
 Comment=Color filters
 Comment[bg]=Цветови филтри
+Comment[ca]=Filtres de color
 Comment[cy]=Hidlau lliw
 Comment[da]=Farvefilter
 Comment[de]=Farbfilter

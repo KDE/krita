@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
+Name[ca]=Filtre d'Emboss
 Name[da]=Relieffilter
 Name[de]=Relief-Filter
 Name[es]=Filtro de realce
@@ -15,6 +16,7 @@ Name[sv]=Relieffilter
 Name[xx]=xxEmboss Filterxx
 Comment=Emboss filter
 Comment[bg]=Релефен филтър
+Comment[ca]=Filtre d'Emboss
 Comment[cy]=Hidlen foglynnu
 Comment[da]=Relieffilter
 Comment[de]=Relief-Filter

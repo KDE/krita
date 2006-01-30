@@ -40,6 +40,7 @@ Name[xx]=xxWhite 640x480xx
 Name[zh_CN]=白色 640 x 480
 Comment=Creates a white RGB image of 640 x 480 pixels.
 Comment[bg]=Създаване на бяло изображение RGB с размери 640x480 пиксела.
+Comment[ca]=Crea una imatge blanca RGB de 640 x 480 píxels
 Comment[cy]=Creu delwedd RGB wen o 640 x 480 picsel.
 Comment[da]=Laver et hvidt RGB-billede på 640 x 480 pixels.
 Comment[de]=Erstellt ein weißes RGB-Bild mit 640 x 480 Pixeln.

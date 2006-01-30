@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolution Filters
+Name[ca]=Filtres de Convolotion
 Name[da]=Foldningsfilter
 Name[de]=Faltungsfilter
 Name[es]=Filtros de convolución
@@ -15,6 +16,7 @@ Name[sv]=Faltningsfilter
 Name[xx]=xxConvolution Filtersxx
 Comment=Convolution filters
 Comment[bg]=Изкривяващи филтри
+Comment[ca]=Filtres de Convolution
 Comment[cy]=Hidlau cordeddiadau
 Comment[da]=Foldningsfilter
 Comment[de]=Faltungsfilter

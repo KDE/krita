@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=CImg Image Restoration Filter
 Name[bg]=Филтър за възстановяване на изображение CImg
+Name[ca]=Filtre de restauració d'imatges Clmg
 Name[cy]=Hidlen adfer Delwedd CImg 
 Name[da]=Cimg-billedrestaureringsfilter
 Name[de]=CImg Filter zur Bildrestauration
@@ -28,6 +29,7 @@ Name[xx]=xxCImg Image Restoration Filterxx
 Name[zh_CN]=CImg 图像修复滤镜
 Comment=CImg Image restoration filter
 Comment[bg]=Филтър за възстановяване на изображение CImg
+Comment[ca]=Filtre de restauració d'imatges Clmg
 Comment[cy]=Hidlen adfer Delwedd CImg 
 Comment[da]=Cimg-billedforbedringsfilter
 Comment[de]=CImg basierter Filter zur Bildrestauration

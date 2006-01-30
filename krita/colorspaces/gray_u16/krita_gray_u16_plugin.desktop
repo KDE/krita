@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Grayscale Color Model (16-bit integer)
 Name[bg]=Цветови модел сива гама (16 бита)
+Name[ca]=Model de color d'escala de grisos (enters de 16 bits)
 Name[cy]=Model Lliw Graddlwyd (cyfanrif 16-did)
 Name[da]=Farvemodel med gråskala (16-bit heltal)
 Name[de]=Graustufen-Farbmodell (16-bit Ganzzahl)
@@ -24,6 +25,7 @@ Name[xx]=xxGrayscale Color Model (16-bit integer)xx
 Name[zh_CN]=灰度色彩模型(16 位整数)
 Comment=Color model for 16-bit integer per channel Grayscale images
 Comment[bg]=Цветови модел за 16 битови изображения в сива гама
+Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges d'escala de grisos
 Comment[cy]=Model lliw ar gyfer delweddau Graddlwyd â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal Gråskala-billeder
 Comment[de]=Farbmodell für 16-bit Ganzzahl pro Kanal Graustufen-Bilder

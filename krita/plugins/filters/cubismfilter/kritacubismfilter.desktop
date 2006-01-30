@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Cubism Filter
+Name[ca]=Filtre de cubisme
 Name[da]=Kubismefilter
 Name[de]=Kubismus-Filter
 Name[es]=Filtro de cubismo
@@ -14,6 +15,7 @@ Name[sv]=Kubismfilter
 Name[xx]=xxCubism Filterxx
 Comment=Cubism filter
 Comment[bg]=Кубичен филтър
+Comment[ca]=Filtre de cubisme
 Comment[cy]=Hidlen Giwbiaeth
 Comment[da]=Kubismefilter
 Comment[de]=Kubismus-Filter

@@ -39,6 +39,7 @@ Name[xx]=xxWhite 2000 x 800xx
 Name[zh_CN]=白色 2000 x 800
 Comment=Creates a white CMYK image of 2000 x 800 pixels.
 Comment[bg]=Създаване на бяло изображения CMYK с размери 2000x800 пиксела.
+Comment[ca]=Crea una imatge blanca CMYK de 2000 x 800 píxels
 Comment[cy]=Creu delwedd CMYK wen o 2000 x 800 picsel.
 Comment[da]=Laver et hvidt CMYK-billede på 2000 x 800 pixels.
 Comment[de]=Erstellt ein weißes CMYK-Bild mit 2000 x 800 Pixeln.

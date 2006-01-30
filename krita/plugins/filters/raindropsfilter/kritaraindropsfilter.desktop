@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Raindrops Filter
+Name[ca]=Filtre de gotes de pluja
 Name[da]=Regndråbefilter
 Name[de]=Regentropfen-Filter
 Name[es]=Filtro de gotas de lluvia
@@ -15,6 +16,7 @@ Name[sv]=Regndroppsfilter
 Name[xx]=xxRaindrops Filterxx
 Comment=Raindrops filter
 Comment[bg]=Филтър за дъждовни капки
+Comment[ca]=Filtre de gotes de pluja
 Comment[cy]=Hidlen ddiferion glaw
 Comment[da]=Regndråbefilter
 Comment[de]=Regentropfen-Filter

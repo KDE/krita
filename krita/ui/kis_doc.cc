@@ -714,7 +714,7 @@ bool KisDoc::completeSaving(KoStore *store)
             
             QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
             QPainter gc(pix);
-            m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, m_currentImage -> getProfile(),
+            m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, 0,
                                               KisImage::PAINT_IMAGE_ONLY);
             gc.end();
             QImage composite = pix -> convertToImage();

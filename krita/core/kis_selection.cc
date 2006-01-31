@@ -184,13 +184,14 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
                 // this is where we come if the pixels should be blue or bluish
 
                 Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+                Q_UINT8 alpha = *(j + 3);
+
+                // Colour influence is proportional to alpha.
+                g = UINT8_MULT(g, alpha);
 
                 if(s==MIN_SELECTED)
                 {
                     //this is where we come if the pixels should be blue (or red outline)
-                    *(j+0) = 165+g ;
-                    *(j+1) = 128+g;
-                    *(j+2) = 128+g;
 
                     // now for a simple outline based on 4-connectivity
                     if(preS != MIN_SELECTED
@@ -202,6 +203,16 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
                         *(j+1) = 0;
                         *(j+2) = 255;
                     }
+                    else
+                    {
+                        *(j+0) = 165+g;
+                        *(j+1) = 128+g;
+                        *(j+2) = 128+g;
+                    }
+
+                    // Stop unselected transparent areas from appearing the same
+                    // as selected transparent areas.
+                    *(j+3) = QMAX(alpha, 192);
                 }
                 else
                 {

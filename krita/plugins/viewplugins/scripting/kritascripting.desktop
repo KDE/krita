@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting plugin
+Name[bg]=Приставка за скриптове
 Name[ca]=Connector de seqüenciació
 Name[da]=Scriptplugin
 Name[de]=Skripting-Plugin
@@ -16,6 +17,7 @@ Name[pt_BR]='Plugin' de programação
 Name[sv]=Skriptinsticksprogram
 Name[zh_CN]=脚本插件
 Comment=Allow execution of scripts
+Comment[bg]=Изпълнение на скриптове
 Comment[ca]=Permet l'execució de seqüències
 Comment[da]=Tillad kørsel af script
 Comment[de]=Ermöglicht das Ausführen von Skripten

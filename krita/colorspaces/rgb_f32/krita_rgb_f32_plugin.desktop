@@ -23,6 +23,7 @@ Name[sv]=RGB-färgmodell (32-bitars heltal)
 Name[tr]=RGB Renk Modeli (32-bit kayan)
 Name[xx]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 32-bit floating point per channel RGB images
+Comment[bg]=Цветови модел за 32 битови изображения RGB
 Comment[ca]=Model de color per a punt flotant de 32 bits-canal d'imatges RGB
 Comment[da]=Farvemodel for 32-bit decimaltal pr kanal RGB-billeder
 Comment[de]=Farbmodell für 32-bit Fließkomma pro Kanal RGB-Bilder

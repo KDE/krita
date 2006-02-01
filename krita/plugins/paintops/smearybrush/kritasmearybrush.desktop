@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Smeary Brush
+Name[bg]=Лепкава четка
 Name[ca]=Pinzell greixós
 Name[da]=Udvisket pensel
 Name[de]=Schmieriger Pinsel
@@ -16,6 +17,7 @@ Name[pt_BR]=Pintura Viscosa
 Name[sv]=Smetig pensel
 Name[xx]=xxSmeary Brushxx
 Comment=Smeary brush
+Comment[bg]=Лепкава четка
 Comment[ca]=Pinzell greixós
 Comment[da]=Udvisket pensel
 Comment[de]=Schmieriger Pinsel

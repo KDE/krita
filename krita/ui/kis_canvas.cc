@@ -952,15 +952,18 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             button = translateX11Button(buttonPressed -> button);
             buttonState = translateX11ButtonState(buttonPressed -> state);
 
-            XEvent mouseEvent;
+            if (QApplication::activePopupWidget() == 0) {
+                XEvent mouseEvent;
 
-            // Look for an accompanying core event.
-            if (XCheckTypedWindowEvent(x11Display, winId, ButtonPress, &mouseEvent)) {
-                if (buttonPressed -> time == mouseEvent.xbutton.time) {
-                    // Do nothing
-                }
-                else {
-                    XPutBackEvent(x11Display, &mouseEvent);
+                // Look for and swallow an accompanying core event, but only if there's
+                // no active popup, as that needs to see it.
+                if (XCheckTypedWindowEvent(x11Display, winId, ButtonPress, &mouseEvent)) {
+                    if (buttonPressed -> time == mouseEvent.xbutton.time) {
+                        // Do nothing
+                    }
+                    else {
+                        XPutBackEvent(x11Display, &mouseEvent);
+                    }
                 }
             }
         }
@@ -972,16 +975,18 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             button = translateX11Button(buttonReleased -> button);
             buttonState = translateX11ButtonState(buttonReleased -> state);
 
-            XEvent mouseEvent;
+            if (QApplication::activePopupWidget() == 0) {
+                XEvent mouseEvent;
 
-            // Look for an accompanying core event.
-            if (XCheckTypedWindowEvent(x11Display, winId, ButtonRelease, &mouseEvent)) {
-                if (buttonReleased -> time == mouseEvent.xbutton.time) {
-                    // Do nothing
-                    // kdDebug() << "Consumed core event" << endl;
-                }
-                else {
-                    XPutBackEvent(x11Display, &mouseEvent);
+                // Look for and swallow an accompanying core event, but only if there's
+                // no active popup, as that needs to see it.
+                if (XCheckTypedWindowEvent(x11Display, winId, ButtonRelease, &mouseEvent)) {
+                    if (buttonReleased -> time == mouseEvent.xbutton.time) {
+                        // Do nothing
+                    }
+                    else {
+                        XPutBackEvent(x11Display, &mouseEvent);
+                    }
                 }
             }
         }

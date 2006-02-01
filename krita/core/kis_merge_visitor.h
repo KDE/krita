@@ -83,9 +83,16 @@ public:
         // No layers in this group are dirty, we're not
         // dirty, we're not going to recomposite. Our
         // projection is up to date.
-        if (!layer->dirty())
+        if (!layer->dirty() && m_projection != layer->projection()) {
+            KisPainter gc(m_projection);
+            gc.bitBlt(m_rc.left(), m_rc.top(), layer->compositeOp(),
+                      layer->projection(), OPACITY_OPAQUE,
+                      m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+            gc.end();
+
             return true;
-        
+        }
+
         // Get the first layer in this group to start compositing with
         KisLayerSP child = layer->lastChild();
         KisLayerSP startWith = layer->lastChild();

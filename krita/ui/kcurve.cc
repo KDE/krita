@@ -55,10 +55,10 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
     setPaletteBackgroundColor(Qt::NoBackground);
     setMinimumSize(150, 50);
     QPair<double,double> *p = new QPair<double,double>;
-    p->first = 0.0;p->second=0.0;
+    p->first = 0.0; p->second=0.0;
     m_points.append(p);
     p = new QPair<double,double>;
-    p->first = 1.0;p->second=1.0;
+    p->first = 1.0; p->second=1.0;
     m_points.append(p);
     m_points.setAutoDelete(true);
     setFocusPolicy(QWidget::StrongFocus);

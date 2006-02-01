@@ -29,11 +29,11 @@ class KisEmbossFilterConfiguration : public KisFilterConfiguration
 public:
     KisEmbossFilterConfiguration(Q_UINT32 depth)
         : KisFilterConfiguration( "emboss", 1 )
-        , m_depth(depth) {};
+    {
+        setProperty("depth", depth);
+    };
 public:
-    inline Q_UINT32 depth() { return m_depth; };
-private:
-    Q_UINT32 m_depth;
+    inline Q_UINT32 depth() { return getInt("depth"); };
 };
 
 class KisEmbossFilter : public KisFilter
@@ -50,6 +50,8 @@ public:
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration* configuration() {return new KisEmbossFilterConfiguration( 30 );};
+
 private:
     void Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, int d);
     inline int Lim_Max (int Now, int Up, int Max);

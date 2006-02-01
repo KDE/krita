@@ -39,7 +39,7 @@ public:
     virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
     virtual QWidget* optionWidget(QWidget* parent, const KisInputDevice& /*inputDevice*/) {
         if (!m_optWidget)
-            m_optWidget = new WetPaintOptions();
+            m_optWidget = new WetPaintOptions(parent);
         return m_optWidget;
     }
 };

@@ -63,7 +63,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     if(config !=0)
     {
         KisWaveletNoiseReductionConfiguration* configWNRC = (KisWaveletNoiseReductionConfiguration*)config;
-        threshold = configWNRC->threshold;
+        threshold = configWNRC->threshold();
     } else {
         threshold = 1.0;
     }

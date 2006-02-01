@@ -34,11 +34,16 @@ public:
         , m_keepSign(keepSign)
         , m_makeOpaque(makeOpaque)
         {};
+
+    virtual void fromXML( const QString&  );
+    virtual QString toString();
+
 public:
     inline bool doHorizontally() { return m_doHorizontally; };
     inline bool doVertically() {return m_doVertically; };
     inline bool keepSign() {return m_keepSign; };
     inline bool makeOpaque() {return m_makeOpaque; };
+    
 private:
     bool m_doHorizontally;
     bool m_doVertically;
@@ -60,6 +65,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return new KisSobelFilterConfiguration( true, true, true, true); };
 private:
     void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
     void sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);

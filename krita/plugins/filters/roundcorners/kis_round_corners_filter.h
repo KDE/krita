@@ -29,11 +29,11 @@ class KisRoundCornersFilterConfiguration : public KisFilterConfiguration
 public:
     KisRoundCornersFilterConfiguration(Q_INT32 radius)
         : KisFilterConfiguration( "roundcorners", 1 )
-        , m_radius(radius){};
+    {
+        setProperty("radius", radius);
+    };
 public:
-    inline Q_INT32 radius() { return m_radius; };
-private:
-    Q_INT32 m_radius;
+    inline Q_INT32 radius() { return getInt("radius"); };
 };
 
 class KisRoundCornersFilter : public KisFilter
@@ -50,6 +50,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return new KisRoundCornersFilterConfiguration( 30 ); };
 private:
 };
 

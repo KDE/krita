@@ -43,6 +43,8 @@
 
 #include "kis_paint_device_iface.h"
 #include "kis_paint_device.h"
+#include "kis_datamanager.h"
+#include "kis_memento.h"
 
 namespace {
 
@@ -441,6 +443,21 @@ QRect KisPaintDevice::exactBounds() const
     return QRect(boundX, boundY, boundW, boundH);
 }
 
+void KisPaintDevice::crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+     m_datamanager -> setExtent(x - m_x, y - m_y, w, h);
+}
+
+
+void KisPaintDevice::crop(QRect r)
+{
+    r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r);
+}
+
+void KisPaintDevice::clear()
+{
+    m_datamanager -> clear();
+}
 
 void KisPaintDevice::mirrorX()
 {
@@ -496,6 +513,12 @@ void KisPaintDevice::mirrorY()
         qApp -> processEvents();
     }
 }
+
+KisMementoSP KisPaintDevice::getMemento() { return m_datamanager -> getMemento(); }
+
+void KisPaintDevice::rollback(KisMementoSP memento) { m_datamanager -> rollback(memento); }
+
+void KisPaintDevice::rollforward(KisMementoSP memento) { m_datamanager -> rollforward(memento); }
 
 bool KisPaintDevice::write(KoStore *store)
 {
@@ -940,4 +963,20 @@ void KisPaintDevice::setY(Q_INT32 y)
         m_selection->setY(y);
 }
 
+
+void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+    m_datamanager -> readBytes(data, x - m_x, y - m_y, w, h);
+}
+
+void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+{
+    m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
+}
+
+
+KisDataManagerSP KisPaintDevice::dataManager() const
+{
+    return m_datamanager;
+}
 #include "kis_paint_device.moc"

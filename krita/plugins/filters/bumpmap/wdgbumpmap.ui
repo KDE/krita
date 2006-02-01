@@ -9,8 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>464</width>
-            <height>574</height>
+            <height>520</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgBumpmap</string>
     </property>
     <grid>
         <property name="name">
@@ -361,4 +364,13 @@ layer, the current layer will be used.</string>
     <tabstop>bnRefresh</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
 </UI>

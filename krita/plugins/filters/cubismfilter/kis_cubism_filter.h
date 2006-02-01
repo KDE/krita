@@ -33,10 +33,14 @@ public:
     KisCubismFilterConfiguration(Q_UINT32 tileSize, Q_UINT32 tileSaturation)
         : KisFilterConfiguration( "cubism", 1 )
         , m_tileSize(tileSize)
-        , m_tileSaturation(tileSaturation) {};
+        , m_tileSaturation(tileSaturation)
+    {
+        setProperty("tileSize", tileSize);
+        setProperty("tileSaturation", tileSaturation);
+    };
 public:
-    inline Q_UINT32 tileSize() { return m_tileSize; };
-    inline Q_UINT32 tileSaturation() {return m_tileSaturation; };
+    inline Q_UINT32 tileSize() { return getInt("tileSize"); };
+    inline Q_UINT32 tileSaturation() {return getInt("tileSaturation"); };
 private:
     Q_UINT32 m_tileSize;
     Q_UINT32 m_tileSaturation;
@@ -57,6 +61,7 @@ public:
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration* configuration() { return new KisCubismFilterConfiguration( 10, 10); };
 private:
     //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
         void randomizeIndices (Q_INT32 count, Q_INT32* indices);

@@ -196,16 +196,12 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         Q_INT32 ey = (Q_INT32) (*poly)[1].y();
 
         double dist = sqrt (SQR (ex - sx) + SQR (ey - sy));
-        double oneOverDist;
+        double oneOverDist = 0.0;
         if (dist > 0.0)
         {
                 double oneOverDist = 1/dist;
                 vec[0] = (ex - sx) * oneOverDist;
                 vec[1] = (ey - sy) * oneOverDist;
-        }
-        else
-        {
-                oneOverDist = 0.0;
         }
 
         Q_INT32 pixelSize = src -> pixelSize();

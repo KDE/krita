@@ -54,4 +54,14 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
     widgetLayout -> addStretch();
 }
 
+
+void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
+{
+    
+    for (int i = 0; i < m_nbboolWidgets; ++i) {
+        double val = config->getBool(m_boolWidgets[i]->name());
+        m_boolWidgets[i]->setChecked(val);
+    }
+}
+
 #include "kis_multi_bool_filter_widget.moc"

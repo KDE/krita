@@ -42,9 +42,13 @@ class KRITA_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigWidget
     Q_OBJECT
 public:
     KisMultiIntegerFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisIntegerWidgetParam iwparam);
+
+    virtual void setConfiguration(KisFilterConfiguration * config);
+    
 public:
     inline Q_INT32 nbValues() { return m_nbintegerWidgets; };
     inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };
+    
 private:
     KIntNumInput** m_integerWidgets;
     Q_INT32 m_nbintegerWidgets;

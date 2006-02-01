@@ -460,9 +460,10 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
 
                     if (!layer) {
                         kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
-                        return;
                     }
-                    img -> addLayer(layer, parent, 0);
+                    else {
+                        img -> addLayer(layer, parent, 0);
+                    }
                 }
             }
         }
@@ -618,22 +619,28 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
                                              QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                                              KisCompositeOp compositeOp)
 {
-    kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
+    kdDebug(DBG_AREA_FILE) << "loadAdjustmentLayer called\n";
     QString attr;
     KisAdjustmentLayerSP layer;
-    KisFilterConfiguration * config;
     QString filtername;
     
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
+        kdDebug(DBG_AREA_FILE) << "Adjustmentlayer with empty filtername.\n";
         return 0;
     }
-        
-    KisFilter * f = KisFilterRegistry::instance()->get(filtername);
-    if (!f) return 0; // XXX: We don't have this filter. We should warn about it!
     
-    // We'll load the selection later. 
-    layer = new KisAdjustmentLayer(img, name, config, 0);
+    KisFilter * f = KisFilterRegistry::instance()->get(filtername);
+    kdDebug(DBG_AREA_FILE) << "Filtername: " << filtername << "\n";
+    if (!f) {
+        kdDebug(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
+        return 0; // XXX: We don't have this filter. We should warn about it!
+    }
+
+    KisFilterConfiguration * kfc = f->configuration();
+    
+    // We'll load the configuration and the selection later.
+    layer = new KisAdjustmentLayer(img, name, kfc, 0);
     Q_CHECK_PTR(layer);
 
     layer -> setCompositeOp(compositeOp);
@@ -648,7 +655,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
     else
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
     kdDebug(DBG_AREA_FILE) << "filename of adjustment layer: " << m_layerFilenames[layer.data()]  << "\n";
-    
+    layer->setDirty(true);
     return layer;
 }
 

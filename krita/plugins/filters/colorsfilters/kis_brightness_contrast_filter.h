@@ -28,10 +28,16 @@ class WdgBrightnessContrast;
 class QWidget;
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
+    
 public:
+    
     KisBrightnessContrastFilterConfiguration();
+    virtual void fromXML( const QString&  );
+    virtual QString toString();
+    
 public:
     Q_UINT16 transfer[256];
+    QPtrList<QPair<double,double> >  curve;
 };
 
 /**
@@ -47,7 +53,8 @@ public:
 public:
 
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget *);
+    virtual KisFilterConfiguration * configuration(QWidget *);
+    virtual KisFilterConfiguration * configuration() { return new KisBrightnessContrastFilterConfiguration(); };
     virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
     virtual bool supportsPainting() { return true; }
@@ -66,7 +73,7 @@ public:
     virtual ~KisBrightnessContrastConfigWidget() {};
 
     KisBrightnessContrastFilterConfiguration * config();
-
+    void setConfiguration( KisFilterConfiguration * config );
     WdgBrightnessContrast * m_page;
 };
 

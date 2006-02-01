@@ -31,6 +31,10 @@ public:
         : KisFilterConfiguration( "smalltiles", 1 )
         , m_numberOfTiles(numberOfTiles) {};
 
+
+    virtual void fromXML( const QString&  );
+    virtual QString toString();
+    
 public:
     inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };
 
@@ -54,7 +58,8 @@ public:
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return new KisSmallTilesFilterConfiguration( 2 ); };
 
 private:
     void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles);

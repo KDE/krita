@@ -39,6 +39,7 @@ public:
 public:
 
     KisCImgFilterConfiguration * config();
+    void setConfiguration(KisFilterConfiguration * config);
 
 private:
     WdgCImg * m_page;

@@ -20,6 +20,7 @@
 
 #include <qimage.h>
 
+#include "ksharedptr.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 
@@ -33,15 +34,28 @@ enum KisConvolutionBorderOp {
     BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
+class KisKernel;
+typedef KSharedPtr<KisKernel> KisKernelSP;
 
-struct KisKernel {
+class KisKernel : public KShared 
+{
+
+public:
+    
     Q_UINT32 width;
     Q_UINT32 height;
     Q_INT32 offset;
     Q_INT32 factor;
     Q_INT32 * data;
-    static KisKernel* fromQImage(const QImage& img);
+
+    KisKernel() : width(0), height(0), offset(0), factor(0), data(0) {};
+
+    virtual ~KisKernel() { delete [] data; };
+
+    static KisKernelSP fromQImage(const QImage& img);
+
 };
+
 
 class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
 {
@@ -66,14 +80,14 @@ public:
      *
      * Note that we do not (currently) support different kernels for different channels _or_ channel types.
      */
-    void applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+    void applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID,
                      KisChannelInfo::enumChannelFlags channelFlags = KisChannelInfo::FLAG_COLOR);
 private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
-    void applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+    void applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                            KisChannelInfo::enumChannelFlags channelFlags);
 
 

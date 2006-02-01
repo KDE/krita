@@ -241,7 +241,7 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     m_brushesTab -> addTab( customBrushes, i18n("Custom Brush"));
     connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
             m_view, SLOT(brushActivated(KisResource*)));
-#if HAVE_TEXT_BRUSH
+#ifdef HAVE_TEXT_BRUSH
     KisTextBrush* textBrushes = new KisTextBrush(m_brushesTab, "textbrush",
             i18n("Text Brush")/*, m_view*/);
     m_brushesTab -> addTab( textBrushes, i18n("Text Brush"));

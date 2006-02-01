@@ -439,7 +439,7 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
     devices.push_back(QValueVector<KisPaintDevice*>());
     modes.push_back(m_parasite.selection[0]);
 
-    for (int i = 0; i < m_brushes.count(); i++) {
+    for (uint i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
                 KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
         pd -> convertFromQImage(m_brushes.at(i) -> img(), "");

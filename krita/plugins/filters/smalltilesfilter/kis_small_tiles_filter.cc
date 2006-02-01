@@ -56,6 +56,20 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
+void KisSmallTilesFilterConfiguration::fromXML(const QString & s)
+{
+    KisFilterConfiguration::fromXML(s);
+    m_numberOfTiles = getInt("numberOfTiles");
+}
+
+QString KisSmallTilesFilterConfiguration::toString()
+{
+    m_properties.clear();
+    setProperty("numberOfTiles()", m_numberOfTiles);
+
+    return KisFilterConfiguration::toString();
+}
+
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small Tiles..."))
 {
 }

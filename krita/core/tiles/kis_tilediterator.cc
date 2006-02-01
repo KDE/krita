@@ -104,11 +104,15 @@ void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
         m_tile -> removeReader();
 
     m_tile = m_ktm->getTile(col, row, m_writable);
-    Q_ASSERT(m_tile != 0);
+    
+    if (m_tile == 0) return;
+    //Q_ASSERT(m_tile != 0);
     m_tile -> addReader();
 
     m_data = m_tile->data();
-    Q_ASSERT(m_data != 0);
+    if (m_data == 0) return;
+
+    //Q_ASSERT(m_data != 0);
 
     // set old data but default to current value
     m_oldData = m_ktm->getOldTile(col, row, m_tile)->data();

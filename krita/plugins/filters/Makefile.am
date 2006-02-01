@@ -1,7 +1,6 @@
 SUBDIRS = \
-    bumpmap \
+    bumpmap  \
     cimg \
-    colorsfilters \
     convolutionfilters \
     cubismfilter \
     embossfilter \
@@ -12,5 +11,5 @@ SUBDIRS = \
     raindropsfilter \
     roundcorners \
     smalltilesfilter \
-    sobelfilter
-
+    sobelfilter \
+    colorsfilters 

@@ -22,13 +22,14 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <kofficeversion.h>
 #include <config.h>
 
 KAboutData * newKritaAboutData()
 {
     KAboutData * aboutData = new KAboutData( "krita",
             I18N_NOOP("Krita"),
-            VERSION,
+            KOFFICE_VERSION_STRING,
             I18N_NOOP("KOffice image manipulation application"),
             KAboutData::License_GPL,
             I18N_NOOP("(c) 1999-2006 The Krita team.\n"),

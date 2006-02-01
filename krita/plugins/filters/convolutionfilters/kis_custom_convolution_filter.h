@@ -27,20 +27,12 @@
 #include "kis_types.h"
 
 class QWidget;
-class KisKernel;
-
-class KisCustomConvolutionConfiguration : public KisConvolutionConfiguration {
-public:
-    KisCustomConvolutionConfiguration(KisKernel* matrix) : KisConvolutionConfiguration("custom convolution", matrix) {};
-    ~KisCustomConvolutionConfiguration();
-private:
-    KisKernel* m_matrix;
-};
 
 class KisCustomConvolutionFilter : public KisConvolutionFilter {
 
 public:
-    KisCustomConvolutionFilter();
+    KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution...")) {};
+    
 public:
     static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
     virtual bool supportsPainting() { return true; }
@@ -48,11 +40,12 @@ public:
 
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return configuration(0); }; 
 protected:
-    virtual KisKernel* matrix() { return m_matrix; };
+    virtual KisKernelSP matrix() { return m_matrix; };
 private:
-    KisKernel* m_matrix;
+    KisKernelSP m_matrix;
 };
 
 

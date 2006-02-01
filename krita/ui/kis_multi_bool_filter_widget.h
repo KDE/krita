@@ -41,6 +41,7 @@ class KRITA_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
     Q_OBJECT
 public:
     KisMultiBoolFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisBoolWidgetParam iwparam);
+    virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
     inline Q_INT32 nbValues() { return m_nbboolWidgets; };
     inline Q_INT32 valueAt( Q_INT32 i ) { return m_boolWidgets[i]->isChecked(); };

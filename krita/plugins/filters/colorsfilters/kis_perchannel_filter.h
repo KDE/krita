@@ -24,6 +24,7 @@
 #include <qpair.h>
 #include <qptrlist.h>
 #include "kis_filter.h"
+#include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 
 class WdgPerChannel;
@@ -35,11 +36,13 @@ public:
     KisPerChannelFilterConfiguration(int n);
     ~KisPerChannelFilterConfiguration();
 
+    virtual void fromXML( const QString&  );
+    virtual QString toString();
+    
 public:
+    QPtrList<QPair<double,double> > *curves;
     Q_UINT16 *transfers[256];
-
-private:
-    Q_UINT16 m_nTransfers;
+    Q_UINT16 nTransfers;
 };
 
 
@@ -50,7 +53,7 @@ class KisPerChannelFilter
     : public KisFilter
 {
 public:
-    KisPerChannelFilter();
+    KisPerChannelFilter() : KisFilter( id(), "adjust", i18n("&Color Adjustment...")) {};
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
     virtual KisFilterConfiguration* configuration(QWidget*);
@@ -74,6 +77,7 @@ public:
     virtual ~KisPerChannelConfigWidget() {};
 
     KisPerChannelFilterConfiguration * config();
+    void setConfiguration(KisFilterConfiguration * config);
 
 private slots:
     virtual void setActiveChannel(int ch);

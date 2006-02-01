@@ -235,9 +235,13 @@ public:
             return true;
 
         KisFilterConfiguration * cfg = layer->filter();
-        Q_ASSERT(cfg);
+        if (!cfg) return false;
+
+        kdDebug() << "Filter: " << cfg->name() << "\n" << kdBacktrace() << "\n";
+        
+        
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
-        Q_ASSERT(f);
+        if (!f) return false;
         
         KisSelectionSP selection = layer->selection();
         kdDebug() << "Do we have a selection: " << selection << "?\n";

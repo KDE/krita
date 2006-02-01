@@ -43,45 +43,14 @@
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const QString & layerName,
                                              const QString & caption,
-                                             bool create,
                                              QWidget *parent,
                                              const char *name)
     : KDialogBase(parent, name, true, "", Ok | Cancel)
     , m_image(img)
 {
     Q_ASSERT(img);
-    
-    KisLayerSP activeLayer = 0;
-    KisFilterConfiguration * kfc = 0;
-    KisFilter * filter = 0;
-    KisAdjustmentLayer * adjustmentLayer = 0;
-    
-    if (create) {
-        activeLayer = img->activeLayer();
-    } else {
-        adjustmentLayer = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());
-        if (adjustmentLayer) {
-            KisLayerSP next = adjustmentLayer->nextSibling();
-            if (!next) {
-                create = true;
-                activeLayer = img->activeLayer();
-            }
 
-            kfc = adjustmentLayer->filter();
-            filter = KisFilterRegistry::instance()->get(kfc->name());
-            if (!filter) {
-                create = true; // XXX: warning after message freeze
-                activeLayer = img->activeLayer();
-            }
-        }
-        else {
-            create = true;
-            activeLayer = img->activeLayer();
-        }
-    }
-
-    kdDebug() << "Create: " << create << ", layer: " << activeLayer->name() << ", adj: " << adjustmentLayer << "\n";
-    
+    KisLayerSP activeLayer = img->activeLayer();
     KisPaintDeviceSP dev = 0;
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(activeLayer.data());
@@ -100,10 +69,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
             }
         }
     }
-    kdDebug() << "Paint device: " << dev << "\n";
-    
-    // XXX: Do the rest of the property setting stuff
-    
+
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
     QGridLayout * grid = new QGridLayout(page, 3, 2, 0, 6);
@@ -120,13 +86,13 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_filtersList = new KisFiltersListView(dev, page, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
-    
+
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( dev );
-    
+
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     grid->addWidget(m_preview, 1, 1);
-    
+
     m_configWidgetHolder = new QGroupBox(i18n("Configuration"), page, "currentConfigWidget");
     m_configWidgetHolder->setColumnLayout(0, Qt::Horizontal);
     grid->addWidget(m_configWidgetHolder, 2, 1);
@@ -141,11 +107,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     m_currentConfigWidget = 0;
 
     enableButtonOK( !m_layerName->text().isEmpty() );
-
-    if (!create) {
-        m_filtersList->setCurrentFilter(filter->id());
-    }
-    
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
@@ -195,22 +156,22 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
     if ( m_currentConfigWidget != 0 )
     {
         m_configWidgetHolder->layout()->remove(m_currentConfigWidget);
-        
+
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
-        
+
     } else {
-        
+
         m_labelNoConfigWidget->hide();
     }
-    
+
     KisPaintLayerSP activeLayer = (KisPaintLayer*) m_image->activeLayer().data();
-    
+
     if (activeLayer) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_configWidgetHolder,
                                                                            activeLayer->paintDevice());
     }
-    
+
     if (m_currentConfigWidget != 0)
     {
         m_configWidgetHolder->layout()->add(m_currentConfigWidget);

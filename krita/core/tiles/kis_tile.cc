@@ -117,7 +117,9 @@ void KisTile::setNext(KisTile *n)
 
 Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
 {
-    Q_ASSERT(m_data != 0);
+    //Q_ASSERT(m_data != 0);
+    if (m_data == 0) return 0;
+
     return m_data + m_pixelSize * ( y * WIDTH + x );
 }
 

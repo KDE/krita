@@ -143,6 +143,7 @@
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_image_properties.h"
 #include "kis_dlg_adjustment_layer.h"
+#include "kis_dlg_adj_layer_props.h"
 
 // Action managers
 #include "kis_selection_manager.h"
@@ -164,6 +165,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_doc( doc )
     , m_canvas( 0 )
     , m_popup( 0 )
+    , m_partHandler( 0 )
     , m_gridManager( 0 )
     , m_selectionManager( 0 )
     , m_filterManager( 0 )
@@ -220,13 +222,12 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_toolIsPainting( false )
     , m_monitorProfile( 0 )
     , m_HDRExposure( 0 )
-    , m_partHandler( 0 )
 {
 
     Q_ASSERT(doc);
     Q_ASSERT(adapter);
     Q_ASSERT(parent);
-    
+
     setFocusPolicy( QWidget::StrongFocus );
 
     // Must come before input devices are referenced as this detects them.
@@ -249,7 +250,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_filterManager = new KisFilterManager(this, doc);
     m_toolManager = new KisToolManager(canvasSubject(), getCanvasController());
     m_gridManager = new KisGridManager(this);
-    
+
     // This needs to be set before the dockers are created.
     m_image = m_doc -> currentImage();
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
@@ -288,7 +289,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     layersUpdated();
 
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
-    
+
     // Load all plugins
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
                                                          QString::fromLatin1("(Type == 'Service') and "
@@ -548,11 +549,11 @@ void KisView::setupStatusBar()
         addStatusBarItem(m_statusBarProfileLabel,3);
         updateStatusBarProfileLabel();
 
-        int height = m_statusBarProfileLabel -> height();
+        //int height = m_statusBarProfileLabel -> height();
 
         m_progress = new KisLabelProgress(this);
         m_progress -> setMaximumWidth(225);
-        m_progress -> setMaximumHeight(height);
+        m_progress -> setMaximumHeight(fontMetrics().height() );
         addStatusBarItem(m_progress, 2, true);
 
         m_progress -> hide();
@@ -873,7 +874,7 @@ void KisView::paintView(const KisRect& r)
                         if (m_actLayerVis) {
                             paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
                         }
-                        
+
                         if (m_selectionManager->displaySelection())
                         {
                             paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_SELECTION);
@@ -1103,7 +1104,7 @@ void KisView::layerUpdateGUI(bool enable)
     m_imgFlatten -> setEnabled(nlayers > 1);
     m_imgMergeLayer -> setEnabled(nlayers > 1 && layer && layer -> nextSibling());
 
-    
+
     m_selectionManager->updateGUI();
     m_filterManager->updateGUI();
     m_toolManager->updateGUI();
@@ -1260,7 +1261,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
     m_hScroll -> update();
     m_vScroll -> update();
 
-    
+
 
     canvasRefresh();
 }
@@ -1378,7 +1379,7 @@ void KisView::setInitialZoomLevel()
         zoomLevel = nextZoomOutLevel(zoomLevel);
     }
 
-    // XXX: 
+    // XXX:
     if (zoomLevel < 0.1) {
         zoomLevel = 1.0;
     }
@@ -2304,7 +2305,7 @@ void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
     if (KURLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
         accept = true;
     }
-    
+
     event -> accept(accept);
 }
 
@@ -2369,6 +2370,9 @@ void KisView::layerProperties()
 
 void KisView::showLayerProperties(KisLayerSP layer)
 {
+    Q_ASSERT( layer );
+    if ( !layer ) return;
+
     KisColorSpace * cs = 0;
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
     if ( pl ) {
@@ -2381,7 +2385,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
 
     if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
     {
-        KisDlgAdjustmentLayer dlg(currentImg(), alayer->name(), i18n("Adjustment Layer Properties"), false, this, "dlgadjustmentlayer");
+        KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjlayerprops");
         if (dlg.exec() == QDialog::Accepted)
         {
             alayer -> setDirty( true );
@@ -2558,12 +2562,12 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     Q_ASSERT(parent);
     Q_ASSERT(above);
-    
+
     KisImageSP img = currentImg();
     if (!img) return;
 
     KisLayerSP l = img->activeLayer();
-    
+
     KisPaintDeviceSP dev;
 
     //  Argh! I hate having to cast, cast and cast again to see what kind of a layer I've got!
@@ -2587,7 +2591,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
         }
     }
 
-    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), true, this, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = 0;
         if (dev->hasSelection()) {
@@ -2597,7 +2601,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
         QString name = dlg.layerName();
 
         addAdjustmentLayer( parent, above, name, filter, selection);
-        
+
         img->notify();
     }
 }
@@ -2608,7 +2612,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
     Q_ASSERT(parent);
     Q_ASSERT(above);
     Q_ASSERT(filter);
-    
+
     KisImageSP img = currentImg();
     if (!img) return;
 
@@ -3073,14 +3077,14 @@ void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 {
     Q_ASSERT(event);
-    
+
     KStatusBar *sb = statusBar();
 
     if (sb)
         sb -> show();
 
     super::guiActivateEvent(event);
-    
+
     if (!m_initialZoomSet && isVisible()) {
         setInitialZoomLevel();
         m_initialZoomSet = true;
@@ -3093,7 +3097,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 {
     Q_ASSERT(o);
     Q_ASSERT(e);
-    
+
     switch (e -> type()) {
     case QEvent::TabletMove:
     case QEvent::TabletPress:
@@ -3148,18 +3152,18 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
     {
         QChildEvent *childEvent = static_cast<QChildEvent *>(e);
         QObject *child = childEvent -> child();
-        
+
         child -> installEventFilter(this);
-        
+
         QObjectList *objectList = child -> queryList("QWidget");
         QObjectListIt it(*objectList);
         QObject *obj;
-        
+
         while ((obj = it.current()) != 0) {
            obj -> installEventFilter(this);
            ++it;
         }
-        
+
         delete objectList;
     }
 #endif

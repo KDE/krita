@@ -30,10 +30,12 @@ class KisSimpleNoiseReducerConfiguration
     public:
         KisSimpleNoiseReducerConfiguration(int nt, int ws)
             : KisFilterConfiguration( "simplenoicereducer", 1 )
-            , threshold(nt)
-            , windowsize(ws) { }
-        int threshold;
-        int windowsize;
+        {
+            setProperty("threshold", nt);
+            setProperty("windowsize", ws);
+        }
+        int threshold() { return getInt("threshold"); };
+        int windowsize() { return getInt("windowsize"); };
 };
 
 class KisSimpleNoiseReducer : public KisFilter
@@ -43,7 +45,8 @@ class KisSimpleNoiseReducer : public KisFilter
         ~KisSimpleNoiseReducer();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        virtual KisFilterConfiguration* configuration(QWidget* nwidget);
+        virtual KisFilterConfiguration * configuration(QWidget* nwidget);
+        virtual KisFilterConfiguration * configuration() { return new KisSimpleNoiseReducerConfiguration( 50, 1); };
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
         static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reducer")); };

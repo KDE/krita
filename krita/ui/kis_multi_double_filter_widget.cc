@@ -64,4 +64,13 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
 
 }
 
+void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
+{
+    
+    for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
+        double val = config->getDouble(m_doubleWidgets[i]->name());
+        m_doubleWidgets[i]->setValue(val);
+    }
+}
+
 #include "kis_multi_double_filter_widget.moc"

@@ -17,33 +17,91 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include "qdom.h"
 #include "klocale.h"
+#include "kdebug.h"
 
 #include "kis_convolution_filter.h"
-
 #include "kis_convolution_painter.h"
 #include "kis_progress_display_interface.h"
 #include "kis_progress_subject.h"
 
-
-KisConvolutionFilter::KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry) :
-    KisFilter( id, category, entry )
+void KisConvolutionConfiguration::fromXML(const QString & s)
 {
+    kdDebug() << "Restoring filter configuration from: " << s << "\n";
+
+    m_matrix = new KisKernel();
+
+    QDomDocument doc;
+    doc.setContent( s );
+    QDomElement e = doc.documentElement();
+    QDomNode n = e.firstChild();
+
+    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
+
+    m_name = e.attribute("name");
+    m_version = e.attribute("version").toInt();
+
+    QDomElement matrix = n.toElement();
+    m_matrix->width = QString( matrix.attribute( "width" ) ).toInt();
+    m_matrix->height = QString( matrix.attribute( "height" ) ).toInt();
+    m_matrix->offset = QString( matrix.attribute( "offset" ) ).toInt();
+    m_matrix->factor = QString( matrix.attribute( "factor" ) ).toInt();
+
+    m_matrix->data = new Q_INT32[m_matrix->width * m_matrix->height];
+
+    QStringList data = QStringList::split( ",", e.text() );
+    QStringList::Iterator start = data.begin();
+    QStringList::Iterator end = data.end();
+    int i = 0;
+    for ( QStringList::Iterator it = start; it != end; ++it ) {
+        QString s = *it;
+        m_matrix->data[i] = s.toInt();
+        i++;
+    }
+}
+
+QString KisConvolutionConfiguration::toString()
+{
+    QDomDocument doc = QDomDocument("filterconfig");
+    QDomElement root = doc.createElement( "filterconfig" );
+    root.setAttribute( "name", name() );
+    root.setAttribute( "version", version() );
+
+    doc.appendChild( root );
+
+    QDomElement e = doc.createElement( "kernel" );
+    e.setAttribute( "width", m_matrix->width );
+    e.setAttribute( "height", m_matrix->height );
+    e.setAttribute( "offset", m_matrix->offset );
+    e.setAttribute( "factor", m_matrix->factor );
+
+    QString data;
+
+    for ( uint i = 0; i < m_matrix->width * m_matrix->height; ++i ) {
+        data += QString::number( m_matrix->data[i] );
+        data += ",";
+    }
+
+    QDomText text = doc.createCDATASection(data);
+    e.appendChild(text);
+    root.appendChild(e);
+
+    return doc.toString();
 
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP src,
-                   KisPaintDeviceSP dst,
-                   KisFilterConfiguration* configuration,
-                   const QRect& rect)
+void KisConvolutionFilter::process(KisPaintDeviceSP /*src*/,
+                                   KisPaintDeviceSP dst,
+                                   KisFilterConfiguration* configuration,
+                                   const QRect& rect)
 {
     // XXX: We don't do anything with src here -- carefully test this for problems.
     KisConvolutionPainter painter( dst );
     if (m_progressDisplay)
         m_progressDisplay->setSubject( &painter, true, true );
 
-    KisKernel * kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
+    KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
@@ -51,10 +109,6 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
     }
 
     setProgressDone();
-}
-
-KisConvolutionConstFilter::~KisConvolutionConstFilter()
-{
 }
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)

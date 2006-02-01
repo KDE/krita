@@ -59,8 +59,9 @@ public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&) = 0;
 
 public:
-    virtual KisFilterConfiguration* configuration(QWidget*);
-
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration();
+            
     /**
          * If true, this filter can be used in painting tools as a paint operation
          */

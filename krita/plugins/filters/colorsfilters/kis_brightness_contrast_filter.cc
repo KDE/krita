@@ -27,6 +27,9 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qlabel.h>
+#include <qdom.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
@@ -42,6 +45,87 @@
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
     : KisFilterConfiguration( "brightnesscontrast", 1 )
 {
+}
+
+
+void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
+{
+    kdDebug() << "Restoring filter configuration from: " << s << "\n";
+
+    
+    QDomDocument doc;
+    doc.setContent( s );
+    QDomElement e = doc.documentElement();
+    QDomNode n = e.firstChild();
+    
+    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
+    
+    while (!n.isNull()) {
+        e = n.toElement();
+        if (!e.isNull()) {
+            if (e.attribute("name") == "transfer") {
+                QStringList data = QStringList::split( ",", e.text() );
+                QStringList::Iterator start = data.begin();
+                QStringList::Iterator end = data.end();
+                int i = 0;
+                for ( QStringList::Iterator it = start; it != end && i < 256; ++it ) {
+                    QString s = *it;
+                    transfer[i] = s.toUShort();
+                    i++;
+                }
+            }
+            else if (e.attribute("name") == "curve") {
+                QStringList data = QStringList::split( ";", e.text() );
+                QStringList::Iterator pairStart = data.begin();
+                QStringList::Iterator pairEnd = data.end();
+                for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
+                    QString pair = * it;
+                    if (pair.find(",") > -1) {
+                        QPair<double,double> *p = new QPair<double,double>;
+                        p->first = pair.section(",", 0, 0).toDouble();
+                        p->second = pair.section(",", 1, 1).toDouble();
+                        curve.append(p);
+                    }
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
+}
+
+QString KisBrightnessContrastFilterConfiguration::toString()
+{
+    QDomDocument doc = QDomDocument("filterconfig");
+    QDomElement root = doc.createElement( "filterconfig" );
+    root.setAttribute( "name", name() );
+    root.setAttribute( "version", version() );
+
+    doc.appendChild( root );
+
+    QDomElement e = doc.createElement( "transfer" );
+    QString sTransfer;
+    for ( uint i = 0; i < 255 ; ++i ) {
+        sTransfer += QString::number( transfer[i] );
+        sTransfer += ",";
+    }
+    QDomText text = doc.createCDATASection(sTransfer);
+    e.appendChild(text);
+    root.appendChild(e);
+
+    e = doc.createElement("curve");
+    QString sCurve;
+    QPair<double,double> * pair;
+    for ( pair = curve.first(); pair; pair = curve.next() ) {
+        sCurve += QString::number(pair->first);
+        sCurve += ",";
+        sCurve += QString::number(pair->second);
+        sCurve += ";";
+    }
+    text = doc.createCDATASection(sCurve);
+    e.appendChild(text);
+    root.appendChild(e);
+    
+    return doc.toString();
 }
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
@@ -69,7 +153,7 @@ KisFilterConfiguration* KisBrightnessContrastFilter::configuration(QWidget *nwid
 
 std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
 {
-//XXX should really come up with a list of configurations
+    //XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
     list.insert(list.begin(), new KisBrightnessContrastFilterConfiguration( ));
     return list;
@@ -216,6 +300,12 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 
         cfg->transfer[i] = val;
     }
-
+    cfg->curve = m_page->kCurve->getCurve();
     return cfg;
+}
+
+void KisBrightnessContrastConfigWidget::setConfiguration( KisFilterConfiguration * config )
+{
+    KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<KisBrightnessContrastFilterConfiguration *>(config);
+    m_page->kCurve->setCurve(cfg->curve);
 }

@@ -22,7 +22,9 @@
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
+
 #include <koffice_export.h>
+
 
 enum enumSelectionMode {
     SELECTION_ADD,

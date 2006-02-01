@@ -32,29 +32,47 @@
 #include "kis_filter_config_widget.h"
 
 
-KisFilterConfiguration::KisFilterConfiguration(const QString & s )
-{
-    QDomDocument doc;
-    doc.setContent( s );
-    QDomElement e = doc.documentElement();
-    QDomNode n = e.firstChild();
-
-    while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            // Do stuff
-        }
-        n = n.nextSibling();
-    }
-    init();
-}
-
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
 {
     m_name = rhs.m_name;
     m_version = rhs.m_version;
     m_properties = rhs.m_properties;
+}
+
+void KisFilterConfiguration::fromXML(const QString & s )
+{
+    kdDebug() << "Restoring filter configuration from: " << s << "\n";
+    m_properties.clear();
+    
+    QDomDocument doc;
+    doc.setContent( s );
+    QDomElement e = doc.documentElement();
+    QDomNode n = e.firstChild();
+
+    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
+
+    m_name = e.attribute("name");
+    m_version = e.attribute("version").toInt();
+    
+    while (!n.isNull()) {
+        // We don't nest elements in filter configuration. For now...
+        QDomElement e = n.toElement();
+        QString name;
+        QString type;
+        QString value;
+        
+        if (!e.isNull()) {
+            if (e.tagName() == "property") {
+                name = e.attribute("name");
+                type = e.attribute("type");
+                value = e.text();
+                // XXX Convert the variant pro-actively to the right type?
+                kdDebug() << "Property name: " << name << ", type: " << type << ", value: " << value << "\n";
+                m_properties[name] = QVariant(value);
+            }
+        }
+        n = n.nextSibling();
+    }
 }
 
 QString KisFilterConfiguration::toString()
@@ -72,9 +90,13 @@ QString KisFilterConfiguration::toString()
         e.setAttribute( "name", it.key().latin1() );
         QVariant v = it.data();
         e.setAttribute( "type", v.typeName() );
-        e.setAttribute( "value", v.asString() ); // XXX: Unittest this!
+        QString s = v.asString();
+        QDomText text = doc.createCDATASection(v.asString() ); // XXX: Unittest this!
+        e.appendChild(text);
+        root.appendChild(e);
     }
 
+    kdDebug() << doc.toString();
     return doc.toString();
 }
 
@@ -109,3 +131,50 @@ bool KisFilterConfiguration::getProperty(const QString & name, QVariant & value)
    }
 }
 
+QVariant KisFilterConfiguration::getProperty(const QString & name)
+{
+    if ( m_properties.find( name ) == m_properties.end() ) {
+        return QVariant();
+    }
+    else {
+        return m_properties[name];
+    }
+}
+
+
+int KisFilterConfiguration::getInt(const QString & name, int def)
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return v.asInt();
+    else
+        return def;
+                
+}
+
+double KisFilterConfiguration::getDouble(const QString & name, double def)
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return v.asDouble();
+    else
+        return def;
+}
+
+bool KisFilterConfiguration::getBool(const QString & name, bool def)
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return v.asBool();
+    else
+        return def;
+}
+
+QString KisFilterConfiguration::getString(const QString & name, QString def)
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return v.asString();
+    else
+        return def;
+}

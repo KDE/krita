@@ -183,3 +183,8 @@ KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)
         return new KisPixelizeFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
     }
 }
+
+KisFilterConfiguration * KisPixelizeFilter::configuration()
+{
+    return new KisPixelizeFilterConfiguration(10, 10);
+}

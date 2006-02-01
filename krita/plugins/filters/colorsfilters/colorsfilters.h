@@ -23,6 +23,14 @@
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
 
+
+class ColorsFilters : public KParts::Plugin
+{
+    public:
+        ColorsFilters(QObject *parent, const char *name, const QStringList &);
+        virtual ~ColorsFilters();
+};
+
 class KisDesaturateFilter : public KisFilter {
 public:
     KisDesaturateFilter();
@@ -49,16 +57,6 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
     virtual bool workWith(KisColorSpace* cs);
 
-};
-
-class ColorsFilters : public KParts::Plugin
-{
-public:
-    ColorsFilters(QObject *parent, const char *name, const QStringList &);
-    virtual ~ColorsFilters();
-
-private:
-    KisPainter *m_painter;
 };
 
 #endif

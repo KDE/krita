@@ -23,6 +23,7 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 
+#include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
 #include "wdg_perchannel.h"
@@ -37,22 +38,33 @@
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
-    for(int i=0;i<n;i++)
-         transfers[i] = new Q_UINT16[256];
-    m_nTransfers=n;
+    curves = new QSortedList<QPair<double,double> >[n];
+    
+    for(int i=0;i<n;i++) {
+        transfers[i] = new Q_UINT16[256];
+    }
+    nTransfers = n;
 }
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
-    for(int i=0;i<m_nTransfers;i++)
+    delete [] curves;
+    for(int i=0;i<nTransfers;i++)
         delete [] transfers[i];
 }
 
-KisPerChannelFilter::KisPerChannelFilter()
-    : KisFilter( id(), "adjust", i18n("&Color Adjustment..."))
-{
 
+
+void KisPerChannelFilterConfiguration::fromXML( const QString& s )
+{
+    kdDebug() << "Restoring filter configuration from: " << s << "\n";
 }
+
+QString KisPerChannelFilterConfiguration::toString()
+{
+    return QString::null;
+}
+
 
 KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
@@ -254,6 +266,17 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
         }
     }
     return cfg;
+}
+
+void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config)
+{
+    KisPerChannelFilterConfiguration * cfg = dynamic_cast<KisPerChannelFilterConfiguration *>(config);
+
+    for(unsigned int ch = 0; ch < cfg->nTransfers; ch++)
+    {
+        m_curves[ch] = cfg->curves[ch];
+    }
+
 }
 
 #include "kis_perchannel_filter.moc"

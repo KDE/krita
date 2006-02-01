@@ -74,7 +74,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
-    
+
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
 
@@ -83,13 +83,13 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
     KisColorSpace * cs = src->colorSpace();
     Q_INT32 psize = cs->pixelSize();
-    
+
     while( ! srcIt.isDone() )
     {
         if(srcIt.isSelected())
         {
             memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
-            
+
             cs->invertColor( dstIt.rawData(), 1);
         }
         setProgress(++pixelsProcessed);

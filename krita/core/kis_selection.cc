@@ -23,7 +23,6 @@
 #include <qcolor.h>
 
 #include "kis_layer.h"
-#include "kis_selection.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
 #include "kis_colorspace_factory_registry.h"
@@ -31,6 +30,9 @@
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
 #include "kis_image.h"
+#include "kis_datamanager.h"
+
+#include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
     : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())

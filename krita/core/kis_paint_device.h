@@ -29,11 +29,9 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_datamanager.h"
 #include "kis_colorspace.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-
 #include <koffice_export.h>
 
 class DCOPObject;
@@ -48,6 +46,12 @@ class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
 class KNamedCommand;
+
+class KisDataManager;
+typedef KSharedPtr<KisDataManager> KisDataManagerSP;
+
+class KisMemento;
+typedef KSharedPtr<KisMemento> KisMementoSP;
 
 
 /**
@@ -156,15 +160,15 @@ public:
     /**
      * Cut the paint device down to the specified rect
      */
-    void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) { m_datamanager -> setExtent(x - m_x, y - m_y, w, h); };
+    void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
     /// Convience method for the above
-    void crop(QRect r) { r.moveBy(-m_x, -m_y); m_datamanager -> setExtent(r); };
+    void crop(QRect r);
 
     /**
      * Complete erase the current paint device. Its size will become 0.
      */
-    virtual void clear() { m_datamanager -> clear(); };
+    virtual void clear();
 
     /**
      * Read the bytes representing the rectangle described by x, y, w, h into
@@ -307,7 +311,7 @@ public:
 
     KisColorSpace * colorSpace() const;
 
-    KisDataManagerSP dataManager() const { return m_datamanager; }
+    KisDataManagerSP dataManager() const;
 
     /**
      * Replace the pixel data, color strategy, and profile.
@@ -358,9 +362,9 @@ public:
      */
     void mirrorY();
 
-    KisMementoSP getMemento() { return m_datamanager -> getMemento(); };
-    void rollback(KisMementoSP memento) { m_datamanager -> rollback(memento); };
-    void rollforward(KisMementoSP memento) { m_datamanager -> rollforward(memento); };
+    KisMementoSP getMemento();
+    void rollback(KisMementoSP memento);
+    void rollforward(KisMementoSP memento);
 
     /**
      * This function return an iterator which points to the first pixel of an rectangle
@@ -514,16 +518,6 @@ inline const KisImage *KisPaintDevice::image() const
 inline void KisPaintDevice::setImage(KisImage *image)
 {
         m_owner = image;
-}
-
-inline void KisPaintDevice::readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-    m_datamanager -> readBytes(data, x - m_x, y - m_y, w, h);
-}
-
-inline void KisPaintDevice::writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-{
-    m_datamanager -> writeBytes( data, x - m_x, y - m_y, w, h);
 }
 
 

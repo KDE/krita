@@ -112,11 +112,11 @@ public:
     {
         //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
 
-        QString location = m_external ? QString::null : m_uri;
-        location += m_img->name() + "/layers/" + m_layerFilenames[layer];
-
         // The selection -- if present. If not, we simply cannot open the dratted thing.
-        if (m_store -> open(location)) {
+        QString location = m_external ? QString::null : m_uri;
+        location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".selection";
+        if (m_store->hasFile(location)) {
+            m_store->open(location);
             KisSelectionSP selection = new KisSelection(m_img);
             if (!selection->read(m_store)) {
                 selection -> disconnect();
@@ -132,14 +132,15 @@ public:
         location = m_external ? QString::null : m_uri;
         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
 
-        if (m_store -> hasFile(location)) {
+        if (m_store -> hasFile(location) && layer->filter()) {
             QByteArray data;
             m_store -> open(location);
             data = m_store -> read(m_store -> size());
             m_store -> close();
-            // XXX: Transform the data to a string and create the filter config
-            KisFilterConfiguration * kfc = new KisFilterConfiguration(QString(data));
-            layer->setFilter( kfc );
+            if (data) {
+                KisFilterConfiguration * kfc = layer->filter();
+                kfc->fromXML(QString(data));
+            }
         }
 
         return true;

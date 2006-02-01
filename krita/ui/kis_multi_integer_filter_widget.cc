@@ -33,8 +33,11 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT
 
 }
 
-KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent, const char * name, const char * caption, vKisIntegerWidgetParam iwparam) : 
-    KisFilterConfigWidget( parent, name )
+KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
+                                                         const char * name,
+                                                         const char * caption,
+                                                         vKisIntegerWidgetParam iwparam)
+    : KisFilterConfigWidget( parent, name )
 {
     Q_INT32 m_nbintegerWidgets = iwparam.size();
 
@@ -61,6 +64,14 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent, const
     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout -> addItem(sp, m_nbintegerWidgets, 0);
 
+}
+
+void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config)
+{
+    for (int i = 0; i < m_nbintegerWidgets; ++i) {
+        int val = config->getInt(m_integerWidgets[i]->name());
+        m_integerWidgets[i]->setValue(val);
+    }
 }
 
 #include "kis_multi_integer_filter_widget.moc"

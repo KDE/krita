@@ -22,27 +22,45 @@
 #define _KIS_CONVOLUTION_FILTER_H_
 
 #include "kis_filter.h"
-class KisKernel;
+#include "kis_filter_configuration.h"
+#include "kis_convolution_painter.h"
 
 class KisConvolutionConfiguration : public KisFilterConfiguration {
 public:
     KisConvolutionConfiguration(const QString & name, KisKernel * matrix)
         : KisFilterConfiguration( name, 1 )
-        , m_matrix(matrix) {};
+        , m_matrix(matrix)
+    {};
+
+    void fromXML(const QString & s);
+    QString toString();
+
 public:
-    inline KisKernel * matrix() { return m_matrix; };
+
+    inline KisKernelSP matrix() { return m_matrix; };
+
 private:
-    KisKernel * m_matrix;
+
+    KisKernelSP m_matrix;
+
 };
 
 
 class KisConvolutionFilter : public KisFilter {
+
     Q_OBJECT
+
 public:
-    KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry);
+
+    KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry)
+        : KisFilter( id, category, entry )
+        {};
+
 public:
+
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     virtual bool supportsIncrementalPainting() { return false; }
+
 };
 
 
@@ -50,13 +68,23 @@ public:
  * This class is used for a convolution filter with a constant matrix
  */
 class KisConvolutionConstFilter : public KisConvolutionFilter {
+
 public:
-    KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) : KisConvolutionFilter(id, category, entry) { } ;
-    virtual ~KisConvolutionConstFilter();
+
+    KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) 
+	: KisConvolutionFilter(id, category, entry) 
+    {};
+
+    virtual ~KisConvolutionConstFilter() {};
+
 public:
-    virtual KisFilterConfiguration* configuration(QWidget*);
+
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return configuration(0); };
+
 protected:
-    KisKernel * m_matrix;
+
+    KisKernelSP m_matrix;
 };
 
 #endif

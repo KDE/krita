@@ -155,7 +155,8 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     m_swapMutex->lock();
 
-    Q_ASSERT(m_tileMap.contains(tile));
+    if (!m_tileMap.contains(tile)) return;
+    // Q_ASSERT(m_tileMap.contains(tile));
 
     TileInfo* info = m_tileMap[tile];
 
@@ -232,7 +233,8 @@ void KisTileManager::fromSwap(TileInfo* info)
 {
     m_swapMutex->lock();
 
-    Q_ASSERT(!info -> inMem);
+    //Q_ASSERT(!info -> inMem);
+    if (info->inMem) return;
 
     doSwapping();
 
@@ -250,7 +252,8 @@ void KisTileManager::toSwap(TileInfo* info) {
 
     m_swapMutex->lock();
 
-    Q_ASSERT(info -> inMem);
+    //Q_ASSERT(info -> inMem);
+    if (!info->inMem) return;
 
     if (info -> filePos < 0) {
         // This tile is not yet in the file. Save it there

@@ -29,9 +29,6 @@ class KoStore;
 #include "tiles/kis_tileddatamanager.h"
 #define ACTUAL_DATAMGR KisTiledDataManager
 
-
-
-
 /**
  * KisDataManager defines the interface that modules responsible for
  * storing and retrieving data must inmplement. Data modules, like

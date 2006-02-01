@@ -29,20 +29,12 @@
 #include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
-KisCustomConvolutionFilter::KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution..."))
-{
 
-}
 KisFilterConfigWidget * KisCustomConvolutionFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     KisCustomConvolutionFilterConfigurationWidget* ccfcw = new KisCustomConvolutionFilterConfigurationWidget(this,parent, "custom convolution config widget");
     Q_CHECK_PTR(ccfcw);
     return ccfcw;
-}
-
-KisCustomConvolutionConfiguration::~KisCustomConvolutionConfiguration()
-{
-    delete m_matrix;
 }
 
 KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwidget)
@@ -52,7 +44,7 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
     if ( widget == 0 )
     {
         // Create the identity matrix:
-        KisKernel * kernel = new KisKernel();
+        KisKernelSP kernel = new KisKernel();
         kernel -> width = 3;
         kernel -> height = 3;
 
@@ -70,11 +62,12 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->data[7] = 0;
         kernel->data[8] = 0;
 
-        return new KisCustomConvolutionConfiguration( kernel );
+        return new KisConvolutionConfiguration( "custom convolution", kernel );
+        
     } else {
 
         // Create the identity matrices:
-        KisKernel * kernel = new KisKernel();
+        KisKernelSP kernel = new KisKernel();
         kernel -> width = 3;
         kernel -> height = 3;
 
@@ -95,6 +88,6 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel -> factor = mw->spinBoxFactor->value();
         kernel -> offset = mw->spinBoxOffset->value();
 
-        return new KisCustomConvolutionConfiguration( kernel );
+        return new KisConvolutionConfiguration( "custom convolution",  kernel );
     }
 }

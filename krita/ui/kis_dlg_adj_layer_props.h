@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISDLGAdjustMENTLAYER_H
-#define KISDLGAdjustMENTLAYER_H
+#ifndef KIS_DLG_ADJ_LAYER_PROPS_H
+#define KIS_DLG_ADJ_LAYER_PROPS_H
 
 #include <kdialogbase.h>
 
@@ -33,7 +33,7 @@ class QGroupBox;
 /**
  * Create a new adjustment layer.
  */
-class KisDlgAdjustmentLayer : public KDialogBase
+class KisDlgAdjLayerProps : public KDialogBase
 {
 
     Q_OBJECT
@@ -51,11 +51,13 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjustmentLayer(KisImage * img,
+    KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
                           const QString & layerName,
                           const QString & caption,
                           QWidget *parent = 0,
                           const char *name = 0);
+
+    virtual ~KisDlgAdjLayerProps() {};
 
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
@@ -65,17 +67,15 @@ protected slots:
     void slotNameChanged( const QString & );
     void slotConfigChanged();
     void refreshPreview();
-    void selectionHasChanged ( QIconViewItem * item );
 
 private:
     KisImage * m_image;
-    KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
-    QGroupBox * m_configWidgetHolder;
-    QWidget * m_currentConfigWidget;
+    KisFilterConfigWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
+    KisFilterConfiguration * m_currentConfiguration;
+    KisAdjustmentLayer * m_layer;
     KLineEdit * m_layerName;
-    QLabel* m_labelNoConfigWidget;
 };
 
-#endif
+#endif // KIS_DLG_ADJ_LAYER_PROPS_H

@@ -28,11 +28,13 @@
 #include "kis_layer.h"
 #include "kis_view.h"
 #include "kis_types.h"
+#include "kis_filter_configuration.h"
 #include "kis_colorspace.h"
+#include "kis_convolution_filter.h"
 #include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
-KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* nfilter, QWidget * parent, const char * name)
+KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* /*nfilter*/, QWidget * parent, const char * name)
     : KisFilterConfigWidget ( parent, name )
 {
     QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
@@ -56,6 +58,26 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
     connect( m_ccfcws->matrixWidget, SIGNAL(valueChanged()), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_ccfcws->spinBoxFactor, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_ccfcws->spinBoxOffset, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+}
+
+void KisCustomConvolutionFilterConfigurationWidget::setConfiguration(KisFilterConfiguration * cfg)
+{
+    KisConvolutionConfiguration * config = dynamic_cast<KisConvolutionConfiguration*>(cfg);
+    
+    if (config->matrix()->width != 3 || config->matrix()->height != 3) return;
+
+    m_ccfcws->spinBoxOffset->setValue(config->matrix()->offset);
+    m_ccfcws->spinBoxFactor->setValue(config->matrix()->factor);
+
+    m_ccfcws->matrixWidget->m11->setValue(config->matrix()->data[0]);
+    m_ccfcws->matrixWidget->m21->setValue(config->matrix()->data[1]);
+    m_ccfcws->matrixWidget->m31->setValue(config->matrix()->data[2]);
+    m_ccfcws->matrixWidget->m12->setValue(config->matrix()->data[3]);
+    m_ccfcws->matrixWidget->m22->setValue(config->matrix()->data[4]);
+    m_ccfcws->matrixWidget->m32->setValue(config->matrix()->data[5]);
+    m_ccfcws->matrixWidget->m31->setValue(config->matrix()->data[6]);
+    m_ccfcws->matrixWidget->m32->setValue(config->matrix()->data[7]);
+    m_ccfcws->matrixWidget->m33->setValue(config->matrix()->data[8]);
 }
 
 #include "kis_custom_convolution_filter_configuration_widget.moc"

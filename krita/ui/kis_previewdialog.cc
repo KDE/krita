@@ -21,36 +21,19 @@
 #include <qhbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
- 
+
 #include "kis_previewwidget.h"
 #include "kis_previewdialog.h"
- 
+
 KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool modal, const QString &caption)
     : super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
-#if 0
-    QWidget * page = new QWidget(this);
-    setMainWidget(page);
-    
-    QHBoxLayout * layout = new QHBoxLayout(page, 0, 6);
-    layout->setAutoAdd(true);
-    
-    m_containerFrame = new QFrame( this, "container" );
-    m_preview = new KisPreviewWidget( this, "previewWidget" );
-#endif    
     QHBox* layout = new QHBox(this);
     layout -> setSpacing( 6 );
-    
+
     m_containerFrame = new QFrame( layout, "container" );
 
-//     QGroupBox* groupBox = new QGroupBox( "Preview", layout, "groupBox" );
-//     groupBox -> setColumnLayout(0, Qt::Vertical );
-//     groupBox -> layout()->setSpacing( 6 );
-//     groupBox -> layout()->setMargin( 11 );
-//     QGridLayout *groupBoxLayout = new QGridLayout( groupBox -> layout(), 1, 1);
-    m_preview = new KisPreviewWidget( layout/*groupBox*/, "previewWidget" );
-//     groupBoxLayout -> addWidget( m_preview, 0 , 0);
-    Q_CHECK_PTR(m_preview);
+    m_preview = new KisPreviewWidget( layout, "previewWidget" );
 
     setMainWidget(layout);
 }

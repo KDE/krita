@@ -58,7 +58,7 @@ public:
      * Mix the current paint color with the color found
      * at pos in dev.
      */
-    void mixAt(const KisPoint & pos, double pressure, KisPaintDeviceSP dev)
+        void mixAt(const KisPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
     {
         // Get the image background color
         // Get the color at pos

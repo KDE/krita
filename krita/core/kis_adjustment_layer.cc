@@ -32,7 +32,6 @@
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
     : KisLayer (img, name, OPACITY_OPAQUE)
 {
-    Q_ASSERT(kfc);
     m_filterConfig = kfc;
     setSelection( selection );
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), "cached paint device for adjustmentlayer");
@@ -93,22 +92,31 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 
 Q_INT32 KisAdjustmentLayer::x() const
 {
-    return m_selection->getX();
+    if (m_selection)
+        return m_selection->getX();
+    else
+        return 0;
 }
 
 void KisAdjustmentLayer::setX(Q_INT32 x)
 {
-    m_selection->setX(x);
+    if (m_selection)
+        m_selection->setX(x);
+
 }
 
 Q_INT32 KisAdjustmentLayer::y() const
 {
-    return m_selection->getY();
+    if (m_selection)
+        return m_selection->getY();
+    else
+        return 0;
 }
 
 void KisAdjustmentLayer::setY(Q_INT32 y)
 {
-    m_selection->setY(y);
+    if (m_selection)
+        m_selection->setY(y);
 }
 
 QRect KisAdjustmentLayer::extent() const

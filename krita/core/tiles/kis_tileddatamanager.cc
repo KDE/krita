@@ -133,7 +133,8 @@ void KisTiledDataManager::setDefaultPixel(const Q_UINT8 *defPixel)
 bool KisTiledDataManager::write(KoStore *store)
 {
 
-    Q_ASSERT(store != 0);
+    if (store == 0) return false;
+    //Q_ASSERT(store != 0);
 
     char str[80];
 
@@ -161,13 +162,15 @@ bool KisTiledDataManager::write(KoStore *store)
 }
 bool KisTiledDataManager::read(KoStore *store)
 {
-    Q_ASSERT(store != 0);
+    if (store == 0) return false;
+    //Q_ASSERT(store != 0);
 
     char str[80];
     Q_INT32 x,y,w,h;
 
     QIODevice *stream = store->device();
-    Q_ASSERT(stream != 0);
+    if (stream == 0) return false;
+    //Q_ASSERT(stream != 0);
 
     stream->readLine(str, 79);
 
@@ -365,7 +368,8 @@ KisMementoSP KisTiledDataManager::getMemento()
 
 void KisTiledDataManager::rollback(KisMementoSP memento)
 {
-    Q_ASSERT(memento != 0);
+    if (memento == 0) return;
+    //Q_ASSERT(memento != 0);
 
     if (m_currentMemento != 0) {
         // Undo means our current memento is no longer valid so remove it.
@@ -453,7 +457,8 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
 
 void KisTiledDataManager::rollforward(KisMementoSP memento)
 {
-    Q_ASSERT(memento != 0);
+    if (memento == 0) return;
+    //Q_ASSERT(memento != 0);
 
     if (m_currentMemento != 0) {
         // Redo means our current memento is no longer valid so remove it.
@@ -542,7 +547,8 @@ void KisTiledDataManager::rollforward(KisMementoSP memento)
 
 void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile)
 {
-    Q_ASSERT(refTile != 0);
+    if (refTile == 0) return;
+    //Q_ASSERT(refTile != 0);
 
     // Basically we search for the tile in the current memento, and if it's already there we do nothing, otherwise
     //  we make a copy of the tile and put it in the current memento
@@ -627,7 +633,8 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
     // Lookup tile in hash table of current memento
     if (m_currentMemento)
     {
-        Q_ASSERT(m_currentMemento -> valid());
+        if (!m_currentMemento->valid()) return def;
+        //Q_ASSERT(m_currentMemento -> valid());
 
         Q_UINT32 tileHash = calcTileHash(col, row);
         tile = m_currentMemento->m_hashTable[tileHash];
@@ -683,7 +690,8 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
                     Q_INT32 x, Q_INT32 y,
                     Q_INT32 w, Q_INT32 h)
 {
-    Q_ASSERT(data != 0);
+    if (data == 0) return;
+    //Q_ASSERT(data != 0);
      if (w < 0)
          w = 0;
 
@@ -738,8 +746,10 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
                      Q_INT32 x, Q_INT32 y,
                      Q_INT32 w, Q_INT32 h)
 {
-    Q_ASSERT(bytes != 0);
-     // XXX: Is this correct?
+    if (bytes == 0) return;
+    //Q_ASSERT(bytes != 0);
+     
+    // XXX: Is this correct?
     if (w < 0)
         w = 0;
 

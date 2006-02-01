@@ -74,4 +74,21 @@ KisCImgFilterConfiguration * KisCImgconfigWidget::config()
     return cfg;
 
 }
+
+void KisCImgconfigWidget::setConfiguration(KisFilterConfiguration * config)
+{
+    KisCImgFilterConfiguration * cfg = dynamic_cast<KisCImgFilterConfiguration*>(config);
+    if (!cfg) return;
+
+    m_page->numDetail->setValue(cfg->power1);
+    m_page->numGradient->setValue(cfg->power2);
+    m_page->numTimeStep->setValue(cfg->dt);
+    m_page->numBlur->setValue(cfg->sigma);
+    m_page->numAngularStep->setValue(cfg->nb_iter);
+    m_page->numIntegralStep->setValue(cfg->dlength);
+    m_page->numGaussian->setValue(cfg->gauss_prec);
+    m_page->chkLinearInterpolation->setChecked(cfg->linear);
+    m_page->chkNormalize->setChecked(cfg->onormalize);
+}
+
 #include "kis_cimgconfig_widget.moc"

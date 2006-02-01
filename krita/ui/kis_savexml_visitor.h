@@ -117,7 +117,8 @@ public:
         layerElement.setAttribute("locked", layer -> locked());
         layerElement.setAttribute("layertype", "adjustmentlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
-        
+        layerElement.setAttribute("x", layer->x());
+        layerElement.setAttribute("y", layer->y());
         m_elem.appendChild(layerElement);
 
         m_count++;

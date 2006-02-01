@@ -30,20 +30,22 @@ class KisCImgFilterConfiguration : public KisFilterConfiguration
 
 public:
 
-    KisCImgFilterConfiguration() : KisFilterConfiguration( "cimg", 1 ){};
-
+    KisCImgFilterConfiguration();
+    virtual QString toString();
+    virtual void fromXML(const QString & s);
+    
 public:
 
     Q_INT32 nb_iter;    // Number of smoothing iterations
-    float   dt;         // Time step
-    float   dlength;    // Integration step
-    float   dtheta;     // Angular step (in degrees)
-    float   sigma;      // Structure tensor blurring
-    float   power1;     // Diffusion limiter along isophote
-    float   power2;     // Diffusion limiter along gradient
-    float   gauss_prec; //  Precision of the gaussian function
-    bool    onormalize; // Output image normalization (in [0,255])
-    bool    linear;     // Use linear interpolation for integration ?
+    double dt;         // Time step
+    double dlength;    // Integration step
+    double dtheta;     // Angular step (in degrees)
+    double sigma;      // Structure tensor blurring
+    double power1;     // Diffusion limiter along isophote
+    double power2;     // Diffusion limiter along gradient
+    double gauss_prec; //  Precision of the gaussian function
+    bool onormalize; // Output image normalization (in [0,255])
+    bool linear;     // Use linear interpolation for integration ?
 };
 
 
@@ -58,8 +60,8 @@ public:
     virtual bool supportsPreview() { return false; }
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
-
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return new KisCImgFilterConfiguration();};
 private:
 
     bool process();

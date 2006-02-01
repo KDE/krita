@@ -795,7 +795,7 @@ void LayerList::slotItemRenamed( QListViewItem *item, const QString &text, int c
     emit displayNameChanged( static_cast<LayerItem*>( item )->id(), text );
 }
 
-void LayerList::slotItemMoved( QPtrList<QListViewItem> &items, QPtrList<QListViewItem> &afterBefore, QPtrList<QListViewItem> &afterNow )
+void LayerList::slotItemMoved( QPtrList<QListViewItem> &items, QPtrList<QListViewItem> &/*afterBefore*/, QPtrList<QListViewItem> &afterNow )
 {
     for( int i = 0, n = items.count(); i < n; ++i )
     {

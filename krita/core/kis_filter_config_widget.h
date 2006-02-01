@@ -19,6 +19,8 @@
 #define _KIS_FILTER_CONFIG_WIDGET_H_
 
 #include <qwidget.h>
+#include "kis_filter_configuration.h"
+
 /**
  * Empty base class. Filters can build their own configuration widgets that
  * inherit this class. The configuration widget can emit sigPleaseUpdatePreview
@@ -32,6 +34,9 @@ public:
 
     KisFilterConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
     virtual ~KisFilterConfigWidget();
+
+    virtual void setConfiguration(KisFilterConfiguration * config) = 0;
+
 signals:
 
     /**

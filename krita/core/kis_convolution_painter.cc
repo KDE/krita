@@ -56,9 +56,9 @@
 #include "kis_convolution_painter.h"
 
 
-KisKernel* KisKernel::fromQImage(const QImage& img)
+KisKernelSP KisKernel::fromQImage(const QImage& img)
 {
-    KisKernel* k = new KisKernel;
+    KisKernelSP k = new KisKernel;
     k->width = img.width();
     k->height = img.height();
     k->offset = 0;
@@ -85,7 +85,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 {
 }
 
-void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                     KisConvolutionBorderOp borderOp,
                     KisChannelInfo::enumChannelFlags  channelFlags )
 {
@@ -113,7 +113,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
 
     widthMinuskhw = (w - khalfWidth);
     heightMinuskhh = (h - khalfHeight);
-    
+
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
     if (w < kw || h < kh || kw&1 == 0 ) return;
 
@@ -146,7 +146,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
 
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
-    
+
     for (; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
@@ -163,11 +163,11 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
                 {
                     Q_INT32 i = 0;
                     for (Q_INT32 krow = 0; krow <  kh; ++krow) {
-    
+
                         // col - khalfWidth = the left starting point of the kernel as centered on our pixel
                         // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
                         // kw = the width of the kernel
-    
+
                         // Fill the cache with pointers to the pixels under the kernel
                         KisHLineIteratorPixel kit = m_device -> createHLineIterator(col - khalfWidth, (row - khalfHeight) + krow, kw, false);
                         while (!kit.isDone()) {
@@ -216,7 +216,7 @@ void KisConvolutionPainter::applyMatrix(KisKernel * kernel, Q_INT32 x, Q_INT32 y
     emit notifyProgressDone();
 }
 
-void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
                            KisChannelInfo::enumChannelFlags channelFlags)
 {
     int lastProgressPercent = 0;
@@ -235,10 +235,10 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
     QMemArray<Q_UINT8 *> pixelPtrCache(kw * kh);
-    
+
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
-    
+
     for (; row < y + h; ++row) {
 
         // col = the x position of the pixel we want to change
@@ -273,7 +273,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
                         // so we need to create them only once, and then to copy them
                         if( x < khalfWidth)
                         { // the left pixels are outside of the layer, in the corner
-                            uint kcol = 0;
+                            Q_INT32 kcol = 0;
                             KisHLineIteratorPixel kit = m_device -> createHLineIterator(0, 0, kw, false);
                             for(; kcol < (khalfWidth - x) + 1; ++kcol)
                             { // First copy the address of the topleft pixel
@@ -306,11 +306,11 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
                         itH += heightMinuskhh - row - khalfHeight;
                     }
                     for (; krow <  itH; ++krow) {
-    
+
                         // col - khalfWidth = the left starting point of the kernel as centered on our pixel
                         // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
                         // kw = the width of the kernel
-    
+
                         // Fill the cache with pointers to the pixels under the kernel
                         Q_INT32 itHStart = col - khalfWidth;
                         Q_INT32 itW = kw;
@@ -335,7 +335,9 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
                     }
                     Q_INT32 lastvalid = i - kw;
                     for(; krow < kh; ++krow) {
-                        memcpy( pixelPtrCache.data() + krow * kw, pixelPtrCache.data() + lastvalid, kw*sizeof(Q_UINT8*)); // Copy the last valid line in the current line
+                        memcpy( pixelPtrCache.data() + krow * kw,
+                                pixelPtrCache.data() + lastvalid,
+                                kw * sizeof(Q_UINT8)); // Copy the last valid line in the current line
                     }
                     needFull = false;
                 } else {

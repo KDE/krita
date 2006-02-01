@@ -26,10 +26,8 @@
 class KisTile;
 class KisTiledDataManager;
 
-
 class KisMemento;
 typedef KSharedPtr<KisMemento> KisMementoSP;
-
 
 class KisMemento : public KShared
 {

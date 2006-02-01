@@ -54,6 +54,56 @@ using namespace cimg_library;
 typedef unsigned char uchar;
 
 
+KisCImgFilterConfiguration::KisCImgFilterConfiguration()
+    : KisFilterConfiguration("cimg", 1)
+{
+    nb_iter = 1;
+    dt = 20.0;
+    sigma = 1.4;
+    dlength = 0.8;
+    dtheta = 45.0;
+    onormalize = false;
+    power1 = 0.1;
+    power2 = 0.9;
+    gauss_prec = 3.0;
+    linear = true;
+}
+
+void KisCImgFilterConfiguration::fromXML(const QString & s)
+{
+    KisFilterConfiguration::fromXML( s );
+    
+    nb_iter = getInt("nb_iter", 1);
+    dt = getDouble("dt", 20.0);
+    sigma = getDouble("sigma", 1.4);
+    dlength  = getDouble("dlength", 0.8);
+    dtheta = getDouble("dtheta", 45.0);
+    onormalize = getBool("onormalize", false);
+    power1 = getDouble("power1", 0.1);
+    power2 = getDouble("power2", 0.9);
+    gauss_prec = getDouble("gauss_pref", 3.0);
+    linear = getBool("linear", true);
+}
+
+
+QString KisCImgFilterConfiguration::toString()
+{
+    m_properties.clear();
+    
+    setProperty("nb_iter", nb_iter);
+    setProperty("dt", dt);
+    setProperty("sigma", sigma);
+    setProperty("dlength", dlength);
+    setProperty("dtheta", dtheta);
+    setProperty("onormalize", onormalize);
+    setProperty("power1", power1);
+    setProperty("power2", power2);
+    setProperty("gauss_prec", gauss_prec);
+    setProperty("linear", linear);
+
+    return KisFilterConfiguration::toString();
+}
+
 KisCImgFilter::KisCImgFilter()
     : KisFilter(id(), "", i18n("&CImg Image Restoration...")),
       eigen(CImg<>(2,1), CImg<>(2,2))
@@ -595,17 +645,6 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
     {
         KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
         Q_CHECK_PTR(cfg);
-
-        cfg -> nb_iter        = 1;
-        cfg -> dt             = 20.0f;
-        cfg -> sigma          = 1.4f;
-        cfg -> dlength        = 0.8;
-        cfg -> dtheta         = 45.0;
-        cfg -> onormalize     = false;
-        cfg -> power1         = 0.1;
-        cfg -> power2         = 0.9;
-        cfg -> gauss_prec     = 3.0f;
-        cfg -> linear         = true;
         return cfg;
 
     } else {

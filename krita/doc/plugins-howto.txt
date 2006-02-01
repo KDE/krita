@@ -145,15 +145,81 @@ KisFilterConfiguration* /*config*/, const QRect& rect).
 The function gets passed two paint devices, a configuration object (which is not
 used in this simple filter) and a rect. The rect describes the area of the paint
 device which the filter should act on. This area is described by integers, which
-means no sub-pixel accuracy.
+means no sub-pixel accuracy. 
 
 The src paint device is for reading from, the dst paint device for writing to.
 These parameters may point to the same actual paint device, or be two different
-paint devices. (Note: this may change in the future
+paint devices. (Note: this may change to only one paint device in the future.)
+
+Now, let's look at the code line by line (XXX: Sander: docbook has very nice
+callouts for this...)
+
+KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+
+* This creates an iterator to read the existing pixels. Krita has three types of iterators:
+horizontal, vertical and rectangulaer. The rect iterator takes the most efficient path
+through the image data, but does not guarantee anything about the location of the next
+pixel it returns. The horizontal and vertical line iterators do guarantee the location
+of the pixels they return. 
 
 
-Paintops
+KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
+We create the destination iterator with the write setting to true. This means that if
+the destionation paint device is smaller than the rect we write, it will automatically
+be enlarged to fit every pixel we iterate over.
+
+Note that we've got a potential bug here: if dst and src are not the same device, then
+it is quite possible that the pixels returned by the iterators do not correspond. For
+every position in the iterator, src may be, for example, at 165,200, while dsk could
+be at 20,8 -- and therefore the copy we perform below may distort the image...
+
+    int pixelsProcessed = 0;
+    setProgressTotalSteps(rect.width() * rect.height());
+
+    KisColorSpace * cs = src->colorSpace();
+    Q_INT32 psize = cs->pixelSize();
+
+It's often useful to cache the size of a pixel in bytes outside the loop. 
+
+    while( ! srcIt.isDone() )
+    {
+        if(srcIt.isSelected())
+
+Want to know if a pixel is selected? That's easy -- use the above method.
+But selectedness is not a binary property of a pixel, a pixel can be
+half selected, barely selected or almost completely selected. That value
+you can also got from the iterator. Selections are actually a mask paint
+device with a range between 0 and 255, where 0 is completely unselected
+and 255 completely selected.
+
+        {
+            memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
+
+As noted above, this memcpy is a big bad bug... rawData() returns the array of
+bytes which is the current state of the pixel; oldRawData() returns the array of
+bytes as it was before we created the iterator.
+
+            cs->invertColor( dstIt.rawData(), 1);
+
+But this is correct: instead of figuring out which byte represents which channel,
+we use a function supplied by all colorspaces to invert the current pixel.
+
+        }
+        setProgress(++pixelsProcessed);
+        ++srcIt;
+        ++dstIt;
+    }
+    setProgressDone();
+
+Krita's progress bar functionality is something to study on your own.
+
+This is not all there is to creating a filter. Filters have two other important
+components: a configuration object and a configuration widget. The two interact
+closely.
+
+Important notes: if your filter relies on converting the pixels to another colorspace
+and back, you need to make that explicit in the XXX
 
 Tools
 

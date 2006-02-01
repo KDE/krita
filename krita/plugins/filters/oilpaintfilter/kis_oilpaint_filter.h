@@ -33,11 +33,14 @@ public:
         : KisFilterConfiguration( "oilpaint", 1 )
         , m_brushSize(brushSize),
           m_smooth(smooth)
-        {};
+        {
+            setProperty("brushSize", brushSize);
+            setProperty("smooth", smooth);
+        };
 public:
 
-    inline Q_UINT32 brushSize() { return m_brushSize; };
-    inline Q_UINT32 smooth() {return m_smooth; };
+    inline Q_UINT32 brushSize() { return getInt("brushSize"); };
+    inline Q_UINT32 smooth() {return getInt("smooth"); };
 
 private:
 
@@ -58,7 +61,8 @@ public:
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
-    virtual KisFilterConfiguration* configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration(QWidget*);
+    virtual KisFilterConfiguration * configuration() { return new KisOilPaintFilterConfiguration( 1, 30); };
 private:
     void OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int x, int y, int w, int h, int BrushSize, int Smoothness);
     uint MostFrequentColor(KisPaintDeviceSP, const QRect& bounds, int X, int Y, int Radius, int Intensity);

@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qvariant.h>
-
+#include <kdebug.h>
 #include "koffice_export.h"
 
 class KisPreviewDialog;
@@ -44,12 +44,7 @@ public:
      */
     KisFilterConfiguration(const QString & name, Q_INT32 version)
         : m_name(name)
-        , m_version(version) { init(); }
-
-    /**
-     * Create the filter config from the serialized representation.
-     */
-    KisFilterConfiguration(const QString &);
+        , m_version(version) {}
 
     /**
      * Deep copy the filter configFile
@@ -59,12 +54,10 @@ public:
 public:
 
     /**
-     * This is called after construction to perform any subclass
-     * specific initialization, such as filling variables from
-     * the map
+     * Fill the filter configuration object from the XML encoded representation in s.
      */
-    virtual bool init() { return true; }
-    
+    virtual void fromXML(const QString &);
+
     /**
      * Create a serialized version of this filter config
      */
@@ -91,13 +84,17 @@ public:
      */
     virtual bool getProperty(const QString & name, QVariant & value);
 
-private:
+    virtual QVariant getProperty(const QString & name);
+
+    int getInt(const QString & name, int def = 0);
+    double getDouble(const QString & name, double def = 0.0);
+    bool getBool(const QString & name, bool def = false);
+    QString getString(const QString & name, QString def = QString::null);
+    
+protected:
 
     QString m_name;
     Q_INT32 m_version;
-
-protected:
-
     QMap<QString, QVariant> m_properties;
     
 };

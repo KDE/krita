@@ -55,7 +55,7 @@ extern "C"
     {
         return new Kross::KritaCore::KritaCoreModule(manager);
     }
-};
+}
 
 
 using namespace Kross::KritaCore;

@@ -92,7 +92,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     // Get the paint info (we store the strength in the otherwise unused (?) height field of
     // the paint
-    double wetness = paint.w;
+    // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
     strength  = strength * (strength + info.pressure) * 0.5;
@@ -105,8 +105,8 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     int maskW = brush -> maskWidth(info);
     int maskH = brush -> maskHeight(info);
     KoPoint dest = (pos - (brush -> hotSpot(info)));
-    int xStart = dest.x();
-    int yStart = dest.y();
+    int xStart = (int)dest.x();
+    int yStart = (int)dest.y();
 
     for (int y = 0; y < maskH; y++) {
         KisHLineIteratorPixel dabIt = dab -> createHLineIterator(0, y, maskW, false);
@@ -134,19 +134,19 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 double rnd = rand() * (1.0 / RAND_MAX);
 
                 v = currentPix.rd;
-                currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
+                currentPix.rd = (Q_UINT16) floor(v + (paint.rd * strength - v) * contact + rnd);
                 v = currentPix.rw;
-                currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
+                currentPix.rw = (Q_UINT16) floor(v + (paint.rw * strength - v) * contact + rnd);
                 v = currentPix.gd;
-                currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
+                currentPix.gd = (Q_UINT16) floor(v + (paint.gd * strength - v) * contact + rnd);
                 v = currentPix.gw;
-                currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
+                currentPix.gw = (Q_UINT16) floor(v + (paint.gw * strength - v) * contact + rnd);
                 v = currentPix.bd;
-                currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
+                currentPix.bd = (Q_UINT16) floor(v + (paint.bd * strength - v) * contact + rnd);
                 v = currentPix.bw;
-                currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
+                currentPix.bw = (Q_UINT16) floor(v + (paint.bw * strength - v) * contact + rnd);
                 v = currentPix.w;
-                currentPix.w = floor(v + (paint.w - v) * contact + rnd);
+                currentPix.w = (Q_UINT16) floor(v + (paint.w - v) * contact + rnd);
 
                 currentPack.paint = currentPix;
                 *(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;

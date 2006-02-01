@@ -104,6 +104,7 @@ Q_INT32 KisHLineIterator::x() const { return m_iter->x(); }
  
 Q_INT32 KisHLineIterator::y() const { return m_iter->y(); }
 
+void KisHLineIterator::nextRow() { m_iter->nextRow(); }
 
 //---------------------------------------------------------------------------------------
 
@@ -139,3 +140,4 @@ Q_INT32 KisVLineIterator::x() const { return m_iter->x(); }
 
 Q_INT32 KisVLineIterator::y() const { return m_iter->y(); }
 
+void KisVLineIterator::nextCol() { return m_iter->nextCol(); }

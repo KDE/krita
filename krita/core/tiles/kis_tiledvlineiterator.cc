@@ -27,6 +27,7 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_I
     m_bottom(y + h - 1)
 {
     m_writable = writable;
+    m_top = y;
     m_x = x;
     m_y = y;
 
@@ -116,6 +117,27 @@ void KisTiledVLineIterator::nextTile()
         else
             m_bottomInTile = KisTile::HEIGHT - 1;
     }
+}
+
+void KisTiledVLineIterator::nextCol()
+{
+    m_x++;
+    m_xInTile++;
+    Q_INT32 newRow = yToRow(m_top);
+    m_y = m_top;
+    m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
+    m_yInTile = m_topInTile;
+    if( m_xInTile >= KisTile::WIDTH )
+    { // Need a new row
+        m_xInTile = 0;
+        m_col++;
+        m_row = newRow;
+        fetchTileData(m_col, m_row);
+    } else if( newRow != m_row ) {
+        m_row = newRow;
+        fetchTileData(m_col, m_row);
+    }
+    m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 
 /*

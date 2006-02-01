@@ -117,11 +117,14 @@ public:
     /// returns true when iterators has reached the end
     bool isDone()  const;
 
-    // current x position
+    /// current x position
     Q_INT32 x() const;
 
-    // current y position
+    /// current y position
     Q_INT32 y() const;
+
+    /// increment to the next row and rewind to the begining
+    void nextRow();
 
 
 private:
@@ -152,11 +155,14 @@ public:
     /// returns true when iterators has reached the end
     bool isDone() const;
 
-    // current x position
+    /// current x position
     Q_INT32 x() const;
 
-    // current y position
+    /// current y position
     Q_INT32 y() const;
+    
+    /// increment to the next column and rewind to the begining
+    void nextCol();
 
 private:
 

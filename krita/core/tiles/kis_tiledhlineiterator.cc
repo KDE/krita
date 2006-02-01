@@ -187,3 +187,24 @@ KisTiledHLineIterator & KisTiledHLineIterator::operator -- ()
 
     return *this;
 }
+
+void KisTiledHLineIterator::nextRow()
+{
+    m_y++;
+    m_yInTile++;
+    Q_INT32 newCol = xToCol(m_left);
+    m_x = m_left;
+    m_leftInTile = m_x - m_leftCol * KisTile::WIDTH;
+    m_xInTile = m_leftInTile;
+    if( m_yInTile >= KisTile::HEIGHT )
+    { // Need a new row
+        m_yInTile = 0;
+        m_row++;
+        m_col = newCol;
+        fetchTileData(m_col, m_row);
+    } else if( newCol != m_col ) {
+        m_col = newCol;
+        fetchTileData(m_col, m_row);
+    }
+    m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
+}

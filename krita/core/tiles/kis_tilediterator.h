@@ -150,6 +150,8 @@ public:
     /// returns true when the iterator has reached the end
     bool isDone() const { return m_x > m_right; }
 
+    /// increment to the next row and rewind to the begining
+    void nextRow();
 
 protected:
      Q_INT32 m_right;
@@ -190,15 +192,18 @@ public:
     /// returns true when the iterator has reached the end
     bool isDone() const { return m_y > m_bottom; }
 
+    /// increment to the next column and rewind to the begining
+    void nextCol();
 
 protected:
-     Q_INT32 m_bottom;
-     Q_INT32 m_topRow;
-     Q_INT32 m_bottomRow;
-     Q_INT32 m_xInTile;
-     Q_INT32 m_yInTile;
-     Q_INT32 m_topInTile;
-     Q_INT32 m_bottomInTile;
+    Q_INT32 m_top;
+    Q_INT32 m_bottom;
+    Q_INT32 m_topRow;
+    Q_INT32 m_bottomRow;
+    Q_INT32 m_xInTile;
+    Q_INT32 m_yInTile;
+    Q_INT32 m_topInTile;
+    Q_INT32 m_bottomInTile;
 
 private:
      void nextTile();

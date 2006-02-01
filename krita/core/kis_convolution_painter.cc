@@ -246,6 +246,18 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
 
         KisHLineIteratorPixel hit = m_device -> createHLineIterator(x, row, w, true);
         bool needFull = true;
+        
+        Q_INT32 itStart = row - khalfHeight;
+        Q_INT32 itH = kh;
+        if(itStart < 0)
+        {
+            itH += itStart;
+            itStart = 0;
+        } else if(itStart + kh > heightMinuskhh)
+        {
+            itH -= itStart + kh - heightMinuskhh;
+        }
+        KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);
         while (!hit.isDone()) {
             if (hit.isSelected()) {
 
@@ -334,17 +346,8 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernel * kernel, Q_INT32 x, Q_I
                     if(col < widthMinuskhw)
                     {
                         Q_INT32 i = kw - 1;
-                        Q_INT32 itStart = row - khalfHeight;
-                        Q_INT32 itH = kh;
-                        if(itStart < 0)
-                        {
-                            itH += itStart;
-                            itStart = 0;
-                        } else if(itStart + kh > heightMinuskhh)
-                        {
-                            itH -= itStart + kh - heightMinuskhh;
-                        }
-                        KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);
+//                         KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);
+                        kit.nextCol();
                         if( row < khalfHeight )
                         {
                             for(; i < (khalfHeight- row ) * kw; i+=kw)

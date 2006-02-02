@@ -36,6 +36,7 @@
 #include <qbuttongroup.h>
 #include <qstring.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -54,6 +55,10 @@
 #include <kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <kis_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_adjustment_layer.h>
 
 #include "wdgbumpmap.h"
 #include "bumpmap.h"
@@ -80,12 +85,12 @@ KritaBumpmap::~KritaBumpmap()
 {
 }
 
-KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "", i18n("&Bumpmap..."))
+KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "map", i18n("&Bumpmap..."))
 {
 }
 
 namespace {
-    void convertRow(KisPaintDeviceSP orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
+    void convertRow(KisPaintDevice * orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
     {
         KisColorSpace * csOrig = orig->colorSpace();
 
@@ -176,18 +181,33 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     // Crate a grayscale layer from the bumpmap layer.
     QRect bmRect;
-    KisPaintDeviceSP bumpmap;
+    KisPaintDevice * bumpmap;
 
-    
-    if (!config->bumpmap.isNull()) {
-/*  LAYERREMOVE
-         KisPaintDeviceSP bumplayer = src->image()->findLayer(config->bumpmap).paintDevice();
-*/
-         KisPaintDeviceSP bumplayer = 0;
+    if (!config->bumpmap.isNull() && src->image()) {
+        KisLayerSP l = src->image()->findLayer(config->bumpmap);
+        KisPaintDeviceSP bumplayer = 0;
 
-         if (bumplayer) {
+        KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
+        if (pl) {
+            bumplayer = pl->paintDevice();
+        }
+        else {
+            KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
+            if (gl) {
+                bumplayer = gl->projection();
+            }
+            else {
+                KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
+                if (al) {
+                    bumplayer = al->cachedPaintDevice();
+                }
+            }
+        }
+
+
+        if (bumplayer) {
             bmRect = bumplayer->exactBounds();
-            bumpmap = bumplayer;
+            bumpmap = bumplayer.data();
         }
         else {
             bmRect = rect;
@@ -196,7 +216,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
      }
      else {
          bmRect = rect;
-        bumpmap = src;
+         bumpmap = src;
     }
 
 
@@ -389,7 +409,7 @@ KisBumpmapConfiguration::KisBumpmapConfiguration()
 void KisBumpmapConfiguration::fromXML(const QString & s)
 {
     KisFilterConfiguration::fromXML( s );
-    
+
     bumpmap = QString::null;
     azimuth = 135.0;
     elevation = 45.0;
@@ -436,7 +456,7 @@ void KisBumpmapConfiguration::fromXML(const QString & s)
 QString KisBumpmapConfiguration::toString()
 {
     m_properties.clear();
-    
+
     //setProperty("bumpmap", QVariant(bumpmap));
     setProperty("azimuth", QVariant(azimuth));
     setProperty("elevation", QVariant(elevation));
@@ -449,7 +469,7 @@ QString KisBumpmapConfiguration::toString()
     setProperty("invert", QVariant(invert));
     setProperty("tiled", QVariant(tiled));
     setProperty("type", QVariant(type));
-    
+
     return KisFilterConfiguration::toString();
 }
 
@@ -467,27 +487,14 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
 
     l -> add(m_page);
     m_filter -> setAutoUpdate(false);
-
-    // XXX LAYERRemove
-/*
-    // Fill combobox with layers
-    const KisImageSP img = dev->image();
-    if (img) {
-        vKisLayerSP layers = img->layers();
-
-        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
-            const KisLayerSP& layer = *it;
-            m_page->cmbLayer->insertItem(layer->name());
-        }
-    }
-*/
+    m_page->txtSourceLayer->setText( "" );
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
 {
     KisBumpmapConfiguration * cfg = new KisBumpmapConfiguration();
-    cfg->bumpmap = QString::null; //m_page->cmbLayer->currentText();
+    cfg->bumpmap = m_page->txtSourceLayer->text();
     cfg->azimuth = m_page->dblAzimuth->value();
     cfg->elevation = m_page->dblElevation->value();
     cfg->depth = m_page->dblDepth->value();
@@ -507,8 +514,8 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * config)
 {
     KisBumpmapConfiguration * cfg = dynamic_cast<KisBumpmapConfiguration*>(config);
     if (!cfg) return;
-    
-    //m_page->cmbLayer->setCurrentText( cfg->bumpmap );
+
+    m_page->txtSourceLayer->setText( cfg->bumpmap );
     m_page->dblAzimuth->setValue(cfg->azimuth);
     m_page->dblElevation->setValue(cfg->elevation);
     m_page->dblDepth->setValue(cfg->depth);

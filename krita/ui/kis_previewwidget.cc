@@ -19,7 +19,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpainter.h>
@@ -57,31 +57,31 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 {
     m_autoupdate = true;
     m_previewIsDisplayed = true;
-    
+
     btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", KIcon::MainToolbar, 16 ));
     connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
     btnZoomOut->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", KIcon::MainToolbar, 16 ));
     connect(btnZoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
     btnUpdate->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "reload", KIcon::MainToolbar, 16 ));
     connect(btnUpdate, SIGNAL(clicked()), this, SLOT(forceUpdate()));
-    
+
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
-    
+
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
-    
+
 //     kToolBar1->insertButton("viewmag+",0, true, i18n("Zoom In"));
 //     connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
-    
+
 //     kToolBar1->insertButton("viewmag-",1, true, i18n("Zoom Out"));
 //     connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
 
 /*    kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, i18n("Update"));
     connect(kToolBar1->getButton(2),SIGNAL(clicked()),this,SLOT(forceUpdate()));
-    
+
     kToolBar1->insertButton("",3, true, i18n("Auto Update"));
     connect(kToolBar1->getButton(3),SIGNAL(clicked()),this,SLOT(toggleAutoUpdate()));
-    
+
     kToolBar1->insertButton("",4, true, i18n("Switch"));
     connect(kToolBar1->getButton(4),SIGNAL(clicked()),this,SLOT(toggleImageDisplayed()));*/
 // these currently don't yet work, reenable when they do work :)  (TZ-12-2005)
@@ -101,17 +101,18 @@ void KisPreviewWidget::forceUpdate()
 
 void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 {
-    Q_ASSERT(dev);
+    Q_ASSERT( dev );
+
     if (!dev) return;
 
     m_origDevice = dev;
-    
+
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     m_profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
 
     QRect r = dev->exactBounds();
-    
+
     m_groupBox->setTitle(i18n("Preview: ") + dev->name());
     m_previewIsDisplayed = true;
 
@@ -151,7 +152,7 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
     if (!m_origDevice) return;
     if (!m_preview) return;
     if (m_scaledPreview == 0) return;
-    
+
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
     {
@@ -176,13 +177,13 @@ bool KisPreviewWidget::getAutoUpdate()  const {
 bool KisPreviewWidget::zoomChanged()
 {
     if (!m_origDevice) return false;
-    
+
     QRect r = m_origDevice->exactBounds();
     int w = (int) ceil(r.width() * m_zoom );
     int h = (int) ceil(r.height() * m_zoom );
 
     if( w == 0 || h == 0 )
-        return false; 
+        return false;
 
     // Scale the original
     m_scaledOriginal = m_origDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
@@ -194,11 +195,14 @@ bool KisPreviewWidget::zoomChanged()
 
     // Scale the preview
     m_previewDevice = new KisPaintDevice( *m_origDevice );
+    // Some filters need access to the image to get other layers, and
+    // the copy constructor of KisPaintDevice doesn't copy the image.
+    m_previewDevice->setImage( m_origDevice->image() );
+
     if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
     {
         KisScaleWorker scaleWorker(m_previewDevice, m_zoom, m_zoom, new KisMitchellFilterStrategy());
-        scaleWorker.start();
-        scaleWorker.wait();
+        scaleWorker.run();
     }
 
     emit updated();
@@ -215,7 +219,7 @@ void KisPreviewWidget::zoomIn() {
 }
 
 void KisPreviewWidget::zoomOut() {
-    double oldZoom = m_zoom; 
+    double oldZoom = m_zoom;
     if (m_zoom > 0 && m_zoom / 1.5 > 1/8) {
         m_zoom = m_zoom / 1.5;
 	if( !zoomChanged() )

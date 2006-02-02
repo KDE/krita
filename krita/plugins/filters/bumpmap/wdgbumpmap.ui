@@ -330,12 +330,7 @@ layer, the current layer will be used.</string>
                 <string>&amp;Bumpmap layer:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>cmbLayer</cstring>
-            </property>
-        </widget>
-        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>cmbLayer</cstring>
+                <cstring>txtSourceLayer</cstring>
             </property>
         </widget>
         <widget class="QPushButton" row="0" column="3">
@@ -346,10 +341,17 @@ layer, the current layer will be used.</string>
                 <string>&amp;Preview</string>
             </property>
         </widget>
+        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>txtSourceLayer</cstring>
+            </property>
+        </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
-    <tabstop>cmbLayer</tabstop>
+    <tabstop>txtSourceLayer</tabstop>
     <tabstop>radioLinear</tabstop>
     <tabstop>chkCompensate</tabstop>
     <tabstop>chkInvert</tabstop>

@@ -76,7 +76,7 @@ public:
 #ifdef __BIG_ENDIAN__
     cmsHTRANSFORM bigEndianTransform;
 #endif
-    
+
 };
 
 
@@ -881,11 +881,14 @@ Q_INT32 KisImage::height() const
 
 KisPaintDeviceSP KisImage::activeDevice()
 {
-    if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data()))
+    if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
         return layer -> paintDevice();
-    else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data()))
-        if (layer->selection())
+    }
+    else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data())) {
+        if (layer->selection()) {
             return layer -> selection().data();
+        }
+    }
     return 0;
 }
 

@@ -106,8 +106,8 @@ void KisScaleWorker::run()
         {
             if (!(contribY.p[srcpos].m_pixel < 0 || contribY.p[srcpos].m_pixel >= height))
             {
-                //tmpRows[contribY.p[srcpos].m_pixel] = new Q_UINT8[ width * m_pixelSize ];
-                tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
+                tmpRows[contribY.p[srcpos].m_pixel] = new Q_UINT8[ width * m_pixelSize ];
+                //tmpRows[ contribY.p[srcpos].m_pixel ] = tmpRowsMem[ srcpos ];
                 m_dev ->readBytes(tmpRows[contribY.p[srcpos].m_pixel], 0, contribY.p[srcpos].m_pixel, width, 1);
             }
         }

@@ -59,9 +59,9 @@ KisFilterManager::KisFilterManager(KisView * view, KisDoc * doc)
     m_lastDialog = 0;
     m_lastFilter = 0;
     m_lastWidget = 0;
-    
+
     m_filterMapper = new QSignalMapper(this);
-    
+
     connect(m_filterMapper, SIGNAL(mapped(int)), this, SLOT(slotApplyFilter(int)));
 
 }
@@ -101,14 +101,14 @@ void KisFilterManager::setup(KActionCollection * ac)
     m_filterActionMenus.insert("enhance", am);
 
     am = new KActionMenu(i18n("Map"), ac, "map_filters");
-    m_filterActionMenus.insert("map", am);    
+    m_filterActionMenus.insert("map", am);
 
 //     am = new KActionMenu(i18n("Non-photorealistic"), ac, "nonphotorealistic_filters");
 //     m_filterActionMenus.insert("nonphotorealistic", am);
 
     am = new KActionMenu(i18n("Other"), ac, "misc_filters");
     m_filterActionMenus.insert("", am);
-    
+
     m_reapplyAction = new KAction(i18n("Apply Filter Again"),
                 "Ctrl+Shift+J",
                 this, SLOT(slotApply()),
@@ -125,10 +125,10 @@ void KisFilterManager::setup(KActionCollection * ac)
 
         // Create action
         KAction * a = new KAction(f->menuEntry(), 0, m_filterMapper, SLOT(map()), ac);
-        
+
         // Add action to the right submenu
         m_filterActionMenus.find( f->menuCategory() )->insert(a);
-        
+
         // Add filter to list of filters for mapper
         m_filterMapper->setMapping( a, i );
 
@@ -165,7 +165,7 @@ void KisFilterManager::updateGUI()
             a->setEnabled(false);
         }
     }
-    
+
 }
 
 void KisFilterManager::slotApply()
@@ -182,7 +182,7 @@ bool KisFilterManager::apply()
 
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return false;
-    
+
     QApplication::setOverrideCursor( Qt::waitCursor );
 
     //Apply the filter
@@ -203,7 +203,7 @@ bool KisFilterManager::apply()
 
     m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
     m_lastFilter->setProgressDisplay( m_view->progressDisplay());
-    
+
     KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), dev);
     Q_CHECK_PTR(cmd);
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
@@ -220,9 +220,9 @@ bool KisFilterManager::apply()
     }
 
     m_lastFilter->disableProgress();
-    
+
     QApplication::restoreOverrideCursor();
-    
+
     return true;
 }
 
@@ -255,7 +255,7 @@ void KisFilterManager::slotApplyFilter(int i)
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
                                                "lab16degradation") != KMessageBox::Continue) return;
-                                               
+
         }
         else if (m_lastFilter->colorSpaceIndendendence() == TO_RGBA8) {
             if (KMessageBox::warningContinueCancel(m_view,
@@ -267,7 +267,7 @@ void KisFilterManager::slotApplyFilter(int i)
                                                "rgba8degradation") != KMessageBox::Continue) return;
         }
     }
-    
+
     m_lastFilter->disableProgress();
 
     // Create the config dialog
@@ -275,26 +275,26 @@ void KisFilterManager::slotApplyFilter(int i)
     Q_CHECK_PTR(m_lastDialog);
     m_lastWidget = m_lastFilter->createConfigurationWidget( (QWidget*)m_lastDialog->container(), dev );
 
-    
+
     if( m_lastWidget != 0)
     {
         connect(m_lastWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
-    
+
         m_lastDialog->previewWidget()->slotSetDevice( dev );
 
         connect(m_lastDialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
-        
+
         QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_lastDialog->container(), 1, 1);
-        
+
         widgetLayout -> addWidget(m_lastWidget, 0 , 0);
-        
+
         m_lastDialog->container()->setMinimumSize(m_lastWidget->minimumSize());
-        
+
         refreshPreview();
-        
+
         if(m_lastDialog->exec() == QDialog::Rejected )
         {
-            delete m_lastDialog; // XXX: Can I do this? It's too hot to think.
+            delete m_lastDialog;
             m_lastDialog = oldDialog;
             m_lastFilter = oldFilter;
             return;
@@ -326,12 +326,12 @@ void KisFilterManager::refreshPreview( )
 {
     if( m_lastDialog == 0 )
         return;
-        
+
     KisPaintDeviceSP dev = m_lastDialog -> previewWidget()->getDevice();
     if (!dev) return;
-    
+
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget);
-    
+
     QRect rect = dev -> extent();
     KisTransaction cmd("Temporary transaction", dev);
     m_lastFilter->process(dev, dev, config, rect);

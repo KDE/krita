@@ -162,8 +162,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 KisDoc::~KisDoc()
 {
     // XXX: Now gives a crash, see CRASHES file.
-    //delete m_cmdHistory;
-        delete m_dcop;
+    delete m_cmdHistory;
+    delete m_dcop;
     delete m_nserver;
 }
 

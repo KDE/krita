@@ -95,6 +95,7 @@
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_device.h"
+#include "kis_tool_freehand.h"
 //#include "kis_guide.h"
 
 #include "kis_layerbox.h"
@@ -319,6 +320,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     // Set the current image for real now everything is ready to go.
     setCurrentImage(m_image);
     m_paletteManager->showWidget( "layerbox" );
+    setFocus();
 }
 
 KisView::~KisView()
@@ -1938,22 +1940,28 @@ void KisView::setBGColor(const KisColor& c)
 {
     m_bg = c;
     notifyObservers();
+    emit sigBGQColorChanged( c.toQColor() );
 }
 
 void KisView::setFGColor(const KisColor& c)
 {
     m_fg = c;
     notifyObservers();
+    emit sigFGQColorChanged( c.toQColor() );
 }
 
 void KisView::slotSetFGColor(const KisColor& c)
 {
-    setFGColor(c);
+
+    m_fg = c;
+    notifyObservers();
 }
 
 void KisView::slotSetBGColor(const KisColor& c)
 {
-    setBGColor(c);
+
+    m_bg = c;
+    notifyObservers();
 }
 
 void KisView::slotSetFGQColor(const QColor& c)
@@ -2083,6 +2091,9 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //            }
 //        }
 //    }
+    // Freehand tools bcome a colorpicker when ctrl is pressed
+    KisToolFreehand * freehand = dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool());
+    
     if (e->button() == Qt::RightButton) {
 
         if (m_popup == 0) {
@@ -2090,6 +2101,17 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
             m_popup = (QPopupMenu *)factory()->container("image_popup", this);
         }
         m_popup->popup(e->globalPos().roundQPoint());
+    }
+    else if (e->button() == Qt::LeftButton
+             && e->state() == Qt::ControlButton
+             && freehand) {
+        kdDebug() << "Going to pick color\n";
+        KisTool * oldTool = m_toolManager->currentTool();
+        m_toolManager->setCurrentTool("tool_colorpicker");
+        KisPoint p = viewToWindow(e -> pos());
+        KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::LeftButton);
+        m_toolManager->currentTool()->buttonPress(&ev);
+        m_toolManager->setCurrentTool(oldTool);
     }
     else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
@@ -2660,9 +2682,11 @@ void KisView::layerRemove()
 
         if (layer) {
             //Q_INT32 n = img -> index(layer);
-
+            if (layer->parent())
+                layer->parent()->setDirty(true);
             img->removeLayer(layer);
-            img->activeLayer()->setDirty(true);
+            if (img->activeLayer())
+                img->activeLayer()->setDirty(true);
             img->notify(layer->extent());
             resizeEvent(0);
             updateCanvas();

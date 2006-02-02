@@ -145,6 +145,7 @@ bool KisGroupLayer::removeLayer(int x)
         at(index) -> m_parent = 0;
         at(index) -> m_index = -1;
         m_layers.erase(m_layers.begin() + reverseIndex(index));
+        setDirty(true);
         return true;
     }
     kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;

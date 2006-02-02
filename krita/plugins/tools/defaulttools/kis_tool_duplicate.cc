@@ -99,8 +99,10 @@ void KisToolDuplicate::initPaint(KisEvent *e)
         super::initPaint(e);
         painter() -> setDuplicateOffset( m_offset );
         KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("duplicate", painter());
-        op -> setSource(m_source);
-        painter() -> setPaintOp(op);
+        if (op) {
+            op -> setSource(m_source);
+            painter() -> setPaintOp(op);
+        }
     }
 }
 

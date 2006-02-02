@@ -50,12 +50,6 @@ KisToolPolygon::KisToolPolygon()
           m_currentImage (0)
 {
     setName("tool_polygon");
-    // initialize ellipse tool settings
-//    m_lineThickness = 4;
-//     m_opacity = 255;
-//     m_usePattern = false;
-//     m_useGradient = false;
-//     m_fillSolid = false;
 }
 
 KisToolPolygon::~KisToolPolygon()
@@ -72,7 +66,7 @@ void KisToolPolygon::update (KisCanvasSubject *subject)
 void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage) {
-        if (event -> button() == LeftButton) {
+        if (event->button() == LeftButton && event->state() != ShiftButton) {
 
             m_dragging = true;
 
@@ -86,38 +80,48 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event -> pos();
                 draw();
             }
-        } else if (event -> state() == ShiftButton) {
-            // erase old lines on canvas
-            draw();
-            m_dragging = false;
-
-            KisPaintDeviceSP device = m_currentImage->activeDevice ();;
-            KisPainter painter (device);
-            painter.beginTransaction (i18n ("Polygon"));
-
-            painter.setPaintColor(m_subject -> fgColor());
-            painter.setBackgroundColor(m_subject -> bgColor());
-            painter.setFillStyle(fillStyle());
-            painter.setBrush(m_subject -> currentBrush());
-            painter.setPattern(m_subject -> currentPattern());
-            painter.setOpacity(m_opacity);
-            painter.setCompositeOp(m_compositeOp);
-            KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
-            painter.setPaintOp(op); // Painter takes ownership
-
-            painter.paintPolygon(m_points);
-
-            m_points.clear();
-
-            m_currentImage -> notify( painter.dirtyRect() );
-            notifyModified();
-
-            KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-            if (adapter) {
-                adapter -> addCommand(painter.endTransaction());
-            }
+        } else if (event->button() == LeftButton && event->state() == ShiftButton) {
+            finish();
         }
     }
+}
+
+void KisToolPolygon::finish()
+{
+    // erase old lines on canvas
+    draw();
+    m_dragging = false;
+
+    KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+    KisPainter painter (device);
+    painter.beginTransaction (i18n ("Polygon"));
+
+    painter.setPaintColor(m_subject -> fgColor());
+    painter.setBackgroundColor(m_subject -> bgColor());
+    painter.setFillStyle(fillStyle());
+    painter.setBrush(m_subject -> currentBrush());
+    painter.setPattern(m_subject -> currentPattern());
+    painter.setOpacity(m_opacity);
+    painter.setCompositeOp(m_compositeOp);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
+    painter.setPaintOp(op); // Painter takes ownership
+
+    painter.paintPolygon(m_points);
+
+    m_points.clear();
+
+    m_currentImage -> notify( painter.dirtyRect() );
+    notifyModified();
+
+    KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+    if (adapter) {
+        adapter -> addCommand(painter.endTransaction());
+    }
+}
+
+void KisToolPolygon::doubleClick( KisDoubleClickEvent * )
+{
+    finish();
 }
 
 void KisToolPolygon::move(KisMoveEvent *event)

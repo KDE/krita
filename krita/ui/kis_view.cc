@@ -162,6 +162,8 @@
 KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name)
     : super(doc, parent, name)
     , KXMLGUIBuilder( shell() )
+    , m_panning( false )
+    , m_oldTool( 0 )
     , m_doc( doc )
     , m_canvas( 0 )
     , m_popup( 0 )
@@ -2268,8 +2270,8 @@ void KisView::canvasGotLeaveEvent (QEvent *e)
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
-    if(event->state() == ControlButton )
-    {
+    //if(event->state() == ControlButton )
+    //{
         if(event->delta() / 120 != 0)
         {
             if(event->delta() > 0)
@@ -2279,13 +2281,27 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
                 zoomOut();
             }
         }
-    } else {
-        QApplication::sendEvent(m_vScroll, event);
-    }
+    //} else {
+    //    QApplication::sendEvent(m_vScroll, event);
+    //}
 }
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Space) {
+        if (!m_panning) {
+            // Set tool temporarily to pan
+            m_panning = true;
+            m_oldTool = m_toolManager->currentTool();
+            m_toolManager->setCurrentTool( "tool_pan" );
+        }
+        else {
+            // Unset panning
+            m_panning = false;
+            m_toolManager->setCurrentTool( m_oldTool );
+            m_oldTool = 0;
+        }
+    }
     if (m_toolManager->currentTool())
         m_toolManager->currentTool() -> keyPress(event);
 }

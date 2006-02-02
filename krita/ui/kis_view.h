@@ -470,6 +470,9 @@ private slots:
 
 private:
 
+    bool m_panning;
+    KisTool * m_oldTool;
+    
     KisDoc *m_doc;
     KisCanvas *m_canvas;
     QPopupMenu * m_popup;

@@ -58,10 +58,12 @@ public:
     virtual Q_UINT32 priority() { return 5; }
 
     virtual void buttonPress(KisButtonPressEvent *event);
+    virtual void doubleClick(KisDoubleClickEvent *e);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual QString quickHelp() const;
-    
+    void finish();
+
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);

@@ -243,7 +243,6 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
-    Q_ASSERT( img );
     Q_ASSERT( colorSpace );
 
     m_dcop = 0;

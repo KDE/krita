@@ -59,12 +59,14 @@ public:
     virtual QString quickHelp() const {
         return i18n("Shift-click will end the polygon.");
     }
+    virtual void doubleClick(KisDoubleClickEvent * event);
+
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     void draw(KisCanvasPainter& gc);
     void draw();
-
+    void finish();
 protected:
     KisPoint m_dragStart;
     KisPoint m_dragEnd;

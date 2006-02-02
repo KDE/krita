@@ -107,7 +107,6 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     QValueList<KisID>::iterator end = m_paintops -> end();
     m_displayedOps -> clear();
     m_cmbPaintops->clear();
-    kdDebug() << "CS: " << cs->id().id() << "\n";
     for ( ; it != end; ++it ) {
         if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
             QPixmap pm = paintopPixmap(*it);

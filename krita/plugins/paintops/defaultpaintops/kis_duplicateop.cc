@@ -30,6 +30,8 @@
 #include "kis_layer.h"
 #include "kis_painter.h"
 #include "kis_types.h"
+#include "kis_meta_registry.h"
+#include "kis_colorspace_factory_registry.h"
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
@@ -116,16 +118,17 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copyPainter.end();
 
     // Convert the dab to the colorspace of a selection
-    dab -> convertTo(srcdev -> selection() -> colorSpace());
+    dab -> convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
 
     // Add the dab as selection to the srcdev
     KisPainter copySelection(srcdev -> selection().data());
     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
     copySelection.end();
 
-    // copy the seldev onto a new device, after applying the dab selection
+    // copy the srcdev onto a new device, after applying the dab selection
     KisPaintDeviceSP target = new KisPaintDevice(srcdev -> colorSpace());
     copyPainter.begin(target);
+    
     copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev -> selection(),
                              OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();

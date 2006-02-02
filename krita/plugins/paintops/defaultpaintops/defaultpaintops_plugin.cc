@@ -60,7 +60,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, 
         // themselves in the plugin initialization code.
         r -> add ( new KisAirbrushOpFactory );
         r -> add ( new KisBrushOpFactory );
-        //r -> add ( new KisDuplicateOpFactory );
+        r -> add ( new KisDuplicateOpFactory );
         r -> add ( new KisEraseOpFactory );
         r -> add ( new KisPenOpFactory );
     }

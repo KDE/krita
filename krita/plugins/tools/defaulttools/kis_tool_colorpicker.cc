@@ -44,6 +44,7 @@
 #include "kis_resourceserver.h"
 #include "kis_palette.h"
 #include "wdgcolorpicker.h"
+#include "kis_layer_stringlist_visitor.h"
 
 namespace {
     // The location of the sample all visible layers in the combobox
@@ -223,25 +224,15 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
 
     m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
+    
     m_optionsWidget -> cmbSources -> setCurrentItem(0);
+
     m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
     m_optionsWidget -> cbPalette -> setChecked(m_addPalette);
     m_optionsWidget -> radius -> setValue(m_radius);
 
     m_optionsWidget -> listViewChannels -> setSorting(-1);
-/* LAYERREMOVE
-    const KisImageSP img = m_subject->currentImg();
-    if (img) {
-        vKisLayerSP layers = img->layers();
 
-        for (vKisLayerSP_cit it = layers.begin(); it != layers.end(); ++it) {
-            const KisLayerSP& layer = *it;
-            if (layer->visible()) {
-                m_optionsWidget->cmbSources->insertItem(layer->name());
-            }
-        }
-    }
-*/
     connect(m_optionsWidget -> cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
     connect(m_optionsWidget -> cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
     connect(m_optionsWidget -> cbPalette, SIGNAL(toggled(bool)),

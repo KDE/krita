@@ -26,6 +26,8 @@ Filters
 C  * Fix crashes in filters
 R  * Check filters for colorspace problems
 B  * Fix buttons in brightness/contrast
+R  * Optimize rendering of preview (timer, thread, on-demand rendering of filter preview list)
+     see: 120224
 
 Colorspaces
 
@@ -47,12 +49,11 @@ R  * disable everything necessary when the current layer is wet.
 R  * check whether we indeed support the CREATE spec
 ?  * Use the right profile and colorspace when loading layers. The code in kis_load_visitor.h is commented out
 C  * finish the convolution painter
+?  * The nameserver is only initialized when you first add a layer, leading to duplicate layer names
 
 User interface
 
-R  * Remove preview from rotate dialog (again...)
 B  * Add image preview to bird's eyeview box
-G  * Add GUI to actually group layers
 R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
 A  * Display grid in OpenGL mode

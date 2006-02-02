@@ -25,6 +25,11 @@
                     <string>Sample All Visible Layers</string>
                 </property>
             </item>
+            <item>
+                <property name="text">
+                    <string>Current Layer</string>
+                </property>
+            </item>
             <property name="name">
                 <cstring>cmbSources</cstring>
             </property>

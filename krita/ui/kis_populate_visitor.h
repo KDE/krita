@@ -48,7 +48,8 @@ class KisPopulateVisitor: public KisLayerVisitor
 
         virtual bool visit(KisPaintLayer* layer)
         {
-            if (!layer->temporary()) add(layer);
+            if (!layer->temporary())
+                add(layer);
             return true;
         }
 

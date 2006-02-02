@@ -471,6 +471,8 @@ private slots:
 private:
 
     bool m_panning;
+    bool m_picking;
+    
     KisTool * m_oldTool;
     
     KisDoc *m_doc;

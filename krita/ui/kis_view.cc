@@ -164,6 +164,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     : super(doc, parent, name)
     , KXMLGUIBuilder( shell() )
     , m_panning( false )
+    , m_picking( false )
     , m_oldTool( 0 )
     , m_doc( doc )
     , m_canvas( 0 )
@@ -2091,9 +2092,6 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //            }
 //        }
 //    }
-    // Freehand tools bcome a colorpicker when ctrl is pressed
-    KisToolFreehand * freehand = dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool());
-    
     if (e->button() == Qt::RightButton) {
 
         if (m_popup == 0) {
@@ -2101,17 +2099,6 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
             m_popup = (QPopupMenu *)factory()->container("image_popup", this);
         }
         m_popup->popup(e->globalPos().roundQPoint());
-    }
-    else if (e->button() == Qt::LeftButton
-             && e->state() == Qt::ControlButton
-             && freehand) {
-        kdDebug() << "Going to pick color\n";
-        KisTool * oldTool = m_toolManager->currentTool();
-        m_toolManager->setCurrentTool("tool_colorpicker");
-        KisPoint p = viewToWindow(e -> pos());
-        KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), Qt::LeftButton, Qt::LeftButton);
-        m_toolManager->currentTool()->buttonPress(&ev);
-        m_toolManager->setCurrentTool(oldTool);
     }
     else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());
@@ -2310,7 +2297,13 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Space) {
+    kdDebug() << m_toolManager->currentTool()->name() << ", " << (dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool())) << "\n";
+    if (dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool()) && event->key() == Qt::Key_Control && m_panning == false) {
+        m_oldTool = m_toolManager->currentTool();
+        m_picking = true;
+        m_toolManager->setCurrentTool("tool_colorpicker");
+    }
+    if (event->key() == Qt::Key_Space && m_picking == false) {
         if (!m_panning) {
             // Set tool temporarily to pan
             m_panning = true;
@@ -2330,6 +2323,11 @@ void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 
 void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Control && m_picking == true) {
+        m_picking = false;
+        m_toolManager->setCurrentTool(m_oldTool);
+        m_oldTool = 0;
+    }
     if (m_toolManager->currentTool())
         m_toolManager->currentTool() -> keyRelease(event);
 }

@@ -100,17 +100,13 @@ public:
     virtual QRect extent() const { return m_doc -> geometry(); }
     virtual QRect exactBounds() const { return m_doc -> geometry(); }
 
-    virtual QImage createThumbnail(Q_INT32, Q_INT32) {
-        return QImage(); //m_paintLayer -> createThumbnail(w, h);
-    }
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
 
     virtual bool accept(KisLayerVisitor& visitor) {
         return visitor.visit(this);
     }
 
-    //virtual KisPaintLayerSP paintLayer() { return m_paintLayer; }
-
-    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection);
+    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
 
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 

@@ -201,7 +201,7 @@ public:
         if (!layer -> visible())
             return true;
 
-        KisPaintDeviceSP dev(layer -> prepareProjection(m_projection));
+        KisPaintDeviceSP dev(layer -> prepareProjection(m_projection, m_rc));
         if (!dev)
             return true;
 

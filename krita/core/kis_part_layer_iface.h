@@ -28,8 +28,7 @@ class KisPartLayer : public KisLayer {
 public:
     KisPartLayer(KisImage *img, const QString &name, Q_UINT8 opacity)
         : super(img, name, opacity) {}
-    //virtual KisPaintLayerSP paintLayer() = 0;
-    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection) = 0;
+    virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
 };
 
 #endif // KIS_PART_IFACE_LAYER_IFACE_

@@ -44,7 +44,6 @@
 #include "kis_resourceserver.h"
 #include "kis_palette.h"
 #include "wdgcolorpicker.h"
-#include "kis_layer_stringlist_visitor.h"
 
 namespace {
     // The location of the sample all visible layers in the combobox

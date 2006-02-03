@@ -56,6 +56,7 @@ KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
     : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
+        m_top = rhs.m_top;
         m_bottom = rhs.m_bottom;
         m_topRow = rhs.m_topRow;
         m_bottomRow = rhs.m_bottomRow;
@@ -71,6 +72,7 @@ KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineItera
     if (this != &rhs) {
         KisTiledIterator::operator=(rhs);
 
+        m_top = rhs.m_top;
         m_bottom = rhs.m_bottom;
         m_topRow = rhs.m_topRow;
         m_bottomRow = rhs.m_bottomRow;
@@ -123,7 +125,6 @@ void KisTiledVLineIterator::nextCol()
 {
     m_x++;
     m_xInTile++;
-    Q_INT32 newRow = yToRow(m_top);
     m_y = m_top;
     m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
     m_yInTile = m_topInTile;
@@ -131,12 +132,17 @@ void KisTiledVLineIterator::nextCol()
     { // Need a new row
         m_xInTile = 0;
         m_col++;
-        m_row = newRow;
+        m_row = m_topRow;
         fetchTileData(m_col, m_row);
-    } else if( newRow != m_row ) {
-        m_row = newRow;
+    } else if( m_topRow != m_row ) {
+        m_row = m_topRow;
         fetchTileData(m_col, m_row);
     }
+    if(m_row == m_bottomRow)
+        m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
+    else
+        m_bottomInTile = KisTile::HEIGHT - 1;
+
     m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 

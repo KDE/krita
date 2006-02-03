@@ -192,7 +192,6 @@ void KisTiledHLineIterator::nextRow()
 {
     m_y++;
     m_yInTile++;
-    Q_INT32 newCol = xToCol(m_left);
     m_x = m_left;
     m_leftInTile = m_x - m_leftCol * KisTile::WIDTH;
     m_xInTile = m_leftInTile;
@@ -200,11 +199,15 @@ void KisTiledHLineIterator::nextRow()
     { // Need a new row
         m_yInTile = 0;
         m_row++;
-        m_col = newCol;
+        m_col = m_leftCol;
         fetchTileData(m_col, m_row);
-    } else if( newCol != m_col ) {
-        m_col = newCol;
+    } else if( m_leftCol != m_col ) {
+        m_col = m_leftCol;
         fetchTileData(m_col, m_row);
     }
+    if(m_col == m_rightCol)
+        m_rightInTile = m_right - m_rightCol * KisTile::WIDTH;
+    else
+        m_rightInTile = KisTile::WIDTH - 1;
     m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }

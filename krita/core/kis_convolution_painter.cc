@@ -337,7 +337,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
                     for(; krow < kh; ++krow) {
                         memcpy( pixelPtrCache.data() + krow * kw,
                                 pixelPtrCache.data() + lastvalid,
-                                kw * sizeof(Q_UINT8)); // Copy the last valid line in the current line
+                                kw * sizeof(Q_UINT8*)); // Copy the last valid line in the current line
                     }
                     needFull = false;
                 } else {

@@ -18,4 +18,6 @@ include_HEADERS = \
     kis_progress_display_interface.h \
     kis_progress_subject.h \
     kis_shared_ptr_vector.h \
-    kis_undo_adapter.h 
+    kis_undo_adapter.h \
+    kis_generic_registry.h
+

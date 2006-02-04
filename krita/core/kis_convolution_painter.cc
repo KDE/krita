@@ -69,7 +69,7 @@ KisKernelSP KisKernel::fromQImage(const QImage& img)
     k->factor = 0;
     for(uint i = 0; i < count; ++i , ++itData, ++itImg)
     {
-        *itData = *itImg;
+        *itData = 255 - *itImg;
         k->factor += *itData;
     }
     return k;

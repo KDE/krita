@@ -44,8 +44,8 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh
 }
 Q_INT8 KisAutobrushCircleShape::valueAt(Q_INT32 x, Q_INT32 y)
 {
-    double xr = (x - m_xcentre);
-    double yr = (y - m_ycentre);
+    double xr = (x - m_xcentre) + 0.5;
+    double yr = (y - m_ycentre) + 0.5;
     double n = norme( xr * m_xcoef, yr * m_ycoef);
     if( n > 1 )
     {

@@ -110,7 +110,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     m_filterActionMenus.insert("", am);
 
     m_reapplyAction = new KAction(i18n("Apply Filter Again"),
-                "Ctrl+Shift+J",
+                "Ctrl+Shift+F",
                 this, SLOT(slotApply()),
                 ac, "filter_apply_again");
 

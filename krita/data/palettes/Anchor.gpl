@@ -1,0 +1,448 @@
+GIMP Palette
+Name: Anchor
+#
+253 251 255	1 Snow White
+250 250 250	2 White
+251 187 167	6 Salmon - VY LT
+248 165 151	8 Salmon - LT
+244 138 125	9 Salmon - MED LT
+225  90  82	10 Salmon - MED
+225  62  41	11 Salmon - MED DK
+178  16  18	13 Salmon - DK
+164   0  43	19 Burgundy - MED
+121  12  20	20 Burgundy - MED DK
+ 89   9  31	22 Burgundy - VY DK
+251 190 195	23 Baby Pink
+250 166 171	24 Carnation - VY LT
+244 154 169	25 Carnation - LT
+245 105 136	26 Carnation - MED LT
+247 107 132	27 Carnation - MED
+239  59  88	28 Carnation - MED
+204  10  34	29 Carnation - DK
+247 124 138	31 Blush - LT
+248  90 101	33 Blush - MED
+234  49  56	35 Blush - DK
+245 147 158	36 Blossom Pink - LT
+225  58  95	38 Blossom Pink - MED
+177  21  32	39 Blossom Pink - DK
+241  89 129	40 Carmine Rose - LT
+218  59  95	41 Carmine Rose - MED LT
+180  10  62	42 Carmine Rose - MED
+125  20  40	43 Carmine Rose - MED DK
+ 97   0  33	44 Carmine Rose - DK
+ 95  15  20	45 Carmine Rose - VY DK
+211   5  13	46 Crimson Red
+172   0  35	47 Carmine Red
+249 196 206	48 China Rose - VY LT
+236 181 189	49 China Rose - LT
+245 153 175	50 China Rose - MED
+255 164 194	51 Nelke Dunkel
+244  98 147	52 China Rose - MED DK
+224  40  98	54 China Rose - DK
+242 121 163	55 Beauty Rose - LT
+218  27  91	57 Beauty Rose - MED
+168   6  70	59 China Rose
+233 159 190	60 Magenta - LT
+235  93 138	62 Magenta - MED
+225  32 104	63 Magenta - DK
+152  12  71	65 Antique Rose - VY DK
+233 135 173	66 Raspberry - LT
+194  79 119	68 Raspberry - MED LT
+150  36  75	69 Raspberry - MED
+106  11  50	70 Raspberry - DK
+ 85   9  37	72 Raspberry - VY DK
+252 195 204	73 Antique Rose - VY LT
+244 155 175	74 Antique Rose - LT
+242 133 163	75 Antique Rose - MED LT
+208  92 119	76 Antique Rose - MED
+182  48  99	77 Antique Rose - MED DK
+168  18  88	78 Antique Rose - DK
+233 159 200	85 Orchid - LT
+221 120 177	86 Orchid - MED LT
+199  55 132	87 Orchid - MED
+174  17 100	88 Orchid - MED DK
+175  13 100	89 Orchid - DK
+208 149 179	90 Plum - LT
+161  73 152	92 Plum - MED
+131  24 106	94 Plum - DK
+215 167 201	95 Violet - VY LT
+209 142 183	96 Violet - LT
+182 106 166	97 Violet - MED LT
+159  83 140	98 Violet - MED
+135  56 118	99 Violet
+122  40  98	100 Violet - MED DK
+ 90   0  92	101 Violet - DK
+ 69   8  68	102 Violet - VY DK
+227 186 210	103 Plum - VY LT
+194 159 208	108 Lavender - LT
+165 122 175	109 Lavender - MED LT
+122  82 165	110 Lavender - MED
+ 93  46 132	111 Lavender - MED DK
+ 84  34 121	112 Lavender - DK
+153 169 201	117 Thistle - LT
+121 120 182	118 Thistle - MED
+ 80  54 130	119 Thistle - MED
+179 197 223	120 Blueberry - LT
+116 139 184	121 Blueberry - MED LT
+ 82  95 145	122 Blueberry - MED
+ 44  48 106	123 Blueberry - DK
+  0   0  63	127 Indigo
+199 222 233	128 Blue - LT
+136 170 203	129 Blue
+121 156 198	130 Blue - MED LT
+ 62  95 157	131 Blue - MED
+ 16  62 133	132 Blue - MED DK
+ 20  51 116	133 Blue - DK
+  8  23 100	134 Blue - VY DK
+ 91 130 172	136 Wedgewood - LT
+ 49  97 161	137 Wedgewood - MED
+ 13  60 120	139 Wedgewood - DK
+127 165 200	140 Copen Blue - LT
+ 22  91 164	142 Copen Blue - MED
+ 12  67 134	143 Copen Blue - DK
+157 189 207	144 Delft Blue - VY LT
+113 145 188	145 Delft Blue - LT
+ 56 112 169	146 Delft Blue
+  7  77 142	147 Delft Blue - MED LT
+  8  45  99	148 Delft Blue - MED
+  9  32  86	149 Delft Blue - MED DK
+ 21  34  71	150 Delft Blue - DK
+ 15  18  50	152 Delft Blue - VY DK
+206 233 233	158 Sapphire - VY LT
+170 202 226	159 Sapphire - LT
+158 205 221	160 Sapphire - MED LT
+ 67 137 168	161 Sapphire - MED
+ 11 101 140	162 Sapphire - MED DK
+  9  66 100	164 Sapphire - DK
+142 204 211	167 Surf Blue - VY LT
+ 89 158 169	168 Surf Blue - LT
+ 21 113 139	169 Surf Blue - MED
+  0  85 108	170 Surf Blue - DK
+123 157 193	175 Ocean Blue - LT
+100 125 166	176 Ocean Blue
+ 71  82 153	177 Ocean Blue - MED
+ 47  43 103	178 Ocean Blue - DK
+129 214 196	185 Sea Green - LT
+ 82 191 172	186 Sea Green - MED LT
+ 43 168 153	187 Sea Green - MED
+  7 139 129	188 Sea Green - MED DK
+ 14 125 113	189 Sea Green - DK
+124 192 140	203 Mint Green - LT
+100 187 135	204 Mint Green - MED
+ 52 149 104	205 Mint Green - DK
+166 206 164	206 Spruce - LT
+ 99 174 128	208 Spruce - MED LT
+ 73 161 112	209 Spruce
+ 40 117  72	210 Spruce - MED
+ 11  96  51	211 Spruce - MED DK
+ 20  82  54	212 Spruce - DK
+186 204 171	213 Juniper - VY LT
+153 183 134	214 Juniper - LT
+106 142 100	215 Juniper - MED LT
+ 81 124  96	216 Juniper - MED
+ 52 101  68	217 Juniper - MED DK
+ 21  71  37	218 Juniper - DK
+100 181  93	225 Emerald - LT
+ 65 153  55	226 Emerald - MED LT
+ 28 133  50	227 Emerald - MED
+ 10 118  47	228 Emerald - MED DK
+  7 111  47	229 Emerald - DK
+  2 119  78	230 Mint Green - VY DK
+192 176 170	231 Rose Gray - LT
+169 151 147	232 Rose Gray - MED
+130 110 109	233 Rose Gray
+205 208 205	234 Charcoal Gray - LT
+111 113 119	235 Charcoal Gray - MED
+ 53  50  55	236 Charcoal Gray - DK
+ 96 173  54	238 Spring Green - MED
+ 67 156  23	239 Spring Green - DK
+159 205 136	240 Grass Green - LT
+135 198 119	241 Grass Green
+115 168  94	242 Grass Green - MED LT
+ 88 146  74	243 Grass Green - MED
+ 55 119  57	244 Grass Green - MED DK
+ 21 104  23	245 Grass Green - DK
+ 20  76  25	246 Grass Green - VY DK
+207 224 128	253 Parrot Green - VY LT
+199 221  99	254 Parrot Green - LT
+139 175  34	255 Parrot Green - MED LT
+ 92 150  25	256 Parrot Green - MED
+ 71 135  25	257 Parrot Green - MED DK
+ 53 115  22	258 Parrot Green - DK
+222 233 165	259 Loden Green - VY LT
+159 180 118	260 Loden Green - LT
+136 159 114	261 Loden Green - MED LT
+ 70 102  51	262 Loden Green - MED
+ 43  69  30	263 Loden Green - DK
+181 195 130	264 Avocado - VY LT
+152 180  90	265 Avocado - LT
+112 139  58	266 Avocado - MED LT
+ 85 111  31	267 Avocado - MED
+ 58  88  24	268 Avocado - MED DK
+ 55  70  30	269 Avocado - DK
+253 226 221	271 Soft Carnation
+ 85  77  58	273 Stone Gray - DK
+199 209 202	274 Blue Mist - LT
+251 241 206	275 Citrus - LT
+239 217 187	276 Pearl
+124  88  21	277 Desert - VY DK
+207 203 103	278 Olive Green - LT
+191 175  75	279 Olive Green - MED LT
+155 142  62	280 Olive Green - MED
+117 103  44	281 Olive Green - DK
+251 235 105	288 Canary Yellow - LT
+251 233  80	289 Canary Yellow - MED
+253 214  16	290 Canary Yellow - MED
+252 205  13	291 Canary Yellow - DK
+252 236 160	292 Jonquil - VY LT
+252 227 120	293 Jonquil - LT
+253 217  81	295 Jonquil - MED LT
+252 208  29	297 Jonquil - MED
+251 181  30	298 Jonquil - DK
+247 221 159	300 Citrus - LT
+245 212 132	301 Citrus
+250 189  72	302 Citrus - MED LT
+250 149  23	303 Citrus - MED
+247 123  13	304 Citrus - DK
+249 198  84	305 Topaz - LT
+237 162  49	306 Topaz - MED LT
+222 142  23	307 Topaz - MED
+189 110  26	308 Topaz - MED DK
+173  95  38	309 Topaz - DK
+148  76  34	310 Topaz - VY DK
+243 186 113	311 Tangerine - VY LT
+250 170  85	313 Tangerine - LT
+245 137  22	314 Tangerine - MED LT
+250 112  23	316 Tangerine - DK
+249 136  79	323 Apricot - LT
+237 110  50	324 Apricot - MED
+207  70  15	326 Apricot - DK
+252 142 117	328 Melon - LT
+248 110  69	329 Melon - DK
+247  93  31	330 Melon - DK
+246  69  31	332 Blaze - LT
+230  39  20	333 Blaze - MED LT
+232  19  15	334 Blaze - MED
+225   9  13	335 Blaze - DK
+239 158 121	336 Terra Cotta - LT
+226 139 110	337 Terra Cotta - MED LT
+202 110  88	338 Terra Cotta
+177  63  40	339 Terra Cotta - MED
+157  48  34	340 Terra Cotta - MED DK
+141  36  25	341 Terra Cotta - DK
+217 190 221	342 Lilac - LT
+140 162 180	343 Slate Blue
+208 146  92	347 Bark - LT
+170  85  27	349 Bark - MED
+140  47  24	351 Bark - MED DK
+109  24  21	352 Bark - DK
+147  66  26	355 Mocha - MED
+116  43  17	357 Mocha - DK
+117  55  26	358 Coffee
+104  45  18	359 Coffee - MED
+ 83  43  25	360 Coffee - DK
+238 195 138	361 Nutmeg - LT
+225 162 102	362 Nutmeg - MED LT
+224 150  56	363 Nutmeg - MED
+169  96  20	365 Nutmeg - DK
+233 199 151	366 Spice - VY LT
+227 179 134	367 Spice - LT
+210 154 100	368 Spice - MED LT
+184 114  67	369 Spice - MED
+151  73  27	370 Spice - MED DK
+130  58  23	371 Spice - DK
+227 187 133	372 Desert - LT
+196 151  94	373 Desert - MED
+163 110  54	374 Desert - MED
+136  90  35	375 Desert - DK
+215 173 152	376 Fawn - LT
+166 128 104	378 Fawn - MED
+141  97  73	379 Fawn - DK
+ 71  33  23	380 Fudge
+ 61  29  17	381 Fudge - MED
+ 54  28  17	382 Fudge - DK
+245 231 201	386 Citrus - VY LT
+239 218 182	387 Ecru
+201 179 151	388 Ecru - MED
+229 215 184	390 Linen - LT
+202 186 160	391 Linen
+163 139 108	392 Linen - MED
+118  97  57	393 Linen - DK
+197 193 179	397 Gray - LT
+175 176 173	398 Gray
+146 146 147	399 Gray - MED LT
+ 88  86  90	400 Gray - MED
+ 62  58  65	401 Gray - DK
+  0   0   0	403 Black
+  0 120 169	410 Ice Blue - DK
+  0 166 222	433 Ice Blue
+ 85  87  51	681 Forest - DK
+ 31  67  58	683 Turf Green
+238 198 171	778 Flesh - LT
+ 77 120 123	779 Blue Mist - MED DK
+209 191 158	830 Sierra - VY LT
+198 174 138	831 Sierra - LT
+157 131  96	832 Sierra - MED
+193 184 121	842 Fern Green - LT
+138 137  72	843 Fern Green
+129 119  49	844 Fern Green - MED
+ 97  91  32	845 Fern Green - MED DK
+ 70  65  11	846 Fern Green - DK
+214 222 215	847 Blue Mist - VY LT
+175 191 186	848 Blue Mist
+156 170 171	849 Blue Mist - MED LT
+122 139 140	850 Blue Mist - MED
+ 41  80  86	851 Blue Mist - DK
+227 207 159	852 Turf - VY LT
+190 169 117	853 Turf - LT
+162 141  83	854 Turf - MED LT
+153 127  67	855 Turf - MED
+124 106  47	856 Turf - DK
+163 174 143	858 Laurel Green - LT
+139 149 112	859 Laurel Green
+114 126  91	860 Laurel Green - MED LT
+ 74  89  55	861 Laurel Green - MED
+ 49  68  36	862 Laurel Green - DK
+234 166 142	868 Flesh - MED
+196 176 185	869 Amethyst - LT
+171 146 168	870 Amethyst - MED LT
+129  97 117	871 Amethyst - MED LT
+116  79 104	872 Amethyst - MED
+ 88  49  71	873 Amethyst - DK
+214 175  92	874 Saffron - MED
+146 182 159	875 Pine - LT
+ 96 144 121	876 Pine
+ 65 113  96	877 Pine - MED
+ 43  84  70	878 Pine - MED DK
+ 17  76  56	879 Pine - DK
+226 192 165	880 Copper - LT
+233 186 152	881 Copper
+220 148 118	882 Copper - MED LT
+189 114  85	883 Copper - MED
+154  67  46	884 Copper - DK
+245 226 180	885 Sand Stone - LT
+231 206 135	886 Sand Stone
+213 180 113	887 Sand Stone - MED LT
+169 128  56	888 Sand Stone - MED DK
+111  75  26	889 Sand Stone - MED DK
+209 148  63	890 Brass - LT
+234 189 111	891 Brass
+243 211 197	892 Rose Wine - LT
+238 179 167	893 Rose Wine
+223 154 151	894 Rose Wine - MED LT
+209 113 122	895 Rose Wine - MED
+162  66  79	896 Rose Wine - DK
+112  26  36	897 Rose Wine - VY DK
+135 107  62	898 Sierra
+178 155 126	899 Tawny - LT
+169 169 149	900 Pewter - LT
+182 122  39	901 Tawny - MED
+137 112  80	903 Tawny - MED
+ 95  77  49	904 Mocha Brown - DK
+ 65  50  28	905 Tawny - DK
+106  72  13	906 Brass - DK
+182 139  40	907 Saffron - DK
+193 123  93	914 Flesh - MED DK
+114 141 158	920 Denim - LT
+ 86 112 128	921 Denim - MED
+ 65  89 106	922 Denim - DK
+  0  93  48	923 Emerald - VY DK
+ 94  89  14	924 Olive Green - VY DK
+233  82   7	925 Tangerine Very
+249 237 210	926 Ecru - VY LT
+170 217 223	928 Larkspur - LT
+240 207 179	933 Fawn - VY LT
+127  61  38	936 Fawn - VY DK
+121 130 169	939 Stormy Blue - MED
+ 60  80 144	940 Stormy Blue - MED DK
+ 60  71 125	941 Stormy Blue - VY DK
+234 195 129	942 Wheat - LT
+201 157  87	943 Wheat - MED
+133  78  28	944 Wheat - DK
+190 165  88	945 Harvest - MED
+209 191 139	956 Harvest - LT
+229 172 170	968 Wineberry - LT
+206 143 148	969 Wineberry - MED
+171  93 116	970 Wineberry - MED
+138  48  89	972 Wineberry - DK
+170 197 203	975 Sea Blue - LT
+141 172 185	976 Sea Blue - MED LT
+ 97 137 170	977 Sea Blue - MED
+ 70 113 150	978 Sea Blue - MED DK
+ 24  80 115	979 Sea Blue - DK
+210 108  16	1001 Antique Gold - MED
+237 139  29	1002 Antique Gold - LT
+221 108  54	1003 Amberglow
+165  61  20	1004 Apricot - VY DK
+141   8  33	1005 Cherry Red - MED
+155   0  24	1006 Cherry Red
+160  89  69	1007 Chicory - DK
+207 146 120	1008 Chicory - MED
+247 220 194	1009 Copper - VY LT
+253 217 180	1010 Cinnamon - VY LT
+248 220 198	1011 Flesh - VY LT
+245 192 166	1012 Chicory - LT
+198 112  94	1013 Brick - MED
+158  31  33	1014 Brick - VY DK
+144   9  17	1015 Brick - DK
+211 155 167	1016 Antique Mauve - LT
+190 123 142	1017 Antique
+156  89 101	1018 Antique Mauve - DK
+134  63  80	1019 Antique Mauve - VY DK
+241 190 182	1020 Peony - VY LT
+233 171 165	1021 Peony - LT
+228 132 125	1022 Peony - MED LT
+214 107 113	1023 Peony
+198  86  86	1024 Peony - MED
+173  17  35	1025 Peony - MED DK
+247 206 196	1026 Wineberry - VY LT
+188  89  94	1027 Rose Wine - MED DK
+124  28  65	1028 Raspberry - MED DK
+134  16  61	1029 Antique Rose - DK
+115  99 166	1030 Thistle - MED DK
+201 220 227	1031 Antique Blue - LT
+171 194 207	1032 Antique Blue - VY LT
+141 161 180	1033 Antique Blue - LT
+ 93 117 140	1034 Antique
+ 45  63  84	1035 Antique Blue - DK
+ 35  56  86	1036 Antique Blue - VY DK
+222 235 236	1037 Sea Blue - VY LT
+139 189 199	1038 Glacier Blue - MED
+ 87 156 177	1039 Glacier Blue - MED DK
+136 129 112	1040 Pewter - MED
+ 60  54  43	1041 Stone Gray - VY DK
+191 218 192	1042 Pine - VY LT
+206 229 173	1043 Grass Green - VY LT
+ 23  61  19	1044 Grass Green - DK
+202 135  76	1045 Toast - LT
+172 100  31	1046 Toast
+243 159 100	1047 Cinnamon - LT
+212 107  52	1048 Cinnamon - MED
+174  80  35	1049 Cinnamon
+105  66  40	1050 Tawnyu - MED DK
+158 198 205	1060 Blue Violet - VY LT
+ 99 146 161	1062 Peacock Blue
+ 75 130 151	1064 Wedgewood - LT
+ 27  87 106	1066 Wedgewood - DK
+  0  68  87	1068 Wedgewood - VY DK
+ 84 172 153	1070 Sea Green - MED
+ 48 156 132	1072 Sea Green - MED DK
+  0 131 115	1074 Sea Green - DK
+  0 114 101	1076 Misty Green - DK
+200 166 137	1080 Mocha Beige - LT
+159 129 108	1082 Mocha Beige - MED
+132 101  80	1084 Mocha Brown - MED
+ 92  70  54	1086 Mocha Brown - DK
+ 61  44  35	1088 Mocha Brown - VY DK
+  0 136 211	1089 Electric Blue - MED
+ 62 169 234	1090 Electric Blue
+153 216 210	1092 Turquoise - LT
+252 158 197	1094 Cranberry - VY LT
+159 179 193	1096 Blue Violet - LT
+212  24  41	1098 Bright Red
+234 186 164	4146 Sportsman Flesh
+182  82  69	5975 Brick - DK
+121 114  94	8581 Stone Gray
+198   0  25	9046 Christmas Red
+183 218 228	9159 Glacier Blue
+220 148 121	9575 Brick - MED LT

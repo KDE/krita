@@ -21,10 +21,15 @@
 
 #include <qbitmap.h>
 #include <qcursor.h>
+#include <qimage.h>
+#include <qpainter.h>
+
 #include <kcursor.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
 
 #include "kis_cursor.h"
+#include "kis_factory.h"
 
 KisCursor::KisCursor() {}
 
@@ -103,7 +108,7 @@ QCursor KisCursor::pointingHandCursor()
 
 
 /*
- * Custom KImageShop cursors. Use the X utility "bitmap" to create new cursors.
+ * Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
  */
 
 QCursor KisCursor::pickerCursor()
@@ -313,29 +318,57 @@ QCursor KisCursor::selectCursor()
 
 QCursor KisCursor::openHandCursor()
 {
-    return load("openhand_cursor");
+    return load("openhand_cursor.xpm");
 }
 
 QCursor KisCursor::closedHandCursor()
 {
-    return load("closedhand_cursor");
+    return load("closedhand_cursor.xpm");
 }
 
 QCursor KisCursor::rotateCursor()
 {
-    return load("rotate_cursor");
+    return load("rotate_cursor.xpm");
 }
 
 QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
 {
-    QPixmap pixmap = UserIcon(iconName);
-    Q_ASSERT(!pixmap.isNull());
+    QString filename = KisFactory::instance()->dirs()->findResource("kis_pics", iconName);
+    QImage cursorImage;
 
-    QBitmap mask(pixmap.width(), pixmap.height());
+    cursorImage.load(filename);
+    Q_ASSERT(!cursorImage.isNull());
+    Q_ASSERT(cursorImage.hasAlphaBuffer());
 
-    mask = pixmap.createHeuristicMask();
-    pixmap.setMask(mask);
+    QBitmap bitmap(cursorImage.width(), cursorImage.height());
+    QBitmap mask(cursorImage.width(), cursorImage.height());
 
-    return QCursor(pixmap, hotspotX, hotspotY);
+    QPainter bitmapPainter(&bitmap);
+    QPainter maskPainter(&mask);
+
+    for (Q_INT32 x = 0; x < cursorImage.width(); ++x) {
+        for (Q_INT32 y = 0; y < cursorImage.height(); ++y) {
+
+            QRgb pixel = cursorImage.pixel(x, y);
+            
+            if (qAlpha(pixel) < 128) {
+                bitmapPainter.setPen(Qt::color0);
+                maskPainter.setPen(Qt::color0);
+            } else {
+                maskPainter.setPen(Qt::color1);
+
+                if (qGray(pixel) < 128) {
+                    bitmapPainter.setPen(Qt::color1);
+                } else {
+                    bitmapPainter.setPen(Qt::color0);
+                }
+            }
+
+            bitmapPainter.drawPoint(x, y);
+            maskPainter.drawPoint(x, y);
+        }
+    }
+
+    return QCursor(bitmap, mask, hotspotX, hotspotY);
 }
 

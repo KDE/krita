@@ -40,13 +40,14 @@
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
+#include "kis_cursor.h"
 
 KisToolLine::KisToolLine()
     : super(i18n("Line")),
       m_dragging( false )
 {
     setName("tool_line");
-    setCursor(KisCursor::arrowCursor());
+    setCursor(KisCursor::load("tool_line_cursor.png", 6, 6));
 
     m_painter = 0;
     m_currentImage = 0;

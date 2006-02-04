@@ -41,6 +41,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
+#include "kis_cursor.h"
 
 #include "kis_tool_polyline.h"
 
@@ -50,6 +51,7 @@ KisToolPolyline::KisToolPolyline()
           m_currentImage (0)
 {
     setName("tool_polyline");
+    setCursor(KisCursor::load("tool_polyline_cursor.png", 6, 6));
 }
 
 KisToolPolyline::~KisToolPolyline()

@@ -51,7 +51,7 @@ KisToolSelectOutline::KisToolSelectOutline()
     : super(i18n("Select Outline"))
 {
     setName("tool_select_outline");
-    setCursor(KisCursor::selectCursor());
+    setCursor(KisCursor::load("tool_outline_selection_cursor.png", 5, 5));
 
     m_subject = 0;
     m_dragging = false;

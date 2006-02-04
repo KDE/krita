@@ -27,3 +27,9 @@ kritatooltransform_la_LIBADD =  ../../../libkritacommon.la
 kritatooltransform_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	rotate_cursor.xpm
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

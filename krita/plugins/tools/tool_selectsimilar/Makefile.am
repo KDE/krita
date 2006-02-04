@@ -22,6 +22,10 @@ kritatoolselectsimilar_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 # directory for pixmaps
-kritapics_DATA=tool_similar_selection.png
+kritapics_DATA = \
+	tool_similar_selection.png \
+	tool_similar_selection_plus_cursor.png \
+	tool_similar_selection_minus_cursor.png
+
 kritapicsdir = $(kde_datadir)/krita/pics
 

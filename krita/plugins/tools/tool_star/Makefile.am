@@ -27,3 +27,10 @@ kritatoolstar_la_LIBADD =  ../../../libkritacommon.la
 kritatoolstar_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_star.png \
+	tool_star_cursor.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

@@ -52,7 +52,7 @@ KisToolSelectBrush::KisToolSelectBrush()
 {
     setName("tool_select_brush");
     m_optWidget = 0;
-    setCursor(KisCursor::brushCursor());
+    setCursor(KisCursor::load("tool_brush_selection_cursor.png", 5, 5));
 }
 
 KisToolSelectBrush::~KisToolSelectBrush()

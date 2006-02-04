@@ -52,7 +52,7 @@ KisToolGradient::KisToolGradient()
       m_dragging( false )
 {
     setName("tool_gradient");
-    setCursor(KisCursor::arrowCursor());
+    setCursor(KisCursor::load("tool_gradient_cursor.png", 6, 6));
 
     m_startPos = KisPoint(0, 0);
     m_endPos = KisPoint(0, 0);

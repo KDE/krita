@@ -49,7 +49,7 @@ KisToolSelectElliptical::KisToolSelectElliptical()
     : super(i18n("Elliptical Select"))
 {
     setName("tool_select_elliptical");
-    setCursor(KisCursor::selectCursor());
+    setCursor(KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6));
 
     m_subject = 0;
     m_selecting = false;

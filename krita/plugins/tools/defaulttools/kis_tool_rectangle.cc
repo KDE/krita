@@ -38,6 +38,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
+#include "kis_cursor.h"
 
 KisToolRectangle::KisToolRectangle()
     : super(i18n ("Rectangle")),
@@ -45,6 +46,7 @@ KisToolRectangle::KisToolRectangle()
           m_currentImage (0)
 {
     setName("tool_rectangle");
+    setCursor(KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 }
 
 KisToolRectangle::~KisToolRectangle()

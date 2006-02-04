@@ -30,7 +30,8 @@ kritatoolfilter_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
-	tool_filter.png
+	tool_filter.png \
+	tool_filter_cursor.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

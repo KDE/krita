@@ -52,7 +52,7 @@ KisToolText::KisToolText()
 {
     setName("tool_text");
     m_subject = 0;
-    setCursor(KisCursor::pointingHandCursor()); // needs a Text Cursur
+    setCursor(KisCursor::load("tool_text_cursor.png", 6, 6));
 }
 
 KisToolText::~KisToolText()

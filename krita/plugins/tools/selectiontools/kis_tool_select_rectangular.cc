@@ -51,7 +51,7 @@ KisToolSelectRectangular::KisToolSelectRectangular()
     : super(i18n("Rectangular Select Tool"))
 {
     setName("tool_select_rectangular");
-    setCursor(KisCursor::selectCursor());
+    setCursor(KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6));
     m_subject = 0;
     m_selecting = false;
     m_centerPos = KisPoint(0, 0);

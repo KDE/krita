@@ -74,6 +74,8 @@ private:
     enumSelectionMode m_defaultSelectAction;
     enumSelectionMode m_currentSelectAction;
     QTimer *m_timer;
+    QCursor m_addCursor;
+    QCursor m_subtractCursor;
 
 private slots:
     void slotTimer();

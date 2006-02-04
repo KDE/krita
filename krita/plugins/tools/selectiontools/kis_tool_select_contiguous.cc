@@ -62,8 +62,7 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super(i18n("Contiguous Sele
     m_sampleMerged = false;
     m_selectAction = SELECTION_ADD;
 
-    //XXX : make wizard cursor from tool icon.
-    setCursor(KisCursor::fillerCursor());
+    setCursor(KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6));
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()

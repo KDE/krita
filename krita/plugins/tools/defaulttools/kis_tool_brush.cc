@@ -49,7 +49,7 @@ KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
 {
     setName("tool_brush");
-    setCursor(KisCursor::blankCursor());
+    setCursor(KisCursor::load("tool_freehand_cursor.png", 5, 5));
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
     Q_CHECK_PTR(m_timer);
@@ -76,7 +76,6 @@ void KisToolBrush::timeoutPaint()
 void KisToolBrush::update(KisCanvasSubject *subject)
 {
     super::update(subject);
-    setCursor(KisCursor::brushCursor());
 }
 
 void KisToolBrush::initPaint(KisEvent *e)

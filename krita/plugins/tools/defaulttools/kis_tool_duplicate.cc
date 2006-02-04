@@ -45,7 +45,7 @@ KisToolDuplicate::KisToolDuplicate()
 {
     setName("tool_duplicate");
     m_subject = 0;
-    setCursor(KisCursor::penCursor());
+    setCursor(KisCursor::load("tool_duplicate_cursor.png", 5, 5));
 }
 
 KisToolDuplicate::~KisToolDuplicate()

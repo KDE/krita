@@ -60,8 +60,7 @@ KisToolFill::KisToolFill()
     m_sampleMerged = false;
     m_fillOnlySelection = false;
 
-    // set custom cursor.
-    setCursor(KisCursor::fillerCursor());
+    setCursor(KisCursor::load("tool_fill_cursor.png", 6, 6));
 }
 
 void KisToolFill::update(KisCanvasSubject *subject)

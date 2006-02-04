@@ -53,7 +53,7 @@ KisToolFilter::KisToolFilter()
 {
     setName("tool_filter");
     m_subject = 0;
-    setCursor(KisCursor::penCursor());
+    setCursor(KisCursor::load("tool_filter_cursor.png", 5, 5));
 }
 
 KisToolFilter::~KisToolFilter()

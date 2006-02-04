@@ -50,3 +50,25 @@ kritadefaulttools_la_LIBADD =  ../../../libkritacommon.la $(LIB_KOPAINTER) $(LIB
 kritadefaulttools_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_rectangle_cursor.png \
+	tool_ellipse_cursor.png \
+	tool_line_cursor.png \
+	tool_freehand_cursor.png \
+	tool_duplicate_cursor.png \
+	tool_fill_cursor.png \
+	tool_text_cursor.png \
+	tool_gradient_cursor.png \
+        gradient.png \
+	line.png \
+        rectangle.png \
+	ellipse.png \
+        tool_pan.png \
+        tool_freehand.png \
+	tool_text.png \
+        openhand_cursor.xpm \
+        closedhand_cursor.xpm
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

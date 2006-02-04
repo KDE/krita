@@ -38,6 +38,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
+#include "kis_cursor.h"
 
 KisToolEllipse::KisToolEllipse()
     : super(i18n ("Ellipse")),
@@ -45,6 +46,7 @@ KisToolEllipse::KisToolEllipse()
       m_currentImage (0)
 {
     setName("tool_ellipse");
+    setCursor(KisCursor::load("tool_ellipse_cursor.png", 6, 6));
 }
 
 KisToolEllipse::~KisToolEllipse()

@@ -26,3 +26,10 @@ kritatoolpolygon_la_LIBADD =  ../../../libkritacommon.la
 kritatoolpolygon_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_polygon_cursor.png \
+	polygon.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

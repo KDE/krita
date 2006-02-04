@@ -91,7 +91,9 @@ KisToolSelectSimilar::KisToolSelectSimilar()
     : super(i18n("Select Similar Colors"))
 {
     setName("tool_select_similar");
-    setCursor(KisCursor::pickerCursor());
+    m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
+    m_subtractCursor = KisCursor::load("tool_similar_selection_minus_cursor.png", 1, 21);
+    setCursor(m_addCursor);
     m_subject = 0;
     m_optWidget = 0;
     m_selectionOptionsWidget = 0;
@@ -190,10 +192,10 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 {
     switch (action) {
         case SELECTION_ADD:
-            m_subject->canvasController()->setCanvasCursor(KisCursor::pickerPlusCursor());
+            m_subject->canvasController()->setCanvasCursor(m_addCursor);
             break;
         case SELECTION_SUBTRACT:
-            m_subject->canvasController()->setCanvasCursor(KisCursor::pickerMinusCursor());
+            m_subject->canvasController()->setCanvasCursor(m_subtractCursor);
     }
 }
 

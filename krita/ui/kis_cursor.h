@@ -47,7 +47,7 @@ public:
     static QCursor splitHCursor();        // horziontal splitting
     static QCursor pointingHandCursor();  // a pointing hand
 
-    // Custom KimageShop cursors. Use the X utility "bitmap" to create new cursors.
+    // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
     static QCursor moveCursor();          // move tool cursor
     static QCursor penCursor();           // pen tool cursor
     static QCursor brushCursor();         // brush tool cursor
@@ -65,8 +65,9 @@ public:
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
 
-private:
-    // Load a cursor from an image file. XPM format seems to work the best.
-    static QCursor load(const QString & iconName, int hotspotX = -1, int hotspotY = -1);
+    // Load a cursor from an image file. The image should have an alpha channel
+    // and will be converted to black and white on loading. Any format loadable by
+    // QImage can be used.
+    static QCursor load(const QString & imageFilename, int hotspotX = -1, int hotspotY = -1);
 };
 #endif // __kis_cursor_h__

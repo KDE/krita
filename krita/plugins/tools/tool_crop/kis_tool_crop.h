@@ -107,6 +107,7 @@ private:
     bool m_haveCropSelection;
     Q_INT32 m_dx, m_dy;
     Q_INT32 m_mouseOnHandleType;
+    QCursor m_cropCursor;
 
     enum handleType
     {

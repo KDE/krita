@@ -26,3 +26,10 @@ kritatoolpolyline_la_LIBADD =  ../../../libkritacommon.la
 kritatoolpolyline_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_polyline_cursor.png \
+	polyline.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

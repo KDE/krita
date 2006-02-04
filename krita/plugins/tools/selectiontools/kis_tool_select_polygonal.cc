@@ -51,7 +51,7 @@ KisToolSelectPolygonal::KisToolSelectPolygonal()
     : super(i18n("Select Polygonal"))
 {
     setName("tool_select_polygonal");
-    setCursor(KisCursor::selectCursor());
+    setCursor(KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6));
 
     m_subject = 0;
     m_dragging = false;

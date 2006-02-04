@@ -27,3 +27,9 @@ kritatoolcrop_la_LIBADD =  ../../../libkritacommon.la
 kritatoolcrop_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
+
+kritapics_DATA = \
+	tool_crop_cursor.png
+
+kritapicsdir = $(kde_datadir)/krita/pics
+

@@ -63,7 +63,8 @@ KisToolCrop::KisToolCrop()
     : super(i18n("Crop"))
 {
     setName("tool_crop");
-    setCursor(KisCursor::selectCursor());
+    m_cropCursor = KisCursor::load("tool_crop_cursor.png", 6, 6);
+    setCursor(m_cropCursor);
     m_subject = 0;
     m_selecting = false;
     m_rectCrop = QRect(0, 0, 0, 0);
@@ -473,6 +474,7 @@ void KisToolCrop::crop() {
     // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
 
     m_haveCropSelection = false;
+    setCursor(m_cropCursor);
 
     KisImageSP img = m_subject -> currentImg();
 
@@ -878,7 +880,7 @@ void KisToolCrop::setMoveResizeCursor (Q_INT32 handle)
         m_subject->canvasController()->setCanvasCursor(KisCursor::sizeAllCursor());
         return;
     }
-    m_subject->canvasController()->setCanvasCursor(KisCursor::selectCursor());
+    m_subject->canvasController()->setCanvasCursor(KisCursor::arrowCursor());
     return;
 }
 

@@ -99,7 +99,11 @@ public:
         KisAdjustmentLayerSP adjLayer = 0;
 
         if (!child) {
-            m_projection->clear();
+            KisPainter gc(layer->projection());
+            gc.bitBlt(m_rc.left(), m_rc.top(), COMPOSITE_COPY,
+                      m_projection, OPACITY_OPAQUE,
+                      m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+            gc.end();
         }
         
         // Look through all the layer, searching for the first dirty layer

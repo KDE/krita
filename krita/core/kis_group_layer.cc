@@ -122,6 +122,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     newLayer -> m_parent = this;
     newLayer -> m_index = index;
     newLayer -> setImage(image());
+    setDirty(true);
     return true;
 }
 
@@ -132,7 +133,6 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
         kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
         return false;
     }
-
     return addLayer(newLayer, aboveThis ? aboveThis -> index() : childCount());
 }
 
@@ -147,6 +147,10 @@ bool KisGroupLayer::removeLayer(int x)
         at(index) -> m_index = -1;
         m_layers.erase(m_layers.begin() + reverseIndex(index));
         setDirty(true);
+        if (childCount() < 1) {
+            // No children, nothing to show for it.
+            m_projection->clear();
+        }
         return true;
     }
     kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;

@@ -87,6 +87,7 @@ public slots:
 private:
     void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
     void fattenRegion (Q_INT32 xradius, Q_INT32 yradius);
+    void thinRegion (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock);
     void computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius);
     inline void rotatePointers (Q_UINT8  **p, Q_UINT32 n);
 

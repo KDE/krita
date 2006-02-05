@@ -772,11 +772,189 @@ void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}
 void KisSelectionManager::smooth() {}
 void KisSelectionManager::contract() {}
-void KisSelectionManager::grow() {}
+void KisSelectionManager::grow() { fattenRegion (5, 5); }
 void KisSelectionManager::similar() {}
 void KisSelectionManager::transform() {}
 void KisSelectionManager::load() {}
 void KisSelectionManager::save() {}
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
+{
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
+
+    KisPaintDeviceSP dev = img -> activeDevice();
+    if (!dev) return;
+    
+    if (!dev -> hasSelection()) return;
+    KisSelectionSP selection = dev -> selection();
+    
+    //determine the exact rectangle that encloses the selection
+    QRect selectedExactRect = selection->selectedExactRect();
+    /*
+        Any bugs in this fuction are probably also in thin_region
+        Blame all bugs in this function on jaycox@gimp.org
+    */
+    Q_INT32 i, j, x, y;
+    
+    Q_UINT8  **buf;  // caches the region's pixel data
+    Q_UINT8   *out;  // holds the new scan line we are computing
+    Q_UINT8  **max;  // caches the largest values for each column
+    Q_INT32   *circ; // holds the y coords of the filter's mask
+    Q_INT32   last_max, last_index;
+    
+    Q_UINT8   *buffer;
+    
+    if (xradius <= 0 || yradius <= 0)
+        return;
+    
+    max = new Q_UINT8* [selectedExactRect.width() + 2 * xradius];
+    buf = new Q_UINT8* [yradius + 1]; 
+    for (i = 0; i < yradius + 1; i++)
+    {
+        buf[i] = new Q_UINT8[selectedExactRect.width()];
+    }
+    buffer = new Q_UINT8[ ( selectedExactRect.width() + 2 * xradius ) * ( yradius + 1 ) ];
+    for (i = 0; i < selectedExactRect.width() + 2 * xradius; i++)
+    {
+        if (i < xradius)
+            max[i] = buffer;
+        else if (i < selectedExactRect.width() + xradius)
+            max[i] = &buffer[(yradius + 1) * (i - xradius)];
+        else
+            max[i] = &buffer[(yradius + 1) * (selectedExactRect.width() + xradius - 1)];
+    
+        for (j = 0; j < xradius + 1; j++)
+            max[i][j] = 0;
+    }
+    /* offset the max pointer by xradius so the range of the array
+        is [-xradius] to [region->w + xradius] */
+    max += xradius;
+
+    out = new Q_UINT8[ selectedExactRect.width() ];
+
+    circ = new Q_INT32[ 2 * xradius + 1 ];
+    computeBorder (circ, xradius, yradius);
+
+    /* offset the circ pointer by xradius so the range of the array
+        is [-xradius] to [xradius] */
+    circ += xradius;
+
+    memset (buf[0], 0, selectedExactRect.width());
+    for (i = 0; i < yradius && i < selectedExactRect.height(); i++) // load top of image
+    {
+        selection->readBytes(buf[i + 1], selectedExactRect.x(), selectedExactRect.y() + i, selectedExactRect.width(), 1);
+    }
+
+    for (x = 0; x < selectedExactRect.width() ; x++) // set up max for top of image
+    {
+            max[x][0] = 0;         // buf[0][x] is always 0 
+            max[x][1] = buf[1][x]; // MAX (buf[1][x], max[x][0]) always = buf[1][x]
+            for (j = 2; j < yradius + 1; j++)
+            {
+                max[x][j] = MAX(buf[j][x], max[x][j-1]);
+            }
+    }
+
+  for (y = 0; y < selectedExactRect.height(); y++)
+    {
+      rotatePointers (buf, yradius + 1);
+      if (y < selectedExactRect.height() - (yradius))
+        selection->readBytes(buf[yradius], selectedExactRect.x(), selectedExactRect.y() + y + yradius, selectedExactRect.width(), 1);
+      else
+            memset (buf[yradius], 0, selectedExactRect.width());
+      for (x = 0; x < selectedExactRect.width(); x++) /* update max array */
+        {
+          for (i = yradius; i > 0; i--)
+            {
+              max[x][i] = MAX (MAX (max[x][i - 1], buf[i - 1][x]), buf[i][x]);
+            }
+          max[x][0] = buf[0][x];
+        }
+      last_max = max[0][circ[-1]];
+      last_index = 1;
+      for (x = 0; x < selectedExactRect.width(); x++) /* render scan line */
+        {
+          last_index--;
+          if (last_index >= 0)
+            {
+              if (last_max == 255)
+                out[x] = 255;
+              else
+                {
+                  last_max = 0;
+                  for (i = xradius; i >= 0; i--)
+                    if (last_max < max[x + i][circ[i]])
+                      {
+                        last_max = max[x + i][circ[i]];
+                        last_index = i;
+                      }
+                  out[x] = last_max;
+                }
+            }
+          else
+            {
+              last_index = xradius;
+              last_max = max[x + xradius][circ[xradius]];
+              for (i = xradius - 1; i >= -xradius; i--)
+                if (last_max < max[x + i][circ[i]])
+                  {
+                    last_max = max[x + i][circ[i]];
+                    last_index = i;
+                  }
+              out[x] = last_max;
+            }
+        }
+        selection->writeBytes(out, selectedExactRect.x(), selectedExactRect.y() + y, selectedExactRect.width(), 1);
+    }
+  /* undo the offsets to the pointers so we can free the malloced memmory */
+  circ -= xradius;
+  max -= xradius;
+
+  delete circ;
+  delete buffer;
+  delete max;
+  for (i = 0; i < yradius + 1; i++)
+    delete buf[i];
+  delete buf;
+  delete out;
+
+    dev -> emitSelectionChanged();
+}
+
+#define RINT(x) floor ((x) + 0.5)
+
+void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius)
+{
+  Q_INT32 i;
+  Q_INT32 diameter = xradius * 2 + 1;
+  double tmp;
+
+    for (i = 0; i < diameter; i++)
+    {
+        if (i > xradius)
+        tmp = (i - xradius) - 0.5;
+        else if (i < xradius)
+        tmp = (xradius - i) - 0.5;
+        else
+        tmp = 0.0;
+    
+        circ[i] = RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
+    }
+}
+
+void KisSelectionManager::rotatePointers (Q_UINT8  **p, Q_UINT32 n)
+{
+    Q_UINT32  i;
+    Q_UINT8  *tmp;
+    
+    tmp = p[0];
+    
+    for (i = 0; i < n - 1; i++) p[i] = p[i + 1];
+    
+    p[i] = tmp;
+}
 
 #include "kis_selection_manager.moc"

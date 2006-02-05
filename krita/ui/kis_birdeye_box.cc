@@ -173,7 +173,8 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
 KisBirdEyeBox::~KisBirdEyeBox()
 {
-    delete m_zoomAdapter;
+    // Huh? Why does this cause a crash?
+    // delete m_zoomAdapter;
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

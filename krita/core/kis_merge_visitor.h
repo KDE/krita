@@ -98,6 +98,10 @@ public:
         KisLayerSP startWith = layer->lastChild();
         KisAdjustmentLayerSP adjLayer = 0;
 
+        if (!child) {
+            m_projection->clear();
+        }
+        
         // Look through all the layer, searching for the first dirty layer
         // if it's found, and if we have an adj. layer, composite from the
         // first adjustment layer searching back from the first dirty layer
@@ -237,14 +241,11 @@ public:
         KisFilterConfiguration * cfg = layer->filter();
         if (!cfg) return false;
 
-        kdDebug() << "Filter: " << cfg->name() << "\n" << kdBacktrace() << "\n";
-        
         
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
         if (!f) return false;
         
         KisSelectionSP selection = layer->selection();
-        kdDebug() << "Do we have a selection: " << selection << "?\n";
 
         // Copy of the projection -- use the copy-on-write trick.
         KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);

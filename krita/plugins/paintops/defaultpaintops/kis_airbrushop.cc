@@ -34,7 +34,7 @@
 #include "kis_layer.h"
 #include "kis_airbrushop.h"
 
-KisPaintOp * KisAirbrushOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 { 
     KisPaintOp * op = new KisAirbrushOp(painter); 
     Q_CHECK_PTR(op);

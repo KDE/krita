@@ -36,7 +36,7 @@
 
 #include "kis_eraseop.h"
 
-KisPaintOp * KisEraseOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 { 
     KisPaintOp * op = new KisEraseOp(painter); 
     Q_CHECK_PTR(op);

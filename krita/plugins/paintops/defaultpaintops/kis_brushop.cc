@@ -39,53 +39,65 @@
 
 #include "kis_brushop.h"
 
-KisPaintOp * KisBrushOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
 {
-    KisPaintOp * op = 0;
-    if (m_optionWidget && m_size -> isVisible() /* bah */) {
-        op = new KisBrushOp(painter, m_size -> isChecked(), m_opacity -> isChecked(),
-                            m_darken -> isChecked());
-    } else {
-        op = new KisBrushOp(painter);
-    }
+    const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings);
+    Q_ASSERT(settings == 0 || brushopSettings != 0);
+
+    KisPaintOp * op = new KisBrushOp(brushopSettings, painter);
     Q_CHECK_PTR(op);
     return op;
 }
 
-QWidget * KisBrushOpFactory::optionWidget(QWidget * parent, const KisInputDevice& inputDevice)
+KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
+    : super(parent)
 {
-    if (m_optionWidget == 0) {
-        m_optionWidget = new QWidget(parent, "brush option widget");
-        QHBoxLayout * l = new QHBoxLayout(m_optionWidget);
-        l->setAutoAdd(true);
-        m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionWidget);
-        m_size =  new QCheckBox(i18n("size"), m_optionWidget);
-        m_size->setChecked(true);
-        m_opacity = new QCheckBox(i18n("opacity"), m_optionWidget);
-        m_darken = new QCheckBox(i18n("darken"), m_optionWidget);
-    }
-
-    if (inputDevice != KisInputDevice::mouse()) {
-        m_pressureVariation->show();
-        m_size->show();
-        m_opacity->show();
-        m_darken->show();
-    } else {
-        m_pressureVariation->hide();
-        m_size->hide();
-        m_opacity->hide();
-        m_darken->hide();
-    }
-
-    return m_optionWidget;
+    m_optionsWidget = new QWidget(parent, "brush option widget");
+    QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
+    l->setAutoAdd(true);
+    m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
+    m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
+    m_size->setChecked(true);
+    m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
+    m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
 }
 
-KisBrushOp::KisBrushOp(KisPainter * painter, bool size, bool opacity, bool darken)
-    : super(painter)
-    , m_pressureSize(size)
-    , m_pressureOpacity(opacity)
-    , m_pressureDarken(darken)
+bool KisBrushOpSettings::varySize() const
 {
+    return m_size->isChecked();
+}
+
+bool KisBrushOpSettings::varyOpacity() const
+{
+    return m_opacity->isChecked();
+}
+
+bool KisBrushOpSettings::varyDarken() const
+{
+    return m_darken->isChecked();
+}
+
+KisPaintOpSettings* KisBrushOpFactory::settings(QWidget * parent, const KisInputDevice& inputDevice)
+{
+    if (inputDevice == KisInputDevice::mouse()) {
+        // No options for mouse, only tablet devices
+        return 0;
+    } else {
+        return new KisBrushOpSettings(parent);
+    }
+}
+
+KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
+    : super(painter)
+    , m_pressureSize(true)
+    , m_pressureOpacity(false)
+    , m_pressureDarken(false)
+{
+    if (settings != 0) {
+        m_pressureSize = settings->varySize();
+        m_pressureOpacity = settings->varyOpacity();
+        m_pressureDarken = settings->varyDarken();
+    }
 }
 
 KisBrushOp::~KisBrushOp()

@@ -35,7 +35,7 @@
 #include "kis_filterop.h"
 
 
-KisPaintOp * KisFilterOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 {
     KisPaintOp * op = new KisFilterOp(painter);
     Q_CHECK_PTR(op);

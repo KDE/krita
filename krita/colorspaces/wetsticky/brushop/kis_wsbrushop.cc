@@ -29,7 +29,7 @@
 
 #include "kis_wsbrushop.h"
 
-KisPaintOp * KisWSBrushOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisWSBrushOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 {
     KisPaintOp * op = new KisWSBrushOp(painter);
     Q_CHECK_PTR(op);

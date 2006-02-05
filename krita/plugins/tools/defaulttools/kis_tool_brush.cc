@@ -86,7 +86,7 @@ void KisToolBrush::initPaint(KisEvent *e)
         kdWarning() << "Didn't create a painter! Something is wrong!\n";
         return;
     }
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_painter);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
     if (!op) return;
     
     m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline

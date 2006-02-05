@@ -888,8 +888,9 @@ void KisView::paintView(const KisRect& r)
                         m_image -> renderToPainter(wr.left(), wr.top(),
                             wr.right(), wr.bottom(), gc, monitorProfile(),
                             paintFlags, HDRExposure());
+
+                        m_gridManager->drawGrid( wr, gc );
                     }
-                    m_gridManager->drawGrid( wr, gc );
 //                    paintGuides();
                 }
 
@@ -1926,14 +1927,15 @@ void KisView::gradientActivated(KisResource *gradient)
     }
 }
 
-void KisView::paintopActivated(const KisID & paintop)
+void KisView::paintopActivated(const KisID & paintop, const KisPaintOpSettings *paintopSettings)
 {
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
     }
 
     m_paintop = paintop;
-    emit paintopChanged(m_paintop);
+    m_paintopSettings = paintopSettings;
+    emit paintopChanged(m_paintop, paintopSettings);
     notifyObservers();
 }
 
@@ -3401,6 +3403,11 @@ KisGradient *KisView::currentGradient() const
 KisID KisView::currentPaintop() const
 {
     return m_paintop;
+}
+
+const KisPaintOpSettings *KisView::currentPaintopSettings() const
+{
+    return m_paintopSettings;
 }
 
 double KisView::zoomFactor() const

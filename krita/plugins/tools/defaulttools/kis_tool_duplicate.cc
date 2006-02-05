@@ -36,6 +36,7 @@
 #include "kis_move_event.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
+#include "kis_canvas_subject.h"
 
 #include "kis_canvas_painter.h"
 #include "kis_boundary_painter.h"
@@ -98,7 +99,7 @@ void KisToolDuplicate::initPaint(KisEvent *e)
         m_paintIncremental = false;
         super::initPaint(e);
         painter() -> setDuplicateOffset( m_offset );
-        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("duplicate", painter());
+        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("duplicate", 0, painter());
         if (op) {
             op -> setSource(m_source);
             painter() -> setPaintOp(op);

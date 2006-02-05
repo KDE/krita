@@ -38,6 +38,7 @@ class QCursor;
 class KisColor;
 class KoPaletteManager;
 class KisProfile;
+class KisPaintOpSettings;
 
 /**
  * KisCanvasSubject is part of the Observer pattern. Classes implementing KisCanvasObserver
@@ -134,7 +135,12 @@ public:
      * @return the identification of the current paintop object, not the paintop object itself.
      */
     virtual KisID currentPaintop() const = 0;
-    
+
+    /**
+     * @return the settings for the current paintop object, or 0 if there are no options set.
+     */
+    virtual const KisPaintOpSettings *currentPaintopSettings() const = 0;
+
     /**
      * @return the currently applied zoom factor. XXX: Shouldn't this be in the canvas controller?
      */

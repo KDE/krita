@@ -17,6 +17,7 @@
  */
 
 #include <qrect.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 
@@ -30,17 +31,53 @@
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_colorspace_factory_registry.h>
+#include "kis_input_device.h"
 
 #include "kis_wetop.h"
 #include "kis_wet_colorspace.h"
 
-KisPaintOp * KisWetOpFactory::createOp(KisPainter * painter)
+KisWetOpSettings::KisWetOpSettings(QWidget *parent)
+    : super(parent)
 {
-    KisPaintOp * op = new KisWetOp(painter);
+    m_options = new WetPaintOptions(parent, "wet option widget");
+}
+
+bool KisWetOpSettings::varySize() const
+{
+    return m_options->checkSize->isChecked();
+}
+
+bool KisWetOpSettings::varyWetness() const
+{
+    return m_options->checkWetness->isChecked();
+}
+
+bool KisWetOpSettings::varyStrength() const
+{
+    return m_options->checkStrength->isChecked();
+}
+
+KisPaintOp * KisWetOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
+{
+    const KisWetOpSettings *wetopSettings = dynamic_cast<const KisWetOpSettings *>(settings);
+    Q_ASSERT(settings == 0 || wetopSettings != 0);
+
+    KisPaintOp * op = new KisWetOp(wetopSettings, painter);
+    Q_CHECK_PTR(op);
     return op;
 }
 
-KisWetOp::KisWetOp(KisPainter * painter)
+KisPaintOpSettings* KisWetOpFactory::settings(QWidget * parent, const KisInputDevice& inputDevice)
+{
+    if (inputDevice == KisInputDevice::mouse()) {
+        // No options for mouse, only tablet devices
+        return 0;
+    } else {
+        return new KisWetOpSettings(parent);
+    }
+}
+
+KisWetOp::KisWetOp(const KisWetOpSettings */*settings*/, KisPainter * painter)
     : super(painter)
 {
 }

@@ -104,7 +104,7 @@ class KisToolManager;
 class KisUndoAdapter;
 class KisFilterConfiguration;
 class KisPartLayerHandler;
-
+class KisPaintOpSettings;
 
 class KRITA_EXPORT KisView
     : public KoView,
@@ -160,7 +160,7 @@ signals:
     void brushChanged(KisBrush * brush);
     void gradientChanged(KisGradient * gradient);
     void patternChanged(KisPattern * pattern);
-    void paintopChanged(KisID paintop);
+    void paintopChanged(KisID paintop, const KisPaintOpSettings *paintopSettings);
     /**
      * Indicates when the current layer changed so that the current colorspace could have
      * changed.
@@ -193,7 +193,7 @@ public slots:
     void brushActivated(KisResource *brush);
     void patternActivated(KisResource *pattern);
     void gradientActivated(KisResource *gradient);
-    void paintopActivated(const KisID & paintop);
+    void paintopActivated(const KisID & paintop, const KisPaintOpSettings *paintopSettings);
 
 
 public:
@@ -246,6 +246,7 @@ private:
     virtual KisPattern *currentPattern() const;
     virtual KisGradient *currentGradient() const;
     virtual KisID currentPaintop() const;
+    virtual const KisPaintOpSettings *currentPaintopSettings() const;
 
     virtual double zoomFactor() const;
 
@@ -563,6 +564,7 @@ private:
     KisGradient *m_gradient;
 
     KisID m_paintop;
+    const KisPaintOpSettings *m_paintopSettings;
 
     QTime m_tabletEventTimer;
     QTabletEvent::TabletDevice m_lastTabletEventDevice;

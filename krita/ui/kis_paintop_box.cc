@@ -61,7 +61,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     m_layout = new QHBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 
-    connect(this, SIGNAL(selected(const KisID &)), view, SLOT(paintopActivated(const KisID &)));
+    connect(this, SIGNAL(selected(const KisID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KisID &, const KisPaintOpSettings *)));
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
@@ -107,6 +107,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     QValueList<KisID>::iterator end = m_paintops -> end();
     m_displayedOps -> clear();
     m_cmbPaintops->clear();
+
     for ( ; it != end; ++it ) {
         if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
             QPixmap pm = paintopPixmap(*it);
@@ -122,7 +123,14 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
         }
     }
 
-    const int index = m_displayedOps->findIndex(currentPaintop());
+    int index = m_displayedOps->findIndex(currentPaintop());
+
+    if (index == -1) {
+        // Must change the paintop as the current one is not supported
+        // by the new colourspace.
+        index = 0;
+    }
+
     m_cmbPaintops->setCurrentItem( index );
     slotItemSelected( index );
 }
@@ -151,7 +159,15 @@ void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
         paintop = (*it).second;
     }
 
-    const int index = m_displayedOps->findIndex(paintop);
+    int index = m_displayedOps->findIndex(paintop);
+
+    if (index == -1) {
+        // Must change the paintop as the current one is not supported
+        // by the new colourspace.
+        index = 0;
+        paintop = *m_displayedOps->at(index);
+    }
+
     m_cmbPaintops->setCurrentItem(index);
     setCurrentPaintop(paintop);
 }
@@ -164,9 +180,12 @@ void KisPaintopBox::updateOptionWidget()
         m_layout->invalidate();
     }
 
-    m_optionWidget = KisPaintOpRegistry::instance()->configWidget( currentPaintop(), this, m_canvasController->currentInputDevice() );
+    const KisPaintOpSettings *settings = paintopSettings(currentPaintop(), m_canvasController->currentInputDevice());
 
-    if (m_optionWidget != 0) {
+    if (settings != 0) {
+        m_optionWidget = settings->widget();
+        Q_ASSERT(m_optionWidget != 0);
+
         m_layout->addWidget(m_optionWidget);
         updateGeometry();
         m_optionWidget->show();
@@ -184,7 +203,7 @@ void KisPaintopBox::setCurrentPaintop(const KisID & paintop)
 
     updateOptionWidget();
 
-    emit selected(paintop);
+    emit selected(paintop, paintopSettings(paintop, m_canvasController->currentInputDevice()));
 }
 
 KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
@@ -196,4 +215,28 @@ KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
     }
 }
 
+const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice)
+{
+    QValueVector<KisPaintOpSettings *> settingsArray;
+    InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
+
+    if (it == m_inputDevicePaintopSettings.end()) {
+        // Create settings for each paintop.
+
+        for (QValueList<KisID>::const_iterator pit = m_paintops->begin(); pit != m_paintops->end(); ++pit) {
+            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(*pit, this, inputDevice);
+            settingsArray.append(settings);
+        }
+        m_inputDevicePaintopSettings[inputDevice] = settingsArray;
+    } else {
+        settingsArray = (*it).second;
+    }
+
+    const int index = m_paintops->findIndex(paintop);
+    Q_ASSERT(index >= 0 && index < settingsArray.count());
+
+    return settingsArray[index];
+}
+
 #include "kis_paintop_box.moc"
+

@@ -32,7 +32,7 @@ public:
     KisWSBrushOpFactory() {}
     virtual ~KisWSBrushOpFactory() {}
 
-    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KisID id() { return KisID("wsbrush", i18n("Wet & Sticky Paintbrush")); }
     virtual QString pixmap() { return "wetpaintbrush.png"; }
 };

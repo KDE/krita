@@ -38,7 +38,7 @@
 
 #include "kis_duplicateop.h"
 
-KisPaintOp * KisDuplicateOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 { 
     KisPaintOp * op = new KisDuplicateOp(painter); 
     Q_CHECK_PTR(op);

@@ -29,6 +29,7 @@ class QWidget;
 class QStringList;
 
 class KisPaintOp;
+class KisPaintOpSettings;
 class KisPainter;
 class KisColorSpace;
 class KisInputDevice;
@@ -44,19 +45,20 @@ public:
     /**
      * Return a newly created paintop
      */
-    KisPaintOp * paintOp(const KisID& id, KisPainter * painter) const;
+    KisPaintOp * paintOp(const KisID& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
 
     /**
      * Return a newly created paintopd
      */
-    KisPaintOp * paintOp(const QString& id, KisPainter * painter) const;
+    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
 
     /**
-     * Return or create and return a configuration widget
+     * Create and return an (abstracted) configuration widget
      * for using the specified paintop with the specified input device,
-     * with the specified parent as widget parent.
+     * with the specified parent as widget parent. Returns 0 if there
+     * are no settings available for the given device.
      */
-    QWidget * configWidget(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
+    KisPaintOpSettings * settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
     
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KisID & id, KisColorSpace* cs) const;

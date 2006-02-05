@@ -84,7 +84,7 @@ void KisToolFilter::initPaint(KisEvent *e)
     m_paintIncremental = m_filter -> supportsIncrementalPainting();
     
     super::initPaint(e);
-    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", painter());
+    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("filter", 0, painter());
     op -> setSource ( m_source );
     painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
     painter() -> setFilter( m_filter );

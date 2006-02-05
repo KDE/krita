@@ -34,17 +34,28 @@ class KisPainter;
 class KisBrushOpFactory : public KisPaintOpFactory  {
 
 public:
-    KisBrushOpFactory() : m_optionWidget(0), m_size(0), m_opacity(0), m_darken(0) {}
+    KisBrushOpFactory() {}
     virtual ~KisBrushOpFactory() {}
 
-    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KisID id() { return KisID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
-    virtual QWidget * optionWidget(QWidget * parent, const KisInputDevice& inputDevice);
-    
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
+};
+
+class KisBrushOpSettings : public KisPaintOpSettings {
+    typedef KisPaintOpSettings super;
+public:
+    KisBrushOpSettings(QWidget *parent);
+
+    bool varySize() const;
+    bool varyOpacity() const;
+    bool varyDarken() const;
+
+    virtual QWidget *widget() const { return m_optionsWidget; }
 
 private:
-    QWidget * m_optionWidget;
+    QWidget *m_optionsWidget;
     QLabel * m_pressureVariation;
     QCheckBox * m_size;
     QCheckBox * m_opacity;
@@ -57,7 +68,7 @@ class KisBrushOp : public KisPaintOp {
 
 public:
 
-    KisBrushOp(KisPainter * painter, bool size = true, bool opacity = false, bool darken = false);
+    KisBrushOp(const KisBrushOpSettings *settings, KisPainter * painter);
     virtual ~KisBrushOp();
 
     void paintAt(const KisPoint &pos, const KisPaintInformation& info);

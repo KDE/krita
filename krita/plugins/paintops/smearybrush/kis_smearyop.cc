@@ -165,7 +165,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 }
 
 
-KisPaintOp * KisSmearyOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisSmearyOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 {
     KisPaintOp * op = new KisSmearyOp(painter);
     Q_CHECK_PTR(op);

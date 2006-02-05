@@ -39,7 +39,7 @@
 #include "kis_penop.h"
 
 
-KisPaintOp * KisPenOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 { 
     KisPaintOp * op = new KisPenOp(painter); 
     Q_CHECK_PTR(op);

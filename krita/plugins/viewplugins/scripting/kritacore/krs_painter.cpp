@@ -348,7 +348,7 @@ Kross::Api::Object::Ptr Painter::setBrush(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr Painter::setPaintOp(Kross::Api::List::Ptr args)
 {
     QString id = Kross::Api::Variant::toString(args->item(0));
-    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( id, m_painter );
+    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( id, 0, m_painter );
     m_painter->setPaintOp( op );
     return 0;
 }

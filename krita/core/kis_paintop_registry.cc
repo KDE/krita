@@ -75,7 +75,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
     if (painter == 0) {
         kdWarning() << " KisPaintOpRegistry::paintOp painter is null";
@@ -83,23 +83,23 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, KisPainter * painter)
     }
     KisPaintOpFactorySP f = get(id);
    if (f) {
-        return f -> createOp(painter);
+        return f -> createOp(settings, painter);
     }
     else {
         return 0;
     }
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
-    return paintOp(KisID(id, ""), painter);
+    return paintOp(KisID(id, ""), settings, painter);
 }
 
-QWidget * KisPaintOpRegistry::configWidget(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const
+KisPaintOpSettings * KisPaintOpRegistry::settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const
 {
-    KisPaintOpFactory*  f = get(id);
+    KisPaintOpFactory* f = get(id);
     if (f)
-        return f->optionWidget( parent, inputDevice );
+        return f->settings( parent, inputDevice );
 
     return 0;
 }

@@ -34,7 +34,7 @@
 #include "kis_convolveop.h"
 
 
-KisPaintOp * KisConvolveOpFactory::createOp(KisPainter * painter)
+KisPaintOp * KisConvolveOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 { 
     KisPaintOp * op = new KisConvolveOp(painter); 
     Q_CHECK_PTR(op);

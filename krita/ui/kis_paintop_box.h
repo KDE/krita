@@ -61,7 +61,7 @@ public:
     
 signals:
 
-   void selected(const KisID & id);
+    void selected(const KisID & id, const KisPaintOpSettings *settings);
 
 private slots:
 
@@ -79,6 +79,7 @@ private:
     const KisID & currentPaintop();
     void setCurrentPaintop(const KisID & paintop);
     KisID defaultPaintop(const KisInputDevice& inputDevice);
+    const KisPaintOpSettings *paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice);
 
 private:
     KisCanvasController *m_canvasController;
@@ -91,6 +92,9 @@ private:
 
     typedef std::map<KisInputDevice, KisID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
+
+    typedef std::map<KisInputDevice, QValueVector<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 
 

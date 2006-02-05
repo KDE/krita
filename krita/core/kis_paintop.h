@@ -64,7 +64,7 @@ class KRITACORE_EXPORT KisPaintOp : public KShared
 
 public:
 
-        KisPaintOp(KisPainter * painter);
+    KisPaintOp(KisPainter * painter);
     virtual ~KisPaintOp();
 
     virtual void paintAt(const KisPoint &pos, const KisPaintInformation& info) = 0;
@@ -92,6 +92,14 @@ protected:
     KisPaintDeviceSP m_source; // use this layer as source layer for the operation
 };
 
+class KisPaintOpSettings {
+public:
+    KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
+    virtual ~KisPaintOpSettings() {}
+
+    virtual QWidget *widget() const { return 0; }
+};
+
 /**
  * The paintop factory is responsible for creating paintops of the specified class.
  * If there is an optionWidget, the derived paintop itself must support settings,
@@ -101,16 +109,16 @@ class KisPaintOpFactory  : public KShared
 {
 
 public:
-    KisPaintOpFactory() {};
-    virtual ~KisPaintOpFactory() {};
+    KisPaintOpFactory() {}
+    virtual ~KisPaintOpFactory() {}
 
-    virtual KisPaintOp * createOp(KisPainter * painter) = 0;
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
     virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
      */
-    virtual QString pixmap() { return ""; };
+    virtual QString pixmap() { return ""; }
 
     /**
      * Whether this paintop is internal to a certain tool or can be used
@@ -120,10 +128,11 @@ public:
     virtual bool userVisible(KisColorSpace * cs = 0) { return cs -> id() != KisID("WET", ""); }
 
     /**
-     * Create and return a widget with options for this paintop when used with the 
-     * specified input device.
+     * Create and return an (abstracted) widget with options for this paintop when used with the 
+     * specified input device. Return 0 if there are no settings available for the given
+     * device.
      */
-    virtual QWidget* optionWidget(QWidget* parent, const KisInputDevice& inputDevice);
+    virtual KisPaintOpSettings* settings(QWidget* parent, const KisInputDevice& inputDevice);
 
 };
 #endif // KIS_PAINTOP_H_

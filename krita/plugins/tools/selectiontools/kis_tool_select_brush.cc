@@ -95,7 +95,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
     m_painter -> setBrush(m_subject -> currentBrush());
     m_painter -> setOpacity(MAX_SELECTED);
     m_painter -> setCompositeOp(COMPOSITE_OVER);
-    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", painter());
+    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, painter());
     painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,

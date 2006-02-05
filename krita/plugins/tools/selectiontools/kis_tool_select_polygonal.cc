@@ -121,7 +121,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
             painter.setBrush(m_subject -> currentBrush());
             painter.setOpacity(OPACITY_OPAQUE);
-            KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", &painter);
+            KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, &painter);
             painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
 
             switch(m_selectAction)

@@ -132,7 +132,7 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
         painter.setPattern(m_subject -> currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
-        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), &painter);
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
         painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());

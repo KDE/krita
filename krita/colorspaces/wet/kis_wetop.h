@@ -29,19 +29,29 @@ class KisPainter;
 class KisInputDevice;
 
 class KisWetOpFactory : public KisPaintOpFactory  {
-    WetPaintOptions* m_optWidget;
 public:
-    KisWetOpFactory() : m_optWidget(0) {}
+    KisWetOpFactory() {}
     virtual ~KisWetOpFactory() {}
 
-    virtual KisPaintOp * createOp(KisPainter * painter);
+    virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
     virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
-    virtual QWidget* optionWidget(QWidget* parent, const KisInputDevice& /*inputDevice*/) {
-        if (!m_optWidget)
-            m_optWidget = new WetPaintOptions(parent);
-        return m_optWidget;
-    }
+    virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
+};
+
+class KisWetOpSettings : public KisPaintOpSettings {
+    typedef KisPaintOpSettings super;
+public:
+    KisWetOpSettings(QWidget *parent);
+
+    bool varySize() const;
+    bool varyWetness() const;
+    bool varyStrength() const;
+
+    virtual QWidget *widget() const { return m_options; }
+
+private:
+    WetPaintOptions *m_options;
 };
 
 class KisWetOp : public KisPaintOp {
@@ -50,7 +60,7 @@ class KisWetOp : public KisPaintOp {
 
 public:
 
-    KisWetOp(KisPainter * painter);
+    KisWetOp(const KisWetOpSettings *settings, KisPainter * painter);
     virtual ~KisWetOp();
 
     void paintAt(const KisPoint &pos, const KisPaintInformation& info);

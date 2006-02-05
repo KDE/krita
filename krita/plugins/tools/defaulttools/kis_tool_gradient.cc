@@ -307,7 +307,7 @@ void KisToolGradient::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Gradient"),
-                        "gradient", Qt::Key_G, this,
+                        "tool_gradient", Qt::Key_G, this,
                         SLOT(activate()), collection,
                         name());
         m_action -> setToolTip(i18n("Draw a gradient"));

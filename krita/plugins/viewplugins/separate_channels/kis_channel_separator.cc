@@ -241,6 +241,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
             }
             else {
+                
                 // To images
                 // create a document
                 // create an image

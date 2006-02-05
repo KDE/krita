@@ -142,11 +142,11 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 {
     QVBoxLayout * l = new QVBoxLayout(this);
 
-    KoZoomAdapter * kzl = new ZoomListener(m_subject->canvasController());
+    KoZoomAdapter * m_zoomAdapter = new ZoomListener(m_subject->canvasController());
     KoThumbnailAdapter * ktp = new ThumbnailProvider(m_subject->currentImg(), m_subject);
     KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);
 
-    m_birdEyePanel = new KoBirdEyePanel(kzl, ktp, kpc, this);
+    m_birdEyePanel = new KoBirdEyePanel(m_zoomAdapter, ktp, kpc, this);
     connect(view, SIGNAL(cursorPosition( Q_INT32, Q_INT32 )), m_birdEyePanel, SLOT(cursorPosChanged( Q_INT32, Q_INT32 )));
     l->addWidget(m_birdEyePanel);
 
@@ -173,6 +173,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
 KisBirdEyeBox::~KisBirdEyeBox()
 {
+    delete m_zoomAdapter;
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

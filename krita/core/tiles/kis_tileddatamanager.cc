@@ -125,6 +125,8 @@ KisTiledDataManager::~KisTiledDataManager()
 
 void KisTiledDataManager::setDefaultPixel(const Q_UINT8 *defPixel)
 {
+    if (defPixel == 0) return;
+
     memcpy(m_defPixel, defPixel, m_pixelSize);
 
     m_defaultTile->setData(m_defPixel);

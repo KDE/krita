@@ -50,6 +50,7 @@ KisTool::~KisTool()
         delete m_action;
         m_action = 0;
     }
+    delete d;
 }
 
 QWidget* KisTool::createOptionWidget(QWidget* parent)

@@ -54,6 +54,7 @@ KisLayerSP KisGroupLayer::clone() const
 
 KisGroupLayer::~KisGroupLayer()
 {
+    m_layers.clear();
 }
 
 

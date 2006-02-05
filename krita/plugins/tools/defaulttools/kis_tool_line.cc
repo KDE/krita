@@ -233,7 +233,7 @@ void KisToolLine::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Line"),
-                        "line", Qt::Key_L, this,
+                        "tool_line", Qt::Key_L, this,
                         SLOT(activate()), collection,
                         name());
         m_action -> setToolTip(i18n("Draw a line"));

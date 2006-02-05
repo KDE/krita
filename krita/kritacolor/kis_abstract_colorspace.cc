@@ -162,6 +162,15 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 					    Q_UINT32 numPixels,
 					    Q_INT32 renderingIntent)
 {
+    if (dstColorSpace->colorSpaceType() == colorSpaceType()
+        && dstColorSpace->getProfile() == getProfile())
+    {
+        if (src!= dst)
+            memcpy (dst, src, numPixels * pixelSize());
+
+        return true;
+    }
+    
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();

@@ -29,7 +29,7 @@ KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
 	tool_polygon_cursor.png \
-	polygon.png
+	tool_polygon.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

@@ -166,7 +166,7 @@ void KisToolRectangle::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Rectangle"),
-                        "rectangle",
+                        "tool_rectangle",
                         Qt::Key_F6,
                         this,
                         SLOT(activate()),

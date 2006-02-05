@@ -60,10 +60,10 @@ kritapics_DATA = \
 	tool_fill_cursor.png \
 	tool_text_cursor.png \
 	tool_gradient_cursor.png \
-        gradient.png \
-	line.png \
-        rectangle.png \
-	ellipse.png \
+        tool_gradient.png \
+	tool_line.png \
+        tool_rectangle.png \
+	tool_ellipse.png \
         tool_pan.png \
         tool_freehand.png \
 	tool_text.png \

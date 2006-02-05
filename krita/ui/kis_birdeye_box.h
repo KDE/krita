@@ -26,6 +26,7 @@ class KoBirdEyePanel;
 class KisDoubleWidget;
 class KisView;
 class KisCanvasSubject;
+class KoZoomAdapter;
 
 class KisBirdEyeBox : public QWidget
 { 
@@ -48,6 +49,7 @@ private:
     KisView * m_view;
     KisCanvasSubject * m_subject;
     bool m_draggingExposureSlider;
+    KoZoomAdapter * m_zoomAdapter;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

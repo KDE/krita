@@ -44,8 +44,8 @@ protected:
     bool m_writable;
 
 protected:
-    inline Q_UINT32 xToCol(Q_UINT32 x) const { return m_ktm->xToCol(x); };
-    inline Q_UINT32 yToRow(Q_UINT32 y) const { return m_ktm->yToRow(y); };
+    inline Q_UINT32 xToCol(Q_UINT32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
+    inline Q_UINT32 yToRow(Q_UINT32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
     void fetchTileData(Q_INT32 col, Q_INT32 row);
 
 public:

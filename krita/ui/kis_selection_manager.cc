@@ -207,13 +207,11 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 0, 0,
                 this, SLOT(contract()),
                 collection, "contract");
-
     m_grow =
         new KAction(i18n("Grow"),
                 0, 0,
                 this, SLOT(grow()),
                 collection, "grow");
-
     m_similar =
         new KAction(i18n("Similar"),
                 0, 0,
@@ -791,8 +789,8 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
     
-    //determine the exact rectangle that encloses the selection
-    QRect selectedExactRect = selection->selectedExactRect();
+    //determine the layerSize
+    QRect layerSize = dev->exactBounds();
     /*
         Any bugs in this fuction are probably also in thin_region
         Blame all bugs in this function on jaycox@gimp.org
@@ -810,21 +808,21 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
     if (xradius <= 0 || yradius <= 0)
         return;
     
-    max = new Q_UINT8* [selectedExactRect.width() + 2 * xradius];
+    max = new Q_UINT8* [layerSize.width() + 2 * xradius];
     buf = new Q_UINT8* [yradius + 1]; 
     for (i = 0; i < yradius + 1; i++)
     {
-        buf[i] = new Q_UINT8[selectedExactRect.width()];
+        buf[i] = new Q_UINT8[layerSize.width()];
     }
-    buffer = new Q_UINT8[ ( selectedExactRect.width() + 2 * xradius ) * ( yradius + 1 ) ];
-    for (i = 0; i < selectedExactRect.width() + 2 * xradius; i++)
+    buffer = new Q_UINT8[ ( layerSize.width() + 2 * xradius ) * ( yradius + 1 ) ];
+    for (i = 0; i < layerSize.width() + 2 * xradius; i++)
     {
         if (i < xradius)
             max[i] = buffer;
-        else if (i < selectedExactRect.width() + xradius)
+        else if (i < layerSize.width() + xradius)
             max[i] = &buffer[(yradius + 1) * (i - xradius)];
         else
-            max[i] = &buffer[(yradius + 1) * (selectedExactRect.width() + xradius - 1)];
+            max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius - 1)];
     
         for (j = 0; j < xradius + 1; j++)
             max[i][j] = 0;
@@ -833,7 +831,7 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
         is [-xradius] to [region->w + xradius] */
     max += xradius;
 
-    out = new Q_UINT8[ selectedExactRect.width() ];
+    out = new Q_UINT8[ layerSize.width() ];
 
     circ = new Q_INT32[ 2 * xradius + 1 ];
     computeBorder (circ, xradius, yradius);
@@ -842,13 +840,13 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
         is [-xradius] to [xradius] */
     circ += xradius;
 
-    memset (buf[0], 0, selectedExactRect.width());
-    for (i = 0; i < yradius && i < selectedExactRect.height(); i++) // load top of image
+    memset (buf[0], 0, layerSize.width());
+    for (i = 0; i < yradius && i < layerSize.height(); i++) // load top of image
     {
-        selection->readBytes(buf[i + 1], selectedExactRect.x(), selectedExactRect.y() + i, selectedExactRect.width(), 1);
+        selection->readBytes(buf[i + 1], layerSize.x(), layerSize.y() + i, layerSize.width(), 1);
     }
 
-    for (x = 0; x < selectedExactRect.width() ; x++) // set up max for top of image
+    for (x = 0; x < layerSize.width() ; x++) // set up max for top of image
     {
             max[x][0] = 0;         // buf[0][x] is always 0 
             max[x][1] = buf[1][x]; // MAX (buf[1][x], max[x][0]) always = buf[1][x]
@@ -858,14 +856,14 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
             }
     }
 
-  for (y = 0; y < selectedExactRect.height(); y++)
+  for (y = 0; y < layerSize.height(); y++)
     {
       rotatePointers (buf, yradius + 1);
-      if (y < selectedExactRect.height() - (yradius))
-        selection->readBytes(buf[yradius], selectedExactRect.x(), selectedExactRect.y() + y + yradius, selectedExactRect.width(), 1);
+      if (y < layerSize.height() - (yradius))
+        selection->readBytes(buf[yradius], layerSize.x(), layerSize.y() + y + yradius, layerSize.width(), 1);
       else
-            memset (buf[yradius], 0, selectedExactRect.width());
-      for (x = 0; x < selectedExactRect.width(); x++) /* update max array */
+            memset (buf[yradius], 0, layerSize.width());
+      for (x = 0; x < layerSize.width(); x++) /* update max array */
         {
           for (i = yradius; i > 0; i--)
             {
@@ -875,7 +873,7 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
         }
       last_max = max[0][circ[-1]];
       last_index = 1;
-      for (x = 0; x < selectedExactRect.width(); x++) /* render scan line */
+      for (x = 0; x < layerSize.width(); x++) /* render scan line */
         {
           last_index--;
           if (last_index >= 0)
@@ -907,7 +905,7 @@ void KisSelectionManager::fattenRegion (Q_INT32 xradius, Q_INT32 yradius)
               out[x] = last_max;
             }
         }
-        selection->writeBytes(out, selectedExactRect.x(), selectedExactRect.y() + y, selectedExactRect.width(), 1);
+        selection->writeBytes(out, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
     }
   /* undo the offsets to the pointers so we can free the malloced memmory */
   circ -= xradius;

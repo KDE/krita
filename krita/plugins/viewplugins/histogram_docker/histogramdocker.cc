@@ -77,7 +77,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
                 this, SLOT(popupMenu(const QPoint&)));
         connect(m_cache, SIGNAL(cacheUpdated()),
-                new HistogramDockerUpdater(m_histogram, m_hview, m_producer), SLOT(updated()));
+                new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
         connect(&m_popup, SIGNAL(activated(int)),
                 this, SLOT(producerChanged(int)));
         connect(img, SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
@@ -142,7 +142,7 @@ void KritaHistogramDocker::producerChanged(int pos)
         m_hview -> setCurrentChannels(m_producer, m_producer -> channels());
 
         connect(m_cache, SIGNAL(cacheUpdated()),
-                new HistogramDockerUpdater(m_histogram, m_hview, m_producer), SLOT(updated()));
+                new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
     }
 }
 
@@ -169,7 +169,7 @@ void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
     producerChanged(0);
 }
 
-HistogramDockerUpdater::HistogramDockerUpdater(KisHistogramSP h, KisHistogramView* v,
+HistogramDockerUpdater::HistogramDockerUpdater(QObject* parent, KisHistogramSP h, KisHistogramView* v,
                                                KisAccumulatingHistogramProducer* p)
     : m_histogram(h), m_view(v), m_producer(p)
 {

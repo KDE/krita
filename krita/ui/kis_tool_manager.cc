@@ -79,10 +79,12 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
     toolbox->setupTools();
 
     KisTool * t = findTool("tool_brush");
-    t->activate();
-    setCurrentTool(t);
-
+    if (t) {
+        t->activate();
+        setCurrentTool(t);
+    }
     setup = true;
+        
 }
 
 

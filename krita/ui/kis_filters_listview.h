@@ -70,7 +70,7 @@ public:
 private:
     KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
-    KisPaintLayerSP m_thumb;
+    KisPaintDeviceSP m_thumb;
 };
 
 #endif

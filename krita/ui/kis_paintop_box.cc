@@ -58,6 +58,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     m_displayedOps = new QValueList<KisID>();
 
     m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
+    m_cmbPaintops->setMinimumWidth(150);
     m_layout = new QHBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 

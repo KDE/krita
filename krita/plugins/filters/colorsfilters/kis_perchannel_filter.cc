@@ -22,6 +22,7 @@
 #include <qpainter.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qdom.h>
 
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
@@ -62,7 +63,49 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 
 QString KisPerChannelFilterConfiguration::toString()
 {
-    return QString::null;
+    QDomDocument doc = QDomDocument("filterconfig");
+    QDomElement root = doc.createElement( "filterconfig" );
+    root.setAttribute( "name", name() );
+    root.setAttribute( "version", version() );
+
+    QDomElement e = doc.createElement( "transfers" );
+    e.setAttribute("number", nTransfers);
+
+    for (int i = 0; i < nTransfers; ++i) {
+        QDomElement t = doc.createElement("transfer");
+        QString sTransfer;
+        for ( uint j = 0; j < 255 ; ++i ) {
+            sTransfer += QString::number( transfers[i][j] );
+            sTransfer += ",";
+        }
+        QDomText text = doc.createCDATASection(sTransfer);
+        t.appendChild(text);
+        e.appendChild(t);
+    }
+    root.appendChild(e);
+        
+    QDomElement c = doc.createElement("curves");
+    c.setAttribute("number", nTransfers);
+    for (int i = 0; i < nTransfers; ++i) {
+        QDomElement t = doc.createElement("curve");
+        QPtrList<QPair<double,double> > curve = curves[i];
+        QString sCurve;
+        QPair<double,double> * pair;
+        for ( pair = curve.first(); pair; pair = curve.next() ) {
+            sCurve += QString::number(pair->first);
+            sCurve += ",";
+            sCurve += QString::number(pair->second);
+            sCurve += ";";
+        }
+        QDomText text = doc.createCDATASection(sCurve);
+        t.appendChild(text);
+        c.appendChild(t);
+    }
+    root.appendChild(c);
+
+    
+    doc.appendChild( root );
+    return doc.toString();
 }
 
 

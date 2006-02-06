@@ -61,14 +61,6 @@
 #include "kis_crop_visitor.h"
 #include "kis_profile.h"
 
-#define DEBUG_IMAGES 0
-const Q_INT32 RENDER_HEIGHT = 128;
-const Q_INT32 RENDER_WIDTH = 128;
-
-#if DEBUG_IMAGES
-static int numImages = 0;
-#endif
-
 class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
@@ -1265,7 +1257,20 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     if (!img.isNull()) {
 
 #ifdef __BIG_ENDIAN__
-        cmsDoTransform(m_private->bigEndianTransform, img.bits(), img.bits(), w * h);
+        //cmsDoTransform(m_private->bigEndianTransform, img.bits(), img.bits(), w * h);
+        uchar * data = img.bits();
+        for (int i = 0; i < w * h; ++i) {
+            uchar r, g, b, a;
+            a = data[0];
+            b = data[1];
+            g = data[2];
+            r = data[3];
+            data[0] = r;
+            data[1] = g;
+            data[2] = b;
+            data[3] = a;
+            data += 4;
+        }        
 #endif
         return img;
     }

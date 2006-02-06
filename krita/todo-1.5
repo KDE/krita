@@ -40,7 +40,7 @@ Core
 ?  * merge layer don't work
 R  * rendering with complex groupings gives very wrong results
 R  * Fix unittests for colorspaces
-P  * Fix part layers
+P  * Fix part layers (nearly done)
 R  * Resize image to size of layer: move layer to 0,0 in this image
 R  * Selections are no longer updated when switching layers
 R  * disable everything necessary when the current layer is wet.
@@ -52,6 +52,7 @@ C  * finish the convolution painter
 
 User interface
 
+P  * Try to optimize histogram docker
 B  * Add image preview to bird's eyeview box
 R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
@@ -73,11 +74,9 @@ R  * Finish raw importer
 Tools
 
 B  * Fix transform tool and re-enable the shear and rotate functionality
-P  * Add radius option to color picker tool. Fix color picker tool according to TZ
 R  * Add direct/incremental option to shape tools
 ?  * Disable tools that don't work with group layers when the current layer is
      a group layer.
-P  * implement the checkboxes in the brush op
      
 Plugins
 
@@ -98,7 +97,6 @@ hard look at them. We can do without open bugs :-) (Wishlists excepted, but
 Cyrille, maybe you're interested in 119290 after the release? sounds like
 something that's absolutely your cup of cafe au lait.)
 
-P  113086   NEW      krita crashes when resizing certain image
 R  116075   NEW      reproducible crash when trying cimg image restauration
    117633   NEW      Krita crashed while trying to edit a picture's layer
    117923   NEW      crash at opening a random file

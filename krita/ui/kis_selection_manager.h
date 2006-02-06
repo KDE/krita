@@ -75,19 +75,26 @@ public slots:
     void feather();
     void border();
     void expand();
-    void smooth();
     void contract();
     void grow();
+    void smooth();
     void similar();
     void transform();
     void load();
     void save();
     void toggleDisplaySelection();
 
+public:
+    void grow (Q_INT32 xradius, Q_INT32 yradius);
+    void shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock);
+    // the following functions are needed for the siox tool
+    // they might be also usefull on its own
+    void erode();
+    void dilate();
+
 private:
     void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
-    void fattenRegion (Q_INT32 xradius, Q_INT32 yradius);
-    void thinRegion (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock);
+    
     void computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius);
     inline void rotatePointers (Q_UINT8  **p, Q_UINT32 n);
 

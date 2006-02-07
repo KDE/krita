@@ -884,9 +884,9 @@ KisPaintDeviceSP KisImage::activeDevice()
     return 0;
 }
 
-KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
+KisPaintLayer * KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
 {
-    KisLayerSP layer;
+    KisPaintLayer * layer;
     if (colorstrategy)
         layer = new KisPaintLayer(this, name, opacity, colorstrategy);
     else

@@ -622,7 +622,8 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     else {
 #endif
         Q_UINT8 * dstData = new Q_UINT8[img.width() * img.height() * pixelSize()];
-        KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),srcProfileName) ->
+        KisMetaRegistry::instance()->csRegistry()
+                ->getColorSpace(KisID("RGBA",""),srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
 //    }

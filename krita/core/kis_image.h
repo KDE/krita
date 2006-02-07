@@ -34,7 +34,12 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_annotation.h"
+#include "kis_paint_device.h"
+#include "kis_paint_layer.h"
+#include "kis_doc.h"
+
 #include <koffice_export.h>
+
 
 class DCOPObject;
 class KCommand;
@@ -179,9 +184,9 @@ public:
      */
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
-    /// Creates a new layer with the specified properties, adds it to the image, and returns it.
-    KisLayerSP newLayer(const QString& name, Q_UINT8 opacity,
-                        const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
+    /// Creates a new paint layer with the specified properties, adds it to the image, and returns it.
+    KisPaintLayer * newLayer(const QString& name, Q_UINT8 opacity,
+                             const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();

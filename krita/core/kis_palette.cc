@@ -213,7 +213,6 @@ bool KisPalette::init()
         QColor color;
         KisPaletteEntry e;
 
-        kdDebug(DBG_AREA_FILE) << "Gimp format palette file\n";
         format = FORMAT_GPL;
 
         // Read name

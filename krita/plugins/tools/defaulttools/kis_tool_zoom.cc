@@ -1,4 +1,4 @@
-/*
+cd /*
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
@@ -19,17 +19,20 @@
 
 #include <kaction.h>
 #include <klocale.h>
+
+#include "kis_image.h"
+#include "kis_paint_device.h"
+#include "kis_paint_layer.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
-#include "kis_tool_zoom.h"
-#include "kis_tool_zoom.moc"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_image.h"
+#include "kis_tool_zoom.h"
+
 
 KisToolZoom::KisToolZoom()
     : super(i18n("Zoom Tool"))
@@ -155,3 +158,4 @@ void KisToolZoom::setup(KActionCollection *collection)
     }
 }
 
+#include "kis_tool_zoom.moc"

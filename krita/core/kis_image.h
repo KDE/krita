@@ -35,7 +35,6 @@
 #include "kis_types.h"
 #include "kis_annotation.h"
 #include "kis_paint_device.h"
-#include "kis_paint_layer.h"
 #include "kis_doc.h"
 
 #include <koffice_export.h>
@@ -56,6 +55,7 @@ class KisFilterStrategy;
 class KisImageIface;
 class KisProfile;
 class KisProgressDisplayInterface;
+class KisPaintLayer;
 
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
@@ -185,7 +185,7 @@ public:
     KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
 
     /// Creates a new paint layer with the specified properties, adds it to the image, and returns it.
-    KisPaintLayer * newLayer(const QString& name, Q_UINT8 opacity,
+    KisLayerSP newLayer(const QString& name, Q_UINT8 opacity,
                              const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.

@@ -18,10 +18,10 @@
 #ifndef KIS_PAINT_LAYER_H_
 #define KIS_PAINT_LAYER_H_
 
-#include "kis_paint_device.h"
-#include "kis_layer.h"
 #include "kis_types.h"
-
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kis_colorspace.h"
 /**
  * This layer is of a type that can be painted on.
  */
@@ -46,14 +46,14 @@ public:
     // Called when another layer is made active
     virtual void deactivate() {};
 
-    virtual Q_INT32 x() const { return m_paintdev->getX(); };
-    virtual void setX(Q_INT32 x) { m_paintdev->setX(x); };
+    virtual Q_INT32 x() const;
+    virtual void setX(Q_INT32 x);
 
-    virtual Q_INT32 y() const { return m_paintdev->getY(); };
-    virtual void setY(Q_INT32 y) { m_paintdev->setY(y); };
+    virtual Q_INT32 y() const;
+    virtual void setY(Q_INT32 y);
 
-    virtual QRect extent() const {return m_paintdev->extent(); };
-    virtual QRect exactBounds() const {return m_paintdev->exactBounds(); };
+    virtual QRect extent() const;
+    virtual QRect exactBounds() const;
 
     virtual void setImage(KisImage *image);
 

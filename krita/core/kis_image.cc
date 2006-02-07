@@ -60,6 +60,7 @@
 #include "kis_scale_visitor.h"
 #include "kis_crop_visitor.h"
 #include "kis_profile.h"
+#include "kis_paint_layer.h"
 
 class KisImage::KisImagePrivate {
 public:
@@ -884,7 +885,7 @@ KisPaintDeviceSP KisImage::activeDevice()
     return 0;
 }
 
-KisPaintLayer * KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
+KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
 {
     KisPaintLayer * layer;
     if (colorstrategy)
@@ -1270,7 +1271,7 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
             data[2] = b;
             data[3] = a;
             data += 4;
-        }        
+        }
 #endif
         return img;
     }

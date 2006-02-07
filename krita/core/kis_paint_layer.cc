@@ -100,6 +100,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
 void KisPaintLayer::setImage(KisImage *image)
 {
     super::setImage(image);
+
     m_paintdev->setImage(image);
 }
 
@@ -107,5 +108,15 @@ QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 {
     return m_paintdev->createThumbnail(w, h);
 }
+
+
+Q_INT32 KisPaintLayer::x() const { return m_paintdev->getX(); }
+void KisPaintLayer::setX(Q_INT32 x) { m_paintdev->setX(x); }
+
+Q_INT32 KisPaintLayer::y() const { return m_paintdev->getY(); }
+void KisPaintLayer::setY(Q_INT32 y) { m_paintdev->setY(y); }
+
+QRect KisPaintLayer::extent() const {return m_paintdev->extent(); }
+QRect KisPaintLayer::exactBounds() const {return m_paintdev->exactBounds(); }
 
 #include "kis_paint_layer.moc"

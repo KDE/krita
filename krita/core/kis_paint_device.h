@@ -25,9 +25,9 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
+#include "kis_types.h"
 #include "kdebug.h"
 #include "kis_global.h"
-#include "kis_types.h"
 #include "kis_image.h"
 #include "kis_colorspace.h"
 #include "kis_canvas_controller.h"
@@ -46,6 +46,7 @@ class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisHLineIteratorPixel;
 class KNamedCommand;
+class KisUndoAdapter;
 
 class KisDataManager;
 typedef KSharedPtr<KisDataManager> KisDataManagerSP;

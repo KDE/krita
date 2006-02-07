@@ -20,7 +20,7 @@
 
 #include "kis_colorspace.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_paint_device.h"
 #include "kis_boundary.h"
 
 KisBoundary::KisBoundary(KisPaintDevice* dev) {
@@ -58,7 +58,7 @@ void KisBoundary::generateBoundary(int w, int h) {
             ++botIt;
         }
     }
-    
+
     // Vertical
     for (int currentX = - 1; currentX < w; currentX++) {
         KisVLineIteratorPixel leftIt = m_device -> createVLineIterator(currentX, 0, h, false);

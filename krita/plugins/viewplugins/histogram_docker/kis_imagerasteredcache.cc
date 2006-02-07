@@ -89,6 +89,7 @@ void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
     cleanUpElements();
+    m_busy = false;
 
     m_width = static_cast<int>(ceil(float(w) / float(m_rasterSize)));
     m_height = static_cast<int>(ceil(float(h) / float(m_rasterSize)));
@@ -116,16 +117,22 @@ void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
 void KisImageRasteredCache::timeOut() {
     m_busy = true;
     KisImageSP img = m_view -> canvasSubject() -> currentImg();
-    while(!m_queue.isEmpty()) {
+
+    // Pick one element of the cache, and update it
+    if (!m_queue.isEmpty()) {
         KisPaintDeviceSP dev = img -> mergedImage(); // Just returns a pointer to projection
         m_queue.front() -> observer -> regionUpdated(dev);
         m_queue.front() -> valid = true;
         m_queue.pop_front();
-        //qApp -> processEvents();
     }
 
-    emit cacheUpdated();
-    m_busy = false;
+    // If there are still elements, we need to be called again (this emulates processEvents)
+    if (!m_queue.isEmpty()) {
+        QTimer::singleShot(0, this, SLOT(timeOut()));
+    } else {
+        emit cacheUpdated();
+        m_busy = false;
+    }
 }
 
 void KisImageRasteredCache::cleanUpElements() {

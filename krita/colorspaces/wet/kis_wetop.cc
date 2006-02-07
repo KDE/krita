@@ -77,9 +77,18 @@ KisPaintOpSettings* KisWetOpFactory::settings(QWidget * parent, const KisInputDe
     }
 }
 
-KisWetOp::KisWetOp(const KisWetOpSettings */*settings*/, KisPainter * painter)
+KisWetOp::KisWetOp(const KisWetOpSettings * settings, KisPainter * painter)
     : super(painter)
 {
+    if (settings) {
+        m_size = settings -> varySize();
+        m_wetness = settings -> varyWetness();
+        m_strength = settings -> varyStrength();
+    } else {
+        m_size = false;
+        m_wetness = false;
+        m_strength = false;
+    }
 }
 
 KisWetOp::~KisWetOp()
@@ -101,13 +110,18 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (! brush -> canPaintFor(info) )
         return;
 
+    KisPaintInformation inf(info);
+
+    if (!m_size)
+        inf.pressure = PRESSURE_DEFAULT;
+
     KisPaintDeviceSP dab = 0;
 
     if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), info);
+        dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), inf);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(info);
+        KisAlphaMaskSP mask = brush -> mask(inf);
         dab = computeDab(mask, KisMetaRegistry::instance() -> csRegistry() -> getAlpha8());
     }
 
@@ -132,16 +146,19 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
-    strength  = strength * (strength + info.pressure) * 0.5;
+    if (m_strength)
+        strength = strength * (strength + info.pressure) * 0.5;
+    else
+        strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
     WetPack currentPack;
     WetPix currentPix;
     double eff_height;
     double press, contact;
 
-    int maskW = brush -> maskWidth(info);
-    int maskH = brush -> maskHeight(info);
-    KoPoint dest = (pos - (brush -> hotSpot(info)));
+    int maskW = brush -> maskWidth(inf);
+    int maskH = brush -> maskHeight(inf);
+    KoPoint dest = (pos - (brush -> hotSpot(inf)));
     int xStart = (int)dest.x();
     int yStart = (int)dest.y();
 
@@ -166,6 +183,9 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
             contact = (press + eff_height) * 0.2;
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
+            if (press != -1 && currentData.h < 161) {
+                kdDebug() << contact << " " << press << " " << eff_height << endl;
+            }
             if (contact > 0.0001) {
                 int v;
                 double rnd = rand() * (1.0 / RAND_MAX);
@@ -183,7 +203,11 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 v = currentPix.bw;
                 currentPix.bw = (Q_UINT16) floor(v + (paint.bw * strength - v) * contact + rnd);
                 v = currentPix.w;
-                currentPix.w = (Q_UINT16) floor(v + (paint.w - v) * contact + rnd);
+                if (m_wetness)
+                    currentPix.w = (Q_UINT16)(CLAMP(floor(
+                          v + (paint.w * (0.5 + info.pressure) - v) * contact + rnd), 0, 512));
+                else
+                    currentPix.w = (Q_UINT16) floor(v + (paint.w - v) * contact + rnd);
 
                 currentPack.paint = currentPix;
                 *(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;

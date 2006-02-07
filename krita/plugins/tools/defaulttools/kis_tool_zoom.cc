@@ -1,4 +1,4 @@
-cd /*
+/*
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *

@@ -188,7 +188,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 0, 0,
                 this, SLOT(border()),
                 collection, "border");
-
     m_expand =
         new KAction(i18n("Expand..."),
                 0, 0,
@@ -1079,6 +1078,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
 }
 
 //Simple convolution filter to smooth a mask (1bpp)
+
 void KisSelectionManager::smooth()
 {
     KisImageSP img = m_parent -> currentImg();
@@ -1245,7 +1245,7 @@ void KisSelectionManager::dilate()
     Q_UINT8* out = new Q_UINT8[width];
 
     // load top of image
-     selection->readBytes(buf[0] + 1, layerSize.x(), layerSize.y(), width, 1);
+    selection->readBytes(buf[0] + 1, layerSize.x(), layerSize.y(), width, 1);
 
     buf[0][0]         = buf[0][1];
     buf[0][width + 1] = buf[0][width];
@@ -1292,6 +1292,253 @@ void KisSelectionManager::dilate()
     dev -> emitSelectionChanged();
 }
 
+void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
+{
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return;
+
+    KisPaintDeviceSP dev = img -> activeDevice();
+    if (!dev) return;
+    
+    if (!dev -> hasSelection()) return;
+    KisSelectionSP selection = dev -> selection();
+    
+    //determine the layerSize
+    QRect layerSize = dev->exactBounds();
+
+  /*
+     This function has no bugs, but if you imagine some you can
+     blame them on jaycox@gimp.org
+  */
+    Q_UINT8  *buf[3];
+    Q_UINT8 **density;
+    Q_UINT8 **transition;
+    
+    if (xradius == 1 && yradius == 1) // optimize this case specifically
+    {
+        Q_UINT8* source[3];
+    
+        for (Q_INT32 i = 0; i < 3; i++)
+            source[i] = new Q_UINT8[layerSize.width()];
+    
+        Q_UINT8* transition = new Q_UINT8[layerSize.width()];
+
+        selection->readBytes(source[0], layerSize.x(), layerSize.y(), layerSize.width(), 1);
+        memcpy (source[1], source[0], layerSize.width());
+        if (layerSize.height() > 1)
+            selection->readBytes(source[2], layerSize.x(), layerSize.y() + 1, layerSize.width(), 1);
+        else
+            memcpy (source[2], source[1], layerSize.width());
+
+        computeTransition (transition, source, layerSize.width());
+        selection->writeBytes(transition, layerSize.x(), layerSize.y(), layerSize.width(), 1);
+
+        for (Q_INT32 y = 1; y < layerSize.height(); y++)
+        {
+            rotatePointers (source, 3);
+            if (y + 1 < layerSize.height())
+                selection->readBytes(source[2], layerSize.x(), layerSize.y() + y + 1, layerSize.width(), 1);
+            else
+                memcpy(source[2], source[1], layerSize.width());
+            computeTransition (transition, source, layerSize.width());
+            selection->writeBytes(transition, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
+        }
+
+        for (Q_INT32 i = 0; i < 3; i++)
+            delete source[i];
+        delete transition;
+        return;
+    }
+
+    Q_INT32* max = new Q_INT32[layerSize.width() + 2 * xradius];
+    for (Q_INT32 i = 0; i < (layerSize.width() + 2 * xradius); i++)
+        max[i] = yradius + 2;
+    max += xradius;
+
+    for (Q_INT32 i = 0; i < 3; i++)
+        buf[i] = new Q_UINT8[layerSize.width()];
+
+    transition = new Q_UINT8*[yradius + 1];
+    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    {
+        transition[i] = new Q_UINT8[layerSize.width() + 2 * xradius];
+        memset(transition[i], 0, layerSize.width() + 2 * xradius);
+        transition[i] += xradius;
+    }
+    Q_UINT8* out = new Q_UINT8[layerSize.width()];
+    density = new Q_UINT8*[2 * xradius + 1];
+    density += xradius;
+
+    for (Q_INT32 x = 0; x < (xradius + 1); x++) // allocate density[][]
+    {
+        density[ x]  = new Q_UINT8[2 * yradius + 1];
+        density[ x] += yradius;
+        density[-x]  = density[x];
+    }
+    for (Q_INT32 x = 0; x < (xradius + 1); x++) // compute density[][]
+    {
+        double tmpx, tmpy, dist;
+        Q_UINT8 a;
+
+        if (x > 0)
+            tmpx = x - 0.5;
+        else if (x < 0)
+            tmpx = x + 0.5;
+        else
+            tmpx = 0.0;
+
+        for (Q_INT32 y = 0; y < (yradius + 1); y++)
+        {
+            if (y > 0)
+                tmpy = y - 0.5;
+            else if (y < 0)
+                tmpy = y + 0.5;
+            else
+                tmpy = 0.0;
+            dist = ((tmpy * tmpy) / (yradius * yradius) +
+                    (tmpx * tmpx) / (xradius * xradius));
+            if (dist < 1.0)
+                a = 255 * (1.0 - sqrt (dist));
+            else
+                a = 0;
+            density[ x][ y] = a;
+            density[ x][-y] = a;
+            density[-x][ y] = a;
+            density[-x][-y] = a;
+        }
+    }
+    selection->readBytes(buf[0], layerSize.x(), layerSize.y(), layerSize.width(), 1);
+    memcpy (buf[1], buf[0], layerSize.width());
+    if (layerSize.height() > 1)
+        selection->readBytes(buf[2], layerSize.x(), layerSize.y() + 1, layerSize.width(), 1);
+    else
+        memcpy (buf[2], buf[1], layerSize.width());
+    computeTransition (transition[1], buf, layerSize.width());
+
+    for (Q_INT32 y = 1; y < yradius && y + 1 < layerSize.height(); y++) // set up top of image
+    {
+        rotatePointers (buf, 3);
+        selection->readBytes(buf[2], layerSize.x(), layerSize.y() + y + 1, layerSize.width(), 1);
+        computeTransition (transition[y + 1], buf, layerSize.width());
+    }
+    for (Q_INT32 x = 0; x < layerSize.width(); x++) // set up max[] for top of image
+    {
+        max[x] = -(yradius + 7);
+        for (Q_INT32 j = 1; j < yradius + 1; j++)
+            if (transition[j][x])
+            {
+                max[x] = j;
+                break;
+            }
+    }
+    for (Q_INT32 y = 0; y < layerSize.height(); y++) // main calculation loop
+    {
+        rotatePointers (buf, 3);
+        rotatePointers (transition, yradius + 1);
+        if (y < layerSize.height() - (yradius + 1))
+        {
+            selection->readBytes(buf[2], layerSize.x(), layerSize.y() + y + yradius + 1, layerSize.width(), 1);
+            computeTransition (transition[yradius], buf, layerSize.width());
+        }
+        else
+            memcpy (transition[yradius], transition[yradius - 1], layerSize.width());
+
+        for (Q_INT32 x = 0; x < layerSize.width(); x++) // update max array
+        {
+            if (max[x] < 1)
+            {
+                if (max[x] <= -yradius)
+                {
+                    if (transition[yradius][x])
+                        max[x] = yradius;
+                    else
+                        max[x]--;
+                }
+                else
+                    if (transition[-max[x]][x])
+                        max[x] = -max[x];
+                    else if (transition[-max[x] + 1][x])
+                        max[x] = -max[x] + 1;
+                else
+                  max[x]--;
+            }
+            else
+                max[x]--;
+            if (max[x] < -yradius - 1)
+                max[x] = -yradius - 1;
+        }
+        Q_UINT8 last_max =  max[0][density[-1]];
+        Q_INT32 last_index = 1;
+        for (Q_INT32 x = 0 ; x < layerSize.width(); x++) // render scan line
+        {
+            last_index--;
+            if (last_index >= 0)
+            {
+                last_max = 0;
+                for (Q_INT32 i = xradius; i >= 0; i--)
+                    if (max[x + i] <= yradius && max[x + i] >= -yradius && density[i][max[x+i]] > last_max)
+                    {
+                        last_max = density[i][max[x + i]];
+                        last_index = i;
+                    }
+                out[x] = last_max;
+            }
+            else
+            {
+                last_max = 0;
+                for (Q_INT32 i = xradius; i >= -xradius; i--)
+                    if (max[x + i] <= yradius && max[x + i] >= -yradius && density[i][max[x + i]] > last_max)
+                    {
+                        last_max = density[i][max[x + i]];
+                        last_index = i;
+                    }
+                out[x] = last_max;
+            }
+            if (last_max == 0)
+            {
+                Q_INT32 i;
+                for (i = x + 1; i < layerSize.width(); i++)
+                {
+                    if (max[i] >= -yradius)
+                        break;
+                }
+                if (i - x > xradius)
+                {
+                    for (; x < i - xradius; x++)
+                        out[x] = 0;
+                    x--;
+                }
+                last_index = xradius;
+            }
+        }
+        selection->writeBytes(out, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
+    }
+    delete out;
+
+    for (Q_INT32 i = 0; i < 3; i++)
+        delete buf[i];
+
+    max -= xradius;
+    delete max;
+
+    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    {
+        transition[i] -= xradius;
+        delete transition[i];
+    }
+    delete transition;
+
+    for (Q_INT32 i = 0; i < xradius + 1 ; i++)
+    {
+        density[i] -= yradius;
+        delete density[i];
+    }
+    density -= xradius;
+    delete density;
+
+    dev -> emitSelectionChanged();
+}
+
 #define RINT(x) floor ((x) + 0.5)
 
 void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius)
@@ -1323,6 +1570,56 @@ void KisSelectionManager::rotatePointers (Q_UINT8  **p, Q_UINT32 n)
     for (i = 0; i < n - 1; i++) p[i] = p[i + 1];
     
     p[i] = tmp;
+}
+
+void KisSelectionManager::computeTransition (Q_UINT8* transition, Q_UINT8** buf, Q_INT32 width)
+{
+    Q_INT32 x = 0;
+
+    if (width == 1)
+    {
+        if (buf[1][x] > 127 && (buf[0][x] < 128 || buf[2][x] < 128))
+            transition[x] = 255;
+        else
+            transition[x] = 0;
+    return;
+    }
+    if (buf[1][x] > 127)
+    {
+        if ( buf[0][x] < 128 || buf[0][x + 1] < 128 ||
+            buf[1][x + 1] < 128 ||
+            buf[2][x] < 128 || buf[2][x + 1] < 128 )
+            transition[x] = 255;
+        else
+            transition[x] = 0;
+    }
+    else
+        transition[x] = 0;
+    for (Q_INT32 x = 1; x < width - 1; x++)
+    {
+        if (buf[1][x] >= 128)
+        {
+            if (buf[0][x - 1] < 128 || buf[0][x] < 128 || buf[0][x + 1] < 128 ||
+                buf[1][x - 1] < 128           ||          buf[1][x + 1] < 128 ||
+                buf[2][x - 1] < 128 || buf[2][x] < 128 || buf[2][x + 1] < 128)
+                transition[x] = 255;
+            else
+                transition[x] = 0;
+        }
+        else
+            transition[x] = 0;
+    }
+    if (buf[1][x] >= 128)
+    {
+        if (buf[0][x - 1] < 128 || buf[0][x] < 128 ||
+            buf[1][x - 1] < 128 ||
+            buf[2][x - 1] < 128 || buf[2][x] < 128)
+            transition[x] = 255;
+        else
+            transition[x] = 0;
+    }
+    else
+        transition[x] = 0;
 }
 
 #include "kis_selection_manager.moc"

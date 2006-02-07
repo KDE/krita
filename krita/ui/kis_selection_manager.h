@@ -87,6 +87,7 @@ public slots:
 public:
     void grow (Q_INT32 xradius, Q_INT32 yradius);
     void shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock);
+    void border(Q_INT32 xradius, Q_INT32 yradius);
     // the following functions are needed for the siox tool
     // they might be also usefull on its own
     void erode();
@@ -97,6 +98,7 @@ private:
     
     void computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius);
     inline void rotatePointers (Q_UINT8  **p, Q_UINT32 n);
+    void computeTransition (Q_UINT8* transition, Q_UINT8** buf, Q_INT32 width);
 
     KisView * m_parent;
     KisDoc * m_doc;

@@ -29,12 +29,16 @@
 #include "kis_paint_device.h"
 #include "kis_types.h"
 
+#include <new>
+
 class KisMathToolbox : public QObject {
     Q_OBJECT
     public:
         struct KisFloatRepresentation {
-            KisFloatRepresentation(uint nsize, uint ndepth) : coeffs(new float[nsize*nsize*ndepth]), size(nsize), depth(ndepth) { }
-            ~KisFloatRepresentation() { delete[] coeffs; }
+            KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc ) : size(nsize), depth(ndepth)
+            {
+            }
+            ~KisFloatRepresentation() { if(coeffs) delete[] coeffs; }
             float* coeffs;
             uint size;
             uint depth;
@@ -49,7 +53,7 @@ class KisMathToolbox : public QObject {
          * This function initialize a wavelet structure
          * @param lay the layer that will be used for the transformation
          */
-        inline KisWavelet* initWavelet(KisPaintDeviceSP lay, const QRect&);
+        inline KisWavelet* initWavelet(KisPaintDeviceSP lay, const QRect&) throw(std::bad_alloc );
         inline uint fastWaveletTotalSteps(const QRect&);
         /**
          * This function reconstruct the layer from the information of a wavelet
@@ -94,7 +98,7 @@ class KisMathToolboxFactoryRegistry : public KisGenericRegistry<KisMathToolbox*>
 };
 
 
-inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP src, const QRect& rect)
+inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP src, const QRect& rect) throw(std::bad_alloc )
 {
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();

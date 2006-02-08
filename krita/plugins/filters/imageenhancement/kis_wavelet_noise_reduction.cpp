@@ -84,8 +84,22 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
     kdDebug(41005) << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
-    KisMathToolbox::KisWavelet* buff = mathToolbox->initWavelet(src, rect);
-    KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
+    KisMathToolbox::KisWavelet* buff = 0;
+    KisMathToolbox::KisWavelet* wav = 0;
+    try {
+        buff = mathToolbox->initWavelet(src, rect);
+    } catch(std::bad_alloc)
+    {
+        if(buff) delete buff;
+        return;
+    }
+    try {
+        wav = mathToolbox->fastWaveletTransformation(src, rect, buff);
+    } catch(std::bad_alloc)
+    {
+        if(wav) delete wav;
+        return;
+    }
 
     kdDebug(41005) << "Thresholding..." << endl;
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;

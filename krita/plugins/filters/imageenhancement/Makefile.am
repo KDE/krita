@@ -22,3 +22,5 @@ noinst_HEADERS = imageenhancement.h kis_wavelet_noise_reduction.h
 kritaimageenhancement_la_LIBADD =  ../../../libkritacommon.la 
 
 kritaimageenhencement_la_METASOURCES = AUTO
+
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)

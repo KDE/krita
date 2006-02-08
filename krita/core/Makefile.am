@@ -3,6 +3,7 @@ INCLUDES  = \
 	-I$(srcdir)/../sdk \
 	-I$(srcdir)/tiles \
 	-I$(srcdir)/../kritacolor \
+	-I$(srcdir)/../ui \
 	$(KOFFICE_INCLUDES) \
     $(KOPAINTER_INCLUDES) \
     $(OPENEXR_CFLAGS) \

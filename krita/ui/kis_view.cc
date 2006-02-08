@@ -1401,6 +1401,9 @@ void KisView::imgResizeToActiveLayer()
     if (img && (layer = img -> activeLayer())) {
         QRect r = layer -> exactBounds();
         img -> resize(r.width(), r.height(), r.x(), r.y(), true);
+        KisPaintLayer * l = dynamic_cast<KisPaintLayer*>(layer.data());
+        if (l)
+            l->paintDevice()->move(0,0);
     }
 }
 
@@ -3350,6 +3353,8 @@ KisImageSP KisView::currentImg() const
 void KisView::setCurrentImage(KisImageSP image)
 {
     Q_ASSERT(image);
+    if (!image) return;
+    
     disconnectCurrentImg();
     m_image = image;
 

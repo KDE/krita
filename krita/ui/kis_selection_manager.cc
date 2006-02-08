@@ -1395,7 +1395,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             dist = ((tmpy * tmpy) / (yradius * yradius) +
                     (tmpx * tmpx) / (xradius * xradius));
             if (dist < 1.0)
-                a = 255 * (1.0 - sqrt (dist));
+                a = 255 * (Q_UINT8)(1.0 - sqrt (dist));
             else
                 a = 0;
             density[ x][ y] = a;
@@ -1553,7 +1553,7 @@ void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT
         else
         tmp = 0.0;
     
-        circ[i] = RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
+        circ[i] = (Q_INT32) RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
     }
 }
 

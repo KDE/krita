@@ -471,6 +471,9 @@ private slots:
 
     void handlePartLayerAdded(KisLayerSP layer);
 
+    /// Is called when the file is loaded
+    void slotLoadingFinished();
+
 private:
 
     bool m_panning;

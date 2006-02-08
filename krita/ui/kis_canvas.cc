@@ -1229,6 +1229,12 @@ void KisCanvas::show()
     dynamic_cast<QWidget *>(m_canvasWidget) -> show();
 }
 
+void KisCanvas::hide()
+{
+    Q_ASSERT(m_canvasWidget);
+    dynamic_cast<QWidget *>(m_canvasWidget) -> hide();
+}
+
 int KisCanvas::width() const
 {
     Q_ASSERT(m_canvasWidget);

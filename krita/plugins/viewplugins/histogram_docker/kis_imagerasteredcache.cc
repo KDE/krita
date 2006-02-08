@@ -67,16 +67,17 @@ void KisImageRasteredCache::imageUpdated(const QRect& rc) {
     int x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
     int y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
 
-    for ( ; x < x2; x++) {
-        for (int i = y; i < y2; i++) {
-            Element* e = m_raster.at(x).at(i);
-            if (e -> valid) {
-                e -> valid = false;
-                m_queue.push_back(e);
+    if (!m_raster.empty()) {
+        for ( ; x < x2; x++) {
+            for (int i = y; i < y2; i++) {
+                Element* e = m_raster.at(x).at(i);
+                if (e -> valid) {
+                    e -> valid = false;
+                    m_queue.push_back(e);
+                }
             }
         }
     }
-
     if (!m_busy) {
         // If the timer is already started, this resets it. That way, we update always
         // m_timeOutMSec milliseconds after the lastly monitored activity

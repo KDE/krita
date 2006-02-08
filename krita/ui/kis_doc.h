@@ -151,6 +151,7 @@ public slots:
 signals:
     void docUpdated();
     void docUpdated(const QRect& rect);
+    void loadingFinished();
 
 protected:
     // Overide KoDocument

@@ -278,6 +278,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     createLayerBox();
 
     setupCanvas();
+    m_canvas->hide();
     setupRulers();
     setupScrollBars();
     setupStatusBar();
@@ -320,9 +321,13 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         }
     }
 
-    // Set the current image for real now everything is ready to go.
-    setCurrentImage(m_image);
-    m_paletteManager->showWidget( "layerbox" );
+    if(!doc->isLoading())
+    {
+        slotLoadingFinished();
+    } else {
+        connect(doc, SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
+    }
+
     setFocus();
 }
 
@@ -3380,6 +3385,7 @@ KisImageSP KisView::currentImg() const
 
 void KisView::setCurrentImage(KisImageSP image)
 {
+    if(!image) return;
     Q_ASSERT(image);
     if (!image) return;
     
@@ -3594,6 +3600,15 @@ QPoint KisView::reverseViewTransformations(const QPoint& p) const {
 void KisView::canvasAddChild(KoViewChild *child) {
     super::canvasAddChild(child);
     connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
+}
+
+void KisView::slotLoadingFinished()
+{
+    // Set the current image for real now everything is ready to go.
+    setCurrentImage(document()->currentImage());
+    m_paletteManager->showWidget( "layerbox" );
+    m_canvas->show();
+    disconnect(document(), SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
 }
 
 #include "kis_view.moc"

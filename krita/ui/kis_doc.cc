@@ -338,6 +338,8 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
             }
         }
     }
+
+    emit loadingFinished();
     return true;
 }
 
@@ -1137,6 +1139,7 @@ void KisDoc::setCurrentImage(KisImageSP image)
     m_currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();
+    emit loadingFinished();
 }
 
 void KisDoc::initEmpty()

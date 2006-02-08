@@ -339,6 +339,7 @@ protected:
     void createOpenGLCanvas(QGLWidget *sharedContextWidget);
 #endif
     void show();
+    void hide();
     void setGeometry(int x, int y, int width, int height);
 
     void setUpdatesEnabled(bool updatesEnabled);

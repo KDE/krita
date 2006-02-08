@@ -59,6 +59,8 @@
 #include "kis_transaction.h"
 #include "kis_scale_visitor.h"
 #include "kis_crop_visitor.h"
+#include "kis_transform_visitor.h"
+#include "kis_filter_strategy.h"
 #include "kis_profile.h"
 #include "kis_paint_layer.h"
 
@@ -685,60 +687,35 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
     }
 }
 
-void KisImage::rotate(double , KisProgressDisplayInterface *)
+
+void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
 {
-/*LAYERREMOVE
-void KisImage::rotate(double angle, KisProgressDisplayInterface *m_progress)
-{
-    const double pi=3.1415926535897932385;
+    angle *= M_PI/180;
+    Q_INT32 w = width();
+    Q_INT32 h = height();
+    Q_INT32 tx = Q_INT32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
+    Q_INT32 ty = Q_INT32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
+    w = (Q_INT32)(width()*QABS(cos(angle)) + height()*QABS(sin(angle)) + 0.5);
+    h = (Q_INT32)(height()*QABS(cos(angle)) + width()*QABS(sin(angle)) + 0.5);
 
-    if (m_layers.empty()) return; // Nothing to scale
+    tx -= (w - width()) / 2;
+    ty -= (h - height()) / 2;
 
-    Q_INT32 w, h;
-    w = (Q_INT32)(width()*QABS(cos(angle*pi/180)) + height()*QABS(sin(angle*pi/180)) + 0.5);
-    h = (Q_INT32)(height()*QABS(cos(angle*pi/180)) + width()*QABS(sin(angle*pi/180)) + 0.5);
+    undoAdapter()->beginMacro(i18n("Rotate Image"));
 
-    Q_INT32 oldCentreToNewCentreXOffset = (w - width()) / 2;
-    Q_INT32 oldCentreToNewCentreYOffset = (h - height()) / 2;
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(KisID("Box"));
+    KisTransformVisitor visitor (this, 1.0, 1.0, 0, 0, angle, -tx, -ty, progress, filter);
+    m_rootLayer->accept(visitor);
 
-    m_adapter->beginMacro("Rotate image");
-
-    vKisLayerSP_it it;
-    for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-        KisLayerSP layer = (*it);
-
-        KisTransaction * t = 0;
-        if (undoAdapter() && m_adapter->undo()) {
-            t = new KisTransaction("", layer.data());
-            Q_CHECK_PTR(t);
-        }
-
-        layer -> rotate(angle, true, m_progress);
-
-        if (t) {
-            m_adapter->addCommand(t);
-        }
-
-        //XXX: This is very ugly.
-        KNamedCommand *moveCommand = layer -> moveCommand(layer -> getX() + oldCentreToNewCentreXOffset,
-                                                          layer -> getY() + oldCentreToNewCentreYOffset);
-        if (undoAdapter() && m_adapter->undo()) {
-            m_adapter->addCommand(moveCommand);
-        } else {
-            delete moveCommand;
-        }
-    }
-
-    m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+    undoAdapter()->addCommand(new KisResizeImageCmd(undoAdapter(), this, w, h, width(), height()));
 
     m_width = w;
     m_height = h;
 
     undoAdapter()->endMacro();
 
-    emit sigSizeChanged(KisImageSP(this), w, h);
+    emit sigSizeChanged(w, h);
     notify();
-*/
 }
 
 void KisImage::shear(double , double , KisProgressDisplayInterface *)
@@ -772,7 +749,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
     if (w != width() || h != height()) {
 
-        m_adapter->beginMacro("Shear image");
+        m_adapter->beginMacro(i18n("Shear Image"));
 
         vKisLayerSP_it it;
         for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {

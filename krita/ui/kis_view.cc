@@ -91,6 +91,7 @@
 #include "kis_doc.h"
 #include "kis_double_click_event.h"
 #include "kis_factory.h"
+#include "kis_filter_strategy.h"
 #include "kis_gradient.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
@@ -128,6 +129,7 @@
 #include "kis_background.h"
 #include "kis_paint_device_action.h"
 #include "kis_filter_configuration.h"
+#include "kis_transform_worker.h"
 
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
@@ -1674,7 +1676,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
     canvasRefresh();
 }
 
-void KisView::rotateLayer(double /*angle*/)
+void KisView::rotateLayer(double angle)
 {
     if (!currentImg()) return;
 
@@ -1688,14 +1690,22 @@ void KisView::rotateLayer(double /*angle*/)
         Q_CHECK_PTR(t);
     }
 
-    // Rotate XXX: LAYERREMOVE
-    // dev -> rotate(angle, false, m_progress);
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(KisID("Box"));
+    angle *= M_PI/180;
+    Q_INT32 w = currentImg()->width();
+    Q_INT32 h = currentImg()->height();
+    Q_INT32 tx = Q_INT32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
+    Q_INT32 ty = Q_INT32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
+
+    KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_progress, filter);
+    tw.run();
 
     if (undo) undo -> addCommand(t);
 
     m_doc -> setModified(true);
     layersUpdated();
     resizeEvent(0);
+    currentImg()->notify();
     updateCanvas();
     canvasRefresh();
 }

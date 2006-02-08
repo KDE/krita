@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TRANSFORM_VISITOR_H_
-#define KIS_TRANSFORM_VISITOR_H_
+#ifndef KIS_TRANSFORM_WORKER_H_
+#define KIS_TRANSFORM_WORKER_H_
 
 #include "kis_types.h"
 #include "kis_progress_subject.h"

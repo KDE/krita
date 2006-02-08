@@ -58,17 +58,12 @@ KisChildDoc::~KisChildDoc ()
 }
 
 
-KisPartLayerImpl::KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc)
+KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
     : super(img, i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
     m_cache = new KisPaintDevice(
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"") );
     m_activated = false;
-
-    connect(v, SIGNAL(childActivated(KoDocumentChild*)),
-            this, SLOT(childDeactivated(KoDocumentChild*)));
-    connect(v, SIGNAL(childDeactivated(KoDocumentChild*)),
-            this, SLOT(childActivated(KoDocumentChild*)));
 }
 
 KisPartLayerImpl::~KisPartLayerImpl()
@@ -76,8 +71,8 @@ KisPartLayerImpl::~KisPartLayerImpl()
 }
 
 KisLayerSP KisPartLayerImpl::clone() const {
-    kdDebug(41001) << "Whoops, clone for partlayers, how do I do that best?" << endl;
-    return 0;
+    kdDebug(41001) << "Whoops, clone for partlayers, this doesn't follow usual semantics" << endl;
+    return new KisPartLayerImpl(image(), childDoc());
 }
 
 // Called when the layer is made active
@@ -86,23 +81,31 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
     kdDebug(41001) << "Activate object layer\n";
 
     // Clear the image, so that if we move the part while activated, no ghosts show up
-    //if (!m_activated /*&& child == childDoc()*/) {
+    if (!m_activated && child == m_doc) {
         QRect rect = extent();
         m_activated = true;
         image() -> notify(rect);
-    //}
+        QPtrList<KoView> views = child -> parentDocument() -> views();
+        Q_ASSERT(views.count());
+        connect(views.at(0), SIGNAL(activated(bool)),
+                this, SLOT(childDeactivated(bool)));
+    }
 }
 
 // Called when another layer is made inactive
-void KisPartLayerImpl::childDeactivated(KoDocumentChild* child)
+void KisPartLayerImpl::childDeactivated(bool activated)
 {
-    kdDebug(41001) << "Deactivate object layer: going to render onto paint device.\n";
+    kdDebug(41001) << "Deactivate object layer: going to render onto paint device."
+                   << activated << "\n";
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry
-    //if (m_activated/* && child == childDoc()*/) {
-    //    m_activated = false;
+    if (m_activated && !activated /* no clue, but debugging suggests it is false here */) {
+        QPtrList<KoView> views = m_doc -> parentDocument() -> views();
+        Q_ASSERT(views.count());
+        views.at(0) -> disconnect(SIGNAL(activated(bool)));
+        m_activated = false;
         image() -> notify(m_doc -> geometry());
-    //}
+    }
 }
 
 void KisPartLayerImpl::setX(Q_INT32 x) {
@@ -112,8 +115,6 @@ void KisPartLayerImpl::setX(Q_INT32 x) {
     // since the part is not necesarily started at (0,0)
     rect.moveBy(x - this -> x(), 0);
     m_doc -> setGeometry(rect);
-
-//    m_paintLayer -> setX(x);
 }
 
 void KisPartLayerImpl::setY(Q_INT32 y) {
@@ -123,8 +124,6 @@ void KisPartLayerImpl::setY(Q_INT32 y) {
     // since the part is not necesarily started at (0,0)
     rect.moveBy(0, y - this -> y());
     m_doc -> setGeometry(rect);
-
-//    m_paintLayer -> setY(y);
 }
 
 void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
@@ -145,10 +144,10 @@ void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32
 
 }
 
-//void KisPartLayerImpl::repaint() {
 KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection,
         const QRect& r) {
-    if (!m_doc || !m_doc->document()/* || !m_activated*/) return 0;
+    kdDebug() << m_activated << endl;
+    if (!m_doc || !m_doc->document() || m_activated) return 0;
 
     m_cache -> clear();
 
@@ -203,5 +202,61 @@ QImage KisPartLayerImpl::createThumbnail(Q_INT32 w, Q_INT32 h) {
     return qimg;
 }
 
+bool KisPartLayerImpl::saveToXML(QDomDocument doc, QDomElement elem)
+{
+    QDomElement embeddedElement = doc.createElement("layer");
+    embeddedElement.setAttribute("name", name());
+
+    // x and y are loaded from the rect element in the embedded object tag
+    embeddedElement.setAttribute("x", 0);
+    embeddedElement.setAttribute("y", 0);
+
+    embeddedElement.setAttribute("opacity", opacity());
+    embeddedElement.setAttribute("compositeop", compositeOp().id().id());
+    embeddedElement.setAttribute("visible", visible());
+    embeddedElement.setAttribute("locked", locked());
+    embeddedElement.setAttribute("layertype", "partlayer");
+    elem.appendChild(embeddedElement);
+
+    QDomElement objectElem = childDoc() -> save(doc);
+    embeddedElement.appendChild(objectElem);
+
+    return true;
+}
+
+KisConnectPartLayerVisitor::KisConnectPartLayerVisitor(KisImageSP img, KisView* view, bool mode)
+    : m_img(img), m_view(view), m_connect(mode)
+{
+}
+
+bool KisConnectPartLayerVisitor::visit(KisGroupLayer *layer) {
+    KisLayerSP child = layer -> lastChild();
+
+    while (child) {
+        child -> accept(*this);
+        child = child -> prevSibling();
+    }
+
+    return true;
+}
+
+bool KisConnectPartLayerVisitor::visit(KisPartLayer *layer) {
+    if (m_connect) {
+        QObject::connect(m_view, SIGNAL(childActivated(KoDocumentChild*)),
+                         layer, SLOT(childActivated(KoDocumentChild*)));
+    } else {
+        QObject::disconnect(m_view, SIGNAL(childActivated(KoDocumentChild*)), layer, 0 );
+    }
+
+    return true;
+}
+
+bool KisConnectPartLayerVisitor::visit(KisPaintLayer*) {
+    return true;
+}
+
+bool KisConnectPartLayerVisitor::visit(KisAdjustmentLayer*) {
+    return true;
+}
 
 #include "kis_part_layer.moc"

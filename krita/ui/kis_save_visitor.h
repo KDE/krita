@@ -102,6 +102,7 @@ public:
 
     virtual bool visit(KisPartLayer *)
     {
+        m_count++;
         return true;
     }
 

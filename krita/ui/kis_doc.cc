@@ -341,6 +341,16 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
     return true;
 }
 
+bool KisDoc::loadChildren(KoStore* store) {
+    QPtrListIterator<KoDocumentChild> it(children());
+    for( ; it.current(); ++it ) {
+        if (!it.current() -> loadDocument(store)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
 {
     QDomElement image = doc.createElement("IMAGE");
@@ -551,7 +561,10 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
     if(attr == "adjustmentlayer")
         return loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
-    
+
+    if(attr == "partlayer")
+        return loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
+
     kdDebug(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return 0;
 }
@@ -656,6 +669,34 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
     kdDebug(DBG_AREA_FILE) << "filename of adjustment layer: " << m_layerFilenames[layer.data()]  << "\n";
     layer->setDirty(true);
+    return layer;
+}
+
+KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
+                                      QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity,
+                                      bool visible, bool locked,
+                                      KisCompositeOp compositeOp) {
+    KisChildDoc* child = new KisChildDoc(this);
+    QString filename(element.attribute("filename"));
+    QDomElement partElement = element.namedItem("object").toElement();
+
+    if (partElement.isNull()) {
+        kdDebug() << "loadPartLayer failed with partElement isNull" << endl;
+        return 0;
+    }
+
+    child -> load(partElement);
+    insertChild(child);
+
+    KisPartLayerSP layer = new KisPartLayerImpl(img, child);
+    Q_CHECK_PTR(layer);
+
+    layer -> setCompositeOp(compositeOp);
+    layer -> setVisible(visible);
+    layer -> setLocked(locked);
+    layer -> setOpacity(opacity);
+    layer -> setName(name);
+
     return layer;
 }
 
@@ -1075,6 +1116,7 @@ KisChildDoc * KisDoc::createChildDoc( const QRect & rect, KoDocument* childDoc )
 {
     KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
     insertChild( ch );
+    ch -> document() -> setStoreInternal(true);
     return ch;
 }
 

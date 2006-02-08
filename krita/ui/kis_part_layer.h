@@ -28,6 +28,7 @@
 #include "kis_doc.h"
 #include "kis_part_layer_iface.h"
 #include "kis_view.h"
+#include "kis_layer_visitor.h"
 
 class KoFrame;
 class KoDocument;
@@ -68,15 +69,13 @@ protected:
  * whereas when it is deactivated (deactivate()), it removes that rectangle and commits
  * the child to the paint device.
  *
- * XXX At the moment, it is not actually embedded when you save this as a Krita Native File!
- * Only the RGBA8 data gets saved :(
+ * Embedded parts should get loaded and saved to the Native Krita Fileformat natively.
  */
 class KisPartLayerImpl : public KisPartLayer {
     Q_OBJECT
     typedef KisPartLayer super;
 public:
-    /// KisView param is a hack, see commented out code in impl
-    KisPartLayerImpl(KisView* v, KisImageSP img, KisChildDoc * doc);
+    KisPartLayerImpl(KisImageSP img, KisChildDoc * doc);
     virtual ~KisPartLayerImpl();
 
     virtual KisLayerSP clone() const;
@@ -88,7 +87,7 @@ public:
     virtual void deactivate() {}
 
     /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
-    virtual KisChildDoc* childDoc() { return m_doc; }
+    virtual KisChildDoc* childDoc() const { return m_doc; }
 
     void setDocType(const QString& type) { m_docType = type; }
     QString docType() const { return m_docType; }
@@ -110,12 +109,13 @@ public:
 
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
+    virtual bool saveToXML(QDomDocument doc, QDomElement elem);
 private slots:
     /// Repaints our device with the data from the embedded part
     //void repaint();
     /// When we activate the embedding, we clear ourselves
     void childActivated(KoDocumentChild* child);
-    void childDeactivated(KoDocumentChild* child);
+    void childDeactivated(bool activated);
 
 
 private:
@@ -125,6 +125,23 @@ private:
     KisChildDoc * m_doc; // The sub-document
     QString m_docType;
     bool m_activated;
+};
+
+/**
+ * Visitor that connects all partlayers in an image to a KisView's signals
+ */
+class KisConnectPartLayerVisitor : public KisLayerVisitor {
+    KisImageSP m_img;
+    KisView* m_view;
+    bool m_connect; // connects, or disconnects signals
+public:
+    KisConnectPartLayerVisitor(KisImageSP img, KisView* view, bool mode);
+    virtual ~KisConnectPartLayerVisitor() {}
+
+    virtual bool visit(KisPaintLayer *layer);
+    virtual bool visit(KisGroupLayer *layer);
+    virtual bool visit(KisPartLayer *layer);
+    virtual bool visit(KisAdjustmentLayer *layer);
 };
 
 #endif // _KIS_PART_LAYER_

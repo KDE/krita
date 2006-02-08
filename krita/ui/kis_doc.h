@@ -63,7 +63,7 @@ public:
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
-    virtual bool loadChildren( KoStore* /*store*/) { return true; };
+    virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QCString mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
@@ -180,6 +180,9 @@ private:
     KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
                                              QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                                              KisCompositeOp compositeOp);
+    KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
+                                  QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity,
+                                  bool visible, bool locked, KisCompositeOp compositeOp);
     bool init();
 
     void setIOSteps(Q_INT32 nsteps);

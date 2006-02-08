@@ -18,6 +18,7 @@
 #ifndef KIS_PART_LAYER_IFACE_
 #define KIS_PART_LAYER_IFACE_
 
+#include <qdom.h>
 #include "kis_types.h"
 
 /**
@@ -29,6 +30,7 @@ public:
     KisPartLayer(KisImage *img, const QString &name, Q_UINT8 opacity)
         : super(img, name, opacity) {}
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
+    virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;
 };
 
 #endif // KIS_PART_IFACE_LAYER_IFACE_

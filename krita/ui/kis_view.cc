@@ -2568,7 +2568,7 @@ void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
     KisChildDoc * childDoc = m_doc->createChildDoc(rect, doc);
     kdDebug(41001) << "AddPartLayer: KisChildDoc is " << childDoc << endl;
 
-    KisPartLayerImpl* partLayer = new KisPartLayerImpl(this, img, childDoc);
+    KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
     img -> addLayer(partLayer, parent, above);
     img->notify(partLayer->extent());
@@ -2919,6 +2919,11 @@ void KisView::connectCurrentImg()
         connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_image, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
 
+        KisConnectPartLayerVisitor v(m_image, this, true);
+        m_image -> rootLayer() -> accept(v);
+        connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)),
+                SLOT(handlePartLayerAdded(KisLayerSP)));
+
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
             connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(const QRect&)),
@@ -2943,6 +2948,9 @@ void KisView::disconnectCurrentImg()
     if (m_image) {
         m_image -> disconnect(this);
         m_layerBox -> setImage(0);
+
+        KisConnectPartLayerVisitor v(m_image, this, false);
+        m_image -> rootLayer() -> accept(v);
     }
 
 #ifdef HAVE_GL
@@ -2950,6 +2958,16 @@ void KisView::disconnectCurrentImg()
         m_OpenGLImageContext -> disconnect(this);
     }
 #endif
+}
+
+void KisView::handlePartLayerAdded(KisLayerSP layer)
+{
+    KisPartLayer* l = dynamic_cast<KisPartLayer*>(layer.data());
+    if (!l)
+        return;
+
+    connect(this, SIGNAL(childActivated(KoDocumentChild*)),
+            layer, SLOT(childActivated(KoDocumentChild*)));
 }
 
 void KisView::imgUpdated(const QRect& rc)

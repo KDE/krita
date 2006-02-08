@@ -99,9 +99,11 @@ public:
         return true;
     }
 
-    virtual bool visit(KisPartLayer *)
+    virtual bool visit(KisPartLayer* layer)
     {
-        return true;
+        bool ok = layer -> saveToXML(m_doc, m_elem);
+        m_count++; // What is this good for?
+        return ok;
     }
 
     virtual bool visit(KisAdjustmentLayer* layer)

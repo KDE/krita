@@ -469,6 +469,8 @@ private slots:
 
     void slotAutoScroll(const QPoint &p);
 
+    void handlePartLayerAdded(KisLayerSP layer);
+
 private:
 
     bool m_panning;

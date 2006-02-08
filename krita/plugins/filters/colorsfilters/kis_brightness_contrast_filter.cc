@@ -30,6 +30,7 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qpushbutton.h>
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
@@ -232,6 +233,14 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     m_page = new WdgBrightnessContrast(this);
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
+
+    //Hide these buttons and labels as they are not implemented in 1.5
+    m_page->pb_more_contrast->hide();
+    m_page->pb_less_contrast->hide();
+    m_page->pb_more_brightness->hide();
+    m_page->pb_less_brightness->hide();
+    m_page->textLabelBrightness->hide();
+    m_page->textLabelContrast->hide();
 
     l -> addWidget(m_page, 0, Qt::AlignTop);
     height = 256;

@@ -40,7 +40,6 @@ Core
 R  * rendering with complex groupings gives very wrong results
 R  * Fix unittests for colorspaces
 P  * Fix part layers (nearly done)
-R  * Resize image to size of layer: move layer to 0,0 in this image
 R  * Selections are no longer updated when switching layers
 R  * disable everything necessary when the current layer is wet.
 ?  * update the plugin .desktop and plugin loader required versions (and maybe change the name to X-Krita-Version instead of X-KDE-Version)
@@ -48,6 +47,7 @@ R  * disable everything necessary when the current layer is wet.
 ?  * Use the right profile and colorspace when loading layers. The code in kis_load_visitor.h is commented out
 C  * finish the convolution painter
 ?  * The nameserver is only initialized when you first add a layer, leading to duplicate layer names
+?  * Loading a remote image from the recent files list fails: however, loading it directly does work.
 
 User interface
 

@@ -47,6 +47,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
     m_widget->filtersList->setLayer(view->canvasSubject()->currentImg()->activeLayer());
+    m_widget->filtersList->setProfile(view->canvasSubject()->monitorProfile());
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));

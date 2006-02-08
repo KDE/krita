@@ -182,7 +182,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
     
-#if 0 // Not implemented yet
     m_border =
         new KAction(i18n("Border..."),
                 0, 0,
@@ -225,19 +224,18 @@ void KisSelectionManager::setup(KActionCollection * collection)
                   collection, "transform_selection");
 
 
-    m_load
-        = new KAction(i18n("Load..."),
-                  0, 0,
-                  this, SLOT(load()),
-                  collection, "load_selection");
-
-
-    m_save
-        = new KAction(i18n("Save As..."),
-                  0, 0,
-                  this, SLOT(save()),
-                  collection, "save_selection");
-#endif
+//     m_load
+//         = new KAction(i18n("Load..."),
+//                   0, 0,
+//                   this, SLOT(load()),
+//                   collection, "load_selection");
+// 
+// 
+//     m_save
+//         = new KAction(i18n("Save As..."),
+//                   0, 0,
+//                   this, SLOT(save()),
+//                   collection, "save_selection");
 
         QClipboard *cb = QApplication::clipboard();
         connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
@@ -296,7 +294,7 @@ void KisSelectionManager::updateGUI()
     m_invert -> setEnabled(enable);
 
     m_feather -> setEnabled(enable);
-#if 0 // Not implemented yet
+
     m_border -> setEnabled(enable);
     m_expand -> setEnabled(enable);
     m_smooth -> setEnabled(enable);
@@ -304,9 +302,8 @@ void KisSelectionManager::updateGUI()
     m_grow -> setEnabled(enable);
     m_similar -> setEnabled(enable);
     m_transform -> setEnabled(enable);
-    m_load -> setEnabled(enable);
-    m_save -> setEnabled(enable);
-#endif
+//    m_load -> setEnabled(enable);
+//    m_save -> setEnabled(enable);
 
 
     KAction * a;
@@ -539,7 +536,7 @@ void KisSelectionManager::deselect()
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
 
-    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("&Deselect"), dev);
+    KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Deselect"), dev);
     Q_CHECK_PTR(t);
 
     dev -> deselect();

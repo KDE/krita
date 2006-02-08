@@ -816,8 +816,8 @@ bool PreferencesDialog::editPreferences()
         cfg.setGridOffsetY( dialog->m_gridSettings->intOffsetY->value( ));
 
     }
-        delete dialog;
-        return baccept;
+    delete dialog;
+    return baccept;
 }
 
 #include "kis_dlg_preferences.moc"

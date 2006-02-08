@@ -60,7 +60,7 @@ public:
 
     //========== Channels =====================================================//
 
-    // Return a vector describing all the channels this color model has.
+    /// Return a vector describing all the channels this color model has.
     virtual QValueVector<KisChannelInfo *> channels() const = 0;
 
     /**

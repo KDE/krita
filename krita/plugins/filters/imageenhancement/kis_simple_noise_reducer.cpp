@@ -19,6 +19,8 @@
 
 #include <kis_iterators_pixel.h>
 #include "kis_multi_integer_filter_widget.h"
+#include <kis_meta_registry.h>
+#include <kis_colorspace_factory_registry.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), "enhance", i18n("&Simple Noise Reduction"))
@@ -69,8 +71,9 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     }
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    QRect extends = src->extent();
+    QRect extends = src->exactBounds();
     int lastx = extends.width() - windowsize;
     int lasty = extends.height() - windowsize;
     int* means = new int[depth];
@@ -106,25 +109,32 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
                 }
                 ++neighbourgh_srcIt;
             }
+            
             // Count the number of time that the data is too much different from is neighbourgh
             int pixelsnb = lx * ly - 1;
-            int depthbad = 0;
-            for( int i = 0; i < depth; i++)
-            {
-                means[i] /= pixelsnb;
-                if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
-                {
-                    ++depthbad;
-                }
-            }
-            // Change the value of the pixel, if the pixel is too much different
-            if(depthbad > depth / 2)
-            {
+
+            if (pixelsnb != 0) {
+                int depthbad = 0;
                 for( int i = 0; i < depth; i++)
                 {
-                    dstIt.rawData()[i] = means[i];
+                    means[i] /= pixelsnb;
+                    if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
+                    {
+                        ++depthbad;
+                    }
                 }
+                // Change the value of the pixel, if the pixel is too much different
+                if(depthbad > depth / 2)
+                {
+                    for( int i = 0; i < depth; i++)
+                    {
+                        dstIt.rawData()[i] = means[i];
+                    }
+                }
+            } else {
+                kdDebug() << "pixelsnb == 0: lx " << lx << ", " << ly << "\n";
             }
+
         }
         setProgress(++pixelsProcessed);
         ++srcIt;

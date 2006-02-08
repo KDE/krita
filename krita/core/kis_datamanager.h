@@ -58,7 +58,7 @@ public:
     /**
      * Gets the default pixel.
      */
-     inline const Q_UINT8 *defaultPixel() { return ACTUAL_DATAMGR::defaultPixel(); };
+     inline const Q_UINT8 *defaultPixel() const { return ACTUAL_DATAMGR::defaultPixel(); } ;
 
     /**
      * Reguests a memento from the data manager. There is only one memento active

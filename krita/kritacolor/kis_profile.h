@@ -83,7 +83,6 @@ private:
 
     QByteArray m_rawData;
 
-    QString m_name;
     QString m_filename;
     bool m_valid;
     bool m_suitableForOutput;

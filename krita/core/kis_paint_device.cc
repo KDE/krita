@@ -376,17 +376,15 @@ QRect KisPaintDevice::exactBounds() const
     extent(x, y, w, h);
 
     extent(boundX, boundY, boundW, boundH);
-    Q_UINT8 * emptyPixel = new Q_UINT8[m_pixelSize];
-    Q_CHECK_PTR(emptyPixel);
 
-    memset(emptyPixel, 0, m_pixelSize);
-
+    const Q_UINT8* defaultPixel = m_datamanager->defaultPixel();
+    
     bool found = false;
 
     for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
         KisHLineIterator it = const_cast<KisPaintDevice *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundY = y2;
                 found = true;
                 break;
@@ -401,7 +399,7 @@ QRect KisPaintDevice::exactBounds() const
     for (Q_INT32 y2 = y + h; y2 > y ; --y2) {
         KisHLineIterator it = const_cast<KisPaintDevice *>(this)->createHLineIterator(x, y2, w, false);
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundH = y2 - boundY + 1;
                 found = true;
                 break;
@@ -415,7 +413,7 @@ QRect KisPaintDevice::exactBounds() const
     for (Q_INT32 x2 = x; x2 < x + w ; ++x2) {
         KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundX = x2;
                 found = true;
                 break;
@@ -431,7 +429,7 @@ QRect KisPaintDevice::exactBounds() const
     for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
         KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
-            if (memcmp(it.rawData(), emptyPixel, m_pixelSize) != 0) {
+            if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
                 boundW = x2 - boundX + 1;
                 found = true;
                 break;
@@ -441,7 +439,6 @@ QRect KisPaintDevice::exactBounds() const
         if (found) break;
     }
 
-    delete [] emptyPixel;
     return QRect(boundX, boundY, boundW, boundH);
 }
 

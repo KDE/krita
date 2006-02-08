@@ -59,6 +59,67 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 {
     kdDebug() << "Restoring filter configuration from: " << s << "\n";
+    
+    QDomDocument doc;
+    doc.setContent( s );
+    QDomElement e = doc.documentElement();
+    QDomNode n = e.firstChild();
+    
+    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
+    
+    while (!n.isNull()) {
+        e = n.toElement();
+        if (!e.isNull()) {
+            if (e.attribute("name") == "transfers") {
+                QDomNode transferNode = e.firstChild();
+                nTransfers = e.attribute("number").toUShort();
+                int count = 0;
+                while (!transferNode.isNull()) {
+                    
+                    QDomElement transferElement = transferNode.toElement();
+                    if (!transferElement.isNull()) {
+                        QStringList data = QStringList::split( ",", transferElement.text() );
+                        QStringList::Iterator start = data.begin();
+                        QStringList::Iterator end = data.end();
+                        int i = 0;
+                        for ( QStringList::Iterator it = start; it != end && i < 256; ++it ) {
+                            QString s = *it;
+                            transfers[count][i] = s.toUShort();
+                            i++;
+                        }
+                        count++;
+                    }
+                    transferNode = transferNode.nextSibling();
+                }
+                if (count != nTransfers) kdDebug() << "Number of declared transfers and number of parsed transfers doesn't match" << endl;
+                
+            }
+            else if (e.attribute("name") == "curves") {
+                QDomNode curvesNode = e.firstChild();
+                int count = 0;
+                while (!curvesNode.isNull()) {
+                    QDomElement curvesElement = curvesNode.toElement();
+                    if (!curvesElement.isNull()) {
+                        QStringList data = QStringList::split( ";", e.text() );
+                        QStringList::Iterator pairStart = data.begin();
+                        QStringList::Iterator pairEnd = data.end();
+                        for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
+                            QString pair = * it;
+                            if (pair.find(",") > -1) {
+                                QPair<double,double> *p = new QPair<double,double>;
+                                p->first = pair.section(",", 0, 0).toDouble();
+                                p->second = pair.section(",", 1, 1).toDouble();
+                                curves[count].append(p);
+                            }
+                        }
+                    }
+                    count++;
+                    curvesNode = curvesNode.nextSibling();
+                }
+            }
+        }
+        n = n.nextSibling();
+    }
 }
 
 QString KisPerChannelFilterConfiguration::toString()

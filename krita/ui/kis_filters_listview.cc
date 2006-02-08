@@ -32,7 +32,7 @@
 #include "kis_filter_strategy.h"
 
 
-KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_original(0)
+KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_original(0), m_profile(0)
 {
     init();
 }
@@ -78,16 +78,17 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
 void KisFiltersListView::setCurrentFilter(KisID filter)
 {
     
-    kdDebug() << "Current is: " << currentItem() << ", Set current to: " << filter.name() << "\n";
+    //kdDebug() << "Current is: " << currentItem() << ", Set current to: " << filter.name() << "\n";
     setCurrentItem(findItem(filter.name()));
-    kdDebug() << "Current is now: " << currentItem() << "\n";
+    //kdDebug() << "Current is now: " << currentItem() << "\n";
     
 }
 
 KisPaintDeviceSP createThumbnail(KisPaintDeviceSP dev, Q_INT32 w, Q_INT32 h)
 {
-    kdDebug() << "Going to create a thumbnail size " << w << ", " << h << endl;
+    //kdDebug() << "Going to create a thumbnail size " << w << ", " << h << endl;
     KisPaintDeviceSP thumbnail = new KisPaintDevice(dev->colorSpace(), "thumbnail");
+    thumbnail->clear();
     
     int srcw, srch;
     if( dev->image() )
@@ -97,12 +98,12 @@ KisPaintDeviceSP createThumbnail(KisPaintDeviceSP dev, Q_INT32 w, Q_INT32 h)
     }
     else
     {
-        const QRect e = dev->extent();
+        const QRect e = dev->exactBounds();
         srcw = e.width();
         srch = e.height();
     }
 
-    kdDebug() << "Source size: " << srcw << ", " << srch << "\n";
+    //kdDebug() << "Source size: " << srcw << ", " << srch << "\n";
     
     if (w > srcw)
     {
@@ -120,13 +121,12 @@ KisPaintDeviceSP createThumbnail(KisPaintDeviceSP dev, Q_INT32 w, Q_INT32 h)
     else if (srch > srcw)
         w = Q_INT32(double(srcw) / srch * h);
 
-    kdDebug() << "w has become: " << w << ", h: " << h << endl;
+    //kdDebug() << "w has become: " << w << ", h: " << h << endl;
     
     for (Q_INT32 y=0; y < h; ++y) {
         Q_INT32 iY = (y * srch ) / h;
         for (Q_INT32 x=0; x < w; ++x) {
             Q_INT32 iX = (x * srcw ) / w;
-            
             thumbnail->setPixel(x, y, dev->colorAt(iX, iY));
         }
     }
@@ -143,15 +143,17 @@ void KisFiltersListView::buildPreview()
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     m_thumb = createThumbnail(m_original, 150, 100);
+    
     QRect bounds = m_thumb->exactBounds();
-    kdDebug() << "bound: " << bounds.x() << ", " << bounds.y() << ", " << bounds.width() << ", " << bounds.height() << endl;
+    //kdDebug() << "bounds: " << bounds.x() << ", " << bounds.y() << ", " << bounds.width() << ", " << bounds.height() << endl;
+    
     KisIDList l = KisFilterRegistry::instance()->listKeys();
     KisIDList::iterator it;
     it = l.begin();
     // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
-        kdDebug() << "Going to create preview for filter " << f->id().name() << "\n";
+        //kdDebug() << "Going to create preview for filter " << f->id().name() << "\n";
         // Check if filter support the preview and work with the current colorspace
         if (f -> supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
             std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration(m_thumb);
@@ -159,15 +161,19 @@ void KisFiltersListView::buildPreview()
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
             {
-                kdDebug() << "Copying preview paint device\n";
+                //kdDebug() << "Copying preview paint device\n";
                 KisPaintDeviceSP thumbPreview = new KisPaintDevice(*m_thumb);
+                //kdDebug() << "Thumbpreview extent: " << thumbPreview->extent().width() << ", " << thumbPreview->extent().height() << endl;
+                //kdDebug() << "Thumbpreview bounds: " << thumbPreview->exactBounds().width() << ", " << thumbPreview->exactBounds().height() << endl;
+                
                 // Apply the filter
                 f->disableProgress();
-                kdDebug() << "Processing thumbnail\n";
+                //kdDebug() << "Processing thumbnail\n";
                 f->process(m_thumb, thumbPreview, *itc, bounds);
-                kdDebug() << "Done processing thumbnail\n";
+                //kdDebug() << "Done processing thumbnail\n";
                 // Add the preview to the list
-                QImage qm_image =  thumbPreview->convertToQImage(0);
+                QImage qm_image =  thumbPreview->convertToQImage(m_profile);
+                //kdDebug() << "Qimage size: " << qm_image.width() << ", " << qm_image.height() << "\n";
                 new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qm_image), *it, f, *itc );
             }
         }

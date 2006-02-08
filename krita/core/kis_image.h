@@ -35,7 +35,6 @@
 #include "kis_types.h"
 #include "kis_annotation.h"
 #include "kis_paint_device.h"
-#include "kis_doc.h"
 
 #include <koffice_export.h>
 

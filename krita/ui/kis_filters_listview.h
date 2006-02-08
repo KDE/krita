@@ -58,6 +58,8 @@ private:
     void init();
 public:
     void setLayer(KisLayerSP layer) KDE_DEPRECATED;
+    void setProfile(KisProfile * profile) { m_profile = profile; };
+    
     inline void setPaintDevice(KisPaintDeviceSP pd) {
         if( pd != m_original)
         {
@@ -67,10 +69,12 @@ public:
     }
     void buildPreview();
     void setCurrentFilter(KisID filter);
-private:
+
+    private:
     KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;
+    KisProfile * m_profile;
 };
 
 #endif

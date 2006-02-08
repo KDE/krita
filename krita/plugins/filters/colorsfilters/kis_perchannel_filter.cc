@@ -187,11 +187,10 @@ KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
     }
 }
 
-std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP /*dev*/)
+std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfiguration(KisPaintDeviceSP dev)
 {
-//XXX should really come up with a list of configurations
     std::list<KisFilterConfiguration*> list;
-//    list.insert(list.begin(), new KisPerChannelFilterConfiguration(m_dev->colorspace()->nColorChannels()));
+    list.insert(list.begin(), new KisPerChannelFilterConfiguration(dev->colorSpace()->nColorChannels()));
     return list;
 }
 

@@ -67,7 +67,6 @@ R  * Add dialog for resolution
 Files and Import/Export
 
 C  * add support for YCbCr in TIFF and fix the reading of deflate files
-R  * Finish raw importer
 ?  * Add layer export to magick filter.
 
 Tools
@@ -86,22 +85,12 @@ Release
 
 R  * develop thorough test plan and exercise it on several installations
      before release
-S  * finish basic documentation to cover all of the UI (Sander, you can take
-     the full feature list I posted recently as an outline)
 
 Bugs
 
-I'm not saying all these bugs can be fixed for 1.5; but please take a good
-hard look at them. We can do without open bugs :-) (Wishlists excepted, but
-Cyrille, maybe you're interested in 119290 after the release? sounds like
-something that's absolutely your cup of cafe au lait.)
-
 R  116075   NEW      reproducible crash when trying cimg image restauration
-   117633   NEW      Krita crashed while trying to edit a picture's layer
-   117923   NEW      crash at opening a random file
-   107348   ASSI      Layerbox behaves badly when there are many layers
-   118847   NEW      off by one bug in subtracting-selections
-   119401   ASSI      Action 'change image size' crops source image
+B  118847   NEW      off by one bug in subtracting-selections
+B  119401   ASSI      Action 'change image size' crops source image
    
 And if there's time
 

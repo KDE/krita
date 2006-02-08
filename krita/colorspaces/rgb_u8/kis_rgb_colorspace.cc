@@ -200,14 +200,14 @@ void KisRgbColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade,
 
     while (i < nPixels * MAX_CHANNEL_RGBA) {
         if (compensate) {
+            dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255))); i++;
+            dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255))); i++;
             dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
-            dst[++i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
-            dst[++i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
         }
         else {
+            dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255)); i++;
+            dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255)); i++;
             dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
-            dst[++i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
-            dst[++i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
         }
 
         ++i;

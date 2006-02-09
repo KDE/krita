@@ -37,6 +37,7 @@
 #include "kis_profile.h"
 #include "kis_colorspace.h"
 #include "wdglayerproperties.h"
+#include "kis_int_spinbox.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
                    const QString & profilename,
@@ -56,9 +57,8 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
     m_page->editName->setText(deviceName);
 
     // Opacity
-    m_page->intOpacity -> setRange(0, 100, 13, true);
+    m_page->intOpacity -> setRange(0, 100, 13);
     m_page->intOpacity -> setValue(100);
-    m_page->intOpacity -> setSuffix("%");
 
     // ColorSpace
     m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());

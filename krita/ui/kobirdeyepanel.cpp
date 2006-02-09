@@ -32,9 +32,10 @@
 #include <klocale.h>
 
 #include <koDocument.h>
- 
+
 #include "wdgbirdeye.h"
 #include "kobirdeyepanel.h"
+#include "kis_int_spinbox.h"
 
 KoCanvasAdapter::KoCanvasAdapter() {}
 KoCanvasAdapter::~KoCanvasAdapter() {}
@@ -58,10 +59,9 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 {
     QHBoxLayout * l = new QHBoxLayout(this);
     m_page = new WdgBirdEye(this);
-    m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()), 10, true);
+    m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()), 10);
     m_page->zoom->setValue(100);
-    m_page->zoom->setSuffix("%");
-    
+
     m_page->toolbar->setIconSize(16);
     m_page->view->installEventFilter(this);
     

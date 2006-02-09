@@ -374,8 +374,8 @@ bool KisTransformWorker::run()
     else
         r = m_dev->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace());;
-    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace());;
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(), "tmpdev1");
+    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(), "tmpdev2");
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;

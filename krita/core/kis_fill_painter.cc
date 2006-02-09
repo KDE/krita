@@ -157,7 +157,7 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace());
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace(), "filled");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
@@ -170,7 +170,7 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace());
+    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace(), "filled");
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled.data());
     painter.fillRect(0, 0, m_width, m_height, m_pattern);

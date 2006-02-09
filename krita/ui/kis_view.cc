@@ -2317,7 +2317,6 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-    kdDebug() << m_toolManager->currentTool()->name() << ", " << (dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool())) << "\n";
     if (dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool()) && event->key() == Qt::Key_Control && m_panning == false) {
         m_oldTool = m_toolManager->currentTool();
         m_picking = true;

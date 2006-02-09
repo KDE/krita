@@ -37,10 +37,10 @@
 #include "kis_eraseop.h"
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
-{ 
-    KisPaintOp * op = new KisEraseOp(painter); 
+{
+    KisPaintOp * op = new KisEraseOp(painter);
     Q_CHECK_PTR(op);
-    return op; 
+    return op;
 }
 
 
@@ -49,7 +49,7 @@ KisEraseOp::KisEraseOp(KisPainter * painter)
 {
 }
 
-KisEraseOp::~KisEraseOp() 
+KisEraseOp::~KisEraseOp()
 {
 }
 
@@ -76,7 +76,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 // with the combination.
 
     if (!m_painter) return;
-    
+
     KisPaintDeviceSP device = m_painter -> device();
     if (!device) return;
 
@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
 
-    KisPaintDeviceSP dab = new KisPaintDevice(device -> colorSpace());
+    KisPaintDeviceSP dab = new KisPaintDevice(device -> colorSpace(), "erase op dab");
     Q_CHECK_PTR(dab);
 
     Q_INT32 maskWidth = mask -> width();

@@ -24,12 +24,37 @@
 class QString;
 class KCommand;
 
+/**
+ * A transaction provider is a class that wants to provide
+ * a transaction before anyone else gets a chance to do that,
+ * but who doesn't want to that right now.
+ *
+ * There can be only one transaction provider be pending, and
+ * it can only add one pending transaction.
+ */
+class KisPendingTransactionProvider {
+
+public:
+
+    virtual void addPendingTransaction() = 0;
+
+};
+
+
 class KisUndoAdapter {
 public:
     KisUndoAdapter();
     virtual ~KisUndoAdapter();
 
 public:
+    /**
+     * Set a transactionprovider. Whenever addCommand is called, look
+     * whether there's a tranaction pending and give the pending
+     * transaction provider a chance to set that transaction before
+     * adding the new command.
+     */
+    virtual void setTransactionPending(KisPendingTransactionProvider *) = 0;
+    
     virtual void addCommand(KCommand *cmd) = 0;
     virtual void setUndo(bool undo) = 0;
     virtual bool undo() const = 0;

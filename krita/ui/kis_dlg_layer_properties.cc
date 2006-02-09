@@ -31,6 +31,7 @@
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
 #include "kis_profile.h"
+#include "kis_int_spinbox.h"
 #include "kis_colorspace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
@@ -63,9 +64,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbProfile->insertItem(profilename);
     m_page->cmbProfile->setEnabled(false);
 
-    m_page->intOpacity -> setRange(0, 100, 13, true);
+    m_page->intOpacity -> setRange(0, 100, 13);
     m_page->intOpacity -> setValue(opacity);
-    m_page->intOpacity -> setSuffix("%");
 
     m_page->cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
     m_page->cmbComposite -> setCurrentItem(compositeOp);

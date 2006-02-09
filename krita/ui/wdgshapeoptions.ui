@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>275</width>
-            <height>81</height>
+            <height>31</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,7 +25,24 @@
         <property name="spacing">
             <number>2</number>
         </property>
-        <widget class="QLabel" row="2" column="0">
+        <spacer row="1" column="2">
+            <property name="name">
+                <cstring>spacer9</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>textLabel3</cstring>
             </property>
@@ -33,7 +50,7 @@
                 <string>Fill:</string>
             </property>
         </widget>
-        <widget class="QComboBox" row="2" column="1">
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
             <item>
                 <property name="text">
                     <string>Not Filled</string>
@@ -58,6 +75,23 @@
                 <cstring>cmbFill</cstring>
             </property>
         </widget>
+        <spacer row="0" column="3" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

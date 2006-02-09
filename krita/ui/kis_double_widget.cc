@@ -58,6 +58,7 @@ void KisDoubleWidget::init(double min, double max)
     m_layout -> addWidget(m_slider);
     m_layout -> addSpacing(5);
     m_layout -> addWidget(m_spinBox);
+    m_layout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
 
 double KisDoubleWidget::value() const

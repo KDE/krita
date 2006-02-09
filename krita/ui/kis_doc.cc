@@ -149,7 +149,8 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     m_macroNestDepth = 0;
     m_ioProgressBase = 0;
     m_ioProgressTotalSteps = 0;
-
+    m_pendingTransactionProvider = 0;
+    
     setInstance( KisFactory::instance(), false );
     setTemplateType( "krita_template" );
 
@@ -675,7 +676,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 }
 
 KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                      QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity,
+                                     QString name, Q_INT32 /*x*/, Q_INT32 /*y*/, Q_INT32 opacity,
                                       bool visible, bool locked,
                                       KisCompositeOp compositeOp) {
     KisChildDoc* child = new KisChildDoc(this);
@@ -994,6 +995,7 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 void KisDoc::beginMacro(const QString& macroName)
 {
     if (m_undo) {
+        //kdDebug() << "Adding macro " << macroName << ", depth: " << m_macroNestDepth << endl;
         if (m_macroNestDepth == 0) {
             Q_ASSERT(m_currentMacro == 0);
             m_currentMacro = new KMacroCommand(macroName);
@@ -1008,6 +1010,7 @@ void KisDoc::endMacro()
 {
     if (m_undo) {
         Q_ASSERT(m_macroNestDepth > 0);
+        //kdDebug() << "Ending macro " <<  ", depth: " << m_macroNestDepth << endl;
         
         if (m_macroNestDepth > 0) {
             m_macroNestDepth--;
@@ -1022,9 +1025,24 @@ void KisDoc::endMacro()
     }
 }
 
+void KisDoc::setTransactionPending(KisPendingTransactionProvider * provider)
+{
+    //kdDebug() << "setting pending transaction provider\n";
+    m_pendingTransactionProvider = provider;
+}
+
 void KisDoc::addCommand(KCommand *cmd)
 {
     Q_ASSERT(cmd);
+    
+    //kdDebug() << "Adding command " << cmd->name() << endl;
+
+    if (m_pendingTransactionProvider) {
+        KisPendingTransactionProvider * p = m_pendingTransactionProvider;
+        m_pendingTransactionProvider = 0;
+        p->addPendingTransaction();
+    }
+    
     setModified(true);
     if (m_undo) {
         if (m_currentMacro)

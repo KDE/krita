@@ -176,7 +176,7 @@ bool KisTiledDataManager::read(KoStore *store)
 
     stream->readLine(str, 79);
 
-    sscanf(str,"%d",&m_numTiles);
+    sscanf(str,"%u",&m_numTiles);
 
     for(Q_UINT32 i = 0; i < m_numTiles; i++)
     {

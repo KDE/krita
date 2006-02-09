@@ -34,7 +34,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 {
     m_filterConfig = kfc;
     setSelection( selection );
-    m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), "cached paint device for adjustmentlayer");
+    m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -62,7 +62,7 @@ KisLayerSP KisAdjustmentLayer::clone() const
 
 void KisAdjustmentLayer::resetCache()
 {
-    m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), "cached paint device for adjustmentlayer");
+    m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), name().latin1());
 }
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()
@@ -128,7 +128,7 @@ QRect KisAdjustmentLayer::extent() const
     else
         return QRect();
 }
-    
+
 QRect KisAdjustmentLayer::exactBounds() const
 {
     if (m_selection)
@@ -143,7 +143,7 @@ bool KisAdjustmentLayer::accept(KisLayerVisitor & v)
 {
 //    kdDebug(41001) << "ADJUSTMENT\t\t" << name()
 //            << ", dirty: " << dirty() << "\n";
-    
+
     return v.visit( this );
 }
 

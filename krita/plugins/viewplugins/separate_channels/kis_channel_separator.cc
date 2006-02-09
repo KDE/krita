@@ -123,14 +123,14 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         KisPaintDeviceSP dev;
         if (toColor) {
             // We don't downscale if we separate to color channels
-            dev = new KisPaintDevice(srcCs);
+            dev = new KisPaintDevice(srcCs, "color separations");
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ));
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ), "8 bit grayscale sep");
             }
             else {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ));
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ), "16 bit grayscale sep");
                 destSize = 2;
             }
         }
@@ -241,7 +241,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
             }
             else {
-                
+
                 // To images
                 // create a document
                 // create an image
@@ -252,7 +252,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         if (undo) undo -> addCommand(t);
         image->notify();
         m_view->canvasSubject()->document()->setModified(true);
-        
+
         ++deviceIt;
 
     }

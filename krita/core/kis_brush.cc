@@ -453,8 +453,8 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisPaintDevice *layer = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8());
-   
+    KisPaintDevice *layer = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush");
+
     Q_CHECK_PTR(layer);
 
     for (int y = 0; y < outputHeight; y++) {
@@ -469,7 +469,7 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
             int alpha = qAlpha(pixel);
 
             // Scaled images are in pre-multiplied alpha form so
-            // divide by alpha. 
+            // divide by alpha.
 	    // channel order is BGRA
             if (alpha != 0) {
                 p[2] = (red * 255) / alpha;
@@ -477,7 +477,7 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
 		p[0] = (blue * 255) / alpha;
 		p[3] = alpha;
             }
-	    
+
             ++iter;
         }
     }
@@ -1264,7 +1264,7 @@ void KisBrush::generateBoundary() {
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
         KisColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"");
-        dev = new KisPaintDevice(cs);
+        dev = new KisPaintDevice(cs, "tmp for generateBoundary");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = dev -> createHLineIterator(0, y, w, true);
             int x = 0;

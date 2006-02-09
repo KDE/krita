@@ -54,18 +54,18 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisPaintDeviceSP dab = new KisPaintDevice(cs);
+    KisPaintDeviceSP dab = new KisPaintDevice(cs, "dab");
     Q_CHECK_PTR(dab);
 
     KisColor kc = m_painter -> paintColor();
-    
+
     KisColorSpace * colorSpace = dab -> colorSpace();
 
     Q_INT32 pixelSize = colorSpace->pixelSize();
-    
+
     Q_INT32 maskWidth = mask -> width();
     Q_INT32 maskHeight = mask -> height();
-    
+
     // Convert the kiscolor to the right colorspace.
     kc.convertTo(colorSpace);
 

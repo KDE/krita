@@ -652,6 +652,7 @@ printf("%f %f\n",tx,ty);
         delete m_transaction;
     }    
     m_transaction = new TransformCmd(img->activeDevice().data());
+    img->undoAdapter()->setTransactionPending(this);
     Q_CHECK_PTR(m_transaction);
     
     KisTransformWorker t(img->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
@@ -669,6 +670,11 @@ printf("%f %f\n",tx,ty);
     rc = rc.normalize();
     
     img -> notify(rc);
+}
+
+void KisToolTransform::addPendingTransaction()
+{
+    clear();
 }
 
 void KisToolTransform::slotSetFilter(const KisID &filterID)

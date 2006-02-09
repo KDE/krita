@@ -134,7 +134,7 @@ void KritaHistogramDocker::producerChanged(int pos)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram( new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8()), m_producer, LOGARITHMIC);
+    m_histogram = new KisHistogram( new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram"), m_producer, LOGARITHMIC);
 
     if (m_hview) {
         m_hview -> setHistogram(m_histogram);

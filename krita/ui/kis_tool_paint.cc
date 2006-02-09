@@ -37,6 +37,7 @@
 #include "kis_tool_paint.h"
 #include "kis_cmb_composite.h"
 #include "kis_image.h"
+#include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
 
 KisToolPaint::KisToolPaint(const QString& UIName)
@@ -122,10 +123,9 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_optionWidget -> setCaption(m_UIName);
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
-    m_slOpacity = new KIntNumInput( m_optionWidget, "int_m_optionwidget");
+    m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");
     m_slOpacity -> setRange( 0, 100);
     m_slOpacity -> setValue(m_opacity / OPACITY_OPAQUE * 100);
-    m_slOpacity -> setSuffix("%");
     connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
     m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
@@ -137,6 +137,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
         m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
+        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
 
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
@@ -152,10 +153,12 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
         m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
-
+        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
+        
         m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
         m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
-
+        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 2);
+        
         m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
     }
 

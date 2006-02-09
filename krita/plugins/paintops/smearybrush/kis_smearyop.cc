@@ -49,7 +49,7 @@ public:
      *        by picking up paint from the canvas
      * @param color the initial paint color. Will change through contact with color on the canvas
      */
-    SmearyTuft(Q_INT32 distanceFromCenter, Q_INT32 paintload, KisColor color) 
+    SmearyTuft(Q_INT32 distanceFromCenter, Q_INT32 paintload, KisColor color)
         : m_distanceFromCenter(distanceFromCenter)
         , m_paintload(paintload)
         , m_color(color) {};
@@ -73,7 +73,7 @@ public:
      */
     void paintAt(const KisPoint & pos, double pressure, KisPaintDeviceSP dev)
     {
-        // 
+        //
     };
 
 public:
@@ -92,7 +92,7 @@ KisSmearyOp::KisSmearyOp(KisPainter * painter)
         m_leftTufts.append(new SmearyTuft(i, STARTING_PAINTLOAD, painter->paintColor()));
         m_rightTufts.append(new SmearyTuft(i, STARTING_PAINTLOAD, painter->paintColor()));
     }
-    
+
 }
 
 KisSmearyOp::~KisSmearyOp()
@@ -129,29 +129,29 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = new KisPaintDevice(colorSpace);
+    KisPaintDeviceSP dab = new KisPaintDevice(colorSpace, "smeary dab");
     Q_CHECK_PTR(dab);
-    
+
     m_painter -> setPressure(info.pressure);
 
     // Compute the position of the tufts. The tufts are arranged in a line
     // perpendicular to the motion of the brush, i.e, the straight line between
     // the current position and the previous position.
     // The tufts are spread out through the pressure
-    
+
     KisPoint previousPoint = info.movement.toKisPoint();
     KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
     KisVector2D currentPointVector = KisVector2D(pos);
     brushVector.normalize();
 
     KisVector2D vl, vr;
-    
+
     for (int i = 0; i < (NUMBER_OF_TUFTS / 2); ++i) {
         // Compute the positions on the new vector.
         vl = currentPointVector + i * brushVector;
         KisPoint pl = vl.toKisPoint();
         dab->setPixel(pl.roundX(), pl.roundY(), kc);
-        
+
         vr = currentPointVector - i * brushVector;
         KisPoint pr = vr.toKisPoint();
         dab->setPixel(pr.roundX(), pr.roundY(), kc);
@@ -159,7 +159,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     vr = vr - vl;
     vr.normalize();
-    
+
     m_painter -> bltSelection(x - 32, y - 32, m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), x - 32, y -32, 64, 64);
     m_painter -> addDirtyRect(QRect(x -32, y -32, 64, 64));
 }

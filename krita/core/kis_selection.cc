@@ -35,7 +35,7 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8())
+    : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1())
     , m_parentPaintDevice(dev)
 {
     Q_ASSERT(dev);

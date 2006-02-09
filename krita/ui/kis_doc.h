@@ -90,6 +90,7 @@ public slots:
      virtual void initEmpty();
 
 private: // Undo adapter
+    virtual void setTransactionPending(KisPendingTransactionProvider *);
     virtual void addCommand(KCommand *cmd);
     virtual void setUndo(bool undo);
     virtual bool undo() const;
@@ -194,6 +195,7 @@ private:
 
     bool m_undo;
     KoCommandHistory *m_cmdHistory;
+    KisPendingTransactionProvider * m_pendingTransactionProvider;
     KisImageSP m_currentImage;
     DCOPObject *m_dcop;
     KisNameServer *m_nserver;
@@ -203,6 +205,7 @@ private:
     int m_ioProgressTotalSteps;
     int m_ioProgressBase;
     QMap<KisLayerSP, QString> m_layerFilenames; // temp storage during load
+    
 };
 
 #endif // KIS_DOC_H_

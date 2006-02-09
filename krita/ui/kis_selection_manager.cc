@@ -162,26 +162,26 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 this, SLOT(feather()),
                 collection, "feather");
 
-    m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"), 
-                                             "Alt+backspace", this, 
-                                             SLOT(fillForegroundColor()), 
-                                             collection, 
+    m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"),
+                                             "Alt+backspace", this,
+                                             SLOT(fillForegroundColor()),
+                                             collection,
                                              "fill_selection_foreground_color");
-    m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"), 
-                                             "backspace", this, 
-                                             SLOT(fillBackgroundColor()), 
+    m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"),
+                                             "backspace", this,
+                                             SLOT(fillBackgroundColor()),
                                              collection,
                                              "fill_selection_background_color");
-    m_fillPattern = new KAction(i18n("Fill with Pattern"), 
-                                             0, this, 
-                                             SLOT(fillPattern()), 
+    m_fillPattern = new KAction(i18n("Fill with Pattern"),
+                                             0, this,
+                                             SLOT(fillPattern()),
                                              collection,
                                              "fill_selection_pattern");
 
     m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), "", this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
-    
+
     m_border =
         new KAction(i18n("Border..."),
                 0, 0,
@@ -229,8 +229,8 @@ void KisSelectionManager::setup(KActionCollection * collection)
 //                   0, 0,
 //                   this, SLOT(load()),
 //                   collection, "load_selection");
-// 
-// 
+//
+//
 //     m_save
 //         = new KAction(i18n("Save As..."),
 //                   0, 0,
@@ -385,7 +385,7 @@ void KisSelectionManager::copy()
           << r.width() << ", "
           << r.height() << "\n";
 
-    KisPaintDeviceSP clip = new KisPaintDevice(dev -> colorSpace());
+    KisPaintDeviceSP clip = new KisPaintDevice(dev -> colorSpace(), "clip");
     Q_CHECK_PTR(clip);
 
     KisColorSpace * cs = clip->colorSpace();
@@ -590,7 +590,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
         painter.fillRect(0, 0, img -> width(), img -> height(),
                          m_parent -> currentPattern());
     } else {
-        painter.fillRect(0, 0, img -> width(), img -> height(), color); 
+        painter.fillRect(0, 0, img -> width(), img -> height(), color);
     }
 
     painter.end();
@@ -781,25 +781,25 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
     /*
         Any bugs in this fuction are probably also in thin_region
         Blame all bugs in this function on jaycox@gimp.org
     */
-    
+
     Q_UINT8  **buf;  // caches the region's pixel data
     Q_UINT8  **max;  // caches the largest values for each column
-    
+
     if (xradius <= 0 || yradius <= 0)
         return;
-    
+
     max = new Q_UINT8* [layerSize.width() + 2 * xradius];
-    buf = new Q_UINT8* [yradius + 1]; 
+    buf = new Q_UINT8* [yradius + 1];
     for (Q_INT32 i = 0; i < yradius + 1; i++)
     {
         buf[i] = new Q_UINT8[layerSize.width()];
@@ -813,7 +813,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
             max[i] = &buffer[(yradius + 1) * (i - xradius)];
         else
             max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius - 1)];
-    
+
         for (Q_INT32 j = 0; j < xradius + 1; j++)
             max[i][j] = 0;
     }
@@ -838,7 +838,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
 
     for (Q_INT32 x = 0; x < layerSize.width() ; x++) // set up max for top of image
     {
-            max[x][0] = 0;         // buf[0][x] is always 0 
+            max[x][0] = 0;         // buf[0][x] is always 0
             max[x][1] = buf[1][x]; // MAX (buf[1][x], max[x][0]) always = buf[1][x]
             for (Q_INT32 j = 2; j < yradius + 1; j++)
             {
@@ -920,10 +920,10 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
   /*
@@ -942,7 +942,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
         return;
 
     max = new Q_UINT8* [layerSize.width() + 2 * xradius];
-    buf = new Q_UINT8* [yradius + 1]; 
+    buf = new Q_UINT8* [yradius + 1];
     for (Q_INT32 i = 0; i < yradius + 1; i++)
     {
         buf[i] = new Q_UINT8[layerSize.width()];
@@ -950,10 +950,10 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
 
     Q_INT32 buffer_size = (layerSize.width() + 2 * xradius + 1) * (yradius + 1);
     Q_UINT8* buffer = new Q_UINT8[buffer_size];
-    
-    if (edge_lock) 
+
+    if (edge_lock)
         memset(buffer, 255, buffer_size);
-    else 
+    else
         memset(buffer, 0, buffer_size);
 
     for (Q_INT32 i = 0; i < layerSize.width() + 2 * xradius; i++)
@@ -1070,7 +1070,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
             delete buf[i];
     delete buf;
     delete out;
-    
+
     dev -> emitSelectionChanged();
 }
 
@@ -1083,10 +1083,10 @@ void KisSelectionManager::smooth()
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
@@ -1151,10 +1151,10 @@ void KisSelectionManager::erode()
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
@@ -1173,7 +1173,7 @@ void KisSelectionManager::erode()
 
     buf[0][0]         = buf[0][1];
     buf[0][width + 1] = buf[0][width];
-    
+
     memcpy (buf[1], buf[0], width + 2);
 
     for (Q_INT32 y = 0; y < layerSize.height(); y++)
@@ -1210,7 +1210,7 @@ void KisSelectionManager::erode()
 
     for (Q_INT32 i = 0; i < 3; i++)
         delete buf[i];
-    
+
     delete out;
 
     dev -> emitSelectionChanged();
@@ -1225,10 +1225,10 @@ void KisSelectionManager::dilate()
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
@@ -1246,7 +1246,7 @@ void KisSelectionManager::dilate()
 
     buf[0][0]         = buf[0][1];
     buf[0][width + 1] = buf[0][width];
-    
+
     memcpy (buf[1], buf[0], width + 2);
 
     for (Q_INT32 y = 0; y < layerSize.height(); y++)
@@ -1266,13 +1266,13 @@ void KisSelectionManager::dilate()
         for (Q_INT32 x = 0 ; x < width; x++)
         {
             Q_INT32 max = 0;
-    
+
             if (buf[0][x+1] > max) max = buf[0][x+1];
             if (buf[1][x]   > max) max = buf[1][x];
             if (buf[1][x+1] > max) max = buf[1][x+1];
             if (buf[1][x+2] > max) max = buf[1][x+2];
             if (buf[2][x+1] > max) max = buf[2][x+1];
-    
+
             out[x] = max;
         }
 
@@ -1283,7 +1283,7 @@ void KisSelectionManager::dilate()
 
     for (Q_INT32 i = 0; i < 3; i++)
         delete buf[i];
-    
+
     delete out;
 
     dev -> emitSelectionChanged();
@@ -1296,10 +1296,10 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
 
     KisPaintDeviceSP dev = img -> activeDevice();
     if (!dev) return;
-    
+
     if (!dev -> hasSelection()) return;
     KisSelectionSP selection = dev -> selection();
-    
+
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
@@ -1310,14 +1310,14 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
     Q_UINT8  *buf[3];
     Q_UINT8 **density;
     Q_UINT8 **transition;
-    
+
     if (xradius == 1 && yradius == 1) // optimize this case specifically
     {
         Q_UINT8* source[3];
-    
+
         for (Q_INT32 i = 0; i < 3; i++)
             source[i] = new Q_UINT8[layerSize.width()];
-    
+
         Q_UINT8* transition = new Q_UINT8[layerSize.width()];
 
         selection->readBytes(source[0], layerSize.x(), layerSize.y(), layerSize.width(), 1);
@@ -1552,7 +1552,7 @@ void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT
         tmp = (xradius - i) - 0.5;
         else
         tmp = 0.0;
-    
+
         circ[i] = (Q_INT32) RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
     }
 }
@@ -1561,11 +1561,11 @@ void KisSelectionManager::rotatePointers (Q_UINT8  **p, Q_UINT32 n)
 {
     Q_UINT32  i;
     Q_UINT8  *tmp;
-    
+
     tmp = p[0];
-    
+
     for (i = 0; i < n - 1; i++) p[i] = p[i + 1];
-    
+
     p[i] = tmp;
 }
 

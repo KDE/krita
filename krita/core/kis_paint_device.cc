@@ -209,6 +209,9 @@ namespace {
 KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
+    if (name == 0) {
+        kdDebug() << "device without a name " << kdBacktrace() << "\n";
+    }
     if (colorSpace == 0) {
         kdDebug(41001) << "Cannot create paint device without colorstrategy!\n";
         return;
@@ -245,6 +248,10 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const 
 {
     Q_ASSERT( colorSpace );
 
+    if (name == 0) {
+        kdDebug() << "device without a name " << kdBacktrace() << "\n";
+    }
+    
     m_dcop = 0;
 
     m_x = 0;

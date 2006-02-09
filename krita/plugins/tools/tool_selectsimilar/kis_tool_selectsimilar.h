@@ -28,6 +28,7 @@ class KisCanvasSubject;
 class QWidget;
 class QVBoxLayout;
 class QCheckBox;
+class KisIntSpinbox;
 
 /**
  * Tool to select colours by pointing at a color on the image.

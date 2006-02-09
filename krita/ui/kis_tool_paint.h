@@ -37,9 +37,9 @@ class QGridLayout;
 class KDialog;
 class KisCanvasSubject;
 class QLabel;
-class KIntNumInput;
 class KisCmbComposite;
-
+class KisIntSpinbox;
+        
 enum enumBrushMode {
     PAINT,
     PAINT_STYLUS,
@@ -110,7 +110,7 @@ private:
     QGridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;
-    KIntNumInput *m_slOpacity;
+    KisIntSpinbox *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
 };

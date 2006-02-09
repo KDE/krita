@@ -61,7 +61,7 @@ KisIntSpinbox::KisIntSpinbox(QWidget *parent, const char *name)
     init(0);
 }
 
-KisIntSpinbox::KisIntSpinbox(const QString & label, int val, QWidget *parent, const char *name)
+KisIntSpinbox::KisIntSpinbox(const QString & /*label*/, int val, QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     init(val);
@@ -72,22 +72,31 @@ void KisIntSpinbox::init(int val)
     d = new KisIntSpinboxPrivate( );
     QBoxLayout * l = new QHBoxLayout( this );
 
+    l->insertStretch(0, 1);
     d->m_numinput = new QLineEdit(this, "KisIntSpinbox::QLineEdit");
     d->m_numinput->setInputMask("000%");
     d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
     d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
+    d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    
     l->addWidget( d->m_numinput );
-
+    
     connect(d->m_numinput, SIGNAL(textChanged(const QString &)), SLOT(numValueChanged(const QString &)));
 
     //d->m_slider = new KisPopupSlider(INT_MIN, INT_MAX, 1, val, QSlider::Horizontal, this);
     d->m_slider = new KisPopupSlider(0, 100, 1, val, QSlider::Horizontal, this);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
     connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-
-    d->m_arrow = new KArrowButton(this,Qt::DownArrow);
+    
+    d->m_arrow = new KArrowButton(this, Qt::DownArrow);
     d->m_arrow->setPopup(d->m_slider);
+    d->m_arrow->setMaximumHeight( fontMetrics().height() + 2);
+    d->m_arrow->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->m_arrow->setEnabled(true);
+    
     l->addWidget( d->m_arrow );
+    
+    
 
     setValue(val);
     setFocusProxy(d->m_numinput);
@@ -114,7 +123,7 @@ void KisIntSpinbox::sliderValueChanged(int val)
     emit valueChanged(val);
 }
 
-void KisIntSpinbox::setRange(int lower, int upper, int step)
+void KisIntSpinbox::setRange(int lower, int upper, int /*step*/)
 {
     upper = kMax(upper, lower);
     lower = kMin(upper, lower);

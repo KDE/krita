@@ -26,6 +26,7 @@
 
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
+#include <kis_undo_adapter.h>
 
 class KisTransaction;
 class WdgToolTransform;
@@ -36,7 +37,7 @@ class KisFilterStrategy;
  * Transform tool
  *
  */
-class KisToolTransform : public KisToolNonPaint {
+class KisToolTransform : public KisToolNonPaint, private KisPendingTransactionProvider {
 
     typedef KisToolNonPaint super;
     Q_OBJECT
@@ -58,6 +59,10 @@ public:
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
+public:
+
+    void addPendingTransaction();
+    
 private:
     void paintOutline();
     void paintOutline(KisCanvasPainter& gc, const QRect& rc);

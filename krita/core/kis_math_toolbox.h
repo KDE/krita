@@ -35,7 +35,7 @@ class KisMathToolbox : public QObject {
     Q_OBJECT
     public:
         struct KisFloatRepresentation {
-            KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc ) : size(nsize), depth(ndepth)
+            KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc ) : coeffs(new float[nsize*nsize*ndepth]) ,size(nsize), depth(ndepth)
             {
             }
             ~KisFloatRepresentation() { if(coeffs) delete[] coeffs; }

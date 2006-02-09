@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>190</width>
-            <height>198</height>
+            <width>188</width>
+            <height>126</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -37,42 +37,115 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="KToolBar">
-            <property name="name">
-                <cstring>toolbar</cstring>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>32767</width>
-                    <height>32</height>
-                </size>
-            </property>
-        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout3</cstring>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>spacer2</cstring>
+                        <cstring>layout10</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Minimum</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>30</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>lblX</cstring>
+                            </property>
+                            <property name="text">
+                                <string>X:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>txtX</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>00000</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>lblY</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Y:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>txtY</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>00000</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer6</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
                 <widget class="QFrame">
                     <property name="name">
                         <cstring>view</cstring>
@@ -80,14 +153,20 @@
                     <property name="sizePolicy">
                         <sizepolicy>
                             <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>2</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
                     <property name="minimumSize">
                         <size>
                             <width>75</width>
+                            <height>75</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>200</width>
                             <height>75</height>
                         </size>
                     </property>
@@ -101,113 +180,81 @@
                         <enum>Raised</enum>
                     </property>
                 </widget>
-                <spacer>
+            </hbox>
+        </widget>
+        <widget class="KToolBar">
+            <property name="name">
+                <cstring>toolbar</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>32</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="KIntSpinBox">
                     <property name="name">
-                        <cstring>spacer1</cstring>
+                        <cstring>zoom</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string></string>
+                    </property>
+                    <property name="maxValue">
+                        <number>1600</number>
+                    </property>
+                    <property name="minValue">
+                        <number>10</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>slZoom</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maxValue">
+                        <number>19</number>
+                    </property>
+                    <property name="pageStep">
+                        <number>1</number>
+                    </property>
+                    <property name="value">
+                        <number>10</number>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
                     </property>
-                    <property name="sizeType">
-                        <enum>Minimum</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
+                </widget>
+                <widget class="QToolButton">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>bn100</cstring>
                     </property>
                     <property name="text">
-                        <string>Zoom:</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput">
-                    <property name="name">
-                        <cstring>zoom</cstring>
-                    </property>
-                    <property name="label">
-                        <string></string>
-                    </property>
-                    <property name="value">
-                        <number>100</number>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>500</number>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>lblX</cstring>
-                    </property>
-                    <property name="text">
-                        <string>X:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>txtX</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Panel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>00000</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>lblY</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Y:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>txtY</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Panel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>00000</string>
+                        <string>1:1</string>
                     </property>
                 </widget>
             </hbox>
@@ -234,7 +281,7 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="PNG" length="741">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002ac49444154388db5d53d4c13611cc7f12fbd83ca3561c0232a03e2408b2c242e24482204582531a1c1c4059cdab8100712572663620823918e0eb8a0a2042160085638a824d4817a5a7931a4b4e5d52b5c5fae75406bc1a654a2bfe42e4ffec9f379eeff24cf73056eb79bd3525f5f9f3a5973bbdd05b9e698ce82e6aa67ae0c90fad78ff86b81e59901c22bb3c4a37b9844f3698d1c4b9124634435d6bd2e6e3f3caaa5e1f0ca2c6b4b2e92b91bcc1a4180022061fcaea5e178748f640aee3cfa7b1860e8c13952e87fc299ed87c361c442112da2e15df2323232c2cece0e0dd71b282f2f4792248a2dc5acaeade21a74313931c905db2dd63f3efd13cecce0e0209ba14d66dfcfa2cc29b4dbdbe9efef473e2f03a0eb3a33ef66585d5925b819ccda4156b8a7a7273d3689263c1e0f034f06b8db7917df271fbdbdbd2c7a16d9dada4292a4fc6100abd58ac3e9402c142993cbb0d96c949494a07e5269bcd148576717cf5f3c677f7f9fd157a3f9c18e7b0eda6eb6d1dadc4a3c11c75c64261a8b62124cc46231eaeaea68696ec16ab3e2f7fbb3c2594f9e20081849032da261321d61a150888383035455657c629cefda772a2f57120e85f3df8ad72f5f2397ca5455552197ca08824020184092242c160bcbbe65865f0eb3f8619179cf7c5638eb176f7cdb20140ea1691a878787e8873a5393530c3d1bc2e7f3b1a02c100c04b1dbed545babf387f5988efa59c5ffd58f7fc54f2c1ea3a9a909d5a7b2e059a0e24a05814000c330703a9df96f85288a28730a35576bb0b7db8944225cba7889eefbddd45eab65eccd18cabc82a228747474e4868b241941381a27120976b777e97bdc47dfe3beac137f65faed340066a98ccc6b260d1b518d028ecefc05dbad9cd8c998a532b4ed2f64ca6978ddeb2261400afdd899cf27a99faf6432a3f8bf2efa537f4d67cd7f837f00a0a6494d8d22e5ed0000000049454e44ae426082</data>
+        <data format="PNG" length="730">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002a149444154388db595df4b536118c73f3bdbecf8036c4e41f2c6695022045e486e90b721e4ba126f1a0966627f4108512004a197fd0586588220980a9a068be63abaa884cc1f6d30a7e29cfb216dceb39d9d2e2cf3c74997e417de97972fbc9fe77d1e789e57e772b9384d369b4d3deab95c2edd497784b3404ff20f460650fff732fc0ee0f5bc241298252dc710f4174e4be4908cb9661439cefa7c0fb71eee79fbe0486096b5af3d644e4e50537a3de880b4f2c7db07a7e51819156e77fe3b1860b4bb1095d871f0c1f4239108068381f84e9cc58545c6c7c78946a3d45dafa3b4b414511411f34456d756e9eded65706090924a076bdf9e1f071fd4c0c000c15010f7b49bc93793b4de6ba5abab0bd3451300bbbbbb783e7a08ac04d858dfd0cc4013dcdedebe7f368a462449a2ff553fcd4dcdf87c3eba7bba71bbdcf8fd7e8a8a8ab20703d4d6d6d2f1a00383d180b9c84c85a58282fc027c3e1ff537ea71dc71303a36caf6f6367d2ffab203773eeaa4e1660336ab8db49226c798839c9211f402b22c53535383cd6ac35261c1eff76b82353b4fafd7a3a80a899d048220904aa588842324779278bd5e9cef9cc41371ca2e9511de0a675f8ae1a161cc2633e5e5e5980a4d0882c06678133157243f2f9f85a50526a62698fb32c78c674613acf962dfb28fd05688443c41329944de95997e3fcdc8e8088b4b8bb85d6e42c110f6463b5557aab207c77ec458febe8c3fe067657585542a85d566c5bbecc5fdc18de5b285603088925168b9db927d294451c4e9745275b50a7ba39dc44e8292e212daeeb7517dad9aa9b7534833129224d1d4d4a409de9f6e9fc61eabaf9f9d7d9a7d1e7ba20e3dd5986e8a1c47c75ecf97543ab45ff117e5e416138f7af790474bb13edf435a0195d8a19ecf46eaaf2d9339609ed7a03ff56b3aabce0dfc13238259bff00a6d890000000049454e44ae426082</data>
     </image>
 </images>
 <includes>
@@ -249,7 +296,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>ktoolbar.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

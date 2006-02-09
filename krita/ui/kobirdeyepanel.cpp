@@ -23,6 +23,8 @@
 #include <qpainter.h>
 #include <qframe.h>
 #include <qlabel.h>
+#include <qtoolbutton.h>
+#include <qslider.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -59,7 +61,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 {
     QHBoxLayout * l = new QHBoxLayout(this);
     m_page = new WdgBirdEye(this);
-    m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()), 10);
+    m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
 
     m_page->toolbar->setIconSize(16);
@@ -68,20 +70,114 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     m_zoomIn = new KAction( i18n("Zoom In"), "birdeye_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
     m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
 
-    
-
-    
     l->addWidget(m_page);
 
     connect(m_page->zoom, SIGNAL(valueChanged(int)), SLOT(zoomValueChanged(int)));
+    connect(m_page->bn100, SIGNAL(clicked()), SLOT(zoom100()));
+    connect(m_page->slZoom, SIGNAL(valueChanged(int)), SLOT(sliderChanged( int )));
+}
+
+void KoBirdEyePanel::setZoom(int zoom)
+{
+    m_page->zoom->blockSignals(true);
+    m_page->slZoom->blockSignals(true);
+    
+    m_page->zoom->setValue(zoom);
+
+    if (zoom < 10) {
+        m_page->slZoom->setValue(0);
+    }
+    else if (zoom > 10 && zoom < 100) {
+        m_page->slZoom->setValue(zoom / 10);
+    }
+    else if (zoom >= 100 && zoom < 150) {
+        m_page->slZoom->setValue(10);
+    }
+    else if (zoom >= 150 && zoom < 250) {
+        m_page->slZoom->setValue(11);
+    }
+    else if (zoom >= 250 && zoom < 350) {
+        m_page->slZoom->setValue(12);
+    }
+    else if (zoom >= 350 && zoom < 450) {
+        m_page->slZoom->setValue(13);
+    }
+    else if (zoom >= 450 && zoom < 550) {
+        m_page->slZoom->setValue(14);
+    }
+    else if (zoom >= 550 && zoom < 650) {
+        m_page->slZoom->setValue(15);
+    }
+    else if (zoom >= 650 && zoom < 875) {
+        m_page->slZoom->setValue(16);
+    }
+    else if (zoom >= 875 && zoom < 1150) {
+        m_page->slZoom->setValue(17);
+    }
+    else if (zoom >= 1150 && zoom < 1450) {
+        m_page->slZoom->setValue(18);
+    }
+    else if (zoom >= 1450) {
+        m_page->slZoom->setValue(19);
+    }
+    
+    
+    m_page->zoom->blockSignals(false);
+    m_page->slZoom->blockSignals(false);
+
 }
 
 void KoBirdEyePanel::zoomValueChanged(int zoom)
 {
     KoPoint center;
     center = m_canvas->visibleArea().center();
-
     m_zoomListener->zoomTo(center.x(), center.y(), zoom / 100.0);
+    setZoom(zoom);
+}
+
+void KoBirdEyePanel::zoom100()
+{
+    zoomValueChanged( 100 );
+}
+
+void KoBirdEyePanel::sliderChanged( int v )
+{
+    if (v < 10) {
+        zoomValueChanged((v + 1) * 10);
+    }
+    else {
+        switch(v) {
+            case 10:
+                zoomValueChanged(100);
+                break;
+            case 11:
+                zoomValueChanged(200);
+                break;
+            case 12:
+                zoomValueChanged(300);
+            case 13:
+                zoomValueChanged(400);
+                break;
+            case 14:
+                zoomValueChanged(500);
+                break;
+            case 15:
+                zoomValueChanged(600);
+                break;
+            case 16:
+                zoomValueChanged(750);
+                break;
+            case 17:
+                zoomValueChanged(1000);
+                break;
+            case 18:
+                zoomValueChanged(1300);
+                break;
+            case 19:
+                zoomValueChanged(1600);
+                break;
+        }
+    }
 }
 
 void KoBirdEyePanel::cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos)

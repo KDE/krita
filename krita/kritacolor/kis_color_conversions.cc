@@ -240,7 +240,9 @@ void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * l
     float r = red / 255.0;
     float g = green / 255.0;
     float b = blue / 255.0;
-    float h, l, s;
+    float h = 0;
+    float l = 0;
+    float s = 0;
 
     float max, min, delta;
 

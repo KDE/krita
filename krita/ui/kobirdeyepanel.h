@@ -186,9 +186,12 @@ protected slots:
 
     void updateVisibleArea();
     void zoomValueChanged(int zoom);
+    void zoom100();
+    void sliderChanged(int);
     
 protected:
-    
+    void setZoom(int zoom);
+            
     void updateView();
     void handleMouseMove(QPoint);
     void handleMouseMoveAction(QPoint);

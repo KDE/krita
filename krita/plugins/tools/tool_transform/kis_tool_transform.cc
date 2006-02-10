@@ -98,7 +98,6 @@ KisToolTransform::KisToolTransform()
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);
     m_optWidget = 0;
-    m_transaction = 0;
     m_sizeCursors[0] = KisCursor::sizeVerCursor();
     m_sizeCursors[1] = KisCursor::sizeBDiagCursor();
     m_sizeCursors[2] = KisCursor::sizeHorCursor();
@@ -107,34 +106,31 @@ KisToolTransform::KisToolTransform()
     m_sizeCursors[5] = KisCursor::sizeBDiagCursor();
     m_sizeCursors[6] = KisCursor::sizeHorCursor();
     m_sizeCursors[7] = KisCursor::sizeFDiagCursor();
+    m_origDevice = 0;
+    m_origSelection = 0;
+
 }
 
 KisToolTransform::~KisToolTransform()
 {
-    delete m_transaction;
 }
 
 void KisToolTransform::clear()
 {
+    if (m_subject) m_subject->undoAdapter()->removeCommandHistoryListener( this );
+    
     KisImageSP img = m_subject -> currentImg();
-
-    if (!img)
-        return;
-
+    if (!img) return;
+    
     paintOutline();
-
-    if (m_transaction && img -> undoAdapter()) {
-        img -> undoAdapter() -> addCommand(m_transaction);
-    }
-    else
-        delete m_transaction;
-    m_transaction=0;
 }
 
 void KisToolTransform::activate()
 {
     if(m_subject)
     {
+        m_subject->undoAdapter()->setCommandHistoryListener( this );
+        
         KisToolControllerInterface *controller = m_subject -> toolController();
 
         if (controller)
@@ -143,9 +139,14 @@ void KisToolTransform::activate()
         Q_INT32 x,y,w,h;
         KisImageSP img = m_subject -> currentImg();
         KisPaintDeviceSP dev = img -> activeDevice();
+        m_origDevice = new KisPaintDevice(*dev.data());
+        Q_ASSERT(m_origDevice);
+        
         if(dev->hasSelection())
         {
             KisSelectionSP sel = dev->selection();
+            m_origSelection = new KisSelection(sel.data());
+            
             QRect r = sel->selectedExactRect();
             r.rect(&x, &y, &w, &h);
         }
@@ -633,48 +634,82 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 }
 
 void KisToolTransform::transform() {
+    
     KisImageSP img = m_subject -> currentImg();
 
     if (!img)
         return;
-/*
+
+    /*
     double tx = m_translateX - m_org_cenX * m_scaleX;
     double ty = m_translateY - m_org_cenY * m_scaleY;
     */
     
+    QRect rc = img->activeDevice()->extent();
+    rc = rc.normalize();
+
     double tx = m_translateX - rotX(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
     double ty = m_translateY - rotY(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
-printf("%f %f\n",tx,ty);
-    if(m_transaction)
-    {
-        m_transaction->unexecuteNoUpdate();
-        delete m_transaction;
-    }    
-    m_transaction = new TransformCmd(img->activeDevice().data());
-    img->undoAdapter()->setTransactionPending(this);
-    Q_CHECK_PTR(m_transaction);
+
+    // This mementoes the current state of the active device.
+    TransformCmd * transaction = new TransformCmd(img->activeDevice().data());
+
+    kdDebug() << "::transform() " << img->activeDevice() << ", orig device: " << m_origDevice << "\n";
     
+    // Copy the original state back -- this should be optimized by
+    // doing only the dirty rect(s). However, that's for Casper to figure out.
+    KisPainter gc(img->activeDevice());
+    gc.bitBlt(0, 0, COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
+    gc.end();
+
+    // Also restore the original selection. After all, this is a transform from the
+    // original state again. If I understood Casper correctly. Not sure whether this
+    // works with the undo.
+    // img->activeDevice()->setSelection(m_origSelection);
+    
+    // Perform the transform. Since we copied the original state back, this doesn't degrade
+    // after many tweaks. Since we started the transaction before the copy back, the memento
+    // has the previous state.
     KisTransformWorker t(img->activeDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(tx), int(ty), progress, m_filter);
     t.run();
-    
+
+    // If canceled, go back to the memento
     if(t.isCanceled())
     {
-        m_transaction->unexecute();
-        delete m_transaction;
-        m_transaction = 0;
-        activate();
+        transaction->unexecute();
+        delete transaction;
         return;
     }
-    QRect rc = img->activeDevice()->extent();
-    rc = rc.normalize();
-    
+
+    // Else add the command -- this will have the memento from the previous state,
+    // and the transformed state from the original device we cached in our activated()
+    // method.
+    if (transaction && img -> undoAdapter()) {
+        img -> undoAdapter() -> addCommand(transaction);
+    }
+        
     img -> notify(rc);
 }
 
-void KisToolTransform::addPendingTransaction()
+void KisToolTransform::notifyCommandAdded( KCommand * command)
 {
-    clear();
+    kdDebug() << "there was a command added: " << command->name() << "\n";
+    TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
+    if (cmd == 0) {
+        // The last added command wasn't one of ours;
+        // we should reset to the new state of the canvas.
+        kdDebug() << "Going to reset the orig device\n";
+        if(m_subject)
+        {
+            KisImageSP img = m_subject -> currentImg();
+            KisPaintDeviceSP dev = img -> activeDevice();
+            m_origDevice = new KisPaintDevice(*dev.data());
+            Q_ASSERT(m_origDevice);
+        
+        }
+
+    }
 }
 
 void KisToolTransform::slotSetFilter(const KisID &filterID)

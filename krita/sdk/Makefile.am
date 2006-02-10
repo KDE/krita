@@ -4,7 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	        $(all_includes)
 
 noinst_LTLIBRARIES = libkritasdk.la
-libkritasdk_la_SOURCES = kis_progress_subject.cc
+libkritasdk_la_SOURCES = kis_progress_subject.cc 
 libkritasdk_la_METASOURCES = AUTO
 
 include_HEADERS = \
@@ -19,5 +19,5 @@ include_HEADERS = \
     kis_progress_subject.h \
     kis_shared_ptr_vector.h \
     kis_undo_adapter.h \
-    kis_generic_registry.h
+    kis_generic_registry.h 
 

@@ -45,6 +45,7 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 
 KisTransaction::~KisTransaction()
 {
+    kdDebug() << "going to delete: " << m_private->m_name << ", " << kdBacktrace() << "\n";
     if (m_private->m_memento) {
         // For debugging purposes
         m_private->m_memento -> setInvalid();

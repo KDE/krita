@@ -90,7 +90,10 @@ public slots:
      virtual void initEmpty();
 
 private: // Undo adapter
-    virtual void setTransactionPending(KisPendingTransactionProvider *);
+    
+    virtual void setCommandHistoryListener(const KisCommandHistoryListener *);
+    virtual void removeCommandHistoryListener(const KisCommandHistoryListener *);
+
     virtual void addCommand(KCommand *cmd);
     virtual void setUndo(bool undo);
     virtual bool undo() const;
@@ -167,8 +170,9 @@ protected slots:
 private slots:
     void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
     void slotIOProgress(Q_INT8 percentage);
-
+    
 private:
+    
     QDomElement saveImage(QDomDocument& doc, KisImageSP img);
     KisImageSP loadImage(const QDomElement& elem);
     void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
@@ -195,7 +199,7 @@ private:
 
     bool m_undo;
     KoCommandHistory *m_cmdHistory;
-    KisPendingTransactionProvider * m_pendingTransactionProvider;
+    QPtrList<KisCommandHistoryListener> m_undoListeners;
     KisImageSP m_currentImage;
     DCOPObject *m_dcop;
     KisNameServer *m_nserver;

@@ -152,7 +152,6 @@ public:
      */
     void setUndoAdapter(KisUndoAdapter * undoAdapter);
     KisUndoAdapter *undoAdapter() const;
-    void enableUndo(KoCommandHistory *history);
 
     /**
      * Tell the image it's modified; this emits the sigImageModified signal. This happens
@@ -388,7 +387,6 @@ private:
 
 private:
 
-    KoCommandHistory *m_undoHistory;
     KURL m_uri;
     QString m_name;
     QString m_description;

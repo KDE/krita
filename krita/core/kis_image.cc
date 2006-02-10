@@ -29,7 +29,6 @@
 #include <qthread.h>
 
 #include <kcommand.h>
-#include <kocommandhistory.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -489,7 +488,6 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
     m_dcop = 0L;
     if (this != &rhs) {
         m_private = new KisImagePrivate(*rhs.m_private);
-        m_undoHistory = rhs.m_undoHistory;
         m_uri = rhs.m_uri;
         m_name = QString::null;
         m_width = rhs.m_width;
@@ -600,7 +598,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_yres = 1.0;
     m_unit = KoUnit::U_PT;
     m_dirty = false;
-    m_undoHistory = 0;
     m_width = width;
     m_height = height;
 
@@ -1150,11 +1147,6 @@ void KisImage::mergeLayer(KisLayerSP /*l*/)
 */
 }
 
-
-void KisImage::enableUndo(KoCommandHistory *history)
-{
-    m_undoHistory = history;
-}
 
 void KisImage::setModified()
 {

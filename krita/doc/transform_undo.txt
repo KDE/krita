@@ -1,0 +1,38 @@
+Problem:
+
+When working with the transform tool, the user performs many adjustments.
+These adjustments should be aggregated into one transform, and always
+performed from the original state of the image, as it was before the
+first transformation adjustment was applied -- because otherwise
+the quality degradation becomes too bad.
+
+That means that all work with the transform tool should eventually
+result in one transform command. However, when working with the transform
+tool, the user expects to be able to undo various stages of his transform
+actions. And undo should not undo to the original state, but to the previous
+state.
+
+When the user selects another tool, the definitive transform is applied.
+This happens because selecting another tool calls the clear function of
+the transform tool. One transform command should end up on the undo
+stack.
+
+When the user selects an action from the menu, like a filter,
+the definitive transform should also be applied, and only
+then the action from the menu.
+
+Thus, we have two problems:
+
+* Transforms should always be done from the original image, but undoing
+the transform command should unto to the previous state.
+
+* Pending transforms should be committed before a menu action is taken.
+
+These problems can be solved in one go, without any of the complications
+I created yesterday by always committing the transform to the undo history
+in the transform() method, but by performing the transform from the original
+paint device, as it was when the tool got activated.
+
+Menu actions should reset the tool: for this we will need my complicated hack,
+I propose resetting the transform tool after a command is added.
+

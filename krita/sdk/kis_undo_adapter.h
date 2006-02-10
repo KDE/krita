@@ -25,35 +25,28 @@ class QString;
 class KCommand;
 
 /**
- * A transaction provider is a class that wants to provide
- * a transaction before anyone else gets a chance to do that,
- * but who doesn't want to that right now.
- *
- * There can be only one transaction provider be pending, and
- * it can only add one pending transaction.
+ * Undo listeners want to be notified of undo and redo actions.
+ * Notification is given _before_ the command is added to the
+ * stack.
  */
-class KisPendingTransactionProvider {
+class KisCommandHistoryListener {
 
 public:
 
-    virtual void addPendingTransaction() = 0;
-
+    KisCommandHistoryListener(){};
+    
+    virtual void notifyCommandAdded(KCommand * cmd) = 0;
 };
-
 
 class KisUndoAdapter {
 public:
-    KisUndoAdapter();
-    virtual ~KisUndoAdapter();
+    KisUndoAdapter() {};
+    virtual ~KisUndoAdapter() {};
 
 public:
-    /**
-     * Set a transactionprovider. Whenever addCommand is called, look
-     * whether there's a tranaction pending and give the pending
-     * transaction provider a chance to set that transaction before
-     * adding the new command.
-     */
-    virtual void setTransactionPending(KisPendingTransactionProvider *) = 0;
+    
+    virtual void setCommandHistoryListener(const KisCommandHistoryListener *) = 0;
+    virtual void removeCommandHistoryListener(const KisCommandHistoryListener *) = 0;
     
     virtual void addCommand(KCommand *cmd) = 0;
     virtual void setUndo(bool undo) = 0;
@@ -66,15 +59,6 @@ private:
     KisUndoAdapter& operator=(const KisUndoAdapter&);
 };
 
-inline
-KisUndoAdapter::KisUndoAdapter()
-{
-}
-
-inline
-KisUndoAdapter::~KisUndoAdapter()
-{
-}
 
 #endif // KIS_UNDO_ADAPTER_H_
 

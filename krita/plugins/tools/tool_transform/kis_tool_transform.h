@@ -37,7 +37,7 @@ class KisFilterStrategy;
  * Transform tool
  *
  */
-class KisToolTransform : public KisToolNonPaint, private KisPendingTransactionProvider {
+class KisToolTransform : public KisToolNonPaint, KisCommandHistoryListener {
 
     typedef KisToolNonPaint super;
     Q_OBJECT
@@ -61,7 +61,7 @@ public:
 
 public:
 
-    void addPendingTransaction();
+    void notifyCommandAdded(KCommand *);
     
 private:
     void paintOutline();
@@ -110,14 +110,18 @@ private:
     double m_sina;
     double m_a;
     double m_clickangle;
-    KisTransaction *m_transaction;
     KisFilterStrategy *m_filter;
 
     WdgToolTransform *m_optWidget;
+    
+    KisPaintDevice * m_origDevice;
+    KisSelection * m_origSelection;
+
 };
 
 class KisToolTransformFactory : public KisToolFactory {
     typedef KisToolFactory super;
+
 public:
     KisToolTransformFactory() : super() {};
     virtual ~KisToolTransformFactory(){};

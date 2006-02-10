@@ -15,35 +15,12 @@ to x/y and width/height ones. Additionally adding a 'keep aspect ratio'
 checkbox so users can type width=3D3 and height=3D2 to keep that aspect ratio 
 from then on.
 
-Overview palette:
-Last; why is the space between the 'Zoom:' label and its slider soo much
-larger then the space betweenthe 'Exposure:' label and that slider ?
-
 Color palettes ;
-pressing the 'reset colors' icon directly under the foreground/background 
-preview swatches does not change the background to white, as I would 
-expect.
-You can drag a color from the preview swatches but it is changing the 
+You can drag a color from the preview swatches but it is changing the
 selected one at click and since dropping drops on the selected one, the 
 concept of duplicating the foreground to the background by dragging is 
 impossible.  I suggest to do selecting of foreground/background color on 
 mouse release instead.
-=46or all the 'tracks' in the RGB and Gray palettes you can change the 
-current position of the slider by clicking, but you can't keep updating 
-it by dragging.  Please copy the behavior of any slider and continuesly 
-update the value on click until the mouse is released again.  See QSlider 
-behavior for how to handle mouse-drag events outside the widget 
-boundaries.
-The HSV/RGB/Gray have labels in front of the color-sliders. Please follow 
-the styleguide and let all such labels end with a colon ":"
-
-
-Color Picker tool:
-The 'Normalize integer values' should not be enabled by default.  I would 
-also like to suggest it converts the values to percentages instead of 
-values between 0 and 1.
-The label could then be renamed to something much less technical like 
-'Colors in percentages'
 
 Color Range shows a dialog that also has extra margins around them, the 
 groupbox on the right does not line up with the cancel right-side.

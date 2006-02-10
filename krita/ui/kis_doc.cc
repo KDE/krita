@@ -149,8 +149,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
     m_macroNestDepth = 0;
     m_ioProgressBase = 0;
     m_ioProgressTotalSteps = 0;
-    m_pendingTransactionProvider = 0;
-    
+
     setInstance( KisFactory::instance(), false );
     setTemplateType( "krita_template" );
 
@@ -166,6 +165,7 @@ KisDoc::~KisDoc()
     delete m_cmdHistory;
     delete m_dcop;
     delete m_nserver;
+    m_undoListeners.setAutoDelete(false);
 }
 
 QCString KisDoc::mimeType() const
@@ -270,6 +270,8 @@ bool KisDoc::init()
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
+
+    m_undoListeners.setAutoDelete(false);
 
     return true;
 }
@@ -1025,22 +1027,28 @@ void KisDoc::endMacro()
     }
 }
 
-void KisDoc::setTransactionPending(KisPendingTransactionProvider * provider)
+void KisDoc::setCommandHistoryListener(const KisCommandHistoryListener * l)
 {
-    //kdDebug() << "setting pending transaction provider\n";
-    m_pendingTransactionProvider = provider;
+    // Never have more than one instance of a listener around. Qt should prove a Set class for this...
+    m_undoListeners.removeRef(l);
+    m_undoListeners.append(l);
+}
+
+void KisDoc::removeCommandHistoryListener(const KisCommandHistoryListener * l)
+{
+   m_undoListeners.removeRef(l);
 }
 
 void KisDoc::addCommand(KCommand *cmd)
 {
     Q_ASSERT(cmd);
     
-    //kdDebug() << "Adding command " << cmd->name() << endl;
+    kdDebug() << "Adding command " << cmd->name() << endl;
 
-    if (m_pendingTransactionProvider) {
-        KisPendingTransactionProvider * p = m_pendingTransactionProvider;
-        m_pendingTransactionProvider = 0;
-        p->addPendingTransaction();
+    KisCommandHistoryListener* l = 0;
+    
+    for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
+        l->notifyCommandAdded(cmd);
     }
     
     setModified(true);
@@ -1063,6 +1071,8 @@ Q_INT32 KisDoc::undoLimit() const
 {
     return m_cmdHistory -> undoLimit();
 }
+
+
 
 void KisDoc::setUndoLimit(Q_INT32 limit)
 {

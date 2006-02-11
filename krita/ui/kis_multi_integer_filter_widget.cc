@@ -20,9 +20,29 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qtimer.h>
 
 #include <knuminput.h>
 #include <klocale.h>
+
+KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const char * name)
+        : KIntNumInput(parent, name)
+{
+        m_timer = new QTimer(this, name);
+        connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
+        connect(this, SIGNAL(valueChanged( int )), SLOT(slotTimeToUpdate()));
+}
+
+void KisDelayedActionIntegerInput::slotTimeToUpdate()
+{
+    m_timer->start(50, true);
+}
+
+void KisDelayedActionIntegerInput::slotValueChanged()
+{
+    emit valueChangedDelayed( value() );
+}
+
 
 KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname) :
     min(nmin),
@@ -30,7 +50,6 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT
     initvalue(ninitvalue),
     name(nname)
 {
-
 }
 
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
@@ -46,15 +65,15 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
     QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 3);
     widgetLayout -> setColStretch ( 1, 1 );
 
-    m_integerWidgets = new KIntNumInput*[ m_nbintegerWidgets ];
+    m_integerWidgets = new KisDelayedActionIntegerInput*[ m_nbintegerWidgets ];
 
     for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
     {
-        m_integerWidgets[i] = new KIntNumInput( this, iwparam[i].name.ascii());
+        m_integerWidgets[i] = new KisDelayedActionIntegerInput( this, iwparam[i].name.ascii());
         m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
         m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
 
-        connect(m_integerWidgets[i], SIGNAL(valueChanged( int )), SIGNAL(sigPleaseUpdatePreview()));
+        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
 
         QLabel* lbl = new QLabel(iwparam[i].name+":", this);
         widgetLayout -> addWidget( lbl, i , 0);

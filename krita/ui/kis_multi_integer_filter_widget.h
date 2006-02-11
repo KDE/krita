@@ -25,7 +25,28 @@
 #include <kis_filter_config_widget.h>
 #include "koffice_export.h"
 
-class KIntNumInput;
+class KisDelayedActionIntegerInput : public KIntNumInput
+{
+
+    Q_OBJECT
+            
+public:
+        
+    KisDelayedActionIntegerInput(QWidget * parent, const char * name);
+
+private slots:
+    void slotValueChanged();
+    void slotTimeToUpdate();
+
+signals:
+    
+    void valueChangedDelayed(int value);
+    
+private:
+ 
+        QTimer * m_timer;
+};
+
 
 struct KisIntegerWidgetParam {
     KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
@@ -50,7 +71,7 @@ public:
     inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };
     
 private:
-    KIntNumInput** m_integerWidgets;
+    KisDelayedActionIntegerInput** m_integerWidgets;
     Q_INT32 m_nbintegerWidgets;
 };
 

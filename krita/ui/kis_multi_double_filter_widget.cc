@@ -20,10 +20,31 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qtimer.h>
 
 #include <knuminput.h>
 #include <kis_filter_config_widget.h>
 #include <klocale.h>
+
+KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const char * name)
+    : KDoubleNumInput(parent, name)
+{
+    m_timer = new QTimer(this, name);
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
+    connect(this, SIGNAL(valueChanged( double )), SLOT(slotTimeToUpdate()));
+}
+
+void KisDelayedActionDoubleInput::slotTimeToUpdate()
+{
+    m_timer->start(50, true);
+}
+
+void KisDelayedActionDoubleInput::slotValueChanged()
+{
+    emit valueChangedDelayed( value() );
+}
+
+
 
 KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nname) :
     min(nmin),
@@ -44,15 +65,15 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
     QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
     widgetLayout -> setColStretch ( 1, 1 );
 
-    m_doubleWidgets = new KDoubleNumInput*[ m_nbdoubleWidgets ];
+    m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
 
     for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
     {
-        m_doubleWidgets[i] = new KDoubleNumInput(this, dwparam[i].name.ascii());
+        m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name.ascii());
         m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max );
         m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
 
-        connect(m_doubleWidgets[i], SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+        connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigPleaseUpdatePreview()));
 
         QLabel* lbl = new QLabel(dwparam[i].name+":", this);
         widgetLayout -> addWidget( lbl, i , 0);

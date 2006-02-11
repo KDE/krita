@@ -24,6 +24,29 @@
 #include <kis_filter_config_widget.h>
 #include "koffice_export.h"
 
+class KisDelayedActionDoubleInput : public KDoubleNumInput
+{
+
+    Q_OBJECT
+            
+    public:
+        
+        KisDelayedActionDoubleInput(QWidget * parent, const char * name);
+
+    private slots:
+        void slotValueChanged();
+        void slotTimeToUpdate();
+
+    signals:
+    
+        void valueChangedDelayed(double value);
+    
+    private:
+ 
+        QTimer * m_timer;
+};
+
+
 struct KRITA_EXPORT KisDoubleWidgetParam {
     KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
     double min;
@@ -44,7 +67,7 @@ public:
     inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
     inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
 private:
-    KDoubleNumInput** m_doubleWidgets;
+    KisDelayedActionDoubleInput** m_doubleWidgets;
     Q_INT32 m_nbdoubleWidgets;
 };
 

@@ -160,7 +160,6 @@ signals:
 protected:
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent, const char *name);
-    virtual bool saveChildren( KoStore * ) { return true; };
 
 protected slots:
     // Overide KoDocument

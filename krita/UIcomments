@@ -1,20 +1,3 @@
-Zoom is in for form of n:m.  This is not really a commonly used format and
-many people will have less problems interpreting a percentage format.  So 
-200% or 50% instead of 2:1 or 1:2 (respectively).
-
-Zoom tool;  it zooms by 2-complement changes. So 1, 2, 4, 8 etc.
-This misses other well known nice looking zoom-levels. Like 33% Or, as 
-krita displays it, 3-times zoom.
-I suggest making the zoom use 1, 2, 3, 4, 6, 8, 9 etc.
-
-Crop tool;
-The crop tool should have statusbar details like position and size, which 
-are continuesly updated.
-The crop-options panel shows start and end coordinates. Please change that
-to x/y and width/height ones. Additionally adding a 'keep aspect ratio' 
-checkbox so users can type width=3D3 and height=3D2 to keep that aspect ratio 
-from then on.
-
 Color palettes ;
 You can drag a color from the preview swatches but it is changing the
 selected one at click and since dropping drops on the selected one, the 
@@ -22,11 +5,7 @@ concept of duplicating the foreground to the background by dragging is
 impossible.  I suggest to do selecting of foreground/background color on 
 mouse release instead.
 
-Color Range shows a dialog that also has extra margins around them, the 
-groupbox on the right does not line up with the cancel right-side.
-or the color range, I also fail to see what the dialog should do.
-feature request; hide selection visualization (but leave the selection in
-place). Similar feature in Photoshop can be found under 'Ctrl-H'.
+
 When you did a 'select all' and then create a selection nothing happens 
 since you can't select more then you already did.  For that reason I 
 suggest to make select all and deselect lead to a similar situation where 

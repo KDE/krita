@@ -444,7 +444,7 @@ private slots:
     void flattenImage();
     void mergeLayer();
     void saveLayerAsImage();
-
+    
     void slotUpdateFullScreen(bool toggle);
     void showRuler();
 

@@ -21,23 +21,69 @@
 #ifndef _KIS_FILTERS_LIST_VIEW_H_
 #define _KIS_FILTERS_LIST_VIEW_H_
 
+#include <qevent.h>
+
 #include <kiconview.h>
 
 #include "kis_id.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+#include "kis_thread.h"
 
 class KisView;
 class KisFilter;
 class KisFilterConfiguration;
 class KisPreviewView;
+class QTimer;
+class KisFiltersIconViewItem;
+class KisFiltersListView;
+
+class KisThumbnailDoneEvent : public QCustomEvent
+{
+public:
+
+    KisThumbnailDoneEvent(KisFiltersIconViewItem * iconItem, const QImage & img)
+        : QCustomEvent(QEvent::User + 1969)
+        , m_iconItem(iconItem)
+        , m_image(img) {};
+
+    KisFiltersIconViewItem * m_iconItem;
+    QImage m_image;
+
+};
+
+class KisFiltersThumbnailThread : public KisThread
+{
+public:
+
+    KisFiltersThumbnailThread(QIconView * parent,
+                              KisFiltersIconViewItem * iconItem,
+                              KisFilterConfiguration * config, KisFilter * filter,
+                              KisPaintDeviceSP dev, const QRect & bounds,
+                              KisProfile * profile);
+
+    virtual void run();
+    QPixmap pixmap();
+
+private:
+    QIconView * m_parent;
+    KisFiltersIconViewItem * m_iconItem;
+    KisFilterConfiguration * m_config;
+    KisFilter * m_filter;
+    KisPaintDeviceSP m_dev;
+    const QRect m_bounds;
+    KisProfile * m_profile;
+    QImage m_pixmap;
+};
 
 class KisFiltersIconViewItem : public QIconViewItem {
 public:
-    KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon, KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig ) : QIconViewItem(parent, text, icon), m_id(id), m_filter(filter), m_filterconfig(filterConfig)
-        {
-        }
+    KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon,
+                            KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
+                            KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile);
+
+    virtual ~KisFiltersIconViewItem();
     inline KisID id() { return m_id; }
     inline KisFilter* filter() { return m_filter; }
     inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
@@ -46,16 +92,23 @@ private:
     KisID m_id;
     KisFilter* m_filter;
     KisFilterConfiguration* m_filterconfig;
+    KisFiltersThumbnailThread * m_thread;
 };
 
 class KisFiltersListView : public KIconView {
+
 public:
+    
     KisFiltersListView(QWidget* parent, const char* name = 0);
     KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0) KDE_DEPRECATED;
     KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, const char * name = 0);
+        
+    virtual void customEvent(QCustomEvent *);
+
+    private:
     
-private:
     void init();
+    
 public:
     void setLayer(KisLayerSP layer) KDE_DEPRECATED;
     void setProfile(KisProfile * profile) { m_profile = profile; };
@@ -70,7 +123,8 @@ public:
     void buildPreview();
     void setCurrentFilter(KisID filter);
 
-    private:
+private:
+    
     KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;

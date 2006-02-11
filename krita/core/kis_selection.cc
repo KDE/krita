@@ -42,14 +42,21 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
 }
 
 KisSelection::KisSelection(KisImageSP img)
-    : super(img, KisMetaRegistry::instance()->csRegistry()->getAlpha8())
+    : super(img, KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "anonymous selection")
     , m_parentPaintDevice(0)
 {
     Q_ASSERT(img);
 }
 
+KisSelection::KisSelection(const KisSelection& rhs)
+    : super(rhs)
+{
+    m_parentPaintDevice = rhs.m_parentPaintDevice;
+}
+
 KisSelection::~KisSelection()
 {
+    //kdDebug() << "Deleting selection " << name() << "\n" << kdBacktrace() << "\n";
 }
 
 Q_UINT8 KisSelection::selected(Q_INT32 x, Q_INT32 y)

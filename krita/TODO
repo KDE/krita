@@ -21,42 +21,26 @@ Integration
 	* A krita document embedded in KWord has the wrong scaling and transparency
 	* A krita document embedded in another document prints at the wrong place
 	* Embedded KOffice objects don't paint themselves correctly
-	* write the Krita handbook. Split into chapters for easier concurrent editing.
 	* There is currently no kimgio module for Krita images: implement one by
 	  saving a rendered png image into the krita file and extracting that from
 	  kimgio. (Saving of a png image in .kra files is done; now we just need to 
           add the kimgio file)
         * There is no easy way to get back from editing an embedded document (if the image is larger
           than the window)
-	* Hack koMainWindow so the save warning doesn't happen for Krita (BSAR)
-
+          
 Colorspace independence (found with the test colorstrategy)
 
 	* tool gradient uses wrong colors; gradient still uses qcolor everywhere.
-	* Map colorspace transforms using the full set of discriminating features:
-		source color space (not null) // KisStrategyColorspace descendant
-		destination color space (not null) // KisStrategyColorspace descendant
-		source profile (may be null) // KisProfile
-		destination profile (may be null) // KisProfile
-		src lcms color type (may be 0) // frex (COLORSPACE_SH(PT_CMYK) | 
-							CHANNELS_SH(4) |
-							BYTES_SH(1) | EXTRA_SH(1)) for cmyka
-		dst lcms color type (may be 0)
-		rendering intent
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
 	* Merge grayscale layers back into one color image.
-    * Allow both simply setting the profile and converting to the new profile
+        * Allow both simply setting the profile and converting to the new profile
     
 Core
 
      * The fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
           tool should use that rect to blit and notify the image, instead of notifying the complete image.s
 	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
-	* Adjustment layers (Layers that dynamically apply a filter to
-	  the layer they are linked to, these do not store actual
-	  image data, except for an occasional mask) These should work on object
-          layers (embedded KOFfice objects), too. (BSAR)
 	* Loading and saving of selections
 	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
 	* Load/save configuration of everything user-settable.
@@ -93,15 +77,9 @@ User Interface
 		    - Variations (#Boudewijn)
 		    - Gradient: remove the autogradient dialog and make into a proper
 				gradient dialog, and allow saving gradients.
-    * Improve the preview widget - see "doc/the preview widget"
-        Still need to clear away the rect when the image 
-        is smaller than the preview widget and somehow the initial part show of the 
-        image is all we ever see. And there's some horrible flicker here: we'd better 
-        create a QImage and bitBlt it, instead of using the painter interface.
 
     * Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
-    * Allow guides to be disabled. Allow diagonal guides (useful
-      for perspective drawings) Bug #108398 
+    * Allow guides to be disabled. Allow diagonal guides (useful for perspective drawings) Bug #108398
     * Allow snapping to guides.
     * Create templates for often-used image formats. Add save-as-template
     * Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
@@ -131,15 +109,10 @@ User Interface
       I suggest to set the default format (in the "save as" dialog) to the krita 
       format for any image that has more then 1 layer.  
 
-    * Layers toolbar has a pretty annoying problem.  Clicking on the eye to 
-      enable/disable a layer only works when the scrollbar is at the top, so if 
-      there is some offset in the scrollpane the clicks to disable a layer are 
-      ignored. Note that double click for edit layer works fine.
-
 
 Selections
 
-	* On shearing, the whole image is mirrored, not the selected
+    * On shearing, the whole image is mirrored, not the selected
 	  bits.
     * Add opacity slider to selection painting tools so you can
           select something 50%.

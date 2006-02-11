@@ -35,7 +35,7 @@ public:
 
 KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 {
-    kdDebug() << "Transaction " << name << " created for device " << device->name() << "\n";
+    //kdDebug() << "Transaction " << name << " created for device " << device->name() << "\n";
     m_private = new KisTransactionPrivate;
 
     m_private->m_name = name;
@@ -45,7 +45,7 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 
 KisTransaction::~KisTransaction()
 {
-    kdDebug() << "going to delete: " << m_private->m_name << ", " << kdBacktrace() << "\n";
+    //kdDebug() << "going to delete: " << m_private->m_name << ", " << kdBacktrace() << "\n";
     if (m_private->m_memento) {
         // For debugging purposes
         m_private->m_memento -> setInvalid();
@@ -57,7 +57,7 @@ void KisTransaction::execute()
 {
     Q_ASSERT(m_private->m_memento != 0);
 
-    kdDebug() << "Executing transaction " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
+    //kdDebug() << "Executing transaction " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
     KisImageSP img = m_private->m_device -> image();
 
     m_private->m_device->rollforward(m_private->m_memento);
@@ -73,7 +73,7 @@ void KisTransaction::execute()
 void KisTransaction::unexecute()
 {
     Q_ASSERT(m_private->m_memento != 0);
-    kdDebug() << "Unexecuting transaction: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
+    //kdDebug() << "Unexecuting transaction: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
     KisImageSP img = m_private->m_device -> image();
 
     m_private->m_device -> rollback(m_private->m_memento);
@@ -89,7 +89,7 @@ void KisTransaction::unexecute()
 void KisTransaction::unexecuteNoUpdate()
 {
     Q_ASSERT(m_private->m_memento != 0);
-    kdDebug() << "Unexecuting transaction with no update: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
+    //kdDebug() << "Unexecuting transaction with no update: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
     KisImageSP img = m_private->m_device -> image();
 
     m_private->m_device -> rollback(m_private->m_memento);

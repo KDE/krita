@@ -178,7 +178,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
                                              collection,
                                              "fill_selection_pattern");
 
-    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), "", this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
+    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), "Ctrl+h", this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 

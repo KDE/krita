@@ -114,8 +114,8 @@ private:
 
     WdgToolTransform *m_optWidget;
     
-    KisPaintDevice * m_origDevice;
-    KisSelection * m_origSelection;
+    KisPaintDeviceSP m_origDevice;
+    KisSelectionSP m_origSelection;
 
 };
 

@@ -209,6 +209,7 @@ namespace {
 KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
+    //kdDebug() << "creating paint device " << name << endl;
     if (name == 0) {
         kdDebug() << "device without a name " << kdBacktrace() << "\n";
     }
@@ -247,7 +248,7 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const 
     QObject(0, name), KShared()
 {
     Q_ASSERT( colorSpace );
-
+    //kdDebug() << "creating paint device " << name << endl;
     if (name == 0) {
         kdDebug() << "device without a name " << kdBacktrace() << "\n";
     }
@@ -284,12 +285,16 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const 
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
+    //kdDebug() << "Copying paint device " << rhs.name() << endl;
     if (this != &rhs) {
         m_owner = 0;
         m_dcop = rhs.m_dcop;
         if (rhs.m_datamanager) {
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
             Q_CHECK_PTR(m_datamanager);
+        }
+        else {
+            kdWarning() << "rhs " << rhs.name() << " has no datamanager\n";
         }
         m_extentIsValid = rhs.m_extentIsValid;
         m_x = rhs.m_x;
@@ -299,11 +304,12 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
         m_selection = 0;
         m_pixelSize = rhs.m_pixelSize;
         m_nChannels = rhs.m_nChannels;
-        }
+    }
 }
 
 KisPaintDevice::~KisPaintDevice()
 {
+    //kdDebug() << "going to delete paint device " << this  << ", " << name() << "\n";
     delete m_dcop;
 }
 

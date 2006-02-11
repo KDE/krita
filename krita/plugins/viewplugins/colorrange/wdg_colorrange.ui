@@ -8,214 +8,166 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>337</width>
-            <height>468</height>
+            <width>515</width>
+            <height>528</height>
         </rect>
     </property>
     <property name="caption">
         <string>Color Range</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>grpColorRange</cstring>
+                <cstring>layout10</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Select Color Range</string>
-            </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QComboBox" row="0" column="0">
-                    <item>
-                        <property name="text">
-                            <string>Reds</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Yellows</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Greens</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Cyans</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Blues</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Magentas</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Highlights</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Midtones</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Shadows</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Out of Gamut</string>
-                        </property>
-                    </item>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>cmbSelect</cstring>
+                        <cstring>layout8</cstring>
                     </property>
-                </widget>
-                <widget class="QCheckBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>chkInvert</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Invert</string>
-                    </property>
-                </widget>
-                <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>grpPreview</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>1</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="title">
-                        <string>Preview</string>
-                    </property>
-                    <property name="flat">
-                        <bool>false</bool>
-                    </property>
-                    <grid>
+                    <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel" row="0" column="0">
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>pixSelection</cstring>
+                                <cstring>layout7</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>7</vsizetype>
-                                    <horstretch>1</horstretch>
-                                    <verstretch>1</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
-                            </property>
-                            <property name="frameShadow">
-                                <enum>Plain</enum>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>image0</pixmap>
-                            </property>
-                            <property name="scaledContents">
-                                <bool>false</bool>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignCenter</set>
-                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>Reds</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Yellows</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Greens</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Cyans</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Blues</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Magentas</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Highlights</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Midtones</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Shadows</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Out of Gamut</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbSelect</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>chkInvert</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Invert</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+I</string>
+                                    </property>
+                                </widget>
+                            </hbox>
                         </widget>
-                    </grid>
+                        <widget class="QButtonGroup">
+                            <property name="name">
+                                <cstring>grpSelection</cstring>
+                            </property>
+                            <property name="title">
+                                <string></string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioAdd</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Add to current selection</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+A</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>radioSubtract</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Subtract from current selection</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string>Alt+S</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </vbox>
                 </widget>
-                <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>grpSelection</cstring>
+                        <cstring>layout9</cstring>
                     </property>
-                    <property name="title">
-                        <string></string>
-                    </property>
-                    <grid>
+                    <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radioAdd</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Add to current selection</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="2" column="0">
-                            <property name="name">
-                                <cstring>radioSubtract</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Subtract from current selection</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer1</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>81</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
                         <widget class="QPushButton">
                             <property name="name">
                                 <cstring>bnSelect</cstring>
                             </property>
                             <property name="text">
                                 <string>&amp;Select</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+S</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">
@@ -225,12 +177,84 @@
                             <property name="text">
                                 <string>&amp;Deselect</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+D</string>
+                            </property>
                         </widget>
-                    </hbox>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer9</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>40</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>grpPreview</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Preview</string>
+            </property>
+            <property name="flat">
+                <bool>false</bool>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>pixSelection</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Plain</enum>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
                 </widget>
             </grid>
         </widget>
-    </grid>
+    </vbox>
 </widget>
 <images>
     <image name="image0">
@@ -238,8 +262,6 @@
     </image>
 </images>
 <tabstops>
-    <tabstop>cmbSelect</tabstop>
-    <tabstop>chkInvert</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

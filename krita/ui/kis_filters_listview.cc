@@ -20,17 +20,68 @@
  */
 
 #include "kis_filters_listview.h"
-#include <qapplication.h>
 
-#include "kis_cursor.h"
+#include <qapplication.h>
+#include "qtimer.h"
+#include "qpainter.h"
+#include "qpixmap.h"
+
 #include "kis_types.h"
-#include "kis_image.h"
+#include "kis_paint_device.h"
+#include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_filter.h"
 #include "kis_filter_strategy.h"
 
+KisFiltersThumbnailThread::KisFiltersThumbnailThread(QIconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KisProfile * profile)
+    : m_parent(parent)
+    , m_iconItem(iconItem)
+    , m_config(config)
+    , m_filter(filter)
+    , m_dev(dev)
+    , m_bounds(bounds)
+    , m_profile(profile)
+{
+}
+
+void KisFiltersThumbnailThread::run()
+{
+    kdDebug() << "thumbnail thread for " << m_filter->id().id() << " started\n";
+    KisPaintDeviceSP thumbPreview = new KisPaintDevice(*m_dev);
+    m_filter->disableProgress();
+    m_filter->process(thumbPreview, thumbPreview, m_config, m_bounds);
+    
+    m_pixmap =  thumbPreview->convertToQImage(m_profile);
+
+    qApp->postEvent(m_parent, new KisThumbnailDoneEvent (m_iconItem, m_pixmap));
+    
+    kdDebug() << "thumbnail thread for " << m_filter->id().id() << " done\n";
+}
+
+QPixmap KisFiltersThumbnailThread::pixmap()
+{
+    return m_pixmap;
+}
+
+KisFiltersIconViewItem::KisFiltersIconViewItem(QIconView * parent, const QString & text, const QPixmap & icon,
+                                               KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
+                                               KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile)
+    : QIconViewItem(parent, text, icon)
+    , m_id(id)
+    , m_filter(filter)
+    , m_filterconfig(filterConfig)
+{
+    m_thread = new KisFiltersThumbnailThread(parent, this, filterConfig, filter, thumb, bounds, profile);
+    m_thread->start();
+}
+
+KisFiltersIconViewItem::~KisFiltersIconViewItem()
+{
+    m_thread->wait();
+    delete m_thread;
+}
 
 KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_original(0), m_profile(0)
 {
@@ -52,6 +103,14 @@ KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent,
 {
     buildPreview();
     init();
+}
+
+void KisFiltersListView::customEvent(QCustomEvent * e)
+{
+    KisThumbnailDoneEvent * ev = dynamic_cast<KisThumbnailDoneEvent *>(e);
+    if (ev) {
+        ev->m_iconItem->setPixmap(QPixmap(ev->m_image));
+    }
 }
 
 void KisFiltersListView::init()
@@ -145,7 +204,10 @@ void KisFiltersListView::buildPreview()
     m_thumb = createThumbnail(m_original, 150, 100);
     
     QRect bounds = m_thumb->exactBounds();
-    //kdDebug() << "bounds: " << bounds.x() << ", " << bounds.y() << ", " << bounds.width() << ", " << bounds.height() << endl;
+    QPixmap pm(bounds.width(), bounds.height());
+    QPainter gc(&pm);
+    gc.fillRect(0, 0, bounds.width(), bounds.height(), Qt::lightGray);
+    gc.end();
     
     KisIDList l = KisFilterRegistry::instance()->listKeys();
     KisIDList::iterator it;
@@ -161,24 +223,10 @@ void KisFiltersListView::buildPreview()
             for(std::list<KisFilterConfiguration*>::iterator itc = configlist.begin();
                          itc != configlist.end(); itc++)
             {
-                //kdDebug() << "Copying preview paint device\n";
-                KisPaintDeviceSP thumbPreview = new KisPaintDevice(*m_thumb);
-                //kdDebug() << "Thumbpreview extent: " << thumbPreview->extent().width() << ", " << thumbPreview->extent().height() << endl;
-                //kdDebug() << "Thumbpreview bounds: " << thumbPreview->exactBounds().width() << ", " << thumbPreview->exactBounds().height() << endl;
-                
-                // Apply the filter
-                f->disableProgress();
-                //kdDebug() << "Processing thumbnail\n";
-                f->process(m_thumb, thumbPreview, *itc, bounds);
-                //kdDebug() << "Done processing thumbnail\n";
-                // Add the preview to the list
-                QImage qm_image =  thumbPreview->convertToQImage(m_profile);
-                //kdDebug() << "Qimage size: " << qm_image.width() << ", " << qm_image.height() << "\n";
-                new KisFiltersIconViewItem( this, (*it).name(), QPixmap(qm_image), *it, f, *itc );
+                new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f, *itc, m_thumb, bounds, m_profile );
             }
         }
     }
 
     QApplication::restoreOverrideCursor();
 }
-

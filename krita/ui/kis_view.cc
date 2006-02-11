@@ -2931,6 +2931,7 @@ void KisView::connectCurrentImg()
         connect(m_image, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_image, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(canvasRefresh()));
         connect(m_image, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
 
         KisConnectPartLayerVisitor v(m_image, this, true);

@@ -117,7 +117,7 @@ KisToolTransform::~KisToolTransform()
 
 void KisToolTransform::clear()
 {
-    if (m_subject) m_subject->undoAdapter()->removeCommandHistoryListener( this );
+    if (m_subject && m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
     
     KisImageSP img = m_subject -> currentImg();
     if (!img) return;
@@ -139,20 +139,22 @@ void KisToolTransform::activate()
         Q_INT32 x,y,w,h;
         KisImageSP img = m_subject -> currentImg();
         KisPaintDeviceSP dev = img -> activeDevice();
+
+        // Create a lazy copy of the current state
         m_origDevice = new KisPaintDevice(*dev.data());
         Q_ASSERT(m_origDevice);
         
         if(dev->hasSelection())
         {
             KisSelectionSP sel = dev->selection();
-            m_origSelection = new KisSelection(sel.data());
-            
+            m_origSelection = new KisSelection(*sel.data());
             QRect r = sel->selectedExactRect();
             r.rect(&x, &y, &w, &h);
         }
-        else
+        else {
             dev->exactBounds(x,y,w,h);
-        
+            m_origSelection = 0;
+        }
         m_startPos = QPoint(x, y);
         m_endPos = QPoint(x+w-1, y+h-1);
         m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
@@ -633,7 +635,8 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
     }
 }
 
-void KisToolTransform::transform() {
+void KisToolTransform::transform()
+{
     
     KisImageSP img = m_subject -> currentImg();
 
@@ -655,8 +658,7 @@ void KisToolTransform::transform() {
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(img->activeDevice().data());
 
-    kdDebug() << "::transform() " << img->activeDevice() << ", orig device: " << m_origDevice << "\n";
-    
+    img->activeDevice()->clearSelection();
     // Copy the original state back -- this should be optimized by
     // doing only the dirty rect(s). However, that's for Casper to figure out.
     KisPainter gc(img->activeDevice());
@@ -666,7 +668,7 @@ void KisToolTransform::transform() {
     // Also restore the original selection. After all, this is a transform from the
     // original state again. If I understood Casper correctly. Not sure whether this
     // works with the undo.
-    // img->activeDevice()->setSelection(m_origSelection);
+    img->activeDevice()->setSelection(m_origSelection);
     
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
@@ -694,17 +696,19 @@ void KisToolTransform::transform() {
 
 void KisToolTransform::notifyCommandAdded( KCommand * command)
 {
-    kdDebug() << "there was a command added: " << command->name() << "\n";
     TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
-        kdDebug() << "Going to reset the orig device\n";
         if(m_subject)
         {
             KisImageSP img = m_subject -> currentImg();
             KisPaintDeviceSP dev = img -> activeDevice();
             m_origDevice = new KisPaintDevice(*dev.data());
+            m_origSelection = 0;
+            if (dev->hasSelection()) {
+                m_origSelection = new KisSelection(*m_origDevice->selection().data());
+            }
             Q_ASSERT(m_origDevice);
         
         }

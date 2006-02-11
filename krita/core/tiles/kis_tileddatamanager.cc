@@ -63,6 +63,8 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defP
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
     : KShared()
 {
+    //kdDebug() << "Copying datamanager " << dm.m_pixelSize << "\n";
+    
     m_pixelSize = dm.m_pixelSize;
 
     m_defPixel = new Q_UINT8[m_pixelSize];
@@ -82,7 +84,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
     m_extentMaxX = dm.m_extentMaxX;
     m_extentMaxY = dm.m_extentMaxY;
 
-    // Deep copy every tile
+    // Deep copy every tile. XXX: Make this copy-on-write!
     for(int i = 0; i < 1024; i++)
     {
         KisTile *tile = dm.m_hashTable[i];
@@ -663,7 +665,6 @@ Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
     // calc limits within the tile
     Q_INT32 yInTile = y - row * KisTile::HEIGHT;
     Q_INT32 xInTile = x - col * KisTile::WIDTH;
-
     Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
 
     KisTile *tile = getTile(col, row, writable);

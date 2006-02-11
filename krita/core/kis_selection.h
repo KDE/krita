@@ -54,6 +54,11 @@ public:
      */
     KisSelection(KisImageSP img);
     
+    /**
+     * Copy the selection
+     */
+    KisSelection(const KisSelection& rhs);
+    
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates

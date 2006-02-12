@@ -1,19 +1,6 @@
 [Desktop Entry]
 Name=Grayscale
-Name[bg]=Степени на сивото
 Name[br]=SkeulLouet
-Name[cy]=Graddlwyd
-Name[da]=Gråskala
-Name[en_GB]=Greyscale
-Name[es]=Escala de grises
-Name[et]=Halltoonis
-Name[fr]=Modèle en niveaux de gris
 Name[ga]=Liathscála
-Name[pt]=Tons de Cinzento
-Name[pt_BR]=Tons de Cinza
-Name[ru]=Оттенки серого
-Name[sv]=Gråskala
 Name[ta]=பழுப்புநிற வண்ணம்
-Name[tr]=Griton
-Name[xx]=xxGrayscalexx
 X-KDE-DefaultTab=true

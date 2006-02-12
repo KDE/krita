@@ -47,7 +47,7 @@ namespace KoChart
 
         Part *part() const { return m_part; }
 
-        virtual bool show() = 0;
+        virtual bool show( QString &area ) = 0;
         // XXX add more?
 
     private:

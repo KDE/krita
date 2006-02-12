@@ -61,7 +61,7 @@ histoTarget = [ 0.0, 0.00392156862745098, 0.00784313725490196, 0.011764705882352
 
 doc = krosskritacore.get("KritaDocument")
 image = doc.getImage()
-layer = image.getActiveLayer()
+layer = image.getActivePaintLayer()
 width = layer.getWidth()
 height = layer.getHeight()
 

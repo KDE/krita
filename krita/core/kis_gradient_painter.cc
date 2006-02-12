@@ -52,6 +52,8 @@
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
+#include "kis_meta_registry.h"
+#include "kis_colorspace_factory_registry.h"
 
 namespace {
 
@@ -479,7 +481,6 @@ KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device) : super(device),
 {
 }
 
-// XXX: Use KisColor here instead of QColor
 bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                        const KisPoint& gradientVectorEnd,
                        enumGradientShape shape,
@@ -534,12 +535,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
     Q_ASSERT(repeatStrategy != 0);
 
-    KisPaintDeviceSP layer = new KisPaintDevice( m_device -> colorSpace(), "gradient layer");
-    Q_CHECK_PTR(layer);
-
-    KisPainter painter(layer);
-
-    //If the device has a selection only iterate of that selection
+    
+    //If the device has a selection only iterate over that selection
     QRect r;
     if( m_device -> hasSelection() ) {
         r = m_device -> selection() -> selectedExactRect();
@@ -554,6 +551,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     Q_INT32 endx = startx + width - 1;
     Q_INT32 endy = starty + height - 1;
 
+    QImage layer (width, height, 32);
+    layer.setAlphaBuffer(true);
+    
     int pixelsProcessed = 0;
     int lastProgressPercent = 0;
 
@@ -566,7 +566,6 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
 
     for (int y = starty; y <= endy; y++) {
-        KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
         for (int x = startx; x <= endx; x++) {
 
             double t = shapeStrategy -> valueAt( x, y);
@@ -580,8 +579,10 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             Q_UINT8 opacity;
 
             m_gradient -> colorAt(t, &color, &opacity);
-            layer -> colorSpace() -> fromQColor( color, opacity, iter.rawData());
-
+            
+            layer.setPixel(x - startx, y - starty,
+                           qRgba(color.red(), color.green(), color.blue(), opacity));
+            
             pixelsProcessed++;
 
             int progressPercent = (pixelsProcessed * 100) / totalPixels;
@@ -594,8 +595,6 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                     break;
                 }
             }
-            ++iter;
-
             if (m_cancelRequested) {
                 break;
             }
@@ -605,18 +604,15 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
         emit notifyProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
-        KisColorSpace * cs = layer->colorSpace();
+        Q_UINT8 * layerPointer = layer.bits();
         for (int y = starty; y <= endy; y++) {
-            KisHLineIterator iter = layer -> createHLineIterator(startx, y, width, true);
             for (int x = startx; x <= endx; x++) {
 
                 double maxDistance = 0;
 
-                QColor thisPixel;
-                Q_UINT8 thisPixelOpacity;
-
-                cs->toQColor(iter.rawData(), &thisPixel, &thisPixelOpacity);
-
+                QColor thisPixel(layerPointer[2], layerPointer[1], layerPointer[0]);
+                Q_UINT8 thisPixelOpacity = layerPointer[3];
+            
                 for (int yOffset = -1; yOffset < 2; yOffset++) {
                     for (int xOffset = -1; xOffset < 2; xOffset++) {
 
@@ -625,11 +621,12 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             int sampleY = y + yOffset;
 
                             if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
-                                QColor color;
-                                Q_UINT8 opacity;
-
-                                layer -> pixel(sampleX, sampleY, &color, &opacity);
-
+                                uint x = sampleX - startx;
+                                uint y = sampleY - starty;
+                                Q_UINT8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
+                                QColor color(*(pixelPos +2), *(pixelPos + 1), *pixelPos);
+                                Q_UINT8 opacity = *(pixelPos + 3);
+                                
                                 double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
                                 double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
                                 double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;
@@ -686,9 +683,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                     int blue = totalBlue / (numSamples * numSamples);
                     int opacity = totalOpacity / (numSamples * numSamples);
 
-                    QColor color(red, green,  blue);
-
-                    cs-> fromQColor( color, opacity, iter.rawData());
+                    layer.setPixel(x - startx, y - starty, qRgba(red, green, blue, opacity));
                 }
 
                 pixelsProcessed++;
@@ -703,7 +698,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                         break;
                     }
                 }
-                ++iter;
+                layerPointer += 4;
             }
 
             if (m_cancelRequested) {
@@ -713,7 +708,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
 
     if (!m_cancelRequested) {
-        bltSelection(startx, starty, m_compositeOp, layer.data(), m_opacity, startx, starty, width, height);
+        KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient");
+        dev->writeBytes(layer.bits(), startx, starty, width, height);
+        bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }
     delete shapeStrategy;
 

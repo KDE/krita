@@ -243,6 +243,7 @@ public:
     virtual QImage generatePreview(int width, int height) const;
 
     void colorAt(double t, QColor *color, Q_UINT8 *opacity) const;
+    
     KisGradientSegment *segmentAt(double t) const;
 
 protected:

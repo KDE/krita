@@ -234,7 +234,6 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, 
     }
 
     const int index = m_paintops->findIndex(paintop);
-    Q_ASSERT(index >= 0 && index < (int)settingsArray.count());
     if (index >= 0 && index < (int)settingsArray.count())
         return settingsArray[index];
     else

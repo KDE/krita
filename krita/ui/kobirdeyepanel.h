@@ -112,15 +112,17 @@ class KoThumbnailAdapter
          *
          * @returns the size in pixels.
          */
-        virtual QRect pixelSize() = 0;
+        virtual QSize pixelSize() = 0;
         
         /**
-         * Returns the specified rectangle as a QImage. The image should zoomed
-         * to 100%; the bird eye widget takes care of fitting it into the frame.
+         * Returns the specified rectangle of the thumbnail as a QImage. thumbnailSize
+         * gives the dimensions of the whole document thumbnail, and r specifies a rectangle
+         * within that.
          *
-         * @param r the rect that is to be rendered onto the QImage
+         * @param r the rectangle in the thumbnail to be rendered
+         * @param thumbnailSize the size in pixels of the full thumbnail
          */
-        virtual QImage image(QRect r) = 0;
+        virtual QImage image(QRect r, QSize thumbnailSize) = 0;
 };
 
 /**
@@ -159,8 +161,12 @@ public:
 public slots:
 
     void setZoomListener( KoZoomAdapter * zoomListener) { m_zoomListener = zoomListener; }
-    
-    void setThumbnailProvider( KoThumbnailAdapter * thumbnailProvider ) { m_thumbnailProvider = thumbnailProvider; }
+
+    /**
+     * Set a new thumbnail provider. This will first delete the existing provider.
+     **/
+    void setThumbnailProvider( KoThumbnailAdapter * thumbnailProvider );
+
     /**
      * Connect to this slot to inform the bird's eye view of changes in
      * the zoom level of your canvas or view. The value is taken as a percentage,
@@ -177,10 +183,8 @@ public slots:
      * Connect to this slot if a (rectangular) area of your document is changed.
      * 
      * @param r The rect that has been changed: this is unzoomed.
-     * @param img An image that contains the unzoomed new data for rect r
-     * @param docrect The boundaries of the entire document we thumbnail 
      */
-    void slotUpdate(const QRect & r, const QImage & img, const QRect & docrect);
+    void slotUpdate(const QRect & r);
 
 protected slots:
 
@@ -196,6 +200,10 @@ protected:
     void handleMouseMove(QPoint);
     void handleMouseMoveAction(QPoint);
     void handleMousePress(QPoint);
+    void fitThumbnailToView();
+    void renderView();
+    void resizeViewEvent(QSize size);
+    void paintViewEvent(QPaintEvent *e);
 
 private:
     
@@ -207,8 +215,10 @@ private:
     
     KAction* m_zoomIn;
     KAction* m_zoomOut;
-    QPixmap m_buffer;
+    QPixmap m_viewBuffer;
+    QPixmap m_thumbnail;
 
+    QSize m_documentSize;
     QRect m_visibleArea;
     AlignmentFlags m_aPos;
     bool m_handlePress;

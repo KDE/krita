@@ -194,9 +194,6 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
 
-                if (img -> undoAdapter())
-                    img -> undoAdapter() -> addCommand(t);
-
                 if(! hasSelection)
                 {
                     selection->clear();
@@ -222,6 +219,9 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                     dev->emitSelectionChanged(rc);
                 else
                     dev->emitSelectionChanged();
+
+                if (img -> undoAdapter())
+                    img -> undoAdapter() -> addCommand(t);
 
                 QApplication::restoreOverrideCursor();
             }

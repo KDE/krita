@@ -54,6 +54,7 @@
 #include <kis_paint_device.h>
 #include <kis_channelinfo.h>
 #include <kis_convolution_painter.h>
+#include "kis_rgb_colorspace.h"
 
 #include "kis_dropshadow.h"
 
@@ -81,17 +82,18 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         progress -> setSubject(this, true, true);
     emit notifyProgressStage(i18n("Add drop shadow..."), 0);
 
-    KisUndoAdapter * undo = 0;
-    KisTransaction * t = 0;
-    if ((undo = image->undoAdapter())) {
-        t = new KisTransaction(i18n("Add Drop Shadow"), dev.data());
+    KisUndoAdapter * undo = image->undoAdapter();
+
+    if (undo) {
+        undo->beginMacro(i18n("Add Drop Shadow"));
     }
 
     KisPaintDeviceSP shadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
     KisPaintDeviceSP bShadowDev;
+    KisRgbColorSpace *rgb8cs = static_cast<KisRgbColorSpace *>(shadowDev->colorSpace());
 
     QRect rect = dev->exactBounds();
-    Q_UINT32 pixelSize = dev -> pixelSize();
+
     for (Q_INT32 row = 0; row < rect.height(); ++row)
     {
         KisHLineIteratorPixel srcIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width(), false);
@@ -101,11 +103,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
             if (srcIt.isSelected())
             {
                 //set the shadow color
-                //XXX: is it ok to assume fixed channal positions for RGBA?
-                dstIt.rawData()[0] = color.blue();
-                dstIt.rawData()[1] = color.green();
-                dstIt.rawData()[2] = color.red();
-                dstIt.rawData()[3] = srcIt.oldRawData()[pixelSize-1];
+                Q_UINT8 alpha = dev->colorSpace()->getAlpha(srcIt.rawData());
+                rgb8cs->setPixel(dstIt.rawData(), color.red(), color.green(), color.blue(), alpha);
             }
             ++srcIt;
             ++dstIt;
@@ -122,29 +121,59 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
     if (!m_cancelRequested) {
         shadowDev -> move (xoffset,yoffset);
+
         KisGroupLayerSP parent = image -> rootLayer();
         if (image -> activeLayer())
             parent = image -> activeLayer() -> parent().data();
+
         KisPaintLayerSP l = new KisPaintLayer(image, "shadow", opacity, shadowDev);
-        // XXX: position under the right layer!
-        image -> addLayer( dynamic_cast<KisLayer*>(l.data()), parent, 0 );
+        image -> addLayer( l.data(), parent, src->siblingBelow() );
 
-        if (undo) undo -> addCommand(t);
-
-        if ( allowResize && xoffset > 0 && yoffset > 0)
+        if (allowResize)
         {
-            //XXX: this is only correct if the offsets are greater then zero!
-            Q_UINT32 width = image->width() + xoffset + blurradius;
-            Q_UINT32 height = image->height() +yoffset + blurradius;
-            image->resize( width, height );
+            QRect shadowBounds = shadowDev->exactBounds();
+
+            if (!image->bounds().contains(shadowBounds)) {
+
+                QRect newImageSize = image->bounds() | shadowBounds;
+                image->resize(newImageSize.width(), newImageSize.height());
+
+                if (shadowBounds.left() < 0 || shadowBounds.top() < 0) {
+
+                    Q_INT32 newRootX = image->rootLayer()->x();
+                    Q_INT32 newRootY = image->rootLayer()->y();
+
+                    if (shadowBounds.left() < 0) {
+                        newRootX += -shadowBounds.left();
+                    }
+                    if (shadowBounds.top() < 0) {
+                        newRootY += -shadowBounds.top();
+                    }
+
+                    KCommand *moveCommand = image->rootLayer()->moveCommand(QPoint(image->rootLayer()->x(), image->rootLayer()->y()),
+                                                                            QPoint(newRootX, newRootY));
+                    Q_ASSERT(moveCommand != 0);
+
+                    if (moveCommand) {
+                        moveCommand->execute();
+                        if (undo) {
+                            undo->addCommand(moveCommand);
+                        } else {
+                            delete moveCommand;
+                        }
+                    }
+                }
+            }
         }
         m_view->canvasSubject()->document()->setModified(true);
         image->notify();
+    }
 
+    if (undo) {
+        undo->endMacro();
     }
 
     emit notifyProgressDone();
-
 }
 
 void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay)

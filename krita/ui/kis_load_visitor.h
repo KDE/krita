@@ -117,7 +117,7 @@ public:
         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".selection";
         if (m_store->hasFile(location)) {
             m_store->open(location);
-            KisSelectionSP selection = new KisSelection(m_img);
+            KisSelectionSP selection = new KisSelection();
             if (!selection->read(m_store)) {
                 selection -> disconnect();
                 m_store -> close();

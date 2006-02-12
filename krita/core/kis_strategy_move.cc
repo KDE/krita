@@ -31,67 +31,6 @@
 #include "kis_strategy_move.h"
 #include "kis_undo_adapter.h"
 
-namespace {
-    class MoveCommand : public KNamedCommand {
-        typedef KNamedCommand super;
-
-    public:
-        MoveCommand(KisCanvasController *controller, KisImageSP img, KisLayerSP device, const QPoint& oldpos, const QPoint& newpos);
-        virtual ~MoveCommand();
-
-        virtual void execute();
-        virtual void unexecute();
-
-    private:
-        void moveTo(const QPoint& pos);
-
-    private:
-        KisCanvasController *m_controller;
-        KisLayerSP m_device;
-        QRect m_updateRect;
-        QPoint m_oldPos;
-        QPoint m_newPos;
-        KisImageSP m_img;
-    };
-
-    MoveCommand::MoveCommand(KisCanvasController *controller, KisImageSP img, KisLayerSP device, const QPoint& oldpos, const QPoint& newpos) :
-        super(i18n("Move Layer"))
-    {
-        m_controller = controller;
-        m_img = img;
-        m_device = device;
-        m_oldPos = oldpos;
-        m_newPos = newpos;
-
-        QRect currentBounds = m_device->exactBounds();
-        QRect oldBounds = currentBounds;
-        oldBounds.moveBy(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
-
-        m_updateRect = currentBounds | oldBounds;
-    }
-
-    MoveCommand::~MoveCommand()
-    {
-    }
-
-    void MoveCommand::execute()
-    {
-        moveTo(m_newPos);
-    }
-
-    void MoveCommand::unexecute()
-    {
-        moveTo(m_oldPos);
-    }
-
-    void MoveCommand::moveTo(const QPoint& pos)
-    {
-       m_device -> setX(pos.x());
-       m_device -> setY(pos.y());
-       m_img -> notify(m_updateRect);
-    }
-}
-
 KisStrategyMove::KisStrategyMove()
 {
     reset(0);
@@ -180,12 +119,15 @@ void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
             m_dragging = false;
 
             if (undo) {
-                KCommand *cmd = new MoveCommand(m_controller, img, img -> activeLayer(), m_layerStart, m_layerPosition);
+                KCommand *cmd = dev -> moveCommand(m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
                 KisUndoAdapter *adapter = img -> undoAdapter();
 
-                if (adapter)
+                if (adapter) {
                     adapter -> addCommand(cmd);
+                } else {
+                    delete cmd;
+                }
             }
             img->setModified();
         }

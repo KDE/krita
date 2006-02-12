@@ -214,9 +214,9 @@ bool KisFilterManager::apply()
         delete cmd;
         return false;
     } else {
-        img->undoAdapter()->addCommand(cmd);
-        m_doc->setModified(true);
         img->notify();
+        m_doc->setModified(true);
+        img->undoAdapter()->addCommand(cmd);
     }
 
     m_lastFilter->disableProgress();

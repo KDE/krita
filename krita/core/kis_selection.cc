@@ -35,17 +35,16 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->image(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1())
+    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1())
     , m_parentPaintDevice(dev)
 {
     Q_ASSERT(dev);
 }
 
-KisSelection::KisSelection(KisImageSP img)
-    : super(img, KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "anonymous selection")
+KisSelection::KisSelection()
+    : super(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "anonymous selection")
     , m_parentPaintDevice(0)
 {
-    Q_ASSERT(img);
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
@@ -123,6 +122,7 @@ void KisSelection::clear(QRect r)
     KisFillPainter painter(this);
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     painter.fillRect(r, KisColor(Qt::white, cs), MIN_SELECTED);
+    emitSelectionChanged(r);
 }
 
 void KisSelection::clear()
@@ -130,6 +130,7 @@ void KisSelection::clear()
     Q_UINT8 defPixel = MIN_SELECTED;
     m_datamanager -> setDefaultPixel(&defPixel);
     m_datamanager -> clear();
+    emitSelectionChanged();
 }
 
 void KisSelection::invert()
@@ -147,6 +148,7 @@ void KisSelection::invert()
     }
     Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
     m_datamanager -> setDefaultPixel(&defPixel);
+    emitSelectionChanged();
 }
 
 bool KisSelection::isTotallyUnselected(QRect r)

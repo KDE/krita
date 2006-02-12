@@ -448,6 +448,10 @@ bool KisTransformWorker::run()
 //printf("%d %d\n",m_progressStep,m_progressTotalSteps);
 //printf("%f\n",rotation);
 
+    if (m_dev->image()) {
+        m_dev->image()->notify();
+    }
+
     //progress info
         emit notifyProgressDone();
 

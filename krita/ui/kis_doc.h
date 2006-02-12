@@ -158,6 +158,12 @@ signals:
     void docUpdated(const QRect& rect);
     void loadingFinished();
 
+    /*
+     * Emitted every time a command is added to the undo history, or executed
+     * due to an undo or redo action.
+     */
+    void sigCommandExecuted();
+
 protected:
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent, const char *name);

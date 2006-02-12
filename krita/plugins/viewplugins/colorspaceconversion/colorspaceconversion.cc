@@ -115,7 +115,6 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         image->convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
-        image->notify();
         QApplication::restoreOverrideCursor();
         image -> setProfile(cs->getProfile());
     }
@@ -154,7 +153,6 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         QApplication::restoreOverrideCursor();
-        image -> notify();
         image -> notifyLayersChanged();
     }
     delete dlgColorSpaceConversion;

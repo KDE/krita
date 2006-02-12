@@ -361,8 +361,6 @@ void KisSelectionManager::cut()
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(t);
     }
-
-    dev -> emitSelectionChanged();
 }
 
 void KisSelectionManager::copy()
@@ -421,7 +419,6 @@ void KisSelectionManager::copy()
                    << r.height() << "\n";
 
 
-     dev -> emitSelectionChanged();
      m_clipboard -> setClip(clip);
      imgSelectionChanged(m_parent -> currentImg());
 }
@@ -506,11 +503,9 @@ void KisSelectionManager::pasteNew()
     win->setRootDocument( doc );
 }
 
-
-
 void KisSelectionManager::selectAll()
 {
-        KisImageSP img = m_parent -> currentImg();
+    KisImageSP img = m_parent -> currentImg();
     if (!img) return;
 
     KisPaintDeviceSP dev = img -> activeDevice();
@@ -524,9 +519,7 @@ void KisSelectionManager::selectAll()
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
-    dev -> emitSelectionChanged();
 }
-
 
 void KisSelectionManager::deselect()
 {
@@ -543,8 +536,6 @@ void KisSelectionManager::deselect()
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
-
-    dev -> emitSelectionChanged();
 }
 
 
@@ -566,7 +557,6 @@ void KisSelectionManager::clear()
     }
 
     dev -> clearSelection();
-    img -> notify();
 
     if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 }
@@ -600,7 +590,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
     painter2.beginTransaction(transactionText);
     painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
                           0, 0, img -> width(), img -> height());
-    img -> notify();
+    img -> notify(selection->selectedRect());
 
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(painter2.endTransaction());
@@ -637,8 +627,6 @@ void KisSelectionManager::reselect()
 
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
-
-    dev -> emitSelectionChanged();
 }
 
 
@@ -665,8 +653,6 @@ void KisSelectionManager::invert()
         if (img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
     }
-
-    dev -> emitSelectionChanged();
 }
 
 void KisSelectionManager::copySelectionToNewLayer()
@@ -744,12 +730,12 @@ void KisSelectionManager::feather()
     painter.applyMatrix(&k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, KisChannelInfo::FLAG_ALPHA);
     painter.end();
 
+    dev -> emitSelectionChanged();
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 
     delete[] k.data;
-
-    dev -> emitSelectionChanged();
 }
 
 void KisSelectionManager::toggleDisplaySelection()

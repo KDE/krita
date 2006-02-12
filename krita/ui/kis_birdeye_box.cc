@@ -27,12 +27,14 @@
 #include "klocale.h"
 
 #include "kis_view.h"
+#include "kis_doc.h"
 #include "kis_canvas_controller.h"
 #include "kis_birdeye_box.h"
 #include "kis_double_widget.h"
 #include "kis_canvas.h"
 #include "kis_image.h"
 #include "kis_rect.h"
+#include "kis_iterators_pixel.h"
 
 #include "kobirdeyepanel.h"
 
@@ -111,21 +113,51 @@ namespace {
             
         public:
         
-            virtual QRect pixelSize()
+            virtual QSize pixelSize()
                 {
-                    if (!m_image) return QRect(0,0,0,0);
-                    return QRect (0, 0, m_image->width(), m_image->height());
+                    if (!m_image) return QSize(0, 0);
+                    return QSize(m_image->width(), m_image->height());
                 }
                 
-            virtual QImage image(QRect r)
+            virtual QImage image(QRect r, QSize thumbnailSize)
                 {
-                    if (!m_image) return QImage();
-                    
-                    return m_image->convertToQImage(r.x(), r.y(), r.x() + r.width(), r.y() + r.height(), 
-                                                    m_canvasSubject->monitorProfile(), 
-                                                    m_canvasSubject->HDRExposure());
+                    if (!m_image || r.isEmpty() || thumbnailSize.width() == 0 || thumbnailSize.height() == 0) {
+                        return QImage();
+                    }
+
+                    KisPaintDevice thumbnailRect(m_image->colorSpace(), "thumbnailRect");
+
+                    Q_INT32 imageWidth = m_image->width();
+                    Q_INT32 imageHeight = m_image->height();
+                    Q_UINT32 pixelSize = m_image->colorSpace()->pixelSize();
+
+                    for (Q_INT32 y = 0; y < r.height(); ++y) {
+
+                        KisHLineIterator it = thumbnailRect.createHLineIterator(0, y, r.width(), true);
+                        Q_INT32 thumbnailY = r.y() + y;
+                        Q_INT32 thumbnailX = r.x();
+                        Q_INT32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
+
+                        while (!it.isDone()) {
+
+                            Q_INT32 imageX = (thumbnailX * imageWidth) / thumbnailSize.width();
+
+                            KisColor pixelColor = m_image->mergedPixel(imageX, imageY);
+                            memcpy(it.rawData(), pixelColor.data(), pixelSize);
+
+                            ++it;
+                            ++thumbnailX;
+                        }
+                    }
+
+                    return thumbnailRect.convertToQImage(m_canvasSubject->monitorProfile(), 0, 0, r.width(), r.height(), 
+                                                         m_canvasSubject->HDRExposure());
                 }
 
+            void setImage(KisImageSP image)
+                {
+                    m_image = image;
+                }
         private:
         
             KisImageSP m_image;
@@ -142,8 +174,10 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 {
     QVBoxLayout * l = new QVBoxLayout(this);
 
-    KoZoomAdapter * m_zoomAdapter = new ZoomListener(m_subject->canvasController());
-    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_subject->currentImg(), m_subject);
+    m_image = m_subject->currentImg();
+
+    m_zoomAdapter = new ZoomListener(m_subject->canvasController());
+    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);
     KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);
 
     m_birdEyePanel = new KoBirdEyePanel(m_zoomAdapter, ktp, kpc, this);
@@ -170,12 +204,51 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
 
     m_draggingExposureSlider = false;
+
+    Q_ASSERT(m_subject->document() != 0);
+    connect(m_subject->document(), SIGNAL(sigCommandExecuted()), SLOT(slotDocCommandExecuted()));
+
+    if (m_image) {
+        connect(m_image, SIGNAL(sigImageUpdated(const QRect&)), SLOT(slotImageUpdated(const QRect&)));
+    }
 }
 
 KisBirdEyeBox::~KisBirdEyeBox()
 {
     // Huh? Why does this cause a crash?
     // delete m_zoomAdapter;
+}
+
+void KisBirdEyeBox::setImage(KisImageSP image)
+{
+    if (m_image) {
+        m_image->disconnect(this);
+    }
+
+    m_image = image;
+
+    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);
+    m_birdEyePanel->setThumbnailProvider(ktp);
+
+    if (m_image) {
+        connect(m_image, SIGNAL(sigImageUpdated(const QRect&)), SLOT(slotImageUpdated(const QRect&)));
+    }
+
+}
+
+void KisBirdEyeBox::slotDocCommandExecuted()
+{
+    if (m_image) {
+        if (!m_dirtyRect.isEmpty()) {
+            m_birdEyePanel->slotUpdate(m_dirtyRect);
+        }
+        m_dirtyRect = QRect();
+    }
+}
+
+void KisBirdEyeBox::slotImageUpdated(const QRect& r)
+{
+    m_dirtyRect |= r;
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

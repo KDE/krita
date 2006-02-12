@@ -73,18 +73,19 @@ public:
      * Create a new paint device with the specified colorspace.
      *
      * @param colorSpace the colorspace of this paint device
-     * @param nname for debugging purposes
+     * @param name for debugging purposes
      */
     KisPaintDevice(KisColorSpace * colorSpace, const char * name = 0);
 
     /**
-     * Create a new paint device with the specified colorspace. The image
-     * will be notified whenever the selection on this paint device changes.
+     * Create a new paint device with the specified colorspace. The
+     * parentLayer will be notified of changes to this paint device.
      *
+     * @param parentLayer the layer that contains this paint device.
      * @param colorSpace the colorspace of this paint device
-     * @param nname for debugging purposes
+     * @param name for debugging purposes
      */
-    KisPaintDevice(KisImage *img,  KisColorSpace * colorSpace, const char * name = 0);
+    KisPaintDevice(KisLayer *parentLayer, KisColorSpace * colorSpace, const char * name = 0);
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -350,9 +351,21 @@ public:
      */
     virtual Q_INT32 nChannels() const;
 
-    KisImage *image();
-    const KisImage *image() const;
-    void setImage(KisImage *image);
+    /*
+     * Return the image that contains this paint device, or 0 if it is not
+     * part of an image. This is the same as calling parentLayer()->image().
+     */
+    KisImage *image() const;
+
+    /* Returns the KisLayer that contains this paint device, or 0 if this is not 
+     * part of a layer.
+     */
+    KisLayer *parentLayer() const;
+
+    /* Set the KisLayer that contains this paint device, or 0 if this is not 
+     * part of a layer.
+     */
+    void setParentLayer(KisLayer *parentLayer);
 
     /**
      * Mirror the device along the X axis
@@ -448,12 +461,10 @@ protected:
     KisDataManagerSP m_datamanager;
 
 private:
-    // This is not a shared pointer by design. A layer does not own its containing image,
-    // the image owns its layers. This allows the image and its layers to be destroyed
-    // when the last reference to the image is removed. If the layers kept references,
-    // a cycle would be created, and removing the last external reference to the image would not
-    // destroy the objects.
-    KisImage *m_owner;
+    /* The KisLayer that contains this paint device, or 0 if this is not 
+     * part of a layer.
+     */
+    KisLayer *m_parentLayer;
 
     bool m_extentIsValid;
 
@@ -505,22 +516,6 @@ inline Q_INT32 KisPaintDevice::getY() const
 {
     return m_y;
 }
-
-inline KisImage *KisPaintDevice::image()
-{
-        return m_owner;
-}
-
-inline const KisImage *KisPaintDevice::image() const
-{
-        return m_owner;
-}
-
-inline void KisPaintDevice::setImage(KisImage *image)
-{
-        m_owner = image;
-}
-
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_
 

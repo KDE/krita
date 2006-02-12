@@ -49,10 +49,9 @@ public:
     KisSelection(KisPaintDeviceSP dev);
 
     /**
-     * Create a new KisSelection
-     * @param img the parent image. This selection will not have a parent paint device
+     * Create a new KisSelection. This selection will not have a parent paint device.
      */
-    KisSelection(KisImageSP img);
+    KisSelection();
     
     /**
      * Copy the selection

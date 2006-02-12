@@ -64,7 +64,9 @@ public:
     /// Returns the ID of the layer, which is guaranteed to be unique among all KisLayers.
     int id() const { return m_id; }
 
-    /// Returns the index of the layer in its parent's list of child layers.
+    /* Returns the index of the layer in its parent's list of child layers. Indices
+     * increase from 0, which is the topmost layer in the list, to the bottommost.
+     */
     virtual int index() const;
 
     /// Moves this layer to the specified index within its parent's list of child layers.
@@ -76,14 +78,30 @@ public:
     virtual KisGroupLayerSP parent() const;
 
     /**
-     * Returns the previous sibling of this layer in the parent's list. 0 is returned
-     * if there is no parent, or if this child has no more previous siblings (== firstChild())*/
+     * Returns the previous sibling of this layer in the parent's list. This is the layer
+     * *above* this layer. 0 is returned if there is no parent, or if this child has no more
+     * previous siblings (== firstChild())
+     */
     virtual KisLayerSP prevSibling() const;
 
     /**
-     * Returns the next sibling of this layer in the parent's list. 0 is returned
-     * if there is no parent, or if this child has no more next siblings (== lastChild())*/
+     * Returns the next sibling of this layer in the parent's list. This is the layer *below*
+     * this layer. 0 is returned if there is no parent, or if this child has no more next 
+     * siblings (== lastChild())
+     */
     virtual KisLayerSP nextSibling() const;
+
+    /**
+     * Returns the sibling above this layer in its parent's list. 0 is returned if there is no parent,
+     * or if this layer is the topmost layer in its group. This is the same as calling prevSibling().
+     */
+    KisLayerSP siblingAbove() const { return prevSibling(); }
+
+    /**
+     * Returns the sibling below this layer in its parent's list. 0 is returned if there is no parent,
+     * or if this layer is the bottommost layer in its group.  This is the same as calling nextSibling().
+     */
+    KisLayerSP siblingBelow() const { return nextSibling(); }
 
     /// Returns how many direct child layers this layer has (not recursive).
     virtual uint childCount() const { return 0; }
@@ -118,6 +136,8 @@ public:
 
     virtual Q_INT32 y() const = 0;
     virtual void setY(Q_INT32) = 0;
+
+    virtual KNamedCommand *moveCommand(QPoint oldPosition, QPoint newPosition);
 
     /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const = 0;
@@ -163,12 +183,13 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
+    void notify(const QRect& r);
+
 private:
     friend class KisGroupLayer;
 
     bool matchesFlags(int flags) const;
     void notifyPropertyChanged();
-    void notify();
 
     int m_id;
     int m_index;

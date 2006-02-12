@@ -155,12 +155,12 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         // if (opacity > OPACITY_TRANSPARENT)
         selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);
 
+        dev->emitSelectionChanged();
+
         if(img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
         m_subject -> canvasController() -> updateCanvas();
                 
-        dev->emitSelectionChanged();
-
         QApplication::restoreOverrideCursor();
     }
 }

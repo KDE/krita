@@ -1022,6 +1022,7 @@ void KisDoc::endMacro()
 
                 m_cmdHistory -> addCommand(m_currentMacro, false);
                 m_currentMacro = 0;
+                emit sigCommandExecuted();
             }
         }
     }
@@ -1042,7 +1043,6 @@ void KisDoc::removeCommandHistoryListener(const KisCommandHistoryListener * l)
 void KisDoc::addCommand(KCommand *cmd)
 {
     Q_ASSERT(cmd);
-    
     kdDebug() << "Adding command " << cmd->name() << endl;
 
     KisCommandHistoryListener* l = 0;
@@ -1052,11 +1052,14 @@ void KisDoc::addCommand(KCommand *cmd)
     }
     
     setModified(true);
+
     if (m_undo) {
         if (m_currentMacro)
             m_currentMacro -> addCommand(cmd);
-        else
+        else {
             m_cmdHistory -> addCommand(cmd, false);
+            emit sigCommandExecuted();
+        }
     } else {
         delete cmd;
     }
@@ -1097,7 +1100,7 @@ void KisDoc::slotDocumentRestored()
 void KisDoc::slotCommandExecuted()
 {
     setModified(true);
-
+    emit sigCommandExecuted();
 }
 void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {

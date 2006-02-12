@@ -55,8 +55,6 @@ public:
     virtual QRect extent() const;
     virtual QRect exactBounds() const;
 
-    virtual void setImage(KisImage *image);
-
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 

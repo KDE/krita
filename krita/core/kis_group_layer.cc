@@ -32,7 +32,7 @@ KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity
     m_x(0),
     m_y(0)
 {
-    m_projection = new KisPaintDevice(img, img->colorSpace(), name.latin1());
+    m_projection = new KisPaintDevice(this, img->colorSpace(), name.latin1());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -44,7 +44,8 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     {
         m_layers.push_back( it->data()->clone() );
     }
-    m_projection = rhs.m_projection;
+    m_projection = new KisPaintDevice(*rhs.m_projection.data());
+    m_projection->setParentLayer(this);
 }
 
 KisLayerSP KisGroupLayer::clone() const
@@ -60,7 +61,7 @@ KisGroupLayer::~KisGroupLayer()
 
 void KisGroupLayer::resetProjection()
 {
-    m_projection = new KisPaintDevice(image(), image()->colorSpace(), name().latin1());
+    m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
 }
 
 uint KisGroupLayer::childCount() const

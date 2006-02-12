@@ -63,13 +63,12 @@ public:
 
         if (layer->undoAdapter()) {
             layer->undoAdapter()->addCommand(t);
-	}
-	if(m_movelayers)
-	{
-	    KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-	    if(layer->undoAdapter()) {
-  	        layer->undoAdapter()->addCommand(cmd);
-	    }
+        }
+        if(m_movelayers) {
+    	    KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
+    	    if(layer->undoAdapter()) {
+      	        layer->undoAdapter()->addCommand(cmd);
+    	    }
         }
         layer->setDirty(true);
         return true;

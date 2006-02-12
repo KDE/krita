@@ -636,11 +636,12 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         }
 
+        notify();
+        emit sigSizeChanged(w, h);
+
         if (m_adapter && m_adapter -> undo()) {
             m_adapter -> endMacro();
         }
-
-        emit sigSizeChanged(w, h);
     }
 }
 
@@ -675,12 +676,12 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         m_width = w;
         m_height = h;
 
-        if (m_adapter && m_adapter -> undo()) {
-            m_adapter->endMacro();
-        }
         emit sigSizeChanged(w, h);
         notify();
 
+        if (m_adapter && m_adapter -> undo()) {
+            m_adapter->endMacro();
+        }
     }
 }
 
@@ -709,10 +710,10 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     m_width = w;
     m_height = h;
 
-    undoAdapter()->endMacro();
-
     emit sigSizeChanged(w, h);
     notify();
+
+    undoAdapter()->endMacro();
 }
 
 void KisImage::shear(double , double , KisProgressDisplayInterface *)
@@ -795,6 +796,8 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
     KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_rootLayer->accept(visitor);
+
+    notify();
 
     if (undoAdapter() && m_adapter->undo()) {
 
@@ -953,9 +956,6 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
     const bool success = parent->addLayer(layer, aboveThis);
     if (success)
     {
-        if (!layer->temporary() && m_adapter && m_adapter->undo()) {
-            m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
-        }
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
         if (player != 0) {
 
@@ -970,7 +970,13 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             emit sigLayerAdded(layer);
             activate(layer);
         }
+
         layer->setDirty(true);
+        notify(layer->extent());
+
+        if (!layer->temporary() && m_adapter && m_adapter->undo()) {
+            m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
+        }
     }
 
     return success;
@@ -989,6 +995,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
         const bool success = parent -> removeLayer(layer);
         if (success) {
             layer -> setImage(0);
+            notify(layer->extent());
             if (!layer->temporary() && m_adapter->undo()) {
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             }
@@ -1059,17 +1066,17 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     const bool success = parent -> addLayer(layer, aboveThis);
     if (success)
     {
+        emit sigLayerMoved(layer, wasParent, wasAbove);
+        notify(layer->extent());
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerMoveCmd(m_adapter, this, layer, wasParent, wasAbove));
-        emit sigLayerMoved(layer, wasParent, wasAbove);
-        notify();
     }
     else //we already removed the layer above, but re-adding it failed, so...
     {
+        emit sigLayerRemoved(layer, wasParent, wasAbove);
+        notify(layer->extent());
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, wasParent, wasAbove));
-        emit sigLayerRemoved(layer, wasParent, wasAbove);
-        notify();
     }
 
     layer->setDirty(true);

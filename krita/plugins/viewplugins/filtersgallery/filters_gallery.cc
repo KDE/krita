@@ -110,9 +110,8 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 cmd -> unexecute();
                 delete cmd;
             } else {
-                img->undoAdapter()->addCommand(cmd);
-                m_view->canvasSubject()->document()->setModified(true);
                 img->notify();
+                img->undoAdapter()->addCommand(cmd);
             }
             filter->disableProgress();
             QApplication::restoreOverrideCursor();

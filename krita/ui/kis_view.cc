@@ -1585,7 +1585,6 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
                 }
 
                 currentImage->addLayer(importedImageLayer.data(), parent, currentActiveLayer);
-                currentImage->notify(importedImageLayer->extent());
                 rc += importedImageLayer->numLayers();
             }
         }
@@ -1676,9 +1675,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
 
     m_doc -> setModified(true);
     layersUpdated();
-    resizeEvent(0);
     updateCanvas();
-    canvasRefresh();
 }
 
 void KisView::rotateLayer(double angle)
@@ -1709,10 +1706,7 @@ void KisView::rotateLayer(double angle)
 
     m_doc -> setModified(true);
     layersUpdated();
-    resizeEvent(0);
-    currentImg()->notify();
     updateCanvas();
-    canvasRefresh();
 }
 
 void KisView::shearLayer(double /*angleX*/, double /*angleY*/)
@@ -2496,7 +2490,6 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
-                img->notify(layer->extent());
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2518,7 +2511,6 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
-                img->notify(layer->extent());
                 resizeEvent(0);
                 updateCanvas(0, 0, img -> width(), img -> height());
             } else {
@@ -2585,7 +2577,6 @@ void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
     KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
     img -> addLayer(partLayer, parent, above);
-    img->notify(partLayer->extent());
     m_doc->setModified(true);
 
     reconnectAfterPartInsert();
@@ -2673,7 +2664,6 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
 
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
     img->addLayer(l, parent, above);
-    img->notify(l->extent());
 }
 
 void KisView::slotChildActivated(bool a) {
@@ -2704,7 +2694,6 @@ void KisView::layerRemove()
             img->removeLayer(layer);
             if (img->activeLayer())
                 img->activeLayer()->setDirty(true);
-            img->notify(layer->extent());
             resizeEvent(0);
             updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2727,7 +2716,6 @@ void KisView::layerDuplicate()
     KisLayerSP dup = active->clone();
     dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
     img->addLayer(dup, active->parent().data(), active);
-    img->notify(dup->extent());
     if (dup) {
         //        m_layerBox->slotSetCurrentItem(img -> index(layer)); // LAYERREMOVE
         resizeEvent(0);
@@ -2806,10 +2794,7 @@ void KisView::layerToggleVisible()
     KisLayerSP layer = img -> activeLayer();
     if (!layer) return;
 
-    KNamedCommand *cmd = layer -> setVisibleCommand(!layer -> visible());
-    cmd -> execute();
-    img->notify(); // We have changed the visual appearance of the image here, so notify.
-    undoAdapter() -> addCommand(cmd);
+    layer -> setVisible(!layer -> visible());
 }
 
 void KisView::layerToggleLocked()
@@ -2820,9 +2805,7 @@ void KisView::layerToggleLocked()
     KisLayerSP layer = img -> activeLayer();
     if (!layer) return;
 
-    KNamedCommand *cmd = layer -> setLockedCommand(!layer -> locked());
-    cmd -> execute();
-    undoAdapter() -> addCommand(cmd);
+    layer -> setLocked(!layer -> locked());
 }
 
 void KisView::actLayerVisChanged(int show)
@@ -2956,6 +2939,7 @@ void KisView::connectCurrentImg()
     }
 
     m_layerBox -> setImage(m_image);
+    m_birdEyeBox -> setImage(m_image);
 }
 
 void KisView::disconnectCurrentImg()
@@ -2963,6 +2947,7 @@ void KisView::disconnectCurrentImg()
     if (m_image) {
         m_image -> disconnect(this);
         m_layerBox -> setImage(0);
+        m_birdEyeBox -> setImage(0);
 
         KisConnectPartLayerVisitor v(m_image, this, false);
         m_image -> rootLayer() -> accept(v);

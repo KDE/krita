@@ -22,6 +22,8 @@
 
 #include "qwidget.h"
 
+#include "kis_types.h"
+
 class KoBirdEyePanel;
 class KisDoubleWidget;
 class KisView;
@@ -36,9 +38,14 @@ public:
 
     KisBirdEyeBox(KisView * view, QWidget * parent = 0, const char* name=0);
     ~KisBirdEyeBox();
-// 
-protected slots:
 
+    void setImage(KisImageSP image);
+
+public slots:
+    void slotDocCommandExecuted();
+    void slotImageUpdated(const QRect& r);
+
+protected slots:
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
@@ -50,6 +57,8 @@ private:
     KisCanvasSubject * m_subject;
     bool m_draggingExposureSlider;
     KoZoomAdapter * m_zoomAdapter;
+    KisImageSP m_image;
+    QRect m_dirtyRect;
 };
 
 #endif // KIS_BIRDEYE_BOX_H

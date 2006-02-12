@@ -115,8 +115,6 @@ void ImageSize::slotImageSize()
         else {
             m_view -> resizeCurrentImage(w, h, dlgImageSize -> cropLayers());
         }
-        image->notify();
-
     }
 
     delete dlgImageSize;

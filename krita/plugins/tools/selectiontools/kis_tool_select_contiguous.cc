@@ -126,12 +126,12 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
         }
         
+        dev->emitSelectionChanged();
+
         KisUndoAdapter *adapter = img -> undoAdapter();
         if (adapter)
             adapter -> addCommand(t);
             
-        dev->emitSelectionChanged();
-        
         QApplication::restoreOverrideCursor();
     }
 

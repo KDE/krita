@@ -197,7 +197,7 @@ bool KisPreviewWidget::zoomChanged()
     m_previewDevice = new KisPaintDevice( *m_origDevice );
     // Some filters need access to the image to get other layers, and
     // the copy constructor of KisPaintDevice doesn't copy the image.
-    m_previewDevice->setImage( m_origDevice->image() );
+    m_previewDevice->setParentLayer(m_origDevice->parentLayer());
 
     if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
     {

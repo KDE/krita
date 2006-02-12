@@ -61,20 +61,18 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked);
+        KisLayerLockedCommand(KisLayerSP layer, bool newLocked);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        bool m_oldLocked;
         bool m_newLocked;
     };
 
-    KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool oldLocked, bool newLocked) :
+    KisLayerLockedCommand::KisLayerLockedCommand(KisLayerSP layer, bool newLocked) :
         super(i18n("Lock Layer"), layer)
     {
-        m_oldLocked = oldLocked;
         m_newLocked = newLocked;
     }
 
@@ -88,7 +86,7 @@ namespace {
     void KisLayerLockedCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setLocked(m_oldLocked);
+        m_layer -> setLocked(!m_newLocked);
         setUndo(true);
     }
 
@@ -131,20 +129,18 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerVisibilityCommand(KisLayerSP layer, bool oldVisibility, bool newVisibility);
+        KisLayerVisibilityCommand(KisLayerSP layer, bool newVisibility);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        bool m_oldVisibility;
         bool m_newVisibility;
     };
 
-    KisLayerVisibilityCommand::KisLayerVisibilityCommand(KisLayerSP layer, bool oldVisibility, bool newVisibility) :
+    KisLayerVisibilityCommand::KisLayerVisibilityCommand(KisLayerSP layer, bool newVisibility) :
         super(i18n("Layer Visibility"), layer)
     {
-        m_oldVisibility = oldVisibility;
         m_newVisibility = newVisibility;
     }
 
@@ -158,7 +154,7 @@ namespace {
     void KisLayerVisibilityCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setVisible(m_oldVisibility);
+        m_layer -> setVisible(!m_newVisibility);
         setUndo(true);
     }
 
@@ -198,6 +194,71 @@ namespace {
         setUndo(true);
     }
 
+    class KisLayerOffsetCommand : public KNamedCommand {
+        typedef KNamedCommand super;
+    
+    public:
+        KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos);
+        virtual ~KisLayerOffsetCommand();
+    
+        virtual void execute();
+        virtual void unexecute();
+    
+    private:
+        void moveTo(const QPoint& pos);
+    
+    private:
+        KisLayerSP m_layer;
+        QRect m_updateRect;
+        QPoint m_oldPos;
+        QPoint m_newPos;
+    };
+    
+    KisLayerOffsetCommand::KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
+        super(i18n("Move Layer"))
+    {
+        m_layer = layer;
+        m_oldPos = oldpos;
+        m_newPos = newpos;
+    
+        QRect currentBounds = m_layer->exactBounds();
+        QRect oldBounds = currentBounds;
+        oldBounds.moveBy(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
+    
+        m_updateRect = currentBounds | oldBounds;
+    }
+    
+    KisLayerOffsetCommand::~KisLayerOffsetCommand()
+    {
+    }
+    
+    void KisLayerOffsetCommand::execute()
+    {
+        moveTo(m_newPos);
+    }
+    
+    void KisLayerOffsetCommand::unexecute()
+    {
+        moveTo(m_oldPos);
+    }
+    
+    void KisLayerOffsetCommand::moveTo(const QPoint& pos)
+    {
+        if (m_layer->undoAdapter()) {
+            m_layer->undoAdapter()->setUndo(false);
+        }
+
+        m_layer -> setX(pos.x());
+        m_layer -> setY(pos.y());
+
+        if (m_layer->image()) {
+            m_layer->image()->notify(m_updateRect);
+        }
+
+        if (m_layer->undoAdapter()) {
+            m_layer->undoAdapter()->setUndo(true);
+        }
+    }
 }
 
 static int getID()
@@ -338,7 +399,7 @@ void KisLayer::setOpacity(Q_UINT8 val)
     {
         m_opacity = val;
         notifyPropertyChanged();
-        notify();
+        notify(extent());
     }
 }
 
@@ -357,13 +418,17 @@ void KisLayer::setVisible(bool v)
     if (m_visible != v) {
         m_visible = v;
         notifyPropertyChanged();
-        notify();
+        notify(extent());
+
+        if (undoAdapter()) {
+            undoAdapter() -> addCommand(setVisibleCommand(v));
+        }
     }
 }
 
 KNamedCommand *KisLayer::setVisibleCommand(bool newVisibility)
 {
-    return new KisLayerVisibilityCommand(this, m_visible, newVisibility);
+    return new KisLayerVisibilityCommand(this, newVisibility);
 }
 
 bool KisLayer::locked() const
@@ -373,10 +438,13 @@ bool KisLayer::locked() const
 
 void KisLayer::setLocked(bool l)
 {
-    if (m_locked != l)
-    {
+    if (m_locked != l) {
         m_locked = l;
         notifyPropertyChanged();
+
+        if (undoAdapter()) {
+            undoAdapter() -> addCommand(setLockedCommand(l));
+        }
     }
 }
 
@@ -392,7 +460,7 @@ void KisLayer::setTemporary(bool t)
 
 KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
 {
-    return new KisLayerLockedCommand(this, locked(), newLocked);
+    return new KisLayerLockedCommand(this, newLocked);
 }
 
 QString KisLayer::name() const
@@ -415,13 +483,18 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
     {
         m_compositeOp = compositeOp;
         notifyPropertyChanged();
-        notify();
+        notify(extent());
     }
 }
 
 KNamedCommand *KisLayer::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
 {
     return new KisLayerCompositeOpCommand(this, compositeOp(), newCompositeOp);
+}
+
+KNamedCommand *KisLayer::moveCommand(QPoint oldPosition, QPoint newPosition)
+{
+    return new KisLayerOffsetCommand(this, oldPosition, newPosition);
 }
 
 KisUndoAdapter *KisLayer::undoAdapter() const
@@ -451,10 +524,10 @@ void KisLayer::notifyPropertyChanged()
         image() -> notifyPropertyChanged(this);
 }
 
-void KisLayer::notify()
+void KisLayer::notify(const QRect& r)
 {
     if(image() && !signalsBlocked())
-        image() -> notify();
+        image() -> notify(r);
 }
 
 #include "kis_layer.moc"

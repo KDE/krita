@@ -40,7 +40,7 @@
 #include "kis_integer_maths.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_selection.h"
-
+#include "kis_layer.h"
 #include "kis_paint_device_iface.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
@@ -235,7 +235,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 
-    m_owner = 0;
+    m_parentLayer = 0;
 
     m_colorSpace = colorSpace;
 
@@ -244,7 +244,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     m_selection = 0;
 }
 
-KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const char * name) :
+KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
     QObject(0, name), KShared()
 {
     Q_ASSERT( colorSpace );
@@ -262,10 +262,10 @@ KisPaintDevice::KisPaintDevice(KisImage *img, KisColorSpace * colorSpace, const 
     m_selectionDeselected = false;
     m_selection = 0;
 
-    m_owner = img;
+    m_parentLayer = parent;
 
-    if (img != 0 && colorSpace == 0) {
-        m_colorSpace = img -> colorSpace();
+    if (colorSpace == 0 && parent != 0 && parent->image() != 0) {
+        m_colorSpace = parent->image()->colorSpace();
     }
     else {
         m_colorSpace = colorSpace;
@@ -287,7 +287,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 {
     //kdDebug() << "Copying paint device " << rhs.name() << endl;
     if (this != &rhs) {
-        m_owner = 0;
+        m_parentLayer = 0;
         m_dcop = rhs.m_dcop;
         if (rhs.m_datamanager) {
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
@@ -322,6 +322,24 @@ DCOPObject *KisPaintDevice::dcopObject()
     return m_dcop;
 }
 
+KisLayer *KisPaintDevice::parentLayer() const
+{
+    return m_parentLayer;
+}
+
+void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
+{
+    m_parentLayer = parentLayer;
+}
+
+KisImage *KisPaintDevice::image() const
+{
+    if (m_parentLayer) {
+        return m_parentLayer->image();
+    } else {
+        return 0;
+    }
+}
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
@@ -497,6 +515,9 @@ void KisPaintDevice::mirrorX()
         }
         qApp -> processEvents();
     }
+    if (m_parentLayer) {
+        m_parentLayer->notify(r);
+    }
 }
 
 void KisPaintDevice::mirrorY()
@@ -523,6 +544,10 @@ void KisPaintDevice::mirrorY()
             ++itTop;
         }
         qApp -> processEvents();
+    }
+
+    if (m_parentLayer) {
+        m_parentLayer->notify(r);
     }
 }
 
@@ -587,12 +612,18 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
         }
     }
 
-    if (undoAdapter() && undoAdapter() -> undo()) {
-        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, m_datamanager, m_colorSpace,  dst.m_datamanager, dstColorSpace));
-    }
+    KisDataManagerSP oldData = m_datamanager;
+    KisColorSpace *oldColorSpace = m_colorSpace;
 
     setData(dst.m_datamanager, dstColorSpace);
 
+    if (m_parentLayer) {
+        m_parentLayer->notify(extent());
+    }
+
+    if (undoAdapter() && undoAdapter() -> undo()) {
+        undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, oldData, oldColorSpace, m_datamanager, m_colorSpace));
+    }
 }
 
 void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
@@ -605,8 +636,8 @@ void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
 
 KisUndoAdapter *KisPaintDevice::undoAdapter() const
 {
-    if (m_owner) {
-        return m_owner -> undoAdapter();
+    if (m_parentLayer && m_parentLayer->image()) {
+        return m_parentLayer->image()->undoAdapter();
     }
     return 0;
 }
@@ -751,17 +782,19 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 
 }
 
-
-void KisPaintDevice::emitSelectionChanged() {
-    if(m_owner)
-        m_owner -> slotSelectionChanged();
+void KisPaintDevice::emitSelectionChanged()
+{
+    if (m_parentLayer && m_parentLayer->image()) {
+        m_parentLayer->image()->slotSelectionChanged();
+    }
 }
 
-void KisPaintDevice::emitSelectionChanged(const QRect& r) {
-    if(m_owner)
-        m_owner -> slotSelectionChanged(r);
+void KisPaintDevice::emitSelectionChanged(const QRect& r)
+{
+    if (m_parentLayer && m_parentLayer->image()) {
+        m_parentLayer->image()->slotSelectionChanged(r);
+    }
 }
-
 
 KisSelectionSP KisPaintDevice::selection()
 {
@@ -796,6 +829,7 @@ void KisPaintDevice::deselect()
     if (m_selection && m_hasSelection) {
         m_hasSelection = false;
         m_selectionDeselected = true;
+        emitSelectionChanged();
     }
 }
 
@@ -803,6 +837,7 @@ void KisPaintDevice::reselect()
 {
     m_hasSelection = true;
     m_selectionDeselected = false;
+    emitSelectionChanged();
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
@@ -843,6 +878,10 @@ void KisPaintDevice::clearSelection()
             ++devIt;
             ++selectionIt;
         }
+    }
+
+    if (m_parentLayer) {
+        m_parentLayer->notify(r);
     }
 }
 

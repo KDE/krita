@@ -209,8 +209,8 @@ KisPaintDeviceSP KisClipboard::clip()
 
 void KisClipboard::clipboardDataChanged()
 {
-    m_hasClip = false;
     if (!m_pushedClipboard) {
+        m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
         QImage qimg = cb -> image();
         QMimeSource *cbData = cb->data();

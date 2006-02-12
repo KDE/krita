@@ -220,15 +220,15 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                         break;
                 }
                 
-                KisUndoAdapter *adapter = img -> undoAdapter();
-                if (adapter)
-                    adapter -> addCommand(t);
-
                 if(hasSelection)
                     dev->emitSelectionChanged(rc);
                 else
                     dev->emitSelectionChanged();
-                    
+
+                KisUndoAdapter *adapter = img -> undoAdapter();
+                if (adapter)
+                    adapter -> addCommand(t);
+
                 QApplication::restoreOverrideCursor();
             }
         }

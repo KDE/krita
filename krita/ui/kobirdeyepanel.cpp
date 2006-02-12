@@ -125,6 +125,7 @@ void KoBirdEyePanel::setZoom(int zoom)
     m_page->zoom->blockSignals(false);
     m_page->slZoom->blockSignals(false);
 
+
 }
 
 void KoBirdEyePanel::zoomValueChanged(int zoom)
@@ -190,12 +191,53 @@ KoBirdEyePanel::~KoBirdEyePanel()
 {
 }
 
+void KoBirdEyePanel::setThumbnailProvider(KoThumbnailAdapter * thumbnailProvider)
+{
+    delete m_thumbnailProvider;
+    m_thumbnailProvider = thumbnailProvider;
+}
+
 void KoBirdEyePanel::slotCanvasZoomChanged(int zoom)
 {
 }
 
-void KoBirdEyePanel::slotUpdate(const QRect & r, const QImage & img, const QRect & docrect)
+void KoBirdEyePanel::slotUpdate(const QRect & r)
 {
+    QRect updateRect = r;
+
+    if (m_thumbnailProvider->pixelSize() != m_documentSize) {
+        fitThumbnailToView();
+        m_documentSize = m_thumbnailProvider->pixelSize();
+        updateRect = QRect(0, 0, m_documentSize.width(), m_documentSize.height());
+    }
+
+    updateRect &= QRect(0, 0, m_documentSize.width(), m_documentSize.height());
+
+    if (!updateRect.isEmpty() && !m_documentSize.isEmpty()) {
+
+        Q_INT32 thumbnailLeft = (updateRect.left() * m_thumbnail.width()) / m_documentSize.width();
+        Q_INT32 thumbnailRight = ((updateRect.right() + 1) * m_thumbnail.width()) / m_documentSize.width();
+        Q_INT32 thumbnailTop = (updateRect.top() * m_thumbnail.height()) / m_documentSize.height();
+        Q_INT32 thumbnailBottom = ((updateRect.bottom() + 1) * m_thumbnail.height()) / m_documentSize.height();
+
+        QRect thumbnailRect(thumbnailLeft, thumbnailTop, thumbnailRight - thumbnailLeft + 1, thumbnailBottom - thumbnailTop + 1);
+        thumbnailRect &= m_thumbnail.rect();
+
+        QImage thumbnailImage = m_thumbnailProvider->image(thumbnailRect, m_thumbnail.size());
+
+        if (!thumbnailImage.isNull()) {
+
+            Q_ASSERT(thumbnailImage.size() == thumbnailRect.size());
+
+            QPainter painter(&m_thumbnail);
+
+            painter.fillRect(thumbnailRect, KGlobalSettings::baseColor());
+            painter.drawImage(thumbnailLeft, thumbnailTop, thumbnailImage);
+        }
+    }
+
+    renderView();
+    m_page->view->update();
 }
 
 void KoBirdEyePanel::zoomMinus()
@@ -214,6 +256,7 @@ void KoBirdEyePanel::updateView()
 
 void KoBirdEyePanel::updateVisibleArea()
 {
+    /*
     KoRect visibleRect = m_canvas->visibleArea();
     QRect canvasSize = m_canvas->size();
     QSize viewSize = m_page->view->size();
@@ -248,6 +291,26 @@ void KoBirdEyePanel::updateVisibleArea()
     painter.end();
 
     m_visibleArea.setRect(x, y, w, h);
+    */
+
+//     QImage img = m_thumbnailProvider->image(QRect(0, 0, thumbnailWidth, thumbnailHeight), QSize(thumbnailWidth, thumbnailHeight));
+//
+//     QPainter painter(m_page->view);
+//
+//     painter.fillRect(0, 0, m_page->view->width(), m_page->view->height(), KGlobalSettings::baseColor());
+//
+//     int imgx = (m_page->view->width() - img.width()) / 2;
+//     int imgy = (m_page->view->height() - img.height()) / 2;
+//
+//     painter.drawImage(imgx, imgy, img, 0, 0, img.width(), img.height());
+//
+//     /*painter.setPen(red);
+//     painter.drawRect(x, y, w, h);
+//     painter.setPen(red.light());
+//     painter.drawRect(x-1, y-1, w+2, h+2);*/
+//     painter.end();
+
+    //m_visibleArea.setRect(x, y, w, h);
 }
 
 
@@ -258,11 +321,11 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
     }
 
     if (o == m_page->view && ev->type() == QEvent::Resize) {
-        m_buffer.resize(m_page->view->size());
+        resizeViewEvent(static_cast<QResizeEvent *>(ev)->size());
     }
 
     if (o == m_page->view && ev->type() == QEvent::Paint) {
-        updateVisibleArea();
+        paintViewEvent(static_cast<QPaintEvent *>(ev));
     }
 
     if (o == m_page->view && ev->type() == QEvent::MouseMove) {
@@ -395,5 +458,75 @@ void KoBirdEyePanel::handleMousePress(QPoint p)
 #endif    
 }
 
+void KoBirdEyePanel::resizeViewEvent(QSize size)
+{
+    m_viewBuffer.resize(size);
+    fitThumbnailToView();
+    slotUpdate(QRect(0, 0, m_documentSize.width(), m_documentSize.height()));
+}
+
+void KoBirdEyePanel::fitThumbnailToView()
+{
+    QRect docRect = QRect(0, 0, m_thumbnailProvider->pixelSize().width(), m_thumbnailProvider->pixelSize().height());
+    Q_INT32 thumbnailWidth;
+    Q_INT32 thumbnailHeight;
+
+    if (docRect.isEmpty()) {
+        thumbnailWidth = 0;
+        thumbnailHeight = 0;
+    } else {
+        double xScale = double(m_page->view->width()) / docRect.width();
+        double yScale = double(m_page->view->height()) / docRect.height();
+
+        if (xScale < yScale) {
+            thumbnailWidth = m_page->view->width();
+            thumbnailHeight = Q_INT32(ceil(docRect.height() * xScale));
+        } else {
+            thumbnailWidth = Q_INT32(ceil(docRect.width() * yScale));
+            thumbnailHeight = m_page->view->height();
+        }
+    }
+
+    m_thumbnail.resize(thumbnailWidth, thumbnailHeight);
+}
+
+void KoBirdEyePanel::renderView()
+{
+    Q_ASSERT(!m_viewBuffer.isNull());
+
+    if (!m_viewBuffer.isNull()) {
+
+        QPainter painter(&m_viewBuffer);
+
+        painter.fillRect(0, 0, m_viewBuffer.width(), m_viewBuffer.height(), KGlobalSettings::baseColor());
+
+        if (!m_thumbnail.isNull()) {
+
+            int thumbnailX = (m_viewBuffer.width() - m_thumbnail.width()) / 2;
+            int thumbnailY = (m_viewBuffer.height() - m_thumbnail.height()) / 2;
+
+            painter.drawPixmap(thumbnailX, thumbnailY, m_thumbnail);
+        }
+
+        /*painter.setPen(red);
+        painter.drawRect(x, y, w, h);
+        painter.setPen(red.light());
+        painter.drawRect(x-1, y-1, w+2, h+2);*/
+        painter.end();
+
+        //m_visibleArea.setRect(x, y, w, h);
+
+    }
+}
+
+void KoBirdEyePanel::paintViewEvent(QPaintEvent *e)
+{
+    Q_ASSERT(!m_viewBuffer.isNull());
+
+    if (!m_viewBuffer.isNull()) {
+        bitBlt(m_page->view, e->rect().x(), e->rect().y(), &m_viewBuffer, 
+               e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height());
+    }
+}
 
 #include "kobirdeyepanel.moc"

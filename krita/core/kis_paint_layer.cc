@@ -35,6 +35,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     Q_ASSERT(img);
     Q_ASSERT(dev);
     m_paintdev = dev;
+    m_paintdev->setParentLayer(this);
 }
 
 
@@ -42,7 +43,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
-    m_paintdev = new KisPaintDevice(img, img -> colorSpace(), name.latin1());
+    m_paintdev = new KisPaintDevice(this, img -> colorSpace(), name.latin1());
 }
 
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
@@ -50,12 +51,13 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
 {
     Q_ASSERT(img);
     Q_ASSERT(colorSpace);
-    m_paintdev = new KisPaintDevice(img, colorSpace,  name.latin1());
+    m_paintdev = new KisPaintDevice(this, colorSpace,  name.latin1());
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 {
     m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
+    m_paintdev->setParentLayer(this);
 }
 
 KisLayerSP KisPaintLayer::clone() const
@@ -65,6 +67,9 @@ KisLayerSP KisPaintLayer::clone() const
 
 KisPaintLayer::~KisPaintLayer()
 {
+    if (m_paintdev != 0) {
+        m_paintdev->setParentLayer(0);
+    }
 }
 
 void KisPaintLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
@@ -95,13 +100,6 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
             ++it;
         }
     }
-}
-
-void KisPaintLayer::setImage(KisImage *image)
-{
-    super::setImage(image);
-
-    m_paintdev->setImage(image);
 }
 
 QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)

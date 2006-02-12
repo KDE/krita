@@ -46,6 +46,7 @@
 #include "kis_canvas_subject.h"
 #include "kis_button_release_event.h"
 #include "kis_color.h"
+#include "kis_undo_adapter.h"
 
 KisToolText::KisToolText()
     : super(i18n("Text"))
@@ -79,6 +80,12 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
              QString::null, &ok);
         if (!ok)
             return;
+
+        KisUndoAdapter *undoAdapter = img -> undoAdapter();
+        if (undoAdapter) {
+            undoAdapter -> beginMacro(i18n("Text"));
+        }
+
         QFontMetrics metrics(m_font);
         QRect boundingRect = metrics.boundingRect(text).normalize();
         int xB = - boundingRect.x();
@@ -121,7 +128,12 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
         layer->setX(x);
         layer->setY(y);
-        img->notify();
+
+        img->notify(layer->extent());
+
+        if (undoAdapter) {
+            undoAdapter -> endMacro();
+        }
     }
 }
 

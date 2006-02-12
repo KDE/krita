@@ -684,14 +684,14 @@ void KisToolTransform::transform()
         return;
     }
 
+    img -> notify(rc);
+
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
     if (transaction && img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(transaction);
     }
-        
-    img -> notify(rc);
 }
 
 void KisToolTransform::notifyCommandAdded( KCommand * command)

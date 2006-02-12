@@ -105,7 +105,6 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     layer -> setVisible(true);
 
     m_image->addLayer(layer, m_image->rootLayer(), 0);
-    m_image->notify(layer->extent());
     return new PaintLayer(layer);
 
 }

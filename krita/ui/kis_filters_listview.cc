@@ -83,12 +83,18 @@ KisFiltersIconViewItem::~KisFiltersIconViewItem()
     delete m_thread;
 }
 
-KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) : KIconView(parent, name), m_original(0), m_profile(0)
+KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name) 
+    : KIconView(parent, name)
+    , m_original(0)
+    , m_profile(0)
 {
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(0)
+KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name) 
+    : KIconView(parent, name) 
+    , m_original(0)
+    , m_profile(0)
 {
     KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(layer.data());
     if(pl != 0)
@@ -99,7 +105,10 @@ KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const 
     init();
 }
 
-KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, const char * name) : KIconView(parent, name) , m_original(device)
+KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, const char * name) 
+    : KIconView(parent, name)
+    , m_original(device)
+    , m_profile(0)
 {
     buildPreview();
     init();

@@ -35,7 +35,7 @@
 #include <kdebug.h>
 #include <kxmlguibuilder.h>
 #include <kxmlguiclient.h>
-#include <koView.h>
+#include <KoView.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"

@@ -26,9 +26,9 @@
 #include <klocale.h>
 #include <kstdaction.h>
 
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koQueryTrader.h>
+#include <KoDocument.h>
+#include <KoMainWindow.h>
+#include <KoQueryTrader.h>
 
 #include "kis_clipboard.h"
 #include "kis_types.h"

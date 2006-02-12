@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include "kis_types.h"
 #include "kis_undo_adapter.h"

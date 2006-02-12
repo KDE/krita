@@ -21,7 +21,7 @@
 
 #include <qvariant.h>
 
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <KDChartTable.h>
 
 #include <koffice_export.h>

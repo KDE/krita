@@ -25,7 +25,7 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kscan.h>
-#include <koView.h>
+#include <KoView.h>
 #include <kgenericfactory.h>
 
 #include "scan.moc"

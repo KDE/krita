@@ -69,9 +69,9 @@
 
 // KOffice
 #include <koPartSelectAction.h>
-#include <koFilterManager.h>
-#include <koMainWindow.h>
-#include <koView.h>
+#include <KoFilterManager.h>
+#include <KoMainWindow.h>
+#include <KoView.h>
 #include <kotabbar.h>
 #include <ko_gray_widget.h>
 #include <ko_hsv_widget.h>

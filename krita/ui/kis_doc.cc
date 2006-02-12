@@ -43,13 +43,13 @@
 #include <kmessagebox.h>
 
 // KOffice
-#include <koFilterManager.h>
-#include <koMainWindow.h>
-#include <koQueryTrader.h>
+#include <KoFilterManager.h>
+#include <KoMainWindow.h>
+#include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <koTemplateChooseDia.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kocommandhistory.h>
 
 // Local

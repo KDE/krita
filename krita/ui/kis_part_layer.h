@@ -20,8 +20,8 @@
 
 #include <qrect.h>
 
-#include <koDocument.h>
-#include <koDocumentChild.h>
+#include <KoDocument.h>
+#include <KoDocumentChild.h>
 
 #include "kis_paint_layer.h"
 #include "kis_types.h"

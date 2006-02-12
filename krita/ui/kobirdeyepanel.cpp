@@ -33,7 +33,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include "wdgbirdeye.h"
 #include "kobirdeyepanel.h"

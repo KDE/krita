@@ -22,7 +22,7 @@
 
 #include <qframe.h>
 #include <qpixmap.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 
 // XXX: Make this look more like the KOffice ruler -- the KOffice
 // ruler is not quite suited to Krita. Also: start units with 0,

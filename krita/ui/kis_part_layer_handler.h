@@ -19,7 +19,7 @@
 #define KIS_PART_LAYER_HANDLER_
 
 #include <qobject.h>
-#include <koQueryTrader.h> // KoDocumentEntry
+#include <KoQueryTrader.h> // KoDocumentEntry
 
 #include "kis_types.h"
 #include "kis_doc.h"

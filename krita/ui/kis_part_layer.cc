@@ -23,10 +23,10 @@
 
 #include <klocale.h>
 
-#include "koDocument.h"
-#include "koDocumentChild.h"
-#include "koFrame.h"
-#include "koView.h"
+#include "KoDocument.h"
+#include "KoDocumentChild.h"
+#include "KoFrame.h"
+#include "KoView.h"
 
 #include "kis_layer.h"
 #include "kis_types.h"

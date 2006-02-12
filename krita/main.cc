@@ -19,7 +19,7 @@
  */
 #include <dcopclient.h>
 #include <kcmdlineargs.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 
 #include "ui/kis_aboutdata.h"
 

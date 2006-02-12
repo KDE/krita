@@ -39,7 +39,7 @@
 #include <kgenericfactory.h>
 
 #include <kopalettemanager.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include <kis_debug_areas.h>
 #include "kis_meta_registry.h"

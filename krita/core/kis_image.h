@@ -28,7 +28,7 @@
 #include <ksharedptr.h>
 #include <kurl.h>
 
-#include "koUnit.h"
+#include "KoUnit.h"
 
 #include "kis_composite_op.h"
 #include "kis_global.h"

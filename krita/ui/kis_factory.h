@@ -25,7 +25,7 @@
 
 #include <kparts/plugin.h>
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 #include <koffice_export.h>
 

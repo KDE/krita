@@ -27,8 +27,8 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kdebug.h>
-#include <koView.h>
-#include <koDocument.h>
+#include <KoView.h>
+#include <KoDocument.h>
 #include <kgenericfactory.h>
 
 #include "ksnapshot.h"

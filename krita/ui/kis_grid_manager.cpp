@@ -19,6 +19,7 @@
  */
 
 #include "kis_grid_manager.h"
+#include "kis_grid_manager.moc"
 
 #include <qradiobutton.h>
 
@@ -31,12 +32,12 @@
 KisGridManager::KisGridManager(KisView * parent)
     : QObject(parent), m_view(parent)
 {
-    
+
 }
 
 KisGridManager::~KisGridManager()
 {
-    
+
 }
 
 void KisGridManager::setup(KActionCollection * collection)
@@ -56,7 +57,7 @@ void KisGridManager::setup(KActionCollection * collection)
 
 void KisGridManager::updateGUI()
 {
-    
+
 }
 
 void KisGridManager::toggleGrid()

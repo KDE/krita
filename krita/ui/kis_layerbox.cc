@@ -535,6 +535,9 @@ void KisLayerBox::slotRaiseClicked()
         if (KisLayerSP layer = m_image -> findLayer(l[i]))
             if (layer -> prevSibling())
                 m_image -> moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
+
+    if( !l.isEmpty() )
+        list() -> ensureItemVisible( list() -> layer( l.first() ) );
 }
 
 void KisLayerBox::slotLowerClicked()
@@ -546,10 +549,13 @@ void KisLayerBox::slotLowerClicked()
         l.append(list() -> activeLayer());
     }
 
-    for (int i = 0, n = l.count(); i < n; ++i)
+    for (int i = l.count() - 1; i >= 0; --i)
         if (LayerItem *layer = l[i])
             if (layer -> nextSibling())
                 list() -> moveLayer(layer, layer -> parent(), layer -> nextSibling());
+
+    if( !l.isEmpty() )
+        list() -> ensureItemVisible( l.last() );
 }
 
 void KisLayerBox::slotPropertiesClicked()

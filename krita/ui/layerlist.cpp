@@ -502,6 +502,8 @@ void LayerList::setActiveLayer( LayerItem *layer ) //SLOT
     if( !foldersCanBeActive() && layer && layer->isFolder() )
         return;
 
+    ensureItemVisible( layer );
+
     if( d->activeLayer == layer )
         return;
 
@@ -631,9 +633,14 @@ void LayerList::moveLayer( LayerItem *layer, LayerItem *parent, LayerItem *after
     if( layer->parent() == parent && layer->prevSibling() == after )
         return;
 
+    QListViewItem *current = currentItem();
+
     moveItem( layer, parent, after );
+
     emit layerMoved( layer, parent, after );
     emit layerMoved( layer->id(), parent ? parent->id() : -1, after ? after->id() : -1 );
+
+    setCurrentItem( current ); //HACK, sometimes Qt changes this under us
 }
 
 void LayerList::moveLayer( int id, int parentID, int afterID ) //SLOT
@@ -817,6 +824,7 @@ void LayerList::setCurrentItem( QListViewItem *item )
         return;
 
     super::setCurrentItem( item );
+    ensureItemVisible( item );
     int n = 0;
     for( LayerItemIterator it( this, LayerItemIterator::Selected ); n < 2 && (*it); ++it ) { n++; }
     if( n == 1 )

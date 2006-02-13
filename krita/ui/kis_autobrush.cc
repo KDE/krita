@@ -17,7 +17,7 @@
  */
  
 #include "kis_autobrush.h"
-#include <koImageResource.h>
+#include <KoImageResource.h>
 #include <kdebug.h>
 #include <qspinbox.h>
 #include <qtoolbutton.h>

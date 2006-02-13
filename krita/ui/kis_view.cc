@@ -68,11 +68,11 @@
 #include <kparts/componentfactory.h>
 
 // KOffice
-#include <koPartSelectAction.h>
+#include <KoPartSelectAction.h>
 #include <KoFilterManager.h>
 #include <KoMainWindow.h>
 #include <KoView.h>
-#include <kotabbar.h>
+#include <KoTabBar.h>
 #include <ko_gray_widget.h>
 #include <ko_hsv_widget.h>
 #include <ko_rgb_widget.h>
@@ -116,7 +116,7 @@
 #include "kis_palette.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
-#include "kotoolbox.h"
+#include "KoToolBox.h"
 #include "kis_tool.h"
 #include "kis_tool_manager.h"
 #include "kis_transaction.h"

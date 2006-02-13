@@ -39,7 +39,7 @@
 #include <qgl.h>
 #endif
 
-#include <koImageResource.h>
+#include <KoImageResource.h>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>

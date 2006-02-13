@@ -22,7 +22,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
-#include <koPartSelectAction.h>
+#include <KoPartSelectAction.h>
 #include <qimage.h>
 
 #include "kis_layer.h"

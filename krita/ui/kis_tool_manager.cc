@@ -25,7 +25,7 @@
 #include "kis_view.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
-#include "kotoolbox.h"
+#include "KoToolBox.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_input_device.h"

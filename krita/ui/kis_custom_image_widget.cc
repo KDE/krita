@@ -32,7 +32,7 @@
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qtextedit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {

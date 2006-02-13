@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kcolorcombo.h>
 
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include "kis_factory.h"
 #include "kis_meta_registry.h"

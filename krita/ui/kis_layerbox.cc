@@ -44,7 +44,7 @@
 #include <kicontheme.h>
 #include <klocale.h>
 
-#include <koPartSelectAction.h>
+#include <KoPartSelectAction.h>
 
 #include "kis_layerlist.h"
 #include "kis_cmb_composite.h"

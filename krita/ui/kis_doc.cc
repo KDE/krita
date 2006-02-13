@@ -48,9 +48,9 @@
 #include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <koTemplateChooseDia.h>
+#include <KoTemplateChooseDia.h>
 #include <KoApplication.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 
 // Local
 #include <kis_meta_registry.h>

@@ -53,6 +53,7 @@ public:
 
 };
 
+
 class KisFiltersThumbnailThread : public KisThread
 {
 public:

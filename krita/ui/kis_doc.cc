@@ -760,33 +760,6 @@ bool KisDoc::completeSaving(KoStore *store)
         }
     }
 
-    // Composite rendition of the entire image for easier kimgio loading
-    // and to speed up loading the image into Krita: show the composite png first,
-    // then load the layers. Don't do this if the image is too big.
-    if (m_currentImage->width() * m_currentImage->height() < 5000000) {
-        if (store -> open("composite.png")) {
-            
-            QPixmap * pix = new QPixmap(m_currentImage -> width(), m_currentImage -> height());
-            QPainter gc(pix);
-            m_currentImage -> renderToPainter(0, 0, m_currentImage -> width(), m_currentImage -> height(), gc, 0,
-                                              KisImage::PAINT_IMAGE_ONLY);
-            gc.end();
-            QImage composite = pix -> convertToImage();
-            
-            KoStoreDevice io (store);
-            
-            if (!composite.save(&io, "PNG")) {
-                store -> close();
-                IODone();
-                return false;
-            }
-            
-            delete pix;
-
-            IOCompletedStep();
-            store -> close();
-        }
-    }
     IODone();
     return true;
 }

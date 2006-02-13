@@ -118,7 +118,24 @@ void KisFiltersListView::customEvent(QCustomEvent * e)
 {
     KisThumbnailDoneEvent * ev = dynamic_cast<KisThumbnailDoneEvent *>(e);
     if (ev) {
+        QPixmap * p = ev->m_iconItem->pixmap();
+        QImage img = ev->m_image.smoothScale(p->width(), p->height(), QImage::ScaleMin);
+        int x, y;
+        if (p->width() > img.width())
+            x = p->width() - img.width() / 2;
+        else
+            x = 0;
+        if (p->height() > img.height())
+            y = p->width() - img.width() / 2;
+        else
+            y = 0;
+        
+        QPainter gc(p);
+        gc.drawImage(QPoint(x,y), img);
+        gc.end();
+        
         ev->m_iconItem->setPixmap(QPixmap(ev->m_image));
+        arrangeItemsInGrid();
     }
 }
 

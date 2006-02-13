@@ -42,12 +42,12 @@ public:
 
 private:
     KisFilterRegistry();
-     KisFilterRegistry(const KisFilterRegistry&);
-     KisFilterRegistry operator=(const KisFilterRegistry&);
+    KisFilterRegistry(const KisFilterRegistry&);
+    KisFilterRegistry operator=(const KisFilterRegistry&);
 
 private:
      static KisFilterRegistry *m_singleton;
 };
-
+ 
 #endif // KIS_FILTERSPACE_REGISTRY_H_
 

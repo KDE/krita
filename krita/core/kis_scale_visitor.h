@@ -141,8 +141,8 @@ public:
         KisScaleWorker * scaleThread = new KisScaleWorker(layer->paintDevice(),
                                                      m_sx, m_sy, m_filterStrategy);
         m_scalethreads.append(scaleThread);
-        //scaleThread->start();
-        scaleThread->run();
+        scaleThread->start();
+        //scaleThread->run();
         layer->setDirty(true);
         return true;
     }

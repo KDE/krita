@@ -19,5 +19,5 @@ Comment[sr]=Модул који имплементира потпун прост
 Comment[sr@Latn]=Modul koji implementira potpun prostor boja za upotrebu sa libkritacolor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor
 Comment[xx]=xxA module implementing a complete colorspace for use with libkritacolorxx
-[PropertyDef::X-KDE-Version]
+[PropertyDef::X-Krita-Version]
 Type=int

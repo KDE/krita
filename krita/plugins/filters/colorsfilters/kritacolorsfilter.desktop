@@ -44,4 +44,4 @@ Comment[zh_CN]=颜色滤镜
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters
-X-KDE-Version=2
+X-Krita-Version=2

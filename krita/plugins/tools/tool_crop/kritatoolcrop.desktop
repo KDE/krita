@@ -35,4 +35,4 @@ Name[zh_CN]=裁剪工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcrop
-X-KDE-Version=2
+X-Krita-Version=2

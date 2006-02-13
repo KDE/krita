@@ -39,4 +39,4 @@ Comment[xx]=xxRaindrops filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaraindropsfilter
-X-KDE-Version=2
+X-Krita-Version=2

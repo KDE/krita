@@ -30,5 +30,5 @@ Comment[sv]=Verktygsinsticksprogram för Krita
 Comment[tr]=Krita için araç eklenti modülü
 Comment[xx]=xxTool plugin for Kritaxx
 Comment[zh_CN]=Krita 工具插件
-[PropertyDef::X-KDE-Version]
+[PropertyDef::X-Krita-Version]
 Type=int

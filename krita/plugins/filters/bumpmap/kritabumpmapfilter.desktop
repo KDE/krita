@@ -41,4 +41,4 @@ Comment[xx]=xxBumpmap filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap
-X-KDE-Version=2
+X-Krita-Version=2

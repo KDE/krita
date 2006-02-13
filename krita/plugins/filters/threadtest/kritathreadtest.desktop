@@ -21,4 +21,4 @@ Name[xx]=xxInvert Filter with Threadsxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritathreadtest
-X-KDE-Version=2
+X-Krita-Version=2

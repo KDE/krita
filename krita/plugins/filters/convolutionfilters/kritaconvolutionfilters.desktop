@@ -41,4 +41,4 @@ Comment[xx]=xxConvolution filtersxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaconvolutionfilters
-X-KDE-Version=2
+X-Krita-Version=2

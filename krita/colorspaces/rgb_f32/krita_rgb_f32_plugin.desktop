@@ -42,5 +42,5 @@ Comment[sv]=Färgmodell för 32-bitars flyttal per kanal RGB-bilder
 Comment[xx]=xxColor model for 32-bit floating point per channel RGB imagesxx
 ServiceTypes=Krita/ColorSpace
 Type=Service
-X-KDE-Version=2
+X-Krita-Version=2
 X-KDE-Library=krita_rgb_f32_plugin

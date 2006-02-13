@@ -48,5 +48,5 @@ Comment[xx]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 Comment[zh_CN]=每通道 16 位整数的灰度图像色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
-X-KDE-Version=2
+X-Krita-Version=2
 X-KDE-Library=krita_gray_u16_plugin

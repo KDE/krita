@@ -40,4 +40,4 @@ Comment[xx]=xxWet & Sticky paintbrushxx
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=kritawsbrushpaintop
-X-KDE-Version=2
+X-Krita-Version=2

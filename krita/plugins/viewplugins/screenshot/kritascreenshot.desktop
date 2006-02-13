@@ -21,4 +21,4 @@ Name[zh_CN]=抓图
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot
-X-KDE-Version=2
+X-Krita-Version=2

@@ -40,4 +40,4 @@ Comment[xx]=xxColor model for 16-bit floating point 'half' per channel RGB image
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_rgb_f16half_plugin
-X-KDE-Version=2
+X-Krita-Version=2

@@ -29,5 +29,5 @@ Comment[tr]=Krita için Süzgeç Eklentisi
 Comment[uk]=Втулок фільтра для Krita
 Comment[xx]=xxFilter plugin for Kritaxx
 Comment[zh_CN]=Krita 过滤器插件
-[PropertyDef::X-KDE-Version]
+[PropertyDef::X-Krita-Version]
 Type=int

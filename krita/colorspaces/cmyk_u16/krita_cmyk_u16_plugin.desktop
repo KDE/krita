@@ -49,4 +49,4 @@ Comment[zh_CN]=16 位整数每通道 CYMK 图像的色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin
-X-KDE-Version=2
+X-Krita-Version=2

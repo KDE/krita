@@ -300,7 +300,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     // Load all plugins
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ViewPlugin"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 2)"));
     KTrader::OfferList::ConstIterator iter;
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

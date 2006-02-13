@@ -26,4 +26,4 @@ Name[zh_CN]=选择相似颜色工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolselectsimilar
-X-KDE-Version=2
+X-Krita-Version=2

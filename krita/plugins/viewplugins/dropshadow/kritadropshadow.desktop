@@ -20,4 +20,4 @@ Name[zh_CN]=阴影
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritadropshadow
-X-KDE-Version=2
+X-Krita-Version=2

@@ -22,4 +22,4 @@ Name[zh_CN]=滤镜库
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery
-X-KDE-Version=2
+X-Krita-Version=2

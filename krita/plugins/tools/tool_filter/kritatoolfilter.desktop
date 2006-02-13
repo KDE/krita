@@ -66,4 +66,4 @@ Comment[zh_CN]=过滤器工具和绘图集成
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolfilter
-X-KDE-Version=2
+X-Krita-Version=2

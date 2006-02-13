@@ -36,4 +36,4 @@ Name[zh_CN]=星形工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar
-X-KDE-Version=2
+X-Krita-Version=2

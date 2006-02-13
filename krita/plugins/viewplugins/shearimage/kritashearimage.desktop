@@ -20,4 +20,4 @@ Name[xx]=xxShear Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage
-X-KDE-Version=2
+X-Krita-Version=2

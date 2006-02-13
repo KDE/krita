@@ -24,6 +24,7 @@
 
 #include <kcolorbutton.h>
 #include <knuminput.h>
+#include "kis_int_spinbox.h"
 #include "kis_gradient.h"
 #include "kis_autogradient_resource.h"
 

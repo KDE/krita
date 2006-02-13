@@ -31,4 +31,4 @@ Categories=Qt;KDE;Office;Graphics;
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
-X-KDE-Version=2
+X-Krita-Version=2

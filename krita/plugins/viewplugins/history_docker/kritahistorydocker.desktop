@@ -43,4 +43,4 @@ Comment[xx]=xxCommand history docker for Kritaxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistorydocker
-X-KDE-Version=2
+X-Krita-Version=2

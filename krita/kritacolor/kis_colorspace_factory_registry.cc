@@ -64,7 +64,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
     // Load all colorspace modules
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ColorSpace"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 2)"));
 
     if (offers.empty()) {
         KMessageBox::sorry(0, i18n("Cannot start Krita: no colorspaces available."));

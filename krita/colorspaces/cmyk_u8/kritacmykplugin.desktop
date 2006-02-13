@@ -72,5 +72,5 @@ Comment[zh_CN]=八位/通道 CMYK 图像的色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=kritacmykplugin
-X-KDE-Version=2
+X-Krita-Version=2
 

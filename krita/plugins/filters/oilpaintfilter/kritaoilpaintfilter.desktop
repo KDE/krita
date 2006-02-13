@@ -39,4 +39,4 @@ Comment[xx]=xxOilpaint filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaoilpaintfilter
-X-KDE-Version=2
+X-Krita-Version=2

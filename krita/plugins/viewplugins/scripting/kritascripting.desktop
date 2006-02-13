@@ -35,4 +35,4 @@ Comment[zh_CN]=允许执行脚本
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting
-X-KDE-Version=2
+X-Krita-Version=2

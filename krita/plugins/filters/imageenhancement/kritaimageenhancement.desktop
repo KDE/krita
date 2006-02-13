@@ -46,4 +46,4 @@ Comment[xx]=xxEnhance the quality of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaimageenhancement
-X-KDE-Version=2
+X-Krita-Version=2

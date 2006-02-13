@@ -38,12 +38,8 @@ R  * rendering with complex groupings gives very wrong results
 R  * Fix unittests for colorspaces
 P  * Fix part layers (nearly done)
 R  * disable everything necessary when the current layer is wet.
-?  * update the plugin .desktop and plugin loader required versions (and maybe change the name to X-Krita-Version instead of X-KDE-Version)
-?  * set the headers to install
 ?  * Use the right profile and colorspace when loading layers. The code in kis_load_visitor.h is commented out
 C  * finish the convolution painter
-?  * The nameserver is only initialized when you first add a layer, leading to duplicate layer names
-?  * Loading a remote image from the recent files list fails: however, loading it directly does work.
 
 User interface
 
@@ -53,14 +49,13 @@ R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
 A  * Display grid in OpenGL mode
 R  * Replace all int spinboxes with the dropdown slider (bug: http://bugs.kde.org/show_bug.cgi?id=119314)
+R  * Check all tool option widgets for layout errors
 ?  * Lock all actions when layers are locked or invisible, not just filters
 and tools (#90456)
-?  * Fix the color selectors (they are completely broken, details in TZ)
 
 Files and Import/Export
 
 C  * add support for YCbCr in TIFF and fix the reading of deflate files
-?  * Add layer export to magick filter.
 
 Tools
 

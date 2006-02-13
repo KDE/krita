@@ -69,4 +69,4 @@ Comment[zh_CN]=8 位灰度图像的色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=kritagrayplugin
-X-KDE-Version=2
+X-Krita-Version=2

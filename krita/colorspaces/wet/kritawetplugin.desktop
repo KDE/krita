@@ -62,4 +62,4 @@ Comment[zh_CN]=模拟水彩绘画的色彩模型和工具
 ServiceTypes=Krita/ColorSpace,Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritawetplugin
-X-KDE-Version=2
+X-Krita-Version=2

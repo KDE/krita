@@ -45,7 +45,7 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Paintop"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 2)"));
 
     KTrader::OfferList::ConstIterator iter;
 

@@ -477,6 +477,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                         kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
                     }
                     else {
+                        img -> nextLayerName(); // Make sure the nameserver is current with the number of layers.
                         img -> addLayer(layer, parent, 0);
                     }
                 }

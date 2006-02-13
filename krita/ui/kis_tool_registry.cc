@@ -39,7 +39,7 @@ KisToolRegistry::KisToolRegistry()
     // Load all modules: color models, paintops, filters
     KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Tool"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-KDE-Version] == 2)"));
+                                                                             "([X-Krita-Version] == 2)"));
 
     KTrader::OfferList::ConstIterator iter;
 

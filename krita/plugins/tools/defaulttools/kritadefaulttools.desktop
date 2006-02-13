@@ -39,4 +39,4 @@ Name[zh_CN]=默认工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritadefaulttools
-X-KDE-Version=2
+X-Krita-Version=2

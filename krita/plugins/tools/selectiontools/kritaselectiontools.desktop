@@ -36,4 +36,4 @@ Name[zh_CN]=选择工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools
-X-KDE-Version=2
+X-Krita-Version=2

@@ -39,4 +39,4 @@ Comment[xx]=xxEmboss filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaembossfilter
-X-KDE-Version=2
+X-Krita-Version=2

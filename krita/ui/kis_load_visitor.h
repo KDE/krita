@@ -29,6 +29,8 @@
 #include "kis_group_layer.h"
 #include "kis_filter_configuration.h"
 
+#include "kis_datamanager.h"
+
 class KisLoadVisitor : public KisLayerVisitor {
 public:
     KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayerSP, QString> &layerFilenames) :
@@ -75,10 +77,10 @@ public:
             data = m_store -> read(m_store -> size());
             m_store -> close();
             // Create a colorspace with the embedded profile
-/*            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(layer->paintDevice()->colorSpace()->id(), new KisProfile(data));
+            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(layer->paintDevice()->colorSpace()->id(), new KisProfile(data));
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
-*/
+
             kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 

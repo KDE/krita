@@ -2717,7 +2717,7 @@ void KisView::layerDuplicate()
     dup -> setName(QString(i18n("Duplicate of '%1'")).arg(active -> name()));
     img->addLayer(dup, active->parent().data(), active);
     if (dup) {
-        //        m_layerBox->slotSetCurrentItem(img -> index(layer)); // LAYERREMOVE
+        img -> activate( dup );
         resizeEvent(0);
         updateCanvas(0, 0, img -> width(), img -> height());
     } else {

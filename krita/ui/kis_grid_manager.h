@@ -24,6 +24,8 @@
 #include <qobject.h>
 #include <qpainter.h>
 
+#include "kis_types.h"
+
 class KisView;
 class KActionCollection;
 class KToggleAction;
@@ -37,7 +39,7 @@ class KisGridManager : public QObject
         ~KisGridManager();
     public:
         void setup(KActionCollection * collection);
-        void drawGrid(QRect wr, QPainter& p);
+        void drawGrid(QRect wr, QPainter *p, bool openGL = false);
     public slots:
         void updateGUI();
     private slots:
@@ -49,8 +51,42 @@ class KisGridManager : public QObject
         void fastConfig20x20();
         void fastConfig40x40();
     private:
-        Qt::PenStyle gs2style(Q_UINT32 s);
-    private:
+
+        class GridDrawer {
+        public:
+            GridDrawer() {}
+            virtual ~GridDrawer() {}
+        
+        public:
+            void drawGrid(KisImageSP image, const QRect& wr);
+        
+            virtual void setPen(const QPen& pen) = 0;
+            virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) = 0;
+        private:
+            Qt::PenStyle gs2style(Q_UINT32 s);
+        };
+        
+        class QPainterGridDrawer : public GridDrawer {
+        public:
+            QPainterGridDrawer(QPainter *p) { m_painter = p; }
+        
+            virtual void setPen(const QPen& pen) { m_painter->setPen(pen); }
+            virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) { m_painter->drawLine(x1, y1, x2, y2); }
+        
+        private:
+            QPainter *m_painter;
+        };
+        
+        class OpenGLGridDrawer : public GridDrawer {
+        public:
+            OpenGLGridDrawer();
+            virtual ~OpenGLGridDrawer();
+        
+            virtual void setPen(const QPen& pen);
+            virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2);
+        };
+
+private:
         KisView* m_view;
         KToggleAction* m_toggleGrid;
         KAction* m_gridConfig;

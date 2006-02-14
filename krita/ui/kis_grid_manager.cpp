@@ -18,13 +18,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_grid_manager.h"
-#include "kis_grid_manager.moc"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_GL
+#include <qgl.h>
+#endif
 
 #include <qradiobutton.h>
 
 #include <kaction.h>
 #include <kdialogbase.h>
+
+#include "kis_grid_manager.h"
+#include "kis_grid_manager.moc"
 
 #include "kis_config.h"
 #include "kis_view.h"
@@ -113,7 +121,7 @@ void KisGridManager::fastConfig40x40()
     m_view->canvasRefresh();
 }
 
-Qt::PenStyle KisGridManager::gs2style(Q_UINT32 s)
+Qt::PenStyle KisGridManager::GridDrawer::gs2style(Q_UINT32 s)
 {
     switch(s)
     {
@@ -130,53 +138,159 @@ Qt::PenStyle KisGridManager::gs2style(Q_UINT32 s)
     }
 }
 
-void KisGridManager::drawGrid(QRect wr, QPainter& p)
+void KisGridManager::drawGrid(QRect wr, QPainter *p, bool openGL)
 {
-    if( m_toggleGrid->isChecked())
-    {
-        KisConfig cfg;
-        Q_UINT32 offsetx = cfg.getGridOffsetX();
-        Q_UINT32 offsety = cfg.getGridOffsetY();
-        Q_UINT32 hspacing = cfg.getGridHSpacing();
-        Q_UINT32 vspacing = cfg.getGridVSpacing();
-        Q_UINT32 subdivision = cfg.getGridSubdivisions() - 1;
-        double ihspsub = hspacing / (double)subdivision;
-        double ivspsub = hspacing / (double)subdivision;
-        // Draw horizontal line
-        QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
-        QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
-        Q_UINT32 i = 0;
-        for( Q_UINT32 x = offsetx; x <= (Q_UINT32)wr.right(); x +=hspacing)
+    KisImageSP image = m_view->canvasSubject()->currentImg();
+
+    if (image) {
+        if (m_toggleGrid->isChecked())
         {
-            if( i == subdivision )
-            {
-                p.setPen(mainPen);
-                i = 0;
+            GridDrawer *gridDrawer = 0;
+
+            if (openGL) {
+                gridDrawer = new OpenGLGridDrawer();
             } else {
-                p.setPen(subdivisionPen);
-                i++;
+                Q_ASSERT(p);
+
+                if (p) {
+                    gridDrawer = new QPainterGridDrawer(p);
+                }
             }
-            if( x >= wr.x() )
-            {
-                p.drawLine(x, wr.top(), x, wr.bottom()+1);
-            }
-        }
-        // Draw vertical line
-        i = 0;
-        for( Q_UINT32 y = offsety; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
-        {
-            if( i == subdivision )
-            {
-                p.setPen(mainPen);
-                i = 0;
-            } else {
-                p.setPen(subdivisionPen);
-                i++;
-            }
-            if( y >= wr.y() )
-            {
-                p.drawLine(wr.left(), y, wr.right()+1, y);
+
+            Q_ASSERT(gridDrawer != 0);
+
+            if (gridDrawer) {
+                gridDrawer->drawGrid(image, wr);
+                delete gridDrawer;
             }
         }
     }
 }
+
+void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
+{
+    KisConfig cfg;
+    Q_UINT32 offsetx = cfg.getGridOffsetX();
+    Q_UINT32 offsety = cfg.getGridOffsetY();
+    Q_UINT32 hspacing = cfg.getGridHSpacing();
+    Q_UINT32 vspacing = cfg.getGridVSpacing();
+    Q_UINT32 subdivision = cfg.getGridSubdivisions() - 1;
+    double ihspsub = hspacing / (double)subdivision;
+    double ivspsub = hspacing / (double)subdivision;
+
+    Q_INT32 imageWidth = image->width();
+    Q_INT32 imageHeight = image->height();
+
+    // Draw vertical line
+    QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
+    QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
+    Q_UINT32 i = 0;
+    for( Q_UINT32 x = offsetx; x <= (Q_UINT32)wr.right(); x +=hspacing)
+    {
+        if( i == subdivision )
+        {
+            setPen(mainPen);
+            i = 0;
+        } else {
+            setPen(subdivisionPen);
+            i++;
+        }
+        if( x >= wr.x() )
+        {
+            // Always draw the full line otherwise the line stippling varies
+            // with the location of wr and we get glitchy patterns.
+            drawLine(x, 0, x, imageHeight);
+        }
+    }
+    // Draw horizontal line
+    i = 0;
+    for( Q_UINT32 y = offsety; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
+    {
+        if( i == subdivision )
+        {
+            setPen(mainPen);
+            i = 0;
+        } else {
+            setPen(subdivisionPen);
+            i++;
+        }
+        if( y >= wr.y() )
+        {
+            drawLine(0, y, imageWidth, y);
+        }
+    }
+}
+
+KisGridManager::OpenGLGridDrawer::OpenGLGridDrawer()
+{
+#ifdef HAVE_GL
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+#endif
+}
+
+KisGridManager::OpenGLGridDrawer::~OpenGLGridDrawer()
+{
+#ifdef HAVE_GL
+    glPopAttrib();
+#endif
+}
+
+void KisGridManager::OpenGLGridDrawer::setPen(const QPen& pen)
+{
+#ifdef HAVE_GL
+    Qt::PenStyle penStyle = pen.style();
+
+    if (penStyle == Qt::SolidLine) {
+        glDisable(GL_LINE_STIPPLE);
+    } else {
+        GLushort lineStipple;
+
+        switch (penStyle) {
+        case Qt::NoPen:
+            lineStipple = 0;
+            break;
+        default:
+        case Qt::SolidLine:
+            lineStipple = 0xffff;
+            break;
+        case Qt::DashLine:
+            lineStipple = 0x3fff;
+            break;
+        case Qt::DotLine:
+            lineStipple = 0x3333;
+            break;
+        case Qt::DashDotLine:
+            lineStipple = 0x33ff;
+            break;
+        case Qt::DashDotDotLine:
+            lineStipple = 0x333f;
+            break;
+        }
+
+        glEnable(GL_LINE_STIPPLE);
+        glLineStipple(1, lineStipple);
+    }
+
+    QColor penColor = pen.color();
+
+    glColor3ub(penColor.red(), penColor.green(), penColor.blue());
+#else
+    Q_UNUSED(pen);
+#endif
+}
+
+void KisGridManager::OpenGLGridDrawer::drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2)
+{
+#ifdef HAVE_GL
+    glBegin(GL_LINES);
+    glVertex2i(x1, y1);
+    glVertex2i(x2, y2);
+    glEnd();
+#else
+    Q_UNUSED(x1);
+    Q_UNUSED(y1);
+    Q_UNUSED(x2);
+    Q_UNUSED(y2);
+#endif
+}
+

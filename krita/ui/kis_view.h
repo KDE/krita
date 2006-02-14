@@ -302,12 +302,14 @@ private:
     virtual void zoomAroundPoint(double x, double y, double zf);
 
     virtual QPoint viewToWindow(const QPoint& pt);
+    virtual QPoint viewToWindow(const QPoint& pt) const;
     virtual KisPoint viewToWindow(const KisPoint& pt);
     virtual QRect viewToWindow(const QRect& rc);
     virtual KisRect viewToWindow(const KisRect& rc);
     virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y);
 
     virtual QPoint windowToView(const QPoint& pt);
+    virtual QPoint windowToView(const QPoint& pt) const;
     virtual KisPoint windowToView(const KisPoint& pt);
     virtual QRect windowToView(const QRect& rc);
     virtual KisRect windowToView(const KisRect& rc);

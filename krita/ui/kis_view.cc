@@ -3041,6 +3041,16 @@ QPoint KisView::viewToWindow(const QPoint& pt)
     return converted;
 }
 
+QPoint KisView::viewToWindow(const QPoint& pt) const
+{
+    QPoint converted;
+
+    converted.rx() = static_cast<int>((pt.x() + horzValue()) / zoom());
+    converted.ry() = static_cast<int>((pt.y() + vertValue()) / zoom());
+
+    return converted;
+}
+
 KisPoint KisView::viewToWindow(const KisPoint& pt)
 {
     KisPoint converted;
@@ -3085,6 +3095,15 @@ void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
 }
 
 QPoint KisView::windowToView(const QPoint& pt)
+{
+    QPoint p;
+    p.setX(static_cast<int>(pt.x() * zoom() - horzValue()));
+    p.setY(static_cast<int>(pt.y() * zoom() - vertValue()));
+
+    return p;
+}
+
+QPoint KisView::windowToView(const QPoint& pt) const
 {
     QPoint p;
     p.setX(static_cast<int>(pt.x() * zoom() - horzValue()));
@@ -3557,34 +3576,29 @@ void KisView::createDockers()
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {
-    QPoint point(p.x() + m_canvasXOffset, p.y() + m_canvasYOffset);
+    return windowToView(p);
 /*
     if (m_hRuler -> isShown())
         point.ry() -= m_hRuler -> height();
     if (m_vRuler -> isShown())
         point.rx() -= m_hRuler -> width();
 */
-    return QPoint(qRound(point.x() * zoomFactor()), qRound(point.y() * zoomFactor()));
 }
 
 QPoint KisView::reverseViewTransformations(const QPoint& p) const {
     // Since we now zoom ourselves, the only thing super::~ does is nothing anymore.
     // Hence, zoom ourselves, like super would
-    QPoint point(qRound(p.x() / zoomFactor()), qRound(p.y() / zoomFactor()));
-    point.rx() -= m_canvasXOffset;
-    point.ry() -= m_canvasYOffset;
-/*
-    if (m_hRuler -> isShown())
-        point.ry() += m_hRuler -> height();
-    if (m_vRuler -> isShown())
-        point.rx() += m_hRuler -> width();
-*/
-    return point;
+    return viewToWindow(p);
 }
 
 void KisView::canvasAddChild(KoViewChild *child) {
     super::canvasAddChild(child);
     connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
+    m_vScroll -> raise();
+    m_hScroll -> raise();
+    m_vScroll -> raise();
+    m_hRuler -> raise();
+    m_vRuler -> raise();
 }
 
 void KisView::slotLoadingFinished()

@@ -1304,6 +1304,9 @@ void KisImage::notifyPropertyChanged(KisLayerSP layer)
 
 void KisImage::notifyImageLoaded()
 {
+    // Make the projection valid at loading.
+    notify();
+
     emit sigNonActiveLayersUpdated();
 }
 

@@ -52,6 +52,11 @@ public:
     virtual QRect size() = 0;
     
     /**
+     * Return the current canvas zoom factor.
+     */
+    virtual double zoomFactor() = 0;
+
+    /**
      * Show pt in the center of the view
      */
     virtual void setViewCenterPoint(double x, double y) = 0;
@@ -169,10 +174,9 @@ public slots:
 
     /**
      * Connect to this slot to inform the bird's eye view of changes in
-     * the zoom level of your canvas or view. The value is taken as a percentage,
-     * with 100 being zoomed to 100% of size.
+     * the view transformation, i.e. zoom level or scroll changes.
      */
-    void slotCanvasZoomChanged(int);
+    void slotViewTransformationChanged();
     
     void cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos);
 
@@ -196,7 +200,6 @@ protected slots:
 protected:
     void setZoom(int zoom);
             
-    void updateView();
     void handleMouseMove(QPoint);
     void handleMouseMoveAction(QPoint);
     void handleMousePress(QPoint);
@@ -204,6 +207,36 @@ protected:
     void renderView();
     void resizeViewEvent(QSize size);
     void paintViewEvent(QPaintEvent *e);
+    void makeThumbnailRectVisible(const QRect& r);
+
+    enum enumDragHandle {
+        DragHandleNone,
+        DragHandleLeft,
+        DragHandleCentre,
+        DragHandleRight,
+        DragHandleTop,
+        DragHandleBottom
+    };
+
+    /*
+     * Returns the drag handle type at point p in thumbnail coordinates.
+     */
+    enumDragHandle dragHandleAt(QPoint p);
+
+    /**
+     * Returns the rectangle in the thumbnail covered by the given document rectangle.
+     */
+    QRect documentToThumbnail(const KoRect& docRect);
+
+    /**
+     * Returns the rectangle in the document covered by the given thumbnail rectangle.
+     */
+    KoRect thumbnailToDocument(const QRect& thumbnailRect);
+
+    /**
+     * Converts a point in the view to a point in the thumbnail.
+     */
+    QPoint viewToThumbnail(const QPoint& viewPoint);
 
 private:
     
@@ -219,10 +252,10 @@ private:
     QPixmap m_thumbnail;
 
     QSize m_documentSize;
-    QRect m_visibleArea;
-    AlignmentFlags m_aPos;
-    bool m_handlePress;
-    QPoint m_lastPos;
+    QRect m_visibleAreaInThumbnail;
+    bool m_dragging;
+    enumDragHandle m_dragHandle;
+    QPoint m_lastDragPos;
 
 };
 

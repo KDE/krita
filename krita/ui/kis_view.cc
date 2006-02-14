@@ -1274,9 +1274,9 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
     m_hScroll -> update();
     m_vScroll -> update();
 
-
-
     canvasRefresh();
+
+    emit viewTransformationsChanged();
 }
 
 void KisView::zoomTo(const KisRect& r)

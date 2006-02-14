@@ -173,7 +173,9 @@ signals:
 
     void sigInputDeviceChanged(const KisInputDevice& inputDevice);
 
-    /// for KoViewChild
+    /*
+     * Emitted whenever the zoom or scroll values change.
+     */
     void viewTransformationsChanged();
 
 public slots:

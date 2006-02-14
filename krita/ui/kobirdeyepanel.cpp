@@ -25,6 +25,7 @@
 #include <qlabel.h>
 #include <qtoolbutton.h>
 #include <qslider.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -58,15 +59,18 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     , m_zoomListener(zoomListener)
     , m_thumbnailProvider(thumbnailProvider)
     , m_canvas(canvas)
+    , m_dragging(false)
 {
     QHBoxLayout * l = new QHBoxLayout(this);
     m_page = new WdgBirdEye(this);
-    m_page->zoom->setRange((int) (100 * zoomListener->getMinZoom()), (int) (100 * zoomListener->getMaxZoom()));
+    m_page->zoom->setRange((int) (QMAX(1, 100 * zoomListener->getMinZoom())), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
+    m_page->zoom->setSuffix("%");
 
     m_page->toolbar->setIconSize(16);
     m_page->view->installEventFilter(this);
-    
+    m_page->view->setBackgroundMode(Qt::NoBackground);
+
     m_zoomIn = new KAction( i18n("Zoom In"), "birdeye_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
     m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
 
@@ -75,6 +79,10 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     connect(m_page->zoom, SIGNAL(valueChanged(int)), SLOT(zoomValueChanged(int)));
     connect(m_page->bn100, SIGNAL(clicked()), SLOT(zoom100()));
     connect(m_page->slZoom, SIGNAL(valueChanged(int)), SLOT(sliderChanged( int )));
+}
+
+KoBirdEyePanel::~KoBirdEyePanel()
+{
 }
 
 void KoBirdEyePanel::setZoom(int zoom)
@@ -187,18 +195,18 @@ void KoBirdEyePanel::cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos)
     m_page->txtY->setText(QString("%L1").arg(ypos, 5));
 }
 
-KoBirdEyePanel::~KoBirdEyePanel()
-{
-}
-
 void KoBirdEyePanel::setThumbnailProvider(KoThumbnailAdapter * thumbnailProvider)
 {
     delete m_thumbnailProvider;
     m_thumbnailProvider = thumbnailProvider;
 }
 
-void KoBirdEyePanel::slotCanvasZoomChanged(int zoom)
+void KoBirdEyePanel::slotViewTransformationChanged()
 {
+    updateVisibleArea();
+    renderView();
+    m_page->view->update();
+    setZoom(qRound(m_canvas->zoomFactor() * 100));
 }
 
 void KoBirdEyePanel::slotUpdate(const QRect & r)
@@ -206,8 +214,8 @@ void KoBirdEyePanel::slotUpdate(const QRect & r)
     QRect updateRect = r;
 
     if (m_thumbnailProvider->pixelSize() != m_documentSize) {
-        fitThumbnailToView();
         m_documentSize = m_thumbnailProvider->pixelSize();
+        fitThumbnailToView();
         updateRect = QRect(0, 0, m_documentSize.width(), m_documentSize.height());
     }
 
@@ -215,30 +223,70 @@ void KoBirdEyePanel::slotUpdate(const QRect & r)
 
     if (!updateRect.isEmpty() && !m_documentSize.isEmpty()) {
 
-        Q_INT32 thumbnailLeft = (updateRect.left() * m_thumbnail.width()) / m_documentSize.width();
-        Q_INT32 thumbnailRight = ((updateRect.right() + 1) * m_thumbnail.width()) / m_documentSize.width();
-        Q_INT32 thumbnailTop = (updateRect.top() * m_thumbnail.height()) / m_documentSize.height();
-        Q_INT32 thumbnailBottom = ((updateRect.bottom() + 1) * m_thumbnail.height()) / m_documentSize.height();
+        QRect thumbnailRect = documentToThumbnail(KoRect::fromQRect(updateRect));
 
-        QRect thumbnailRect(thumbnailLeft, thumbnailTop, thumbnailRight - thumbnailLeft + 1, thumbnailBottom - thumbnailTop + 1);
-        thumbnailRect &= m_thumbnail.rect();
+        if (!thumbnailRect.isEmpty()) {
 
-        QImage thumbnailImage = m_thumbnailProvider->image(thumbnailRect, m_thumbnail.size());
+            QImage thumbnailImage = m_thumbnailProvider->image(thumbnailRect, m_thumbnail.size());
 
-        if (!thumbnailImage.isNull()) {
+            if (!thumbnailImage.isNull()) {
 
-            Q_ASSERT(thumbnailImage.size() == thumbnailRect.size());
+                Q_ASSERT(thumbnailImage.size() == thumbnailRect.size());
 
-            QPainter painter(&m_thumbnail);
+                QPainter painter(&m_thumbnail);
 
-            painter.fillRect(thumbnailRect, KGlobalSettings::baseColor());
-            painter.drawImage(thumbnailLeft, thumbnailTop, thumbnailImage);
+                painter.fillRect(thumbnailRect, colorGroup().mid());
+                painter.drawImage(thumbnailRect.x(), thumbnailRect.y(), thumbnailImage);
+            }
         }
     }
 
     renderView();
     m_page->view->update();
 }
+
+QRect KoBirdEyePanel::documentToThumbnail(const KoRect& docRect)
+{
+    if (docRect.isEmpty() || m_documentSize.isEmpty() || m_thumbnail.isNull()) {
+        return QRect();
+    }
+
+    Q_INT32 thumbnailLeft = static_cast<Q_INT32>((docRect.left() * m_thumbnail.width()) / m_documentSize.width());
+    Q_INT32 thumbnailRight = static_cast<Q_INT32>(((docRect.right() + 1) * m_thumbnail.width()) / m_documentSize.width());
+    Q_INT32 thumbnailTop = static_cast<Q_INT32>((docRect.top() * m_thumbnail.height()) / m_documentSize.height());
+    Q_INT32 thumbnailBottom = static_cast<Q_INT32>(((docRect.bottom() + 1) * m_thumbnail.height()) / m_documentSize.height());
+
+    QRect thumbnailRect(thumbnailLeft, thumbnailTop, thumbnailRight - thumbnailLeft + 1, thumbnailBottom - thumbnailTop + 1);
+    thumbnailRect &= m_thumbnail.rect();
+
+    return thumbnailRect;
+}
+
+KoRect KoBirdEyePanel::thumbnailToDocument(const QRect& thumbnailRect)
+{
+    if (thumbnailRect.isEmpty() || m_documentSize.isEmpty() || m_thumbnail.isNull()) {
+        return KoRect();
+    }
+
+    double docLeft = (static_cast<double>(thumbnailRect.left()) * m_documentSize.width()) / m_thumbnail.width();
+    double docRight = (static_cast<double>(thumbnailRect.right() + 1) * m_documentSize.width()) / m_thumbnail.width();
+    double docTop = (static_cast<double>(thumbnailRect.top()) * m_documentSize.height()) / m_thumbnail.height();
+    double docBottom = (static_cast<double>(thumbnailRect.bottom() + 1) * m_documentSize.height()) / m_thumbnail.height();
+
+    KoRect docRect(docLeft, docTop, docRight - docLeft + 1, docBottom - docTop + 1);
+    docRect &= KoRect(0, 0, m_documentSize.width(), m_documentSize.height());
+
+    return docRect;
+}
+
+QPoint KoBirdEyePanel::viewToThumbnail(const QPoint& viewPoint)
+{
+    int thumbnailX = (m_viewBuffer.width() - m_thumbnail.width()) / 2;
+    int thumbnailY = (m_viewBuffer.height() - m_thumbnail.height()) / 2;
+
+    return QPoint(viewPoint.x() - thumbnailX, viewPoint.y() - thumbnailY);
+}
+
 
 void KoBirdEyePanel::zoomMinus()
 {
@@ -248,78 +296,14 @@ void KoBirdEyePanel::zoomPlus()
 {
 }
 
-void KoBirdEyePanel::updateView()
-{
-    updateVisibleArea();
-}
-
-
 void KoBirdEyePanel::updateVisibleArea()
 {
-    /*
-    KoRect visibleRect = m_canvas->visibleArea();
-    QRect canvasSize = m_canvas->size();
-    QSize viewSize = m_page->view->size();
-    
-    int px0 = (viewSize.width() - canvasSize.width()) / 2;
-    int py0 = (viewSize.height() - canvasSize.width()) / 2;
-
-    int x = visibleRect.x() + px0;
-    int y = visibleRect.y() + py0;
-    int w = visibleRect.width();
-    int h = visibleRect.height();
-    
-    QRect r = m_thumbnailProvider->pixelSize();
-    QImage img = m_thumbnailProvider->image(r);
-    img = img.smoothScale(m_page->view->width(), m_page->view->height(), QImage::ScaleMin);
-    
-    QPainter painter(m_page->view);
-    
-    painter.fillRect(0, 0, m_page->view->width(), m_page->view->height(), KGlobalSettings::baseColor());
-    
-    int imgx = 0;
-    int imgy = 0;
-    if (img.width() < 150) imgx = (150 - img.width()) / 2;
-    if (img.height() < 150) imgy = (150 - img.height()) / 2;
-
-    painter.drawImage(imgx, imgy, img, 0, 0, img.width(), img.height());
-
-    painter.setPen(red);
-    painter.drawRect(x, y, w, h);
-    painter.setPen(red.light());
-    painter.drawRect(x-1, y-1, w+2, h+2);
-    painter.end();
-
-    m_visibleArea.setRect(x, y, w, h);
-    */
-
-//     QImage img = m_thumbnailProvider->image(QRect(0, 0, thumbnailWidth, thumbnailHeight), QSize(thumbnailWidth, thumbnailHeight));
-//
-//     QPainter painter(m_page->view);
-//
-//     painter.fillRect(0, 0, m_page->view->width(), m_page->view->height(), KGlobalSettings::baseColor());
-//
-//     int imgx = (m_page->view->width() - img.width()) / 2;
-//     int imgy = (m_page->view->height() - img.height()) / 2;
-//
-//     painter.drawImage(imgx, imgy, img, 0, 0, img.width(), img.height());
-//
-//     /*painter.setPen(red);
-//     painter.drawRect(x, y, w, h);
-//     painter.setPen(red.light());
-//     painter.drawRect(x-1, y-1, w+2, h+2);*/
-//     painter.end();
-
-    //m_visibleArea.setRect(x, y, w, h);
+    m_visibleAreaInThumbnail = documentToThumbnail(m_canvas->visibleArea());
 }
 
 
 bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 {
-    if (o == m_page->view && ev->type() == QEvent::Show) {
-        updateView();
-    }
-
     if (o == m_page->view && ev->type() == QEvent::Resize) {
         resizeViewEvent(static_cast<QResizeEvent *>(ev)->size());
     }
@@ -329,133 +313,226 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
     }
 
     if (o == m_page->view && ev->type() == QEvent::MouseMove) {
-        QMouseEvent* me = (QMouseEvent*)ev;
-        if (me->state() == LeftButton)
-            handleMouseMoveAction(me->pos());
-        else
-        handleMouseMove(me->pos());
 
-        m_lastPos = me->pos();
+        QMouseEvent* me = (QMouseEvent*)ev;
+        QPoint thumbnailPos = viewToThumbnail(me->pos());
+
+        if (m_dragging) {
+            handleMouseMoveAction(thumbnailPos);
+        } else {
+            handleMouseMove(thumbnailPos);
+        }
+
         return true;
     }
 
     if (o == m_page->view && ev->type() == QEvent::MouseButtonPress) {
+
         QMouseEvent* me = (QMouseEvent*)ev;
+        QPoint thumbnailPos = viewToThumbnail(me->pos());
+
         if (me->button() == LeftButton) {
-            handleMousePress(me->pos());
+            handleMousePress(thumbnailPos);
         }
+
+        return true;
+    }
+
+    if (o == m_page->view && ev->type() == QEvent::MouseButtonRelease) {
+
+        QMouseEvent* me = (QMouseEvent*)ev;
+
+        if (me->button() == LeftButton) {
+            m_dragging = false;
+        }
+
         return true;
     }
 
     return m_page->eventFilter(o, ev);
 }
 
+KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(QPoint p)
+{
+    QRect left = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
+    QRect right = QRect(m_visibleAreaInThumbnail.right()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
+    QRect top = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.top()-1, m_visibleAreaInThumbnail.width()+2, 3);
+    QRect bottom = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.bottom()-1, m_visibleAreaInThumbnail.width()+2, 3);
+
+    if (left.contains(p)) {
+        return DragHandleLeft;
+    }
+
+    if (right.contains(p)) {
+        return DragHandleRight;
+    }
+
+    if (top.contains(p)) {
+        return DragHandleTop;
+    }
+
+    if (bottom.contains(p)) {
+        return DragHandleBottom;
+    }
+
+    if (m_visibleAreaInThumbnail.contains(p)) {
+        return DragHandleCentre;
+    }
+
+    return DragHandleNone;
+}
 
 void KoBirdEyePanel::handleMouseMove(QPoint p)
 {
-    m_handlePress = true;
+    QCursor cursor;
 
-    QRect r1 = QRect(m_visibleArea.x()-1, m_visibleArea.y()-1, 3, m_visibleArea.height()+2);
-    if (r1.contains(p)) {
-        m_page->view->setCursor(sizeHorCursor);
-        m_aPos = AlignLeft;
-        return;
+    switch (dragHandleAt(p)) {
+    case DragHandleLeft:
+    case DragHandleRight:
+        cursor = Qt::sizeHorCursor;
+        break;
+    case DragHandleTop:
+    case DragHandleBottom:
+        cursor = Qt::sizeVerCursor;
+        break;
+    case DragHandleCentre:
+        cursor = Qt::sizeAllCursor;
+        break;
+    default:
+    case DragHandleNone:
+        if (m_thumbnail.rect().contains(p)) {
+            cursor = Qt::PointingHandCursor;
+        } else {
+            cursor = Qt::arrowCursor;
+        }
+        break;
     }
 
-    r1.moveBy(m_visibleArea.width(),0);
-    if (r1.contains(p)) {
-        m_page->view->setCursor(sizeHorCursor);
-        m_aPos = AlignRight;
-        return;
-    }
-
-    QRect r2 = QRect(m_visibleArea.x()-1, m_visibleArea.y()-1, m_visibleArea.width()+2, 3);
-    if (r2.contains(p)) {
-        m_page->view->setCursor(sizeVerCursor);
-        m_aPos = AlignTop;
-        return;
-    }
-
-    r2.moveBy(0, m_visibleArea.height());
-    
-    if (r2.contains(p)) {
-        m_page->view->setCursor(sizeVerCursor);
-        m_aPos = AlignBottom;
-        return;
-    }
-
-    if (m_visibleArea.contains(p)) {
-        m_page->view->setCursor(sizeAllCursor);
-        m_aPos = AlignCenter;
-        return;
-    }
-
-    m_page->view->setCursor(arrowCursor);
-    m_handlePress = false;
-    
+    m_page->view->setCursor(cursor);
 }
 
 void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
 {
-    if (!m_handlePress)
-        return;
+    if (m_dragging) {
 
-    p -= m_lastPos;
+        Q_INT32 dx = p.x() - m_lastDragPos.x();
+        Q_INT32 dy = p.y() - m_lastDragPos.y();
 
-#if 0
-    if (m_aPos == AlignCenter) {
-        double zy = m_pView->zoomHandler()->zoomedResolutionY() / m_zoomHandler->zoomedResolutionY();
-        double zx = m_pView->zoomHandler()->zoomedResolutionX() / m_zoomHandler->zoomedResolutionX();
-        m_pCanvas->setUpdatesEnabled(false);
-        m_pCanvas->scrollDx(-(int)(p.x()*zx));
-        m_pCanvas->scrollDy(-(int)(p.y()*zy));
-        m_pCanvas->setUpdatesEnabled(true);
-        return;
-    }
-    double dx = m_zoomHandler->unzoomItX(p.x());
-    double dy = m_zoomHandler->unzoomItY(p.y());
+        m_lastDragPos = p;
 
-    QRect vr = m_canvas->visibleArea();
-    if (m_aPos == AlignRight) {
-        vr.setWidth(QMAX(10.0, vr.width() + dx));
-        m_canvas->setVisibleAreaByWidth(vr);
-    }
-    else if (m_aPos == AlignLeft) {
-        vr.setX(vr.x() + dx);
-        vr.setWidth(QMAX(10.0, vr.width() - dx));
-        m_pCanvas->setVisibleAreaByWidth(vr);
-    }
-    else if (m_aPos == AlignTop) {
-        vr.setY(vr.y() + dy);
-        vr.setHeight(QMAX(10.0 ,vr.height() - dy));
-        m_pCanvas->setVisibleAreaByHeight(vr);
-    }
-    else if (m_aPos == AlignBottom) {
-        vr.setHeight(QMAX(10.0 ,vr.height() + dy));
-        m_pCanvas->setVisibleAreaByHeight(vr);
-    }
+        QRect thumbnailRect = m_visibleAreaInThumbnail;
 
-#endif
-    
+        switch (m_dragHandle) {
+        case DragHandleLeft: {
+            thumbnailRect.setLeft(thumbnailRect.left()+dx);
+            break;
+        }
+        case DragHandleRight: {
+            thumbnailRect.setRight(thumbnailRect.right()+dx);
+            break;
+        }
+        case DragHandleTop: {
+            thumbnailRect.setTop(thumbnailRect.top()+dy);
+            break;
+        }
+        case DragHandleBottom: {
+            thumbnailRect.setBottom(thumbnailRect.bottom()+dy);
+            break;
+        }
+        case DragHandleCentre: {
+            thumbnailRect.moveBy(dx, dy);
+            break;
+        }
+        default:
+        case DragHandleNone:
+            break;
+        }
+
+        makeThumbnailRectVisible(thumbnailRect);
+    }
 }
 
 void KoBirdEyePanel::handleMousePress(QPoint p)
 {
-    if (m_handlePress)
+    if (!m_dragging) {
+
+        enumDragHandle dragHandle = dragHandleAt(p);
+
+        if (dragHandle == DragHandleNone) {
+            if (m_thumbnail.rect().contains(p)) {
+    
+                // Snap visible area centre to p and begin a centre drag.
+    
+                QRect thumbnailRect = m_visibleAreaInThumbnail;
+                thumbnailRect.moveCenter(p);
+                makeThumbnailRectVisible(thumbnailRect);
+    
+                m_dragHandle = DragHandleCentre;
+                m_page->view->setCursor(Qt::sizeAllCursor);
+                m_dragging = true;
+            }
+        } else {
+            m_dragHandle = dragHandle;
+            m_dragging = true;
+        }
+        m_lastDragPos = p;
+    }
+}
+
+void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
+{
+    if (r.isEmpty()) {
         return;
-#if 0
-    QSize s1 = m_page->view->size();
-    KoPageLayout pl = m_pView->activePage()->paperLayout();
-    int pw = m_zoomHandler->zoomItX(pl.ptWidth);
-    int ph = m_zoomHandler->zoomItY(pl.ptHeight);
-    int px0 = (s1.width()-pw)/2;
-    int py0 = (s1.height()-ph)/2;
+    }
 
-    double x = m_zoomHandler->unzoomItX(p.x() - px0);
-    double y = m_zoomHandler->unzoomItY(p.y() - py0);
+    QRect thumbnailRect = r;
 
-    m_canvas->setViewCenterPoint(KoPoint(x,y));
-#endif    
+    if (thumbnailRect.left() < m_thumbnail.rect().left()) {
+        thumbnailRect.moveLeft(m_thumbnail.rect().left());
+    }
+    if (thumbnailRect.right() > m_thumbnail.rect().right()) {
+        thumbnailRect.moveRight(m_thumbnail.rect().right());
+    }
+    if (thumbnailRect.top() < m_thumbnail.rect().top()) {
+        thumbnailRect.moveTop(m_thumbnail.rect().top());
+    }
+    if (thumbnailRect.bottom() > m_thumbnail.rect().bottom()) {
+        thumbnailRect.moveBottom(m_thumbnail.rect().bottom());
+    }
+
+    if (thumbnailRect.width() > m_thumbnail.rect().width()) {
+        thumbnailRect.setLeft(m_thumbnail.rect().left());
+        thumbnailRect.setRight(m_thumbnail.rect().right());
+    }
+    if (thumbnailRect.height() > m_thumbnail.rect().height()) {
+        thumbnailRect.setTop(m_thumbnail.rect().top());
+        thumbnailRect.setBottom(m_thumbnail.rect().bottom());
+    }
+
+    double zoomFactor = m_canvas->zoomFactor();
+
+    if (thumbnailRect.size() == m_visibleAreaInThumbnail.size()) {
+        // No change to zoom
+    } else if (thumbnailRect.width() != m_visibleAreaInThumbnail.width()) {
+
+        Q_ASSERT(thumbnailRect.height() == m_visibleAreaInThumbnail.height());
+
+        zoomFactor *= static_cast<double>(m_visibleAreaInThumbnail.width()) / thumbnailRect.width();
+    } else {
+
+        Q_ASSERT(thumbnailRect.width() == m_visibleAreaInThumbnail.width());
+
+        zoomFactor *= static_cast<double>(m_visibleAreaInThumbnail.height()) / thumbnailRect.height();
+    }
+
+    if (zoomFactor < m_zoomListener->getMinZoom()) {
+        zoomFactor = m_zoomListener->getMinZoom();
+    } else if (zoomFactor > m_zoomListener->getMaxZoom()) {
+        zoomFactor = m_zoomListener->getMaxZoom();
+    }
+
+    KoRect docRect = thumbnailToDocument(thumbnailRect);
+    m_zoomListener->zoomTo(docRect.center().x(), docRect.center().y(), zoomFactor);
 }
 
 void KoBirdEyePanel::resizeViewEvent(QSize size)
@@ -475,19 +552,22 @@ void KoBirdEyePanel::fitThumbnailToView()
         thumbnailWidth = 0;
         thumbnailHeight = 0;
     } else {
-        double xScale = double(m_page->view->width()) / docRect.width();
-        double yScale = double(m_page->view->height()) / docRect.height();
+        const int thumbnailBorderPixels = 4;
+
+        double xScale = double(m_page->view->contentsRect().width() - thumbnailBorderPixels) / docRect.width();
+        double yScale = double(m_page->view->contentsRect().height() - thumbnailBorderPixels) / docRect.height();
 
         if (xScale < yScale) {
-            thumbnailWidth = m_page->view->width();
+            thumbnailWidth = m_page->view->contentsRect().width() - thumbnailBorderPixels;
             thumbnailHeight = Q_INT32(ceil(docRect.height() * xScale));
         } else {
             thumbnailWidth = Q_INT32(ceil(docRect.width() * yScale));
-            thumbnailHeight = m_page->view->height();
+            thumbnailHeight = m_page->view->contentsRect().height() - thumbnailBorderPixels;
         }
     }
 
     m_thumbnail.resize(thumbnailWidth, thumbnailHeight);
+    updateVisibleArea();
 }
 
 void KoBirdEyePanel::renderView()
@@ -496,9 +576,11 @@ void KoBirdEyePanel::renderView()
 
     if (!m_viewBuffer.isNull()) {
 
+        updateVisibleArea();
+
         QPainter painter(&m_viewBuffer);
 
-        painter.fillRect(0, 0, m_viewBuffer.width(), m_viewBuffer.height(), KGlobalSettings::baseColor());
+        painter.fillRect(0, 0, m_viewBuffer.width(), m_viewBuffer.height(), colorGroup().mid());
 
         if (!m_thumbnail.isNull()) {
 
@@ -506,16 +588,18 @@ void KoBirdEyePanel::renderView()
             int thumbnailY = (m_viewBuffer.height() - m_thumbnail.height()) / 2;
 
             painter.drawPixmap(thumbnailX, thumbnailY, m_thumbnail);
+
+            painter.setPen(Qt::red);
+            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 1, 
+                             thumbnailY + m_visibleAreaInThumbnail.y() - 1, 
+                             m_visibleAreaInThumbnail.width() + 2, 
+                             m_visibleAreaInThumbnail.height() + 2);
+            painter.setPen(Qt::red.light());
+            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 2, 
+                             thumbnailY + m_visibleAreaInThumbnail.y() - 2, 
+                             m_visibleAreaInThumbnail.width() + 4, 
+                             m_visibleAreaInThumbnail.height() + 4);
         }
-
-        /*painter.setPen(red);
-        painter.drawRect(x, y, w, h);
-        painter.setPen(red.light());
-        painter.drawRect(x-1, y-1, w+2, h+2);*/
-        painter.end();
-
-        //m_visibleArea.setRect(x, y, w, h);
-
     }
 }
 

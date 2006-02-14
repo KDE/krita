@@ -623,7 +623,7 @@ void KisView::setupActions()
 
     // image actions
     m_imgFlatten = new KAction(i18n("&Flatten image"), "Ctrl+Shift+E", this, SLOT(flattenImage()), actionCollection(), "flatten_image");
-    m_imgMergeLayer = new KAction(i18n("&Merge Layer"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
 
     // setting actions
     KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");

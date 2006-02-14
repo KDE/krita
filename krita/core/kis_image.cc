@@ -1121,37 +1121,25 @@ void KisImage::flatten()
 }
 
 
-void KisImage::mergeLayer(KisLayerSP /*l*/)
+void KisImage::mergeLayer(KisLayerSP layer)
 {
-/*
-    vKisLayerSP beforeLayers = m_layers;
+    KisPaintLayer *player = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
+    Q_CHECK_PTR(player);
 
-    KisLayerSP dst = new KisLayer(this, l -> name(), OPACITY_OPAQUE);
-    Q_CHECK_PTR(dst);
+    QRect rc = layer->extent() | layer->nextSibling()->extent();
 
-    KisFillPainter painter(dst.data());
+    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
-    KisMerge<All, All> visitor(this);
-    visitor(painter, layer(index(l) + 1));
-    visitor(painter, l);
+    //Abuse the merge visitor to only merge two layers (if either are groups they'll recursively merge)
+    KisMergeVisitor visitor(this, player->paintDevice(), rc);
+    layer->nextSibling()->accept(visitor);
+    layer->accept(visitor);
 
-    int insertIndex = -1;
+    removeLayer(layer->nextSibling());
+    addLayer(player, layer->parent(), layer);
+    removeLayer(layer);
 
-    if (visitor.insertMergedAboveLayer() != 0) {
-        insertIndex = index(visitor.insertMergedAboveLayer());
-    }
-
-    add(dst, insertIndex);
-
-    notifyLayersChanged();
-    notify();
-
-    if (m_adapter && m_adapter -> undo())
-    {
-        m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, beforeLayers, m_layers, i18n("&Merge Layers")));
-//XXX fix name after string freeze
-    }
-*/
+    undoAdapter()->endMacro();
 }
 
 

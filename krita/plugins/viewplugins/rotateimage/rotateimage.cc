@@ -127,7 +127,7 @@ void RotateImage::slotRotateLayer()
     DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
-    dlgRotateImage -> setCaption("Rotate Layer");
+    dlgRotateImage -> setCaption(i18n("Rotate Layer"));
 
     if (dlgRotateImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angle = dlgRotateImage -> angle();

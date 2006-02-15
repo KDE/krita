@@ -70,7 +70,7 @@ QString KisSobelFilterConfiguration::toString()
     return KisFilterConfiguration::toString();
 }
 
-KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", "&Sobel...")
+KisSobelFilter::KisSobelFilter() : KisFilter(id(), "edge", i18n("&Sobel..."))
 {
 }
 

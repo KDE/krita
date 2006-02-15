@@ -106,7 +106,7 @@ void ShearImage::slotShearLayer()
     DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
-    dlgShearImage -> setCaption("Shear Layer");
+    dlgShearImage -> setCaption(i18n("Shear Layer"));
 
     if (dlgShearImage -> exec() == QDialog::Accepted) {
                 Q_INT32 angleX = dlgShearImage -> angleX();

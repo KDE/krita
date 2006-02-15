@@ -56,7 +56,7 @@
  * gravity, viscosity and absorbency.
  *
  */
-KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", "&Wet & Sticky paint engine...")
+KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", i18n("&Wet & Sticky paint engine..."))
 {
 }
 

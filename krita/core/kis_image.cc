@@ -620,9 +620,9 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
     if (w != width() || h != height()) {
         if (m_adapter && m_adapter -> undo()) {
             if (cropLayers)
-                m_adapter->beginMacro("Crop Image");
+                m_adapter->beginMacro(i18n("Crop Image"));
             else
-                m_adapter -> beginMacro("Resize Image");
+                m_adapter -> beginMacro(i18n("Resize Image"));
 
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
         }
@@ -663,7 +663,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
     if (w != width() || h != height()) {
 
         if (m_adapter && m_adapter -> undo()) {
-            m_adapter->beginMacro("Scale image");
+            m_adapter->beginMacro(i18n("Scale Image"));
         }
 
         KisScaleVisitor visitor (this, sx, sy, progress, filterStrategy);

@@ -51,7 +51,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "blur", "&Pixelize...")
+KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), "blur", i18n("&Pixelize..."))
 {
 }
 

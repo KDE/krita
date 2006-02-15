@@ -21,6 +21,8 @@
 #ifndef KIS_ZOOM_TOOL_H_
 #define KIS_ZOOM_TOOL_H_
 
+#include <qtimer.h>
+
 #include "kis_tool_non_paint.h"
 
 #include "kis_tool_factory.h"
@@ -47,6 +49,10 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
+
+    void activate();
+    void clear();
+
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
 
@@ -54,11 +60,17 @@ private:
     void paintOutline();
     void paintOutline(KisCanvasPainter& gc, const QRect& rc);
 
+private slots:
+    void slotTimer();
+
 private:
     KisCanvasSubject *m_subject;
     QPoint m_startPos;
     QPoint m_endPos;
     bool m_dragging;
+    QCursor m_plusCursor;
+    QCursor m_minusCursor;
+    QTimer m_timer;
 };
 
 

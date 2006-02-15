@@ -68,7 +68,10 @@ kritapics_DATA = \
         tool_freehand.png \
 	tool_text.png \
         openhand_cursor.xpm \
-        closedhand_cursor.xpm
+        closedhand_cursor.xpm \
+	tool_zoom_plus_cursor.png \
+	tool_zoom_minus_cursor.png
+
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

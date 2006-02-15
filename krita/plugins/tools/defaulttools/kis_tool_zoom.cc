@@ -19,6 +19,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -42,7 +43,10 @@ KisToolZoom::KisToolZoom()
     m_dragging = false;
     m_startPos = QPoint(0, 0);
     m_endPos = QPoint(0, 0);
-    setCursor(KisCursor::zoomCursor());
+    m_plusCursor = KisCursor::load("tool_zoom_plus_cursor.png", 8, 8);
+    m_minusCursor = KisCursor::load("tool_zoom_minus_cursor.png", 8, 8);
+    setCursor(m_plusCursor);
+    connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimer()));
 }
 
 KisToolZoom::~KisToolZoom()
@@ -75,11 +79,6 @@ void KisToolZoom::buttonPress(KisButtonPressEvent *e)
             m_endPos = e -> pos().floorQPoint();
             m_dragging = true;
         }
-        else if (e -> button() == Qt::RightButton) {
-
-            KisCanvasController *controller = m_subject -> canvasController();
-            controller -> zoomOut(e -> pos().floorX(), e -> pos().floorY());
-        }
     }
 }
 
@@ -105,10 +104,41 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
         QPoint delta = m_endPos - m_startPos;
 
         if (sqrt(delta.x() * delta.x() + delta.y() * delta.y()) < 10) {
-            controller -> zoomIn(m_endPos.x(), m_endPos.y());
+            if (e -> state() & Qt::ControlButton) {
+                controller -> zoomOut(m_endPos.x(), m_endPos.y());
+            } else {
+                controller -> zoomIn(m_endPos.x(), m_endPos.y());
+            }
         } else {
             controller -> zoomTo(QRect(m_startPos, m_endPos));
         }
+    }
+}
+
+void KisToolZoom::activate()
+{
+    super::activate();
+    m_timer.start(50);
+}
+
+void KisToolZoom::clear()
+{
+    m_timer.stop();
+}
+
+void KisToolZoom::slotTimer()
+{
+#if KDE_IS_VERSION(3,4,0)
+    int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
+#else
+    int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
+            |KApplication::ControlModifier|KApplication::Modifier1);
+#endif
+
+    if (state & Qt::ControlButton) {
+        m_subject->canvasController()->setCanvasCursor(m_minusCursor);
+    } else {
+        m_subject->canvasController()->setCanvasCursor(m_plusCursor);
     }
 }
 

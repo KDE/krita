@@ -104,6 +104,29 @@ void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
     dst[3] = dstK;
 }
 
+void KisCmykColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+    
+    Q_UINT8 * tmp = new Q_UINT8[nPixels * psize];
+    Q_UINT8 * tmpPtr = tmp;
+    memcpy(tmp, dst, nPixels * psize);
+    
+    KisAbstractColorSpace::applyAdjustment(src, dst, adj, nPixels);
+
+    // Copy the alpha, which lcms doesn't do for us, grumble.
+
+    while (nPixels--)
+    {
+        dst[4] = tmpPtr[4];
+
+        tmpPtr += psize;
+        dst += psize;
+    }
+
+    delete [] tmp;
+}
+
 QValueVector<KisChannelInfo *> KisCmykColorSpace::channels() const
 {
     return m_channels;
@@ -220,27 +243,7 @@ void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
             columns--;
             src += cmyk::MAX_CHANNEL_CMYKA;
             dst += cmyk::MAX_CHANNEL_CMYKA;
-            /*
-            if (src[PIXEL_CYAN] == 0
-                && src[PIXEL_MAGENTA] == 0
-                && src[PIXEL_YELLOW] == 0
-                && src[PIXEL_BLACK] == 0) {
-                // Skip; we don't put any new ink over the old.
-            } else if (opacity == OPACITY_OPAQUE) {
-                memcpy(dst, src, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
 
-            } else {
-
-                dst[PIXEL_CYAN] = UINT8_BLEND(src[PIXEL_CYAN], dst[PIXEL_CYAN], opacity);
-                dst[PIXEL_MAGENTA] = UINT8_BLEND(src[PIXEL_MAGENTA], dst[PIXEL_MAGENTA], opacity);
-                dst[PIXEL_YELLOW] = UINT8_BLEND(src[PIXEL_YELLOW], dst[PIXEL_YELLOW], opacity);
-                dst[PIXEL_BLACK] = UINT8_BLEND(src[PIXEL_BLACK], dst[PIXEL_BLACK], opacity);
-
-            }
-
-            columns--;
-            src += cmyk::MAX_CHANNEL_CMYKA;
-            dst += cmyk::MAX_CHANNEL_CMYKA;*/
         }
 
         rows--;

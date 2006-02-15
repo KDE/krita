@@ -19,6 +19,8 @@
 #include <config.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include LCMS_HEADER
 
 #include <qimage.h>
@@ -94,6 +96,33 @@ void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     dstPixel -> magenta = totalMagenta;
     dstPixel -> yellow = totalYellow;
     dstPixel -> black = totalBlack;
+}
+
+
+void KisCmykU16ColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+    
+    Q_UINT8 * tmp = new Q_UINT8[nPixels * psize];
+    Q_UINT8 * tmpPtr = tmp;
+    memcpy(tmp, dst, nPixels * psize);
+    
+    KisAbstractColorSpace::applyAdjustment(src, dst, adj, nPixels);
+
+    // Copy the alpha, which lcms doesn't do for us, grumble.
+
+    while (nPixels--)
+    {
+        Q_UINT16 *pixelAlphaSrc = reinterpret_cast<Q_UINT16 *>(tmpPtr + m_alphaPos);
+        Q_UINT16 *pixelAlphaDst = reinterpret_cast<Q_UINT16 *>(dst + m_alphaPos);
+        
+        *pixelAlphaDst= *pixelAlphaSrc;
+        
+        tmpPtr += psize;
+        dst += psize;
+    }
+
+    delete [] tmp;
 }
 
 QValueVector<KisChannelInfo *> KisCmykU16ColorSpace::channels() const
@@ -368,8 +397,8 @@ void KisCmykU16ColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
             Q_UINT16 dstColor = dst[channel];
 
             srcColor = QMIN(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
-            srcColor = CLAMP(UINT16_MAX - srcColor, 0u, UINT16_MAX);
-
+            if (srcColor > UINT16_MAX - srcColor) srcColor = UINT16_MAX;
+            
             Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;

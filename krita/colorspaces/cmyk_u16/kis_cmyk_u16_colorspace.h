@@ -58,7 +58,8 @@ public:
     virtual Q_UINT32 pixelSize() const;
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-
+    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels);
+    
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:

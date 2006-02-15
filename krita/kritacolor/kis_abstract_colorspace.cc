@@ -350,15 +350,13 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 **transferValues)
 {
     LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[nColorChannels()+1];
-    transferFunctions[0] = cmsBuildGamma(256, 1.0);
-    transferFunctions[1] = cmsBuildGamma(256, 1.0);
-    transferFunctions[2] = cmsBuildGamma(256, 1.0);
-    transferFunctions[3] = cmsBuildGamma(256, 1.0);
 
-    for(uint ch=0; ch <nColorChannels(); ch++)
+    for(uint ch=0; ch < nColorChannels(); ch++) {
+        transferFunctions[ch] = cmsBuildGamma(256, 1.0);
         for(uint i =0; i < 256; i++)
             transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
-
+    }
+    
     KisColorAdjustment *adj = new KisColorAdjustment;
     adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
     adj->profiles[1] = NULL;

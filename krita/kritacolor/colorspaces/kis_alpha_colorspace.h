@@ -34,7 +34,7 @@ public:
     virtual ~KisAlphaColorSpace();
 
 public:
-    virtual bool willDegrade(ColorSpaceIndependence independence)
+    virtual bool willDegrade(ColorSpaceIndependence)
         {
             return false;
         };

@@ -93,7 +93,7 @@ Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
     return 0;
 }
 
-Kross::Api::Object::Ptr Wavelet::getDepth(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr Wavelet::getDepth(Kross::Api::List::Ptr /*args*/)
 {
     return new Kross::Api::Variant(m_wavelet->depth);
 }

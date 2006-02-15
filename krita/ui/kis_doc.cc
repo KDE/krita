@@ -1049,8 +1049,6 @@ Q_INT32 KisDoc::undoLimit() const
     return m_cmdHistory -> undoLimit();
 }
 
-
-
 void KisDoc::setUndoLimit(Q_INT32 limit)
 {
     m_cmdHistory -> setUndoLimit(limit);

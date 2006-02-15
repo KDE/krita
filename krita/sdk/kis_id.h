@@ -73,7 +73,6 @@ public:
     friend inline bool operator<(const KisID &, const KisID &);
     friend inline bool operator>(const KisID &, const KisID &);
 
-
 private:
 
     QString m_id;

@@ -57,8 +57,6 @@ public:
                           QWidget *parent = 0,
                           const char *name = 0);
 
-    virtual ~KisDlgAdjLayerProps() {};
-
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 

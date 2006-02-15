@@ -129,8 +129,8 @@ void KisToolDuplicate::move(KisMoveEvent *e)
     Q_INT32 y;
 
     // like KisPaintOp::splitCoordinate
-    x = (e -> x() < 0) ? e -> x() - 1 : e -> x();
-    y = (e -> y() < 0) ? e -> y() - 1 : e -> y();
+    x = (Q_INT32)((e -> x() < 0) ? e -> x() - 1 : e -> x());
+    y = (Q_INT32)((e -> y() < 0) ? e -> y() - 1 : e -> y());
     srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
 
     paintOutline(srcPos);

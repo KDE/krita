@@ -82,7 +82,7 @@ class Wavelet : public Kross::Api::Class<Wavelet>
         KisMathToolbox::KisWavelet* wavelet() { return m_wavelet; }
     private:
         KisMathToolbox::KisWavelet* m_wavelet;
-        int m_numCoeff;
+        uint m_numCoeff;
 };
 
 }

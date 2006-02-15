@@ -67,7 +67,6 @@ void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
 {
     /* XXX: Is this like a convolution operation? BSAR */
-    int x, y;
     int width = r.width();
     int height = r.height();
 
@@ -309,12 +308,12 @@ void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const 
 
             wetPixFromDouble(adsorb, &wet_bot);
 
-            paint -> rd *= (1 - ads);
-            paint -> rw *= (1 - ads);
-            paint -> gd *= (1 - ads);
-            paint -> gw *= (1 - ads);
-            paint -> bd *= (1 - ads);
-            paint -> bw *= (1 - ads);
+            paint -> rd *= (Q_UINT16)(1 - ads);
+            paint -> rw *= (Q_UINT16)(1 - ads);
+            paint -> gd *= (Q_UINT16)(1 - ads);
+            paint -> gw *= (Q_UINT16)(1 - ads);
+            paint -> bd *= (Q_UINT16)(1 - ads);
+            paint -> bw *= (Q_UINT16)(1 - ads);
 
             *(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
 

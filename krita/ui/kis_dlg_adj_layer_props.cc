@@ -81,7 +81,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     kdDebug() << "Paint device: " << dev << "\n";
 
-
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
     QVBoxLayout * layout = new QVBoxLayout(page, 0, 6);

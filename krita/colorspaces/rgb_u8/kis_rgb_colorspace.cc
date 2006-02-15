@@ -217,8 +217,7 @@ void KisRgbColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade,
 
 Q_UINT8 KisRgbColorSpace::intensity8(const Q_UINT8 * src) const
 {
-        return (Q_UINT8)(src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5;
-
+    return (Q_UINT8)((src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5);
 }
 
 
@@ -714,7 +713,7 @@ void KisRgbColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                     Q_UINT8 dstColor = dst[channel];
 
                     srcColor = QMIN(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
-                    srcColor = CLAMP(UINT8_MAX - srcColor, 0, UINT8_MAX);
+                    if (UINT8_MAX - srcColor > UINT8_MAX) srcColor = UINT8_MAX;
 
                     Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 

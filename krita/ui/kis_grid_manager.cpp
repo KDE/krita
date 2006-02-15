@@ -170,13 +170,14 @@ void KisGridManager::drawGrid(QRect wr, QPainter *p, bool openGL)
 void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
 {
     KisConfig cfg;
+    
     Q_UINT32 offsetx = cfg.getGridOffsetX();
     Q_UINT32 offsety = cfg.getGridOffsetY();
     Q_UINT32 hspacing = cfg.getGridHSpacing();
     Q_UINT32 vspacing = cfg.getGridVSpacing();
     Q_UINT32 subdivision = cfg.getGridSubdivisions() - 1;
-    double ihspsub = hspacing / (double)subdivision;
-    double ivspsub = hspacing / (double)subdivision;
+    //double ihspsub = hspacing / (double)subdivision;
+    //double ivspsub = hspacing / (double)subdivision;
 
     Q_INT32 imageWidth = image->width();
     Q_INT32 imageHeight = image->height();
@@ -185,7 +186,7 @@ void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
     QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
     Q_UINT32 i = 0;
-    for( Q_UINT32 x = offsetx; x <= (Q_UINT32)wr.right(); x +=hspacing)
+    for( Q_INT32 x = offsetx; x <= wr.right(); x +=hspacing)
     {
         if( i == subdivision )
         {
@@ -204,7 +205,7 @@ void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
     }
     // Draw horizontal line
     i = 0;
-    for( Q_UINT32 y = offsety; y <= (Q_UINT32)wr.bottom(); y +=vspacing)
+    for( Q_INT32 y = offsety; y <= wr.bottom(); y +=vspacing)
     {
         if( i == subdivision )
         {

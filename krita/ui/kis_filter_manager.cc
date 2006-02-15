@@ -212,18 +212,18 @@ bool KisFilterManager::apply()
         delete m_lastFilterConfig;
         cmd -> unexecute();
         delete cmd;
+        m_lastFilter->disableProgress();
+        QApplication::restoreOverrideCursor();
         return false;
+
     } else {
         img->notify();
         m_doc->setModified(true);
         img->undoAdapter()->addCommand(cmd);
+        m_lastFilter->disableProgress();
+        QApplication::restoreOverrideCursor();
+        return true;
     }
-
-    m_lastFilter->disableProgress();
-
-    QApplication::restoreOverrideCursor();
-
-    return true;
 }
 
 void KisFilterManager::slotApplyFilter(int i)

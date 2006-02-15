@@ -176,41 +176,41 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
     emit notifyProgressDone();
 }
 
-void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface * progressDisplay)
+void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KisProgressDisplayInterface *)
 {
-    Q_INT32          width, height;
-    Q_INT32          bytes;
-    Q_UINT8       *dest, *dp;
-    Q_UINT8       *src, *sp, *sp_p, *sp_m;
-    Q_INT32         *buf = NULL;
-    Q_INT32         *bb;
-    double       n_p[5], n_m[5];
-    double       d_p[5], d_m[5];
-    double       bd_p[5], bd_m[5];
-    double      *val_p = NULL;
-    double      *val_m = NULL;
-    double      *vp, *vm;
-    Q_INT32          x1, y1, x2, y2;
-    Q_INT32          i, j;
-    Q_INT32          row, col, b;
-    Q_INT32          terms;
-    double       progress, max_progress;
-    Q_INT32          initial_p[4];
-    Q_INT32          initial_m[4];
-    double       std_dev;
-    Q_INT32          pixels;
-    Q_INT32          total = 1;
-    Q_INT32          start, end;
-    Q_INT32         *curve;
-    Q_INT32         *sum = NULL;
-    Q_INT32          val;
-    Q_INT32          length;
-    Q_INT32          initial_pp, initial_mm;
+    Q_INT32 width, height;
+    Q_INT32 bytes;
+    Q_UINT8 *dest, *dp;
+    Q_UINT8 *src, *sp, *sp_p, *sp_m;
+    Q_INT32 *buf = NULL;
+    Q_INT32 *bb;
+    double n_p[5], n_m[5];
+    double d_p[5], d_m[5];
+    double bd_p[5], bd_m[5];
+    double *val_p = NULL;
+    double *val_m = NULL;
+    double *vp, *vm;
+    Q_INT32 x1, y1, x2, y2;
+    Q_INT32 i, j;
+    Q_INT32 row, col, b;
+    Q_INT32 terms;
+    double progress, max_progress;
+    Q_INT32 initial_p[4];
+    Q_INT32 initial_m[4];
+    double std_dev;
+    Q_INT32 pixels;
+    Q_INT32 total = 1;
+    Q_INT32 start, end;
+    Q_INT32 *curve;
+    Q_INT32 *sum = NULL;
+    Q_INT32 val;
+    Q_INT32 length;
+    Q_INT32 initial_pp, initial_mm;
 
-    x1 = rect.x() - horz;
-    y1 = rect.y() - vert;
-    width = rect.width() + 2 * horz;
-    height = rect.height() + 2 * vert;
+    x1 = (Q_INT32)(rect.x() - horz);
+    y1 = (Q_INT32)(rect.y() - vert);
+    width = (Q_INT32)(rect.width() + 2 * horz);
+    height = (Q_INT32)(rect.height() + 2 * vert);
     x2 = x1 + width;
     y2 = y1 + height;
 
@@ -380,12 +380,10 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
 
             separate_alpha (src, height, bytes);
 
-            //gimp_pixel_rgn_set_col (&dest_rgn, dest, col + x1, y1, height);
             dstDev->writeBytes(dest, col + x1, y1, 1, height);
 
             progress += height * vert;
-            //if ((col % 5) == 0) gimp_progress_update (progress / max_progress);
-            if ((col % 5) == 0) emit notifyProgress( (progress * 100) / max_progress );
+            if ((col % 5) == 0) emit notifyProgress( (Q_UINT32)((progress * 100) / max_progress));
         }
     }
 
@@ -538,7 +536,7 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
 
             progress += width * horz;
             //if ((row % 5) == 0) gimp_progress_update (progress / max_progress);
-            if ((row % 5) == 0) emit notifyProgress( (progress * 100) / max_progress );
+            if ((row % 5) == 0) emit notifyProgress( (Q_UINT32)((progress * 100) / max_progress ));
         }
     }
 
@@ -668,7 +666,7 @@ Q_INT32 * KisDropshadow::make_curve(double sigma, Q_INT32 *length)
     sigma2 = 2 * sigma * sigma;
     l = sqrt (-sigma2 * log (1.0 / 255.0));
 
-    n = ceil (l) * 2;
+    n = (int)(ceil (l) * 2);
     if ((n % 2) == 0)
         n += 1;
 
@@ -729,8 +727,10 @@ void KisDropshadow::multiply_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes)
     for (i = 0; i < width * bytes; i += bytes)
     {
         alpha = buf[i + bytes - 1] * (1.0 / 255.0);
-        for (j = 0; j < bytes - 1; j++)
-            buf[i + j] *= alpha;
+        for (j = 0; j < bytes - 1; j++) {
+            double a = (double)(buf[i + j]) * alpha;
+            buf[i + j] = (Q_UINT8)a;
+        }
     }
 }
 
@@ -739,7 +739,7 @@ void KisDropshadow::separate_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes)
     Q_INT32   i, j;
     Q_UINT8 alpha;
     double recip_alpha;
-    Q_INT32    new_val;
+    Q_UINT32    new_val;
 
     for (i = 0; i < width * bytes; i += bytes)
     {
@@ -749,7 +749,7 @@ void KisDropshadow::separate_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes)
             recip_alpha = 255.0 / alpha;
             for (j = 0; j < bytes - 1; j++)
             {
-                new_val = buf[i + j] * recip_alpha;
+                new_val = (Q_UINT32)(buf[i + j] * recip_alpha);
                 buf[i + j] = MIN (255, new_val);
             }
         }

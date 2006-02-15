@@ -85,14 +85,19 @@ KritaFiltersGallery::~KritaFiltersGallery()
 
 void KritaFiltersGallery::showFiltersGalleryDialog()
 {
-    KisDlgFiltersGallery dlg(m_view,m_view);
-    if(dlg.exec())
+    KisDlgFiltersGallery dlg(m_view, m_view);
+    if (dlg.exec())
     {
+        QApplication::setOverrideCursor( Qt::waitCursor );
+
         KisFilter* filter = dlg.currentFilter();
         if(filter )
         {
             KisImageSP img = m_view->canvasSubject()->currentImg();
+            if (!img) return;
+            
             KisPaintDeviceSP dev = img->activeDevice();
+            if (!dev) return;
             QRect r1 = dev -> extent();
             QRect r2 = img -> bounds();
 
@@ -103,8 +108,15 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 rect = rect.intersect(r3);
             }
             KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget());
+            
+            filter->enableProgress();
+            m_view->canvasSubject()->progressDisplay()->setSubject(filter, true, true);
+            filter->setProgressDisplay(m_view->canvasSubject()->progressDisplay());
+            
             KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
+
             filter->process(dev,dev, config, rect);
+            
             delete config;
             if (filter->cancelRequested()) {
                 cmd -> unexecute();
@@ -115,6 +127,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             }
             filter->disableProgress();
             QApplication::restoreOverrideCursor();
+
         }
     }
 }

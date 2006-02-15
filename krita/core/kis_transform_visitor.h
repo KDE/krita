@@ -39,8 +39,8 @@ class KisTransformVisitor : public KisLayerVisitor {
 
 public:
 
-    KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
-        double  xshear, double  yshear, double angle,
+    KisTransformVisitor(KisImageSP img, double  /*xscale*/, double  /*yscale*/,
+        double  /*xshear*/, double  /*yshear*/, double angle,
         Q_INT32  tx, Q_INT32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter) 
         : KisLayerVisitor()
         , m_tx(tx)

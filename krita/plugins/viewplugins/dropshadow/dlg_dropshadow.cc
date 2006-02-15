@@ -34,8 +34,8 @@
 #include "dlg_dropshadow.h"
 #include "wdg_dropshadow.h"
 
-DlgDropshadow::DlgDropshadow( const QString & imageCS,
-                          const QString & layerCS,
+DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
+                          const QString & /*layerCS*/,
                           QWidget *  parent,
                           const char * name)
     : super (parent, name, true, i18n("Drop Shadow"), Ok | Cancel, Ok)

@@ -74,28 +74,28 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
 {
     int v;
 
-    v = floor (8192.0 * src->rd + 0.5);
+    v = (int)floor (8192.0 * src->rd + 0.5);
     dst->rd = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->rw + 0.5);
+    v = (int)floor (8192.0 * src->rw + 0.5);
     dst->rw = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->gd + 0.5);
+    v = (int)floor (8192.0 * src->gd + 0.5);
     dst->gd = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->gw + 0.5);
+    v = (int)floor (8192.0 * src->gw + 0.5);
     dst->gw = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->bd + 0.5);
+    v = (int)floor (8192.0 * src->bd + 0.5);
     dst->bd = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->bw + 0.5);
+    v = (int)floor (8192.0 * src->bw + 0.5);
     dst->bw = CLAMP(v, 0, 65535);
 
-    v = floor (8192.0 * src->w + 0.5);
+    v = (int)floor (8192.0 * src->w + 0.5);
     dst->w = CLAMP(v, 0, 511);
 
-    v = floor (8192.0 * src->h + 0.5);
+    v = (int)floor (8192.0 * src->h + 0.5);
     dst->h = CLAMP(v, 0, 511);
 
 }
@@ -166,7 +166,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * /*profile*/)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -184,7 +184,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * pr
     // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile * profile)
+void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile * /*profile*/)
 {
     fromQColor(c, dst);
 }
@@ -194,34 +194,34 @@ Q_UINT8 KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/)
     return OPACITY_OPAQUE;
 }
 
-void KisWetColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisWetColorSpace::setAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/)
 {
 }
 
-void KisWetColorSpace::multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisWetColorSpace::multiplyAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/)
 {
 }
 
-void KisWetColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+void KisWetColorSpace::applyAlphaU8Mask(Q_UINT8 * /*pixels*/, Q_UINT8 * /*alpha*/, Q_INT32 /*nPixels*/)
 {
 }
 
-void KisWetColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+void KisWetColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * /*pixels*/, Q_UINT8 * /*alpha*/, Q_INT32 /*nPixels*/)
 {
 }
 
-Q_UINT8 KisWetColorSpace::scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
-{
-    return 0;
-}
-
-Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+Q_UINT8 KisWetColorSpace::scaleToU8(const Q_UINT8 * /*srcPixel*/, Q_INT32 /*channelPos*/)
 {
     return 0;
 }
 
+Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * /*srcPixel*/, Q_INT32 /*channelPos*/)
+{
+    return 0;
+}
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile)
+
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*profile*/)
 {
     Q_UINT8 * rgb = new Q_UINT8[3];
     Q_CHECK_PTR(rgb);
@@ -243,12 +243,12 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * prof
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 */*opacity*/, KisProfile * /*profile*/)
 {
     toQColor(src, c);
 }
 
-void KisWetColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+void KisWetColorSpace::mixColors(const Q_UINT8 **/*colors*/, const Q_UINT8 */*weights*/, Q_UINT32 /*nColors*/, Q_UINT8 */*dst*/) const
 {
 }
 
@@ -395,9 +395,9 @@ void KisWetColorSpace::wet_init_render_tab()
         if (i == 0)
             a = 0;
         else
-            a = floor (0xff00 / i + 0.5);
+            a = (int) floor (0xff00 / i + 0.5);
 
-        b = floor (0x8000 * exp (-d) + 0.5);
+        b = (int) floor (0x8000 * exp (-d) + 0.5);
         wet_render_tab[i] = (a << 16) | b;
     }
 

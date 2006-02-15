@@ -77,7 +77,7 @@ void KisCmbIDList::setCurrentText(const QString & s)
 
 void KisCmbIDList::slotIDActivated(int i)
 {
-    if (i > m_list.count()) return;
+    if ((uint)i > m_list.count()) return;
 
     emit activated(m_list[i]);
 
@@ -85,7 +85,7 @@ void KisCmbIDList::slotIDActivated(int i)
 
 void KisCmbIDList::slotIDHighlighted(int i)
 {
-    if (i > m_list.count()) return;
+    if ((uint)i > m_list.count()) return;
 
     emit highlighted(m_list[i]);
 

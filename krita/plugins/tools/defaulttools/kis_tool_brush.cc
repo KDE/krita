@@ -129,7 +129,7 @@ void KisToolBrush::move(KisMoveEvent *e) {
         paintOutline(e -> pos());
 }
 
-void KisToolBrush::leave(QEvent *e) {
+void KisToolBrush::leave(QEvent */*e*/) {
     m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
 }
 

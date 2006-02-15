@@ -34,7 +34,7 @@ public:
     KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbColorSpace();
 
-    virtual bool willDegrade(ColorSpaceIndependence independence)
+    virtual bool willDegrade(ColorSpaceIndependence)
         {
             return false;
         };

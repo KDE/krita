@@ -154,13 +154,13 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisColor origColor = m_painter -> paintColor();
 
     if (m_pressureOpacity)
-        m_painter -> setOpacity(origOpacity * info.pressure);
+        m_painter -> setOpacity((Q_INT8)(origOpacity * info.pressure));
 
     if (m_pressureDarken) {
         KisColor darkened = origColor;
         // Darken docs aren't really clear about what exactly the amount param can have as value...
         darkened.colorSpace() -> darken(origColor.data(), darkened.data(),
-                                        255  - 75 * info.pressure, false, 0.0, 1);
+            (Q_INT32)(255  - 75 * info.pressure), false, 0.0, 1);
         m_painter -> setPaintColor(darkened);
     }
 

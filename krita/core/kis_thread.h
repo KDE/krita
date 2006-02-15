@@ -19,7 +19,8 @@
 #ifndef KIS_THREAD_
 #define KIS_THREAD_
 
-#include "qthread.h"
+#include <qthread.h>
+#include <ksharedptr.h>
 
 /**
  * A KisThread is a QThread that can be set in the canceled state.
@@ -41,10 +42,10 @@ public:
      * previous state of paint devices etc, the thread itself just stops
      * as soon as possible.
      */
-    void cancel() { m_canceled = true; }
-    bool isCanceled() { return m_canceled; }
+    virtual void cancel() { m_canceled = true; }
+    virtual bool isCanceled() { return m_canceled; }
 
-private:
+protected:
     
     bool m_canceled;
 

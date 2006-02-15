@@ -257,10 +257,17 @@ public:
      */
     virtual QImage convertToQImage(KisProfile *  dstProfile, float exposure = 0.0f);
 
+    /**
+     * Creates a paint device thumbnail of the paint device, retaining the aspect ratio.
+     * The width and height of the returned device won't exceed \p maxw and \p maxw, but they may be smaller.
+     */
 
+    KisPaintDeviceSP createThumbnailDevice(Q_INT32 w, Q_INT32 h);
+            
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
+     * The colors are not corrected for display!
      */
     virtual QImage createThumbnail(Q_INT32 maxw, Q_INT32 maxh);
 

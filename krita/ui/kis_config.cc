@@ -33,7 +33,7 @@ namespace {
     const Q_INT32 IMG_DEFAULT_WIDTH = 512;
     const Q_INT32 IMG_DEFAULT_HEIGHT = 512;
     const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
-    const Q_INT32 DEFAULT_MAX_THREADS = 10;
+    const Q_INT32 DEFAULT_MAX_THREADS = 4;
     const Q_INT32 DEFAULT_MAX_TILES_MEM = 500; // 8192 kilobytes given 64x64 tiles with 32bpp
     const Q_INT32 DEFAULT_SWAPPINESS = 100;
     const Q_INT32 DEFAULT_PRESSURE_CORRECTION = 50;
@@ -310,7 +310,9 @@ void KisConfig::setDockerFontSize(float size)
 Q_UINT32 KisConfig::getGridMainStyle()
 {
     Q_UINT32 v = m_cfg->readNumEntry("gridmainstyle", 0);
-    return CLAMP( v, 0, 2);
+    if (v > 2)
+        v = 2;
+    return v;
 }
 
 void KisConfig::setGridMainStyle(Q_UINT32 v)
@@ -321,7 +323,8 @@ void KisConfig::setGridMainStyle(Q_UINT32 v)
 Q_UINT32 KisConfig::getGridSubdivisionStyle()
 {
     Q_UINT32 v = m_cfg->readNumEntry("gridsubdivisionstyle", 1);
-    return CLAMP( v, 0, 2);
+    if (v > 2) v = 2;
+    return v;
 }
 
 void KisConfig::setGridSubdivisionStyle(Q_UINT32 v)

@@ -38,6 +38,7 @@ class KisPreviewView;
 class QTimer;
 class KisFiltersIconViewItem;
 class KisFiltersListView;
+class KisThreadPool;
 
 class KisThumbnailDoneEvent : public QCustomEvent
 {
@@ -64,8 +65,11 @@ public:
                               KisPaintDeviceSP dev, const QRect & bounds,
                               KisProfile * profile);
 
+    ~KisFiltersThumbnailThread();
+    
     virtual void run();
     QPixmap pixmap();
+    void cancel();
 
 private:
     QIconView * m_parent;
@@ -85,9 +89,12 @@ public:
                             KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile);
 
     virtual ~KisFiltersIconViewItem();
-    inline KisID id() { return m_id; }
-    inline KisFilter* filter() { return m_filter; }
-    inline void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
+    KisID id() { return m_id; }
+    KisFilter* filter() { return m_filter; }
+    void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
+
+    void resetThread() { m_thread = 0; };
+    KisThread * thread() { return m_thread; }
     
 private:
     KisID m_id;
@@ -130,6 +137,7 @@ private:
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;
     KisProfile * m_profile;
+    KisThreadPool * threadPool;
 };
 
 #endif

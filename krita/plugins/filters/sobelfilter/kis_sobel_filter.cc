@@ -88,7 +88,7 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
 
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
-    y = CLAMP (y, 0, h - 1);
+    if (y > h -1) y = h -1;
     Q_UINT32 pixelSize = src -> pixelSize();
 
     src -> readBytes( data, x, y, w, 1 );
@@ -157,10 +157,10 @@ void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHo
                                    ((pr[negative] + 2 * cr[negative] + nr[negative]) -
                                     (pr[positive] + 2 * cr[positive] + nr[positive]))
                                    : 0);
-                    gradient = (doVertical && doHorizontal) ?
+                    gradient = (Q_INT32)((doVertical && doHorizontal) ?
                         (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
                         : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
-                           : (ROUND (QABS (horGradient + verGradient) / 4.0)));
+                        : (ROUND (QABS (horGradient + verGradient) / 4.0))));
 
                     *d++ = gradient;
                     if (gradient > 10) counter ++;

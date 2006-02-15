@@ -24,11 +24,11 @@ libkritaimage_la_SOURCES = kis_adjustment_layer.cc kis_alpha_mask.cc \
 	kis_selected_transaction.cc kis_selection.cc kis_strategy_move.cc kis_transaction.cc \
 	kis_transform_worker.cc kis_vec.cc kis_paint_device.cc kis_paint_device_iface.cc \
 	kis_paint_device_iface.skel kis_image_iface.cc kis_image_iface.skel kis_basic_math_toolbox.cpp \
-	kis_math_toolbox.cpp
+	kis_math_toolbox.cpp kis_thread_pool.cc
 
 noinst_HEADERS = kis_rotate_visitor.h kis_scale_visitor.h \
 	kis_selected_transaction.h kis_strategy_move.h kis_transform_worker.h kis_datamanager.h \
-	kis_filter_strategy.h kis_iteratorpixeltrait.h kis_merge_visitor.h kis_thread.h
+	kis_filter_strategy.h kis_iteratorpixeltrait.h kis_merge_visitor.h kis_thread.h kis_thread_pool.h
 
 include_HEADERS = \
     kis_adjustment_layer.h \

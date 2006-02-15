@@ -169,7 +169,7 @@ void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
     producerChanged(0);
 }
 
-HistogramDockerUpdater::HistogramDockerUpdater(QObject* parent, KisHistogramSP h, KisHistogramView* v,
+HistogramDockerUpdater::HistogramDockerUpdater(QObject* /*parent*/, KisHistogramSP h, KisHistogramView* v,
                                                KisAccumulatingHistogramProducer* p)
     : m_histogram(h), m_view(v), m_producer(p)
 {

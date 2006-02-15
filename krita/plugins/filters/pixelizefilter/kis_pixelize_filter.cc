@@ -83,10 +83,8 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 
     Q_INT32 pixelSize = src -> pixelSize();
     QMemArray<Q_INT32> average(  pixelSize );
-    Q_UINT8* bufRow;
-    Q_UINT8* buf;
+
     Q_INT32 count;
-    Q_INT32 rowstride;
 
     //calculate the total number of pixels
     Q_INT32 numX=0;
@@ -165,7 +163,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width") ) );

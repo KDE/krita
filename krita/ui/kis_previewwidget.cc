@@ -69,11 +69,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
 
-//     kToolBar1->insertButton("viewmag+",0, true, i18n("Zoom In"));
-//     connect(kToolBar1->getButton(0),SIGNAL(clicked()), this, SLOT(zoomIn()));
 
-//     kToolBar1->insertButton("viewmag-",1, true, i18n("Zoom Out"));
-//     connect(kToolBar1->getButton(1),SIGNAL(clicked()), this, SLOT(zoomOut()));
 
 /*    kToolBar1->insertLineSeparator();
     kToolBar1->insertButton("reload",2, true, i18n("Update"));

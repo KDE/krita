@@ -58,20 +58,20 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "decor", i18n("
 
 void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-        //read the filter configuration values from the KisFilterConfiguration object
-        Q_UINT32 radius = ((KisRoundCornersFilterConfiguration*)configuration)->radius();
+    //read the filter configuration values from the KisFilterConfiguration object
+    Q_INT32 radius = (Q_INT32)((KisRoundCornersFilterConfiguration*)configuration)->radius();
     Q_UINT32 pixelSize = src -> pixelSize();
 
     setProgressTotalSteps( rect.height() );
-        setProgressStage(i18n("Applying pixelize filter..."),0);
+    setProgressStage(i18n("Applying pixelize filter..."),0);
 
     for (Q_INT32 y = rect.y(); y < rect.height(); y++)
     {
-        Q_UINT32 x = rect.x();
-        Q_UINT32 x0 = rect.x();
-        Q_UINT32 y0 = rect.x();
-        Q_UINT32 width = rect.width();
-        Q_UINT32 height = rect.height();
+        Q_INT32 x = rect.x();
+        Q_INT32 x0 = rect.x();
+        Q_INT32 y0 = rect.x();
+        Q_INT32 width = rect.width();
+        Q_INT32 height = rect.height();
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y, width, true );
         KisHLineIteratorPixel srcIt = src->createHLineIterator(x, y, width, false);
         while( ! srcIt.isDone() )
@@ -139,7 +139,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius") ) );

@@ -22,11 +22,12 @@
 #include "kis_types.h"
 #include "kis_filter_configuration.h"
 
-KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry) :
-    m_id(id),
-    m_progressDisplay(0),
-    m_category(category),
-    m_entry(entry)
+KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry)
+    : KisProgressSubject(0, id.id().latin1())
+    , m_id(id)
+    , m_progressDisplay(0)
+    , m_category(category)
+    , m_entry(entry)
 {
 }
 
@@ -75,7 +76,6 @@ void KisFilter::setProgressTotalSteps(Q_INT32 totalSteps)
 void KisFilter::setProgress(Q_INT32 progress)
 {
     if (m_progressEnabled) {
-
         Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
         m_progressSteps = progress;
 

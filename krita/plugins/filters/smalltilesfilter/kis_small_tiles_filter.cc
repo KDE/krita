@@ -76,17 +76,13 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small
 
 void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
-        Q_INT32 x = rect.x(), y = rect.y();
-        Q_INT32 width = rect.width();
-        Q_INT32 height = rect.height();
-
         //read the filter configuration values from the KisFilterConfiguration object
         Q_UINT32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
 
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
+void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& /*rect*/, Q_UINT32 numberOfTiles)
 {
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
     KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
@@ -100,7 +96,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     {
         for( Q_UINT32 j=0; j < numberOfTiles; j++ )
         {
-            for( Q_UINT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
+            for( Q_INT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
             {
                 KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
                 KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
@@ -124,7 +120,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     setProgressDone();
 }
 
-KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 5, 1, i18n("Number of tiles") ) );

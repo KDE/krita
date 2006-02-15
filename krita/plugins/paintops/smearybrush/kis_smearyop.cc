@@ -71,7 +71,7 @@ public:
     /**
      * Paint the tuft footprint (calculated from the pressure) at the given position
      */
-    void paintAt(const KisPoint & pos, double pressure, KisPaintDeviceSP dev)
+    void paintAt(const KisPoint & /*pos*/, double /*pressure*/, KisPaintDeviceSP /*dev*/)
     {
         //
     };

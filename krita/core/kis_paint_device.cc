@@ -456,12 +456,12 @@ QRect KisPaintDevice::exactBounds() const
 
     found = false;
 
-    // Loog for right edge )
+    // Look for right edge )
     for (Q_INT32 x2 = x + w; x2 > x ; --x2) {
         KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
-                boundW = x2 - boundX + 1;
+                boundW = x2 - boundX;// + 1;
                 found = true;
                 break;
             }
@@ -513,7 +513,6 @@ void KisPaintDevice::mirrorX()
             --dstIt;
 
         }
-        qApp -> processEvents();
     }
     if (m_parentLayer) {
         m_parentLayer->notify(r);
@@ -543,7 +542,6 @@ void KisPaintDevice::mirrorY()
             ++itBottom;
             ++itTop;
         }
-        qApp -> processEvents();
     }
 
     if (m_parentLayer) {
@@ -708,6 +706,56 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 
     return image;
 }
+
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
+{
+    //kdDebug() << "Going to create a thumbnail size " << w << ", " << h << endl;
+    KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace(), "thumbnail");
+    thumbnail->clear();
+    
+    int srcw, srch;
+    if( image() )
+    {
+        srcw = image()->width();
+        srch = image()->height();
+    }
+    else
+    {
+        const QRect e = exactBounds();
+        srcw = e.width();
+        srch = e.height();
+    }
+
+    if (w > srcw)
+    {
+        w = srcw;
+        h = Q_INT32(double(srcw) / w * h);
+    }
+    if (h > srch)
+    {
+        h = srch;
+        w = Q_INT32(double(srch) / h * w);
+    }
+
+    if (srcw > srch)
+        h = Q_INT32(double(srch) / srcw * w);
+    else if (srch > srcw)
+        w = Q_INT32(double(srcw) / srch * h);
+
+    //kdDebug() << "w has become: " << w << ", h: " << h << endl;
+    
+    for (Q_INT32 y=0; y < h; ++y) {
+        Q_INT32 iY = (y * srch ) / h;
+        for (Q_INT32 x=0; x < w; ++x) {
+            Q_INT32 iX = (x * srcw ) / w;
+            thumbnail->setPixel(x, y, colorAt(iX, iY));
+        }
+    }
+    
+    return thumbnail;
+
+}
+
 
 QImage KisPaintDevice::createThumbnail(Q_INT32 w, Q_INT32 h)
 {

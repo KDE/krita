@@ -840,41 +840,27 @@ void compositeThreshold(Q_INT32 pixelSize,
 
 #endif
 
-void compositeColorize(Q_INT32 pixelSize,
-               Q_UINT8 *dst, 
-               Q_INT32 dstRowSize,
-               const Q_UINT8 *src, 
-               Q_INT32 srcRowSize,
-               Q_INT32 rows, 
-               Q_INT32 cols, 
-               Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeColorize(Q_INT32,
+               Q_UINT8 *, 
+               Q_INT32 ,
+               const Q_UINT8 *, 
+               Q_INT32 ,
+               Q_INT32 , 
+               Q_INT32 , 
+               Q_UINT8 )
 {
-    Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
-    Q_UINT8 *d;
-    const Q_UINT8 *s;
-    Q_UINT8 alpha;
-    Q_UINT8 invAlpha;
-    Q_INT32 i;
-
-
 }
 
 
-void compositeLuminize(Q_INT32 pixelSize,
-               Q_UINT8 *dst, 
-               Q_INT32 dstRowSize,
-               const Q_UINT8 *src, 
-               Q_INT32 srcRowSize,
-               Q_INT32 rows, 
-               Q_INT32 cols, 
-               Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeLuminize(Q_INT32 ,
+               Q_UINT8 *, 
+               Q_INT32 ,
+               const Q_UINT8 *, 
+               Q_INT32 ,
+               Q_INT32 , 
+               Q_INT32 , 
+               Q_UINT8 )
 {
-    Q_INT32 linesize = pixelSize * sizeof(Q_UINT8) * cols;
-    Q_UINT8 *d;
-    const Q_UINT8 *s;
-    Q_UINT8 alpha;
-    Q_UINT8 invAlpha;
-    Q_INT32 i;
 
 }
 

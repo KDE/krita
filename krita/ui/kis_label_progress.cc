@@ -21,6 +21,7 @@
 #include <qtoolbutton.h>
 #include <qcursor.h>
 
+#include <kdebug.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kprogress.h>

@@ -124,7 +124,8 @@ void KisFilterManager::setup(KActionCollection * ac)
         if (!f) break;
 
         // Create action
-        KAction * a = new KAction(f->menuEntry(), 0, m_filterMapper, SLOT(map()), ac);
+        KAction * a = new KAction(f->menuEntry(), 0, m_filterMapper, SLOT(map()), ac,
+                                  QString("krita_filter_%1").arg((*it) . id()).ascii());
 
         // Add action to the right submenu
         m_filterActionMenus.find( f->menuCategory() )->insert(a);

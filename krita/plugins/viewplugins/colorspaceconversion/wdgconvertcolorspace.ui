@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>355</height>
+            <width>399</width>
+            <height>228</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,89 +19,112 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
-                <cstring>groupBox1</cstring>
+                <cstring>lblConvert</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Target color space:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbColorSpaces</cstring>
+            </property>
+        </widget>
+        <widget class="KisCmbIDList" row="0" column="1">
+            <property name="name">
+                <cstring>cmbColorSpaces</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <item>
+                <property name="text">
+                    <string>Default</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cmbDestProfile</cstring>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>grpIntent</cstring>
             </property>
             <property name="title">
-                <string>Colorspace Conversion</string>
+                <string>&amp;Rendering Intent</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QButtonGroup" row="5" column="0" rowspan="1" colspan="2">
+                <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
-                        <cstring>grpIntent</cstring>
+                        <cstring>radioPerceptual</cstring>
                     </property>
-                    <property name="title">
-                        <string>&amp;Rendering Intent</string>
+                    <property name="text">
+                        <string>Perceptual</string>
                     </property>
-                    <property name="toolTip" stdset="0">
+                    <property name="accel">
                         <string></string>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radioPerceptual</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Perceptual</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>For images</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Hue hopefully maintained (but not required),
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>For images</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Hue hopefully maintained (but not required),
 lightness and saturation sacrificed to maintain
 the perceived color. White point changed to
 result in neutral grays. Intended for images.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radioRelativeColorimetric</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Relative colorimetric</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Within and outside gamut; same as Absolute
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radioRelativeColorimetric</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Relative colorimetric</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Within and outside gamut; same as Absolute
 Colorimetric. White point changed to result in
 neutral grays.
 
 If adequate table is present in profile,
 then, it is used. Else reverts to perceptual
 intent.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="2" column="0">
-                            <property name="name">
-                                <cstring>radioSaturation</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Saturation</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Best for graphs and charts</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Hue and saturation maintained with lightness
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>radioSaturation</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Saturation</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Best for graphs and charts</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Hue and saturation maintained with lightness
 sacrificed to maintain saturation. White point
 changed to result in neutral grays. Intended for
 business graphics (make it colorful charts,
@@ -110,70 +133,42 @@ graphs, overheads, ...)
 If adequate table is present in profile,
 then, it is used. Else reverts to perceptual
 intent.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="3" column="0">
-                            <property name="name">
-                                <cstring>radioAbsoluteColorimetric</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Absolute colorimetric</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Best for spot colours</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Within the destination device gamut; hue,
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="0">
+                    <property name="name">
+                        <cstring>radioAbsoluteColorimetric</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Absolute colorimetric</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Best for spot colours</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Within the destination device gamut; hue,
 lightness and saturation are maintained. Outside
 the gamut; hue and lightness are maintained,
 saturation is sacrificed. White point for source
 and destination; unchanged. Intended for spot
 colors (Pantone, TruMatch, logo colors, ...)</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>lblDestICMProfile</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Destination ICM profile:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>cmbDestProfile</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>lblConvert</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Target color space:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>cmbColorSpaces</cstring>
-                    </property>
-                </widget>
-                <widget class="KisCmbIDList" row="0" column="1">
-                    <property name="name">
-                        <cstring>cmbColorSpaces</cstring>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="2" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Default</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>cmbDestProfile</cstring>
                     </property>
                 </widget>
             </grid>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>lblDestICMProfile</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Destination ICM profile:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cmbDestProfile</cstring>
+            </property>
         </widget>
     </grid>
 </widget>
@@ -201,9 +196,9 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
     </image>
 </images>
 <tabstops>
-    <tabstop>cmbColorSpaces</tabstop>
-    <tabstop>cmbDestProfile</tabstop>
-    <tabstop>radioPerceptual</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kiscmbidlist.h</includehint>
+</includehints>
 </UI>

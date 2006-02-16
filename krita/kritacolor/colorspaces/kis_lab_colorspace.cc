@@ -40,9 +40,9 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
          icSigLabData, parent, p)
 
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16), QColor(150,150,150)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16), QColor(200,200,200)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 6, KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
     init();

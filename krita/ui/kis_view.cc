@@ -582,7 +582,7 @@ void KisView::setupActions()
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-    m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
+    m_imgProperties = new KAction(i18n("Image Properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
     m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
     m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 
@@ -614,7 +614,7 @@ void KisView::setupActions()
     m_layerLower = new KAction(i18n("Lower"), "lower", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
     m_layerTop = new KAction(i18n("To Top"), "bring_forward", "Ctrl+Shift+]", this, SLOT(layerFront()), actionCollection(), "toplayer");
     m_layerBottom = new KAction(i18n("To Bottom"), "send_backward", "Ctrl+Shift+[", this, SLOT(layerBack()), actionCollection(), "bottomlayer");
-    m_layerProperties = new KAction(i18n("Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
+    m_layerProperties = new KAction(i18n("Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
     (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
     m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), "filesave", this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
     (void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");

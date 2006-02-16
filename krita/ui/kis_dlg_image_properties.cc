@@ -56,7 +56,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     resize(m_page -> sizeHint());
 
     m_page -> txtName -> setText(image -> name());
-
+    m_page->m_createButton->hide();
     KisConfig cfg;
 
     m_page -> intWidth -> setValue(image -> width());

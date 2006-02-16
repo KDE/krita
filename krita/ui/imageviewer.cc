@@ -34,6 +34,7 @@ ImageViewer::ImageViewer(QWidget *widget, const char * name)
     , m_image(QPixmap())
 {
     m_label = new QLabel( viewport());
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     addChild(m_label);
 }
 

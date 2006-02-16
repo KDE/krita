@@ -174,19 +174,24 @@ void KisFiltersListView::setCurrentFilter(KisID filter)
 
 void KisFiltersListView::buildPreview()
 {
-    
+    QTime t;
     if(m_original== 0)
         return;
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
+    t.start();
     m_thumb = m_original->createThumbnailDevice(150, 150);
-    
+    kdDebug() << "Creating thumbnail: " << t.elapsed() << endl;
+
+    t.start();
     QRect bounds = m_thumb->exactBounds();
     QPixmap pm(bounds.width(), bounds.height());
     QPainter gc(&pm);
     gc.fillRect(0, 0, bounds.width(), bounds.height(), backgroundColor());
     gc.end();
-    
+    kdDebug() << "Creating base pixmap: " << t.elapsed() << endl;
+
+    t.start();
     KisIDList l = KisFilterRegistry::instance()->listKeys();
     KisIDList::iterator it;
     it = l.begin();
@@ -207,7 +212,7 @@ void KisFiltersListView::buildPreview()
             }
         }
     }
-
+    kdDebug() << "Creating icons: " << t.elapsed() << endl;
     QApplication::restoreOverrideCursor();
 }
 

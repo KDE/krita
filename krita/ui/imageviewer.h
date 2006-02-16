@@ -24,6 +24,12 @@
 
 class QLabel;
 
+/**
+ * A scrollable image view.
+ *
+ * XXX: We should add a signal that emits newly eposed rects so the filters
+ *      don't have to filter everything, but just the the new bits.
+ */
 class ImageViewer : public QScrollView {
     Q_OBJECT
 

@@ -335,7 +335,7 @@ void KisFilterManager::refreshPreview( )
     QRect rect = dev -> extent();
     KisTransaction cmd("Temporary transaction", dev);
     m_lastFilter->process(dev, dev, config, rect);
-    m_lastDialog->previewWidget() -> slotUpdate();
+    m_lastDialog->previewWidget()->slotUpdate();
     cmd.unexecute();
 }
 

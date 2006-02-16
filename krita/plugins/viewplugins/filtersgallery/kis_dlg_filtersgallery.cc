@@ -23,6 +23,7 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qdatetime.h>
 
 #include <kis_filter.h>
 #include <kis_filter_config_widget.h>
@@ -44,16 +45,19 @@ namespace FiltersGallery {
 KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
   : KDialogBase(parent,name, true,i18n("Filters Gallery"), Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
 {
-    // Initialize main widget
+   // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
     m_widget->filtersList->setLayer(view->canvasSubject()->currentImg()->activeLayer());
     m_widget->filtersList->setProfile(view->canvasSubject()->monitorProfile());
+    
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     // Initialize configWidgetHolder
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
+    m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
+    
     if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeLayer())
     {
         m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice().data() );
@@ -62,7 +66,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
-    m_labelNoCW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
     m_labelNoCW->hide();
 }
@@ -90,6 +93,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
     
     if(m_currentConfigWidget != 0) {
+        m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
@@ -123,6 +127,7 @@ void KisDlgFiltersGallery::refreshPreview( )
     m_currentFilter->process(layer.data(), layer.data(), config, rect);
     m_widget->previewWidget->slotUpdate();
     cmd.unexecute();
+
 }
 
 }

@@ -20,7 +20,6 @@ There are still a couple of LAYERREMOVE's around!
 Filters
 
 C  * Fix crashes in filters
-R  * Optimize rendering of preview. See: 120224
 
 Colorspaces
 
@@ -30,8 +29,10 @@ R  * Fix drying the wet colorspace
 
 Core
 
+?  * When painting with the qpainter, if the zoom factor is < 1, we should first
+     scale down, then colorcorrect, then add the masks, then paint. This would
+     solve the slow loading for big images problem.
 R  * rendering with complex groupings gives very wrong results
-R  * Fix unittests for colorspaces
 P  * Fix part layers (nearly done)
 R  * disable everything necessary when the current layer is wet.
 C  * finish the convolution painter

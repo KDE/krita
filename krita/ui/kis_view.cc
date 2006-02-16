@@ -166,7 +166,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     : super(doc, parent, name)
     , KXMLGUIBuilder( shell() )
     , m_panning( false )
-    , m_picking( false )
     , m_oldTool( 0 )
     , m_doc( doc )
     , m_canvas( 0 )
@@ -2313,12 +2312,12 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 
 void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 {
-    if (dynamic_cast<KisToolFreehand*>(m_toolManager->currentTool()) && event->key() == Qt::Key_Control && m_panning == false) {
-        m_oldTool = m_toolManager->currentTool();
-        m_picking = true;
-        m_toolManager->setCurrentTool("tool_colorpicker");
+    if (!m_toolManager->currentTool()) {
+        event->ignore();
+        return;
     }
-    if (event->key() == Qt::Key_Space && m_picking == false) {
+    
+    if (event->key() == Qt::Key_Space) {
         if (!m_panning) {
             // Set tool temporarily to pan
             m_panning = true;
@@ -2338,11 +2337,6 @@ void KisView::canvasGotKeyPressEvent(QKeyEvent *event)
 
 void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Control && m_picking == true) {
-        m_picking = false;
-        m_toolManager->setCurrentTool(m_oldTool);
-        m_oldTool = 0;
-    }
     if (m_toolManager->currentTool())
         m_toolManager->currentTool() -> keyRelease(event);
 }

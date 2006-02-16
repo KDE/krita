@@ -113,7 +113,7 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("Selection &Eraser"),
-                        "tool_eraser_selection", Qt::Key_B, this,
+                        "tool_eraser_selection", "Ctrl+Shift+E", this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);

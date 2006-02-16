@@ -181,25 +181,28 @@ bool KisPreviewWidget::zoomChanged()
     if( w == 0 || h == 0 )
         return false;
 
-    // Scale the original
-    m_scaledOriginal = m_origDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
-    m_scaledOriginal = m_scaledOriginal.smoothScale(w, h, QImage::ScaleMax);
+    if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
+    {
+        m_previewDevice = m_origDevice->createThumbnailDevice(w, h); 
+        //KisScaleWorker scaleWorker(m_previewDevice, m_zoom, m_zoom, new KisMitchellFilterStrategy());
+        //scaleWorker.run();
+    }
+    else {
+        m_previewDevice = new KisPaintDevice( *m_origDevice );
+    }
+    
+    m_scaledOriginal = m_previewDevice->convertToQImage(m_profile, 0, 0, w, h);
+
+
     if(!m_previewIsDisplayed)
     {
         m_preview->setImage(m_scaledOriginal);
     }
 
-    // Scale the preview
-    m_previewDevice = new KisPaintDevice( *m_origDevice );
+
     // Some filters need access to the image to get other layers, and
     // the copy constructor of KisPaintDevice doesn't copy the image.
     m_previewDevice->setParentLayer(m_origDevice->parentLayer());
-
-    if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
-    {
-        KisScaleWorker scaleWorker(m_previewDevice, m_zoom, m_zoom, new KisMitchellFilterStrategy());
-        scaleWorker.run();
-    }
 
     emit updated();
     return true;

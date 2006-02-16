@@ -46,7 +46,7 @@ public:
     /** Constructs the widget */
     KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
 
-    /** @return the layer, so the dialog can apply its effect on it. */
+    /** @return the scaled down copy of the layer, so the dialog can apply its effect on it. */
     KisPaintDeviceSP getDevice();
 
     /** returns if the preview is automatically updated */
@@ -85,7 +85,6 @@ private slots:
     
 private:
 
-    /// XXX: What does this bool signify?
     bool zoomChanged();
     
     bool m_autoupdate, m_previewIsDisplayed;
@@ -97,7 +96,6 @@ private:
     double m_zoom;
     KisProfile * m_profile;
 
-//     KisImageSP m_image;
     KisPaintDeviceSP m_origDevice;
 };
 

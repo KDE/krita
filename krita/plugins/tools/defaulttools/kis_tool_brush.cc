@@ -113,9 +113,9 @@ void KisToolBrush::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Brush"),
-                        "tool_freehand", 0, this,
-                        SLOT(activate()), collection,
-                        name());
+                                    "tool_freehand", Qt::Key_B, this,
+                                    SLOT(activate()), collection,
+                                    name());
         m_action -> setToolTip(i18n("Draw freehand"));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;

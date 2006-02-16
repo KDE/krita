@@ -130,7 +130,7 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Selection Brush"),
-                        "tool_brush_selection", Qt::Key_B, this,
+                        "tool_brush_selection", "Ctrl+Shift+B", this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);

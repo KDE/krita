@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kiconloader.h>
 
 #include "kis_colorspace.h"
 #include "kis_global.h"
@@ -144,8 +145,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
         m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
 
-        // XXX make this a picture of a '?', like you see everywhere
-        QPushButton* push = new QPushButton("?", m_optionWidget);
+        QPushButton* push = new QPushButton(SmallIconSet( "help" ), "", m_optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
         m_optionWidgetLayout -> addWidget(push, 0, 2);
     } else {

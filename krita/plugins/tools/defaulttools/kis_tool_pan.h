@@ -46,6 +46,8 @@ public:
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
+    virtual bool wantsAutoScroll() const { return false; }
+
 private:
     KisCanvasSubject *m_subject;
     KisPoint m_dragPos;

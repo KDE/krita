@@ -89,6 +89,12 @@ public:
     virtual QWidget* optionWidget();
     KRadioAction *action() const { return m_action; }
 
+    /**
+     * Return true if this tool wants auto canvas-scrolling to 
+     * work when this tool is active.
+     */
+    virtual bool wantsAutoScroll() const { return true; }
+
     // Methods for integration with karbon-style toolbox
     virtual Q_UINT32 priority() { return 0; }
     virtual enumToolType toolType() { return TOOL_FREEHAND; }

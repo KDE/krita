@@ -157,6 +157,8 @@
 #include "kis_custom_palette.h"
 #include "wdgpalettechooser.h"
 
+#include <fixx11h.h>
+
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
 // sent to a receiver if it does not accept the tablet event.
@@ -2122,9 +2124,11 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
         if (m_vScroll -> draggingSlider() || m_hScroll -> draggingSlider())
             return;
 
-        KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
+        if (m_toolManager->currentTool()->wantsAutoScroll()) {
+            enableAutoScroll();
+        }
 
-        enableAutoScroll();
+        KisButtonPressEvent ev(e -> device(), p, e -> globalPos(), e -> pressure(), e -> xTilt(), e -> yTilt(), e -> button(), e -> state());
         m_toolManager->currentTool() -> buttonPress(&ev);
     }
 }
@@ -2979,7 +2983,7 @@ void KisView::profileChanged(KisProfile *  /*profile*/)
 void KisView::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
 {
     resizeEvent(0);
-    canvasRefresh();
+    updateCanvas();
 }
 
 void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
@@ -2990,7 +2994,7 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
     m_doc -> setModified(true);
     resizeEvent(0);
     layersUpdated();
-    canvasRefresh();
+    updateCanvas();
 }
 
 void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
@@ -3001,7 +3005,6 @@ void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterS
     resizeEvent(0);
     layersUpdated();
     updateCanvas();
-    canvasRefresh();
 }
 
 void KisView::rotateCurrentImage(double angle)
@@ -3012,7 +3015,6 @@ void KisView::rotateCurrentImage(double angle)
     resizeEvent(0);
     layersUpdated();
     updateCanvas();
-    canvasRefresh();
 }
 
 void KisView::shearCurrentImage(double angleX, double angleY)
@@ -3023,7 +3025,6 @@ void KisView::shearCurrentImage(double angleX, double angleY)
     resizeEvent(0);
     layersUpdated();
     updateCanvas();
-    canvasRefresh();
 }
 
 

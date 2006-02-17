@@ -32,6 +32,9 @@
 #include "kis_colorspace.h"
 #include "kis_lab_colorspace.h"
 
+KisLabColorSpace* KisGenericLabHistogramProducer::m_labCs = 0;
+
+
 KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs)
     : m_channels(channels),
       m_nrOfBins(nrOfBins),
@@ -413,8 +416,11 @@ KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
     m_channelsList.append(new KisChannelInfo(i18n("a*"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
     m_channelsList.append(new KisChannelInfo(i18n("b*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
 
-    KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
-    m_colorSpace = new KisLabColorSpace(0, labProfile);
+    if (!m_labCs) {
+        KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
+        m_labCs = new KisLabColorSpace(0, labProfile);
+    }
+    m_colorSpace = m_labCs;
 }
 
 QValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {

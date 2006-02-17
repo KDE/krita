@@ -28,6 +28,8 @@
 #include "kis_colorspace.h"
 #include "kis_id.h"
 
+class KisLabColorSpace;
+
 class KisBasicHistogramProducer : public KisHistogramProducer {
 public:
     KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *colorSpace);
@@ -175,6 +177,8 @@ class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
         virtual QValueVector<KisChannelInfo *> channels();
     protected:
         QValueVector<KisChannelInfo *> m_channelsList;
+    private:
+        static KisLabColorSpace* m_labCs;
 };
 
 /** KisGenericLabHistogramProducer his special Factory that isCompatibleWith everything. */

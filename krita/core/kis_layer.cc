@@ -397,6 +397,7 @@ void KisLayer::setOpacity(Q_UINT8 val)
 {
     if (m_opacity != val)
     {
+        setDirty( true );
         m_opacity = val;
         notifyPropertyChanged();
         notify(extent());
@@ -416,6 +417,7 @@ const bool KisLayer::visible() const
 void KisLayer::setVisible(bool v)
 {
     if (m_visible != v) {
+        setDirty(true);
         m_visible = v;
         notifyPropertyChanged();
         notify(extent());
@@ -481,6 +483,7 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
 {
     if (m_compositeOp != compositeOp)
     {
+        setDirty(true);
         m_compositeOp = compositeOp;
         notifyPropertyChanged();
         notify(extent());

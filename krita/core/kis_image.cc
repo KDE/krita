@@ -1281,8 +1281,8 @@ void KisImage::notify()
 void KisImage::notify(const QRect& rc)
 {
     QRect rect = rc & QRect(0, 0, width(), height());
-    if (m_activeLayer)
-        m_activeLayer->setDirty(true); // Shouldn't do that here, but where we modify each layer.
+    //if (m_activeLayer)
+    //    m_activeLayer->setDirty(true); // Shouldn't do that here, but where we modify each layer.
     updateProjection(rect);
 
     if (rect.isValid()) {

@@ -32,6 +32,7 @@
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
     : KisLayer (img, name, OPACITY_OPAQUE)
 {
+    kdDebug() << "Creating adj layer with filter: " << kfc << endl;
     m_filterConfig = kfc;
     setSelection( selection );
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
@@ -67,6 +68,7 @@ void KisAdjustmentLayer::resetCache()
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()
 {
+    Q_ASSERT(m_filterConfig);
     return m_filterConfig;
 }
 

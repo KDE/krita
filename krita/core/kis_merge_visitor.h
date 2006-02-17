@@ -98,6 +98,7 @@ public:
         KisLayerSP startWith = layer->lastChild();
         KisAdjustmentLayerSP adjLayer = 0;
 
+        // Group without a child
         if (!child) {
             KisPainter gc(layer->projection());
             gc.bitBlt(m_rc.left(), m_rc.top(), COMPOSITE_COPY,

@@ -426,8 +426,8 @@ void KisSelectionManager::copy()
 
 KisLayerSP KisSelectionManager::paste()
 {
-        KisImageSP img = m_parent -> currentImg();
-        if (!img) return 0;
+    KisImageSP img = m_parent -> currentImg();
+    if (!img) return 0;
 
     KisPaintDeviceSP clip = m_clipboard -> clip();
 
@@ -440,7 +440,6 @@ KisLayerSP KisSelectionManager::paste()
         gc.begin(layer->paintDevice());
         gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
         gc.end();
-        img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
 
        //figure out where to position the clip
         KisCanvasController *cc = m_parent->getCanvasController();
@@ -460,9 +459,9 @@ KisLayerSP KisSelectionManager::paste()
             if (dlg -> exec() == QDialog::Accepted)
                 layer -> convertTo(img -> colorSpace());
 */
-
-        img -> notify(layer->extent());
-
+        img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
+        img->notify(layer->extent());
+        layer->setDirty();
         return layer;
     }
     return 0;

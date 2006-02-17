@@ -454,7 +454,7 @@ void KisOpenGLCanvasPainter::drawPoints(const QPointArray& pointArray, int index
     if (firstPointIndex < 0) {
         firstPointIndex = 0;
     }
-    if (firstPointIndex > pointArray.count() - 1) {
+    if (firstPointIndex > (int)pointArray.count() - 1) {
         return;
     }
 
@@ -464,7 +464,7 @@ void KisOpenGLCanvasPainter::drawPoints(const QPointArray& pointArray, int index
         lastPointIndex = pointArray.count() - 1;
     } else {
         lastPointIndex = firstPointIndex + npoints;
-        if (lastPointIndex > pointArray.count() - 1) {
+        if (lastPointIndex > (int)pointArray.count() - 1) {
             lastPointIndex = pointArray.count() - 1;
         }
     }
@@ -607,7 +607,7 @@ void KisOpenGLCanvasPainter::drawPolyline(const QPointArray& pointArray, int ind
     if (firstPointIndex < 0) {
         firstPointIndex = 0;
     }
-    if (firstPointIndex > pointArray.count() - 2) {
+    if (firstPointIndex > (int)pointArray.count() - 2) {
         return;
     }
 
@@ -617,7 +617,7 @@ void KisOpenGLCanvasPainter::drawPolyline(const QPointArray& pointArray, int ind
         lastPointIndex = pointArray.count() - 1;
     } else {
         lastPointIndex = firstPointIndex + npoints - 1;
-        if (lastPointIndex > pointArray.count() - 1) {
+        if (lastPointIndex > (int)pointArray.count() - 1) {
             lastPointIndex = pointArray.count() - 1;
         }
     }

@@ -272,6 +272,13 @@ void KisCanvasWidget::moveEvent(KisMoveEvent *e)
 
 void KisCanvasWidget::buttonPressEvent(KisButtonPressEvent *e)
 {
+    QWidget *widget = dynamic_cast<QWidget *>(this);
+    Q_ASSERT(widget != 0);
+
+    if (widget) {
+        widget->setFocus();
+    }
+
     emit sigGotButtonPressEvent(e);
 }
 

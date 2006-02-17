@@ -710,16 +710,11 @@ bool KisDoc::completeSaving(KoStore *store)
     QString location;
     bool external = isStoredExtern();
     Q_INT32 totalSteps = 0;
-    KisImageSP img;
 
     if (!m_currentImage) return false;
 
     totalSteps = (m_currentImage) -> nlayers();
 
-    img = new KisImage(*m_currentImage);
-    Q_CHECK_PTR(img);
-    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
-    img -> setName((m_currentImage) -> name());
 
     setIOSteps(totalSteps + 1);
 
@@ -736,21 +731,21 @@ bool KisDoc::completeSaving(KoStore *store)
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
     // e.g. have <ANNOTATION> tags or so.
-    KisAnnotationSP annotation = (img) -> annotation("exif");
+    KisAnnotationSP annotation = (m_currentImage) -> annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += (img) -> name() + "/annotations/exif";
+        location += (m_currentImage) -> name() + "/annotations/exif";
         if (store -> open(location)) {
             store -> write(annotation -> annotation());
             store -> close();
         }
     }
-    if (img -> getProfile()) {
-        annotation = img -> getProfile() -> annotation();
+    if (m_currentImage -> getProfile()) {
+        annotation = m_currentImage -> getProfile() -> annotation();
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += img -> name() + "/annotations/icc";
+            location += m_currentImage -> name() + "/annotations/icc";
             if (store -> open(location)) {
                 store -> write(annotation -> annotation());
                 store -> close();

@@ -88,6 +88,6 @@ Spaces
 
 Slots and signals
 
-	Prefix slots with slot and signals with sig: slotSelectionUpdated, sigSelectionUpdated.
+	Prefix slots with slot and signals with sig: slotUpdateSelection, sigSelectionUpdated.
 
 Boudewijn Rempt

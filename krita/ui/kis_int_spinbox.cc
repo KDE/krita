@@ -75,8 +75,8 @@ void KisIntSpinbox::init(int val)
     l->insertStretch(0, 1);
     d->m_numinput = new QLineEdit(this, "KisIntSpinbox::QLineEdit");
     d->m_numinput->setInputMask("000%");
-    d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
-    d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
+    //d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
+    //d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
     d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     
     l->addWidget( d->m_numinput );

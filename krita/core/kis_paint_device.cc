@@ -211,7 +211,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 {
     //kdDebug() << "creating paint device " << name << endl;
     if (name == 0) {
-        kdDebug() << "device without a name " << kdBacktrace() << "\n";
+        //kdDebug() << "device without a name " << kdBacktrace() << "\n";
     }
     if (colorSpace == 0) {
         kdDebug(41001) << "Cannot create paint device without colorstrategy!\n";
@@ -250,7 +250,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     Q_ASSERT( colorSpace );
     //kdDebug() << "creating paint device " << name << endl;
     if (name == 0) {
-        kdDebug() << "device without a name " << kdBacktrace() << "\n";
+        //kdDebug() << "device without a name " << kdBacktrace() << "\n";
     }
     
     m_dcop = 0;
@@ -622,6 +622,18 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
     if (undoAdapter() && undoAdapter() -> undo()) {
         undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
+}
+
+void KisPaintDevice::setProfile(KisProfile * profile)
+{
+    if (profile == 0) return;
+    
+    KisColorSpace * dstSpace =
+            KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
+                                                                      profile);
+    if (dstSpace)
+        m_colorSpace = dstSpace;
+
 }
 
 void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)

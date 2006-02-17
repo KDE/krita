@@ -143,7 +143,15 @@ public:
     // Get the profile associated with this image
     KisProfile *  getProfile() const;
 
-    // Set the profile associated with this image
+    /**
+     * Set the profile of the image to the new profile and do the same for
+     * all layers that have the same colorspace and profile as the image.
+     * It doesn't do any pixel conversion.
+     *
+     * This is essential if you have loaded an image that didn't
+     * have an embedded profile to which you want to attach the right profile.
+      */
+
     void setProfile(const KisProfile * profile);
 
     /**

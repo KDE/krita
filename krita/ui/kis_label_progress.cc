@@ -20,6 +20,7 @@
 #include <qtooltip.h>
 #include <qtoolbutton.h>
 #include <qcursor.h>
+#include <qeventloop.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -167,9 +168,11 @@ void KisLabelProgress::update(int percent)
     m_bar -> setValue(percent);
 
     KApplication *app = KApplication::kApplication();
-    Q_ASSERT(app);
 
     app -> processEvents();
+    // The following is safer, but makes cancel impossible:
+    //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
+    //                                         QEventLoop::ExcludeSocketNotifiers);
 }
 
 void KisLabelProgress::updateStage(const QString&, int percent)

@@ -59,6 +59,7 @@ public:
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
 
+            
 private:
     KisView * m_view;
     bool m_cancelRequested;

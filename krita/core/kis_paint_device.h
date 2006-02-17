@@ -228,6 +228,12 @@ public:
     virtual void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
+     * Changes the profile of the colorspace of this paint device to the given
+     * profile. If the given profile is 0, nothing happens.
+     */
+    virtual void setProfile(KisProfile * profile);
+    
+    /**
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
      */

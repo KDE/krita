@@ -56,6 +56,11 @@ public:
 
     virtual DCOPObject * dcopObject();
 
+    virtual bool operator==(const KisColorSpace& rhs) {
+        return id().id() == rhs.id().id();
+    }
+
+    
 public:
 
     //========== Channels =====================================================//

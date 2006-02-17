@@ -28,7 +28,8 @@ libkritaimage_la_SOURCES = kis_adjustment_layer.cc kis_alpha_mask.cc \
 
 noinst_HEADERS = kis_rotate_visitor.h kis_scale_visitor.h \
 	kis_selected_transaction.h kis_strategy_move.h kis_transform_worker.h kis_datamanager.h \
-	kis_filter_strategy.h kis_iteratorpixeltrait.h kis_merge_visitor.h kis_thread.h kis_thread_pool.h
+	kis_filter_strategy.h kis_iteratorpixeltrait.h kis_merge_visitor.h kis_thread.h kis_thread_pool.h \
+	kis_change_profile_visitor.h
 
 include_HEADERS = \
     kis_adjustment_layer.h \

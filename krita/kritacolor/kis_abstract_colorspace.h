@@ -62,6 +62,10 @@ public:
 
     virtual ~KisAbstractColorSpace();
 
+    virtual bool operator==(const KisAbstractColorSpace& rhs) {
+        return (m_id == rhs.m_id && m_profile == rhs.m_profile);
+    }
+
 
 //================== Information about this color strategy ========================//
 

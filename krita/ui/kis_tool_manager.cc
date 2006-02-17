@@ -187,7 +187,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
             tool->createOptionWidget(0);
         }
         QWidget * w = tool->optionWidget();
-        w->setMinimumWidth(200); // XXX Hack! This has been measured to be the widest tool docker :-( BSAR
+        
         m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;

@@ -62,6 +62,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_profile.h"
 #include "kis_paint_layer.h"
+#include "kis_change_profile_visitor.h"
 
 class KisImage::KisImagePrivate {
 public:
@@ -817,10 +818,18 @@ KisProfile *  KisImage::getProfile() const
 
 void KisImage::setProfile(const KisProfile * profile)
 {
-    KisColorSpace * dstSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(), profile);
-    //convertTo( dstSpace ); // XXX: We shouldn't convert here -- if you want to convert, use the conversion function.
-    setColorSpace(dstSpace);
-    emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
+    if (profile == 0) return;
+    
+    KisColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
+                                                                                         profile);
+    if (dstCs) {
+        KisColorSpace * oldCs = colorSpace();
+        setColorSpace(dstCs);
+        emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
+
+        KisChangeProfileVisitor visitor(oldCs, dstCs);
+        m_rootLayer->accept(visitor);
+    }
 }
 
 double KisImage::xRes()
@@ -1158,7 +1167,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                                float exposure)
 {
 
-
+    kdDebug() << "Render to painter " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << endl;
     Q_INT32 w = x2 - x1 + 1;
     Q_INT32 h = y2 - y1 + 1;
 
@@ -1255,8 +1264,9 @@ KisColor KisImage::mergedPixel(Q_INT32 x, Q_INT32 y)
 
 void KisImage::updateProjection(const QRect& rc)
 {
+    
     QRect rect = rc & QRect(0, 0, width(), height());
-
+    kdDebug() << "updating projection : " << rc.x() << ", " rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
     KisMergeVisitor visitor(this, m_rootLayer->projection(), rc);
     m_rootLayer -> accept(visitor);
 

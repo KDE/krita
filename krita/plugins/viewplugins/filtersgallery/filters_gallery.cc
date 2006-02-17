@@ -98,7 +98,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
             
             KisPaintDeviceSP dev = img->activeDevice();
             if (!dev) return;
-            QRect r1 = dev -> extent();
+            QRect r1 = dev -> exactBounds();
             QRect r2 = img -> bounds();
 
             QRect rect = r1.intersect(r2);

@@ -200,7 +200,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     hl->addWidget(m_exposureDoubleWidget);
 
-    //l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     m_exposureDoubleWidget -> setPrecision(1);
     m_exposureDoubleWidget -> setValue(0);

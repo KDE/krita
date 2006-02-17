@@ -241,12 +241,36 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
             }
             else {
+                /*
+                QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+                QString mimelist = listMimeFilter.join(" ");
 
-                // To images
-                // create a document
-                // create an image
-                // add layer to image
-                // show document in new view
+                KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
+                fd.setCaption(i18n("Export Layer"));
+                fd.setMimeFilter(listMimeFilter);
+                fd.setOperationMode(KFileDialog::Saving);
+
+                if (!fd.exec()) return;
+
+                KURL url = fd.selectedURL();
+                QString mimefilter = fd.currentMimeFilter();
+
+                if (url.isEmpty())
+                    return;
+
+
+                QRect r = l -> exactBounds();
+
+                KisDoc d;
+                d.prepareForImport();
+
+                KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
+                d.setCurrentImage( dst );
+                dst->addLayer(l->clone(), dst->rootLayer(), 0);
+
+                d.setOutputMimeType(mimefilter.latin1());
+                d.exp0rt(url);
+                */
             }
         }
         image->notify();
@@ -260,5 +284,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     emit notifyProgressDone();
 
 }
+
+
+
 
 #include "kis_channel_separator.moc"

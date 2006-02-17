@@ -161,11 +161,10 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
 KisDoc::~KisDoc()
 {
-    // XXX: Now gives a crash, see CRASHES file.
     delete m_cmdHistory;
-    delete m_dcop;
     delete m_nserver;
     m_undoListeners.setAutoDelete(false);
+    delete m_dcop;
 }
 
 QCString KisDoc::mimeType() const
@@ -445,6 +444,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         }
 
         img = new KisImage(this, width, height, cs, name);
+        img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(img);
         connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img -> setDescription(description);
@@ -452,8 +452,6 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         loadLayers(element, img, img -> rootLayer().data());
 
-    } else {
-        // TODO Try to import it
     }
 
     img -> notifyImageLoaded();
@@ -1139,6 +1137,7 @@ KisImageSP KisDoc::currentImage()
 
 void KisDoc::setCurrentImage(KisImageSP image)
 {
+    kdDebug() << "setCurrentImage " << image->name() << "\n";
     m_currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();

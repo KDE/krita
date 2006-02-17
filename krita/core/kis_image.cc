@@ -637,6 +637,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         }
 
+        // XXX: Only recomposite the new areas.
         notify();
         emit sigSizeChanged(w, h);
 
@@ -957,7 +958,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent)
     return addLayer(layer, parent, parent->firstChild());
 }
 
-bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
+bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis, bool doNotify)
 {
     if (!parent)
         return false;
@@ -981,7 +982,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         }
 
         layer->setDirty(true);
-        notify(layer->extent());
+        if (doNotify) notify(layer->extent());
 
         if (!layer->temporary() && m_adapter && m_adapter->undo()) {
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
@@ -1266,6 +1267,7 @@ void KisImage::updateProjection(const QRect& rc)
 {
     
     QRect rect = rc & QRect(0, 0, width(), height());
+    //kdDebug() << "updating projection : " << kdBacktrace() << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
     kdDebug() << "updating projection : " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
     KisMergeVisitor visitor(this, m_rootLayer->projection(), rc);
     m_rootLayer -> accept(visitor);

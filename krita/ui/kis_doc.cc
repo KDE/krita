@@ -476,7 +476,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                     }
                     else {
                         img -> nextLayerName(); // Make sure the nameserver is current with the number of layers.
-                        img -> addLayer(layer, parent, 0);
+                        img -> addLayer(layer, parent, 0, false);
                     }
                 }
             }
@@ -868,7 +868,7 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     painter.fillRect(0, 0, width, height, KisColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
-    img->addLayer(layer, img->rootLayer(),0);
+    img->addLayer(layer, img->rootLayer(), 0);
     img->activate(layer);
 
     m_currentImage = img;

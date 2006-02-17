@@ -141,6 +141,7 @@ public:
             m_store -> close();
             if (data) {
                 KisFilterConfiguration * kfc = layer->filter();
+                kdDebug() << "loaded adj layer xml for " << kfc << "\n" << QString(data) << "\n";
                 kfc->fromXML(QString(data));
             }
         }

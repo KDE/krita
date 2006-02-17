@@ -222,14 +222,9 @@ public:
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
     
     /**
-     * Add already existing layer to image. The image is _not_ automatically
-     * recompited, you need to call notify(layer.extent()) yourself. This means
-     * that you add a bunchaton of layers without recompositing the image again
-     * for every layer, which in turn means you can add layers much faster.
-     * 
-     * So, don't forget to call notify() when you're done adding layers (or
-     * postpone it if you're going to do other things to the image afterwards,
-     * before displaying).
+     * Add already existing layer to image. If notify is set to true, the image
+     * is immediately recomposited. When adding layers on loading an image, this
+     * is not what you want.
      *
      * @param layer the layer to be added
      * @param parent the parent layer
@@ -237,10 +232,12 @@ public:
      *                  parent, add this layer above the specified sibling.
      *                  if 0, the layer is put in the lowermost position in
      *                  its group.
+     * @param notify If true, the image is immediately recomposited, if false,
+     *               no recomposition is done yet. The added layer is all
      *
      * returns false if adding the layer didn't work, true if the layer got added
      */
-    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
+    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis, bool notify = true);
 
     /// Remove layer
     bool removeLayer(KisLayerSP layer);

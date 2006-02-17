@@ -1266,7 +1266,7 @@ void KisImage::updateProjection(const QRect& rc)
 {
     
     QRect rect = rc & QRect(0, 0, width(), height());
-    kdDebug() << "updating projection : " << rc.x() << ", " rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
+    kdDebug() << "updating projection : " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
     KisMergeVisitor visitor(this, m_rootLayer->projection(), rc);
     m_rootLayer -> accept(visitor);
 

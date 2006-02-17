@@ -42,7 +42,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     : KisLayer(rhs)
 {
-    m_filterConfig = rhs.m_filterConfig;
+    m_filterConfig = new KisFilterConfiguration(*rhs.m_filterConfig);
     if (rhs.m_selection)
         m_selection = new KisSelection( *rhs.m_selection.data() );
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );

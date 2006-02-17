@@ -132,7 +132,7 @@ public:
             if (m_store -> open(location)) {
                 QString s = layer->filter()->toString();
                 kdDebug() << "saving adj layer xml: \n" << s << endl;
-                m_store -> write(s.utf8());
+                m_store -> write(s.utf8(), qstrlen(s.utf8()));
                 m_store -> close();
             }
         }

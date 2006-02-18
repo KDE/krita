@@ -78,6 +78,7 @@ public:
     virtual void setCursor(const QCursor& cursor);
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
+    virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
 
 public slots:
     virtual void activate();

@@ -257,16 +257,11 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
     m_cmbRepeat -> insertItem(i18n("Forwards"));
     m_cmbRepeat -> insertItem(i18n("Alternating"));
 
-    QGridLayout *optionLayout = new QGridLayout(widget, 6, 2);
-    super::addOptionWidgetLayout(optionLayout);
+    addOptionWidgetOption(m_cmbShape, m_lbShape);
 
-    optionLayout -> addWidget(m_lbShape, 0, 0);
-    optionLayout -> addWidget(m_cmbShape, 0, 1);
+    addOptionWidgetOption(m_cmbRepeat, m_lbRepeat);
 
-    optionLayout -> addWidget(m_lbRepeat, 1, 0);
-    optionLayout -> addWidget(m_cmbRepeat, 1, 1);
-
-    optionLayout -> addWidget(m_ckReverse, 2, 0);
+    addOptionWidgetOption(m_ckReverse);
 
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
 
@@ -275,8 +270,7 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
     m_slAntiAliasThreshold -> setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
-    optionLayout -> addWidget(m_lbAntiAliasThreshold, 3, 0);
-    optionLayout -> addWidget(m_slAntiAliasThreshold, 3, 1);
+    addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
 
     return widget;
 }

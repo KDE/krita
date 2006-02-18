@@ -118,13 +118,11 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
     }
     m_cbFilter ->setIDList( l2 );
 
-    m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
+    addOptionWidgetOption(m_cbFilter, lbFilter);
+
+    m_optionLayout = new QGridLayout(widget, 1, 1, 0, 6);
     Q_CHECK_PTR(m_optionLayout);
-
     super::addOptionWidgetLayout(m_optionLayout);
-
-     m_optionLayout -> addWidget(lbFilter, 0, 0);
-     m_optionLayout -> addWidget(m_cbFilter, 0, 1);
 
     connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
     changeFilter( m_cbFilter->currentItem () );

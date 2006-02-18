@@ -162,7 +162,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
     }
 
-    m_optionWidgetLayout -> setRowSpacing(3, 6);
+    //m_optionWidgetLayout -> setRowSpacing(3, 6);
 
     return m_optionWidget;
 }
@@ -176,7 +176,21 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
     Q_ASSERT(m_optionWidget != 0);
     Q_ASSERT(m_optionWidgetLayout != 0);
-    m_optionWidgetLayout -> addMultiCellLayout(layout, 3, 3, 0, 1);
+    int rowCount = m_optionWidgetLayout->numRows();
+    m_optionWidgetLayout -> addMultiCellLayout(layout, rowCount, rowCount, 0, 1);
+}
+
+void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
+{
+    Q_ASSERT(m_optionWidget != 0);
+    Q_ASSERT(m_optionWidgetLayout != 0);
+    if(label)
+    {
+        m_optionWidgetLayout -> addWidget(label, m_optionWidgetLayout->numRows(), 0);
+        m_optionWidgetLayout -> addWidget(control, m_optionWidgetLayout->numRows()-1, 1);
+    }
+    else
+        m_optionWidgetLayout -> addWidget(control, m_optionWidgetLayout->numRows(), 0);
 }
 
 void KisToolPaint::slotSetOpacity(int opacityPerCent)

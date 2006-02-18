@@ -175,15 +175,11 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     m_checkFillSelection -> setChecked(m_fillOnlySelection);
     connect(m_checkFillSelection, SIGNAL(stateChanged(int)), this, SLOT(slotSetFillSelection(int)));
 
-    QGridLayout *optionLayout = new QGridLayout(widget, 5, 3);
-    super::addOptionWidgetLayout(optionLayout);
+    addOptionWidgetOption(m_slThreshold, m_lbThreshold);
 
-    optionLayout -> addWidget(m_lbThreshold, 1, 0);
-    optionLayout -> addWidget(m_slThreshold, 1, 1);
-
-    optionLayout -> addMultiCellWidget(m_checkUsePattern, 2, 2, 0, 2);
-    optionLayout -> addMultiCellWidget(m_checkSampleMerged, 3, 3, 0, 2);
-    optionLayout -> addMultiCellWidget(m_checkFillSelection, 4, 4, 0, 2);
+    addOptionWidgetOption(m_checkUsePattern);
+    addOptionWidgetOption(m_checkSampleMerged);
+    addOptionWidgetOption(m_checkFillSelection);
 
     return widget;
 }

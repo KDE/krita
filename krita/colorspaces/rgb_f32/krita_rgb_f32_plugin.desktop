@@ -21,6 +21,7 @@ Name[sr]=RGB модел боја (32-битно реално)
 Name[sr@Latn]=RGB model boja (32-bitno realno)
 Name[sv]=RGB-färgmodell (32-bitars heltal)
 Name[tr]=RGB Renk Modeli (32-bit kayan)
+Name[uk]=Модель кольору RGB (32-бітне дробове число)
 Name[xx]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 32-bit floating point per channel RGB images
 Comment[bg]=Цветови модел за 32 битови изображения RGB

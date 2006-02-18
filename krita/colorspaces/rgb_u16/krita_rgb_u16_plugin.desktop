@@ -22,6 +22,7 @@ Name[sr]=RGB модел боја (16-битно целобројно)
 Name[sr@Latn]=RGB model boja (16-bitno celobrojno)
 Name[sv]=RGB-färgmodell (16-bitars heltal)
 Name[tr]=RGB Renk Modeli (16 bit)
+Name[uk]=Модель кольору RGB (16-бітне ціле число)
 Name[xx]=xxRGB Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel RGB images
 Comment[bg]=Цветови модел за 16 битови изображения RGB

@@ -31,6 +31,7 @@ Name[sr@Latn]=Model boja za sive nijanse
 Name[sv]=Gråskalefärgmodell
 Name[ta]=பழுப்புநிற வண்ண மாதிரி
 Name[tr]=Gri Ton Renk Modeli
+Name[uk]=Модель кольору "відтінки сірого"
 Name[xx]=xxGrayscale Color Modelxx
 Name[zh_CN]=灰度色彩模型
 Comment=Color model for 8-bit grayscale images

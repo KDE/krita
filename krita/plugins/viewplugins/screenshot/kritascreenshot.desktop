@@ -18,6 +18,7 @@ Name[pt_BR]=Captura
 Name[sr]=Снимак екрана
 Name[sr@Latn]=Snimak ekrana
 Name[sv]=Skärmdump
+Name[uk]=Знімок екрана
 Name[xx]=xxScreenshotxx
 Name[zh_CN]=抓图
 ServiceTypes=Krita/ViewPlugin

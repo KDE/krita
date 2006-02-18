@@ -20,6 +20,9 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
+#include <config.h>
+#include LCMS_HEADER
+
 #include <kis_colorspace_factory_registry.h>
 #include <kis_math_toolbox.h>
 #include <kis_meta_registry.h>
@@ -39,13 +42,23 @@ KisMetaRegistry::KisMetaRegistry()
     profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.ICC");
     profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.icc");
 
-    QDir d("/usr/share/color/icc/", "*.icc");
-    profileFilenames += d.entryList();
+    QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
 
-    d.setCurrent("/usr/share/color/icc/");
-    d.setNameFilter("*.icm");
+    QStringList filenames = d.entryList();
 
-    profileFilenames += d.entryList();
+    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
+        profileFilenames += d.absFilePath(*it);
+    }
+
+    d.setPath(QDir::homeDirPath() + "/.color/icc/");
+    filenames = d.entryList();
+
+    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
+        profileFilenames += d.absFilePath(*it);
+    }
+
+    // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
+    cmsErrorAction(LCMS_ERROR_SHOW);
 
     m_csRegistry = new KisColorSpaceFactoryRegistry(profileFilenames);
     m_mtRegistry = new KisMathToolboxFactoryRegistry();

@@ -92,6 +92,10 @@ bool KisProfile::load()
     m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
     file.close();
 
+    if (m_profile == 0) {
+        kdDebug() << "Failed to load profile from " << m_filename << endl;
+    }
+
     return init();
 
 }

@@ -39,13 +39,17 @@ class DCOPObject;
 class QImage;
 class QSize;
 class QPoint;
-class KoStore;
-class KisImage;
 class QWMatrix;
+
+class KNamedCommand;
+
+class KoStore;
+
+class KisExifInfo;
+class KisHLineIteratorPixel;
+class KisImage;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
-class KisHLineIteratorPixel;
-class KNamedCommand;
 class KisUndoAdapter;
 
 class KisDataManager;
@@ -461,6 +465,15 @@ public:
     
     KisUndoAdapter *undoAdapter() const;
 
+    /**
+     * Return the exifInfo associated with this layer. If no exif infos are
+     * available, the function will create it.
+     */
+    KisExifInfo* exifInfo();
+    /**
+     * This function return true if the layer has exif info associated with it.
+     */
+    bool hasExifInfo() { return m_exifInfo != 0; }
 signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(Q_INT8 percentage);
@@ -498,6 +511,7 @@ private:
     
     DCOPObject * m_dcop;
 
+    KisExifInfo* m_exifInfo;
 };
 
 inline Q_INT32 KisPaintDevice::pixelSize() const

@@ -46,6 +46,8 @@
 #include "kis_datamanager.h"
 #include "kis_memento.h"
 
+#include "kis_exif_info.h"
+
 namespace {
 
     class KisPaintDeviceCommand : public KNamedCommand {
@@ -207,7 +209,7 @@ namespace {
 }
 
 KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
-    QObject(0, name), KShared()
+        QObject(0, name), KShared(), m_exifInfo(0)
 {
     //kdDebug() << "creating paint device " << name << endl;
     if (name == 0) {
@@ -245,7 +247,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 }
 
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
-    QObject(0, name), KShared()
+        QObject(0, name), KShared(), m_exifInfo(0)
 {
     Q_ASSERT( colorSpace );
     //kdDebug() << "creating paint device " << name << endl;
@@ -304,6 +306,10 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
         m_selection = 0;
         m_pixelSize = rhs.m_pixelSize;
         m_nChannels = rhs.m_nChannels;
+        if(rhs.m_exifInfo)
+        {
+            m_exifInfo = new KisExifInfo(*rhs.m_exifInfo);
+        }
     }
 }
 
@@ -311,6 +317,7 @@ KisPaintDevice::~KisPaintDevice()
 {
     //kdDebug() << "going to delete paint device " << this  << ", " << name() << "\n";
     delete m_dcop;
+    delete m_exifInfo;
 }
 
 DCOPObject *KisPaintDevice::dcopObject()
@@ -1091,4 +1098,13 @@ KisDataManagerSP KisPaintDevice::dataManager() const
 {
     return m_datamanager;
 }
+
+KisExifInfo* KisPaintDevice::exifInfo()
+{
+    if(!m_exifInfo)
+        m_exifInfo = new KisExifInfo();
+    return m_exifInfo;
+}
+
+
 #include "kis_paint_device.moc"

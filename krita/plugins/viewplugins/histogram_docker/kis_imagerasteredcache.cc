@@ -63,18 +63,22 @@ void KisImageRasteredCache::imageUpdated(const QRect& rc) {
     r &= rc;
     r = r.normalize();
 
-    int x = static_cast<int>(r.x() / m_rasterSize);
-    int y = static_cast<int>(r.y() / m_rasterSize);
-    int x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
-    int y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
+    uint x = static_cast<int>(r.x() / m_rasterSize);
+    uint y = static_cast<int>(r.y() / m_rasterSize);
+    uint x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
+    uint y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
 
     if (!m_raster.empty()) {
         for ( ; x < x2; x++) {
-            for (int i = y; i < y2; i++) {
-                Element* e = m_raster.at(x).at(i);
-                if (e -> valid) {
-                    e -> valid = false;
-                    m_queue.push_back(e);
+            for (uint i = y; i < y2; i++) {
+                if (x < m_raster.size()) {
+                    if (i < m_raster.at(x).size()) {
+                        Element* e = m_raster.at(x).at(i);
+                        if (e && e -> valid) {
+                            e -> valid = false;
+                            m_queue.push_back(e);
+                        }
+                    }
                 }
             }
         }

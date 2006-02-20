@@ -25,8 +25,11 @@ KisThreadPool * KisThreadPool::m_singleton = 0;
 
 KisThreadPool::KisThreadPool()
 {
-    //kdDebug() << "Creating thread pool\n";
+    kdDebug() << "Creating thread pool\n";
     Q_ASSERT(KisThreadPool::m_singleton == 0);
+    if (KisThreadPool::m_singleton != 0)
+        delete KisThreadPool::m_singleton;
+    
     KisThreadPool::m_singleton = this;
 
     KConfig * cfg = KGlobal::config();
@@ -42,7 +45,7 @@ KisThreadPool::KisThreadPool()
 
 KisThreadPool::~KisThreadPool()
 {
-    //kdDebug() << "Deleting threadpool\n";
+    kdDebug() << "Deleting threadpool\n";
     
     m_poolMutex.lock();
     
@@ -78,9 +81,9 @@ KisThreadPool::~KisThreadPool()
         }
     }
 
-    //kdDebug() << "Waiting threads: " << m_threads.count()
-    //          << ", running threads: " << m_runningThreads.count()
-    //          << ", done threads: " << m_oldThreads.count() << endl;
+    kdDebug() << "After deleting, Waiting threads: " << m_threads.count()
+              << ", running threads: " << m_runningThreads.count()
+              << ", done threads: " << m_oldThreads.count() << endl;
     
     m_poolMutex.unlock();
 

@@ -31,7 +31,7 @@
 #include "kis_integer_maths.h"
 #include "kis_image.h"
 #include "kis_datamanager.h"
-
+#include "kis_fill_painter.h"
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)

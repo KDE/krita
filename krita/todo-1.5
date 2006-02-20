@@ -35,21 +35,16 @@ A  * When painting with the qpainter, if the zoom factor is < 1, we should first
      solve the slow loading for big images problem.
 A  * When painting with qpainter, simply resizing the window seems to result in a complete
      repaint. This happens every time a docked docker changes width, for instance.
-R  * rendering with complex groupings gives very wrong results
 P  * Fix part layers (nearly done)
 R  * disable everything necessary when the current layer is wet.
 C  * finish the convolution painter
-R  * Fix adj. layers issues Gary reported
-?  * Be able to paint on an adjustment layer created without selection
+R  * rendering with complex groupings gives very wrong results
 
 User interface
 
 P  * Try to optimize histogram docker
 R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
-R  * Check all tool option widgets for layout errors
-?  * Lock all actions when layers are locked or invisible, not just filters
-and tools (#90456)
 
 Files and Import/Export
 

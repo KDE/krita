@@ -28,6 +28,7 @@
 #include "kis_painter.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection.h"
+#include "kis_fill_painter.h"
 
 KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
     : KisLayer (img, name, OPACITY_OPAQUE)
@@ -89,6 +90,13 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     if (selection)
         m_selection = new KisSelection( *selection.data() );
+    else {
+        m_selection = new KisSelection();
+        KisFillPainter gc(m_selection.data());
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+        gc.fillRect(image()->bounds(), KisColor(Qt::white, cs), MAX_SELECTED);
+        gc.end();
+    }
 }
 
 

@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include "kodom.h"
+#include <KoDom.h>
 
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>

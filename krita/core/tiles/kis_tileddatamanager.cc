@@ -307,7 +307,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 }
 
 
-
 void KisTiledDataManager::clear(Q_INT32, Q_INT32, Q_INT32, Q_INT32, Q_UINT8)
 {
     //CBR_MISSING should be done more efficient, but for now it tests iterators and manager

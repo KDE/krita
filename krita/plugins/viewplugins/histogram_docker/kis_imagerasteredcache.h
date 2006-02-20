@@ -73,6 +73,8 @@ private:
     int m_width, m_height;
     KisView * m_view;
     bool m_busy;
+
+    KisPaintDeviceSP m_imageProjection;
 };
 
 #endif // _KIS_IMAGE_RASTERED_CACHE_H_

@@ -69,7 +69,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     else {
         KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(next.data());
         if (gl) {
-            dev = gl->projection();
+            dev = gl->projection(gl->extent());
         }
         else {
             KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(next.data());

@@ -25,6 +25,7 @@
 
 #include "kis_paint_layer.h"
 
+class KisMergeVisitor;
 
 /**
  * A KisLayer that bundles child layers into a single layer.
@@ -44,7 +45,21 @@ public:
 
     virtual KisLayerSP clone() const;
 public:
+    
+    /**
+     * Set the entire layer extent dirty; this percolates up to parent layers all the
+     * way to the root layer.
+     */
+    virtual void setDirty();
 
+    /**
+     * Add the given rect to the set of dirty rects for this layer;
+     * this percolates up to parent layers all the way to the root
+     * layer.
+     */
+    virtual void setDirty(const QRect & rect);
+
+    
     virtual void activate() {};
 
     virtual void deactivate() {};
@@ -72,7 +87,7 @@ public:
         };
 
     virtual void resetProjection();
-    virtual KisPaintDeviceSP projection() const { return m_projection; }
+    virtual KisPaintDeviceSP projection(const QRect & rect);
 
     virtual uint childCount() const;
 
@@ -103,8 +118,15 @@ public:
     virtual bool removeLayer(KisLayerSP layer);
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+    
+signals:
 
+    void sigDirty(const QRect & rc);
+    
 private:
+    
+    void updateProjection(const QRect & rc);
+    
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
     KisPaintDeviceSP m_projection; // The cached composition of all layers in this group

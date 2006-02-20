@@ -161,7 +161,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 
             if (painted) {
                 // does whole thing at moment
-                img -> notify(/* m_painter -> dirtyRect() */);
+                device->setDirty(painter.dirtyRect());
 
                 notifyModified();
 
@@ -177,9 +177,6 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
                 controller -> kiscanvas() -> update();
             }
 
-        } else {
-            // m_painter can be 0 here...!!!
-            //controller -> updateCanvas(m_painter -> dirtyRect()); // Removes the last remaining line.
         }
     }
 }

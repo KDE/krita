@@ -460,7 +460,6 @@ KisLayerSP KisSelectionManager::paste()
                 layer -> convertTo(img -> colorSpace());
 */
         img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
-        img->notify(layer->extent());
         layer->setDirty();
         return layer;
     }
@@ -589,7 +588,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
     painter2.beginTransaction(transactionText);
     painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
                           0, 0, img -> width(), img -> height());
-    img -> notify(selection->selectedRect());
+    if (dev->parentLayer()) dev->parentLayer()->setDirty(selection->selectedRect());
 
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(painter2.endTransaction());

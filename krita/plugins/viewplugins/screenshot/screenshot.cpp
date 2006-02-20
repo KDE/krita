@@ -73,5 +73,4 @@ void Screenshot::slotScreenGrabbed()
     KisView *view = dynamic_cast<KisView *>(parent());
     if(view)
         view->koDocument()->import(temp.name());
-        view->canvasSubject()->currentImg()->notify();
 }

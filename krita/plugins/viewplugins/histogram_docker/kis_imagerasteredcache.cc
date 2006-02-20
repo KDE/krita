@@ -35,8 +35,9 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
     : m_observer(o -> createNew(0, 0, 0, 0)), m_view(view)
 {
     m_busy = false;
+    m_imageProjection = 0;
     m_rasterSize = 64;
-    m_timeOutMSec = 250;
+    m_timeOutMSec = 1000;
 
     KisImageSP img = view -> canvasSubject() -> currentImg();
 
@@ -119,10 +120,13 @@ void KisImageRasteredCache::timeOut() {
     m_busy = true;
     KisImageSP img = m_view -> canvasSubject() -> currentImg();
 
+    // Temporary cache: while we are busy, we won't get the mergeImage time and again.
+    if (!m_imageProjection)
+        m_imageProjection = img->mergedImage();
+
     // Pick one element of the cache, and update it
     if (!m_queue.isEmpty()) {
-        KisPaintDeviceSP dev = img -> mergedImage(); // Just returns a pointer to projection
-        m_queue.front() -> observer -> regionUpdated(dev);
+        m_queue.front() -> observer -> regionUpdated(m_imageProjection);
         m_queue.front() -> valid = true;
         m_queue.pop_front();
     }
@@ -132,6 +136,7 @@ void KisImageRasteredCache::timeOut() {
         QTimer::singleShot(0, this, SLOT(timeOut()));
     } else {
         emit cacheUpdated();
+        m_imageProjection = 0;
         m_busy = false;
     }
 }

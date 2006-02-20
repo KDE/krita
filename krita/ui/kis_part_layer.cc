@@ -84,7 +84,7 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
     if (!m_activated && child == m_doc) {
         QRect rect = extent();
         m_activated = true;
-        image() -> notify(rect);
+        setDirty(rect);
         QPtrList<KoView> views = child -> parentDocument() -> views();
         Q_ASSERT(views.count());
         connect(views.at(0), SIGNAL(activated(bool)),
@@ -104,7 +104,7 @@ void KisPartLayerImpl::childDeactivated(bool activated)
         Q_ASSERT(views.count());
         views.at(0) -> disconnect(SIGNAL(activated(bool)));
         m_activated = false;
-        image() -> notify(m_doc -> geometry());
+        setDirty(m_doc -> geometry());
     }
 }
 

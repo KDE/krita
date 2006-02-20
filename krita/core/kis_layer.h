@@ -47,16 +47,34 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
-    /// If the layer has been changed and not been composited yet, this returns true
-    virtual bool dirty() { return m_dirty; }
+    
+    /**
+     * Set the specified rect to clean
+     */
+    virtual void setClean(const QRect & rect);
+    
+    /**
+     * If the layer has been changed and not been composited yet, this returns true
+     */
+    virtual bool dirty();
 
     /**
-     * Set the dirty flag. This also sets the dirty flag of the parent(s)
-     * The dirty flag is set to true only when the layer has been composited,
-     * i.e., passed through the merge visitor. Note that we may want to replace
-     * this with a list of dirty rects in the future.
+     * Return true if the given rect intersects the dirty rect(s) of this layer
      */
-    virtual void setDirty(bool dirty = true);
+    virtual bool dirty(const QRect & rc);
+    
+    /**
+     * Set the entire layer extent dirty; this percolates up to parent layers all the
+     * way to the root layer.
+     */
+    virtual void setDirty();
+
+    /**
+     * Add the given rect to the set of dirty rects for this layer;
+     * this percolates up to parent layers all the way to the root
+     * layer.
+     */
+    virtual void setDirty(const QRect & rect);
     
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
@@ -183,7 +201,6 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-    void notify(const QRect& r);
 
 private:
     friend class KisGroupLayer;
@@ -197,7 +214,9 @@ private:
     bool m_locked;
     bool m_visible;
     bool m_temporary;
-    bool m_dirty;
+
+    // XXX: keep a list of dirty rects instead of always aggegrating them
+    QRect m_dirtyRect;
     QString m_name;
     KisGroupLayerSP m_parent;
     KisImage *m_image;

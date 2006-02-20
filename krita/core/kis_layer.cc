@@ -251,9 +251,7 @@ namespace {
         m_layer -> setX(pos.x());
         m_layer -> setY(pos.y());
 
-        if (m_layer->image()) {
-            m_layer->image()->notify(m_updateRect);
-        }
+        m_layer->setDirty(m_updateRect);
 
         if (m_layer->undoAdapter()) {
             m_layer->undoAdapter()->setUndo(true);
@@ -277,7 +275,6 @@ KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
     m_locked(false),
     m_visible(true),
     m_temporary(false),
-    m_dirty(false), // XXX: is a layer dirty on creation, or on adding to an image?
     m_name(name),
     m_parent(0),
     m_image(img),
@@ -296,7 +293,7 @@ KisLayer::KisLayer(const KisLayer& rhs) :
         m_locked = rhs.m_locked;
         m_visible = rhs.m_visible;
         m_temporary = rhs.m_temporary;
-        m_dirty = rhs.m_dirty;
+        m_dirtyRect = rhs.m_dirtyRect;
         m_name = rhs.m_name;
         m_image = rhs.m_image;
         m_parent = 0;
@@ -308,12 +305,57 @@ KisLayer::~KisLayer()
 {
 }
 
-void KisLayer::setDirty(bool dirty)
+void KisLayer::setClean(const QRect & rect)
 {
-    // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_parent && dirty) m_parent->setDirty();
-    m_dirty = dirty;
+    if (m_dirtyRect.isValid() && rect.isValid()) {
+
+        kdDebug() << "setClean " << name() << " clean" << endl;
+        //kdDebug() << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
+        //kdDebug() << "cleaned rect: " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
+
+        // XXX: We should only set the parts clean that were actually cleaned. However, extent and exactBounds conspire
+        // to make that very hard atm.
+        //if (rect.contains(m_dirtyRect)) m_dirtyRect = QRect();
+        m_dirtyRect = QRect();
+    }
+
 }
+
+bool KisLayer::dirty()
+{
+    return m_dirtyRect.isValid();
+}
+
+
+bool KisLayer::dirty(const QRect & rc)
+{
+    if (!m_dirtyRect.isValid()) return false;
+
+    return rc.intersects(m_dirtyRect);
+}
+
+void KisLayer::setDirty()
+{
+    kdDebug() << "setDirty() " << name() << "\n";
+    QRect rc = extent();
+
+    if (rc.isValid()) m_dirtyRect = rc;
+    
+    // If we're dirty, our parent is dirty, if we've got a parent
+    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
+
+    
+}
+
+void KisLayer::setDirty(const QRect & rc)
+{
+    kdDebug() << "setDirty(rc) " << name() << "\n";
+    // If we're dirty, our parent is dirty, if we've got a parent
+    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
+    if (rc.isValid())
+        m_dirtyRect |= rc;
+}
+
 
 KisGroupLayerSP KisLayer::parent() const
 {
@@ -397,10 +439,9 @@ void KisLayer::setOpacity(Q_UINT8 val)
 {
     if (m_opacity != val)
     {
-        setDirty( true );
+        setDirty();
         m_opacity = val;
         notifyPropertyChanged();
-        notify(extent());
     }
 }
 
@@ -411,20 +452,24 @@ KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
 
 const bool KisLayer::visible() const
 {
+    //kdDebug() << name() << " visible: " << m_visible << endl;
     return m_visible; //XXX hmm is this right?
 }
 
 void KisLayer::setVisible(bool v)
 {
+    //kdDebug() << name() << " setVisible: " << v << ", was " << m_visible << endl;
     if (m_visible != v) {
-        setDirty(true);
+
         m_visible = v;
         notifyPropertyChanged();
-        notify(extent());
 
         if (undoAdapter()) {
             undoAdapter() -> addCommand(setVisibleCommand(v));
         }
+
+        setDirty();
+
     }
 }
 
@@ -483,10 +528,9 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
 {
     if (m_compositeOp != compositeOp)
     {
-        setDirty(true);
+        setDirty();
         m_compositeOp = compositeOp;
         notifyPropertyChanged();
-        notify(extent());
     }
 }
 
@@ -525,12 +569,6 @@ void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
         image() -> notifyPropertyChanged(this);
-}
-
-void KisLayer::notify(const QRect& r)
-{
-    if(image() && !signalsBlocked())
-        image() -> notify(r);
 }
 
 #include "kis_layer.moc"

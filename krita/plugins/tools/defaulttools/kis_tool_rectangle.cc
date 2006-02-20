@@ -39,6 +39,7 @@
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
+#include "kis_layer.h"
 
 KisToolRectangle::KisToolRectangle()
     : super(i18n ("Rectangle")),
@@ -136,7 +137,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         painter.setPaintOp(op);
 
         painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
-        m_currentImage -> notify( painter.dirtyRect() );
+        device->setDirty( painter.dirtyRect() );
         notifyModified();
 
         KisUndoAdapter *adapter = m_currentImage -> undoAdapter();

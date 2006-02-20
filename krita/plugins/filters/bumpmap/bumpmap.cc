@@ -194,7 +194,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         else {
             KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
             if (gl) {
-                bumplayer = gl->projection();
+                bumplayer = gl->projection(gl->extent());
             }
             else {
                 KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());

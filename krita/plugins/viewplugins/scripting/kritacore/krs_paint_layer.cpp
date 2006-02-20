@@ -159,7 +159,7 @@ Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
     if(doc() !=0)
     {
         doc()->setModified(true);
-        doc()->currentImage()->notify();
+        doc()->currentImage()->activeLayer()->setDirty();
     }
     if(m_cmd != 0)
     {

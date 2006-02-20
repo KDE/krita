@@ -131,7 +131,8 @@ namespace {
                     }
 
                     KisPaintDevice thumbnailRect(m_image->colorSpace(), "thumbnailRect");
-
+                    KisPaintDeviceSP mergedImage = m_image->projection();
+                    
                     Q_INT32 imageWidth = m_image->width();
                     Q_INT32 imageHeight = m_image->height();
                     Q_UINT32 pixelSize = m_image->colorSpace()->pixelSize();
@@ -147,7 +148,7 @@ namespace {
 
                             Q_INT32 imageX = (thumbnailX * imageWidth) / thumbnailSize.width();
 
-                            KisColor pixelColor = m_image->mergedPixel(imageX, imageY);
+                            KisColor pixelColor = mergedImage->colorAt(imageX, imageY);
                             memcpy(it.rawData(), pixelColor.data(), pixelSize);
 
                             ++it;

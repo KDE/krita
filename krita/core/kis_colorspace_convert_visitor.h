@@ -64,7 +64,7 @@ bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
         child->accept(*this);
         child = child->nextSibling();
     }
-    layer->setDirty(true);
+    layer->setDirty();
     return true;
 }
 
@@ -72,7 +72,7 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
 
-    layer->setDirty(true);
+    layer->setDirty();
     return true;
 }
 
@@ -85,7 +85,7 @@ bool KisColorSpaceConvertVisitor::visit(KisPartLayer *)
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
     layer->resetCache();
-    layer->setDirty(true);
+    layer->setDirty();
     return true;
 }
 

@@ -129,7 +129,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         layer->setX(x);
         layer->setY(y);
 
-        img->notify(layer->extent());
+        layer->setDirty();
 
         if (undoAdapter) {
             undoAdapter -> endMacro();

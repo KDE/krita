@@ -478,6 +478,7 @@ private slots:
     /// Is called when the file is loaded
     void slotLoadingFinished();
 
+
 private:
 
     bool m_panning;

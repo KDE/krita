@@ -103,7 +103,7 @@ void KisStrategyMove::drag(const QPoint& original)
             m_layerPosition = QPoint(dev->x(), dev->y());
             m_dragStart = original;
 
-            img->notify(rc);
+            dev->setDirty(rc);
         }
     }
 }

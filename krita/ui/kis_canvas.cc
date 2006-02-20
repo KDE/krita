@@ -379,8 +379,8 @@ void KisCanvasWidget::initX11Support()
     const XDeviceInfo *devices = XListInputDevices(x11Display, &numDevices);
 
     if (devices != NULL) {
-        XID lastStylusSeen;
-        XID lastEraserSeen;
+        XID lastStylusSeen = 0;
+        XID lastEraserSeen = 0;
         bool foundStylus = false;
         bool foundEraser = false;
 

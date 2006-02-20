@@ -136,7 +136,7 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
         painter.setPaintOp(op); // Painter takes ownership
 
         painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
-        m_currentImage -> notify( painter.dirtyRect() );
+        device->setDirty( painter.dirtyRect() );
         notifyModified();
 
         KisUndoAdapter *adapter = m_currentImage -> undoAdapter();

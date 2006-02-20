@@ -71,7 +71,7 @@ public:
       	        layer->undoAdapter()->addCommand(cmd);
     	    }
         }
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     };
 
@@ -84,7 +84,7 @@ public:
             child->accept(*this);
             child = child->nextSibling();
         }
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     };
 

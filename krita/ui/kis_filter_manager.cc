@@ -218,7 +218,7 @@ bool KisFilterManager::apply()
         return false;
 
     } else {
-        img->notify();
+        if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
         m_doc->setModified(true);
         img->undoAdapter()->addCommand(cmd);
         m_lastFilter->disableProgress();

@@ -60,7 +60,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     else {
         KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(activeLayer.data());
         if (gl) {
-            dev = gl->projection();
+            dev = gl->projection(img->bounds());
         }
         else {
             KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());

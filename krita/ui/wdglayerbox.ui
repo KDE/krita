@@ -12,6 +12,9 @@
             <height>542</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgLayerBox</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -36,7 +39,7 @@
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>7</hsizetype>
+                            <hsizetype>3</hsizetype>
                             <vsizetype>0</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
@@ -297,8 +300,8 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kis_cmb_composite.h</includehint>
-    <includehint>kis_int_spinbox.h</includehint>
-    <includehint>kis_layerlist.h</includehint>
+    <includehint>kiscmbcomposite.h</includehint>
+    <includehint>kisintspinbox.h</includehint>
+    <includehint>kislayerlist.h</includehint>
 </includehints>
 </UI>

@@ -204,7 +204,7 @@ public:
 
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
-    KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP projection();
     
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name) const;
@@ -222,9 +222,7 @@ public:
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
     
     /**
-     * Add already existing layer to image. If notify is set to true, the image
-     * is immediately recomposited. When adding layers on loading an image, this
-     * is not what you want.
+     * Add already existing layer to image.
      *
      * @param layer the layer to be added
      * @param parent the parent layer
@@ -237,7 +235,7 @@ public:
      *
      * returns false if adding the layer didn't work, true if the layer got added
      */
-    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis, bool notify = true);
+    bool addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
 
     /// Remove layer
     bool removeLayer(KisLayerSP layer);
@@ -347,7 +345,7 @@ signals:
 
     /**
      * Emitted whenever an action has caused the image to be recomposited. This happens
-     * after calls to notify().
+     * after calls to recomposite().
      *
      * @param rc The rect that has been recomposited.
      */
@@ -370,21 +368,6 @@ public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
 
-    /**
-     * notify is called whenever we have changed something to one or more layers.
-     * The entire image will be recomposited and made ready for redisplay.
-     * XXX: Note that this also sets the currently active layer dirty; we don't want that.
-     */
-    void notify();
-
-    /**
-     * The specified rect will be composited and made ready for redisplay.
-     * XXX: Note that this also sets the currently active layer dirty; we don't want that.
-     */
-    void notify(const QRect& rc);
-
-protected:
-    void updateProjection(const QRect& rc);
 
 private:
     KisImage& operator=(const KisImage& rhs);
@@ -421,8 +404,6 @@ private:
     DCOPObject *m_dcop;
 
     vKisAnnotationSP m_annotations;
-
-    bool m_renderinit;
 
     class KisImagePrivate;
     KisImagePrivate * m_private;

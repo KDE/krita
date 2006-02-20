@@ -112,7 +112,7 @@ void KisToolPolygon::finish()
 
     m_points.clear();
 
-    m_currentImage -> notify( painter.dirtyRect() );
+    device->setDirty( painter.dirtyRect() );
     notifyModified();
 
     KisUndoAdapter *adapter = m_currentImage -> undoAdapter();

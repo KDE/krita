@@ -122,7 +122,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 cmd -> unexecute();
                 delete cmd;
             } else {
-                img->notify();
+                dev->setDirty(rect);
                 img->undoAdapter()->addCommand(cmd);
             }
             filter->disableProgress();

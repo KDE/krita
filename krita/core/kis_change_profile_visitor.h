@@ -71,7 +71,7 @@ bool KisChangeProfileVisitor::visit(KisGroupLayer * layer)
         child->accept(*this);
         child = child->nextSibling();
     }
-    layer->setDirty(true);
+    layer->setDirty();
     return true;
 }
 
@@ -87,7 +87,7 @@ bool KisChangeProfileVisitor::visit(KisPaintLayer *layer)
     
         layer->paintDevice()->setProfile(m_dstColorSpace->getProfile());
 
-        layer->setDirty(true);
+        layer->setDirty();
     }
     return true;
 }
@@ -101,7 +101,7 @@ bool KisChangeProfileVisitor::visit(KisPartLayer *)
 bool KisChangeProfileVisitor::visit(KisAdjustmentLayer * layer)
 {
     layer->resetCache();
-    layer->setDirty(true);
+    layer->setDirty();
     return true;
 }
 

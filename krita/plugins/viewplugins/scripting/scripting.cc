@@ -75,7 +75,9 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
         //END TODO
 
-        m_view->canvasSubject()->paletteManager()->addWidget(new Kross::Api::WdgScriptsManager(m_scriptguiclient, m_view),"Scripts Manager",krita::LAYERBOX, 10);
+        QWidget * w = new Kross::Api::WdgScriptsManager(m_scriptguiclient, m_view);
+
+        m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager",krita::LAYERBOX, 10);
 
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
 
@@ -96,7 +98,7 @@ Scripting::~Scripting()
 void Scripting::executionFinished(const Kross::Api::ScriptAction*)
 {
     m_view->canvasSubject()->document()->setModified(true);
-    m_view->canvasSubject()->document()->currentImage()->notify();
+    m_view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
     m_scriptProgress->progressDone();
     QApplication::restoreOverrideCursor();
 }

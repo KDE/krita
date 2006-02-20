@@ -166,7 +166,6 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
             }
         }
         m_view->canvasSubject()->document()->setModified(true);
-        image->notify();
     }
 
     if (undo) {

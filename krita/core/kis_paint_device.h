@@ -368,22 +368,35 @@ public:
      */
     virtual Q_INT32 nChannels() const;
 
-    /*
+    /**
      * Return the image that contains this paint device, or 0 if it is not
      * part of an image. This is the same as calling parentLayer()->image().
      */
     KisImage *image() const;
 
-    /* Returns the KisLayer that contains this paint device, or 0 if this is not 
+    /**
+     * Returns the KisLayer that contains this paint device, or 0 if this is not
      * part of a layer.
      */
     KisLayer *parentLayer() const;
 
-    /* Set the KisLayer that contains this paint device, or 0 if this is not 
+    /**
+     * Set the KisLayer that contains this paint device, or 0 if this is not
      * part of a layer.
      */
     void setParentLayer(KisLayer *parentLayer);
 
+    /**
+     * Add the specified rect top the parent layer (if present)
+     */
+    void setDirty(const QRect & rc);
+
+    /**
+     * Set the parent layer completely dirty, if this paint device has one.
+     */
+    void setDirty();
+    
+    
     /**
      * Mirror the device along the X axis
      */

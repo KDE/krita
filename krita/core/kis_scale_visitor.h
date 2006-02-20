@@ -143,7 +143,7 @@ public:
         m_scalethreads.append(scaleThread);
         scaleThread->start();
         //scaleThread->run();
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     }
 
@@ -176,7 +176,7 @@ public:
         m_scalethreads.append(scaleThread);
         scaleThread->start();
         layer->resetCache();
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     }
     

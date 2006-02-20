@@ -41,6 +41,7 @@
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
+#include "kis_layer.h"
 
 KisToolLine::KisToolLine()
     : super(i18n("Line")),
@@ -148,7 +149,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
             m_painter -> setPaintOp(op); // Painter takes ownership
             m_painter -> paintLine(m_startPos, PRESSURE_DEFAULT, 0, 0, m_endPos, PRESSURE_DEFAULT, 0, 0);
-            m_currentImage -> notify( m_painter -> dirtyRect() );
+            device->setDirty( m_painter -> dirtyRect() );
             notifyModified();
 
             /* remove remains of the line drawn while moving */

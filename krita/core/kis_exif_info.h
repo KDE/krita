@@ -29,7 +29,7 @@ class KisExifInfo
 {
     public:
         KisExifInfo();
-        ~KisExifInfo();
+        virtual ~KisExifInfo();
 
         virtual bool load(const QDomElement& e);
         virtual QDomElement save(QDomDocument& doc);

@@ -2451,7 +2451,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
         KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjlayerprops");
         if (dlg.exec() == QDialog::Accepted)
         {
-            alayer -> setDirty( true );
+            alayer -> setDirty();
             alayer -> setFilter( dlg.filterConfiguration() );
         }
     }
@@ -2469,8 +2469,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
             {
                 m_adapter -> beginMacro(i18n("Property Changes"));
                 layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
-                layer -> setDirty( true );
-                layer->image()->notify(layer->extent());
+                layer -> setDirty();
                 m_adapter -> endMacro();
             }
         }
@@ -2638,7 +2637,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
     else {
         KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(l.data());
         if (gl) {
-            dev = gl->projection();
+            dev = gl->projection(img->bounds());
         }
         else {
             KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(l.data());
@@ -2662,7 +2661,6 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
 
         addAdjustmentLayer( parent, above, name, filter, selection);
 
-        img->notify();
     }
 }
 
@@ -2704,10 +2702,8 @@ void KisView::layerRemove()
         if (layer) {
             //Q_INT32 n = img -> index(layer);
             if (layer->parent())
-                layer->parent()->setDirty(true);
+                layer->parent()->setDirty(layer->extent());
             img->removeLayer(layer);
-            if (img->activeLayer())
-                img->activeLayer()->setDirty(true);
             kdDebug() << "layerRemove calls resizeEvent\n"; resizeEvent(0);
             kdDebug() << "layerRemove calls updateCanvas\n"; updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
@@ -2920,6 +2916,7 @@ void KisView::connectCurrentImg()
 {
     if (m_image) {
         connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+        connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(canvasRefresh()));
 
         connect(m_image, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
@@ -2938,17 +2935,13 @@ void KisView::connectCurrentImg()
 
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
-            connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(const QRect&)),
-                    SLOT(imgUpdated(const QRect&)));
-            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
-                    SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+            connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(const QRect&)), SLOT(imgUpdated(const QRect&)));
+            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         } else
 #endif
         {
-            connect(m_image, SIGNAL(sigImageUpdated(const QRect&)),
-                    SLOT(imgUpdated(const QRect&)));
-            connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
-                    SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+            connect(m_image, SIGNAL(sigImageUpdated(const QRect&)), SLOT(imgUpdated(const QRect&)));
+            connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
         }
     }
 
@@ -3418,7 +3411,6 @@ void KisView::setCurrentImage(KisImageSP image)
 #endif
     connectCurrentImg();
     m_layerBox -> setImage(currentImg());
-    m_image -> notify();
 
     kdDebug() << "setCurrentImage class zoomAroundPoint\n"; zoomAroundPoint(0, 0, 1.0);
     kdDebug() << "setCurrentImage calls resizeEvent\n"; resizeEvent(0);

@@ -97,7 +97,7 @@ bool KisToolFill::flood(int startX, int startY)
         painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
                               0, 0, m_currentImage -> width(), m_currentImage -> height());
 
-        m_currentImage -> notify();
+        device->setDirty(filled->extent());
         notifyModified();
 
         KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
@@ -127,7 +127,7 @@ bool KisToolFill::flood(int startX, int startY)
     else
         painter.fillColor(startX, startY);
 
-    m_currentImage -> notify();
+    device->setDirty(painter.dirtyRect());
     notifyModified();
 
     KisUndoAdapter *adapter = m_currentImage -> undoAdapter();

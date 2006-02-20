@@ -83,7 +83,7 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
     bool makeOpaque = ((KisSobelFilterConfiguration*)configuration)->makeOpaque();
 
     //pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
-    sobel(src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
+    sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -103,9 +103,9 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::sobel(KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
+void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
-    QRect rect = src -> exactBounds();
+    QRect rect = rc; //src -> exactBounds();
     Q_UINT32 x = rect.x();
     Q_UINT32 y = rect.y();
     Q_UINT32 width = rect.width();

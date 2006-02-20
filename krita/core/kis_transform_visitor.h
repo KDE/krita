@@ -76,7 +76,7 @@ public:
         if (m_img->undoAdapter()) {
             m_img->undoAdapter()->addCommand(t);
 	}
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     };
 
@@ -89,7 +89,7 @@ public:
             child->accept(*this);
             child = child->nextSibling();
         }
-        layer->setDirty(true);
+        layer->setDirty();
         return true;
     };
 

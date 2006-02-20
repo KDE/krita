@@ -640,7 +640,7 @@ void KisToolTransform::transform()
     
     KisImageSP img = m_subject -> currentImg();
 
-    if (!img)
+    if (!img || !img->activeDevice())
         return;
 
     /*
@@ -684,7 +684,7 @@ void KisToolTransform::transform()
         return;
     }
 
-    img -> notify(rc);
+    img->activeDevice()->setDirty(rc);
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()

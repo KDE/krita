@@ -132,12 +132,11 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
-        //painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
         vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
         painter.paintPolygon(coord);
-        //painter.paintLine(m_dragStart, PRESSURE_DEFAULT, 0, 0, m_dragEnd, PRESSURE_DEFAULT, 0, 0);
-        m_currentImage -> notify( painter.dirtyRect() );
+        
+        device->setDirty( painter.dirtyRect() );
         notifyModified();
 
         KisUndoAdapter *adapter = m_currentImage -> undoAdapter();

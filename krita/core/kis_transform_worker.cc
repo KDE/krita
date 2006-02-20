@@ -27,6 +27,7 @@
 #include "kis_progress_display_interface.h"
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
+#include "kis_layer.h"
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, double yscale,
                     double xshear, double yshear, double rotation,
@@ -448,12 +449,12 @@ bool KisTransformWorker::run()
 //printf("%d %d\n",m_progressStep,m_progressTotalSteps);
 //printf("%f\n",rotation);
 
-    if (m_dev->image()) {
-        m_dev->image()->notify();
+    if (m_dev->parentLayer()) {
+        m_dev->parentLayer()->setDirty();
     }
 
     //progress info
-        emit notifyProgressDone();
+    emit notifyProgressDone();
 
-        return m_cancelRequested;
+    return m_cancelRequested;
 }

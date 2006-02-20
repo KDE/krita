@@ -44,6 +44,7 @@
 #include "kis_boundary.h"
 #include "kis_move_event.h"
 #include "kis_canvas.h"
+#include "kis_layer.h"
 
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
@@ -67,8 +68,8 @@ KisToolBrush::~KisToolBrush()
 void KisToolBrush::timeoutPaint()
 {
     if (currentImage() && painter()) {
-        painter() -> paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
-        currentImage() -> notify(painter() -> dirtyRect());
+        painter()->paintAt(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt);
+        currentImage()->activeLayer()->setDirty(painter()->dirtyRect());
     }
 }
 

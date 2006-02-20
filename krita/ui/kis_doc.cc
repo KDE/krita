@@ -476,7 +476,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                     }
                     else {
                         img -> nextLayerName(); // Make sure the nameserver is current with the number of layers.
-                        img -> addLayer(layer, parent, 0, false);
+                        img -> addLayer(layer, parent, 0);
                     }
                 }
             }
@@ -672,7 +672,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
     else
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
     kdDebug(DBG_AREA_FILE) << "filename of adjustment layer: " << m_layerFilenames[layer.data()]  << "\n";
-    layer->setDirty(true);
+
     return layer;
 }
 

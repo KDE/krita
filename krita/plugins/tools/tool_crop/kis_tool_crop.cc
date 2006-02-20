@@ -498,7 +498,6 @@ void KisToolCrop::crop() {
         KisCropVisitor v(rc, false);
         KisLayerSP layer = img->activeLayer();
         layer->accept(v);
-        img -> notify();
 
         if (img -> undoAdapter())
             img -> undoAdapter() -> endMacro();
@@ -507,9 +506,7 @@ void KisToolCrop::crop() {
     else {
         // Resize creates the undo macro itself
         img -> resize(rc, true);
-        img -> notify();
     }
-
 
     m_rectCrop = QRect(0,0,0,0);
 

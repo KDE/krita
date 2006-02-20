@@ -19,8 +19,9 @@
 #include <qrect.h>
 #include <qwmatrix.h>
 #include <qimage.h>
-
+#include <qdatetime.h>
 #include <qapplication.h>
+
 #include <kcommand.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -142,10 +143,8 @@ namespace {
     void MoveCommand::moveTo(const QPoint& pos)
     {
         m_device -> move(pos.x(), pos.y());
-
-        if (m_device -> image()) {
-            m_device -> image() -> notify();
-        }
+        KisLayerSP l = m_device->parentLayer();
+        if (l) l->setDirty();
     }
 
     class KisConvertLayerTypeCmd : public KNamedCommand {
@@ -177,9 +176,8 @@ namespace {
                 m_paintDevice -> setData(m_afterData, m_afterColorSpace);
 
                 m_adapter -> setUndo(true);
-                if (m_paintDevice -> image()) {
-                    m_paintDevice -> image() -> notify();
-                }
+                KisLayerSP l = m_paintDevice->parentLayer();
+                if (l) l->setDirty();
             }
 
         virtual void unexecute()
@@ -189,9 +187,8 @@ namespace {
                 m_paintDevice -> setData(m_beforeData, m_beforeColorSpace);
 
                 m_adapter -> setUndo(true);
-                if (m_paintDevice -> image()) {
-                    m_paintDevice -> image() -> notify();
-                }
+                KisLayerSP l = m_paintDevice->parentLayer();
+                if (l) l->setDirty();
             }
 
     private:
@@ -317,7 +314,7 @@ KisPaintDevice::~KisPaintDevice()
 {
     //kdDebug() << "going to delete paint device " << this  << ", " << name() << "\n";
     delete m_dcop;
-    delete m_exifInfo;
+    //delete m_exifInfo;
 }
 
 DCOPObject *KisPaintDevice::dcopObject()
@@ -337,6 +334,16 @@ KisLayer *KisPaintDevice::parentLayer() const
 void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
 {
     m_parentLayer = parentLayer;
+}
+
+void KisPaintDevice::setDirty(const QRect & rc) 
+{
+    if (m_parentLayer) m_parentLayer->setDirty(rc);
+}
+
+void KisPaintDevice::setDirty()
+{
+    if (m_parentLayer) m_parentLayer->setDirty();
 }
 
 KisImage *KisPaintDevice::image() const
@@ -522,7 +529,7 @@ void KisPaintDevice::mirrorX()
         }
     }
     if (m_parentLayer) {
-        m_parentLayer->notify(r);
+        m_parentLayer->setDirty(r);
     }
 }
 
@@ -552,7 +559,7 @@ void KisPaintDevice::mirrorY()
     }
 
     if (m_parentLayer) {
-        m_parentLayer->notify(r);
+        m_parentLayer->setDirty(r);
     }
 }
 
@@ -623,7 +630,7 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
     setData(dst.m_datamanager, dstColorSpace);
 
     if (m_parentLayer) {
-        m_parentLayer->notify(extent());
+        m_parentLayer->setDirty(extent());
     }
 
     if (undoAdapter() && undoAdapter() -> undo()) {
@@ -708,22 +715,55 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, float exposure)
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
+// XXX: is this faster than building the QImage ourselves? It makes  
 QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
 {
     if (w < 0)
-        w = 0;
+        return QImage();
 
     if (h < 0)
-        h = 0;
+        return QImage();
+#if 0 // XXX: This one should be faster and take much less memory, but it corrupts a lot :-(
+    QImage img (w, h, 32, 0, QImage::LittleEndian);
+    img.setAlphaBuffer( true );
 
+    KisColorSpace * dstCS;
+
+    if (dstProfile)
+        dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),dstProfile->productName());
+    else
+        dstCS = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
+    if (!dstCS) return img;
+
+    KisColorSpace * srcCS = colorSpace();
+    
+    Q_UINT8 * imgBits = img.bits();
+    for (Q_INT32 y = y1; y < h; ++y) {
+        KisHLineIteratorPixel it = createHLineIterator( x1, y, w, false );
+        while (!it.isDone()) {
+            Q_INT32 pixels = it.nConseqHPixels();
+            // Just converting the pixels doesn't set the exposure correctly
+            QImage tmpImage = srcCS->convertToQImage(it.rawData(), pixels, 1, dstProfile, INTENT_PERCEPTUAL, exposure);
+            memcpy(imgBits, tmpImage.bits(), pixels * 4);
+            it+=pixels;
+            imgBits += pixels * 4;
+        }
+    }
+    return img;
+#else
+    
     Q_UINT8 * data = new Q_UINT8 [w * h * m_pixelSize];
     Q_CHECK_PTR(data);
 
+    // XXX: Is this really faster than converting line by line and building the QImage directly?
+    //      This copies potentially a lot of data.
     m_datamanager -> readBytes(data, x1, y1, w, h);
     QImage image = colorSpace() -> convertToQImage(data, w, h, dstProfile, INTENT_PERCEPTUAL, exposure);
     delete[] data;
 
     return image;
+#endif
 }
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
@@ -948,7 +988,7 @@ void KisPaintDevice::clearSelection()
     }
 
     if (m_parentLayer) {
-        m_parentLayer->notify(r);
+        m_parentLayer->setDirty(r);
     }
 }
 

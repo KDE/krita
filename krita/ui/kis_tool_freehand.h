@@ -81,6 +81,7 @@ protected:
     double m_dragDist;
 
     bool m_paintIncremental;
+    bool m_paintOnSelection;
     
     KisPaintDeviceSP m_target;
     KisLayerSP m_tempLayer;

@@ -51,6 +51,7 @@ KisToolSelectEraser::KisToolSelectEraser()
     setName("tool_select_eraser");
     setCursor(KisCursor::load("tool_eraser_selection_cursor.png", 5, 5));
     m_optWidget = 0;
+    m_paintOnSelection = true;
 }
 
 KisToolSelectEraser::~KisToolSelectEraser()

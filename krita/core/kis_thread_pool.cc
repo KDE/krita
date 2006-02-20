@@ -27,8 +27,6 @@ KisThreadPool::KisThreadPool()
 {
     kdDebug() << "Creating thread pool\n";
     Q_ASSERT(KisThreadPool::m_singleton == 0);
-    if (KisThreadPool::m_singleton != 0)
-        delete KisThreadPool::m_singleton;
     
     KisThreadPool::m_singleton = this;
 
@@ -97,7 +95,14 @@ KisThreadPool * KisThreadPool::instance()
         KisThreadPool::m_singleton = new KisThreadPool();
         return KisThreadPool::m_singleton;
     }
-    else if (KisThreadPool::m_singleton->finished()) {
+    else {
+        
+        if (!KisThreadPool::m_singleton->finished()) {
+            
+            KisThreadPool::m_singleton->cancel();
+            KisThreadPool::m_singleton->wait();
+        }
+        
         //kdDebug() << "the old threadpool has stopped; start a new one\n";
         delete KisThreadPool::m_singleton;
         KisThreadPool::m_singleton = new KisThreadPool();

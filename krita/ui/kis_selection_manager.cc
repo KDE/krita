@@ -355,9 +355,10 @@ void KisSelectionManager::cut()
         Q_CHECK_PTR(t);
     }
 
-    dev -> clearSelection();
-    dev -> deselect();
-
+    dev->clearSelection();
+    dev->deselect();
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(t);
     }
@@ -419,8 +420,8 @@ void KisSelectionManager::copy()
                    << r.height() << "\n";
 
 
-     m_clipboard -> setClip(clip);
-     imgSelectionChanged(m_parent -> currentImg());
+    m_clipboard -> setClip(clip);
+    imgSelectionChanged(m_parent -> currentImg());
 }
 
 
@@ -460,7 +461,7 @@ KisLayerSP KisSelectionManager::paste()
                 layer -> convertTo(img -> colorSpace());
 */
         img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
-        layer->setDirty();
+        
         return layer;
     }
     return 0;
@@ -514,7 +515,8 @@ void KisSelectionManager::selectAll()
 
     dev -> selection() -> clear();
     dev -> selection() -> invert();
-
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -531,7 +533,8 @@ void KisSelectionManager::deselect()
     Q_CHECK_PTR(t);
 
     dev -> deselect();
-
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -555,7 +558,8 @@ void KisSelectionManager::clear()
     }
 
     dev -> clearSelection();
-
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 }
 
@@ -588,8 +592,9 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
     painter2.beginTransaction(transactionText);
     painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
                           0, 0, img -> width(), img -> height());
-    if (dev->parentLayer()) dev->parentLayer()->setDirty(selection->selectedRect());
 
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(painter2.endTransaction());
     }
@@ -622,7 +627,8 @@ void KisSelectionManager::reselect()
     Q_CHECK_PTR(t);
 
     dev -> reselect(); // sets hasSelection=true
-
+    dev->emitSelectionChanged();
+    
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -647,7 +653,8 @@ void KisSelectionManager::invert()
         }
 
         s -> invert();
-
+        dev->emitSelectionChanged();
+    
         if (img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
     }
@@ -678,8 +685,6 @@ void KisSelectionManager::cutToNewLayer()
 }
 
 
-// XXX Krita post 1.4: Make feather radius configurable
-// XXX This has just become post 1.5, I'm afaid
 void KisSelectionManager::feather()
 {
     KisImageSP img = m_parent -> currentImg();
@@ -880,17 +885,17 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     }
     selection->writeBytes(out, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
     }
-  /* undo the offsets to the pointers so we can free the malloced memmory */
-  circ -= xradius;
-  max -= xradius;
-  //XXXX: replace delete by delete[] where it is necessary to avoid memory leaks!
-  delete circ;
-  delete buffer;
-  delete max;
-  for (Q_INT32 i = 0; i < yradius + 1; i++)
-    delete buf[i];
-  delete buf;
-  delete out;
+    /* undo the offsets to the pointers so we can free the malloced memmory */
+    circ -= xradius;
+    max -= xradius;
+    //XXXX: replace delete by delete[] where it is necessary to avoid memory leaks!
+    delete circ;
+    delete buffer;
+    delete max;
+    for (Q_INT32 i = 0; i < yradius + 1; i++)
+        delete buf[i];
+    delete buf;
+    delete out;
 
     dev -> emitSelectionChanged();
 }

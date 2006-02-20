@@ -57,6 +57,7 @@ KisToolFreehand::KisToolFreehand(QString transactionText)
     m_currentImage = 0;
     m_tempLayer = 0;
     m_paintIncremental = true;
+    m_paintOnSelection = false;
     m_paintedOutline = false;
 }
 
@@ -94,7 +95,12 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
             m_dirtyRect = r;
 
             r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-            m_currentImage->activeLayer()->setDirty(r);
+            if (!m_paintOnSelection)
+                m_currentImage->activeLayer()->setDirty(r);
+            else {
+            // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
+                m_subject->canvasController()->updateCanvas( r );
+            } 
         }
     }
 }
@@ -120,7 +126,12 @@ void KisToolFreehand::move(KisMoveEvent *e)
         m_dirtyRect |= r;
 
         r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-        m_currentImage->activeLayer()->setDirty(r);
+        if (!m_paintOnSelection)
+            m_currentImage->activeLayer()->setDirty(r);
+        else {
+            // Just update the canvas
+            m_subject->canvasController()->updateCanvas( r );
+        } 
     }
 }
 

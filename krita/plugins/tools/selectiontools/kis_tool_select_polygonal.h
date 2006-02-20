@@ -54,7 +54,9 @@ public:
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-
+    virtual void doubleClick(KisDoubleClickEvent * event);
+    
+    void finish();
     QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
 

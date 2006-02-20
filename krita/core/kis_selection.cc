@@ -122,7 +122,7 @@ void KisSelection::clear(QRect r)
     KisFillPainter painter(this);
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     painter.fillRect(r, KisColor(Qt::white, cs), MIN_SELECTED);
-    emitSelectionChanged(r);
+    //emitSelectionChanged(r);
 }
 
 void KisSelection::clear()
@@ -130,7 +130,7 @@ void KisSelection::clear()
     Q_UINT8 defPixel = MIN_SELECTED;
     m_datamanager -> setDefaultPixel(&defPixel);
     m_datamanager -> clear();
-    emitSelectionChanged();
+    //emitSelectionChanged();
 }
 
 void KisSelection::invert()
@@ -148,7 +148,7 @@ void KisSelection::invert()
     }
     Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
     m_datamanager -> setDefaultPixel(&defPixel);
-    emitSelectionChanged();
+    //emitSelectionChanged();
 }
 
 bool KisSelection::isTotallyUnselected(QRect r)

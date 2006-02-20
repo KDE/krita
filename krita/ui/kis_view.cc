@@ -1095,7 +1095,8 @@ void KisView::updateCanvas(const QRect& rc)
 
 void KisView::updateCanvas(const KisRect& rc)
 {
-    kdDebug() << "updateCanvas(rc) called\n\t updateCanvas(rc) calls paintView" << endl; paintView(rc);
+    kdDebug() << "updateCanvas(rc) called\n\t updateCanvas(rc) calls paintView" << endl;
+    paintView(rc);
 }
 
 void KisView::canvasRefresh()

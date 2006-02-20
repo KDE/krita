@@ -35,6 +35,10 @@ enum enumSelectionMode {
  * KisSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  *
+ * NOTE: If you need to manually call emitSelectionChanged on the owner paint device
+ *       of a selection. KisSelection does not emit any signals by itself because
+ *       often you want to combine several actions in to perfom one operation and you
+ *       do not want recomposition to happen all the time.
  */
 class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
 

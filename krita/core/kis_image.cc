@@ -1320,13 +1320,13 @@ KisUndoAdapter* KisImage::undoAdapter() const
 
 void KisImage::slotSelectionChanged()
 {
-//     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged\n";
+    kdDebug() << "KisImage::slotSelectionChanged\n";
     emit sigActiveSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
 {
-//     kdDebug(DBG_AREA_CORE) << "KisImage::slotSelectionChanged rect\n";
+    kdDebug() << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
     emit sigActiveSelectionChanged(KisImageSP(this));

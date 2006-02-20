@@ -861,6 +861,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 
 void KisPaintDevice::emitSelectionChanged()
 {
+    kdDebug() << "KisPaintDevice::emitSelectionChanged()\n"; // << kdBacktrace() << "\n";
     if (m_parentLayer && m_parentLayer->image()) {
         m_parentLayer->image()->slotSelectionChanged();
     }
@@ -868,6 +869,7 @@ void KisPaintDevice::emitSelectionChanged()
 
 void KisPaintDevice::emitSelectionChanged(const QRect& r)
 {
+    kdDebug() << "KisPaintDevice::emitSelectionChanged(const QRect & r)\n";
     if (m_parentLayer && m_parentLayer->image()) {
         m_parentLayer->image()->slotSelectionChanged(r);
     }
@@ -906,7 +908,7 @@ void KisPaintDevice::deselect()
     if (m_selection && m_hasSelection) {
         m_hasSelection = false;
         m_selectionDeselected = true;
-        emitSelectionChanged();
+        //emitSelectionChanged();
     }
 }
 
@@ -914,7 +916,7 @@ void KisPaintDevice::reselect()
 {
     m_hasSelection = true;
     m_selectionDeselected = false;
-    emitSelectionChanged();
+    //emitSelectionChanged();
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {

@@ -94,63 +94,75 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             m_dragEnd = event -> pos();
             draw();
         }
-    } else if (event -> button() == RightButton) {
-        // erase old lines on canvas
-        draw();
-        m_dragging = false;
+    } else if (event->button() == LeftButton && event->state() == ShiftButton) {
+        finish();
+    }
+}
 
-        KisImageSP img = m_subject -> currentImg();
+           
+void KisToolSelectPolygonal::doubleClick( KisDoubleClickEvent * )
+{
+    finish();
+}
 
-        if (img) {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = img -> activeDevice();
-            bool hasSelection = dev -> hasSelection();
+void KisToolSelectPolygonal::finish()
+{
+    // erase old lines on canvas
+    draw();
+    m_dragging = false;
 
-            //XXX: Fix string
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
-            KisSelectionSP selection = dev -> selection();
+    KisImageSP img = m_subject -> currentImg();
 
-            if (!hasSelection)
-            {
-                selection -> clear();
-            }
+    if (img) {
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        KisPaintDeviceSP dev = img -> activeDevice();
+        bool hasSelection = dev -> hasSelection();
 
-            KisPainter painter(selection.data());
-            painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-            painter.setBrush(m_subject -> currentBrush());
-            painter.setOpacity(OPACITY_OPAQUE);
-            KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, &painter);
-            painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+        //XXX: Fix string
+        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Polygonal Selection"), dev);
+        KisSelectionSP selection = dev -> selection();
 
-            switch(m_selectAction)
-            {
-                case SELECTION_ADD:
-                    painter.setCompositeOp(COMPOSITE_OVER);
-                    break;
-                case SELECTION_SUBTRACT:
-                    painter.setCompositeOp(COMPOSITE_SUBTRACT);
-                    break;
-                default:
-                    break;
-            }
-
-            painter.paintPolygon(m_points);
-
-            if(hasSelection)
-                dev->emitSelectionChanged(painter.dirtyRect());
-            else
-                dev->emitSelectionChanged();
-
-            if (img -> undoAdapter())
-                img -> undoAdapter() -> addCommand(t);
-
-            QApplication::restoreOverrideCursor();
+        if (!hasSelection)
+        {
+            selection -> clear();
         }
 
-        m_points.clear();
+        KisPainter painter(selection.data());
+        painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+        painter.setBrush(m_subject -> currentBrush());
+        painter.setOpacity(OPACITY_OPAQUE);
+        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, &painter);
+        painter.setPaintOp(op); // And now the painter owns the op and will destroy it.
+
+        switch(m_selectAction)
+        {
+            case SELECTION_ADD:
+                painter.setCompositeOp(COMPOSITE_OVER);
+                break;
+            case SELECTION_SUBTRACT:
+                painter.setCompositeOp(COMPOSITE_SUBTRACT);
+                break;
+            default:
+                break;
+        }
+
+        painter.paintPolygon(m_points);
+
+        if(hasSelection)
+            dev->emitSelectionChanged(painter.dirtyRect());
+        else
+            dev->emitSelectionChanged();
+
+        if (img -> undoAdapter())
+            img -> undoAdapter() -> addCommand(t);
+
+        QApplication::restoreOverrideCursor();
     }
+
+    m_points.clear();
+    
 }
 
 void KisToolSelectPolygonal::move(KisMoveEvent *event)

@@ -34,8 +34,6 @@ Core
 A  * When painting with the qpainter, if the zoom factor is < 1, we should first
      scale down, then colorcorrect, then add the masks, then paint. This would
      solve the slow loading for big images problem.
-A  * When painting with qpainter, simply resizing the window seems to result in a complete
-     repaint. This happens every time a docked docker changes width, for instance.
 P  * Fix part layers (nearly done)
 R  * disable everything necessary when the current layer is wet.
 C  * finish the convolution painter

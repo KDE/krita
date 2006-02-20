@@ -66,6 +66,7 @@
 #include <kservice.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <kparts/event.h>
 
 // KOffice
 #include <KoPartSelectAction.h>
@@ -214,8 +215,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_scrollY( 0 )
     , m_canvasXOffset( 0)
     , m_canvasYOffset( 0)
-    , m_initialZoomSet( false )
+    , m_paintViewEnabled( false )
     , m_guiActivateEventReceived( false )
+    , m_showEventReceived( false )
+    , m_imageLoaded( false )
 //    , m_currentGuide( 0 )
     , m_adapter( adapter )
     , m_statusBarZoomLabel( 0 )
@@ -248,6 +251,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     m_tabletEventTimer.start();
     m_inputDevice = KisInputDevice::mouse();
+
+    connect(&m_initialZoomTimer, SIGNAL(timeout()), SLOT(slotInitialZoomTimeout()));
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");\
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
@@ -335,6 +340,8 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 KisView::~KisView()
 {
+    kdDebug() << "KisView::~KisView\n";
+
     KisConfig cfg;
     cfg.setShowRulers( m_RulerAction->isChecked() );
 
@@ -653,6 +660,11 @@ void KisView::setupActions()
 
 void KisView::resizeEvent(QResizeEvent *)
 {
+    if (!m_paintViewEnabled) {
+        //kdDebug() << "Resize before initial zoom timer timed out - restarting\n";
+
+        startInitialZoomTimerIfReady();
+    }
 
     kdDebug() << "resizeEvent called: reported w, h: " << width() << ", " << height()
             << ", zoom: " << zoom()
@@ -743,6 +755,9 @@ void KisView::resizeEvent(QResizeEvent *)
         m_hScrollBarExtent = scrollBarExtent;
     }
 
+    Q_INT32 oldCanvasXOffset = m_canvasXOffset;
+    Q_INT32 oldCanvasYOffset = m_canvasYOffset;
+
     if (docW < drawW) {
         m_canvasXOffset = (drawW - docW) / 2;
     } else {
@@ -762,13 +777,74 @@ void KisView::resizeEvent(QResizeEvent *)
         m_canvas -> setGeometry(0, 0, drawW, drawH);
     m_canvas -> show();
 
-    m_canvasPixmap.resize(drawW, drawH);
-
     if (!m_canvas -> isOpenGLCanvas()) {
-        if (!m_canvasPixmap.isNull()) {
-            KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
 
-            kdDebug() << "resizeEvent calls paintView" << endl; paintView(viewToWindow(rc));
+        if (m_canvasPixmap.size() != QSize(drawW, drawH)) {
+
+            Q_INT32 oldCanvasWidth = m_canvasPixmap.width();
+            Q_INT32 oldCanvasHeight = m_canvasPixmap.height();
+
+            Q_INT32 newCanvasWidth = drawW;
+            Q_INT32 newCanvasHeight = drawH;
+
+            QRegion exposedRegion = QRect(0, 0, newCanvasWidth, newCanvasHeight);
+
+            // Increase size first so that we can copy the old image area to the new one.
+            m_canvasPixmap.resize(QMAX(oldCanvasWidth, newCanvasWidth), QMAX(oldCanvasHeight, newCanvasHeight));
+
+            if (!m_canvasPixmap.isNull()) {
+
+                if (oldCanvasXOffset != m_canvasXOffset || oldCanvasYOffset != m_canvasYOffset) {
+
+                    Q_INT32 srcX;
+                    Q_INT32 srcY;
+                    Q_INT32 srcWidth;
+                    Q_INT32 srcHeight;
+                    Q_INT32 dstX;
+                    Q_INT32 dstY;
+
+                    if (oldCanvasXOffset <= m_canvasXOffset) {
+                        // Move to the right
+                        srcX = 0;
+                        dstX = m_canvasXOffset - oldCanvasXOffset;
+                        srcWidth = oldCanvasWidth;
+                    } else {
+                        // Move to the left
+                        srcX = oldCanvasXOffset - m_canvasXOffset;
+                        dstX = 0;
+                        srcWidth = newCanvasWidth;
+                    }
+
+                    if (oldCanvasYOffset <= m_canvasYOffset) {
+                        // Move down
+                        srcY = 0;
+                        dstY = m_canvasYOffset - oldCanvasYOffset;
+                        srcHeight = oldCanvasHeight;
+                    } else {
+                        // Move up
+                        srcY = oldCanvasYOffset - m_canvasYOffset;
+                        dstY = 0;
+                        srcHeight = newCanvasHeight;
+                    }
+
+                    bitBlt(&m_canvasPixmap, dstX, dstY, &m_canvasPixmap, srcX, srcY, srcWidth, srcHeight);
+                    exposedRegion -= QRegion(QRect(dstX, dstY, srcWidth, srcHeight));
+                } else {
+                    exposedRegion -= QRegion(QRect(0, 0, oldCanvasWidth, oldCanvasHeight));
+                }
+            }
+
+            m_canvasPixmap.resize(newCanvasWidth, newCanvasHeight);
+
+            if (!m_canvasPixmap.isNull() && !exposedRegion.isEmpty()) {
+
+                QMemArray<QRect> rects = exposedRegion.rects();
+
+                for (unsigned int i = 0; i < rects.count(); i++) {
+                    QRect r = rects[i];
+                    kdDebug() << "resizeEvent calls paintView" << endl; paintView(viewToWindow(r));
+                }
+            }
         }
     }
 
@@ -819,9 +895,10 @@ void KisView::paletteChange(const QPalette& oldPalette)
 
 void KisView::showEvent(QShowEvent *)
 {
-    if (!m_initialZoomSet && m_guiActivateEventReceived && isVisible()) {
-        setInitialZoomLevel();
-        m_initialZoomSet = true;
+    if (!m_showEventReceived) {
+        //kdDebug() << "Show event received\n";
+        m_showEventReceived = true;
+        startInitialZoomTimerIfReady();
     }
 }
 
@@ -835,7 +912,7 @@ void KisView::clearCanvas(const QRect& rc)
     QPainter gc;
 
     if (gc.begin(&m_canvasPixmap)) {
-        gc.fillRect(rc, backgroundColor());
+        gc.fillRect(rc, colorGroup().mid());
     }
 }
 
@@ -867,50 +944,55 @@ void KisView::paintView(const KisRect& r)
 
                 if (gc.begin(&m_canvasPixmap)) {
 
-                    QRect wr = viewToWindow(vr).qRect();
+                    if (m_paintViewEnabled) {
 
-                    if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
-                        // Erase areas outside document
-                        QRegion rg(vr.qRect());
-                        rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
+                        QRect wr = viewToWindow(vr).qRect();
 
-                        QMemArray<QRect> rects = rg.rects();
+                        if (wr.left() < 0 || wr.right() >= img -> width() || wr.top() < 0 || wr.bottom() >= img -> height()) {
+                            // Erase areas outside document
+                            QRegion rg(vr.qRect());
+                            rg -= QRegion(windowToView(KisRect(0, 0, img -> width(), img -> height())).qRect());
 
-                        for (unsigned int i = 0; i < rects.count(); i++) {
-                            QRect er = rects[i];
-                            gc.fillRect(er, colorGroup().mid());
+                            QMemArray<QRect> rects = rg.rects();
+
+                            for (unsigned int i = 0; i < rects.count(); i++) {
+                                QRect er = rects[i];
+                                gc.fillRect(er, colorGroup().mid());
+                            }
+                            wr &= QRect(0, 0, img -> width(), img -> height());
                         }
-                        wr &= QRect(0, 0, img -> width(), img -> height());
+
+                        if (!wr.isEmpty()) {
+
+                            gc.setWorldXForm(true);
+                            gc.translate(-horzValue(), -vertValue());
+
+                            if (zoom() < 1.0 - EPSILON || zoom() > 1.0 + EPSILON) {
+                                gc.scale(zoomFactor(), zoomFactor());
+                            }
+
+                            KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)KisImage::PAINT_BACKGROUND;
+
+                            if (m_actLayerVis) {
+                                paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
+                            }
+
+                            if (m_selectionManager->displaySelection())
+                            {
+                                paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_SELECTION);
+                            }
+
+                            kdDebug() << "Going to render to Painter\n";
+                            m_image -> renderToPainter(wr.left(), wr.top(),
+                                wr.right(), wr.bottom(), gc, monitorProfile(),
+                                paintFlags, HDRExposure());
+
+                            m_gridManager->drawGrid( wr, &gc );
+                        }
+    //                    paintGuides();
+                    } else {
+                        gc.fillRect(vr.qRect(), colorGroup().mid());
                     }
-
-                    if (!wr.isEmpty()) {
-
-                        gc.setWorldXForm(true);
-                        gc.translate(-horzValue(), -vertValue());
-
-                        if (zoom() < 1.0 - EPSILON || zoom() > 1.0 + EPSILON) {
-                            gc.scale(zoomFactor(), zoomFactor());
-                        }
-
-                        KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)KisImage::PAINT_BACKGROUND;
-
-                        if (m_actLayerVis) {
-                            paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_MASKINACTIVELAYERS);
-                        }
-
-                        if (m_selectionManager->displaySelection())
-                        {
-                            paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_SELECTION);
-                        }
-
-                        kdDebug() << "Going to render to Painter\n";
-                        m_image -> renderToPainter(wr.left(), wr.top(),
-                            wr.right(), wr.bottom(), gc, monitorProfile(),
-                            paintFlags, HDRExposure());
-
-                        m_gridManager->drawGrid( wr, &gc );
-                    }
-//                    paintGuides();
                 }
 
                 m_canvas -> update(vr.qRect());
@@ -940,7 +1022,7 @@ void KisView::paintOpenGLView(const KisRect& r)
 
     KisImageSP img = currentImg();
 
-    if (img) {
+    if (img && m_paintViewEnabled) {
 
         KisRect vr = windowToView(r);
         vr &= KisRect(0, 0, m_canvas -> width(), m_canvas -> height());
@@ -1029,10 +1111,10 @@ void KisView::paintOpenGLView(const KisRect& r)
             glBindTexture(GL_TEXTURE_2D, 0);
 
             //paintGuides();
-
-            m_canvas -> OpenGLWidget() -> swapBuffers();
         }
     }
+
+    m_canvas -> OpenGLWidget() -> swapBuffers();
 #else
     Q_UNUSED(r);
 #endif
@@ -1410,10 +1492,6 @@ void KisView::setInitialZoomLevel()
         zoomLevel = nextZoomOutLevel(zoomLevel);
     }
 
-    // XXX:
-    if (zoomLevel < 0.1) {
-        zoomLevel = 1.0;
-    }
     zoomAroundPoint(-1, -1, zoomLevel);
 }
 
@@ -3165,22 +3243,23 @@ void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
 
 void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
 {
-    kdDebug() << "guiActivate event called\n";
     Q_ASSERT(event);
 
-    KStatusBar *sb = statusBar();
+    if (event -> activated()) {
 
-    if (sb)
-        sb -> show();
+        KStatusBar *sb = statusBar();
+        if (sb) {
+            sb -> show();
+        }
 
-    super::guiActivateEvent(event);
-
-    if (!m_initialZoomSet && isVisible()) {
-        setInitialZoomLevel();
-        m_initialZoomSet = true;
+        if (!m_guiActivateEventReceived) {
+            kdDebug() << "guiActivate event called\n";
+            m_guiActivateEventReceived = true;
+            startInitialZoomTimerIfReady();
+        }
     }
 
-    m_guiActivateEventReceived = true;
+    super::guiActivateEvent(event);
 }
 
 bool KisView::eventFilter(QObject *o, QEvent *e)
@@ -3619,6 +3698,27 @@ void KisView::slotLoadingFinished()
     m_paletteManager->showWidget( "layerbox" );
     m_canvas->show();
     disconnect(document(), SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
+
+    m_imageLoaded = true;
+    startInitialZoomTimerIfReady();
+}
+
+void KisView::startInitialZoomTimerIfReady()
+{
+    if (m_imageLoaded && m_showEventReceived && m_guiActivateEventReceived) {
+        m_initialZoomTimer.start(250, true);
+        kdDebug() << "Starting initial zoom timer\n";
+    }
+}
+
+void KisView::slotInitialZoomTimeout()
+{
+    Q_ASSERT(!m_paintViewEnabled);
+
+    kdDebug() << "Initial zoom timer timed out - setting zoom and enabling paintView\n";
+
+    m_paintViewEnabled = true;
+    setInitialZoomLevel();
 }
 
 #include "kis_view.moc"

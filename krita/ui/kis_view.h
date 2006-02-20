@@ -27,10 +27,12 @@
 #include <config.h>
 #endif
 
+#include <list>
+
 #include <qdatetime.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
-#include <list>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <kxmlguibuilder.h>
@@ -395,6 +397,8 @@ private:
      */
     void setInitialZoomLevel();
 
+    void startInitialZoomTimerIfReady();
+
 private slots:
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
 
@@ -478,6 +482,7 @@ private slots:
     /// Is called when the file is loaded
     void slotLoadingFinished();
 
+    void slotInitialZoomTimeout();
 
 private:
 
@@ -546,8 +551,13 @@ private:
     int m_canvasXOffset;
     int m_canvasYOffset;
 
-    bool m_initialZoomSet;
+    bool m_paintViewEnabled;
     bool m_guiActivateEventReceived;
+    bool m_showEventReceived;
+    bool m_imageLoaded;
+
+    QTimer m_initialZoomTimer;
+
 
 //    KisGuideSP m_currentGuide;
 //    QPoint m_lastGuidePoint;

@@ -45,7 +45,7 @@ public:
 
     virtual KisLayerSP clone() const;
 public:
-    
+
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
@@ -59,6 +59,7 @@ public:
      */
     virtual void setDirty(const QRect & rect);
 
+    QRect dirtyRect() const;
     
     virtual void activate() {};
 

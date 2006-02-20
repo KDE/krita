@@ -723,35 +723,6 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 
     if (h < 0)
         return QImage();
-#if 0 // XXX: This one should be faster and take much less memory, but it corrupts a lot :-(
-    QImage img (w, h, 32, 0, QImage::LittleEndian);
-    img.setAlphaBuffer( true );
-
-    KisColorSpace * dstCS;
-
-    if (dstProfile)
-        dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),dstProfile->productName());
-    else
-        dstCS = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-
-    if (!dstCS) return img;
-
-    KisColorSpace * srcCS = colorSpace();
-    
-    Q_UINT8 * imgBits = img.bits();
-    for (Q_INT32 y = y1; y < h; ++y) {
-        KisHLineIteratorPixel it = createHLineIterator( x1, y, w, false );
-        while (!it.isDone()) {
-            Q_INT32 pixels = it.nConseqHPixels();
-            // Just converting the pixels doesn't set the exposure correctly
-            QImage tmpImage = srcCS->convertToQImage(it.rawData(), pixels, 1, dstProfile, INTENT_PERCEPTUAL, exposure);
-            memcpy(imgBits, tmpImage.bits(), pixels * 4);
-            it+=pixels;
-            imgBits += pixels * 4;
-        }
-    }
-    return img;
-#else
     
     Q_UINT8 * data = new Q_UINT8 [w * h * m_pixelSize];
     Q_CHECK_PTR(data);
@@ -763,7 +734,6 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
     delete[] data;
 
     return image;
-#endif
 }
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)

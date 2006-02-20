@@ -1419,6 +1419,8 @@ void KisView::setInitialZoomLevel()
 void KisView::imgResizeToActiveLayer()
 {
     KisImageSP img = currentImg();
+    
+    img->lock();
     KisLayerSP layer;
 
 
@@ -1429,6 +1431,8 @@ void KisView::imgResizeToActiveLayer()
         if (l)
             l->paintDevice()->move(0,0);
     }
+
+    img->unlock();
 }
 
 void KisView::slotImageProperties()

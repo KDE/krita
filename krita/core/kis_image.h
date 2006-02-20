@@ -99,6 +99,19 @@ public:
 
 public:
 
+    /**
+     * Lock the image to make sure no recompositing-causing signals get emitted
+     * while you're messing with the layers. Don't forget to unlock again.
+     */
+    void lock();
+
+    /**
+     * Unlock the image to make sure the rest of Krita learns about changes in the image
+     * again. If the rootLayer is dirty on unlocking, an imgUpdated signal is sent out
+     * immediately.
+     */
+    void unlock();
+    
     KisColor backgroundColor() const;
     void setBackgroundColor(const KisColor & color);
 

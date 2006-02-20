@@ -75,6 +75,10 @@ void KisGroupLayer::setDirty(const QRect & rc)
     emit sigDirty(rc);
 }
 
+QRect KisGroupLayer::dirtyRect() const
+{
+    return m_dirtyRect;
+}
 
 void KisGroupLayer::resetProjection()
 {

@@ -64,15 +64,12 @@
 #include "kis_profile.h"
 #include "kis_paint_layer.h"
 #include "kis_change_profile_visitor.h"
+#include "kis_group_layer.h"
 
 class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
-
-#ifdef __BIG_ENDIAN__
-    cmsHTRANSFORM bigEndianTransform;
-#endif
-
+    bool     locked;
 };
 
 
@@ -574,10 +571,17 @@ QString KisImage::nextLayerName() const
 
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
+    Q_ASSERT(colorSpace);
+    
+    if (colorSpace == 0) {
+        colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+        kdDebug() << "No colorspace specified: using RGBA\n";
+    }
+
     m_private = new KisImagePrivate();
     m_private->backgroundColor = KisColor(Qt::white, colorSpace);
-
-    Q_ASSERT(colorSpace != 0);
+    m_private->locked = false;
+    
     m_adapter = adapter;
 
     m_nserver = new KisNameServer(i18n("Layer %1"), 1);
@@ -596,22 +600,26 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_width = width;
     m_height = height;
 
-#ifdef __BIG_ENDIAN__
-    cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    m_private->bigEndianTransform = cmsCreateTransform(hProfile ,
-                                              TYPE_ABGR_8,
-                                              hProfile ,
-                                              TYPE_RGBA_8,
-                                              INTENT_PERCEPTUAL,
-                                              0);
-#endif
-
     connect(this, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SIGNAL(sigNonActiveLayersUpdated()));
 }
 
+void KisImage::lock()
+{
+    m_private->locked = true;
+    if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+}
+
+void KisImage::unlock()
+{
+    m_private->locked = false;
+    if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
+    if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+}
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)
 {
+    lock();
+    
     kdDebug() << "Resize: " << x << ", " << y << ", " << w << ", " << h << ", " << cropLayers << endl;
     if (w != width() || h != height()) {
         if (m_adapter && m_adapter -> undo()) {
@@ -632,12 +640,14 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         }
         
-        emit sigSizeChanged(w, h);
-
         if (m_adapter && m_adapter -> undo()) {
             m_adapter -> endMacro();
         }
     }
+
+    emit sigSizeChanged(w, h);
+
+    unlock();
 }
 
 void KisImage::resize(const QRect& rc, bool cropLayers)
@@ -648,8 +658,12 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
 {
+
+
     if (nlayers() == 0) return; // Nothing to scale
 
+    lock();
+    
     // New image size. XXX: Pass along to discourage rounding errors?
     Q_INT32 w, h;
     w = (Q_INT32)(( width() * sx) + 0.5);
@@ -672,17 +686,22 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         m_height = h;
 
         emit sigSizeChanged(w, h);
-        //notify();
 
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->endMacro();
         }
     }
+
+    unlock();
+    
 }
+
 
 
 void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
 {
+    lock();
+    
     angle *= M_PI/180;
     Q_INT32 w = width();
     Q_INT32 h = height();
@@ -706,13 +725,15 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     m_height = h;
 
     emit sigSizeChanged(w, h);
-    //notify();
 
     undoAdapter()->endMacro();
+
+    unlock();
 }
 
 void KisImage::shear(double , double , KisProgressDisplayInterface *)
 {
+    lock();
 /*LAYERREMOVE
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
@@ -773,6 +794,8 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
         notify();
     }
 */
+
+    unlock();
 }
 
 void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
@@ -783,6 +806,8 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
         return;
     }
 
+    lock();
+    
     if (undoAdapter() && m_adapter->undo()) {
         m_adapter->beginMacro(i18n("Convert Image Type"));
     }
@@ -792,17 +817,19 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_rootLayer->accept(visitor);
 
-    //notify();
-
     if (undoAdapter() && m_adapter->undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
                                                          m_colorSpace, dstColorSpace));
         m_adapter->endMacro();
     }
+
+    unlock();
+    
     emit sigLayerPropertiesChanged( m_activeLayer );
     emit sigNonActiveLayersUpdated(); // This makes sure the
                                       // thumbnails are updated
+
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -817,12 +844,18 @@ void KisImage::setProfile(const KisProfile * profile)
     KisColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
                                                                                          profile);
     if (dstCs) {
+
+        lock();
+        
         KisColorSpace * oldCs = colorSpace();
         setColorSpace(dstCs);
         emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
 
         KisChangeProfileVisitor visitor(oldCs, dstCs);
         m_rootLayer->accept(visitor);
+
+        unlock();
+        
     }
 }
 
@@ -1066,11 +1099,12 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     if (!wasParent -> removeLayer(layer))
         return false;
 
+    lock();
+    
     const bool success = parent -> addLayer(layer, aboveThis);
     if (success)
     {
         emit sigLayerMoved(layer, wasParent, wasAbove);
-        //notify(layer->extent());
         if (m_adapter->undo())
             m_adapter->addCommand(new LayerMoveCmd(m_adapter, this, layer, wasParent, wasAbove));
     }
@@ -1082,6 +1116,9 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     }
 
     layer->setDirty();
+
+    unlock();
+    
     return success;
 }
 

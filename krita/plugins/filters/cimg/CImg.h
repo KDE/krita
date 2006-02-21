@@ -3472,7 +3472,7 @@ namespace cimg_library {
       } else { width=height=depth=dim=0; data=NULL; }
     }
     // Add template overloading if VC>7.1 (optimized version)
-#if !defined(_MSC_VER) && _MSC_VER>1300
+#if defined(_MSC_VER) && _MSC_VER>1300
     CImg(const T *const data_buffer,
 	 const unsigned int dx,const unsigned int dy=1,
 	 const unsigned int dz=1,const unsigned int dv=1,

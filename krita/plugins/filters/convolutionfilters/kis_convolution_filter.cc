@@ -21,6 +21,7 @@
 #include "klocale.h"
 #include "kdebug.h"
 
+#include "kis_painter.h"
 #include "kis_convolution_filter.h"
 #include "kis_convolution_painter.h"
 #include "kis_progress_display_interface.h"
@@ -91,12 +92,18 @@ QString KisConvolutionConfiguration::toString()
 
 }
 
-void KisConvolutionFilter::process(KisPaintDeviceSP /*src*/,
+void KisConvolutionFilter::process(KisPaintDeviceSP src,
                                    KisPaintDeviceSP dst,
                                    KisFilterConfiguration* configuration,
                                    const QRect& rect)
 {
-    // XXX: We don't do anything with src here -- carefully test this for problems.
+
+    if (dst != src) {
+        KisPainter gc(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
+    }
+
     KisConvolutionPainter painter( dst );
     if (m_progressDisplay)
         m_progressDisplay->setSubject( &painter, true, true );

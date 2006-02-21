@@ -43,6 +43,7 @@
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
 #include <kis_colorspace.h>
+#include <kis_painter.h>
 
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
@@ -156,6 +157,13 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             cfg->transfer[i] = 0xFFFF;
     }
 
+
+    if (dst != src) {
+        KisPainter gc(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
+    }
+
     // apply
     KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
@@ -228,6 +236,12 @@ bool KisDesaturateFilter::workWith(KisColorSpace* cs)
 
 void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
+    if (dst != src) {
+        KisPainter gc(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
+    }
+
     KisColorAdjustment *adj = src->colorSpace()->createDesaturateAdjustment();
 
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );

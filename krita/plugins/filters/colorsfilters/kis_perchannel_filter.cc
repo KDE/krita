@@ -34,7 +34,7 @@
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
-
+#include "kis_painter.h"
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
@@ -200,6 +200,13 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
 
     KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
+
+   
+    if (src!=dst) {
+        KisPainter gc(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
+    }
 
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 

@@ -42,6 +42,7 @@
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
+#include "kis_painter.h"
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
     : KisFilterConfiguration( "brightnesscontrast", 1 )
@@ -169,6 +170,12 @@ bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
+
+    if (src!=dst) {
+        KisPainter gc(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
+    }
 
     KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );

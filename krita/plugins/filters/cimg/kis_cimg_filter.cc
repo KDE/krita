@@ -204,7 +204,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
     if (process() && !cancelRequested()) {
 
-        it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+        it = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
         while (!it.isDone()) {
 

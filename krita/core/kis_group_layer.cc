@@ -87,8 +87,18 @@ void KisGroupLayer::resetProjection()
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 {
-    //kdDebug() << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
-    
+    kdDebug() << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
+
+    // We don't have a parent, and we've got only one child: abuse the child's
+    // paint device as the projection if the child is visible and 100% opaque
+    kdDebug() << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
+    if (parent() == 0 && childCount() == 1) {
+        KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
+        if (l && l->visible() && l->opacity() == OPACITY_OPAQUE) {
+            return l->paintDevice();
+        }
+
+    }
     // No need for updates, we're clean
     if (!dirty()) {
         //kdDebug() << name() << " No need for updates, we're clean\n";
@@ -100,6 +110,7 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
         return m_projection;
     }
 
+
     // Okay, we need to update the intersection between
     // what's dirty and what's asked us to be updated.
     const QRect rc = rect.intersect(m_dirtyRect);
@@ -108,6 +119,7 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     t.start();
     updateProjection(rc);
     kdDebug() << ">>> Updating projection " << name() << " for " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << " took: " << t.elapsed() << endl;
+    //kdDebug() << kdBacktrace() << "\n";
     setClean(rect);
 
     return m_projection;

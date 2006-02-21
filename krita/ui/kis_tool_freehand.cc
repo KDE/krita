@@ -80,9 +80,11 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
     if (!m_currentImage || !m_currentImage -> activeDevice()) return;
 
     if (e -> button() == QMouseEvent::LeftButton) {
-
+        
+        
+        if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
+        
         initPaint(e);
-
         paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 
         m_prevPos = e -> pos();
@@ -115,8 +117,9 @@ void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
 void KisToolFreehand::move(KisMoveEvent *e)
 {
     if (m_mode == PAINT) {
-        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
 
+        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+    
         m_prevPos = e -> pos();
         m_prevPressure = e -> pressure();
         m_prevXTilt = e -> xTilt();

@@ -50,6 +50,8 @@
 #include <kis_paint_device.h>
 #include <kis_filter_strategy.h>
 #include <kis_scale_visitor.h>
+#include <kis_painter.h>
+#include <kis_selection.h>
 
 #include "kis_multi_integer_filter_widget.h"
 #include "kis_small_tiles_filter.h"
@@ -85,41 +87,88 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
 void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
-    Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "tmp");
-    KisPainter gc(tmp);
-    gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
-    gc.end();
+    if (!src) return;
+    if (!dst) return;
 
-    KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
-    worker.run();
+    //Q_INT32 depth = src -> colorSpace() -> nColorChannels();
+    //KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "tmp");
+    kdDebug() << rect << ", extent: " << src->extent() << ", bounds: " << src->exactBounds() << "\n";
 
-    QRect tmpRect = tmp -> exactBounds();
+    QRect srcRect = src->exactBounds();
+    
+    int w = static_cast<int>(srcRect.width() / numberOfTiles);
+    int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
-    for( Q_UINT32 i=0; i < numberOfTiles; i++ )
-    {
-        for( Q_UINT32 j=0; j < numberOfTiles; j++ )
-        {
-            for( Q_INT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
-            {
-                KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
-                KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
+    KisPaintDeviceSP tile = 0;
+    if (src->hasSelection()) {
+        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "selected bit");
+        KisPainter gc(tmp);
+        gc.bltSelection(0, 0, COMPOSITE_COPY, src, OPACITY_OPAQUE, rect.x(), rect.y(), rect.width(), rect.height());
+        tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
+    }
+    else {
+        tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
+    }
+    if (tile == 0) return;
 
-                while( ! tmpIt.isDone() )
-                {
-                    if(tmpIt.isSelected())
-                    {
-                        for( int i = 0; i < depth; i++)
-                        {
-                            dstIt.rawData()[i] = tmpIt.oldRawData()[i];
-                        }
-                    }
-                    ++tmpIt;
-                    ++dstIt;
-                }
-            }
+    KisPaintDeviceSP scratch = new KisPaintDevice(src->colorSpace());
+
+    KisPainter gc(scratch);
+    
+    setProgressTotalSteps(numberOfTiles);
+    
+    for (uint y = 0; y < numberOfTiles; ++y) {
+        for (uint x = 0; x < numberOfTiles; ++x) {
+            // XXX make composite op and opacity configurable
+            gc.bitBlt( w * x, h * y, COMPOSITE_COPY, tile, 0, 0, w, h);
+            setProgress(y);
         }
     }
+    gc.end();
+    
+    gc.begin(dst);
+    if (src->hasSelection()) {
+        gc.bltSelection(rect.x(), rect.y(), COMPOSITE_OVER, scratch, src->selection(), OPACITY_OPAQUE, 0, 0, rect.width(), rect.height() );
+    }
+    else {
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_OVER, scratch, OPACITY_OPAQUE, 0, 0, rect.width(), rect.height() );
+    }
+    setProgressDone();
+    gc.end();
+    
+    //KisPainter gc(tmp);
+    //gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+    //gc.end();
+
+    //KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
+    //worker.run();
+
+//     QRect tmpRect = tmp -> exactBounds();
+//
+//     for( Q_UINT32 i=0; i < numberOfTiles; i++ )
+//     {
+//         for( Q_UINT32 j=0; j < numberOfTiles; j++ )
+//         {
+//             for( Q_INT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
+//             {
+//                 KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
+//                 KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
+//
+//                 while( ! tmpIt.isDone() )
+//                 {
+//                     if(tmpIt.isSelected())
+//                     {
+//                         for( int i = 0; i < depth; i++)
+//                         {
+//                             dstIt.rawData()[i] = tmpIt.oldRawData()[i];
+//                         }
+//                     }
+//                     ++tmpIt;
+//                     ++dstIt;
+//                 }
+//             }
+//         }
+//     }
 
     setProgressDone();
 }

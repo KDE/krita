@@ -95,9 +95,10 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     if (parent() == 0 && childCount() == 1) {
         KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
         if (l && l->visible() && l->opacity() == OPACITY_OPAQUE) {
+            l->setClean(rect);
+            setClean(rect);
             return l->paintDevice();
         }
-
     }
     // No need for updates, we're clean
     if (!dirty()) {

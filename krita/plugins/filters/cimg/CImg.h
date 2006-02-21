@@ -2528,7 +2528,7 @@ namespace cimg_library {
       }
     }
   
-    static void* thread_lowlevel(void *arg) {
+    static void* thread_lowlevel(void */*arg*/) {
       XEvent event;
       pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,NULL);
       pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,NULL);
@@ -6432,7 +6432,7 @@ namespace cimg_library {
     /**
        Same as get_RGBtoLUT() with the default color palette given by get_default_LUT8().
     **/
-    CImg<T> get_RGBtoLUT(const bool dithering=true, const bool indexing=false) const {
+    CImg<T> get_RGBtoLUT(const bool dithering=true, const bool /*indexing*/=false) const {
       CImg<T> foo;
       return get_RGBtoLUT(foo,dithering); 
     }

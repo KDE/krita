@@ -633,7 +633,7 @@ bool KisCImgFilter::process()
         return true;
 }
 
-KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
+KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     return new KisCImgconfigWidget(this, parent);
 }

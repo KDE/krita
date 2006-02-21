@@ -296,9 +296,4 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kis_cmb_composite.h</includehint>
-    <includehint>kis_int_spinbox.h</includehint>
-    <includehint>kis_layerlist.h</includehint>
-</includehints>
 </UI>

@@ -184,8 +184,6 @@ bool KisPreviewWidget::zoomChanged()
     if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
     {
         m_previewDevice = m_origDevice->createThumbnailDevice(w, h); 
-        //KisScaleWorker scaleWorker(m_previewDevice, m_zoom, m_zoom, new KisMitchellFilterStrategy());
-        //scaleWorker.run();
     }
     else {
         m_previewDevice = new KisPaintDevice( *m_origDevice );
@@ -198,11 +196,7 @@ bool KisPreviewWidget::zoomChanged()
     {
         m_preview->setImage(m_scaledOriginal);
     }
-
-
-    // Some filters need access to the image to get other layers, and
-    // the copy constructor of KisPaintDevice doesn't copy the image.
-    m_previewDevice->setParentLayer(m_origDevice->parentLayer());
+\
 
     emit updated();
     return true;

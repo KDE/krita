@@ -3151,11 +3151,10 @@ KisPoint KisView::viewToWindow(const KisPoint& pt)
 QRect KisView::viewToWindow(const QRect& rc)
 {
     QRect r;
-    QPoint p = viewToWindow(QPoint(rc.x(), rc.y()));
-    r.setX(p.x());
-    r.setY(p.y());
-    r.setWidth(static_cast<int>(ceil(rc.width() / zoom())));
-    r.setHeight(static_cast<int>(ceil(rc.height() / zoom())));
+
+    r.setTopLeft(viewToWindow(rc.topLeft()));
+    r.setRight((int)(ceil((rc.right() + 1.0 + horzValue()) / zoom()) - 1));
+    r.setBottom((int)(ceil((rc.bottom() + 1.0 + vertValue()) / zoom()) - 1));
 
     return r;
 }
@@ -3211,11 +3210,10 @@ KisPoint KisView::windowToView(const KisPoint& pt)
 QRect KisView::windowToView(const QRect& rc)
 {
     QRect r;
-    QPoint p = windowToView(QPoint(rc.x(), rc.y()));
-    r.setX(p.x());
-    r.setY(p.y());
-    r.setWidth(static_cast<int>(ceil(rc.width() * zoom())));
-    r.setHeight(static_cast<int>(ceil(rc.height() * zoom())));
+
+    r.setTopLeft(windowToView(rc.topLeft()));
+    r.setRight((int)(ceil((rc.right() + 1.0) * zoom()) - horzValue() - 1));
+    r.setBottom((int)(ceil((rc.bottom() + 1.0) * zoom()) - vertValue() - 1));
 
     return r;
 }

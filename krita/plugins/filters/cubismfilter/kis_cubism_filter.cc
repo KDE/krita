@@ -332,11 +332,9 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                         }
                 }
         }
-      /*
-  delete[] vals;
-  delete[] minScanlines;
-  delete[] maxScanlines;
-        */
+    delete[] vals;
+    delete[] minScanlines;
+    delete[] maxScanlines;
 }
 
 void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation)

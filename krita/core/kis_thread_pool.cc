@@ -33,7 +33,7 @@ KisThreadPool::KisThreadPool()
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
     m_maxThreads = cfg->readNumEntry("maxthreads",  10);
-    //kdDebug() << "Maximum threads: " << m_maxThreads << "\n";
+    kdDebug() << "Maximum threads: " << m_maxThreads << "\n";
     m_numberOfRunningThreads = 0;
     m_numberOfQueuedThreads = 0;
     m_wait = 200;
@@ -44,7 +44,7 @@ KisThreadPool::KisThreadPool()
 
 KisThreadPool::~KisThreadPool()
 {
-    //kdDebug() << "Deleting threadpool\n";
+    kdDebug() << "Deleting threadpool\n";
     
     m_poolMutex.lock();
     
@@ -80,9 +80,9 @@ KisThreadPool::~KisThreadPool()
         }
     }
 
-    //kdDebug() << "After deleting, Waiting threads: " << m_threads.count()
-    //          << ", running threads: " << m_runningThreads.count()
-    //          << ", done threads: " << m_oldThreads.count() << endl;
+    kdDebug() << "After deleting, Waiting threads: " << m_threads.count()
+              << ", running threads: " << m_runningThreads.count()
+              << ", done threads: " << m_oldThreads.count() << endl;
 
     KisThreadPool::m_singleton = 0;
     m_poolMutex.unlock();
@@ -92,17 +92,17 @@ KisThreadPool::~KisThreadPool()
 
 KisThreadPool * KisThreadPool::instance()
 {
-    //kdDebug() << "Instance: " << KisThreadPool::m_singleton << "\n";
+    kdDebug() << "Instance: " << KisThreadPool::m_singleton << "\n";
     
     if(KisThreadPool::m_singleton == 0)
     {
-        //kdDebug() << "creating threadpool\n";
+        kdDebug() << "no current threadpool\n";
         KisThreadPool::m_singleton = new KisThreadPool();
     }
     else {
         
         if (KisThreadPool::m_singleton->finished()) {
-            //kdDebug() << "Previous pool finished\n";
+            kdDebug() << "Previous pool finished: creating new one\n";
             delete KisThreadPool::m_singleton;
             KisThreadPool::m_singleton = 0;
             KisThreadPool::m_singleton = new KisThreadPool();
@@ -192,6 +192,7 @@ void KisThreadPool::run()
             if (m_numberOfQueuedThreads == 0 && m_numberOfRunningThreads == 0) {
                 sleeps--;
                 if (sleeps == 0) {
+                    kdDebug() << "We're out of threads and waiting no longer\n";
                     m_poolMutex.unlock();
                     return;
                 }

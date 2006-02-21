@@ -38,6 +38,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <kis_painter.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -82,10 +83,13 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& /*rect*/, Q_UINT32 numberOfTiles)
+void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
 {
     Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    KisPaintDeviceSP tmp = new KisPaintDevice( *(src.data()) );
+    KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "tmp");
+    KisPainter gc(tmp);
+    gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+    gc.end();
 
     KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
     worker.run();

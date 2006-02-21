@@ -355,6 +355,7 @@ KisImage *KisPaintDevice::image() const
     }
 }
 
+
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
     m_x = x;

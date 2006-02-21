@@ -96,8 +96,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     hl->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    layout->addLayout( hl );
-
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( dev );
 
@@ -106,7 +104,8 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     if ( m_currentFilter ) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, dev);
-        m_currentConfigWidget->setConfiguration( m_currentConfiguration );
+        if (m_currentConfigWidget)
+            m_currentConfigWidget -> setConfiguration( m_currentConfiguration );
     }
     if ( m_currentFilter == 0 || m_currentConfigWidget == 0 ) {
         QLabel * labelNoConfigWidget = new QLabel( i18n("No configuration options are available for this filter"), page );

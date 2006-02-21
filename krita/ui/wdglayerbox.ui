@@ -297,8 +297,8 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kiscmbcomposite.h</includehint>
-    <includehint>kisintspinbox.h</includehint>
-    <includehint>kislayerlist.h</includehint>
+    <includehint>kis_cmb_composite.h</includehint>
+    <includehint>kis_int_spinbox.h</includehint>
+    <includehint>kis_layerlist.h</includehint>
 </includehints>
 </UI>

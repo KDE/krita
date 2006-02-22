@@ -20,6 +20,8 @@
 
 #include "kis_exif_value.h"
 
+#include <kdebug.h>
+#include <kmdcodec.h>
 
 namespace {
 void set16Bit (unsigned char *data, ExifValue::ByteOrder order, const Q_UINT16* value)
@@ -115,14 +117,272 @@ void set64Bit(unsigned char *data, ExifValue::ByteOrder order, const Q_UINT64* v
 
 }
 
-ExifValue::ExifValue(ExifType ntype, unsigned char *data, unsigned int size, int ifd, uint ncomponents, ExifValue::ByteOrder order ) : m_ifd(ifd), m_type(ntype), m_components(ncomponents)
+ExifValue::ExifValue(ExifType ntype, unsigned char *data, unsigned int size, int ifd, uint ncomponents, ExifValue::ByteOrder order ) : m_ifd(ifd), m_type(ntype), m_components(ncomponents), m_value(0)
+{
+    allocData();
+    setValue(data, size, order);
+}
+
+void ExifValue::allocData()
 {
     if( type() != EXIF_TYPE_ASCII && type() != EXIF_TYPE_UNDEFINED)
     {
         m_value = new ExifNumber[components()];
+    } else if ( type() == EXIF_TYPE_ASCII )
+    {
+        m_value = new QString();
+    } else if ( type() == EXIF_TYPE_UNDEFINED)
+    {
+        m_value = new UByteArray();
     }
-    setValue(data, size, order);
 }
+
+bool ExifValue::load(const QDomElement& elmt)
+{
+    QString attr;
+    if( (attr = elmt.attribute("ifd")).isNull() )
+        return false;
+    m_ifd = attr.toInt();
+    if( (attr = elmt.attribute("components")).isNull() )
+        return false;
+    m_components = attr.toInt();
+    if( (attr = elmt.attribute("type")).isNull() )
+        return false;
+    m_type = (ExifValue::ExifType)attr.toInt();
+    kdDebug() << "Trying to load exifvalue ifd=" << ifd() << " components=" << components() << " type=" << type() << endl;
+    allocData();
+    switch(type())
+    {
+        case EXIF_TYPE_BYTE:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_UINT8)0);
+                } else {
+                    setValue(i, (Q_UINT8) attr.toUInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_ASCII:
+            kdDebug() << "Value = " << elmt.attribute("value" ) << endl;
+            setAsAscii( elmt.attribute("value" ) );
+            break;
+        case EXIF_TYPE_SHORT:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_UINT16)0);
+                } else {
+                    setValue(i, (Q_UINT16) attr.toUInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_LONG:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_UINT32)0);
+                } else {
+                    setValue(i, (Q_UINT32) attr.toUInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_RATIONAL:
+            for(uint i = 0; i < components(); i++)
+            {
+                KisExifRational r;
+                if( (attr = elmt.attribute(QString("numerator%1").arg(i) ) ).isNull() )
+                {
+                    r.numerator = (Q_UINT32)0;
+                } else {
+                    r.numerator = (Q_UINT32) attr.toUInt();
+                }
+                if( (attr = elmt.attribute(QString("denominator%1").arg(i) ) ).isNull() )
+                {
+                    r.denominator = (Q_UINT32)0;
+                } else {
+                    r.denominator = (Q_UINT32) attr.toUInt();
+                }
+                setValue(i, r);
+            }
+            break;
+        case EXIF_TYPE_SBYTE:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_INT8)0);
+                } else {
+                    setValue(i, (Q_INT8) attr.toInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_UNDEFINED:
+        {
+            QString instr = elmt.attribute("value");
+            QByteArray out;
+            QByteArray in;
+            in.setRawData(instr.latin1(), instr.length() );
+            in.resetRawData(instr.latin1(), instr.length() );
+            KCodecs::base64Decode( in, out);
+            setAsUndefined((uchar*)out.data(), out.size() );
+            
+/*            QCString str ( instr.latin1() );
+            QCString out = KCodecs::base64Decode( str );
+            kdDebug() << instr << " instr.length() = " << instr.length() << endl;
+            kdDebug() << "str = " << str << " str.size() = " << str.size() << " str.length() = " << str.length() << endl;
+            kdDebug() << "out = " << out << " out.size() = " << out << endl;
+            setAsUndefined((uchar*)out.data(), out.size() );*/
+        }
+        break;
+        case EXIF_TYPE_SSHORT:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_INT16)0);
+                } else {
+                    setValue(i, (Q_INT16) attr.toInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_SLONG:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (Q_INT32)0);
+                } else {
+                    setValue(i, (Q_INT32) attr.toInt());
+                }
+            }
+            break;
+        case EXIF_TYPE_SRATIONAL:
+            for(uint i = 0; i < components(); i++)
+            {
+                KisExifSRational r;
+                if( (attr = elmt.attribute(QString("numerator%1").arg(i) ) ).isNull() )
+                {
+                    r.numerator = (Q_INT32)0;
+                } else {
+                    r.numerator = (Q_INT32) attr.toInt();
+                }
+                if( (attr = elmt.attribute(QString("denominator%1").arg(i) ) ).isNull() )
+                {
+                    r.denominator = (Q_UINT32)0;
+                } else {
+                    r.denominator = (Q_UINT32) attr.toInt();
+                }
+                setValue(i, r);
+            }
+            break;
+        case EXIF_TYPE_FLOAT:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (float)0);
+                } else {
+                    setValue(i, (float) attr.toFloat());
+                }
+            }
+            break;
+        case EXIF_TYPE_DOUBLE:
+            for(uint i = 0; i < components(); i++)
+            {
+                if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
+                {
+                    setValue(i, (double)0);
+                } else {
+                    setValue(i, (double) attr.toDouble());
+                }
+            }
+            break;
+        case EXIF_TYPE_UNKNOW:
+            break;
+
+    }
+    kdDebug() << " Value = " << toString() << endl;
+    return true;
+}
+
+QDomElement ExifValue::save(QDomDocument& doc)
+{
+    QDomElement elmt = doc.createElement("ExifValue");
+    elmt.setAttribute("ifd", ifd());
+    elmt.setAttribute("components", components() );
+    elmt.setAttribute("type", type() );
+    switch(type())
+    {
+        case EXIF_TYPE_BYTE:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asByte( i ) );
+            break;
+        case EXIF_TYPE_ASCII:
+            kdDebug() << asAscii() << endl;
+            elmt.setAttribute("value", asAscii() );
+            break;
+        case EXIF_TYPE_SHORT:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asShort( i ) );
+            break;
+        case EXIF_TYPE_LONG:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asLong( i ) );
+            break;
+        case EXIF_TYPE_RATIONAL:
+            for(uint i = 0; i < components(); i++)
+            {
+                KisExifRational r = asRational(i);
+                elmt.setAttribute(QString("numerator%1").arg(i), r.numerator );
+                elmt.setAttribute(QString("denominator%1").arg(i), r.denominator );
+            }
+            break;
+        case EXIF_TYPE_SBYTE:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asSByte( i ) );
+            break;
+        case EXIF_TYPE_UNDEFINED:
+        {
+            UByteArray value = asUndefined();
+            QByteArray data(value.size());
+            data.setRawData((char*)value.data(), value.size());
+            elmt.setAttribute("value", KCodecs::base64Encode( data ));
+        }
+            break;
+        case EXIF_TYPE_SSHORT:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asSShort( i ) );
+            break;
+        case EXIF_TYPE_SLONG:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asSLong( i ) );
+            break;
+        case EXIF_TYPE_SRATIONAL:
+            for(uint i = 0; i < components(); i++)
+            {
+                KisExifSRational r = asSRational(i);
+                elmt.setAttribute(QString("numerator%1").arg(i), r.numerator );
+                elmt.setAttribute(QString("denominator%1").arg(i), r.denominator );
+            }
+            break;
+        case EXIF_TYPE_FLOAT:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asFloat( i ) );
+            break;
+        case EXIF_TYPE_DOUBLE:
+            for(uint i = 0; i < components(); i++)
+                elmt.setAttribute(QString("value%1").arg(i), asDouble( i ) );
+            break;
+        case EXIF_TYPE_UNKNOW:
+            break;
+    }
+    return elmt;
+}
+
 
 void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue::ByteOrder order)
 {
@@ -265,11 +525,13 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             return;
         case EXIF_TYPE_ASCII:
         {
+            kdDebug() << "convertingToData from ascii " << asAscii() << endl;
             QString str = asAscii();
             *size = str.length();
             *data = new uchar[ *size ];
             uchar* ptr = *data;
             memcpy(ptr, str.ascii(), (*size)*sizeof(uchar));
+            kdDebug() << QString((char*)ptr) << endl;
         }
         return;
         break;

@@ -580,7 +580,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 {
     kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
     QString attr;
-    KisLayerSP layer;
+    KisPaintLayerSP layer;
     KisColorSpace * cs;
 
     QString colorspacename;
@@ -602,12 +602,21 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
     layer -> setY(y);
 
     if ((element.attribute("filename")).isNull())
-        m_layerFilenames[layer] = name;
+        m_layerFilenames[layer.data()] = name;
     else
-        m_layerFilenames[layer] = QString(element.attribute("filename"));
-    kdDebug(DBG_AREA_FILE) << "filename of layer: " << m_layerFilenames[layer]  << "\n";
+        m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
+    kdDebug(DBG_AREA_FILE) << "filename of layer: " << m_layerFilenames[layer.data()]  << "\n";
 
-    return layer;
+    // Load exif info
+    for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
+    {
+        QDomElement e = node.toElement();
+        if ( !e.isNull() && e.tagName() == "ExifInfo" )
+        {
+            layer->paintDevice()->exifInfo()->load(e);
+        }
+    }
+    return layer.data();
 }
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,

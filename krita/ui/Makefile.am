@@ -62,8 +62,9 @@ include_HEADERS = kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_confi
 		kis_multi_bool_filter_widget.h kis_multi_double_filter_widget.h kis_multi_integer_filter_widget.h \
 		kis_paintop_box.h kis_palette_widget.h \
 		kis_previewdialog.h kis_previewwidget.h \
-		kis_tool_controller.h \
-		kis_tool_dummy.h kis_tool_manager.h kis_tool_registry.h kis_view.h \
+		kis_tool_controller.h kis_tool.h kis_tool_non_paint.h kis_tool_paint.h kis_tool_freehand.h  \
+		kis_tool_dummy.h kis_tool_manager.h kis_tool_types.h  kis_tool_registry.h kis_view.h \
+		kis_tool_factory.h \
 		kobirdeyepanel.h \
 		kis_filters_listview.h kis_input_device.h
 

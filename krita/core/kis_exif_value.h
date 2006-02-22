@@ -20,6 +20,8 @@
 #ifndef KIS_EXIF_VALUE_H
 #define KIS_EXIF_VALUE_H
 
+#include <qdom.h> 
+
 #include <qcstring.h>
 #include <qstring.h>
 
@@ -68,8 +70,12 @@ class ExifValue {
             BYTE_ORDER_MOTOROLA,
             BYTE_ORDER_INTEL
         };
-        ExifValue() : m_ifd(-1), m_type(EXIF_TYPE_UNKNOW), m_components(0) { }
+        ExifValue() : m_ifd(-1), m_type(EXIF_TYPE_UNKNOW), m_components(0), m_value(0) { }
         ExifValue(ExifType type, unsigned char *data, unsigned int size, int ifd, uint components, ExifValue::ByteOrder order);
+        
+        virtual bool load(const QDomElement& elmt);
+        virtual QDomElement save(QDomDocument& doc);
+
         /**
          * Return the type of the array
          */
@@ -81,21 +87,30 @@ class ExifValue {
         }
         inline void setAsUndefined(const unsigned char *data, unsigned int size)
         {
-            UByteArray* array = new UByteArray(size);
-            memcpy( array->data(), data, size*sizeof(unsigned char));
-            m_value = (void*)array;
-            m_components = size;
+            if(m_type == EXIF_TYPE_UNDEFINED)
+            {
+                ((UByteArray*)m_value)->setRawData(data, size);
+                m_components = size;
+            }
         }
         inline const QString asAscii() {
             if(m_type == EXIF_TYPE_ASCII)
-                return *(QString*) m_value;
+                return QString(*(QString*) m_value);
             return QString();
         }
         inline void setAsAscii(char* data)
         {
-            QString* str = new QString((char*) data);
-            m_value = str;
-            m_components = str->length();
+            if(m_type == EXIF_TYPE_ASCII)
+            {
+                QString str = QString((char*) data);
+                *(QString*)m_value = str;
+                m_components = str.length();
+            }
+        }
+        inline void setAsAscii(QString str)
+        {
+            *(QString*)m_value = str;
+            m_components = str.length();
         }
         void convertToData(unsigned char ** data, unsigned int* size, ExifValue::ByteOrder order);
         /**
@@ -153,6 +168,10 @@ class ExifValue {
             ((ExifNumber*)m_value)[i].m_rational.numerator = n;
             ((ExifNumber*)m_value)[i].m_rational.denominator = d;
         }
+        inline void setValue(uint i, KisExifRational r)
+        {
+            ((ExifNumber*)m_value)[i].m_rational = r;
+        }
         inline Q_INT8 asSByte(uint i)
         {
             if(m_type == EXIF_TYPE_SBYTE)
@@ -189,6 +208,10 @@ class ExifValue {
                 return asExifNumber(i).m_srational;
             return KisExifSRational();
         }
+        inline void setValue(uint i, KisExifSRational r)
+        {
+            ((ExifNumber*)m_value)[i].m_srational = r;
+        }
         inline void setValue(uint i, Q_INT32 n, Q_INT32 d)
         {
             ((ExifNumber*)m_value)[i].m_srational.numerator = n;
@@ -216,7 +239,7 @@ class ExifValue {
         }
     private:
         /**
-     * Return the ith component as a string.
+         * Return the ith component as a string.
          */
         QString toString(uint i);
         void setValue(const unsigned char *data, unsigned int size, ExifValue::ByteOrder order);
@@ -233,6 +256,10 @@ class ExifValue {
             Q_ASSERT(index < m_components);
             ((ExifNumber*)m_value)[index] = n;
         }
+        /**
+         * This function will allocate the memory used for storing the current data.
+         */
+        void allocData();
     private:
         int m_ifd;
         ExifType m_type;

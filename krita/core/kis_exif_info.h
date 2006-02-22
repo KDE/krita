@@ -31,7 +31,7 @@ class KisExifInfo
         KisExifInfo();
         virtual ~KisExifInfo();
 
-        virtual bool load(const QDomElement& e);
+        virtual bool load(const QDomElement& elmt);
         virtual QDomElement save(QDomDocument& doc);
 
         bool getValue(QString name, ExifValue& value)

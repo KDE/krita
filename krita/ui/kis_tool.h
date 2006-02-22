@@ -72,6 +72,15 @@ public:
     virtual void clear() = 0;
     virtual void clear(const QRect& rc) = 0;
 
+    /**
+     * This function is called after the creation of a tool to create the KAction corresponding
+     * to the tool.
+     *
+     * The code should look like :
+     * @code
+     * 
+     * @endcode
+     */
     virtual void setup(KActionCollection *collection) = 0;
 
     virtual void enter(QEvent *e) = 0;
@@ -85,7 +94,14 @@ public:
 
     virtual QCursor cursor() = 0;
     virtual void setCursor(const QCursor& cursor) = 0;
+    /**
+     * This function is called to create the configuration widget of the tool.
+     * @param parent the parent of the widget
+     */
     virtual QWidget* createOptionWidget(QWidget* parent);
+    /**
+     * @return the current configuration widget.
+     */
     virtual QWidget* optionWidget();
     KRadioAction *action() const { return m_action; }
 
@@ -102,6 +118,9 @@ public:
     virtual QString quickHelp() const { return ""; }
 
 public slots:
+    /**
+     * This slot is called when the tool is selected in the toolbox
+     */
     virtual void activate() = 0;
     
 private:

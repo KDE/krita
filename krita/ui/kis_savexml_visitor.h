@@ -20,13 +20,15 @@
 #define KIS_SAVEXML_VISITOR_H_
 
 #include <qrect.h>
-#include "kis_types.h"
-#include "kis_layer_visitor.h"
+
+#include "kis_adjustment_layer.h"
+#include "kis_exif_info.h"
+#include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_layer_visitor.h"
 #include "kis_paint_layer.h"
-#include "kis_group_layer.h"
-#include "kis_adjustment_layer.h"
+#include "kis_types.h"
 
 class KisSaveXmlVisitor : public KisLayerVisitor {
 public:
@@ -57,6 +59,11 @@ public:
 
         m_elem.appendChild(layerElement);
 
+        if(layer->paintDevice()->hasExifInfo())
+        {
+            QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
+            layerElement.appendChild(exifElmt);
+        }
         m_count++;
         return true;
     }

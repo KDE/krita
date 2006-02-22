@@ -23,11 +23,6 @@
 
 #include <kdebug.h>
 
-#include <KoDom.h>
-
-#include <KoStoreDevice.h>
-#include <KoXmlWriter.h>
-
 KisExifInfo::KisExifInfo()
 {}
 
@@ -36,12 +31,36 @@ KisExifInfo::~KisExifInfo()
 {}
 
 
-bool KisExifInfo::load(const QDomElement& /*e*/)
+bool KisExifInfo::load(const QDomElement& elmt)
 {
-    return false;
+    if(elmt.tagName() != "ExifInfo")
+        return false;
+    for( QDomNode node = elmt.firstChild(); !node.isNull(); node = node.nextSibling() )
+    {
+        QDomElement e = node.toElement();
+        if ( !e.isNull() )
+        {
+            if(e.tagName() == "ExifValue")
+            {
+                QString key = e.attribute("name");
+                ExifValue eV;
+                eV.load(e);
+                setValue(key, eV);
+            }
+        }
+    }
+    return true;
 }
 
-QDomElement KisExifInfo::save(QDomDocument& /*doc*/)
+QDomElement KisExifInfo::save(QDomDocument& doc)
 {
-    return QDomElement();
+    QDomElement elmt = doc.createElement("ExifInfo");
+    for( KisExifInfo::evMap::const_iterator it = begin(); it != end(); ++it)
+    {
+        ExifValue ev = it.data();
+        QDomElement evD = ev.save( doc);
+        evD.setAttribute("name", it.key());
+        elmt.appendChild(evD);
+    }
+    return elmt;
 }

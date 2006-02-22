@@ -186,7 +186,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
             if (m_endPos.x() > img -> width())
                 m_endPos.setX(img -> width());
 
-            if (img) {
+            if (img && img->activeDevice()) {
                 KisPaintDeviceSP dev = img -> activeDevice();
                                 
                 KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Elliptical Selection"), dev);

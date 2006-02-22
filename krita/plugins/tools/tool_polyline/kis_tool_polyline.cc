@@ -94,7 +94,9 @@ void KisToolPolyline::finish()
     draw();
     m_dragging = false;
 
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    if (!device) return;
+    
     KisPainter painter (device);
     painter.beginTransaction (i18n ("Polyline"));
 

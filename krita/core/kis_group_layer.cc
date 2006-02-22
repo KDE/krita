@@ -302,6 +302,8 @@ QImage KisGroupLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
+    kdDebug() << "Updating projection for " << name() << ", " << rc << endl;
+    
     if (!m_dirtyRect.isValid()) return;
         
     // Get the first layer in this group to start compositing with
@@ -356,12 +358,14 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
     if (adjLayer != 0) {
+        kdDebug() << "Copying cached adj. layer representation\n";
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
                   rc.left(), rc.top(), rc.width(), rc.height());
         first = false;
     }
     else {
+        kdDebug() << "Erasing projection\n";
         gc.eraseRect(rc);
         first = true;
     }
@@ -373,6 +377,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     while(child)
     {
+        kdDebug() << name() << ": looping past children. Current: " << child->name() << "\n";
         if(first)
         {
             // Copy the lowest layer rather than compositing it with the background
@@ -394,8 +399,6 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
         child = child->prevSibling();
     }
-
-    //emit sigProjectionUpdated(rc);
 }
 
 #include "kis_group_layer.moc"

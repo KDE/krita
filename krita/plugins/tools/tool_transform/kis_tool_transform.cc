@@ -127,7 +127,7 @@ void KisToolTransform::clear()
 
 void KisToolTransform::activate()
 {
-    if(m_subject)
+    if(m_subject && m_subject->currentImg() && m_subject->currentImg()->activeDevice())
     {
         m_subject->undoAdapter()->setCommandHistoryListener( this );
         
@@ -138,6 +138,7 @@ void KisToolTransform::activate()
             
         Q_INT32 x,y,w,h;
         KisImageSP img = m_subject -> currentImg();
+        
         KisPaintDeviceSP dev = img -> activeDevice();
 
         // Create a lazy copy of the current state
@@ -700,7 +701,7 @@ void KisToolTransform::notifyCommandAdded( KCommand * command)
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
-        if(m_subject)
+        if(m_subject && m_subject -> currentImg() && m_subject->currentImg()->activeDevice() )
         {
             KisImageSP img = m_subject -> currentImg();
             KisPaintDeviceSP dev = img -> activeDevice();

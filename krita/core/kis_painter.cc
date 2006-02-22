@@ -102,6 +102,8 @@ KisPainter::~KisPainter()
 
 void KisPainter::begin(KisPaintDeviceSP device)
 {
+    if (!device) return;
+    
     if (m_transaction)
         delete m_transaction;
 

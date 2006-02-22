@@ -111,6 +111,12 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject)
         return;
 
+    if (!m_currentImage)
+        return;
+    
+    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    if (!device) return;
+        
     if (m_dragging && event -> button() == LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
@@ -122,7 +128,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_currentImage)
             return;
 
-        KisPaintDeviceSP device = m_currentImage->activeDevice ();
+        
         KisPainter painter (device);
         painter.beginTransaction (i18n ("Rectangle"));
         

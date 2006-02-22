@@ -273,9 +273,10 @@ void KisSelectionManager::updateGUI()
     KisPaintDeviceSP dev = 0;
 
     bool enable = false;
-    if (img) {
+    if (img && img->activeDevice() && img->activeLayer()) {
         l = img -> activeLayer();
         dev = img -> activeDevice();
+
 
         enable = l && dev&& dev -> hasSelection() && !l -> locked() && l -> visible();
 

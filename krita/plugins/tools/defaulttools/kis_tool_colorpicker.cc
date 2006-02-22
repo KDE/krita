@@ -87,6 +87,8 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
         KisPaintDeviceSP dev = img -> activeDevice();
 
+        if (!dev) return;
+        
         bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
         if (!sampleMerged) {
             if (!img->activeLayer())

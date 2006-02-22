@@ -895,6 +895,18 @@ KisPaintDeviceSP KisImage::activeDevice()
             return layer -> selection().data();
         }
     }
+    else if (KisGroupLayer * layer = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
+        // Find first child
+        KisLayer * child = layer->lastChild();
+        while(child)
+        {
+            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
+                return layer -> paintDevice();
+            }
+            child = child->prevSibling();
+        }
+    }
+    // XXX: We're buggered!
     return 0;
 }
 

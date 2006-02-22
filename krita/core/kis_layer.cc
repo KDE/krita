@@ -307,9 +307,9 @@ KisLayer::~KisLayer()
 
 void KisLayer::setClean(const QRect & rect)
 {
+    kdDebug() << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
     if (m_dirtyRect.isValid() && rect.isValid()) {
 
-        kdDebug() << "setClean " << name() << " clean" << endl;
         //kdDebug() << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
         //kdDebug() << "cleaned rect: " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 
@@ -329,6 +329,7 @@ bool KisLayer::dirty()
 
 bool KisLayer::dirty(const QRect & rc)
 {
+    kdDebug() << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
     if (!m_dirtyRect.isValid()) return false;
 
     return rc.intersects(m_dirtyRect);
@@ -341,24 +342,37 @@ QRect KisLayer::dirtyRect() const
 
 void KisLayer::setDirty()
 {
-    kdDebug() << "setDirty() " << name() << "\n";
     QRect rc = extent();
+    
+    kdDebug() << "setDirty() " << name() << ", " << rc << "\n";
 
     if (rc.isValid()) m_dirtyRect = rc;
     
     // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
+    if (m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
 
     
 }
 
 void KisLayer::setDirty(const QRect & rc)
 {
-    kdDebug() << "setDirty(rc) " << name() << "\n";
+    kdDebug() << "setDirty(rc) "
+            << name()
+            << ", new rect: "
+            << rc
+            << ", old rect: "
+            << m_dirtyRect
+            << ", becomes: "
+            << (m_dirtyRect | rc)
+            << "\n";
     // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_parent && rc.isValid()) m_parent->setDirty(rc);
+    
     if (rc.isValid())
         m_dirtyRect |= rc;
+
+    if (m_parent && rc.isValid())
+        m_parent->setDirty(m_dirtyRect);
+
 }
 
 

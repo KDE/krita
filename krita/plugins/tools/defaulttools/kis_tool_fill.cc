@@ -78,6 +78,7 @@ KisToolFill::~KisToolFill()
 bool KisToolFill::flood(int startX, int startY)
 {
     KisPaintDeviceSP device = m_currentImage->activeDevice();
+    if (!device) return false;
 
     if (m_fillOnlySelection) {
         KisPaintDeviceSP filled = new KisPaintDevice(device -> colorSpace(),  "filled");

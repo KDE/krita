@@ -180,7 +180,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 
             if (m_endPos.x() > img -> width())
                 m_endPos.setX(img -> width());
-            if (img) {
+            if (img && img->activeDevice()) {
 
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 KisPaintDeviceSP dev = img -> activeDevice();

@@ -58,7 +58,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
     
-    if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeLayer())
+    if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeDevice())
     {
         m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice().data() );
     }

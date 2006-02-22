@@ -141,6 +141,7 @@ void KisToolFilter::changeFilter( const KisID & id)
     }
 
     m_source = m_currentImage->activeDevice();
+    if (!m_source) return;
 
     m_filterConfigurationWidget = m_filter -> createConfigurationWidget( optionWidget(), m_source );
     if( m_filterConfigurationWidget != 0 )

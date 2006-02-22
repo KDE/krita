@@ -113,9 +113,10 @@ void KisToolSelectPolygonal::finish()
 
     KisImageSP img = m_subject -> currentImg();
 
-    if (img) {
+    if (img && img->activeDevice()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KisPaintDeviceSP dev = img -> activeDevice();
+        
         bool hasSelection = dev -> hasSelection();
 
         //XXX: Fix string

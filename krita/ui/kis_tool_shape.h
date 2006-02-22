@@ -41,9 +41,6 @@ public:
 protected:
     virtual QWidget* createOptionWidget(QWidget* parent);
 
-    // Add the tool-specific layout to the default option widget's layout.
-    void addOptionWidgetLayout(QLayout *layout);
-
     KisPainter::FillStyle fillStyle();
 
 private:

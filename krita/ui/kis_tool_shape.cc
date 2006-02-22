@@ -19,6 +19,7 @@
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qcombobox.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,22 +41,17 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
 {
     QWidget *widget = super::createOptionWidget(parent);
 
-    m_shapeOptionsWidget = new WdgGeometryOptions(widget);
+    m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
     m_optionLayout = new QGridLayout(widget, 2, 1);
-    super::addOptionWidgetLayout(m_optionLayout);
+   // super::addOptionWidgetLayout(m_optionLayout);
 
-    m_optionLayout -> addWidget(m_shapeOptionsWidget, 0, 0);
+    m_shapeOptionsWidget -> cmbFill -> reparent(widget, QPoint(0,0), true);
+    m_shapeOptionsWidget -> textLabel3 -> reparent(widget, QPoint(0,0), true);
+    addOptionWidgetOption(m_shapeOptionsWidget -> cmbFill, m_shapeOptionsWidget -> textLabel3);
 
     return widget;
-}
-
-void KisToolShape::addOptionWidgetLayout(QLayout *layout)
-{
-    Q_ASSERT(m_optionLayout != 0);
-
-    m_optionLayout -> addMultiCellLayout(layout, 1, 1, 0, 1);
 }
 
 KisPainter::FillStyle KisToolShape::fillStyle(void)

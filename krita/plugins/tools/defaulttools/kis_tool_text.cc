@@ -26,6 +26,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qfontmetrics.h>
+#include <qhbox.h>
 
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -147,19 +148,16 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
     QWidget *widget = super::createOptionWidget(parent);
 
     m_lbFont = new QLabel(i18n("Font: "), widget);
+
+    QHBox *fontBox = new QHBox(widget);
     m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
-        .arg(m_font.pointSize()), widget);
-    m_btnMoreFonts = new QPushButton("...", widget);
+        .arg(m_font.pointSize()), fontBox);
+    m_btnMoreFonts = new QPushButton("...", fontBox);
 
     connect(m_btnMoreFonts, SIGNAL(released()), this, SLOT(setFont()));
 
-    QGridLayout *optionLayout = new QGridLayout(widget, 3, 1);
-    super::addOptionWidgetLayout(optionLayout);
+    addOptionWidgetOption(fontBox, m_lbFont);
 
-    optionLayout->addWidget(m_lbFont, 0, 0);
-    optionLayout->addWidget(m_lbFontName, 0, 1);
-    optionLayout->addWidget(m_btnMoreFonts, 0, 2);
-    
     return widget;
 }
 

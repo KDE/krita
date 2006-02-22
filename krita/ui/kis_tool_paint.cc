@@ -133,37 +133,27 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
-   if (!quickHelp().isEmpty()) {
-        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 5, 3, 0, 6);
+    QVBoxLayout* verticalLayout = new QVBoxLayout(m_optionWidget);
 
-        m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
-        m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
-        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
+    m_optionWidgetLayout = new QGridLayout(verticalLayout, 2, 3, 6);
 
-        m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
-        m_optionWidgetLayout -> addMultiCellWidget(m_cmbComposite, 1, 1, 1, 2);
+    m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
+    m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
 
-        m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
+    m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
+    m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
 
+    verticalLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding));
+
+    if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(SmallIconSet( "help" ), "", m_optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
-        m_optionWidgetLayout -> addWidget(push, 0, 2);
-    } else {
-        m_optionWidgetLayout = new QGridLayout(m_optionWidget, 5, 2, 0, 6);
 
-        m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);
-        m_optionWidgetLayout -> addWidget(m_slOpacity, 0, 1);
-        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
-        
-        m_optionWidgetLayout -> addWidget(m_lbComposite, 1, 0);
-        m_optionWidgetLayout -> addWidget(m_cmbComposite, 1, 1);
-        m_optionWidgetLayout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 2);
-        
-        m_optionWidgetLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Fixed,QSizePolicy::Expanding), 4, 0);
+        QHBoxLayout* hLayout = new QHBoxLayout(m_optionWidget);
+        hLayout -> addWidget(push);
+        hLayout -> addItem(new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Fixed));
+        verticalLayout -> addLayout(hLayout);
     }
-
-    //m_optionWidgetLayout -> setRowSpacing(3, 6);
-
     return m_optionWidget;
 }
 

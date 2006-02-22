@@ -133,6 +133,7 @@
 #include "kis_paint_device_action.h"
 #include "kis_filter_configuration.h"
 #include "kis_transform_worker.h"
+#include "kis_shear_visitor.h"
 
 #include <kis_resourceserver.h>
 #include <kis_resource_mediator.h>
@@ -1809,30 +1810,29 @@ void KisView::rotateLayer(double angle)
     kdDebug() << "rotateLayer calls updateCanvas\n"; updateCanvas();
 }
 
-void KisView::shearLayer(double /*angleX*/, double /*angleY*/)
+void KisView::shearLayer(double angleX, double angleY)
 {
     if (!currentImg()) return;
 
-    KisPaintDeviceSP dev = currentImg() -> activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = currentImg() -> activeLayer();
+    if (!layer) return;
 
     KisUndoAdapter * undo = 0;
-    KisTransaction * t = 0;
     if ((undo = currentImg() -> undoAdapter())) {
-        t = new KisTransaction(i18n("Shear layer"), dev);
-        Q_CHECK_PTR(t);
+        undo -> beginMacro(i18n("Shear layer"));
     }
 
-    // XXX LAYERREMOVE
-    //dev -> shear(angleX, angleY, m_progress);
+    KisShearVisitor v(angleX, angleY, m_progress);
+    v.setUndoAdapter(undo);
+    layer -> accept(v);
 
-    if (undo) undo -> addCommand(t);
+    if (undo) undo -> endMacro();
 
     m_doc -> setModified(true);
     layersUpdated();
-    kdDebug() << "shearLayer calls resizeEvent\n"; resizeEvent(0);
+//    kdDebug() << "shearLayer calls resizeEvent\n"; resizeEvent(0);
     kdDebug() << "shearLayer calls updateCanvas\n"; updateCanvas();
-    kdDebug() << "SHEARlAYER calls canvasRefresh\n"; canvasRefresh();
+//    kdDebug() << "SHEARlAYER calls canvasRefresh\n"; canvasRefresh();
 }
 
 void KisView::flattenImage()

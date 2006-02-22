@@ -65,6 +65,7 @@
 #include "kis_paint_layer.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_group_layer.h"
+#include "kis_shear_visitor.h"
 
 class KisImage::KisImagePrivate {
 public:
@@ -731,15 +732,11 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     unlock();
 }
 
-void KisImage::shear(double , double , KisProgressDisplayInterface *)
-{
-    lock();
-/*LAYERREMOVE
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
-    const double pi=3.1415926535897932385;
+    lock();
 
-    if (m_layers.empty()) return; // Nothing to scale
+    const double pi=3.1415926535897932385;
 
     //new image size
     Q_INT32 w=width();
@@ -765,23 +762,10 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         m_adapter->beginMacro(i18n("Shear Image"));
 
-        vKisLayerSP_it it;
-        for ( it = m_layers.begin(); it != m_layers.end(); ++it ) {
-            KisLayerSP layer = (*it);
+        KisShearVisitor v(angleX, angleY, m_progress);
+        v.setUndoAdapter(undoAdapter());
+        rootLayer() -> accept(v);
 
-            KisTransaction * t = 0;
-            if (undoAdapter() && m_adapter->undo()) {
-                t = new KisTransaction("", layer.data());
-                Q_CHECK_PTR(t);
-            }
-
-            layer -> shear(angleX, angleY, m_progress);
-
-            if (t) {
-                m_adapter->addCommand(t);
-            }
-
-        }
 
         m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
@@ -790,10 +774,8 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         undoAdapter()->endMacro();
 
-        emit sigSizeChanged(KisImageSP(this), w, h);
-        notify();
+        emit sigSizeChanged(w, h);
     }
-*/
 
     unlock();
 }

@@ -730,7 +730,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 
     // XXX: Is this really faster than converting line by line and building the QImage directly?
     //      This copies potentially a lot of data.
-    m_datamanager -> readBytes(data, x1, y1, w, h);
+    readBytes(data, x1, y1, w, h);
     QImage image = colorSpace() -> convertToQImage(data, w, h, dstProfile, INTENT_PERCEPTUAL, exposure);
     delete[] data;
 

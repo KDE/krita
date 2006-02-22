@@ -95,7 +95,10 @@ public:
                                     Q_INT32 y2,
                                     KisProfile * profile,
                                     float exposure = 0.0f);
-    KisBackgroundSP background() const;
+
+     virtual QImage convertToQImage(const QRect& r, const QSize& fullImageSize, KisProfile *profile, PaintFlags paintFlags, float exposure = 0.0f);
+
+     KisBackgroundSP background() const;
 
 public:
 

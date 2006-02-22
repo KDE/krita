@@ -965,13 +965,6 @@ void KisView::paintView(const KisRect& r)
 
                         if (!wr.isEmpty()) {
 
-                            gc.setWorldXForm(true);
-                            gc.translate(-horzValue(), -vertValue());
-
-                            if (zoom() < 1.0 - EPSILON || zoom() > 1.0 + EPSILON) {
-                                gc.scale(zoomFactor(), zoomFactor());
-                            }
-
                             KisImage::PaintFlags paintFlags = (KisImage::PaintFlags)KisImage::PAINT_BACKGROUND;
 
                             if (m_actLayerVis) {
@@ -984,9 +977,35 @@ void KisView::paintView(const KisRect& r)
                             }
 
                             kdDebug() << "Going to render to Painter\n";
-                            m_image -> renderToPainter(wr.left(), wr.top(),
-                                wr.right(), wr.bottom(), gc, monitorProfile(),
-                                paintFlags, HDRExposure());
+
+                            if (zoom() > 1.0 - EPSILON) {
+
+                                gc.setWorldXForm(true);
+                                gc.translate(-horzValue(), -vertValue());
+                                gc.scale(zoomFactor(), zoomFactor());
+
+                                m_image -> renderToPainter(wr.left(), wr.top(),
+                                    wr.right(), wr.bottom(), gc, monitorProfile(),
+                                    paintFlags, HDRExposure());
+                            } else {
+
+                                QRect canvasRect = windowToView(wr);
+                                QRect imageRect = canvasRect;
+                                imageRect.moveBy(horzValue(), vertValue());
+
+                                QSize fullImageSize(static_cast<Q_INT32>(ceil(docWidth() * zoom())),
+                                                    static_cast<Q_INT32>(ceil(docHeight() * zoom())));
+
+                                QImage image = m_image->convertToQImage(imageRect, fullImageSize, 
+                                                                        monitorProfile(), paintFlags, HDRExposure());
+
+                                gc.drawImage(canvasRect.topLeft(), image, image.rect());
+
+                                // Set up for the grid drawer.
+                                gc.setWorldXForm(true);
+                                gc.translate(-horzValue(), -vertValue());
+                                gc.scale(zoomFactor(), zoomFactor());
+                            }
 
                             m_gridManager->drawGrid( wr, &gc );
                         }

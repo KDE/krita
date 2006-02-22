@@ -579,6 +579,10 @@ void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
 {
 }
 
+void KisLayer::paintSelection(QImage &, const QRect&, const QSize&, const QSize&)
+{
+}
+
 QImage KisLayer::createThumbnail(Q_INT32, Q_INT32)
 {
     return 0;

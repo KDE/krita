@@ -95,6 +95,7 @@ public:
     QRect selectedExactRect();
 
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
 private:
     KisPaintDeviceSP m_parentPaintDevice;

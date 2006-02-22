@@ -33,6 +33,8 @@ public:
     // in image space.
     void paintBackground(QImage image, int leftX, int topY);
 
+    void paintBackground(QImage image, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+
     // Returns the pattern tile.
     const QImage& patternTile() const;
 

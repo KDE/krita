@@ -195,6 +195,8 @@ public:
 
     /// paints a mask where the selection on this layer resides
     virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
+
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 

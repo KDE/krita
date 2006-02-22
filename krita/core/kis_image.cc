@@ -65,6 +65,7 @@
 #include "kis_paint_layer.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_group_layer.h"
+#include "kis_iterators_pixel.h"
 #include "kis_shear_visitor.h"
 
 class KisImage::KisImagePrivate {
@@ -1260,6 +1261,71 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     }
 
     return QImage();
+}
+
+QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, KisProfile *profile, PaintFlags paintFlags, float exposure)
+{
+    if (r.isEmpty() || scaledImageSize.isEmpty()) {
+        return QImage();
+    }
+
+    Q_INT32 imageWidth = width();
+    Q_INT32 imageHeight = height();
+    Q_UINT32 pixelSize = colorSpace()->pixelSize();
+
+    double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
+    double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
+
+    QRect srcRect;
+
+    srcRect.setLeft(static_cast<int>(r.left() * xScale));
+    srcRect.setRight(static_cast<int>(ceil((r.right() + 1) * xScale)) - 1);
+    srcRect.setTop(static_cast<int>(r.top() * yScale));
+    srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
+
+    KisPaintDevice imageArea(colorSpace(), "imageArea");
+    KisPaintDeviceSP mergedImage = m_rootLayer->projection(srcRect);
+
+    for (Q_INT32 y = 0; y < r.height(); ++y) {
+
+        KisHLineIterator it = imageArea.createHLineIterator(0, y, r.width(), true);
+        Q_INT32 dstY = r.y() + y;
+        Q_INT32 dstX = r.x();
+        Q_INT32 srcY = (dstY * imageHeight) / scaledImageSize.height();
+
+        while (!it.isDone()) {
+
+            Q_INT32 srcX = (dstX * imageWidth) / scaledImageSize.width();
+
+            KisColor pixelColor = mergedImage->colorAt(srcX, srcY);
+            memcpy(it.rawData(), pixelColor.data(), pixelSize);
+
+            ++it;
+            ++dstX;
+        }
+    }
+
+    QImage image = imageArea.convertToQImage(profile, 0, 0, r.width(), r.height(), exposure);
+
+    if (paintFlags & PAINT_BACKGROUND) {
+        m_bkg -> paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+        image.setAlphaBuffer(false);
+    }
+
+    if (paintFlags & PAINT_SELECTION) {
+        if (m_activeLayer != 0) {
+            m_activeLayer -> paintSelection(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+        }
+    }
+
+    /*if (paintFlags & PAINT_MASKINACTIVELAYERS) {
+        if (m_activeLayer != 0) {
+            m_activeLayer -> paintMaskInactiveLayers(img, x1, y1, w, h);
+        }
+    }*/
+
+
+    return image;
 }
 
 KisPaintDeviceSP KisImage::mergedImage()

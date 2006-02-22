@@ -240,3 +240,91 @@ void KisSelection::paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q
         }
     }
 }
+
+void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
+{
+    if (scaledImageRect.isEmpty() || scaledImageSize.isEmpty() || imageSize.isEmpty()) {
+        return;
+    }
+
+    Q_ASSERT(img.size() == scaledImageRect.size());
+
+    if (img.size() != scaledImageRect.size()) {
+        return;
+    }
+
+    Q_INT32 imageWidth = imageSize.width();
+    Q_INT32 imageHeight = imageSize.height();
+
+    for (Q_INT32 y = 0; y < scaledImageRect.height(); ++y) {
+
+        Q_INT32 scaledY = scaledImageRect.y() + y;
+        Q_INT32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
+
+        for (Q_INT32 x = 0; x < scaledImageRect.width(); ++x) {
+
+            Q_INT32 scaledX = scaledImageRect.x() + x;
+            Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
+
+            KisHLineIteratorPixel hit = createHLineIterator(srcX - 1, srcY, 3, false);
+            KisVLineIteratorPixel vit = createVLineIterator(srcX, srcY - 1, 3, false);
+
+            Q_UINT8 left = *(hit.rawData());
+            ++hit;
+            Q_UINT8 centre = *(hit.rawData());
+            ++hit;
+            Q_UINT8 right = *(hit.rawData());
+
+            Q_UINT8 above = *(vit.rawData());
+            ++vit;
+            ++vit;
+            Q_UINT8 below = *(vit.rawData());
+
+            uchar *j = img.scanLine(y) + x * sizeof(QRgb);
+
+            if (centre != MAX_SELECTED) {
+
+                // this is where we come if the pixels should be blue or bluish
+
+                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+                Q_UINT8 alpha = *(j + 3);
+
+                // Colour influence is proportional to alpha.
+                g = UINT8_MULT(g, alpha);
+
+                if (centre == MIN_SELECTED)
+                {
+                    //this is where we come if the pixels should be blue (or red outline)
+
+                    // now for a simple outline based on 4-connectivity
+                    if (left != MIN_SELECTED
+                        || right != MIN_SELECTED
+                        || above != MIN_SELECTED
+                        || below != MIN_SELECTED)
+                    {
+                        *(j+0) = 0;
+                        *(j+1) = 0;
+                        *(j+2) = 255;
+                    }
+                    else
+                    {
+                        *(j+0) = 165+g;
+                        *(j+1) = 128+g;
+                        *(j+2) = 128+g;
+                    }
+
+                    // Stop unselected transparent areas from appearing the same
+                    // as selected transparent areas.
+                    *(j+3) = QMAX(alpha, 192);
+                }
+                else
+                {
+                    *(j+0) = UINT8_BLEND(*(j+0), g+165, centre);
+                    *(j+1) = UINT8_BLEND(*(j+1), g+128, centre);
+                    *(j+2) = UINT8_BLEND(*(j+2), g+128, centre);
+                }
+            }
+        }
+    }
+}
+

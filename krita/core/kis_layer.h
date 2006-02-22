@@ -62,6 +62,10 @@ public:
      * Return true if the given rect intersects the dirty rect(s) of this layer
      */
     virtual bool dirty(const QRect & rc);
+
+
+    virtual QRect dirtyRect() const;
+    
     
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the

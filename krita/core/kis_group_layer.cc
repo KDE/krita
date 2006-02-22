@@ -75,11 +75,6 @@ void KisGroupLayer::setDirty(const QRect & rc)
     emit sigDirty(rc);
 }
 
-QRect KisGroupLayer::dirtyRect() const
-{
-    return m_dirtyRect;
-}
-
 void KisGroupLayer::resetProjection()
 {
     m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
@@ -185,8 +180,9 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     newLayer -> m_parent = this;
     newLayer -> m_index = index;
     newLayer -> setImage(image());
+    newLayer -> setDirty(newLayer->extent());
     setDirty();
-        return true;
+    return true;
 }
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
@@ -213,6 +209,7 @@ bool KisGroupLayer::removeLayer(int x)
         if (childCount() < 1) {
             // No children, nothing to show for it.
             m_projection->clear();
+            setDirty();
         }
         return true;
     }
@@ -277,7 +274,6 @@ void KisGroupLayer::setX(Q_INT32 x)
         KisLayerSP layer = *it;
         layer->setX(layer->x() + delta);
     }
-
     m_x = x;
 }
 

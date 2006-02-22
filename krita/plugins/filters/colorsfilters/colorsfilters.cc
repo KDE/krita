@@ -44,7 +44,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_colorspace.h>
 #include <kis_painter.h>
-
+#include <kis_selection.h>
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
 #include "colorsfilters.h"
@@ -107,6 +107,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     int twoPercent = int(0.005*histogram.calculations().getCount());
     int pixCount = 0;
     int binnum = 0;
+    
     while(binnum<histogram.producer()->numberOfBins())
     {
         pixCount += histogram.getValue(binnum);
@@ -157,11 +158,16 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             cfg->transfer[i] = 0xFFFF;
     }
 
-
+    KisSelectionSP dstSel = 0;
     if (dst != src) {
+        kdDebug() << "Src != dst!\n";
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();
+        if (src->hasSelection()) {
+            dstSel = dst->selection();
+            dst->setSelection(src->selection());
+        }
     }
 
     // apply
@@ -216,6 +222,10 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
                 break;
         }
         setProgress(pixelsProcessed);
+    }
+    // Restore selection
+    if (src != dst && src->hasSelection()) {
+        dst->setSelection(dstSel);
     }
 
     setProgressDone();

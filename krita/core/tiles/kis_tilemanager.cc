@@ -250,6 +250,11 @@ void KisTileManager::fromSwap(TileInfo* info)
 
 void KisTileManager::toSwap(TileInfo* info) {
 
+    if (!info) {
+        kdWarning(DBG_AREA_TILES) << "Info is NULL" << endl;
+        return;
+    }
+    
     m_swapMutex->lock();
 
     //Q_ASSERT(info -> inMem);

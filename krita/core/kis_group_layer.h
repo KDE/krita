@@ -59,8 +59,6 @@ public:
      */
     virtual void setDirty(const QRect & rect);
 
-    QRect dirtyRect() const;
-    
     virtual void activate() {};
 
     virtual void deactivate() {};

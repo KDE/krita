@@ -104,17 +104,25 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
 
 QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 {
-    return m_paintdev->createThumbnail(w, h);
+    if (m_paintdev)
+        return m_paintdev->createThumbnail(w, h);
+    else
+        return QImage();
 }
 
 
-Q_INT32 KisPaintLayer::x() const { return m_paintdev->getX(); }
-void KisPaintLayer::setX(Q_INT32 x) { m_paintdev->setX(x); }
+Q_INT32 KisPaintLayer::x() const { if (m_paintdev) return m_paintdev->getX(); else return 0; }
 
-Q_INT32 KisPaintLayer::y() const { return m_paintdev->getY(); }
-void KisPaintLayer::setY(Q_INT32 y) { m_paintdev->setY(y); }
+void KisPaintLayer::setX(Q_INT32 x)
+{
+    if (m_paintdev)
+        m_paintdev->setX(x);
+}
 
-QRect KisPaintLayer::extent() const {return m_paintdev->extent(); }
-QRect KisPaintLayer::exactBounds() const {return m_paintdev->exactBounds(); }
+Q_INT32 KisPaintLayer::y() const { if (m_paintdev) return m_paintdev->getY(); else return 0;  }
+void KisPaintLayer::setY(Q_INT32 y) { if (m_paintdev) m_paintdev->setY(y); }
+
+QRect KisPaintLayer::extent() const { if (m_paintdev) return m_paintdev->extent(); else return QRect(); }
+QRect KisPaintLayer::exactBounds() const { if (m_paintdev) return m_paintdev->exactBounds(); else return QRect(); }
 
 #include "kis_paint_layer.moc"

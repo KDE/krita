@@ -54,6 +54,13 @@ public:
 public:
     virtual bool visit(KisPaintLayer *layer)
     {
+        
+        if (m_projection == 0) {
+            return false;
+        }
+        
+        kdDebug() << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         if (!layer -> visible())
             return true;
 
@@ -77,6 +84,14 @@ public:
 
     virtual bool visit(KisGroupLayer *layer)
     {
+        
+        if (m_projection == 0) {
+            return false;
+        }
+        
+        kdDebug() << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+                
         if (!layer -> visible())
             return true;
         
@@ -101,6 +116,10 @@ public:
 
     virtual bool visit(KisPartLayer* layer)
     {
+
+        kdDebug() << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+        
         if (m_projection == 0) {
             return false;
         }
@@ -131,6 +150,9 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        kdDebug() << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+                << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
+        
         if (m_projection == 0) {
             return true;
         }

@@ -110,8 +110,10 @@ Q_INT32 KisAdjustmentLayer::x() const
 
 void KisAdjustmentLayer::setX(Q_INT32 x)
 {
-    if (m_selection)
+    if (m_selection) {
         m_selection->setX(x);
+        resetCache();
+    }
 
 }
 
@@ -125,8 +127,10 @@ Q_INT32 KisAdjustmentLayer::y() const
 
 void KisAdjustmentLayer::setY(Q_INT32 y)
 {
-    if (m_selection)
+    if (m_selection) {
         m_selection->setY(y);
+        resetCache();
+    }
 }
 
 QRect KisAdjustmentLayer::extent() const

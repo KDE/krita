@@ -334,6 +334,11 @@ bool KisLayer::dirty(const QRect & rc)
     return rc.intersects(m_dirtyRect);
 }
 
+QRect KisLayer::dirtyRect() const
+{
+    return m_dirtyRect;
+}
+
 void KisLayer::setDirty()
 {
     kdDebug() << "setDirty() " << name() << "\n";

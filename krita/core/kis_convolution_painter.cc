@@ -105,14 +105,14 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y
     }
 
     // Determine the kernel's extent from the center pixel
-    Q_INT32 kw, kh, khalfWidth, khalfHeight, widthMinuskhw, heightMinuskhh;
+    Q_INT32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
     kw = kernel->width;
     kh = kernel->height;
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
-    widthMinuskhw = (w - khalfWidth);
-    heightMinuskhh = (h - khalfHeight);
+    xLastMinuskhw = x + (w - khalfWidth);
+    yLastMinuskhh = y + (h - khalfHeight);
 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
     if (w < kw || h < kh || kw&1 == 0 || kh&1 == 0 || kernel->factor == 0 ) return;
@@ -221,14 +221,14 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
-    Q_INT32 kw, kh, khalfWidth, khalfHeight, widthMinuskhw, heightMinuskhh;
+    Q_INT32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
     kw = kernel->width;
     kh = kernel->height;
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
-    widthMinuskhw = (w - khalfWidth);
-    heightMinuskhh = (h - khalfHeight);
+    xLastMinuskhw = x + (w - khalfWidth);
+    yLastMinuskhh = y + (h - khalfHeight);
 
     KisColorSpace * cs = m_device->colorSpace();
 
@@ -253,9 +253,9 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
         {
             itH += itStart;
             itStart = 0;
-        } else if(itStart + kh > heightMinuskhh)
+        } else if(itStart + kh > yLastMinuskhh)
         {
-            itH -= itStart + kh - heightMinuskhh;
+            itH -= itStart + kh - yLastMinuskhh;
         }
         KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);
         while (!hit.isDone()) {
@@ -301,9 +301,9 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
                         i = krow * kw;
                     }
                     Q_INT32 itH = kh;
-                    if(row + khalfHeight > heightMinuskhh)
+                    if(row + khalfHeight > yLastMinuskhh)
                     {
-                        itH += heightMinuskhh - row - khalfHeight;
+                        itH += yLastMinuskhh - row - khalfHeight;
                     }
                     for (; krow <  itH; ++krow) {
 
@@ -345,7 +345,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
                         Q_UINT8** d = pixelPtrCache.data() + krow * kw;
                         memmove( d, d + 1, (kw-1)*sizeof(Q_UINT8*));
                     }
-                    if(col < widthMinuskhw)
+                    if(col < xLastMinuskhw)
                     {
                         Q_INT32 i = kw - 1;
 //                         KisVLineIteratorPixel kit = m_device -> createVLineIterator(col + khalfWidth, itStart, itH, false);

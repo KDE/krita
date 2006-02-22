@@ -47,6 +47,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const char *name)
     : KDialogBase(parent, name, true, "", Ok | Cancel)
     , m_image(img)
+    , m_currentFilter(0)
 {
     Q_ASSERT(img);
 
@@ -106,12 +107,12 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
     m_currentConfigWidget = 0;
 
-    enableButtonOK( !m_layerName->text().isEmpty() );
+    enableButtonOK(0);
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 {
-    enableButtonOK( !text.isEmpty() );
+    enableButtonOK( m_currentFilter && !text.isEmpty() );
 }
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
@@ -180,6 +181,8 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
     } else {
         m_labelNoConfigWidget->show();
     }
+
+    enableButtonOK( !m_layerName->text().isEmpty() );
     refreshPreview();
 }
 

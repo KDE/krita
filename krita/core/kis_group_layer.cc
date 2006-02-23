@@ -379,7 +379,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     while(child)
     {
-        kdDebug(41010) << name() << ": looping past children. Current: " << child->name() << "\n";
+        kdDebug(41010) << name() << ": looping past children. Current: " << child->name() << ", " << child->compositeOp().id().name() << "\n";
         if(first)
         {
             // Copy the lowest layer rather than compositing it with the background

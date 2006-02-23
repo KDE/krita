@@ -2,6 +2,7 @@
 Name=Grayscale
 Name[bg]=Гама на сивото
 Name[br]=SkeulLouet
+Name[ca]=Escala de grisos
 Name[da]=Gråskala
 Name[de]=Graustufen
 Name[es]=Escala de grises
@@ -18,4 +19,5 @@ Name[sr@Latn]=Sive nijanse
 Name[sv]=Gråskala
 Name[ta]=பழுப்புநிற வண்ணம்
 Name[uk]=Відтінки сірого
+Name[xx]=xxGrayscalexx
 X-KDE-DefaultTab=true

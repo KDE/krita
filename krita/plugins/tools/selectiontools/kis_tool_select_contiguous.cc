@@ -57,7 +57,6 @@ KisToolSelectContiguous::KisToolSelectContiguous() : super(i18n("Contiguous Sele
     setName("tool_select_contiguous");
     m_subject = 0;
     m_optWidget = 0;
-    m_options = 0;
     m_fuzziness = 20;
     m_sampleMerged = false;
     m_selectAction = SELECTION_ADD;
@@ -73,10 +72,10 @@ void KisToolSelectContiguous::activate()
 {
     super::activate();
 
-    if (!m_options)
+    if (!m_optWidget)
         return;
 
-    m_options -> slotActivated();
+    m_optWidget -> slotActivated();
 }
 
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
@@ -185,18 +184,13 @@ void KisToolSelectContiguous::slotSetAction(int action)
 
 QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
-    m_optWidget = new QWidget(parent);
+    m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget -> setCaption(i18n("Contiguous Area Selection"));
 
-    QVBoxLayout * l = new QVBoxLayout(m_optWidget);
-    Q_CHECK_PTR(l);
-
-    m_options = new KisSelectionOptions(m_optWidget, m_subject);
-    Q_CHECK_PTR(m_options);
-
-    l -> addWidget( m_options);
-    connect (m_options, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    
+    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QHBoxLayout * hbox = new QHBoxLayout(l);
     Q_CHECK_PTR(hbox);
@@ -218,6 +212,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
     connect(samplemerged, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetSampleMerged(int)));
 
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    
     return m_optWidget;
 }
 

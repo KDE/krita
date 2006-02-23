@@ -34,6 +34,7 @@
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_painter.h"
+#include "kis_int_spinbox.h"
 #include "kis_canvas_subject.h"
 #include "kis_canvas_controller.h"
 #include "kis_button_press_event.h"

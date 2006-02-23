@@ -26,7 +26,6 @@ P  * Fix part layers (nearly done)
 User interface
 
 P  * Try to optimize histogram docker
-R  * Finish separation plugin to separate to different images
 A  * Fix display glitches when resizing image or view
 
 Files and Import/Export
@@ -56,8 +55,6 @@ Current user interface issues:
 * Canvas & dockers change position every time a different tool is selected.
 * star tool: the vertices/ration spinners are spaced near the bottom. Ratio should be
   drop down spinbox
-* transform: too much space around block of options (crop is okay, check how to fix there)
-* text tool: everything is too narrow, too much bunched up to the left. font ... button is too big
 * color picker: top combo should be as wide as the whole widget; the widget is a bit too big.,
   we should try to make the listview a lot smaller. Maybe just use labels here?
 * contiguous area: options are near bottom of widget
@@ -69,10 +66,8 @@ Current user interface issues:
   except the one with the tool options in it disappear.
 * Layer properties dialog: the opacity dropdown is too small (perhaps because
   it's hard-coded for a smaller font?
-* Select/transform... no dialog appears
 * Brightness-contrast should have some help text under the curve widget (but it's maybe too late
   for that now.)
-* Cubism is disabled for cmyk: it should be enabled, but give a warning
 * Maybe we should put the filter config widget on the right-hand side of the preview, like
   Digikam does?
 * Filters should be re-ordered in less categories
@@ -81,12 +76,14 @@ Current user interface issues:
 * Wavelet noise reducer action should have ...
 * Scripting docker is far too wide when using the platinum widget style
 * cubism filter doesn't show the progress bar
-* Disable irrelevant tools and buttons when the layer is a group layer
-
+* When splitting the view, and adding or removing layers, only one view is updated
+* When splitting the view (or adding a part layer -- anything that messes with the view itself) all palettes
+  except for the controlbox disappear
+  
 Regressions:
 
 * Selection mask doesn't show in opengl mode
 * setting the opacity with the layerbox slider addes an infinite amount of opacity actions to the undo menu
 * cannot move layers up past the their group layer in the layerbox
-* Wet and non-wet layers cannot be mixed in one image
-* Indirect painting makes wet hang
+* Wet & brush paintop options are both shown on top of each other, and on top of the paintop combo when
+  painting with a tablent. Also: the option widget very rapidly switches when painting with a tablet.

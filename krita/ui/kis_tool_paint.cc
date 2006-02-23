@@ -134,7 +134,9 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(m_optionWidget);
-
+    verticalLayout->setMargin(0);
+    verticalLayout->setSpacing(3);
+    
     m_optionWidgetLayout = new QGridLayout(verticalLayout, 2, 3, 6);
 
     m_optionWidgetLayout -> addWidget(m_lbOpacity, 0, 0);

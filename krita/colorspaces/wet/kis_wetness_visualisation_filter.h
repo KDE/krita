@@ -34,7 +34,9 @@ public:
     WetnessVisualisationFilter(KisView* view);
     virtual ~WetnessVisualisationFilter() {}
     void setAction(KToggleAction* action);
-    
+    // XXX: Figure out a way to match a filter exactly to a colorspace
+    virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+    virtual bool workWith(KisColorSpace* cs) { return (cs->id() == KisID("WET")); };
 private slots:
     void slotActivated();
     void slotTimeout();

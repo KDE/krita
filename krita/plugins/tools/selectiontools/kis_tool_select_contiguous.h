@@ -67,8 +67,7 @@ public slots:
 
 private:
     KisCanvasSubject *m_subject;
-        QWidget * m_optWidget;
-    KisSelectionOptions * m_options; // Default options widget
+    KisSelectionOptions * m_optWidget;
 
     int m_fuzziness;
     enumSelectionMode m_selectAction;

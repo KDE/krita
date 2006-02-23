@@ -34,6 +34,10 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
+#include <kfiledialog.h>
+
+
+#include <KoFilterManager.h>
 
 #include <kis_doc.h>
 #include <kis_image.h>
@@ -92,6 +96,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         case(ALL_LAYERS):
             image->flatten();
+            src = image->mergedImage();
             break;
         default:
             break;
@@ -111,8 +116,14 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         KisChannelInfo * ch = (*it);
 
+        kdDebug() << "Separating channel: " << ch->name()
+                << ", position: " << ch->pos()
+                << ", type: " << ch->channelType()
+                << ", valuetype: " << ch->channelValueType()
+                << ", size: " << ch->size() << endl;
+        
         if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
-            // Don't make an separate separation of the alpha channel if the user didn't ask for it.
+            kdDebug() <<  "Don't make an separate separation of the alpha channel if the user didn't ask for it.\n";
             continue;
         }
 
@@ -136,7 +147,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
 
         dstCs = dev->colorSpace();
-
+        kdDebug() << "new device with colorspace " << dstCs->id().name() << endl;
+        
         layers.push_back(dev);
 
         for (Q_INT32 row = 0; row < rect.height(); ++row) {
@@ -168,11 +180,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                         if (channelSize == 1 && destSize == 1) {
 
                             // Both 8-bit channels
-
-                            memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 1);
+                            dstIt.rawData()[0] = srcIt.rawData()[channelPos];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                                 dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
                             }
                             else {
@@ -182,11 +192,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                         else if (channelSize == 2 && destSize == 2) {
 
                             // Both 16-bit
-
-                            memcpy(dstIt.rawData(), srcIt.rawData() + channelPos, 2);
+                            dstIt.rawData()[0] = srcIt.rawData()[channelPos];
+                            dstIt.rawData()[1] = srcIt.rawData()[channelPos + 1];
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
-                                //memcpy(dstIt.rawData(), srcIt.rawData() + srcAlphaPos, 2);
                                 dstCs->setAlpha(dstIt.rawData(), srcCs->getAlpha(srcIt.rawData()), 1);
                             }
                             else {
@@ -223,7 +232,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     }
 
     vKisPaintDeviceSP_it deviceIt = layers.begin();
-
+    
+    emit notifyProgressDone();
+    
     if (!m_cancelRequested) {
 
         for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
@@ -237,19 +248,18 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             }
 
             if (outputOps == TO_LAYERS) {
-                KisPaintLayerSP l = new KisPaintLayer(image, ch->name(), OPACITY_OPAQUE);
+                KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
                 image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
             }
             else {
-                /*
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
                 QString mimelist = listMimeFilter.join(" ");
 
-                KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
-                fd.setCaption(i18n("Export Layer"));
+                KFileDialog fd (QString::null, mimelist, m_view, "Export Layer", true);
+                fd.setCaption(i18n("Export Layer") + "(" + ch->name() + ")");
                 fd.setMimeFilter(listMimeFilter);
                 fd.setOperationMode(KFileDialog::Saving);
-
+                fd.setURL(KURL(ch->name()));
                 if (!fd.exec()) return;
 
                 KURL url = fd.selectedURL();
@@ -258,30 +268,30 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 if (url.isEmpty())
                     return;
 
-
+                KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
                 QRect r = l -> exactBounds();
 
                 KisDoc d;
                 d.prepareForImport();
 
-                KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
+                KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name());
                 d.setCurrentImage( dst );
                 dst->addLayer(l->clone(), dst->rootLayer(), 0);
 
                 d.setOutputMimeType(mimefilter.latin1());
                 d.exp0rt(url);
-                */
+                
             }
+            
+            ++deviceIt;
         }
 
         if (undo) undo -> addCommand(t);
         m_view->canvasSubject()->document()->setModified(true);
 
-        ++deviceIt;
 
     }
 
-    emit notifyProgressDone();
 
 }
 

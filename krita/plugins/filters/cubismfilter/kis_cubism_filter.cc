@@ -64,7 +64,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), "artistic", i18n("&Cubism..
 
 bool KisCubismFilter::workWith(KisColorSpace* cs)
 {
-    return (cs->id().id() == "RGBA");
+    return true;
 }
 
 

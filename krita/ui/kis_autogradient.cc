@@ -73,7 +73,7 @@ void KisAutogradient::slotSelectedSegment(KisGradientSegment* segment)
     paramChanged();
 }
 
-void KisAutogradient::slotChangedSegment(KisGradientSegment* segment)
+void KisAutogradient::slotChangedSegment(KisGradientSegment*)
 {
     paramChanged();
 }

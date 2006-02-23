@@ -1222,6 +1222,25 @@ void KisView::layerUpdateGUI(bool enable)
         nlayers = img -> nlayers();
         nvisible = nlayers - img -> nHiddenLayers();
     }
+
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
+    
+    if (pl && pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
+        m_paletteManager->hideWidget( "rgbwidget" );
+        m_paletteManager->hideWidget( "hsvwidget" );
+        m_paletteManager->hideWidget( "graywidget" );
+        m_paletteManager->hideWidget( "palettewidget" );
+        m_paletteManager->showWidget( "watercolor docker" );
+        
+    }
+    else {
+        m_paletteManager->showWidget( "hsvwidget" );
+        m_paletteManager->showWidget( "graywidget" );
+        m_paletteManager->showWidget( "palettewidget" );
+        m_paletteManager->showWidget( "rgbwidget" );
+        m_paletteManager->hideWidget( "watercolor docker" );
+    }
+    
     enable = enable && img && layer && layer->visible() && !layer->locked();
     m_layerDup -> setEnabled(enable);
     m_layerRm -> setEnabled(enable);

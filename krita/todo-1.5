@@ -12,8 +12,6 @@ G = Gábor Level
 S = Sander Koning
 TZ = Thomas Zander (to refer to his ui hints)
 
-There are still a couple of LAYERREMOVE's around!
-
 
 Colorspaces
 
@@ -24,7 +22,6 @@ R  * Fix drying the wet colorspace
 Core
 
 P  * Fix part layers (nearly done)
-R  * disable everything necessary when the current layer is wet.
 
 User interface
 
@@ -94,3 +91,5 @@ Regressions:
 * Selection mask doesn't show in opengl mode
 * setting the opacity with the layerbox slider addes an infinite amount of opacity actions to the undo menu
 * cannot move layers up past the their group layer in the layerbox
+* Wet and non-wet layers cannot be mixed in one image
+* Indirect painting makes wet hang

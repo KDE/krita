@@ -109,7 +109,9 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 
     // Okay, we need to update the intersection between
     // what's dirty and what's asked us to be updated.
-    const QRect rc = rect.intersect(m_dirtyRect);
+    // XXX Nooo, that doesn't work, since the call to setClean following this, is actually:
+    // m_dirtyRect = QRect(); So the non-intersecting part gets brilliantly lost otherwise.
+    const QRect rc = m_dirtyRect;//rect.intersect(m_dirtyRect);
 
     QTime t;
     t.start();

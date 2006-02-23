@@ -48,10 +48,11 @@ class KisDelayedActionDoubleInput : public KDoubleNumInput
 
 
 struct KRITA_EXPORT KisDoubleWidgetParam {
-    KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString nname);
+    KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString label, QString nname);
     double min;
     double max;
     double initvalue;
+    QString label;
     QString name;
 };
 

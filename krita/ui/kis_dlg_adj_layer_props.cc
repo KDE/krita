@@ -79,8 +79,6 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
         }
     }
 
-    kdDebug() << "Paint device: " << dev << "\n";
-
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
     QVBoxLayout * layout = new QVBoxLayout(page, 0, 6);
@@ -93,30 +91,35 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     m_layerName = new KLineEdit(page, "m_layerName");
     m_layerName->setText(layerName);
+    m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     hl->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
+    
+    QHBoxLayout * h2 = new QHBoxLayout( layout );
+
+    if ( m_currentFilter ) {
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, dev);
+        if (m_currentConfigWidget) {
+            m_currentConfigWidget->setConfiguration( m_currentConfiguration );
+        }
+    }
+    if ( m_currentFilter == 0 || m_currentConfigWidget == 0 ) {
+        QLabel * labelNoConfigWidget = new QLabel( i18n("No configuration options are available for this filter"), page );
+        h2->addWidget( labelNoConfigWidget );
+    }
+    else {
+        h2->addWidget( m_currentConfigWidget );
+        connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
+    }
+
+    
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( dev );
 
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
-    layout->addWidget(m_preview, 1, 1);
+    h2->addWidget(m_preview, 1, 1);
 
-    if ( m_currentFilter ) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, dev);
-        if (m_currentConfigWidget)
-            m_currentConfigWidget -> setConfiguration( m_currentConfiguration );
-    }
-    if ( m_currentFilter == 0 || m_currentConfigWidget == 0 ) {
-        QLabel * labelNoConfigWidget = new QLabel( i18n("No configuration options are available for this filter"), page );
-        layout->addWidget( labelNoConfigWidget );
-    }
-    else {
-        layout->addWidget( m_currentConfigWidget );
-        connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
-    }
-
-    resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
     refreshPreview();
     enableButtonOK( !m_layerName->text().isEmpty() );
 

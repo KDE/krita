@@ -29,9 +29,11 @@
 class KIntNumInput;
 
 struct KisBoolWidgetParam {
-    KRITA_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString nname  );
+    KRITA_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString label, QString name);
     bool initvalue;
+    QString label;
     QString name;
+    
 };
 
 typedef std::vector<KisBoolWidgetParam> vKisBoolWidgetParam;

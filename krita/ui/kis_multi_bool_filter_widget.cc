@@ -24,8 +24,9 @@
 
 #include <klocale.h>
 
-KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nname) :
+KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nlabel, QString nname) :
     initvalue(ninitvalue),
+    label(nlabel),
     name(nname)
 {
 
@@ -46,7 +47,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
     {
         m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
         m_boolWidgets[i] -> setChecked( iwparam[i].initvalue );
-        m_boolWidgets[i] -> setText( iwparam[i].name );
+        m_boolWidgets[i] -> setText( iwparam[i].label );
         connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
         widgetLayout -> add( m_boolWidgets[i]);
     }

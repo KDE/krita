@@ -341,7 +341,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
 KisView::~KisView()
 {
-    kdDebug() << "KisView::~KisView\n";
+    kdDebug(41010) << "KisView::~KisView\n";
 
     KisConfig cfg;
     cfg.setShowRulers( m_RulerAction->isChecked() );
@@ -662,12 +662,12 @@ void KisView::setupActions()
 void KisView::resizeEvent(QResizeEvent *)
 {
     if (!m_paintViewEnabled) {
-        //kdDebug() << "Resize before initial zoom timer timed out - restarting\n";
+        //kdDebug(41010) << "Resize before initial zoom timer timed out - restarting\n";
 
         startInitialZoomTimerIfReady();
     }
 
-    kdDebug() << "resizeEvent called: reported w, h: " << width() << ", " << height()
+    kdDebug(41010) << "resizeEvent called: reported w, h: " << width() << ", " << height()
             << ", zoom: " << zoom()
             << ", doc w, h: " << docWidth() << ", " << docHeight()
             << ", zoomed doc w, h: " << static_cast<Q_INT32>(ceil(docWidth() * zoom())) << ", " << static_cast<Q_INT32>(ceil(docHeight() * zoom()))
@@ -843,7 +843,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
                 for (unsigned int i = 0; i < rects.count(); i++) {
                     QRect r = rects[i];
-                    kdDebug() << "resizeEvent calls paintView" << endl; paintView(viewToWindow(r));
+                    kdDebug(41010) << "resizeEvent calls paintView" << endl; paintView(viewToWindow(r));
                 }
             }
         }
@@ -885,19 +885,19 @@ void KisView::styleChange(QStyle& oldStyle)
 {
     Q_UNUSED(oldStyle);
     m_canvas -> updateGeometry();
-    kdDebug() << "styleChange calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "styleChange calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::paletteChange(const QPalette& oldPalette)
 {
     Q_UNUSED(oldPalette);
-    kdDebug() << "paletteChange calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "paletteChange calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::showEvent(QShowEvent *)
 {
     if (!m_showEventReceived) {
-        //kdDebug() << "Show event received\n";
+        //kdDebug(41010) << "Show event received\n";
         m_showEventReceived = true;
         startInitialZoomTimerIfReady();
     }
@@ -976,7 +976,7 @@ void KisView::paintView(const KisRect& r)
                                 paintFlags = (KisImage::PaintFlags)(paintFlags|KisImage::PAINT_SELECTION);
                             }
 
-                            kdDebug() << "Going to render to Painter\n";
+                            kdDebug(41010) << "Going to render to Painter\n";
 
                             if (zoom() > 1.0 - EPSILON) {
 
@@ -1173,7 +1173,7 @@ KisCanvas *KisView::kiscanvas() const
 
 void KisView::updateCanvas()
 {
-    kdDebug() << "updateCanvas() called\n";
+    kdDebug(41010) << "updateCanvas() called\n";
     KisRect vr(0, 0, m_canvas -> width(), m_canvas -> height());
     KisRect wr = viewToWindow(vr);
 
@@ -1183,7 +1183,7 @@ void KisView::updateCanvas()
 
 void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-    kdDebug() << "updateCanvas (" << x << ", " << y << ", " << w << ", " << h << ") called\n";
+    kdDebug(41010) << "updateCanvas (" << x << ", " << y << ", " << w << ", " << h << ") called\n";
     KisRect rc(x, y, w, h);
 
     updateCanvas(rc);
@@ -1191,13 +1191,13 @@ void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 void KisView::updateCanvas(const QRect& rc)
 {
-    kdDebug() << "updateCanvas(QRect rc) called\n";
+    kdDebug(41010) << "updateCanvas(QRect rc) called\n";
     updateCanvas(KisRect(rc));
 }
 
 void KisView::updateCanvas(const KisRect& rc)
 {
-    kdDebug() << "updateCanvas(rc) called\n\t updateCanvas(rc) calls paintView" << endl;
+    kdDebug(41010) << "updateCanvas(rc) called\n\t updateCanvas(rc) calls paintView" << endl;
     paintView(rc);
 }
 
@@ -1205,7 +1205,7 @@ void KisView::canvasRefresh()
 {
     KisRect rc(0, 0, m_canvasPixmap.width(), m_canvasPixmap.height());
 
-    kdDebug() << "canvasRefresh() called\n\tcanvasRefresh calls paintView" << endl; paintView(viewToWindow(rc));
+    kdDebug(41010) << "canvasRefresh() called\n\tcanvasRefresh calls paintView" << endl; paintView(viewToWindow(rc));
     m_canvas -> repaint();
 }
 
@@ -1370,7 +1370,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
 
     m_zoomIn -> setEnabled(zf < KISVIEW_MAX_ZOOM);
     m_zoomOut -> setEnabled(zf > KISVIEW_MIN_ZOOM);
-    kdDebug() << "zoomAroundPoint calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "zoomAroundPoint calls resizeEvent\n"; resizeEvent(0);
 
     m_hRuler -> setZoom(zf);
     m_vRuler -> setZoom(zf);
@@ -1394,7 +1394,7 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
     m_hScroll -> update();
     m_vScroll -> update();
 
-    kdDebug() << "zoomAroundPoint calls canvasRefresh\n"; canvasRefresh();
+    kdDebug(41010) << "zoomAroundPoint calls canvasRefresh\n"; canvasRefresh();
 
     emit viewTransformationsChanged();
 }
@@ -1710,7 +1710,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
         }
     }
 
-    kdDebug() << "importImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "importImage calls updateCanvas\n"; updateCanvas();
 
     return rc;
 }
@@ -1749,7 +1749,7 @@ void KisView::mirrorLayerX()
 
     m_doc -> setModified(true);
     layersUpdated();
-    kdDebug() << "mirrorLayerX calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "mirrorLayerX calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::mirrorLayerY()
@@ -1771,7 +1771,7 @@ void KisView::mirrorLayerY()
 
     m_doc -> setModified(true);
     layersUpdated();
-    kdDebug() << "mirrorLayerY calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "mirrorLayerY calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy)
@@ -1795,7 +1795,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
 
     m_doc -> setModified(true);
     layersUpdated();
-    kdDebug() << "scaleLayer calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "scaleLayer calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::rotateLayer(double angle)
@@ -1826,7 +1826,7 @@ void KisView::rotateLayer(double angle)
 
     m_doc -> setModified(true);
     layersUpdated();
-    kdDebug() << "rotateLayer calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "rotateLayer calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::shearLayer(double angleX, double angleY)
@@ -1849,9 +1849,7 @@ void KisView::shearLayer(double angleX, double angleY)
 
     m_doc -> setModified(true);
     layersUpdated();
-//    kdDebug() << "shearLayer calls resizeEvent\n"; resizeEvent(0);
     kdDebug() << "shearLayer calls updateCanvas\n"; updateCanvas();
-//    kdDebug() << "SHEARlAYER calls canvasRefresh\n"; canvasRefresh();
 }
 
 void KisView::flattenImage()
@@ -1919,7 +1917,7 @@ void KisView::preferences()
 
             connectCurrentImg();
 
-            kdDebug() << "preferences calls resizeEvent\n"; resizeEvent(0);
+            kdDebug(41010) << "preferences calls resizeEvent\n"; resizeEvent(0);
         }
 
         if (cfg.useOpenGL()) {
@@ -1927,7 +1925,7 @@ void KisView::preferences()
         }
 #endif
 
-        kdDebug() << "preferences calls canvasRefresh\n"; canvasRefresh();
+        kdDebug(41010) << "preferences calls canvasRefresh\n"; canvasRefresh();
 
         if (m_toolManager->currentTool()) {
             setCanvasCursor(m_toolManager->currentTool() -> cursor());
@@ -1985,8 +1983,8 @@ void KisView::showRuler()
         m_vRuler->hide();
     }
 
-    kdDebug() << "showRuler calls resizeEvent\n"; resizeEvent(0);
-    kdDebug() << "showRuler calls canvasRefresh\n"; canvasRefresh();
+    kdDebug(41010) << "showRuler calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "showRuler calls canvasRefresh\n"; canvasRefresh();
 }
 
 void KisView::slotUpdateFullScreen(bool toggle)
@@ -2158,7 +2156,7 @@ void KisView::canvasGotPaintEvent(QPaintEvent *event)
             bitBlt(m_canvas -> QPaintDeviceWidget(), er.x(), er.y(), &m_canvasPixmap, er.x(), er.y(), er.width(), er.height());
         }
     } else {
-        kdDebug() << "canvasGotPaintEvent calls updateCanvas\n"; updateCanvas(event -> rect());
+        kdDebug(41010) << "canvasGotPaintEvent calls updateCanvas\n"; updateCanvas(event -> rect());
     }
 
     if (m_toolManager->currentTool() && !m_toolIsPainting) {
@@ -2605,8 +2603,8 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
-                kdDebug() << "addLayer calls resizeEvent\n"; resizeEvent(0);
-                kdDebug() << "addLayer calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
+                kdDebug(41010) << "addLayer calls resizeEvent\n"; resizeEvent(0);
+                kdDebug(41010) << "addLayer calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
             } else {
                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
             }
@@ -2626,8 +2624,8 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
                 img->addLayer(layer, parent.data(), above);
-                kdDebug() << "addGrouplayer calls resizeEvent\n"; resizeEvent(0);
-                kdDebug() << "addGroupLayer calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
+                kdDebug(41010) << "addGrouplayer calls resizeEvent\n"; resizeEvent(0);
+                kdDebug(41010) << "addGroupLayer calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
             } else {
                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
             }
@@ -2806,8 +2804,8 @@ void KisView::layerRemove()
             if (layer->parent())
                 layer->parent()->setDirty(layer->extent());
             img->removeLayer(layer);
-            kdDebug() << "layerRemove calls resizeEvent\n"; resizeEvent(0);
-            kdDebug() << "layerRemove calls updateCanvas\n"; updateCanvas();
+            kdDebug(41010) << "layerRemove calls resizeEvent\n"; resizeEvent(0);
+            kdDebug(41010) << "layerRemove calls updateCanvas\n"; updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
         }
     }
@@ -2830,8 +2828,8 @@ void KisView::layerDuplicate()
     img->addLayer(dup, active->parent().data(), active);
     if (dup) {
         img -> activate( dup );
-        kdDebug() << "layerDuplicate calls resizeEvent\n"; resizeEvent(0);
-        kdDebug() << "layerDuplicate calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
+        kdDebug(41010) << "layerDuplicate calls resizeEvent\n"; resizeEvent(0);
+        kdDebug(41010) << "layerDuplicate calls updateCanvas\n"; updateCanvas(0, 0, img -> width(), img -> height());
     } else {
         KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
     }
@@ -2938,7 +2936,7 @@ void KisView::scrollH(int value)
                 bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
 
                 KisRect drawRect(0, 0, xShift, m_canvasPixmap.height());
-                kdDebug() << "scrollH calls paintView" << endl; paintView(viewToWindow(drawRect));
+                kdDebug(41010) << "scrollH calls paintView" << endl; paintView(viewToWindow(drawRect));
             }
             m_canvas -> repaint();
         }
@@ -2948,7 +2946,7 @@ void KisView::scrollH(int value)
                     bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
 
                     KisRect drawRect(m_canvasPixmap.width() + xShift, 0, -xShift, m_canvasPixmap.height());
-                    kdDebug() << "scrollHcalls paintView" << endl; paintView(viewToWindow(drawRect));
+                    kdDebug(41010) << "scrollHcalls paintView" << endl; paintView(viewToWindow(drawRect));
                 }
                 m_canvas -> repaint();
             }
@@ -2973,7 +2971,7 @@ void KisView::scrollV(int value)
                 bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
 
                 KisRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
-                kdDebug() << "scrollV calls paintView" << endl; paintView(viewToWindow(drawRect));
+                kdDebug(41010) << "scrollV calls paintView" << endl; paintView(viewToWindow(drawRect));
             }
             m_canvas -> repaint();
         } else {
@@ -2982,7 +2980,7 @@ void KisView::scrollV(int value)
                     bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
 
                     KisRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
-                    kdDebug() << "scrollV calls paintView" << endl; paintView(viewToWindow(drawRect));
+                    kdDebug(41010) << "scrollV calls paintView" << endl; paintView(viewToWindow(drawRect));
                 }
                 m_canvas -> repaint();
             }
@@ -3081,7 +3079,7 @@ void KisView::handlePartLayerAdded(KisLayerSP layer)
 
 void KisView::imgUpdated(const QRect& rc)
 {
-    kdDebug() << "imgUpdated calls updateCanvas\n"; updateCanvas(rc);
+    kdDebug(41010) << "imgUpdated calls updateCanvas\n"; updateCanvas(rc);
 }
 
 void KisView::profileChanged(KisProfile *  /*profile*/)
@@ -3091,8 +3089,8 @@ void KisView::profileChanged(KisProfile *  /*profile*/)
 
 void KisView::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
 {
-    kdDebug() << "slotImageSizeChanged calls resizeEvent\n"; resizeEvent(0);
-    kdDebug() << "slotImageSizeChanged calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "slotImageSizeChanged calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "slotImageSizeChanged calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
@@ -3101,9 +3099,9 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
 
     currentImg() -> resize(w, h, cropLayers);
     m_doc -> setModified(true);
-    kdDebug() << "slotResizeCurrentImage calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "slotResizeCurrentImage calls resizeEvent\n"; resizeEvent(0);
     layersUpdated();
-    kdDebug() << "resizeCurrentImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "resizeCurrentImage calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
@@ -3111,9 +3109,9 @@ void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterS
     if (!currentImg()) return;
     currentImg() -> scale(sx, sy, m_progress, filterStrategy);
     m_doc -> setModified(true);
-    kdDebug() << "scaleCurrentImage calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "scaleCurrentImage calls resizeEvent\n"; resizeEvent(0);
     layersUpdated();
-    kdDebug() << "scaleCurrentImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "scaleCurrentImage calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::rotateCurrentImage(double angle)
@@ -3121,9 +3119,9 @@ void KisView::rotateCurrentImage(double angle)
     if (!currentImg()) return;
     currentImg() -> rotate(angle, m_progress);
     m_doc -> setModified(true);
-    kdDebug() << "rotateCurrentImage calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "rotateCurrentImage calls resizeEvent\n"; resizeEvent(0);
     layersUpdated();
-    kdDebug() << "rotateCurrentImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "rotateCurrentImage calls updateCanvas\n"; updateCanvas();
 }
 
 void KisView::shearCurrentImage(double angleX, double angleY)
@@ -3131,9 +3129,9 @@ void KisView::shearCurrentImage(double angleX, double angleY)
     if (!currentImg()) return;
     currentImg() -> shear(angleX, angleY ,m_progress);
     m_doc -> setModified(true);
-    kdDebug() << "shearCurrentImage calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "shearCurrentImage calls resizeEvent\n"; resizeEvent(0);
     layersUpdated();
-    kdDebug() << "shearCurrentImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "shearCurrentImage calls updateCanvas\n"; updateCanvas();
 }
 
 
@@ -3270,7 +3268,7 @@ void KisView::guiActivateEvent(KParts::GUIActivateEvent *event)
         }
 
         if (!m_guiActivateEventReceived) {
-            kdDebug() << "guiActivate event called\n";
+            kdDebug(41010) << "guiActivate event called\n";
             m_guiActivateEventReceived = true;
             startInitialZoomTimerIfReady();
         }
@@ -3495,7 +3493,7 @@ KisImageSP KisView::currentImg() const
 
 void KisView::setCurrentImage(KisImageSP image)
 {
-    kdDebug() << "Setting image to: " << image << "\n";
+    kdDebug(41010) << "Setting image to: " << image << "\n";
     
     if(!image) return;
 
@@ -3513,9 +3511,9 @@ void KisView::setCurrentImage(KisImageSP image)
     connectCurrentImg();
     m_layerBox -> setImage(currentImg());
 
-    kdDebug() << "setCurrentImage class zoomAroundPoint\n"; zoomAroundPoint(0, 0, 1.0);
-    kdDebug() << "setCurrentImage calls resizeEvent\n"; resizeEvent(0);
-    kdDebug() << "setCurrentImage calls updateCanvas\n"; updateCanvas();
+    kdDebug(41010) << "setCurrentImage class zoomAroundPoint\n"; zoomAroundPoint(0, 0, 1.0);
+    kdDebug(41010) << "setCurrentImage calls resizeEvent\n"; resizeEvent(0);
+    kdDebug(41010) << "setCurrentImage calls updateCanvas\n"; updateCanvas();
 
     if (!currentImg())
         layersUpdated();
@@ -3628,7 +3626,7 @@ void KisView::setHDRExposure(float exposure)
     if (exposure != m_HDRExposure) {
         m_HDRExposure = exposure;
         notifyObservers();
-        kdDebug() << "setHDRExposure calls updateCanvas\n"; updateCanvas();
+        kdDebug(41010) << "setHDRExposure calls updateCanvas\n"; updateCanvas();
     }
 }
 
@@ -3724,7 +3722,7 @@ void KisView::startInitialZoomTimerIfReady()
 {
     if (m_imageLoaded && m_showEventReceived && m_guiActivateEventReceived) {
         m_initialZoomTimer.start(250, true);
-        kdDebug() << "Starting initial zoom timer\n";
+        kdDebug(41010) << "Starting initial zoom timer\n";
     }
 }
 
@@ -3732,7 +3730,7 @@ void KisView::slotInitialZoomTimeout()
 {
     Q_ASSERT(!m_paintViewEnabled);
 
-    kdDebug() << "Initial zoom timer timed out - setting zoom and enabling paintView\n";
+    kdDebug(41010) << "Initial zoom timer timed out - setting zoom and enabling paintView\n";
 
     m_paintViewEnabled = true;
     setInitialZoomLevel();

@@ -91,6 +91,9 @@ public:
     bool getBool(const QString & name, bool def = false);
     QString getString(const QString & name, QString def = QString::null);
     
+private:
+        void dump();
+    
 protected:
 
     QString m_name;

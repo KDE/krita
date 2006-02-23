@@ -35,8 +35,8 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold") ) );
-    param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size") ) );
+    param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold"), "threshold" ) );
+    param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size"), "windowsize") );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

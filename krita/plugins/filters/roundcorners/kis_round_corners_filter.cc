@@ -142,7 +142,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
 KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius"), "radius" ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

@@ -577,7 +577,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     
     if (colorSpace == 0) {
         colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-        kdDebug() << "No colorspace specified: using RGBA\n";
+        kdDebug(41010) << "No colorspace specified: using RGBA\n";
     }
 
     m_private = new KisImagePrivate();
@@ -622,7 +622,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 {
     lock();
     
-    kdDebug() << "Resize: " << x << ", " << y << ", " << w << ", " << h << ", " << cropLayers << endl;
+    kdDebug(41010) << "Resize: " << x << ", " << y << ", " << w << ", " << h << ", " << cropLayers << endl;
     if (w != width() || h != height()) {
         if (m_adapter && m_adapter -> undo()) {
             if (cropLayers)
@@ -1193,7 +1193,7 @@ void KisImage::renderToPainter(Q_INT32 x1,
                                float exposure)
 {
 
-    kdDebug() << "Render to painter " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << endl;
+    kdDebug(41010) << "Render to painter " << x1 << ", " << y1 << " : " << x2 << ", " << y2 << endl;
     
     QImage img = convertToQImage(x1, y1, x2, y2, monitorProfile, exposure);
 
@@ -1234,10 +1234,10 @@ QImage KisImage::convertToQImage(Q_INT32 x1,
     QTime t;
     t.start();
     KisPaintDeviceSP dev = m_rootLayer->projection(QRect(x1, y1, w, h));
-    kdDebug() << "Updating rootlayer projection took: " << t.elapsed() << endl;
+    kdDebug(41010) << "Updating rootlayer projection took: " << t.elapsed() << endl;
     t.start();
     QImage img = dev->convertToQImage(profile, x1, y1, w, h, exposure);
-    kdDebug() << "Converting rootlayer projection to QImage took: " << t.elapsed() << endl;
+    kdDebug(41010) << "Converting rootlayer projection to QImage took: " << t.elapsed() << endl;
 
     if (!img.isNull()) {
 
@@ -1330,7 +1330,7 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
 
 KisPaintDeviceSP KisImage::mergedImage()
 {
-    //kdDebug() << "Merged image. Root layer = " << m_rootLayer->dirty() << endl;
+    //kdDebug(41010) << "Merged image. Root layer = " << m_rootLayer->dirty() << endl;
     
     return m_rootLayer->projection(QRect(0, 0, m_width, m_height));
 }
@@ -1380,13 +1380,13 @@ KisUndoAdapter* KisImage::undoAdapter() const
 
 void KisImage::slotSelectionChanged()
 {
-    kdDebug() << "KisImage::slotSelectionChanged\n";
+    kdDebug(41010) << "KisImage::slotSelectionChanged\n";
     emit sigActiveSelectionChanged(KisImageSP(this));
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
 {
-    kdDebug() << "KisImage::slotSelectionChanged rect\n";
+    kdDebug(41010) << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
     emit sigActiveSelectionChanged(KisImageSP(this));

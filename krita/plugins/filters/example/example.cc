@@ -88,7 +88,8 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     {
         if(srcIt.isSelected())
         {
-            memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
+            if (src!=dst)
+                memcpy(dstIt.rawData(), srcIt.oldRawData(), psize);
 
             cs->invertColor( dstIt.rawData(), 1);
         }

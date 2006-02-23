@@ -307,11 +307,11 @@ KisLayer::~KisLayer()
 
 void KisLayer::setClean(const QRect & rect)
 {
-    kdDebug() << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
+    kdDebug(41010) << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
     if (m_dirtyRect.isValid() && rect.isValid()) {
 
-        //kdDebug() << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
-        //kdDebug() << "cleaned rect: " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
+        //kdDebug(41010) << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
+        //kdDebug(41010) << "cleaned rect: " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 
         // XXX: We should only set the parts clean that were actually cleaned. However, extent and exactBounds conspire
         // to make that very hard atm.
@@ -329,7 +329,7 @@ bool KisLayer::dirty()
 
 bool KisLayer::dirty(const QRect & rc)
 {
-    kdDebug() << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
+    kdDebug(41010) << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
     if (!m_dirtyRect.isValid()) return false;
 
     return rc.intersects(m_dirtyRect);
@@ -337,16 +337,16 @@ bool KisLayer::dirty(const QRect & rc)
 
 QRect KisLayer::dirtyRect() const
 {
-    return m_dirtyRect;
+    return m_dirtyRect.normalize();
 }
 
 void KisLayer::setDirty()
 {
     QRect rc = extent();
     
-    kdDebug() << "setDirty() " << name() << ", " << rc << "\n";
+    kdDebug(41010) << "setDirty() " << name() << ", " << rc << "\n";
 
-    if (rc.isValid()) m_dirtyRect = rc;
+    if (rc.isValid()) m_dirtyRect = rc.normalize();
     
     // If we're dirty, our parent is dirty, if we've got a parent
     if (m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
@@ -356,7 +356,7 @@ void KisLayer::setDirty()
 
 void KisLayer::setDirty(const QRect & rc)
 {
-    kdDebug() << "setDirty(rc) "
+    kdDebug(41010) << "setDirty(rc) "
             << name()
             << ", new rect: "
             << rc
@@ -369,8 +369,10 @@ void KisLayer::setDirty(const QRect & rc)
     
     if (rc.isValid())
         m_dirtyRect |= rc;
-
-    if (m_parent && rc.isValid())
+    
+    m_dirtyRect = rc.normalize();
+            
+    if (m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);
 
 }
@@ -471,13 +473,13 @@ KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
 
 const bool KisLayer::visible() const
 {
-    //kdDebug() << name() << " visible: " << m_visible << endl;
+    //kdDebug(41010) << name() << " visible: " << m_visible << endl;
     return m_visible; //XXX hmm is this right?
 }
 
 void KisLayer::setVisible(bool v)
 {
-    //kdDebug() << name() << " setVisible: " << v << ", was " << m_visible << endl;
+    //kdDebug(41010) << name() << " setVisible: " << v << ", was " << m_visible << endl;
     if (m_visible != v) {
 
         m_visible = v;

@@ -46,10 +46,11 @@ void KisDelayedActionDoubleInput::slotValueChanged()
 
 
 
-KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nname) :
+KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nlabel, QString nname) :
     min(nmin),
     max(nmax),
     initvalue(ninitvalue),
+    label(nlabel),
     name(nname)
 {
 
@@ -75,7 +76,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
 
         connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigPleaseUpdatePreview()));
 
-        QLabel* lbl = new QLabel(dwparam[i].name+":", this);
+        QLabel* lbl = new QLabel(dwparam[i].label+":", this);
         widgetLayout -> addWidget( lbl, i , 0);
 
         widgetLayout -> addWidget( m_doubleWidgets[i], i , 1);

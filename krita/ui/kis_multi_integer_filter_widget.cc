@@ -44,10 +44,11 @@ void KisDelayedActionIntegerInput::slotValueChanged()
 }
 
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname) :
+KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString label, QString nname) :
     min(nmin),
     max(nmax),
     initvalue(ninitvalue),
+    label(label),
     name(nname)
 {
 }
@@ -58,8 +59,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
                                                          vKisIntegerWidgetParam iwparam)
     : KisFilterConfigWidget( parent, name )
 {
-    Q_INT32 m_nbintegerWidgets = iwparam.size();
-
+    m_nbintegerWidgets = iwparam.size();
     this->setCaption(caption);
 
     QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 3);
@@ -75,21 +75,23 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
 
         connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
 
-        QLabel* lbl = new QLabel(iwparam[i].name+":", this);
+        QLabel* lbl = new QLabel(iwparam[i].label+":", this);
         widgetLayout -> addWidget( lbl, i , 0);
 
         widgetLayout -> addWidget( m_integerWidgets[i], i , 1);
     }
     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout -> addItem(sp, m_nbintegerWidgets, 0);
-
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config)
+void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config )
 {
-    for (int i = 0; i < m_nbintegerWidgets; ++i) {
-        int val = config->getInt(m_integerWidgets[i]->name());
-        m_integerWidgets[i]->setValue(val);
+    for (int i = 0; i < nbValues(); ++i) {
+        KisDelayedActionIntegerInput *  w = m_integerWidgets[i];
+        if (w) {
+            int val = config->getInt(m_integerWidgets[i]->name());
+            m_integerWidgets[i]->setValue(val);
+        }
     }
 }
 

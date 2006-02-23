@@ -198,10 +198,10 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
 KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     vKisBoolWidgetParam param;
-    param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally") ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically") ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result") ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque") ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally"), "doHorizontally" ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically"), "doVertically" ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result"), "keepSign" ) );
+    param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque"), "makeOpaque" ) );
     return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

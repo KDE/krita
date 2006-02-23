@@ -105,8 +105,6 @@
    <Action name = "grow"/>
    <Action name = "similar"/>
    <Separator/>
-   <Action name="transform_selection"/>
-   <Separator/>
    <Action name="toggle_display_selection"/>
 </Menu>
 

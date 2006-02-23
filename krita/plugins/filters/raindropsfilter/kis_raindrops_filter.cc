@@ -415,9 +415,9 @@ uchar KisRainDropsFilter::LimitValues (int ColorValue)
 KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size") ) );
-    param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number") ) );
-    param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes") ) );
+    param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size"), "dropsize" ) );
+    param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number"), "number" ) );
+    param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes"), "fishEyes" ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

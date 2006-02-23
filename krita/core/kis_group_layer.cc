@@ -82,11 +82,11 @@ void KisGroupLayer::resetProjection()
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 {
-    kdDebug() << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
+    kdDebug(41010) << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
 
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible and 100% opaque
-    kdDebug() << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
+    kdDebug(41010) << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
     if (parent() == 0 && childCount() == 1) {
         KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
         if (l && l->visible() && l->opacity() == OPACITY_OPAQUE) {
@@ -97,12 +97,12 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     }
     // No need for updates, we're clean
     if (!dirty()) {
-        //kdDebug() << name() << " No need for updates, we're clean\n";
+        //kdDebug(41010) << name() << " No need for updates, we're clean\n";
         return m_projection;
     }
     // No need for updates -- the desired area wasn't dirty
     if (!rect.intersects(m_dirtyRect)) {
-        //kdDebug() << name() << " No need for updates, the desired area was not dirty\n";
+        //kdDebug(41010) << name() << " No need for updates, the desired area was not dirty\n";
         return m_projection;
     }
 
@@ -116,8 +116,8 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     QTime t;
     t.start();
     updateProjection(rc);
-    kdDebug() << ">>> Updating projection " << name() << " for " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << " took: " << t.elapsed() << endl;
-    //kdDebug() << kdBacktrace() << "\n";
+    kdDebug(41010) << ">>> Updating projection " << name() << " for " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << " took: " << t.elapsed() << endl;
+    //kdDebug(41010) << kdBacktrace() << "\n";
     setClean(rect);
 
     return m_projection;
@@ -304,7 +304,7 @@ QImage KisGroupLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    kdDebug() << "Updating projection for " << name() << ", " << rc << endl;
+    kdDebug(41010) << "Updating projection for " << name() << ", " << rc << endl;
     
     if (!m_dirtyRect.isValid()) return;
         
@@ -360,14 +360,14 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
     if (adjLayer != 0) {
-        kdDebug() << "Copying cached adj. layer representation\n";
+        kdDebug(41010) << "Copying cached adj. layer representation\n";
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
                   rc.left(), rc.top(), rc.width(), rc.height());
         first = false;
     }
     else {
-        kdDebug() << "Erasing projection\n";
+        kdDebug(41010) << "Erasing projection\n";
         gc.eraseRect(rc);
         first = true;
     }
@@ -379,7 +379,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     while(child)
     {
-        kdDebug() << name() << ": looping past children. Current: " << child->name() << "\n";
+        kdDebug(41010) << name() << ": looping past children. Current: " << child->name() << "\n";
         if(first)
         {
             // Copy the lowest layer rather than compositing it with the background

@@ -166,8 +166,8 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width") ) );
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel height") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel height"), "pixelHeight" ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

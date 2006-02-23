@@ -408,8 +408,8 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size") ) );
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation") ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );
+    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation"), "tileSaturation" ) );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
 

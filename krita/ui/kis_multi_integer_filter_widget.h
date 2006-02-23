@@ -49,10 +49,11 @@ private:
 
 
 struct KisIntegerWidgetParam {
-    KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString nname);
+    KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString label, QString nname);
     Q_INT32 min;
     Q_INT32 max;
     Q_INT32 initvalue;
+    QString label;
     QString name;
 };
 
@@ -71,8 +72,8 @@ public:
     inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };
     
 private:
-    KisDelayedActionIntegerInput** m_integerWidgets;
     Q_INT32 m_nbintegerWidgets;
+    KisDelayedActionIntegerInput** m_integerWidgets;
 };
 
 #endif

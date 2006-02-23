@@ -17,6 +17,7 @@
  */
 #include "kis_filter.h"
 
+#include <kdebug.h>
 #include <qdom.h>
 #include <qstring.h>
 
@@ -41,7 +42,7 @@ KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rh
 
 void KisFilterConfiguration::fromXML(const QString & s )
 {
-    kdDebug() << "Restoring filter configuration from: " << s << "\n";
+    //kdDebug() << "Restoring filter configuration from: " << s << "\n";
     m_properties.clear();
     
     QDomDocument doc;
@@ -49,7 +50,7 @@ void KisFilterConfiguration::fromXML(const QString & s )
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
 
-    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
+    //kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
 
     m_name = e.attribute("name");
     m_version = e.attribute("version").toInt();
@@ -67,12 +68,13 @@ void KisFilterConfiguration::fromXML(const QString & s )
                 type = e.attribute("type");
                 value = e.text();
                 // XXX Convert the variant pro-actively to the right type?
-                kdDebug() << "Property name: " << name << ", type: " << type << ", value: " << value << "\n";
+                //kdDebug() << "Property name: " << name << ", type: " << type << ", value: " << value << "\n";
                 m_properties[name] = QVariant(value);
             }
         }
         n = n.nextSibling();
     }
+    //dump();
 }
 
 QString KisFilterConfiguration::toString()
@@ -96,7 +98,7 @@ QString KisFilterConfiguration::toString()
         root.appendChild(e);
     }
 
-    kdDebug() << doc.toString();
+    //kdDebug() << doc.toString();
     return doc.toString();
 }
 
@@ -145,6 +147,7 @@ QVariant KisFilterConfiguration::getProperty(const QString & name)
 int KisFilterConfiguration::getInt(const QString & name, int def)
 {
     QVariant v = getProperty(name);
+    //kdDebug() << "V: " << name << ", " << v << ", type: " << v.typeName() << ", " << v.asInt() << endl;
     if (v.isValid())
         return v.asInt();
     else
@@ -177,4 +180,13 @@ QString KisFilterConfiguration::getString(const QString & name, QString def)
         return v.asString();
     else
         return def;
+}
+
+void KisFilterConfiguration::dump()
+{
+    QMap<QString, QVariant>::Iterator it;
+    for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
+        kdDebug() << "Prop: " << it.key() << ", value: " << it.data() << ", type: " << it.data().typeName() << "\n";
+    }
+
 }

@@ -344,7 +344,7 @@ void KisLayer::setDirty()
 {
     QRect rc = extent();
     
-    kdDebug(41010) << "setDirty() " << name() << ", " << rc << "\n";
+    kdDebug(41010) << "setDirty() " << name() << ", " << rc << ", valid: " << rc.isValid() << "\n";
 
     if (rc.isValid()) m_dirtyRect = rc.normalize();
     
@@ -549,9 +549,10 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
 {
     if (m_compositeOp != compositeOp)
     {
-        setDirty();
-        m_compositeOp = compositeOp;
-        notifyPropertyChanged();
+       m_compositeOp = compositeOp;
+       notifyPropertyChanged();
+       setDirty();
+ 
     }
 }
 

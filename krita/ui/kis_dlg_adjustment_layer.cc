@@ -41,13 +41,14 @@
 #include "kis_filter_configuration.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
-                                             const QString & layerName,
+                                             const QString & /*layerName*/,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
     : KDialogBase(parent, name, true, "", Ok | Cancel)
     , m_image(img)
     , m_currentFilter(0)
+    , m_customName(false)
 {
     Q_ASSERT(img);
 
@@ -80,7 +81,6 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     grid->addWidget(lblName, 0, 0);
 
     m_layerName = new KLineEdit(page, "m_layerName");
-    m_layerName->setText(layerName);
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
@@ -112,7 +112,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 {
-    enableButtonOK( m_currentFilter && !text.isEmpty() );
+    m_customName = !text.isEmpty();
+    enableButtonOK( m_currentFilter && m_customName );
 }
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
@@ -181,6 +182,9 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
     } else {
         m_labelNoConfigWidget->show();
     }
+
+    if (!m_customName)
+        m_layerName->setText(m_currentFilter->id().name());
 
     enableButtonOK( !m_layerName->text().isEmpty() );
     refreshPreview();

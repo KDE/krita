@@ -76,6 +76,7 @@ private:
     KisFilter* m_currentFilter;
     KLineEdit * m_layerName;
     QLabel* m_labelNoConfigWidget;
+    bool m_customName;
 };
 
 #endif

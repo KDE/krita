@@ -370,7 +370,7 @@ void KisLayer::setDirty(const QRect & rc)
     if (rc.isValid())
         m_dirtyRect |= rc;
     
-    m_dirtyRect = rc.normalize();
+    m_dirtyRect = m_dirtyRect.normalize();
             
     if (m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);

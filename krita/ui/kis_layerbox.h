@@ -2,6 +2,7 @@
  *  kis_layerbox.h - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

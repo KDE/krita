@@ -2,6 +2,7 @@
  *  kis_layerbox.cc - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -416,7 +417,7 @@ void KisLayerBox::slotRequestLayerProperties(LayerItem* item)
 void KisLayerBox::updateUI()
 {
     m_lst -> bnDelete -> setEnabled(list() -> activeLayer());
-    m_lst -> bnRaise -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> prevSibling());
+    m_lst -> bnRaise -> setEnabled(list() -> activeLayer() && (list() -> activeLayer() -> prevSibling() || list() -> activeLayer() -> parent()));
     m_lst -> bnLower -> setEnabled(list() -> activeLayer() && list() -> activeLayer() -> nextSibling());
     m_lst -> intOpacity -> setEnabled(list() -> activeLayer());
     m_lst -> cmbComposite -> setEnabled(list() -> activeLayer());
@@ -531,10 +532,19 @@ void KisLayerBox::slotRaiseClicked()
         l.append(list() -> activeLayer() -> id());
     }
 
-    for (int i = 0, n = l.count(); i < n; ++i)
-        if (KisLayerSP layer = m_image -> findLayer(l[i]))
-            if (layer -> prevSibling())
-                m_image -> moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
+    KisLayerSP layer = m_image -> findLayer(l.first());
+    if( l.count() == 1 && layer == layer -> parent() -> firstChild() && layer -> parent() != m_image -> rootLayer())
+    {
+        if (KisGroupLayerSP grandparent = layer -> parent() -> parent())
+            m_image -> moveLayer(layer, grandparent, layer -> parent().data());
+    }
+    else
+    {
+        for (int i = 0, n = l.count(); i < n; ++i)
+            if (KisLayerSP li = m_image -> findLayer(l[i]))
+                if (li -> prevSibling())
+                    m_image -> moveLayer(li, li -> parent(), li -> prevSibling());
+    }
 
     if( !l.isEmpty() )
         list() -> ensureItemVisible( list() -> layer( l.first() ) );

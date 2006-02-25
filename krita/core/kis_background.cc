@@ -130,14 +130,14 @@ void KisBackground::paintBackground(QImage img, const QRect& scaledImageRect, co
 
         for (Q_INT32 x = 0; x < scaledImageRect.width(); ++x) {
 
-            Q_INT32 scaledX = scaledImageRect.x() + x;
-            Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
-            Q_INT32 patternX = srcX % PATTERN_WIDTH;
-
             QRgb imagePixel = *imagePixelPtr;
             Q_UINT8 imagePixelAlpha = qAlpha(imagePixel);
 
             if (imagePixelAlpha != 255) {
+
+                Q_INT32 scaledX = scaledImageRect.x() + x;
+                Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
+                Q_INT32 patternX = srcX % PATTERN_WIDTH;
 
                 QRgb patternPixel = patternScanLine[patternX];
                 Q_UINT8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);

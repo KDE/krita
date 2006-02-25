@@ -1286,6 +1286,9 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     KisPaintDevice imageArea(colorSpace(), "imageArea");
     KisPaintDeviceSP mergedImage = m_rootLayer->projection(srcRect);
 
+    //QTime t;
+    //t.start();
+
     for (Q_INT32 y = 0; y < r.height(); ++y) {
 
         KisHLineIterator it = imageArea.createHLineIterator(0, y, r.width(), true);
@@ -1293,30 +1296,42 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
         Q_INT32 dstX = r.x();
         Q_INT32 srcY = (dstY * imageHeight) / scaledImageSize.height();
 
+        KisHLineIterator srcIt = mergedImage->createHLineIterator(0, srcY, m_width, false);
+        Q_INT32 oldSrcX = 0;
+
         while (!it.isDone()) {
 
             Q_INT32 srcX = (dstX * imageWidth) / scaledImageSize.width();
+            srcIt += srcX - oldSrcX;
+            oldSrcX = srcX;
 
-            KisColor pixelColor = mergedImage->colorAt(srcX, srcY);
-            memcpy(it.rawData(), pixelColor.data(), pixelSize);
+            memcpy(it.rawData(), srcIt.rawData(), pixelSize);
 
             ++it;
             ++dstX;
         }
     }
 
+    //kdDebug(41010) << "Scaling image took " << t.restart() << endl;
+
     QImage image = imageArea.convertToQImage(profile, 0, 0, r.width(), r.height(), exposure);
+
+    //kdDebug(41010) << "Convert to QImage image took " << t.restart() << endl;
 
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg -> paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
         image.setAlphaBuffer(false);
     }
 
+    //kdDebug(41010) << "Paint background took " << t.restart() << endl;
+
     if (paintFlags & PAINT_SELECTION) {
         if (m_activeLayer != 0) {
             m_activeLayer -> paintSelection(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
         }
     }
+
+    //kdDebug(41010) << "Paint selection took " << t.restart() << endl;
 
     /*if (paintFlags & PAINT_MASKINACTIVELAYERS) {
         if (m_activeLayer != 0) {

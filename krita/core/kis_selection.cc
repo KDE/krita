@@ -267,24 +267,16 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
             Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
 
             KisHLineIteratorPixel hit = createHLineIterator(srcX - 1, srcY, 3, false);
-            KisVLineIteratorPixel vit = createVLineIterator(srcX, srcY - 1, 3, false);
 
             Q_UINT8 left = *(hit.rawData());
             ++hit;
             Q_UINT8 centre = *(hit.rawData());
-            ++hit;
-            Q_UINT8 right = *(hit.rawData());
-
-            Q_UINT8 above = *(vit.rawData());
-            ++vit;
-            ++vit;
-            Q_UINT8 below = *(vit.rawData());
-
-            uchar *j = img.scanLine(y) + x * sizeof(QRgb);
 
             if (centre != MAX_SELECTED) {
 
                 // this is where we come if the pixels should be blue or bluish
+
+                uchar *j = img.scanLine(y) + x * sizeof(QRgb);
 
                 Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
                 Q_UINT8 alpha = *(j + 3);
@@ -295,6 +287,16 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
                 if (centre == MIN_SELECTED)
                 {
                     //this is where we come if the pixels should be blue (or red outline)
+
+                    ++hit;
+                    Q_UINT8 right = *(hit.rawData());
+
+                    KisVLineIteratorPixel vit = createVLineIterator(srcX, srcY - 1, 3, false);
+
+                    Q_UINT8 above = *(vit.rawData());
+                    ++vit;
+                    ++vit;
+                    Q_UINT8 below = *(vit.rawData());
 
                     // now for a simple outline based on 4-connectivity
                     if (left != MIN_SELECTED

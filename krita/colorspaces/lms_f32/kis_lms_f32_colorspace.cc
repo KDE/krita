@@ -49,7 +49,7 @@ namespace {
 
 // disable the lcms handling by setting profile=0
 KisLmsF32ColorSpace::KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
-    KisF32BaseColorSpace(KisID("LMSAF32", i18n("LMS (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData, parent, 0)
+    KisF32BaseColorSpace(KisID("LMSAF32", i18n("LMS (32-bit float/channel)")), F32_LCMS_TYPE, icSig3colorData, parent, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
@@ -83,7 +83,7 @@ void KisLmsF32ColorSpace::getPixel(const Q_UINT8 *src, float *longWave, float *m
     *alpha = srcPixel -> alpha;
 }
 
-void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * profile)
+void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -92,7 +92,7 @@ void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile
     dst -> shortWave = computeShort(c.red(),c.green(),c.blue());
 }
 
-void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * profile)
+void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -102,14 +102,14 @@ void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *
     dst -> alpha = UINT8_TO_FLOAT(opacity);
 }
 
-void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * profile)
+void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(computeRed(src -> longWave,src -> middleWave,src -> shortWave), computeGreen(src -> longWave,src -> middleWave,src -> shortWave), computeBlue(src -> longWave,src -> middleWave,src -> shortWave));
 }
 
-void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
+void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
    const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -184,25 +184,9 @@ Q_UINT32 KisLmsF32ColorSpace::pixelSize() const
     return MAX_CHANNEL_LMSA * sizeof(float);
 }
 
-Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
-{
-    //value *= pow(2, exposure + 2.47393);
-    value *= exposureFactor;
-
-    value = powf(value, gamma);
-
-    // scale middle gray to the target framebuffer value
-
-    value *= 84.66f;
-
-    int valueInt = (int)(value + 0.5);
-
-    return CLAMP(valueInt, 0, 255);
-}
-
 QImage KisLmsF32ColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
                                             KisProfile *  /*dstProfile*/,
-                                            Q_INT32 /*renderingIntent*/, float exposure)
+                                            Q_INT32 /*renderingIntent*/, float /*exposure*/)
 
 {
     const float *data = reinterpret_cast<const float *>(dataU8);
@@ -213,24 +197,20 @@ QImage KisLmsF32ColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width
     Q_INT32 i = 0;
     uchar *j = img.bits();
 
-    // XXX: For now assume gamma 2.2.
-    float gamma = 1 / 2.2;
-    float exposureFactor = powf(2, exposure + 2.47393);
-
     while ( i < width * height * MAX_CHANNEL_LMSA) {
         double l = *( data + i + PIXEL_LONGWAVE );
         double m = *( data + i + PIXEL_MIDDLEWAVE );
         double s = *( data + i + PIXEL_SHORTWAVE );
 #ifdef __BIG_ENDIAN__
         *( j + 0)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-        *( j + 1 ) = convertToDisplay(computeRed(l,m,s), exposureFactor, gamma);
-        *( j + 2 ) = convertToDisplay(computeGreen(l,m,s), exposureFactor, gamma);
-        *( j + 3 ) = convertToDisplay(computeBlue(l,m,s), exposureFactor, gamma);
+        *( j + 1 ) = computeRed(l,m,s);
+        *( j + 2 ) = computeGreen(l,m,s);
+        *( j + 3 ) = computeBlue(l,m,s);
 #else
         *( j + 3)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-        *( j + 2 ) = convertToDisplay(computeRed(l,m,s), exposureFactor, gamma);
-        *( j + 1 ) = convertToDisplay(computeGreen(l,m,s), exposureFactor, gamma);
-        *( j + 0 ) = convertToDisplay(computeBlue(l,m,s), exposureFactor, gamma);
+        *( j + 2 ) = computeRed(l,m,s);
+        *( j + 1 ) = computeGreen(l,m,s);
+        *( j + 0 ) = computeBlue(l,m,s);
 #endif
         i += MAX_CHANNEL_LMSA;
         j += MAX_CHANNEL_LMSA;

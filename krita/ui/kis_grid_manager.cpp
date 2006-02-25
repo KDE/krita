@@ -70,7 +70,7 @@ void KisGridManager::updateGUI()
 
 void KisGridManager::toggleGrid()
 {
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig1x1()
@@ -78,7 +78,7 @@ void KisGridManager::fastConfig1x1()
     KisConfig cfg;
     cfg.setGridHSpacing(1);
     cfg.setGridVSpacing(1);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig2x2()
@@ -86,7 +86,7 @@ void KisGridManager::fastConfig2x2()
     KisConfig cfg;
     cfg.setGridHSpacing(2);
     cfg.setGridVSpacing(2);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig5x5()
@@ -94,7 +94,7 @@ void KisGridManager::fastConfig5x5()
     KisConfig cfg;
     cfg.setGridHSpacing(5);
     cfg.setGridVSpacing(5);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig10x10()
@@ -102,7 +102,7 @@ void KisGridManager::fastConfig10x10()
     KisConfig cfg;
     cfg.setGridHSpacing(10);
     cfg.setGridVSpacing(10);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig20x20()
@@ -110,7 +110,7 @@ void KisGridManager::fastConfig20x20()
     KisConfig cfg;
     cfg.setGridHSpacing(20);
     cfg.setGridVSpacing(20);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 void KisGridManager::fastConfig40x40()
@@ -118,7 +118,7 @@ void KisGridManager::fastConfig40x40()
     KisConfig cfg;
     cfg.setGridHSpacing(40);
     cfg.setGridVSpacing(40);
-    m_view->canvasRefresh();
+    m_view->updateCanvas();
 }
 
 Qt::PenStyle KisGridManager::GridDrawer::gs2style(Q_UINT32 s)

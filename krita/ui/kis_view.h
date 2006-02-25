@@ -280,6 +280,9 @@ public:
     KisCanvasController * getCanvasController() { return this; };
 
 
+private slots:
+    virtual void updateCanvas();
+
 private:
     virtual KisCanvas *kiscanvas() const;
     
@@ -288,9 +291,8 @@ private:
 
     virtual void scrollTo(Q_INT32 x, Q_INT32 y);
 
-    virtual void updateCanvas();
     virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
-    virtual void updateCanvas(const QRect& rc);
+    virtual void updateCanvas(const QRect& imageRect);
 
     virtual void zoomIn();
     virtual void zoomIn(Q_INT32 x, Q_INT32 y);
@@ -328,7 +330,6 @@ private:
 
 private:
 
-    void clearCanvas(const QRect& rc);
     void connectCurrentImg();
     void disconnectCurrentImg();
 //    void eraseGuides();
@@ -342,8 +343,22 @@ private:
     void createLayerBox();
     void createDockers();
 
-    void paintView(const KisRect& rc);
-    void paintOpenGLView(const KisRect& rc);
+    void paintToolOverlay(const QRegion& region);
+
+    void paintQPaintDeviceView(const QRegion& canvasRegion);
+    void paintOpenGLView(const QRect& canvasRect);
+
+    void updateQPaintDeviceCanvas(const QRect& imageRect);
+    void updateOpenGLCanvas(const QRect& imageRect);
+
+    /**
+     * Update the whole of the KisCanvas, including areas outside the image.
+     */
+    void refreshKisCanvas();
+
+    void selectionDisplayToggled(bool displaySelection);
+
+    bool activeLayerHasSelection();
 
     /**
      * Reset the monitor profile to the new settings.
@@ -368,7 +383,6 @@ private:
      * @return the number of layers added
      */
     Q_INT32 importImage(const KURL& url = KURL());
-    virtual void updateCanvas(const KisRect& rc);
     KisFilterManager * filterManager() { return m_filterManager; }
     void setCurrentImage(KisImageSP image);
 
@@ -405,7 +419,9 @@ private slots:
     void slotSetFGQColor(const QColor & c);
     void slotSetBGQColor(const QColor & c);
 
-    void imgUpdated(const QRect& rc);
+    void imgUpdated(QRect rc);
+    void slotOpenGLImageUpdated(QRect rc);
+
     void imgResizeToActiveLayer();
 
     void canvasGotMoveEvent(KisMoveEvent *e);
@@ -416,7 +432,6 @@ private slots:
     void canvasGotEnterEvent(QEvent *e);
     void canvasGotLeaveEvent(QEvent *e);
     void canvasGotMouseWheelEvent(QWheelEvent *e);
-    void canvasRefresh();
     void canvasGotKeyPressEvent(QKeyEvent*);
     void canvasGotKeyReleaseEvent(QKeyEvent*);
     void canvasGotDragEnterEvent(QDragEnterEvent*);

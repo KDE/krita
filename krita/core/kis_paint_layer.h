@@ -71,7 +71,7 @@ public:
 
 
     /// Returns the paintDevice that accompanies this layer
-    inline KisPaintDeviceSP paintDevice() { return m_paintdev; };
+    inline KisPaintDeviceSP paintDevice() const { return m_paintdev; };
 
 private:
     KisPaintDeviceSP m_paintdev;

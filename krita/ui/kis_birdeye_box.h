@@ -43,7 +43,7 @@ public:
 
 public slots:
     void slotDocCommandExecuted();
-    void slotImageUpdated(const QRect& r);
+    void slotImageUpdated(QRect r);
 
 protected slots:
     void exposureValueChanged(double exposure);

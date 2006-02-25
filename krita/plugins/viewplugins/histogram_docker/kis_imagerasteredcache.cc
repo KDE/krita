@@ -47,8 +47,8 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 
     imageSizeChanged(img -> width(), img -> height());
 
-    connect(img, SIGNAL(sigImageUpdated(const QRect&)),
-            this, SLOT(imageUpdated(const QRect&)));
+    connect(img, SIGNAL(sigImageUpdated(QRect)),
+            this, SLOT(imageUpdated(QRect)));
     connect(img, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
             this, SLOT(imageSizeChanged(Q_INT32, Q_INT32)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
@@ -58,31 +58,34 @@ KisImageRasteredCache::~KisImageRasteredCache() {
     cleanUpElements();
 }
 
-void KisImageRasteredCache::imageUpdated(const QRect& rc) {
-    QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
-    r &= rc;
-    r = r.normalize();
+void KisImageRasteredCache::imageUpdated(QRect rc) {
 
-    uint x = static_cast<int>(r.x() / m_rasterSize);
-    uint y = static_cast<int>(r.y() / m_rasterSize);
-    uint x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
-    uint y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
+    if (rc.isValid()) {
+        QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
+        r &= rc;
 
-    if (!m_raster.empty()) {
-        for ( ; x < x2; x++) {
-            for (uint i = y; i < y2; i++) {
-                if (x < m_raster.size()) {
-                    if (i < m_raster.at(x).size()) {
-                        Element* e = m_raster.at(x).at(i);
-                        if (e && e -> valid) {
-                            e -> valid = false;
-                            m_queue.push_back(e);
+        uint x = static_cast<int>(r.x() / m_rasterSize);
+        uint y = static_cast<int>(r.y() / m_rasterSize);
+        uint x2 = static_cast<int>(ceil(float(r.x() + r.width()) / float(m_rasterSize)));
+        uint y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
+
+        if (!m_raster.empty()) {
+            for ( ; x < x2; x++) {
+                for (uint i = y; i < y2; i++) {
+                    if (x < m_raster.size()) {
+                        if (i < m_raster.at(x).size()) {
+                            Element* e = m_raster.at(x).at(i);
+                            if (e && e -> valid) {
+                                e -> valid = false;
+                                m_queue.push_back(e);
+                            }
                         }
                     }
                 }
             }
         }
     }
+
     if (!m_busy) {
         // If the timer is already started, this resets it. That way, we update always
         // m_timeOutMSec milliseconds after the lastly monitored activity

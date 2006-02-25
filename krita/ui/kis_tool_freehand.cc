@@ -126,15 +126,19 @@ void KisToolFreehand::move(KisMoveEvent *e)
         m_prevYTilt = e -> yTilt();
 
         QRect r = m_painter -> dirtyRect();
-        m_dirtyRect |= r;
 
-        r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-        if (!m_paintOnSelection)
-            m_currentImage->activeLayer()->setDirty(r);
-        else {
-            // Just update the canvas
-            m_subject->canvasController()->updateCanvas( r );
-        } 
+        if (r.isValid()) {
+            m_dirtyRect |= r;
+
+            if (!m_paintOnSelection) {
+                m_currentImage->activeLayer()->setDirty(r);
+            }
+            else {
+                // Just update the canvas
+                r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+                m_subject->canvasController()->updateCanvas( r );
+            } 
+        }
     }
 }
 

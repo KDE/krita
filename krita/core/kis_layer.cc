@@ -330,14 +330,14 @@ bool KisLayer::dirty()
 bool KisLayer::dirty(const QRect & rc)
 {
     kdDebug(41010) << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
-    if (!m_dirtyRect.isValid()) return false;
+    if (!m_dirtyRect.isValid() || !rc.isValid()) return false;
 
     return rc.intersects(m_dirtyRect);
 }
 
 QRect KisLayer::dirtyRect() const
 {
-    return m_dirtyRect.normalize();
+    return m_dirtyRect;
 }
 
 void KisLayer::setDirty()
@@ -346,7 +346,7 @@ void KisLayer::setDirty()
     
     kdDebug(41010) << "setDirty() " << name() << ", " << rc << ", valid: " << rc.isValid() << "\n";
 
-    if (rc.isValid()) m_dirtyRect = rc.normalize();
+    if (rc.isValid()) m_dirtyRect = rc;
     
     // If we're dirty, our parent is dirty, if we've got a parent
     if (m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
@@ -370,13 +370,10 @@ void KisLayer::setDirty(const QRect & rc)
     if (rc.isValid())
         m_dirtyRect |= rc;
     
-    m_dirtyRect = m_dirtyRect.normalize();
-            
     if (m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);
 
 }
-
 
 KisGroupLayerSP KisLayer::parent() const
 {

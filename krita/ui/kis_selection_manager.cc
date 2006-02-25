@@ -743,7 +743,7 @@ void KisSelectionManager::feather()
 
 void KisSelectionManager::toggleDisplaySelection()
 {
-    m_parent->canvasRefresh();
+    m_parent->selectionDisplayToggled(displaySelection());
 }
 
 bool KisSelectionManager::displaySelection()

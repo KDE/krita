@@ -120,7 +120,7 @@ public:
     
 signals:
 
-    void sigDirty(const QRect & rc);
+    void sigDirty(QRect rc);
     
 private:
     

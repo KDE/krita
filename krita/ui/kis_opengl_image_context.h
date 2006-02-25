@@ -70,6 +70,20 @@ public:
     int imageTextureTileWidth() const;
     int imageTextureTileHeight() const;
 
+    /**
+     * Select selection visualisation rendering.
+     * 
+     * @param enable Set to true to enable selection visualisation rendering.
+     */
+    void setSelectionDisplayEnabled(bool enable);
+
+    /**
+     * Update the image textures for the given image rectangle.
+     * 
+     * @param imageRect The rectangle to update in image coordinates.
+     */
+    void update(const QRect& imageRect);
+
 signals:
     /**
      * Clients using the KisOpenGLImageContext should connect to the
@@ -81,10 +95,9 @@ signals:
     /**
      * Emitted whenever an action has caused the image to be recomposited.
      *
-     * @param image  The image 
      * @param rc     The rect that has been recomposited.
      */
-    void sigImageUpdated(const QRect& rc);
+    void sigImageUpdated(QRect rc);
 
     /**
      * Emitted whenever the image size changes.
@@ -107,13 +120,14 @@ protected:
     static bool imageCanShareImageContext(KisImageSP image);
 
 protected slots:
-    void slotImageUpdated(const QRect& r);
+    void slotImageUpdated(QRect r);
     void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
 
 private:
     KisImageSP m_image;
     KisProfile *m_monitorProfile;
     float m_exposure;
+    bool m_displaySelection;
 
     GLuint m_backgroundTexture;
 

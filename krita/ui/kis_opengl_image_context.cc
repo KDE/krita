@@ -73,6 +73,7 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     m_image = image;
     m_monitorProfile = monitorProfile;
     m_exposure = 0;
+    m_displaySelection = true;
 
     if (SharedContextWidget == 0) {
         kdDebug(41001) << "Creating shared context widget\n";
@@ -97,8 +98,8 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
 
     createImageTextureTiles();
 
-    connect(m_image, SIGNAL(sigImageUpdated(const QRect&)),
-            SLOT(slotImageUpdated(const QRect&)));
+    connect(m_image, SIGNAL(sigImageUpdated(QRect)),
+            SLOT(slotImageUpdated(QRect)));
     connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
             SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
 
@@ -150,6 +151,8 @@ QGLWidget *KisOpenGLImageContext::sharedContextWidget() const
 
 void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 {
+    //kdDebug() << "updateImageTextureTiles " << rect << endl;
+
     QRect updateRect = rect & m_image -> bounds();
 
     if (!updateRect.isEmpty()) {
@@ -181,11 +184,12 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                                                     tileUpdateRect.right(), tileUpdateRect.bottom(),
                                                                      m_monitorProfile, m_exposure);
 
-                //XXX: and not using shader
-                if (m_image -> activeLayer() != 0) {
-                    m_image -> activeLayer() -> paintSelection(tileUpdateImage,
-                                                                              tileUpdateRect.x(), tileUpdateRect.y(),
-                                                                              tileUpdateRect.width(), tileUpdateRect.height());
+                if (m_displaySelection) {
+                    if (m_image -> activeLayer() != 0) {
+                        m_image -> activeLayer() -> paintSelection(tileUpdateImage,
+                                                                   tileUpdateRect.x(), tileUpdateRect.y(),
+                                                                   tileUpdateRect.width(), tileUpdateRect.height());
+                    }
                 }
 
                 if (tileUpdateRect.width() == m_imageTextureTileWidth && tileUpdateRect.height() == m_imageTextureTileHeight) {
@@ -335,7 +339,17 @@ void KisOpenGLImageContext::destroyImageTextureTiles()
     }
 }
 
-void KisOpenGLImageContext::slotImageUpdated(const QRect& rc)
+void KisOpenGLImageContext::update(const QRect& imageRect)
+{
+    updateImageTextureTiles(imageRect);
+}
+
+void KisOpenGLImageContext::setSelectionDisplayEnabled(bool enable)
+{
+    m_displaySelection = enable;
+}
+
+void KisOpenGLImageContext::slotImageUpdated(QRect rc)
 {
     QRect r = rc & m_image -> bounds();
 

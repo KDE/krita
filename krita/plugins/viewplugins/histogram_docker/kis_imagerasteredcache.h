@@ -48,7 +48,7 @@ signals:
     void cacheUpdated();
 
 private slots:
-    void imageUpdated(const QRect& rc);
+    void imageUpdated(QRect rc);
     void imageSizeChanged(Q_INT32 w, Q_INT32 h);
     void timeOut();
 

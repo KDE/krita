@@ -169,7 +169,7 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
         connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
-        connect(img, SIGNAL(sigImageUpdated(const QRect&)), this, SLOT(slotImageUpdated()));
+        connect(img, SIGNAL(sigImageUpdated(QRect)), this, SLOT(slotImageUpdated()));
         connect(img, SIGNAL(sigNonActiveLayersUpdated()), this, SLOT(slotNonActiveLayersUpdated()));
         slotLayersChanged(img -> rootLayer());
         slotNonActiveLayersUpdated();

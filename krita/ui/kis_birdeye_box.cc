@@ -218,7 +218,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     connect(m_subject->document(), SIGNAL(sigCommandExecuted()), SLOT(slotDocCommandExecuted()));
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigImageUpdated(const QRect&)), SLOT(slotImageUpdated(const QRect&)));
+        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
     }
 }
 
@@ -240,7 +240,7 @@ void KisBirdEyeBox::setImage(KisImageSP image)
     m_birdEyePanel->setThumbnailProvider(ktp);
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigImageUpdated(const QRect&)), SLOT(slotImageUpdated(const QRect&)));
+        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
         m_birdEyePanel->slotUpdate(m_image->bounds());
     }
 }
@@ -255,7 +255,7 @@ void KisBirdEyeBox::slotDocCommandExecuted()
     }
 }
 
-void KisBirdEyeBox::slotImageUpdated(const QRect& r)
+void KisBirdEyeBox::slotImageUpdated(QRect r)
 {
     m_dirtyRect |= r;
 }

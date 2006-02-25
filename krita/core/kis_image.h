@@ -365,7 +365,7 @@ signals:
      *
      * @param rc The rect that has been recomposited.
      */
-    void sigImageUpdated(const QRect& rc);
+    void sigImageUpdated(QRect rc);
 
     /// Emmitted when layers other than the active one have changed, for example when rotating the whole image.
     void sigNonActiveLayersUpdated();

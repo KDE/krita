@@ -498,7 +498,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
         Q_CHECK_PTR(m_bkg);
 
         m_rootLayer = static_cast<KisGroupLayer*>(rhs.m_rootLayer->clone().data());
-        connect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+        connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
         
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
@@ -593,7 +593,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_bkg = new KisBackground();
     
     m_rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
-    connect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+    connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
     
     m_xres = 1.0;
     m_yres = 1.0;
@@ -608,14 +608,14 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 void KisImage::lock()
 {
     m_private->locked = true;
-    if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+    if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 }
 
 void KisImage::unlock()
 {
     m_private->locked = false;
     if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
-    if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+    if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)
@@ -1130,7 +1130,7 @@ Q_INT32 KisImage::nHiddenLayers() const
 void KisImage::flatten()
 {
     KisGroupLayerSP oldRootLayer = m_rootLayer;
-    disconnect(oldRootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+    disconnect(oldRootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
     
     KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
@@ -1141,7 +1141,7 @@ void KisImage::flatten()
     gc.bitBlt(0, 0, COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
 
     m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
-    connect(m_rootLayer, SIGNAL(sigDirty(const QRect &)), this, SIGNAL(sigImageUpdated( const QRect& )));
+    connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
     blockSignals(true);
     addLayer(dst, m_rootLayer, 0);

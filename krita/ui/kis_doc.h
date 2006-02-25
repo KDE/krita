@@ -155,7 +155,7 @@ public slots:
 
 signals:
     void docUpdated();
-    void docUpdated(const QRect& rect);
+    void docUpdated(QRect rect);
     void loadingFinished();
 
     /*

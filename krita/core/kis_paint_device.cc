@@ -943,25 +943,27 @@ void KisPaintDevice::clearSelection()
     if (!hasSelection()) return;
 
     QRect r = m_selection -> selectedRect();
-    r = r.normalize();
 
-    for (Q_INT32 y = 0; y < r.height(); y++) {
+    if (r.isValid()) {
 
-        KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
-        KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
+        for (Q_INT32 y = 0; y < r.height(); y++) {
 
-        while (!devIt.isDone()) {
-            // XXX: Optimize by using stretches
+            KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
+            KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
-            m_colorSpace->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
+            while (!devIt.isDone()) {
+                // XXX: Optimize by using stretches
 
-            ++devIt;
-            ++selectionIt;
+                m_colorSpace->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
+
+                ++devIt;
+                ++selectionIt;
+            }
         }
-    }
 
-    if (m_parentLayer) {
-        m_parentLayer->setDirty(r);
+        if (m_parentLayer) {
+            m_parentLayer->setDirty(r);
+        }
     }
 }
 

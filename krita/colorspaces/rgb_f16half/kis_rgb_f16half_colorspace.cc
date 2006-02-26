@@ -83,7 +83,7 @@ void KisRgbF16HalfColorSpace::getPixel(const Q_UINT8 *src, half *red, half *gree
     *alpha = srcPixel -> alpha;
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * profile)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile *)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -92,7 +92,7 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisPro
     dst -> blue = UINT8_TO_HALF(c.blue());
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * profile)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile *)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -102,14 +102,14 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UIN
     dst -> alpha = UINT8_TO_HALF(opacity);
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * profile)
+void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile *)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c -> setRgb(HALF_TO_UINT8(src -> red), HALF_TO_UINT8(src -> green), HALF_TO_UINT8(src -> blue));
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
+void KisRgbF16HalfColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile *)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -201,8 +201,8 @@ Q_UINT8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF16HalfColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width, Q_INT32 height,
-                         KisProfile *  dstProfile,
-                         Q_INT32 renderingIntent, float exposure)
+                         KisProfile *  /*dstProfile*/,
+                         Q_INT32 /*renderingIntent*/, float exposure)
 
 {
     const half *data = reinterpret_cast<const half *>(dataU8);

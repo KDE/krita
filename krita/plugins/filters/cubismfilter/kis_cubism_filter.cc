@@ -62,7 +62,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), "artistic", i18n("&Cubism..
 {
 }
 
-bool KisCubismFilter::workWith(KisColorSpace* cs)
+bool KisCubismFilter::workWith(KisColorSpace* /*cs*/)
 {
     return true;
 }

@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 #include "kis_abstract_colorspace.h"
 #include "kis_u8_base_colorspace.h"
@@ -682,8 +683,8 @@ void KisGrayColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride
                     Q_UINT8 srcColor = src[channel];
                     Q_UINT8 dstColor = dst[channel];
 
-                    srcColor = QMIN(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
-                    srcColor = CLAMP(UINT8_MAX - srcColor, 0, UINT8_MAX);
+                    srcColor = kMin(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
+                    srcColor = kClamp(UINT8_MAX - srcColor, 0u, UINT8_MAX);
 
                     Q_UINT8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 

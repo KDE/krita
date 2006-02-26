@@ -107,10 +107,10 @@ Q_INT32 DlgRotateImage::angle()
         angle = qRound(m_page -> intCustom -> value());
     }
     if (m_page -> radioCW -> isChecked()) {
-        return angle;
+        return Q_INT32(angle);
     }
     else {
-        return -angle;
+        return Q_INT32(-angle);
     }
 }
 

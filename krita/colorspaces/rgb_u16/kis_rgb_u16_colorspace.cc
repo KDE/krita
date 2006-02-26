@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "kis_rgb_u16_colorspace.h"
 #include "kis_u16_base_colorspace.h"
@@ -386,8 +387,8 @@ void KisRgbU16ColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStri
             Q_UINT16 srcColor = src[channel];
             Q_UINT16 dstColor = dst[channel];
 
-            srcColor = QMIN(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
-            srcColor = CLAMP(UINT16_MAX - srcColor, 0u, UINT16_MAX);
+            srcColor = kMin(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
+            srcColor = kClamp(UINT16_MAX - srcColor, 0u, UINT16_MAX);
 
             Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 

@@ -1023,6 +1023,7 @@ void KisView::paintQPaintDeviceView(const QRegion& canvasRegion)
 
 void KisView::updateOpenGLCanvas(const QRect& imageRect)
 {
+#ifdef HAVE_GL
     KisImageSP img = currentImg();
 
     if (img && m_paintViewEnabled) {
@@ -1032,6 +1033,9 @@ void KisView::updateOpenGLCanvas(const QRect& imageRect)
             m_OpenGLImageContext->update(imageRect);
         }
     }
+#else
+    Q_UNUSED(imageRect);
+#endif
 }
 
 void KisView::paintOpenGLView(const QRect& canvasRect)
@@ -1231,11 +1235,15 @@ void KisView::refreshKisCanvas()
 
 void KisView::selectionDisplayToggled(bool displaySelection)
 {
+#ifdef HAVE_GL
     if (m_canvas->isOpenGLCanvas()) {
         if (m_OpenGLImageContext) {
             m_OpenGLImageContext->setSelectionDisplayEnabled(displaySelection);
         }
     }
+#else
+    Q_UNUSED(displaySelection);
+#endif
     updateCanvas();
 }
 

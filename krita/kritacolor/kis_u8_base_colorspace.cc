@@ -35,8 +35,9 @@ void KisU8BaseColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPix
     if (m_alphaPos < 0) return;
     Q_INT32 psize = pixelSize();
 
+    pixels += m_alphaPos;
     while (nPixels > 0) {
-        pixels[m_alphaPos] = alpha;
+        *pixels = alpha;
         --nPixels;
         pixels += psize;
     }

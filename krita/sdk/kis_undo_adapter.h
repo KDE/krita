@@ -26,8 +26,9 @@ class KCommand;
 
 /**
  * Undo listeners want to be notified of undo and redo actions.
- * Notification is given _before_ the command is added to the
+ * add notification is given _before_ the command is added to the
  * stack.
+ * execute notification is given on undo and redo
  */
 class KisCommandHistoryListener {
 
@@ -36,6 +37,7 @@ public:
     KisCommandHistoryListener(){};
     
     virtual void notifyCommandAdded(KCommand * cmd) = 0;
+    virtual void notifyCommandExecuted(KCommand * cmd) = 0;
 };
 
 class KisUndoAdapter {
@@ -48,6 +50,7 @@ public:
     virtual void setCommandHistoryListener(const KisCommandHistoryListener *) = 0;
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *) = 0;
     
+    virtual KCommand * presentCommand() = 0;
     virtual void addCommand(KCommand *cmd) = 0;
     virtual void setUndo(bool undo) = 0;
     virtual bool undo() const = 0;

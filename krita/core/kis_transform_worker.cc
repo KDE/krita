@@ -307,7 +307,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         while(!dstIt.isDone())
         {
             if(scale < 0)
-                center = (srcLen<<8) + (((i * scaleDenom))<<8) / scale;
+                center = (srcLen<<8) + ((i * scaleDenom)<<8) / scale;
             else
                 center = ((i * scaleDenom)<<8) / scale;
 
@@ -317,6 +317,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             begin = (255 + center - support)>>8; // takes ceiling by adding 255
             end = (center + support)>>8; // takes floor
 
+
 ////printf("sup=%d begin=%d end=%d",support,begin,end);
             Q_UINT8 selectedness = tmpSel[center>>8];
             if(selectedness)
@@ -324,8 +325,8 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 // calculate weights
                 int num = 0;
                 int sum = 0;
-                Q_INT32 t = ((center - (begin<<8)) * invfscale)>>8;
-                Q_INT32 dt = -(256 * invfscale)>>8;
+                Q_INT32 t = (((begin<<8) - center) * invfscale)>>8;
+                Q_INT32 dt = invfscale;
                 for(int srcpos = begin; srcpos <= end; srcpos++)
                 {
                     Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
@@ -375,8 +376,8 @@ bool KisTransformWorker::run()
     else
         r = m_dev->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(), "tmpdev1");
-    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(), "tmpdev2");
+    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1");;
+    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;

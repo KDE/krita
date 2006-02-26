@@ -95,6 +95,7 @@ private: // Undo adapter
     virtual void setCommandHistoryListener(const KisCommandHistoryListener *);
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *);
 
+    virtual KCommand * presentCommand();
     virtual void addCommand(KCommand *cmd);
     virtual void setUndo(bool undo);
     virtual bool undo() const;
@@ -151,7 +152,7 @@ public slots:
     void slotImageUpdated();
     void slotImageUpdated(const QRect& rect);
     void slotDocumentRestored();
-    void slotCommandExecuted();
+    void slotCommandExecuted(KCommand *command);
 
 signals:
     void docUpdated();

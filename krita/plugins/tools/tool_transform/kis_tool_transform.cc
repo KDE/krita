@@ -61,20 +61,59 @@ namespace {
         typedef KisSelectedTransaction super;
 
     public:
-        TransformCmd(KisPaintDeviceSP device);
+        TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
         virtual ~TransformCmd();
 
     public:
         virtual void execute();
         virtual void unexecute();
+        void transformArgs(double &sx, double &sy, double &tx, double &ty, double &a);
+        KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
+
+    private:
+        double m_scaleX;
+        double m_scaleY;
+        double m_translateX;
+        double m_translateY;
+        double m_a;
+        KisToolTransform *m_tool;
+        KisSelectionSP m_origSelection;
+        QPoint m_startPos;
+        QPoint m_endPos;
     };
 
-    TransformCmd::TransformCmd(KisPaintDeviceSP device) : super(i18n("Transform"), device)
+    TransformCmd::TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos) :
+        super(i18n("Transform"), device)
+        , m_scaleX(scaleX)
+        , m_scaleY(scaleY)
+        , m_translateX(tX)
+        , m_translateY(tY)
+        , m_a(a)
+        , m_tool(tool)
+        , m_origSelection(origSel)
+        , m_startPos(startPos)
+        , m_endPos(endPos)
     {
     }
 
     TransformCmd::~TransformCmd()
     {
+    }
+
+    void TransformCmd::transformArgs(double &sx, double &sy, double &tx, double &ty, double &a)
+    {
+        sx = m_scaleX;
+        sy = m_scaleY;
+        tx= m_translateX;
+        ty = m_translateY;
+        a = m_a;
+    }
+
+    KisSelectionSP TransformCmd::origSelection(QPoint &startPos, QPoint &endPos)
+    {
+        startPos = m_startPos;
+        endPos = m_endPos;
+        return m_origSelection;
     }
 
     void TransformCmd::execute()
@@ -129,46 +168,67 @@ void KisToolTransform::activate()
 {
     if(m_subject && m_subject->currentImg() && m_subject->currentImg()->activeDevice())
     {
+        //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
-        
+
         KisToolControllerInterface *controller = m_subject -> toolController();
 
         if (controller)
             controller->setCurrentTool(this);
-            
-        Q_INT32 x,y,w,h;
-        KisImageSP img = m_subject -> currentImg();
-        
-        KisPaintDeviceSP dev = img -> activeDevice();
 
-        // Create a lazy copy of the current state
-        m_origDevice = new KisPaintDevice(*dev.data());
-        Q_ASSERT(m_origDevice);
-        
-        if(dev->hasSelection())
+        TransformCmd * cmd=0;
+
+        if(m_subject -> currentImg()->undoAdapter()->presentCommand())
+            cmd = dynamic_cast<TransformCmd*>(m_subject -> currentImg()->undoAdapter()->presentCommand());
+
+        if (cmd == 0) {
+            initHandles();
+        }
+        else
         {
-            KisSelectionSP sel = dev->selection();
-            m_origSelection = new KisSelection(*sel.data());
-            QRect r = sel->selectedExactRect();
-            r.rect(&x, &y, &w, &h);
+            // One of our commands is on top
+            // We should ask for tool args and orig selection
+            cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
+            m_origSelection = cmd->origSelection(m_startPos, m_endPos);
+            paintOutline();
         }
-        else {
-            dev->exactBounds(x,y,w,h);
-            m_origSelection = 0;
-        }
-        m_startPos = QPoint(x, y);
-        m_endPos = QPoint(x+w-1, y+h-1);
-        m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
-        m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
-
-        m_a = 0.0;
-        m_scaleX = 1.0;
-        m_scaleY = 1.0;
-        m_translateX = m_org_cenX;
-        m_translateY = m_org_cenY;
-        
-        paintOutline();
     }
+}
+
+void KisToolTransform::initHandles()
+{
+    Q_INT32 x,y,w,h;
+    KisImageSP img = m_subject -> currentImg();
+        
+    KisPaintDeviceSP dev = img -> activeDevice();
+
+    // Create a lazy copy of the current state
+    m_origDevice = new KisPaintDevice(*dev.data());
+    Q_ASSERT(m_origDevice);
+    
+    if(dev->hasSelection())
+    {
+        KisSelectionSP sel = dev->selection();
+        m_origSelection = new KisSelection(*sel.data());
+        QRect r = sel->selectedExactRect();
+        r.rect(&x, &y, &w, &h);
+    }
+    else {
+        dev->exactBounds(x,y,w,h);
+        m_origSelection = 0;
+    }
+    m_startPos = QPoint(x, y);
+    m_endPos = QPoint(x+w-1, y+h-1);
+    m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
+    m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
+
+    m_a = 0.0;
+    m_scaleX = 1.0;
+    m_scaleY = 1.0;
+    m_translateX = m_org_cenX;
+    m_translateY = m_org_cenY;
+
+    paintOutline();
 }
 
 void KisToolTransform::paint(KisCanvasPainter& gc)
@@ -523,22 +583,24 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_function = ROTATE;
             else
                 m_function = MOVE;
-            
-            if(distsq(mousePos, (m_topleft + m_topright)/2)<25)
+
+            int handleradius = 25 / (m_subject->zoomFactor() * m_subject->zoomFactor());
+
+            if(distsq(mousePos, (m_topleft + m_topright)/2)<=handleradius)
                 m_function = TOPSCALE;
-            if(distsq(mousePos, m_topright)<25)
+            if(distsq(mousePos, m_topright)<=handleradius)
                 m_function = TOPRIGHTSCALE;
-            if(distsq(mousePos, (m_topright + m_bottomright)/2)<25)
+            if(distsq(mousePos, (m_topright + m_bottomright)/2)<=handleradius)
                 m_function = RIGHTSCALE;
-            if(distsq(mousePos, m_bottomright)<25)
+            if(distsq(mousePos, m_bottomright)<=handleradius)
                 m_function = BOTTOMRIGHTSCALE;
-            if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<25)
+            if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<=handleradius)
                 m_function = BOTTOMSCALE;
-            if(distsq(mousePos, m_bottomleft)<25)
+            if(distsq(mousePos, m_bottomleft)<=handleradius)
                 m_function = BOTTOMLEFTSCALE;
-            if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<25)
+            if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<=handleradius)
                 m_function = LEFTSCALE;
-            if(distsq(mousePos, m_topleft)<25)
+            if(distsq(mousePos, m_topleft)<=handleradius)
                 m_function = TOPLEFTSCALE;
             
             setFunctionalCursor();
@@ -557,7 +619,10 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
         m_selecting = false;
     }
     QApplication::setOverrideCursor(KisCursor::waitCursor());
+    paintOutline();
     transform();
+    m_subject -> canvasController() ->updateCanvas();
+    paintOutline();
     QApplication::restoreOverrideCursor();
 }
 
@@ -582,19 +647,19 @@ void KisToolTransform::recalcOutline()
     
     x = (m_startPos.x() - m_org_cenX) * m_scaleX;
     y = (m_startPos.y() - m_org_cenY) * m_scaleY;
-    m_topleft = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
-    
+    m_topleft = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
+
     x = (m_endPos.x() - m_org_cenX) * m_scaleX;
     y = (m_startPos.y() - m_org_cenY) * m_scaleY;
-    m_topright = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+    m_topright = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
     
     x = (m_startPos.x() - m_org_cenX) * m_scaleX;
     y = (m_endPos.y() - m_org_cenY) * m_scaleY;
-    m_bottomleft = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+    m_bottomleft = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
     
     x = (m_endPos.x() - m_org_cenX) * m_scaleX;
     y = (m_endPos.y() - m_org_cenY) * m_scaleY;
-    m_bottomright = QPoint(int(rotX(x,y) + m_translateX), int(rotY(x,y) + m_translateY));
+    m_bottomright = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
 }
 
 void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
@@ -657,20 +722,27 @@ void KisToolTransform::transform()
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(img->activeDevice().data());
+    TransformCmd * transaction = new TransformCmd(this, img->activeDevice().data(), m_scaleX,
+                                                            m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
-    img->activeDevice()->clearSelection();
     // Copy the original state back -- this should be optimized by
     // doing only the dirty rect(s). However, that's for Casper to figure out.
     KisPainter gc(img->activeDevice());
     gc.bitBlt(0, 0, COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
-    // Also restore the original selection. After all, this is a transform from the
-    // original state again. If I understood Casper correctly. Not sure whether this
+    // Also restore the original selection. XXX: Not sure whether this
     // works with the undo.
-    img->activeDevice()->setSelection(m_origSelection);
-    
+    if(m_origSelection)
+    {
+//        img->activeDevice()->setSelection(m_origSelection);
+        KisPainter sgc(img->activeDevice()->selection().data());
+        sgc.bitBlt(0, 0, COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
+        sgc.end();
+    }
+    else
+        img->activeDevice()->deselect();
+
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
@@ -701,19 +773,32 @@ void KisToolTransform::notifyCommandAdded( KCommand * command)
     if (cmd == 0) {
         // The last added command wasn't one of ours;
         // we should reset to the new state of the canvas.
-        if(m_subject && m_subject -> currentImg() && m_subject->currentImg()->activeDevice() )
-        {
-            KisImageSP img = m_subject -> currentImg();
-            KisPaintDeviceSP dev = img -> activeDevice();
-            m_origDevice = new KisPaintDevice(*dev.data());
-            m_origSelection = 0;
-            if (dev->hasSelection()) {
-                m_origSelection = new KisSelection(*m_origDevice->selection().data());
-            }
-            Q_ASSERT(m_origDevice);
-        
-        }
+        // In effect we should treat this as if the tool has been just activated
+        initHandles();
+    }
+}
 
+void KisToolTransform::notifyCommandExecuted( KCommand * command)
+{
+    Q_UNUSED(command);
+    TransformCmd * cmd=0;
+
+    if(m_subject -> currentImg()->undoAdapter()->presentCommand())
+        cmd = dynamic_cast<TransformCmd*>(m_subject -> currentImg()->undoAdapter()->presentCommand());
+
+    if (cmd == 0) {
+        // The command now on the top of the stack isn't one of ours
+        // We should treat this as if the tool has been just activated
+        initHandles();
+    }
+    else
+    {
+        // One of our commands is now on top
+        // We should ask for tool args and orig selection
+        paintOutline();
+        cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
+        m_origSelection = cmd->origSelection(m_startPos, m_endPos);
+        paintOutline();
     }
 }
 
@@ -738,8 +823,7 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
     KisID filterID = m_optWidget -> cmbFilter -> currentItem();
     m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
     
-/*    connect(m_optWidget -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
-
+/*
     connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
     connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
     connect(m_optWidget -> intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));

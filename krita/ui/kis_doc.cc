@@ -259,7 +259,7 @@ bool KisDoc::init()
     Q_CHECK_PTR(m_cmdHistory);
 
     connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));
-    connect(m_cmdHistory, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+    connect(m_cmdHistory, SIGNAL(commandExecuted(KCommand *)), this, SLOT(slotCommandExecuted(KCommand *)));
     setUndo(true);
 
     m_nserver = new KisNameServer(i18n("Image %1"), 1);
@@ -1006,7 +1006,7 @@ void KisDoc::endMacro()
 
 void KisDoc::setCommandHistoryListener(const KisCommandHistoryListener * l)
 {
-    // Never have more than one instance of a listener around. Qt should prove a Set class for this...
+   // Never have more than one instance of a listener around. Qt should prove a Set class for this...
     m_undoListeners.removeRef(l);
     m_undoListeners.append(l);
 }
@@ -1014,6 +1014,11 @@ void KisDoc::setCommandHistoryListener(const KisCommandHistoryListener * l)
 void KisDoc::removeCommandHistoryListener(const KisCommandHistoryListener * l)
 {
    m_undoListeners.removeRef(l);
+}
+
+KCommand * KisDoc::presentCommand()
+{
+    return m_cmdHistory->presentCommand();
 }
 
 void KisDoc::addCommand(KCommand *cmd)
@@ -1071,11 +1076,19 @@ void KisDoc::slotDocumentRestored()
     setModified(false);
 }
 
-void KisDoc::slotCommandExecuted()
+void KisDoc::slotCommandExecuted(KCommand *command)
 {
     setModified(true);
     emit sigCommandExecuted();
+
+    KisCommandHistoryListener* l = 0;
+    
+    for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
+        l->notifyCommandExecuted(command);
+    }
+    
 }
+
 void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
     QRect rc(x, y, w, h);

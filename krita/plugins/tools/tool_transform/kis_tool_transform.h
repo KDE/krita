@@ -58,13 +58,20 @@ public:
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
+    void setScaleX(double sx) { m_scaleX = sx; }
+    void setScaleY(double sy) { m_scaleY = sy; }
+    void setTranslateX(double tx) { m_translateX = tx; }
+    void setTranslateY(double ty) { m_translateY = ty; }
+    void setAngle(double a) { m_a = a; }
+    void paintOutline();
 
 public:
 
     void notifyCommandAdded(KCommand *);
-    
+    void notifyCommandExecuted(KCommand *);
+
 private:
-    void paintOutline();
+
     void paintOutline(KisCanvasPainter& gc, const QRect& rc);
     void transform();
     void recalcOutline();
@@ -75,6 +82,7 @@ private:
     int det(QPoint v,QPoint w);
     int distsq(QPoint v,QPoint w);
     void setFunctionalCursor();
+    void initHandles();
 
 private slots:
 

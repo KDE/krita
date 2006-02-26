@@ -6,15 +6,6 @@ Transform tool (CBR)
 	* The option widget should be connected
 	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
 	* Implement gui, create cursors and update visitor for shearing
-	* Fix problem of deselecting during tool use
-	* Fix problem of undoing during tool use
-	* Add a messagebox that asks whether the changes should be committed or not:
-		
-		"Sure you want to cancel the Transform" ?
-			[Discard] [Apply] [Cancel]
-			
-	* Apply the changes first on the canvas pixmap, not on the actual layer for
-	  quick interactivity 
 
 Integration
 
@@ -71,7 +62,6 @@ User Interface
     * Disable dragging the toolbox from dock position to dock position (see Karbon)
     * Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
     * Add link check to new image dialog to sync width and height
-    * Rounding in opacity spinner is wrong: what starts out as 100% is actually not OPACITY_MAX...
     * The description field in color settings is empty
     * Implement the following dialogs / widgets:
 		    - Variations (#Boudewijn)
@@ -95,7 +85,6 @@ User Interface
 		* Add action (macro) docker
 		* Add navigation/zoom docker
 		* Add history docker
-        * Convert the layer & channel box to a qlistbox; enable the channel box.
 
     * Doing a copy of a selection, but having the wrong layer selected gives 
       me an empty selection (all transparent).  Pressing paste should say so 

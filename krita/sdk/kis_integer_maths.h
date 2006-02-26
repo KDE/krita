@@ -31,6 +31,12 @@
 #define INT16_MAX 32767
 #define INT16_MIN -32768
 
+/// take a and scale it up by 256*b/255
+inline uint UINT8_SCALEBY(uint a, uint b)
+{
+    uint c = a * b + 0x80u;
+    return (c >> 8) + c;
+}
 
 inline uint UINT8_MULT(uint a, uint b)
 {

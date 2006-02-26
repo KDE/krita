@@ -457,8 +457,8 @@ void KisLayer::setOpacity(Q_UINT8 val)
 {
     if (m_opacity != val)
     {
-        setDirty();
         m_opacity = val;
+        setDirty();
         notifyPropertyChanged();
     }
 }

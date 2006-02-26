@@ -115,7 +115,7 @@ class LayerToolTip: public QToolTip, public QFrame
 public:
     LayerToolTip( QWidget *parent, LayerList *list )
         : QToolTip( parent ),
-          QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WStyle_StaysOnTop | WX11BypassWM ),
+          QFrame( 0, 0, WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WStyle_StaysOnTop | WX11BypassWM | WNoAutoErase ),
           m_list( list )
     {
         QFrame::setPalette( QToolTip::palette() );

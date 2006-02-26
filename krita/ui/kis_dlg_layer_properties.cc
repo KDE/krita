@@ -46,9 +46,6 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
 
     opacity = int((opacity * 100.0) / 255 + 0.5);
 
-    if (opacity)
-        opacity++;
-
     setCaption(i18n("Layer Properties"));
     setMainWidget(m_page);
 

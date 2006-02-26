@@ -75,7 +75,8 @@ signals:
     void sigRequestPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void sigRequestLayerProperties(KisLayerSP layer);
 
-    void sigOpacityChanged(int opacity);
+    void sigOpacityChanged(int opacity, bool withSlider);
+    void sigOpacityFinishedChanging(int previous, int opacity);
     void sigItemComposite(const KisCompositeOp&);
 
 private:

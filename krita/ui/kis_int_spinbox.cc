@@ -52,6 +52,7 @@ public:
     QLineEdit * m_numinput;
     KisPopupSlider *m_slider;
     KArrowButton *m_arrow;
+    int m_prevValue;
 };
 
 
@@ -78,26 +79,27 @@ void KisIntSpinbox::init(int val)
     //d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
     //d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
     d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    
+
     l->addWidget( d->m_numinput );
-    
+
     connect(d->m_numinput, SIGNAL(textChanged(const QString &)), SLOT(numValueChanged(const QString &)));
 
     //d->m_slider = new KisPopupSlider(INT_MIN, INT_MAX, 1, val, QSlider::Horizontal, this);
     d->m_slider = new KisPopupSlider(0, 100, 1, val, QSlider::Horizontal, this);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
     connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    
+    connect(d->m_slider, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
+    connect(d->m_slider, SIGNAL(aboutToHide()), SLOT(slotAboutToHide()));
+
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);
     d->m_arrow->setPopup(d->m_slider);
     d->m_arrow->setMaximumHeight( fontMetrics().height() + 2);
     d->m_arrow->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     d->m_arrow->setEnabled(true);
-    
-    l->addWidget( d->m_arrow );
-    
-    
 
+    l->addWidget( d->m_arrow );
+
+    d->m_prevValue = val;
     setValue(val);
     setFocusProxy(d->m_numinput);
     layout();
@@ -111,6 +113,7 @@ void KisIntSpinbox::numValueChanged(const QString &text)
     d->m_slider->blockSignals(false);
 
     emit valueChanged(val);
+    emit valueChanged(val, false);
 }
 
 void KisIntSpinbox::sliderValueChanged(int val)
@@ -121,6 +124,7 @@ void KisIntSpinbox::sliderValueChanged(int val)
     d->m_numinput->blockSignals(false);
 
     emit valueChanged(val);
+    emit valueChanged(val, true);
 }
 
 void KisIntSpinbox::setRange(int lower, int upper, int /*step*/)
@@ -172,6 +176,20 @@ int  KisIntSpinbox::value() const
 void KisIntSpinbox::setLabel(const QString & /*label*/)
 {
 //    d->m_numinput->setLabel(label);
+}
+
+void KisIntSpinbox::slotAboutToShow()
+{
+    d->m_prevValue = value();
+}
+
+void KisIntSpinbox::slotAboutToHide()
+{
+    if( d->m_prevValue != value() )
+    {
+        emit finishedChanging( d->m_prevValue, value() );
+        d->m_prevValue = value();
+    }
 }
 
 

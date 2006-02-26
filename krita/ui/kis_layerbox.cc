@@ -133,7 +133,8 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     connect(m_lst -> bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     connect(m_lst -> bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_lst -> bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
-    connect(m_lst -> intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigOpacityChanged(int)));
+    connect(m_lst -> intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
+    connect(m_lst -> intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
     connect(m_lst -> cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(sigItemComposite(const KisCompositeOp&)));
 
     connect(&m_thumbnailerTimer, SIGNAL( timeout() ), SLOT( updateThumbnails() ) );

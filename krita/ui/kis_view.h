@@ -443,7 +443,8 @@ private slots:
     void slotImageProperties();
 
     void layerCompositeOp(const KisCompositeOp& compositeOp);
-    void layerOpacity(int opacity);
+    void layerOpacity(int opacity, bool dontundo);
+    void layerOpacityFinishedChanging(int previous, int opacity);
 
     void layerToggleVisible();
     void layerToggleLocked();

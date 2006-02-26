@@ -468,6 +468,11 @@ KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
     return new KisLayerOpacityCommand(this, opacity(), newOpacity);
 }
 
+KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 prevOpacity, Q_UINT8 newOpacity)
+{
+    return new KisLayerOpacityCommand(this, prevOpacity, newOpacity);
+}
+
 const bool KisLayer::visible() const
 {
     //kdDebug(41010) << name() << " visible: " << m_visible << endl;

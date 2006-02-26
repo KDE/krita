@@ -431,7 +431,9 @@ void KisView::createLayerBox()
             this, SLOT(addPartLayer(KisGroupLayerSP, KisLayerSP, const KoDocumentEntry&)));
     connect(m_layerBox, SIGNAL(sigRequestLayerProperties(KisLayerSP)),
             this, SLOT(showLayerProperties(KisLayerSP)));
-    connect(m_layerBox, SIGNAL(sigOpacityChanged(int)), this, SLOT(layerOpacity(int)));
+    connect(m_layerBox, SIGNAL(sigOpacityChanged(int, bool)), this, SLOT(layerOpacity(int, bool)));
+    connect(m_layerBox, SIGNAL(sigOpacityFinishedChanging(int, int)),
+            this, SLOT(layerOpacityFinishedChanging(int, int)));
     connect(m_layerBox, SIGNAL(sigItemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
@@ -2016,7 +2018,28 @@ void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
 }
 
 // range: 0 - 100
-void KisView::layerOpacity(int opacity)
+void KisView::layerOpacity(int opacity, bool dontundo)
+{
+    KisImageSP img = currentImg();
+    if (!img) return;
+
+    KisLayerSP layer = img -> activeLayer();
+    if (!layer) return;
+
+    opacity = int(float(opacity * 255) / 100 + 0.5);
+    if (opacity > 255)
+        opacity = 255;
+    if (dontundo)
+        layer -> setOpacity( opacity );
+    else
+    {
+        KNamedCommand *cmd = layer -> setOpacityCommand(opacity);
+        cmd -> execute();
+        undoAdapter() -> addCommand(cmd);
+    }
+}
+
+void KisView::layerOpacityFinishedChanging( int previous, int opacity )
 {
     KisImageSP img = currentImg();
     if (!img) return;
@@ -2028,8 +2051,11 @@ void KisView::layerOpacity(int opacity)
     if (opacity > 255)
         opacity = 255;
 
-    KNamedCommand *cmd = layer -> setOpacityCommand(opacity);
-    cmd -> execute();
+    previous = int(float(previous * 255) / 100 + 0.5);
+    if (previous > 255)
+        previous = 255;
+
+    KNamedCommand *cmd = layer -> setOpacityCommand(previous, opacity);
     undoAdapter() -> addCommand(cmd);
 }
 

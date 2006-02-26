@@ -173,6 +173,7 @@ public:
     Q_UINT8 opacity() const;
     void setOpacity(Q_UINT8 val);
     KNamedCommand *setOpacityCommand(Q_UINT8 val);
+    KNamedCommand *setOpacityCommand(Q_UINT8 prevOpacity, Q_UINT8 newOpacity);
 
     bool locked() const;
     void setLocked(bool l);

@@ -156,13 +156,32 @@ public slots:
     void sliderValueChanged(int val);
 
 signals:
+
     /**
      * Emitted every time the value changes (by calling setValue() or
      * by user interaction).
+     * @param value the new opacity
      */
-    void valueChanged(int);
+    void valueChanged(int value);
 
+    /**
+     * Emitted every time the value changes (by calling setValue() or
+     * by user interaction).
+     * @param value the new opacity
+     * @param withSlider whether the value was set by dragging the slider
+     */
+    void valueChanged(int value, bool withSlider);
 
+    /**
+     * Emitted after the slider has been hidden, if the value was changed while it was shown.
+     * @param previous the value before the slider was shown
+     * @param value the value after the slider was hidden
+     */
+    void finishedChanging(int previous, int value);
+
+private slots:
+    void slotAboutToShow();
+    void slotAboutToHide();
 
 private:
     void init(int val);

@@ -83,6 +83,8 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
     while (nColors--)
     {
         Q_UINT32 alpha = (*colors)[PIXEL_ALPHA];
+        // although we only mult by weight and not by weight*256/255
+        // we divide by the same amount later, so there is no need
         Q_UINT32 alphaTimesWeight = alpha * *weights;
 
         totalRed += (*colors)[PIXEL_RED] * alphaTimesWeight;
@@ -94,11 +96,11 @@ void KisRgbColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         colors++;
     }
 
-    //Q_ASSERT(newAlpha <= 255*255);
+    // note this is correct - if you look at the above calculation
     if (totalAlpha > 255*255) totalAlpha = 255*255;
 
     // Divide by 255.
-    dst[PIXEL_ALPHA] =(((totalAlpha + 0x80)>>8)+totalAlpha) >>8;
+    dst[PIXEL_ALPHA] =(((totalAlpha + 0x80)>>8)+totalAlpha + 0x80) >>8;
 
     if (totalAlpha > 0) {
         totalRed = totalRed / totalAlpha;

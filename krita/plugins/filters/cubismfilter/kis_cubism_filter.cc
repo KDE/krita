@@ -80,7 +80,6 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
 
     cubism(src, dst, rect, tileSize, tileSaturation);
-    setProgressDone(); // Must be called even if you don't really support progression
 }
 
 void KisCubismFilter::randomizeIndices (Q_INT32 count, Q_INT32* indices)
@@ -360,6 +359,9 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         Q_INT32 rows = ( rect.height() + tileSize - 1) / tileSize;
         Q_INT32 numTiles = (rows + 1) * (cols + 1);
 
+        setProgressTotalSteps(numTiles);
+        setProgressStage(i18n("Applying cubism filter..."),0);
+
         Q_INT32* randomIndices = new Q_INT32[numTiles];
         for (Q_INT32 i = 0; i < numTiles; i++)
         {
@@ -402,7 +404,9 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
                         fillPolyColor (src, dst, poly, srcPixel, dstPixel, rect);
                 }
                 count++;
+                if ((count % 5) == 0) setProgress(count);
         }
+        setProgressDone();
 }
 
 KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)

@@ -71,7 +71,7 @@
 class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
-    bool     locked;
+    Q_UINT32     lockCount;
 };
 
 
@@ -582,7 +582,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
     m_private = new KisImagePrivate();
     m_private->backgroundColor = KisColor(Qt::white, colorSpace);
-    m_private->locked = false;
+    m_private->lockCount = 0;
     
     m_adapter = adapter;
 
@@ -607,15 +607,24 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 void KisImage::lock()
 {
-    m_private->locked = true;
-    if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    if (m_private->lockCount == 0) {
+        if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    }
+    m_private->lockCount++;
 }
 
 void KisImage::unlock()
 {
-    m_private->locked = false;
-    if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
-    if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    Q_ASSERT(m_private->lockCount != 0);
+
+    if (m_private->lockCount != 0) {
+        m_private->lockCount--;
+
+        if (m_private->lockCount == 0) {
+            if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
+            if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+        }
+    }
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)

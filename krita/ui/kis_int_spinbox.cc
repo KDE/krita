@@ -36,6 +36,7 @@
 #include <qpopupmenu.h>
 #include <qlineedit.h>
 #include <qlayout.h>
+#include <qvalidator.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -53,6 +54,7 @@ public:
     KisPopupSlider *m_slider;
     KArrowButton *m_arrow;
     int m_prevValue;
+    QValidator *m_validator;
 };
 
 
@@ -75,7 +77,10 @@ void KisIntSpinbox::init(int val)
 
     l->insertStretch(0, 1);
     d->m_numinput = new QLineEdit(this, "KisIntSpinbox::QLineEdit");
-    d->m_numinput->setInputMask("000%");
+    //d->m_numinput->setInputMask("009%"); //makes it use overwrite mode and be uneditable, bizarre.
+    d->m_validator = new QRegExpValidator(QRegExp("^((100)|([0-9]?[0-9]))\\%$"), this);
+    d->m_numinput->setValidator(d->m_validator);
+    d->m_numinput->setAlignment(Qt::AlignRight);
     //d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
     //d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
     d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
@@ -107,7 +112,25 @@ void KisIntSpinbox::init(int val)
 
 void KisIntSpinbox::numValueChanged(const QString &text)
 {
-    int val = text.left(text.length()-1).toInt();
+    int val;
+    if (text.length() >= 2)
+    {
+        val = text.left(text.length()-1).toInt();
+        if (val == 0)
+        {
+            d->m_numinput->setText(QString("%1%").arg(val));
+            return;
+        }
+    }
+    else
+    {
+        if (text.toInt() != 0)
+            val = text.toInt();
+        else
+            val = 0;
+        d->m_numinput->setText(QString("%1%").arg(val));
+        return;
+    }
     d->m_slider->blockSignals(true);
     d->m_slider->setValue(val);
     d->m_slider->blockSignals(false);
@@ -119,7 +142,7 @@ void KisIntSpinbox::numValueChanged(const QString &text)
 void KisIntSpinbox::sliderValueChanged(int val)
 {
     d->m_numinput->blockSignals(true);
-    QString valstr = QString("%1%%").arg(val);
+    QString valstr = QString("%1%").arg(val);
     d->m_numinput->setText(valstr);
     d->m_numinput->blockSignals(false);
 
@@ -163,8 +186,9 @@ KisIntSpinbox::~KisIntSpinbox()
 
 void KisIntSpinbox::setValue(int val)
 {
-    QString valstr = QString("%1").arg(val);
-    d->m_numinput->setText(valstr);
+    QString valstr = QString("%1%").arg(val);
+    if (d->m_numinput->text() != valstr)
+        d->m_numinput->setText(valstr);
     // slider value is changed by numValueChanged
 }
 

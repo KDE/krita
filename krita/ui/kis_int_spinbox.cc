@@ -116,7 +116,7 @@ void KisIntSpinbox::numValueChanged(const QString &text)
     if (text.length() >= 2)
     {
         val = text.left(text.length()-1).toInt();
-        if (val == 0)
+        if (val == 0 && text.length() >= 3)
         {
             d->m_numinput->setText(QString("%1%").arg(val));
             return;

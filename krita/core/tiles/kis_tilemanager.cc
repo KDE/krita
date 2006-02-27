@@ -424,8 +424,10 @@ bool KisTileManager::isPoolTile(Q_UINT8* data, Q_INT32 pixelSize) {
         if (m_poolPixelSizes[i] == pixelSize) {
             bool b = data >= m_pools[i]
                      && data < m_pools[i] + pixelSize * m_tileSize * m_tilesPerPool;
-            m_poolMutex->unlock();
-            return b;
+            if (b) {
+                m_poolMutex->unlock();
+                return true;
+            }
         }
     }
     m_poolMutex->unlock();

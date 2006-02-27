@@ -48,6 +48,15 @@ fi
 
 AC_SUBST(LCMS_LIBS)
 
+# Check if the 1.14 version of lcms is detected
+if test ! "$LCMS_LIBS" = ""
+then
+AC_TRY_COMPILE(
+   [#include LCMS_HEADER
+     #if LCMS_VERSION == 114
+     #error lcms 1.14 detected
+     #endif ] , [ ], lcms_version_114='no', lcms_version_114='yes' )
+fi
 
 # IM 6.1.3 changed the number of arguments to GetMagickInfoList
 

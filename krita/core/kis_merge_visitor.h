@@ -59,7 +59,8 @@ public:
             return false;
         }
         
-        kdDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+        kdDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
+                << ", temporary: " << layer->temporary() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         if (!layer -> visible())
             return true;

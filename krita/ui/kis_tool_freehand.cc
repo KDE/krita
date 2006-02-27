@@ -97,10 +97,16 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
             m_dirtyRect = r;
 
             r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
-            if (!m_paintOnSelection)
-                m_currentImage->activeLayer()->setDirty(r);
+            if (!m_paintOnSelection) {
+                if (!m_paintIncremental) {
+                    m_tempLayer->setDirty(r);
+                }
+                else {
+                    m_currentImage->activeLayer()->setDirty(r);
+                }
+            }
             else {
-            // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
+                // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
                 m_subject->canvasController()->updateCanvas( r );
             } 
         }
@@ -131,7 +137,12 @@ void KisToolFreehand::move(KisMoveEvent *e)
             m_dirtyRect |= r;
 
             if (!m_paintOnSelection) {
-                m_currentImage->activeLayer()->setDirty(r);
+                if (!m_paintIncremental) {
+                    m_tempLayer->setDirty(r);
+                }
+                else {
+                    m_currentImage->activeLayer()->setDirty(r);
+                }
             }
             else {
                 // Just update the canvas
@@ -152,8 +163,10 @@ void KisToolFreehand::initPaint(KisEvent *)
     // Create painter
     KisPaintDeviceSP device;
     if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+        
         if (m_painter)
             delete m_painter;
+        
         if (!m_paintIncremental) {
             if (m_currentImage -> undoAdapter())
                 m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
@@ -217,7 +230,7 @@ void KisToolFreehand::endPaint()
                 painter.setCompositeOp(m_compositeOp);
                 painter.beginTransaction(m_transactionText);
                 painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, m_opacity,
-                           m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
+                               m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
                 adapter -> addCommand(painter.endTransaction());
                 m_currentImage->removeLayer(m_tempLayer);

@@ -60,6 +60,8 @@ public:
 
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     virtual bool supportsIncrementalPainting() { return false; }
+    virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+
 
 };
 

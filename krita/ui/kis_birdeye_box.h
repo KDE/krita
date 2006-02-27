@@ -44,6 +44,7 @@ public:
 public slots:
     void slotDocCommandExecuted();
     void slotImageUpdated(QRect r);
+    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
 
 protected slots:
     void exposureValueChanged(double exposure);

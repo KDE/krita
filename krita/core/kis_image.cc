@@ -72,6 +72,8 @@ class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
     Q_UINT32     lockCount;
+    bool sizeChangedWhileLocked;
+    bool selectionChangedWhileLocked;
 };
 
 
@@ -468,6 +470,45 @@ namespace {
         Q_INT32 m_opacity;
         KisCompositeOp m_compositeOp;
     };
+
+    // -------------------------------------------------------
+
+    class LockImageCommand : public KNamedCommand {
+        typedef KNamedCommand super;
+
+    public:
+        LockImageCommand(KisImageSP img, bool lockImage) : super("lock image")  // Not for translation, this
+            {                                                                   // is only ever used inside a macro command.
+                m_img = img;
+                m_lockImage = lockImage;
+            }
+
+        virtual ~LockImageCommand()
+            {
+            }
+
+        virtual void execute()
+            {
+                if (m_lockImage) {
+                    m_img->lock();
+                } else {
+                    m_img->unlock();
+                }
+            }
+
+        virtual void unexecute()
+            {
+                if (m_lockImage) {
+                    m_img->unlock();
+                } else {
+                    m_img->lock();
+                }
+            }
+
+    private:
+        KisImageSP m_img;
+        bool m_lockImage;
+    };
 }
 
 KisImage::KisImage(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
@@ -583,6 +624,8 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_private = new KisImagePrivate();
     m_private->backgroundColor = KisColor(Qt::white, colorSpace);
     m_private->lockCount = 0;
+    m_private->sizeChangedWhileLocked = false;
+    m_private->selectionChangedWhileLocked = false;
     
     m_adapter = adapter;
 
@@ -609,6 +652,8 @@ void KisImage::lock()
 {
     if (m_private->lockCount == 0) {
         if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+        m_private->sizeChangedWhileLocked = false;
+        m_private->selectionChangedWhileLocked = false;
     }
     m_private->lockCount++;
 }
@@ -621,24 +666,45 @@ void KisImage::unlock()
         m_private->lockCount--;
 
         if (m_private->lockCount == 0) {
-            if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
+            if (m_private->sizeChangedWhileLocked) {
+                // A size change implies a full image update so only send this.
+                emit sigSizeChanged(m_width, m_height);
+            } else {
+                if (m_rootLayer->dirty()) emit sigImageUpdated( m_rootLayer->dirtyRect() );
+            }
+
+            if (m_private->selectionChangedWhileLocked) {
+                emit sigActiveSelectionChanged(this);
+            }
+            
             if (m_rootLayer) connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
         }
     }
 }
 
+void KisImage::emitSizeChanged()
+{
+    if (m_private->lockCount == 0) {
+        emit sigSizeChanged(m_width, m_height);
+    } else {
+        m_private->sizeChangedWhileLocked = true;
+    }
+}
+
 void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)
 {
-    lock();
-    
     kdDebug(41010) << "Resize: " << x << ", " << y << ", " << w << ", " << h << ", " << cropLayers << endl;
     if (w != width() || h != height()) {
+
+        lock();
+
         if (m_adapter && m_adapter -> undo()) {
             if (cropLayers)
                 m_adapter->beginMacro(i18n("Crop Image"));
             else
-                m_adapter -> beginMacro(i18n("Resize Image"));
+                m_adapter->beginMacro(i18n("Resize Image"));
 
+            m_adapter->addCommand(new LockImageCommand(this, true));
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
         }
 
@@ -648,17 +714,17 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
         if (cropLayers) {
             KisCropVisitor v(QRect(x, y, w, h));
             m_rootLayer->accept(v);
-
         }
-        
+
+        emitSizeChanged();
+
+        unlock();
+
         if (m_adapter && m_adapter -> undo()) {
+            m_adapter->addCommand(new LockImageCommand(this, false));
             m_adapter -> endMacro();
         }
     }
-
-    emit sigSizeChanged(w, h);
-
-    unlock();
 }
 
 void KisImage::resize(const QRect& rc, bool cropLayers)
@@ -669,12 +735,8 @@ void KisImage::resize(const QRect& rc, bool cropLayers)
 
 void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress, KisFilterStrategy *filterStrategy)
 {
-
-
     if (nlayers() == 0) return; // Nothing to scale
 
-    lock();
-    
     // New image size. XXX: Pass along to discourage rounding errors?
     Q_INT32 w, h;
     w = (Q_INT32)(( width() * sx) + 0.5);
@@ -682,12 +744,17 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
     if (w != width() || h != height()) {
 
+        lock();
+
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->beginMacro(i18n("Scale Image"));
+            m_adapter->addCommand(new LockImageCommand(this, true));
         }
 
-        KisScaleVisitor visitor (this, sx, sy, progress, filterStrategy);
-        m_rootLayer->accept(visitor);
+        {
+            KisScaleVisitor visitor (this, sx, sy, progress, filterStrategy);
+            m_rootLayer->accept(visitor);
+        }
 
         if (m_adapter && m_adapter -> undo()) {
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
@@ -696,15 +763,15 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         m_width = w;
         m_height = h;
 
-        emit sigSizeChanged(w, h);
+        emitSizeChanged();
+
+        unlock();
 
         if (m_adapter && m_adapter -> undo()) {
+            m_adapter->addCommand(new LockImageCommand(this, false));
             m_adapter->endMacro();
         }
     }
-
-    unlock();
-    
 }
 
 
@@ -724,7 +791,10 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
-    undoAdapter()->beginMacro(i18n("Rotate Image"));
+    if (m_adapter && m_adapter -> undo()) {
+        m_adapter->beginMacro(i18n("Rotate Image"));
+        m_adapter->addCommand(new LockImageCommand(this, true));
+    }
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(KisID("Box"));
     KisTransformVisitor visitor (this, 1.0, 1.0, 0, 0, angle, -tx, -ty, progress, filter);
@@ -735,17 +805,18 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     m_width = w;
     m_height = h;
 
-    emit sigSizeChanged(w, h);
-
-    undoAdapter()->endMacro();
+    emitSizeChanged();
 
     unlock();
+
+    if (m_adapter && m_adapter -> undo()) {
+        m_adapter->addCommand(new LockImageCommand(this, false));
+        m_adapter->endMacro();
+    }
 }
 
 void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *m_progress)
 {
-    lock();
-
     const double pi=3.1415926535897932385;
 
     //new image size
@@ -770,24 +841,31 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
     if (w != width() || h != height()) {
 
-        m_adapter->beginMacro(i18n("Shear Image"));
+        lock();
+
+        if (m_adapter && m_adapter -> undo()) {
+            m_adapter->beginMacro(i18n("Shear Image"));
+            m_adapter->addCommand(new LockImageCommand(this, true));
+        }
 
         KisShearVisitor v(angleX, angleY, m_progress);
         v.setUndoAdapter(undoAdapter());
         rootLayer() -> accept(v);
-
 
         m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
         m_width = w;
         m_height = h;
 
-        undoAdapter()->endMacro();
+        emitSizeChanged();
 
-        emit sigSizeChanged(w, h);
+        unlock();
+
+        if (m_adapter && m_adapter -> undo()) {
+            m_adapter->addCommand(new LockImageCommand(this, false));
+            m_adapter->endMacro();
+        }
     }
-
-    unlock();
 }
 
 void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
@@ -809,19 +887,18 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_rootLayer->accept(visitor);
 
+    unlock();
+
+    emit sigLayerPropertiesChanged( m_activeLayer );
+    emit sigNonActiveLayersUpdated(); // This makes sure the
+                                      // thumbnails are updated
+
     if (undoAdapter() && m_adapter->undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
                                                          m_colorSpace, dstColorSpace));
         m_adapter->endMacro();
     }
-
-    unlock();
-    
-    emit sigLayerPropertiesChanged( m_activeLayer );
-    emit sigNonActiveLayersUpdated(); // This makes sure the
-                                      // thumbnails are updated
-
 }
 
 KisProfile *  KisImage::getProfile() const
@@ -847,7 +924,6 @@ void KisImage::setProfile(const KisProfile * profile)
         m_rootLayer->accept(visitor);
 
         unlock();
-        
     }
 }
 
@@ -1100,12 +1176,19 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     if (wasParent.data() == parent.data() && wasAbove.data() == aboveThis.data())
         return false;
 
-    if (!wasParent -> removeLayer(layer))
-        return false;
-
     lock();
-    
+
+    if (!wasParent -> removeLayer(layer)) {
+        unlock();
+        return false;
+    }
+
     const bool success = parent -> addLayer(layer, aboveThis);
+
+    layer->setDirty();
+
+    unlock();
+
     if (success)
     {
         emit sigLayerMoved(layer, wasParent, wasAbove);
@@ -1119,10 +1202,6 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, wasParent, wasAbove));
     }
 
-    layer->setDirty();
-
-    unlock();
-    
     return success;
 }
 
@@ -1405,7 +1484,7 @@ KisUndoAdapter* KisImage::undoAdapter() const
 void KisImage::slotSelectionChanged()
 {
     kdDebug(41010) << "KisImage::slotSelectionChanged\n";
-    emit sigActiveSelectionChanged(KisImageSP(this));
+    slotSelectionChanged(bounds());
 }
 
 void KisImage::slotSelectionChanged(const QRect& r)
@@ -1413,7 +1492,11 @@ void KisImage::slotSelectionChanged(const QRect& r)
     kdDebug(41010) << "KisImage::slotSelectionChanged rect\n";
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
-    emit sigActiveSelectionChanged(KisImageSP(this));
+    if (m_private->lockCount == 0) {
+        emit sigActiveSelectionChanged(this);
+    } else {
+        m_private->selectionChangedWhileLocked = true;
+    }
 }
 
 KisColorSpace * KisImage::colorSpace() const

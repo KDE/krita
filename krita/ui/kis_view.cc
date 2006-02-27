@@ -1584,20 +1584,29 @@ void KisView::setInitialZoomLevel()
 void KisView::imgResizeToActiveLayer()
 {
     KisImageSP img = currentImg();
-    
-    img->lock();
     KisLayerSP layer;
 
-
     if (img && (layer = img -> activeLayer())) {
+
+        if (m_adapter && m_adapter -> undo()) {
+            m_adapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
+        }
+
+        img->lock();
+
         QRect r = layer -> exactBounds();
         img -> resize(r.width(), r.height(), r.x(), r.y(), true);
-        KisPaintLayer * l = dynamic_cast<KisPaintLayer*>(layer.data());
-        if (l)
-            l->paintDevice()->move(0,0);
-    }
+        //KisPaintLayer * l = dynamic_cast<KisPaintLayer*>(layer.data());
+        // XXX: This doesn't seem to be needed anymore.
+        //if (l)
+        //    l->paintDevice()->move(0,0);
 
-    img->unlock();
+        img->unlock();
+
+        if (m_adapter && m_adapter -> undo()) {
+            m_adapter->endMacro();
+        }
+    }
 }
 
 void KisView::slotImageProperties()
@@ -3202,7 +3211,6 @@ void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
     currentImg() -> resize(w, h, cropLayers);
     m_doc -> setModified(true);
     layersUpdated();
-    refreshKisCanvas();
 }
 
 void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
@@ -3211,7 +3219,6 @@ void KisView::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterS
     currentImg() -> scale(sx, sy, m_progress, filterStrategy);
     m_doc -> setModified(true);
     layersUpdated();
-    refreshKisCanvas();
 }
 
 void KisView::rotateCurrentImage(double angle)
@@ -3220,7 +3227,6 @@ void KisView::rotateCurrentImage(double angle)
     currentImg() -> rotate(angle, m_progress);
     m_doc -> setModified(true);
     layersUpdated();
-    refreshKisCanvas();
 }
 
 void KisView::shearCurrentImage(double angleX, double angleY)
@@ -3229,7 +3235,6 @@ void KisView::shearCurrentImage(double angleX, double angleY)
     currentImg() -> shear(angleX, angleY, m_progress);
     m_doc -> setModified(true);
     layersUpdated();
-    refreshKisCanvas();
 }
 
 

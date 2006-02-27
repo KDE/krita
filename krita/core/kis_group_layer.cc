@@ -204,10 +204,11 @@ bool KisGroupLayer::removeLayer(int x)
         uint index(x);
         for (uint i = childCount() - 1; i > index; i--)
             at(i) -> m_index--;
-        at(index) -> m_parent = 0;
-        at(index) -> m_index = -1;
+        KisLayerSP removedLayer = at(index);
+        removedLayer -> m_parent = 0;
+        removedLayer -> m_index = -1;
         m_layers.erase(m_layers.begin() + reverseIndex(index));
-        setDirty(); // XXX: Set only the extent of the removed layer to dirty
+        setDirty(removedLayer->extent());
         if (childCount() < 1) {
             // No children, nothing to show for it.
             m_projection->clear();

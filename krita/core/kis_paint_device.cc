@@ -143,8 +143,6 @@ namespace {
     void MoveCommand::moveTo(const QPoint& pos)
     {
         m_device -> move(pos.x(), pos.y());
-        KisLayerSP l = m_device->parentLayer();
-        if (l) l->setDirty();
     }
 
     class KisConvertLayerTypeCmd : public KNamedCommand {
@@ -358,8 +356,12 @@ KisImage *KisPaintDevice::image() const
 
 void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
 {
+    QRect dirtyRect = extent();
+
     m_x = x;
     m_y = y;
+
+    dirtyRect |= extent();
 
     if(m_selection)
     {
@@ -367,12 +369,14 @@ void KisPaintDevice::move(Q_INT32 x, Q_INT32 y)
         m_selection->setY(y);
     }
 
-        emit positionChanged(this);
+    setDirty(dirtyRect);
+
+    emit positionChanged(this);
 }
 
 void KisPaintDevice::move(const QPoint& pt)
 {
-        move(pt.x(), pt.y());
+    move(pt.x(), pt.y());
 }
 
 KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)

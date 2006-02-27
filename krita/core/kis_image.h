@@ -388,6 +388,7 @@ public slots:
 private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
+    void emitSizeChanged();
 
 private:
 

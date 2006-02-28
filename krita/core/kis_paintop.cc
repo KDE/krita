@@ -102,6 +102,7 @@ void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *frac
 }
 
 void KisPaintOp::setSource(KisPaintDeviceSP p) {
+    Q_ASSERT(p);
     m_source = p;
 }
 

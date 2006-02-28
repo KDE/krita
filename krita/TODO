@@ -1,3 +1,12 @@
+After 1.5 cleanups
+
+* Move core/ui class private members to d-pointers
+* Selections, adj. masks, wetness, heigh masks (all 8-bit mask ideas)
+  as sublayers to paint layers, and make them movable between layers
+  and x,y, toggle on/off.
+* Fix KisFilter::colorSpaceIndependence/worksWith overlap
+* Add api & gui to exclude channels from compositing
+
 Code organization
 
 Transform tool (CBR)
@@ -21,11 +30,9 @@ Integration
           
 Colorspace independence (found with the test colorstrategy)
 
-	* tool gradient uses wrong colors; gradient still uses qcolor everywhere.
 	* Check and double check the cms capabilities: especially the use of
           profiles in the render/convert/edit paths.
 	* Merge grayscale layers back into one color image.
-        * Allow both simply setting the profile and converting to the new profile
     
 Core
 

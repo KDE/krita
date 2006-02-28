@@ -52,7 +52,7 @@ public:
 
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
-    virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
     virtual bool workWith(KisColorSpace* cs) { return (cs->id() == KisID("WET")); };
     
 private:

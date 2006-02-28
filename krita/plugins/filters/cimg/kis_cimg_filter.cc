@@ -105,7 +105,7 @@ QString KisCImgFilterConfiguration::toString()
 }
 
 KisCImgFilter::KisCImgFilter()
-    : KisFilter(id(), "", i18n("&CImg Image Restoration...")),
+    : KisFilter(id(), "enhance", i18n("&CImg Image Restoration...")),
       eigen(CImg<>(2,1), CImg<>(2,2))
 {
     restore = true;

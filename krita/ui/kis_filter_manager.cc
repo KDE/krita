@@ -246,9 +246,9 @@ void KisFilterManager::slotApplyFilter(int i)
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
-    if (dev->colorSpace()->willDegrade(m_lastFilter->colorSpaceIndendendence())) {
+    if (dev->colorSpace()->willDegrade(m_lastFilter->colorSpaceIndependence())) {
         // Warning bells!
-        if (m_lastFilter->colorSpaceIndendendence() == TO_LAB16) {
+        if (m_lastFilter->colorSpaceIndependence() == TO_LAB16) {
             if (KMessageBox::warningContinueCancel(m_view,
                                                i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ")
                                                        .arg(m_lastFilter->id().name())
@@ -258,7 +258,7 @@ void KisFilterManager::slotApplyFilter(int i)
                                                "lab16degradation") != KMessageBox::Continue) return;
 
         }
-        else if (m_lastFilter->colorSpaceIndendendence() == TO_RGBA8) {
+        else if (m_lastFilter->colorSpaceIndependence() == TO_RGBA8) {
             if (KMessageBox::warningContinueCancel(m_view,
                                                i18n("The %1 filter will convert your %2 data to 8-bit RGBA and vice versa. ")
                                                        .arg(m_lastFilter->id().name())

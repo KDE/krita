@@ -1,3 +1,5 @@
+WARNING: OBSOLETE (Krita's internal code has become much better by now)
+
 From time to time, people come up with the suggestion to use an
 existing imaging library with Krita, to replace our own core. This
 file contains a list of all libraries known to me, and a short

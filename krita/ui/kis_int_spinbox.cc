@@ -90,7 +90,7 @@ void KisIntSpinbox::init(int val)
     connect(d->m_numinput, SIGNAL(textChanged(const QString &)), SLOT(numValueChanged(const QString &)));
 
     //d->m_slider = new KisPopupSlider(INT_MIN, INT_MAX, 1, val, QSlider::Horizontal, this);
-    d->m_slider = new KisPopupSlider(0, 100, 1, val, QSlider::Horizontal, this);
+    d->m_slider = new KisPopupSlider(0, 100, 10, val, QSlider::Horizontal, this);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
     connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
     connect(d->m_slider, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));

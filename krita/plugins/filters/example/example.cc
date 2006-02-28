@@ -66,7 +66,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("&Invert"))
+KisFilterInvert::KisFilterInvert() : KisFilter(id(), "adjust", i18n("&Invert"))
 {
 }
 

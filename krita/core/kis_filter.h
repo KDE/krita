@@ -103,7 +103,7 @@ public:
      * 
      * @return the degree of independence
      */
-    virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_RGBA8; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
     
     /**
      * Determine if this filter can work with this colorSpace. For instance, some

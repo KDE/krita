@@ -626,7 +626,7 @@ private:
     KoRGBWidget *m_rgbwidget;
     KoGrayWidget *m_graywidget;
     KisPaletteWidget *m_palettewidget;
-    KisID currentColorChooserDisplay;
+    KisID m_currentColorChooserDisplay;
 
 private:
     KisImageSP m_image;

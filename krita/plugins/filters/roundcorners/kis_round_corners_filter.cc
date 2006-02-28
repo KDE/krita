@@ -52,7 +52,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "decor", i18n("&Round Corners..."))
+KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), "map", i18n("&Round Corners..."))
 {
 }
 

@@ -40,7 +40,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     
-    virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
     virtual bool workWith(KisColorSpace* cs);
 };
 
@@ -54,7 +54,7 @@ public:
     virtual bool supportsPainting() { return false; }
     virtual bool supportsThreading() { return false; };
 
-    virtual ColorSpaceIndependence colorSpaceIndendendence() { return TO_LAB16; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
     virtual bool workWith(KisColorSpace* cs);
 
 };

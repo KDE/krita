@@ -41,6 +41,7 @@ public:
         : QPopupMenu(parent, name)
     {
         m_slider = new QSlider(minValue, maxValue, pageStep, value, orientation, this, name);
+        //m_slider->setTracking(false);
         insertItem(m_slider);
         connect(m_slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
     }

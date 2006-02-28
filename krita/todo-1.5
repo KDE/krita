@@ -51,32 +51,23 @@ B  119401   ASSI      Action 'change image size' crops source image
 
 Current user interface issues:
 
-* Canvas & dockers change position every time a different tool is selected.
 * star tool: Ratio should be drop down spinbox
-* color picker: top combo should be as wide as the whole widget; the widget is a bit too big.,
+* color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
   we should try to make the listview a lot smaller. Maybe just use labels here?
 * contiguous area: options are near bottom of widget
 * select similar: options are near bottom of widget
 * brush, gradient, pattern buttons: should always be _square_
 * Add Palette dialog should have Cancel button (the layout also looks wierd, don't know why)
 * The edit palette dialog two-step should be changed into a single dialog
-* Layer properties dialog: the opacity dropdown is too small (perhaps because
-  it's hard-coded for a smaller font?
-* Brightness-contrast should have some help text under the curve widget (but it's maybe too late
-  for that now.)
 * Maybe we should put the filter config widget on the right-hand side of the preview, like
   Digikam does?
-* Filters should be re-ordered in less categories
 * Custom convolution filter widget layout is iffy
 * Simple noise reducer action should have ...
 * Wavelet noise reducer action should have ...
 * Scripting docker is far too wide when using the platinum widget style
-* cubism filter doesn't show the progress bar
 * When splitting the view, and adding or removing layers, only one view is updated
-  
-Regressions:
+    
 
-A Wet & brush paintop options are both shown on top of each other, and on top of the paintop combo when
-  painting with a tablet. Also: the option widget very rapidly switches when painting with a tablet.
+Crashes
 
-  
+* When removing a layer when the image is split, a crash in the palette code

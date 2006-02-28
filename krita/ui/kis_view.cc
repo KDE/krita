@@ -240,6 +240,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     Q_ASSERT(adapter);
     Q_ASSERT(parent);
 
+    m_currentColorChooserDisplay = KisID("BLA");
     setFocusPolicy( QWidget::StrongFocus );
 
     // Must come before input devices are referenced as this detects them.
@@ -1264,8 +1265,10 @@ void KisView::layerUpdateGUI(bool enable)
     }
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-
-    if(pl && pl->paintDevice()->colorSpace()->id() != currentColorChooserDisplay)
+    
+    if(pl &&
+       ( m_currentColorChooserDisplay == KisID("BLA") ||
+         pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay))
     {
         if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
             m_paletteManager->hideWidget( "rgbwidget" );
@@ -1281,7 +1284,7 @@ void KisView::layerUpdateGUI(bool enable)
             m_paletteManager->showWidget( "hsvwidget" );
             m_paletteManager->hideWidget( "watercolor docker" );
         }
-        currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
+        m_currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
     }
 
     enable = enable && img && layer && layer->visible() && !layer->locked();

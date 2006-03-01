@@ -75,49 +75,88 @@ KisFilterManager::~KisFilterManager()
 
 void KisFilterManager::setup(KActionCollection * ac)
 {
+    KisFilter * f = 0;
+    int i = 0;
 
-    KActionMenu * am = new KActionMenu(i18n("Adjust"), ac, "adjust_filters");
-    m_filterActionMenus.insert("adjust", am);
+    // Only create the submenu's we've actually got filters for.
+    // XXX: Make this list extensible after 1.5
 
-    am = new KActionMenu(i18n("Artistic"), ac, "artistic_filters");
-    m_filterActionMenus.insert("artistic", am);
+    KActionMenu * other = 0;
+    KActionMenu * am = 0;
+    
+    m_filterList = KisFilterRegistry::instance()->listKeys();
+    
+    for ( KisIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
+        f = KisFilterRegistry::instance()->get(*it);
+        if (!f) break;
+        
+        QString s = f->menuCategory();
+        if (s == "adjust" && !m_filterActionMenus.find("adjust")) {
+            am = new KActionMenu(i18n("Adjust"), ac, "adjust_filters");
+            m_filterActionMenus.insert("adjust", am);
+        }
 
-    am = new KActionMenu(i18n("Blur"), ac, "blur_filters");
-    m_filterActionMenus.insert("blur", am);
+        else if (s == "artistic" && !m_filterActionMenus.find("artistic")) {
+            am = new KActionMenu(i18n("Artistic"), ac, "artistic_filters");
+            m_filterActionMenus.insert("artistic", am);
+        }
 
-    am = new KActionMenu(i18n("Colors"), ac, "color_filters");
-    m_filterActionMenus.insert("colors", am);
+        else if (s == "blur" && !m_filterActionMenus.find("blur")) {
+            am = new KActionMenu(i18n("Blur"), ac, "blur_filters");
+            m_filterActionMenus.insert("blur", am);
+        }
 
-    am = new KActionMenu(i18n("Decor"), ac, "decor_filters");
-    m_filterActionMenus.insert("decor", am);
+        else if (s == "colors" && !m_filterActionMenus.find("colors")) {
+            am = new KActionMenu(i18n("Colors"), ac, "color_filters");
+            m_filterActionMenus.insert("colors", am);
+        }
 
-    am = new KActionMenu(i18n("Edge Detection"), ac, "edge_filters");
-    m_filterActionMenus.insert("edge", am);
+        else if (s == "decor" && !m_filterActionMenus.find("decor")) {
+            am = new KActionMenu(i18n("Decor"), ac, "decor_filters");
+            m_filterActionMenus.insert("decor", am);
+        }
 
-    am = new KActionMenu(i18n("Emboss"), ac, "emboss_filters");
-    m_filterActionMenus.insert("emboss", am);
+        else if (s == "edge" && !m_filterActionMenus.find("edge")) {
+            am = new KActionMenu(i18n("Edge Detection"), ac, "edge_filters");
+            m_filterActionMenus.insert("edge", am);
+        }
 
-    am = new KActionMenu(i18n("Enhance"), ac, "enhance_filters");
-    m_filterActionMenus.insert("enhance", am);
+        else if (s == "emboss" && !m_filterActionMenus.find("emboss")) {
+            am = new KActionMenu(i18n("Emboss"), ac, "emboss_filters");
+            m_filterActionMenus.insert("emboss", am);
+        }
 
-    am = new KActionMenu(i18n("Map"), ac, "map_filters");
-    m_filterActionMenus.insert("map", am);
+        else if (s == "enhance" && !m_filterActionMenus.find("enhance")) {
+            am = new KActionMenu(i18n("Enhance"), ac, "enhance_filters");
+            m_filterActionMenus.insert("enhance", am);
+        }
 
-//     am = new KActionMenu(i18n("Non-photorealistic"), ac, "nonphotorealistic_filters");
-//     m_filterActionMenus.insert("nonphotorealistic", am);
+        else if (s == "map" && !m_filterActionMenus.find("map")) {
+            am = new KActionMenu(i18n("Map"), ac, "map_filters");
+            m_filterActionMenus.insert("map", am);
+        }
 
-    am = new KActionMenu(i18n("Other"), ac, "misc_filters");
-    m_filterActionMenus.insert("", am);
+        else if (s == "nonphotorealistic" && !m_filterActionMenus.find("nonphotorealistic")) {
+            am = new KActionMenu(i18n("Non-photorealistic"), ac, "nonphotorealistic_filters");
+            m_filterActionMenus.insert("nonphotorealistic", am);
+        }
+
+        else if (s == "other" && !m_filterActionMenus.find("other")) {
+            other = new KActionMenu(i18n("Other"), ac, "misc_filters");
+            m_filterActionMenus.insert("other", am);
+        }
+        
+    }
 
     m_reapplyAction = new KAction(i18n("Apply Filter Again"),
                 "Ctrl+Shift+F",
                 this, SLOT(slotApply()),
                 ac, "filter_apply_again");
+    
+    m_reapplyAction->setEnabled(false);
 
-
-    m_filterList = KisFilterRegistry::instance()->listKeys();
-    KisFilter * f;
-    int i = 0;
+    f = 0;
+    i = 0;
     for ( KisIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
 
@@ -128,7 +167,17 @@ void KisFilterManager::setup(KActionCollection * ac)
                                   QString("krita_filter_%1").arg((*it) . id()).ascii());
 
         // Add action to the right submenu
-        m_filterActionMenus.find( f->menuCategory() )->insert(a);
+        KActionMenu * m = m_filterActionMenus.find( f->menuCategory() );
+        if (m) {
+            m->insert(a);
+        }
+        else {
+            if (!other) {
+                other = new KActionMenu(i18n("Other"), ac, "misc_filters");
+                m_filterActionMenus.insert("other", am);
+            }
+            other->insert(a);
+        }
 
         // Add filter to list of filters for mapper
         m_filterMapper->setMapping( a, i );
@@ -136,7 +185,6 @@ void KisFilterManager::setup(KActionCollection * ac)
         m_filterActions.append( a );
         ++i;
     }
-
 }
 
 void KisFilterManager::updateGUI()
@@ -153,7 +201,7 @@ void KisFilterManager::updateGUI()
     {
         enable = false;
     }
-    m_reapplyAction->setEnabled(enable);
+    m_reapplyAction->setEnabled(m_lastFilterConfig);
 
     KAction * a;
     int i = 0;
@@ -208,7 +256,7 @@ bool KisFilterManager::apply()
     KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), dev);
     Q_CHECK_PTR(cmd);
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
-
+    m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
         cmd -> unexecute();

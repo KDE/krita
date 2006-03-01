@@ -55,7 +55,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     // Initialize configWidgetHolder
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
-    m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
     
     if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeDevice())
@@ -63,7 +63,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
         m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice().data() );
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
-    resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
+    resize( minimumSizeHint());
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
     m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
@@ -93,7 +93,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
     
     if(m_currentConfigWidget != 0) {
-        m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        //m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));

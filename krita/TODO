@@ -6,7 +6,11 @@ After 1.5 cleanups
   and x,y, toggle on/off.
 * Fix KisFilter::colorSpaceIndependence/worksWith overlap
 * Add api & gui to exclude channels from compositing
-
+* Add a mechanism for cspaces to start long-running filters when a paintdev
+  is created -- and a gui to turn that on and off, perhaps something analogous
+  to a channels box
+* Make set of filter categories extensible
+          
 Code organization
 
 Transform tool (CBR)

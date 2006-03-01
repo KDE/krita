@@ -1975,7 +1975,7 @@ void KisView::preferences()
     if (PreferencesDialog::editPreferences())
     {
         KisConfig cfg;
-
+        m_paletteManager->slotResetFont();
         resetMonitorProfile();
 
 #ifdef HAVE_GL

@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>527</height>
+            <width>763</width>
+            <height>296</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KisWdgFiltersGallery</string>
     </property>
     <grid>
         <property name="name">
@@ -19,11 +22,6 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="KisFiltersListView" row="0" column="0" rowspan="2" colspan="1">
-            <property name="name">
-                <cstring>filtersList</cstring>
-            </property>
-        </widget>
         <widget class="KisPreviewWidget" row="0" column="1">
             <property name="name">
                 <cstring>previewWidget</cstring>
@@ -37,7 +35,12 @@
                 </sizepolicy>
             </property>
         </widget>
-        <widget class="QGroupBox" row="1" column="1">
+        <widget class="KisFiltersListView" row="0" column="0">
+            <property name="name">
+                <cstring>filtersList</cstring>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="0" column="2">
             <property name="name">
                 <cstring>configWidgetHolder</cstring>
             </property>
@@ -117,7 +120,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kis_filters_listview.h</includehint>
-    <includehint>kis_previewwidget.h</includehint>
+    <includehint>kispreviewwidget.h</includehint>
+    <includehint>kisfilterslistview.h</includehint>
 </includehints>
 </UI>

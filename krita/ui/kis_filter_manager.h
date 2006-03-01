@@ -23,7 +23,7 @@
 #include "qobject.h"
 #include "qptrlist.h"
 #include "qsignalmapper.h"
-
+#include "kactionclasses.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 
@@ -35,7 +35,6 @@ class KisDoc;
 class KisFilter;
 class KisFilterConfiguration;
 class KAction;
-class KActionMenu;
 class KActionCollection;
 class KisPreviewDialog;
 

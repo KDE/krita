@@ -24,12 +24,16 @@ namespace Kross {
 
 namespace KritaCore {
 
-Brush::Brush(KisBrush* brush) : Kross::Api::Class<Brush>("KritaBrush"), m_brush(brush)
+Brush::Brush(KisBrush* brush, bool sharedBrush) : Kross::Api::Class<Brush>("KritaBrush"), m_brush(brush), m_sharedBrush(sharedBrush)
 {
 }
 
 Brush::~Brush()
 {
+    if(!m_sharedBrush)
+    {
+        delete m_brush;
+    }
 }
 
 }

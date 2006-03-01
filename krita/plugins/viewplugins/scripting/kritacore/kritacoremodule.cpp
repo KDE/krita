@@ -60,16 +60,19 @@ extern "C"
 
 using namespace Kross::KritaCore;
 
-KritaCoreFactory::KritaCoreFactory() : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory", 0)
+KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory", 0), m_packagePath(packagePath)
 {
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("getPattern", &KritaCoreFactory::getPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("loadPattern", &KritaCoreFactory::loadPattern);
     addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("loadBrush", &KritaCoreFactory::loadBrush);
     addFunction("getFilter", &KritaCoreFactory::getFilter, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("newImage", &KritaCoreFactory::newImage, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("getPackagePath", &KritaCoreFactory::getPackagePath);
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
@@ -93,7 +96,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
     {
         if((*it)->name() == name)
         {
-            return new Pattern(dynamic_cast<KisPattern*>(*it));
+            return new Pattern(dynamic_cast<KisPattern*>(*it), true);
         }
     }
     throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(  i18n("Unknown pattern") ) );
@@ -101,6 +104,19 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
 
 }
 
+Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args)
+{
+    QString filename = Kross::Api::Variant::toString(args->item(0));
+    KisPattern* pattern = new KisPattern(filename);
+    if(pattern->load())
+    {
+        return new Pattern( pattern, false );
+    } else {
+        delete pattern;
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown pattern") ) );
+        return 0;
+    }
+}
 
 Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
 {
@@ -113,11 +129,25 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
     {
         if((*it)->name() == name)
         {
-            return new Brush(dynamic_cast<KisBrush*>(*it));
+            return new Brush(dynamic_cast<KisBrush*>(*it), true);
         }
     }
     throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
     return 0;
+}
+
+Kross::Api::Object::Ptr KritaCoreFactory::loadBrush(Kross::Api::List::Ptr args)
+{
+    QString filename = Kross::Api::Variant::toString(args->item(0));
+    KisBrush* brush = new KisBrush(filename);
+    if(brush->load())
+    {
+        return new Brush( brush, false );
+    } else {
+        delete brush;
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
+        return 0;
+    }
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
@@ -141,7 +171,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr a
     KisAutobrushShape* kas = new KisAutobrushCircleShape(w, h, hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
-    return new Brush(new KisAutobrushResource(*brsh));
+    return new Brush(new KisAutobrushResource(*brsh), false);
 }
 Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr args)
 {
@@ -157,7 +187,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr arg
     KisAutobrushShape* kas = new KisAutobrushRectShape(w, h, hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
-    return new Brush(new KisAutobrushResource(*brsh));;
+    return new Brush(new KisAutobrushResource(*brsh), false);;
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
@@ -181,9 +211,13 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     return new Image(new KisImage(0,w,h, cs, name));
 }
 
+Kross::Api::Object::Ptr KritaCoreFactory::getPackagePath(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant(m_packagePath);
+}
 
 KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
-    : Kross::Api::Module("kritacore") , m_manager(manager), m_factory(new KritaCoreFactory())
+    : Kross::Api::Module("kritacore") , m_manager(manager), m_factory(0)
 {
 
     QMap<QString, Object::Ptr> children = manager->getChildren();
@@ -207,12 +241,14 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
          }
     }
    // Wrap KritaScriptProgress
+    QString packagePath;
     Kross::Api::Object::Ptr kritascriptprogress = ((Kross::Api::Object*)manager)->getChild("KritaScriptProgress");
     if(kritadocument) {
         Kross::Api::QtObject* kritascriptprogressqt = (Kross::Api::QtObject*)( kritascriptprogress.data() );
         if(kritascriptprogressqt) {
                 ::KisScriptProgress* scriptprogress = (::KisScriptProgress*)( kritascriptprogressqt->getObject() );
                 scriptprogress->activateAsSubject();
+                packagePath = scriptprogress->packagePath();
                 if(scriptprogress) {
                     addChild( new ScriptProgress(scriptprogress) );
                 } else {
@@ -220,11 +256,13 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
                 }
         }
     }
+    m_factory = new KritaCoreFactory(packagePath);
 }
 
 KritaCoreModule::~KritaCoreModule()
 {
-    delete m_factory;
+    if(m_factory)
+        delete m_factory;
 }
 
 

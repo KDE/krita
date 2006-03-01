@@ -26,6 +26,8 @@ class Inverter:
         script = krosskritacore.get("KritaScript")
         image = doc.getImage()
         layer = image.getActivePaintLayer()
+        if(layer.colorSpaceId() != "RGBA" ):
+            raise("This script works only for 8bit RGBA layers")
         width = layer.getWidth()
         height = layer.getHeight()
         script.setProgressTotalSteps(width * height)

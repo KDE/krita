@@ -40,6 +40,7 @@ namespace KritaCore {
     addFunction("getHeight", &Image::getHeight);
     addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("createPaintLayer", &Image::createPaintLayer, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("colorSpaceId", &Image::colorSpaceId);
 }
 
 
@@ -81,6 +82,12 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     m_image->convertTo(dstCS);
     return 0;
 }
+
+Kross::Api::Object::Ptr Image::colorSpaceId(Kross::Api::List::Ptr )
+{
+    return new Kross::Api::Variant( m_image->colorSpace()->id().id() );
+}
+
 
 Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
 {

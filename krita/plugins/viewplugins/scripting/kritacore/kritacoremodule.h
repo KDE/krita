@@ -38,7 +38,7 @@ namespace Kross { namespace KritaCore {
     class KritaCoreFactory : public Kross::Api::Event<KritaCoreFactory>
     {
         public:
-            KritaCoreFactory();
+            KritaCoreFactory(QString packagePath);
         private:
             /**
              * This function return a new Image.
@@ -157,6 +157,22 @@ namespace Kross { namespace KritaCore {
              * @endcode
              */
             Kross::Api::Object::Ptr getFilter(Kross::Api::List::Ptr);
+            /**
+             * This function loads a Brush and then returns it.
+             * It takes one argument: the filename of the brush.
+             */
+            Kross::Api::Object::Ptr loadBrush(Kross::Api::List::Ptr);
+            /**
+             * This function loads a Pattern and then returns it.
+             * It takes one argument: the filename of the pattern.
+             */
+            Kross::Api::Object::Ptr loadPattern(Kross::Api::List::Ptr);
+            /**
+             * This function return the directory where the script is located.
+             */
+            Kross::Api::Object::Ptr getPackagePath(Kross::Api::List::Ptr);
+        private:
+            QString m_packagePath;
     };
     /**
      *

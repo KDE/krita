@@ -29,12 +29,16 @@ namespace KritaCore {
 
 class Brush : public Kross::Api::Class<Brush>{
     public:
-        Brush(KisBrush*);
+        /**
+         * @param sharedBrush tell if the brush should be deleted or not when this object is deleted
+         */
+        Brush(KisBrush*, bool sharedBrush );
         ~Brush();
     public:
         inline KisBrush* getBrush() { return m_brush; }
     private:
         KisBrush* m_brush;
+        bool m_sharedBrush;
 };
 
 }

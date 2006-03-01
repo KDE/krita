@@ -105,6 +105,10 @@ class PaintLayer : public Kross::Api::Class<PaintLayer>
          */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
         /**
+         * Return the id of the colorspace of this paint layer.
+         */
+        Kross::Api::Object::Ptr colorSpaceId(Kross::Api::List::Ptr );
+        /**
          * Return the fast wavelet transformed of the layer
          */
         Kross::Api::Object::Ptr fastWaveletTransformation(Kross::Api::List::Ptr args);

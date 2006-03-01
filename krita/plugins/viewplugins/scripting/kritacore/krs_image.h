@@ -60,6 +60,10 @@ class Image : public Kross::Api::Class<Image>
          */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
         /**
+         * Return the id of the colorspace of this image.
+         */
+        Kross::Api::Object::Ptr colorSpaceId(Kross::Api::List::Ptr );
+        /**
          * Create a new PaintLayer for this image, and return it.
          * This function takes at least two arguments :
          *  - the name of the layer

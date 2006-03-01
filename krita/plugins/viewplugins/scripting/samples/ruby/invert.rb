@@ -22,10 +22,13 @@ doc = Krosskritacore::get("KritaDocument")
 script = Krosskritacore::get("KritaScript")
 image = doc.getImage()
 layer = image.getActivePaintLayer()
+
+if(layer.colorSpaceId() != "RGBA" )
+    raise("This script works only for 8bit RGBA layers")
+end
+
 width = layer.getWidth()
-print width
 height = layer.getHeight()
-print height
 script.setProgressTotalSteps(width * height)
 layer.beginPainting("invert")
 it = layer.createRectIterator( 0, 0, width, height )

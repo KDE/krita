@@ -24,12 +24,14 @@ namespace Kross {
 
 namespace KritaCore {
 
-Pattern::Pattern(KisPattern* pattern) : Kross::Api::Class<Pattern>("KritaPattern"), m_pattern(pattern)
+Pattern::Pattern(KisPattern* pattern, bool sharedPattern) : Kross::Api::Class<Pattern>("KritaPattern"), m_pattern(pattern), m_sharedPattern(sharedPattern)
 {
 }
 
 Pattern::~Pattern()
 {
+    if(!m_sharedPattern)
+        delete m_pattern;
 }
 
 }

@@ -80,12 +80,12 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
         m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager",krita::LAYERBOX, 10);
 
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
+        connect(m_scriptguiclient, SIGNAL(executionStarted( const Kross::Api::ScriptAction* )), this, SLOT(executionStarted(const Kross::Api::ScriptAction*)));
 
         Kross::Api::Manager::scriptManager()->addQObject(m_view->canvasSubject()->document(), "KritaDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");
         m_scriptProgress = new KisScriptProgress(m_view);
         Kross::Api::Manager::scriptManager()->addQObject(m_scriptProgress, "KritaScriptProgress");
-
 
     }
 
@@ -102,5 +102,11 @@ void Scripting::executionFinished(const Kross::Api::ScriptAction*)
     m_scriptProgress->progressDone();
     QApplication::restoreOverrideCursor();
 }
+
+void Scripting::executionStarted(const Kross::Api::ScriptAction* act)
+{
+    kdDebug(41011) << act->getPackagePath() << endl;
+}
+
 
 #include "scripting.moc"

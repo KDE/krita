@@ -23,6 +23,10 @@
 
 class KisView;
 
+/**
+ * TODO: clarify the situation, while, in the future, multiple scripts could be running at a same time,
+ * some of the functions are global to all script and some aren't.
+ */
 class KisScriptProgress : public KisProgressSubject
 {
     public:
@@ -39,9 +43,12 @@ class KisScriptProgress : public KisProgressSubject
         void incProgress();
         void setProgressStage(const QString& stage, Q_INT32 progress);
         void progressDone();
+        inline void setPackagePath(QString path) { m_packagePath = path; };
+        inline QString packagePath() { return m_packagePath; }
     private:
         Q_INT32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KisView * m_view;
+        QString m_packagePath;
 };
 
 #endif

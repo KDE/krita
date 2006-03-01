@@ -55,6 +55,7 @@ PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
     addFunction("convertToColorspace", &PaintLayer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("fastWaveletTransformation", &PaintLayer::fastWaveletTransformation);
     addFunction("fastWaveletUntransformation", &PaintLayer::fastWaveletUntransformation);
+    addFunction("colorSpaceId", &PaintLayer::colorSpaceId);
 }
 
 
@@ -180,6 +181,12 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
     paintLayer()->paintDevice()->convertTo(dstCS);
     return 0;
 }
+
+Kross::Api::Object::Ptr PaintLayer::colorSpaceId(Kross::Api::List::Ptr )
+{
+    return new Kross::Api::Variant( paintLayer()->paintDevice()->colorSpace()->id().id() );
+}
+
 
 Kross::Api::Object::Ptr PaintLayer::fastWaveletTransformation(Kross::Api::List::Ptr )
 {

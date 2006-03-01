@@ -62,6 +62,9 @@ histoTarget = [ 0.0, 0.00392156862745098, 0.00784313725490196, 0.011764705882352
 doc = krosskritacore.get("KritaDocument")
 image = doc.getImage()
 layer = image.getActivePaintLayer()
+if (layer.colorSpaceId() != "RGBA" ):
+    raise("This script works only for 8bit RGBA layers")
+
 width = layer.getWidth()
 height = layer.getHeight()
 

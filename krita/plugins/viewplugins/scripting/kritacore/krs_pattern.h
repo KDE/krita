@@ -29,12 +29,16 @@ namespace KritaCore {
 
 class Pattern : public Kross::Api::Class<Pattern>{
     public:
-        Pattern(KisPattern*);
+        /**
+         * @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
+         */
+        Pattern(KisPattern*, bool sharedPattern);
         ~Pattern();
     public:
         inline KisPattern* getPattern() { return m_pattern; }
     private:
         KisPattern* m_pattern;
+        bool m_sharedPattern;
 };
 
 }

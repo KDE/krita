@@ -42,6 +42,7 @@ class Scripting : public KParts::Plugin
         virtual ~Scripting();
     private slots:
         void executionFinished(const Kross::Api::ScriptAction*);
+        void executionStarted(const Kross::Api::ScriptAction*);
     private:
         KisView * m_view;
         Kross::Api::ScriptGUIClient* m_scriptguiclient;

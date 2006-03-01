@@ -1376,38 +1376,44 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     srcRect.setTop(static_cast<int>(r.top() * yScale));
     srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
 
-    KisPaintDevice imageArea(colorSpace(), "imageArea");
     KisPaintDeviceSP mergedImage = m_rootLayer->projection(srcRect);
 
     //QTime t;
     //t.start();
 
+    Q_UINT8 *scaledImageData = new Q_UINT8[r.width() * r.height() * pixelSize];
+    Q_UINT8 *imageRow = new Q_UINT8[srcRect.width() * pixelSize];
+    const Q_INT32 imageRowX = srcRect.x();
+
     for (Q_INT32 y = 0; y < r.height(); ++y) {
 
-        KisHLineIterator it = imageArea.createHLineIterator(0, y, r.width(), true);
         Q_INT32 dstY = r.y() + y;
         Q_INT32 dstX = r.x();
         Q_INT32 srcY = (dstY * imageHeight) / scaledImageSize.height();
 
-        KisHLineIterator srcIt = mergedImage->createHLineIterator(0, srcY, m_width, false);
-        Q_INT32 oldSrcX = 0;
+        mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
 
-        while (!it.isDone()) {
+        Q_UINT8 *dstPixel = scaledImageData + (y * r.width() * pixelSize);
+        Q_UINT32 columnsRemaining = r.width();
+
+        while (columnsRemaining > 0) {
 
             Q_INT32 srcX = (dstX * imageWidth) / scaledImageSize.width();
-            srcIt += srcX - oldSrcX;
-            oldSrcX = srcX;
 
-            memcpy(it.rawData(), srcIt.rawData(), pixelSize);
+            memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
 
-            ++it;
             ++dstX;
+            dstPixel += pixelSize;
+            --columnsRemaining;
         }
     }
 
+    delete [] imageRow;
+
     //kdDebug(41010) << "Scaling image took " << t.restart() << endl;
 
-    QImage image = imageArea.convertToQImage(profile, 0, 0, r.width(), r.height(), exposure);
+    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), profile, INTENT_PERCEPTUAL, exposure);
+    delete [] scaledImageData;
 
     //kdDebug(41010) << "Convert to QImage image took " << t.restart() << endl;
 
@@ -1431,7 +1437,6 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
             m_activeLayer -> paintMaskInactiveLayers(img, x1, y1, w, h);
         }
     }*/
-
 
     return image;
 }

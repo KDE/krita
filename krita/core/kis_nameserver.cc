@@ -42,3 +42,8 @@ Q_INT32 KisNameServer::number()
     return m_generator++;
 }
 
+void KisNameServer::rollback()
+{
+    m_generator--;
+}
+

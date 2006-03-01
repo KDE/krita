@@ -612,6 +612,11 @@ QString KisImage::nextLayerName() const
     return m_nserver -> name();
 }
 
+void KisImage::rollBackLayerName()
+{
+    m_nserver->rollback();
+}
+
 void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name)
 {
     Q_ASSERT(colorSpace);

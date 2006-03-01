@@ -125,7 +125,7 @@ public:
     void setDescription(const QString& description);
 
     QString nextLayerName() const;
-
+    void rollBackLayerName();
     /**
      * Resize the image to the specified width and height. The resize
      * method handles the creating on an undo step itself.

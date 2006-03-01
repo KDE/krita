@@ -2705,6 +2705,9 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
             }
         }
+        else {
+            img->rollBackLayerName();
+        }
     }
 }
 

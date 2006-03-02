@@ -235,7 +235,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
 
     m_optWidget -> setCaption(i18n("Similar Selection"));
 
-    QVBoxLayout * l = new QVBoxLayout(m_optWidget);
+    QVBoxLayout * l = new QVBoxLayout(m_optWidget, 0, 6);
     Q_CHECK_PTR(l);
 
     m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
@@ -259,6 +259,8 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     input -> setValue(20);
     hbox -> addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;
 }

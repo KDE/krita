@@ -147,6 +147,9 @@ QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget -> setCaption(i18n("Selection Brush"));
 
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+
     return m_optWidget;
 }
 

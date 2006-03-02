@@ -129,6 +129,10 @@ QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget -> setCaption(i18n("Selection Eraser"));
+
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+
     return m_optWidget;
 }
 

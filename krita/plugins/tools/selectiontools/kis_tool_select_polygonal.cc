@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qregion.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -281,6 +282,9 @@ QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
     m_optWidget -> setCaption(i18n("Polygonal Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;
 }

@@ -9,18 +9,21 @@
             <x>0</x>
             <y>0</y>
             <width>180</width>
-            <height>31</height>
+            <height>34</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgSelectionOptions</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>2</number>
+            <number>0</number>
         </property>
         <property name="spacing">
-            <number>2</number>
+            <number>0</number>
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -29,6 +32,9 @@
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
                 <widget class="QLabel">
                     <property name="name">
@@ -55,23 +61,6 @@
                 </widget>
             </hbox>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>0</height>
-                </size>
-            </property>
-        </spacer>
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

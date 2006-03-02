@@ -189,7 +189,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
     m_optWidget -> setCaption(i18n("Contiguous Area Selection"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    
+    l -> setSpacing( 6 );
+
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QHBoxLayout * hbox = new QHBoxLayout(l);

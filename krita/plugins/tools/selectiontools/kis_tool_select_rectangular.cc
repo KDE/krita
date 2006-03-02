@@ -24,6 +24,7 @@
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -296,6 +297,9 @@ QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
     m_optWidget -> setCaption(i18n("Rectangular Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;
 }

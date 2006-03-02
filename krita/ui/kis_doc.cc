@@ -53,6 +53,7 @@
 #include <KoCommandHistory.h>
 
 // Local
+#include <kis_clipboard.h>
 #include <kis_meta_registry.h>
 #include "kis_annotation.h"
 #include "kis_types.h"
@@ -817,9 +818,18 @@ bool KisDoc::completeLoading(KoStore *store)
 
 QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 {
+    
     KisConfig cfg;
-
-    return new KisCustomImageWidget(parent, this, cfg.defImgWidth(), cfg.defImgHeight(), cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
+    
+    int w = cfg.defImgWidth();
+    int h = cfg.defImgHeight();
+    
+    QSize sz = KisClipboard::instance()->clipSize();
+    if (sz.isValid()) {
+        w = sz.width();
+        h = sz.height();
+    }
+    return new KisCustomImageWidget(parent, this, w, h, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
 }
 
 

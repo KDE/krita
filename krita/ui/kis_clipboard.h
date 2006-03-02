@@ -21,6 +21,8 @@
 #ifndef __KIS_CLIPBOARD_H_
 #define __KIS_CLIPBOARD_H_
 
+
+#include <qsize.h>
 #include "kis_types.h"
 
 class QImage;
@@ -53,6 +55,8 @@ public:
 
     bool hasClip();
 
+    QSize clipSize();
+    
 private slots:
 
     void clipboardDataChanged();

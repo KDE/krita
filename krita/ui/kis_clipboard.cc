@@ -232,4 +232,56 @@ bool KisClipboard::hasClip()
     return m_hasClip;
 }
 
+QSize KisClipboard::clipSize()
+{
+
+    QClipboard *cb = QApplication::clipboard();
+    QCString mimeType("application/x-krita-selection");
+    QMimeSource *cbData = cb->data();
+
+    KisPaintDeviceSP clip;
+    
+    if(cbData && cbData->provides(mimeType)) {
+        
+        QBuffer buffer(cbData->encodedData(mimeType));
+        KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
+        KisProfile *profile=0;
+
+        if (store -> hasFile("profile.icc")) {
+            QByteArray data;
+            store -> open("profile.icc");
+            data = store -> read(store -> size());
+            store -> close();
+            profile = new KisProfile(data);
+        }
+
+        QString csName;
+        // ColorSpace id of layer data
+        if (store -> hasFile("colorspace")) {
+            store -> open("colorspace");
+            csName = QString(store->read(store -> size()));
+            store -> close();
+        }
+
+        KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
+
+        clip = new KisPaintDevice(cs, "clip");
+
+        if (store -> hasFile("layerdata")) {
+            store -> open("layerdata");
+            clip->read(store);
+            store -> close();
+        }
+        delete store;
+
+        return clip->exactBounds().size();
+    }
+    else {
+        QImage qimg = cb -> image();
+        return qimg.size();
+    }
+;
+
+}
+
 #include "kis_clipboard.moc"

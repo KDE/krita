@@ -89,7 +89,7 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     kdDebug(41010) << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
     if (parent() == 0 && childCount() == 1) {
         KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
-        if (l && l->visible() && l->opacity() == OPACITY_OPAQUE) {
+        if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible() && l->opacity() == OPACITY_OPAQUE) {
             l->setClean(rect);
             setClean(rect);
             return l->paintDevice();

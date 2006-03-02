@@ -149,7 +149,8 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
     if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
         KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->
+                getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());

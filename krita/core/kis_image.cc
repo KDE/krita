@@ -1377,11 +1377,11 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
 
     KisPaintDeviceSP mergedImage = m_rootLayer->projection(srcRect);
-
     //QTime t;
     //t.start();
 
     Q_UINT8 *scaledImageData = new Q_UINT8[r.width() * r.height() * pixelSize];
+    
     Q_UINT8 *imageRow = new Q_UINT8[srcRect.width() * pixelSize];
     const Q_INT32 imageRowX = srcRect.x();
 

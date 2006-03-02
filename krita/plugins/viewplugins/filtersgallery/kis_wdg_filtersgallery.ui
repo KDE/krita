@@ -120,7 +120,7 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kispreviewwidget.h</includehint>
-    <includehint>kisfilterslistview.h</includehint>
+    <includehint>kis_previewwidget.h</includehint>
+    <includehint>kis_filters_listview.h</includehint>
 </includehints>
 </UI>

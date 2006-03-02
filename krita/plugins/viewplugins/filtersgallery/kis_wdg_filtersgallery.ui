@@ -12,9 +12,6 @@
             <height>296</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KisWdgFiltersGallery</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

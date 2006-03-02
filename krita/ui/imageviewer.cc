@@ -21,12 +21,13 @@
 #include "imageviewer.h"
 
 #include <qlabel.h>
+#include <qpainter.h>
+#include <qimage.h>
+#include <qcursor.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
-
-#include <qpainter.h>
-#include <qimage.h>
+#include <kis_cursor.h>
 
 ImageViewer::ImageViewer(QWidget *widget, const char * name)
     : QScrollView(widget, name)
@@ -35,6 +36,7 @@ ImageViewer::ImageViewer(QWidget *widget, const char * name)
 {
     m_label = new QLabel( viewport());
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setCursor(KisCursor::handCursor());
     addChild(m_label);
 }
 
@@ -49,6 +51,7 @@ void ImageViewer::setImage(QImage & image)
 void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 {
     if(LeftButton == event->button()) {
+        setCursor(KisCursor::closedHandCursor());
         m_currentPos = event->globalPos();
         m_isDragging = true;
     }
@@ -57,6 +60,7 @@ void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 void ImageViewer::contentsMouseReleaseEvent(QMouseEvent *event)
 {
     if(LeftButton == event->button()) {
+        setCursor(KisCursor::handCursor());
         m_currentPos = event->globalPos();
         m_isDragging = false;
     }

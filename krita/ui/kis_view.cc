@@ -2041,6 +2041,9 @@ void KisView::layerOpacity(int opacity, bool dontundo)
     opacity = int(float(opacity * 255) / 100 + 0.5);
     if (opacity > 255)
         opacity = 255;
+
+    if (opacity == layer->opacity()) return;
+    
     if (dontundo)
         layer -> setOpacity( opacity );
     else
@@ -2067,6 +2070,8 @@ void KisView::layerOpacityFinishedChanging( int previous, int opacity )
     if (previous > 255)
         previous = 255;
 
+    if (previous == opacity) return;
+    
     KNamedCommand *cmd = layer -> setOpacityCommand(previous, opacity);
     undoAdapter() -> addCommand(cmd);
 }

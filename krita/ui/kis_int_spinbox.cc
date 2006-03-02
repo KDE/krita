@@ -28,6 +28,7 @@
 #include <math.h>
 #include <algorithm>
 
+#include <qtimer.h>
 #include <qapplication.h>
 #include <qsize.h>
 #include <qslider.h>
@@ -38,6 +39,7 @@
 #include <qlayout.h>
 #include <qvalidator.h>
 
+#include <knuminput.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -50,11 +52,12 @@
 class KisIntSpinbox::KisIntSpinboxPrivate {
 public:
 
-    QLineEdit * m_numinput;
+    KIntSpinBox * m_numinput;
     KisPopupSlider *m_slider;
     KArrowButton *m_arrow;
     int m_prevValue;
     QValidator *m_validator;
+    QTimer m_timer;
 };
 
 
@@ -76,31 +79,19 @@ void KisIntSpinbox::init(int val)
     QBoxLayout * l = new QHBoxLayout( this );
 
     l->insertStretch(0, 1);
-    d->m_numinput = new QLineEdit(this, "KisIntSpinbox::QLineEdit");
-    //d->m_numinput->setInputMask("009%"); //makes it use overwrite mode and be uneditable, bizarre.
-    d->m_validator = new QRegExpValidator(QRegExp("^((100)|([0-9]?[0-9]))\\%$"), this);
-    d->m_numinput->setValidator(d->m_validator);
-    d->m_numinput->setAlignment(Qt::AlignRight);
-    //d->m_numinput->setMaximumWidth(d->m_numinput->fontMetrics().width("100%"));
-    //d->m_numinput->setMinimumWidth(d->m_numinput->fontMetrics().width("100%"));
-    d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    d->m_numinput = new KIntSpinBox(0, 100, 1, val, 10, this, "KisIntSpinbox::KIntSpinBox");
 
+    d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    d->m_numinput->setSuffix("%");
     l->addWidget( d->m_numinput );
 
-    connect(d->m_numinput, SIGNAL(textChanged(const QString &)), SLOT(numValueChanged(const QString &)));
-
-    //d->m_slider = new KisPopupSlider(INT_MIN, INT_MAX, 1, val, QSlider::Horizontal, this);
     d->m_slider = new KisPopupSlider(0, 100, 10, val, QSlider::Horizontal, this);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
-    connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    connect(d->m_slider, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
-    connect(d->m_slider, SIGNAL(aboutToHide()), SLOT(slotAboutToHide()));
 
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);
     d->m_arrow->setPopup(d->m_slider);
-    d->m_arrow->setMaximumHeight( fontMetrics().height() + 2);
-    d->m_arrow->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    d->m_arrow->setEnabled(true);
+    d->m_arrow->setMaximumHeight( fontMetrics().height() + 4);
+    d->m_arrow->setEnabled(true); // Why is the arrow still gray?
 
     l->addWidget( d->m_arrow );
 
@@ -108,44 +99,25 @@ void KisIntSpinbox::init(int val)
     setValue(val);
     setFocusProxy(d->m_numinput);
     layout();
+
+    connect(d->m_numinput, SIGNAL(valueChanged(int)), SLOT(spinboxValueChanged(int)));
+    connect(d->m_slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
+    connect(d->m_slider, SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
+    connect(d->m_slider, SIGNAL(aboutToHide()), SLOT(slotAboutToHide()));
+
+    connect(&(d->m_timer), SIGNAL(timeout()), this, SLOT(slotTimeout()));
 }
 
-void KisIntSpinbox::numValueChanged(const QString &text)
+void KisIntSpinbox::spinboxValueChanged(int val)
 {
-    int val;
-    if (text.length() >= 2)
-    {
-        val = text.left(text.length()-1).toInt();
-        if (val == 0 && text.length() >= 3)
-        {
-            d->m_numinput->setText(QString("%1%").arg(val));
-            return;
-        }
-    }
-    else
-    {
-        if (text.toInt() != 0)
-            val = text.toInt();
-        else
-            val = 0;
-        d->m_numinput->setText(QString("%1%").arg(val));
-        return;
-    }
-    d->m_slider->blockSignals(true);
-    d->m_slider->setValue(val);
-    d->m_slider->blockSignals(false);
+    setValue(val);
+    d->m_timer.start(300, true);
 
-    emit valueChanged(val);
-    emit valueChanged(val, false);
 }
 
 void KisIntSpinbox::sliderValueChanged(int val)
 {
-    d->m_numinput->blockSignals(true);
-    QString valstr = QString("%1%").arg(val);
-    d->m_numinput->setText(valstr);
-    d->m_numinput->blockSignals(false);
-
+    setValue(val);
     emit valueChanged(val);
     emit valueChanged(val, true);
 }
@@ -186,20 +158,22 @@ KisIntSpinbox::~KisIntSpinbox()
 
 void KisIntSpinbox::setValue(int val)
 {
-    QString valstr = QString("%1%").arg(val);
-    if (d->m_numinput->text() != valstr)
-        d->m_numinput->setText(valstr);
-    // slider value is changed by numValueChanged
+   d->m_slider->blockSignals(true);
+   d->m_slider->setValue(val);
+   d->m_slider->blockSignals(false);
+   
+   d->m_numinput->blockSignals(true);
+   d->m_numinput->setValue(val);
+   d->m_numinput->blockSignals(false);
 }
 
 int  KisIntSpinbox::value() const
 {
-    return d->m_slider->value();
+    return d->m_numinput->value(); // From the numinput: that one isn't in steps of ten
 }
 
 void KisIntSpinbox::setLabel(const QString & /*label*/)
 {
-//    d->m_numinput->setLabel(label);
 }
 
 void KisIntSpinbox::slotAboutToShow()
@@ -216,5 +190,10 @@ void KisIntSpinbox::slotAboutToHide()
     }
 }
 
-
+void KisIntSpinbox::slotTimeout()
+{
+    kdDebug() << "timeout: " << d->m_prevValue <<",  " << value() << endl;
+    emit valueChanged(value());
+    emit valueChanged(value(), true);
+}
 #include "kis_int_spinbox.moc"

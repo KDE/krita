@@ -10,6 +10,7 @@ After 1.5 cleanups
   is created -- and a gui to turn that on and off, perhaps something analogous
   to a channels box
 * Make set of filter categories extensible
+* BUG 121975: selections and group layers.
           
 Code organization
 

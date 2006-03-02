@@ -153,9 +153,11 @@ public slots:
     void setValue(int);
 
 
-    void numValueChanged(const QString &text);
+    void spinboxValueChanged(int val);
     void sliderValueChanged(int val);
 
+    void slotTimeout();
+    
 signals:
 
     /**

@@ -1,10 +1,14 @@
 Color palettes ;
+
 You can drag a color from the preview swatches but it is changing the
 selected one at click and since dropping drops on the selected one, the 
 concept of duplicating the foreground to the background by dragging is 
 impossible.  I suggest to do selecting of foreground/background color on 
 mouse release instead.
 
+<BSAR: I don't understand this at all -- not sure what you're talking about.>
+
+Selections
 
 When you did a 'select all' and then create a selection nothing happens 
 since you can't select more then you already did.  For that reason I 
@@ -14,6 +18,13 @@ result of that select or deselect visible.  In either case selecting a
 part in both a fully selected and fully deselected image should lead to 
 the same result.
 
+<BSAR: not going to do this: in the next release, it will be
+always clear whether there's a selection because we're going to show it as a
+child layer. For now, determining whether the extent of a selection is as big
+as the extent of a layer, and whether the whole selection is completely 100%
+selected is going to be too expensive>
+
+Opacity and Layers
 
 In the layer palette there is a custom widget that allows you to set the
 transparancy of the layer. It has a popup (with slider) as well as a text-area.

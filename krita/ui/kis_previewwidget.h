@@ -23,6 +23,7 @@
 #define __kis_previewwidget_h__
 
 #include <qimage.h>
+#include <qevent.h>
 
 #include "kis_types.h"
 
@@ -52,7 +53,8 @@ public:
     /** returns if the preview is automatically updated */
     bool getAutoUpdate() const;
 
-
+    void wheelEvent(QWheelEvent * e);
+    
 public slots:
 
     /** Sets the preview to use the layer specified as argument */

@@ -41,7 +41,7 @@ public:
     void contentsMousePressEvent(QMouseEvent *event);
     void contentsMouseReleaseEvent(QMouseEvent *event);
     void contentsMouseMoveEvent(QMouseEvent *event);
-
+    void wheelEvent(QWheelEvent * event) { event->ignore(); };
 private:
     QLabel* m_label;
     bool m_isDragging;

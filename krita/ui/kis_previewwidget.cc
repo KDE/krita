@@ -27,13 +27,16 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qapplication.h>
 #include <qcolor.h>
 #include <qgroupbox.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
+#include <kis_cursor.h>
 #include <kis_colorspace.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_config.h>
@@ -143,6 +146,15 @@ void KisPreviewWidget::slotSetAutoUpdate(bool set) {
     m_autoupdate = set;
 }
 
+void KisPreviewWidget::wheelEvent(QWheelEvent * e)
+{
+    if (e->delta() > 0)
+        zoomIn();
+    else
+        zoomOut();
+    e->accept();
+}
+
 void KisPreviewWidget::setPreviewDisplayed(bool v)
 {
     if (!m_origDevice) return;
@@ -172,6 +184,7 @@ bool KisPreviewWidget::getAutoUpdate()  const {
 
 bool KisPreviewWidget::zoomChanged()
 {
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
     if (!m_origDevice) return false;
 
     QRect r = m_origDevice->exactBounds();
@@ -196,9 +209,11 @@ bool KisPreviewWidget::zoomChanged()
     {
         m_preview->setImage(m_scaledOriginal);
     }
-\
-
+    
     emit updated();
+
+    QApplication::restoreOverrideCursor();
+
     return true;
 }
 

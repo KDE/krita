@@ -2907,10 +2907,13 @@ void KisView::layerRemove()
         KisLayerSP layer = img -> activeLayer();
 
         if (layer) {
-            //Q_INT32 n = img -> index(layer);
+
+            
+            img->removeLayer(layer);
+
             if (layer->parent())
                 layer->parent()->setDirty(layer->extent());
-            img->removeLayer(layer);
+
             kdDebug(41010) << "layerRemove calls updateCanvas\n"; updateCanvas();
             layerUpdateGUI(img -> activeLayer() != 0);
         }

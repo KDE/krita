@@ -71,14 +71,14 @@ public:
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
      */
-    virtual void setDirty();
+    virtual void setDirty(bool propagate = true);
 
     /**
      * Add the given rect to the set of dirty rects for this layer;
      * this percolates up to parent layers all the way to the root
      * layer.
      */
-    virtual void setDirty(const QRect & rect);
+    virtual void setDirty(const QRect & rect, bool propagate = true);
     
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;

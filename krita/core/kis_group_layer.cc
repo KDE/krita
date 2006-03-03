@@ -63,16 +63,16 @@ KisGroupLayer::~KisGroupLayer()
 }
 
 
-void KisGroupLayer::setDirty()
+void KisGroupLayer::setDirty(bool propagate)
 {
-    KisLayer::setDirty();
-    emit (sigDirty(m_dirtyRect));
+    KisLayer::setDirty(propagate);
+    if (propagate) emit (sigDirty(m_dirtyRect));
 }
 
-void KisGroupLayer::setDirty(const QRect & rc)
+void KisGroupLayer::setDirty(const QRect & rc, bool propagate)
 {
-    KisLayer::setDirty(rc);
-    emit sigDirty(rc);
+    KisLayer::setDirty(rc, propagate);
+    if (propagate) emit sigDirty(rc);
 }
 
 void KisGroupLayer::resetProjection()
@@ -82,11 +82,11 @@ void KisGroupLayer::resetProjection()
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 {
-    kdDebug(41010) << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
+    //kdDebug(41010) << "Call for projection. " << name() << ", Dirty =" << dirty() << endl;
 
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible and 100% opaque
-    kdDebug(41010) << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
+    //kdDebug(41010) << "Abusing our only child? Parent: " << parent() << ", children: " << childCount() << endl;
     if (parent() == 0 && childCount() == 1) {
         KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
         if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible() && l->opacity() == OPACITY_OPAQUE) {
@@ -116,7 +116,7 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     QTime t;
     t.start();
     updateProjection(rc);
-    kdDebug(41010) << ">>> Updating projection " << name() << " for " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << " took: " << t.elapsed() << endl;
+    //kdDebug(41010) << ">>> Updating projection " << name() << " for " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << " took: " << t.elapsed() << endl;
     //kdDebug(41010) << kdBacktrace() << "\n";
     setClean(rect);
 
@@ -205,6 +205,7 @@ bool KisGroupLayer::removeLayer(int x)
         for (uint i = childCount() - 1; i > index; i--)
             at(i) -> m_index--;
         KisLayerSP removedLayer = at(index);
+
         removedLayer -> m_parent = 0;
         removedLayer -> m_index = -1;
         m_layers.erase(m_layers.begin() + reverseIndex(index));
@@ -227,6 +228,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
         kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
         return false;
     }
+
     return removeLayer(layer -> index());
 }
 
@@ -305,7 +307,7 @@ QImage KisGroupLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    kdDebug(41010) << "Updating projection for " << name() << ", " << rc << endl;
+    //kdDebug(41010) << "Updating projection for " << name() << ", " << rc << endl;
     
     if (!m_dirtyRect.isValid()) return;
         
@@ -315,34 +317,60 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // No child -- clear the projection. Without children, a group layer is empty.
     if (!child) m_projection->clear();
     
-    KisLayerSP startWith = child;
+    KisLayerSP startWith = 0;
     KisAdjustmentLayerSP adjLayer = 0;
-
+    KisLayerSP tmpPaintLayer = 0;
+    
+    // If this is the rootlayer, don't do anything with adj. layers that are below the
+    // first paintlayer
+    bool gotPaintLayer = (parent() != 0);
+    //kdDebug() << "We got a paintlayer: " << gotPaintLayer << endl;
+    
     // Look through all the child layers, searching for the first dirty layer
     // if it's found, and if we have found an adj. layer before the the dirty layer,
     // composite from the first adjustment layer searching back from the first dirty layer
     while (child) {
+        //kdDebug() << "Looping over child: " << child->name() << " to see where we will start. Dirty: " << child->dirty() << "\n";
         KisAdjustmentLayerSP tmpAdjLayer = dynamic_cast<KisAdjustmentLayer*>(child.data());
         if (tmpAdjLayer) {
-
-            // If this adjustment layer is dirty, start compositing with the
-            // previous adj. layer, if there's one.
-            if (tmpAdjLayer->dirty(rc) && adjLayer != 0 && adjLayer->visible()) {
-                startWith = adjLayer->prevSibling();
-                break;
+            if (gotPaintLayer) {
+                //kdDebug() << "\tThis is an adjustment layer\n";
+                // If this adjustment layer is dirty, start compositing with the
+                // previous layer, if there's one.
+                if (tmpAdjLayer->dirty(rc) && adjLayer != 0 && adjLayer->visible()) {
+                    //kdDebug() << "\t\tAnd we already had seen a visible adj. layer " << adjLayer->name() << endl;
+                    startWith = adjLayer->prevSibling();
+                    break;
+                }
+                else if (tmpAdjLayer->visible() && !tmpAdjLayer->dirty(rc)) {
+                    //kdDebug() << "\t\tWe've seen a paint layer, and the " << tmpAdjLayer->name() << " adj layer is clean and visible, we could start here\n";
+                    // This is the first adj. layer that is not dirty -- the perfect starting point
+                    adjLayer = tmpAdjLayer;
+                }
+                else {
+                    //kdDebug() << "\t\tThis adj layer is dirty, visible and we've got a paint layer. Start with that\n";
+                    startWith = tmpPaintLayer;
+                }
             }
             else {
-                // This is the first adj. layer that is not dirty -- the perfect starting point
-                adjLayer = tmpAdjLayer;
+                //kdDebug() << "\tgot an adj layer named " << tmpAdjLayer->name() << ", but no paint layer.\n";
             }
         }
         else {
+            //kdDebug() << "\tNot an adj. layer\n";
+            tmpPaintLayer = child;
+            gotPaintLayer = true;
             // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
             // with a cache, we'll start from there.
             if (child->dirty(rc)) {
                 if (adjLayer != 0 && adjLayer->visible()) {
+                    //kdDebug() << "\t\tAnd we've got an adj layer before this layer: start with it\n";
                     // the first layer on top of the adj. layer
                     startWith = adjLayer->prevSibling();
+                }
+                else {
+                    //kdDebug() << "We got a dirty child\n";
+                    startWith = child;
                 }
                 // break here: if there's no adj layer, we'll start with the layer->lastChild
                 break;
@@ -351,24 +379,35 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         child = child->prevSibling();
     }
 
+    if (adjLayer != 0 && startWith == 0 && gotPaintLayer && adjLayer->prevSibling()) {
+        startWith = adjLayer->prevSibling();
+    }
+    
+    // No adj layer -- all layers inside the group must be recomposited
+    if (adjLayer == 0) {
+        startWith = lastChild();
+    }
+    
     if (startWith == 0) {
-        // The projection is apparently still up to date, but why was it marked dirty, then?
+        //kdDebug() << "The projection is apparently still up to date, but why was it marked dirty, then?\n";
         return;
     }
+
+    //kdDebug() << "We'll start with " << startWith->name() << endl;
 
     bool first = true; // The first layer in a stack needs special compositing
 
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
     if (adjLayer != 0) {
-        kdDebug(41010) << "Copying cached adj. layer representation\n";
+        //kdDebug(41010) << "Copying cached adj. layer representation " << adjLayer->name() << "\n";
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
                   rc.left(), rc.top(), rc.width(), rc.height());
         first = false;
     }
     else {
-        kdDebug(41010) << "Erasing projection\n";
+        //kdDebug(41010) << "Erasing projection\n";
         gc.eraseRect(rc);
         first = true;
     }
@@ -380,7 +419,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     while(child)
     {
-        kdDebug(41010) << name() << ": looping past children. Current: " << child->name() << ", " << child->compositeOp().id().name() << "\n";
+        //kdDebug(41010) << name() << ": looping past children. Current: " << child->name() << ", " << child->compositeOp().id().name() << "\n";
         if(first)
         {
             // Copy the lowest layer rather than compositing it with the background

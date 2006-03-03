@@ -307,7 +307,7 @@ KisLayer::~KisLayer()
 
 void KisLayer::setClean(const QRect & rect)
 {
-    kdDebug(41010) << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
+    //kdDebug(41010) << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
     if (m_dirtyRect.isValid() && rect.isValid()) {
 
         //kdDebug(41010) << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
@@ -329,7 +329,7 @@ bool KisLayer::dirty()
 
 bool KisLayer::dirty(const QRect & rc)
 {
-    kdDebug(41010) << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
+    //kdDebug(41010) << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
     if (!m_dirtyRect.isValid() || !rc.isValid()) return false;
 
     return rc.intersects(m_dirtyRect);
@@ -340,37 +340,37 @@ QRect KisLayer::dirtyRect() const
     return m_dirtyRect;
 }
 
-void KisLayer::setDirty()
+void KisLayer::setDirty(bool propagate)
 {
     QRect rc = extent();
     
-    kdDebug(41010) << "setDirty() " << name() << ", " << rc << ", valid: " << rc.isValid() << "\n";
+    //kdDebug(41010) << "setDirty() " << name() << ", " << rc << ", valid: " << rc.isValid() << "\n";
 
     if (rc.isValid()) m_dirtyRect = rc;
     
     // If we're dirty, our parent is dirty, if we've got a parent
-    if (m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
+    if (propagate && m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
 
     
 }
 
-void KisLayer::setDirty(const QRect & rc)
+void KisLayer::setDirty(const QRect & rc, bool propagate)
 {
-    kdDebug(41010) << "setDirty(rc) "
-            << name()
-            << ", new rect: "
-            << rc
-            << ", old rect: "
-            << m_dirtyRect
-            << ", becomes: "
-            << (m_dirtyRect | rc)
-            << "\n";
+//     kdDebug(41010) << "setDirty(rc) "
+//             << name()
+//             << ", new rect: "
+//             << rc
+//             << ", old rect: "
+//             << m_dirtyRect
+//             << ", becomes: "
+//             << (m_dirtyRect | rc)
+//             << "\n";
     // If we're dirty, our parent is dirty, if we've got a parent
     
     if (rc.isValid())
         m_dirtyRect |= rc;
     
-    if (m_parent && m_dirtyRect.isValid())
+    if (propagate && m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);
 
 }

@@ -641,7 +641,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_bkg = new KisBackground();
     
     m_rootLayer = new KisGroupLayer(this,"root", OPACITY_OPAQUE);
-    connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImafgeUpdated(QRect)));
     
     m_xres = 1.0;
     m_yres = 1.0;
@@ -655,6 +655,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
 
 void KisImage::lock()
 {
+    kdDebug() << "locking\n";
     if (m_private->lockCount == 0) {
         if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
         m_private->sizeChangedWhileLocked = false;
@@ -665,6 +666,7 @@ void KisImage::lock()
 
 void KisImage::unlock()
 {
+    kdDebug() << "unlocking\n";
     Q_ASSERT(m_private->lockCount != 0);
 
     if (m_private->lockCount != 0) {
@@ -1109,14 +1111,28 @@ bool KisImage::removeLayer(KisLayerSP layer)
         return false;
 
     if (KisGroupLayerSP parent = layer -> parent()) {
-
+        // Adjustment layers should mark the layers underneath them, whose rendering
+        // they have cached, diryt on removal. Otherwise, the group won't be re-rendered.
+        KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
+        if (al) {
+            QRect r = al->extent();
+            lock(); // Lock the image, because we are going to dirty a lot of layers
+            KisLayerSP l = layer->nextSibling();
+            while (l) {
+                KisAdjustmentLayer * al2 = dynamic_cast<KisAdjustmentLayer*>(l.data());
+                l->setDirty(r, false);
+                if (al2 != 0) break;
+                l = l->nextSibling();
+            }
+            unlock();
+        }
+        
         KisLayerSP wasAbove = layer -> nextSibling();
         KisLayerSP wasBelow = layer -> prevSibling();
         const bool wasActive = layer == activeLayer();
         const bool success = parent -> removeLayer(layer);
         if (success) {
             layer -> setImage(0);
-            //notify(layer->extent());
             if (!layer->temporary() && m_adapter->undo()) {
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             }

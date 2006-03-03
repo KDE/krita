@@ -47,6 +47,7 @@
 #include <kis_view.h>
 
 #include "kritascripting/kis_script_progress.h"
+#include "kritascripting/kis_script_monitor.h"
 
 typedef KGenericFactory<Scripting> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -81,6 +82,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
 
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
         connect(m_scriptguiclient, SIGNAL(executionStarted( const Kross::Api::ScriptAction* )), this, SLOT(executionStarted(const Kross::Api::ScriptAction*)));
+        KisScriptMonitor::instance()->monitor( m_scriptguiclient );
 
         Kross::Api::Manager::scriptManager()->addQObject(m_view->canvasSubject()->document(), "KritaDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KritaView");

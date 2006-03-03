@@ -8,7 +8,7 @@ INCLUDES  =  -I$(top_srcdir)/krita/sdk \
 
 
 lib_LTLIBRARIES = libkritascripting.la
-libkritascripting_la_SOURCES = kis_script_progress.cpp
+libkritascripting_la_SOURCES = kis_script_progress.cpp kis_script_monitor.cpp
 noinst_HEADERS = kis_script_progress.h
 
 libkritascripting_la_LDFLAGS = -no-undefined $(all_libraries)

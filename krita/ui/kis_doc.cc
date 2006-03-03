@@ -329,7 +329,6 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
     setUndo(false);
 
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        kdDebug(DBG_AREA_FILE) << "Node: " << node.nodeName() << ", element: " << node.isElement() << "\n";
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 QDomElement elem = node.toElement();
@@ -440,7 +439,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         }
 
         if (cs == 0) {
-            kdDebug(DBG_AREA_FILE) << "Could not open colorspace\n";
+            kdWarning(DBG_AREA_FILE) << "Could not open colorspace\n";
             return 0;
         }
 
@@ -473,7 +472,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                     KisLayerSP layer = loadLayer(child.toElement(), img);
 
                     if (!layer) {
-                        kdDebug(DBG_AREA_FILE) << "Could not load layer\n";
+                        kdWarning(DBG_AREA_FILE) << "Could not load layer\n";
                     }
                     else {
                         img -> nextLayerName(); // Make sure the nameserver is current with the number of layers.
@@ -499,22 +498,17 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     bool visible;
     bool locked;
 
-    kdDebug(DBG_AREA_FILE) << "loadLayer called\n";
-
     if ((name = element.attribute("name")).isNull())
         return 0;
-    kdDebug(DBG_AREA_FILE) << "Loading layer " << name << "\n";
 
     if ((attr = element.attribute("x")).isNull())
         return 0;
     x = attr.toInt();
-    kdDebug(DBG_AREA_FILE) << "X: " << x << "\n";
 
     if ((attr = element.attribute("y")).isNull())
         return 0;
 
     y = attr.toInt();
-    kdDebug(DBG_AREA_FILE) << "Y: " << y << "\n";
 
     if ((attr = element.attribute("opacity")).isNull())
         return 0;
@@ -522,41 +516,33 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if ((opacity = attr.toInt()) < 0 || opacity > Q_UINT8_MAX)
         opacity = OPACITY_OPAQUE;
 
-    kdDebug(DBG_AREA_FILE) << "Opacity: " << opacity << "\n";
 
     QString compositeOpName = element.attribute("compositeop");
     KisCompositeOp compositeOp;
 
     if (compositeOpName.isNull()) {
-    kdDebug(DBG_AREA_FILE) << "no compositeOpName. Setting COMPOSITE_OVER \n";
         compositeOp = COMPOSITE_OVER;
     } else {
-    kdDebug(DBG_AREA_FILE) << "compositeOpName: " << compositeOpName << "\n";
         compositeOp = KisCompositeOp(compositeOpName);
     }
 
     if (!compositeOp.isValid()) {
         return 0;
     }
-    kdDebug(DBG_AREA_FILE) << "CompositeOp: " << compositeOpName << "\n";
 
     if ((attr = element.attribute("visible")).isNull())
         attr = "1";
 
     visible = attr == "0" ? false : true;
-    kdDebug(DBG_AREA_FILE) << "Visible: " << visible << "\n";
 
     if ((attr = element.attribute("locked")).isNull())
         attr = "0";
 
     locked = attr == "0" ? false : true;
-    kdDebug(DBG_AREA_FILE) << "Locked: " << locked<< "\n";
 
     // Now find out the layer type and do specific handling
     if ((attr = element.attribute("layertype")).isNull())
         return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp) ;
-
-    kdDebug(DBG_AREA_FILE) << "Has specified layertype " << attr << "\n";
 
     if(attr == "paintlayer")
         return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
@@ -570,7 +556,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if(attr == "partlayer")
         return loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
 
-    kdDebug(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
+    kdWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return 0;
 }
 
@@ -579,7 +565,6 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
                                   QString name, Q_INT32 x, Q_INT32 y,
                                   Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
 {
-    kdDebug(DBG_AREA_FILE) << "loadPaintLayer called\n";
     QString attr;
     KisPaintLayerSP layer;
     KisColorSpace * cs;
@@ -606,7 +591,6 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
         m_layerFilenames[layer.data()] = name;
     else
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
-    kdDebug(DBG_AREA_FILE) << "filename of layer: " << m_layerFilenames[layer.data()]  << "\n";
 
     // Load exif info
     for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
@@ -624,7 +608,6 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
                                        QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                                        KisCompositeOp compositeOp)
 {
-    kdDebug(DBG_AREA_FILE) << "loadGroupLayer called\n";
     QString attr;
     KisGroupLayerSP layer;
 
@@ -646,26 +629,23 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
                                              QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
                                              KisCompositeOp compositeOp)
 {
-    kdDebug(DBG_AREA_FILE) << "loadAdjustmentLayer called\n";
     QString attr;
     KisAdjustmentLayerSP layer;
     QString filtername;
-    
+
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
-        kdDebug(DBG_AREA_FILE) << "Adjustmentlayer with empty filtername.\n";
         return 0;
     }
-    
+
     KisFilter * f = KisFilterRegistry::instance()->get(filtername);
-    kdDebug(DBG_AREA_FILE) << "Filtername: " << filtername << "\n";
     if (!f) {
-        kdDebug(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
+        kdWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
     KisFilterConfiguration * kfc = f->configuration();
-    
+
     // We'll load the configuration and the selection later.
     layer = new KisAdjustmentLayer(img, name, kfc, 0);
     Q_CHECK_PTR(layer);
@@ -676,12 +656,11 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
     layer -> setX(x);
     layer -> setY(y);
     layer -> setOpacity(opacity);
-    
+
     if ((element.attribute("filename")).isNull())
         m_layerFilenames[layer.data()] = name;
     else
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
-    kdDebug(DBG_AREA_FILE) << "filename of adjustment layer: " << m_layerFilenames[layer.data()]  << "\n";
 
     return layer;
 }
@@ -695,7 +674,7 @@ KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
     QDomElement partElement = element.namedItem("object").toElement();
 
     if (partElement.isNull()) {
-        kdDebug() << "loadPartLayer failed with partElement isNull" << endl;
+        kdWarning() << "loadPartLayer failed with partElement isNull" << endl;
         return 0;
     }
 
@@ -796,7 +775,6 @@ bool KisDoc::completeLoading(KoStore *store)
         data = store -> read(store -> size());
         store -> close();
         (m_currentImage) -> addAnnotation(new KisAnnotation("exif", "", data));
-        kdDebug(DBG_AREA_FILE) << "Opened exif information, size is " << data.size() << endl;
     }
     // icc profile
     location = external ? QString::null : uri;
@@ -807,7 +785,6 @@ bool KisDoc::completeLoading(KoStore *store)
         data = store -> read(store -> size());
         store -> close();
         (m_currentImage) -> setProfile(new KisProfile(data));
-        kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
     }
 
     IODone();
@@ -818,12 +795,12 @@ bool KisDoc::completeLoading(KoStore *store)
 
 QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 {
-    
+
     KisConfig cfg;
-    
+
     int w = cfg.defImgWidth();
     int h = cfg.defImgHeight();
-    
+
     QSize sz = KisClipboard::instance()->clipSize();
     if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
         w = sz.width();
@@ -983,7 +960,6 @@ void KisDoc::slotImageUpdated(const QRect& rect)
 void KisDoc::beginMacro(const QString& macroName)
 {
     if (m_undo) {
-        //kdDebug() << "Adding macro " << macroName << ", depth: " << m_macroNestDepth << endl;
         if (m_macroNestDepth == 0) {
             Q_ASSERT(m_currentMacro == 0);
             m_currentMacro = new KMacroCommand(macroName);
@@ -998,8 +974,6 @@ void KisDoc::endMacro()
 {
     if (m_undo) {
         Q_ASSERT(m_macroNestDepth > 0);
-        //kdDebug() << "Ending macro " <<  ", depth: " << m_macroNestDepth << endl;
-        
         if (m_macroNestDepth > 0) {
             m_macroNestDepth--;
 
@@ -1034,14 +1008,13 @@ KCommand * KisDoc::presentCommand()
 void KisDoc::addCommand(KCommand *cmd)
 {
     Q_ASSERT(cmd);
-    kdDebug() << "Adding command " << cmd->name() << endl;
 
     KisCommandHistoryListener* l = 0;
-    
+
     for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
         l->notifyCommandAdded(cmd);
     }
-    
+
     setModified(true);
 
     if (m_undo) {
@@ -1092,11 +1065,11 @@ void KisDoc::slotCommandExecuted(KCommand *command)
     emit sigCommandExecuted();
 
     KisCommandHistoryListener* l = 0;
-    
+
     for (l = m_undoListeners.first(); l; l = m_undoListeners.next()) {
         l->notifyCommandExecuted(command);
     }
-    
+
 }
 
 void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -1164,7 +1137,6 @@ KisImageSP KisDoc::currentImage()
 
 void KisDoc::setCurrentImage(KisImageSP image)
 {
-    kdDebug() << "setCurrentImage " << image->name() << "\n";
     m_currentImage = image;
     setUndo(true);
     image->notifyImageLoaded();

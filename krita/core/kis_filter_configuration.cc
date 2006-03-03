@@ -42,33 +42,29 @@ KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rh
 
 void KisFilterConfiguration::fromXML(const QString & s )
 {
-    //kdDebug() << "Restoring filter configuration from: " << s << "\n";
     m_properties.clear();
-    
+
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
 
-    //kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
-
     m_name = e.attribute("name");
     m_version = e.attribute("version").toInt();
-    
+
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
         QDomElement e = n.toElement();
         QString name;
         QString type;
         QString value;
-        
+
         if (!e.isNull()) {
             if (e.tagName() == "property") {
                 name = e.attribute("name");
                 type = e.attribute("type");
                 value = e.text();
                 // XXX Convert the variant pro-actively to the right type?
-                //kdDebug() << "Property name: " << name << ", type: " << type << ", value: " << value << "\n";
                 m_properties[name] = QVariant(value);
             }
         }
@@ -98,7 +94,6 @@ QString KisFilterConfiguration::toString()
         root.appendChild(e);
     }
 
-    //kdDebug() << doc.toString();
     return doc.toString();
 }
 
@@ -147,12 +142,11 @@ QVariant KisFilterConfiguration::getProperty(const QString & name)
 int KisFilterConfiguration::getInt(const QString & name, int def)
 {
     QVariant v = getProperty(name);
-    //kdDebug() << "V: " << name << ", " << v << ", type: " << v.typeName() << ", " << v.asInt() << endl;
     if (v.isValid())
         return v.asInt();
     else
         return def;
-                
+
 }
 
 double KisFilterConfiguration::getDouble(const QString & name, double def)
@@ -186,7 +180,6 @@ void KisFilterConfiguration::dump()
 {
     QMap<QString, QVariant>::Iterator it;
     for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
-        kdDebug() << "Prop: " << it.key() << ", value: " << it.data() << ", type: " << it.data().typeName() << "\n";
     }
 
 }

@@ -58,18 +58,12 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
     setInstance(KritaScriptingFactory::instance());
 
 
-    kdDebug(41006) << "Scripting plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
     if ( parent->inherits("KisView") )
     {
         setInstance(Scripting::instance());
         m_view = (KisView*) parent;
         m_scriptguiclient = new Kross::Api::ScriptGUIClient( m_view, m_view );
 //         m_scriptguiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
-        kdDebug(41011) << "Setup actions for scripting !" << endl;
         //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
         setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
         new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");

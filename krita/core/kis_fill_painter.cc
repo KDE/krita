@@ -187,8 +187,6 @@ void KisFillPainter::genericFillStart(int startX, int startY) {
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
         } else {
-            kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
-                    << endl;
             m_width = m_height = 500;
         }
     }
@@ -233,8 +231,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
         } else {
-            kdDebug(DBG_AREA_CORE) << "KisFillPainter::genericFillStart: no size set, assuming 500x500"
-                    << endl;
             m_width = m_height = 500;
         }
     }
@@ -248,7 +244,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     // sample merged?
     if (m_sampleMerged) {
         if (!m_device -> image()) {
-            kdDebug(DBG_AREA_CORE) << "No image to sample merged from associated with the device" << endl;
             return new KisSelection(m_device);
         }
         sourceDevice = m_device -> image() -> mergedImage();

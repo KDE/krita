@@ -42,13 +42,6 @@ K_EXPORT_COMPONENT_FACTORY( kritadropshadow, KGenericFactory<KisDropshadowPlugin
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        kdDebug(41006) << "Dropshadow plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
-
-
     if ( parent->inherits("KisView") ) {
 
         setInstance(KGenericFactory<KisDropshadowPlugin>::instance());
@@ -71,8 +64,8 @@ void KisDropshadowPlugin::slotDropshadow()
     KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
 
-    DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->id().name(), 
-                                                      image->colorSpace()->id().name(), 
+    DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->id().name(),
+                                                      image->colorSpace()->id().name(),
                                                       m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 

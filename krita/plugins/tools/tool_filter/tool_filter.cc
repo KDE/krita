@@ -49,12 +49,6 @@ ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
 {
      setInstance(ToolFilterFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "Filter tool plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);

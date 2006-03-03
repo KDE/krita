@@ -55,13 +55,6 @@ RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
 
-     kdDebug(41006) << "RotateImage plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if ( parent->inherits("KisView") ) {
         setInstance(RotateImageFactory::instance());
         setXMLFile(locate("data","kritaplugins/rotateimage.rc"), true);

@@ -34,6 +34,7 @@
 #include <qstringlist.h>
 #include <qtimer.h>
 
+#include <ksqueezedtextlabel.h>
 #include <kdebug.h>
 #include <kxmlguibuilder.h>
 #include <kxmlguiclient.h>
@@ -580,8 +581,8 @@ private:
     KisUndoAdapter *m_adapter;
     vKisCanvasObserver m_observers;
     QLabel *m_statusBarZoomLabel;
-    QLabel *m_statusBarSelectionLabel;
-    QLabel *m_statusBarProfileLabel;
+    KSqueezedTextLabel *m_statusBarSelectionLabel;
+    KSqueezedTextLabel *m_statusBarProfileLabel;
     KisLabelProgress *m_progress;
 
 

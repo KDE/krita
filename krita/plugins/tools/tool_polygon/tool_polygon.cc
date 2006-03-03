@@ -47,12 +47,6 @@ ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(ToolPolygonFactory::instance());
 
-    kdDebug(41006) << "Polygon tool plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
-
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );

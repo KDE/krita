@@ -52,12 +52,11 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     KisLayerSP next = layer->nextSibling();
     Q_ASSERT( next );
-    if ( !next ) kdDebug() << "No sibling -- we cannot adjust anything\n";
 
     m_currentConfiguration = layer->filter();
     m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name());
     if (!m_currentFilter) {
-        kdDebug() << "We haven't got this filter\n";
+        kdWarning() << "No filter specified!\n";
     }
 
     KisPaintDeviceSP dev = 0;
@@ -153,16 +152,14 @@ void KisDlgAdjLayerProps::refreshPreview()
         kdDebug() << "no preview!\n";
         return;
     }
-        
+
     KisPaintDeviceSP layer =  m_preview->getDevice();
 
     if (!layer) {
-        kdDebug() << "no layer!\n";
         return;
     }
-    
+
     if (!m_currentFilter) {
-        kdDebug() << "No current filter\n";
         return;
     }
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);

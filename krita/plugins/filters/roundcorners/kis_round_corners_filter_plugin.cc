@@ -29,13 +29,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaroundcornersfilter, KisRoundCornersFilterPlugin
 KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(KisRoundCornersFilterPluginFactory::instance());
-
-        kdDebug(41006) << "RoundCornersFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
+    setInstance(KisRoundCornersFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

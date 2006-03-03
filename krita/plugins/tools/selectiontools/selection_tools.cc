@@ -55,12 +55,6 @@ SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringL
 {
      setInstance(SelectionToolsFactory::instance());
 
-     kdDebug(41006) << "Selection tools plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
      if ( parent->inherits("KisToolRegistry") )
      {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);

@@ -78,8 +78,6 @@ KisTileManager::KisTileManager() {
 }
 
 KisTileManager::~KisTileManager() {
-    kdDebug(DBG_AREA_TILES) << "Destructing TileManager: unmapping everything" << endl;
-
     if (!m_freeLists.empty()) { // See if there are any nonempty freelists
         FreeListList::iterator listsIt = m_freeLists.begin();
         FreeListList::iterator listsEnd = m_freeLists.end();
@@ -102,7 +100,6 @@ KisTileManager::~KisTileManager() {
         m_freeLists.clear();
     }
 
-    kdDebug(DBG_AREA_TILES) << "Destructing TileManager: deleting file" << endl;
     m_tempFile.close();
     m_tempFile.unlink();
 
@@ -113,7 +110,7 @@ KisTileManager::~KisTileManager() {
     delete m_swapMutex;
 }
 
-KisTileManager* KisTileManager::instance() 
+KisTileManager* KisTileManager::instance()
 {
     if(KisTileManager::m_singleton == 0) {
         staticDeleter.setObject(KisTileManager::m_singleton, new KisTileManager());
@@ -122,7 +119,7 @@ KisTileManager* KisTileManager::instance()
     return KisTileManager::m_singleton;
 }
 
-void KisTileManager::registerTile(KisTile* tile) 
+void KisTileManager::registerTile(KisTile* tile)
 {
 
     m_swapMutex->lock();
@@ -196,7 +193,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     m_swapMutex->unlock();
 }
 
-void KisTileManager::ensureTileLoaded(KisTile* tile) 
+void KisTileManager::ensureTileLoaded(KisTile* tile)
 {
 
     m_swapMutex->lock();
@@ -214,7 +211,7 @@ void KisTileManager::ensureTileLoaded(KisTile* tile)
     m_swapMutex->unlock();
 }
 
-void KisTileManager::maySwapTile(KisTile* tile) 
+void KisTileManager::maySwapTile(KisTile* tile)
 {
 
     m_swapMutex->lock();
@@ -229,7 +226,7 @@ void KisTileManager::maySwapTile(KisTile* tile)
     m_swapMutex->unlock();
 }
 
-void KisTileManager::fromSwap(TileInfo* info) 
+void KisTileManager::fromSwap(TileInfo* info)
 {
     m_swapMutex->lock();
 
@@ -287,7 +284,7 @@ void KisTileManager::toSwap(TileInfo* info) {
                                    m_tempFile.handle(), m_fileSize);
 
             if (data == (Q_UINT8*)-1) {
-                kdDebug(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're going to crash...\n";
+                kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're going to crash...\n";
             }
 
             info -> fsize = info -> size;
@@ -318,7 +315,7 @@ void KisTileManager::toSwap(TileInfo* info) {
     m_swapMutex->unlock();
 }
 
-void KisTileManager::doSwapping() 
+void KisTileManager::doSwapping()
 {
     m_swapMutex->lock();
 
@@ -342,7 +339,7 @@ void KisTileManager::doSwapping()
     m_swapMutex->unlock();
 }
 
-void KisTileManager::printInfo() 
+void KisTileManager::printInfo()
 {
     kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
     kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
@@ -364,7 +361,7 @@ void KisTileManager::printInfo()
     kdDebug(DBG_AREA_TILES) << endl;
 }
 
-Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize) 
+Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize)
 {
     m_swapMutex->lock();
 
@@ -377,7 +374,7 @@ Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize)
     return new Q_UINT8[m_tileSize * pixelSize];
 }
 
-void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize) 
+void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize)
 {
     m_poolMutex->lock();
     if (isPoolTile(data, pixelSize)) {
@@ -387,7 +384,7 @@ void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize)
     m_poolMutex->unlock();
 }
 
-Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize) 
+Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
 {
     m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
@@ -450,9 +447,6 @@ void KisTileManager::configChanged() {
     cfg->setGroup("");
     m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
     m_swappiness = cfg->readNumEntry("swappiness", 100);
-
-    kdDebug(DBG_AREA_TILES) << "TileManager has new config: maxinmem: " << m_maxInMem
-            << " swappiness: " << m_swappiness << endl;
 
     m_swapMutex->lock();
     doSwapping();

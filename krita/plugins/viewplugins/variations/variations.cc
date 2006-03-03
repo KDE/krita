@@ -52,13 +52,6 @@ Variations::Variations(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
 
-     kdDebug(41006) << "Variations plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if ( parent->inherits("KisView") )
     {
         setInstance(VariationsFactory::instance());

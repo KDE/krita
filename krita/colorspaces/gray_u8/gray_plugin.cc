@@ -42,12 +42,6 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 {
            setInstance(GrayPluginFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "GRAY Color model plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {

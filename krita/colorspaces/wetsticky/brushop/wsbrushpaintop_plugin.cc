@@ -41,12 +41,6 @@ WSBrushPaintOpPlugin::WSBrushPaintOpPlugin(QObject *parent, const char *name, co
 {
     setInstance(WSBrushPaintOpPluginFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "WSBrushPaintOpPlugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {

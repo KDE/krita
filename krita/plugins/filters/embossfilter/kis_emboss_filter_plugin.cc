@@ -27,13 +27,8 @@ K_EXPORT_COMPONENT_FACTORY( kritaembossfilter, KisEmbossFilterPluginFactory( "kr
 
 KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
 {
-        setInstance(KisEmbossFilterPluginFactory::instance());
+    setInstance(KisEmbossFilterPluginFactory::instance());
 
-        kdDebug(41006) << "EmbossFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisEmbossFilter());

@@ -535,7 +535,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
     Q_ASSERT(repeatStrategy != 0);
 
-    
+
     //If the device has a selection only iterate over that selection
     QRect r;
     if( m_device -> hasSelection() ) {
@@ -545,15 +545,13 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
         width = r.width();
         height = r.height();
     }
-    kdDebug(DBG_AREA_CORE) << "Going to compute gradient for rect: "
-        << startx << ", " << starty << ", " << width << ", " << height << "\n";
 
     Q_INT32 endx = startx + width - 1;
     Q_INT32 endy = starty + height - 1;
 
     QImage layer (width, height, 32);
     layer.setAlphaBuffer(true);
-    
+
     int pixelsProcessed = 0;
     int lastProgressPercent = 0;
 
@@ -579,10 +577,10 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             Q_UINT8 opacity;
 
             m_gradient -> colorAt(t, &color, &opacity);
-            
+
             layer.setPixel(x - startx, y - starty,
                            qRgba(color.red(), color.green(), color.blue(), opacity));
-            
+
             pixelsProcessed++;
 
             int progressPercent = (pixelsProcessed * 100) / totalPixels;
@@ -612,7 +610,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                 QColor thisPixel(layerPointer[2], layerPointer[1], layerPointer[0]);
                 Q_UINT8 thisPixelOpacity = layerPointer[3];
-            
+
                 for (int yOffset = -1; yOffset < 2; yOffset++) {
                     for (int xOffset = -1; xOffset < 2; xOffset++) {
 
@@ -626,7 +624,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                                 Q_UINT8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
                                 QColor color(*(pixelPos +2), *(pixelPos + 1), *pixelPos);
                                 Q_UINT8 opacity = *(pixelPos + 3);
-                                
+
                                 double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
                                 double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
                                 double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;

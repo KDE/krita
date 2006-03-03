@@ -136,7 +136,6 @@ KisFilterStrategyRegistry *KisFilterStrategyRegistry::m_singleton = 0;
 
 KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 {
-     kdDebug(DBG_AREA_REGISTRY) << " creating a KisFilterStrategyRegistry" << endl;
     Q_ASSERT(KisFilterStrategyRegistry::m_singleton == 0);
     KisFilterStrategyRegistry::m_singleton = this;
 }

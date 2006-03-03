@@ -37,13 +37,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_cmyk_u16_plugin, CMYKU16PluginFactory( "krita"
 CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(CMYKU16PluginFactory::instance());
-
-    kdDebug(DBG_AREA_PLUGINS) << "16-bit integer CMYK Color model plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
+    setInstance(CMYKU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {

@@ -46,14 +46,6 @@ SelectSimilar::SelectSimilar(QObject *parent, const char *name, const QStringLis
 {
     setInstance(SelectSimilarFactory::instance());
 
-     kdDebug(41006) << "Selectsimilar plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
-
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);

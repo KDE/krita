@@ -27,13 +27,8 @@ K_EXPORT_COMPONENT_FACTORY( kritacubismfilter, KisCubismFilterPluginFactory( "kr
 
 KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
 {
-        setInstance(KisCubismFilterPluginFactory::instance());
+    setInstance(KisCubismFilterPluginFactory::instance());
 
-        kdDebug(41006) << "CubismFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
     if ( parent->inherits("KisFilterRegistry") )
     {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);

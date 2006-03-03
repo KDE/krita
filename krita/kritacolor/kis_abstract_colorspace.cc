@@ -170,16 +170,11 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
         return true;
     }
-    
+
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();
     Q_INT32 dstPixelSize = dstColorSpace -> pixelSize();
-
-//    kdDebug(41004) << "src space: " << id().name() << ", src profile " << srcProfile->productName()
-//              << ", dst space: " << dstColorSpace->id().name() << ", dst profile " << dstProfile->productName()
-//              << ", number of pixels: " << numPixels << "\n";
-
 
     if (m_lastUsedTransform != 0) {
         if (dstColorSpace->getProfile() == m_lastUsedDstProfile)
@@ -194,9 +189,6 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 				 dstColorSpace->getProfile(),
 				 renderingIntent);
             if (tf) {
-//                  kdDebug(41004) << "Going to add transform to cache "
-//                            << " m_profile: " << m_profile->productName()
-//                            << " dstProfile " << dstColorSpace->getProfile()->productName() << "\n";
 		// XXX: Should we clear the transform cache if it gets too big?
 		m_transforms[dstColorSpace] = tf;
             }
@@ -315,7 +307,7 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
      cmsSetColorSpace(adj->profiles[1], icSigLabData);
      cmsSetPCS(adj->profiles[1], icSigLabData);
 
-     cmsSetRenderingIntent(adj->profiles[1], INTENT_PERCEPTUAL); 
+     cmsSetRenderingIntent(adj->profiles[1], INTENT_PERCEPTUAL);
 
      // Creates a LUT with 3D grid only
      Lut = cmsAllocLUT();
@@ -331,9 +323,9 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 
     // Create tags
 
-    cmsAddTag(adj->profiles[1], icSigDeviceMfgDescTag,      (LPVOID) "(krita internal)"); 
-    cmsAddTag(adj->profiles[1], icSigProfileDescriptionTag, (LPVOID) "krita satuation abstract profile");  
-    cmsAddTag(adj->profiles[1], icSigDeviceModelDescTag,    (LPVOID) "satuation built-in");      
+    cmsAddTag(adj->profiles[1], icSigDeviceMfgDescTag,      (LPVOID) "(krita internal)");
+    cmsAddTag(adj->profiles[1], icSigProfileDescriptionTag, (LPVOID) "krita satuation abstract profile");
+    cmsAddTag(adj->profiles[1], icSigDeviceModelDescTag,    (LPVOID) "satuation built-in");
 
     cmsAddTag(adj->profiles[1], icSigMediaWhitePointTag, (LPVOID) cmsD50_XYZ());
 
@@ -356,7 +348,7 @@ KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 *
         for(uint i =0; i < 256; i++)
             transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
     }
-    
+
     KisColorAdjustment *adj = new KisColorAdjustment;
     adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
     adj->profiles[1] = NULL;

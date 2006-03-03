@@ -21,7 +21,6 @@
 #include LCMS_HEADER
 
 #include <qstringlist.h>
-#include <qthread.h>
 #include <qdir.h>
 
 #include <kdebug.h>

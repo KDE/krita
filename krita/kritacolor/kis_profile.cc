@@ -93,7 +93,7 @@ bool KisProfile::load()
     file.close();
 
     if (m_profile == 0) {
-        kdDebug() << "Failed to load profile from " << m_filename << endl;
+        kdWarning() << "Failed to load profile from " << m_filename << endl;
     }
 
     return init();
@@ -109,7 +109,7 @@ bool KisProfile::init()
         m_productDescription = cmsTakeProductDesc(m_profile);
         m_productInfo = cmsTakeProductInfo(m_profile);
         m_valid = true;
-        
+
         // Check if the profile can convert (something -> this)
 //         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
 //         if( OutMatShaper )
@@ -122,7 +122,7 @@ bool KisProfile::init()
         {
             m_suitableForOutput = true;
         }
-        
+
 #if 0
     // XXX: It wasn't that easy to save a little memory: thsi gives an lcms error
         // Okay, we know enough. Free the memory; we'll load it again if needed.

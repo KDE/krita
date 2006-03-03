@@ -168,7 +168,7 @@ void KisScaleWorker::run()
         } /* next dst row */
     } /* next dst column */
 
-    // XXX: I'm thinking that we should be able to cancel earlier, in the look. 
+    // XXX: I'm thinking that we should be able to cancel earlier, in the look.
     if(!isCanceled()){
         m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
         m_dev -> crop(0, 0, targetW, targetH);
@@ -202,8 +202,6 @@ void KisScaleWorker::run()
     }
 
     QTime stoptime = QTime::currentTime ();
-    kdDebug(41001) << "time needed for scaling: " << starttime.msecsTo ( stoptime )  << "ms" << endl;
-
     return;
 }
 

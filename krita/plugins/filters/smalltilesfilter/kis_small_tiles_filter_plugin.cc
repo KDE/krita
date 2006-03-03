@@ -29,13 +29,7 @@ K_EXPORT_COMPONENT_FACTORY( kritasmalltilesfilter, KisSmallTilesFilterPluginFact
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(KisSmallTilesFilterPluginFactory::instance());
-
-        kdDebug(41006) << "SmallTilesFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
+    setInstance(KisSmallTilesFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);

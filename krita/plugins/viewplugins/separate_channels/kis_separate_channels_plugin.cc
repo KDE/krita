@@ -44,8 +44,6 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char
 {
 
     if ( parent->inherits("KisView") ) {
-        kdDebug (41006) << "Separate channels plugin\n";
-
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
         setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);
         m_view = (KisView*) parent;
@@ -67,7 +65,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
     KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
-    
+
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->id().name(),
                                                 image->colorSpace()->id().name(), m_view, "Separate");
     Q_CHECK_PTR(dlgSeparate);
@@ -80,15 +78,15 @@ void KisSeparateChannelsPlugin::slotSeparate()
     }
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
-        
+
         KisChannelSeparator separator(m_view);
-        separator.separate(m_view->canvasSubject()->progressDisplay(), 
-                           dlgSeparate->getAlphaOptions(), 
+        separator.separate(m_view->canvasSubject()->progressDisplay(),
+                           dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),
                            dlgSeparate->getDownscale(),
                            dlgSeparate->getToColor());
-        
+
     }
 
     delete dlgSeparate;

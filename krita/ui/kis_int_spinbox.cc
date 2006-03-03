@@ -161,7 +161,7 @@ void KisIntSpinbox::setValue(int val)
    d->m_slider->blockSignals(true);
    d->m_slider->setValue(val);
    d->m_slider->blockSignals(false);
-   
+
    d->m_numinput->blockSignals(true);
    d->m_numinput->setValue(val);
    d->m_numinput->blockSignals(false);
@@ -192,7 +192,6 @@ void KisIntSpinbox::slotAboutToHide()
 
 void KisIntSpinbox::slotTimeout()
 {
-    kdDebug() << "timeout: " << d->m_prevValue <<",  " << value() << endl;
     emit valueChanged(value());
     emit valueChanged(value(), true);
 }

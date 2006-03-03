@@ -35,7 +35,6 @@ public:
 
 KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 {
-    //kdDebug() << "Transaction " << name << " created for device " << device->name() << "\n";
     m_private = new KisTransactionPrivate;
 
     m_private->m_name = name;
@@ -45,7 +44,6 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 
 KisTransaction::~KisTransaction()
 {
-    //kdDebug() << "going to delete: " << m_private->m_name << ", " << kdBacktrace() << "\n";
     if (m_private->m_memento) {
         // For debugging purposes
         m_private->m_memento -> setInvalid();
@@ -56,8 +54,6 @@ KisTransaction::~KisTransaction()
 void KisTransaction::execute()
 {
     Q_ASSERT(m_private->m_memento != 0);
-
-    //kdDebug() << "Executing transaction " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
 
     m_private->m_device->rollforward(m_private->m_memento);
 
@@ -73,15 +69,13 @@ void KisTransaction::execute()
 void KisTransaction::unexecute()
 {
     Q_ASSERT(m_private->m_memento != 0);
-    //kdDebug() << "Unexecuting transaction: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
-
     m_private->m_device -> rollback(m_private->m_memento);
 
     QRect rc;
     Q_INT32 x, y, width, height;
     m_private->m_memento->extent(x,y,width,height);
     rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
-    
+
     KisLayerSP l = m_private->m_device->parentLayer();
     if (l) l->setDirty(rc);
 
@@ -90,7 +84,6 @@ void KisTransaction::unexecute()
 void KisTransaction::unexecuteNoUpdate()
 {
     Q_ASSERT(m_private->m_memento != 0);
-    //kdDebug() << "Unexecuting transaction with no update: " << m_private->m_name << " for device " << m_private->m_device->name() << "\n";
 
     m_private->m_device -> rollback(m_private->m_memento);
 }

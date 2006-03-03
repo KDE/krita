@@ -196,52 +196,52 @@ namespace {
 
     class KisLayerOffsetCommand : public KNamedCommand {
         typedef KNamedCommand super;
-    
+
     public:
         KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos);
         virtual ~KisLayerOffsetCommand();
-    
+
         virtual void execute();
         virtual void unexecute();
-    
+
     private:
         void moveTo(const QPoint& pos);
-    
+
     private:
         KisLayerSP m_layer;
         QRect m_updateRect;
         QPoint m_oldPos;
         QPoint m_newPos;
     };
-    
+
     KisLayerOffsetCommand::KisLayerOffsetCommand(KisLayerSP layer, const QPoint& oldpos, const QPoint& newpos) :
         super(i18n("Move Layer"))
     {
         m_layer = layer;
         m_oldPos = oldpos;
         m_newPos = newpos;
-    
+
         QRect currentBounds = m_layer->exactBounds();
         QRect oldBounds = currentBounds;
         oldBounds.moveBy(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
-    
+
         m_updateRect = currentBounds | oldBounds;
     }
-    
+
     KisLayerOffsetCommand::~KisLayerOffsetCommand()
     {
     }
-    
+
     void KisLayerOffsetCommand::execute()
     {
         moveTo(m_newPos);
     }
-    
+
     void KisLayerOffsetCommand::unexecute()
     {
         moveTo(m_oldPos);
     }
-    
+
     void KisLayerOffsetCommand::moveTo(const QPoint& pos)
     {
         if (m_layer->undoAdapter()) {
@@ -307,11 +307,7 @@ KisLayer::~KisLayer()
 
 void KisLayer::setClean(const QRect & rect)
 {
-    //kdDebug(41010) << "setClean " << name() << " clean: " << rect <<  ", current dirty was: " << m_dirtyRect << endl;
     if (m_dirtyRect.isValid() && rect.isValid()) {
-
-        //kdDebug(41010) << "dirty rect" << m_dirtyRect.x() << ", " << m_dirtyRect.y() << ", " << m_dirtyRect.width() << ", " << m_dirtyRect.height() << endl;
-        //kdDebug(41010) << "cleaned rect: " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 
         // XXX: We should only set the parts clean that were actually cleaned. However, extent and exactBounds conspire
         // to make that very hard atm.
@@ -329,7 +325,6 @@ bool KisLayer::dirty()
 
 bool KisLayer::dirty(const QRect & rc)
 {
-    //kdDebug(41010) << name() << ": dirty: " << rc << ", m_dirtyRect " << m_dirtyRect << endl;
     if (!m_dirtyRect.isValid() || !rc.isValid()) return false;
 
     return rc.intersects(m_dirtyRect);
@@ -343,33 +338,22 @@ QRect KisLayer::dirtyRect() const
 void KisLayer::setDirty(bool propagate)
 {
     QRect rc = extent();
-    
-    //kdDebug(41010) << "setDirty() " << name() << ", " << rc << ", valid: " << rc.isValid() << "\n";
 
     if (rc.isValid()) m_dirtyRect = rc;
-    
+
     // If we're dirty, our parent is dirty, if we've got a parent
     if (propagate && m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
 
-    
+
 }
 
 void KisLayer::setDirty(const QRect & rc, bool propagate)
 {
-//     kdDebug(41010) << "setDirty(rc) "
-//             << name()
-//             << ", new rect: "
-//             << rc
-//             << ", old rect: "
-//             << m_dirtyRect
-//             << ", becomes: "
-//             << (m_dirtyRect | rc)
-//             << "\n";
     // If we're dirty, our parent is dirty, if we've got a parent
-    
+
     if (rc.isValid())
         m_dirtyRect |= rc;
-    
+
     if (propagate && m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);
 
@@ -475,13 +459,11 @@ KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 prevOpacity, Q_UINT8 newOpaci
 
 const bool KisLayer::visible() const
 {
-    //kdDebug(41010) << name() << " visible: " << m_visible << endl;
-    return m_visible; //XXX hmm is this right?
+    return m_visible;
 }
 
 void KisLayer::setVisible(bool v)
 {
-    //kdDebug(41010) << name() << " setVisible: " << v << ", was " << m_visible << endl;
     if (m_visible != v) {
 
         m_visible = v;
@@ -554,7 +536,7 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
        m_compositeOp = compositeOp;
        notifyPropertyChanged();
        setDirty();
- 
+
     }
 }
 

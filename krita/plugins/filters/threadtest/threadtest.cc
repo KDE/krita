@@ -52,13 +52,6 @@ KritaThreadTest::KritaThreadTest(QObject *parent, const char *name, const QStrin
 {
     setInstance(KritaThreadTestFactory::instance());
 
-
-    kdDebug(41006) << "ThreadTest plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry *>(parent);
         r->add(new KisFilterInvert());

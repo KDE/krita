@@ -39,13 +39,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_lms_f32_plugin, LMSF32PluginFactory( "krita" )
 LMSF32Plugin::LMSF32Plugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(LMSF32PluginFactory::instance());
-
-    kdDebug(DBG_AREA_PLUGINS) << "32-bit float LMS Color model plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
+    setInstance(LMSF32PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {

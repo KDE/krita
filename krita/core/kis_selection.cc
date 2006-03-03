@@ -55,7 +55,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
 
 KisSelection::~KisSelection()
 {
-    //kdDebug() << "Deleting selection " << name() << "\n" << kdBacktrace() << "\n";
 }
 
 Q_UINT8 KisSelection::selected(Q_INT32 x, Q_INT32 y)
@@ -82,7 +81,7 @@ QImage KisSelection::maskImage()
     QImage img;
     Q_INT32 x, y, w, h, y2, x2;
     if (m_parentPaintDevice) {
-    
+
         m_parentPaintDevice -> exactBounds(x, y, w, h);
         img = QImage(w, h, 32);
     }
@@ -93,7 +92,7 @@ QImage KisSelection::maskImage()
         h = image()->width();
         img = QImage(w, h, 32);
     }
-    
+
     for (y2 = y; y2 < h - y; ++y2) {
             KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
             x2 = 0;
@@ -114,7 +113,6 @@ void KisSelection::select(QRect r)
     painter.fillRect(r, KisColor(Qt::white, cs), MAX_SELECTED);
     Q_INT32 x, y, w, h;
     extent(x, y, w, h);
-    kdDebug (DBG_AREA_CORE) << "Selected rect: x:" << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
 }
 
 void KisSelection::clear(QRect r)
@@ -163,7 +161,7 @@ QRect KisSelection::selectedRect()
 {
     if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return extent();
-    else 
+    else
         return extent().unite(m_parentPaintDevice->extent());
 }
 

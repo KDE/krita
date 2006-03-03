@@ -330,11 +330,9 @@ void KisSelectionManager::updateGUI()
 
 void KisSelectionManager::imgSelectionChanged(KisImageSP img)
 {
-    kdDebug(DBG_AREA_CORE) << "KisSelectionManager::imgSelectionChanged\n";
-        if (img == m_parent -> currentImg()) {
-                updateGUI();
+    if (img == m_parent -> currentImg()) {
+        updateGUI();
     }
-
 }
 
 void KisSelectionManager::cut()
@@ -359,7 +357,7 @@ void KisSelectionManager::cut()
     dev->clearSelection();
     dev->deselect();
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(t);
     }
@@ -378,12 +376,6 @@ void KisSelectionManager::copy()
     KisSelectionSP selection = dev -> selection();
 
     QRect r = selection -> selectedExactRect();
-
-    kdDebug(DBG_AREA_CORE) << "Selection rect: "
-          << r.x() << ", "
-          << r.y() << ", "
-          << r.width() << ", "
-          << r.height() << "\n";
 
     KisPaintDeviceSP clip = new KisPaintDevice(dev -> colorSpace(), "clip");
     Q_CHECK_PTR(clip);
@@ -413,13 +405,6 @@ void KisSelectionManager::copy()
             ++selectionIt;
         }
     }
-
-    kdDebug(DBG_AREA_CORE) << "Selection copied: "
-                   << r.x() << ", "
-                   << r.y() << ", "
-                   << r.width() << ", "
-                   << r.height() << "\n";
-
 
     m_clipboard -> setClip(clip);
     imgSelectionChanged(m_parent -> currentImg());
@@ -462,7 +447,7 @@ KisLayerSP KisSelectionManager::paste()
                 layer -> convertTo(img -> colorSpace());
 */
         img->addLayer(layer, img -> rootLayer(), img -> activeLayer());
-        
+
         return layer;
     }
     return 0;
@@ -517,7 +502,7 @@ void KisSelectionManager::selectAll()
     dev -> selection() -> clear();
     dev -> selection() -> invert();
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -535,7 +520,7 @@ void KisSelectionManager::deselect()
 
     dev -> deselect();
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -560,7 +545,7 @@ void KisSelectionManager::clear()
 
     dev -> clearSelection();
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter()) img -> undoAdapter() -> addCommand(t);
 }
 
@@ -595,7 +580,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
                           0, 0, img -> width(), img -> height());
 
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter()) {
         img -> undoAdapter() -> addCommand(painter2.endTransaction());
     }
@@ -629,7 +614,7 @@ void KisSelectionManager::reselect()
 
     dev -> reselect(); // sets hasSelection=true
     dev->emitSelectionChanged();
-    
+
     if (img -> undoAdapter())
         img -> undoAdapter() -> addCommand(t);
 }
@@ -655,7 +640,7 @@ void KisSelectionManager::invert()
 
         s -> invert();
         dev->emitSelectionChanged();
-    
+
         if (img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
     }

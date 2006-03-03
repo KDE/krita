@@ -68,8 +68,6 @@ KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", i18n("&Wet & Sticky
  */
 QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
 {
-    kdDebug(DBG_AREA_FILTERS) << "W " << width << ", H " << height << "\n";
-
     return QPoint(random() * width,  random() * height);
 }
 

@@ -40,12 +40,6 @@ RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const char *name, const QStr
 {
     setInstance(RGBF16HalfPluginFactory::instance());
 
-    kdDebug(DBG_AREA_PLUGINS) << "16-bit float 'half' RGB Color model plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
-
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {
         KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>( parent );

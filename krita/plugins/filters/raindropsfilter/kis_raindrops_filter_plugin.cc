@@ -31,13 +31,8 @@ K_EXPORT_COMPONENT_FACTORY( kritaraindropsfilter, KisRainDropsFilterPluginFactor
 
 KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
 {
-        setInstance(KisRainDropsFilterPluginFactory::instance());
+    setInstance(KisRainDropsFilterPluginFactory::instance());
 
-        kdDebug(41006) << "RainDropFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisRainDropsFilter());

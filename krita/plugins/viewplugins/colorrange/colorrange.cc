@@ -54,13 +54,6 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
 
-     kdDebug(41006) << "Colorrange plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if (parent -> inherits("KisView")) {
         setInstance(ColorRangeFactory::instance());
         setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);

@@ -116,14 +116,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         KisChannelInfo * ch = (*it);
 
-        kdDebug() << "Separating channel: " << ch->name()
-                << ", position: " << ch->pos()
-                << ", type: " << ch->channelType()
-                << ", valuetype: " << ch->channelValueType()
-                << ", size: " << ch->size() << endl;
-        
         if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
-            kdDebug() <<  "Don't make an separate separation of the alpha channel if the user didn't ask for it.\n";
             continue;
         }
 
@@ -147,8 +140,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
 
         dstCs = dev->colorSpace();
-        kdDebug() << "new device with colorspace " << dstCs->id().name() << endl;
-        
+
         layers.push_back(dev);
 
         for (Q_INT32 row = 0; row < rect.height(); ++row) {
@@ -232,9 +224,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     }
 
     vKisPaintDeviceSP_it deviceIt = layers.begin();
-    
+
     emit notifyProgressDone();
-    
+
     if (!m_cancelRequested) {
 
         for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
@@ -280,9 +272,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                 d.setOutputMimeType(mimefilter.latin1());
                 d.exp0rt(url);
-                
+
             }
-            
+
             ++deviceIt;
         }
 

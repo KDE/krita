@@ -59,13 +59,6 @@ ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringLis
 {
     setInstance(ColorsFiltersFactory::instance());
 
-     kdDebug(41006) << "ColorsFilters plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisBrightnessContrastFilter());
@@ -107,7 +100,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     int twoPercent = int(0.005*histogram.calculations().getCount());
     int pixCount = 0;
     int binnum = 0;
-    
+
     while(binnum<histogram.producer()->numberOfBins())
     {
         pixCount += histogram.getValue(binnum);
@@ -160,7 +153,6 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
     KisSelectionSP dstSel = 0;
     if (dst != src) {
-        kdDebug() << "Src != dst!\n";
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();

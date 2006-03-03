@@ -71,15 +71,12 @@ KisPartLayerImpl::~KisPartLayerImpl()
 }
 
 KisLayerSP KisPartLayerImpl::clone() const {
-    kdDebug(41001) << "Whoops, clone for partlayers, this doesn't follow usual semantics" << endl;
     return new KisPartLayerImpl(image(), childDoc());
 }
 
 // Called when the layer is made active
 void KisPartLayerImpl::childActivated(KoDocumentChild* child)
 {
-    kdDebug(41001) << "Activate object layer\n";
-
     // Clear the image, so that if we move the part while activated, no ghosts show up
     if (!m_activated && child == m_doc) {
         QRect rect = extent();
@@ -95,8 +92,6 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
 // Called when another layer is made inactive
 void KisPartLayerImpl::childDeactivated(bool activated)
 {
-    kdDebug(41001) << "Deactivate object layer: going to render onto paint device."
-                   << activated << "\n";
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry
     if (m_activated && !activated /* no clue, but debugging suggests it is false here */) {
@@ -144,9 +139,8 @@ void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32
 
 }
 
-KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection,
-        const QRect& r) {
-    kdDebug() << m_activated << endl;
+KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
+{
     if (!m_doc || !m_doc->document() || m_activated) return 0;
 
     m_cache -> clear();

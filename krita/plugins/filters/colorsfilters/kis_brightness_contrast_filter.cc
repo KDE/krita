@@ -52,16 +52,11 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 
 void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
 {
-    kdDebug() << "Restoring filter configuration from: " << s << "\n";
-
-    
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
-    
-    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
-    
+
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
@@ -126,7 +121,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
     text = doc.createCDATASection(sCurve);
     e.appendChild(text);
     root.appendChild(e);
-    
+
     return doc.toString();
 }
 

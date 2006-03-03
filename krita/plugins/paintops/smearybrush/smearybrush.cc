@@ -38,19 +38,13 @@ SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(SmearyBrushFactory::instance());
 
-    kdDebug(41006) << "SmearyBrush. Class: "
-                   << className()
-                   << ", Parent: "
-                   << parent -> className()
-                   << "\n";
-    
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
-        {
-            KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-            r -> add ( new KisSmearyOpFactory );
-        }
-    
+    {
+        KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
+        r -> add ( new KisSmearyOpFactory );
+    }
+
 }
 
 SmearyBrush::~SmearyBrush()

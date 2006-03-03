@@ -71,12 +71,6 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(WetPluginFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "Wet Color model plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisColorSpaceFactoryRegistry") ) {
         KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>(parent);

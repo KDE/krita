@@ -85,7 +85,6 @@ void KisResourceServerBase::loadResources(QStringList filenames)
 QValueList<KisResource*> KisResourceServerBase::resources()
 {
     if(!m_loaded) {
-        //kdDebug() << "resources for type " << m_type << " not loaded\n";
         return QValueList<KisResource*>();
     }
 
@@ -95,7 +94,7 @@ QValueList<KisResource*> KisResourceServerBase::resources()
 void KisResourceServerBase::addResource(KisResource* resource)
 {
     if (!resource -> valid()) {
-        kdDebug(41001) << "Tried to add an invalid resource!" << endl;
+        kdWarning(41001) << "Tried to add an invalid resource!" << endl;
         return;
     }
 
@@ -113,15 +112,12 @@ public:
         , m_server(server)
         , m_fileNames( files )
     {
-        kdDebug(41001) << "Created resource loader thread " << m_server->type() << "\n";
     }
 
 
     void run()
     {
-        kdDebug(41001) << "Started resource loader thread " << m_server->type() << "\n";
         m_server->loadResources(m_fileNames);
-        kdDebug(41001) << "Done resource loader thread " << m_server->type() << "\n";
     }
 
 private:
@@ -139,7 +135,6 @@ QStringList getFileNames( QString extensions, QString type )
     QStringList::Iterator it;
     for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
         QString s = (*it);
-        kdDebug(41001) << "Going to find resources for " << type << ", " << s << "\n";
         fileNames += KisFactory::instance()->dirs() -> findAllResources(type.ascii(), (*it));
     }
     return fileNames;
@@ -167,7 +162,7 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     ResourceLoaderThread t4 (gradientServer, getFileNames(KoGradientManager::filters().join( ":" ), "kis_gradients"));
     t4.start();
 
-                          
+
     KisResourceServer<KisPalette>* paletteServer = new KisResourceServer<KisPalette>("kis_palettes");
     ResourceLoaderThread t5 (paletteServer, getFileNames("*.gpl:*.pal:*.act", "kis_palettes") );
     t5.start();

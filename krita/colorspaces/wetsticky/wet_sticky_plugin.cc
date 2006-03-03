@@ -42,12 +42,6 @@ WetStickyPlugin::WetStickyPlugin(QObject *parent, const char *name, const QStrin
 {
            setInstance(WetStickyPluginFactory::instance());
 
-     kdDebug(DBG_AREA_PLUGINS) << "Wet & Sticky canvas color model plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisFactory") )
     {

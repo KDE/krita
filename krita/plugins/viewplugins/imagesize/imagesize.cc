@@ -58,13 +58,6 @@ K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    kdDebug(41006) << "Imagesize plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if ( parent->inherits("KisView") )
     {
         setInstance(ImageSizeFactory::instance());

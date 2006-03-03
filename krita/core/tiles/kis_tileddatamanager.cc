@@ -63,8 +63,6 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defP
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
     : KShared()
 {
-    //kdDebug() << "Copying datamanager " << dm.m_pixelSize << "\n";
-    
     m_pixelSize = dm.m_pixelSize;
 
     m_defPixel = new Q_UINT8[m_pixelSize];
@@ -223,12 +221,6 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
     }
 }
 
-/*
-void printRect(const QString & s, const QRect & r)
-{
-    kdDebug(DBG_AREA_TILES) << "crop: " << s << ": (" << r.x() << "," << r.y() << "," << r.width() << "," << r.height() << ")\n";
-}*/
-
 void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     QRect newRect = QRect(x, y, w, h).normalize();
@@ -248,8 +240,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
         while(tile)
         {
-            kdDebug(DBG_AREA_TILES) << "Tile: " << tile -> getCol() << ", " << tile -> getRow() << "\n";
-
             QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
             //printRect("tileRect", tileRect);
 
@@ -262,7 +252,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                 ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
 
                 if (newRect.intersects(tileRect)) {
-                    //kdDebug(DBG_AREA_TILES) << "Partially inside, clear the non-intersecting bits\n";
 
                     // Create the intersection of the tile and new rect
                     QRect intersection = newRect.intersect(tileRect);
@@ -283,7 +272,6 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                     tile = tile->getNext();
                 }
                 else {
-                    //kdDebug(DBG_AREA_TILES) << "Completely outside, delete this tile. It had already been mementoed\n";
                     KisTile *deltile = tile;
                     tile = tile->getNext();
 
@@ -750,7 +738,7 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 {
     if (bytes == 0) return;
     //Q_ASSERT(bytes != 0);
-     
+
     // XXX: Is this correct?
     if (w < 0)
         w = 0;

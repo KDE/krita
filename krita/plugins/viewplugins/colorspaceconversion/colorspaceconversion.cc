@@ -61,12 +61,6 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const char *name, co
     : KParts::Plugin(parent, name)
 {
 
-     kdDebug(41006) << "ColorSpaceconversion plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     if ( parent->inherits("KisView") )
     {
         m_view = (KisView*) parent;
@@ -100,9 +94,9 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
             "lab16degradation") != KMessageBox::Continue) return;
-            
+
     }
-    
+
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
@@ -139,9 +133,9 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
             "lab16degradation") != KMessageBox::Continue) return;
-            
+
     }
-        
+
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 

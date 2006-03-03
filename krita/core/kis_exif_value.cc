@@ -149,7 +149,6 @@ bool ExifValue::load(const QDomElement& elmt)
     if( (attr = elmt.attribute("type")).isNull() )
         return false;
     m_type = (ExifValue::ExifType)attr.toInt();
-    kdDebug() << "Trying to load exifvalue ifd=" << ifd() << " components=" << components() << " type=" << type() << endl;
     allocData();
     switch(type())
     {
@@ -165,7 +164,6 @@ bool ExifValue::load(const QDomElement& elmt)
             }
             break;
         case EXIF_TYPE_ASCII:
-            kdDebug() << "Value = " << elmt.attribute("value" ) << endl;
             setAsAscii( elmt.attribute("value" ) );
             break;
         case EXIF_TYPE_SHORT:
@@ -229,13 +227,6 @@ bool ExifValue::load(const QDomElement& elmt)
             in.resetRawData(instr.latin1(), instr.length() );
             KCodecs::base64Decode( in, out);
             setAsUndefined((uchar*)out.data(), out.size() );
-            
-/*            QCString str ( instr.latin1() );
-            QCString out = KCodecs::base64Decode( str );
-            kdDebug() << instr << " instr.length() = " << instr.length() << endl;
-            kdDebug() << "str = " << str << " str.size() = " << str.size() << " str.length() = " << str.length() << endl;
-            kdDebug() << "out = " << out << " out.size() = " << out << endl;
-            setAsUndefined((uchar*)out.data(), out.size() );*/
         }
         break;
         case EXIF_TYPE_SSHORT:
@@ -305,7 +296,6 @@ bool ExifValue::load(const QDomElement& elmt)
             break;
 
     }
-    kdDebug() << " Value = " << toString() << endl;
     return true;
 }
 
@@ -322,7 +312,6 @@ QDomElement ExifValue::save(QDomDocument& doc)
                 elmt.setAttribute(QString("value%1").arg(i), asByte( i ) );
             break;
         case EXIF_TYPE_ASCII:
-            kdDebug() << asAscii() << endl;
             elmt.setAttribute("value", asAscii() );
             break;
         case EXIF_TYPE_SHORT:
@@ -525,13 +514,11 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             return;
         case EXIF_TYPE_ASCII:
         {
-            kdDebug() << "convertingToData from ascii " << asAscii() << endl;
             QString str = asAscii();
             *size = str.length();
             *data = new uchar[ *size ];
             uchar* ptr = *data;
             memcpy(ptr, str.ascii(), (*size)*sizeof(uchar));
-            kdDebug() << QString((char*)ptr) << endl;
         }
         return;
         break;

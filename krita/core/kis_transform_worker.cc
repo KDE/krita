@@ -264,10 +264,6 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
     Q_CHECK_PTR(tmpSel);
 
-    kdDebug(DBG_AREA_CORE) << "srcLen=" << srcLen << " dstLen" << dstLen << " scale=" << scale << " sDenom=" <<scaleDenom << endl;
-    kdDebug(DBG_AREA_CORE) << "srcStart="<< srcStart << ",dx=" << dx << endl;
-    kdDebug(DBG_AREA_CORE) << "extraLen="<< extraLen << endl;
-
     for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
     {
         if(scale < 0)

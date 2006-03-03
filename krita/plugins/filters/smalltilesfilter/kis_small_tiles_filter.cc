@@ -90,12 +90,8 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     if (!src) return;
     if (!dst) return;
 
-    //Q_INT32 depth = src -> colorSpace() -> nColorChannels();
-    //KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "tmp");
-    kdDebug() << rect << ", extent: " << src->extent() << ", bounds: " << src->exactBounds() << "\n";
-
     QRect srcRect = src->exactBounds();
-    
+
     int w = static_cast<int>(srcRect.width() / numberOfTiles);
     int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
@@ -114,9 +110,9 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     KisPaintDeviceSP scratch = new KisPaintDevice(src->colorSpace());
 
     KisPainter gc(scratch);
-    
+
     setProgressTotalSteps(numberOfTiles);
-    
+
     for (uint y = 0; y < numberOfTiles; ++y) {
         for (uint x = 0; x < numberOfTiles; ++x) {
             // XXX make composite op and opacity configurable
@@ -125,7 +121,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
         }
     }
     gc.end();
-    
+
     gc.begin(dst);
     if (src->hasSelection()) {
         gc.bltSelection(rect.x(), rect.y(), COMPOSITE_OVER, scratch, src->selection(), OPACITY_OPAQUE, 0, 0, rect.width(), rect.height() );
@@ -135,7 +131,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     }
     setProgressDone();
     gc.end();
-    
+
     //KisPainter gc(tmp);
     //gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
     //gc.end();

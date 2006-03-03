@@ -206,12 +206,8 @@ namespace {
 KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
         QObject(0, name), KShared(), m_exifInfo(0)
 {
-    //kdDebug() << "creating paint device " << name << endl;
-    if (name == 0) {
-        //kdDebug() << "device without a name " << kdBacktrace() << "\n";
-    }
     if (colorSpace == 0) {
-        kdDebug(41001) << "Cannot create paint device without colorstrategy!\n";
+        kdWarning(41001) << "Cannot create paint device without colorstrategy!\n";
         return;
     }
 
@@ -245,11 +241,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
         QObject(0, name), KShared(), m_exifInfo(0)
 {
     Q_ASSERT( colorSpace );
-    //kdDebug() << "creating paint device " << name << endl;
-    if (name == 0) {
-        //kdDebug() << "device without a name " << kdBacktrace() << "\n";
-    }
-    
+
     m_dcop = 0;
 
     m_x = 0;
@@ -282,7 +274,6 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
-    //kdDebug() << "Copying paint device " << rhs.name() << endl;
     if (this != &rhs) {
         m_parentLayer = 0;
         m_dcop = rhs.m_dcop;
@@ -310,7 +301,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 
 KisPaintDevice::~KisPaintDevice()
 {
-    //kdDebug() << "going to delete paint device " << this  << ", " << name() << "\n";
     delete m_dcop;
     //delete m_exifInfo;
 }
@@ -334,7 +324,7 @@ void KisPaintDevice::setParentLayer(KisLayer *parentLayer)
     m_parentLayer = parentLayer;
 }
 
-void KisPaintDevice::setDirty(const QRect & rc) 
+void KisPaintDevice::setDirty(const QRect & rc)
 {
     if (m_parentLayer) m_parentLayer->setDirty(rc);
 }
@@ -428,7 +418,7 @@ QRect KisPaintDevice::exactBounds() const
     extent(boundX, boundY, boundW, boundH);
 
     const Q_UINT8* defaultPixel = m_datamanager->defaultPixel();
-    
+
     bool found = false;
 
     for (Q_INT32 y2 = y; y2 < y + h ; ++y2) {
@@ -646,7 +636,7 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
 void KisPaintDevice::setProfile(KisProfile * profile)
 {
     if (profile == 0) return;
-    
+
     KisColorSpace * dstSpace =
             KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
                                                                       profile);
@@ -678,7 +668,6 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
 
     // Krita is little-endian inside.
     if (img.bitOrder() == QImage::LittleEndian) {
-	kdDebug(41010) << "source was littleendian\n";
 	img = img.convertBitOrder(QImage::BigEndian);
     }
 
@@ -720,7 +709,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, float exposure)
     return convertToQImage(dstProfile, x1, y1, w, h, exposure);
 }
 
-// XXX: is this faster than building the QImage ourselves? It makes  
+// XXX: is this faster than building the QImage ourselves? It makes
 QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, float exposure)
 {
     if (w < 0)
@@ -728,7 +717,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 
     if (h < 0)
         return QImage();
-    
+
     Q_UINT8 * data = new Q_UINT8 [w * h * m_pixelSize];
     Q_CHECK_PTR(data);
 
@@ -743,10 +732,9 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
 {
-    //kdDebug() << "Going to create a thumbnail size " << w << ", " << h << endl;
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace(), "thumbnail");
     thumbnail->clear();
-    
+
     int srcw, srch;
     if( image() )
     {
@@ -776,8 +764,6 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
     else if (srch > srcw)
         w = Q_INT32(double(srcw) / srch * h);
 
-    //kdDebug() << "w has become: " << w << ", h: " << h << endl;
-    
     for (Q_INT32 y=0; y < h; ++y) {
         Q_INT32 iY = (y * srch ) / h;
         for (Q_INT32 x=0; x < w; ++x) {
@@ -785,7 +771,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
             thumbnail->setPixel(x, y, colorAt(iX, iY));
         }
     }
-    
+
     return thumbnail;
 
 }
@@ -866,7 +852,6 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
 
 void KisPaintDevice::emitSelectionChanged()
 {
-    kdDebug() << "KisPaintDevice::emitSelectionChanged()\n"; // << kdBacktrace() << "\n";
     if (m_parentLayer && m_parentLayer->image()) {
         m_parentLayer->image()->slotSelectionChanged();
     }
@@ -874,7 +859,6 @@ void KisPaintDevice::emitSelectionChanged()
 
 void KisPaintDevice::emitSelectionChanged(const QRect& r)
 {
-    kdDebug() << "KisPaintDevice::emitSelectionChanged(const QRect & r)\n";
     if (m_parentLayer && m_parentLayer->image()) {
         m_parentLayer->image()->slotSelectionChanged(r);
     }

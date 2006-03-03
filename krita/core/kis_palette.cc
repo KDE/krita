@@ -186,15 +186,14 @@ bool KisPalette::init()
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
-         kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
-                return false;
-        }
+        kdWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
+        return false;
+    }
 
 
     if (s.startsWith("RIFF") || s.startsWith("PAL data"))
     {
-        kdDebug(DBG_AREA_FILE) << "PAL format palette file\n";
-        format = FORMAT_PAL;
+       format = FORMAT_PAL;
     }
     else if (s.startsWith("GIMP Palette"))
     {
@@ -202,7 +201,7 @@ bool KisPalette::init()
         Q_UINT32 index = 0;
 
         QStringList lines = QStringList::split("\n", s);
-    
+
         if (lines.size() < 3) {
             return false;
         }
@@ -218,12 +217,12 @@ bool KisPalette::init()
         // Read name
         if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
         {
-             kdDebug(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
+            kdWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
             return false;
         }
 
         setName(i18n(lines[1].mid(strlen("Name: ")).stripWhiteSpace().ascii()));
-        
+
         index = 2;
 
         // Read columns
@@ -262,7 +261,7 @@ bool KisPalette::init()
         return true;
     }
     else if (s.length() == 768) {
-         kdDebug(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
+        kdWarning(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
         format = FORMAT_ACT;
     }
     return false;

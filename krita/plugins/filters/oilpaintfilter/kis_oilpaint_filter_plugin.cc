@@ -30,13 +30,6 @@ KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *na
 {
     setInstance(KisOilPaintFilterPluginFactory::instance());
 
-    kdDebug(41006) << "OilPaintFilter plugin. Class: "
-                << className()
-                << ", Parent: "
-                << parent -> className()
-                << "\n";
-
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisOilPaintFilter());

@@ -50,12 +50,6 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, cons
         : KParts::Plugin(parent, name)
 {
 
-    kdDebug(41006) << "FiltersGallery plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if ( parent->inherits("KisView") )
     {
         setInstance(KritaFiltersGallery::instance());
@@ -95,7 +89,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
         {
             KisImageSP img = m_view->canvasSubject()->currentImg();
             if (!img) return;
-            
+
             KisPaintDeviceSP dev = img->activeDevice();
             if (!dev) return;
             QRect r1 = dev -> exactBounds();
@@ -108,15 +102,15 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
                 rect = rect.intersect(r3);
             }
             KisFilterConfiguration* config = filter->configuration( dlg.currentConfigWidget());
-            
+
             filter->enableProgress();
             m_view->canvasSubject()->progressDisplay()->setSubject(filter, true, true);
             filter->setProgressDisplay(m_view->canvasSubject()->progressDisplay());
-            
+
             KisTransaction * cmd = new KisTransaction(filter->id().name(), dev);
 
             filter->process(dev,dev, config, rect);
-            
+
             delete config;
             if (filter->cancelRequested()) {
                 cmd -> unexecute();

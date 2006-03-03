@@ -46,12 +46,6 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, 
 {
      setInstance(DefaultPaintOpsPluginFactory::instance());
 
-     kdDebug(41006) << "DefaultPaintOpsPlugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
     {

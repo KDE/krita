@@ -432,10 +432,6 @@ void KisLayerBox::updateUI()
             slotSetOpacity(int(float(active -> opacity() * 100) / 255 + 0.5));
             slotSetCompositeOp(active -> compositeOp());
         }
-    /*kdDebug() << "--- layerbox ---" << endl;
-    printLayerboxLayers();
-    kdDebug() << "--- krita ---" << endl;
-    printKritaLayers();*/
 }
 
 void KisLayerBox::slotAboutToShow()

@@ -50,12 +50,6 @@ KritaExample::KritaExample(QObject *parent, const char *name, const QStringList 
     setInstance(KritaExampleFactory::instance());
 
 
-    kdDebug(41006) << "Example plugin. Class: "
-          << className()
-          << ", Parent: "
-          << parent -> className()
-          << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisFilterInvert());

@@ -103,7 +103,7 @@ KisPainter::~KisPainter()
 void KisPainter::begin(KisPaintDeviceSP device)
 {
     if (!device) return;
-    
+
     if (m_transaction)
         delete m_transaction;
 
@@ -157,17 +157,6 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
     if (srcdev == 0) {
         return;
     }
-
-//     kdDebug(41001) << "KisPainter::bitBlt rect "
-//               << " dx: " << dx
-//               << " dy: " << dy
-//               << " sx: " << sx
-//               << " sy: " << sy
-//               << " w: " << sw
-//               << " h " << sh
-//               << " layer: " << srcdev -> name()
-//               << " onto: " << m_device -> name()
-//               << "\n";
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
@@ -802,7 +791,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
         // Currently unsupported, fall through
     case FillStyleStrokes:
         // Currently unsupported, fall through
-        kdDebug(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
+        kdWarning(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
         fillPainter.fillRect(boundingRectangle, paintColor(), OPACITY_OPAQUE);
         break;

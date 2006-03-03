@@ -54,13 +54,6 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 ShearImage::ShearImage(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-
-     kdDebug(41006) << "RotateImage plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     if ( parent->inherits("KisView") )
     {
         setInstance(ShearImageFactory::instance());

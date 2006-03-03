@@ -29,16 +29,12 @@
 
 void KisConvolutionConfiguration::fromXML(const QString & s)
 {
-    kdDebug() << "Restoring filter configuration from: " << s << "\n";
-
     m_matrix = new KisKernel();
 
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
-
-    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
 
     m_name = e.attribute("name");
     m_version = e.attribute("version").toInt();

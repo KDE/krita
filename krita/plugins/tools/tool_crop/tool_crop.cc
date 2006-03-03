@@ -47,12 +47,6 @@ ToolCrop::ToolCrop(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(ToolCropFactory::instance());
 
-    kdDebug(41006) << "Crop tool plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
-
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);

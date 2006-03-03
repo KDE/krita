@@ -81,13 +81,6 @@ K_EXPORT_COMPONENT_FACTORY( kritaperftest, PerfTestFactory( "krita" ) )
 PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-     kdDebug(41006) << "PerfTest plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
-
     if ( parent->inherits("KisView") )
     {
         setInstance(PerfTestFactory::instance());

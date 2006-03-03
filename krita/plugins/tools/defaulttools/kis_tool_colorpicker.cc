@@ -88,7 +88,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
         KisPaintDeviceSP dev = img -> activeDevice();
 
         if (!dev) return;
-        
+
         bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
         if (!sampleMerged) {
             if (!img->activeLayer())
@@ -225,7 +225,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     m_optionsWidget = new ColorPickerOptionsWidget(parent);
 
     m_optionsWidget -> cbUpdateCurrentColour -> setChecked(m_updateColor);
-    
+
     m_optionsWidget -> cmbSources -> setCurrentItem(0);
 
     m_optionsWidget -> cbNormaliseValues -> setChecked(m_normaliseValues);
@@ -244,7 +244,6 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
     KisResourceServerBase* srv = KisResourceServerRegistry::instance() -> get("PaletteServer");
 
     if (!srv) {
-        kdDebug(41001) << "No PaletteServer found for KisToolColorPicker" << endl;
         return m_optionsWidget;
     }
 

@@ -38,13 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita"
 GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-        setInstance(GRAYU16PluginFactory::instance());
-
-    kdDebug(DBG_AREA_PLUGINS) << "16-bit integer GRAY Color model plugin. Class: "
-        << className()
-        << ", Parent: "
-        << parent -> className()
-        << "\n";
+    setInstance(GRAYU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {

@@ -40,7 +40,7 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
     curves = new QSortedList<QPair<double,double> >[n];
-    
+
     for(int i=0;i<n;i++) {
         transfers[i] = new Q_UINT16[256];
     }
@@ -58,15 +58,11 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 {
-    kdDebug() << "Restoring filter configuration from: " << s << "\n";
-    
     QDomDocument doc;
     doc.setContent( s );
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
-    
-    kdDebug() << "Filter: " << e.attribute("name") << ", version: " << e.attribute("version") << "\n";
-    
+
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
@@ -75,7 +71,7 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                 nTransfers = e.attribute("number").toUShort();
                 int count = 0;
                 while (!transferNode.isNull()) {
-                    
+
                     QDomElement transferElement = transferNode.toElement();
                     if (!transferElement.isNull()) {
                         QStringList data = QStringList::split( ",", transferElement.text() );
@@ -91,8 +87,8 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                     }
                     transferNode = transferNode.nextSibling();
                 }
-                if (count != nTransfers) kdDebug() << "Number of declared transfers and number of parsed transfers doesn't match" << endl;
-                
+                if (count != nTransfers) kdWarning() << "Number of declared transfers and number of parsed transfers doesn't match" << endl;
+
             }
             else if (e.attribute("name") == "curves") {
                 QDomNode curvesNode = e.firstChild();
@@ -144,7 +140,7 @@ QString KisPerChannelFilterConfiguration::toString()
         e.appendChild(t);
     }
     root.appendChild(e);
-        
+
     QDomElement c = doc.createElement("curves");
     c.setAttribute("number", nTransfers);
     for (int i = 0; i < nTransfers; ++i) {
@@ -164,7 +160,7 @@ QString KisPerChannelFilterConfiguration::toString()
     }
     root.appendChild(c);
 
-    
+
     doc.appendChild( root );
     return doc.toString();
 }
@@ -201,7 +197,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
     KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 
-   
+
     if (src!=dst) {
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());

@@ -38,7 +38,7 @@
 #include "kis_colorspace.h"
 
 
-KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name) 
+KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)
     : super(parent, name)
 {
     m_from = 0.0;
@@ -49,7 +49,7 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev) 
+void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
 {
     grpType -> disconnect(this);
     cmbChannel -> disconnect(this);
@@ -115,8 +115,6 @@ void KisHistogramWidget::slotZoomOut() {
 }
 
 void KisHistogramWidget::slide(int val) {
-    //kdDebug() << "slided to " << val << " viewing from: "
-    //        << ((static_cast<double>(val) / 100.0) * (1.0 - m_width)) << endl;
     // Beware: at the END (e.g. 100), we want to still view m_width:
     setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
 }

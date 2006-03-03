@@ -65,12 +65,6 @@ KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const char *na
 {
     setInstance(KritaConvolutionFiltersFactory::instance());
 
-    kdDebug(41006) << "ConvolutionFilters plugin. Class: "
-           << className()
-           << ", Parent: "
-           << parent -> className()
-           << "\n";
-
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
         manager->add(new KisGaussianBlurFilter());

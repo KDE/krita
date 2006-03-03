@@ -108,6 +108,7 @@ void Scripting::executionFinished(const Kross::Api::ScriptAction*)
 void Scripting::executionStarted(const Kross::Api::ScriptAction* act)
 {
     kdDebug(41011) << act->getPackagePath() << endl;
+    m_scriptProgress->setPackagePath( act->getPackagePath() );
 }
 
 

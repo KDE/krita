@@ -327,7 +327,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
             // If this adjustment layer is dirty, start compositing with the
             // previous adj. layer, if there's one.
-            if (tmpAdjLayer->dirty(rc) && adjLayer != 0) {
+            if (tmpAdjLayer->dirty(rc) && adjLayer != 0 && adjLayer->visible()) {
                 startWith = adjLayer->prevSibling();
                 break;
             }
@@ -340,7 +340,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
             // with a cache, we'll start from there.
             if (child->dirty(rc)) {
-                if (adjLayer != 0) {
+                if (adjLayer != 0 && adjLayer->visible()) {
                     // the first layer on top of the adj. layer
                     startWith = adjLayer->prevSibling();
                 }

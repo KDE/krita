@@ -167,7 +167,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
         m_labelNoConfigWidget->hide();
     }
 
-    KisPaintLayerSP activeLayer = (KisPaintLayer*) m_image->activeLayer().data();
+    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
 
     if (activeLayer) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_configWidgetHolder,

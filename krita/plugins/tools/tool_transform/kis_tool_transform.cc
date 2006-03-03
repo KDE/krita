@@ -228,7 +228,7 @@ void KisToolTransform::initHandles()
     m_translateX = m_org_cenX;
     m_translateY = m_org_cenY;
 
-    paintOutline();
+    m_subject -> canvasController() ->updateCanvas();
 }
 
 void KisToolTransform::paint(KisCanvasPainter& gc)
@@ -621,8 +621,6 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     paintOutline();
     transform();
-    m_subject -> canvasController() ->updateCanvas();
-    paintOutline();
     QApplication::restoreOverrideCursor();
 }
 
@@ -709,14 +707,6 @@ void KisToolTransform::transform()
     if (!img || !img->activeDevice())
         return;
 
-    /*
-    double tx = m_translateX - m_org_cenX * m_scaleX;
-    double ty = m_translateY - m_org_cenY * m_scaleY;
-    */
-    
-    QRect rc = img->activeDevice()->extent();
-    rc = rc.normalize();
-
     double tx = m_translateX - rotX(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
     double ty = m_translateY - rotY(m_org_cenX * m_scaleX, m_org_cenY * m_scaleY);
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
@@ -725,23 +715,27 @@ void KisToolTransform::transform()
     TransformCmd * transaction = new TransformCmd(this, img->activeDevice().data(), m_scaleX,
                                                             m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
-    // Copy the original state back -- this should be optimized by
-    // doing only the dirty rect(s). However, that's for Casper to figure out.
+    // Copy the original state back.
+    QRect rc = m_origDevice->extent();
+    rc = rc.normalize();
+    img->activeDevice()->clear();
     KisPainter gc(img->activeDevice());
-    gc.bitBlt(0, 0, COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
+    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
     gc.end();
 
-    // Also restore the original selection. XXX: Not sure whether this
-    // works with the undo.
+    // Also restore the original selection.
     if(m_origSelection)
     {
-//        img->activeDevice()->setSelection(m_origSelection);
+        QRect rc = m_origSelection->extent();
+        rc = rc.normalize();
+        img->activeDevice()->selection()->clear();
         KisPainter sgc(img->activeDevice()->selection().data());
-        sgc.bitBlt(0, 0, COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
+        sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
-        img->activeDevice()->deselect();
+        if(img->activeDevice()->hasSelection())
+            img->activeDevice()->selection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
@@ -757,7 +751,7 @@ void KisToolTransform::transform()
         return;
     }
 
-    img->activeDevice()->setDirty(rc);
+    img->activeDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
@@ -795,10 +789,9 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
     {
         // One of our commands is now on top
         // We should ask for tool args and orig selection
-        paintOutline();
         cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
         m_origSelection = cmd->origSelection(m_startPos, m_endPos);
-        paintOutline();
+        m_subject -> canvasController() ->updateCanvas();
     }
 }
 

@@ -37,6 +37,7 @@ class KisFilterStrategy
         virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(t/256.0));};
         double support() { return supportVal;};
         Q_UINT32 intSupport() { return intSupportVal;};
+        virtual bool boxSpecial() { return false;};
     protected:
         double supportVal;
         Q_UINT32 intSupportVal;
@@ -63,6 +64,7 @@ class KisBoxFilterStrategy : public KisFilterStrategy
 
         virtual Q_UINT32 intValueAt(Q_INT32 t) const;
         virtual double valueAt(double t) const;
+        virtual bool boxSpecial() { return true;};
 };
 
 class KisTriangleFilterStrategy : public KisFilterStrategy

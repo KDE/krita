@@ -456,6 +456,7 @@ bool KisTransformWorker::run()
 
     //progress info
     emit notifyProgressDone();
+    m_dev->emitSelectionChanged();
 
     return m_cancelRequested;
 }

@@ -87,7 +87,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
         m_labelNoCW->hide();
     }
     KisImageSP img = m_view->canvasSubject()->currentImg();
-    KisPaintLayerSP activeLayer = (KisPaintLayer*) img->activeLayer().data();
+    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
     
     if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());

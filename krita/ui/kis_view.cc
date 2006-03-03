@@ -531,7 +531,7 @@ void KisView::updateStatusBarProfileLabel()
         m_statusBarProfileLabel -> setText(i18n("No profile"));
     }
     else {
-        m_statusBarProfileLabel -> setText(img -> getProfile() -> productName());
+        m_statusBarProfileLabel -> setText(img->colorSpace()->id().name() + "  " + img -> getProfile() -> productName());
     }
 }
 
@@ -2653,8 +2653,10 @@ void KisView::showLayerProperties(KisLayerSP layer)
         KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjlayerprops");
         if (dlg.exec() == QDialog::Accepted)
         {
-            alayer -> setDirty();
+            QApplication::setOverrideCursor(KisCursor::waitCursor());
             alayer -> setFilter( dlg.filterConfiguration() );
+            alayer -> setDirty();
+            QApplication::restoreOverrideCursor();
         }
     }
     else
@@ -2669,10 +2671,12 @@ void KisView::showLayerProperties(KisLayerSP layer)
                 layer -> opacity() != dlg.getOpacity() ||
                 layer -> compositeOp() != dlg.getCompositeOp())
             {
+                QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_adapter -> beginMacro(i18n("Property Changes"));
                 layer -> image() -> setLayerProperties(layer, dlg.getOpacity(), dlg.getCompositeOp(), dlg.getName());
                 layer -> setDirty();
                 m_adapter -> endMacro();
+                QApplication::restoreOverrideCursor();
             }
         }
     }
@@ -3134,7 +3138,7 @@ void KisView::connectCurrentImg()
     if (m_image) {
         connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
-
+        connect(m_image, SIGNAL(sigColorSpaceChanged(KisColorSpace *)), this, SLOT(updateStatusBarProfileLabel()));
         connect(m_image, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
         connect(m_image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));

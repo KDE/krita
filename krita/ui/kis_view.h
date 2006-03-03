@@ -283,6 +283,9 @@ public:
 private slots:
     virtual void updateCanvas();
 
+    void updateStatusBarZoomLabel();
+    void updateStatusBarProfileLabel();
+
 private:
     virtual KisCanvas *kiscanvas() const;
     
@@ -370,9 +373,6 @@ private:
     void setupRulers();
     void setupScrollBars();
     void setupStatusBar();
-
-    void updateStatusBarZoomLabel();
-    void updateStatusBarProfileLabel();
 
     /**
      * Import an image as a layer. If there is more than

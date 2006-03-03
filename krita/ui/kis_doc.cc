@@ -825,7 +825,7 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
     int h = cfg.defImgHeight();
     
     QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid()) {
+    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
         w = sz.width();
         h = sz.height();
     }

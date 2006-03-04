@@ -49,6 +49,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     , m_image(img)
     , m_currentFilter(0)
     , m_customName(false)
+    , m_freezeName(false)
 {
     Q_ASSERT(img);
 
@@ -112,6 +113,9 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
 {
+    if (m_freezeName)
+        return;
+
     m_customName = !text.isEmpty();
     enableButtonOK( m_currentFilter && m_customName );
 }
@@ -183,8 +187,11 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
         m_labelNoConfigWidget->show();
     }
 
-    if (!m_customName)
+    if (!m_customName) {
+        m_freezeName = true;
         m_layerName->setText(m_currentFilter->id().name());
+        m_freezeName = false;
+    }
 
     enableButtonOK( !m_layerName->text().isEmpty() );
     refreshPreview();

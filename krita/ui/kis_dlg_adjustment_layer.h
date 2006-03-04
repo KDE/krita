@@ -77,6 +77,7 @@ private:
     KLineEdit * m_layerName;
     QLabel* m_labelNoConfigWidget;
     bool m_customName;
+    bool m_freezeName;
 };
 
 #endif

@@ -584,7 +584,7 @@ void KisToolTransform::move(KisMoveEvent *e)
             else
                 m_function = MOVE;
 
-            int handleradius = 25 / (m_subject->zoomFactor() * m_subject->zoomFactor());
+            int handleradius = int( 25 / (m_subject->zoomFactor() * m_subject->zoomFactor()) );
 
             if(distsq(mousePos, (m_topleft + m_topright)/2)<=handleradius)
                 m_function = TOPSCALE;

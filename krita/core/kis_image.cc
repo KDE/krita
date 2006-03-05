@@ -1124,6 +1124,12 @@ bool KisImage::removeLayer(KisLayerSP layer)
             }
             unlock();
         }
+        KisLayerSP l = layer->prevSibling();
+        QRect r = layer->extent();
+        while (l) {
+            l->setDirty(r, false);
+            l = l->prevSibling();
+        }
 
         KisLayerSP wasAbove = layer -> nextSibling();
         KisLayerSP wasBelow = layer -> prevSibling();

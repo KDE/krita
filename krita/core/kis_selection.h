@@ -98,6 +98,9 @@ public:
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
 private:
+    void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
+
+private:
     KisPaintDeviceSP m_parentPaintDevice;
 };
 

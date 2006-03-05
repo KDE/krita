@@ -20,6 +20,7 @@
 #define KIS_MEMENTO_H_
 
 #include <qglobal.h>
+#include <qrect.h>
 
 #include <ksharedptr.h>
 
@@ -42,6 +43,7 @@ public:
                   const KisTransaction &) = 0;
 */
     void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    QRect extent() const;
 
     // For debugging use
     bool valid() const { return m_valid; }

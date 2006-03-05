@@ -124,8 +124,8 @@ public:
 
 
     /**
-     * A version of bitBlt that applies an external selection mask first to the source device
-     * and only then blits. This means that the source device is permanently altered.
+     * A version of bitBlt that renders using an external selection mask, ignoring
+     * the src device's own selection, if it has one.
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
                       const KisCompositeOp &op,
@@ -137,9 +137,7 @@ public:
 
 
     /**
-     * A version of bitBlt that applies the destination selection mask
-     * first to the source device and
-     * only then blits. This means that the source device is permanently altered.
+     * A version of bitBlt that renders using the src device's selection mask, if it has one.
      */
     void bltSelection(Q_INT32 dx, Q_INT32 dy,
                       const KisCompositeOp &op,

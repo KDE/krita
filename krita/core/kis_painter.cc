@@ -307,7 +307,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
             const Q_UINT8 *srcData = srcdev -> pixel(srcX, srcY);
             Q_INT32 srcRowStride = srcdev -> rowStride(srcX, srcY);
 
-            Q_UINT8 *selData = seldev -> writablePixel(dstX, dstY);
+            const Q_UINT8 *selData = seldev -> pixel(dstX, dstY);
             Q_INT32 selRowStride = seldev -> rowStride(dstX, dstY);
 
             m_colorSpace -> bitBlt(dstData,

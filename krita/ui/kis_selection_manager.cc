@@ -631,18 +631,19 @@ void KisSelectionManager::invert()
     if (dev -> hasSelection()) {
         KisSelectionSP s = dev -> selection();
 
-        KisTransaction * t = 0;
-        if (img -> undoAdapter())
+        KisSelectedTransaction * t = 0;
+        if (img -> undoAdapter() && img -> undoAdapter() -> undo())
         {
-            t = new KisTransaction(i18n("&Invert"), s.data());
+            t = new KisSelectedTransaction(i18n("&Invert"), dev);
             Q_CHECK_PTR(t);
         }
 
         s -> invert();
         dev->emitSelectionChanged();
 
-        if (img -> undoAdapter())
+        if (t) {
             img -> undoAdapter() -> addCommand(t);
+        }
     }
 }
 

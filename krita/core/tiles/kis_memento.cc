@@ -117,3 +117,17 @@ void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
     else
         h = maxY - y +1;
 }
+
+QRect KisMemento::extent() const
+{
+    Q_INT32 x;
+    Q_INT32 y;
+    Q_INT32 w;
+    Q_INT32 h;
+
+    extent(x, y, w, h);
+
+    return QRect(x, y, w, h);
+}
+
+

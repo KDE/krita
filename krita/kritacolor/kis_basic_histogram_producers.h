@@ -106,7 +106,7 @@ public:
     virtual double maximalZoom() const;
 };
 
-#if HAVE_OPENEXR
+#ifdef HAVE_OPENEXR
 class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *colorSpace);

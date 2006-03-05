@@ -772,6 +772,13 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     if (xradius <= 0 || yradius <= 0)
         return;
 
+    KisSelectedTransaction *t = 0;
+
+    if (img -> undoAdapter() && img -> undoAdapter() -> undo()) {
+        t = new KisSelectedTransaction(i18n("Grow"), dev);
+        Q_CHECK_PTR(t);
+    }
+
     max = new Q_UINT8* [layerSize.width() + 2 * xradius];
     buf = new Q_UINT8* [yradius + 1];
     for (Q_INT32 i = 0; i < yradius + 1; i++)
@@ -884,6 +891,10 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     delete out;
 
     dev -> emitSelectionChanged();
+
+    if (t) {
+        img -> undoAdapter() -> addCommand(t);
+    }
 }
 
 void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock)

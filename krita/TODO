@@ -11,6 +11,8 @@ After 1.5 cleanups
   to a channels box
 * Make set of filter categories extensible
 * BUG 121975: selections and group layers.
+* Add end poly entry to the popup menu when the poly tool is active (note:
+  make this more generically useful for tools. Great idea by David Herman
           
 Code organization
 

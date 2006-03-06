@@ -26,6 +26,7 @@
 #include <kpushbutton.h>
 #include <knuminput.h>
 #include "kis_global.h"
+#include "squeezedcombobox.h"
 #include "wdglayerproperties.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_cmb_composite.h"

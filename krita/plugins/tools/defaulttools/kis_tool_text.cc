@@ -71,10 +71,6 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
     if (m_subject && e->button() == QMouseEvent::LeftButton) {
         KisImageSP img = m_subject->currentImg();
-        KisPaintDeviceSP dev;
-
-        if (!img || !(dev = img->activeDevice()))
-            return;
 
         bool ok;
         QString text = KInputDialog::getText(i18n("Font Tool"), i18n("Enter text:"),

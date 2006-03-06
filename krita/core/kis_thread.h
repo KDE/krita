@@ -45,6 +45,8 @@ public:
     virtual void cancel() { m_canceled = true; }
     virtual bool isCanceled() { return m_canceled; }
 
+    void runDirectly() { run(); }
+    
 protected:
     
     bool m_canceled;

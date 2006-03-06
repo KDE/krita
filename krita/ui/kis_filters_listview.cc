@@ -197,7 +197,8 @@ void KisFiltersListView::buildPreview()
                 itc++)
             {
                 KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f, *itc, m_thumb, bounds, m_profile );
-                KisThreadPool::instance()->enqueue(icon->thread());
+                //KisThreadPool::instance()->enqueue(icon->thread());
+                icon->thread()->runDirectly(); 
             }
         }
     }

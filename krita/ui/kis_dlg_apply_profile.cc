@@ -30,6 +30,7 @@
 #include "kis_id.h"
 #include <kis_meta_registry.h>
 #include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
 #include "wdgapplyprofile.h"
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.

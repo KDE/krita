@@ -35,13 +35,14 @@
 #include "kis_meta_registry.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_dlg_image_properties.h"
-#include "wdgnewimage.h"
 #include "kis_profile.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
+#include "wdgnewimage.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
     : super(parent, name, true, "", Ok | Cancel)

@@ -60,6 +60,13 @@ KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id,
     m_qcolordata = 0;
     m_lastUsedDstProfile = 0;
     m_lastUsedTransform = 0;
+    m_lastRGBProfile = 0;
+    m_lastToRGB = 0;
+    m_lastFromRGB = 0;
+    m_defaultFromRGB = 0;
+    m_defaultToRGB = 0;
+    m_defaultFromLab = 0;
+    m_defaultToLab = 0;
 }
 
 void KisAbstractColorSpace::init()
@@ -68,10 +75,8 @@ void KisAbstractColorSpace::init()
     m_qcolordata = new Q_UINT8[3];
     Q_CHECK_PTR(m_qcolordata);
 
-    if(m_profile == 0) return;
+    if (m_profile == 0) return;
 
-    m_lastRGBProfile = 0;
-    m_lastToRGB = 0;
     // For conversions from default rgb
     m_lastFromRGB = cmsCreate_sRGBProfile();
 
@@ -106,20 +111,20 @@ void KisAbstractColorSpace::fromQColor(const QColor& color, Q_UINT8 *dst, KisPro
 
 
     if (profile == 0) {
-	// Default sRGB
-	if (!m_defaultFromRGB) return;
+	    // Default sRGB
+	    if (!m_defaultFromRGB) return;
 
-	cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
+	    cmsDoTransform(m_defaultFromRGB, m_qcolordata, dst, 1);
     }
     else {
-	if (m_lastFromRGB == 0 || (m_lastFromRGB != 0 && m_lastRGBProfile != profile->profile())) {
-	    m_lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
+    	if (m_lastFromRGB == 0 || (m_lastFromRGB != 0 && m_lastRGBProfile != profile->profile())) {
+	        m_lastFromRGB = cmsCreateTransform(profile->profile(), TYPE_BGR_8,
 					       m_profile->profile(), m_cmType,
 					       INTENT_PERCEPTUAL, 0);
-	    m_lastRGBProfile = profile->profile();
-
-	}
-	cmsDoTransform(m_lastFromRGB, m_qcolordata, dst, 1);
+	        m_lastRGBProfile = profile->profile();
+    
+	    }
+    	cmsDoTransform(m_lastFromRGB, m_qcolordata, dst, 1);
     }
 
     setAlpha(dst, OPACITY_OPAQUE, 1);
@@ -136,16 +141,16 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *
     if (profile == 0) {
 	// Default sRGB transform
         if (!m_defaultToRGB) return;
-	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
+    	cmsDoTransform(m_defaultToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     }
     else {
-	if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
-	    m_lastToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
-                                             profile->profile(), TYPE_BGR_8,
-                                             INTENT_PERCEPTUAL, 0);
-	    m_lastRGBProfile = profile->profile();
-	}
-	cmsDoTransform(m_lastToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
+	    if (m_lastToRGB == 0 || (m_lastToRGB != 0 && m_lastRGBProfile != profile->profile())) {
+	        m_lastToRGB = cmsCreateTransform(m_profile->profile(), m_cmType,
+                                                 profile->profile(), TYPE_BGR_8,
+                                                 INTENT_PERCEPTUAL, 0);
+	        m_lastRGBProfile = profile->profile();
+	    }
+	    cmsDoTransform(m_lastToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     }
     c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
@@ -239,6 +244,8 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
 KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_UINT16 *transferValues)
 {
+    if (!m_profile) return 0;
+
     LPGAMMATABLE transferFunctions[3];
     transferFunctions[0] = cmsBuildGamma(256, 1.0);
     transferFunctions[1] = cmsBuildGamma(256, 1.0);
@@ -289,6 +296,8 @@ static int desaturateSampler(register WORD In[], register WORD Out[], register L
 
 KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 {
+    if (!m_profile) return 0;
+
     KisColorAdjustment *adj = new KisColorAdjustment;
 
     adj->profiles[0] = m_profile->profile();
@@ -314,7 +323,7 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 
      cmsAlloc3DGrid(Lut, 32, 3, 3);
 
-     if (!cmsSample3DGrid(Lut, desaturateSampler, (LPVOID) &bchsw, 0)) {
+     if (!cmsSample3DGrid(Lut, desaturateSampler, static_cast<LPVOID>(&bchsw), 0)) {
          // Shouldn't reach here
          cmsFreeLUT(Lut);
          cmsCloseProfile(adj->profiles[1]);
@@ -324,8 +333,8 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
     // Create tags
 
     cmsAddTag(adj->profiles[1], icSigDeviceMfgDescTag,      (LPVOID) "(krita internal)");
-    cmsAddTag(adj->profiles[1], icSigProfileDescriptionTag, (LPVOID) "krita satuation abstract profile");
-    cmsAddTag(adj->profiles[1], icSigDeviceModelDescTag,    (LPVOID) "satuation built-in");
+    cmsAddTag(adj->profiles[1], icSigProfileDescriptionTag, (LPVOID) "krita saturation abstract profile");
+    cmsAddTag(adj->profiles[1], icSigDeviceModelDescTag,    (LPVOID) "saturation built-in");
 
     cmsAddTag(adj->profiles[1], icSigMediaWhitePointTag, (LPVOID) cmsD50_XYZ());
 
@@ -341,6 +350,8 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 
 KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 **transferValues)
 {
+    if (!m_profile) return 0;
+
     LPGAMMATABLE *transferFunctions = new LPGAMMATABLE[nColorChannels()+1];
 
     for(uint ch=0; ch < nColorChannels(); ch++) {
@@ -384,21 +395,38 @@ void KisAbstractColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
 
 Q_UINT8 KisAbstractColorSpace::difference(const Q_UINT8* src1, const Q_UINT8* src2)
 {
-    Q_UINT8 lab1[8], lab2[8];
-    cmsCIELab labF1, labF2;
+    if (m_defaultToLab) {
 
-    if (getAlpha(src1) == OPACITY_TRANSPARENT || getAlpha(src2) == OPACITY_TRANSPARENT)
-        return (getAlpha(src1) == getAlpha(src2) ? 0 : 255);
+        Q_UINT8 lab1[8], lab2[8];
+        cmsCIELab labF1, labF2;
 
-    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src1 ), lab1, 1);
-    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src2 ), lab2, 1);
-    cmsLabEncoded2Float(&labF1, (WORD *)lab1);
-    cmsLabEncoded2Float(&labF2, (WORD *)lab2);
-    double diff = cmsDeltaE(&labF1, &labF2);
-    if(diff>255)
-        return 255;
-    else
-        return Q_INT8(diff);
+        if (getAlpha(src1) == OPACITY_TRANSPARENT || getAlpha(src2) == OPACITY_TRANSPARENT)
+            return (getAlpha(src1) == getAlpha(src2) ? 0 : 255);
+
+        cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src1 ), lab1, 1);
+        cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8*>( src2 ), lab2, 1);
+        cmsLabEncoded2Float(&labF1, (WORD *)lab1);
+        cmsLabEncoded2Float(&labF2, (WORD *)lab2);
+        double diff = cmsDeltaE(&labF1, &labF2);
+        if(diff>255)
+            return 255;
+        else
+            return Q_INT8(diff);
+    }
+    else {
+        QColor c1;
+        Q_UINT8 opacity1;
+        toQColor(src1, &c1, &opacity1);
+
+        QColor c2;
+        Q_UINT8 opacity2;
+        toQColor(src2, &c2, &opacity2);
+
+        Q_UINT8 red = abs(c1.red() - c2.red());
+        Q_UINT8 green = abs(c1.green() - c2.green());
+        Q_UINT8 blue = abs(c1.blue() - c2.blue());
+        return QMAX(red, QMAX(green, blue));
+    }
 }
 
 void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
@@ -500,14 +528,14 @@ void KisAbstractColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
         Q_INT32 r, g, b;
 
         if (compensate) {
-            r = (Q_INT32) QMIN(255, ((c.red() * shade) / (compensation * 255)));
-            g = (Q_INT32) QMIN(255, ((c.green() * shade) / (compensation * 255)));
-            b = (Q_INT32) QMIN(255, ((c.blue() * shade) / (compensation * 255)));
+            r = static_cast<Q_INT32>( QMIN(255, (c.red() * shade) / (compensation * 255)));
+            g = static_cast<Q_INT32>( QMIN(255, (c.green() * shade) / (compensation * 255)));
+            b = static_cast<Q_INT32>( QMIN(255, (c.blue() * shade) / (compensation * 255)));
         }
         else {
-            r = (Q_INT32) QMIN(255, (c.red() * shade / 255));
-            g = (Q_INT32) QMIN(255, (c.green() * shade / 255));
-            b = (Q_INT32) QMIN(255, (c.blue() * shade / 255));
+            r = static_cast<Q_INT32>( QMIN(255, (c.red() * shade / 255)));
+            g = static_cast<Q_INT32>( QMIN(255, (c.green() * shade / 255)));
+            b = static_cast<Q_INT32>( QMIN(255, (c.blue() * shade / 255)));
         }
         c.setRgb(r, g, b);
 
@@ -520,7 +548,7 @@ Q_UINT8 KisAbstractColorSpace::intensity8(const Q_UINT8 * src) const
     QColor c;
         Q_UINT8 opacity;
         const_cast<KisAbstractColorSpace *>(this)->toQColor(src, &c, &opacity);
-        return (Q_UINT8)((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
+        return static_cast<Q_UINT8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
 
 }
 
@@ -605,7 +633,8 @@ QImage KisAbstractColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width
     else
         dstCS = m_parent->getRGB8();
 
-    convertPixelsTo(const_cast<Q_UINT8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
+    if (data)
+        convertPixelsTo(const_cast<Q_UINT8 *>(data), img.bits(), dstCS, width * height, renderingIntent);
 
     return img;
 }
@@ -625,7 +654,7 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
         flags = cmsFLAGS_BLACKPOINTCOMPENSATION;
     }
 
-    if (dstProfile && srcProfile ) {
+    if (dstColorSpace && dstProfile && srcProfile ) {
         cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
                               colorSpaceType(),
                               dstProfile -> profile(),
@@ -638,7 +667,7 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
     return 0;
 }
 
-void KisAbstractColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 */*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+void KisAbstractColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 * /*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     Q_UINT8 *dst = dstRowStart;
     const Q_UINT8 *src = srcRowStart;

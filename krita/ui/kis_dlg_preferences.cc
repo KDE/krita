@@ -50,6 +50,7 @@
 #include <knuminput.h>
 #include <kurlrequester.h>
 
+#include "squeezedcombobox.h"
 #include "kis_cmb_idlist.h"
 #include "kis_colorspace.h"
 #include "kis_colorspace_factory_registry.h"

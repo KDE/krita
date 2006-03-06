@@ -48,6 +48,7 @@
 #include <kis_paint_device.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_cmb_idlist.h>
+#include <squeezedcombobox.h>
 
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"

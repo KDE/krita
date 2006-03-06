@@ -25,6 +25,7 @@
 #include "kis_colorspace.h"
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
 #include "kis_color.h"
 #include <kcolorcombo.h>
 

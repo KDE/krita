@@ -34,6 +34,7 @@
 #include "kis_colorspace.h"
 #include <kis_id.h>
 #include <kis_cmb_idlist.h>
+#include <squeezedcombobox.h>
 
 #include "wdgconvertcolorspace.h"
 #include "dlg_colorspaceconversion.h"

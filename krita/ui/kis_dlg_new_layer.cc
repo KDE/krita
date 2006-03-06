@@ -31,6 +31,7 @@
 #include "kis_global.h"
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
 #include "kis_dlg_new_layer.h"
 #include <kis_meta_registry.h>
 #include "kis_colorspace_factory_registry.h"

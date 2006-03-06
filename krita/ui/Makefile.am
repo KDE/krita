@@ -40,7 +40,7 @@ libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
 			wdgtextbrush.ui kis_dlg_adjustment_layer.cc kis_filters_listview.cc \
 			wdgpalettechooser.ui wdggridsettings.ui kis_grid_manager.cpp \
 			wdgtabletdevicesettings.ui wdgtabletsettings.ui kis_input_device.cc \
-			kis_part_layer_handler.cc kis_dlg_adj_layer_props.cc
+			kis_part_layer_handler.cc kis_dlg_adj_layer_props.cc squeezedcombobox.cpp
 
 noinst_HEADERS = kis_aboutdata.h imageviewer.h layerlist.h kcurve.h \
 		kis_autobrush.h kis_autogradient.h kis_birdeye_box.h kis_brush_chooser.h \
@@ -51,7 +51,7 @@ noinst_HEADERS = kis_aboutdata.h imageviewer.h layerlist.h kcurve.h \
 		kis_part_layer.h kis_pattern_chooser.h kis_resource_mediator.h kis_resourceserver.h \
 		kis_ruler.h kis_selection_manager.h kis_selection_options.h kis_view_iface.h \
 		kis_custom_brush.h kis_custom_pattern.h kis_custom_image_widget.h \
-		kis_dlg_adjustment_layer.h kis_grid_manager.h kis_dlg_adj_layer_props.h
+		kis_dlg_adjustment_layer.h kis_grid_manager.h kis_dlg_adj_layer_props.h squeezedcombobox.h
 
 include_HEADERS = kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \
 		kis_cursor.h kis_doc.h kis_doc_iface.h \

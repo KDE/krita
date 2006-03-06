@@ -188,7 +188,8 @@ void KisToolManager::setCurrentTool(KisTool *tool)
         }
         QWidget * w = tool->optionWidget();
         
-        m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
+        if (w)
+            m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
         m_controller->setCanvasCursor(tool->cursor());

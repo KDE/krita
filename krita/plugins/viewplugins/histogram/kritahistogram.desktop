@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Histogram Plugin
-Name[bg]=Приставка за Histogram
 Name[ca]=Connector d'histograma
 Name[da]=Plugin med histogram
 Name[de]=Histogramm-Plugin
 Name[es]=Extensión de histograma
 Name[et]=Histogrammiplugin
+Name[hu]=Hisztogram modul
 Name[is]=Súluritssía
 Name[it]=Plugin per gli istogrammi
 Name[ja]=ヒストグラムプラグイン
@@ -17,8 +17,6 @@ Name[sl]=Vstavek za histograme
 Name[sr]=Хистограмски прикључак
 Name[sr@Latn]=Histogramski priključak
 Name[sv]=Insticksprogram med histogram
-Name[xx]=xxHistogram Pluginxx
-Name[zh_CN]=直方图插件
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogram

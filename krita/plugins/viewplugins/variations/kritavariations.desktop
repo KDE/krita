@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Variations Plugin
-Name[bg]=Приставка за вариации
 Name[ca]=Connector de variacions
 Name[da]=Plugin med variationer
 Name[de]=Variationen-Plugin
 Name[es]=Extensión para variaciones
 Name[et]=Variatsioonide plugin
+Name[hu]=Variációk modul
 Name[is]=Breytileika íforrit
 Name[it]=Plugin delle variazioni
 Name[ja]=バリエーションプラグイン
@@ -16,7 +16,6 @@ Name[pt_BR]='Plugin' de Variações
 Name[sr]=Прикључак за варијације
 Name[sr@Latn]=Priključak za varijacije
 Name[sv]=Insticksprogram med variationer
-Name[xx]=xxVariations Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritavariations

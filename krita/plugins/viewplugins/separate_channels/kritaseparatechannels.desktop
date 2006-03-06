@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Separate Channels Plugin
-Name[bg]=Приставка за отделен канал
 Name[ca]=Connector de canals separats
 Name[da]=Plugin for separate kanaler
 Name[de]="Kanäle trennen"-Plugin
 Name[es]=Extensión para canales separados
 Name[et]=Kanalite lahutamise plugin
+Name[hu]=Csatornaszétválasztó modul
 Name[is]=Aðgreindar rásir íforrit
 Name[it]=Plugin per la separazione dei canali
 Name[ja]=チャンネル分離プラグイン
@@ -18,8 +18,6 @@ Name[sr]=Прикључак за раздвајање канала
 Name[sr@Latn]=Priključak za razdvajanje kanala
 Name[sv]=Insticksprogram för separata kanaler
 Name[uk]=Втулок розділення каналів
-Name[xx]=xxSeparate Channels Pluginxx
-Name[zh_CN]=独立通道插件
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels

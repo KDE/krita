@@ -1,14 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Star Tool
-Name[bg]=Инструмент звезда
 Name[br]=Ostilh steredenn
 Name[ca]=Eina d'estrella
 Name[cy]=Erfyn Seren
 Name[da]=Stjerneværktøj
 Name[de]=Stern-Werkzeug
 Name[el]=Εργαλείο αστέρα
-Name[eo]=Ilo stelo
 Name[es]=Herramienta Estrella
 Name[et]=Tähe tööriist
 Name[eu]=Izarra tresna
@@ -30,8 +28,6 @@ Name[sl]=Zvezdno orodje
 Name[sr]=Алат за звезде
 Name[sr@Latn]=Alat za zvezde
 Name[sv]=Stjärnverktyg
-Name[tr]=Yıldız Aracı
-Name[xx]=xxStar Toolxx
 Name[zh_CN]=星形工具
 ServiceTypes=Krita/Tool
 Type=Service

@@ -1,12 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorrange
-Name[bg]=Цветови обхват
 Name[ca]=Rang de color
 Name[da]=Farveområde
 Name[de]=Farbbereich
-Name[en_GB]=Colourrange
 Name[et]=Värvivahemik
+Name[hu]=Egyszerű
 Name[is]=Litasvið
 Name[it]=Intervallo di colori
 Name[ja]=色の範囲
@@ -17,7 +16,6 @@ Name[sl]=Barvni razpon
 Name[sr]=Опсег боја
 Name[sr@Latn]=Opseg boja
 Name[sv]=Färgintervall
-Name[xx]=xxColorrangexx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange

@@ -1,14 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Polygon Tool
-Name[bg]=Инструмент многоъгълник
 Name[br]=Ostilh liestueg
 Name[ca]=Eina de polígon
 Name[cy]=Erfyn Polygon
 Name[da]=Polygonværktøj
 Name[de]=Vieleck-Werkzeug
 Name[el]=Εργαλείο πολυγώνου
-Name[eo]=Ilo por poligonoj
 Name[es]=Herramienta Polígono
 Name[et]=Hulknurga tööriist
 Name[eu]=Poligonoa tresna
@@ -29,9 +27,7 @@ Name[ru]=Многоугольник
 Name[sr]=Алат за полигоне
 Name[sr@Latn]=Alat za poligone
 Name[sv]=Polygonverktyg
-Name[tr]=Çok Kenarlı Araç
 Name[uk]=Засіб багатокутника
-Name[xx]=xxPolygon Toolxx
 Name[zh_CN]=多边形工具
 ServiceTypes=Krita/Tool
 Type=Service

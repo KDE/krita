@@ -1,15 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Screenshot
-Name[bg]=Снимка на екрана
-Name[br]=Skrammpaker
 Name[ca]=Captura de pantalla
-Name[cy]=Sgrinlun
 Name[da]=Skærmaftryk
 Name[de]=Bildschirmphoto
 Name[es]=Captura de pantalla
 Name[et]=Ekraanipilt
-Name[ga]=Pictiúr den Scáileán
+Name[hu]=Képernyőfelvétel
 Name[is]=Skjámynd
 Name[it]=Schermata
 Name[ja]=スクリーンショット
@@ -21,8 +18,6 @@ Name[sr]=Снимак екрана
 Name[sr@Latn]=Snimak ekrana
 Name[sv]=Skärmdump
 Name[uk]=Знімок екрана
-Name[xx]=xxScreenshotxx
-Name[zh_CN]=抓图
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

@@ -1,13 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filters Gallery
-Name[bg]=Галерия с филтри
 Name[ca]=Galeria de filtres
 Name[da]=Filtergalleri
 Name[de]=Filtergallerie
 Name[es]=Galería de filtros
 Name[et]=Filtrigalerii
-Name[ga]=Gailearaí na Scagairí
+Name[hu]=Szűrőgaléria
 Name[is]=Síusafn
 Name[it]=Galleria dei filtri
 Name[ja]=フィルターギャラリー
@@ -18,8 +17,6 @@ Name[sl]=Galerija filtrov
 Name[sr]=Галерија филтера
 Name[sr@Latn]=Galerija filtera
 Name[sv]=Filtrergalleri
-Name[xx]=xxFilters Galleryxx
-Name[zh_CN]=滤镜库
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery

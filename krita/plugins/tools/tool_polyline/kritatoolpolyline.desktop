@@ -1,14 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Polyline Tool
-Name[bg]=Инструмент съставна линия
 Name[br]=Ostilh lieslinenn
 Name[ca]=Eina de polilínia
 Name[cy]=Erfyn Polylinell
 Name[da]=Flerlinjeværktøj
 Name[de]=Linienketten-Werkzeug
 Name[el]=Εργαλείο Polyline
-Name[eo]=Ilo por multlinioj
 Name[es]=Herramienta Polilínea
 Name[et]=Kompleksjoone tööriist
 Name[eu]=Polilerroa tresna
@@ -28,9 +26,7 @@ Name[ru]=Ломаная
 Name[sr]=Алат за полилиније
 Name[sr@Latn]=Alat za polilinije
 Name[sv]=Flerlinjesverktyg
-Name[tr]=Çok Çizgili Araç
 Name[uk]=Засіб ламаної лінії
-Name[xx]=xxPolyline Toolxx
 Name[zh_CN]=折线工具
 ServiceTypes=Krita/Tool
 Type=Service

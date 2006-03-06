@@ -34,7 +34,6 @@ KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
         m_redoHashTable [i] = 0;
     }
     m_numTiles = 0;
-    m_delTilesTable=0;
     m_defPixel = new Q_UINT8[pixelSize];
     m_redoDefPixel = new Q_UINT8[pixelSize];
     m_valid = true;
@@ -54,21 +53,28 @@ KisMemento::~KisMemento()
     // Delete defPixel arrays;
     delete [] m_defPixel;
     delete [] m_redoDefPixel;
-
-    // Finally delete the list of deleted tiles
-    deleteAll(m_delTilesTable);
 }
 
-void KisMemento::deleteAll(DeletedTile *deletedtile)
+KisMemento::DeletedTileList::~DeletedTileList()
+{
+    clear();
+}
+
+void KisMemento::DeletedTileList::clear()
 {
     // They are not tiles just references. The actual tiles have already been deleted,
     // so just delete the references.
-    while(deletedtile)
+
+    const DeletedTile *deletedTile = m_firstDeletedTile;
+
+    while (deletedTile)
     {
-        DeletedTile *d = deletedtile;
-        deletedtile = deletedtile->next;
+        const DeletedTile *d = deletedTile;
+        deletedTile = deletedTile->next();
         delete d;
     }
+
+    m_firstDeletedTile = 0;
 }
 
 void KisMemento::deleteAll(KisTile *tile)

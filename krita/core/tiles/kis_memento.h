@@ -50,16 +50,93 @@ public:
     void setInvalid() { m_valid = false; }
 
 private:
+
+    class DeletedTile {
+    public:
+        DeletedTile(Q_INT32 col, Q_INT32 row, const DeletedTile *next)
+            : m_col(col),
+              m_row(row),
+              m_next(next)
+        {
+        }
+
+        Q_INT32 col() const { return m_col; }
+        Q_INT32 row() const { return m_row; }
+        const DeletedTile *next() const { return m_next; }
+
+    private:
+        Q_INT32 m_col;
+        Q_INT32 m_row;
+        const DeletedTile *m_next;
+    };
+
+    class DeletedTileList {
+    public:
+        DeletedTileList()
+            : m_firstDeletedTile(0)
+        {
+        }
+
+        ~DeletedTileList();
+
+        void addTile(Q_INT32 col, Q_INT32 row)
+        {
+            DeletedTile *d = new DeletedTile(col, row, m_firstDeletedTile);
+            Q_CHECK_PTR(d);
+
+            m_firstDeletedTile = d;
+        }
+
+        DeletedTile *firstTile() const
+        {
+            return m_firstDeletedTile;
+        }
+
+        void clear();
+
+    private:
+        DeletedTile *m_firstDeletedTile;
+    };
+
+    void addTileToDeleteOnRedo(Q_INT32 col, Q_INT32 row)
+    {
+        m_redoDelTilesList.addTile(col, row);
+    }
+
+    DeletedTile *tileListToDeleteOnRedo()
+    {
+        return m_redoDelTilesList.firstTile();
+    }
+
+    void clearTilesToDeleteOnRedo()
+    {
+        m_redoDelTilesList.clear();
+    }
+
+    void addTileToDeleteOnUndo(Q_INT32 col, Q_INT32 row)
+    {
+        m_undoDelTilesList.addTile(col, row);
+    }
+
+    DeletedTile *tileListToDeleteOnUndo()
+    {
+        return m_undoDelTilesList.firstTile();
+    }
+
+    void clearTilesToDeleteOnUndo()
+    {
+        m_undoDelTilesList.clear();
+    }
+
     friend class KisTiledDataManager;
     KisTiledDataManager *originator;
     KisTile **m_hashTable;
     Q_UINT32 m_numTiles;
     KisTile **m_redoHashTable;
-    struct DeletedTile {Q_INT32 col; Q_INT32 row; DeletedTile *next;};
-    DeletedTile *m_delTilesTable;
+    DeletedTileList m_redoDelTilesList;
+    DeletedTileList m_undoDelTilesList;
     Q_UINT8 *m_defPixel;
     Q_UINT8 *m_redoDefPixel;
-    void deleteAll(DeletedTile *deletedtile);
     void deleteAll(KisTile *tile);
 
     bool m_valid;

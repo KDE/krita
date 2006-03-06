@@ -45,20 +45,20 @@ class KoStore;
 class KisDataManager : public ACTUAL_DATAMGR {
 
 public:
-    KisDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {};
-    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { };
+    KisDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
+    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
 public:
     /**
      * Sets the default pixel. Note that this might change every occurrance, and it might not, but new data
      * well be initialised with this pixel
      */
-    inline void setDefaultPixel(const Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); };
+    inline void setDefaultPixel(const Q_UINT8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); }
 
     /**
      * Gets the default pixel.
      */
-     inline const Q_UINT8 *defaultPixel() const { return ACTUAL_DATAMGR::defaultPixel(); } ;
+     inline const Q_UINT8 *defaultPixel() const { return ACTUAL_DATAMGR::defaultPixel(); }
 
     /**
      * Reguests a memento from the data manager. There is only one memento active
@@ -66,7 +66,7 @@ public:
      * write actions on the datamanger builds undo data into this memento
      * necessary to rollback the transaction.
      */
-    inline KisMementoSP getMemento() { return ACTUAL_DATAMGR::getMemento(); };
+    inline KisMementoSP getMemento() { return ACTUAL_DATAMGR::getMemento(); }
 
     /**
      * Restores the image data to the state at the time of the getMemento() call.
@@ -74,7 +74,7 @@ public:
      * Note that rollback should be performed with mementos in the reverse order of
      * their creation, as mementos only store incremental changes
      */
-    inline void rollback(KisMementoSP memento) { ACTUAL_DATAMGR::rollback(memento); };
+    inline void rollback(KisMementoSP memento) { ACTUAL_DATAMGR::rollback(memento); }
 
     /**
      * Restores the image data to the state at the time of the rollback call of the memento.
@@ -83,29 +83,30 @@ public:
      * no intermittent actions have been performed (though it's ok to rollback other mementos and
      * roll them forward again)
      */
-    inline void rollforward(KisMementoSP memento) { ACTUAL_DATAMGR::rollforward(memento); };
+    inline void rollforward(KisMementoSP memento) { ACTUAL_DATAMGR::rollforward(memento); }
 
 public:
     /**
      * Reads and writes the tiles from/onto a KoStore (wich is simply a file within a zip file)
      *
      */
-    inline bool write(KoStore *store) { return ACTUAL_DATAMGR::write(store); };
-    inline bool read(KoStore *store) { return ACTUAL_DATAMGR::read(store); };
+    inline bool write(KoStore *store) { return ACTUAL_DATAMGR::write(store); }
+    inline bool read(KoStore *store) { return ACTUAL_DATAMGR::read(store); }
 
 public:
 
     /**
      * Returns the number of bytes a pixel takes
      */
-    inline Q_UINT32 pixelSize() { return ACTUAL_DATAMGR::pixelSize(); };
+    inline Q_UINT32 pixelSize() { return ACTUAL_DATAMGR::pixelSize(); }
 
     /**
      * Return the extent of the data in x,y,w,h.
      */
     inline void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
-                         { return ACTUAL_DATAMGR::extent(x, y, w, h); };
+                         { return ACTUAL_DATAMGR::extent(x, y, w, h); }
 
+     QRect extent() const { return ACTUAL_DATAMGR::extent(); }
 
 
 public:
@@ -114,9 +115,9 @@ public:
       * Crop or extend the data to x, y, w, h.
       */
     inline void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
-                         { return ACTUAL_DATAMGR::setExtent(x, y, w, h); };
+                         { return ACTUAL_DATAMGR::setExtent(x, y, w, h); }
 
-    inline void setExtent(const QRect & rect) { setExtent(rect.x(), rect.y(), rect.width(), rect.height()); };
+    inline void setExtent(const QRect & rect) { setExtent(rect.x(), rect.y(), rect.width(), rect.height()); }
 
 public:
 
@@ -125,19 +126,19 @@ public:
      */
     inline void clear(Q_INT32 x, Q_INT32 y,
            Q_INT32 w, Q_INT32 h,
-           Q_UINT8 def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); };
+           Q_UINT8 def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
 
     /**
      * Clear the specified rect to the specified pixel value.
      */
     inline void clear(Q_INT32 x, Q_INT32 y,
            Q_INT32 w, Q_INT32 h,
-           Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); };
+           Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
 
     /**
      * Clear all back to default values.
      */
-    inline void clear() { ACTUAL_DATAMGR::clear(); };
+    inline void clear() { ACTUAL_DATAMGR::clear(); }
 
 
 public:
@@ -147,26 +148,26 @@ public:
      * data.
      */
     inline void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-           Q_INT32 w, Q_INT32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); };
+           Q_INT32 w, Q_INT32 h) { ACTUAL_DATAMGR::paste(data, sx, sy, dx, dy, w, h); }
 
 public:
     /**
      * Get a read-only pointer to the specified pixel.
      */
       inline const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y)
-          { return ACTUAL_DATAMGR::pixel(x, y); };
+          { return ACTUAL_DATAMGR::pixel(x, y); }
 
     /**
      * Get a read-write pointer to the specified pixel.
      */
       inline Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y)
-          { return ACTUAL_DATAMGR::writablePixel(x, y); };
+          { return ACTUAL_DATAMGR::writablePixel(x, y); }
 
     /**
      * Write the specified data to x, y. There is no checking on pixelSize!
      */
     inline void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
-        { ACTUAL_DATAMGR::setPixel(x, y, data);};
+        { ACTUAL_DATAMGR::setPixel(x, y, data);}
 
 
      /**
@@ -177,7 +178,7 @@ public:
      inline void readBytes(Q_UINT8 * data,
                Q_INT32 x, Q_INT32 y,
                Q_INT32 w, Q_INT32 h)
-        { ACTUAL_DATAMGR::readBytes(data, x, y, w, h);};
+        { ACTUAL_DATAMGR::readBytes(data, x, y, w, h);}
 
      /**
      * Copy the bytes to the specified rect. w * h * pixelSize bytes will be read, whether
@@ -186,7 +187,7 @@ public:
      inline void writeBytes(const Q_UINT8 * data,
              Q_INT32 x, Q_INT32 y,
              Q_INT32 w, Q_INT32 h)
-        {ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); };
+        {ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); }
 
     // Get the number of contiguous columns starting at x, valid for all values
     // of y between minY and maxY.

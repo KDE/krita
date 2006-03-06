@@ -27,7 +27,7 @@ const Q_INT32 KisTile::WIDTH = 64;
 const Q_INT32 KisTile::HEIGHT = 64;
 
 
-KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
+KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, const Q_UINT8 *defPixel)
 {
     m_pixelSize = pixelSize;
     m_data = 0;
@@ -43,7 +43,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, Q_UINT8 *defPixel)
     setData(defPixel);
 }
 
-KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
+KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -64,7 +64,7 @@ KisTile::KisTile(KisTile& rhs, Q_INT32 col, Q_INT32 row)
     }
 }
 
-KisTile::KisTile(KisTile& rhs)
+KisTile::KisTile(const KisTile& rhs)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -105,11 +105,6 @@ void KisTile::allocate()
     }
 }
 
-KisTile * KisTile::getNext()
-{
-    return m_nextTile;
-}
-
 void KisTile::setNext(KisTile *n)
 {
     m_nextTile = n;
@@ -123,7 +118,7 @@ Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
     return m_data + m_pixelSize * ( y * WIDTH + x );
 }
 
-void KisTile::setData(Q_UINT8 *pixel)
+void KisTile::setData(const Q_UINT8 *pixel)
 {
     Q_UINT8 *dst = m_data;
 

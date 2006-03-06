@@ -91,6 +91,7 @@ protected:
     Q_UINT32 pixelSize();
 
     void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    QRect extent() const;
 
     void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
 
@@ -173,11 +174,13 @@ private:
 
 private:
 
-    void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile);
+    void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, const KisTile *refTile);
     KisTile *getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def);
     KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
     Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
     void updateExtent(Q_INT32 col, Q_INT32 row);
+    void recalculateExtent();
+    void deleteTiles(const KisMemento::DeletedTile *deletedTileList);
     Q_UINT32 xToCol(Q_UINT32 x) const;
     Q_UINT32 yToRow(Q_UINT32 y) const;
     void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);

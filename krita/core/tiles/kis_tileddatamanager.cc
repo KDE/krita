@@ -85,7 +85,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
     // Deep copy every tile. XXX: Make this copy-on-write!
     for(int i = 0; i < 1024; i++)
     {
-        KisTile *tile = dm.m_hashTable[i];
+        const KisTile *tile = dm.m_hashTable[i];
 
         m_hashTable[i] = 0;
 
@@ -109,11 +109,11 @@ KisTiledDataManager::~KisTiledDataManager()
     // Deep delete every tile
     for(int i = 0; i < 1024; i++)
     {
-        KisTile *tile = m_hashTable[i];
+        const KisTile *tile = m_hashTable[i];
 
         while(tile)
         {
-            KisTile *deltile = tile;
+            const KisTile *deltile = tile;
             tile = tile->getNext();
             delete deltile;
         }
@@ -145,7 +145,7 @@ bool KisTiledDataManager::write(KoStore *store)
 
     for(int i = 0; i < 1024; i++)
     {
-        KisTile *tile = m_hashTable[i];
+        const KisTile *tile = m_hashTable[i];
 
         while(tile)
         {
@@ -221,6 +221,18 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
     }
 }
 
+QRect KisTiledDataManager::extent() const
+{
+    Q_INT32 x;
+    Q_INT32 y;
+    Q_INT32 w;
+    Q_INT32 h;
+
+    extent(x, y, w, h);
+
+    return QRect(x, y, w, h);
+}
+
 void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
     QRect newRect = QRect(x, y, w, h).normalize();
@@ -294,6 +306,25 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
     m_extentMaxY = y + h - 1;
 }
 
+void KisTiledDataManager::recalculateExtent()
+{
+    m_extentMinX = Q_INT32_MAX;
+    m_extentMinY = Q_INT32_MAX;
+    m_extentMaxX = Q_INT32_MIN;
+    m_extentMaxY = Q_INT32_MIN;
+
+    // Loop through all tiles.
+    for (int tileHash = 0; tileHash < 1024; tileHash++)
+    {
+        const KisTile *tile = m_hashTable[tileHash];
+
+        while (tile)
+        {
+            updateExtent(tile->getCol(), tile->getRow());
+            tile = tile->getNext();
+        }
+    }
+}
 
 void KisTiledDataManager::clear(Q_INT32, Q_INT32, Q_INT32, Q_INT32, Q_UINT8)
 {
@@ -311,13 +342,13 @@ void KisTiledDataManager::clear()
     // Loop through all tiles, add to the memento, then delete it,
     for(int tileHash = 0; tileHash < 1024; tileHash++)
     {
-        KisTile *tile = m_hashTable[tileHash];
+        const KisTile *tile = m_hashTable[tileHash];
 
         while(tile)
         {
             ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
 
-            KisTile *deltile = tile;
+            const KisTile *deltile = tile;
             tile = tile->getNext();
 
             delete deltile;
@@ -378,8 +409,7 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
     }
 
     // Also clear the table of deleted tiles
-    memento->deleteAll(memento->m_delTilesTable);
-    memento->m_delTilesTable = 0;
+    memento->clearTilesToDeleteOnRedo();
 
     // Now on to the real rollback
 
@@ -422,13 +452,7 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
             }
             else
             {
-                KisMemento::DeletedTile *d = new KisMemento::DeletedTile;
-                Q_CHECK_PTR(d);
-
-                d->col = tile->getCol();
-                d->row = tile->getRow();
-                d->next = memento->m_delTilesTable;
-                memento->m_delTilesTable = d;
+                memento->addTileToDeleteOnRedo(tile->getCol(), tile->getRow());
                 // As we are pratically adding a new tile we need to update the extent
                 updateExtent(tile->getCol(), tile->getRow());
             }
@@ -443,6 +467,11 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
 
             tile = tile->getNext();
         }
+    }
+
+    if (memento->tileListToDeleteOnUndo() != 0) {
+        // XXX: We currently add these tiles above, only to delete them again here.
+        deleteTiles(memento->tileListToDeleteOnUndo());
     }
 }
 
@@ -500,21 +529,28 @@ void KisTiledDataManager::rollforward(KisMementoSP memento)
             curTile->setNext(m_hashTable[i]);
             m_hashTable[i] = curTile;
             m_numTiles++;
+            updateExtent(curTile->getCol(), curTile->getRow());
 
             tile = tile->getNext();
         }
     }
 
     // Roll forward also means re-deleting the tiles that was deleted but restored by the undo
-    KisMemento::DeletedTile *d = memento->m_delTilesTable;
-    while(d)
+    if (memento->tileListToDeleteOnRedo() != 0) {
+        deleteTiles(memento->tileListToDeleteOnRedo());
+    }
+}
+
+void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
+{
+    while (d)
     {
-        Q_UINT32 tileHash = calcTileHash(d->col, d->row);
+        Q_UINT32 tileHash = calcTileHash(d->col(), d->row());
         KisTile *curTile = m_hashTable[tileHash];
         KisTile *preTile = 0;
         while(curTile)
         {
-            if(curTile->getRow() == d->row && curTile->getCol() == d->col)
+            if(curTile->getRow() == d->row() && curTile->getCol() == d->col())
             {
                 break;
             }
@@ -532,11 +568,13 @@ void KisTiledDataManager::rollforward(KisMementoSP memento)
         m_numTiles--;
         delete curTile;
 
-        d = d->next;
+        d = d->next();
     }
+
+    recalculateExtent();
 }
 
-void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, KisTile *refTile)
+void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, const KisTile *refTile)
 {
     if (refTile == 0) return;
     //Q_ASSERT(refTile != 0);
@@ -544,7 +582,7 @@ void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32
     // Basically we search for the tile in the current memento, and if it's already there we do nothing, otherwise
     //  we make a copy of the tile and put it in the current memento
 
-    if( ! m_currentMemento)
+    if(!m_currentMemento)
         return;
 
     KisTile *tile = m_currentMemento->m_hashTable[tileHash];
@@ -593,7 +631,7 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
     }
 
     // Might not have been created yet
-    if(! tile)
+    if(!tile)
     {
         if(writeAccess)
         {
@@ -605,6 +643,10 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
             m_hashTable[tileHash] = tile;
             m_numTiles++;
             updateExtent(col, row);
+
+            if (m_currentMemento) {
+                m_currentMemento->addTileToDeleteOnUndo(col, row);
+            }
         }
         else
             // If only read access then it's enough to share a default tile

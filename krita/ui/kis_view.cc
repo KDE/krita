@@ -3420,6 +3420,15 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
         }
         break;
     }
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+    {
+        if (m_canvas->cursorIsOverCanvas()) {
+            m_canvas->handleKeyEvent(e);
+            return true;
+        }
+        break;
+    }
 #ifdef EXTENDED_X11_TABLET_SUPPORT
     case QEvent::ChildInserted:
     {

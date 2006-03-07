@@ -58,6 +58,8 @@
 **
 **********************************************************************/
 
+#include <qcursor.h>
+
 #include "kis_canvas.h"
 #include "kis_cursor.h"
 #include "kis_move_event.h"
@@ -69,6 +71,7 @@
 #include "kis_opengl_canvas.h"
 #include "kis_config.h"
 #include "kis_input_device.h"
+#include "fixx11h.h"
 
 #ifdef Q_WS_X11
 
@@ -1345,6 +1348,48 @@ void KisCanvas::selectTabletDeviceEvents()
     m_canvasWidget -> selectTabletDeviceEvents();
 }
 #endif
+
+bool KisCanvas::cursorIsOverCanvas() const
+{
+    if (QApplication::activePopupWidget() != 0) {
+        return false;
+    }
+    if (QApplication::activeModalWidget() != 0) {
+        return false;
+    }
+
+    QWidget *canvasWidget = dynamic_cast<QWidget *>(m_canvasWidget);
+    Q_ASSERT(canvasWidget != 0);
+
+    if (canvasWidget) {
+        if (QApplication::widgetAt(QCursor::pos(), true) == canvasWidget) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void KisCanvas::handleKeyEvent(QEvent *e)
+{
+    QKeyEvent *ke = dynamic_cast<QKeyEvent *>(e);
+
+    Q_ASSERT(ke != 0);
+
+    if (ke) {
+        QWidget *canvasWidget = dynamic_cast<QWidget *>(m_canvasWidget);
+        Q_ASSERT(canvasWidget != 0);
+
+        if (canvasWidget) {
+            canvasWidget->setFocus();
+
+            if (e->type() == QEvent::KeyPress) {
+                emit sigGotKeyPressEvent(ke);
+            } else {
+                emit sigGotKeyReleaseEvent(ke);
+            }
+        }
+    }
+}
 
 #include "kis_canvas.moc"
 

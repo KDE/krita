@@ -290,6 +290,17 @@ public:
 
     bool isOpenGLCanvas() const;
 
+    /**
+     * Returns true if the cursor is over the canvas.
+     */
+    bool cursorIsOverCanvas() const;
+
+    /**
+     * Handle the given event (which must be a key event) as if the canvas 
+     * had received it directly.
+     */
+    void handleKeyEvent(QEvent *e);
+
     int width() const;
     int height() const;
 

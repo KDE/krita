@@ -64,14 +64,16 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
+            kdDebug() << e.attribute("name") << endl;
             if (e.attribute("name") == "transfers") {
                 QDomNode transferNode = e.firstChild();
                 nTransfers = e.attribute("number").toUShort();
-                
+
                 for (int i = 0; i < nTransfers ; i++) {
                     transfers[i] = new Q_UINT16[256];
                     memset(transfers[i], 0, 256);
                 }
+                
                 
                 int count = 0;
                 while (!transferNode.isNull()) {
@@ -96,9 +98,11 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
             else if (e.attribute("name") == "curves") {
                 QDomNode curvesNode = e.firstChild();
                 int count = 0;
+                nTransfers = e.attribute("number").toUShort();
+                curves = new QSortedList<QPair<double,double> >[nTransfers];
                 while (!curvesNode.isNull()) {
                     QDomElement curvesElement = curvesNode.toElement();
-                    if (!curvesElement.isNull()) {
+                    if (!curvesElement.isNull() && !e.text().isEmpty()) {
                         QStringList data = QStringList::split( ";", e.text() );
                         QStringList::Iterator pairStart = data.begin();
                         QStringList::Iterator pairEnd = data.end();
@@ -129,6 +133,7 @@ QString KisPerChannelFilterConfiguration::toString()
     root.setAttribute( "version", version() );
 
     QDomElement e = doc.createElement( "transfers" );
+    e.setAttribute("name", "transfers");
     e.setAttribute("number", nTransfers);
 
     for (int i = 0; i < nTransfers; ++i) {
@@ -146,6 +151,7 @@ QString KisPerChannelFilterConfiguration::toString()
 
     QDomElement c = doc.createElement("curves");
     c.setAttribute("number", nTransfers);
+    c.setAttribute("name", "curves");
     for (int i = 0; i < nTransfers; ++i) {
         QDomElement t = doc.createElement("curve");
         QPtrList<QPair<double,double> > curve = curves[i];

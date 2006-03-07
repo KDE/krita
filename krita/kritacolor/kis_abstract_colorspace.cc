@@ -356,8 +356,9 @@ KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 *
 
     for(uint ch=0; ch < nColorChannels(); ch++) {
         transferFunctions[ch] = cmsBuildGamma(256, 1.0);
-        for(uint i =0; i < 256; i++)
+        for(uint i =0; i < 256; i++) {
             transferFunctions[ch]->GammaTable[i] = transferValues[ch][i];
+        }
     }
 
     KisColorAdjustment *adj = new KisColorAdjustment;

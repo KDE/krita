@@ -635,6 +635,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
+        kdWarning(DBG_AREA_FILE) << "No filter in adjustment layer" << endl;
         return 0;
     }
 

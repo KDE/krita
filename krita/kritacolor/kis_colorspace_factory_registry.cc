@@ -141,7 +141,7 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
 {
     QString profileName = pName;
 
-    if(profileName == "")
+    if(profileName.isEmpty())
     {
         KisColorSpaceFactory *csf = get(csID);
 

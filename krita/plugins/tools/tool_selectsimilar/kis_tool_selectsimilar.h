@@ -1,7 +1,6 @@
 /*
  *  Copyright (c) 1999 Matthias Elter
  *  Copyright (c) 2002 Patrick Julien
- *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef KIS_TOOL_SELECT_PICKER_H_
 #define KIS_TOOL_SELECT_PICKER_H_
 

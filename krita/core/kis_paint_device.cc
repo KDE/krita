@@ -296,6 +296,9 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
         {
             m_exifInfo = new KisExifInfo(*rhs.m_exifInfo);
         }
+        else {
+            m_exifInfo = 0;
+        }
     }
 }
 

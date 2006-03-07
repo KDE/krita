@@ -38,7 +38,7 @@ class KisPaintDevice;
 struct KisPaletteEntry {
     QColor color;
     QString name;
-    bool operator==(const KisPaletteEntry& rhs) {
+    bool operator==(const KisPaletteEntry& rhs) const {
         return color == rhs.color && name == rhs.name;
     }
 };

@@ -164,6 +164,12 @@ bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
 
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
+    
+    if (!config) {
+        kdWarning() << "No configuration object for brightness/contrast filter\n";
+        return;
+    }
+    
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
     if (src!=dst) {

@@ -83,7 +83,7 @@ void KisAutogradient::slotChangedInterpolation(int type)
     KisGradientSegment* segment = gradientSlider -> selectedSegment();
     if(segment)
         segment -> setInterpolation( type );
-    gradientSlider -> repaint();
+    gradientSlider -> update();
 
     paramChanged();
 }
@@ -93,7 +93,7 @@ void KisAutogradient::slotChangedColorInterpolation(int type)
     KisGradientSegment* segment = gradientSlider -> selectedSegment();
     if(segment)
         segment -> setColorInterpolation( type );
-    gradientSlider -> repaint();
+    gradientSlider -> update();
 
     paramChanged();
 }
@@ -103,7 +103,7 @@ void KisAutogradient::slotChangedLeftColor( const QColor& color)
     KisGradientSegment* segment = gradientSlider -> selectedSegment();
     if(segment)
         segment -> setStartColor( Color( color, segment -> startColor().alpha() ) );
-    gradientSlider -> repaint();
+    gradientSlider -> update();
 
     paramChanged();
 }

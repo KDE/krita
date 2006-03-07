@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#if !defined KIS_TILED_ITERATOR_H_
+#ifndef KIS_TILED_ITERATOR_H_
 #define KIS_TILED_ITERATOR_H_
 
 #include <qglobal.h>

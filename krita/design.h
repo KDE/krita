@@ -21,3 +21,7 @@
   part. the user interface loads tools and other plugins.
 
  */
+#ifndef DESIGN
+#define DESIGN
+// Let's keep icefox.net/kde/tests.headerincluded_koffice.html happy
+#endif

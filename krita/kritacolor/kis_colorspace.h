@@ -56,7 +56,7 @@ public:
 
     virtual DCOPObject * dcopObject();
 
-    virtual bool operator==(const KisColorSpace& rhs) {
+    virtual bool operator==(const KisColorSpace& rhs) const {
         return id().id() == rhs.id().id();
     }
 

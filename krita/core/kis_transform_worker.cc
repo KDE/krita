@@ -323,7 +323,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 int sum = 0;
                 Q_INT32 t = (((begin<<8) - center) * invfscale)>>8;
                 Q_INT32 dt = invfscale;
-                for(int srcpos = begin; srcpos <= end; srcpos++)
+                for(int srcpos = begin; srcpos <= end; ++srcpos)
                 {
                     Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 

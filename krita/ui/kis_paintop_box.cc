@@ -140,7 +140,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
 {
     QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
 
-    if (pixmapName.isEmpty() /*|| pixmapName.isNull() || pixmapName == ""*/) {
+    if (pixmapName.isEmpty()) {
         return QPixmap();
     }
 

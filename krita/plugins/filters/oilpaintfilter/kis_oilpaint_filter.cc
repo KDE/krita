@@ -57,6 +57,11 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), "artistic", i18n("&Oilp
 void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
 
+    if (!configuration) {
+        kdWarning() << "No configuration object for oilpaint filter\n";
+        return;
+    }
+    
     Q_UNUSED(dst);
 
     Q_INT32 x = rect.x(), y = rect.y();

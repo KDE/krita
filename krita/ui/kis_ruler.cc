@@ -113,7 +113,7 @@ void KisRuler::setUnit(KoUnit::Unit u)
     m_unit = u;
     drawRuler();
     updatePointer(m_currentPosition, m_currentPosition);
-    repaint();
+    update();
 }
 
 void KisRuler::setZoom(double zoom)
@@ -122,7 +122,7 @@ void KisRuler::setZoom(double zoom)
     recalculateSize();
     drawRuler();
     updatePointer(m_currentPosition, m_currentPosition);
-    repaint();
+    update();
 }
 
 void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
@@ -130,7 +130,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
     if (m_pixmapBuffer) {
         if (m_orientation == Qt::Horizontal) {
             if (m_currentPosition != -1)
-                repaint(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
+                update(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
 
             if (x != -1) {
                 bitBlt(this, x, 1, &m_pixmapMarker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
@@ -138,7 +138,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
             }
         } else {
             if (m_currentPosition != -1)
-                repaint(1, m_currentPosition, MARKER_HEIGHT, MARKER_WIDTH);
+                update(1, m_currentPosition, MARKER_HEIGHT, MARKER_WIDTH);
 
             if (y != -1) {
                 bitBlt(this, 1, y, &m_pixmapMarker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
@@ -156,7 +156,7 @@ void KisRuler::updateVisibleArea(Q_INT32 xpos, Q_INT32 ypos)
         m_firstVisible = ypos;
 
     drawRuler();
-    repaint();
+    update();
     updatePointer(m_currentPosition, m_currentPosition);
 }
 

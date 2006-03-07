@@ -322,10 +322,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
             insertChildClient(plugin);
         }
         else {
-            kdDebug(51006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
 	    if( errCode == KParts::ComponentFactory::ErrNoLibrary)
 	    {
-		kdWarning(51006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+		kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
 	    }
         }
     }

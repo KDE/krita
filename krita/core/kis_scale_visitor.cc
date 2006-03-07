@@ -117,7 +117,7 @@ void KisScaleWorker::run()
         {
             for(int channel = 0; channel < m_pixelSize; channel++){
                 weight[channel] = 0.0;
-                bPelDelta[channel] = FALSE;
+                bPelDelta[channel] = false;
                 pel[channel]=tmpRows[contribY.p[0].m_pixel][ x * m_pixelSize + channel ];
             }
             for(int srcpos = 0; srcpos < contribY.n; srcpos++)
@@ -126,7 +126,7 @@ void KisScaleWorker::run()
                     for(int channel = 0; channel < m_pixelSize; channel++)
                     {
                         pel2[channel]=tmpRows[contribY.p[srcpos].m_pixel][ x * m_pixelSize + channel ];
-                        if(pel2[channel] != pel[channel]) bPelDelta[channel] = TRUE;
+                        if(pel2[channel] != pel[channel]) bPelDelta[channel] = true;
                             weight[channel] += pel2[channel] * contribY.p[srcpos].m_weight;
                     }
                 }
@@ -143,7 +143,7 @@ void KisScaleWorker::run()
         {
             for(int channel = 0; channel < m_pixelSize; channel++){
                 weight[channel] = 0.0;
-                bPelDelta[channel] = FALSE;
+                bPelDelta[channel] = false;
                 pel[channel] = tmp[ contribX[x].p[0].m_pixel * m_pixelSize + channel ];
             }
             for(int srcpos = 0; srcpos < contribX[x].n; srcpos++)
@@ -151,7 +151,7 @@ void KisScaleWorker::run()
                 for(int channel = 0; channel < m_pixelSize; channel++){
                     pel2[channel] = tmp[ contribX[x].p[srcpos].m_pixel * m_pixelSize + channel ];
                     if(pel2[channel] != pel[channel])
-                        bPelDelta[channel] = TRUE;
+                        bPelDelta[channel] = true;
                     weight[channel] += pel2[channel] * contribX[x].p[srcpos].m_weight;
                 }
             }

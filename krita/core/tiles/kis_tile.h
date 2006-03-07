@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#if !defined KIS_TILE_H_
+#ifndef KIS_TILE_H_
 #define KIS_TILE_H_
 
 #include <qglobal.h>

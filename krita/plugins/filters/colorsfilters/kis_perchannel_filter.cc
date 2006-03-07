@@ -40,9 +40,9 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
     curves = new QSortedList<QPair<double,double> >[n];
-
     for(int i=0;i<n;i++) {
         transfers[i] = new Q_UINT16[256];
+        memset(transfers[i], 0, 256);
     }
     nTransfers = n;
 }
@@ -53,8 +53,6 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
     for(int i=0;i<nTransfers;i++)
         delete [] transfers[i];
 }
-
-
 
 void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 {
@@ -69,9 +67,14 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
             if (e.attribute("name") == "transfers") {
                 QDomNode transferNode = e.firstChild();
                 nTransfers = e.attribute("number").toUShort();
+                
+                for (int i = 0; i < nTransfers ; i++) {
+                    transfers[i] = new Q_UINT16[256];
+                    memset(transfers[i], 0, 256);
+                }
+                
                 int count = 0;
                 while (!transferNode.isNull()) {
-
                     QDomElement transferElement = transferNode.toElement();
                     if (!transferElement.isNull()) {
                         QStringList data = QStringList::split( ",", transferElement.text() );
@@ -131,7 +134,7 @@ QString KisPerChannelFilterConfiguration::toString()
     for (int i = 0; i < nTransfers; ++i) {
         QDomElement t = doc.createElement("transfer");
         QString sTransfer;
-        for ( uint j = 0; j < 255 ; ++i ) {
+        for ( uint j = 0; j < 255 ; ++j ) {
             sTransfer += QString::number( transfers[i][j] );
             sTransfer += ",";
         }
@@ -193,6 +196,11 @@ std::list<KisFilterConfiguration*> KisPerChannelFilter::listOfExamplesConfigurat
 
 void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
+    if (!config) {
+        kdWarning() << "No configuration object for per-channel filter\n";
+        return;
+    }
+        
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
 
     KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);

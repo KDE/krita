@@ -62,7 +62,7 @@ public:
 
     virtual ~KisAbstractColorSpace();
 
-    virtual bool operator==(const KisAbstractColorSpace& rhs) {
+    virtual bool operator==(const KisAbstractColorSpace& rhs) const {
         return (m_id == rhs.m_id && m_profile == rhs.m_profile);
     }
 

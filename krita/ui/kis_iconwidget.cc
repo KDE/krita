@@ -29,7 +29,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent, 
 void KisIconWidget::slotSetItem(KoIconItem& item)
 {
     m_item = &item;
-    repaint();
+    update();
 }
 
 void KisIconWidget::drawButtonLabel(QPainter *p)

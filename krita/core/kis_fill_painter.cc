@@ -79,34 +79,41 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 }
 
 // 'regular' filling
-// XXX: This needs to be optimized.
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, Q_UINT8 opacity)
 {
+    if (w > 0 && h > 0) {
+        // Make sure we're in the right colorspace
 
-    // Make sure we're in the right colorspace
+        KisColor kc2(kc); // get rid of const
+        kc2.convertTo(m_device->colorSpace());
+        Q_UINT8 * data = kc2.data();
 
-    KisColor kc2(kc); // get rid of const
-    kc2.convertTo(m_device->colorSpace());
-    Q_UINT8 * data = kc2.data();
+        Q_UINT32 pixelSize = m_device->pixelSize();
+        m_device->colorSpace()->setAlpha(data, opacity, 1);
 
-    Q_INT32 y;
-    Q_UINT32 depth = m_device->pixelSize();
-    m_device->colorSpace()->setAlpha(data, opacity, 1);
+        Q_UINT8 *rowData = new Q_UINT8[w * pixelSize];
+        Q_UINT8 *pixel = rowData;
+        Q_INT32 pixelCount = w;
 
-
-    for (y = y1; y < y1 + h; y++)
-    {
-        KisHLineIterator hiter = m_device->createHLineIterator(x1, y, w, true);
-        while( ! hiter.isDone())
-        {
-            memcpy(hiter.rawData(), data, depth);
-            ++hiter;
+        while (pixelCount > 0) {
+            memcpy(pixel, data, pixelSize);
+            --pixelCount;
+            pixel += pixelSize;
         }
-    }
 
-    addDirtyRect(QRect(x1, y1, w, h));
+        // Writing more than 1 line at a time increases the speed a bit,
+        // but the next step is probably to implement the clear() function
+        // in the tile code that clears to a given pixel.
+        for (Q_INT32 y = y1; y < y1 + h; ++y) {
+            m_device->writeBytes(rowData, x1, y, w, 1);
+        }
+
+        delete [] rowData;
+
+        addDirtyRect(QRect(x1, y1, w, h));
+    }
 }
 
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {

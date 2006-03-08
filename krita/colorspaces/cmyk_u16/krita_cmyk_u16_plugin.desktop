@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
 Name[ca]=Model de color CMYK (enters de 16 bits)
+Name[cy]=Model Lliw CMYK (cyfanrif 16-did)
 Name[da]=CMYK-farvemodel (16-bit heltal)
 Name[de]=CMYK-Farbmodell (16-bit Ganzzahl)
 Name[es]=Modelo de color CMYK (entero de 16 bits)
@@ -20,6 +21,7 @@ Name[sv]=CMYK-färgmodell (16-bitars heltal)
 Name[uk]=Модель кольору CMYK (16-бітне ціле число)
 Comment=Color model for 16-bit integer per channel CMYK images
 Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges CMYK
+Comment[cy]=Model lliw ar gyfer delweddau CMYK â chyfanrif 16-did/sianel
 Comment[da]=Farvemodel for 16-bit heltal pr kanal CMYK-billeder
 Comment[de]=Farbmodell für 16-bit pro Kanal CMYK-Bilder
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes CMYK

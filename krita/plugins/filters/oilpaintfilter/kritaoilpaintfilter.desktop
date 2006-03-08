@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Oilpaint Filter
 Name[ca]=Filtre de pintura a l'oli
+Name[cy]=Hidlen Baent Olew
 Name[da]=Oliemalerifilter
 Name[de]=Ölgemälde-Filter
 Name[es]=Filtro de pintura al óleo
@@ -18,6 +19,7 @@ Name[sr@Latn]=Filter za ulje na platnu
 Name[sv]=Oljemålningsfilter
 Comment=Oilpaint filter
 Comment[ca]=Filtre de pintura a l'oli
+Comment[cy]=Hidlen baent olew
 Comment[da]=Oliemalerifilter
 Comment[de]=Ölgemälde-Filter
 Comment[es]=Filtro de pintura al óleo

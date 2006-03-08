@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Raindrops Filter
 Name[ca]=Filtre de gotes de pluja
+Name[cy]=Hidlen Ddiferion Glaw
 Name[da]=Regndråbefilter
 Name[de]=Regentropfen-Filter
 Name[es]=Filtro de gotas de lluvia
@@ -18,6 +19,7 @@ Name[sr@Latn]=Filter za kišne kapi
 Name[sv]=Regndroppsfilter
 Comment=Raindrops filter
 Comment[ca]=Filtre de gotes de pluja
+Comment[cy]=Hidlen ddiferion glaw
 Comment[da]=Regndråbefilter
 Comment[de]=Regentropfen-Filter
 Comment[es]=Filtro de gotas de lluvia

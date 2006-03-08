@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Emboss Filter
 Name[ca]=Filtre d'Emboss
+Name[cy]=Hidlen Foglynnu
 Name[da]=Relieffilter
 Name[de]=Relief-Filter
 Name[es]=Filtro de realce
@@ -18,6 +19,7 @@ Name[sr@Latn]=Reljefni filter
 Name[sv]=Relieffilter
 Comment=Emboss filter
 Comment[ca]=Filtre d'Emboss
+Comment[cy]=Hidlen foglynnu
 Comment[da]=Relieffilter
 Comment[de]=Relief-Filter
 Comment[es]=Filtro de realce

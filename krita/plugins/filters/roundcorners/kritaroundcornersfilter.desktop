@@ -2,10 +2,12 @@
 Encoding=UTF-8
 Name=Sobel Filter
 Name[ca]=Filtre Sobel
+Name[cy]=Hidlen Sobel
 Name[da]=Sobelfilter
 Name[de]=Sobel-Filter
 Name[es]=Filtro Sobel
 Name[et]=Sobeli filter
+Name[ga]=Scagaire Sobel
 Name[hu]=Sobel-eszköz
 Name[is]=Sobel sía
 Name[it]=Filtro Sobel

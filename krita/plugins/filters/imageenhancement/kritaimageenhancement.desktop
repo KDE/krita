@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Enhancement Filters
 Name[ca]=Filtres de millora
+Name[cy]=Hidlau Tecáu
 Name[da]=Forbedringsfilter
 Name[de]=Verbesserungsfilter
 Name[es]=Filtros de realce
@@ -19,6 +20,7 @@ Name[sv]=Förbättringsfilter
 Name[uk]=Фільтри покращання
 Comment=Enhance the quality of an image
 Comment[ca]=Millora la qualitat de la imatge
+Comment[cy]=Tecâu ansawdd delwedd
 Comment[da]=Forbedr kvaliteten af et billede
 Comment[de]=Die Qualität eines Bildes verbessern
 Comment[es]=Realza la calidad de una imagen

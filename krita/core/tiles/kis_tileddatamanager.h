@@ -97,8 +97,8 @@ protected:
 
 protected:
 
-    void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 def);
-    void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, Q_UINT8 * def);
+    void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 clearValue);
+    void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, const Q_UINT8 *clearPixel);
     void clear();
 
 
@@ -181,8 +181,8 @@ private:
     void updateExtent(Q_INT32 col, Q_INT32 row);
     void recalculateExtent();
     void deleteTiles(const KisMemento::DeletedTile *deletedTileList);
-    Q_UINT32 xToCol(Q_UINT32 x) const;
-    Q_UINT32 yToRow(Q_UINT32 y) const;
+    Q_INT32 xToCol(Q_INT32 x) const;
+    Q_INT32 yToRow(Q_INT32 y) const;
     void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
     Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
 };
@@ -193,20 +193,22 @@ inline Q_UINT32 KisTiledDataManager::pixelSize()
     return m_pixelSize;
 }
 
-inline Q_UINT32 KisTiledDataManager::xToCol(Q_UINT32 x) const
+inline Q_INT32 KisTiledDataManager::xToCol(Q_INT32 x) const
 {
-    // The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-    // common result is not like what is desired.
-    // however the hack is not perfect either since for coords lower it gives the wrong result
-    return (x + 16384 * KisTile::WIDTH) / KisTile::WIDTH - 16384;
+    if (x >= 0) {
+        return x / KisTile::WIDTH;
+    } else {
+        return -(((-x - 1) / KisTile::WIDTH) + 1);
+    }
 }
 
-inline Q_UINT32 KisTiledDataManager::yToRow(Q_UINT32 y) const
+inline Q_INT32 KisTiledDataManager::yToRow(Q_INT32 y) const
 {
-    // The hack with 16384 is to avoid negative division which is undefined in C++ and the most
-    // common result is not like what is desired.
-    // however the hack is not perfect either since for coords lower it gives the wrong result
-    return (y + 16384 * KisTile::HEIGHT) / KisTile::HEIGHT - 16384;
+    if (y >= 0) {
+        return y / KisTile::HEIGHT;
+    } else {
+        return -(((-y - 1) / KisTile::HEIGHT) + 1);
+    }
 }
 
 // during development the following line helps to check the interface is correct

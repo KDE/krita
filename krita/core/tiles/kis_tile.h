@@ -19,6 +19,7 @@
 #define KIS_TILE_H_
 
 #include <qglobal.h>
+#include <qrect.h>
 
 class KisTiledDataManager;
 class KisTiledIterator;
@@ -39,7 +40,9 @@ public:
     void release();
     void allocate();
 
-    Q_UINT8 *data(Q_INT32 xoff = 0, Q_INT32 yoff = 0);
+    Q_UINT8 *data(Q_INT32 xoff, Q_INT32 yoff) const;
+    Q_UINT8 *data() const { return m_data; }
+
     void setData(const Q_UINT8 *pixel);
 
     Q_INT32 refCount() const;
@@ -47,6 +50,8 @@ public:
 
     Q_INT32 getRow() const { return m_row; }
     Q_INT32 getCol() const { return m_col; }
+
+    QRect extent() const { return QRect(m_col * WIDTH, m_row * HEIGHT, WIDTH, HEIGHT); }
 
     void setNext(KisTile *);
     KisTile *getNext() const { return m_nextTile; }

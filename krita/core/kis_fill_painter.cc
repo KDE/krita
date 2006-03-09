@@ -89,28 +89,9 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
         KisColor kc2(kc); // get rid of const
         kc2.convertTo(m_device->colorSpace());
         Q_UINT8 * data = kc2.data();
-
-        Q_UINT32 pixelSize = m_device->pixelSize();
         m_device->colorSpace()->setAlpha(data, opacity, 1);
 
-        Q_UINT8 *rowData = new Q_UINT8[w * pixelSize];
-        Q_UINT8 *pixel = rowData;
-        Q_INT32 pixelCount = w;
-
-        while (pixelCount > 0) {
-            memcpy(pixel, data, pixelSize);
-            --pixelCount;
-            pixel += pixelSize;
-        }
-
-        // Writing more than 1 line at a time increases the speed a bit,
-        // but the next step is probably to implement the clear() function
-        // in the tile code that clears to a given pixel.
-        for (Q_INT32 y = y1; y < y1 + h; ++y) {
-            m_device->writeBytes(rowData, x1, y, w, 1);
-        }
-
-        delete [] rowData;
+        m_device->fill(x1, y1, w, h, data);
 
         addDirtyRect(QRect(x1, y1, w, h));
     }

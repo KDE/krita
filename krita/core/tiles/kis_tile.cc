@@ -110,7 +110,7 @@ void KisTile::setNext(KisTile *n)
     m_nextTile = n;
 }
 
-Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y )
+Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y ) const
 {
     //Q_ASSERT(m_data != 0);
     if (m_data == 0) return 0;

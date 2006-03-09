@@ -179,6 +179,11 @@ public:
     virtual void clear();
 
     /**
+     * Fill the given rectangle with the given pixel.
+     */
+    void fill(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const Q_UINT8 *fillPixel);
+
+    /**
      * Read the bytes representing the rectangle described by x, y, w, h into
      * data. If data is not big enough, Krita will gladly overwrite the rest
      * of your precious memory.

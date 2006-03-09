@@ -501,6 +501,11 @@ void KisPaintDevice::clear()
     m_datamanager -> clear();
 }
 
+void KisPaintDevice::fill(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const Q_UINT8 *fillPixel)
+{
+    m_datamanager -> clear(x, y, w, h, fillPixel);
+}
+
 void KisPaintDevice::mirrorX()
 {
     QRect r;

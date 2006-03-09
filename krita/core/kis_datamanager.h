@@ -133,7 +133,7 @@ public:
      */
     inline void clear(Q_INT32 x, Q_INT32 y,
            Q_INT32 w, Q_INT32 h,
-           Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+           const Q_UINT8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
 
     /**
      * Clear all back to default values.

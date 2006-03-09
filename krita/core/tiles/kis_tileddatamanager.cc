@@ -186,8 +186,8 @@ bool KisTiledDataManager::read(KoStore *store)
         // the following is only correct as long as tile size is not changed
         // The first time we change tilesize the dimensions just read needs to be respected
         // but for now we just assume that tiles are the same size as ever.
-        Q_UINT32 row = yToRow(y);
-        Q_UINT32 col = xToCol(x);
+        Q_INT32 row = yToRow(y);
+        Q_INT32 col = xToCol(x);
         Q_UINT32 tileHash = calcTileHash(col, row);
 
         KisTile *tile = new KisTile(m_pixelSize, col, row, m_defPixel);
@@ -326,15 +326,155 @@ void KisTiledDataManager::recalculateExtent()
     }
 }
 
-void KisTiledDataManager::clear(Q_INT32, Q_INT32, Q_INT32, Q_INT32, Q_UINT8)
+void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 clearValue)
 {
-    //CBR_MISSING should be done more efficient, but for now it tests iterators and manager
+    if (w < 1 || h < 1) {
+        return;
+    }
+
+    Q_INT32 firstColumn = xToCol(x);
+    Q_INT32 lastColumn = xToCol(x + w - 1);
+
+    Q_INT32 firstRow = yToRow(y);
+    Q_INT32 lastRow = yToRow(y + h - 1);
+
+    QRect clearRect(x, y, w, h);
+
+    const Q_UINT32 rowStride = KisTile::WIDTH * m_pixelSize;
+
+    for (Q_INT32 row = firstRow; row <= lastRow; ++row) {
+        for (Q_INT32 column = firstColumn; column <= lastColumn; ++column) {
+
+            KisTile *tile = getTile(column, row, true);
+            QRect tileRect = tile->extent();
+
+            QRect clearTileRect = clearRect & tileRect;
+
+            if (clearTileRect == tileRect) {
+
+                // Clear whole tile
+                memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
+
+            } else {
+
+                Q_UINT32 rowsRemaining = clearTileRect.height();
+                Q_UINT8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
+
+                while (rowsRemaining > 0) {
+                    memset(dst, clearValue, clearTileRect.width() * m_pixelSize);
+                    dst += rowStride;
+                    --rowsRemaining;
+                }
+            }
+        }
+    }
 }
 
-void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 * def)
+void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const Q_UINT8 *clearPixel)
 {
-    //CBR_MISSING
-    x=y=w=h=*def;
+    Q_ASSERT(clearPixel != 0);
+
+    if (clearPixel == 0 || w < 1 || h < 1) {
+        return;
+    }
+
+    bool pixelBytesAreTheSame = true;
+
+    for (Q_UINT32 i = 0; i < m_pixelSize; ++i) {
+        if (clearPixel[i] != clearPixel[0]) {
+            pixelBytesAreTheSame = false;
+        }
+    }
+
+    if (pixelBytesAreTheSame) {
+        clear(x, y, w, h, clearPixel[0]);
+    } else {
+
+        Q_INT32 firstColumn = xToCol(x);
+        Q_INT32 lastColumn = xToCol(x + w - 1);
+
+        Q_INT32 firstRow = yToRow(y);
+        Q_INT32 lastRow = yToRow(y + h - 1);
+
+        QRect clearRect(x, y, w, h);
+
+        const Q_UINT32 rowStride = KisTile::WIDTH * m_pixelSize;
+
+        Q_UINT8 *clearPixelData = 0;
+
+        Q_INT32 numColumnsSpanned = lastColumn - firstColumn + 1;
+        Q_INT32 numRowsSpanned = lastRow - firstRow + 1;
+
+        if (numColumnsSpanned > 2 && numRowsSpanned > 2) {
+
+            // There is at least one whole tile to be cleared so generate a cleared tile.
+            clearPixelData = new Q_UINT8[KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize];
+
+            Q_UINT8 *dst = clearPixelData;
+            Q_UINT32 pixelsRemaining = KisTile::WIDTH;
+
+            // Generate one row
+            while (pixelsRemaining > 0) {
+                memcpy(dst, clearPixel, m_pixelSize);
+                dst += m_pixelSize;
+                --pixelsRemaining;
+            }
+
+            Q_UINT32 rowsRemaining = KisTile::HEIGHT - 1;
+
+            // Copy to the rest of the rows.
+            while (rowsRemaining > 0) {
+                memcpy(dst, clearPixelData, rowStride);
+                dst += rowStride;
+                --rowsRemaining;
+            }
+
+        } else {
+
+            // Generate one row
+            Q_UINT32 maxRunLength = QMIN(w, KisTile::WIDTH);
+
+            clearPixelData = new Q_UINT8[maxRunLength * m_pixelSize];
+
+            Q_UINT8 *dst = clearPixelData;
+            Q_UINT32 pixelsRemaining = maxRunLength;
+
+            while (pixelsRemaining > 0) {
+                memcpy(dst, clearPixel, m_pixelSize);
+                dst += m_pixelSize;
+                --pixelsRemaining;
+            }
+        }
+
+        for (Q_INT32 row = firstRow; row <= lastRow; ++row) {
+            for (Q_INT32 column = firstColumn; column <= lastColumn; ++column) {
+
+                KisTile *tile = getTile(column, row, true);
+                QRect tileRect = tile->extent();
+
+                QRect clearTileRect = clearRect & tileRect;
+
+                if (clearTileRect == tileRect) {
+
+                    // Clear whole tile
+                    memcpy(tile->data(), clearPixelData, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
+
+                } else {
+
+                    Q_UINT32 rowsRemaining = clearTileRect.height();
+                    Q_UINT8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
+
+                    while (rowsRemaining > 0) {
+                        memcpy(dst, clearPixelData, clearTileRect.width() * m_pixelSize);
+                        dst += rowStride;
+                        --rowsRemaining;
+                    }
+                }
+            }
+        }
+
+        delete [] clearPixelData;
+    }
 }
 
 void KisTiledDataManager::clear()
@@ -688,8 +828,8 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
 
 Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 {
-    Q_UINT32 row = yToRow(y);
-    Q_UINT32 col = xToCol(x);
+    Q_INT32 row = yToRow(y);
+    Q_INT32 col = xToCol(x);
 
     // calc limits within the tile
     Q_INT32 yInTile = y - row * KisTile::HEIGHT;

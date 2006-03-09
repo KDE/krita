@@ -140,7 +140,9 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
                             // Because the sum of the weights must be 255,
                             // we cheat a bit, and weigh the center pixel differently in order
                             // to sum to 255 in total
-                            weights[i] = 255 - counts[m_radius] * (255 / counts[m_radius]);
+                            // It's -(counts -1), because we'll add the center one implicitly
+                            // through that calculation
+                            weights[i] = 255 - (counts[m_radius]-1) * (255 / counts[m_radius]);
                         } else {
                             weights[i] = 255 / counts[m_radius];
                         }
@@ -148,7 +150,6 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
                     }
                 }
             }
-
             // Weird, I can't do that directly :/
             const Q_UINT8** cpixels = const_cast<const Q_UINT8**>(pixels);
             cs -> mixColors(cpixels, weights, counts[m_radius], data);

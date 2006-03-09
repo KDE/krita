@@ -84,6 +84,7 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
         setDirty(rect);
         QPtrList<KoView> views = child -> parentDocument() -> views();
         Q_ASSERT(views.count());
+        // XXX iterate over views
         connect(views.at(0), SIGNAL(activated(bool)),
                 this, SLOT(childDeactivated(bool)));
     }
@@ -148,12 +149,14 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     QRect intersection(r.intersect(exactBounds()));
     if (intersection.isEmpty())
         return m_cache;
-    // XXX: zoom!
+    // XXX: have a look at the comments and see if they still truthfully represent the code :/
 
     // We know the embedded part's size through the ChildDoc
     // We move it to (0,0), since that is what we will start painting from in paintEverything.
     QRect embedRect(intersection);
     embedRect.moveBy(- exactBounds().x(), - exactBounds().y());
+    QRect paintRect(exactBounds());
+    paintRect.moveBy(- exactBounds().x(), - exactBounds().y());
 
     QPixmap pm1(projection -> convertToQImage(0 /*srgb XXX*/,
                                               intersection.x(), intersection.y(),
@@ -169,7 +172,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     // Since a Krita Device really is displaysize/zoom agnostic, caring about zoom is not
     // really as important here. What we paint at the moment, is just (0,0)x(w,h)
     // Paint transparent, no zoom:
-    m_doc -> document() -> paintEverything(painter, exactBounds(), true);
+    m_doc -> document() -> paintEverything(painter, paintRect, true);
 
     copyBlt(&pm1, 0, 0, &pm2,
              embedRect.x(), embedRect.y(), embedRect.width(), embedRect.height());

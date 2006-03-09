@@ -205,17 +205,24 @@ template <> void calcDimensions <KisVLineIteratorPixel>
         dev->exactBounds(firstLine, srcStart, numLines, srcLen);
 }
 
+struct filterValues
+{
+    Q_UINT8 numWeights;
+    Q_UINT8 *weight;
+    ~filterValues() {delete [] weight;}
+};
 
 template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
 {
     Q_INT32 lineNum,srcStart,firstLine,srcLen,numLines;
-        Q_INT32 center, begin, end;    /* filter calculation variables */
+    Q_INT32 center, begin, end;    /* filter calculation variables */
     Q_UINT8 *data;
     Q_UINT8 pixelSize = src->pixelSize();
     KisSelectionSP dstSelection;
     KisColorSpace * cs = src->colorSpace();
     Q_INT32 scale;
     Q_INT32 scaleDenom;
+    Q_INT32 shearFracOffset;
 
     if(src->hasSelection())
         dstSelection = dst->selection();
@@ -227,10 +234,8 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
 
-    Q_UINT8 *weight = new Q_UINT8[100];
-    const Q_UINT8 *colors[100];
     Q_INT32 support = filterStrategy->intSupport();
-    Q_INT32  dstLen, dstStart;
+    Q_INT32 dstLen, dstStart;
     Q_INT32 invfscale = 256;
 
     // handle magnification/minification
@@ -255,6 +260,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         dstLen = srcLen * scale / scaleDenom;
 
 
+    //allocate space for weights and colors
+    const Q_UINT8 *colors[100];
+
     // Calculate extra length (in each side) needed due to shear
     Q_INT32 extraLen = (support+256)>>8;
 
@@ -264,6 +272,45 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
     Q_CHECK_PTR(tmpSel);
 
+/**********/
+    // Precalculate weights
+    filterValues *filterWeights = new filterValues[256];
+
+    for(int center = 0; center<256; ++center)
+    {
+        Q_INT32 begin = (255 + center - support)>>8; // takes ceiling by adding 255
+        Q_INT32 span = ((center + support)>>8) - begin + 1; // takes floor to get end. Subtracts begin to get span
+        Q_INT32 t = (((begin<<8) - center) * invfscale)>>8;
+        Q_INT32 dt = invfscale;
+        filterWeights[center].weight = new Q_UINT8[span];
+//printf("%d (",center);
+        int sum=0;
+        for(int num = 0; num<span; ++num)
+        {
+            Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
+
+            tmpw >>=8;
+            filterWeights[center].weight[num] = tmpw;
+//printf(" %d=%d",t,filterWeights[center].weight[num]);
+            t += dt;
+            sum+=tmpw;
+        }
+//printf(" )%d sum =%d",span,sum);
+        if(sum!=255)
+        {
+            double fixfactor= 255.0/sum;
+            sum=0;
+            for(int num = 0; num<span; ++num)
+            {
+                filterWeights[center].weight[num] *= fixfactor;
+                sum+=filterWeights[center].weight[num];
+            }
+        }
+//printf("  sum2 =%d\n",sum);
+        
+        filterWeights[center].numWeights = span;
+    }
+/**********/
     for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
     {
         if(scale < 0)
@@ -271,7 +318,8 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         else
             dstStart = (srcStart) * scale / scaleDenom + dx;
 
-        dstStart += int( lineNum * shear +0.5);
+        shearFracOffset = -int( 256 * (lineNum * shear - floor(lineNum * shear)));
+        dstStart += int(floor(lineNum * shear));
 
         // Build a temporary line
         T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
@@ -303,41 +351,28 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         while(!dstIt.isDone())
         {
             if(scale < 0)
-                center = (srcLen<<8) + ((i * scaleDenom)<<8) / scale;
+                center = ((srcLen<<8) + (((i<<8)) * scaleDenom)) / scale;
             else
-                center = ((i * scaleDenom)<<8) / scale;
+                center = (((i<<8)) * scaleDenom) / scale;
 
-            center += (extraLen<<8);
+            center += (extraLen<<8) + shearFracOffset;
 
             // find contributing pixels
             begin = (255 + center - support)>>8; // takes ceiling by adding 255
             end = (center + support)>>8; // takes floor
 
-
 ////printf("sup=%d begin=%d end=%d",support,begin,end);
             Q_UINT8 selectedness = tmpSel[center>>8];
             if(selectedness)
             {
-                // calculate weights
-                int num = 0;
-                int sum = 0;
-                Q_INT32 t = (((begin<<8) - center) * invfscale)>>8;
-                Q_INT32 dt = invfscale;
+                int num=0;
                 for(int srcpos = begin; srcpos <= end; ++srcpos)
                 {
-                    Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
-
-                    tmpw >>=8;
-                    sum += tmpw;
-//printf(" %d=%d",t,tmpw);
-                    weight[num] = tmpw;
                     colors[num] = &tmpLine[srcpos*pixelSize];
                     num++;
-                    t += dt;
                 }
-//printf(" )=%d\n",sum);
                 data = dstIt.rawData();
-                cs->mixColors(colors, weight, num, data);
+                cs->mixColors(colors, filterWeights[center&255].weight, filterWeights[center&255].numWeights, data);
                 data = dstSelIt.rawData();
                 *data = selectedness;
             }
@@ -349,14 +384,18 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
         //progress info
         m_progressStep += dstLen;
-        emit notifyProgress((m_progressStep * 100) / m_progressTotalSteps);
+        if(m_lastProgressReport != (m_progressStep>>m_progressScaler))
+        {
+            m_lastProgressReport = (m_progressStep>>m_progressScaler);
+            emit notifyProgress((m_progressStep * 100) / m_progressTotalSteps);
+        }
         if (m_cancelRequested) {
             break;
         }
     }
     delete [] tmpLine;
     delete [] tmpSel;
-    delete [] weight;
+    delete [] filterWeights;
 }
 
 bool KisTransformWorker::run()
@@ -421,12 +460,34 @@ bool KisTransformWorker::run()
     m_progressTotalSteps = int(yscale * r.width() * r.height());
     m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
 
+    //Calculate progress so we only report 32 steps.
+    m_progressScaler=0;
+    int totalSteps = m_progressTotalSteps;
+    while(totalSteps>0)
+    {
+        m_progressScaler++;
+        totalSteps>>=1;
+    }
+    m_progressScaler-=5;
+    if(m_progressScaler<0)
+        m_progressScaler=0;
+    m_lastProgressReport=0;
+
 //QTime time;
 //time.start();
     if ( m_cancelRequested) {
         emit notifyProgressDone();
         return false;
     }
+
+/*
+    yscale = 1.0;
+    yshear = 0;
+    xscale = 1.0;
+    xshear = 0.25;
+    xtranslate = 0;
+    ytranslate = 0;
+*/
 
     transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
 //printf("time taken first pass %d\n",time.restart());

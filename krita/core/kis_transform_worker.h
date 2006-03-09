@@ -64,6 +64,8 @@ private:
     virtual void cancel() { m_cancelRequested = true; }
     Q_INT32 m_progressTotalSteps;
     Q_INT32 m_progressStep;
+    Q_INT32 m_progressScaler;
+    Q_INT32 m_lastProgressReport;
 };
 
 

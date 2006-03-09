@@ -138,20 +138,6 @@
                                 </property>
                                 <widget class="KPushButton">
                                     <property name="name">
-                                        <cstring>btnZoomIn</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Zoom In</string>
-                                    </property>
-                                </widget>
-                                <widget class="KPushButton">
-                                    <property name="name">
                                         <cstring>btnZoomOut</cstring>
                                     </property>
                                     <property name="text">
@@ -162,6 +148,20 @@
                                     </property>
                                     <property name="toolTip" stdset="0">
                                         <string>Zoom Out</string>
+                                    </property>
+                                </widget>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>btnZoomIn</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Zoom In</string>
                                     </property>
                                 </widget>
                                 <widget class="KPushButton">

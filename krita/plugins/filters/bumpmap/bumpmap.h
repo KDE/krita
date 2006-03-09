@@ -67,6 +67,7 @@ public:
     KisFilterBumpmap();
 public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
     static inline KisID id() { return KisID("bumpmap", i18n("Bumpmap")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }

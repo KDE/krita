@@ -71,12 +71,12 @@ void KisGrayColorSpace::getPixel(const Q_UINT8 *pixel, Q_UINT8 *gray, Q_UINT8 *a
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
-void KisGrayColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+void KisGrayColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) const
 {
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
-void KisGrayColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisGrayColorSpace::setAlpha(Q_UINT8 *pixels, Q_UINT8 alpha, Q_INT32 nPixels) const
 {
     while (nPixels > 0) {
         pixels[PIXEL_GRAY_ALPHA] = alpha;
@@ -114,6 +114,65 @@ void KisGrayColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
     Q_UINT32 dstGray = ((totalGray >> 8) + totalGray) >> 8;
     Q_ASSERT(dstGray <= 255);
     dst[PIXEL_GRAY] = dstGray;
+}
+
+void KisGrayColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    Q_INT32 totalGray = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        Q_INT32 weight = *kernelValues;
+
+        if (weight != 0) {
+            totalGray += (*colors)[PIXEL_GRAY] * weight;
+            totalAlpha += (*colors)[PIXEL_GRAY_ALPHA] * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        dst[PIXEL_GRAY] = CLAMP((totalGray / factor) + offset, 0, Q_UINT8_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        dst[PIXEL_GRAY_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
+    }
+
+}
+
+
+void KisGrayColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        src[PIXEL_GRAY] = Q_UINT8_MAX - src[PIXEL_GRAY];
+        src += psize;
+    }
+}
+
+void KisGrayColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+{
+    Q_UINT32 pSize = pixelSize();
+
+    while (nPixels--) {
+        if (compensate) {
+            dst[PIXEL_GRAY]  = (Q_INT8) QMIN(255,((src[PIXEL_GRAY] * shade) / (compensation * 255)));
+        }
+        else {
+            dst[PIXEL_GRAY]  = (Q_INT8) QMIN(255, (src[PIXEL_GRAY] * shade / 255));
+        }
+        dst += pSize;
+        src += pSize;
+    }
+}
+
+Q_UINT8 KisGrayColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    return src[PIXEL_GRAY];
 }
 
 QValueVector<KisChannelInfo *> KisGrayColorSpace::channels() const

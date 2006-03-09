@@ -2629,6 +2629,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
             alayer -> setFilter( dlg.filterConfiguration() );
             alayer -> setDirty();
             QApplication::restoreOverrideCursor();
+            m_doc->setModified( true );
         }
     }
     else
@@ -2649,6 +2650,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
                 layer -> setDirty();
                 m_adapter -> endMacro();
                 QApplication::restoreOverrideCursor();
+                m_doc->setModified( true );
             }
         }
     }

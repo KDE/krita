@@ -557,17 +557,17 @@ void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
             preTile = curTile;
             curTile = curTile->getNext();
         }
-
-        // Remove it from our hashtable
-        if(preTile)
-            preTile->setNext(curTile->getNext());
-        else
-            m_hashTable[tileHash] = curTile->getNext();
-
-        // And delete it (it's equal to the one stored in the memento's undo)
-        m_numTiles--;
-        delete curTile;
-
+        if (curTile) {
+            // Remove it from our hashtable
+            if(preTile)
+                preTile->setNext(curTile->getNext());
+            else
+                m_hashTable[tileHash] = curTile->getNext();
+    
+            // And delete it (it's equal to the one stored in the memento's undo)
+            m_numTiles--;
+            delete curTile;
+        }
         d = d->next();
     }
 

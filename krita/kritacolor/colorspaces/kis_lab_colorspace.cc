@@ -75,7 +75,7 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
 
     while (nColors--)
     {
-        Pixel *color = (Pixel *)*colors;
+        const Pixel *color = reinterpret_cast<const Pixel *>( *colors );
         Q_UINT32 alphaTimesWeight = UINT8_MULT(color->alpha, *weights);
 
         totalLightness += color->lightness * alphaTimesWeight;
@@ -109,6 +109,53 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         totalb = INT16_MAX;
     ((Pixel *)dst)->b = totalb;
 }
+
+void KisLabColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        Pixel * s = reinterpret_cast<Pixel *>( src );
+
+        s->lightness = Q_UINT16_MAX - s->lightness;
+        s->a = Q_UINT16_MAX - s->a;
+        s->b = Q_UINT16_MAX - s->b;
+
+        src += psize;
+    }
+}
+
+void KisLabColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
+                                      Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    // XXX: Either do this native, or do this in 16 bit rgba, not this, which is going back to QColor!
+    KisAbstractColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
+}
+
+void KisLabColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+{
+    // XXX: Is the 255 right for u16 colorspaces?
+    Q_UINT32 pSize = pixelSize();
+    while ( nPixels-- ) {
+        const Pixel * s = reinterpret_cast<const Pixel*>( src );
+        Pixel * d = reinterpret_cast<Pixel*>( dst );
+
+        if ( compensate ) {
+            d->lightness = static_cast<Q_UINT16>( ( s->lightness * shade ) / ( compensation * 255 ) );
+        }
+        else {
+            d->lightness = static_cast<Q_UINT16>( s->lightness * shade / 255 );
+        }
+        d->a = s->a;
+        d->b = s->b;
+        d->alpha = s->alpha;
+
+        src += pSize;
+        dst += pSize;
+    }
+}
+
 
 QValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
 {
@@ -409,7 +456,7 @@ KisCompositeOpList KisLabColorSpace::userVisiblecompositeOps() const
     return list;
 }
 //////////////
-Q_UINT8 KisLabColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
+Q_UINT8 KisLabColorSpace::getAlpha(const Q_UINT8 * U8_pixel) const
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
 
@@ -417,7 +464,7 @@ Q_UINT8 KisLabColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
 }
 
 
-void KisLabColorSpace::setAlpha(Q_UINT8 *U8_pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisLabColorSpace::setAlpha(Q_UINT8 *U8_pixels, Q_UINT8 alpha, Q_INT32 nPixels) const
 {
     Pixel *pix = reinterpret_cast<Pixel *>(U8_pixels);
 

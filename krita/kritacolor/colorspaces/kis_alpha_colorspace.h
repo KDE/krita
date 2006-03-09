@@ -42,7 +42,7 @@ public:
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
     virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
 
-    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha);
+    virtual void getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) const;
 
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);

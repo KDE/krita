@@ -118,6 +118,63 @@ void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     dstPixel -> blue = totalBlue;
 }
 
+
+void KisRgbU16ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst,
+                                         Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    Q_INT32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        const Pixel * pixel = reinterpret_cast<const Pixel *>( *colors );
+
+        Q_INT32 weight = *kernelValues;
+
+        if (weight != 0) {
+            totalRed += pixel->red * weight;
+            totalGreen += pixel->green * weight;
+            totalBlue += pixel->blue * weight;
+            totalAlpha +=pixel->alpha * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+
+    Pixel * p = reinterpret_cast< Pixel *>( dst );
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        p->red = CLAMP( ( totalRed / factor) + offset, 0, Q_UINT16_MAX);
+        p->green = CLAMP( ( totalGreen / factor) + offset, 0, Q_UINT16_MAX);
+        p->blue = CLAMP( ( totalBlue / factor) + offset, 0, Q_UINT16_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT16_MAX);
+    }
+}
+
+
+void KisRgbU16ColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        Pixel * p = reinterpret_cast< Pixel *>( src );
+        p->red = Q_UINT16_MAX - p->red;
+        p->green = Q_UINT16_MAX - p->green;
+        p->blue = Q_UINT16_MAX - p->blue;
+        src += psize;
+    }
+}
+
+Q_UINT8 KisRgbU16ColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    const Pixel * p = reinterpret_cast<const Pixel *>( src );
+    
+    return UINT16_TO_UINT8(static_cast<Q_UINT16>((p->red * 0.30 + p->green * 0.59 + p->blue * 0.11) + 0.5));
+}
+
+
 QValueVector<KisChannelInfo *> KisRgbU16ColorSpace::channels() const
 {
     return m_channels;

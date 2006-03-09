@@ -20,7 +20,7 @@
 #include "kis_global.h"
 #include "kis_f32_base_colorspace.h"
 
-Q_UINT8 KisF32BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
+Q_UINT8 KisF32BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel) const
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;
 
@@ -30,7 +30,7 @@ Q_UINT8 KisF32BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
     return FLOAT_TO_UINT8(*pixel);
 }
 
-void KisF32BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisF32BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nPixels) const
 {
     if (m_alphaPos < 0) return;
     Q_INT32 psize = pixelSize();

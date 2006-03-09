@@ -87,7 +87,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     m_alphaPos = 3;
     m_alphaSize = 1;
     setDefaultProfile( 0 );
-    
+
 #ifdef WSDEBUG
     QValueVector<KisChannelInfo *>_it it;
     int i = 0;
@@ -227,12 +227,12 @@ void KisWetStickyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *we
 {
 }
 
-Q_UINT8 KisWetStickyColorSpace::getAlpha(const Q_UINT8 *pixel)
+Q_UINT8 KisWetStickyColorSpace::getAlpha(const Q_UINT8 *pixel) const
 {
     return ((CELL_PTR)pixel)->alpha;
 }
 
-void KisWetStickyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisWetStickyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const
 {
     while (nPixels > 0) {
         ((CELL_PTR)pixels)->alpha = alpha;

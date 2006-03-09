@@ -163,6 +163,63 @@ void KisRgbF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     dstPixel -> blue = totalBlue;
 }
 
+void KisRgbF32ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    float totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        const Pixel * pixel = reinterpret_cast<const Pixel *>( *colors );
+
+        float weight = *kernelValues;
+
+        if (weight != 0) {
+            totalRed += pixel->red * weight;
+            totalGreen += pixel->green * weight;
+            totalBlue += pixel->blue * weight;
+            totalAlpha += pixel->alpha * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+
+    Pixel * p = reinterpret_cast< Pixel *>( dst );
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        p->red = CLAMP( ( totalRed / factor) + offset, 0, FLOAT_MAX);
+        p->green = CLAMP( ( totalGreen / factor) + offset, 0, FLOAT_MAX);
+        p->blue = CLAMP( ( totalBlue / factor) + offset, 0, FLOAT_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, FLOAT_MAX);
+    }
+}
+
+
+void KisRgbF32ColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        Pixel * p = reinterpret_cast< Pixel *>( src );
+        p->red = FLOAT_MAX - p->red;
+        p->green = FLOAT_MAX - p->green;
+        p->blue = FLOAT_MAX - p->blue;
+        src += psize;
+    }
+
+}
+
+Q_UINT8 KisRgbF32ColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    const Pixel * p = reinterpret_cast<const Pixel *>( src );
+
+    return FLOAT_TO_UINT8((p->red * 0.30 + p->green * 0.59 + p->blue * 0.11) + 0.5);
+}
+
+
+
 QValueVector<KisChannelInfo *> KisRgbF32ColorSpace::channels() const
 {
     return m_channels;

@@ -153,6 +153,47 @@ void KisRgbColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, K
     }
 }
 
+
+void KisRgbColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        src[PIXEL_RED] = Q_UINT8_MAX - src[PIXEL_RED];
+        src[PIXEL_GREEN] = Q_UINT8_MAX - src[PIXEL_GREEN];
+        src[PIXEL_BLUE] = Q_UINT8_MAX - src[PIXEL_BLUE];
+
+        src += psize;
+    }
+}
+
+
+void KisRgbColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+{
+    Q_UINT32 pSize = pixelSize();
+
+    while (nPixels--) {
+        if (compensate) {
+            dst[PIXEL_RED]  = (Q_INT8) QMIN(255,((src[PIXEL_RED] * shade) / (compensation * 255)));
+            dst[PIXEL_GREEN]  = (Q_INT8) QMIN(255,((src[PIXEL_GREEN] * shade) / (compensation * 255)));
+            dst[PIXEL_BLUE]  = (Q_INT8) QMIN(255,((src[PIXEL_BLUE] * shade) / (compensation * 255)));
+        }
+        else {
+            dst[PIXEL_RED]  = (Q_INT8) QMIN(255, (src[PIXEL_RED] * shade / 255));
+            dst[PIXEL_BLUE]  = (Q_INT8) QMIN(255, (src[PIXEL_BLUE] * shade / 255));
+            dst[PIXEL_GREEN]  = (Q_INT8) QMIN(255, (src[PIXEL_GREEN] * shade / 255));
+        }
+        dst += pSize;
+        src += pSize;
+    }
+}
+
+Q_UINT8 KisRgbColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    return (Q_UINT8)((src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5);
+}
+
 QValueVector<KisChannelInfo *> KisRgbColorSpace::channels() const
 {
     return m_channels;
@@ -196,31 +237,6 @@ QImage KisRgbColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     return img;
 }
 
-void KisRgbColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
-{
-    int i = 0;
-
-    while (i < nPixels * MAX_CHANNEL_RGBA) {
-        if (compensate) {
-            dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255))); i++;
-            dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255))); i++;
-            dst[i]  = (Q_INT8) QMIN(255,((src[i] * shade) / (compensation * 255)));
-        }
-        else {
-            dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255)); i++;
-            dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255)); i++;
-            dst[i]  = (Q_INT8) QMIN(255, (src[i] * shade / 255));
-        }
-
-        ++i;
-        ++i;
-    }
-}
-
-Q_UINT8 KisRgbColorSpace::intensity8(const Q_UINT8 * src) const
-{
-    return (Q_UINT8)((src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5);
-}
 
 
 

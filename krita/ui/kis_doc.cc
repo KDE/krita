@@ -266,7 +266,7 @@ bool KisDoc::init()
     m_nserver = new KisNameServer(i18n("Image %1"), 1);
     Q_CHECK_PTR(m_nserver);
 
-   if (!KisMetaRegistry::instance()->csRegistry()->exists(KisID("RGBA",""))) {
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(KisID("RGBA",""))) {
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }

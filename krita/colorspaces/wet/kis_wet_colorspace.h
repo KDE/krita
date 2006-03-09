@@ -116,8 +116,8 @@ public:
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const;
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
     virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
     virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
@@ -185,7 +185,7 @@ private:
     Q_UINT32 * wet_render_tab;
 
     QStringList m_paintNames;
-    QMap<QRgb, WetPix> m_conversionMap;
+    QMap<int, WetPix> m_conversionMap;
 
     bool m_paintwetness;
     int phase, phasebig;

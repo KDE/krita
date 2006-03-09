@@ -115,8 +115,7 @@ public:
     virtual bool visit(KisAdjustmentLayer* layer)
     {
         QDomElement layerElement = m_doc.createElement("layer");
-        kdDebug() << "Saving adj layer for filter: " << layer->filter() << endl;
-        
+
         layerElement.setAttribute("name", layer -> name());
         layerElement.setAttribute("filtername", layer->filter()->name());
         layerElement.setAttribute("filterversion", layer->filter()->version());

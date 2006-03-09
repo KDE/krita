@@ -64,7 +64,6 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
-            kdDebug() << e.attribute("name") << endl;
             if (e.attribute("name") == "transfers") {
                 QDomNode transferNode = e.firstChild();
                 nTransfers = e.attribute("number").toUShort();
@@ -369,17 +368,19 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
     int nCh = m_dev->colorSpace()->nColorChannels();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
-    m_curves[m_activeCh].setAutoDelete(true);
-    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    cfg->curves[m_activeCh].setAutoDelete(true);
+    cfg->curves[m_activeCh] = m_page->kCurve->getCurve();
+    m_curves[m_activeCh] = cfg->curves[m_activeCh];
+    
     for(int ch = 0; ch < nCh; ch++)
     {
         for(int i=0; i <256; i++)
         {
             Q_INT32 val;
-            val = int(0xFFFF * m_page->kCurve->getCurveValue( m_curves[ch],  i / 255.0));
-            if(val >0xFFFF)
-                val=0xFFFF;
-            if(val <0)
+            val = int(0xFFFF * m_page->kCurve->getCurveValue( cfg->curves[ch],  i / 255.0));
+            if ( val > 0xFFFF )
+                val = 0xFFFF;
+            if ( val < 0 )
                 val = 0;
 
             cfg->transfers[ch][i] = val;

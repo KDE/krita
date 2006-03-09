@@ -39,7 +39,8 @@ KisColor::KisColor(const QColor & color, KisColorSpace * colorSpace)
     : m_colorSpace(colorSpace)
 {
     Q_ASSERT(color.isValid());
-
+    Q_ASSERT(colorSpace);
+    
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
 
@@ -51,7 +52,7 @@ KisColor::KisColor(const QColor & color, Q_UINT8 alpha, KisColorSpace * colorSpa
     : m_colorSpace(colorSpace)
 {
     Q_ASSERT(color.isValid());
-
+    Q_ASSERT(colorSpace);
     m_data = new Q_UINT8[colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
 

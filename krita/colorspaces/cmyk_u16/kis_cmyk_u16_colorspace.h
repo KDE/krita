@@ -56,10 +56,12 @@ public:
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;
-
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels);
     
+    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels);
+    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    virtual void convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
+
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:

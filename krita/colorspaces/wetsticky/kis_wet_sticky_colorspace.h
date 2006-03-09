@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.o>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,8 +85,8 @@ public:
     virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 *pixel);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual Q_UINT8 getAlpha(const Q_UINT8 *pixel) const;
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
 
     virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
     virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
@@ -111,6 +111,9 @@ public:
 
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 

@@ -19,7 +19,12 @@ warns me!
 
 Colorspaces
 
-B  * Implement the last few colorspace dependencies in KisAbstractColorSpace
+R * Implement the last few colorspace dependencies in the specific colorspaces
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    virtual void convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
+    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+   Note: some of these could perhaps be done through lcms (darken, intensity8)
+
 ?  * Optimize colorspace functions at least in 8 and 16 bit rgb where possible
 R  * Fix drying the wet colorspace
 R  * Fix fill in wet
@@ -83,3 +88,9 @@ Regressions
 * Loading perchannel adj. doesn't work
 * Adding an adj. channel when the current layer is an adj. channel gives a
   dialog box without an option widget
+* Crash when converting rgb image with per-channel adj. layer to cmyk
+* crop leaves a single transparent pixel to the right
+* saving tiff crashes
+* saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale
+* undo is not initalized after loading .kra
+* undo after export doesn't work

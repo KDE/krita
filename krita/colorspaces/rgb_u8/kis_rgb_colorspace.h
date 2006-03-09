@@ -46,6 +46,9 @@ public:
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
     virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
+    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
@@ -58,18 +61,6 @@ public:
                        float exposure = 0.0f);
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-
-
-
-    /**
-     * Darken all color channels with the given amount. If compensate is true,
-     * the compensation factor will be used to limit the darkening.
-     *
-     * (See the bumpmap filter)
-     */
-    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
-
-    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
 
 protected:

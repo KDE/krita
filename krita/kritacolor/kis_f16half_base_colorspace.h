@@ -70,8 +70,8 @@ public:
         m_alphaSize = sizeof(half);
     };
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel);
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const;
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
     virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
     virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);

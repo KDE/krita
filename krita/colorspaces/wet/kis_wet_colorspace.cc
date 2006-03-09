@@ -100,6 +100,14 @@ void wetPixFromDouble(WetPix * dst, WetPixDbl *src)
 
 }
 
+int getH(int r, int g, int b)
+{
+    int h, s, v;
+    QColor c(r,g, b);
+    c.getHsv(&h, &s, &v);
+    return h;
+}
+
 KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData, parent, p)
 {
@@ -139,23 +147,21 @@ KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
     m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
     m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
 
-
-    // we store the conversion in an QRgb (equivalent to unsigned int)
-    // since QColor does not provide an operator<
-    m_conversionMap[qRgb(240, 32, 160)] = m_paintbox[0]; // Quinacridone Rose
-    m_conversionMap[qRgb(159, 88, 43)] = m_paintbox[1]; // Indian Red
-    m_conversionMap[qRgb(254, 220, 64)] = m_paintbox[2]; // Cadmium Yellow
-    m_conversionMap[qRgb(36, 180, 32)] = m_paintbox[3]; // Hookers Green
-    m_conversionMap[qRgb(16, 185, 215)] = m_paintbox[4]; // Cerulean Blue
-    m_conversionMap[qRgb(96, 32, 8)] = m_paintbox[5]; // Burnt Umber
-    m_conversionMap[qRgb(254, 96, 8)] = m_paintbox[6]; // Cadmium Red
-    m_conversionMap[qRgb(255, 136, 8)] = m_paintbox[7]; // Brilliant Orange
-    m_conversionMap[qRgb(240, 199, 8)] = m_paintbox[8]; // Hansa Yellow
-    m_conversionMap[qRgb(96, 170, 130)] = m_paintbox[9]; // Phthalo Green
-    m_conversionMap[qRgb(48, 32, 170)] = m_paintbox[10]; // French Ultramarine
-    m_conversionMap[qRgb(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
-    m_conversionMap[qRgb(254, 254, 254)] = m_paintbox[12]; // Titanium White
-    m_conversionMap[qRgb(64, 64, 74)] = m_paintbox[13]; // Ivory Black
+    // Store the hue; we'll pick the paintbox color that closest to the given QColor's hue.
+    m_conversionMap[getH(240, 32, 160)] = m_paintbox[0]; // Quinacridone Rose
+    m_conversionMap[getH(159, 88, 43)] = m_paintbox[1]; // Indian Red
+    m_conversionMap[getH(254, 220, 64)] = m_paintbox[2]; // Cadmium Yellow
+    m_conversionMap[getH(36, 180, 32)] = m_paintbox[3]; // Hookers Green
+    m_conversionMap[getH(16, 185, 215)] = m_paintbox[4]; // Cerulean Blue
+    m_conversionMap[getH(96, 32, 8)] = m_paintbox[5]; // Burnt Umber
+    m_conversionMap[getH(254, 96, 8)] = m_paintbox[6]; // Cadmium Red
+    m_conversionMap[getH(255, 136, 8)] = m_paintbox[7]; // Brilliant Orange
+    m_conversionMap[getH(240, 199, 8)] = m_paintbox[8]; // Hansa Yellow
+    m_conversionMap[getH(96, 170, 130)] = m_paintbox[9]; // Phthalo Green
+    m_conversionMap[getH(48, 32, 170)] = m_paintbox[10]; // French Ultramarine
+    m_conversionMap[getH(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
+    m_conversionMap[getH(254, 254, 254)] = m_paintbox[12]; // Titanium White
+    m_conversionMap[getH(64, 64, 74)] = m_paintbox[13]; // Ivory Black
 
     m_paintwetness = false;
     phasebig = 0;
@@ -170,18 +176,27 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * /*
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
+    int h = getH(c.red(), c.green(), c.blue());
+    int delta = 256;
+    int key = 0;
+    QMap<int, WetPix>::Iterator it;
+    QMap<int, WetPix>::Iterator end = m_conversionMap.end();
+    for (it = m_conversionMap.begin(); it != end; ++it) {
+        if (abs(it.key() - h) < delta) {
+            delta = abs(it.key() - h);
+            key = it.key();
+        }
+    }
+    
     // Translate the special QCOlors from our paintbox to wetpaint paints.
-    // XXX: Define a class that combines QColor, wet paint color and name.
-    if (m_conversionMap.contains(c.rgb())) {
-        (*p).paint = m_conversionMap[c.rgb()];
-        (*p).adsorb = m_conversionMap[c.rgb()]; // or maybe best add water here?
+    if (m_conversionMap.contains(key)) {
+        (*p).paint = m_conversionMap[key];
+        (*p).adsorb = m_conversionMap[key]; // or maybe best add water here?
     } else {
         // water
         (*p).paint = m_paintbox[14];
         (*p).adsorb = m_paintbox[14];
     }
-
-    // XXX: Maybe somehow do something useful with QColor that don't correspond to paint from the paintbox.
 }
 
 void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile * /*profile*/)
@@ -189,12 +204,12 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8
     fromQColor(c, dst);
 }
 
-Q_UINT8 KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/)
+Q_UINT8 KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/) const
 {
     return OPACITY_OPAQUE;
 }
 
-void KisWetColorSpace::setAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/)
+void KisWetColorSpace::setAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/) const
 {
 }
 

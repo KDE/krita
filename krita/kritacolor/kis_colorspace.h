@@ -256,7 +256,7 @@ public:
     /**
     * Get the alpha value of the given pixel, downscaled to an 8-bit value.
     */
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) = 0;
+    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const = 0;
 
     /**
      * Set the alpha channel of the given run of pixels to the given value.
@@ -266,7 +266,7 @@ public:
      * nPixels -- the number of pixels
      *
      */
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) = 0;
+    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const = 0;
 
     /**
      * Multiply the alpha channel of the given run of pixels by the given value.

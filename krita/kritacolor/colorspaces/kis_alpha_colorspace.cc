@@ -60,7 +60,7 @@ void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, Q_UINT8 opacity, Q_UINT
     dst[PIXEL_MASK] = opacity;
 }
 
-void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha)
+void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) const
 {
     *alpha = *pixel;
 }

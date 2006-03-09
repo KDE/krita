@@ -104,14 +104,61 @@ void KisCmykColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights
     dst[3] = dstK;
 }
 
+
+void KisCmykColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    Q_INT32 totalCyan = 0, totalMagenta = 0, totalYellow = 0, totalK = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        Q_INT32 weight = *kernelValues;
+
+        if (weight != 0) {
+            totalCyan += (*colors)[PIXEL_CYAN] * weight;
+            totalMagenta += (*colors)[PIXEL_MAGENTA] * weight;
+            totalYellow += (*colors)[PIXEL_YELLOW] * weight;
+            totalK += (*colors)[PIXEL_BLACK] * weight;
+            totalAlpha += (*colors)[PIXEL_CMYK_ALPHA] * weight;
+        }
+        colors++;
+        kernelValues++;
+    }
+
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        dst[PIXEL_CYAN] = CLAMP((totalCyan / factor) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_MAGENTA] = CLAMP((totalMagenta / factor) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_YELLOW] =  CLAMP((totalYellow / factor) + offset, 0, Q_UINT8_MAX);
+        dst[PIXEL_BLACK] =  CLAMP((totalK / factor) + offset, 0, Q_UINT8_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        dst[PIXEL_CMYK_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT8_MAX);
+    }
+}
+
+
+void KisCmykColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        src[PIXEL_CYAN] = Q_UINT8_MAX - src[PIXEL_CYAN];
+        src[PIXEL_MAGENTA] = Q_UINT8_MAX - src[PIXEL_MAGENTA];
+        src[PIXEL_YELLOW] = Q_UINT8_MAX - src[PIXEL_YELLOW];
+        src[PIXEL_BLACK] = Q_UINT8_MAX - src[PIXEL_BLACK];
+        src += psize;
+    }
+}
+
 void KisCmykColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
 {
     Q_UINT32 psize = pixelSize();
-    
+
     Q_UINT8 * tmp = new Q_UINT8[nPixels * psize];
     Q_UINT8 * tmpPtr = tmp;
     memcpy(tmp, dst, nPixels * psize);
-    
+
     KisAbstractColorSpace::applyAdjustment(src, dst, adj, nPixels);
 
     // Copy the alpha, which lcms doesn't do for us, grumble.

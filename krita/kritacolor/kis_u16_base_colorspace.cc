@@ -23,7 +23,7 @@
 #include "kis_u16_base_colorspace.h"
 
 
-Q_UINT8 KisU16BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
+Q_UINT8 KisU16BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel) const
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;
 
@@ -34,7 +34,7 @@ Q_UINT8 KisU16BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel)
 }
 
 
-void KisU16BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nPixels)
+void KisU16BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nPixels) const
 {
     if (m_alphaPos < 0) return;
     Q_INT32 psize = pixelSize();

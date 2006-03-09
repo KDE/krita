@@ -424,7 +424,6 @@ QPtrList<QPair<double,double> > KCurve::getCurve()
         outlist.append(outpoint);
         p = m_points.next();
     }
-
     return outlist;
 }
 

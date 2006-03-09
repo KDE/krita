@@ -164,6 +164,63 @@ void KisRgbF16HalfColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *w
     dstPixel -> blue = totalBlue;
 }
 
+void KisRgbF16HalfColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+{
+    half totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
+
+    while (nColors--)
+    {
+        const Pixel * pixel = reinterpret_cast<const Pixel *>( *colors );
+
+        half weight = *kernelValues;
+
+        if (weight != 0) {
+            totalRed += pixel->red * UINT8_TO_HALF(weight);
+            totalGreen += pixel->green * UINT8_TO_HALF(weight);
+            totalBlue += pixel->blue * UINT8_TO_HALF(weight);
+            totalAlpha += pixel->alpha * UINT8_TO_HALF(weight);
+        }
+        colors++;
+        kernelValues++;
+    }
+
+    Pixel * p = reinterpret_cast< Pixel *>( dst );
+
+    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+        p->red = CLAMP( ( totalRed / factor) + offset, 0, HALF_MAX);
+        p->green = CLAMP( ( totalGreen / factor) + offset, 0, HALF_MAX);
+        p->blue = CLAMP( ( totalBlue / factor) + offset, 0, HALF_MAX);
+    }
+    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, HALF_MAX);
+    }
+}
+
+
+void KisRgbF16HalfColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+{
+    Q_UINT32 psize = pixelSize();
+
+    while (nPixels--)
+    {
+        Pixel * p = reinterpret_cast< Pixel *>( src );
+        p->red = 1.0 - p->red;
+        p->green = 1.0 - p->green;
+        p->blue = 1.0 - p->blue;
+        src += psize;
+    }
+
+}
+
+
+Q_UINT8 KisRgbF16HalfColorSpace::intensity8(const Q_UINT8 * src) const
+{
+    const Pixel * p = reinterpret_cast<const Pixel *>( src );
+
+    return HALF_TO_UINT8((p->red * 0.30 + p->green * 0.59 + p->blue * 0.11) + 0.5);
+}
+
+
 QValueVector<KisChannelInfo *> KisRgbF16HalfColorSpace::channels() const
 {
     return m_channels;

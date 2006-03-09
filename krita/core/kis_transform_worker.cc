@@ -259,10 +259,6 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     else
         dstLen = srcLen * scale / scaleDenom;
 
-
-    //allocate space for weights and colors
-    const Q_UINT8 *colors[100];
-
     // Calculate extra length (in each side) needed due to shear
     Q_INT32 extraLen = (support+256)>>8;
 
@@ -272,7 +268,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     Q_UINT8 *tmpSel = new Q_UINT8[srcLen+2*extraLen];
     Q_CHECK_PTR(tmpSel);
 
-/**********/
+    //allocate space for colors
+    const Q_UINT8 **colors = new const Q_UINT8 *[2*support+1];
+
     // Precalculate weights
     filterValues *filterWeights = new filterValues[256];
 
@@ -307,10 +305,10 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             }
         }
 //printf("  sum2 =%d\n",sum);
-        
+
         filterWeights[center].numWeights = span;
     }
-/**********/
+
     for(lineNum = firstLine; lineNum < firstLine+numLines; lineNum++)
     {
         if(scale < 0)

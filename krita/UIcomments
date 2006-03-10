@@ -24,38 +24,6 @@ child layer. For now, determining whether the extent of a selection is as big
 as the extent of a layer, and whether the whole selection is completely 100%
 selected is going to be too expensive>
 
-Opacity and Layers
-
-In the layer palette there is a custom widget that allows you to set the
-transparancy of the layer. It has a popup (with slider) as well as a text-area.
-
-The text area has the annoying behavior that it will verify AND CHANGE your
-entry while you type.
-
-The effect is that the transparancy is set to 1 and your cursor is positioned
-after the '%' sign.
-
-Try again by placing your cursor after the '0'.  I note that the place-after
-concept is impossible in this widget as the 0 is selected, no matter what I do
-
-I can't get an insert cursor here. (bug 2)
-
-I type a 0 and simply overwrite the former.
-Between each change there is a huge delay as my image is repainting and due
-to the cursor being moved to a unpredictable location I am stuck waiting and
-retrying.
-
-I suggest to use a normal spinbox with validator and (very very important) not
-use overwrite mode!
-
-Last; please merge all undo-commands into one (i.e. update the last) until this
-widget has seen a focus-lost!
-
-The slider (of the transparany part in the layer-palette) should have a step of
-'10' and we should consider copying the photoshop behavior where clicking
-anywhere in the gutter will move the slider directly there (which Qt does on
-middle-mouse click).
-
 
 Thomas Zander
 

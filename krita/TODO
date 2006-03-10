@@ -18,7 +18,7 @@ UI stuff:
 
 * color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
   we should try to make the listview a lot smaller. Maybe just use labels here?
-          
+* The edit palette dialog two-step should be changed into a single dialog
           
 Code organization
 

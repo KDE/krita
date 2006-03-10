@@ -369,6 +369,7 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
             inpoint = cfg->curves[ch].next();
         }
     }
+    m_page->kCurve->setCurve(m_curves[m_activeCh]);
     setActiveChannel( 0 );
 }
 

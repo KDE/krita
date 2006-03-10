@@ -421,7 +421,12 @@ bool KisTransformWorker::run()
     Q_INT32 xtranslate = m_xtranslate;
     Q_INT32 ytranslate = m_ytranslate;
 
-    int rotQuadrant = int(rotation /(M_PI/2) + 0.5);
+    if(rotation < 0.0)
+        rotation = -fmod(-rotation, 2*M_PI) + 2*M_PI;
+    else
+        rotation = fmod(rotation, 2*M_PI);
+    int rotQuadrant = int(rotation /(M_PI/2) + 0.5) & 3;
+
     double tmp;
     switch(rotQuadrant)
     {
@@ -438,12 +443,15 @@ bool KisTransformWorker::run()
         case 2:
             rotate180(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation += M_PI;
+            rotation -= M_PI;
             break;
         case 3:
             rotateLeft90(srcdev, tmpdev1);
             srcdev = tmpdev1;
-            rotation += M_PI/2;
+            rotation += M_PI/2 + 2*M_PI;
+            tmp = xscale;
+            xscale = yscale;
+            yscale = tmp;
             break;
         default:
             break;
@@ -477,15 +485,6 @@ bool KisTransformWorker::run()
         emit notifyProgressDone();
         return false;
     }
-
-/*
-    yscale = 1.0;
-    yshear = 0;
-    xscale = 1.0;
-    xshear = 0.25;
-    xtranslate = 0;
-    ytranslate = 0;
-*/
 
     transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
 //printf("time taken first pass %d\n",time.restart());

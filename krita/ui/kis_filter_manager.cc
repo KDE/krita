@@ -202,7 +202,11 @@ void KisFilterManager::updateGUI()
         enable = false;
     }
     m_reapplyAction->setEnabled(m_lastFilterConfig);
-
+    if (m_lastFilterConfig)
+        m_reapplyAction->setText(i18n("Apply Filter Again") + ": " + m_lastFilterConfig->name());
+    else
+        m_reapplyAction->setText(i18n("Apply Filter Again"));
+    
     KAction * a;
     int i = 0;
     for (a = m_filterActions.first(); a; a = m_filterActions.next() , i++) {
@@ -257,6 +261,11 @@ bool KisFilterManager::apply()
     Q_CHECK_PTR(cmd);
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
     m_reapplyAction->setEnabled(m_lastFilterConfig);
+    if (m_lastFilterConfig)
+        m_reapplyAction->setText(i18n("Apply Filter Again") + ":" + m_lastFilterConfig->name());
+    else
+        m_reapplyAction->setText(i18n("Apply Filter Again"));
+    
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
         cmd -> unexecute();

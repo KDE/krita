@@ -65,10 +65,11 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
 
-    m_page -> cmbColorSpaces -> hide();
-    m_page -> lblColorSpaces -> setText(image->colorSpace()->id().name());
-
-
+    //m_page -> cmbColorSpaces -> hide();
+    //m_page -> lblColorSpaces -> setText(image->colorSpace()->id().name());
+    m_page->cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
+    m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
+            
     fillCmbProfiles(image -> colorSpace() -> id());
 
     if (image -> getProfile()) {
@@ -125,6 +126,11 @@ double KisDlgImageProperties::resolution()
 QString KisDlgImageProperties::description()
 {
     return m_page -> txtDescription -> text();
+}
+
+KisColorSpace * KisDlgImageProperties::colorSpace()
+{
+    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(m_page->cmbColorSpaces -> currentItem(), m_page->cmbProfile->currentText());
 }
 
 KisProfile * KisDlgImageProperties::profile()

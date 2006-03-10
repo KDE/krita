@@ -30,8 +30,6 @@ User interface
 
 P  * Try to optimize histogram docker
 P  * Try to fix display glitches in selection creation.
-R  * Make it possible to change only the colorspace of the image, without
-     conversions. (I think this can be done without adding new gui strings)
 
 Files and Import/Export
 
@@ -86,3 +84,6 @@ Regressions
 * saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale
 * undo is not initalized after loading .kra
 * undo after export doesn't work
+* per channel filter on cmyk doesn't work
+* cut cuts a pixel too much and copy copies a pixel too less
+* separate to color doesn't work for cmyk

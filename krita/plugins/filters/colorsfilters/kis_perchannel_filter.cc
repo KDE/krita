@@ -64,37 +64,7 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
-            if (e.attribute("name") == "transfers") {
-                QDomNode transferNode = e.firstChild();
-                nTransfers = e.attribute("number").toUShort();
-
-                for (int i = 0; i < nTransfers ; i++) {
-                    transfers[i] = new Q_UINT16[256];
-                    memset(transfers[i], 0, 256);
-                }
-                
-                
-                int count = 0;
-                while (!transferNode.isNull()) {
-                    QDomElement transferElement = transferNode.toElement();
-                    if (!transferElement.isNull()) {
-                        QStringList data = QStringList::split( ",", transferElement.text() );
-                        QStringList::Iterator start = data.begin();
-                        QStringList::Iterator end = data.end();
-                        int i = 0;
-                        for ( QStringList::Iterator it = start; it != end && i < 256; ++it ) {
-                            QString s = *it;
-                            transfers[count][i] = s.toUShort();
-                            i++;
-                        }
-                        count++;
-                    }
-                    transferNode = transferNode.nextSibling();
-                }
-                if (count != nTransfers) kdWarning() << "Number of declared transfers and number of parsed transfers doesn't match" << endl;
-
-            }
-            else if (e.attribute("name") == "curves") {
+            if (e.attribute("name") == "curves") {
                 QDomNode curvesNode = e.firstChild();
                 int count = 0;
                 nTransfers = e.attribute("number").toUShort();
@@ -134,19 +104,6 @@ QString KisPerChannelFilterConfiguration::toString()
     QDomElement e = doc.createElement( "transfers" );
     e.setAttribute("name", "transfers");
     e.setAttribute("number", nTransfers);
-
-    for (int i = 0; i < nTransfers; ++i) {
-        QDomElement t = doc.createElement("transfer");
-        QString sTransfer;
-        for ( uint j = 0; j < 255 ; ++j ) {
-            sTransfer += QString::number( transfers[i][j] );
-            sTransfer += ",";
-        }
-        QDomText text = doc.createCDATASection(sTransfer);
-        t.appendChild(text);
-        e.appendChild(t);
-    }
-    root.appendChild(e);
 
     QDomElement c = doc.createElement("curves");
     c.setAttribute("number", nTransfers);
@@ -397,7 +354,7 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
     {
         m_curves[ch] = cfg->curves[ch];
     }
-
+    setActiveChannel( 0 );
 }
 
 #include "kis_perchannel_filter.moc"

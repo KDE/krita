@@ -1518,6 +1518,7 @@ KisColorSpace * KisImage::colorSpace() const
 void KisImage::setColorSpace(KisColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
+    m_rootLayer->resetProjection();
     emit sigColorSpaceChanged(colorSpace);
 }
 

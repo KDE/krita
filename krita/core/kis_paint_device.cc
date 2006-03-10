@@ -473,7 +473,13 @@ QRect KisPaintDevice::exactBounds() const
         KisVLineIterator it = const_cast<KisPaintDevice *>(this)->createVLineIterator(x2, y, h, false);
         while (!it.isDone() && found == false) {
             if (memcmp(it.rawData(), defaultPixel, m_pixelSize) != 0) {
-                boundW = x2 - boundX;// + 1;
+                boundW = x2 - boundX + 1; // XXX: I commented this
+                                          // +1 out, but why? It
+                                          // should be correct, since
+                                          // we've found the first
+                                          // pixel that should be
+                                          // included, and it should
+                                          // be added to the width.
                 found = true;
                 break;
             }
@@ -938,7 +944,7 @@ void KisPaintDevice::clearSelection()
 {
     if (!hasSelection()) return;
 
-    QRect r = m_selection -> selectedRect();
+    QRect r = m_selection -> selectedExactRect();
 
     if (r.isValid()) {
 

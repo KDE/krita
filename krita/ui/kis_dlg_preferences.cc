@@ -737,10 +737,10 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", KIcon::SizeMedium ));
     m_general = new GeneralTab( vbox );
-
+#ifdef HAVE_GL
     vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", KIcon::SizeMedium ));
     m_displaySettings = new DisplaySettingsTab( vbox );
-
+#endif
     vbox = addVBoxPage( i18n( "Color Management"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
 

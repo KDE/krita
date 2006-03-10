@@ -1578,10 +1578,6 @@ void KisView::imgResizeToActiveLayer()
 
         QRect r = layer -> exactBounds();
         img -> resize(r.width(), r.height(), r.x(), r.y(), true);
-        //KisPaintLayer * l = dynamic_cast<KisPaintLayer*>(layer.data());
-        // XXX: This doesn't seem to be needed anymore.
-        //if (l)
-        //    l->paintDevice()->move(0,0);
 
         img->unlock();
 
@@ -1609,6 +1605,7 @@ void KisView::slotImageProperties()
         Q_INT32 opacity = dlg.opacity();
         opacity = opacity * 255 / 100;
         img -> setName(dlg.imageName());
+        img -> setColorSpace(dlg.colorSpace());
         img -> setResolution(dlg.resolution(), dlg.resolution());
         img -> setDescription(dlg.description());
         img -> setProfile(dlg.profile());

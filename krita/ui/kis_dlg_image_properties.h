@@ -42,6 +42,7 @@ public:
     QString imageName();
     double resolution();
     QString description();
+    KisColorSpace * colorSpace();
     KisProfile * profile();
     
 private slots:

@@ -311,16 +311,16 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
             Q_INT32 selRowStride = seldev -> rowStride(dstX, dstY);
 
             m_colorSpace -> bitBlt(dstData,
-                          dstRowStride,
-                          srcCs,
-                          srcData,
-                          srcRowStride,
-                          selData,
-                          selRowStride,
-                          opacity,
-                          rows,
-                          columns,
-                          op);
+                                   dstRowStride,
+                                   srcCs,
+                                   srcData,
+                                   srcRowStride,
+                                   selData,
+                                   selRowStride,
+                                   opacity,
+                                   rows,
+                                   columns,
+                                   op);
 
             srcX += columns;
             dstX += columns;

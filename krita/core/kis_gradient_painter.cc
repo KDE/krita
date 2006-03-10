@@ -706,6 +706,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
 
     if (!m_cancelRequested) {
+        kdDebug() << "Have we got a selection? " << m_device->hasSelection() << endl;
         KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient");
         dev->writeBytes(layer.bits(), startx, starty, width, height);
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);

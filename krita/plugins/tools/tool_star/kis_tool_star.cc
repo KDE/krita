@@ -44,6 +44,7 @@
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
+#include "kis_int_spinbox.h"
 
 #include "kis_tool_star.h"
 #include "wdg_tool_star.h"
@@ -55,12 +56,6 @@ KisToolStar::KisToolStar()
 {
     setName("tool_star");
     setCursor(KisCursor::load("tool_star_cursor.png", 6, 6));
-    // initialize ellipse tool settings
-//    m_lineThickness = 4;
-//     m_opacity = 255;
-//     m_usePattern = false;
-//     m_useGradient = false;
-//     m_fillSolid = false;
 }
 
 KisToolStar::~KisToolStar()
@@ -242,7 +237,6 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
     super::addOptionWidgetLayout(optionLayout);
 
     optionLayout -> addWidget(m_optWidget, 0, 0);
-    //connect(w -> bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
     return widget;
 }

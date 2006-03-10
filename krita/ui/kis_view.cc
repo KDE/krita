@@ -1620,7 +1620,7 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::slotAddPalette()
 {
-    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Add Palette"), KDialogBase::Ok);
+    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Add Palette"), KDialogBase::Ok | KDialogBase::Cancel);
     KisCustomPalette* p = new KisCustomPalette(base, "add palette", i18n("Add Palette"), this);
     base -> setMainWidget(p);
     base -> show();

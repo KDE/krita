@@ -42,7 +42,10 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     curves = new QSortedList<QPair<double,double> >[n];
     for(int i=0;i<n;i++) {
         transfers[i] = new Q_UINT16[256];
-        memset(transfers[i], 0, 256);
+
+        for (Q_UINT32 j = 0; j < 256; ++j) {
+            transfers[i][j] = j * 255;
+        }
     }
     nTransfers = n;
 }

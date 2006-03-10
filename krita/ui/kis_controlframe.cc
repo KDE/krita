@@ -141,9 +141,9 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
                                view->actionCollection(),
                                "paintops");
 
-    m_brushWidget -> setMinimumSize( 24, 24 );
-    m_patternWidget -> setMinimumSize( 24, 24 );
-    m_gradientWidget -> setMinimumSize( 24, 24 );
+    m_brushWidget -> setFixedSize( 26, 26 );
+    m_patternWidget -> setFixedSize( 26, 26 );
+    m_gradientWidget -> setFixedSize( 26, 26 );
 
     createBrushesChooser(m_view);
     createPatternsChooser(m_view);

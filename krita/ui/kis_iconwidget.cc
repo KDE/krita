@@ -42,8 +42,8 @@ void KisIconWidget::drawButtonLabel(QPainter *p)
         Q_INT32 ph = pix.height();
         Q_INT32 cw = width();
         Q_INT32 ch = height();
-        Q_INT32 itemWidth = 30;
-        Q_INT32 itemHeight = 30;
+        Q_INT32 itemWidth = 24;
+        Q_INT32 itemHeight = 24;
 
         if (pw < itemWidth)
             x = (cw - pw) / 2;

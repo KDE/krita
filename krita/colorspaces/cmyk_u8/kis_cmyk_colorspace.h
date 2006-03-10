@@ -27,6 +27,16 @@
 class KRITACORE_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
+
+        
+    struct Pixel {
+            Q_UINT16 cyan;
+            Q_UINT16 magenta;
+            Q_UINT16 yellow;
+            Q_UINT16 black;
+            Q_UINT16 alpha;
+        };
+public:
     KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisCmykColorSpace();
 
@@ -54,22 +64,32 @@ public:
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;
 
+    
+    virtual KisCompositeOpList userVisiblecompositeOps() const;
 
-virtual void bitBlt(Q_UINT8 *dst,
-            Q_INT32 dstRowSize,
-            const Q_UINT8 *src,
-            Q_INT32 srcRowStride,
-            const Q_UINT8 *srcAlphaMask,
-            Q_INT32 maskRowStride,
-            Q_UINT8 opacity,
-            Q_INT32 rows,
-            Q_INT32 cols,
-            const KisCompositeOp& op);
-
-    KisCompositeOpList userVisiblecompositeOps() const;
 protected:
+    
+    virtual void bitBlt(Q_UINT8 *dst,
+                        Q_INT32 dstRowStride,
+                        const Q_UINT8 *src,
+                        Q_INT32 srcRowStride,
+                        const Q_UINT8 *srcAlphaMask,
+                        Q_INT32 maskRowStride,
+                        Q_UINT8 opacity,
+                        Q_INT32 rows,
+                        Q_INT32 cols,
+                        const KisCompositeOp& op);
 
-    void compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity);
+    void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeMultiply(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeDivide(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeScreen(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeOverlay(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeDodge(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeBurn(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeDarken(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeLighten(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
 
 private:
 

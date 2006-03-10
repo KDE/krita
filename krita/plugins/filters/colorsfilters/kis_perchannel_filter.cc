@@ -101,10 +101,6 @@ QString KisPerChannelFilterConfiguration::toString()
     root.setAttribute( "name", name() );
     root.setAttribute( "version", version() );
 
-    QDomElement e = doc.createElement( "transfers" );
-    e.setAttribute("name", "transfers");
-    e.setAttribute("number", nTransfers);
-
     QDomElement c = doc.createElement("curves");
     c.setAttribute("number", nTransfers);
     c.setAttribute("name", "curves");
@@ -142,7 +138,7 @@ KisFilterConfiguration* KisPerChannelFilter::configuration(QWidget *nwidget)
 
     if ( widget == 0 )
     {
-        return new KisPerChannelFilterConfiguration(3);
+        return 0;
     } else {
         return widget->config();
     }
@@ -325,16 +321,26 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
     int nCh = m_dev->colorSpace()->nColorChannels();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
-    cfg->curves[m_activeCh].setAutoDelete(true);
-    cfg->curves[m_activeCh] = m_page->kCurve->getCurve();
-    m_curves[m_activeCh] = cfg->curves[m_activeCh];
+    m_curves[m_activeCh].setAutoDelete(true);
+    m_curves[m_activeCh] = m_page->kCurve->getCurve();
     
     for(int ch = 0; ch < nCh; ch++)
     {
+        cfg->curves[ch].setAutoDelete(true);
+        cfg->curves[ch].clear();
+        QPair<double, double> *p, *inpoint;
+        inpoint = m_curves[ch].first();
+        while(inpoint)
+        {
+            p = new QPair<double, double>(inpoint->first, inpoint->second);
+            cfg->curves[ch].append(p);
+            inpoint = m_curves[ch].next();
+        }
+
         for(int i=0; i <256; i++)
         {
             Q_INT32 val;
-            val = int(0xFFFF * m_page->kCurve->getCurveValue( cfg->curves[ch],  i / 255.0));
+            val = int(0xFFFF * m_page->kCurve->getCurveValue(m_curves[ch],  i / 255.0));
             if ( val > 0xFFFF )
                 val = 0xFFFF;
             if ( val < 0 )
@@ -352,7 +358,16 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
 
     for(unsigned int ch = 0; ch < cfg->nTransfers; ch++)
     {
-        m_curves[ch] = cfg->curves[ch];
+        m_curves[ch].setAutoDelete(true);
+        m_curves[ch].clear();
+        QPair<double, double> *p, *inpoint;
+        inpoint = cfg->curves[ch].first();
+        while(inpoint)
+        {
+            p = new QPair<double, double>(inpoint->first, inpoint->second);
+            cfg->curves[ch].append(p);
+            inpoint = cfg->curves[ch].next();
+        }
     }
     setActiveChannel( 0 );
 }

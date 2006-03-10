@@ -48,6 +48,7 @@ public slots:
 
 signals:
     void colorSelected(const KisColor &);
+    void colorSelected(const QColor &);
     void colorDoubleClicked(const KisColor &, const QString &);
 
 protected slots:

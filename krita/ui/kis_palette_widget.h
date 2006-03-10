@@ -50,7 +50,8 @@ public slots:
     void setPalette(const QString &paletteName);
 
 signals:
-    void colorSelected( const KisColor &);
+    void colorSelected(const KisColor &);
+    void colorSelected(const QColor&);
     void colorDoubleClicked( const KisColor &, const QString &);
 
 protected slots:

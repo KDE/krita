@@ -3761,6 +3761,9 @@ void KisView::createDockers()
 
     m_palettewidget = new KisPaletteWidget(this);
     m_palettewidget -> setCaption(i18n("Palettes"));
+    connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)),
+            this, SLOT(slotSetFGQColor(const QColor &)));
+    // No BGColor or reverse slotFGChanged -> palette connections, since that's not useful here
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance() -> get("PaletteServer");

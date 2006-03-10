@@ -133,6 +133,7 @@ void KisPaletteView::slotColorCellSelected( int col )
 
     m_currentEntry = m_currentPalette -> getColor(col);
     emit colorSelected(KisColor(m_currentPalette -> getColor(col).color, cs));
+    emit colorSelected(m_currentPalette -> getColor(col).color);
 }
 
 void KisPaletteView::slotColorCellDoubleClicked( int col )

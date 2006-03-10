@@ -82,6 +82,8 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
             this, SLOT(slotSetPalette(const QString &)));
     connect(m_view, SIGNAL(colorSelected(const KisColor &)),
             this, SIGNAL(colorSelected(const KisColor &)));
+    connect(m_view, SIGNAL(colorSelected(const QColor &)),
+            this, SIGNAL(colorSelected(const QColor &)));
     connect(m_view, SIGNAL(colorDoubleClicked(const KisColor &, const QString &)),
             this, SIGNAL(colorDoubleClicked(const KisColor &, const QString &)));
 }

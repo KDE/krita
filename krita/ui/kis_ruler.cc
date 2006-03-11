@@ -130,7 +130,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
     if (m_pixmapBuffer) {
         if (m_orientation == Qt::Horizontal) {
             if (m_currentPosition != -1)
-                update(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
+                repaint(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
 
             if (x != -1) {
                 bitBlt(this, x, 1, &m_pixmapMarker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
@@ -138,7 +138,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
             }
         } else {
             if (m_currentPosition != -1)
-                update(1, m_currentPosition, MARKER_HEIGHT, MARKER_WIDTH);
+                repaint(1, m_currentPosition, MARKER_HEIGHT, MARKER_WIDTH);
 
             if (y != -1) {
                 bitBlt(this, 1, y, &m_pixmapMarker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);

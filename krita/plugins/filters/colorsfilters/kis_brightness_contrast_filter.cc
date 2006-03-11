@@ -48,7 +48,7 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
     : KisFilterConfiguration( "brightnesscontrast", 1 )
 {
     for (Q_UINT32 i = 0; i < 256; ++i) {
-        transfer[i] = i * 255;
+        transfer[i] = i * 257;
     }
 }
 

@@ -44,7 +44,7 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
         transfers[i] = new Q_UINT16[256];
 
         for (Q_UINT32 j = 0; j < 256; ++j) {
-            transfers[i][j] = j * 255;
+            transfers[i][j] = j * 257;
         }
     }
     nTransfers = n;

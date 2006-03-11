@@ -37,6 +37,10 @@ class KisMathToolbox : public QObject {
         struct KisFloatRepresentation {
             KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc ) : coeffs(new float[nsize*nsize*ndepth]) ,size(nsize), depth(ndepth)
             {
+                // XXX: Valgrind shows that these are being used without being initialised.
+                for (Q_UINT32 i = 0; i < nsize*nsize*ndepth; ++i) {
+                    coeffs[i] = 0;
+                }
             }
             ~KisFloatRepresentation() { if(coeffs) delete[] coeffs; }
             float* coeffs;

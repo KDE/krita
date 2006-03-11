@@ -36,6 +36,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_filterConfig = kfc;
     setSelection( selection );
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
+    m_selection -> setParentLayer(this);
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -43,8 +44,10 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     : KisLayer(rhs)
 {
     m_filterConfig = new KisFilterConfiguration(*rhs.m_filterConfig);
-    if (rhs.m_selection)
+    if (rhs.m_selection) {
         m_selection = new KisSelection( *rhs.m_selection.data() );
+        m_selection -> setParentLayer(this);
+    }
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
 }
 
@@ -96,6 +99,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
         gc.fillRect(image()->bounds(), KisColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
     }
+    m_selection -> setParentLayer(this);
 }
 
 

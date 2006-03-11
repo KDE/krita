@@ -212,18 +212,50 @@ void KisRuler::drawRuler()
             break;
     }
 
-    Q_INT32 pos = 0;
     bool s1 = KoUnit::fromUserValue(st1, m_unit) * m_zoom > 3.0;
     bool s2 = KoUnit::fromUserValue(st2, m_unit) * m_zoom > 3.0;
     bool s3 = KoUnit::fromUserValue(st3, m_unit) * m_zoom > 3.0;
     bool s4 = KoUnit::fromUserValue(st4, m_unit) * m_zoom > 3.0;
 
-    if (m_orientation == Qt::Horizontal) {
-        // XXX: This was 7 * 4 -- why? what was the idea about having 30 point intervals?
-        float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
-        Q_INT32 step = qRound(cx);//((Q_INT32)(cx / (float)stt) + 1) * stt;
-        Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
+    float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
+    Q_INT32 step = qRound(cx);
 
+    if (step < 5) {
+        step = 1;
+    } else if (step < 10) {
+        step = 5;
+    } else if (step < 25) {
+        step = 10;
+    } else if (step < 50) {
+        step = 25;
+    } else if (step < 100) {
+        step = 50;
+    } else if (step < 250) {
+        step = 100;
+    } else if (step < 500) {
+        step = 250;
+    } else if (step < 1000) {
+        step = 500;
+    } else if (step < 2500) {
+        step = 1000;
+    } else if (step < 5000) {
+        step = 2500;
+    } else if (step < 10000) {
+        step = 5000;
+    } else  if (step < 25000) {
+        step = 10000;
+    } else if (step < 50000) {
+        step = 25000;
+    } else if (step < 100000) {
+        step = 50000;
+    } else {
+        step = 100000;
+    }
+
+    Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
+    Q_INT32 pos = 0;
+
+    if (m_orientation == Qt::Horizontal) {
         do {
             pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
@@ -247,10 +279,6 @@ void KisRuler::drawRuler()
             start++;
         } while (pos < m_pixmapBuffer -> width());
     } else {
-        float cx = KoUnit::fromUserValue(8 * 4, m_unit) / m_zoom;
-        Q_INT32 step = ((Q_INT32)(cx / (float)stt) + 1) * stt;
-        Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
-
         do {
             pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 

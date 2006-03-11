@@ -74,8 +74,10 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                 curves = new QSortedList<QPair<double,double> >[nTransfers];
                 while (!curvesNode.isNull()) {
                     QDomElement curvesElement = curvesNode.toElement();
-                    if (!curvesElement.isNull() && !e.text().isEmpty()) {
-                        QStringList data = QStringList::split( ";", e.text() );
+                    if (!curvesElement.isNull() && 
+!curvesElement.text().isEmpty()) {
+                        QStringList data = QStringList::split( ";", 
+curvesElement.text() );
                         QStringList::Iterator pairStart = data.begin();
                         QStringList::Iterator pairEnd = data.end();
                         for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
@@ -99,6 +101,18 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
     for(int ch = 0; ch < nTransfers; ++ch)
     {
         transfers[ch] = new Q_UINT16[256];
+        for(int i = 0; i < 256; ++i)
+        {
+            Q_INT32 val;
+            val = int(0xFFF * KCurve::getCurveValue(curves[ch], i / 
+255.0));
+            if(val > 0xFFFF)
+                val = 0xFFFF;
+            if(val < 0)
+                val = 0;
+
+            transfers[ch][i] = val;
+        }
     }
 }
 

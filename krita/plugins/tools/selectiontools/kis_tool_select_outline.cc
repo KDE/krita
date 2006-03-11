@@ -110,7 +110,7 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
 
     if (m_dragging && event -> button() == LeftButton) {
         m_dragging = false;
-        clear();
+        deactivate();
 
         KisImageSP img = m_subject -> currentImg();
 
@@ -209,7 +209,7 @@ void KisToolSelectOutline::draw(KisCanvasPainter& gc)
     }
 }
 
-void KisToolSelectOutline::clear()
+void KisToolSelectOutline::deactivate()
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject -> canvasController();

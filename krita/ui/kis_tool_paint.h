@@ -62,8 +62,6 @@ public:
 
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
-    virtual void clear();
-    virtual void clear(const QRect& rc);
 
     virtual void enter(QEvent *e);
     virtual void leave(QEvent *e);
@@ -82,6 +80,8 @@ public:
 
 public slots:
     virtual void activate();
+    virtual void deactivate();
+
     void slotSetOpacity(int opacityPerCent);
     void slotSetCompositeMode(const KisCompositeOp& compositeOp);
     void slotPopupQuickHelp();

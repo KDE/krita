@@ -40,15 +40,15 @@ public:
     KisToolPolygon();
     virtual ~KisToolPolygon();
 
-        //
-        // KisCanvasObserver interface
-        //
+    //
+    // KisCanvasObserver interface
+    //
 
-        virtual void update (KisCanvasSubject *subject);
+    virtual void update (KisCanvasSubject *subject);
 
-        //
-        // KisToolPaint interface
-        //
+    //
+    // KisToolPaint interface
+    //
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
@@ -74,8 +74,8 @@ protected:
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-        typedef QValueVector<KisPoint> KisPointVector;
-        KisPointVector m_points;
+    typedef QValueVector<KisPoint> KisPointVector;
+    KisPointVector m_points;
 };
 
 

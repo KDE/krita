@@ -50,15 +50,19 @@ public:
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);
 
-    void activate();
-    void clear();
-
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
 
 private:
     void paintOutline();
     void paintOutline(KisCanvasPainter& gc, const QRect& rc);
+
+
+public slots:
+
+    void activate();
+    void deactivate();
+
 
 private slots:
     void slotTimer();

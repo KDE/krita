@@ -78,11 +78,7 @@ void KisToolPaint::paint(KisCanvasPainter&, const QRect&)
 {
 }
 
-void KisToolPaint::clear()
-{
-}
-
-void KisToolPaint::clear(const QRect&)
+void KisToolPaint::deactivate()
 {
 }
 

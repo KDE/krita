@@ -118,7 +118,7 @@ void KisToolSelectSimilar::activate()
     }
 }
 
-void KisToolSelectSimilar::clear()
+void KisToolSelectSimilar::deactivate()
 {
     m_timer->stop();
 }
@@ -160,7 +160,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         if(img -> undoAdapter())
             img -> undoAdapter() -> addCommand(t);
         m_subject -> canvasController() -> updateCanvas();
-                
+
         QApplication::restoreOverrideCursor();
     }
 }

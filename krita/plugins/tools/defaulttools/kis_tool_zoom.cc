@@ -121,7 +121,7 @@ void KisToolZoom::activate()
     m_timer.start(50);
 }
 
-void KisToolZoom::clear()
+void KisToolZoom::deactivate()
 {
     m_timer.stop();
 }

@@ -215,6 +215,8 @@ void KisToolPolygon::draw(KisCanvasPainter& gc)
     }
 }
 
+
+
 void KisToolPolygon::setup(KActionCollection *collection)
 {
         m_action = static_cast<KRadioAction *>(collection -> action(name()));

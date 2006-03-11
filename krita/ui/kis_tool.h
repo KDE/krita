@@ -69,8 +69,6 @@ public:
 
     virtual void paint(KisCanvasPainter& gc) = 0;
     virtual void paint(KisCanvasPainter& gc, const QRect& rc) = 0;
-    virtual void clear() = 0;
-    virtual void clear(const QRect& rc) = 0;
 
     /**
      * This function is called after the creation of a tool to create the KAction corresponding
@@ -123,6 +121,12 @@ public slots:
      */
     virtual void activate() = 0;
     
+    /**
+     * deactivate is called when the tool gets deactivated because another
+     * tool is selected. Tools can then clean up after themselves.
+     */
+    virtual void deactivate() = 0;
+
 private:
     KisTool(const KisTool&);
     KisTool& operator=(const KisTool&);

@@ -177,7 +177,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 
     if (oldTool)
     {
-        oldTool -> clear();
+        oldTool -> deactivate();
         oldTool -> action() -> setChecked( false );
 
         m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
@@ -243,7 +243,7 @@ void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDev
     if (oldTool)
     {
         m_paletteManager -> removeWidget(krita::TOOL_OPTION_WIDGET);
-        oldTool -> clear();
+        oldTool->deactivate();
     }
 
 

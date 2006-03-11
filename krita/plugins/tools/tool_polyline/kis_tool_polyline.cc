@@ -88,6 +88,13 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
     }
 }
 
+void KisToolPolyline::deactivate()
+{
+    draw();
+    m_points.clear();
+    m_dragging = false;
+}
+
 void KisToolPolyline::finish()
 {
     // erase old lines on canvas

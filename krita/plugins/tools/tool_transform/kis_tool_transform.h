@@ -52,7 +52,6 @@ public:
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
     virtual Q_UINT32 priority() { return 0; }
-    virtual void clear();
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
@@ -69,6 +68,9 @@ public:
 
     void notifyCommandAdded(KCommand *);
     void notifyCommandExecuted(KCommand *);
+
+public:
+    virtual void deactivate();
 
 private:
 

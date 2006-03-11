@@ -64,6 +64,10 @@ public:
     virtual QString quickHelp() const;
     void finish();
 
+public slots:
+
+    void deactivate();
+    
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);

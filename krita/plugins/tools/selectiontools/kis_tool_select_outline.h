@@ -57,14 +57,14 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void activate();
-
+    void deactivate();
 
 protected:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     void draw(KisCanvasPainter& gc);
     void draw();
-    void clear();
+
 
 protected:
     KisPoint m_dragStart;

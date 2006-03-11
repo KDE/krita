@@ -154,13 +154,13 @@ KisToolTransform::~KisToolTransform()
 {
 }
 
-void KisToolTransform::clear()
+void KisToolTransform::deactivate()
 {
     if (m_subject && m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
-    
+
     KisImageSP img = m_subject -> currentImg();
     if (!img) return;
-    
+
     paintOutline();
 }
 
@@ -199,13 +199,13 @@ void KisToolTransform::initHandles()
 {
     Q_INT32 x,y,w,h;
     KisImageSP img = m_subject -> currentImg();
-        
+
     KisPaintDeviceSP dev = img -> activeDevice();
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());
     Q_ASSERT(m_origDevice);
-    
+
     if(dev->hasSelection())
     {
         KisSelectionSP sel = dev->selection();
@@ -251,38 +251,38 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
             switch(m_function)
             {
                 case ROTATE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                         - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
                     m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
                     m_clickoffset = QPoint(0, 0);
                     break;
                 case MOVE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                         - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
                     break;
                 case TOPSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                             - QPoint((m_topleft + m_topright)/2);
                     break;
                 case TOPRIGHTSCALE:
                     m_clickoffset = e -> pos().floorQPoint() - m_topright;
                     break;
                 case RIGHTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                             - QPoint((m_topright + m_bottomright)/2);
                     break;
                 case BOTTOMRIGHTSCALE:
                     m_clickoffset = e -> pos().floorQPoint() - m_bottomright;
                     break;
                 case BOTTOMSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                             - QPoint((m_bottomleft + m_bottomright)/2);
                     break;
                 case BOTTOMLEFTSCALE:
                     m_clickoffset = e -> pos().floorQPoint() - m_bottomleft;
                     break;
                 case LEFTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() 
+                    m_clickoffset = e -> pos().floorQPoint()
                             - QPoint((m_topleft + m_bottomleft)/2);
                     break;
                 case TOPLEFTSCALE:
@@ -307,13 +307,13 @@ int KisToolTransform::distsq(QPoint v,QPoint w)
 void KisToolTransform::setFunctionalCursor()
 {
     int rotOctant = 8 + int(8.5 + m_a* 4 / M_PI);
-    
+
     int s;
     if(m_scaleX*m_scaleY<0)
         s = -1;
     else
         s=1;
-        
+
     switch(m_function)
     {
         case MOVE:
@@ -359,21 +359,21 @@ void KisToolTransform::move(KisMoveEvent *e)
         QPoint topright = m_topright;
         QPoint bottomleft = m_bottomleft;
         QPoint bottomright = m_bottomright;
-        
+
         QPoint mousePos = e -> pos().floorQPoint();
-        
+
         if (m_subject && m_selecting) {
             paintOutline();
-            
+
             mousePos -= m_clickoffset;
-            
+
             // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
             double newX = invrotX(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
             double newY = invrotY(mousePos.x() - m_translateX, mousePos.y() - m_translateY);
             double dx=0, dy=0;
             double oldScaleX = m_scaleX;
             double oldScaleY = m_scaleY;
-            
+
             if(m_function == MOVE)
             {
                 m_translateX += newX;
@@ -385,12 +385,12 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_a = -atan2(mousePos.x() - m_translateX, mousePos.y() - m_translateY)
                     - m_clickangle;
             }
-            
+
             if(m_function == TOPSCALE)
             {
                 dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -400,15 +400,15 @@ void KisToolTransform::move(KisMoveEvent *e)
                         m_scaleX = -fabs(m_scaleY);
                 }
             }
-            
+
             if(m_function == TOPRIGHTSCALE)
             {
                 dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-                
+
                 dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -430,12 +430,12 @@ void KisToolTransform::move(KisMoveEvent *e)
                     }
                 }
             }
-            
+
             if(m_function == RIGHTSCALE)
             {
                 dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -445,15 +445,15 @@ void KisToolTransform::move(KisMoveEvent *e)
                         m_scaleY = -fabs(m_scaleX);
                 }
             }
-            
+
             if(m_function == BOTTOMRIGHTSCALE)
             {
                 dx = (newX - m_scaleX * (m_endPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
-                
+
                 dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -475,12 +475,12 @@ void KisToolTransform::move(KisMoveEvent *e)
                     }
                 }
             }
-            
+
             if(m_function == BOTTOMSCALE)
             {
                 dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -490,15 +490,15 @@ void KisToolTransform::move(KisMoveEvent *e)
                         m_scaleX = -fabs(m_scaleY);
                 }
             }
-            
+
             if(m_function == BOTTOMLEFTSCALE)
             {
                 dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-                
+
                 dy = (newY - m_scaleY * (m_endPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -520,12 +520,12 @@ void KisToolTransform::move(KisMoveEvent *e)
                     }
                 }
             }
-            
+
             if(m_function == LEFTSCALE)
             {
                 dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -535,15 +535,15 @@ void KisToolTransform::move(KisMoveEvent *e)
                         m_scaleY = -fabs(m_scaleX);
                 }
             }
-            
+
             if(m_function == TOPLEFTSCALE)
             {
                 dx = (newX - m_scaleX * (m_startPos.x() - m_org_cenX)) / 2;
                 m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
-                
+
                 dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
-                
+
                 // enforce same acpect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
@@ -565,10 +565,10 @@ void KisToolTransform::move(KisMoveEvent *e)
                     }
                 }
             }
-            
+
             m_translateX += rotX(dx, dy);
             m_translateY += rotY(dx, dy);
-            
+
             paintOutline();
         }
         else
@@ -602,7 +602,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_function = LEFTSCALE;
             if(distsq(mousePos, m_topleft)<=handleradius)
                 m_function = TOPLEFTSCALE;
-            
+
             setFunctionalCursor();
         }
     }
@@ -639,10 +639,10 @@ void KisToolTransform::paintOutline()
 void KisToolTransform::recalcOutline()
 {
     double x,y;
-    
+
     m_sina = sin(m_a);
     m_cosa = cos(m_a);
-    
+
     x = (m_startPos.x() - m_org_cenX) * m_scaleX;
     y = (m_startPos.y() - m_org_cenY) * m_scaleY;
     m_topleft = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
@@ -650,11 +650,11 @@ void KisToolTransform::recalcOutline()
     x = (m_endPos.x() - m_org_cenX) * m_scaleX;
     y = (m_startPos.y() - m_org_cenY) * m_scaleY;
     m_topright = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
-    
+
     x = (m_startPos.x() - m_org_cenX) * m_scaleX;
     y = (m_endPos.y() - m_org_cenY) * m_scaleY;
     m_bottomleft = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
-    
+
     x = (m_endPos.x() - m_org_cenX) * m_scaleX;
     y = (m_endPos.y() - m_org_cenY) * m_scaleY;
     m_bottomright = QPoint(int(rotX(x,y) + m_translateX+0.5), int(rotY(x,y) + m_translateY+0.5));
@@ -701,7 +701,7 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 
 void KisToolTransform::transform()
 {
-    
+
     KisImageSP img = m_subject -> currentImg();
 
     if (!img || !img->activeDevice())
@@ -805,7 +805,7 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 
     m_optWidget = new WdgToolTransform(parent);
     Q_CHECK_PTR(m_optWidget);
-    
+
     m_optWidget -> cmbFilter -> clear();
     m_optWidget -> cmbFilter -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
 
@@ -815,7 +815,7 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 
     KisID filterID = m_optWidget -> cmbFilter -> currentItem();
     m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
-    
+
 /*
     connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
     connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
@@ -835,12 +835,12 @@ void KisToolTransform::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection -> action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Transform"), 
-                        "transform", 
-                        0, 
+        m_action = new KRadioAction(i18n("&Transform"),
+                        "transform",
+                        0,
                         this,
-                        SLOT(activate()), 
-                        collection, 
+                        SLOT(activate()),
+                        collection,
                         name());
         Q_CHECK_PTR(m_action);
         m_action -> setToolTip(i18n("Transform a layer or a selection"));

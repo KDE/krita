@@ -56,6 +56,8 @@ KisToolStar::KisToolStar()
 {
     setName("tool_star");
     setCursor(KisCursor::load("tool_star_cursor.png", 6, 6));
+    m_innerOuterRatio=40;
+    m_vertices=5;
 }
 
 KisToolStar::~KisToolStar()
@@ -75,8 +77,8 @@ void KisToolStar::buttonPress(KisButtonPressEvent *event)
         m_dragging = true;
         m_dragStart = event -> pos();
         m_dragEnd = event -> pos();
-        m_vertices = ((WdgToolStar*)m_optWidget) -> verticesSpinBox -> value();
-        m_innerOuterRatio = ((WdgToolStar*)m_optWidget) -> ratioSpinBox -> value();
+        m_vertices = m_optWidget -> verticesSpinBox -> value();
+        m_innerOuterRatio = m_optWidget -> ratioSpinBox -> value();
     }
 }
 
@@ -191,8 +193,6 @@ void KisToolStar::setup(KActionCollection *collection)
         m_action -> setToolTip(i18n("Draw a star"));
         m_action -> setExclusiveGroup("tools");
         m_ownAction = true;
-        m_innerOuterRatio=40;
-        m_vertices=5;
     }
 }
 
@@ -232,6 +232,8 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);
+
+    m_optWidget -> ratioSpinBox -> setValue(m_innerOuterRatio);
 
     QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
     super::addOptionWidgetLayout(optionLayout);

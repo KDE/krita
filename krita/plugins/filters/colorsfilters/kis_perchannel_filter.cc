@@ -104,7 +104,7 @@ curvesElement.text() );
         for(int i = 0; i < 256; ++i)
         {
             Q_INT32 val;
-            val = int(0xFFF * KCurve::getCurveValue(curves[ch], i / 
+            val = int(0xFFFF * KCurve::getCurveValue(curves[ch], i / 
 255.0));
             if(val > 0xFFFF)
                 val = 0xFFFF;

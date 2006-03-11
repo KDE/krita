@@ -791,6 +791,7 @@ bool KisDoc::completeLoading(KoStore *store)
     IODone();
 
     setModified( false );
+    setUndo(true);
     return true;
 }
 

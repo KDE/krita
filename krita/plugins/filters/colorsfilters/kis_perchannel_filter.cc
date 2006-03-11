@@ -95,6 +95,11 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
         }
         n = n.nextSibling();
     }
+
+    for(int ch = 0; ch < nTransfers; ++ch)
+    {
+        transfers[ch] = new Q_UINT16[256];
+    }
 }
 
 QString KisPerChannelFilterConfiguration::toString()
@@ -368,7 +373,7 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
         while(inpoint)
         {
             p = new QPair<double, double>(inpoint->first, inpoint->second);
-            cfg->curves[ch].append(p);
+            m_curves[ch].append(p);
             inpoint = cfg->curves[ch].next();
         }
     }

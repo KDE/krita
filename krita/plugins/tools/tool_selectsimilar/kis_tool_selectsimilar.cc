@@ -56,7 +56,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8
 
     KisColorSpace * cs = dev -> colorSpace();
 
-    for (int y2 = y; y2 < h - y; ++y2) {
+    for (int y2 = y; y2 < y + h; ++y2) {
         KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
         KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
@@ -73,9 +73,6 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8
             else if (mode == SELECTION_SUBTRACT) {
                 if (match <= fuzziness) {
                     *(selIter.rawData()) = MIN_SELECTED;
-                }
-                else {
-                    *(selIter.rawData()) = 0;
                 }
             }
             ++hiter;

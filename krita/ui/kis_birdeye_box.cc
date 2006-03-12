@@ -195,7 +195,8 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     QHBoxLayout * hl = new QHBoxLayout(l);
 
-    hl->addWidget(new QLabel(i18n("Exposure:"), this));
+    m_exposureLabel = new QLabel(i18n("Exposure:"), this);
+    hl->addWidget(m_exposureLabel);
 
     m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, this);
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -272,7 +273,13 @@ void KisBirdEyeBox::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
 
 void KisBirdEyeBox::slotImageColorSpaceChanged(KisColorSpace *cs)
 {
-    m_exposureDoubleWidget->setEnabled(cs->hasHighDynamicRange());
+    if (cs->hasHighDynamicRange()) {
+        m_exposureDoubleWidget->show();
+        m_exposureLabel->show();
+    } else {
+        m_exposureDoubleWidget->hide();
+        m_exposureLabel->hide();
+    }
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

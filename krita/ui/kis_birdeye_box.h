@@ -56,6 +56,7 @@ protected slots:
 private:
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;
+    QLabel *m_exposureLabel;
     KisView * m_view;
     KisCanvasSubject * m_subject;
     bool m_draggingExposureSlider;

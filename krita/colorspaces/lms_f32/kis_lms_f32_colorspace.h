@@ -64,6 +64,8 @@ public:
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;
 
+    virtual bool hasHighDynamicRange() const { return false; }
+
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfile *  dstProfile,
                        Q_INT32 renderingIntent,

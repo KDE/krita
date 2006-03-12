@@ -29,6 +29,7 @@ class KisDoubleWidget;
 class KisView;
 class KisCanvasSubject;
 class KoZoomAdapter;
+class KisColorSpace;
 
 class KisBirdEyeBox : public QWidget
 { 
@@ -45,6 +46,7 @@ public slots:
     void slotDocCommandExecuted();
     void slotImageUpdated(QRect r);
     void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
+    void slotImageColorSpaceChanged(KisColorSpace *cs);
 
 protected slots:
     void exposureValueChanged(double exposure);

@@ -242,7 +242,9 @@ void KisBirdEyeBox::setImage(KisImageSP image)
     if (m_image) {
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
         connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+        connect(m_image, SIGNAL(sigColorSpaceChanged(KisColorSpace *)), SLOT(slotImageColorSpaceChanged(KisColorSpace *)));
         m_birdEyePanel->slotUpdate(m_image->bounds());
+        slotImageColorSpaceChanged(m_image->colorSpace());
     }
 }
 
@@ -266,6 +268,11 @@ void KisBirdEyeBox::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
     if (m_image) {
         m_birdEyePanel->slotUpdate(m_image->bounds());
     }
+}
+
+void KisBirdEyeBox::slotImageColorSpaceChanged(KisColorSpace *cs)
+{
+    m_exposureDoubleWidget->setEnabled(cs->hasHighDynamicRange());
 }
 
 void KisBirdEyeBox::exposureValueChanged(double exposure)

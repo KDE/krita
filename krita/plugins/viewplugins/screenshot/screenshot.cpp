@@ -37,15 +37,15 @@
 #include <kis_image.h>
 #include "screenshot.moc"
 
-typedef KGenericFactory<Screenshot> ScreenshotFactory;
-K_EXPORT_COMPONENT_FACTORY( kritascreenshot, ScreenshotFactory( "kscreenshot_plugin" ) )
 
-    Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
+K_EXPORT_COMPONENT_FACTORY( kritascreenshot, KGenericFactory<Screenshot>( "krita" ) )
+
+Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
         : KParts::Plugin(parent, name)
 {
-    setInstance(ScreenshotFactory::instance());
-
-    KImageIO::registerFormats(); // ???
+    setInstance(KGenericFactory<Screenshot>::instance());
+    setXMLFile(locate("data","kritaplugins/screenshot-krita.rc"), true);
+    KImageIO::registerFormats();
 
     snapshot = new KSnapshot();
     Q_CHECK_PTR(snapshot);

@@ -344,7 +344,9 @@ void KisLayer::setDirty(bool propagate)
     // If we're dirty, our parent is dirty, if we've got a parent
     if (propagate && m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
 
-
+    if (m_image && rc.isValid()) {
+        m_image->notifyLayerUpdated(this, rc);
+    }
 }
 
 void KisLayer::setDirty(const QRect & rc, bool propagate)
@@ -357,6 +359,9 @@ void KisLayer::setDirty(const QRect & rc, bool propagate)
     if (propagate && m_parent && m_dirtyRect.isValid())
         m_parent->setDirty(m_dirtyRect);
 
+    if (m_image && rc.isValid()) {
+        m_image->notifyLayerUpdated(this, rc);
+    }
 }
 
 KisGroupLayerSP KisLayer::parent() const

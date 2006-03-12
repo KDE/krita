@@ -649,8 +649,6 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_dirty = false;
     m_width = width;
     m_height = height;
-
-    connect(this, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SIGNAL(sigNonActiveLayersUpdated()));
 }
 
 bool KisImage::locked() const
@@ -699,6 +697,11 @@ void KisImage::emitSizeChanged()
     } else {
         m_private->sizeChangedWhileLocked = true;
     }
+}
+
+void KisImage::notifyLayerUpdated(KisLayerSP layer, QRect rc)
+{
+    emit sigLayerUpdated(layer, rc);
 }
 
 void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayers)
@@ -901,8 +904,6 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     unlock();
 
     emit sigLayerPropertiesChanged( m_activeLayer );
-    emit sigNonActiveLayersUpdated(); // This makes sure the
-                                      // thumbnails are updated
 
     if (undoAdapter() && m_adapter->undo()) {
 
@@ -1484,7 +1485,6 @@ void KisImage::notifyPropertyChanged(KisLayerSP layer)
 
 void KisImage::notifyImageLoaded()
 {
-    emit sigNonActiveLayersUpdated();
 }
 
 QRect KisImage::bounds() const

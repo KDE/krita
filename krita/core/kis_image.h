@@ -301,7 +301,9 @@ public:
     void notifyPropertyChanged(KisLayerSP layer);
 
     void notifyImageLoaded();
-    
+
+    void notifyLayerUpdated(KisLayerSP layer, QRect rc);
+
     void setColorSpace(KisColorSpace * colorSpace);
     void setRootLayer(KisGroupLayerSP rootLayer);
 
@@ -372,8 +374,13 @@ signals:
      */
     void sigImageUpdated(QRect rc);
 
-    /// Emmitted when layers other than the active one have changed, for example when rotating the whole image.
-    void sigNonActiveLayersUpdated();
+    /**
+     * Emitted whenever a layer is modified.
+     * 
+     * @param layer The layer that has been modified.
+     * @param rc The rectangle that has been modified.
+     */
+    void sigLayerUpdated(KisLayerSP layer, QRect rc);
 
     /**
      * Emitted whenever the image has been modified, so that it doesn't match with the version saved on disk.

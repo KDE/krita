@@ -39,14 +39,14 @@ class KoDocumentEntry;
 class KisCompositeOp;
 class KisLayerList;
 class LayerItem;
+class KisCanvasSubject;
 
-// XXX: Add layer locking, previews
 class KisLayerBox : public QFrame {
         typedef QFrame super;
         Q_OBJECT
 
 public:
-    KisLayerBox(QWidget *parent = 0, const char *name = 0);
+    KisLayerBox(KisCanvasSubject *subject, QWidget *parent = 0, const char *name = 0);
     virtual ~KisLayerBox();
 
     void clear();
@@ -61,8 +61,7 @@ public slots:
     void slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
     void slotLayerPropertiesChanged(KisLayerSP layer);
     void slotLayersChanged(KisGroupLayerSP rootLayer);
-    void slotImageUpdated();
-    void slotNonActiveLayersUpdated();
+    void slotLayerUpdated(KisLayerSP layer, QRect rc);
 
     void slotSetCompositeOp(const KisCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
@@ -114,7 +113,6 @@ private:
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
     QValueList<int> m_modified;
-    QTimer m_thumbnailerTimer;
     WdgLayerBox *m_lst;
 
     void printKritaLayers() const;

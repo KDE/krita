@@ -653,9 +653,14 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     connect(this, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SIGNAL(sigNonActiveLayersUpdated()));
 }
 
+bool KisImage::locked() const
+{
+    return m_private->lockCount != 0;
+}
+
 void KisImage::lock()
 {
-    if (m_private->lockCount == 0) {
+    if (!locked()) {
         if (m_rootLayer) disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
         m_private->sizeChangedWhileLocked = false;
         m_private->selectionChangedWhileLocked = false;
@@ -665,9 +670,9 @@ void KisImage::lock()
 
 void KisImage::unlock()
 {
-    Q_ASSERT(m_private->lockCount != 0);
+    Q_ASSERT(locked());
 
-    if (m_private->lockCount != 0) {
+    if (locked()) {
         m_private->lockCount--;
 
         if (m_private->lockCount == 0) {
@@ -689,7 +694,7 @@ void KisImage::unlock()
 
 void KisImage::emitSizeChanged()
 {
-    if (m_private->lockCount == 0) {
+    if (!locked()) {
         emit sigSizeChanged(m_width, m_height);
     } else {
         m_private->sizeChangedWhileLocked = true;
@@ -1251,20 +1256,29 @@ void KisImage::flatten()
     QRect rc = mergedImage() -> extent();
 
     KisPainter gc(dst->paintDevice());
-    gc.bitBlt(0, 0, COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
+    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
 
     m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
     connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
-    blockSignals(true);
+    if (m_adapter && m_adapter -> undo()) {
+        m_adapter->beginMacro(i18n("Flatten Image"));
+        m_adapter->addCommand(new LockImageCommand(this, true));
+        m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, oldRootLayer, m_rootLayer, ""));
+    }
+
+    lock();
+
     addLayer(dst, m_rootLayer, 0);
     activate(dst);
-    blockSignals(false);
+
+    unlock();
 
     notifyLayersChanged();
 
     if (m_adapter && m_adapter -> undo()) {
-        m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, oldRootLayer, m_rootLayer, i18n("Flatten Image")));
+        m_adapter->addCommand(new LockImageCommand(this, false));
+        m_adapter->endMacro();
     }
 }
 
@@ -1503,7 +1517,7 @@ void KisImage::slotSelectionChanged(const QRect& r)
 {
     QRect r2(r.x() - 1, r.y() - 1, r.width() + 2, r.height() + 2);
 
-    if (m_private->lockCount == 0) {
+    if (!locked()) {
         emit sigActiveSelectionChanged(this);
     } else {
         m_private->selectionChangedWhileLocked = true;
@@ -1524,7 +1538,14 @@ void KisImage::setColorSpace(KisColorSpace * colorSpace)
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
+    disconnect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+
     m_rootLayer = rootLayer;
+
+    if (!locked()) {
+        connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
+    }
+    activate(m_rootLayer->firstChild());
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

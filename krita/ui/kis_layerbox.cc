@@ -261,14 +261,20 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
 
 void KisLayerBox::slotImageUpdated()
 {
-    Q_ASSERT(list() -> activeLayer()
+    Q_ASSERT((list() -> activeLayer()
             && m_image -> activeLayer()
-            && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id());
+            && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()) ||
+            (list() -> activeLayer() == 0 && m_image -> activeLayer() == 0));
+
     if (!(list() -> activeLayer()
            && m_image -> activeLayer()
-           && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id()))
-        return;
-    markModified(m_image -> activeLayer());
+           && list() -> activeLayer() -> id() == m_image -> activeLayer() -> id())) {
+        slotNonActiveLayersUpdated();
+    } else {
+        // XXX: This makes the assumption that only the active layer has been
+        // modified, which isn't necessarily true.
+        markModified(m_image -> activeLayer());
+    }
 }
 
 void KisLayerBox::slotNonActiveLayersUpdated()

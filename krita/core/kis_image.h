@@ -114,7 +114,12 @@ public:
      * immediately.
      */
     void unlock();
-    
+
+    /**
+     * Returns true if the image is locked.
+     */
+    bool locked() const;
+
     KisColor backgroundColor() const;
     void setBackgroundColor(const KisColor & color);
 

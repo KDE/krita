@@ -79,23 +79,16 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         progress -> setSubject(this, true, true);
     emit notifyProgressStage(i18n("Separating image..."), 0);
 
-    KisUndoAdapter * undo = 0;
-    KisTransaction * t = 0;
-    if ((undo = image->undoAdapter())) {
-        t = new KisTransaction(i18n("Separate Image"), src.data());
-    }
-
     KisColorSpace * dstCs = 0;
 
     Q_UINT32 numberOfChannels = src->nChannels();
     KisColorSpace * srcCs  = src->colorSpace();
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
 
-    // Flatten the image first, if required
+    // Use the flattened image, if required
     switch(sourceOps) {
 
         case(ALL_LAYERS):
-            image->flatten();
             src = image->mergedImage();
             break;
         default:
@@ -229,6 +222,20 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     if (!m_cancelRequested) {
 
+        KisUndoAdapter * undo = 0;
+        if ((undo = image->undoAdapter()) && undo->undo()) {
+            undo->beginMacro(i18n("Separate Image"));
+        }
+
+        // Flatten the image if required
+        switch(sourceOps) {
+            case(ALL_LAYERS):
+                image->flatten();
+                break;
+            default:
+                break;
+        }
+
         for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
         {
 
@@ -278,13 +285,12 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             ++deviceIt;
         }
 
-        if (undo) undo -> addCommand(t);
+        if (undo && undo->undo()) {
+            undo -> endMacro();
+        }
+
         m_view->canvasSubject()->document()->setModified(true);
-
-
     }
-
-
 }
 
 

@@ -2296,11 +2296,11 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //    }
     if (e->button() == Qt::RightButton) {
 
-        if (m_popup == 0) {
+        if (m_popup == 0 && factory()) {
             Q_ASSERT(factory());
             m_popup = (QPopupMenu *)factory()->container("image_popup", this);
         }
-        m_popup->popup(e->globalPos().roundQPoint());
+        if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
     }
     else if (e -> device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e -> pos());

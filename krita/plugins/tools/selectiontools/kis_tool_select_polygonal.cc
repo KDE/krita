@@ -66,6 +66,7 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 
 void KisToolSelectPolygonal::activate()
 {
+    m_points.clear();
     super::activate();
 
     if (!m_optWidget)
@@ -73,6 +74,14 @@ void KisToolSelectPolygonal::activate()
 
     m_optWidget -> slotActivated();
 }
+
+void KisToolSelectPolygonal::deactivate()
+{
+    draw();
+    m_points.clear();
+    m_dragging = false;
+}
+
 
 void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
 {
@@ -100,7 +109,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
     }
 }
 
-           
+
 void KisToolSelectPolygonal::doubleClick( KisDoubleClickEvent * )
 {
     finish();
@@ -117,7 +126,7 @@ void KisToolSelectPolygonal::finish()
     if (img && img->activeDevice()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KisPaintDeviceSP dev = img -> activeDevice();
-        
+
         bool hasSelection = dev -> hasSelection();
 
         //XXX: Fix string
@@ -164,7 +173,7 @@ void KisToolSelectPolygonal::finish()
     }
 
     m_points.clear();
-    
+
 }
 
 void KisToolSelectPolygonal::move(KisMoveEvent *event)

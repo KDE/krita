@@ -63,7 +63,7 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void activate();
-
+    void deactivate();
 
 protected:
     virtual void paint(KisCanvasPainter& gc);

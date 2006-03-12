@@ -163,21 +163,23 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
     b -> setFixedSize(WIDTH, HEIGHT);
     connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-    QHBoxLayout * h1 = new QHBoxLayout(vl, 0, "strength layout");
+    QGridLayout * g2 = new QGridLayout(vl, 2, 2);
+    
     QLabel * label = new QLabel(i18n("Paint strength:"), this);
-    h1 -> addWidget(label);
+    g2->addWidget(label, 0, 0);
     m_strength = new KDoubleNumInput(0.0, 2.0, 1.0, 0.1, 1, this);
+    m_strength->setRange(0.0, 2.0, 0.1, true);
     connect(m_strength, SIGNAL(valueChanged(double)), this,  SLOT(slotStrengthChanged(double)));
-    h1 -> addWidget(m_strength);
+    g2->addWidget(m_strength, 0, 1);
 
-    QHBoxLayout * h2 = new QHBoxLayout(vl, 0, "wet layout");
     label = new QLabel(i18n("Wetness:"), this);
-    h2 -> addWidget(label);
+    g2->addWidget(label, 1, 0);
     m_wetness = new KIntNumInput(16, this);
     connect(m_wetness, SIGNAL(valueChanged(int)), this, SLOT(slotWetnessChanged(int)));
     m_wetness -> setRange(0, 16, true);
-    h2 -> addWidget(m_wetness);
+    g2->addWidget(m_wetness, 1, 1);
 
+    g2->addItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
 }
 

@@ -890,6 +890,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     
     if (undoAdapter() && m_adapter->undo()) {
         m_adapter->beginMacro(i18n("Convert Image Type"));
+        m_adapter->addCommand(new LockImageCommand(this, true));
     }
 
     setColorSpace(dstColorSpace);
@@ -907,6 +908,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
                                                          oldCs, dstColorSpace));
+        m_adapter->addCommand(new LockImageCommand(this, false));
         m_adapter->endMacro();
     }
 }

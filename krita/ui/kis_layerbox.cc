@@ -174,7 +174,6 @@ void KisLayerBox::setImage(KisImageSP img)
         connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
         connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
-        connect(img, SIGNAL(sigImageUpdated(QRect)), this, SLOT(slotImageUpdated()));
         connect(img, SIGNAL(sigLayerUpdated(KisLayerSP, QRect)), this, SLOT(slotLayerUpdated(KisLayerSP, QRect)));
         slotLayersChanged(img -> rootLayer());
         updateThumbnails();

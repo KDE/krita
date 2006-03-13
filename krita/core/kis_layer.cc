@@ -473,13 +473,11 @@ void KisLayer::setVisible(bool v)
 
         m_visible = v;
         notifyPropertyChanged();
+        setDirty();
 
         if (undoAdapter()) {
             undoAdapter() -> addCommand(setVisibleCommand(v));
         }
-
-        setDirty();
-
     }
 }
 

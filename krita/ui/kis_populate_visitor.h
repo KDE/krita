@@ -72,12 +72,25 @@ class KisPopulateVisitor: public KisLayerVisitor
             KisPopulateVisitor visitor(item);
             for (KisLayerSP l = layer -> firstChild(); l; l = l -> nextSibling())
                 l -> accept(visitor);
+
+            vKisLayerSP childLayersAdded = visitor.layersAdded();
+
+            for (vKisLayerSP::iterator it = childLayersAdded.begin(); it != childLayersAdded.end(); ++it) {
+                m_layersAdded.append(*it);
+            }
+
             return true;
+        }
+
+        vKisLayerSP layersAdded() const
+        {
+            return m_layersAdded;
         }
 
     private:
         LayerList* m_widget;
         KisLayerItem* m_parent;
+        vKisLayerSP m_layersAdded;
 
         KisLayerItem* add(KisLayer* layer)
         {
@@ -96,6 +109,7 @@ class KisPopulateVisitor: public KisLayerVisitor
             if (layer == img->activeLayer()) {
                 item -> setActive();
             }
+            m_layersAdded.append(layer);
             return item;
         }
 };

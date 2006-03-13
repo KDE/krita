@@ -197,17 +197,25 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 {
     if (layer.data() == m_image -> rootLayer().data() || list() -> layer(layer -> id()))
         return;
+
+    vKisLayerSP layersAdded;
+
     if (layer -> parent() == m_image -> rootLayer())
     {
         KisPopulateVisitor visitor(list());
         layer -> accept(visitor);
+        layersAdded = visitor.layersAdded();
     }
     else
     {
         KisPopulateVisitor visitor(static_cast<KisLayerItem*>(list() -> layer(layer -> parent() -> id())));
         layer -> accept(visitor);
+        layersAdded = visitor.layersAdded();
     }
-    markModified(layer);
+
+    for (vKisLayerSP::iterator it = layersAdded.begin(); it != layersAdded.end(); ++it) {
+        markModified(*it);
+    }
     updateUI();
 }
 

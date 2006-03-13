@@ -84,6 +84,14 @@ bool KisColorSpaceConvertVisitor::visit(KisPartLayer *)
 
 bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
+    if (layer->filter()->name() == "perchannel") {
+        // Per-channel filters need to be reset because of different number
+        // of channels. This makes undo very tricky, but so be it.
+        // XXX: Make this more generic for after 1.6, when we'll have many
+        // channel-specific filters. 
+        KisFilter * f = KisFilterRegistry::instance()->get("perchannel");
+        layer->setFilter(f->configuration());
+    }
     layer->resetCache();
     layer->setDirty();
     return true;

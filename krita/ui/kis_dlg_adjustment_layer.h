@@ -69,6 +69,7 @@ protected slots:
 
 private:
     KisImage * m_image;
+    KisPaintDeviceSP m_dev;
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
     QGroupBox * m_configWidgetHolder;

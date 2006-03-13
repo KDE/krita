@@ -54,21 +54,21 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     Q_ASSERT(img);
 
     KisLayerSP activeLayer = img->activeLayer();
-    KisPaintDeviceSP dev = 0;
+    m_dev = 0;
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(activeLayer.data());
     if (pl) {
-        dev = pl->paintDevice();
+        m_dev = pl->paintDevice();
     }
     else {
         KisGroupLayer * gl = dynamic_cast<KisGroupLayer*>(activeLayer.data());
         if (gl) {
-            dev = gl->projection(img->bounds());
+            m_dev = gl->projection(img->bounds());
         }
         else {
             KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(activeLayer.data());
             if (al) {
-                dev = al->cachedPaintDevice();
+                m_dev = al->cachedPaintDevice();
             }
         }
     }
@@ -85,12 +85,12 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    m_filtersList = new KisFiltersListView(dev, page, "dlgadjustment.filtersList");
+    m_filtersList = new KisFiltersListView(m_dev, page, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
-    m_preview->slotSetDevice( dev );
+    m_preview->slotSetDevice( m_dev );
 
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     grid->addWidget(m_preview, 1, 1);
@@ -171,11 +171,9 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
         m_labelNoConfigWidget->hide();
     }
 
-    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
-
-    if (activeLayer) {
+    if (m_dev) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_configWidgetHolder,
-                                                                           activeLayer->paintDevice());
+                                                                           m_dev);
     }
 
     if (m_currentConfigWidget != 0)

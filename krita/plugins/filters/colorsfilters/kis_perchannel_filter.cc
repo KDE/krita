@@ -180,9 +180,12 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         kdWarning() << "No configuration object for per-channel filter\n";
         return;
     }
-        
+    
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
-
+    if (configBC->nTransfers != src->colorSpace()->nColorChannels()) {
+        // We got an illegal number of colorchannels.KisFilter
+        return;
+    }
     KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 
 

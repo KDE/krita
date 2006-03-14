@@ -179,6 +179,8 @@ public:
     void setLocked(bool l);
     KNamedCommand *setLockedCommand(bool locked);
 
+    void notifyPropertyChanged();
+
     bool temporary() const;
     void setTemporary(bool t);
 
@@ -213,7 +215,6 @@ private:
     friend class KisGroupLayer;
 
     bool matchesFlags(int flags) const;
-    void notifyPropertyChanged();
 
     int m_id;
     int m_index;

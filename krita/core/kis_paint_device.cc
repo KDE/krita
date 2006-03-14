@@ -170,23 +170,15 @@ namespace {
         virtual void execute()
             {
                 m_adapter -> setUndo(false);
-
                 m_paintDevice -> setData(m_afterData, m_afterColorSpace);
-
                 m_adapter -> setUndo(true);
-                KisLayerSP l = m_paintDevice->parentLayer();
-                if (l) l->setDirty();
             }
 
         virtual void unexecute()
             {
                 m_adapter -> setUndo(false);
-
                 m_paintDevice -> setData(m_beforeData, m_beforeColorSpace);
-
                 m_adapter -> setUndo(true);
-                KisLayerSP l = m_paintDevice->parentLayer();
-                if (l) l->setDirty();
             }
 
     private:
@@ -638,10 +630,6 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
 
     setData(dst.m_datamanager, dstColorSpace);
 
-    if (m_parentLayer) {
-        m_parentLayer->setDirty(extent());
-    }
-
     if (undoAdapter() && undoAdapter() -> undo()) {
         undoAdapter() -> addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
@@ -665,6 +653,11 @@ void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
     m_colorSpace = colorSpace;
     m_pixelSize = m_colorSpace -> pixelSize();
     m_nChannels = m_colorSpace -> nChannels();
+
+    if (m_parentLayer) {
+        m_parentLayer->setDirty(extent());
+        m_parentLayer->notifyPropertyChanged();
+    }
 }
 
 KisUndoAdapter *KisPaintDevice::undoAdapter() const

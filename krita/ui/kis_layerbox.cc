@@ -251,6 +251,7 @@ void KisLayerBox::slotLayerPropertiesChanged(KisLayerSP layer)
         Q_ASSERT(item -> layer() == layer.data());
         item -> sync();
         updateUI();
+        markModified(layer);
     }
 }
 

@@ -148,7 +148,6 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
         QApplication::restoreOverrideCursor();
-        image -> notifyLayersChanged();
     }
     delete dlgColorSpaceConversion;
 }

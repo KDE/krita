@@ -416,6 +416,27 @@ void KisGrayU16ColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
+void KisGrayU16ColorSpace::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+{
+    COMMON_COMPOSITE_OP_PROLOG();
+
+    {
+        for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
+
+            Q_UINT16 srcColor = src[channel];
+            Q_UINT16 dstColor = dst[channel];
+
+            srcColor = QMIN(srcColor, dstColor);
+
+            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+
+            dst[channel] = newColor;
+        }
+    }
+
+    COMMON_COMPOSITE_OP_EPILOG();
+}
+
 void KisGrayU16ColorSpace::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();

@@ -34,6 +34,8 @@ public:
         
     KisDelayedActionIntegerInput(QWidget * parent, const char * name);
 
+    void cancelDelayedSignal();
+
 private slots:
     void slotValueChanged();
     void slotTimeToUpdate();

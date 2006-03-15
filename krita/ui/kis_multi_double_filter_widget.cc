@@ -44,7 +44,10 @@ void KisDelayedActionDoubleInput::slotValueChanged()
     emit valueChangedDelayed( value() );
 }
 
-
+void KisDelayedActionDoubleInput::cancelDelayedSignal()
+{
+    m_timer->stop();
+}
 
 KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, QString nlabel, QString nname) :
     min(nmin),
@@ -73,6 +76,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
         m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name.ascii());
         m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max );
         m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
+        m_doubleWidgets[i] -> cancelDelayedSignal();
 
         connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigPleaseUpdatePreview()));
 
@@ -92,6 +96,7 @@ void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * confi
     for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
         double val = config->getDouble(m_doubleWidgets[i]->name());
         m_doubleWidgets[i]->setValue(val);
+        m_doubleWidgets[i]->cancelDelayedSignal();
     }
 }
 

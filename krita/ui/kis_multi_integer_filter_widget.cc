@@ -43,6 +43,10 @@ void KisDelayedActionIntegerInput::slotValueChanged()
     emit valueChangedDelayed( value() );
 }
 
+void KisDelayedActionIntegerInput::cancelDelayedSignal()
+{
+    m_timer->stop();
+}
 
 KisIntegerWidgetParam::KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString label, QString nname) :
     min(nmin),
@@ -72,6 +76,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
         m_integerWidgets[i] = new KisDelayedActionIntegerInput( this, iwparam[i].name.ascii());
         m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
         m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
+        m_integerWidgets[i] -> cancelDelayedSignal();
 
         connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
 
@@ -91,6 +96,7 @@ void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * con
         if (w) {
             int val = config->getInt(m_integerWidgets[i]->name());
             m_integerWidgets[i]->setValue(val);
+            m_integerWidgets[i]->cancelDelayedSignal();
         }
     }
 }

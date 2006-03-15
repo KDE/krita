@@ -61,7 +61,7 @@ class KisPopulateVisitor: public KisLayerVisitor
 
         virtual bool visit(KisAdjustmentLayer* layer)
         {
-            add(layer) -> setPixmap(0, SmallIcon("filter", 16));
+            add(layer) -> setPixmap(0, SmallIcon("tool_filter", 16));
             return true;
         }
 

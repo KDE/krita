@@ -57,7 +57,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
         submenu.clear();
         submenu.insertItem( SmallIconSet( "file" ), i18n( "&Layer..." ), MenuItems::NewLayer );
         submenu.insertItem( SmallIconSet( "folder" ), i18n( "&Group Layer..." ), MenuItems::NewFolder );
-        submenu.insertItem( SmallIconSet( "filter" ), i18n( "&Adjustment Layer..." ), ADJUSTMENT_LAYER );
+        submenu.insertItem( SmallIconSet( "tool_filter" ), i18n( "&Adjustment Layer..." ), ADJUSTMENT_LAYER );
         m_partLayerAction->setText( i18n( "&Object Layer" ) );
         m_partLayerAction->plug( &submenu );
 
@@ -67,7 +67,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
     {
         contextMenu()->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), MenuItems::NewLayer );
         contextMenu()->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), MenuItems::NewFolder );
-        contextMenu()->insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
+        contextMenu()->insertItem( SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
         m_partLayerAction->setText( i18n( "New &Object Layer" ) );
         m_partLayerAction->plug( contextMenu() );
     }

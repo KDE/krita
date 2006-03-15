@@ -122,7 +122,7 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
     m_lst -> bnAdd -> setPopupDelay(1);
     m_newLayerMenu -> insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
     m_newLayerMenu -> insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), GROUP_LAYER );
-    m_newLayerMenu -> insertItem( SmallIconSet( "filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
+    m_newLayerMenu -> insertItem( SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
     m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
     m_partLayerAction -> plug( m_newLayerMenu );
     connect(m_partLayerAction, SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));

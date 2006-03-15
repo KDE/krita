@@ -28,3 +28,32 @@ selected is going to be too expensive>
 Thomas Zander
 
 
+Missing tooltips (Carsten N.)
+
+LEGEND: NTAA No Tooltip At All
+ 
+Missing tooltips:
+ 
+KComboBox in the toolbar (the with 'Pixel Brush' for example)
+ 
+Overview-widget: NTAA
+ 
+Histogram: No Tooltip. Well, there is nothing but the histogram, there should be at least something...
+ 
+Context-Widgets of the tools:
+ 
+Star: NTAA
+ 
+Brush: NTAA
+ 
+Line: NTAA
+ 
+Rectangle: NTAA
+ 
+Ellispse: NTAA
+ 
+Polygone: NTAA
+ 
+Polyline: NTAA
+ 
+Duplicate Brush: NTAA

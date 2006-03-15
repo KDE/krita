@@ -2695,8 +2695,12 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
 {
     KisImageSP img = currentImg();
     if (img) {
+        QString profilename;
+        if(img->colorSpace()->getProfile())
+            profilename = img->colorSpace()->getProfile()->productName();
         KisConfig cfg;
-        NewLayerDialog dlg(img->colorSpace()->id(), "", img->nextLayerName(), this);
+        NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), this);
+        dlg.setColorSpaceEnabled(false);
 
         if (dlg.exec() == QDialog::Accepted) {
             KisLayerSP layer = new KisGroupLayer(img, dlg.layerName(), dlg.opacity());

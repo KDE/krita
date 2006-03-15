@@ -46,6 +46,8 @@ public:
     KisID colorSpaceID() const;
     QString profileName() const;
 
+    void setColorSpaceEnabled(bool enabled);
+
 private slots:
     void fillCmbProfiles(const KisID & s);
     void fillCmbComposite(const KisID & s);

@@ -83,6 +83,12 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 */
 }
 
+void NewLayerDialog::setColorSpaceEnabled(bool enabled)
+{
+    m_page->cmbProfile->setEnabled(enabled);
+    m_page->cmbColorSpaces->setEnabled(enabled);
+}
+
 void NewLayerDialog::fillCmbProfiles(const KisID & s)
 {
     m_page->cmbProfile -> clear();

@@ -171,6 +171,7 @@ public:
 class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
     public:
         KisGenericLabHistogramProducer();
+        virtual ~KisGenericLabHistogramProducer();
         virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
         virtual QString positionToString(double pos) const;
         virtual double maximalZoom() const;

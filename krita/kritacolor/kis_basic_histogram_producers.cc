@@ -422,6 +422,12 @@ KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
     }
     m_colorSpace = m_labCs;
 }
+KisGenericLabHistogramProducer::~KisGenericLabHistogramProducer()
+{
+    delete m_channelsList[0];
+    delete m_channelsList[1];
+    delete m_channelsList[2];
+}
 
 QValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {
     return m_channelsList;

@@ -83,6 +83,9 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 
 KoBirdEyePanel::~KoBirdEyePanel()
 {
+    delete m_canvas;
+    delete m_thumbnailProvider;
+    delete m_zoomListener;
 }
 
 void KoBirdEyePanel::setZoom(int zoom)

@@ -182,9 +182,9 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     m_image = m_subject->currentImg();
 
-    m_zoomAdapter = new ZoomListener(m_subject->canvasController());
-    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);
-    KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);
+    m_zoomAdapter = new ZoomListener(m_subject->canvasController()); // The birdeye panel deletes
+    KoThumbnailAdapter * ktp = new ThumbnailProvider(m_image, m_subject);  // The birdeye panel deletes
+    KoCanvasAdapter * kpc = new CanvasAdapter(m_subject);  // The birdeye panel deletes
 
     m_birdEyePanel = new KoBirdEyePanel(m_zoomAdapter, ktp, kpc, this);
 

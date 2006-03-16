@@ -103,11 +103,15 @@ KisTileManager::~KisTileManager() {
     m_tempFile.close();
     m_tempFile.unlink();
 
+    delete m_poolPixelSizes;
+    delete m_pools;
+    
     m_poolMutex->unlock();
     delete m_poolMutex;
 
     m_swapMutex->unlock();
     delete m_swapMutex;
+
 }
 
 KisTileManager* KisTileManager::instance()

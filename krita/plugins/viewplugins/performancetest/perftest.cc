@@ -588,7 +588,27 @@ QString PerfTest::scaleTest(Q_UINT32 testCount)
 
 QString PerfTest::rotateTest(Q_UINT32 testCount)
 {
-    return QString("Rotate test\n");
+    QString report = QString("* Rotate test\n");
+
+    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+
+        KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+
+        QTime t;
+
+        for (uint i = 0; i < testCount; ++i) {
+            for (double angle = 0; angle < 360; ++angle) {
+                img->rotate(angle, m_view->canvasSubject()->progressDisplay());
+            }
+        }
+        report = report.append(QString("    rotated  1000 x 1000 pixels over 360 degrees, degree by degree, %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+        delete img;
+
+    }
+    return report;
 }
 
 QString PerfTest::renderTest(Q_UINT32 restCount)
@@ -619,7 +639,7 @@ QString PerfTest::colorConversionTest(Q_UINT32 testCount)
             
             t.restart();
             for (uint i = 0; i < testCount; ++i) {
-                KisImage * img2 = new KisImage(*img.data());
+                KisImage * img2 = new KisImage(*img);
                 img2->convertTo(KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it2,""));
                 delete img2;
             }

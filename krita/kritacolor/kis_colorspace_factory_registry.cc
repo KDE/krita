@@ -166,7 +166,8 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
             return 0;
 
         KisProfile *p = getProfileByName(profileName);
-
+        if(!p && profileName != "")
+            return 0;
         KisColorSpace *cs = csf -> createColorSpace(this, p);
         if(!cs)
             return 0;
@@ -194,7 +195,7 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
             if(!csf)
                 return 0;
 
-            KisColorSpace *cs = csf -> createColorSpace(this, const_cast<KisProfile *>(profile));
+            cs = csf -> createColorSpace(this, const_cast<KisProfile *>(profile));
             if(!cs )
                 return 0;
 

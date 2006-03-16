@@ -383,6 +383,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
     for (Q_UINT32 i = 0; i < m_pixelSize; ++i) {
         if (clearPixel[i] != clearPixel[0]) {
             pixelBytesAreTheSame = false;
+            break;
         }
     }
 
@@ -402,12 +403,9 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
 
         Q_UINT8 *clearPixelData = 0;
 
-        Q_INT32 numColumnsSpanned = lastColumn - firstColumn + 1;
-        Q_INT32 numRowsSpanned = lastRow - firstRow + 1;
+        if (w >= KisTile::WIDTH && h >= KisTile::HEIGHT) {
 
-        if (numColumnsSpanned > 2 && numRowsSpanned > 2) {
-
-            // There is at least one whole tile to be cleared so generate a cleared tile.
+            // There might be a whole tile to be cleared so generate a cleared tile.
             clearPixelData = new Q_UINT8[KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize];
 
             Q_UINT8 *dst = clearPixelData;

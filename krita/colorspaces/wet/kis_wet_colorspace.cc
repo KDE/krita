@@ -31,6 +31,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_image.h"
 #include "kis_wet_colorspace.h"
+#include "wetphysicsfilter.h"
 #include "kis_integer_maths.h"
 
 namespace {
@@ -187,7 +188,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * /*
             key = it.key();
         }
     }
-    
+
     // Translate the special QCOlors from our paintbox to wetpaint paints.
     if (m_conversionMap.contains(key)) {
         (*p).paint = m_conversionMap[key];
@@ -247,7 +248,7 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*pr
 
     WetPack * wp = (WetPack*)src;
 
-    // First the adsorption layers
+    // First the adsorption layer
     wet_composite(RGB, rgb, &wp -> adsorb);
 
     // Then the paint layer (which comes first in our double-packed pixel)
@@ -321,7 +322,6 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
         WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
         // XXX Probably won't work on MSB archs!
         wet_composite(BGR, rgb, &(wp -> adsorb));
-
         // Then the paint layer (which comes first in our double-packed pixel)
         wet_composite(BGR, rgb, &(wp -> paint));
 
@@ -432,7 +432,6 @@ void KisWetColorSpace::wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet)
     w = wet[0].rw >> 4;
     d = wet[0].rd >> 4;
 
-
     ab = wet_render_tab[d];
 
     wa = (w * (ab >> 16) + 0x80) >> 8;
@@ -506,3 +505,10 @@ QString KisWetColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 
+QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
+{
+    QValueList<KisFilter *> filterList;
+    KisFilter * f = new WetPhysicsFilter();
+    filterList << f;
+    return filterList;
+}

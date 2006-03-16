@@ -68,7 +68,7 @@ KisPaletteView::KisPaletteView(QWidget *parent, const char* name, int minWidth, 
     m_cells = 0;
     m_currentPalette = 0;
 
-    QSize cellSize = QSize( mMinWidth, 120);
+    QSize cellSize = QSize( mMinWidth, 50);
 
     setHScrollBarMode(QScrollView::AlwaysOff);
     setVScrollBarMode(QScrollView::AlwaysOn);

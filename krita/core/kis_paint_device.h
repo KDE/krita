@@ -21,6 +21,7 @@
 #include <qcolor.h>
 #include <qobject.h>
 #include <qpixmap.h>
+#include <qptrlist.h>
 #include <qrect.h>
 #include <qvaluelist.h>
 #include <qstring.h>
@@ -40,6 +41,7 @@ class QImage;
 class QSize;
 class QPoint;
 class QWMatrix;
+class QTimer;
 
 class KNamedCommand;
 
@@ -51,7 +53,7 @@ class KisImage;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisUndoAdapter;
-
+class KisFilter;
 class KisDataManager;
 typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -96,6 +98,7 @@ public:
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
     virtual DCOPObject *dcopObject();
+
 
 public:
 
@@ -499,13 +502,16 @@ signals:
     void ioProgress(Q_INT8 percentage);
     void profileChanged(KisProfile *  profile);
 
+private slots:
+
+    void runBackgroundFilters();
+    
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
 
-
 protected:
     KisDataManagerSP m_datamanager;
-
+    
 private:
     /* The KisLayer that contains this paint device, or 0 if this is not 
      * part of a layer.
@@ -532,6 +538,9 @@ private:
     DCOPObject * m_dcop;
 
     KisExifInfo* m_exifInfo;
+
+    QValueList<KisFilter*> m_longRunningFilters;
+    QTimer * m_longRunningFilterTimer;
 };
 
 inline Q_INT32 KisPaintDevice::pixelSize() const

@@ -603,7 +603,35 @@ QString PerfTest::selectionTest(Q_UINT32 testCount)
 
 QString PerfTest::colorConversionTest(Q_UINT32 testCount)
 {
-    return QString("Color conversion test");
+    QString report = QString("* Colorspace conversion test\n");
+
+    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+
+        KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+
+        QTime t;
+
+        KisIDList l2 = KisMetaRegistry::instance()->csRegistry()->listKeys();
+        for (KisIDList::Iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
+            kdDebug() << "test conversion from " << (*it).name() << " to " << (*it2).name() << endl;
+            
+            t.restart();
+            for (uint i = 0; i < testCount; ++i) {
+                KisImage * img2 = new KisImage(*img.data());
+                img2->convertTo(KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it2,""));
+                delete img2;
+            }
+            report = report.append(QString("    converted from " + (*it).name() + " to " + (*it2).name() + " 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
+
+        }
+
+        delete img;
+
+    }
+    return report;
+
 }
 
 QString PerfTest::filterTest(Q_UINT32 testCount)
@@ -615,21 +643,24 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
     KisDoc * doc = m_view -> canvasSubject() -> document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
-
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing filtering on " + (*it).name() + "\n");
 
-         KisImageSP img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
+        KisImageSP img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
         KisPaintDeviceSP l = img -> activeDevice();
 
         QTime t;
 
         for (KisIDList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+            
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
-            f -> enableProgress();
-            f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
-            f -> disableProgress();
+            kdDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->id().name() << endl;
+            for (int i = 0; i < testCount; ++i) {
+                f -> enableProgress();
+                f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
+                f -> disableProgress();
+            }
             report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
         }

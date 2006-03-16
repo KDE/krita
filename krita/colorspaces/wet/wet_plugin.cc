@@ -92,7 +92,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
 
         // Dry filter
-        KisFilterRegistry::instance() -> add( new WetPhysicsFilter() );
+        // KisFilterRegistry::instance() -> add( new WetPhysicsFilter() );
 
         // Texture Action:
         f -> addPaintDeviceAction(colorSpaceWet, new WetPaintDevAction);
@@ -114,9 +114,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
         w -> setCaption(i18n("Watercolors"));
 
-        m_view->canvasSubject()->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER);
-        m_view->canvasSubject()->paletteManager()->showWidget("hsvwidget");
-
+        m_view->canvasSubject()->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER,  false);
         m_view->canvasSubject() -> attach(w);
     }
 

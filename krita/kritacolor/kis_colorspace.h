@@ -22,6 +22,7 @@
 #include LCMS_HEADER
 
 #include <qvaluevector.h>
+#include <qvaluelist.h>
 
 #include "kis_composite_op.h"
 #include "kis_channelinfo.h"
@@ -31,6 +32,7 @@ class DCOPObject;
 class KisProfile;
 class KisColorSpaceFactoryRegistry;
 class KisMathToolbox;
+class KisFilter;
 
 struct KisColorAdjustment;
 
@@ -355,6 +357,7 @@ public:
      * Create a mathematical toolbox compatible with this colorspace
      */
     virtual KisID mathToolboxID() const =0;
+    
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same colour model, the source pixels will be
@@ -371,6 +374,14 @@ public:
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op) = 0;
+
+    /**
+     * The backgroundfilters will be run periodically on the newly
+     * created paint device. XXX: Currently this uses times and not
+     * threads.
+     */
+    virtual QValueList<KisFilter*> createBackgroundFilters()
+        { return QValueList<KisFilter*>(); };
 
 private:
 

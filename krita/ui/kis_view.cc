@@ -1245,23 +1245,21 @@ void KisView::layerUpdateGUI(bool enable)
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
 
-    if(pl &&
-       ( m_currentColorChooserDisplay == KisID("BLA") ||
-         pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay))
-    {
+    if (pl && ( m_currentColorChooserDisplay != KisID("BLA") ||
+                pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
         if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
-            m_paletteManager->hideWidget( "rgbwidget" );
             m_paletteManager->hideWidget( "hsvwidget" );
+            m_paletteManager->hideWidget( "rgbwidget" );
             m_paletteManager->hideWidget( "graywidget" );
             m_paletteManager->hideWidget( "palettewidget" );
             m_paletteManager->showWidget( "watercolor docker" );
         }
         else {
-            m_paletteManager->showWidget( "graywidget" );
-            m_paletteManager->showWidget( "palettewidget" );
-            m_paletteManager->showWidget( "rgbwidget" );
-            m_paletteManager->showWidget( "hsvwidget" );
             m_paletteManager->hideWidget( "watercolor docker" );
+            //m_paletteManager->showWidget( "palettewidget" );
+            m_paletteManager->showWidget( "graywidget" );
+            m_paletteManager->showWidget( "rgbwidget" );
+            //m_paletteManager->showWidget( "hsvwidget" );
         }
         m_currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
     }
@@ -3741,7 +3739,7 @@ void KisView::createDockers()
     connect(m_hsvwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
-    m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX);
+    m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
 
     m_rgbwidget = new KoRGBWidget(this, "rgb");
     m_rgbwidget -> setCaption(i18n("RGB"));
@@ -3777,7 +3775,7 @@ void KisView::createDockers()
         m_palettewidget -> slotAddPalette( *it );
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
-    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX);
+    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {

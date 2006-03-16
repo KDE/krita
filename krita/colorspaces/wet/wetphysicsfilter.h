@@ -69,11 +69,11 @@ private:
     void reducePixel (WetPixDbl *dst, WetPix *src, double dilution);
 
     /*
-         * Allows visualization of adsorption by rotating the hue 120 degrees
+     * Allows visualization of adsorption by rotating the hue 120 degrees
      * layer-merge combining. src1 is the top layer
-         *
+     *
      * This does not set the dst h or w fields.
-         */
+     */
     void mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1, WetPixDbl *src2);
 
 

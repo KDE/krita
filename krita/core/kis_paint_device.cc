@@ -21,6 +21,8 @@
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qapplication.h>
+#include <qvaluelist.h>
+#include <qtimer.h>
 
 #include <kcommand.h>
 #include <klocale.h>
@@ -202,9 +204,9 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
         kdWarning(41001) << "Cannot create paint device without colorstrategy!\n";
         return;
     }
-
+    m_longRunningFilterTimer = 0;
     m_dcop = 0;
-    Q_ASSERT(colorSpace != 0);
+    
     m_x = 0;
     m_y = 0;
 
@@ -227,13 +229,20 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     m_hasSelection = false;
     m_selectionDeselected = false;
     m_selection = 0;
+
+    m_longRunningFilters = colorSpace->createBackgroundFilters();
+    if (!m_longRunningFilters.isEmpty()) {
+        m_longRunningFilterTimer = new QTimer(this);
+        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
+        m_longRunningFilterTimer->start(800);
+    }
 }
 
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
         QObject(0, name), KShared(), m_exifInfo(0)
 {
     Q_ASSERT( colorSpace );
-
+    m_longRunningFilterTimer = 0;
     m_dcop = 0;
 
     m_x = 0;
@@ -262,11 +271,21 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     delete [] defPixel;
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
+
+    
+    m_longRunningFilters = colorSpace->createBackgroundFilters();
+    if (!m_longRunningFilters.isEmpty()) {
+        m_longRunningFilterTimer = new QTimer(this);
+        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
+        m_longRunningFilterTimer->start(800);
+    }
 }
 
+ 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(rhs)
 {
     if (this != &rhs) {
+        m_longRunningFilterTimer = 0;
         m_parentLayer = 0;
         m_dcop = rhs.m_dcop;
         if (rhs.m_datamanager) {
@@ -297,6 +316,14 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 KisPaintDevice::~KisPaintDevice()
 {
     delete m_dcop;
+    delete m_longRunningFilterTimer;
+    QValueList<KisFilter*>::iterator it;
+    QValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+    for (it = m_longRunningFilters.begin(); it != end; ++it) {
+        KisFilter * f = (*it);
+        delete f;
+    }
+    m_longRunningFilters.clear();
     //delete m_exifInfo;
 }
 
@@ -1116,5 +1143,17 @@ KisExifInfo* KisPaintDevice::exifInfo()
     return m_exifInfo;
 }
 
+void KisPaintDevice::runBackgroundFilters()
+{
+    QRect rc = extent();
+    if (!m_longRunningFilters.isEmpty()) {
+        QValueList<KisFilter*>::iterator it;
+        QValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+        for (it = m_longRunningFilters.begin(); it != end; ++it) {
+            (*it)->process(this, this, 0, rc);
+        }
+    }
+    if (m_parentLayer) m_parentLayer->setDirty(rc);
+}
 
 #include "kis_paint_device.moc"

@@ -44,27 +44,17 @@ void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 {
     // XXX: It would be nice be able to interleave this, instead of having the same loop over
     //      our pixels three times.
-    // XXX: Don't do the flow yet. It loops three times through the paint device and creates an enormous amount
-    //      of temporary data -- size arrays of doubles width * height of the paint device, and besides, it's
-    //      subject to the same problems as the Wet & Sticky model; the windscreen wiper effect.
-
-    // Because I don't want to put a timer here (yet), just do it 25 times
-    setProgressTotalSteps(25);
-    for (int i = 0; i < 25; i++) {
-        flow(src, dst, rect);
-        /*if (m_adsorbCount++ == 2) {
-            // XXX I think we could combine dry and adsorb, yes
-            adsorb(src, dst, rect);
-            dry(src, dst, rect);
-            m_adsorbCount = 0;
-        }*/
-        setProgress(i + 1);
+    flow(src, dst, rect);
+    if (m_adsorbCount++ == 2) {
+        // XXX I think we could combine dry and adsorb, yes
+        adsorb(src, dst, rect);
+        dry(src, dst, rect);
+        m_adsorbCount = 0;
     }
-    setProgressDone();
 }
 
 
-void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
+void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, const QRect & r)
 {
     /* XXX: Is this like a convolution operation? BSAR */
     int width = r.width();
@@ -142,11 +132,11 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
                 /* smooth out the flow a bit */
                 flow_t[ix] = CLAMP(0.1 * (10 + ft * 0.75 - fb * 0.25), 0, 1);
 
-                //flow_b[ix] = CLAMP(0.1 * (10 + fb * 0.75 - ft * 0.25), 0, 1);
+                flow_b[ix] = CLAMP(0.1 * (10 + fb * 0.75 - ft * 0.25), 0, 1);
 
-                //flow_l[ix] = CLAMP(0.1 * (10 + fl * 0.75 - fr * 0.25), 0, 1);
+                flow_l[ix] = CLAMP(0.1 * (10 + fl * 0.75 - fr * 0.25), 0, 1);
 
-                //flow_r[ix] = CLAMP(0.1 * (10 + fr * 0.75 - fl * 0.25), 0, 1);
+                flow_r[ix] = CLAMP(0.1 * (10 + fr * 0.75 - fl * 0.25), 0, 1);
 
                 outflow[ix] = 0;
             }
@@ -161,7 +151,6 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
         }
         ix+=2; // one for the last pixel on the line, and one for the first of the next line
     }
-
     // Second iteration: Reduce flow in dry areas
     ix = width + 1;
 
@@ -172,12 +161,12 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
                 /* reduce flow in dry areas */
                 flow_t[ix] *= fluid[ix] * fluid[ix - rs];
                 outflow[ix - rs] += flow_t[ix];
-                /*flow_b[ix] *= fluid[ix] * fluid[ix + rs];
+                flow_b[ix] *= fluid[ix] * fluid[ix + rs];
                 outflow[ix + rs] += flow_b[ix];
                 flow_l[ix] *= fluid[ix] * fluid[ix - 1];
                 outflow[ix - 1] += flow_l[ix];
                 flow_r[ix] *= fluid[ix] * fluid[ix + 1];
-                outflow[ix + 1] += flow_r[ix];*/
+                outflow[ix + 1] += flow_r[ix];
             }
             ++srcIt;
             ix++;
@@ -192,7 +181,7 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
         KisHLineIteratorPixel upIt = src->createHLineIterator(dx + 1, dy + y2 - 1, width - 2, false);
         KisHLineIteratorPixel downIt = src->createHLineIterator(dx + 1, dy + y2 + 1, width - 2, false);
 
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dx + 1, dy + y2, width - 2, true);
+        KisHLineIteratorPixel dstIt = src->createHLineIterator(dx + 1, dy + y2, width - 2, true);
 
         WetPix left = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
         ++srcIt;
@@ -209,14 +198,12 @@ void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QR
                 reducePixel(&wet_mix, &current, 1 - outflow[ix]);
                 reducePixel(&wet_tmp, &up, flow_t[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                /*
                 reducePixel(&wet_tmp, &down, flow_b[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
                 reducePixel(&wet_tmp, &left, flow_l[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
                 reducePixel(&wet_tmp, &right, flow_r[ix]);
                 combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                */
                 WetPix* target = reinterpret_cast<WetPix*>(dstIt.rawData());
                 wetPixFromDouble(target, &wet_mix);
             }
@@ -271,57 +258,50 @@ void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRe
 
 void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
 {
-    kdDebug(DBG_AREA_CMS) << "adsorbing" << endl;
     for (Q_INT32 y = 0; y < r.height(); y++) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), true);
 
         double ads;
 
         WetPixDbl wet_top;
         WetPixDbl wet_bot;
 
-        WetPack pack;
+        WetPack * pack;
         Q_UINT16 w;
 
         while (!srcIt.isDone()) {
             // Two wet pixels in one KisWetColorSpace pixels.
-            pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
-            WetPix* paint = &(pack.paint);
-            WetPix* adsorb = &(pack.adsorb);
+            pack = reinterpret_cast<WetPack*>(srcIt.rawData());
+            WetPix* paint = &pack->paint;
+            WetPix* adsorb = &pack->adsorb;
 
             /* do adsorption */
             w = paint -> w;
 
             if (w == 0) {
                 ++srcIt;
-                ++dstIt;
-                continue;
             }
+            else {
 
-            ads = 0.5 / QMAX(w, 1);
+                ads = 0.5 / QMAX(w, 1);
 
-            wetPixToDouble(&wet_top, paint);
-            wetPixToDouble(&wet_bot, adsorb);
+                wetPixToDouble(&wet_top, paint);
+                wetPixToDouble(&wet_bot, adsorb);
 
-            mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
+                mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
+                wetPixFromDouble(adsorb, &wet_bot);
 
-            wetPixFromDouble(adsorb, &wet_bot);
+                paint -> rd *= (Q_UINT16)(1 - ads);
+                paint -> rw *= (Q_UINT16)(1 - ads);
+                paint -> gd *= (Q_UINT16)(1 - ads);
+                paint -> gw *= (Q_UINT16)(1 - ads);
+                paint -> bd *= (Q_UINT16)(1 - ads);
+                paint -> bw *= (Q_UINT16)(1 - ads);
 
-            paint -> rd *= (Q_UINT16)(1 - ads);
-            paint -> rw *= (Q_UINT16)(1 - ads);
-            paint -> gd *= (Q_UINT16)(1 - ads);
-            paint -> gw *= (Q_UINT16)(1 - ads);
-            paint -> bd *= (Q_UINT16)(1 - ads);
-            paint -> bw *= (Q_UINT16)(1 - ads);
-
-            *(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
-
-            ++srcIt;
-            ++dstIt;
+                ++srcIt;
+            }
         }
     }
-    kdDebug(DBG_AREA_CMS) << "adsorbing done" << endl;
 }
 
 void WetPhysicsFilter::combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2)
@@ -356,7 +336,8 @@ void WetPhysicsFilter::reducePixel (WetPixDbl *dst, WetPix *src, double dilution
     dst->w *= dilution;
 }
 
-void WetPhysicsFilter::mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1, WetPixDbl *src2)
+void WetPhysicsFilter::mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1,
+                                   WetPixDbl *src2)
 {
     double d1, w1, d2, w2;
     double ed1, ed2;

@@ -145,7 +145,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // the paint
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
-    double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
+    double strength = 16.0 * static_cast<double>(paint.h) / (double)(0xffff);
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
     else

@@ -20,11 +20,13 @@
 
 #include <qcolor.h>
 #include <qstringlist.h>
+#include <qvaluelist.h>
 #include <qmap.h>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"
 
+class KisFilter;
 
 /**
  * The wet colourspace is one of the more complicated colour spaces. Every
@@ -67,7 +69,7 @@ struct _WetPix {
 };
 
 struct _WetPack {
-    WetPix paint;      /* Paint layer */
+    WetPix paint;  /* Paint layer */
     WetPix adsorb; /* Adsorbtion layer */
 };
 
@@ -142,7 +144,8 @@ public:
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-
+    virtual QValueList<KisFilter*> createBackgroundFilters();
+    
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
     void setPaintWetness(bool b) { m_paintwetness = b; } // XXX this needs better design!

@@ -401,7 +401,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
                 srcPixel = srcIt.oldRawData();
                 if (srcPixel[pixelSize - 1])
                 {
-                        fillPolyColor (src, dst, poly, srcPixel, dstPixel, rect);
+                    fillPolyColor (src, dst, poly, srcPixel, dstPixel, rect);
                 }
                 count++;
                 if ((count % 5) == 0) setProgress(count);

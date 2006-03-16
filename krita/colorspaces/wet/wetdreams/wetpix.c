@@ -275,9 +275,7 @@ void wet_pix_from_double(WetPix * dst, WetPixDbl * src)
 		v = 65535;
 	dst->rd = v;
 
-#if 0
 	g_print("src->rd = %f, dst->rd = %d\n", src->rd, dst->rd);
-#endif
 
 	v = floor(8192.0 * src->rw + 0.5);
 	if (v < 0)

@@ -72,7 +72,7 @@ Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
 
         QWidget * w = new Kross::Api::WdgScriptsManager(m_scriptguiclient, m_view);
 
-        m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager",krita::LAYERBOX, 10);
+        m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
 
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
         connect(m_scriptguiclient, SIGNAL(executionStarted( const Kross::Api::ScriptAction* )), this, SLOT(executionStarted(const Kross::Api::ScriptAction*)));

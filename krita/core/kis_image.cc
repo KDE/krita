@@ -890,7 +890,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
     lock();
 
     KisColorSpace * oldCs = m_colorSpace;
-    
+
     if (undoAdapter() && m_adapter->undo()) {
         m_adapter->beginMacro(i18n("Convert Image Type"));
         m_adapter->addCommand(new LockImageCommand(this, true));
@@ -1088,6 +1088,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
         if (player != 0) {
 
+            // XXX: This should also be done whenever a layer grows!
             QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry() -> paintDeviceActionsFor(player -> paintDevice() -> colorSpace());
             for (uint i = 0; i < actions.count(); i++) {

@@ -80,7 +80,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
     connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
     b = new KisColorCup(this);
-    b->setColor(QColor(254, 220, 64));
+    b->setColor(QColor(36, 180, 32));
     l -> addWidget(b, 0, 3);
     QToolTip::add(b,i18n("Hookers Green"));
     b -> setFixedSize(WIDTH, HEIGHT);

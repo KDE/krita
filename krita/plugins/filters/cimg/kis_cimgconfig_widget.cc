@@ -46,7 +46,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
     connect( m_page->numGradient, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numTimeStep, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numBlur, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( m_page->numBlurIterations, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( m_page->numBlurIterations, SIGNAL(valueChanged (int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numAngularStep, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numIntegralStep, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numGaussian, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));

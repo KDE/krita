@@ -49,6 +49,7 @@ KisTileManager::KisTileManager() {
     m_fileSize = 0;
     m_bytesInMem = 0;
     m_bytesTotal = 0;
+    m_swapForbidden = false;
 
     // Hardcoded (at the moment only?): 4 pools of 1000 tiles each
     m_tilesPerPool = 1000;
@@ -105,7 +106,7 @@ KisTileManager::~KisTileManager() {
 
     delete m_poolPixelSizes;
     delete m_pools;
-    
+
     m_poolMutex->unlock();
     delete m_poolMutex;
 
@@ -280,15 +281,59 @@ void KisTileManager::toSwap(TileInfo* info) {
             int newsize = m_fileSize + info -> size;
             newsize = newsize + newsize % pagesize;
 
-            ftruncate(m_tempFile.handle(), newsize);
+            if (ftruncate(m_tempFile.handle(), newsize)) {
+                // XXX make these maybe i18n()able and in an error box, but then through
+                // some kind of proxy such that we don't pollute this with GUI code
+                kdWarning(DBG_AREA_TILES) << "Resizing the temporary swapfile failed!" << endl;
+                // Be somewhat pollite and try to figure out why it failed
+                switch (errno) {
+                    case EIO: kdWarning(DBG_AREA_TILES) << "Error was E IO, "
+                            << "possible reason is a disk error!" << endl; break;
+                    case EINVAL: kdWarning(DBG_AREA_TILES) << "Error was E INVAL, "
+                            << "possible reason is that you are using more memory than "
+                            << "the filesystem or disk can handle" << endl; break;
+                    default: kdWarning(DBG_AREA_TILES) << "Errno was: " << errno << endl;
+                }
+                kdWarning(DBG_AREA_TILES) << "The swapfile is: " << m_tempFile.name() << endl;
+                kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
+
+                kdDebug(DBG_AREA_TILES) << "Failed ftruncate info: "
+                        << "tried mapping " << info -> size << " bytes"
+                        << "to a " << m_fileSize << " bytes file" << endl;
+                printInfo();
+
+                m_swapForbidden = true;
+                m_swapMutex -> unlock();
+                return;
+            }
 
             data = (Q_UINT8*) mmap(0, info -> size,
                                    PROT_READ | PROT_WRITE,
                                    MAP_SHARED,
                                    m_tempFile.handle(), m_fileSize);
 
+            // Same here for warning and GUI
             if (data == (Q_UINT8*)-1) {
-                kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're going to crash...\n";
+                kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
+
+                // Try to ignore what happened and carry on, but unlikely that we'll get
+                // much further, since the file resizing went OK and this is memory-related...
+                if (errno == ENOMEM) {
+                    kdWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that "
+                            << "either there are no more memory mappings available for Krita, "
+                            << "or that there is no more memory available!" << endl;
+                }
+
+                kdWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
+                kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
+                kdDebug(DBG_AREA_TILES) << "Failed mmap info: "
+                        << "tried mapping " << info -> size << " bytes"
+                        << "to a " << m_fileSize << " bytes file" << endl;
+                printInfo();
+
+                m_swapForbidden = true;
+                m_swapMutex -> unlock();
+                return;
             }
 
             info -> fsize = info -> size;
@@ -323,7 +368,7 @@ void KisTileManager::doSwapping()
 {
     m_swapMutex->lock();
 
-        if (m_currentInMem <= m_maxInMem) {
+    if (m_swapForbidden || m_currentInMem <= m_maxInMem) {
         m_swapMutex->unlock();
         return;
     }

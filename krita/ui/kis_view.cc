@@ -1256,10 +1256,10 @@ void KisView::layerUpdateGUI(bool enable)
         }
         else {
             m_paletteManager->hideWidget( "watercolor docker" );
-            //m_paletteManager->showWidget( "palettewidget" );
+            m_paletteManager->showWidget( "palettewidget" );
             m_paletteManager->showWidget( "graywidget" );
             m_paletteManager->showWidget( "rgbwidget" );
-            //m_paletteManager->showWidget( "hsvwidget" );
+            m_paletteManager->showWidget( "hsvwidget" );
         }
         m_currentColorChooserDisplay = pl->paintDevice()->colorSpace()->id();
     }

@@ -25,6 +25,7 @@ R  * Fix fill in wet
 Core
 
 P  * Fix part layers (nearly done)
+B  * Fix rotation growing and growing
 
 User interface
 
@@ -61,3 +62,5 @@ Regressions
 * painting in lab16 with a green color shows red fringes
 * zooming in leaves display artefacts (see Bart's mail)
 * Crash when setting the image colorspace to watercolor -- see CRASHES file.
+* Memory leaks in channel adjustment filters
+* setting undo false doesn't mean no undo information is collected

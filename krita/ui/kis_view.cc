@@ -3779,19 +3779,27 @@ void KisView::createDockers()
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {
-    return windowToView(p);
-/*
+    QPoint point(windowToView(p));
+
     if (m_hRuler -> isShown())
-        point.ry() -= m_hRuler -> height();
+        point.ry() += m_hRuler -> height();
     if (m_vRuler -> isShown())
-        point.rx() -= m_hRuler -> width();
-*/
+        point.rx() += m_vRuler -> width();
+
+    return point;
 }
 
 QPoint KisView::reverseViewTransformations(const QPoint& p) const {
     // Since we now zoom ourselves, the only thing super::~ does is nothing anymore.
     // Hence, zoom ourselves, like super would
-    return viewToWindow(p);
+    // viewToWindow doesn't take the rulers into account, do that ourselves
+    QPoint point(p);
+    if (m_hRuler -> isShown())
+        point.ry() -= m_hRuler -> height();
+    if (m_vRuler -> isShown())
+        point.rx() -= m_vRuler -> width();
+
+    return viewToWindow(point);
 }
 
 void KisView::canvasAddChild(KoViewChild *child) {

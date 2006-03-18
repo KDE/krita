@@ -782,7 +782,7 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
             m_numTiles++;
             updateExtent(col, row);
 
-            if (m_currentMemento) {
+            if (m_currentMemento && !m_currentMemento->containsTile(col, row, tileHash)) {
                 m_currentMemento->addTileToDeleteOnUndo(col, row);
             }
         }

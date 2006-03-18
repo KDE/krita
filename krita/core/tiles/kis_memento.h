@@ -45,6 +45,8 @@ public:
     void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
     QRect extent() const;
 
+    bool containsTile(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash) const;
+
     // For debugging use
     bool valid() const { return m_valid; }
     void setInvalid() { m_valid = false; }

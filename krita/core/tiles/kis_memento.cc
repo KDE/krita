@@ -136,4 +136,19 @@ QRect KisMemento::extent() const
     return QRect(x, y, w, h);
 }
 
+bool KisMemento::containsTile(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash) const
+{
+    const KisTile *tile = m_hashTable[tileHash];
+
+    while (tile != 0)
+    {
+        if (tile->getRow() == row && tile->getCol() == col) {
+            return true;
+        }
+
+        tile = tile->getNext();
+    }
+
+    return false;
+}
 

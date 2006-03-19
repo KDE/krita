@@ -50,7 +50,7 @@ DlgShearImage::DlgShearImage( QWidget *  parent,
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));
@@ -64,26 +64,26 @@ DlgShearImage::~DlgShearImage()
 
 void DlgShearImage::setAngleX(Q_UINT32 angle) 
 {
-    m_page -> shearAngleX -> setValue(angle);
+    m_page->shearAngleX->setValue(angle);
     m_oldAngle = angle;
 
 }
 
 void DlgShearImage::setAngleY(Q_UINT32 angle) 
 {
-    m_page -> shearAngleY -> setValue(angle);
+    m_page->shearAngleY->setValue(angle);
     m_oldAngle = angle;
 
 }
 
 Q_INT32 DlgShearImage::angleX()
 {
-    return (Q_INT32)qRound(m_page -> shearAngleX -> value());
+    return (Q_INT32)qRound(m_page->shearAngleX->value());
 }
 
 Q_INT32 DlgShearImage::angleY()
 {
-    return (Q_INT32)qRound(m_page -> shearAngleY -> value());
+    return (Q_INT32)qRound(m_page->shearAngleY->value());
 }
 
 // SLOTS

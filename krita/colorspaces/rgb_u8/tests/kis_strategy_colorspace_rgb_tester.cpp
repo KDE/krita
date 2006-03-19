@@ -58,31 +58,31 @@ void KisRgbColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = 64;
     pixel[PIXEL_ALPHA] = 0;
 
-    QString valueText = cs -> channelValueText(pixel, RED_CHANNEL);
+    QString valueText = cs->channelValueText(pixel, RED_CHANNEL);
     CHECK(valueText, QString("255"));
 
-    valueText = cs -> channelValueText(pixel, GREEN_CHANNEL);
+    valueText = cs->channelValueText(pixel, GREEN_CHANNEL);
     CHECK(valueText, QString("128"));
 
-    valueText = cs -> channelValueText(pixel, BLUE_CHANNEL);
+    valueText = cs->channelValueText(pixel, BLUE_CHANNEL);
     CHECK(valueText, QString("64"));
 
-    valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
+    valueText = cs->channelValueText(pixel, ALPHA_CHANNEL);
     CHECK(valueText, QString("0"));
 
-    valueText = cs -> normalisedChannelValueText(pixel, RED_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, RED_CHANNEL);
     CHECK(valueText, QString().setNum(1.0));
 
-    valueText = cs -> normalisedChannelValueText(pixel, GREEN_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, GREEN_CHANNEL);
     CHECK(valueText, QString().setNum(128.0 / 255.0));
 
-    valueText = cs -> normalisedChannelValueText(pixel, BLUE_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, BLUE_CHANNEL);
     CHECK(valueText, QString().setNum(64.0 / 255.0));
 
-    valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(0.0));
 
-    cs -> setPixel(pixel, 128, 192, 64, 99);
+    cs->setPixel(pixel, 128, 192, 64, 99);
     CHECK((uint)pixel[PIXEL_RED], 128u);
     CHECK((uint)pixel[PIXEL_GREEN], 192u);
     CHECK((uint)pixel[PIXEL_BLUE], 64u);
@@ -93,7 +93,7 @@ void KisRgbColorSpaceTester::testBasics()
     Q_UINT8 blue;
     Q_UINT8 alpha;
 
-    cs -> getPixel(pixel, &red, &green, &blue, &alpha);
+    cs->getPixel(pixel, &red, &green, &blue, &alpha);
     CHECK((uint)red, 128u);
     CHECK((uint)green, 192u);
     CHECK((uint)blue, 64u);
@@ -130,7 +130,7 @@ void KisRgbColorSpaceTester::testMixColors()
     weights[0] = 255;
     weights[1] = 0;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[PIXEL_RED], 255);
     CHECK((int)outputPixel[PIXEL_GREEN], 255);
@@ -140,7 +140,7 @@ void KisRgbColorSpaceTester::testMixColors()
     weights[0] = 0;
     weights[1] = 255;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[PIXEL_RED], 0);
     CHECK((int)outputPixel[PIXEL_GREEN], 0);
@@ -150,7 +150,7 @@ void KisRgbColorSpaceTester::testMixColors()
     weights[0] = 128;
     weights[1] = 127;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
      
     CHECK((int)outputPixel[PIXEL_RED], 255);
     CHECK((int)outputPixel[PIXEL_GREEN], 255);
@@ -167,7 +167,7 @@ void KisRgbColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 20;
     pixel2[PIXEL_ALPHA] = 255;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[PIXEL_RED], 150);
     CHECK((int)outputPixel[PIXEL_GREEN], 150);
@@ -187,7 +187,7 @@ void KisRgbColorSpaceTester::testMixColors()
     weights[0] = 89;
     weights[1] = 166;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[PIXEL_RED], 255);
     CHECK((int)outputPixel[PIXEL_GREEN], 255);

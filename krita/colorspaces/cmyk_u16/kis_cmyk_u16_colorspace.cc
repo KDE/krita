@@ -66,13 +66,13 @@ void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        Q_UINT32 alpha = pixel -> alpha;
+        Q_UINT32 alpha = pixel->alpha;
         Q_UINT32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
-        totalCyan += UINT16_MULT(pixel -> cyan, alphaTimesWeight);
-        totalMagenta += UINT16_MULT(pixel -> magenta, alphaTimesWeight);
-        totalYellow += UINT16_MULT(pixel -> yellow, alphaTimesWeight);
-        totalBlack += UINT16_MULT(pixel -> black, alphaTimesWeight);
+        totalCyan += UINT16_MULT(pixel->cyan, alphaTimesWeight);
+        totalMagenta += UINT16_MULT(pixel->magenta, alphaTimesWeight);
+        totalYellow += UINT16_MULT(pixel->yellow, alphaTimesWeight);
+        totalBlack += UINT16_MULT(pixel->black, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -83,7 +83,7 @@ void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
 
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> alpha = newAlpha;
+    dstPixel->alpha = newAlpha;
 
     if (newAlpha > 0) {
         totalCyan = UINT16_DIVIDE(totalCyan, newAlpha);
@@ -92,10 +92,10 @@ void KisCmykU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
         totalBlack = UINT16_DIVIDE(totalBlack, newAlpha);
     }
 
-    dstPixel -> cyan = totalCyan;
-    dstPixel -> magenta = totalMagenta;
-    dstPixel -> yellow = totalYellow;
-    dstPixel -> black = totalBlack;
+    dstPixel->cyan = totalCyan;
+    dstPixel->magenta = totalMagenta;
+    dstPixel->yellow = totalYellow;
+    dstPixel->black = totalBlack;
 }
 
 void KisCmykU16ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
@@ -519,7 +519,7 @@ void KisCmykU16ColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s -> alpha;
+            Q_UINT16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -530,7 +530,7 @@ void KisCmykU16ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = UINT16_MULT(srcAlpha, d -> alpha);
+            d->alpha = UINT16_MULT(srcAlpha, d->alpha);
         }
 
         dst += dstRowSize;

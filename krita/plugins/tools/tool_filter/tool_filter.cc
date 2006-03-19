@@ -52,11 +52,11 @@ ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r -> add( new KisToolFilterFactory());
+        r->add( new KisToolFilterFactory());
 
         // XXX: Put this in a separate plugin?
         KisPaintOpRegistry * pr = KisPaintOpRegistry::instance();
-        pr -> add( new KisFilterOpFactory );
+        pr->add( new KisFilterOpFactory );
 
      }
 }

@@ -517,7 +517,7 @@ void KisCmykColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT8 srcAlpha = s -> alpha;
+            Q_UINT8 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -528,7 +528,7 @@ void KisCmykColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = UINT8_MULT(srcAlpha, d -> alpha);
+            d->alpha = UINT8_MULT(srcAlpha, d->alpha);
         }
 
         dst += dstRowSize;

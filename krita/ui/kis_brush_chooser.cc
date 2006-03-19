@@ -32,8 +32,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 {
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
-    m_slSpacing -> setTickmarks(QSlider::Below);
-    m_slSpacing -> setTickInterval(1);
+    m_slSpacing->setTickmarks(QSlider::Below);
+    m_slSpacing->setTickInterval(1);
     QObject::connect(m_slSpacing, SIGNAL(valueChanged(double)), this, SLOT(slotSetItemSpacing(double)));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
@@ -43,17 +43,17 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
 
-    mainLayout -> addWidget(m_lbName);
-    mainLayout -> addWidget(chooserWidget(), 10);
+    mainLayout->addWidget(m_lbName);
+    mainLayout->addWidget(chooserWidget(), 10);
 
     QGridLayout *spacingLayout = new QGridLayout( 2, 2);
 
-    mainLayout -> addLayout(spacingLayout, 1);
+    mainLayout->addLayout(spacingLayout, 1);
 
-    spacingLayout -> addWidget(m_lbSpacing, 0, 0);
-    spacingLayout -> addWidget(m_slSpacing, 0, 1);
+    spacingLayout->addWidget(m_lbSpacing, 0, 0);
+    spacingLayout->addWidget(m_slSpacing, 0, 1);
 
-    spacingLayout -> addMultiCellWidget(m_chkColorMask, 1, 1, 0, 1);
+    spacingLayout->addMultiCellWidget(m_chkColorMask, 1, 1, 0, 1);
 }
 
 KisBrushChooser::~KisBrushChooser()
@@ -65,8 +65,8 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
     KisIconItem *item = static_cast<KisIconItem *>(currentItem());
 
     if (item) {
-        KisBrush *brush = static_cast<KisBrush *>(item -> resource());
-        brush -> setSpacing(spacingValue);
+        KisBrush *brush = static_cast<KisBrush *>(item->resource());
+        brush->setSpacing(spacingValue);
     }
 }
 
@@ -75,9 +75,9 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     KisIconItem *item = static_cast<KisIconItem *>(currentItem());
 
     if (item) {
-        KisBrush *brush = static_cast<KisBrush *>(item -> resource());
-        brush -> setUseColorAsMask(useColorAsMask);
-        item -> updatePixmaps();
+        KisBrush *brush = static_cast<KisBrush *>(item->resource());
+        brush->setUseColorAsMask(useColorAsMask);
+        item->updatePixmaps();
         emit selected(currentItem());
     }
 }
@@ -87,14 +87,14 @@ void KisBrushChooser::update(KoIconItem *item)
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 
     if (kisItem) {
-        KisBrush *brush = static_cast<KisBrush *>(kisItem -> resource());
+        KisBrush *brush = static_cast<KisBrush *>(kisItem->resource());
 
-        QString text = QString("%1 (%2 x %3)").arg(brush -> name()).arg(brush -> width()).arg(brush -> height());
+        QString text = QString("%1 (%2 x %3)").arg(brush->name()).arg(brush->width()).arg(brush->height());
 
-        m_lbName -> setText(text);
-        m_slSpacing -> setValue(brush -> spacing());
-        m_chkColorMask -> setChecked(brush -> useColorAsMask());
-        m_chkColorMask -> setEnabled(brush -> hasColor());
+        m_lbName->setText(text);
+        m_slSpacing->setValue(brush->spacing());
+        m_chkColorMask->setChecked(brush->useColorAsMask());
+        m_chkColorMask->setEnabled(brush->hasColor());
     }
 }
 

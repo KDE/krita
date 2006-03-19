@@ -121,18 +121,18 @@ void KisAlphaMask::computeAlpha(const QImage& img)
 
 KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP mask2, double t)
 {
-    Q_ASSERT((mask1 -> width() == mask2 -> width()) && (mask1 -> height() == mask2 -> height()));
+    Q_ASSERT((mask1->width() == mask2->width()) && (mask1->height() == mask2->height()));
     Q_ASSERT(t > -DBL_EPSILON && t < 1 + DBL_EPSILON);
 
-    int width = mask1 -> width();
-    int height = mask1 -> height();
+    int width = mask1->width();
+    int height = mask1->height();
     KisAlphaMaskSP outputMask = new KisAlphaMask(width, height);
     Q_CHECK_PTR(outputMask);
 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            Q_UINT8 d = static_cast<Q_UINT8>((1 - t) * mask1 -> alphaAt(x, y) + t * mask2 -> alphaAt(x, y));
-            outputMask -> setAlphaAt(x, y, d);
+            Q_UINT8 d = static_cast<Q_UINT8>((1 - t) * mask1->alphaAt(x, y) + t * mask2->alphaAt(x, y));
+            outputMask->setAlphaAt(x, y, d);
         }
     }
 

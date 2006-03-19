@@ -45,8 +45,8 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
             profile = new KisProfile(*it);
             Q_CHECK_PTR(profile);
 
-            profile -> load();
-            if (profile -> valid()) {
+            profile->load();
+            if (profile->valid()) {
                 m_profileMap[profile->productName()] = profile;
             }
         }
@@ -56,13 +56,13 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
     addProfile(labProfile);
     add(new KisLabColorSpaceFactory());
 /* XXX where to put this
-    KisHistogramProducerFactoryRegistry::instance() -> add(
+    KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("LABAHISTO", i18n("L*a*b* Histogram")), new KisLabColorSpace(this, 0);) );
 */
 
     // Load all colorspace modules
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/ColorSpace"),
+    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/ColorSpace"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
@@ -79,9 +79,9 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(DBG_AREA_PLUGINS) << "found colorspace " << service -> property("Name").toString() << "\n";
+            kdDebug(DBG_AREA_PLUGINS) << "found colorspace " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
                 kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
@@ -129,19 +129,19 @@ QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSp
 
 void KisColorSpaceFactoryRegistry::addProfile(KisProfile *p)
 {
-      if (p -> valid()) {
+      if (p->valid()) {
           m_profileMap[p->productName()] = p;
       }
 }
 
 void KisColorSpaceFactoryRegistry::addPaintDeviceAction(KisColorSpace* cs,
         KisPaintDeviceAction* action) {
-    m_paintDevActionMap[cs -> id()].append(action);
+    m_paintDevActionMap[cs->id()].append(action);
 }
 
 QValueVector<KisPaintDeviceAction *>
 KisColorSpaceFactoryRegistry::paintDeviceActionsFor(KisColorSpace* cs) {
-    return m_paintDevActionMap[cs -> id()];
+    return m_paintDevActionMap[cs->id()];
 }
 
 KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const QString & pName)
@@ -168,7 +168,7 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
         KisProfile *p = getProfileByName(profileName);
         if(!p && profileName != "")
             return 0;
-        KisColorSpace *cs = csf -> createColorSpace(this, p);
+        KisColorSpace *cs = csf->createColorSpace(this, p);
         if(!cs)
             return 0;
 
@@ -195,7 +195,7 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
             if(!csf)
                 return 0;
 
-            cs = csf -> createColorSpace(this, const_cast<KisProfile *>(profile));
+            cs = csf->createColorSpace(this, const_cast<KisProfile *>(profile));
             if(!cs )
                 return 0;
 

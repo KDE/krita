@@ -45,11 +45,11 @@ void KisImageTester::allTests()
 
 void KisImageTester::mergeTests()
 {
-    KisColorSpace * colorSpace = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""), "");
+    KisColorSpace * colorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""), "");
 
     KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, colorSpace, "merge test");
 
-    KisColor mergedPixel = image -> mergedPixel(0, 0);
+    KisColor mergedPixel = image->mergedPixel(0, 0);
 
     QColor colour;
     Q_UINT8 opacity;
@@ -63,7 +63,7 @@ void KisImageTester::mergeTests()
 
     layer->paintDevice()->setPixel(0, 0, QColor(255, 128, 64), OPACITY_OPAQUE);
 
-    mergedPixel = image -> mergedPixel(0, 0);
+    mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&colour, &opacity);
 
     CHECK(opacity, OPACITY_OPAQUE);
@@ -72,11 +72,11 @@ void KisImageTester::mergeTests()
     CHECK(colour.blue(), 64);
 
     KisPaintLayer * layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE / 2);
-    image -> addLayer(layer2, image->rootLayer(), layer);
+    image->addLayer(layer2, image->rootLayer(), layer);
 
     layer2->paintDevice()->setPixel(0, 0, QColor(255, 255, 255), OPACITY_OPAQUE);
 
-    mergedPixel = image -> mergedPixel(0, 0);
+    mergedPixel = image->mergedPixel(0, 0);
     mergedPixel.toQColor(&colour, &opacity);
 
     CHECK(opacity, OPACITY_OPAQUE);

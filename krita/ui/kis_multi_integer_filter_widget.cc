@@ -67,26 +67,26 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
     this->setCaption(caption);
 
     QGridLayout *widgetLayout = new QGridLayout(this, m_nbintegerWidgets + 1, 3);
-    widgetLayout -> setColStretch ( 1, 1 );
+    widgetLayout->setColStretch ( 1, 1 );
 
     m_integerWidgets = new KisDelayedActionIntegerInput*[ m_nbintegerWidgets ];
 
     for( Q_INT32 i = 0; i < m_nbintegerWidgets; ++i)
     {
         m_integerWidgets[i] = new KisDelayedActionIntegerInput( this, iwparam[i].name.ascii());
-        m_integerWidgets[i] -> setRange( iwparam[i].min, iwparam[i].max);
-        m_integerWidgets[i] -> setValue( iwparam[i].initvalue );
-        m_integerWidgets[i] -> cancelDelayedSignal();
+        m_integerWidgets[i]->setRange( iwparam[i].min, iwparam[i].max);
+        m_integerWidgets[i]->setValue( iwparam[i].initvalue );
+        m_integerWidgets[i]->cancelDelayedSignal();
 
         connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
 
         QLabel* lbl = new QLabel(iwparam[i].label+":", this);
-        widgetLayout -> addWidget( lbl, i , 0);
+        widgetLayout->addWidget( lbl, i , 0);
 
-        widgetLayout -> addWidget( m_integerWidgets[i], i , 1);
+        widgetLayout->addWidget( m_integerWidgets[i], i , 1);
     }
     QSpacerItem * sp = new QSpacerItem(1, 1);
-    widgetLayout -> addItem(sp, m_nbintegerWidgets, 0);
+    widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
 }
 
 void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config )

@@ -90,7 +90,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolSelectSimilar();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("selectsimilar", i18n("Select Similar")); }

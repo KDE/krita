@@ -94,9 +94,9 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
     m_cursor = cursor;
 
     if (m_subject) {
-        KisToolControllerInterface *controller = m_subject -> toolController();
+        KisToolControllerInterface *controller = m_subject->toolController();
 
-        if (controller && controller -> currentTool() == this) {
+        if (controller && controller->currentTool() == this) {
             m_subject->canvasController()->setCanvasCursor(m_cursor);
         }
     }
@@ -105,10 +105,10 @@ void KisToolNonPaint::setCursor(const QCursor& cursor)
 void KisToolNonPaint::activate()
 {
     if (m_subject) {
-        KisToolControllerInterface *controller = m_subject -> toolController();
+        KisToolControllerInterface *controller = m_subject->toolController();
 
         if (controller)
-            controller -> setCurrentTool(this);
+            controller->setCurrentTool(this);
     }
 }
 

@@ -89,7 +89,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolSelectOutline();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }

@@ -64,7 +64,7 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
         m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
 
         m_view = (KisView*) parent;
-        if (KisImageSP img = m_view -> canvasSubject() -> currentImg()) {
+        if (KisImageSP img = m_view->canvasSubject()->currentImg()) {
             connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
             connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
@@ -83,7 +83,7 @@ Histogram::~Histogram()
 }
 
 void Histogram::slotLayersChanged() {
-    m_action -> setEnabled(m_img && m_img -> activeLayer() && m_img -> activeLayer() -> visible());
+    m_action->setEnabled(m_img && m_img->activeLayer() && m_img->activeLayer()->visible());
 }
 
 void Histogram::slotActivated()
@@ -91,11 +91,11 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisPaintDeviceSP dev = m_view -> canvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceSP dev = m_view->canvasSubject()->currentImg()->activeDevice();
     if (dev)
-        dlgHistogram -> setPaintDevice(dev);
+        dlgHistogram->setPaintDevice(dev);
 
-    if (dlgHistogram -> exec() == QDialog::Accepted) {
+    if (dlgHistogram->exec() == QDialog::Accepted) {
         // Do nothing; this is an informational dialog
     }
     delete dlgHistogram;

@@ -47,7 +47,7 @@ DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
 
     setCaption(i18n("Histogram"));
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 }
 
 DlgHistogram::~DlgHistogram()
@@ -57,7 +57,7 @@ DlgHistogram::~DlgHistogram()
 
 void DlgHistogram::setPaintDevice(KisPaintDeviceSP dev)
 {
-    m_page -> setPaintDevice(dev);
+    m_page->setPaintDevice(dev);
 }
 
 void DlgHistogram::okClicked()

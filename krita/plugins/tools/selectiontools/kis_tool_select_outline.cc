@@ -71,7 +71,7 @@ void KisToolSelectOutline::activate()
     if (!m_optWidget)
         return;
 
-    m_optWidget -> slotActivated();
+    m_optWidget->slotActivated();
 }
 
 void KisToolSelectOutline::update (KisCanvasSubject *subject)
@@ -82,11 +82,11 @@ void KisToolSelectOutline::update (KisCanvasSubject *subject)
 
 void KisToolSelectOutline::buttonPress(KisButtonPressEvent *event)
 {
-    if (event -> button() == LeftButton) {
+    if (event->button() == LeftButton) {
         m_dragging = true;
 
-        m_dragStart = event -> pos();
-        m_dragEnd = event -> pos();
+        m_dragStart = event->pos();
+        m_dragEnd = event->pos();
         m_points.clear();
         m_points.append(m_dragStart);
     }
@@ -96,7 +96,7 @@ void KisToolSelectOutline::move(KisMoveEvent *event)
 {
     if (m_dragging) {
         m_dragStart = m_dragEnd;
-        m_dragEnd = event -> pos();
+        m_dragEnd = event->pos();
         m_points.append (m_dragEnd);
         // draw new lines on canvas
         draw();
@@ -108,23 +108,22 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject)
         return;
 
-    if (m_dragging && event -> button() == LeftButton) {
+    if (m_dragging && event->button() == LeftButton) {
         m_dragging = false;
         deactivate();
 
-        KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject->currentImg();
 
         if (img && img->activeDevice()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KisPaintDeviceSP dev = img -> activeDevice();
-            bool hasSelection = dev -> hasSelection();
-
-            //XXX: Fix string
-            KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
+            KisPaintDeviceSP dev = img->activeDevice();
+            bool hasSelection = dev->hasSelection();
+            KisSelectedTransaction *t = 0;
+            if (img->undo()) t = new KisSelectedTransaction(i18n("Outline Selection"), dev);
             KisSelectionSP selection = dev->selection();
 
             if (!hasSelection) {
-                selection -> clear();
+                selection->clear();
             }
 
             KisPainter painter(selection.data());
@@ -132,9 +131,9 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
             painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-            painter.setBrush(m_subject -> currentBrush());
+            painter.setBrush(m_subject->currentBrush());
             painter.setOpacity(OPACITY_OPAQUE);
-            KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, &painter);
+            KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter);
             painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
 
             switch (m_selectAction) {
@@ -156,8 +155,8 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
             else
                 dev->emitSelectionChanged();
 
-            if (img -> undoAdapter())
-                img -> undoAdapter() -> addCommand(t);
+            if (img->undo())
+                img->undoAdapter()->addCommand(t);
 
             QApplication::restoreOverrideCursor();
         }
@@ -179,8 +178,8 @@ void KisToolSelectOutline::paint(KisCanvasPainter& gc, const QRect&)
 void KisToolSelectOutline::draw()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> kiscanvas();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
         KisCanvasPainter gc(canvas);
 
         draw(gc);
@@ -198,13 +197,13 @@ void KisToolSelectOutline::draw(KisCanvasPainter& gc)
         gc.setPen(pen);
         gc.setRasterOp(Qt::XorROP);
 
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
         KisPoint start, end;
         QPoint startPos;
         QPoint endPos;
 
-        startPos = controller -> windowToView(m_dragStart.floorQPoint());
-        endPos = controller -> windowToView(m_dragEnd.floorQPoint());
+        startPos = controller->windowToView(m_dragStart.floorQPoint());
+        endPos = controller->windowToView(m_dragEnd.floorQPoint());
         gc.drawLine(startPos, endPos);
     }
 }
@@ -212,8 +211,8 @@ void KisToolSelectOutline::draw(KisCanvasPainter& gc)
 void KisToolSelectOutline::deactivate()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> kiscanvas();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
         KisCanvasPainter gc(canvas);
 
         QPen pen(Qt::white, 0, Qt::DotLine);
@@ -233,8 +232,8 @@ void KisToolSelectOutline::deactivate()
             } else {
                 end = (*it);
 
-                startPos = controller -> windowToView(start.floorQPoint());
-                endPos = controller -> windowToView(end.floorQPoint());
+                startPos = controller->windowToView(start.floorQPoint());
+                endPos = controller->windowToView(end.floorQPoint());
 
                 gc.drawLine(startPos, endPos);
 
@@ -246,7 +245,7 @@ void KisToolSelectOutline::deactivate()
 
 void KisToolSelectOutline::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Outline Selection"),
@@ -257,8 +256,8 @@ void KisToolSelectOutline::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action -> setExclusiveGroup("tools");
-        m_action -> setToolTip(i18n("Select an outline"));
+        m_action->setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Select an outline"));
         m_ownAction = true;
     }
 }
@@ -268,7 +267,7 @@ QWidget* KisToolSelectOutline::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Outline Selection"));
+    m_optWidget->setCaption(i18n("Outline Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

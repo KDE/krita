@@ -67,26 +67,26 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
     this->setCaption(caption);
 
     QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
-    widgetLayout -> setColStretch ( 1, 1 );
+    widgetLayout->setColStretch ( 1, 1 );
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
 
     for( Q_INT32 i = 0; i < m_nbdoubleWidgets; ++i)
     {
         m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name.ascii());
-        m_doubleWidgets[i] -> setRange( dwparam[i].min, dwparam[i].max );
-        m_doubleWidgets[i] -> setValue( dwparam[i].initvalue );
-        m_doubleWidgets[i] -> cancelDelayedSignal();
+        m_doubleWidgets[i]->setRange( dwparam[i].min, dwparam[i].max );
+        m_doubleWidgets[i]->setValue( dwparam[i].initvalue );
+        m_doubleWidgets[i]->cancelDelayedSignal();
 
         connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigPleaseUpdatePreview()));
 
         QLabel* lbl = new QLabel(dwparam[i].label+":", this);
-        widgetLayout -> addWidget( lbl, i , 0);
+        widgetLayout->addWidget( lbl, i , 0);
 
-        widgetLayout -> addWidget( m_doubleWidgets[i], i , 1);
+        widgetLayout->addWidget( m_doubleWidgets[i], i , 1);
     }
     QSpacerItem * sp = new QSpacerItem(1, 1);
-    widgetLayout -> addItem(sp, m_nbdoubleWidgets, 0);
+    widgetLayout->addItem(sp, m_nbdoubleWidgets, 0);
 
 }
 

@@ -33,9 +33,9 @@ public:
                                int x, int y, int w, int h, bool add = true)
         : m_producers(p), m_factory(f), m_x(x), m_y(y), m_w(w), m_h(h)
     {
-        m_producer = m_factory -> generate();
+        m_producer = m_factory->generate();
         if (add)
-            m_producers -> append(m_producer);
+            m_producers->append(m_producer);
     }
     virtual ~KisCachedHistogramObserver() {}
 

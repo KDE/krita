@@ -68,31 +68,31 @@ KisToolFreehand::~KisToolFreehand()
 void KisToolFreehand::update(KisCanvasSubject *subject)
 {
     super::update(subject);
-    m_currentImage = m_subject -> currentImg();
+    m_currentImage = m_subject->currentImg();
 }
 
 void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 {
     if (!m_subject) return;
 
-    if (!m_subject -> currentBrush()) return;
+    if (!m_subject->currentBrush()) return;
 
-    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
-    if (e -> button() == QMouseEvent::LeftButton) {
+    if (e->button() == QMouseEvent::LeftButton) {
         
         
         if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
         
         initPaint(e);
-        paintAt(e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+        paintAt(e->pos(), e->pressure(), e->xTilt(), e->yTilt());
 
-        m_prevPos = e -> pos();
-        m_prevPressure = e -> pressure();
-        m_prevXTilt = e -> xTilt();
-        m_prevYTilt = e -> yTilt();
+        m_prevPos = e->pos();
+        m_prevPressure = e->pressure();
+        m_prevXTilt = e->xTilt();
+        m_prevYTilt = e->yTilt();
 
-        QRect r = m_painter -> dirtyRect();
+        QRect r = m_painter->dirtyRect();
         if ( r.isValid() ) {
             m_dirtyRect = r;
 
@@ -115,7 +115,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
 void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
 {
-    if (e -> button() == QMouseEvent::LeftButton && m_mode == PAINT) {
+    if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
         endPaint();
     }
 }
@@ -124,14 +124,14 @@ void KisToolFreehand::move(KisMoveEvent *e)
 {
     if (m_mode == PAINT) {
 
-        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e -> pos(), e -> pressure(), e -> xTilt(), e -> yTilt());
+        paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e->pos(), e->pressure(), e->xTilt(), e->yTilt());
     
-        m_prevPos = e -> pos();
-        m_prevPressure = e -> pressure();
-        m_prevXTilt = e -> xTilt();
-        m_prevYTilt = e -> yTilt();
+        m_prevPos = e->pos();
+        m_prevPressure = e->pressure();
+        m_prevXTilt = e->xTilt();
+        m_prevYTilt = e->yTilt();
 
-        QRect r = m_painter -> dirtyRect();
+        QRect r = m_painter->dirtyRect();
 
         if (r.isValid()) {
             m_dirtyRect |= r;
@@ -155,21 +155,21 @@ void KisToolFreehand::move(KisMoveEvent *e)
 
 void KisToolFreehand::initPaint(KisEvent *)
 {
-    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
     KisPaintDeviceSP device;
-    if (m_currentImage && (device = m_currentImage -> activeDevice())) {
+    if (m_currentImage && (device = m_currentImage->activeDevice())) {
         
         if (m_painter)
             delete m_painter;
         
         if (!m_paintIncremental) {
-            if (m_currentImage -> undoAdapter())
-                m_currentImage -> undoAdapter() -> beginMacro(m_transactionText);
+            if (m_currentImage->undo())
+                m_currentImage->undoAdapter()->beginMacro(m_transactionText);
 
             //if (m_tempLayer == 0) {
                 // XXX ugly! hacky! We'd like to cache the templayer, but that makes sure
@@ -180,16 +180,16 @@ void KisToolFreehand::initPaint(KisEvent *)
                 m_target = (dynamic_cast<KisPaintLayer*>(m_tempLayer.data()))->paintDevice();
             //}
 
-            m_tempLayer -> setCompositeOp( m_compositeOp );
-            m_tempLayer -> setOpacity( m_opacity );
+            m_tempLayer->setCompositeOp( m_compositeOp );
+            m_tempLayer->setOpacity( m_opacity );
 
-            if (device -> hasSelection()) {
-                m_target -> addSelection(device -> selection());
+            if (device->hasSelection()) {
+                m_target->addSelection(device->selection());
             }
 
-            m_tempLayer -> setVisible(true);
+            m_tempLayer->setVisible(true);
 
-            currentImage() -> addLayer(m_tempLayer, m_currentImage -> activeLayer()->parent().data(), m_currentImage -> activeLayer());
+            currentImage()->addLayer(m_tempLayer, m_currentImage->activeLayer()->parent().data(), m_currentImage->activeLayer());
 
         } else {
             m_target = device;
@@ -197,21 +197,21 @@ void KisToolFreehand::initPaint(KisEvent *)
         m_painter = new KisPainter( m_target );
         Q_CHECK_PTR(m_painter);
         m_source = device;
-        m_painter -> beginTransaction(m_transactionText);
+        if (currentImage()->undo()) m_painter->beginTransaction(m_transactionText);
     }
 
-    m_painter -> setPaintColor(m_subject -> fgColor());
-    m_painter -> setBackgroundColor(m_subject -> bgColor());
-    m_painter -> setBrush(m_subject -> currentBrush());
+    m_painter->setPaintColor(m_subject->fgColor());
+    m_painter->setBackgroundColor(m_subject->bgColor());
+    m_painter->setBrush(m_subject->currentBrush());
 
 
     // if you're drawing on a temporary layer, the layer already sets this
     if (m_paintIncremental) {
-        m_painter -> setCompositeOp(m_compositeOp);
-        m_painter -> setOpacity(m_opacity);
+        m_painter->setCompositeOp(m_compositeOp);
+        m_painter->setOpacity(m_opacity);
     } else {
-        m_painter -> setCompositeOp(COMPOSITE_OVER);
-        m_painter -> setOpacity( OPACITY_OPAQUE );
+        m_painter->setCompositeOp(COMPOSITE_OVER);
+        m_painter->setOpacity( OPACITY_OPAQUE );
 
     }
 }
@@ -220,19 +220,19 @@ void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
     if (m_currentImage) {
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-        if (adapter && m_painter) {
+        
+        if (m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
             if (!m_paintIncremental) {
-                m_painter -> endTransaction();
+                if (m_currentImage->undo()) m_painter->endTransaction();
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
-                painter.beginTransaction(m_transactionText);
+                if (m_currentImage->undo()) painter.beginTransaction(m_transactionText);
                 painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, m_opacity,
                                m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
 
-                adapter -> addCommand(painter.endTransaction());
+                if (m_currentImage->undo()) m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
                 m_currentImage->removeLayer(m_tempLayer);
                 // The shared ptr layer vector in the group keeps the layer from being
                 // being removed if it isn't removed here. It would be much faster to
@@ -240,9 +240,9 @@ void KisToolFreehand::endPaint()
                 // old templayer with a new one at the end of paint prevents at least
                 // the pause when painting again.
                 //m_target->clear();
-                adapter -> endMacro();
+                if (m_currentImage->undo()) m_currentImage->undoAdapter()->endMacro();
             } else {
-                adapter -> addCommand(m_painter->endTransaction());
+                if (m_currentImage->undo()) m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
             }
         }
         delete m_painter;
@@ -256,7 +256,7 @@ void KisToolFreehand::paintAt(const KisPoint &pos,
                const double xTilt,
                const double yTilt)
 {
-    painter() -> paintAt(pos, pressure, xTilt, yTilt);
+    painter()->paintAt(pos, pressure, xTilt, yTilt);
 }
 
 void KisToolFreehand::paintLine(const KisPoint & pos1,
@@ -268,7 +268,7 @@ void KisToolFreehand::paintLine(const KisPoint & pos1,
                  const double xtilt2,
                  const double ytilt2)
 {
-    m_dragDist = painter() -> paintLine(pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
+    m_dragDist = painter()->paintLine(pos1, pressure1, xtilt1, ytilt1, pos2, pressure2, xtilt2, ytilt2, m_dragDist);
 }
 
 
@@ -283,44 +283,44 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
         return;
     }
 
-    KisCanvasController *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject->canvasController();
 
-    if (currentImage() && !currentImage() -> bounds().contains(point.floorQPoint())) {
+    if (currentImage() && !currentImage()->bounds().contains(point.floorQPoint())) {
         if (m_paintedOutline) {
-            controller -> kiscanvas() -> update();
+            controller->kiscanvas()->update();
             m_paintedOutline = false;
         }
         return;
     }
 
-    KisCanvas *canvas = controller -> kiscanvas();
-    canvas -> repaint();
+    KisCanvas *canvas = controller->kiscanvas();
+    canvas->repaint();
 
-    KisBrush *brush = m_subject -> currentBrush();
+    KisBrush *brush = m_subject->currentBrush();
     // There may not be a brush present, and we shouldn't crash in that case
     if (brush) {
         KisCanvasPainter gc(canvas);
         QPen pen(Qt::SolidLine);
 
-        KisPoint hotSpot = brush -> hotSpot();
+        KisPoint hotSpot = brush->hotSpot();
 
         gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
-        gc.setViewport(0, 0, static_cast<Q_INT32>(canvas -> width() * m_subject -> zoomFactor()),
-                       static_cast<Q_INT32>(canvas -> height() * m_subject -> zoomFactor()));
-        gc.translate((- controller -> horzValue()) / m_subject -> zoomFactor(),
-                        (- controller -> vertValue()) / m_subject -> zoomFactor());
+        gc.setViewport(0, 0, static_cast<Q_INT32>(canvas->width() * m_subject->zoomFactor()),
+                       static_cast<Q_INT32>(canvas->height() * m_subject->zoomFactor()));
+        gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
+                        (- controller->vertValue()) / m_subject->zoomFactor());
 
         KisPoint topLeft = point - hotSpot;
 
-        if (m_subject -> currentPaintop().id() == "pen") {
+        if (m_subject->currentPaintop().id() == "pen") {
             // Pen paints on whole pixels only.
             topLeft = topLeft.roundQPoint();
         }
 
         gc.translate(topLeft.x(), topLeft.y());
 
-        KisBoundaryPainter::paint(brush -> boundary(), gc);
+        KisBoundaryPainter::paint(brush->boundary(), gc);
         m_paintedOutline = true;
     }
 }

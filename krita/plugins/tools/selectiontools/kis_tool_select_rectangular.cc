@@ -73,7 +73,7 @@ void KisToolSelectRectangular::activate()
     if (!m_optWidget)
         return;
 
-    m_optWidget -> slotActivated();
+    m_optWidget->slotActivated();
 }
 
 void KisToolSelectRectangular::update(KisCanvasSubject *subject)
@@ -97,8 +97,8 @@ void KisToolSelectRectangular::paint(KisCanvasPainter& gc, const QRect& rc)
 void KisToolSelectRectangular::clearSelection()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisImageSP img = m_subject -> currentImg();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisImageSP img = m_subject->currentImg();
 
         Q_ASSERT(controller);
 
@@ -112,11 +112,11 @@ void KisToolSelectRectangular::clearSelection()
 void KisToolSelectRectangular::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject->currentImg();
 
-        if (img && img -> activeDevice() && e -> button() == LeftButton) {
+        if (img && img->activeDevice() && e->button() == LeftButton) {
             clearSelection();
-            m_startPos = m_endPos = m_centerPos = e -> pos();
+            m_startPos = m_endPos = m_centerPos = e->pos();
             m_selecting = true;
         }
     }
@@ -127,15 +127,15 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
     if (m_subject && m_selecting) {
         paintOutline();
         // move (alt) or resize rectangle
-        if (e -> state() & Qt::AltButton) {
-            KisPoint trans = e -> pos() - m_endPos;
+        if (e->state() & Qt::AltButton) {
+            KisPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            KisPoint diag = e -> pos() - (e -> state() & Qt::ControlButton
+            KisPoint diag = e->pos() - (e->state() & Qt::ControlButton
                     ? m_centerPos : m_startPos);
             // square?
-            if (e -> state() & Qt::ShiftButton) {
+            if (e->state() & Qt::ShiftButton) {
                 double size = QMAX(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
@@ -143,7 +143,7 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
             }
 
             // resize around center point?
-            if (e -> state() & Qt::ControlButton) {
+            if (e->state() & Qt::ControlButton) {
                 m_startPos = m_centerPos - diag;
                 m_endPos = m_centerPos + diag;
             } else {
@@ -158,14 +158,14 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
 
 void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && m_selecting && e -> button() == LeftButton) {
+    if (m_subject && m_selecting && e->button() == LeftButton) {
 
         paintOutline();
 
         if (m_startPos == m_endPos) {
             clearSelection();
         } else {
-            KisImageSP img = m_subject -> currentImg();
+            KisImageSP img = m_subject->currentImg();
 
             if (!img)
                 return;
@@ -173,22 +173,23 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
             if (m_endPos.y() < 0)
                 m_endPos.setY(0);
 
-            if (m_endPos.y() > img -> height())
-                m_endPos.setY(img -> height());
+            if (m_endPos.y() > img->height())
+                m_endPos.setY(img->height());
 
             if (m_endPos.x() < 0)
                 m_endPos.setX(0);
 
-            if (m_endPos.x() > img -> width())
-                m_endPos.setX(img -> width());
+            if (m_endPos.x() > img->width())
+                m_endPos.setX(img->width());
             if (img && img->activeDevice()) {
 
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                KisPaintDeviceSP dev = img -> activeDevice();
-                bool hasSelection = dev -> hasSelection();
-
-                KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
-                KisSelectionSP selection = dev -> selection();
+                KisPaintDeviceSP dev = img->activeDevice();
+                bool hasSelection = dev->hasSelection();
+                
+                KisSelectedTransaction *t = 0;
+                if (img->undo())  t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
+                KisSelectionSP selection = dev->selection();
                 QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
 
@@ -221,8 +222,8 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                 else
                     dev->emitSelectionChanged();
 
-                if (img -> undoAdapter())
-                    img -> undoAdapter() -> addCommand(t);
+                if (img->undo())
+                    img->undoAdapter()->addCommand(t);
 
                 QApplication::restoreOverrideCursor();
             }
@@ -235,8 +236,8 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 void KisToolSelectRectangular::paintOutline()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> kiscanvas();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
         KisCanvasPainter gc(canvas);
         QRect rc;
 
@@ -247,7 +248,7 @@ void KisToolSelectRectangular::paintOutline()
 void KisToolSelectRectangular::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::DotLine);
@@ -255,8 +256,8 @@ void KisToolSelectRectangular::paintOutline(KisCanvasPainter& gc, const QRect&)
         QPoint end;
 
         Q_ASSERT(controller);
-        start = controller -> windowToView(m_startPos.floorQPoint());
-        end = controller -> windowToView(m_endPos.floorQPoint());
+        start = controller->windowToView(m_startPos.floorQPoint());
+        end = controller->windowToView(m_endPos.floorQPoint());
 
         gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
@@ -273,7 +274,7 @@ void KisToolSelectRectangular::slotSetAction(int action) {
 
 void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Rectangular Selection"),
@@ -284,8 +285,8 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action -> setExclusiveGroup("tools");
-        m_action -> setToolTip(i18n("Select a rectangular area"));
+        m_action->setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Select a rectangular area"));
         m_ownAction = true;
     }
 }
@@ -294,7 +295,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Rectangular Selection"));
+    m_optWidget->setCaption(i18n("Rectangular Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

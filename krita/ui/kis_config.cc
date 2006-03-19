@@ -38,6 +38,7 @@ namespace {
     const Q_INT32 DEFAULT_SWAPPINESS = 100;
     const Q_INT32 DEFAULT_PRESSURE_CORRECTION = 50;
     const Q_INT32 DEFAULT_DOCKABILITY = 0;
+    const Q_INT32 DEFAULT_UNDO_LIMIT = 50;
 }
 
 KisConfig::KisConfig()
@@ -54,32 +55,64 @@ KisConfig::KisConfig()
 
 KisConfig::~KisConfig()
 {
-    m_cfg -> sync();
+    m_cfg->sync();
+}
+
+
+bool KisConfig::fixDockerWidth() const
+{
+    return m_cfg->readBoolEntry("fixDockerWidth", true);
+}
+
+void KisConfig::setFixedDockerWidth(bool fix)
+{
+    m_cfg->writeEntry("fixDockerWidth", fix);
+}
+
+bool KisConfig::undoEnabled() const
+{
+    return m_cfg->readBoolEntry("undoEnabled", true);
+}
+
+void KisConfig::setUndoEnabled(bool undo)
+{
+    m_cfg->writeEntry("undoEnabled", undo);
+}
+
+
+Q_INT32 KisConfig::defUndoLimit() const
+{
+    return m_cfg->readNumEntry("undolimit", DEFAULT_UNDO_LIMIT);
+}
+
+void KisConfig::defUndoLimit(Q_INT32 limit)
+{
+    m_cfg->writeEntry("undolimit", limit);
 }
 
 Q_INT32 KisConfig::defImgWidth() const
 {
-    return m_cfg -> readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
+    return m_cfg->readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
 }
 
 Q_INT32 KisConfig::defImgHeight() const
 {
-    return m_cfg -> readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
+    return m_cfg->readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
 double KisConfig::defImgResolution() const
 {
-    return m_cfg -> readDoubleNumEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
+    return m_cfg->readDoubleNumEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
 }
 
 void KisConfig::defImgWidth(Q_INT32 width)
 {
-    m_cfg -> writeEntry("imgWidthDef", width);
+    m_cfg->writeEntry("imgWidthDef", width);
 }
 
 void KisConfig::defImgHeight(Q_INT32 height)
 {
-    m_cfg -> writeEntry("imgHeightDef", height);
+    m_cfg->writeEntry("imgHeightDef", height);
 }
 
 void KisConfig::defImgResolution(double res)
@@ -89,7 +122,7 @@ void KisConfig::defImgResolution(double res)
 
 enumCursorStyle KisConfig::cursorStyle() const
 {
-    return (enumCursorStyle) m_cfg -> readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
+    return (enumCursorStyle) m_cfg->readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
 }
 
 enumCursorStyle KisConfig::getDefaultCursorStyle() const
@@ -99,62 +132,62 @@ enumCursorStyle KisConfig::getDefaultCursorStyle() const
 
 void KisConfig::setCursorStyle(enumCursorStyle style)
 {
-    m_cfg -> writeEntry("cursorStyleDef", style);
+    m_cfg->writeEntry("cursorStyleDef", style);
 }
 
 
 QString KisConfig::monitorProfile() const
 {
-    return m_cfg -> readEntry("monitorProfile", "None");
+    return m_cfg->readEntry("monitorProfile", "None");
 }
 
 void KisConfig::setMonitorProfile(QString monitorProfile)
 {
-    m_cfg -> writeEntry("monitorProfile", monitorProfile);
+    m_cfg->writeEntry("monitorProfile", monitorProfile);
 }
 
 
 QString KisConfig::workingColorSpace() const
 {
-    return m_cfg -> readEntry("workingColorSpace", "RGBA");
+    return m_cfg->readEntry("workingColorSpace", "RGBA");
 }
 
 void KisConfig::setWorkingColorSpace(QString workingColorSpace)
 {
-    m_cfg -> writeEntry(workingColorSpace, workingColorSpace);
+    m_cfg->writeEntry(workingColorSpace, workingColorSpace);
 }
 
 
 QString KisConfig::printerColorSpace() const
 {
-    return m_cfg -> readEntry("printerColorSpace", "CMYK");
+    return m_cfg->readEntry("printerColorSpace", "CMYK");
 }
 
 void KisConfig::setPrinterColorSpace(QString printerColorSpace)
 {
-    m_cfg -> writeEntry("printerColorSpace", printerColorSpace);
+    m_cfg->writeEntry("printerColorSpace", printerColorSpace);
 }
 
 
 QString KisConfig::printerProfile() const
 {
-    return m_cfg -> readEntry("printerProfile", "None");
+    return m_cfg->readEntry("printerProfile", "None");
 }
 
 void KisConfig::setPrinterProfile(QString printerProfile)
 {
-    m_cfg -> writeEntry("printerProfile", printerProfile);
+    m_cfg->writeEntry("printerProfile", printerProfile);
 }
 
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg -> readBoolEntry("useBlackPointCompensation", false);
+    return m_cfg->readBoolEntry("useBlackPointCompensation", false);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
 {
-    m_cfg -> writeEntry("useBlackPointCompensation", useBlackPointCompensation);
+    m_cfg->writeEntry("useBlackPointCompensation", useBlackPointCompensation);
 }
 
 
@@ -171,73 +204,73 @@ void KisConfig::setShowRulers(bool rulers)
 
 Q_INT32 KisConfig::pasteBehaviour() const
 {
-    return m_cfg -> readNumEntry("pasteBehaviour", 2);
+    return m_cfg->readNumEntry("pasteBehaviour", 2);
 }
 
 void KisConfig::setPasteBehaviour(Q_INT32 renderIntent)
 {
-    m_cfg -> writeEntry("pasteBehaviour", renderIntent);
+    m_cfg->writeEntry("pasteBehaviour", renderIntent);
 }
 
 
 Q_INT32 KisConfig::renderIntent() const
 {
-    return m_cfg -> readNumEntry("renderIntent", INTENT_PERCEPTUAL);
+    return m_cfg->readNumEntry("renderIntent", INTENT_PERCEPTUAL);
 }
 
 void KisConfig::setRenderIntent(Q_INT32 renderIntent)
 {
-    m_cfg -> writeEntry("renderIntent", renderIntent);
+    m_cfg->writeEntry("renderIntent", renderIntent);
 }
 
 bool KisConfig::useOpenGL() const
 {
-    return m_cfg -> readBoolEntry("useOpenGL", false);
+    return m_cfg->readBoolEntry("useOpenGL", false);
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL)
 {
-    m_cfg -> writeEntry("useOpenGL", useOpenGL);
+    m_cfg->writeEntry("useOpenGL", useOpenGL);
 }
 
 bool KisConfig::useOpenGLShaders() const
 {
-    return m_cfg -> readBoolEntry("useOpenGLShaders", false);
+    return m_cfg->readBoolEntry("useOpenGLShaders", false);
 }
 
 void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
 {
-    m_cfg -> writeEntry("useOpenGLShaders", useOpenGLShaders);
+    m_cfg->writeEntry("useOpenGLShaders", useOpenGLShaders);
 }
 
 Q_INT32 KisConfig::maxNumberOfThreads()
 {
-    return m_cfg -> readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
+    return m_cfg->readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
 }
 
 void KisConfig::setMaxNumberOfThreads(Q_INT32 maxThreads)
 {
-    m_cfg -> writeEntry("maxthreads", maxThreads);
+    m_cfg->writeEntry("maxthreads", maxThreads);
 }
 
 Q_INT32 KisConfig::maxTilesInMem() const
 {
-    return m_cfg -> readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
+    return m_cfg->readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
 }
 
 void KisConfig::setMaxTilesInMem(Q_INT32 tiles)
 {
-    m_cfg -> writeEntry("maxtilesinmem", tiles);
+    m_cfg->writeEntry("maxtilesinmem", tiles);
 }
 
 Q_INT32 KisConfig::swappiness() const
 {
-    return m_cfg -> readNumEntry("swappiness", DEFAULT_SWAPPINESS);
+    return m_cfg->readNumEntry("swappiness", DEFAULT_SWAPPINESS);
 }
 
 void KisConfig::setSwappiness(Q_INT32 swappiness)
 {
-    m_cfg -> writeEntry("swappiness", swappiness);
+    m_cfg->writeEntry("swappiness", swappiness);
 }
 
 Q_INT32 KisConfig::getPressureCorrection()
@@ -257,22 +290,22 @@ Q_INT32 KisConfig::getDefaultPressureCorrection()
 
 bool KisConfig::tabletDeviceEnabled(const QString& tabletDeviceName) const
 {
-    return m_cfg -> readBoolEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
+    return m_cfg->readBoolEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
 }
 
 void KisConfig::setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled)
 {
-    m_cfg -> writeEntry("TabletDevice" + tabletDeviceName + "Enabled", enabled);
+    m_cfg->writeEntry("TabletDevice" + tabletDeviceName + "Enabled", enabled);
 }
 
 Q_INT32 KisConfig::tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 defaultAxis) const
 {
-    return m_cfg -> readNumEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
+    return m_cfg->readNumEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
 }
 
 void KisConfig::setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 axis) const
 {
-    m_cfg -> writeEntry("TabletDevice" + tabletDeviceName + axisName, axis);
+    m_cfg->writeEntry("TabletDevice" + tabletDeviceName + axisName, axis);
 }
 
 void KisConfig::setDockability( Q_INT32 dockability )

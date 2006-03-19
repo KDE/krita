@@ -51,7 +51,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) 
     m_modal = false;
 
     QHBoxLayout *box = new QHBoxLayout(this);
-    box -> setAutoAdd(true);
+    box->setAutoAdd(true);
 
     QIconSet cancelIconSet = SmallIconSet("stop");
 
@@ -85,15 +85,17 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
         if (canCancel) {
             if (modal) {
-                m_cancelButton -> grabMouse();
-                m_cancelButton -> grabKeyboard();
+                kdDebug() << "grabbing 1\n";
+                m_cancelButton->grabMouse();
+                m_cancelButton->grabKeyboard();
             }
         }
         else {
-            m_cancelButton -> hide();
+            m_cancelButton->hide();
 
             if (modal) {
                 // Only visible widgets can grab.
+                kdDebug() << "grabbing 2\n";
                 grabMouse();
                 grabKeyboard();
             }
@@ -103,7 +105,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
             QApplication::setOverrideCursor(KisCursor::waitCursor());
         }
 
-        m_bar -> setValue(0);
+        m_bar->setValue(0);
     }
 }
 
@@ -146,7 +148,7 @@ bool KisLabelProgress::event(QEvent * e)
 void KisLabelProgress::reset()
 {
     if (m_subject) {
-        m_subject -> disconnect(this);
+        m_subject->disconnect(this);
         m_subject = 0;
 
         if (m_modal) {
@@ -158,18 +160,18 @@ void KisLabelProgress::reset()
 
     releaseMouse();
     releaseKeyboard();
-    m_cancelButton -> releaseMouse();
-    m_cancelButton -> releaseKeyboard();
+    m_cancelButton->releaseMouse();
+    m_cancelButton->releaseKeyboard();
     hide();
 }
 
 void KisLabelProgress::update(int percent)
 {
-    m_bar -> setValue(percent);
+    m_bar->setValue(percent);
 
     KApplication *app = KApplication::kApplication();
 
-    app -> processEvents();
+    app->processEvents();
     // The following is safer, but makes cancel impossible:
     //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
     //                                         QEventLoop::ExcludeSocketNotifiers);
@@ -177,18 +179,18 @@ void KisLabelProgress::update(int percent)
 
 void KisLabelProgress::updateStage(const QString&, int percent)
 {
-    m_bar -> setValue(percent);
+    m_bar->setValue(percent);
 
     KApplication *app = KApplication::kApplication();
     Q_ASSERT(app);
 
-    app -> processEvents();
+    app->processEvents();
 }
 
 void KisLabelProgress::cancelPressed()
 {
     if (m_subject) {
-        m_subject -> cancel();
+        m_subject->cancel();
         reset();
     }
 }

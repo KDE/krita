@@ -204,10 +204,10 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
-    m_exposureDoubleWidget -> setPrecision(1);
-    m_exposureDoubleWidget -> setValue(0);
-    m_exposureDoubleWidget -> setLineStep(0.1);
-    m_exposureDoubleWidget -> setPageStep(1);
+    m_exposureDoubleWidget->setPrecision(1);
+    m_exposureDoubleWidget->setValue(0);
+    m_exposureDoubleWidget->setLineStep(0.1);
+    m_exposureDoubleWidget->setPageStep(1);
 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
@@ -301,7 +301,7 @@ void KisBirdEyeBox::exposureSliderPressed()
 void KisBirdEyeBox::exposureSliderReleased()
 {
     m_draggingExposureSlider = false;
-    exposureValueChanged(m_exposureDoubleWidget -> value());
+    exposureValueChanged(m_exposureDoubleWidget->value());
 }
 
 #include "kis_birdeye_box.moc"

@@ -54,40 +54,40 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_image = image;
 
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
-    m_page -> txtName -> setText(image -> name());
+    m_page->txtName->setText(image->name());
     m_page->m_createButton->hide();
     KisConfig cfg;
 
-    m_page -> intWidth -> setValue(image -> width());
-    m_page -> intHeight -> setValue(image -> height());
+    m_page->intWidth->setValue(image->width());
+    m_page->intHeight->setValue(image->height());
 
-    m_page -> doubleResolution -> setValue(image -> xRes()); // XXX: separate values for x & y?
+    m_page->doubleResolution->setValue(image->xRes()); // XXX: separate values for x & y?
 
-    //m_page -> cmbColorSpaces -> hide();
-    //m_page -> lblColorSpaces -> setText(image->colorSpace()->id().name());
-    m_page->cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
+    //m_page->cmbColorSpaces->hide();
+    //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
+    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
             
-    fillCmbProfiles(image -> colorSpace() -> id());
+    fillCmbProfiles(image->colorSpace()->id());
 
-    if (image -> getProfile()) {
-        m_page -> cmbProfile -> setCurrentText(image -> getProfile() -> productName());
+    if (image->getProfile()) {
+        m_page->cmbProfile->setCurrentText(image->getProfile()->productName());
     }
     else {
-        m_page -> cmbProfile -> setCurrentItem(0);
+        m_page->cmbProfile->setCurrentItem(0);
     }
 
-    m_page -> sliderOpacity -> setEnabled(false); // XXX re-enable when figured out a way to do this
-    m_page -> opacityPanel -> hide();
-    m_page -> lblOpacity -> hide();
+    m_page->sliderOpacity->setEnabled(false); // XXX re-enable when figured out a way to do this
+    m_page->opacityPanel->hide();
+    m_page->lblOpacity->hide();
 
-    m_page -> cmbColor -> setEnabled(false); // XXX re-enable when figured out a way to do this
-    m_page -> cmbColor -> hide();
-    m_page -> lblColor -> hide();
+    m_page->cmbColor->setEnabled(false); // XXX re-enable when figured out a way to do this
+    m_page->cmbColor->hide();
+    m_page->lblColor->hide();
 
-    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
 
 
@@ -100,43 +100,43 @@ KisDlgImageProperties::~KisDlgImageProperties()
 
 int KisDlgImageProperties::imageWidth()
 {
-    return m_page -> intWidth -> value();
+    return m_page->intWidth->value();
 }
 
 int KisDlgImageProperties::imageHeight()
 {
-    return m_page -> intHeight -> value();
+    return m_page->intHeight->value();
 }
 
 int KisDlgImageProperties::opacity()
 {
-    return m_page -> sliderOpacity -> value();
+    return m_page->sliderOpacity->value();
 }
 
 QString KisDlgImageProperties::imageName()
 {
-    return m_page -> txtName -> text();
+    return m_page->txtName->text();
 }
 
 double KisDlgImageProperties::resolution()
 {
-    return m_page -> doubleResolution -> value();
+    return m_page->doubleResolution->value();
 }
 
 QString KisDlgImageProperties::description()
 {
-    return m_page -> txtDescription -> text();
+    return m_page->txtDescription->text();
 }
 
 KisColorSpace * KisDlgImageProperties::colorSpace()
 {
-    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(m_page->cmbColorSpaces -> currentItem(), m_page->cmbProfile->currentText());
+    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }
 
 KisProfile * KisDlgImageProperties::profile()
 {
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image -> colorSpace()->id() );
-    Q_UINT32 index = m_page -> cmbProfile -> currentItem();
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
+    Q_UINT32 index = m_page->cmbProfile->currentItem();
     return profileList.at(index);
 }
 
@@ -144,12 +144,12 @@ KisProfile * KisDlgImageProperties::profile()
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
-    m_page -> cmbProfile -> clear();
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    m_page->cmbProfile->clear();
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page -> cmbProfile -> insertItem((*it) -> productName());
+        m_page->cmbProfile->insertItem((*it)->productName());
     }
 
 

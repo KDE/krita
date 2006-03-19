@@ -139,7 +139,7 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     //KisScaleWorker worker(tmp, 1.0 / static_cast<double>(numberOfTiles), 1.0 / static_cast<double>(numberOfTiles), new KisMitchellFilterStrategy() );
     //worker.run();
 
-//     QRect tmpRect = tmp -> exactBounds();
+//     QRect tmpRect = tmp->exactBounds();
 //
 //     for( Q_UINT32 i=0; i < numberOfTiles; i++ )
 //     {
@@ -147,8 +147,8 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 //         {
 //             for( Q_INT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
 //             {
-//                 KisHLineIteratorPixel tmpIt = tmp -> createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
-//                 KisHLineIteratorPixel dstIt = dst -> createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
+//                 KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
+//                 KisHLineIteratorPixel dstIt = dst->createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);
 //
 //                 while( ! tmpIt.isDone() )
 //                 {

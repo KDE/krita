@@ -51,25 +51,25 @@ KisHistogramWidget::~KisHistogramWidget()
 
 void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
 {
-    grpType -> disconnect(this);
-    cmbChannel -> disconnect(this);
+    grpType->disconnect(this);
+    cmbChannel->disconnect(this);
 
-    m_histogramView -> setPaintDevice(dev);
+    m_histogramView->setPaintDevice(dev);
     setActiveChannel(0); // So we have the colored one if there are colors
 
     // The channels
-    cmbChannel -> clear();
-    cmbChannel -> insertStringList(m_histogramView -> channelStrings());
-    cmbChannel -> setCurrentItem(0);
+    cmbChannel->clear();
+    cmbChannel->insertStringList(m_histogramView->channelStrings());
+    cmbChannel->setCurrentItem(0);
 
     // View display
-    currentView -> setMinValue(0);
-    currentView -> setMaxValue(100);
+    currentView->setMinValue(0);
+    currentView->setMaxValue(100);
 
     updateEnabled();
 
-    m_from = m_histogramView -> currentProducer() -> viewFrom();
-    m_width = m_histogramView -> currentProducer() -> viewWidth();
+    m_from = m_histogramView->currentProducer()->viewFrom();
+    m_width = m_histogramView->currentProducer()->viewWidth();
 
     connect(grpType, SIGNAL(clicked(int)), this, SLOT(slotTypeSwitched(int)));
     connect(cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
@@ -80,16 +80,16 @@ void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
 
 void KisHistogramWidget::setActiveChannel(int channel)
 {
-    m_histogramView -> setActiveChannel(channel);
+    m_histogramView->setActiveChannel(channel);
     updateEnabled();
 }
 
 void KisHistogramWidget::slotTypeSwitched(int id)
 {
     if (id == LINEAR)
-        m_histogramView -> setHistogramType(LINEAR);
+        m_histogramView->setHistogramType(LINEAR);
     else if (id == LOGARITHMIC)
-        m_histogramView -> setHistogramType(LOGARITHMIC);
+        m_histogramView->setHistogramType(LOGARITHMIC);
 }
 
 void KisHistogramWidget::setView(double from, double size)
@@ -98,12 +98,12 @@ void KisHistogramWidget::setView(double from, double size)
     m_width = size;
     if (m_from + m_width > 1.0)
         m_from = 1.0 - m_width;
-    m_histogramView -> setView(m_from, m_width);
+    m_histogramView->setView(m_from, m_width);
     updateEnabled();
 }
 
 void KisHistogramWidget::slotZoomIn() {
-    if ((m_width / 2) >= m_histogramView -> currentProducer() -> maximalZoom()) {
+    if ((m_width / 2) >= m_histogramView->currentProducer()->maximalZoom()) {
         setView(m_from, m_width / 2);
     }
 }
@@ -120,25 +120,25 @@ void KisHistogramWidget::slide(int val) {
 }
 
 void KisHistogramWidget::updateEnabled() {
-    if (m_histogramView -> currentProducer() -> maximalZoom() < 1.0) {
-        if ((m_width / 2) >= m_histogramView -> currentProducer() -> maximalZoom()) {
-            zoomIn -> setEnabled(true);
+    if (m_histogramView->currentProducer()->maximalZoom() < 1.0) {
+        if ((m_width / 2) >= m_histogramView->currentProducer()->maximalZoom()) {
+            zoomIn->setEnabled(true);
         } else {
-            zoomIn -> setEnabled(false);
+            zoomIn->setEnabled(false);
         }
         if (m_width * 2 <= 1.0) {
-            zoomOut -> setEnabled(true);
+            zoomOut->setEnabled(true);
         } else {
-            zoomOut -> setEnabled(false);
+            zoomOut->setEnabled(false);
         }
         if (m_width < 1.0)
-            currentView -> setEnabled(true);
+            currentView->setEnabled(true);
         else
-            currentView -> setEnabled(false);
+            currentView->setEnabled(false);
     } else {
-        zoomIn -> setEnabled(false);
-        zoomOut -> setEnabled(false);
-        currentView -> setEnabled(false);
+        zoomIn->setEnabled(false);
+        zoomOut->setEnabled(false);
+        currentView->setEnabled(false);
     }
 }
 

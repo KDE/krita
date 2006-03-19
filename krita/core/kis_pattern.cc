@@ -64,8 +64,8 @@ KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image -> convertToQImage(0, x, y, w, h));
-    setName(image -> name());
+    setImage(image->convertToQImage(0, x, y, w, h));
+    setName(image->name());
 }
 
 KisPattern::~KisPattern()
@@ -327,8 +327,8 @@ void KisPattern::setImage(const QImage& img)
 KisPattern* KisPattern::clone() const
 {
     KisPattern* pattern = new KisPattern("");
-    pattern -> setImage(m_img);
-    pattern -> setName(name());
+    pattern->setImage(m_img);
+    pattern->setName(name());
     return pattern;
 }
 

@@ -99,118 +99,118 @@ PerfTest::~PerfTest()
 
 void PerfTest::slotPerfTest()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
     DlgPerfTest * dlgPerfTest = new DlgPerfTest(m_view, "PerfTest");
     Q_CHECK_PTR(dlgPerfTest);
 
-    dlgPerfTest -> setCaption(i18n("Performance Test"));
+    dlgPerfTest->setCaption(i18n("Performance Test"));
 
     QString report = QString("");
 
-        if (dlgPerfTest -> exec() == QDialog::Accepted) {
+        if (dlgPerfTest->exec() == QDialog::Accepted) {
 
-        Q_INT32 testCount = (Q_INT32)qRound(dlgPerfTest -> page() -> intTestCount -> value());
+        Q_INT32 testCount = (Q_INT32)qRound(dlgPerfTest->page()->intTestCount->value());
 
-        if (dlgPerfTest -> page() -> chkBitBlt -> isChecked()) {
+        if (dlgPerfTest->page()->chkBitBlt->isChecked()) {
             kdDebug() << "bltTest:\n";
             QString s = bltTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkFill -> isChecked()) {
+        if (dlgPerfTest->page()->chkFill->isChecked()) {
             kdDebug() << "Filltest\n";
             QString s= fillTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkGradient -> isChecked()) {
+        if (dlgPerfTest->page()->chkGradient->isChecked()) {
             kdDebug() << "Gradienttest\n";
             QString s = gradientTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkPixel -> isChecked()) {
+        if (dlgPerfTest->page()->chkPixel->isChecked()) {
             kdDebug() << "Pixeltest\n";
             QString s = pixelTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkShape -> isChecked()) {
+        if (dlgPerfTest->page()->chkShape->isChecked()) {
             kdDebug() << "Shapetest\n";
             QString s = shapeTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkLayer -> isChecked()) {
+        if (dlgPerfTest->page()->chkLayer->isChecked()) {
             kdDebug() << "LayerTest\n";
             QString s = layerTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkScale -> isChecked()) {
+        if (dlgPerfTest->page()->chkScale->isChecked()) {
             kdDebug() << "Scaletest\n";
             QString s = scaleTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkRotate -> isChecked()) {
+        if (dlgPerfTest->page()->chkRotate->isChecked()) {
             kdDebug() << "Rotatetest\n";
             QString s = rotateTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkRender -> isChecked()) {
+        if (dlgPerfTest->page()->chkRender->isChecked()) {
             kdDebug() << "Rendertest\n";
             QString s = renderTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkSelection -> isChecked()) {
+        if (dlgPerfTest->page()->chkSelection->isChecked()) {
             kdDebug() << "Selectiontest\n";
             QString s = selectionTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkColorConversion -> isChecked()) {
+        if (dlgPerfTest->page()->chkColorConversion->isChecked()) {
             kdDebug() << "Colorconversiontest\n";
             QString s = colorConversionTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkFilter-> isChecked()) {
+        if (dlgPerfTest->page()->chkFilter-> isChecked()) {
             kdDebug() << "filtertest\n";
             QString s = filterTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkReadBytes -> isChecked()) {
+        if (dlgPerfTest->page()->chkReadBytes->isChecked()) {
             kdDebug() << "Readbytes test\n";
             QString s = readBytesTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkWriteBytes-> isChecked()) {
+        if (dlgPerfTest->page()->chkWriteBytes-> isChecked()) {
             kdDebug() << "Writebytes test\n";
             QString s = writeBytesTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkIterators -> isChecked()) {
+        if (dlgPerfTest->page()->chkIterators->isChecked()) {
             kdDebug() << "Iterators test\n";
             QString s = iteratorTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkPaintView -> isChecked()) {
+        if (dlgPerfTest->page()->chkPaintView->isChecked()) {
             kdDebug() << "paintview test\n";
             QString s = paintViewTest(testCount);
             report = report.append(s);
             kdDebug() << s << "\n";
         }
-        if (dlgPerfTest -> page() -> chkPaintViewFPS -> isChecked()) {
+        if (dlgPerfTest->page()->chkPaintViewFPS->isChecked()) {
             kdDebug() << "paint current view (fps) test\n";
             QString s = paintViewFPSTest();
             report = report.append(s);
@@ -219,14 +219,14 @@ void PerfTest::slotPerfTest()
         KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
         Q_CHECK_PTR(d);
 
-        d -> setCaption("Performance test results");
+        d->setCaption("Performance test results");
         QTextEdit * e = new QTextEdit(d);
         Q_CHECK_PTR(e);
-        d -> setMainWidget(e);
-        e -> setText(report);
-        e -> setMinimumWidth(600);
-        e -> setMinimumHeight(600);
-        d -> exec();
+        d->setMainWidget(e);
+        e->setText(report);
+        e->setMinimumWidth(600);
+        e->setMinimumHeight(600);
+        d->exec();
         delete d;
 
     }
@@ -237,17 +237,17 @@ QString PerfTest::bltTest(Q_UINT32 testCount)
 {
     QString report = QString("* bitBlt test\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
-    KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
+    KisDoc * doc = m_view->canvasSubject()->document();
+    KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
 
-        kdDebug() << "Image -> " << (*it).name() << "\n";
+        kdDebug() << "Image->" << (*it).name() << "\n";
 
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
-         KisImageSP img = doc -> newImage("blt-" + (*it).name(), 1000, 1000,
-                KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
+         KisImageSP img = doc->newImage("blt-" + (*it).name(), 1000, 1000,
+                KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
 
         report = report.append(doBlit(COMPOSITE_OVER, *it, OPACITY_OPAQUE, testCount, img));
         report = report.append( "\n");
@@ -278,7 +278,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Small
 
-    KisPaintDeviceSP small = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace,""), "small blit");
+    KisPaintDeviceSP small = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit");
     Q_CHECK_PTR(small);
 
     KisFillPainter pf(small.data()) ;
@@ -286,7 +286,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     pf.end();
 
     t.restart();
-    KisPainter p(img -> activeDevice());
+    KisPainter p(img->activeDevice());
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         p.bitBlt(0, 0, op, small.data(),0,0,32, 32);
     }
@@ -301,7 +301,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
 
     // ------------------------------------------------------------------------------
     // Medium
-    KisPaintDeviceSP medium = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace,""), "medium blit");
+    KisPaintDeviceSP medium = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "medium blit");
     Q_CHECK_PTR(medium);
 
     pf.begin(medium.data()) ;
@@ -309,7 +309,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     pf.end();
 
     t.restart();
-    p.begin(img -> activeDevice().data());
+    p.begin(img->activeDevice().data());
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         p.bitBlt(0, 0, op, medium.data(),0,0,96, 96);
     }
@@ -324,7 +324,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
 
     // ------------------------------------------------------------------------------
     // Big
-    KisPaintDeviceSP big = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace,""), "big blit");
+    KisPaintDeviceSP big = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "big blit");
     Q_CHECK_PTR(big);
 
     pf.begin(big.data()) ;
@@ -332,7 +332,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     pf.end();
 
     t.restart();
-    p.begin(img -> activeDevice().data());
+    p.begin(img->activeDevice().data());
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         p.bitBlt(0, 0, op, big.data(),0,0,800,800);
 
@@ -348,14 +348,14 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Outside
 
-    KisPaintDeviceSP outside = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace,""), "outside blit");
+    KisPaintDeviceSP outside = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "outside blit");
     Q_CHECK_PTR(outside);
     pf.begin(outside.data()) ;
     pf.fillRect(0, 0, 500, 500, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     pf.end();
 
     t.restart();
-    p.begin(img -> activeDevice().data());
+    p.begin(img->activeDevice().data());
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         p.bitBlt(600, 600, op, outside.data(),0,0,500,500);
 
@@ -370,7 +370,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Small with varied source opacity
 
-    KisPaintDeviceSP small_with_alpha = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace,""), "small blit with alpha");
+    KisPaintDeviceSP small_with_alpha = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit with alpha");
     Q_CHECK_PTR(small_with_alpha);
 
     pf.begin(small_with_alpha.data()) ;
@@ -380,7 +380,7 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     pf.end();
 
     t.restart();
-    p.begin(img -> activeDevice().data());
+    p.begin(img->activeDevice().data());
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         p.bitBlt(0, 0, op, small_with_alpha.data(), 0, 0, 32, 32);
     }
@@ -400,16 +400,16 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
 {
     QString report = QString("* Fill test\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
-    KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
+    KisDoc * doc = m_view->canvasSubject()->document();
+    KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         kdDebug() << "Filltest on " << (*it).name() + "\n";
 
         report = report.append( "  Testing blitting on " + (*it).name() + "\n");
 
-        KisImageSP img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
-        KisPaintDeviceSP l = img -> activeDevice();
+        KisImageSP img = doc->newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+        KisPaintDeviceSP l = img->activeDevice();
 
         // Rect fill
         KisFillPainter p(l.data());
@@ -498,9 +498,9 @@ QString PerfTest::fillTest(Q_UINT32 testCount)
             p.eraseRect(0, 0, 1000, 1000);
 //             p.paintEllipse(500, 1000, 100, 0, 0);
             p.setPaintColor(KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
-            KisResourceServerBase* r = KisResourceServerRegistry::instance() -> get("PatternServer");
+            KisResourceServerBase* r = KisResourceServerRegistry::instance()->get("PatternServer");
             Q_CHECK_PTR(r);
-            p.setPattern((KisPattern*)r -> resources().first());
+            p.setPattern((KisPattern*)r->resources().first());
             p.setFillThreshold(15);
             p.setCompositeOp(COMPOSITE_OVER);
             p.fillPattern(0,0);
@@ -526,16 +526,16 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
 {
     QString report = QString("* pixel/setpixel test\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
-    KisIDList l = KisMetaRegistry::instance()->csRegistry() -> listKeys();
+    KisDoc * doc = m_view->canvasSubject()->document();
+    KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing pixel/setpixel on " + (*it).name() + "\n");
 
-         KisImageSP img = doc -> newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
+         KisImageSP img = doc->newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
 
-        KisPaintDeviceSP l = img -> activeDevice();
+        KisPaintDeviceSP l = img->activeDevice();
 
          QTime t;
          t.restart();
@@ -545,7 +545,7 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
          for (Q_UINT32 i = 0; i < testCount; ++i) {
             for (Q_UINT32 x = 0; x < 1000; ++x) {
                 for (Q_UINT32 y = 0; y < 1000; ++y) {
-                    l -> pixel(x, y, &c, &opacity);
+                    l->pixel(x, y, &c, &opacity);
                 }
             }
          }
@@ -556,7 +556,7 @@ QString PerfTest::pixelTest(Q_UINT32 testCount)
          for (Q_UINT32 i = 0; i < testCount; ++i) {
             for (Q_UINT32 x = 0; x < 1000; ++x) {
                 for (Q_UINT32 y = 0; y < 1000; ++y) {
-                    l -> setPixel(x, y, c, 128);
+                    l->setPixel(x, y, c, 128);
                 }
             }
          }
@@ -590,23 +590,23 @@ QString PerfTest::rotateTest(Q_UINT32 testCount)
 {
     QString report = QString("* Rotate test\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisDoc * doc = m_view->canvasSubject()->document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
 
         KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
-
+        doc->undoAdapter()->setUndo( false );
         QTime t;
 
         for (uint i = 0; i < testCount; ++i) {
             for (double angle = 0; angle < 360; ++angle) {
+                kdDebug() << "Rotating " << (*it).name() << " at " << angle << " degrees\n";
                 img->rotate(angle, m_view->canvasSubject()->progressDisplay());
+                kdDebug() << "Size: " << img->projection()->extent() << endl;
             }
         }
         report = report.append(QString("    rotated  1000 x 1000 pixels over 360 degrees, degree by degree, %1 times: %2\n").arg(testCount).arg(t.elapsed()));
-
         delete img;
-
     }
     return report;
 }
@@ -625,7 +625,7 @@ QString PerfTest::colorConversionTest(Q_UINT32 testCount)
 {
     QString report = QString("* Colorspace conversion test\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisDoc * doc = m_view->canvasSubject()->document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
 
@@ -660,14 +660,14 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
     QString report = QString("* Filter test\n");
 
     KisIDList filters = KisFilterRegistry::instance()->listKeys();
-    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisDoc * doc = m_view->canvasSubject()->document();
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing filtering on " + (*it).name() + "\n");
 
-        KisImageSP img = doc -> newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(*it,""));
-        KisPaintDeviceSP l = img -> activeDevice();
+        KisImageSP img = doc->newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+        KisPaintDeviceSP l = img->activeDevice();
 
         QTime t;
 
@@ -676,10 +676,10 @@ QString PerfTest::filterTest(Q_UINT32 testCount)
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
             kdDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->id().name() << endl;
-            for (int i = 0; i < testCount; ++i) {
-                f -> enableProgress();
-                f -> process(l.data(), l.data(), f -> configuration(f -> createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
-                f -> disableProgress();
+            for (Q_UINT32 i = 0; i < testCount; ++i) {
+                f->enableProgress();
+                f->process(l.data(), l.data(), f->configuration(f->createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
+                f->disableProgress();
             }
             report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
@@ -695,17 +695,17 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
     QString report = QString("* Read bytes test\n\n");
 
     // On default tiles
-    KisDoc * doc = m_view -> canvasSubject() -> document();
-    KisImageSP img = doc -> newImage("Readbytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisDoc * doc = m_view->canvasSubject()->document();
+    KisImageSP img = doc->newImage("Readbytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+        Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l->pixelSize()];
         Q_CHECK_PTR(newData);
-        l -> readBytes(newData, 0, 0, 1000, 1000);
+        l->readBytes(newData, 0, 0, 1000, 1000);
         delete[] newData;
     }
 
@@ -720,9 +720,9 @@ QString PerfTest::readBytesTest(Q_UINT32 testCount)
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+        Q_UINT8 * newData = new Q_UINT8[1000 * 1000 * l->pixelSize()];
         Q_CHECK_PTR(newData);
-        l -> readBytes(newData, 0, 0, 1000, 1000);
+        l->readBytes(newData, 0, 0, 1000, 1000);
         delete[] newData;
     }
 
@@ -737,22 +737,22 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
     QString report = QString("* Write bytes test");
 
     // On default tiles
-    KisDoc * doc = m_view -> canvasSubject() -> document();
-    KisImageSP img = doc -> newImage("Writebytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisDoc * doc = m_view->canvasSubject()->document();
+    KisImageSP img = doc->newImage("Writebytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
 
-    Q_UINT8 * data = new Q_UINT8[1000 * 1000 * l -> pixelSize()];
+    Q_UINT8 * data = new Q_UINT8[1000 * 1000 * l->pixelSize()];
     Q_CHECK_PTR(data);
-    l -> readBytes(data, 0, 0, 1000, 1000);
+    l->readBytes(data, 0, 0, 1000, 1000);
 
     QTime t;
     t.restart();
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        l -> writeBytes(data, 0, 0, 1000, 1000);
+        l->writeBytes(data, 0, 0, 1000, 1000);
     }
     delete[] data;
     report = report.append(QString("    written 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
@@ -766,8 +766,8 @@ QString PerfTest::writeBytesTest(Q_UINT32 testCount)
 
 QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
@@ -778,7 +778,7 @@ QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, false);
+            KisHLineIterator hiter = l->createHLineIterator(0, y2, 1000, false);
             while(! hiter.isDone())
             {
                  adv = hiter.nConseqHPixels();
@@ -795,8 +795,8 @@ QString hlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -810,7 +810,7 @@ QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
 
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, false);
+            KisHLineIterator hiter = l->createHLineIterator(0, y2, 1000, false);
             while(! hiter.isDone())
             {
                  adv = hiter.nConseqHPixels();
@@ -826,8 +826,8 @@ QString hlineRO(KisDoc * doc, Q_UINT32 testCount)
 
 QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
@@ -837,7 +837,7 @@ QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
+            KisHLineIterator hiter = l->createHLineIterator(0, y2, 1000, true);
             while(! hiter.isDone())
             {
                  adv = hiter.nConseqHPixels();
@@ -853,8 +853,8 @@ QString hlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -868,7 +868,7 @@ QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
          int adv;
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisHLineIterator hiter = l -> createHLineIterator(0, y2, 1000, true);
+            KisHLineIterator hiter = l->createHLineIterator(0, y2, 1000, true);
             while(! hiter.isDone())
             {
                  adv = hiter.nConseqHPixels();
@@ -885,8 +885,8 @@ QString hlineWR(KisDoc * doc, Q_UINT32 testCount)
 
 QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
@@ -894,7 +894,7 @@ QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+            KisVLineIterator hiter = l->createVLineIterator(y2, 0, 1000, true);
             while(! hiter.isDone())
             {
                  ++hiter;
@@ -909,8 +909,8 @@ QString vlineRODefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -923,7 +923,7 @@ QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+            KisVLineIterator hiter = l->createVLineIterator(y2, 0, 1000, true);
             while(! hiter.isDone())
             {
                  ++hiter;
@@ -938,8 +938,8 @@ QString vlineRO(KisDoc * doc, Q_UINT32 testCount)
 
 QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
@@ -948,7 +948,7 @@ QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisVLineIterator hiter = l -> createVLineIterator(y2, 0, 1000, true);
+            KisVLineIterator hiter = l->createVLineIterator(y2, 0, 1000, true);
             while(! hiter.isDone())
             {
                  ++hiter;
@@ -963,8 +963,8 @@ QString vlineWRDefault(KisDoc * doc, Q_UINT32 testCount)
 QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
 {
 
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -976,7 +976,7 @@ QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
     for (Q_UINT32 i = 0; i < testCount; ++i) {
         for(Q_INT32 y2 = 0; y2 < 0 + 1000; y2++)
         {
-            KisHLineIterator hiter = l -> createHLineIterator(y2, 0, 1000, true);
+            KisHLineIterator hiter = l->createHLineIterator(y2, 0, 1000, true);
             while(! hiter.isDone())
             {
                  ++hiter;
@@ -991,14 +991,14 @@ QString vlineWR(KisDoc * doc, Q_UINT32 testCount)
 
 QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 ;
     QTime t;
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, false);
+        KisRectIterator r = l->createRectIterator(0, 0, 1000, 1000, false);
         while(! r.isDone())
         {
             ++r;
@@ -1012,8 +1012,8 @@ QString rectRODefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString rectRO(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -1023,7 +1023,7 @@ QString rectRO(KisDoc * doc, Q_UINT32 testCount)
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, false);
+        KisRectIterator r = l->createRectIterator(0, 0, 1000, 1000, false);
         while(! r.isDone())
         {
             ++r;
@@ -1038,14 +1038,14 @@ QString rectWRDefault(KisDoc * doc, Q_UINT32 testCount)
 {
 
 
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     QTime t;
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, true);
+        KisRectIterator r = l->createRectIterator(0, 0, 1000, 1000, true);
         while(! r.isDone())
         {
             ++r;
@@ -1058,8 +1058,8 @@ QString rectWRDefault(KisDoc * doc, Q_UINT32 testCount)
 
 QString rectWR(KisDoc * doc, Q_UINT32 testCount)
 {
-    KisImageSP img = doc -> newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA", ""),""));
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -1071,7 +1071,7 @@ QString rectWR(KisDoc * doc, Q_UINT32 testCount)
 
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        KisRectIterator r = l -> createRectIterator(0, 0, 1000, 1000, true);
+        KisRectIterator r = l->createRectIterator(0, 0, 1000, 1000, true);
         while(! r.isDone())
         {
             ++r;
@@ -1087,7 +1087,7 @@ QString PerfTest::iteratorTest(Q_UINT32 testCount)
 {
     QString report = "Iterator test";
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisDoc * doc = m_view->canvasSubject()->document();
 
     report = report.append(hlineRODefault(doc, testCount));
     report = report.append(hlineRO(doc, testCount));
@@ -1113,13 +1113,13 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 {
     QString report = QString("* paintView test\n\n");
 
-    KisDoc * doc = m_view -> canvasSubject() -> document();
+    KisDoc * doc = m_view->canvasSubject()->document();
 
     KisImageSP img = doc->currentImage();
     img->resize(512,512);
 
 
-    KisPaintDeviceSP l = img -> activeDevice();
+    KisPaintDeviceSP l = img->activeDevice();
 
     KisFillPainter p(l.data());
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -1133,7 +1133,7 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
 #endif
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        m_view -> getCanvasController() -> updateCanvas(QRect(0, 0, 512, 512));
+        m_view->getCanvasController()->updateCanvas(QRect(0, 0, 512, 512));
     }
 
 #if USE_CALLGRIND
@@ -1143,14 +1143,14 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
     report = report.append(QString("    painted a 512 x 512 image %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
 
     img->newLayer("layer 2", OPACITY_OPAQUE);
-    l = img -> activeDevice();
+    l = img->activeDevice();
 
     p.begin(l.data());
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
     img->newLayer("layer 3", OPACITY_OPAQUE);
-    l = img -> activeDevice();
+    l = img->activeDevice();
 
     p.begin(l.data());
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
@@ -1159,7 +1159,7 @@ QString PerfTest::paintViewTest(Q_UINT32 testCount)
     t.restart();
 
     for (Q_UINT32 i = 0; i < testCount; ++i) {
-        m_view -> getCanvasController() -> updateCanvas(QRect(0, 0, 512, 512));
+        m_view->getCanvasController()->updateCanvas(QRect(0, 0, 512, 512));
     }
 
     report = report.append(QString("    painted a 512 x 512 image with 3 layers %1 times: %2 ms\n").arg(testCount).arg(t.elapsed()));
@@ -1182,7 +1182,7 @@ QString PerfTest::paintViewFPSTest()
     const int millisecondsPerSecond = 1000;
 
     while (t.elapsed() < millisecondsPerSecond) {
-        m_view -> getCanvasController() -> updateCanvas();
+        m_view->getCanvasController()->updateCanvas();
         numViewsPainted++;
     }
 

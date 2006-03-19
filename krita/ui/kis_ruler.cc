@@ -163,7 +163,7 @@ void KisRuler::updateVisibleArea(Q_INT32 xpos, Q_INT32 ypos)
 void KisRuler::paintEvent(QPaintEvent *e)
 {
     if (m_pixmapBuffer) {
-        const QRect& rect = e -> rect();
+        const QRect& rect = e->rect();
 
         bitBlt(this, rect.topLeft(), m_pixmapBuffer, rect);
         super::paintEvent(e);
@@ -186,7 +186,7 @@ void KisRuler::drawRuler()
     p.begin(m_pixmapBuffer);
     p.setPen(colorGroup().text());
     p.setBackgroundColor(colorGroup().base());
-    p.eraseRect(0, 0, m_pixmapBuffer -> width(), m_pixmapBuffer -> height());
+    p.eraseRect(0, 0, m_pixmapBuffer->width(), m_pixmapBuffer->height());
 
     switch (m_unit) {
         case KoUnit::U_PT:
@@ -277,7 +277,7 @@ void KisRuler::drawRuler()
             }
 
             start++;
-        } while (pos < m_pixmapBuffer -> width());
+        } while (pos < m_pixmapBuffer->width());
     } else {
         do {
             pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
@@ -300,7 +300,7 @@ void KisRuler::drawRuler()
             }
 
             start++;
-        } while (pos < m_pixmapBuffer -> height());
+        } while (pos < m_pixmapBuffer->height());
     }
 
     p.end();
@@ -358,7 +358,7 @@ void KisRuler::drawNums(QPainter *p, Q_INT32 x, Q_INT32 y, QString& num, bool or
     for (Q_UINT32 k = 0; k < num.length(); k++) {
         Q_INT32 st = num.at(k).digitValue() * 7;
 
-        p -> drawPixmap(x, y, m_pixmapNums, st, 0, 7, 7);
+        p->drawPixmap(x, y, m_pixmapNums, st, 0, 7, 7);
 
         if (orientationHoriz)
             x += 7;

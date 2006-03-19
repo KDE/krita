@@ -43,7 +43,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
-    m_paintdev = new KisPaintDevice(this, img -> colorSpace(), name.latin1());
+    m_paintdev = new KisPaintDevice(this, img->colorSpace(), name.latin1());
 }
 
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
@@ -74,13 +74,13 @@ KisPaintLayer::~KisPaintLayer()
 
 void KisPaintLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 {
-    if (m_paintdev -> hasSelection())
+    if (m_paintdev->hasSelection())
             m_paintdev->selection()->paintSelection(img, x, y, w, h);
 }
 
 void KisPaintLayer::paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize)
 {
-    if (m_paintdev && m_paintdev -> hasSelection()) {
+    if (m_paintdev && m_paintdev->hasSelection()) {
         m_paintdev->selection()->paintSelection(img, scaledImageRect, scaledImageSize, imageSize);
     }
 }

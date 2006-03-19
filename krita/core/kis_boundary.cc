@@ -36,20 +36,20 @@ void KisBoundary::generateBoundary(int w, int h) {
     if (!m_device)
         return;
 
-    KisColorSpace* cs = m_device -> colorSpace();
+    KisColorSpace* cs = m_device->colorSpace();
 
     // Horizontal
     for (int currentY = - 1; currentY < h; currentY++) {
-        KisHLineIteratorPixel topIt = m_device -> createHLineIterator(0, currentY, w, false);
-        KisHLineIteratorPixel botIt = m_device -> createHLineIterator(0, currentY + 1, w, false);
+        KisHLineIteratorPixel topIt = m_device->createHLineIterator(0, currentY, w, false);
+        KisHLineIteratorPixel botIt = m_device->createHLineIterator(0, currentY + 1, w, false);
         bool darkTop;
         bool darkBot;
 
         m_horSegments.append(QValueList<PointPair>());
 
         while (!topIt.isDone()) {
-            darkTop = cs -> getAlpha(topIt.rawData());
-            darkBot = cs -> getAlpha(botIt.rawData());
+            darkTop = cs->getAlpha(topIt.rawData());
+            darkBot = cs->getAlpha(botIt.rawData());
             if (darkTop != darkBot) {
                 // detected a change
                 m_horSegments.back().append(qMakePair(KisPoint(botIt.x(), botIt.y()), 1));
@@ -61,16 +61,16 @@ void KisBoundary::generateBoundary(int w, int h) {
 
     // Vertical
     for (int currentX = - 1; currentX < w; currentX++) {
-        KisVLineIteratorPixel leftIt = m_device -> createVLineIterator(currentX, 0, h, false);
-        KisVLineIteratorPixel rightIt = m_device -> createVLineIterator(currentX + 1, 0, h, false);
+        KisVLineIteratorPixel leftIt = m_device->createVLineIterator(currentX, 0, h, false);
+        KisVLineIteratorPixel rightIt = m_device->createVLineIterator(currentX + 1, 0, h, false);
         bool darkLeft;
         bool darkRight;
 
         m_vertSegments.append(QValueList<PointPair>());
 
         while (!leftIt.isDone()) {
-            darkLeft = cs -> getAlpha(leftIt.rawData());
-            darkRight = cs -> getAlpha(rightIt.rawData());
+            darkLeft = cs->getAlpha(leftIt.rawData());
+            darkRight = cs->getAlpha(rightIt.rawData());
             if (darkLeft != darkRight) {
                 // detected a change
                 m_vertSegments.back().append(qMakePair(KisPoint(rightIt.x(), rightIt.y()), 1));

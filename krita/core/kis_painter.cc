@@ -97,7 +97,7 @@ KisPainter::~KisPainter()
 {
     m_brush = 0;
     delete m_paintOp;
-        end();
+    end();
 }
 
 void KisPainter::begin(KisPaintDeviceSP device)
@@ -108,8 +108,8 @@ void KisPainter::begin(KisPaintDeviceSP device)
         delete m_transaction;
 
     m_device = device;
-    m_colorSpace = device -> colorSpace();
-    m_pixelSize = device -> pixelSize();
+    m_colorSpace = device->colorSpace();
+    m_pixelSize = device->pixelSize();
 }
 
 KCommand *KisPainter::end()
@@ -160,8 +160,8 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev -> extentIsValid() && op != COMPOSITE_COPY) {
-        srcRect &= srcdev -> extent();
+    if (srcdev->extentIsValid() && op != COMPOSITE_COPY) {
+        srcRect &= srcdev->extent();
     }
 
     if (srcRect.isEmpty()) {
@@ -178,7 +178,7 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
     addDirtyRect(QRect(dx, dy, sw, sh));
 
-    KisColorSpace * srcCs = srcdev -> colorSpace();
+    KisColorSpace * srcCs = srcdev->colorSpace();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -189,28 +189,28 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
         Q_INT32 dstX = dx;
         Q_INT32 srcX = sx;
         Q_INT32 columnsRemaining = sw;
-        Q_INT32 numContiguousDstRows = m_device -> numContiguousRows(dstY, dstX, dstX + sw - 1);
-        Q_INT32 numContiguousSrcRows = srcdev -> numContiguousRows(srcY, srcX, srcX + sw - 1);
+        Q_INT32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        Q_INT32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
 
         Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows);
         rows = QMIN(rows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousDstColumns = m_device -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
-            Q_INT32 numContiguousSrcColumns = srcdev -> numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            Q_INT32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            Q_INT32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
 
             Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
             columns = QMIN(columns, columnsRemaining);
 
-            const Q_UINT8 *srcData = srcdev -> pixel(srcX, srcY);
-            Q_INT32 srcRowStride = srcdev -> rowStride(srcX, srcY);
+            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
+            Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
 
-            Q_UINT8 *dstData = m_device -> writablePixel(dstX, dstY);
-            Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
+            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
+            Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
 
 
-            m_colorSpace -> bitBlt(dstData,
+            m_colorSpace->bitBlt(dstData,
                           dstRowStride,
                           srcCs,
                           srcData,
@@ -254,8 +254,8 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
     QRect srcRect = QRect(sx, sy, sw, sh);
 
-    if (srcdev -> extentIsValid() && op != COMPOSITE_COPY) {
-        srcRect &= srcdev -> extent();
+    if (srcdev->extentIsValid() && op != COMPOSITE_COPY) {
+        srcRect &= srcdev->extent();
     }
 
     if (srcRect.isEmpty()) {
@@ -272,7 +272,7 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
     addDirtyRect(QRect(dx, dy, sw, sh));
 
-    KisColorSpace * srcCs = srcdev -> colorSpace();
+    KisColorSpace * srcCs = srcdev->colorSpace();
 
     Q_INT32 dstY = dy;
     Q_INT32 srcY = sy;
@@ -283,9 +283,9 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
         Q_INT32 dstX = dx;
         Q_INT32 srcX = sx;
         Q_INT32 columnsRemaining = sw;
-        Q_INT32 numContiguousDstRows = m_device -> numContiguousRows(dstY, dstX, dstX + sw - 1);
-        Q_INT32 numContiguousSrcRows = srcdev -> numContiguousRows(srcY, srcX, srcX + sw - 1);
-        Q_INT32 numContiguousSelRows = seldev -> numContiguousRows(dstY, dstX, dstX + sw - 1);
+        Q_INT32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        Q_INT32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
+        Q_INT32 numContiguousSelRows = seldev->numContiguousRows(dstY, dstX, dstX + sw - 1);
 
         Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows);
         rows = QMIN(numContiguousSelRows, rows);
@@ -293,24 +293,24 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousDstColumns = m_device -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
-            Q_INT32 numContiguousSrcColumns = srcdev -> numContiguousColumns(srcX, srcY, srcY + rows - 1);
-            Q_INT32 numContiguousSelColumns = seldev -> numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            Q_INT32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            Q_INT32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            Q_INT32 numContiguousSelColumns = seldev->numContiguousColumns(dstX, dstY, dstY + rows - 1);
 
             Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
             columns = QMIN(numContiguousSelColumns, columns);
             columns = QMIN(columns, columnsRemaining);
 
-            Q_UINT8 *dstData = m_device -> writablePixel(dstX, dstY);
-            Q_INT32 dstRowStride = m_device -> rowStride(dstX, dstY);
+            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
+            Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
 
-            const Q_UINT8 *srcData = srcdev -> pixel(srcX, srcY);
-            Q_INT32 srcRowStride = srcdev -> rowStride(srcX, srcY);
+            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
+            Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
 
-            const Q_UINT8 *selData = seldev -> pixel(dstX, dstY);
-            Q_INT32 selRowStride = seldev -> rowStride(dstX, dstY);
+            const Q_UINT8 *selData = seldev->pixel(dstX, dstY);
+            Q_INT32 selRowStride = seldev->rowStride(dstX, dstY);
 
-            m_colorSpace -> bitBlt(dstData,
+            m_colorSpace->bitBlt(dstData,
                                    dstRowStride,
                                    srcCs,
                                    srcData,
@@ -343,11 +343,11 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 {
     if (m_device == 0) return;
 
-    if (!m_device -> hasSelection()) {
+    if (!m_device->hasSelection()) {
         bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
     }
     else
-        bltSelection(dx,dy,op,srcdev, m_device -> selection(),opacity,sx,sy,sw,sh);
+        bltSelection(dx,dy,op,srcdev, m_device->selection(),opacity,sx,sy,sw,sh);
 }
 
 double KisPainter::paintLine(const KisPoint & pos1,
@@ -372,14 +372,14 @@ double KisPainter::paintLine(const KisPoint & pos1,
     KisVector2D movement = dragVec;
 
     if (savedDist < 0) {
-        m_paintOp -> paintAt(pos1, KisPaintInformation(pressure1, xTilt1, yTilt1, movement));
+        m_paintOp->paintAt(pos1, KisPaintInformation(pressure1, xTilt1, yTilt1, movement));
         savedDist = 0;
     }
 
     // XXX: The spacing should vary as the pressure changes along the line.
     // This is a quick simplification.
-    double xSpacing = m_brush -> xSpacing((pressure1 + pressure2) / 2);
-    double ySpacing = m_brush -> ySpacing((pressure1 + pressure2) / 2);
+    double xSpacing = m_brush->xSpacing((pressure1 + pressure2) / 2);
+    double ySpacing = m_brush->ySpacing((pressure1 + pressure2) / 2);
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;
@@ -440,7 +440,7 @@ double KisPainter::paintLine(const KisPoint & pos1,
         double xTilt = (1 - t) * xTilt1 + t * xTilt2;
         double yTilt = (1 - t) * yTilt1 + t * yTilt2;
 
-        m_paintOp -> paintAt(p, KisPaintInformation(pressure, xTilt, yTilt, movement));
+        m_paintOp->paintAt(p, KisPaintInformation(pressure, xTilt, yTilt, movement));
         dist -= spacing;
     }
 
@@ -624,7 +624,7 @@ void KisPainter::paintAt(const KisPoint & pos,
                          const double yTilt)
 {
     if (!m_paintOp) return;
-    m_paintOp -> paintAt(pos, KisPaintInformation(pressure, xTilt, yTilt, KisVector2D()));
+    m_paintOp->paintAt(pos, KisPaintInformation(pressure, xTilt, yTilt, KisVector2D()));
 }
 
 double KisPainter::pointToLineDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)
@@ -771,17 +771,17 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceSP polygon = new KisPaintDevice(m_device -> colorSpace(), "polygon");
+    KisPaintDeviceSP polygon = new KisPaintDevice(m_device->colorSpace(), "polygon");
     Q_CHECK_PTR(polygon);
-    polygon -> setX(m_device -> getX());
-    polygon -> setY(m_device -> getY());
+    polygon->setX(m_device->getX());
+    polygon->setY(m_device->getY());
 
     KisFillPainter fillPainter(polygon);
     QRect boundingRectangle(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
 
     // Clip to the image bounds.
-    if (m_device -> image()) {
-        boundingRectangle &= m_device -> image() -> bounds();
+    if (m_device->image()) {
+        boundingRectangle &= m_device->image()->bounds();
     }
 
     switch (fillStyle) {
@@ -805,8 +805,8 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     }
 
     KisSelectionSP polygonMask = new KisSelection(polygon);
-    polygonMask -> setX(polygon -> getX());
-    polygonMask -> setY(polygon -> getY());
+    polygonMask->setX(polygon->getX());
+    polygonMask->setY(polygon->getY());
 
     for (y=y0; y<=y1; y++) {        /* step through scanlines */
         /* scanline y is at y+.5 in continuous coordinates */
@@ -842,7 +842,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
             xr = static_cast<int>(floor(active[j+1].x-.5));        /* right end of span */
 
             if (xl<=xr) {
-                KisHLineIterator it = polygonMask -> createHLineIterator(xl, y, xr - xl + 1, true);
+                KisHLineIterator it = polygonMask->createHLineIterator(xl, y, xr - xl + 1, true);
 
                 while (!it.isDone()) {
                     // We're using a selection here, that means alpha colorspace, that means one byte.
@@ -858,9 +858,9 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     delete [] ind;
     delete [] active;
 
-    polygon -> applySelectionMask(polygonMask);
+    polygon->applySelectionMask(polygonMask);
 
-    QRect r = polygon -> extent();
+    QRect r = polygon->extent();
 
     // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
     // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...

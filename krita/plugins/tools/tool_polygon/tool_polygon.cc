@@ -50,7 +50,7 @@ ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
-        r -> add(new KisToolPolygonFactory());
+        r->add(new KisToolPolygonFactory());
     }
 
 }

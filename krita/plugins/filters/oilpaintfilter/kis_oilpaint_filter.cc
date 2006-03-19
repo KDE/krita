@@ -99,15 +99,15 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 
     for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
 
-        KisHLineIteratorPixel it = src -> createHLineIterator(x, y + yOffset, w, false);
-        KisHLineIteratorPixel dstIt = dst -> createHLineIterator(x, y + yOffset, w, true);
+        KisHLineIteratorPixel it = src->createHLineIterator(x, y + yOffset, w, false);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y + yOffset, w, true);
 
         while (!it.isDone() && !cancelRequested()) {
 
             if (it.isSelected()) {
 
                 uint color = MostFrequentColor(src, bounds, it.x(), it.y(), BrushSize, Smoothness);
-                dst -> colorSpace() -> fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
+                dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
             }
 
             ++it;
@@ -155,7 +155,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
         /*for (i = 0; i <= Intensity; ++i)
       IntensityCount[i] = 0;*/
 
-    KisRectIteratorPixel it = src -> createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
+    KisRectIteratorPixel it = src->createRectIterator(X - Radius, Y - Radius, (2 * Radius) + 1, (2 * Radius) + 1, false);
 
     while (!it.isDone()) {
 
@@ -164,7 +164,7 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
 // XXX: COLORSPACE_INDEPENDENCE
 
             QColor c;
-            src -> colorSpace() -> toQColor(it.rawData(), &c);
+            src->colorSpace()->toQColor(it.rawData(), &c);
 
             // Swapping red and blue here is done because that gives the same
             // output as digikam, even though it might be interpreted as a bug

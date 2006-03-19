@@ -95,6 +95,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 {
 
     if (dst != src) {
+        kdDebug() << "src != dst\n";
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();

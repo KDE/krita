@@ -62,11 +62,11 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbProfile->insertItem(profilename);
     m_page->cmbProfile->setEnabled(false);
 
-    m_page->intOpacity -> setRange(0, 100, 13);
-    m_page->intOpacity -> setValue(opacity);
+    m_page->intOpacity->setRange(0, 100, 13);
+    m_page->intOpacity->setValue(opacity);
 
-    m_page->cmbComposite -> setCompositeOpList(colorSpace -> userVisiblecompositeOps());
-    m_page->cmbComposite -> setCurrentItem(compositeOp);
+    m_page->cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());
+    m_page->cmbComposite->setCurrentItem(compositeOp);
 
     slotNameChanged( m_page->editName->text() );
 }
@@ -82,12 +82,12 @@ void KisDlgLayerProperties::slotNameChanged( const QString &_text )
 
 QString KisDlgLayerProperties::getName() const
 {
-    return m_page->editName -> text();
+    return m_page->editName->text();
 }
 
 int KisDlgLayerProperties::getOpacity() const
 {
-    Q_INT32 opacity = m_page->intOpacity -> value();
+    Q_INT32 opacity = m_page->intOpacity->value();
 
     if (!opacity)
         return 0;
@@ -100,7 +100,7 @@ int KisDlgLayerProperties::getOpacity() const
 
 KisCompositeOp KisDlgLayerProperties::getCompositeOp() const
 {
-    return m_page->cmbComposite -> currentItem();
+    return m_page->cmbComposite->currentItem();
 }
 
 #include "kis_dlg_layer_properties.moc"

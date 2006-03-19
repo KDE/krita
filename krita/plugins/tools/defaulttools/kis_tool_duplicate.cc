@@ -74,15 +74,15 @@ void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
 
 void KisToolDuplicate::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Duplicate Brush"),
                         "stamp", Qt::Key_C, this,
                         SLOT(activate()), collection,
                         name());
-        m_action -> setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -93,16 +93,16 @@ void KisToolDuplicate::initPaint(KisEvent *e)
     {
         if(m_isOffsetNotUptodate)
         {
-            m_offset = e -> pos() - m_position;
+            m_offset = e->pos() - m_position;
             m_isOffsetNotUptodate = false;
         }
         m_paintIncremental = false;
         super::initPaint(e);
-        painter() -> setDuplicateOffset( m_offset );
-        KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("duplicate", 0, painter());
+        painter()->setDuplicateOffset( m_offset );
+        KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("duplicate", 0, painter());
         if (op && m_source) {
-            op -> setSource(m_source);
-            painter() -> setPaintOp(op);
+            op->setSource(m_source);
+            painter()->setPaintOp(op);
         }
     }
 }
@@ -117,10 +117,10 @@ void KisToolDuplicate::move(KisMoveEvent *e)
 
     QPoint srcPos;
     if (m_mode == PAINT) {
-        srcPos = painter() -> duplicateOffset().floorQPoint();
+        srcPos = painter()->duplicateOffset().floorQPoint();
     } else {
         if(m_isOffsetNotUptodate)
-            srcPos = e -> pos().floorQPoint() - m_position.floorQPoint();
+            srcPos = e->pos().floorQPoint() - m_position.floorQPoint();
         else
             srcPos = m_offset.floorQPoint();
     }
@@ -129,8 +129,8 @@ void KisToolDuplicate::move(KisMoveEvent *e)
     Q_INT32 y;
 
     // like KisPaintOp::splitCoordinate
-    x = (Q_INT32)((e -> x() < 0) ? e -> x() - 1 : e -> x());
-    y = (Q_INT32)((e -> y() < 0) ? e -> y() - 1 : e -> y());
+    x = (Q_INT32)((e->x() < 0) ? e->x() - 1 : e->x());
+    y = (Q_INT32)((e->y() < 0) ? e->y() - 1 : e->y());
     srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
 
     paintOutline(srcPos);
@@ -148,7 +148,7 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
             m_offset = pos - m_position;
             m_isOffsetNotUptodate = false;
         }
-        painter() -> paintAt( pos, pressure, xtilt, ytilt);
+        painter()->paintAt( pos, pressure, xtilt, ytilt);
     }
 }
 

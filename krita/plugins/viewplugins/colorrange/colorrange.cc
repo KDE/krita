@@ -54,11 +54,11 @@ ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
 
-    if (parent -> inherits("KisView")) {
+    if (parent->inherits("KisView")) {
         setInstance(ColorRangeFactory::instance());
         setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
         m_view = dynamic_cast<KisView*>(parent);
-        m_view -> canvasSubject() -> selectionManager() -> addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
+        m_view->canvasSubject()->selectionManager()->addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
 
     }
 }
@@ -69,13 +69,13 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    KisPaintDeviceSP layer = m_view -> canvasSubject() -> currentImg() -> activeDevice();
+    KisPaintDeviceSP layer = m_view->canvasSubject()->currentImg()->activeDevice();
     if (!layer) return;
 
     DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
     Q_CHECK_PTR(dlgColorRange);
 
-    dlgColorRange -> exec();
+    dlgColorRange->exec();
 }
 
 #include "colorrange.moc"

@@ -79,16 +79,14 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
     m_cancelRequested = false;
     if ( progress )
-        progress -> setSubject(this, true, true);
+        progress->setSubject(this, true, true);
     emit notifyProgressStage(i18n("Add drop shadow..."), 0);
 
-    KisUndoAdapter * undo = image->undoAdapter();
-
-    if (undo) {
-        undo->beginMacro(i18n("Add Drop Shadow"));
+    if (image->undo()) {
+        image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
     }
 
-    KisPaintDeviceSP shadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "Shadow");
+    KisPaintDeviceSP shadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "Shadow");
     KisPaintDeviceSP bShadowDev;
     KisRgbColorSpace *rgb8cs = static_cast<KisRgbColorSpace *>(shadowDev->colorSpace());
 
@@ -114,20 +112,20 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
     if( blurradius > 0 )
     {
-        bShadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("RGBA",""),"" ), "bShadow");
+        bShadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "bShadow");
         gaussianblur(shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progress);
         shadowDev = bShadowDev;
     }
 
     if (!m_cancelRequested) {
-        shadowDev -> move (xoffset,yoffset);
+        shadowDev->move (xoffset,yoffset);
 
-        KisGroupLayerSP parent = image -> rootLayer();
-        if (image -> activeLayer())
-            parent = image -> activeLayer() -> parent().data();
+        KisGroupLayerSP parent = image->rootLayer();
+        if (image->activeLayer())
+            parent = image->activeLayer()->parent().data();
 
         KisPaintLayerSP l = new KisPaintLayer(image, i18n("Drop Shadow"), opacity, shadowDev);
-        image -> addLayer( l.data(), parent, src->siblingBelow() );
+        image->addLayer( l.data(), parent, src->siblingBelow() );
 
         if (allowResize)
         {
@@ -156,8 +154,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
 
                     if (moveCommand) {
                         moveCommand->execute();
-                        if (undo) {
-                            undo->addCommand(moveCommand);
+                        if (image->undo()) {
+                            image->undoAdapter()->addCommand(moveCommand);
                         } else {
                             delete moveCommand;
                         }
@@ -168,8 +166,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, Q_INT32 x
         m_view->canvasSubject()->document()->setModified(true);
     }
 
-    if (undo) {
-        undo->endMacro();
+    if (image->undo()) {
+        image->undoAdapter()->endMacro();
     }
 
     emit notifyProgressDone();
@@ -217,7 +215,7 @@ void KisDropshadow::gaussianblur (KisPaintDeviceSP srcDev, KisPaintDeviceSP dstD
 
     emit notifyProgressStage(i18n("Blur..."), 0);
 
-    bytes = srcDev -> pixelSize();
+    bytes = srcDev->pixelSize();
 
     switch (method)
     {

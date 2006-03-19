@@ -89,7 +89,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolStar();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("starshape", i18n("Star Tool")); }

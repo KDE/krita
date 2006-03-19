@@ -69,38 +69,38 @@ void KisRgbF32ColorSpaceTester::testBasics()
     KisRgbF32ColorSpace *cs = new KisRgbF32ColorSpace(profile);
     KisAbstractColorSpace * csSP = cs;
 
-    CHECK(cs -> hasAlpha(), true);
-    CHECK(cs -> nChannels(), NUM_CHANNELS);
-    CHECK(cs -> nColorChannels(), NUM_COLOUR_CHANNELS);
-    CHECK(cs -> pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
+    CHECK(cs->hasAlpha(), true);
+    CHECK(cs->nChannels(), NUM_CHANNELS);
+    CHECK(cs->nColorChannels(), NUM_COLOUR_CHANNELS);
+    CHECK(cs->pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 
-    QValueVector<KisChannelInfo *> channels = cs -> channels();
+    QValueVector<KisChannelInfo *> channels = cs->channels();
 
     // Red
-    CHECK(channels[0] -> pos(), PIXEL_RED * CHANNEL_SIZE);
-    CHECK(channels[0] -> size(), CHANNEL_SIZE);
-    CHECK(channels[0] -> channelType(), COLOR);
+    CHECK(channels[0]->pos(), PIXEL_RED * CHANNEL_SIZE);
+    CHECK(channels[0]->size(), CHANNEL_SIZE);
+    CHECK(channels[0]->channelType(), COLOR);
 
     // Green
-    CHECK(channels[1] -> pos(), PIXEL_GREEN * CHANNEL_SIZE);
-    CHECK(channels[1] -> size(), CHANNEL_SIZE);
-    CHECK(channels[1] -> channelType(), COLOR);
+    CHECK(channels[1]->pos(), PIXEL_GREEN * CHANNEL_SIZE);
+    CHECK(channels[1]->size(), CHANNEL_SIZE);
+    CHECK(channels[1]->channelType(), COLOR);
 
     // Blue
-    CHECK(channels[2] -> pos(), PIXEL_BLUE * CHANNEL_SIZE);
-    CHECK(channels[2] -> size(), CHANNEL_SIZE);
-    CHECK(channels[2] -> channelType(), COLOR);
+    CHECK(channels[2]->pos(), PIXEL_BLUE * CHANNEL_SIZE);
+    CHECK(channels[2]->size(), CHANNEL_SIZE);
+    CHECK(channels[2]->channelType(), COLOR);
 
     // Alpha
-    CHECK(channels[3] -> pos(), PIXEL_ALPHA * CHANNEL_SIZE);
-    CHECK(channels[3] -> size(), CHANNEL_SIZE);
-    CHECK(channels[3] -> channelType(), ALPHA);
+    CHECK(channels[3]->pos(), PIXEL_ALPHA * CHANNEL_SIZE);
+    CHECK(channels[3]->size(), CHANNEL_SIZE);
+    CHECK(channels[3]->channelType(), ALPHA);
 
     KisPaintDeviceSP pd = new KisPaintDevice(cs, "test");
 
     KisRgbF32ColorSpace::Pixel defaultPixel;
 
-    memcpy(&defaultPixel, pd -> dataManager() -> defaultPixel(), sizeof(defaultPixel));
+    memcpy(&defaultPixel, pd->dataManager()->defaultPixel(), sizeof(defaultPixel));
 
     CHECK(defaultPixel.red, 0.0f);
     CHECK(defaultPixel.green, 0.0f);
@@ -109,39 +109,39 @@ void KisRgbF32ColorSpaceTester::testBasics()
 
     float pixel[NUM_CHANNELS];
 
-    cs -> fromQColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
 
-    cs -> fromQColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MIN_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MIN_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MIN_CHANNEL_VALUE);
 
-    cs -> fromQColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], UINT8_TO_FLOAT(128));
     CHECK(pixel[PIXEL_GREEN], UINT8_TO_FLOAT(64));
     CHECK(pixel[PIXEL_BLUE], UINT8_TO_FLOAT(192));
 
-    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_ALPHA], MAX_CHANNEL_VALUE);
 
-    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_ALPHA], F32_OPACITY_TRANSPARENT);
 
-    cs -> fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
 
     CHECK(pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
@@ -154,7 +154,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
 
     QColor c;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -164,7 +164,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
     pixel[PIXEL_GREEN] = MIN_CHANNEL_VALUE;
     pixel[PIXEL_BLUE] = MIN_CHANNEL_VALUE;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
 
     CHECK(c.red(), 0);
     CHECK(c.green(), 0);
@@ -174,7 +174,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
     pixel[PIXEL_GREEN] = MAX_CHANNEL_VALUE / 2;
     pixel[PIXEL_BLUE] = (3 * MAX_CHANNEL_VALUE) / 4;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
 
     CHECK(c.red(), (int)FLOAT_TO_UINT8(MAX_CHANNEL_VALUE / 4));
     CHECK(c.green(), (int)FLOAT_TO_UINT8(MAX_CHANNEL_VALUE / 2));
@@ -187,7 +187,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
 
     Q_UINT8 opacity;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -196,7 +196,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
 
     pixel[PIXEL_ALPHA] = F32_OPACITY_OPAQUE;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -208,7 +208,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MIN_CHANNEL_VALUE;
     pixel[PIXEL_ALPHA] = F32_OPACITY_TRANSPARENT;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 0);
     CHECK(c.green(), 0);
@@ -220,7 +220,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = (3 * MAX_CHANNEL_VALUE) / 4;
     pixel[PIXEL_ALPHA] = MAX_CHANNEL_VALUE / 2;
 
-    cs -> toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), (int)FLOAT_TO_UINT8(MAX_CHANNEL_VALUE / 4));
     CHECK(c.green(), (int)FLOAT_TO_UINT8(MAX_CHANNEL_VALUE / 2));
@@ -236,7 +236,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    cs -> setAlpha(reinterpret_cast<Q_UINT8 *>(pixels), OPACITY_OPAQUE / 2, NUM_PIXELS);
+    cs->setAlpha(reinterpret_cast<Q_UINT8 *>(pixels), OPACITY_OPAQUE / 2, NUM_PIXELS);
 
     CHECK(pixels[0].red, MAX_CHANNEL_VALUE);
     CHECK(pixels[0].green, MAX_CHANNEL_VALUE);
@@ -263,31 +263,31 @@ void KisRgbF32ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MAX_CHANNEL_VALUE / 4;
     pixel[PIXEL_ALPHA] = MIN_CHANNEL_VALUE;
 
-    QString valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+    QString valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE));
 
-    valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 2));
 
-    valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 4));
 
-    valueText = cs -> channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(MIN_CHANNEL_VALUE));
 
-    valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE));
 
-    valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 2));
 
-    valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 4));
 
-    valueText = cs -> normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(MIN_CHANNEL_VALUE));
 
-    cs -> setPixel(reinterpret_cast<Q_UINT8 *>(pixel), 0.128, 0.192, 0.64, 0.99);
+    cs->setPixel(reinterpret_cast<Q_UINT8 *>(pixel), 0.128, 0.192, 0.64, 0.99);
     CHECK(pixel[PIXEL_RED], 0.128f);
     CHECK(pixel[PIXEL_GREEN], 0.192f);
     CHECK(pixel[PIXEL_BLUE], 0.64f);
@@ -298,7 +298,7 @@ void KisRgbF32ColorSpaceTester::testBasics()
     float blue;
     float alpha;
 
-    cs -> getPixel(reinterpret_cast<const Q_UINT8 *>(pixel), &red, &green, &blue, &alpha);
+    cs->getPixel(reinterpret_cast<const Q_UINT8 *>(pixel), &red, &green, &blue, &alpha);
     CHECK(red, 0.128f);
     CHECK(green, 0.192f);
     CHECK(blue, 0.64f);
@@ -352,7 +352,7 @@ void KisRgbF32ColorSpaceTester::testMixColors()
     weights[0] = 255;
     weights[1] = 0;
 
-    cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
     CHECK(outputPixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(outputPixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
@@ -362,7 +362,7 @@ void KisRgbF32ColorSpaceTester::testMixColors()
     weights[0] = 0;
     weights[1] = 255;
 
-    cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
     CHECK(outputPixel[PIXEL_RED], 0.0f);
     CHECK(outputPixel[PIXEL_GREEN], 0.0f);
@@ -372,7 +372,7 @@ void KisRgbF32ColorSpaceTester::testMixColors()
     weights[0] = 128;
     weights[1] = 127;
 
-    cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
     CHECK(outputPixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(outputPixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
@@ -389,7 +389,7 @@ void KisRgbF32ColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 2000;
     pixel2[PIXEL_ALPHA] = MAX_CHANNEL_VALUE;
 
-    cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
     CHECK_TOLERANCE(outputPixel[PIXEL_RED], (128 * 20000 + 127 * 10000) / 255, 5);
     CHECK_TOLERANCE(outputPixel[PIXEL_GREEN], (128 * 10000 + 127 * 20000) / 255, 5);
@@ -409,7 +409,7 @@ void KisRgbF32ColorSpaceTester::testMixColors()
     weights[0] = 89;
     weights[1] = 166;
 
-    cs -> mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
 
     CHECK(outputPixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK(outputPixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
@@ -433,7 +433,7 @@ void KisRgbF32ColorSpaceTester::testToQImage()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    QImage image = cs -> convertToQImage(reinterpret_cast<const Q_UINT8 *>(pixels), PIXELS_WIDTH, PIXELS_HEIGHT, 0, 0);
+    QImage image = cs->convertToQImage(reinterpret_cast<const Q_UINT8 *>(pixels), PIXELS_WIDTH, PIXELS_HEIGHT, 0, 0);
 
     QRgb c = image.pixel(0, 0);
 
@@ -497,7 +497,7 @@ void KisRgbF32ColorSpaceTester::testCompositeOps()
 
     dstPixel = srcPixel;
 
-    cs -> compositeDivide(reinterpret_cast<Q_UINT8 *>(&dstPixel), 1, reinterpret_cast<const Q_UINT8 *>(&srcPixel),
+    cs->compositeDivide(reinterpret_cast<Q_UINT8 *>(&dstPixel), 1, reinterpret_cast<const Q_UINT8 *>(&srcPixel),
                 1, 0, 0, 1, 1, F32_OPACITY_OPAQUE);
     /*
     CHECK(dstPixel.red, (Q_UINT16)UINT8_TO_UINT16(253));
@@ -532,7 +532,7 @@ void KisRgbF32ColorSpaceTester::testCompositeOps()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    cs -> compositeOver(reinterpret_cast<Q_UINT8 *>(dstPixels), DST_ROW_STRIDE, reinterpret_cast<const Q_UINT8 *>(srcPixels),
+    cs->compositeOver(reinterpret_cast<Q_UINT8 *>(dstPixels), DST_ROW_STRIDE, reinterpret_cast<const Q_UINT8 *>(srcPixels),
                 SRC_ROW_STRIDE, mask, MASK_ROW_STRIDE, NUM_ROWS, NUM_COLUMNS, opacity);
     */
 

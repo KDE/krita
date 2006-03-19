@@ -58,11 +58,11 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
     m_page->editName->setText(deviceName);
 
     // Opacity
-    m_page->intOpacity -> setRange(0, 100, 13);
-    m_page->intOpacity -> setValue(100);
+    m_page->intOpacity->setRange(0, 100, 13);
+    m_page->intOpacity->setValue(100);
 
     // ColorSpace
-    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
+    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     m_page->cmbColorSpaces->setCurrentText(colorSpaceID.id());
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
@@ -91,13 +91,13 @@ void NewLayerDialog::setColorSpaceEnabled(bool enabled)
 
 void NewLayerDialog::fillCmbProfiles(const KisID & s)
 {
-    m_page->cmbProfile -> clear();
+    m_page->cmbProfile->clear();
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
         return;
     }
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
@@ -110,21 +110,21 @@ void NewLayerDialog::fillCmbProfiles(const KisID & s)
 
 void NewLayerDialog::fillCmbComposite(const KisID & s)
 {
-    m_page->cmbComposite -> clear();
+    m_page->cmbComposite->clear();
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
         return;
     }
 
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(s,"");
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(s,"");
     if (cs) {
-        m_page->cmbComposite -> setCompositeOpList(cs -> userVisiblecompositeOps());
+        m_page->cmbComposite->setCompositeOpList(cs->userVisiblecompositeOps());
     }
 }
 
 int NewLayerDialog::opacity() const
 {
-    Q_INT32 opacity = m_page->intOpacity -> value();
+    Q_INT32 opacity = m_page->intOpacity->value();
 
     if (!opacity)
         return 0;
@@ -137,7 +137,7 @@ int NewLayerDialog::opacity() const
 
 KisCompositeOp NewLayerDialog::compositeOp() const
 {
-    return m_page->cmbComposite -> currentItem();
+    return m_page->cmbComposite->currentItem();
 }
 
 KisID NewLayerDialog::colorSpaceID() const
@@ -147,7 +147,7 @@ KisID NewLayerDialog::colorSpaceID() const
 
 QString NewLayerDialog::layerName() const
 {
-    return m_page->editName -> text();
+    return m_page->editName->text();
 }
 
 QString NewLayerDialog::profileName() const

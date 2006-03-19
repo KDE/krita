@@ -69,7 +69,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     }
 
 
-    Q_INT32 depth = src -> colorSpace() -> nColorChannels();
+    Q_INT32 depth = src->colorSpace()->nColorChannels();
 
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();

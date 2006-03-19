@@ -29,10 +29,10 @@ void KisScaleWorker::run()
 {
     double fwidth = m_filterStrategy->support();
 
-    QRect rect = m_dev -> exactBounds();
+    QRect rect = m_dev->exactBounds();
     Q_INT32 width = rect.width();
     Q_INT32 height =  rect.height();
-    m_pixelSize=m_dev -> pixelSize();
+    m_pixelSize=m_dev->pixelSize();
 
     // compute size of target image
     if ( m_sx == 1.0F && m_sy == 1.0F ) {
@@ -170,8 +170,8 @@ void KisScaleWorker::run()
 
     // XXX: I'm thinking that we should be able to cancel earlier, in the look.
     if(!isCanceled()){
-        m_dev -> writeBytes( newData, 0, 0, targetW, targetH);
-        m_dev -> crop(0, 0, targetW, targetH);
+        m_dev->writeBytes( newData, 0, 0, targetW, targetH);
+        m_dev->crop(0, 0, targetW, targetH);
     }
 
     /* free the memory allocated for horizontal filter weights */

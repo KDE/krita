@@ -55,15 +55,15 @@ void KisDoubleWidget::init(double min, double max)
 
     m_layout = new QHBoxLayout(this, 0, -1, "hbox layout");
 
-    m_layout -> addWidget(m_slider);
-    m_layout -> addSpacing(5);
-    m_layout -> addWidget(m_spinBox);
-    m_layout -> addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_layout->addWidget(m_slider);
+    m_layout->addSpacing(5);
+    m_layout->addWidget(m_spinBox);
+    m_layout->addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
 
 double KisDoubleWidget::value() const
 {
-    return m_spinBox -> value();
+    return m_spinBox->value();
 }
 
 void KisDoubleWidget::setValue(double value)
@@ -75,28 +75,28 @@ void KisDoubleWidget::setValue(double value)
     } else {
         intValue = static_cast<int>(value * 100 + 0.5);
     }
-    m_slider -> setValue(intValue);
+    m_slider->setValue(intValue);
 }
 
 void KisDoubleWidget::setRange(double min, double max)
 {
-    m_spinBox -> setRange(min, max);
-    m_slider -> setRange(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5));
+    m_spinBox->setRange(min, max);
+    m_slider->setRange(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5));
 }
 
 void KisDoubleWidget::setTickmarks(QSlider::TickSetting tickSetting)
 {
-    m_slider -> setTickmarks(tickSetting);
+    m_slider->setTickmarks(tickSetting);
 }
 
 void KisDoubleWidget::setTickInterval(double value)
 {
-    m_slider -> setTickInterval(static_cast<int>(value * 100 + 0.5));
+    m_slider->setTickInterval(static_cast<int>(value * 100 + 0.5));
 }
 
 double KisDoubleWidget::tickInterval() const
 {
-    return m_slider -> tickInterval() / 100.0;
+    return m_slider->tickInterval() / 100.0;
 }
 
 void KisDoubleWidget::setSliderValue(double value)
@@ -108,39 +108,39 @@ void KisDoubleWidget::setSliderValue(double value)
     } else {
         intValue = static_cast<int>(value * 100 + 0.5);
     }
-    m_slider -> setValue(intValue);
+    m_slider->setValue(intValue);
     emit valueChanged(value);
 }
 
 void KisDoubleWidget::sliderValueChanged(int value)
 {
-    m_spinBox -> setValue(value / 100.0);
+    m_spinBox->setValue(value / 100.0);
 }
 
 void KisDoubleWidget::setPrecision(int precision)
 {
-    m_spinBox -> setPrecision(precision);
+    m_spinBox->setPrecision(precision);
 }
 
 void KisDoubleWidget::setLineStep(double step)
 {
-    m_spinBox -> setLineStep(step);
-    m_slider -> setLineStep(static_cast<int>(step * 100));
+    m_spinBox->setLineStep(step);
+    m_slider->setLineStep(static_cast<int>(step * 100));
 }
 
 void KisDoubleWidget::setPageStep(double step)
 {
-    m_slider -> setPageStep(static_cast<int>(step * 100));
+    m_slider->setPageStep(static_cast<int>(step * 100));
 }
 
 void KisDoubleWidget::setTracking(bool tracking)
 {
-    m_slider -> setTracking(tracking);
+    m_slider->setTracking(tracking);
 }
 
 bool KisDoubleWidget::tracking() const
 {
-    return m_slider -> tracking();
+    return m_slider->tracking();
 }
 
 #include "kis_double_widget.moc"

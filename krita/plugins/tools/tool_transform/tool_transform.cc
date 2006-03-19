@@ -52,7 +52,7 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
         KisToolTransformFactory * f = new KisToolTransformFactory();
         Q_CHECK_PTR(f);
-        r -> add(f);
+        r->add(f);
     }
 
 }

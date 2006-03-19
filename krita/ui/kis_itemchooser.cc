@@ -28,7 +28,7 @@
 KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent, name)
 {
 /*    m_frame = new QVBox(this);
-    m_frame -> setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
+    m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
     m_chooser = new KoIconChooser(QSize(30,30), this, "icon_chooser", true);
     QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
 }
@@ -39,7 +39,7 @@ KisItemChooser::~KisItemChooser()
 
 void KisItemChooser::setCurrent(KoIconItem *item)
 {
-    m_chooser -> setCurrentItem(item);
+    m_chooser->setCurrentItem(item);
     update(item);
 }
 
@@ -50,7 +50,7 @@ void KisItemChooser::setCurrent(int index)
 
 KoIconItem* KisItemChooser::currentItem()
 {
-    return m_chooser -> currentItem();
+    return m_chooser->currentItem();
 }
 
 void KisItemChooser::slotItemSelected(KoIconItem *item)
@@ -61,7 +61,7 @@ void KisItemChooser::slotItemSelected(KoIconItem *item)
 
 void KisItemChooser::addItem(KoIconItem *item)
 {
-    m_chooser -> addItem(item);
+    m_chooser->addItem(item);
 }
 
 void KisItemChooser::addItems(const vKoIconItem& items)
@@ -69,7 +69,7 @@ void KisItemChooser::addItems(const vKoIconItem& items)
     QPtrListIterator<KoIconItem> itr(items);
 
     for (itr.toFirst(); itr.current(); ++itr)
-        m_chooser -> addItem(itr.current());
+        m_chooser->addItem(itr.current());
 }
 
 QWidget *KisItemChooser::chooserWidget() const

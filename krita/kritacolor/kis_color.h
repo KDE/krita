@@ -63,7 +63,7 @@ public:
 
     KisColorSpace * colorSpace() const { return m_colorSpace; }
 
-    KisProfile *  profile() const { return m_colorSpace -> getProfile(); }
+    KisProfile *  profile() const { return m_colorSpace->getProfile(); }
 
     /// Convert this KisColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KisColor.

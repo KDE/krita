@@ -76,7 +76,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     m_cancelRequested = false;
     if ( progress )
-        progress -> setSubject(this, true, true);
+        progress->setSubject(this, true, true);
     emit notifyProgressStage(i18n("Separating image..."), 0);
 
     KisColorSpace * dstCs = 0;
@@ -124,10 +124,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA",""),"" ), "8 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("GRAYA",""),"" ), "8 bit grayscale sep");
             }
             else {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry() -> getColorSpace(KisID("GRAYA16",""),"" ), "16 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("GRAYA16",""),"" ), "16 bit grayscale sep");
                 destSize = 2;
             }
         }
@@ -248,7 +248,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
-                image->addLayer( dynamic_cast<KisLayer*>(l.data()), image -> rootLayer(), 0);
+                image->addLayer( dynamic_cast<KisLayer*>(l.data()), image->rootLayer(), 0);
             }
             else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
@@ -268,7 +268,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                     return;
 
                 KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
-                QRect r = l -> exactBounds();
+                QRect r = l->exactBounds();
 
                 KisDoc d;
                 d.prepareForImport();
@@ -286,7 +286,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
 
         if (undo && undo->undo()) {
-            undo -> endMacro();
+            undo->endMacro();
         }
 
         m_view->canvasSubject()->document()->setModified(true);

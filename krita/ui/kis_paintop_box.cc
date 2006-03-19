@@ -104,13 +104,13 @@ void KisPaintopBox::slotItemSelected(int index)
 
 void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
 {
-    QValueList<KisID>::iterator it = m_paintops -> begin();
-    QValueList<KisID>::iterator end = m_paintops -> end();
-    m_displayedOps -> clear();
+    QValueList<KisID>::iterator it = m_paintops->begin();
+    QValueList<KisID>::iterator end = m_paintops->end();
+    m_displayedOps->clear();
     m_cmbPaintops->clear();
 
     for ( ; it != end; ++it ) {
-        if (KisPaintOpRegistry::instance() -> userVisible(*it, cs)) {
+        if (KisPaintOpRegistry::instance()->userVisible(*it, cs)) {
             QPixmap pm = paintopPixmap(*it);
             if (pm.isNull()) {
                 QPixmap p = QPixmap( 16, 16 );
@@ -120,7 +120,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
             else {
                 m_cmbPaintops->insertItem(pm, (*it).name());
             }
-            m_displayedOps -> append(*it);
+            m_displayedOps->append(*it);
         }
     }
 

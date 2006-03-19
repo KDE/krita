@@ -180,8 +180,17 @@ public:
      * The current undo adapter will _not_ be deleted.
      */
     void setUndoAdapter(KisUndoAdapter * undoAdapter);
+
+    /**
+     * Returns the current undo adapter. You can add new commands to the
+     * undo stack using the adapter
+     */
     KisUndoAdapter *undoAdapter() const;
 
+    /**
+     * Returns true if this image wants undo information, false otherwise
+     */
+    bool undo() const;
     /**
      * Tell the image it's modified; this emits the sigImageModified signal. This happens
      *  when the image needs to be saved

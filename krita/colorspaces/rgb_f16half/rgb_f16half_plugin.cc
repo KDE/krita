@@ -48,7 +48,7 @@ RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const char *name, const QStr
         KisColorSpaceFactory *csf  = new KisRgbF16HalfColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF16Half);
         f->add(csf);
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicF16HalfHistogramProducer>
                 (KisID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
     }

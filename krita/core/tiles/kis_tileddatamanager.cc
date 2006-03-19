@@ -252,7 +252,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
         while(tile)
         {
-            QRect tileRect = QRect(tile -> getCol() * KisTile::WIDTH, tile -> getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
+            QRect tileRect = QRect(tile->getCol() * KisTile::WIDTH, tile->getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
             //printRect("tileRect", tileRect);
 
             if (newRect.contains(tileRect)) {
@@ -261,7 +261,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                 tile = tile->getNext();
             }
             else {
-                ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
+                ensureTileMementoed(tile->getCol(), tile->getRow(), tileHash, tile);
 
                 if (newRect.intersects(tileRect)) {
 
@@ -275,7 +275,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                     for (int y = 0; y < KisTile::HEIGHT; ++y) {
                         for (int x = 0; x < KisTile::WIDTH; ++x) {
                             if (!intersection.contains(x,y)) {
-                                Q_UINT8 * ptr = tile -> data(x, y);
+                                Q_UINT8 * ptr = tile->data(x, y);
                                 memcpy(ptr, m_defPixel, m_pixelSize);
                             }
                         }
@@ -290,7 +290,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                     m_numTiles--;
 
                     if (previousTile)
-                        previousTile -> setNext(tile);
+                        previousTile->setNext(tile);
                     else
                         m_hashTable[tileHash] = tile;
                     delete deltile;
@@ -484,7 +484,7 @@ void KisTiledDataManager::clear()
 
         while(tile)
         {
-            ensureTileMementoed(tile -> getCol(), tile -> getRow(), tileHash, tile);
+            ensureTileMementoed(tile->getCol(), tile->getRow(), tileHash, tile);
 
             const KisTile *deltile = tile;
             tile = tile->getNext();
@@ -805,7 +805,7 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
     if (m_currentMemento)
     {
         if (!m_currentMemento->valid()) return def;
-        //Q_ASSERT(m_currentMemento -> valid());
+        //Q_ASSERT(m_currentMemento->valid());
 
         Q_UINT32 tileHash = calcTileHash(col, row);
         tile = m_currentMemento->m_hashTable[tileHash];
@@ -836,7 +836,7 @@ Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 
     KisTile *tile = getTile(col, row, writable);
 
-    return tile -> data() + offset;
+    return tile->data() + offset;
 }
 
 const Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)

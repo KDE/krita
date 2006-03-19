@@ -39,14 +39,14 @@ KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device)
 
     m_private->m_name = name;
     m_private->m_device = device;
-    m_private->m_memento = device -> getMemento();
+    m_private->m_memento = device->getMemento();
 }
 
 KisTransaction::~KisTransaction()
 {
     if (m_private->m_memento) {
         // For debugging purposes
-        m_private->m_memento -> setInvalid();
+        m_private->m_memento->setInvalid();
     }
     delete m_private;
 }
@@ -69,7 +69,7 @@ void KisTransaction::execute()
 void KisTransaction::unexecute()
 {
     Q_ASSERT(m_private->m_memento != 0);
-    m_private->m_device -> rollback(m_private->m_memento);
+    m_private->m_device->rollback(m_private->m_memento);
 
     QRect rc;
     Q_INT32 x, y, width, height;
@@ -85,7 +85,7 @@ void KisTransaction::unexecuteNoUpdate()
 {
     Q_ASSERT(m_private->m_memento != 0);
 
-    m_private->m_device -> rollback(m_private->m_memento);
+    m_private->m_device->rollback(m_private->m_memento);
 }
 
 QString KisTransaction::name() const

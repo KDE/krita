@@ -56,7 +56,7 @@ KisResource *KisResourceMediator::currentResource() const
 {
     if (m_activeItem) {
         Q_ASSERT(dynamic_cast<KisIconItem*>(m_activeItem));
-        return static_cast<KisIconItem*>(m_activeItem) -> resource();
+        return static_cast<KisIconItem*>(m_activeItem)->resource();
     }
 
     return 0;
@@ -75,12 +75,12 @@ KisResource *KisResourceMediator::resourceFor(KoIconItem *item) const
 {
     KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
 
-    return kisitem ? kisitem -> resource() : 0;
+    return kisitem ? kisitem->resource() : 0;
 }
 
 KisResource *KisResourceMediator::resourceFor(KisIconItem *item) const
 {
-    return item ? item -> resource() : 0;
+    return item ? item->resource() : 0;
 }
 
 QWidget *KisResourceMediator::chooserWidget() const
@@ -94,21 +94,21 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 
     if (kisitem) {
         m_activeItem = kisitem;
-        m_chooser -> setCurrent(item);
-        emit activatedResource(kisitem ? kisitem -> resource() : 0);
+        m_chooser->setCurrent(item);
+        emit activatedResource(kisitem ? kisitem->resource() : 0);
     }
 }
 
 void KisResourceMediator::rServerAddedResource(KisResource *resource)
 {
-    if (resource && resource -> valid()) {
+    if (resource && resource->valid()) {
         
         KisIconItem *item = new KisIconItem(resource);
         Q_CHECK_PTR(item);
         
         m_items[resource] = item;
 
-        m_chooser -> addItem(item);
+        m_chooser->addItem(item);
         if (m_activeItem == 0) setActiveItem(item);
     }
 }

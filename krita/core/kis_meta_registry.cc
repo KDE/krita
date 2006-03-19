@@ -33,14 +33,14 @@ KisMetaRegistry::KisMetaRegistry()
 {
     // Create the colorspaces and load the profiles
 
-    KGlobal::instance() -> dirs() -> addResourceType("kis_profiles",
+    KGlobal::instance()->dirs()->addResourceType("kis_profiles",
                                                      KStandardDirs::kde_default("data") + "krita/profiles/");
                           
     QStringList profileFilenames;
-    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::instance()->dirs() -> findAllResources("kis_profiles", "*.icc");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
 
     QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
 

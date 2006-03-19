@@ -30,14 +30,14 @@ KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
     m_y = 0;
     m_row = 0;
     m_col = 0;
-    m_pixelSize = m_ktm -> pixelSize();
+    m_pixelSize = m_ktm->pixelSize();
     m_tile = 0;
 }
 
 KisTiledIterator::~KisTiledIterator( )
 {
     if (m_tile)
-        m_tile -> removeReader();
+        m_tile->removeReader();
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
@@ -56,7 +56,7 @@ KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
         m_tile = rhs.m_tile;
         m_writable = rhs.m_writable;
         if (m_tile)
-            m_tile -> addReader();
+            m_tile->addReader();
     }
 }
 
@@ -64,7 +64,7 @@ KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
 {
     if (this != &rhs) {
         if (m_tile)
-            m_tile -> removeReader();
+            m_tile->removeReader();
         m_ktm = rhs.m_ktm;
         m_pixelSize = rhs.m_pixelSize;
         m_x = rhs.m_x;
@@ -77,7 +77,7 @@ KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
         m_tile = rhs.m_tile;
         m_writable = rhs.m_writable;
         if (m_tile)
-            m_tile -> addReader();
+            m_tile->addReader();
     }
     return *this;
 }
@@ -93,7 +93,7 @@ const Q_UINT8 * KisTiledIterator::oldRawData() const
 #ifdef DEBUG
     // Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
     // as rawData().
-    kdWarning(!m_ktm -> hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
+    kdWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
 #endif
     return m_oldData + m_offset;
 }
@@ -101,13 +101,13 @@ const Q_UINT8 * KisTiledIterator::oldRawData() const
 void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
     if (m_tile)
-        m_tile -> removeReader();
+        m_tile->removeReader();
 
     m_tile = m_ktm->getTile(col, row, m_writable);
     
     if (m_tile == 0) return;
     //Q_ASSERT(m_tile != 0);
-    m_tile -> addReader();
+    m_tile->addReader();
 
     m_data = m_tile->data();
     if (m_data == 0) return;

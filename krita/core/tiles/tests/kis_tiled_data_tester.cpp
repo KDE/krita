@@ -41,31 +41,31 @@ void KisTiledDataTester::allTests()
     Q_INT32 extentWidth;
     Q_INT32 extentHeight;
 
-    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentWidth, 0);
     CHECK(extentHeight, 0);
 
-    const Q_UINT8 *readOnlyPixel = dm -> pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    const Q_UINT8 *readOnlyPixel = dm->pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentWidth, 0);
     CHECK(extentHeight, 0);
 
-    Q_UINT8 *writablePixel = dm -> writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
-    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    Q_UINT8 *writablePixel = dm->writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentX, 0);
     CHECK(extentY, 0);
     CHECK(extentWidth, KisTile::WIDTH);
     CHECK(extentHeight, KisTile::HEIGHT);
 
-    writablePixel = dm -> writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
-    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    writablePixel = dm->writablePixel(-KisTile::WIDTH, -KisTile::HEIGHT);
+    dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentX, -KisTile::WIDTH);
     CHECK(extentY, -KisTile::HEIGHT);
     CHECK(extentWidth, 2*KisTile::WIDTH);
     CHECK(extentHeight, 2*KisTile::HEIGHT);
 
-    dm -> clear();
-    dm -> extent(extentX, extentY, extentWidth, extentHeight);
+    dm->clear();
+    dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentWidth, 0);
     CHECK(extentHeight, 0);
 

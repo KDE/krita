@@ -249,12 +249,12 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*pr
     WetPack * wp = (WetPack*)src;
 
     // First the adsorption layer
-    wet_composite(RGB, rgb, &wp -> adsorb);
+    wet_composite(RGB, rgb, &wp->adsorb);
 
     // Then the paint layer (which comes first in our double-packed pixel)
-    wet_composite(RGB, rgb,  &wp -> paint);
+    wet_composite(RGB, rgb,  &wp->paint);
 
-    c -> setRgb(rgb[0], rgb[1], rgb[2]);
+    c->setRgb(rgb[0], rgb[1], rgb[2]);
 
     delete[]rgb;
 }
@@ -321,9 +321,9 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
         // First the adsorption layers
         WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
         // XXX Probably won't work on MSB archs!
-        wet_composite(BGR, rgb, &(wp -> adsorb));
+        wet_composite(BGR, rgb, &(wp->adsorb));
         // Then the paint layer (which comes first in our double-packed pixel)
-        wet_composite(BGR, rgb, &(wp -> paint));
+        wet_composite(BGR, rgb, &(wp->paint));
 
         // XXX pay attention to this comment!!
         // Display the wet stripes -- this only works if we have at least three scanlines in height,
@@ -372,8 +372,8 @@ void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
             for (int i = 0; i < cols; i++) {
                 WetPack* dstPack = &(reinterpret_cast<WetPack*>(d))[i];
                 const WetPack* srcPack = &(reinterpret_cast<const WetPack*>(s))[i];
-                combinePixels(&(dstPack -> paint), &(dstPack -> paint), &(srcPack -> paint));
-                combinePixels(&(dstPack -> adsorb), &(dstPack -> adsorb), &(srcPack -> adsorb));
+                combinePixels(&(dstPack->paint), &(dstPack->paint), &(srcPack->paint));
+                combinePixels(&(dstPack->adsorb), &(dstPack->adsorb), &(srcPack->adsorb));
             }
             d += dstRowSize; // size??
             s += srcRowStride;
@@ -469,7 +469,7 @@ void KisWetColorSpace::wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet)
 
 void KisWetColorSpace::wet_render_wetness(Q_UINT8 * rgb, WetPack * pack)
 {
-    int highlight = 255 - (pack -> paint.w >> 1);
+    int highlight = 255 - (pack->paint.w >> 1);
 
     if (highlight < 255 && ((phase++) % 3 == 0)) {
         for (int i = 0; i < 3; i++)
@@ -491,7 +491,7 @@ QString KisWetColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 cha
 {
     Q_ASSERT(channelIndex < nChannels());
     const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
 }
@@ -500,7 +500,7 @@ QString KisWetColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
 {
     Q_ASSERT(channelIndex < nChannels());
     const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }

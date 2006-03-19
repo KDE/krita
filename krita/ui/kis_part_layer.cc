@@ -82,7 +82,7 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
         QRect rect = extent();
         m_activated = true;
         setDirty(rect);
-        QPtrList<KoView> views = child -> parentDocument() -> views();
+        QPtrList<KoView> views = child->parentDocument()->views();
         Q_ASSERT(views.count());
         // XXX iterate over views
         connect(views.at(0), SIGNAL(activated(bool)),
@@ -96,35 +96,35 @@ void KisPartLayerImpl::childDeactivated(bool activated)
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry
     if (m_activated && !activated /* no clue, but debugging suggests it is false here */) {
-        QPtrList<KoView> views = m_doc -> parentDocument() -> views();
+        QPtrList<KoView> views = m_doc->parentDocument()->views();
         Q_ASSERT(views.count());
-        views.at(0) -> disconnect(SIGNAL(activated(bool)));
+        views.at(0)->disconnect(SIGNAL(activated(bool)));
         m_activated = false;
-        setDirty(m_doc -> geometry());
+        setDirty(m_doc->geometry());
     }
 }
 
 void KisPartLayerImpl::setX(Q_INT32 x) {
-    QRect rect = m_doc -> geometry();
+    QRect rect = m_doc->geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
     // since the part is not necesarily started at (0,0)
-    rect.moveBy(x - this -> x(), 0);
-    m_doc -> setGeometry(rect);
+    rect.moveBy(x - this->x(), 0);
+    m_doc->setGeometry(rect);
 }
 
 void KisPartLayerImpl::setY(Q_INT32 y) {
-    QRect rect = m_doc -> geometry();
+    QRect rect = m_doc->geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
     // since the part is not necesarily started at (0,0)
-    rect.moveBy(0, y - this -> y());
-    m_doc -> setGeometry(rect);
+    rect.moveBy(0, y - this->y());
+    m_doc->setGeometry(rect);
 }
 
 void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
     uchar *j = img.bits();
-    QRect rect = m_doc -> geometry();
+    QRect rect = m_doc->geometry();
 
     for (int y2 = y; y2 < h + y; ++y2) {
         for (int x2 = x; x2 < w + x; ++x2) {
@@ -144,7 +144,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
 {
     if (!m_doc || !m_doc->document() || m_activated) return 0;
 
-    m_cache -> clear();
+    m_cache->clear();
 
     QRect intersection(r.intersect(exactBounds()));
     if (intersection.isEmpty())
@@ -158,7 +158,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     QRect paintRect(exactBounds());
     paintRect.moveBy(- exactBounds().x(), - exactBounds().y());
 
-    QPixmap pm1(projection -> convertToQImage(0 /*srgb XXX*/,
+    QPixmap pm1(projection->convertToQImage(0 /*srgb XXX*/,
                                               intersection.x(), intersection.y(),
                                               intersection.width(), intersection.height()));
     QPixmap pm2(extent().width(), extent().height());
@@ -172,7 +172,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     // Since a Krita Device really is displaysize/zoom agnostic, caring about zoom is not
     // really as important here. What we paint at the moment, is just (0,0)x(w,h)
     // Paint transparent, no zoom:
-    m_doc -> document() -> paintEverything(painter, paintRect, true);
+    m_doc->document()->paintEverything(painter, paintRect, true);
 
     copyBlt(&pm1, 0, 0, &pm2,
              embedRect.x(), embedRect.y(), embedRect.width(), embedRect.height());
@@ -180,7 +180,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
 
     //assume the part is sRGB for now, and that "" is sRGB
     // And we need to paint offsetted
-    m_cache -> convertFromQImage(qimg, "", intersection.left(), intersection.top());
+    m_cache->convertFromQImage(qimg, "", intersection.left(), intersection.top());
 
     return m_cache;
 }
@@ -193,7 +193,7 @@ QImage KisPartLayerImpl::createThumbnail(Q_INT32 w, Q_INT32 h) {
     painter.fillRect(0, 0, w, h, Qt::white);
 
     painter.scale(w / bounds.width(), h / bounds.height());
-    m_doc -> document() -> paintEverything(painter, bounds);
+    m_doc->document()->paintEverything(painter, bounds);
     QImage qimg = pm.convertToImage();
 
     return qimg;
@@ -215,7 +215,7 @@ bool KisPartLayerImpl::saveToXML(QDomDocument doc, QDomElement elem)
     embeddedElement.setAttribute("layertype", "partlayer");
     elem.appendChild(embeddedElement);
 
-    QDomElement objectElem = childDoc() -> save(doc);
+    QDomElement objectElem = childDoc()->save(doc);
     embeddedElement.appendChild(objectElem);
 
     return true;
@@ -227,11 +227,11 @@ KisConnectPartLayerVisitor::KisConnectPartLayerVisitor(KisImageSP img, KisView* 
 }
 
 bool KisConnectPartLayerVisitor::visit(KisGroupLayer *layer) {
-    KisLayerSP child = layer -> lastChild();
+    KisLayerSP child = layer->lastChild();
 
     while (child) {
-        child -> accept(*this);
-        child = child -> prevSibling();
+        child->accept(*this);
+        child = child->prevSibling();
     }
 
     return true;

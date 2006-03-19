@@ -79,7 +79,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t =  new KisToolEllipse(); 
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t; 
     }
     virtual KisID id() { return KisID("ellipse", i18n("Ellipse Tool")); }

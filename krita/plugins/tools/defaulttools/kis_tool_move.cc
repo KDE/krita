@@ -58,12 +58,12 @@ void KisToolMove::update(KisCanvasSubject *subject)
 
 void KisToolMove::buttonPress(KisButtonPressEvent *e)
 {
-    if (m_subject && e -> button() == QMouseEvent::LeftButton) {
-        QPoint pos = e -> pos().floorQPoint();
-        KisImageSP img = m_subject -> currentImg();
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        QPoint pos = e->pos().floorQPoint();
+        KisImageSP img = m_subject->currentImg();
         KisLayerSP dev;
 
-        if (!img || !(dev = img -> activeLayer()))
+        if (!img || !(dev = img->activeLayer()))
             return;
 
         m_strategy.startDrag(pos);
@@ -73,19 +73,19 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
 void KisToolMove::move(KisMoveEvent *e)
 {
     if (m_subject)
-        m_strategy.drag(e -> pos().floorQPoint());
+        m_strategy.drag(e->pos().floorQPoint());
 }
 
 void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && e -> button() == QMouseEvent::LeftButton) {
-        m_strategy.endDrag(e -> pos().floorQPoint());
+    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+        m_strategy.endDrag(e->pos().floorQPoint());
     }
 }
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Move"),
@@ -95,8 +95,8 @@ void KisToolMove::setup(KActionCollection *collection)
                         SLOT(activate()),
                         collection,
                         name());
-        m_action -> setToolTip(i18n("Move"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Move"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

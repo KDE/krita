@@ -65,12 +65,12 @@ void KisToolSelectEraser::activate()
     if (!m_optWidget)
         return;
 
-    m_optWidget -> slotActivated();
+    m_optWidget->slotActivated();
 }
 
 void KisToolSelectEraser::initPaint(KisEvent */*e*/) 
 {
-    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
@@ -82,22 +82,22 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     
     if (m_painter)
         delete m_painter;
-    if(! dev -> hasSelection())
+    if(! dev->hasSelection())
     {
-        dev -> selection() -> clear();
-        dev -> emitSelectionChanged();
+        dev->selection()->clear();
+        dev->emitSelectionChanged();
     }
-    KisSelectionSP selection = dev -> selection();
+    KisSelectionSP selection = dev->selection();
 
     m_painter = new KisPainter(selection.data());
     Q_CHECK_PTR(m_painter);
-    m_painter -> beginTransaction(i18n("Selection Eraser"));
-    m_painter -> setPaintColor(KisColor(Qt::white, selection->colorSpace()));
-    m_painter -> setBrush(m_subject -> currentBrush());
-    m_painter -> setOpacity(OPACITY_OPAQUE);
-    m_painter -> setCompositeOp(COMPOSITE_ERASE);
-    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("eraser", 0, painter());
-    painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->beginTransaction(i18n("Selection Eraser"));
+    m_painter->setPaintColor(KisColor(Qt::white, selection->colorSpace()));
+    m_painter->setBrush(m_subject->currentBrush());
+    m_painter->setOpacity(OPACITY_OPAQUE);
+    m_painter->setCompositeOp(COMPOSITE_ERASE);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("eraser", 0, painter());
+    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
@@ -110,7 +110,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("Selection &Eraser"),
@@ -118,8 +118,8 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action -> setToolTip(i18n("Erase parts of a selection"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Erase parts of a selection"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -128,7 +128,7 @@ QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Selection Eraser"));
+    m_optWidget->setCaption(i18n("Selection Eraser"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));

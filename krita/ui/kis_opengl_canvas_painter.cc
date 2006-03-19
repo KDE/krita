@@ -45,7 +45,7 @@ KisOpenGLCanvasPainter::~KisOpenGLCanvasPainter()
         if (m_active) {
             end();
         }
-        m_widget -> doneCurrent();
+        m_widget->doneCurrent();
     }
 }
 
@@ -65,7 +65,7 @@ bool KisOpenGLCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipp
 void KisOpenGLCanvasPainter::prepareForDrawing()
 {
     if (m_widget != 0) {
-        m_widget -> makeCurrent();
+        m_widget->makeCurrent();
         m_active = true;
         save();
         glDrawBuffer(GL_FRONT);
@@ -75,7 +75,7 @@ void KisOpenGLCanvasPainter::prepareForDrawing()
         glMatrixMode(GL_TEXTURE);
         glLoadIdentity();
 
-        m_window = QRect(0, 0, m_widget -> width(), m_widget -> height());
+        m_window = QRect(0, 0, m_widget->width(), m_widget->height());
         m_viewport = m_window;
         updateViewTransformation();
 
@@ -93,8 +93,8 @@ void KisOpenGLCanvasPainter::updateViewTransformation()
 
     // We don't set the GL viewport directly from the Qt one as the GL
     // has a limited size. Instead we fold it into the projection matrix.
-    glViewport(0, 0, m_widget -> width(), m_widget -> height());
-    glOrtho(0, m_widget -> width(), m_widget -> height(), 0, -1, 1);
+    glViewport(0, 0, m_widget->width(), m_widget->height());
+    glOrtho(0, m_widget->width(), m_widget->height(), 0, -1, 1);
 
     glTranslatef(m_viewport.x(), m_viewport.y(), 0.0);
     glScalef(static_cast<float>(m_viewport.width()) / m_window.width(), 

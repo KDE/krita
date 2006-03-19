@@ -73,7 +73,7 @@ KisPaletteView::KisPaletteView(QWidget *parent, const char* name, int minWidth, 
     setHScrollBarMode(QScrollView::AlwaysOff);
     setVScrollBarMode(QScrollView::AlwaysOn);
 
-    QSize minSize = QSize(verticalScrollBar() -> width(), 0);
+    QSize minSize = QSize(verticalScrollBar()->width(), 0);
     minSize += QSize(frameWidth(), 0);
     minSize += QSize(cellSize);
 
@@ -95,23 +95,23 @@ void KisPaletteView::setPalette(KisPalette* palette)
     m_currentPalette = palette;
     delete m_cells;
 
-    int rows = (m_currentPalette -> nColors() + mCols -1 ) / mCols;
+    int rows = (m_currentPalette->nColors() + mCols -1 ) / mCols;
 
     if (rows < 1) rows = 1;
 
     m_cells = new KColorCells(viewport(), rows, mCols);
     Q_CHECK_PTR(m_cells);
 
-    m_cells -> setShading(false);
-    m_cells -> setAcceptDrags(false);
+    m_cells->setShading(false);
+    m_cells->setAcceptDrags(false);
 
     QSize cellSize = QSize( mMinWidth, mMinWidth * rows / mCols);
-    m_cells -> setFixedSize( cellSize );
+    m_cells->setFixedSize( cellSize );
 
-    for( int i = 0; i < m_currentPalette -> nColors(); i++)
+    for( int i = 0; i < m_currentPalette->nColors(); i++)
     {
-        QColor c = m_currentPalette -> getColor(i).color;
-        m_cells -> setColor( i, c );
+        QColor c = m_currentPalette->getColor(i).color;
+        m_cells->setColor( i, c );
     }
 
     connect(m_cells, SIGNAL(colorSelected(int)),
@@ -121,7 +121,7 @@ void KisPaletteView::setPalette(KisPalette* palette)
             SLOT(slotColorCellDoubleClicked(int)) );
 
     addChild( m_cells );
-    m_cells -> show();
+    m_cells->show();
     updateScrollBars();
 }
 
@@ -131,19 +131,19 @@ void KisPaletteView::slotColorCellSelected( int col )
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
-    m_currentEntry = m_currentPalette -> getColor(col);
-    emit colorSelected(KisColor(m_currentPalette -> getColor(col).color, cs));
-    emit colorSelected(m_currentPalette -> getColor(col).color);
+    m_currentEntry = m_currentPalette->getColor(col);
+    emit colorSelected(KisColor(m_currentPalette->getColor(col).color, cs));
+    emit colorSelected(m_currentPalette->getColor(col).color);
 }
 
 void KisPaletteView::slotColorCellDoubleClicked( int col )
 {
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    if (!m_currentPalette || (col >= m_currentPalette -> nColors()))
+    if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
     emit colorDoubleClicked(KisColor(m_currentPalette->getColor(col).color, cs),
-                            m_currentPalette -> getColor(col).name);
+                            m_currentPalette->getColor(col).name);
 }
 
 #include "kis_palette_view.moc"

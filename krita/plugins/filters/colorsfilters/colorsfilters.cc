@@ -219,7 +219,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     if (src != dst && src->hasSelection()) {
         dst->setSelection(dstSel);
     }
-
+    delete adj;
     setProgressDone();
 }
 
@@ -296,6 +296,6 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         }
         setProgress(pixelsProcessed);
     }
-
+    delete adj;
     setProgressDone();
 }

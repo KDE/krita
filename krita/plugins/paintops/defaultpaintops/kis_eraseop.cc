@@ -77,13 +77,13 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (!m_painter) return;
 
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter->device();
     if (!device) return;
 
-    KisBrush *brush = m_painter -> brush();
-    if (! brush -> canPaintFor(info) )
+    KisBrush *brush = m_painter->brush();
+    if (! brush->canPaintFor(info) )
         return;
-    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     Q_INT32 destX;
@@ -94,30 +94,30 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &destX, &xFraction);
     splitCoordinate(pt.y(), &destY, &yFraction);
 
-    KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
+    KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
 
-    KisPaintDeviceSP dab = new KisPaintDevice(device -> colorSpace(), "erase op dab");
+    KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace(), "erase op dab");
     Q_CHECK_PTR(dab);
 
-    Q_INT32 maskWidth = mask -> width();
-    Q_INT32 maskHeight = mask -> height();
+    Q_INT32 maskWidth = mask->width();
+    Q_INT32 maskHeight = mask->height();
 
     QRect dstRect;
 
-    KisRectIteratorPixel it = dab -> createRectIterator(0, 0, maskWidth, maskHeight, true);
-    KisColorSpace* cs = dab -> colorSpace();
+    KisRectIteratorPixel it = dab->createRectIterator(0, 0, maskWidth, maskHeight, true);
+    KisColorSpace* cs = dab->colorSpace();
     while (!it.isDone()) {
-        cs -> setAlpha(it.rawData(), Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()), 1);
+        cs->setAlpha(it.rawData(), Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()), 1);
         ++it;
     }
 
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
-    KisImage * image = device -> image();
+    KisImage * image = device->image();
 
     if (image != 0) {
-        dstRect &= image -> bounds();
+        dstRect &= image->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -127,8 +127,8 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
 
-    m_painter -> bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
+    m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
 
-    m_painter -> addDirtyRect(dstRect);
+    m_painter->addDirtyRect(dstRect);
 }
 

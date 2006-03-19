@@ -95,7 +95,7 @@ Kross::Api::Object::Ptr Histogram::getValue(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Histogram::getNumberOfBins(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram -> producer() -> numberOfBins() );
+    return new Kross::Api::Variant( m_histogram->producer()->numberOfBins() );
 }
 
 

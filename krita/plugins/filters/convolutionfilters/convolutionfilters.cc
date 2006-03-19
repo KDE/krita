@@ -35,11 +35,11 @@ KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
                           Q_INT32 factor, Q_INT32 offset )
 {
     KisKernelSP kernel = new KisKernel();
-    kernel -> width = 3;
-    kernel -> height = 3;
+    kernel->width = 3;
+    kernel->height = 3;
 
-    kernel -> factor = factor;
-    kernel -> offset = offset;
+    kernel->factor = factor;
+    kernel->offset = offset;
 
     kernel->data = new Q_INT32[9];
     kernel->data[0] = i0;

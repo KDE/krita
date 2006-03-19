@@ -47,8 +47,8 @@ KisIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
     // O(n^2), can't this be done better? (But preferrably not by looking up the preferredness
     // during the sorting...
     while( it != endit ) {
-        if (it -> second -> isCompatibleWith(colorSpace)) {
-            float preferred = it -> second -> preferrednessLevelWith(colorSpace);
+        if (it->second->isCompatibleWith(colorSpace)) {
+            float preferred = it->second->preferrednessLevelWith(colorSpace);
             QValueList<float>::iterator pit = preferredList.begin();
             QValueList<float>::iterator pend = preferredList.end();
             KisIDList::iterator lit = list.begin();
@@ -58,7 +58,7 @@ KisIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
                 ++lit;
             }
 
-            list.insert(lit, it -> first);
+            list.insert(lit, it->first);
             preferredList.insert(pit, preferred);
         }
         ++it;

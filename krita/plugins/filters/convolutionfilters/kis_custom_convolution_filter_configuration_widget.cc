@@ -46,13 +46,13 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 //     QSpacerItem *spacer = new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Minimum);
 //     Q_CHECK_PTR(spacer);
 
-//     widgetLayout -> addWidget(bnRefresh, 0, 0);
-//     widgetLayout -> addItem(spacer, 0, 1);
+//     widgetLayout->addWidget(bnRefresh, 0, 0);
+//     widgetLayout->addItem(spacer, 0, 1);
 
     m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
     Q_CHECK_PTR(m_ccfcws);
 
-    widgetLayout -> addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
+    widgetLayout->addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
 
 //     connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
     connect( m_ccfcws->matrixWidget, SIGNAL(valueChanged()), SIGNAL(sigPleaseUpdatePreview()));

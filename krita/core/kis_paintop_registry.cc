@@ -43,7 +43,7 @@ KisPaintOpRegistry::KisPaintOpRegistry()
     Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
     KisPaintOpRegistry::m_singleton = this;
 
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Paintop"),
+    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
@@ -56,9 +56,9 @@ KisPaintOpRegistry::KisPaintOpRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << "\n";
+            kdDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
                 kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
@@ -91,7 +91,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, const KisPaintOpSetti
     }
     KisPaintOpFactorySP f = get(id);
    if (f) {
-        return f -> createOp(settings, painter);
+        return f->createOp(settings, painter);
     }
     else {
         return 0;

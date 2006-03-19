@@ -538,8 +538,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
     //If the device has a selection only iterate over that selection
     QRect r;
-    if( m_device -> hasSelection() ) {
-        r = m_device -> selection() -> selectedExactRect();
+    if( m_device->hasSelection() ) {
+        r = m_device->selection()->selectedExactRect();
         startx = r.x();
         starty = r.y();
         width = r.width();
@@ -566,8 +566,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     for (int y = starty; y <= endy; y++) {
         for (int x = startx; x <= endx; x++) {
 
-            double t = shapeStrategy -> valueAt( x, y);
-            t = repeatStrategy -> valueAt(t);
+            double t = shapeStrategy->valueAt( x, y);
+            t = repeatStrategy->valueAt(t);
 
             if (reverseGradient) {
                 t = 1 - t;
@@ -576,7 +576,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             QColor color;
             Q_UINT8 opacity;
 
-            m_gradient -> colorAt(t, &color, &opacity);
+            m_gradient->colorAt(t, &color, &opacity);
 
             layer.setPixel(x - startx, y - starty,
                            qRgba(color.red(), color.green(), color.blue(), opacity));
@@ -657,8 +657,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             double sampleX = x - 0.5 + (sampleWidth / 2) + xSample * sampleWidth;
                             double sampleY = y - 0.5 + (sampleWidth / 2) + ySample * sampleWidth;
 
-                            double t = shapeStrategy -> valueAt(sampleX, sampleY);
-                            t = repeatStrategy -> valueAt(t);
+                            double t = shapeStrategy->valueAt(sampleX, sampleY);
+                            t = repeatStrategy->valueAt(t);
 
                             if (reverseGradient) {
                                 t = 1 - t;
@@ -667,7 +667,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             QColor color;
                             Q_UINT8 opacity;
 
-                            m_gradient -> colorAt(t, &color, &opacity);
+                            m_gradient->colorAt(t, &color, &opacity);
 
                             totalRed += color.red();
                             totalGreen += color.green();

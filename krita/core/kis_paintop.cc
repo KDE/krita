@@ -42,7 +42,7 @@ KisPaintOp::~KisPaintOp()
 }
 
 KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask) {
-    return computeDab(mask, m_painter -> device() -> colorSpace());
+    return computeDab(mask, m_painter->device()->colorSpace());
 }
 
 KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
@@ -57,14 +57,14 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     KisPaintDeviceSP dab = new KisPaintDevice(cs, "dab");
     Q_CHECK_PTR(dab);
 
-    KisColor kc = m_painter -> paintColor();
+    KisColor kc = m_painter->paintColor();
 
-    KisColorSpace * colorSpace = dab -> colorSpace();
+    KisColorSpace * colorSpace = dab->colorSpace();
 
     Q_INT32 pixelSize = colorSpace->pixelSize();
 
-    Q_INT32 maskWidth = mask -> width();
-    Q_INT32 maskHeight = mask -> height();
+    Q_INT32 maskWidth = mask->width();
+    Q_INT32 maskHeight = mask->height();
 
     // Convert the kiscolor to the right colorspace.
     kc.convertTo(colorSpace);

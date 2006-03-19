@@ -62,9 +62,10 @@ public:
     static inline KisID id() { return KisID("perchannel", i18n("Color Adjustment")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsIncrementalPainting() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
+    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
 private:
 };
 

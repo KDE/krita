@@ -68,7 +68,7 @@ void KisResourceServerBase::loadResources(QStringList filenames)
             uniqueFiles.append(fname);
             KisResource *resource;
             resource = createResource(front);
-            if(resource -> load() && resource -> valid())
+            if(resource->load() && resource->valid())
             {
                 m_resources.append(resource);
                 Q_CHECK_PTR(resource);
@@ -93,7 +93,7 @@ QValueList<KisResource*> KisResourceServerBase::resources()
 
 void KisResourceServerBase::addResource(KisResource* resource)
 {
-    if (!resource -> valid()) {
+    if (!resource->valid()) {
         kdWarning(41001) << "Tried to add an invalid resource!" << endl;
         return;
     }
@@ -135,7 +135,7 @@ QStringList getFileNames( QString extensions, QString type )
     QStringList::Iterator it;
     for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
         QString s = (*it);
-        fileNames += KisFactory::instance()->dirs() -> findAllResources(type.ascii(), (*it));
+        fileNames += KisFactory::instance()->dirs()->findAllResources(type.ascii(), (*it));
     }
     return fileNames;
 }

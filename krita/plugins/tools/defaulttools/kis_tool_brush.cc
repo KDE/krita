@@ -90,19 +90,19 @@ void KisToolBrush::initPaint(KisEvent *e)
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
     if (!op) return;
     
-    m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
+    m_subject->canvasController()->kiscanvas()->update(); // remove the outline
 
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     if (op->incremental()) {
-        m_timer -> start( m_rate );
+        m_timer->start( m_rate );
     }
 }
 
 
 void KisToolBrush::endPaint()
 {
-    m_timer -> stop();
+    m_timer->stop();
     super::endPaint();
 }
 
@@ -110,15 +110,15 @@ void KisToolBrush::endPaint()
 void KisToolBrush::setup(KActionCollection *collection)
 {
 
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Brush"),
                                     "tool_freehand", Qt::Key_B, this,
                                     SLOT(activate()), collection,
                                     name());
-        m_action -> setToolTip(i18n("Draw freehand"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Draw freehand"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -127,11 +127,11 @@ void KisToolBrush::move(KisMoveEvent *e) {
     KisToolFreehand::move(e);
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
-        paintOutline(e -> pos());
+        paintOutline(e->pos());
 }
 
 void KisToolBrush::leave(QEvent */*e*/) {
-    m_subject -> canvasController() -> kiscanvas() -> update(); // remove the outline
+    m_subject->canvasController()->kiscanvas()->update(); // remove the outline
 }
 
 
@@ -158,7 +158,7 @@ QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optionLayout);
 
     super::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout -> addWidget(m_chkDirect, 0, 0);
+    m_optionLayout->addWidget(m_chkDirect, 0, 0);
 
     return widget;
 }

@@ -37,7 +37,7 @@ KisToolRegistry *KisToolRegistry::m_singleton = 0;
 KisToolRegistry::KisToolRegistry()
 {
     // Load all modules: color models, paintops, filters
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Tool"),
+    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Tool"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
@@ -50,9 +50,9 @@ KisToolRegistry::KisToolRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
+            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
                 kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
@@ -90,12 +90,12 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
     {
         KisToolFactorySP f = get(*it);
 
-        KisTool * tool = f -> createTool(ac);
-        subject -> attach(tool);
+        KisTool * tool = f->createTool(ac);
+        subject->attach(tool);
         tools.push_back(tool);
     }
 
-    subject -> notifyObservers();
+    subject->notifyObservers();
 
     return tools;
 }
@@ -103,7 +103,7 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
 KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const
 {
     KisToolFactorySP f = get(id);
-    KisTool * t = f -> createTool(ac);
+    KisTool * t = f->createTool(ac);
     subject->attach(t);
     return t;
 }

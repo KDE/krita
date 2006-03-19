@@ -47,9 +47,9 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
     m_optionLayout = new QGridLayout(widget, 2, 1);
    // super::addOptionWidgetLayout(m_optionLayout);
 
-    m_shapeOptionsWidget -> cmbFill -> reparent(widget, QPoint(0,0), true);
-    m_shapeOptionsWidget -> textLabel3 -> reparent(widget, QPoint(0,0), true);
-    addOptionWidgetOption(m_shapeOptionsWidget -> cmbFill, m_shapeOptionsWidget -> textLabel3);
+    m_shapeOptionsWidget->cmbFill->reparent(widget, QPoint(0,0), true);
+    m_shapeOptionsWidget->textLabel3->reparent(widget, QPoint(0,0), true);
+    addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabel3);
 
     return widget;
 }
@@ -57,7 +57,7 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
 KisPainter::FillStyle KisToolShape::fillStyle(void)
 {
     if (m_shapeOptionsWidget) {
-        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget -> cmbFill -> currentItem());
+        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget->cmbFill->currentItem());
     } else {
         return KisPainter::FillStyleNone;
     }

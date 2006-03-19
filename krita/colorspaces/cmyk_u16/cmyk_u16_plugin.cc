@@ -46,8 +46,8 @@ CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const char *name, const QStringLis
         KisColorSpace * colorSpaceCMYKU16 = new KisCmykU16ColorSpace(f, 0);
         KisColorSpaceFactory * csf = new KisCmykU16ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceCMYKU16);
-        f -> add(csf);
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        f->add(csf);
+        KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("CMYK16HISTO", i18n("CMYK16 Histogram")), colorSpaceCMYKU16) );
     }

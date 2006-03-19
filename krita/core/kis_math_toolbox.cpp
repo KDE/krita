@@ -114,7 +114,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 
 void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
 {
-    Q_INT32 depth = dst -> colorSpace() -> nColorChannels();
+    Q_INT32 depth = dst->colorSpace()->nColorChannels();
     QMemArray<PtrFromDouble> f(depth);
     QValueVector<KisChannelInfo *> cis = dst->colorSpace()->channels();
     for(Q_INT32 k = 0; k < depth; k++)

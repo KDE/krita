@@ -46,13 +46,13 @@ public:
     {
         QDomElement layerElement = m_doc.createElement("layer");
 
-        layerElement.setAttribute("name", layer -> name());
+        layerElement.setAttribute("name", layer->name());
         layerElement.setAttribute("x", layer->x());
         layerElement.setAttribute("y", layer->y());
-        layerElement.setAttribute("opacity", layer -> opacity());
-        layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
-        layerElement.setAttribute("visible", layer -> visible());
-        layerElement.setAttribute("locked", layer -> locked());
+        layerElement.setAttribute("opacity", layer->opacity());
+        layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+        layerElement.setAttribute("visible", layer->visible());
+        layerElement.setAttribute("locked", layer->locked());
         layerElement.setAttribute("layertype", "paintlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
         layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id().id());
@@ -78,13 +78,13 @@ public:
         {
             layerElement = m_doc.createElement("layer");
 
-            layerElement.setAttribute("name", layer -> name());
+            layerElement.setAttribute("name", layer->name());
             layerElement.setAttribute("x", layer->x());
             layerElement.setAttribute("y", layer->y());
-            layerElement.setAttribute("opacity", layer -> opacity());
-            layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
-            layerElement.setAttribute("visible", layer -> visible());
-            layerElement.setAttribute("locked", layer -> locked());
+            layerElement.setAttribute("opacity", layer->opacity());
+            layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+            layerElement.setAttribute("visible", layer->visible());
+            layerElement.setAttribute("locked", layer->locked());
             layerElement.setAttribute("layertype", "grouplayer");
 
             m_elem.appendChild(layerElement);
@@ -108,7 +108,7 @@ public:
 
     virtual bool visit(KisPartLayer* layer)
     {
-        bool ok = layer -> saveToXML(m_doc, m_elem);
+        bool ok = layer->saveToXML(m_doc, m_elem);
         return ok;
     }
 
@@ -116,13 +116,13 @@ public:
     {
         QDomElement layerElement = m_doc.createElement("layer");
 
-        layerElement.setAttribute("name", layer -> name());
+        layerElement.setAttribute("name", layer->name());
         layerElement.setAttribute("filtername", layer->filter()->name());
         layerElement.setAttribute("filterversion", layer->filter()->version());
-        layerElement.setAttribute("opacity", layer -> opacity());
-        layerElement.setAttribute("compositeop", layer -> compositeOp().id().id());
-        layerElement.setAttribute("visible", layer -> visible());
-        layerElement.setAttribute("locked", layer -> locked());
+        layerElement.setAttribute("opacity", layer->opacity());
+        layerElement.setAttribute("compositeop", layer->compositeOp().id().id());
+        layerElement.setAttribute("visible", layer->visible());
+        layerElement.setAttribute("locked", layer->locked());
         layerElement.setAttribute("layertype", "adjustmentlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
         layerElement.setAttribute("x", layer->x());

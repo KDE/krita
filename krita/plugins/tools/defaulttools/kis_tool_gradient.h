@@ -110,7 +110,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolGradient();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }

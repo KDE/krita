@@ -35,7 +35,7 @@ public:
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
     virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
-    virtual bool userVisible(KisColorSpace* cs) { return cs -> id() == KisID("WET", ""); }
+    virtual bool userVisible(KisColorSpace* cs) { return cs->id() == KisID("WET", ""); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
 };
 

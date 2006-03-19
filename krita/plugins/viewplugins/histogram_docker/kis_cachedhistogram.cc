@@ -24,12 +24,12 @@
 #include "kis_cachedhistogram.h"
 
 void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
-    m_producer -> clear();
-    KisRectIteratorPixel srcIt = dev -> createRectIterator(m_x, m_y, m_w, m_h, false);
+    m_producer->clear();
+    KisRectIteratorPixel srcIt = dev->createRectIterator(m_x, m_y, m_w, m_h, false);
     int i;
     while ( !srcIt.isDone() ) {
         i = srcIt.nConseqPixels();
-        m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, dev -> colorSpace());
+        m_producer->addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, dev->colorSpace());
         srcIt += i;
     }
 }

@@ -108,7 +108,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    m_profile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
+    m_profile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
 
     QRect r = dev->exactBounds();
 

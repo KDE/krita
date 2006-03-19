@@ -40,7 +40,7 @@ public:
     void generateBoundary(int w, int h);
 
 private:
-    typedef QPair<KisPoint, int> PointPair; // int -> length
+    typedef QPair<KisPoint, int> PointPair; // int->length
     bool isDark(Q_UINT8 val);
     KisPaintDevice* m_device;
     int m_fuzzyness;

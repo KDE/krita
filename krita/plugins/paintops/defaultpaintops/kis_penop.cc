@@ -59,38 +59,38 @@ KisPenOp::~KisPenOp()
 void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter->device();
     if (!device) return;
-    KisBrush * brush = m_painter -> brush();
+    KisBrush * brush = m_painter->brush();
     if (!brush) return;
-    if (! brush -> canPaintFor(info) )
+    if (! brush->canPaintFor(info) )
         return;
 
-    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     Q_INT32 x = pt.roundX();
     Q_INT32 y = pt.roundY();
 
     KisPaintDeviceSP dab = 0;
-    if (brush -> brushType() == IMAGE || 
-        brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), info);
+    if (brush->brushType() == IMAGE || 
+        brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(device->colorSpace(), info);
     }
     else {
         // Compute mask without sub-pixel positioning
-        KisAlphaMaskSP mask = brush -> mask(info);
+        KisAlphaMaskSP mask = brush->mask(info);
         dab = computeDab(mask);
     }
 
-    m_painter -> setPressure(info.pressure);
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
+    m_painter->setPressure(info.pressure);
+    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = device -> image();
+    KisImage * image = device->image();
 
     if (image != 0) {
-        dstRect &= image -> bounds();
+        dstRect &= image->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -100,7 +100,7 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
 
-    KisRectIteratorPixel pixelIt = dab -> createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
+    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
 
     while (!pixelIt.isDone()) {
         Q_UINT8 alpha = cs->getAlpha(pixelIt.rawData());
@@ -119,6 +119,6 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
 
-    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
-    m_painter -> addDirtyRect(dstRect);
+    m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+    m_painter->addDirtyRect(dstRect);
 }

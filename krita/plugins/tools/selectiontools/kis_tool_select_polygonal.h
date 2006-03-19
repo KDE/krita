@@ -94,7 +94,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolSelectPolygonal();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal Select Tool")); }

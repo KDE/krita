@@ -60,24 +60,24 @@ KisHistogram::~KisHistogram()
 void KisHistogram::updateHistogram()
 {
     Q_INT32 x,y,w,h;
-    m_dev -> exactBounds(x,y,w,h);
-    KisRectIteratorPixel srcIt = m_dev -> createRectIterator(x,y,w,h, false);
-    KisColorSpace* cs = m_dev -> colorSpace();
+    m_dev->exactBounds(x,y,w,h);
+    KisRectIteratorPixel srcIt = m_dev->createRectIterator(x,y,w,h, false);
+    KisColorSpace* cs = m_dev->colorSpace();
 
     QTime t;
     t.start();
 
     // Let the producer do it's work
-    m_producer -> clear();
+    m_producer->clear();
     int i;
     // Handle degenerate case (this happens with the accumulating histogram,
     // which has an empty device)
     if (srcIt.isDone()) {
-        m_producer -> addRegionToBin(0, 0, 0, cs);
+        m_producer->addRegionToBin(0, 0, 0, cs);
     } else {
         while ( !srcIt.isDone() ) {
             i = srcIt.nConseqPixels();
-            m_producer -> addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
+            m_producer->addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
             srcIt += i;
         }
     }
@@ -87,8 +87,8 @@ void KisHistogram::updateHistogram()
 
 void KisHistogram::computeHistogram()
 {
-    m_completeCalculations = calculateForRange(m_producer -> viewFrom(),
-            m_producer -> viewFrom() + m_producer -> viewWidth());
+    m_completeCalculations = calculateForRange(m_producer->viewFrom(),
+            m_producer->viewFrom() + m_producer->viewWidth());
 
     if (m_selection) {
         m_selectionCalculations = calculateForRange(m_selFrom, m_selTo);
@@ -111,7 +111,7 @@ KisHistogram::Calculations KisHistogram::selectionCalculations() {
 
 QValueVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
     QValueVector<Calculations> calculations;
-    uint count = m_producer -> channels().count();
+    uint count = m_producer->channels().count();
 
     for (uint i = 0; i < count; i++) {
         calculations.append(calculateSingleRange(i, from, to));
@@ -128,24 +128,24 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
     double max = from, min = to, total = 0.0, mean = 0.0; //, median = 0.0, stddev = 0.0;
     Q_UINT32 high = 0, low = (Q_UINT32) -1, count = 0;
 
-    if (m_producer -> count() == 0) {
+    if (m_producer->count() == 0) {
         // We won't get anything, even if a range is specified
         // XXX make sure all initial '0' values are correct here!
         return c;
     }
 
-    Q_INT32 totbins = m_producer -> numberOfBins();
+    Q_INT32 totbins = m_producer->numberOfBins();
     Q_UINT32 current;
 
     // convert the double range into actual bins:
-    double factor = static_cast<double>(totbins) / m_producer -> viewWidth();
+    double factor = static_cast<double>(totbins) / m_producer->viewWidth();
 
-    Q_INT32 fromBin = static_cast<Q_INT32>((from - m_producer -> viewFrom()) * factor);
+    Q_INT32 fromBin = static_cast<Q_INT32>((from - m_producer->viewFrom()) * factor);
     Q_INT32 toBin = fromBin + static_cast<Q_INT32>((to - from) * factor);
 
     // Min, max, count, low, high
     for (Q_INT32 i = fromBin; i < toBin; i++) {
-        current = m_producer -> getBinAt(channel, i);
+        current = m_producer->getBinAt(channel, i);
         double pos = static_cast<double>(i) / factor + from;
         if (current > high)
             high = current;
@@ -158,7 +158,7 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
                 max = pos;
         }
         // We do the count here as well.
-        // we can't use m_producer -> count() for this, because of the range
+        // we can't use m_producer->count() for this, because of the range
         count += current;
         total += current * pos;
     }
@@ -205,7 +205,7 @@ void KisHistogram::dump() {
     kdDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(c.getMin()) << "\n";
     kdDebug(DBG_AREA_MATH) << "High: " << QString().setNum(c.getHighest()) << "\n";
     kdDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(c.getLowest()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Mean: " << m_producer -> positionToString(c.getMean()) << "\n";
+    kdDebug(DBG_AREA_MATH) << "Mean: " << m_producer->positionToString(c.getMean()) << "\n";
     kdDebug(DBG_AREA_MATH) << "Total: " << QString().setNum(c.getTotal()) << "\n";
 //    kdDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
 //    kdDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";

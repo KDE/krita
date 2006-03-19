@@ -103,16 +103,16 @@ namespace {
     public:
         virtual void execute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> resize(m_after.width(), m_after.height());
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->resize(m_after.width(), m_after.height());
+                m_adapter->setUndo(true);
             }
 
         virtual void unexecute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> resize(m_before.width(), m_before.height());
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->resize(m_before.width(), m_before.height());
+                m_adapter->setUndo(true);
             }
 
     private:
@@ -145,18 +145,18 @@ namespace {
     public:
         virtual void execute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> setRootLayer(m_newRootLayer);
-                m_adapter -> setUndo(true);
-                m_img -> notifyLayersChanged();
+                m_adapter->setUndo(false);
+                m_img->setRootLayer(m_newRootLayer);
+                m_adapter->setUndo(true);
+                m_img->notifyLayersChanged();
             }
 
         virtual void unexecute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> setRootLayer(m_oldRootLayer);
-                m_adapter -> setUndo(true);
-                m_img -> notifyLayersChanged();
+                m_adapter->setUndo(false);
+                m_img->setRootLayer(m_oldRootLayer);
+                m_adapter->setUndo(true);
+                m_img->notifyLayersChanged();
             }
 
     private:
@@ -190,22 +190,22 @@ namespace {
     public:
         virtual void execute()
             {
-                m_adapter -> setUndo(false);
+                m_adapter->setUndo(false);
 
-                m_img -> setColorSpace(m_afterColorSpace);
-                m_img -> setProfile(m_afterColorSpace -> getProfile());
+                m_img->setColorSpace(m_afterColorSpace);
+                m_img->setProfile(m_afterColorSpace->getProfile());
 
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(true);
             }
 
         virtual void unexecute()
             {
-                m_adapter -> setUndo(false);
+                m_adapter->setUndo(false);
 
-                m_img -> setColorSpace(m_beforeColorSpace);
-                m_img -> setProfile(m_beforeColorSpace -> getProfile());
+                m_img->setColorSpace(m_beforeColorSpace);
+                m_img->setProfile(m_beforeColorSpace->getProfile());
 
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(true);
             }
 
     private:
@@ -241,7 +241,7 @@ namespace {
 
     void KisImageCommand::setUndo(bool undo)
     {
-        if (m_image -> undoAdapter()) {
+        if (m_image->undoAdapter()) {
             m_image->undoAdapter()->setUndo(undo);
         }
     }
@@ -265,14 +265,14 @@ namespace {
         virtual void execute()
             {
                 setUndo(false);
-                m_image -> moveLayer(m_layer, m_newParent, m_newAboveThis);
+                m_image->moveLayer(m_layer, m_newParent, m_newAboveThis);
                 setUndo(true);
             }
 
         virtual void unexecute()
             {
                 setUndo(false);
-                m_image -> moveLayer(m_layer, m_oldParent, m_oldAboveThis);
+                m_image->moveLayer(m_layer, m_oldParent, m_oldAboveThis);
                 setUndo(true);
             }
 
@@ -305,16 +305,16 @@ namespace {
 
         virtual void execute()
             {
-                adapter() -> setUndo(false);
-                m_img -> addLayer(m_layer, m_parent.data(), m_aboveThis);
-                adapter() -> setUndo(true);
+                adapter()->setUndo(false);
+                m_img->addLayer(m_layer, m_parent.data(), m_aboveThis);
+                adapter()->setUndo(true);
             }
 
         virtual void unexecute()
             {
-                adapter() -> setUndo(false);
-                m_img -> removeLayer(m_layer);
-                adapter() -> setUndo(true);
+                adapter()->setUndo(false);
+                m_img->removeLayer(m_layer);
+                adapter()->setUndo(true);
             }
 
     private:
@@ -347,16 +347,16 @@ namespace {
 
         virtual void execute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> removeLayer(m_layer);
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->removeLayer(m_layer);
+                m_adapter->setUndo(true);
             }
 
         virtual void unexecute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> addLayer(m_layer, m_prevParent.data(), m_prevAbove);
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->addLayer(m_layer, m_prevParent.data(), m_prevAbove);
+                m_adapter->setUndo(true);
             }
 
     private:
@@ -380,8 +380,8 @@ namespace {
                 m_layer = layer;
                 m_prevParent = wasParent;
                 m_prevAbove = wasAbove;
-                m_newParent = layer -> parent();
-                m_newAbove = layer -> nextSibling();
+                m_newParent = layer->parent();
+                m_newAbove = layer->nextSibling();
             }
 
         virtual ~LayerMoveCmd()
@@ -390,16 +390,16 @@ namespace {
 
         virtual void execute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> moveLayer(m_layer, m_newParent.data(), m_newAbove);
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->moveLayer(m_layer, m_newParent.data(), m_newAbove);
+                m_adapter->setUndo(true);
             }
 
         virtual void unexecute()
             {
-                m_adapter -> setUndo(false);
-                m_img -> moveLayer(m_layer, m_prevParent.data(), m_prevAbove);
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(false);
+                m_img->moveLayer(m_layer, m_prevParent.data(), m_prevAbove);
+                m_adapter->setUndo(true);
             }
 
     private:
@@ -441,16 +441,16 @@ namespace {
     public:
         virtual void execute()
             {
-                QString name = m_layer -> name();
-                Q_INT32 opacity = m_layer -> opacity();
-                KisCompositeOp compositeOp = m_layer -> compositeOp();
+                QString name = m_layer->name();
+                Q_INT32 opacity = m_layer->opacity();
+                KisCompositeOp compositeOp = m_layer->compositeOp();
 
-                m_adapter -> setUndo(false);
-                m_img -> setLayerProperties(m_layer,
+                m_adapter->setUndo(false);
+                m_img->setLayerProperties(m_layer,
                                             m_opacity,
                                             m_compositeOp,
                                             m_name);
-                m_adapter -> setUndo(true);
+                m_adapter->setUndo(true);
                 m_name = name;
                 m_opacity = opacity;
                 m_compositeOp = compositeOp;
@@ -543,7 +543,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
         m_annotations = rhs.m_annotations; // XXX the annotations would probably need to be deep-copied
 
-        m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver -> currentSeed() + 1);
+        m_nserver = new KisNameServer(i18n("Layer %1"), rhs.m_nserver->currentSeed() + 1);
         Q_CHECK_PTR(m_nserver);
 
         //m_guides = rhs.m_guides;
@@ -604,12 +604,12 @@ void KisImage::setBackgroundColor(const KisColor & color)
 
 QString KisImage::nextLayerName() const
 {
-    if (m_nserver -> currentSeed() == 0) {
-        m_nserver -> number();
+    if (m_nserver->currentSeed() == 0) {
+        m_nserver->number();
         return i18n("background");
     }
 
-    return m_nserver -> name();
+    return m_nserver->name();
 }
 
 void KisImage::rollBackLayerName()
@@ -710,7 +710,7 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         lock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             if (cropLayers)
                 m_adapter->beginMacro(i18n("Crop Image"));
             else
@@ -732,9 +732,9 @@ void KisImage::resize(Q_INT32 w, Q_INT32 h, Q_INT32 x, Q_INT32 y, bool cropLayer
 
         unlock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->addCommand(new LockImageCommand(this, false));
-            m_adapter -> endMacro();
+            m_adapter->endMacro();
         }
     }
 }
@@ -758,7 +758,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
         lock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->beginMacro(i18n("Scale Image"));
             m_adapter->addCommand(new LockImageCommand(this, true));
         }
@@ -768,7 +768,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
             m_rootLayer->accept(visitor);
         }
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
         }
 
@@ -779,7 +779,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
 
         unlock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->addCommand(new LockImageCommand(this, false));
             m_adapter->endMacro();
         }
@@ -803,16 +803,16 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
-    if (m_adapter && m_adapter -> undo()) {
+    if (undo()) {
         m_adapter->beginMacro(i18n("Rotate Image"));
         m_adapter->addCommand(new LockImageCommand(this, true));
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(KisID("Box"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Box"));
     KisTransformVisitor visitor (this, 1.0, 1.0, 0, 0, angle, -tx, -ty, progress, filter);
     m_rootLayer->accept(visitor);
 
-    undoAdapter()->addCommand(new KisResizeImageCmd(undoAdapter(), this, w, h, width(), height()));
+    if (undo()) m_adapter->addCommand(new KisResizeImageCmd(undoAdapter(), this, w, h, width(), height()));
 
     m_width = w;
     m_height = h;
@@ -821,7 +821,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
 
     unlock();
 
-    if (m_adapter && m_adapter -> undo()) {
+    if (undo()) {
         m_adapter->addCommand(new LockImageCommand(this, false));
         m_adapter->endMacro();
     }
@@ -855,16 +855,16 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         lock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->beginMacro(i18n("Shear Image"));
             m_adapter->addCommand(new LockImageCommand(this, true));
         }
 
         KisShearVisitor v(angleX, angleY, m_progress);
         v.setUndoAdapter(undoAdapter());
-        rootLayer() -> accept(v);
+        rootLayer()->accept(v);
 
-        m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
+        if (undo()) m_adapter->addCommand(new KisResizeImageCmd(m_adapter, this, w, h, width(), height()));
 
         m_width = w;
         m_height = h;
@@ -873,7 +873,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
 
         unlock();
 
-        if (m_adapter && m_adapter -> undo()) {
+        if (undo()) {
             m_adapter->addCommand(new LockImageCommand(this, false));
             m_adapter->endMacro();
         }
@@ -891,7 +891,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
     KisColorSpace * oldCs = m_colorSpace;
 
-    if (undoAdapter() && m_adapter->undo()) {
+    if (undo()) {
         m_adapter->beginMacro(i18n("Convert Image Type"));
         m_adapter->addCommand(new LockImageCommand(this, true));
     }
@@ -905,7 +905,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent)
 
     emit sigLayerPropertiesChanged( m_activeLayer );
 
-    if (undoAdapter() && m_adapter->undo()) {
+    if (undo()) {
 
         m_adapter->addCommand(new KisConvertImageTypeCmd(undoAdapter(), this,
                                                          oldCs, dstColorSpace));
@@ -969,11 +969,11 @@ Q_INT32 KisImage::height() const
 KisPaintDeviceSP KisImage::activeDevice()
 {
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
-        return layer -> paintDevice();
+        return layer->paintDevice();
     }
     else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data())) {
         if (layer->selection()) {
-            return layer -> selection().data();
+            return layer->selection().data();
         }
     }
     else if (KisGroupLayer * layer = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
@@ -982,7 +982,7 @@ KisPaintDeviceSP KisImage::activeDevice()
         while(child)
         {
             if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
-                return layer -> paintDevice();
+                return layer->paintDevice();
             }
             child = child->prevSibling();
         }
@@ -1001,8 +1001,8 @@ KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCom
     Q_CHECK_PTR(layer);
 
     if (compositeOp.isValid())
-        layer -> setCompositeOp(compositeOp);
-    layer -> setVisible(true);
+        layer->setCompositeOp(compositeOp);
+    layer->setVisible(true);
 
     if (m_activeLayer != 0) {
         addLayer(layer, m_activeLayer->parent().data(), m_activeLayer->nextSibling());
@@ -1018,18 +1018,18 @@ KisLayerSP KisImage::newLayer(const QString& name, Q_UINT8 opacity, const KisCom
 void KisImage::setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name)
 {
     if (layer && (layer->opacity() != opacity || layer->compositeOp() != compositeOp || layer->name() != name)) {
-        if (m_adapter->undo()) {
-            QString oldname = layer -> name();
-            Q_INT32 oldopacity = layer -> opacity();
-            KisCompositeOp oldCompositeOp = layer -> compositeOp();
-            layer -> setName(name);
-            layer -> setOpacity(opacity);
-            layer -> setCompositeOp(compositeOp);
+        if (undo()) {
+            QString oldname = layer->name();
+            Q_INT32 oldopacity = layer->opacity();
+            KisCompositeOp oldCompositeOp = layer->compositeOp();
+            layer->setName(name);
+            layer->setOpacity(opacity);
+            layer->setCompositeOp(compositeOp);
             m_adapter->addCommand(new LayerPropsCmd(layer, this, m_adapter, oldname, oldopacity, oldCompositeOp));
         } else {
-            layer -> setName(name);
-            layer -> setOpacity(opacity);
-            layer -> setCompositeOp(compositeOp);
+            layer->setName(name);
+            layer->setOpacity(opacity);
+            layer->setCompositeOp(compositeOp);
         }
     }
 }
@@ -1063,12 +1063,12 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
 
 KisLayerSP KisImage::findLayer(const QString& name) const
 {
-    return rootLayer() -> findLayer(name);
+    return rootLayer()->findLayer(name);
 }
 
 KisLayerSP KisImage::findLayer(int id) const
 {
-    return rootLayer() -> findLayer(id);
+    return rootLayer()->findLayer(id);
 }
 
 
@@ -1090,9 +1090,9 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
             // XXX: This should also be done whenever a layer grows!
             QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
-                csRegistry() -> paintDeviceActionsFor(player -> paintDevice() -> colorSpace());
+                csRegistry()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
             for (uint i = 0; i < actions.count(); i++) {
-                actions.at(i) -> act(player.data() -> paintDevice(), width(), height());
+                actions.at(i)->act(player.data()->paintDevice(), width(), height());
             }
         }
 
@@ -1104,7 +1104,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         }
 
 
-        if (!layer->temporary() && m_adapter && m_adapter->undo()) {
+        if (!layer->temporary() && undo()) {
             m_adapter->addCommand(new LayerAddCmd(m_adapter, this, layer));
         }
     }
@@ -1114,10 +1114,10 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
 
 bool KisImage::removeLayer(KisLayerSP layer)
 {
-    if (!layer || layer -> image() != this)
+    if (!layer || layer->image() != this)
         return false;
 
-    if (KisGroupLayerSP parent = layer -> parent()) {
+    if (KisGroupLayerSP parent = layer->parent()) {
         // Adjustment layers should mark the layers underneath them, whose rendering
         // they have cached, diryt on removal. Otherwise, the group won't be re-rendered.
         KisAdjustmentLayer * al = dynamic_cast<KisAdjustmentLayer*>(layer.data());
@@ -1140,13 +1140,13 @@ bool KisImage::removeLayer(KisLayerSP layer)
             l = l->prevSibling();
         }
 
-        KisLayerSP wasAbove = layer -> nextSibling();
-        KisLayerSP wasBelow = layer -> prevSibling();
+        KisLayerSP wasAbove = layer->nextSibling();
+        KisLayerSP wasBelow = layer->prevSibling();
         const bool wasActive = layer == activeLayer();
-        const bool success = parent -> removeLayer(layer);
+        const bool success = parent->removeLayer(layer);
         if (success) {
-            layer -> setImage(0);
-            if (!layer->temporary() && m_adapter->undo()) {
+            layer->setImage(0);
+            if (!layer->temporary() && undo()) {
                 m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, parent, wasAbove));
             }
             if (!layer->temporary()) {
@@ -1159,7 +1159,7 @@ bool KisImage::removeLayer(KisLayerSP layer)
                     else if (parent != rootLayer())
                         activate(parent.data());
                     else
-                        activate(rootLayer() -> firstChild());
+                        activate(rootLayer()->firstChild());
                 }
             }
         }
@@ -1173,15 +1173,15 @@ bool KisImage::raiseLayer(KisLayerSP layer)
 {
     if (!layer)
         return false;
-    return moveLayer(layer, layer -> parent().data(), layer -> prevSibling());
+    return moveLayer(layer, layer->parent().data(), layer->prevSibling());
 }
 
 bool KisImage::lowerLayer(KisLayerSP layer)
 {
     if (!layer)
         return false;
-    if (KisLayerSP next = layer -> nextSibling())
-        return moveLayer(layer, layer -> parent().data(), next -> nextSibling());
+    if (KisLayerSP next = layer->nextSibling())
+        return moveLayer(layer, layer->parent().data(), next->nextSibling());
     return false;
 }
 
@@ -1189,7 +1189,7 @@ bool KisImage::toTop(KisLayerSP layer)
 {
     if (!layer)
         return false;
-    return moveLayer(layer, rootLayer(), rootLayer() -> firstChild());
+    return moveLayer(layer, rootLayer(), rootLayer()->firstChild());
 }
 
 bool KisImage::toBottom(KisLayerSP layer)
@@ -1204,20 +1204,20 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     if (!parent)
         return false;
 
-    KisGroupLayerSP wasParent = layer -> parent();
-    KisLayerSP wasAbove = layer -> nextSibling();
+    KisGroupLayerSP wasParent = layer->parent();
+    KisLayerSP wasAbove = layer->nextSibling();
 
     if (wasParent.data() == parent.data() && wasAbove.data() == aboveThis.data())
         return false;
 
     lock();
 
-    if (!wasParent -> removeLayer(layer)) {
+    if (!wasParent->removeLayer(layer)) {
         unlock();
         return false;
     }
 
-    const bool success = parent -> addLayer(layer, aboveThis);
+    const bool success = parent->addLayer(layer, aboveThis);
 
     layer->setDirty();
 
@@ -1226,13 +1226,13 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
     if (success)
     {
         emit sigLayerMoved(layer, wasParent, wasAbove);
-        if (m_adapter->undo())
+        if (undo())
             m_adapter->addCommand(new LayerMoveCmd(m_adapter, this, layer, wasParent, wasAbove));
     }
     else //we already removed the layer above, but re-adding it failed, so...
     {
         emit sigLayerRemoved(layer, wasParent, wasAbove);
-        if (m_adapter->undo())
+        if (undo())
             m_adapter->addCommand(new LayerRmCmd(m_adapter, this, layer, wasParent, wasAbove));
     }
 
@@ -1241,12 +1241,12 @@ bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP ab
 
 Q_INT32 KisImage::nlayers() const
 {
-    return rootLayer() -> numLayers() - 1;
+    return rootLayer()->numLayers() - 1;
 }
 
 Q_INT32 KisImage::nHiddenLayers() const
 {
-    return rootLayer() -> numLayers(KisLayer::Hidden);
+    return rootLayer()->numLayers(KisLayer::Hidden);
 }
 
 void KisImage::flatten()
@@ -1257,7 +1257,7 @@ void KisImage::flatten()
     KisPaintLayer *dst = new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(dst);
 
-    QRect rc = mergedImage() -> extent();
+    QRect rc = mergedImage()->extent();
 
     KisPainter gc(dst->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
@@ -1265,7 +1265,7 @@ void KisImage::flatten()
     m_rootLayer = new KisGroupLayer(this, "", OPACITY_OPAQUE);
     connect(m_rootLayer, SIGNAL(sigDirty(QRect)), this, SIGNAL(sigImageUpdated(QRect)));
 
-    if (m_adapter && m_adapter -> undo()) {
+    if (undo()) {
         m_adapter->beginMacro(i18n("Flatten Image"));
         m_adapter->addCommand(new LockImageCommand(this, true));
         m_adapter->addCommand(new KisChangeLayersCmd(m_adapter, this, oldRootLayer, m_rootLayer, ""));
@@ -1280,7 +1280,7 @@ void KisImage::flatten()
 
     notifyLayersChanged();
 
-    if (m_adapter && m_adapter -> undo()) {
+    if (undo()) {
         m_adapter->addCommand(new LockImageCommand(this, false));
         m_adapter->endMacro();
     }
@@ -1331,19 +1331,19 @@ void KisImage::renderToPainter(Q_INT32 x1,
 
 
     if (paintFlags & PAINT_BACKGROUND) {
-        m_bkg -> paintBackground(img, x1, y1);
+        m_bkg->paintBackground(img, x1, y1);
         img.setAlphaBuffer(false);
     }
 
     if (paintFlags & PAINT_SELECTION) {
         if (m_activeLayer != 0) {
-            m_activeLayer -> paintSelection(img, x1, y1, w, h);
+            m_activeLayer->paintSelection(img, x1, y1, w, h);
         }
     }
 
     if (paintFlags & PAINT_MASKINACTIVELAYERS) {
         if (m_activeLayer != 0) {
-            m_activeLayer -> paintMaskInactiveLayers(img, x1, y1, w, h);
+            m_activeLayer->paintMaskInactiveLayers(img, x1, y1, w, h);
         }
     }
 
@@ -1445,19 +1445,19 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
     delete [] scaledImageData;
 
     if (paintFlags & PAINT_BACKGROUND) {
-        m_bkg -> paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+        m_bkg->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
         image.setAlphaBuffer(false);
     }
 
     if (paintFlags & PAINT_SELECTION) {
         if (m_activeLayer != 0) {
-            m_activeLayer -> paintSelection(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+            m_activeLayer->paintSelection(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
         }
     }
 
     /*if (paintFlags & PAINT_MASKINACTIVELAYERS) {
         if (m_activeLayer != 0) {
-            m_activeLayer -> paintMaskInactiveLayers(img, x1, y1, w, h);
+            m_activeLayer->paintMaskInactiveLayers(img, x1, y1, w, h);
         }
     }*/
 
@@ -1505,6 +1505,10 @@ KisUndoAdapter* KisImage::undoAdapter() const
     return m_adapter;
 }
 
+bool KisImage::undo() const
+{
+    return (m_adapter && m_adapter->undo());
+}
 
 //KisGuideMgr *KisImage::guides() const
 //{
@@ -1556,7 +1560,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
     // Find the icc annotation, if there is one
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {
-        if ((*it) -> type() == annotation -> type()) {
+        if ((*it)->type() == annotation->type()) {
             *it = annotation;
             return;
         }
@@ -1569,7 +1573,7 @@ KisAnnotationSP KisImage::annotation(QString type)
 {
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {
-        if ((*it) -> type() == type) {
+        if ((*it)->type() == type) {
             return *it;
         }
         ++it;
@@ -1581,7 +1585,7 @@ void KisImage::removeAnnotation(QString type)
 {
     vKisAnnotationSP_it it = m_annotations.begin();
     while (it != m_annotations.end()) {
-        if ((*it) -> type() == type) {
+        if ((*it)->type() == type) {
             m_annotations.erase(it);
             return;
         }
@@ -1595,7 +1599,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
     KisAnnotationSP annotation;
 
     if (profile)
-        annotation =  profile -> annotation();
+        annotation =  profile->annotation();
 
     if (annotation)
          addAnnotation(annotation);

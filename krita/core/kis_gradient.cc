@@ -105,7 +105,7 @@ bool KisGradient::init()
                 KisGradientSegment *segment = new KisGradientSegment(colstop->interpolation, colstop->colorType, colstop->offset, midp, colstopNext->offset, leftColor, rightColor);
                 Q_CHECK_PTR(segment);
 
-                if ( !segment -> isValid() ) {
+                if ( !segment->isValid() ) {
                     delete segment;
                     return false;
                 }
@@ -155,7 +155,7 @@ KisGradientSegment *KisGradient::segmentAt(double t) const
     KisGradientSegment *segment = 0;
 
     for (uint i = 0; i < m_segments.count(); i++) {
-        if (t > m_segments[i] -> startOffset() - DBL_EPSILON && t < m_segments[i] -> endOffset() + DBL_EPSILON) {
+        if (t > m_segments[i]->startOffset() - DBL_EPSILON && t < m_segments[i]->endOffset() + DBL_EPSILON) {
             segment = m_segments[i];
             break;
         }
@@ -170,7 +170,7 @@ void KisGradient::colorAt(double t, QColor *color, Q_UINT8 *opacity) const
     Q_ASSERT(segment != 0);
 
     if (segment) {
-        Color col = segment -> colorAt(t);
+        Color col = segment->colorAt(t);
         *color = col.color();
         *opacity = static_cast<Q_UINT8>(col.alpha() * OPACITY_OPAQUE + 0.5);
     }
@@ -352,7 +352,7 @@ void KisGradientSegment::setEndOffset(double t)
 
 int KisGradientSegment::interpolation() const
 {
-    return m_interpolator -> type();
+    return m_interpolator->type();
 }
 
 void KisGradientSegment::setInterpolation(int interpolationType)
@@ -378,7 +378,7 @@ void KisGradientSegment::setInterpolation(int interpolationType)
 
 int KisGradientSegment::colorInterpolation() const
 {
-    return m_colorInterpolator -> type();
+    return m_colorInterpolator->type();
 }
 
 void KisGradientSegment::setColorInterpolation(int colorInterpolationType)
@@ -409,9 +409,9 @@ Color KisGradientSegment::colorAt(double t) const
         segmentT = (t - m_startOffset) / m_length;
     }
 
-    double colorT = m_interpolator -> valueAt(segmentT, m_middleT);
+    double colorT = m_interpolator->valueAt(segmentT, m_middleT);
 
-    Color color = m_colorInterpolator -> colorAt(colorT, m_startColor, m_endColor);
+    Color color = m_colorInterpolator->colorAt(colorT, m_startColor, m_endColor);
 
     return color;
 }

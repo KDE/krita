@@ -57,6 +57,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
 #include "kis_color.h"
+#include "kis_selection.h"
 
 namespace {
 }
@@ -99,35 +100,35 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
 
 void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {
     if (!pattern) return;
-    if (!pattern -> valid()) return;
+    if (!pattern->valid()) return;
     if (!m_device) return;
 
 
-    KisPaintDeviceSP patternLayer = pattern -> image(m_device->colorSpace());
+    KisPaintDeviceSP patternLayer = pattern->image(m_device->colorSpace());
 
     int sx, sy, sw, sh;
 
     int y = y1;
 
     if (y >= 0) {
-        sy = y % pattern -> height();
+        sy = y % pattern->height();
     } else {
-        sy = pattern -> height() - (((-y - 1) % pattern -> height()) + 1);
+        sy = pattern->height() - (((-y - 1) % pattern->height()) + 1);
     }
 
     while (y < y1 + h) {
-        sh = QMIN((y1 + h) - y, pattern -> height() - sy);
+        sh = QMIN((y1 + h) - y, pattern->height() - sy);
 
         int x = x1;
 
         if (x >= 0) {
-            sx = x % pattern -> width();
+            sx = x % pattern->width();
         } else {
-            sx = pattern -> width() - (((-x - 1) % pattern -> width()) + 1);
+            sx = pattern->width() - (((-x - 1) % pattern->width()) + 1);
         }
 
         while (x < x1 + w) {
-            sw = QMIN((x1 + w) - x, pattern -> width() - sx);
+            sw = QMIN((x1 + w) - x, pattern->width() - sx);
 
             bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
             x += sw; sx = 0;
@@ -210,12 +211,12 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (m_width < 0 || m_height < 0) {
-        if (m_device -> hasSelection() && m_careForSelection) {
+        if (m_device->hasSelection() && m_careForSelection) {
             Q_INT32 x,y,w,h;
-            m_device -> selection() -> extent(x,y,w,h);
+            m_device->selection()->extent(x,y,w,h);
             m_width = w - (startX - x);
             m_height = h - (startY - y);
-        } else if (m_device -> image()) {
+        } else if (m_device->image()) {
             m_width = m_device->image()->width();
             m_height = m_device->image()->height();
         } else {
@@ -231,10 +232,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     // sample merged?
     if (m_sampleMerged) {
-        if (!m_device -> image()) {
+        if (!m_device->image()) {
             return new KisSelection(m_device);
         }
-        sourceDevice = m_device -> image() -> mergedImage();
+        sourceDevice = m_device->image()->mergedImage();
     } else {
         sourceDevice = m_device;
     }
@@ -242,8 +243,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     m_size = m_width * m_height;
 
     KisSelectionSP selection = new KisSelection(m_device);
-    KisColorSpace * colorSpace = selection -> colorSpace();
-    KisColorSpace * devColorSpace = sourceDevice -> colorSpace();
+    KisColorSpace * colorSpace = selection->colorSpace();
+    KisColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     Q_UINT8* source = new Q_UINT8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
@@ -261,10 +262,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
     emit notifyProgressStage(i18n("Making fill outline..."), 0);
 
-    bool hasSelection = m_careForSelection && sourceDevice -> hasSelection();
+    bool hasSelection = m_careForSelection && sourceDevice->hasSelection();
     KisSelectionSP srcSel = 0;
     if (hasSelection)
-        srcSel = sourceDevice -> selection();
+        srcSel = sourceDevice->selection();
 
     while(!stack.empty()) {
         FillSegment* segment = stack.top();
@@ -282,21 +283,21 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
         pixelIt += x;
-        Q_UINT8 diff = devColorSpace -> difference(source, pixelIt.rawData());
+        Q_UINT8 diff = devColorSpace->difference(source, pixelIt.rawData());
 
         if (diff >= m_threshold
-            || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
+            || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
             delete segment;
             continue;
         }
 
         // Here as well: start the iterator at (0,y)
-        KisHLineIteratorPixel selIt = selection -> createHLineIterator(0, y, m_width, true);
+        KisHLineIteratorPixel selIt = selection->createHLineIterator(0, y, m_width, true);
         selIt += x;
         if (m_fuzzy)
-            colorSpace -> fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+            colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
         else
-            colorSpace -> fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+            colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
@@ -318,17 +319,17 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         // go to the left
         while(!stop && x >= 0 && (map[m_width * y + x] != Checked) ) { // FIXME optimizeable?
             map[m_width * y + x] = Checked;
-            diff = devColorSpace -> difference(source, pixelIt.rawData());
+            diff = devColorSpace->difference(source, pixelIt.rawData());
             if (diff >= m_threshold
-                || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
+                || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
                 stop = true;
                 continue;
             }
 
             if (m_fuzzy)
-                colorSpace -> fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
             else
-                colorSpace -> fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
 
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
@@ -344,31 +345,31 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
             --x;
         }
 
-        x = segment -> x + 1;
+        x = segment->x + 1;
         delete segment;
 
         if (map[m_width * y + x] == Checked)
             continue;
 
         // and go to the right
-        pixelIt = sourceDevice -> createHLineIterator(x, y, m_width, false);
-        selIt = selection -> createHLineIterator(x, y, m_width, true);
+        pixelIt = sourceDevice->createHLineIterator(x, y, m_width, false);
+        selIt = selection->createHLineIterator(x, y, m_width, true);
 
         stop = false;
         while(!stop && x < m_width && (map[m_width * y + x] != Checked) ) {
-            diff = devColorSpace -> difference(source, pixelIt.rawData());
+            diff = devColorSpace->difference(source, pixelIt.rawData());
             map[m_width * y + x] = Checked;
 
             if (diff >= m_threshold
-                || (hasSelection && srcSel -> selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED) ) {
+                || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED) ) {
                 stop = true;
                 continue;
             }
 
             if (m_fuzzy)
-                colorSpace -> fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, MAX_SELECTED - diff, selIt.rawData());
             else
-                colorSpace -> fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
+                colorSpace->fromQColor(Qt::white, MAX_SELECTED, selIt.rawData());
 
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;

@@ -35,10 +35,10 @@ const QValueVector<double> KisAutogradientResource::getHandlePositions() const
 {
     QValueVector<double> handlePositions;
 
-    handlePositions.push_back(m_segments[0] -> startOffset());
+    handlePositions.push_back(m_segments[0]->startOffset());
     for (uint i = 0; i < m_segments.count(); i++)
     {
-        handlePositions.push_back(m_segments[i] -> endOffset());
+        handlePositions.push_back(m_segments[i]->endOffset());
     }
     return handlePositions;
 }
@@ -49,7 +49,7 @@ const QValueVector<double> KisAutogradientResource::getMiddleHandlePositions() c
 
     for (uint i = 0; i < m_segments.count(); i++)
     {
-        middleHandlePositions.push_back(m_segments[i] -> middleOffset());
+        middleHandlePositions.push_back(m_segments[i]->middleOffset());
     }
     return middleHandlePositions;
 }
@@ -61,21 +61,21 @@ void KisAutogradientResource::moveSegmentStartOffset( KisGradientSegment* segmen
     {
         if ( it == m_segments.begin() )
         {
-            segment -> setStartOffset( 0.0 );
+            segment->setStartOffset( 0.0 );
             return;
         }
         KisGradientSegment* previousSegment = (*(it-1));
-        if ( t > segment -> startOffset()  )
+        if ( t > segment->startOffset()  )
         {
-            if( t > segment -> middleOffset() )
-                t = segment -> middleOffset();
+            if( t > segment->middleOffset() )
+                t = segment->middleOffset();
         }
         else {
-            if( t < previousSegment -> middleOffset() )
-                t = previousSegment -> middleOffset();
+            if( t < previousSegment->middleOffset() )
+                t = previousSegment->middleOffset();
         }
-        previousSegment -> setEndOffset( t );
-        segment -> setStartOffset( t );
+        previousSegment->setEndOffset( t );
+        segment->setStartOffset( t );
     }
 }
 
@@ -86,21 +86,21 @@ void KisAutogradientResource::moveSegmentEndOffset( KisGradientSegment* segment,
     {
         if ( it+1 == m_segments.end() )
         {
-            segment -> setEndOffset( 1.0 );
+            segment->setEndOffset( 1.0 );
             return;
         }
         KisGradientSegment* followingSegment = (*(it+1));
-        if ( t < segment -> endOffset() )
+        if ( t < segment->endOffset() )
         {
-            if( t < segment -> middleOffset() )
-                t = segment -> middleOffset();
+            if( t < segment->middleOffset() )
+                t = segment->middleOffset();
         }
         else {
-            if( t > followingSegment -> middleOffset() )
-                t = followingSegment -> middleOffset();
+            if( t > followingSegment->middleOffset() )
+                t = followingSegment->middleOffset();
         }
-        followingSegment -> setStartOffset( t );
-        segment -> setEndOffset( t );
+        followingSegment->setStartOffset( t );
+        segment->setEndOffset( t );
     }
 }
 
@@ -108,12 +108,12 @@ void KisAutogradientResource::moveSegmentMiddleOffset( KisGradientSegment* segme
 {
     if( segment )
     {
-        if( t > segment -> endOffset() )
-            segment -> setMiddleOffset( segment -> endOffset() );
-        else if( t < segment -> startOffset() )
-            segment -> setMiddleOffset( segment -> startOffset() );
+        if( t > segment->endOffset() )
+            segment->setMiddleOffset( segment->endOffset() );
+        else if( t < segment->startOffset() )
+            segment->setMiddleOffset( segment->startOffset() );
         else
-            segment -> setMiddleOffset( t );
+            segment->setMiddleOffset( t );
     }
 }
 
@@ -124,16 +124,16 @@ void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
     if ( it != m_segments.end() )
     {
         KisGradientSegment* newSegment = new KisGradientSegment(
-                segment -> interpolation(), segment -> colorInterpolation(),
-                segment  -> startOffset(),
-                ( segment -> middleOffset() - segment -> startOffset() ) / 2 + segment -> startOffset(),
-                segment -> middleOffset(),
-                segment -> startColor(),
-                segment -> colorAt( segment -> middleOffset() ) );
+                segment->interpolation(), segment->colorInterpolation(),
+                segment ->startOffset(),
+                ( segment->middleOffset() - segment->startOffset() ) / 2 + segment->startOffset(),
+                segment->middleOffset(),
+                segment->startColor(),
+                segment->colorAt( segment->middleOffset() ) );
         m_segments.insert( it, newSegment );
-        segment -> setStartColor( segment -> colorAt( segment -> middleOffset() ) );
-        segment -> setStartOffset( segment -> middleOffset() );
-        segment -> setMiddleOffset( ( segment -> endOffset() - segment -> startOffset() ) / 2 + segment -> startOffset() );
+        segment->setStartColor( segment->colorAt( segment->middleOffset() ) );
+        segment->setStartOffset( segment->middleOffset() );
+        segment->setMiddleOffset( ( segment->endOffset() - segment->startOffset() ) / 2 + segment->startOffset() );
     }
 }
 
@@ -143,37 +143,37 @@ void KisAutogradientResource::duplicateSegment( KisGradientSegment* segment )
     QValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
-        double middlePostionPercentage = ( segment -> middleOffset() - segment -> startOffset() ) / segment -> length();
-        double center = segment -> startOffset() + segment -> length() / 2;
+        double middlePostionPercentage = ( segment->middleOffset() - segment->startOffset() ) / segment->length();
+        double center = segment->startOffset() + segment->length() / 2;
         KisGradientSegment* newSegment = new KisGradientSegment(
-                segment -> interpolation(), segment -> colorInterpolation(),
-                segment  -> startOffset(),
-                segment -> length() / 2 * middlePostionPercentage + segment -> startOffset(),
-                center, segment -> startColor(),
-                segment -> endColor() );
+                segment->interpolation(), segment->colorInterpolation(),
+                segment ->startOffset(),
+                segment->length() / 2 * middlePostionPercentage + segment->startOffset(),
+                center, segment->startColor(),
+                segment->endColor() );
         m_segments.insert( it, newSegment );
-        segment -> setStartOffset( center );
-        segment -> setMiddleOffset( segment -> length() * middlePostionPercentage  + segment -> startOffset() );
+        segment->setStartOffset( center );
+        segment->setMiddleOffset( segment->length() * middlePostionPercentage  + segment->startOffset() );
     }
 }
 
 void KisAutogradientResource::mirrorSegment( KisGradientSegment* segment )
 {
     Q_ASSERT(segment != 0);
-    Color tmpColor = segment -> startColor();
-    segment -> setStartColor( segment -> endColor() );
-    segment -> setEndColor( tmpColor );
-    segment -> setMiddleOffset( segment -> endOffset() - ( segment -> middleOffset() - segment -> startOffset() ) );
+    Color tmpColor = segment->startColor();
+    segment->setStartColor( segment->endColor() );
+    segment->setEndColor( tmpColor );
+    segment->setMiddleOffset( segment->endOffset() - ( segment->middleOffset() - segment->startOffset() ) );
 
-    if( segment -> interpolation() == INTERP_SPHERE_INCREASING )
-        segment -> setInterpolation( INTERP_SPHERE_DECREASING );
-    else if( segment -> interpolation() == INTERP_SPHERE_DECREASING )
-        segment -> setInterpolation( INTERP_SPHERE_INCREASING );
+    if( segment->interpolation() == INTERP_SPHERE_INCREASING )
+        segment->setInterpolation( INTERP_SPHERE_DECREASING );
+    else if( segment->interpolation() == INTERP_SPHERE_DECREASING )
+        segment->setInterpolation( INTERP_SPHERE_INCREASING );
 
-    if( segment -> colorInterpolation() == COLOR_INTERP_HSV_CW )
-        segment -> setColorInterpolation( COLOR_INTERP_HSV_CCW );
-    else if( segment -> colorInterpolation() == COLOR_INTERP_HSV_CCW )
-        segment -> setColorInterpolation( COLOR_INTERP_HSV_CW );
+    if( segment->colorInterpolation() == COLOR_INTERP_HSV_CW )
+        segment->setColorInterpolation( COLOR_INTERP_HSV_CCW );
+    else if( segment->colorInterpolation() == COLOR_INTERP_HSV_CCW )
+        segment->setColorInterpolation( COLOR_INTERP_HSV_CW );
 }
 
 KisGradientSegment* KisAutogradientResource::removeSegment( KisGradientSegment* segment )
@@ -189,16 +189,16 @@ KisGradientSegment* KisAutogradientResource::removeSegment( KisGradientSegment* 
         if( it == m_segments.begin() )
         {
             nextSegment = (*(it+1));
-            middlePostionPercentage = ( nextSegment -> middleOffset() - nextSegment -> startOffset() ) / nextSegment -> length();
-            nextSegment -> setStartOffset( segment -> startOffset() );
-            nextSegment -> setMiddleOffset( middlePostionPercentage * nextSegment -> length() + nextSegment -> startOffset() );
+            middlePostionPercentage = ( nextSegment->middleOffset() - nextSegment->startOffset() ) / nextSegment->length();
+            nextSegment->setStartOffset( segment->startOffset() );
+            nextSegment->setMiddleOffset( middlePostionPercentage * nextSegment->length() + nextSegment->startOffset() );
         }
         else
         {
             nextSegment = (*(it-1));
-            middlePostionPercentage = ( nextSegment -> middleOffset() - nextSegment -> startOffset() ) / nextSegment -> length();
-            nextSegment -> setEndOffset( segment -> endOffset() );
-            nextSegment -> setMiddleOffset( middlePostionPercentage * nextSegment -> length() + nextSegment -> startOffset() );
+            middlePostionPercentage = ( nextSegment->middleOffset() - nextSegment->startOffset() ) / nextSegment->length();
+            nextSegment->setEndOffset( segment->endOffset() );
+            nextSegment->setMiddleOffset( middlePostionPercentage * nextSegment->length() + nextSegment->startOffset() );
         }
 
         delete segment;

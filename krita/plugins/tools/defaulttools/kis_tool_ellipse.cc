@@ -62,9 +62,9 @@ void KisToolEllipse::update (KisCanvasSubject *subject)
 
 void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event -> button() == LeftButton) {
+    if (m_currentImage && event->button() == LeftButton) {
         m_dragging = true;
-        m_dragStart = m_dragCenter = m_dragEnd = event -> pos();
+        m_dragStart = m_dragCenter = m_dragEnd = event->pos();
         draw(m_dragStart, m_dragEnd);
     }
 }
@@ -75,15 +75,15 @@ void KisToolEllipse::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize ellipse
-        if (event -> state() & Qt::AltButton) {
-            KisPoint trans = event -> pos() - m_dragEnd;
+        if (event->state() & Qt::AltButton) {
+            KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KisPoint diag = event -> pos() - (event->state() & Qt::ControlButton
+            KisPoint diag = event->pos() - (event->state() & Qt::ControlButton
                                               ? m_dragCenter : m_dragStart);
             // circle?
-            if (event -> state() & Qt::ShiftButton) {
+            if (event->state() & Qt::ShiftButton) {
                 double size = QMAX(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
@@ -91,7 +91,7 @@ void KisToolEllipse::move(KisMoveEvent *event)
             }
 
             // resize around center point?
-            if (event -> state() & Qt::ControlButton) {
+            if (event->state() & Qt::ControlButton) {
                 m_dragStart = m_dragCenter - diag;
                 m_dragEnd = m_dragCenter + diag;
             } else {
@@ -110,7 +110,7 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject || !m_currentImage)
         return;
 
-    if (m_dragging && event -> button() == LeftButton) {
+    if (m_dragging && event->button() == LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -126,25 +126,25 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
 
         KisPaintDeviceSP device = m_currentImage->activeDevice ();
         KisPainter painter (device);
-        painter.beginTransaction (i18n ("Ellipse"));
+        if (m_currentImage->undo()) painter.beginTransaction (i18n ("Ellipse"));
 
-        painter.setPaintColor(m_subject -> fgColor());
-        painter.setBackgroundColor(m_subject -> bgColor());
+        painter.setPaintColor(m_subject->fgColor());
+        painter.setBackgroundColor(m_subject->bgColor());
         painter.setFillStyle(fillStyle());
-        painter.setBrush(m_subject -> currentBrush());
-        painter.setPattern(m_subject -> currentPattern());
+        painter.setBrush(m_subject->currentBrush());
+        painter.setPattern(m_subject->currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
         painter.setPaintOp(op); // Painter takes ownership
 
-        painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+        painter.paintEllipse(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
         device->setDirty( painter.dirtyRect() );
         notifyModified();
 
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
+        KisUndoAdapter *adapter = m_currentImage->undoAdapter();
         if (adapter) {
-            adapter -> addCommand(painter.endTransaction());
+            adapter->addCommand(painter.endTransaction());
         }
     }
 }
@@ -165,7 +165,7 @@ void KisToolEllipse::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolEllipse::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
@@ -177,8 +177,8 @@ void KisToolEllipse::setup(KActionCollection *collection)
                                     SLOT(activate()),
                                     collection,
                                     name());
-        m_action -> setToolTip(i18n("Draw an ellipse"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Draw an ellipse"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

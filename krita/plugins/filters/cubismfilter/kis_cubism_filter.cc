@@ -38,6 +38,8 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <kis_meta_registry.h>
+#include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -79,7 +81,31 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     Q_UINT32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
     Q_UINT32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
 
-    cubism(src, dst, rect, tileSize, tileSaturation);
+    KisColorSpace * cs = src->colorSpace();
+    QString id = cs->id().id();
+
+    if (id == "RGBA" || id == "GRAY" || id == "CMYK") {
+        cubism(src, dst, rect, tileSize, tileSaturation);
+    }
+    else {
+        if (src == dst) {
+            src->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
+        }
+        else {
+            src->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
+            dst->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
+        }
+        cubism(src, dst, rect, tileSize, tileSaturation);
+        
+        if (src == dst) {
+            src->convertTo(cs);
+        }
+        else {
+            src->convertTo(cs);
+            dst->convertTo(cs);
+        }
+        
+    }
 }
 
 void KisCubismFilter::randomizeIndices (Q_INT32 count, Q_INT32* indices)
@@ -203,11 +229,11 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                 vec[1] = (ey - sy) * oneOverDist;
         }
 
-        Q_INT32 pixelSize = src -> pixelSize();
+        Q_INT32 pixelSize = src->pixelSize();
 
         //get the extents of the polygon
         double dMinX, dMinY, dMaxX, dMaxY;
-        poly -> extents (dMinX, dMinY, dMaxX, dMaxY);
+        poly->extents (dMinX, dMinY, dMaxX, dMaxY);
         Q_INT32 minX = static_cast<Q_INT32>(dMinX);
         Q_INT32 minY = static_cast<Q_INT32>(dMinY);
         Q_INT32 maxX = static_cast<Q_INT32>(dMaxX);
@@ -226,9 +252,9 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
             maxScanlines[i] = minX * SUPERSAMPLE;
         }
 
-        if ( poly -> numberOfPoints() )
+        if ( poly->numberOfPoints() )
         {
-                Q_INT32 polyNpts = poly -> numberOfPoints();
+                Q_INT32 polyNpts = poly->numberOfPoints();
 
                 xs = static_cast<Q_INT32>((*poly)[polyNpts-1].x());
                 ys = static_cast<Q_INT32>((*poly)[polyNpts-1].y());
@@ -307,7 +333,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
 //                                                         KisRectIteratorPixel srcIt = src->createRectIterator(x,y,1,1, false);
 //                                                         const Q_UINT8* srcPixel = srcIt.oldRawData();
 //                                                         memcpy( buf, srcPixel, sizeof(Q_UINT8) * pixelSize );
-                                                        src -> readBytes(buf, x, y, 1, 1);
+                                                        src->readBytes(buf, x, y, 1, 1);
                                                 #ifndef USE_READABLE_BUT_SLOW_CODE
                                                         Q_UINT8 *bufIter = buf;
                                                         const Q_UINT8 *colIter = col;
@@ -324,7 +350,7 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
                                                         }
                                                 #endif
                                                         
-                                                        dst -> writeBytes(buf, x, y, 1, 1);
+                                                        dst->writeBytes(buf, x, y, 1, 1);
                                                 }
                                         }
                                 }
@@ -343,7 +369,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
     
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-        Q_INT32 depth = src -> colorSpace() -> nColorChannels();
+        Q_INT32 depth = src->colorSpace()->nColorChannels();
 
         while( ! dstIt.isDone() )
         {
@@ -373,7 +399,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         Q_INT32 i, j, ix, iy;
         double x, y, width, height, theta;
         KisPolygon *poly = new KisPolygon();
-        Q_INT32 pixelSize = src -> pixelSize();
+        Q_INT32 pixelSize = src->pixelSize();
         const Q_UINT8 *srcPixel /*= new Q_UINT8[ pixelSize ]*/;
         Q_UINT8 *dstPixel = 0;
         while (count < numTiles)
@@ -385,13 +411,13 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
                 width = (tileSize + randomDoubleNumber(0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
                 height = (tileSize + randomDoubleNumber (0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
                 theta = randomDoubleNumber(0, 2*M_PI);
-                poly -> clear();
-                poly -> addPoint( -width / 2.0, -height / 2.0 );
-                poly -> addPoint( width / 2.0, -height / 2.0 );
-                poly -> addPoint( width / 2.0, height / 2.0 );
-                poly -> addPoint( -width / 2.0, height / 2.0 );
-                poly -> rotate( theta );
-                poly -> translate ( x, y );
+                poly->clear();
+                poly->addPoint( -width / 2.0, -height / 2.0 );
+                poly->addPoint( width / 2.0, -height / 2.0 );
+                poly->addPoint( width / 2.0, height / 2.0 );
+                poly->addPoint( -width / 2.0, height / 2.0 );
+                poly->rotate( theta );
+                poly->translate ( x, y );
                 //  bounds check on x, y
                 ix = (Q_INT32) CLAMP (x, rect.x(), rect.x() + rect.width() - 1);
                 iy = (Q_INT32) CLAMP (y, rect.y(), rect.y() + rect.height() - 1);

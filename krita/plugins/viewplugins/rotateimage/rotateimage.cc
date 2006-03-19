@@ -79,18 +79,18 @@ RotateImage::~RotateImage()
 
 void RotateImage::slotRotateImage()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
     DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
-    dlgRotateImage -> setCaption(i18n("Rotate Image"));
+    dlgRotateImage->setCaption(i18n("Rotate Image"));
 
-        if (dlgRotateImage -> exec() == QDialog::Accepted) {
-        Q_INT32 angle = dlgRotateImage -> angle();
-        m_view -> rotateCurrentImage(angle);
+        if (dlgRotateImage->exec() == QDialog::Accepted) {
+        Q_INT32 angle = dlgRotateImage->angle();
+        m_view->rotateCurrentImage(angle);
     }
     delete dlgRotateImage;
 }
@@ -113,18 +113,18 @@ void RotateImage::slotRotateImage270()
 
 void RotateImage::slotRotateLayer()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
     DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
-    dlgRotateImage -> setCaption(i18n("Rotate Layer"));
+    dlgRotateImage->setCaption(i18n("Rotate Layer"));
 
-    if (dlgRotateImage -> exec() == QDialog::Accepted) {
-                Q_INT32 angle = dlgRotateImage -> angle();
-        m_view -> rotateLayer(angle);
+    if (dlgRotateImage->exec() == QDialog::Accepted) {
+                Q_INT32 angle = dlgRotateImage->angle();
+        m_view->rotateLayer(angle);
 
     }
     delete dlgRotateImage;

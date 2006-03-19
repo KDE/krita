@@ -42,11 +42,11 @@ void KisIconItem::updatePixmaps()
     validPixmap = false;
     validThumb = false;
 
-    if (m_resource && m_resource -> valid()) {
-        QImage img = m_resource -> img();
+    if (m_resource && m_resource->valid()) {
+        QImage img = m_resource->img();
 
         if (img.isNull()) {
-            m_resource -> setValid(false);
+            m_resource->setValid(false);
             m_resource = 0;
             return;
         }
@@ -108,7 +108,7 @@ int KisIconItem::compare(const KoIconItem *o) const
     const KisIconItem *other = dynamic_cast<const KisIconItem *>(o);
 
     if (other != 0) {
-        return m_resource -> name().localeAwareCompare(other -> m_resource -> name());
+        return m_resource->name().localeAwareCompare(other->m_resource->name());
     } else {
         return 0;
     }

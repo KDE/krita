@@ -86,7 +86,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t =  new KisToolLine(); 
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t->setup(ac); 
         return t; 
     }
     virtual KisID id() { return KisID("line", i18n("Line Tool")); }

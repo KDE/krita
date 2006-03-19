@@ -110,7 +110,7 @@ bool KisProfile::init()
         m_productInfo = cmsTakeProductInfo(m_profile);
         m_valid = true;
 
-        // Check if the profile can convert (something -> this)
+        // Check if the profile can convert (something->this)
 //         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(m_profile);
 //         if( OutMatShaper )
 //         {

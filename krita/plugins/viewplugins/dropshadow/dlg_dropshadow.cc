@@ -43,7 +43,7 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
     m_page = new WdgDropshadow(this, "dropshadow");
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
     connect(this, SIGNAL(okClicked()),
         this, SLOT(okClicked()));

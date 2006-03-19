@@ -50,12 +50,12 @@ void KisToolPan::update(KisCanvasSubject *subject)
 
 void KisToolPan::buttonPress(KisButtonPressEvent *e)
 {
-    if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasController *controller = m_subject -> canvasController();
+    if (m_subject && !m_dragging && e->button() == Qt::LeftButton) {
+        KisCanvasController *controller = m_subject->canvasController();
 
-        m_origScrollX = controller -> horzValue();
-        m_origScrollY = controller -> vertValue();
-        m_dragPos = controller -> windowToView(e -> pos());
+        m_origScrollX = controller->horzValue();
+        m_origScrollY = controller->vertValue();
+        m_dragPos = controller->windowToView(e->pos());
         m_dragging = true;
         setCursor(m_closedHandCursor);
     }
@@ -64,17 +64,17 @@ void KisToolPan::buttonPress(KisButtonPressEvent *e)
 void KisToolPan::move(KisMoveEvent *e)
 {
     if (m_subject && m_dragging) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint currPos = controller -> windowToView(e -> pos());
+        KisPoint currPos = controller->windowToView(e->pos());
         KisPoint delta = currPos - m_dragPos;
-        controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
+        controller->scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
     }
 }
 
 void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
+    if (m_subject && m_dragging && e->button() == Qt::LeftButton) {
         setCursor(m_openHandCursor);
         m_dragging = false;
     }
@@ -82,12 +82,12 @@ void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 
 void KisToolPan::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Pan"), "tool_pan", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
-        m_action -> setToolTip(i18n("Pan"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Pan"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

@@ -60,7 +60,7 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
 {
     //read the filter configuration values from the KisFilterConfiguration object
     Q_INT32 radius = (Q_INT32)((KisRoundCornersFilterConfiguration*)configuration)->radius();
-    Q_UINT32 pixelSize = src -> pixelSize();
+    Q_UINT32 pixelSize = src->pixelSize();
 
     setProgressTotalSteps( rect.height() );
     setProgressStage(i18n("Applying pixelize filter..."),0);

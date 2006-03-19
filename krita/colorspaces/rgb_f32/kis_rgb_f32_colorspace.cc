@@ -66,54 +66,54 @@ void KisRgbF32ColorSpace::setPixel(Q_UINT8 *dst, float red, float green, float b
 {
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> red = red;
-    dstPixel -> green = green;
-    dstPixel -> blue = blue;
-    dstPixel -> alpha = alpha;
+    dstPixel->red = red;
+    dstPixel->green = green;
+    dstPixel->blue = blue;
+    dstPixel->alpha = alpha;
 }
 
 void KisRgbF32ColorSpace::getPixel(const Q_UINT8 *src, float *red, float *green, float *blue, float *alpha) const
 {
     const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
 
-    *red = srcPixel -> red;
-    *green = srcPixel -> green;
-    *blue = srcPixel -> blue;
-    *alpha = srcPixel -> alpha;
+    *red = srcPixel->red;
+    *green = srcPixel->green;
+    *blue = srcPixel->blue;
+    *alpha = srcPixel->alpha;
 }
 
 void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst -> red = UINT8_TO_FLOAT(c.red());
-    dst -> green = UINT8_TO_FLOAT(c.green());
-    dst -> blue = UINT8_TO_FLOAT(c.blue());
+    dst->red = UINT8_TO_FLOAT(c.red());
+    dst->green = UINT8_TO_FLOAT(c.green());
+    dst->blue = UINT8_TO_FLOAT(c.blue());
 }
 
 void KisRgbF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst -> red = UINT8_TO_FLOAT(c.red());
-    dst -> green = UINT8_TO_FLOAT(c.green());
-    dst -> blue = UINT8_TO_FLOAT(c.blue());
-    dst -> alpha = UINT8_TO_FLOAT(opacity);
+    dst->red = UINT8_TO_FLOAT(c.red());
+    dst->green = UINT8_TO_FLOAT(c.green());
+    dst->blue = UINT8_TO_FLOAT(c.blue());
+    dst->alpha = UINT8_TO_FLOAT(opacity);
 }
 
 void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
-    c -> setRgb(FLOAT_TO_UINT8(src -> red), FLOAT_TO_UINT8(src -> green), FLOAT_TO_UINT8(src -> blue));
+    c->setRgb(FLOAT_TO_UINT8(src->red), FLOAT_TO_UINT8(src->green), FLOAT_TO_UINT8(src->blue));
 }
 
 void KisRgbF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
-    c -> setRgb(FLOAT_TO_UINT8(src -> red), FLOAT_TO_UINT8(src -> green), FLOAT_TO_UINT8(src -> blue));
-    *opacity = FLOAT_TO_UINT8(src -> alpha);
+    c->setRgb(FLOAT_TO_UINT8(src->red), FLOAT_TO_UINT8(src->green), FLOAT_TO_UINT8(src->blue));
+    *opacity = FLOAT_TO_UINT8(src->alpha);
 }
 
 Q_UINT8 KisRgbF32ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
@@ -121,9 +121,9 @@ Q_UINT8 KisRgbF32ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *sr
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
 
-    return FLOAT_TO_UINT8(QMAX(QABS(src2 -> red - src1 -> red),
-                QMAX(QABS(src2 -> green - src1 -> green),
-                     QABS(src2 -> blue - src1 -> blue))));
+    return FLOAT_TO_UINT8(QMAX(QABS(src2->red - src1->red),
+                QMAX(QABS(src2->green - src1->green),
+                     QABS(src2->blue - src1->blue))));
 }
 
 void KisRgbF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
@@ -134,12 +134,12 @@ void KisRgbF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        float alpha = pixel -> alpha;
+        float alpha = pixel->alpha;
         float alphaTimesWeight = alpha * UINT8_TO_FLOAT(*weights);
 
-        totalRed += pixel -> red * alphaTimesWeight;
-        totalGreen += pixel -> green * alphaTimesWeight;
-        totalBlue += pixel -> blue * alphaTimesWeight;
+        totalRed += pixel->red * alphaTimesWeight;
+        totalGreen += pixel->green * alphaTimesWeight;
+        totalBlue += pixel->blue * alphaTimesWeight;
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -150,7 +150,7 @@ void KisRgbF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
 
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> alpha = newAlpha;
+    dstPixel->alpha = newAlpha;
 
     if (newAlpha > EPSILON) {
         totalRed = totalRed / newAlpha;
@@ -158,9 +158,9 @@ void KisRgbF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
         totalBlue = totalBlue / newAlpha;
     }
 
-    dstPixel -> red = totalRed;
-    dstPixel -> green = totalGreen;
-    dstPixel -> blue = totalBlue;
+    dstPixel->red = totalRed;
+    dstPixel->green = totalGreen;
+    dstPixel->blue = totalBlue;
 }
 
 void KisRgbF32ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
@@ -766,7 +766,7 @@ void KisRgbF32ColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            float srcAlpha = s -> alpha;
+            float srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -777,7 +777,7 @@ void KisRgbF32ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = srcAlpha * d -> alpha;
+            d->alpha = srcAlpha * d->alpha;
         }
 
         dst += dstRowSize;

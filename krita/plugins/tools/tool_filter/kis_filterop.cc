@@ -56,17 +56,17 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
-    KisFilterSP filter = m_painter -> filter();
+    KisFilterSP filter = m_painter->filter();
     if (!filter) return;
 
     if ( ! m_source ) return;
 
-    KisBrush * brush = m_painter -> brush();
+    KisBrush * brush = m_painter->brush();
     if (!brush) return;
 
-    KisColorSpace * colorSpace = m_source -> colorSpace();
+    KisColorSpace * colorSpace = m_source->colorSpace();
 
-    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -82,12 +82,12 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     // Filters always work with a mask, never with an image; that
     // wouldn't be useful at all.
-    KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
+    KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
 
-    m_painter -> setPressure(info.pressure);
+    m_painter->setPressure(info.pressure);
 
-    Q_INT32 maskWidth = mask -> width();
-    Q_INT32 maskHeight = mask -> height();
+    Q_INT32 maskWidth = mask->width();
+    Q_INT32 maskHeight = mask->height();
 
     // Create a temporary paint device
     KisPaintDeviceSP tmpDev = new KisPaintDevice(colorSpace, "filterop tmpdev");
@@ -99,9 +99,9 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     p.bitBlt( 0,  0,  COMPOSITE_COPY, m_source, OPACITY_OPAQUE, x, y, maskWidth, maskHeight );
 
     // Filter the paint device
-    filter -> disableProgress();
-    filter -> process( tmpDev,  tmpDev, m_filterConfiguration, QRect( 0, 0, maskWidth, maskHeight ));
-    filter -> enableProgress();
+    filter->disableProgress();
+    filter->process( tmpDev,  tmpDev, m_filterConfiguration, QRect( 0, 0, maskWidth, maskHeight ));
+    filter->enableProgress();
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
@@ -111,7 +111,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         int x=0;
         while(! hiter.isDone())
         {
-            Q_UINT8 alpha = mask -> alphaAt( x++, y );
+            Q_UINT8 alpha = mask->alphaAt( x++, y );
             colorSpace->setAlpha(hiter.rawData(), alpha, 1);
 
             ++hiter;
@@ -123,10 +123,10 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = m_painter -> device() -> image();
+    KisImage * image = m_painter->device()->image();
 
     if (image != 0) {
-        dstRect &= image -> bounds();
+        dstRect &= image->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -136,6 +136,6 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
 
-    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), tmpDev, m_painter -> opacity(), sx, sy, sw, sh);
-    m_painter -> addDirtyRect(dstRect);
+    m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
+    m_painter->addDirtyRect(dstRect);
 }

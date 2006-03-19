@@ -76,7 +76,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t =  new KisToolColorPicker(); 
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t->setup(ac); 
         return t;
     }
     virtual KisID id() { return KisID("colorpicker", i18n("Color Picker")); }

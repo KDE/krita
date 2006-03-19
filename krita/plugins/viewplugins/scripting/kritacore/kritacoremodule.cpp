@@ -87,7 +87,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args
 
 Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
     QValueList<KisResource*> resources = rServer->resources();
 
     QString name = Kross::Api::Variant::toString(args->item(0));
@@ -120,7 +120,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args
 
 Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
 {
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
     QValueList<KisResource*> resources = rServer->resources();
 
     QString name = Kross::Api::Variant::toString(args->item(0));

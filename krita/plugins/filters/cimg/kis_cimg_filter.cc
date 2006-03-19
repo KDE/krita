@@ -169,13 +169,13 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
     img = CImg<>(width, height, 1, 3);
 
-    KisRectIteratorPixel it = src -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    KisColorSpace * cs = src -> colorSpace();
+    KisRectIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+    KisColorSpace * cs = src->colorSpace();
 
     while (!it.isDone()) {
 
         QColor color;
-        cs -> toQColor(it.rawData(), &color);
+        cs->toQColor(it.rawData(), &color);
 
         Q_INT32 x = it.x() - rect.x();
         Q_INT32 y = it.y() - rect.y();
@@ -191,20 +191,20 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
     KisCImgFilterConfiguration * cfg = (KisCImgFilterConfiguration*)configuration;
 
-        nb_iter = cfg -> nb_iter;
-        dt = cfg -> dt;
-        dlength = cfg -> dlength;
-        dtheta = cfg -> dtheta;
-        sigma = cfg -> sigma;
-        power1 = cfg -> power1;
-        power2 = cfg -> power2;
-        gauss_prec = cfg -> gauss_prec;
-        onormalize = cfg -> onormalize;
-        linear = cfg -> linear;
+        nb_iter = cfg->nb_iter;
+        dt = cfg->dt;
+        dlength = cfg->dlength;
+        dtheta = cfg->dtheta;
+        sigma = cfg->sigma;
+        power1 = cfg->power1;
+        power2 = cfg->power2;
+        gauss_prec = cfg->gauss_prec;
+        onormalize = cfg->onormalize;
+        linear = cfg->linear;
 
     if (process() && !cancelRequested()) {
 
-        it = dst -> createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+        it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
         while (!it.isDone()) {
 
@@ -215,7 +215,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
                 QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
 
-                cs -> fromQColor(color, it.rawData());
+                cs->fromQColor(color, it.rawData());
             }
 
             ++it;
@@ -648,7 +648,7 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
         return cfg;
 
     } else {
-        return widget -> config();
+        return widget->config();
     }
 }
 

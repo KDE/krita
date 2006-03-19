@@ -30,16 +30,32 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_channelinfo.h"
 
-struct KisColorAdjustment
+class KisColorAdjustmentImpl : public KisColorAdjustment
 {
-    ~KisColorAdjustment() { cmsDeleteTransform(transform);
-        cmsCloseProfile(profiles[0]);
-        if(profiles[1])
+    public:
+        
+    KisColorAdjustmentImpl() : KisColorAdjustment()
+        {
+            csProfile = 0;
+            transform = 0;
+            profiles[0] = 0;
+            profiles[1] = 0;
+            profiles[2] = 0;
+        };
+    
+    ~KisColorAdjustmentImpl() {
+
+        if (transform)
+            cmsDeleteTransform(transform);
+        if (profiles[0] && profiles[0] != csProfile)
+            cmsCloseProfile(profiles[0]);
+        if(profiles[1] && profiles[1] != csProfile)
             cmsCloseProfile(profiles[1]);
-        if(profiles[2])
+        if(profiles[2] && profiles[2] != csProfile)
             cmsCloseProfile(profiles[2]);
     }
 
+    cmsHPROFILE csProfile;
     cmsHPROFILE profiles[3];
     cmsHTRANSFORM transform;
 };
@@ -152,7 +168,7 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *
 	    }
 	    cmsDoTransform(m_lastToRGB, const_cast <Q_UINT8 *>(src), m_qcolordata, 1);
     }
-    c -> setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
+    c->setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
 void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
@@ -179,7 +195,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
     cmsHTRANSFORM tf = 0;
 
     Q_INT32 srcPixelSize = pixelSize();
-    Q_INT32 dstPixelSize = dstColorSpace -> pixelSize();
+    Q_INT32 dstPixelSize = dstColorSpace->pixelSize();
 
     if (m_lastUsedTransform != 0) {
         if (dstColorSpace->getProfile() == m_lastUsedDstProfile)
@@ -215,7 +231,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
             Q_UINT8 alpha = getAlpha(src);
-            dstColorSpace -> setAlpha(dst, alpha, 1);
+            dstColorSpace->setAlpha(dst, alpha, 1);
 
             src += srcPixelSize;
             dst += dstPixelSize;
@@ -231,7 +247,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
         Q_UINT8 opacity;
 
         toQColor(src, &color, &opacity);
-        dstColorSpace -> fromQColor(color, opacity, dst);
+        dstColorSpace->fromQColor(color, opacity, dst);
 
         src += srcPixelSize;
         dst += dstPixelSize;
@@ -254,14 +270,14 @@ KisColorAdjustment *KisAbstractColorSpace::createBrightnessContrastAdjustment(Q_
     for(int i =0; i < 256; i++)
         transferFunctions[0]->GammaTable[i] = transferValues[i];
 
-    KisColorAdjustment *adj = new KisColorAdjustment;
+    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
     adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
     cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
     adj->profiles[0] = m_profile->profile();
     adj->profiles[2] = m_profile->profile();
     adj->transform  = cmsCreateMultiprofileTransform(adj->profiles, 3, m_cmType, m_cmType, INTENT_PERCEPTUAL, 0);
-
+    adj->csProfile = m_profile->profile();
     return adj;
 }
 
@@ -283,7 +299,7 @@ static int desaturateSampler(register WORD In[], register WORD Out[], register L
 
     // Do some adjusts on LCh
     LChOut.L = LChIn.L;
-    LChOut.C = 0;//LChIn.C + bchsw -> Saturation;
+    LChOut.C = 0;//LChIn.C + bchsw->Saturation;
     LChOut.h = LChIn.h;
 
     cmsLCh2Lab(&LabOut, &LChOut);
@@ -298,11 +314,12 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
 {
     if (!m_profile) return 0;
 
-    KisColorAdjustment *adj = new KisColorAdjustment;
+    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
 
     adj->profiles[0] = m_profile->profile();
     adj->profiles[2] = m_profile->profile();
-
+    adj->csProfile = m_profile->profile();
+    
      LPLUT Lut;
      BCHSWADJUSTS bchsw;
 
@@ -361,10 +378,11 @@ KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 *
         }
     }
 
-    KisColorAdjustment *adj = new KisColorAdjustment;
+    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
     adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
     adj->profiles[1] = NULL;
     adj->profiles[2] = NULL;
+    adj->csProfile = m_profile->profile();
     adj->transform  = cmsCreateTransform(adj->profiles[0], m_cmType, NULL, m_cmType, INTENT_PERCEPTUAL, 0);
 
     delete [] transferFunctions;
@@ -372,9 +390,12 @@ KisColorAdjustment *KisAbstractColorSpace::createPerChannelAdjustment(Q_UINT16 *
     return adj;
 }
 
-void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adj, Q_INT32 nPixels)
+
+void KisAbstractColorSpace::applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *adjustment, Q_INT32 nPixels)
 {
-    cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
+    KisColorAdjustmentImpl * adj = dynamic_cast<KisColorAdjustmentImpl*>(adjustment);
+    if (adj)
+        cmsDoTransform(adj->transform, const_cast<Q_UINT8 *>(src), dst, nPixels);
 }
 
 
@@ -440,7 +461,7 @@ void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
     while (nColors--)
     {
         // Ugly hack to get around the current constness mess of the colour strategy...
-        const_cast<KisAbstractColorSpace *>(this) -> toQColor(*colors, &c, &opacity);
+        const_cast<KisAbstractColorSpace *>(this)->toQColor(*colors, &c, &opacity);
 
         Q_UINT32 alphaTimesWeight = UINT8_MULT(opacity, *weights);
 
@@ -475,7 +496,7 @@ void KisAbstractColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *wei
     Q_UINT32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
     Q_ASSERT(dstBlue <= 255);
 
-    const_cast<KisAbstractColorSpace *>(this) -> fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
+    const_cast<KisAbstractColorSpace *>(this)->fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
 void KisAbstractColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
@@ -548,7 +569,7 @@ void KisAbstractColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 s
 
         for (int i = 0; i < nPixels; ++i) {
 
-            const_cast<KisAbstractColorSpace *>(this) -> toQColor(src + (i * psize), &c);
+            const_cast<KisAbstractColorSpace *>(this)->toQColor(src + (i * psize), &c);
             Q_INT32 r, g, b;
 
             if (compensate) {
@@ -598,7 +619,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
     if (rows <= 0 || cols <= 0)
         return;
 
-    if (this!= srcSpace) {
+    if (this != srcSpace) {
         Q_UINT32 len = pixelSize() * rows * cols;
 
         // If our conversion cache is too small, extend it.
@@ -609,7 +630,7 @@ void KisAbstractColorSpace::bitBlt(Q_UINT8 *dst,
         }
 
         for (Q_INT32 row = 0; row < rows; row++) {
-            srcSpace -> convertPixelsTo(src + row * srcRowStride,
+            srcSpace->convertPixelsTo(src + row * srcRowStride,
                                         m_conversionCache.data() + row * cols * pixelSize(), this,
                                         cols);
         }
@@ -680,10 +701,10 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
     }
 
     if (dstColorSpace && dstProfile && srcProfile ) {
-        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile -> profile(),
+        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->profile(),
                               colorSpaceType(),
-                              dstProfile -> profile(),
-                              dstColorSpace -> colorSpaceType(),
+                              dstProfile->profile(),
+                              dstColorSpace->colorSpaceType(),
                               renderingIntent,
                               flags);
 

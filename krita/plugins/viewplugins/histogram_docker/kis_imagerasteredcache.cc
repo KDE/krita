@@ -32,20 +32,20 @@
 #include "kis_imagerasteredcache.h"
 
 KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o) 
-    : m_observer(o -> createNew(0, 0, 0, 0)), m_view(view)
+    : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
 {
     m_busy = false;
     m_imageProjection = 0;
     m_rasterSize = 64;
     m_timeOutMSec = 1000;
 
-    KisImageSP img = view -> canvasSubject() -> currentImg();
+    KisImageSP img = view->canvasSubject()->currentImg();
 
     if (!img) {
         return;
     }
 
-    imageSizeChanged(img -> width(), img -> height());
+    imageSizeChanged(img->width(), img->height());
 
     connect(img, SIGNAL(sigImageUpdated(QRect)),
             this, SLOT(imageUpdated(QRect)));
@@ -75,8 +75,8 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
                     if (x < m_raster.size()) {
                         if (i < m_raster.at(x).size()) {
                             Element* e = m_raster.at(x).at(i);
-                            if (e && e -> valid) {
-                                e -> valid = false;
+                            if (e && e->valid) {
+                                e->valid = false;
                                 m_queue.push_back(e);
                             }
                         }
@@ -89,7 +89,7 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
     if (!m_busy) {
         // If the timer is already started, this resets it. That way, we update always
         // m_timeOutMSec milliseconds after the lastly monitored activity
-        m_timer.start(m_timeOutMSec, true); // true -> singleshot
+        m_timer.start(m_timeOutMSec, true); // true->singleshot
     }
 }
 
@@ -113,19 +113,19 @@ void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
         m_raster.at(rasterX).resize(m_height + 1);
 
         for (int j = 0; j < m_height * m_rasterSize; j += m_rasterSize) {
-            Element* e = new Element(m_observer -> createNew(i, j, m_rasterSize, m_rasterSize));
+            Element* e = new Element(m_observer->createNew(i, j, m_rasterSize, m_rasterSize));
             m_raster.at(rasterX).at(rasterY) = e;
             rasterY++;
         }
         rasterX++;
     }
 
-    imageUpdated(QRect(0,0, image -> width(), image -> height()));
+    imageUpdated(QRect(0,0, image->width(), image->height()));
 }
 
 void KisImageRasteredCache::timeOut() {
     m_busy = true;
-    KisImageSP img = m_view -> canvasSubject() -> currentImg();
+    KisImageSP img = m_view->canvasSubject()->currentImg();
 
     // Temporary cache: while we are busy, we won't get the mergeImage time and again.
     if (!m_imageProjection)
@@ -133,8 +133,8 @@ void KisImageRasteredCache::timeOut() {
 
     // Pick one element of the cache, and update it
     if (!m_queue.isEmpty()) {
-        m_queue.front() -> observer -> regionUpdated(m_imageProjection);
-        m_queue.front() -> valid = true;
+        m_queue.front()->observer->regionUpdated(m_imageProjection);
+        m_queue.front()->valid = true;
         m_queue.pop_front();
     }
 

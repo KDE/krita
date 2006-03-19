@@ -55,7 +55,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         setInstance(KritaHistogramDockerFactory::instance());
         setXMLFile(locate("data","kritaplugins/kritahistogramdocker.rc"), true);
 
-        KisImageSP img = m_view -> canvasSubject() -> currentImg();
+        KisImageSP img = m_view->canvasSubject()->currentImg();
         if (!img) {
             m_cache = 0;
             return;
@@ -63,15 +63,15 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
 
         m_hview = 0; // producerChanged wants to setCurrentChannels, prevent that here
         m_cache = 0; // we try to delete it in producerChanged
-        colorSpaceChanged(img -> colorSpace()); // calls producerChanged(0)
+        colorSpaceChanged(img->colorSpace()); // calls producerChanged(0)
 
 
         m_hview = new KisHistogramView(m_view);
-        m_hview -> setHistogram(m_histogram);
-        m_hview -> setColor(true);
-        m_hview -> setCurrentChannels(m_producer, m_producer -> channels());
-        m_hview -> setFixedSize(256, 100); // XXX if not it keeps expanding
-        m_hview -> setCaption(i18n("Histogram"));
+        m_hview->setHistogram(m_histogram);
+        m_hview->setColor(true);
+        m_hview->setCurrentChannels(m_producer, m_producer->channels());
+        m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
+        m_hview->setCaption(i18n("Histogram"));
 
 
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
@@ -84,7 +84,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
                 this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
-        m_view -> canvasSubject() -> paletteManager() -> addWidget(
+        m_view->canvasSubject()->paletteManager()->addWidget(
             m_hview, "histodocker", krita::CONTROL_PALETTE);
     } else {
         m_cache = 0;
@@ -99,13 +99,13 @@ KritaHistogramDocker::~KritaHistogramDocker()
     }
 
     if (m_cache)
-        m_cache -> deleteLater();
+        m_cache->deleteLater();
 }
 
 void KritaHistogramDocker::producerChanged(int pos)
 {
     if (m_cache)
-        m_cache -> deleteLater();
+        m_cache->deleteLater();
     m_cache = 0;
 
     if (m_currentProducerPos < m_popup.count())
@@ -122,7 +122,7 @@ void KritaHistogramDocker::producerChanged(int pos)
     KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
-    m_factory = KisHistogramProducerFactoryRegistry::instance() -> get(*(keys.at(pos)));
+    m_factory = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(pos)));
 
     KisCachedHistogramObserver observer(&m_producers, m_factory, 0, 0, 0, 0, false);
 
@@ -137,9 +137,9 @@ void KritaHistogramDocker::producerChanged(int pos)
     m_histogram = new KisHistogram( new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram"), m_producer, LOGARITHMIC);
 
     if (m_hview) {
-        m_hview -> setHistogram(m_histogram);
-        m_hview -> setColor(true);
-        m_hview -> setCurrentChannels(m_producer, m_producer -> channels());
+        m_hview->setHistogram(m_histogram);
+        m_hview->setColor(true);
+        m_hview->setCurrentChannels(m_producer, m_producer->channels());
 
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
@@ -177,14 +177,14 @@ HistogramDockerUpdater::HistogramDockerUpdater(QObject* /*parent*/, KisHistogram
 }
 
 void HistogramDockerUpdater::updated() {
-    // We don't [!] do m_histogram -> updateHistogram();, because that will try to compute
+    // We don't [!] do m_histogram->updateHistogram();, because that will try to compute
     // the histogram synchronously, while we want it asynchronously.
-    m_producer -> addRegionsToBinAsync();
+    m_producer->addRegionsToBinAsync();
 }
 
 void HistogramDockerUpdater::completed() {
-    m_histogram -> computeHistogram();
-    m_view -> updateHistogram();
+    m_histogram->computeHistogram();
+    m_view->updateHistogram();
 }
 
 #include "histogramdocker.moc"

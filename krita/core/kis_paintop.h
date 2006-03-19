@@ -125,7 +125,7 @@ public:
      * in various tools. If false, it won't show up in the toolchest.
      * The KisColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KisColorSpace * cs = 0) { return cs -> id() != KisID("WET", ""); }
+    virtual bool userVisible(KisColorSpace * cs = 0) { return cs->id() != KisID("WET", ""); }
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the 

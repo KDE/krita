@@ -271,7 +271,7 @@ void KisLabColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s -> alpha;
+            Q_UINT16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -282,7 +282,7 @@ void KisLabColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = UINT16_MULT(srcAlpha, d -> alpha);
+            d->alpha = UINT16_MULT(srcAlpha, d->alpha);
         }
 
         dst += dstRowSize;

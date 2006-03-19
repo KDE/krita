@@ -38,7 +38,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, const Q_UINT8 *def
 
     allocate();
 
-    KisTileManager::instance() -> registerTile(this);
+    KisTileManager::instance()->registerTile(this);
 
     setData(defPixel);
 }
@@ -60,7 +60,7 @@ KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
         m_col = col;
         m_row = row;
 
-        KisTileManager::instance() -> registerTile(this);
+        KisTileManager::instance()->registerTile(this);
     }
 }
 
@@ -80,17 +80,17 @@ KisTile::KisTile(const KisTile& rhs)
             memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
         }
 
-        KisTileManager::instance() -> registerTile(this);
+        KisTileManager::instance()->registerTile(this);
     }
 }
 
 KisTile::~KisTile()
 {
-    KisTileManager::instance() -> deregisterTile(this); // goes before the deleting of m_data!
+    KisTileManager::instance()->deregisterTile(this); // goes before the deleting of m_data!
 
     if (m_data) {
 //        delete[] m_data;
-        KisTileManager::instance() -> dontNeedTileData(m_data, m_pixelSize);
+        KisTileManager::instance()->dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
     assert( !readers() );
@@ -100,7 +100,7 @@ void KisTile::allocate()
 {
     if (m_data == 0) {
         assert (!readers());
-        m_data = KisTileManager::instance() -> requestTileData(m_pixelSize);
+        m_data = KisTileManager::instance()->requestTileData(m_pixelSize);
         Q_CHECK_PTR(m_data);
     }
 }
@@ -134,7 +134,7 @@ void KisTile::setData(const Q_UINT8 *pixel)
 void KisTile::addReader()
 {
     if (m_nReadlock++ == 0)
-        KisTileManager::instance() -> ensureTileLoaded(this);
+        KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
         kdDebug(41000) << m_nReadlock << endl;
         assert(0);
@@ -144,5 +144,5 @@ void KisTile::addReader()
 void KisTile::removeReader()
 {
     if (--m_nReadlock == 0)
-        KisTileManager::instance() -> maySwapTile(this);
+        KisTileManager::instance()->maySwapTile(this);
 }

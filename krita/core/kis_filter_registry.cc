@@ -40,7 +40,7 @@ KisFilterRegistry::KisFilterRegistry()
     Q_ASSERT(KisFilterRegistry::m_singleton == 0);
     KisFilterRegistry::m_singleton = this;
 
-    KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Krita/Filter"),
+    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Filter"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
@@ -53,9 +53,9 @@ KisFilterRegistry::KisFilterRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service -> property("Name").toString() << "\n";
+            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service -> property("Name").toString() << ", " << errCode << "\n";
+            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
                 kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;

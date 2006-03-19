@@ -82,7 +82,7 @@ ColorSpaceConversion::~ColorSpaceConversion()
 
 void ColorSpaceConversion::slotImgColorSpaceConversion()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
@@ -101,15 +101,15 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion -> setCaption(i18n("Convert All Layers From ") + image -> colorSpace() -> id().name());
+    dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From ") + image->colorSpace()->id().name());
 
-    if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
+    if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
-        KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+        KisID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
+        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image->convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        image->convertTo(cs, dlgColorSpaceConversion->m_page->grpIntent->selectedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
@@ -118,10 +118,10 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 void ColorSpaceConversion::slotLayerColorSpaceConversion()
 {
 
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
     if (!image) return;
 
-    KisPaintDeviceSP dev = image -> activeDevice();
+    KisPaintDeviceSP dev = image->activeDevice();
     if (!dev) return;
 
     if (dev->colorSpace()->willDegrade(TO_LAB16)) {
@@ -138,15 +138,15 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion -> setCaption(i18n("Convert Current Layer From") + dev -> colorSpace() -> id().name());
+    dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->id().name());
 
-    if (dlgColorSpaceConversion -> exec() == QDialog::Accepted) {
-        KisID cspace = dlgColorSpaceConversion -> m_page -> cmbColorSpaces -> currentItem();
+    if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
+        KisID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->
-                getColorSpace(cspace, dlgColorSpaceConversion -> m_page -> cmbDestProfile -> currentText());
+                getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        dev -> convertTo(cs, dlgColorSpaceConversion -> m_page -> grpIntent -> selectedId());
+        dev->convertTo(cs, dlgColorSpaceConversion->m_page->grpIntent->selectedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;

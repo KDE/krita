@@ -92,7 +92,7 @@ void KisU8BaseColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * al
 QString KisU8BaseColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
 }
@@ -100,7 +100,7 @@ QString KisU8BaseColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 cha
 QString KisU8BaseColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(100.0 * static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }

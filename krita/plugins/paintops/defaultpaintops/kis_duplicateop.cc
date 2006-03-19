@@ -59,16 +59,16 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 {
     if (!m_painter) return;
 
-    KisPaintDeviceSP device = m_painter -> device();
+    KisPaintDeviceSP device = m_painter->device();
     if (m_source) device = m_source;
     if (!device) return;
 
     KisBrush * brush = m_painter->brush();
     if (!brush) return;
-    if (! brush -> canPaintFor(info) )
+    if (! brush->canPaintFor(info) )
         return;
 
-    KisPoint hotSpot = brush -> hotSpot(info);
+    KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -85,23 +85,23 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     KisPaintDeviceSP dab = 0;
 
-    if (brush -> brushType() == IMAGE ||
-        brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(device -> colorSpace(), info, xFraction, yFraction);
+    if (brush->brushType() == IMAGE ||
+        brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(info, xFraction, yFraction);
+        KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
         dab = computeDab(mask);
     }
 
-    m_painter -> setPressure(info.pressure);
+    m_painter->setPressure(info.pressure);
 
-    QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter -> duplicateOffset().x()),
-                             y - static_cast<Q_INT32>(m_painter -> duplicateOffset().y()));
+    QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter->duplicateOffset().x()),
+                             y - static_cast<Q_INT32>(m_painter->duplicateOffset().y()));
 
 
-    Q_INT32 sw = dab -> extent().width();
-    Q_INT32 sh = dab -> extent().height();
+    Q_INT32 sw = dab->extent().width();
+    Q_INT32 sh = dab->extent().height();
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -109,7 +109,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceSP srcdev = new KisPaintDevice(dab -> colorSpace(), "duplicate source dev");
+    KisPaintDeviceSP srcdev = new KisPaintDevice(dab->colorSpace(), "duplicate source dev");
     Q_CHECK_PTR(srcdev);
 
     // First, copy the source data on the temporary device:
@@ -118,28 +118,28 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copyPainter.end();
 
     // Convert the dab to the colorspace of a selection
-    dab -> convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
+    dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
 
     // Add the dab as selection to the srcdev
-    KisPainter copySelection(srcdev -> selection().data());
+    KisPainter copySelection(srcdev->selection().data());
     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
     copySelection.end();
 
     // copy the srcdev onto a new device, after applying the dab selection
-    KisPaintDeviceSP target = new KisPaintDevice(srcdev -> colorSpace(), "duplicate target dev");
+    KisPaintDeviceSP target = new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
     copyPainter.begin(target);
 
-    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev -> selection(),
+    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev->selection(),
                              OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();
 
-    QRect dabRect = QRect(0, 0, brush -> maskWidth(info), brush -> maskHeight(info));
+    QRect dabRect = QRect(0, 0, brush->maskWidth(info), brush->maskHeight(info));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    KisImage * image = device -> image();
+    KisImage * image = device->image();
 
     if (image != 0) {
-        dstRect &= image -> bounds();
+        dstRect &= image->bounds();
     }
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
@@ -149,7 +149,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     sw = dstRect.width();
     sh = dstRect.height();
 
-    m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), target,
-                              m_painter -> opacity(), sx, sy, sw, sh);
-    m_painter -> addDirtyRect(dstRect);
+    m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), target,
+                              m_painter->opacity(), sx, sy, sw, sh);
+    m_painter->addDirtyRect(dstRect);
 }

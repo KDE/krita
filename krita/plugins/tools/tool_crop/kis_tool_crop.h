@@ -133,7 +133,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t = new KisToolCrop();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("crop", i18n("Crop Tool")); }

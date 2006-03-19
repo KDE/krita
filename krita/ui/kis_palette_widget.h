@@ -44,7 +44,7 @@ public:
     virtual ~KisPaletteWidget();
 
     QString palette() const;
-    KisPaletteEntry currentEntry() const { return m_view -> currentEntry(); }
+    KisPaletteEntry currentEntry() const { return m_view->currentEntry(); }
 
 public slots:
     void setPalette(const QString &paletteName);

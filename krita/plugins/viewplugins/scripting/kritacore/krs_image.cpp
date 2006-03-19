@@ -109,7 +109,7 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     } else {
         layer = new KisPaintLayer(m_image, name, opacity);
     }
-    layer -> setVisible(true);
+    layer->setVisible(true);
 
     m_image->addLayer(layer, m_image->rootLayer(), 0);
     return new PaintLayer(layer);

@@ -85,7 +85,7 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
 
     kdDebug(41001) << "Shared context widget ref count now " << SharedContextWidgetRefCount << endl;
 
-    SharedContextWidget -> makeCurrent();
+    SharedContextWidget->makeCurrent();
     glGenTextures(1, &m_backgroundTexture);
     generateBackgroundTexture();
 
@@ -103,7 +103,7 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
             SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
 
-    updateImageTextureTiles(m_image -> bounds());
+    updateImageTextureTiles(m_image->bounds());
 }
 
 KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KisProfile *monitorProfile)
@@ -116,7 +116,7 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
             kdDebug(41001) << "Sharing image context from map\n";
 
             KisOpenGLImageContextSP context = (*it).second;
-            context -> setMonitorProfile(monitorProfile);
+            context->setMonitorProfile(monitorProfile);
 
             return context;
         } else {
@@ -136,7 +136,7 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
 
 bool KisOpenGLImageContext::imageCanShareImageContext(KisImageSP image)
 {
-    if (image -> colorSpace() -> hasHighDynamicRange()) {
+    if (image->colorSpace()->hasHighDynamicRange()) {
         //XXX: and we don't have shaders...
         return false;
     } else {
@@ -153,11 +153,11 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 {
     //kdDebug() << "updateImageTextureTiles " << rect << endl;
 
-    QRect updateRect = rect & m_image -> bounds();
+    QRect updateRect = rect & m_image->bounds();
 
     if (!updateRect.isEmpty()) {
 
-        SharedContextWidget -> makeCurrent();
+        SharedContextWidget->makeCurrent();
 
         int firstColumn = updateRect.left() / m_imageTextureTileWidth;
         int lastColumn = updateRect.right() / m_imageTextureTileWidth;
@@ -180,13 +180,13 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-                QImage tileUpdateImage = m_image -> convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
+                QImage tileUpdateImage = m_image->convertToQImage(tileUpdateRect.left(), tileUpdateRect.top(),
                                                                     tileUpdateRect.right(), tileUpdateRect.bottom(),
                                                                      m_monitorProfile, m_exposure);
 
                 if (m_displaySelection) {
-                    if (m_image -> activeLayer() != 0) {
-                        m_image -> activeLayer() -> paintSelection(tileUpdateImage,
+                    if (m_image->activeLayer() != 0) {
+                        m_image->activeLayer()->paintSelection(tileUpdateImage,
                                                                    tileUpdateRect.x(), tileUpdateRect.y(),
                                                                    tileUpdateRect.width(), tileUpdateRect.height());
                     }
@@ -217,7 +217,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
 KisColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KisColorSpace */*imageColorSpace*/)
 {
-    return KisMetaRegistry::instance() -> csRegistry() -> getColorSpace(KisID("RGBA", ""), "");
+    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""), "");
 }
 
 void KisOpenGLImageContext::setMonitorProfile(KisProfile *monitorProfile)
@@ -225,7 +225,7 @@ void KisOpenGLImageContext::setMonitorProfile(KisProfile *monitorProfile)
     if (monitorProfile != m_monitorProfile) {
         m_monitorProfile = monitorProfile;
         generateBackgroundTexture();
-        updateImageTextureTiles(m_image -> bounds());
+        updateImageTextureTiles(m_image->bounds());
     }
 }
 
@@ -234,16 +234,16 @@ void KisOpenGLImageContext::setHDRExposure(float exposure)
     if (exposure != m_exposure) {
         m_exposure = exposure;
 
-        if (m_image -> colorSpace() -> hasHighDynamicRange()) {
+        if (m_image->colorSpace()->hasHighDynamicRange()) {
             //XXX: and we are not using shaders...
-            updateImageTextureTiles(m_image -> bounds());
+            updateImageTextureTiles(m_image->bounds());
         }
     }
 }
 
 void KisOpenGLImageContext::generateBackgroundTexture()
 {
-    SharedContextWidget -> makeCurrent();
+    SharedContextWidget->makeCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_backgroundTexture);
 
@@ -254,7 +254,7 @@ void KisOpenGLImageContext::generateBackgroundTexture()
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    QImage backgroundImage = m_image -> background() -> patternTile();
+    QImage backgroundImage = m_image->background()->patternTile();
 
     // XXX: temp.
     Q_ASSERT(backgroundImage.width() == BACKGROUND_TEXTURE_WIDTH);
@@ -298,12 +298,12 @@ int KisOpenGLImageContext::imageTextureTileHeight() const
 
 void KisOpenGLImageContext::createImageTextureTiles()
 {
-    SharedContextWidget -> makeCurrent();
+    SharedContextWidget->makeCurrent();
 
     destroyImageTextureTiles();
 
-    m_numImageTextureTileColumns = (m_image -> width() + m_imageTextureTileWidth - 1) / m_imageTextureTileWidth;
-    int numImageTextureTileRows = (m_image -> height() + m_imageTextureTileHeight - 1) / m_imageTextureTileHeight;
+    m_numImageTextureTileColumns = (m_image->width() + m_imageTextureTileWidth - 1) / m_imageTextureTileWidth;
+    int numImageTextureTileRows = (m_image->height() + m_imageTextureTileHeight - 1) / m_imageTextureTileHeight;
     int numImageTextureTiles = m_numImageTextureTileColumns * numImageTextureTileRows;
 
     m_imageTextureTiles.resize(numImageTextureTiles);
@@ -333,7 +333,7 @@ void KisOpenGLImageContext::createImageTextureTiles()
 void KisOpenGLImageContext::destroyImageTextureTiles()
 {
     if (!m_imageTextureTiles.empty()) {
-        SharedContextWidget -> makeCurrent();
+        SharedContextWidget->makeCurrent();
         glDeleteTextures(m_imageTextureTiles.count(), &(m_imageTextureTiles[0]));
         m_imageTextureTiles.clear();
     }
@@ -351,7 +351,7 @@ void KisOpenGLImageContext::setSelectionDisplayEnabled(bool enable)
 
 void KisOpenGLImageContext::slotImageUpdated(QRect rc)
 {
-    QRect r = rc & m_image -> bounds();
+    QRect r = rc & m_image->bounds();
 
     updateImageTextureTiles(r);
     emit sigImageUpdated(r);
@@ -360,7 +360,7 @@ void KisOpenGLImageContext::slotImageUpdated(QRect rc)
 void KisOpenGLImageContext::slotImageSizeChanged(Q_INT32 w, Q_INT32 h)
 {
     createImageTextureTiles();
-    updateImageTextureTiles(m_image -> bounds());
+    updateImageTextureTiles(m_image->bounds());
 
     emit sigSizeChanged(w, h);
 }

@@ -140,14 +140,14 @@ KisLayerSP KisGroupLayer::at(int index) const
 
 int KisGroupLayer::index(KisLayerSP layer) const
 {
-    if (layer -> parent().data() == this)
-        return layer -> index();
+    if (layer->parent().data() == this)
+        return layer->index();
     return -1;
 }
 
 void KisGroupLayer::setIndex(KisLayerSP layer, int index)
 {
-    if (layer -> parent().data() != this)
+    if (layer->parent().data() != this)
         return;
     //TODO optimize
     removeLayer(layer);
@@ -157,7 +157,7 @@ void KisGroupLayer::setIndex(KisLayerSP layer, int index)
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
     if (x < 0 || kClamp(uint(x), uint(0), childCount()) != uint(x) ||
-        newLayer -> parent() || m_layers.contains(newLayer))
+        newLayer->parent() || m_layers.contains(newLayer))
     {
         kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
         return false;
@@ -168,23 +168,23 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     else
         m_layers.insert(m_layers.begin() + reverseIndex(index) + 1, newLayer);
     for (uint i = childCount() - 1; i > index; i--)
-        at(i) -> m_index++;
-    newLayer -> m_parent = this;
-    newLayer -> m_index = index;
-    newLayer -> setImage(image());
-    newLayer -> setDirty(newLayer->extent());
+        at(i)->m_index++;
+    newLayer->m_parent = this;
+    newLayer->m_index = index;
+    newLayer->setImage(image());
+    newLayer->setDirty(newLayer->extent());
     setDirty();
     return true;
 }
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
-    if (aboveThis && aboveThis -> parent().data() != this)
+    if (aboveThis && aboveThis->parent().data() != this)
     {
         kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
         return false;
     }
-    return addLayer(newLayer, aboveThis ? aboveThis -> index() : childCount());
+    return addLayer(newLayer, aboveThis ? aboveThis->index() : childCount());
 }
 
 bool KisGroupLayer::removeLayer(int x)
@@ -193,11 +193,11 @@ bool KisGroupLayer::removeLayer(int x)
     {
         uint index(x);
         for (uint i = childCount() - 1; i > index; i--)
-            at(i) -> m_index--;
+            at(i)->m_index--;
         KisLayerSP removedLayer = at(index);
 
-        removedLayer -> m_parent = 0;
-        removedLayer -> m_index = -1;
+        removedLayer->m_parent = 0;
+        removedLayer->m_index = -1;
         m_layers.erase(m_layers.begin() + reverseIndex(index));
         setDirty(removedLayer->extent());
         if (childCount() < 1) {
@@ -213,13 +213,13 @@ bool KisGroupLayer::removeLayer(int x)
 
 bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
-    if (layer -> parent().data() != this)
+    if (layer->parent().data() != this)
     {
         kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
         return false;
     }
 
-    return removeLayer(layer -> index());
+    return removeLayer(layer->index());
 }
 
 void KisGroupLayer::setImage(KisImage *image)

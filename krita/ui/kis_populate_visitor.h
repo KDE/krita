@@ -42,7 +42,7 @@ class KisPopulateVisitor: public KisLayerVisitor
             { }
 
         KisPopulateVisitor(KisLayerItem* parent)
-            : m_widget(parent -> listView())
+            : m_widget(parent->listView())
             , m_parent(parent)
             { }
 
@@ -55,23 +55,23 @@ class KisPopulateVisitor: public KisLayerVisitor
 
         virtual bool visit(KisPartLayer* layer)
         {
-            add(layer) -> setPixmap(0, SmallIcon("gear", 16));
+            add(layer)->setPixmap(0, SmallIcon("gear", 16));
             return true;
         }
 
         virtual bool visit(KisAdjustmentLayer* layer)
         {
-            add(layer) -> setPixmap(0, SmallIcon("tool_filter", 16));
+            add(layer)->setPixmap(0, SmallIcon("tool_filter", 16));
             return true;
         }
 
         virtual bool visit(KisGroupLayer* layer)
         {
             KisLayerItem* item = add(layer);
-            item -> makeFolder();
+            item->makeFolder();
             KisPopulateVisitor visitor(item);
-            for (KisLayerSP l = layer -> firstChild(); l; l = l -> nextSibling())
-                l -> accept(visitor);
+            for (KisLayerSP l = layer->firstChild(); l; l = l->nextSibling())
+                l->accept(visitor);
 
             vKisLayerSP childLayersAdded = visitor.layersAdded();
 
@@ -107,7 +107,7 @@ class KisPopulateVisitor: public KisLayerVisitor
                 item = new KisLayerItem(m_widget, layer); 
             }
             if (layer == img->activeLayer()) {
-                item -> setActive();
+                item->setActive();
             }
             m_layersAdded.append(layer);
             return item;

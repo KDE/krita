@@ -49,7 +49,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev, double xscale, doub
 void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
-    Q_INT32 pixelSize = src -> pixelSize();
+    Q_INT32 pixelSize = src->pixelSize();
     QRect r;
     KisColorSpace *cs = src->colorSpace();
 
@@ -65,8 +65,8 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
     }
 
     for (Q_INT32 y = r.bottom(); y >= r.top(); --y) {
-        KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), true);
-        KisVLineIterator vit = dst -> createVLineIterator(-y, r.x(), r.width(), true);
+        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
+        KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width(), true);
         KisVLineIterator dstSelIt = dstSelection->createVLineIterator(-y, r.x(), r.width(), true);
 
             while (!hit.isDone()) {
@@ -87,7 +87,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
-    Q_INT32 pixelSize = src -> pixelSize();
+    Q_INT32 pixelSize = src->pixelSize();
     QRect r;
     KisColorSpace *cs = src->colorSpace();
 
@@ -105,9 +105,9 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
         // Read the horizontal line from back to front, write onto the vertical column
-        KisHLineIteratorPixel hit = src -> createHLineIterator(r.x(), y, r.width(), true);
-        KisVLineIterator vit = dst -> createVLineIterator(y, -r.x() - r.width(), r.width(), true);
-        KisVLineIterator dstSelIt = dstSelection -> createVLineIterator(y, -r.x() - r.width(), r.width(), true);
+        KisHLineIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width(), true);
+        KisVLineIterator vit = dst->createVLineIterator(y, -r.x() - r.width(), r.width(), true);
+        KisVLineIterator dstSelIt = dstSelection->createVLineIterator(y, -r.x() - r.width(), r.width(), true);
 
         hit += r.width() - 1;
         while (!vit.isDone()) {
@@ -129,7 +129,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
 void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
     KisSelectionSP dstSelection;
-    Q_INT32 pixelSize = src -> pixelSize();
+    Q_INT32 pixelSize = src->pixelSize();
     QRect r;
     KisColorSpace *cs = src->colorSpace();
 
@@ -145,9 +145,9 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     }
 
     for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIteratorPixel srcIt = src -> createHLineIterator(r.x(), y, r.width(), false);
-        KisHLineIterator dstIt = dst -> createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
-        KisHLineIterator dstSelIt = dstSelection -> createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), y, r.width(), false);
+        KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
+        KisHLineIterator dstSelIt = dstSelection->createHLineIterator(-r.x() - r.width(), -y, r.width(), true);
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
@@ -205,11 +205,11 @@ template <> void calcDimensions <KisVLineIteratorPixel>
         dev->exactBounds(firstLine, srcStart, numLines, srcLen);
 }
 
-struct filterValues
+struct FilterValues
 {
     Q_UINT8 numWeights;
     Q_UINT8 *weight;
-    ~filterValues() {delete [] weight;}
+    ~FilterValues() {delete [] weight;}
 };
 
 template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst, double floatscale, double shear, Q_INT32 dx, KisFilterStrategy *filterStrategy)
@@ -272,7 +272,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     const Q_UINT8 **colors = new const Q_UINT8 *[2*support+1];
 
     // Precalculate weights
-    filterValues *filterWeights = new filterValues[256];
+    FilterValues *filterWeights = new FilterValues[256];
 
     for(int center = 0; center<256; ++center)
     {
@@ -300,7 +300,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             sum=0;
             for(int num = 0; num<span; ++num)
             {
-                filterWeights[center].weight[num] *= fixfactor;
+                filterWeights[center].weight[num] = static_cast<Q_UINT8>(filterWeights[center].weight[num] * fixfactor);
                 sum+=filterWeights[center].weight[num];
             }
         }
@@ -391,6 +391,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             break;
         }
     }
+    delete [] colors;
     delete [] tmpLine;
     delete [] tmpSel;
     delete [] filterWeights;
@@ -400,7 +401,7 @@ bool KisTransformWorker::run()
 {
         //progress info
         m_cancelRequested = false;
-        m_progress -> setSubject(this, true, true);
+        m_progress->setSubject(this, true, true);
     m_progressTotalSteps = 0;
     m_progressStep = 0;
     QRect r;

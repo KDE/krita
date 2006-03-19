@@ -67,54 +67,54 @@ void KisLmsF32ColorSpace::setPixel(Q_UINT8 *dst, float longWave, float middleWav
 {
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> longWave = longWave;
-    dstPixel -> middleWave = middleWave;
-    dstPixel -> shortWave = shortWave;
-    dstPixel -> alpha = alpha;
+    dstPixel->longWave = longWave;
+    dstPixel->middleWave = middleWave;
+    dstPixel->shortWave = shortWave;
+    dstPixel->alpha = alpha;
 }
 
 void KisLmsF32ColorSpace::getPixel(const Q_UINT8 *src, float *longWave, float *middleWave, float *shortWave, float *alpha) const
 {
     const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
 
-    *longWave = srcPixel -> longWave;
-    *middleWave = srcPixel -> middleWave;
-    *shortWave = srcPixel -> shortWave;
-    *alpha = srcPixel -> alpha;
+    *longWave = srcPixel->longWave;
+    *middleWave = srcPixel->middleWave;
+    *shortWave = srcPixel->shortWave;
+    *alpha = srcPixel->alpha;
 }
 
 void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst -> longWave = computeLong(c.red(),c.green(),c.blue());
-    dst -> middleWave = computeMiddle(c.red(),c.green(),c.blue());
-    dst -> shortWave = computeShort(c.red(),c.green(),c.blue());
+    dst->longWave = computeLong(c.red(),c.green(),c.blue());
+    dst->middleWave = computeMiddle(c.red(),c.green(),c.blue());
+    dst->shortWave = computeShort(c.red(),c.green(),c.blue());
 }
 
 void KisLmsF32ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst -> longWave = computeLong(c.red(),c.green(),c.blue());
-    dst -> middleWave = computeMiddle(c.red(),c.green(),c.blue());
-    dst -> shortWave = computeShort(c.red(),c.green(),c.blue());
-    dst -> alpha = UINT8_TO_FLOAT(opacity);
+    dst->longWave = computeLong(c.red(),c.green(),c.blue());
+    dst->middleWave = computeMiddle(c.red(),c.green(),c.blue());
+    dst->shortWave = computeShort(c.red(),c.green(),c.blue());
+    dst->alpha = UINT8_TO_FLOAT(opacity);
 }
 
 void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
-    c -> setRgb(computeRed(src -> longWave,src -> middleWave,src -> shortWave), computeGreen(src -> longWave,src -> middleWave,src -> shortWave), computeBlue(src -> longWave,src -> middleWave,src -> shortWave));
+    c->setRgb(computeRed(src->longWave,src->middleWave,src->shortWave), computeGreen(src->longWave,src->middleWave,src->shortWave), computeBlue(src->longWave,src->middleWave,src->shortWave));
 }
 
 void KisLmsF32ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
    const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
-   c -> setRgb(computeRed(src -> longWave,src -> middleWave,src -> shortWave), computeGreen(src -> longWave,src -> middleWave,src -> shortWave), computeBlue(src -> longWave,src -> middleWave,src -> shortWave));
-   *opacity = FLOAT_TO_UINT8(src -> alpha);
+   c->setRgb(computeRed(src->longWave,src->middleWave,src->shortWave), computeGreen(src->longWave,src->middleWave,src->shortWave), computeBlue(src->longWave,src->middleWave,src->shortWave));
+   *opacity = FLOAT_TO_UINT8(src->alpha);
 }
 
 Q_UINT8 KisLmsF32ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
@@ -122,9 +122,9 @@ Q_UINT8 KisLmsF32ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *sr
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
 
-    return FLOAT_TO_UINT8(QMAX(QABS(src2 -> longWave - src1 -> longWave),
-                          QMAX(QABS(src2 -> middleWave - src1 -> middleWave),
-                               QABS(src2 -> shortWave - src1 -> shortWave))));
+    return FLOAT_TO_UINT8(QMAX(QABS(src2->longWave - src1->longWave),
+                          QMAX(QABS(src2->middleWave - src1->middleWave),
+                               QABS(src2->shortWave - src1->shortWave))));
 }
 
 void KisLmsF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
@@ -135,12 +135,12 @@ void KisLmsF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        float alpha = pixel -> alpha;
+        float alpha = pixel->alpha;
         float alphaTimesWeight = alpha * UINT8_TO_FLOAT(*weights);
 
-        totalLong += pixel -> longWave * alphaTimesWeight;
-        totalMiddle += pixel -> middleWave * alphaTimesWeight;
-        totalShort += pixel -> shortWave * alphaTimesWeight;
+        totalLong += pixel->longWave * alphaTimesWeight;
+        totalMiddle += pixel->middleWave * alphaTimesWeight;
+        totalShort += pixel->shortWave * alphaTimesWeight;
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -151,7 +151,7 @@ void KisLmsF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
 
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> alpha = newAlpha;
+    dstPixel->alpha = newAlpha;
 
     if (newAlpha > EPSILON) {
         totalLong = totalLong / newAlpha;
@@ -159,9 +159,9 @@ void KisLmsF32ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
         totalShort = totalShort / newAlpha;
     }
 
-    dstPixel -> longWave = totalLong;
-    dstPixel -> middleWave = totalMiddle;
-    dstPixel -> shortWave = totalShort;
+    dstPixel->longWave = totalLong;
+    dstPixel->middleWave = totalMiddle;
+    dstPixel->shortWave = totalShort;
 }
 
 QValueVector<KisChannelInfo *> KisLmsF32ColorSpace::channels() const
@@ -318,7 +318,7 @@ void KisLmsF32ColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            float srcAlpha = s -> alpha;
+            float srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -329,7 +329,7 @@ void KisLmsF32ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = srcAlpha * d -> alpha;
+            d->alpha = srcAlpha * d->alpha;
         }
 
         dst += dstRowSize;

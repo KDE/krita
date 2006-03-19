@@ -59,7 +59,7 @@ KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name
       m_name(name)
 {
     Q_ASSERT(nColors > 0);
-    Q_ASSERT(!img -> isNull());
+    Q_ASSERT(!img->isNull());
 
     // XXX: Implement
 
@@ -94,7 +94,7 @@ KisPalette::KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QStr
 
     KisPaletteEntry e;
     for (i = 0, cur_x = 0; i < nColors; i++, cur_x += dx) {
-        gradient -> colorAt(cur_x, &e.color, &opacity);
+        gradient->colorAt(cur_x, &e.color, &opacity);
         e.name = "Untitled";
         add(e);
     }

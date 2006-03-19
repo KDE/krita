@@ -82,7 +82,7 @@ QImage KisSelection::maskImage()
     Q_INT32 x, y, w, h, y2, x2;
     if (m_parentPaintDevice) {
 
-        m_parentPaintDevice -> exactBounds(x, y, w, h);
+        m_parentPaintDevice->exactBounds(x, y, w, h);
         img = QImage(w, h, 32);
     }
     else {
@@ -126,8 +126,8 @@ void KisSelection::clear(QRect r)
 void KisSelection::clear()
 {
     Q_UINT8 defPixel = MIN_SELECTED;
-    m_datamanager -> setDefaultPixel(&defPixel);
-    m_datamanager -> clear();
+    m_datamanager->setDefaultPixel(&defPixel);
+    m_datamanager->clear();
     //emitSelectionChanged();
 }
 
@@ -144,14 +144,14 @@ void KisSelection::invert()
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
-    Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager -> defaultPixel());
-    m_datamanager -> setDefaultPixel(&defPixel);
+    Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager->defaultPixel());
+    m_datamanager->setDefaultPixel(&defPixel);
     //emitSelectionChanged();
 }
 
 bool KisSelection::isTotallyUnselected(QRect r)
 {
-    if(*(m_datamanager -> defaultPixel()) != MIN_SELECTED)
+    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
 
     return ! r.intersects(extent());
@@ -159,7 +159,7 @@ bool KisSelection::isTotallyUnselected(QRect r)
 
 QRect KisSelection::selectedRect()
 {
-    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
+    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return extent();
     else
         return extent().unite(m_parentPaintDevice->extent());
@@ -167,7 +167,7 @@ QRect KisSelection::selectedRect()
 
 QRect KisSelection::selectedExactRect()
 {
-    if(*(m_datamanager -> defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
+    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return exactBounds();
     else
         return exactBounds().unite(m_parentPaintDevice->exactBounds());

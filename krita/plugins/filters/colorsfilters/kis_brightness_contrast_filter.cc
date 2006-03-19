@@ -50,6 +50,7 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
     for (Q_UINT32 i = 0; i < 256; ++i) {
         transfer[i] = i * 257;
     }
+    curve.setAutoDelete(true);
 }
 
 
@@ -233,6 +234,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
         setProgress(pixelsProcessed);
     }
 
+    delete adj;
     setProgressDone();
 }
 
@@ -253,7 +255,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     m_page->textLabelBrightness->hide();
     m_page->textLabelContrast->hide();
 
-    l -> addWidget(m_page, 0, Qt::AlignTop);
+    l->addWidget(m_page, 0, Qt::AlignTop);
     height = 256;
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
@@ -287,7 +289,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
 
     double highest = (double)histogram.calculations().getHighest();
-    Q_INT32 bins = histogram.producer() -> numberOfBins();
+    Q_INT32 bins = histogram.producer()->numberOfBins();
 
     if (histogram.getHistogramType() == LINEAR) {
         double factor = (double)height / highest;

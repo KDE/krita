@@ -81,23 +81,23 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         Q_CHECK_PTR(colorSpaceWet);
 
         // colorspace
-        f -> add(csf);
+        f->add(csf);
 
         // histogram producer
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
 
         // wet brush op
-        KisPaintOpRegistry::instance() -> add(new KisWetOpFactory);
+        KisPaintOpRegistry::instance()->add(new KisWetOpFactory);
 
         // Dry filter
-        // KisFilterRegistry::instance() -> add( new WetPhysicsFilter() );
+        // KisFilterRegistry::instance()->add( new WetPhysicsFilter() );
 
         // Texture Action:
-        f -> addPaintDeviceAction(colorSpaceWet, new WetPaintDevAction);
+        f->addPaintDeviceAction(colorSpaceWet, new WetPaintDevAction);
     }
-    else if (parent -> inherits("KisView"))
+    else if (parent->inherits("KisView"))
     {
         setInstance(WetPluginFactory::instance());
         setXMLFile(locate("data","kritaplugins/wetplugin.rc"), true);
@@ -105,17 +105,17 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         m_view = dynamic_cast<KisView*>(parent);
         // Wetness visualisation
         WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
-        wf -> setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
+        wf->setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
                         SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
 
         // Create the wet palette
         KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
         Q_CHECK_PTR(w);
 
-        w -> setCaption(i18n("Watercolors"));
+        w->setCaption(i18n("Watercolors"));
 
-        m_view->canvasSubject()->paletteManager() -> addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER,  false);
-        m_view->canvasSubject() -> attach(w);
+        m_view->canvasSubject()->paletteManager()->addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER,  false);
+        m_view->canvasSubject()->attach(w);
     }
 
 

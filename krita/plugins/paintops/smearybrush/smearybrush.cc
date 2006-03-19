@@ -42,7 +42,7 @@ SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisPaintOpRegistry") )
     {
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-        r -> add ( new KisSmearyOpFactory );
+        r->add ( new KisSmearyOpFactory );
     }
 
 }

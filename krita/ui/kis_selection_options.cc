@@ -40,9 +40,9 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * sub
     Q_CHECK_PTR(m_page);
 
     QVBoxLayout * l = new QVBoxLayout(this);
-    l -> addWidget(m_page);
+    l->addWidget(m_page);
 
-    connect(m_page -> cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
+    connect(m_page->cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -51,19 +51,19 @@ KisSelectionOptions::~KisSelectionOptions()
 
 int KisSelectionOptions::action()
 {
-    return m_page -> cmbAction -> currentItem();
+    return m_page->cmbAction->currentItem();
 }
 
 void KisSelectionOptions::slotActivated()
 {
     
     if (!m_subject) return;
-    KisImageSP img = m_subject -> currentImg();
+    KisImageSP img = m_subject->currentImg();
     if (!img) return;
-    KisPaintDeviceSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
 
-    if (dev -> hasSelection()) {
+    if (dev->hasSelection()) {
     }
 }
 

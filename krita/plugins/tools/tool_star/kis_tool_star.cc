@@ -73,12 +73,12 @@ void KisToolStar::update (KisCanvasSubject *subject)
 
 void KisToolStar::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event -> button() == LeftButton) {
+    if (m_currentImage && event->button() == LeftButton) {
         m_dragging = true;
-        m_dragStart = event -> pos();
-        m_dragEnd = event -> pos();
-        m_vertices = m_optWidget -> verticesSpinBox -> value();
-        m_innerOuterRatio = m_optWidget -> ratioSpinBox -> value();
+        m_dragStart = event->pos();
+        m_dragEnd = event->pos();
+        m_vertices = m_optWidget->verticesSpinBox->value();
+        m_innerOuterRatio = m_optWidget->ratioSpinBox->value();
     }
 }
 
@@ -88,12 +88,12 @@ void KisToolStar::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize star
-        if (event -> state() & Qt::AltButton) {
-            KisPoint trans = event -> pos() - m_dragEnd;
+        if (event->state() & Qt::AltButton) {
+            KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            m_dragEnd = event -> pos();
+            m_dragEnd = event->pos();
         }
         // draw new lines on canvas
         draw(m_dragStart, m_dragEnd);
@@ -105,7 +105,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject || !m_currentImage)
         return;
 
-    if (m_dragging && event -> button() == LeftButton) {
+    if (m_dragging && event->button() == LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -121,13 +121,13 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         
         KisPaintDeviceSP device = m_currentImage->activeDevice ();;
         KisPainter painter (device);
-        painter.beginTransaction (i18n("Star"));
+        if (m_currentImage->undo()) painter.beginTransaction (i18n("Star"));
 
-        painter.setPaintColor(m_subject -> fgColor());
-        painter.setBackgroundColor(m_subject -> bgColor());
+        painter.setPaintColor(m_subject->fgColor());
+        painter.setBackgroundColor(m_subject->bgColor());
         painter.setFillStyle(fillStyle());
-        painter.setBrush(m_subject -> currentBrush());
-        painter.setPattern(m_subject -> currentPattern());
+        painter.setBrush(m_subject->currentBrush());
+        painter.setPattern(m_subject->currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
@@ -140,9 +140,8 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         device->setDirty( painter.dirtyRect() );
         notifyModified();
 
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-        if (adapter) {
-            adapter -> addCommand(painter.endTransaction());
+        if (m_currentImage->undo()) {
+            m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
         }
     }
 }
@@ -152,15 +151,15 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
     if (!m_subject || !m_currentImage)
         return;
 
-    KisCanvasController *controller = m_subject -> canvasController();
+    KisCanvasController *controller = m_subject->canvasController();
     KisCanvas *canvas = controller->kiscanvas();
     KisCanvasPainter p (canvas);
     QPen pen(Qt::SolidLine);
 
     KisPoint startPos;
     KisPoint endPos;
-    startPos = controller -> windowToView(start);
-    endPos = controller -> windowToView(end);
+    startPos = controller->windowToView(start);
+    endPos = controller->windowToView(end);
 
     p.setRasterOp(Qt::NotROP);
 
@@ -176,7 +175,7 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolStar::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
@@ -190,8 +189,8 @@ void KisToolStar::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action -> setToolTip(i18n("Draw a star"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Draw a star"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -233,12 +232,12 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);
 
-    m_optWidget -> ratioSpinBox -> setValue(m_innerOuterRatio);
+    m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
     QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
     super::addOptionWidgetLayout(optionLayout);
 
-    optionLayout -> addWidget(m_optWidget, 0, 0);
+    optionLayout->addWidget(m_optWidget, 0, 0);
 
     return widget;
 }

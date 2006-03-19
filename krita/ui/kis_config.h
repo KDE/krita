@@ -26,6 +26,15 @@ public:
     KisConfig();
     ~KisConfig();
 
+    bool fixDockerWidth() const;
+    void setFixedDockerWidth(bool fix);
+    
+    bool undoEnabled() const;
+    void setUndoEnabled(bool undo);
+    
+    Q_INT32 defUndoLimit() const;
+    void defUndoLimit(Q_INT32 limit);
+
     Q_INT32 defImgWidth() const;
     void defImgWidth(Q_INT32 width);
 

@@ -60,8 +60,8 @@ void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev)
     if (!m_currentProducer)
         return;
 
-    m_from = m_currentProducer -> viewFrom();
-    m_width = m_currentProducer -> viewWidth();
+    m_from = m_currentProducer->viewFrom();
+    m_width = m_currentProducer->viewWidth();
 
     m_histogram = new KisHistogram(dev, m_currentProducer, LINEAR);
 
@@ -72,9 +72,9 @@ void KisHistogramView::setHistogram(KisHistogramSP histogram)
 {
     m_cs = 0;
     m_histogram = histogram;
-    m_currentProducer = m_histogram -> producer();
-    m_from = m_currentProducer -> viewFrom();
-    m_width = m_currentProducer -> viewWidth();
+    m_currentProducer = m_histogram->producer();
+    m_from = m_currentProducer->viewFrom();
+    m_width = m_currentProducer->viewWidth();
 
     m_comboInfo.clear();
     m_channelStrings.clear();
@@ -97,9 +97,9 @@ void KisHistogramView::setView(double from, double size)
     m_width = size;
     if (m_from + m_width > 1.0)
         m_from = 1.0 - m_width;
-    m_histogram -> producer() -> setView(m_from, m_width);
+    m_histogram->producer()->setView(m_from, m_width);
 
-    m_histogram -> updateHistogram();
+    m_histogram->updateHistogram();
     updateHistogram();
 }
 
@@ -116,24 +116,24 @@ QStringList KisHistogramView::channelStrings()
 KisIDList KisHistogramView::listProducers()
 {
     if (m_cs)
-        return KisHistogramProducerFactoryRegistry::instance() -> listKeysCompatibleWith(m_cs);
+        return KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
     return KisIDList();
 }
 
 void KisHistogramView::setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels)
 {
     setCurrentChannels(
-        KisHistogramProducerFactoryRegistry::instance() -> get(producerID) -> generate(),
+        KisHistogramProducerFactoryRegistry::instance()->get(producerID)->generate(),
         channels);
 }
 
 void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, QValueVector<KisChannelInfo *> channels)
 {
     m_currentProducer = producer;
-    m_currentProducer -> setView(m_from, m_width);
-    m_histogram -> setProducer(m_currentProducer);
-    m_histogram -> updateHistogram();
-    m_histogram -> setChannel(0); // Set a default channel, just being nice
+    m_currentProducer->setView(m_from, m_width);
+    m_histogram->setProducer(m_currentProducer);
+    m_histogram->updateHistogram();
+    m_histogram->setChannel(0); // Set a default channel, just being nice
 
     m_channels.clear();
     m_channelToOffset.clear();
@@ -143,12 +143,12 @@ void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, QValu
         return;
     }
 
-    QValueVector<KisChannelInfo *> producerChannels = m_currentProducer -> channels();
+    QValueVector<KisChannelInfo *> producerChannels = m_currentProducer->channels();
 
     for (uint i = 0; i < channels.count(); i++) {
         // Also makes sure the channel is actually in the producer's list
         for (uint j = 0; j < producerChannels.count(); j++) {
-            if (channels.at(i) -> name() == producerChannels.at(j) -> name()) {
+            if (channels.at(i)->name() == producerChannels.at(j)->name()) {
                 m_channelToOffset.append(m_channels.count()); // The first we append maps to 0
                 m_channels.append(channels.at(i));
             }
@@ -176,9 +176,9 @@ void KisHistogramView::setActiveChannel(int channel)
     ComboboxInfo info = m_comboInfo.at(channel);
     if (info.producer.data() != m_currentProducer.data()) {
         m_currentProducer = info.producer;
-        m_currentProducer -> setView(m_from, m_width);
-        m_histogram -> setProducer(m_currentProducer);
-        m_histogram -> updateHistogram();
+        m_currentProducer->setView(m_from, m_width);
+        m_histogram->setProducer(m_currentProducer);
+        m_histogram->updateHistogram();
     }
 
     m_channels.clear();
@@ -191,16 +191,16 @@ void KisHistogramView::setActiveChannel(int channel)
 
     if (info.isProducer) {
         m_color = true;
-        m_channels = m_currentProducer -> channels();
+        m_channels = m_currentProducer->channels();
         for (uint i = 0; i < m_channels.count(); i++)
             m_channelToOffset.append(i);
-        m_histogram -> setChannel(0); // Set a default channel, just being nice
+        m_histogram->setChannel(0); // Set a default channel, just being nice
     } else {
         m_color = false;
-        QValueVector<KisChannelInfo *> channels = m_currentProducer -> channels();
+        QValueVector<KisChannelInfo *> channels = m_currentProducer->channels();
         for (uint i = 0; i < channels.count(); i++) {
             KisChannelInfo* channel = channels.at(i);
-            if (channel -> name() == info.channel -> name()) {
+            if (channel->name() == info.channel->name()) {
                 m_channels.append(channel);
                 m_channelToOffset.append(i);
                 break;
@@ -213,7 +213,7 @@ void KisHistogramView::setActiveChannel(int channel)
 
 void KisHistogramView::setHistogramType(enumHistogramType type)
 {
-    m_histogram -> setHistogramType(type);
+    m_histogram->setHistogramType(type);
     updateHistogram();
 }
 
@@ -233,7 +233,7 @@ void KisHistogramView::setChannels()
     } else {
         for (uint i = 0; i < list.count(); i++) {
             KisID id(*(list.at(i)));
-            addProducerChannels( KisHistogramProducerFactoryRegistry::instance() -> get(id) -> generate() );
+            addProducerChannels( KisHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
         }
     }
 
@@ -249,38 +249,38 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
         info.isProducer = true;
         info.producer = producer;
         // channel not used for a producer
-        QValueVector<KisChannelInfo *> channels = info.producer -> channels();
+        QValueVector<KisChannelInfo *> channels = info.producer->channels();
         int count = channels.count();
         m_comboInfo.append(info);
-        m_channelStrings.append(producer -> id() . name());
+        m_channelStrings.append(producer->id() . name());
         for (int j = 0; j < count; j++) {
             info.isProducer = false;
             info.channel = channels.at(j);
             m_comboInfo.append(info);
-            m_channelStrings.append(QString(" ").append(info.channel -> name()));
+            m_channelStrings.append(QString(" ").append(info.channel->name()));
         }
 }
 
 void KisHistogramView::updateHistogram()
 {
-    Q_UINT32 height = this -> height();
+    Q_UINT32 height = this->height();
     int selFrom, selTo; // from - to in bins
 
     if (!m_currentProducer) { // Something's very wrong: no producer for this colorspace to update histogram with!
         return;
     }
 
-    Q_INT32 bins = m_histogram -> producer() -> numberOfBins();
+    Q_INT32 bins = m_histogram->producer()->numberOfBins();
     m_pix = QPixmap(bins, height);
     m_pix.fill();
     QPainter p(&m_pix);
     p.setBrush(Qt::black);
 
     // Draw the box of the selection, if any
-    if (m_histogram -> hasSelection()) {
-        double width = m_histogram -> selectionTo() - m_histogram -> selectionFrom();
-        double factor = static_cast<double>(bins) / m_histogram -> producer() -> viewWidth();
-        selFrom = static_cast<int>(m_histogram -> selectionFrom() * factor);
+    if (m_histogram->hasSelection()) {
+        double width = m_histogram->selectionTo() - m_histogram->selectionFrom();
+        double factor = static_cast<double>(bins) / m_histogram->producer()->viewWidth();
+        selFrom = static_cast<int>(m_histogram->selectionFrom() * factor);
         selTo = selFrom + static_cast<int>(width * factor);
         p.drawRect(selFrom, 0, selTo - selFrom, height);
     } else {
@@ -296,24 +296,24 @@ void KisHistogramView::updateHistogram()
     // First we iterate once, so that we have the overall maximum. This is a bit inefficient,
     // but not too much since the histogram caches the calculations
     for (uint chan = 0; chan < m_channels.count(); chan++) {
-        m_histogram -> setChannel(m_channelToOffset.at(chan));
-        if ((double)m_histogram -> calculations().getHighest() > highest)
-            highest = (double)m_histogram -> calculations().getHighest();
+        m_histogram->setChannel(m_channelToOffset.at(chan));
+        if ((double)m_histogram->calculations().getHighest() > highest)
+            highest = (double)m_histogram->calculations().getHighest();
     }
 
     for (uint chan = 0; chan < m_channels.count(); chan++) {
         QColor color;
-        m_histogram -> setChannel(m_channelToOffset.at(chan));
+        m_histogram->setChannel(m_channelToOffset.at(chan));
 
         if (m_color) {
-            color = m_channels.at(chan) -> color();
+            color = m_channels.at(chan)->color();
             p.setPen(color);
         } else {
             color = Qt::black;
         }
         blackOnBlack = (color == Qt::black);
 
-        if (m_histogram -> getHistogramType() == LINEAR) {
+        if (m_histogram->getHistogramType() == LINEAR) {
             double factor = (double)height / highest;
             for( i=0; i<bins; ++i ) {
                 // So that we get a good view even with a selection box with
@@ -344,8 +344,8 @@ void KisHistogramView::updateHistogram()
 }
 
 void KisHistogramView::mousePressEvent(QMouseEvent * e) {
-    if (e -> button() == Qt::RightButton)
-        emit rightClicked(e -> globalPos());
+    if (e->button() == Qt::RightButton)
+        emit rightClicked(e->globalPos());
     else
         QLabel::mousePressEvent(e);
 }

@@ -43,7 +43,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
         return;
     }
 
-    KisCanvasPainter painter(m_view -> getCanvasController() -> kiscanvas());
+    KisCanvasPainter painter(m_view->getCanvasController()->kiscanvas());
     painter.setRasterOp( NotROP );
 
     // erase old lines
@@ -52,7 +52,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
     if (!r.isEmpty())
         painter.drawRect(r);
 
-    m_end = event -> pos().roundQPoint();
+    m_end = event->pos().roundQPoint();
     r = QRect(m_start, m_end).normalize();
 
     painter.drawRect(r);
@@ -60,7 +60,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
 }
 
 void KisPartLayerHandler::gotButtonPressEvent(KisButtonPressEvent* event) {
-    m_start = event -> pos().roundQPoint();
+    m_start = event->pos().roundQPoint();
     m_end = m_start;
     m_started = true;
 }
@@ -71,16 +71,16 @@ void KisPartLayerHandler::gotButtonReleaseEvent(KisButtonReleaseEvent* event) {
         return;
     }
 
-    m_end = event -> pos().roundQPoint();
+    m_end = event->pos().roundQPoint();
 
     QRect r(m_start, m_end);
 
-    m_view -> insertPart(r.normalize(), m_entry, m_parent, m_above);
+    m_view->insertPart(r.normalize(), m_entry, m_parent, m_above);
     // We will get deleted by the view through the above
 }
 
 void KisPartLayerHandler::gotKeyPressEvent(QKeyEvent* event) {
-    if (event -> key() == Key_Escape) {
+    if (event->key() == Key_Escape) {
         done();
     } else {
         emit sigGotKeyPressEvent(event);

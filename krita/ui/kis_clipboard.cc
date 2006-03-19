@@ -87,29 +87,29 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     Q_ASSERT( !store->bad() );
 
     // Layer data
-    if (store -> open("layerdata")) {
-        if (!selection -> write(store)) {
-            selection -> disconnect();
-            store -> close();
+    if (store->open("layerdata")) {
+        if (!selection->write(store)) {
+            selection->disconnect();
+            store->close();
             return;
         }
-        store -> close();
+        store->close();
     }
 
     // ColorSpace id of layer data
-    if (store -> open("colorspace")) {
-        QString csName = selection -> colorSpace()->id().id();
+    if (store->open("colorspace")) {
+        QString csName = selection->colorSpace()->id().id();
         store->write(csName.ascii(), strlen(csName.ascii()));
-        store -> close();
+        store->close();
     }
 
-    if (selection -> colorSpace() -> getProfile()) {
-        KisAnnotationSP annotation = selection -> colorSpace() -> getProfile() -> annotation();
+    if (selection->colorSpace()->getProfile()) {
+        KisAnnotationSP annotation = selection->colorSpace()->getProfile()->annotation();
          if (annotation) {
             // save layer profile
-             if (store -> open("profile.icc")) {
-                store -> write(annotation -> annotation());
-                store -> close();
+             if (store->open("profile.icc")) {
+                store->write(annotation->annotation());
+                store->close();
             }
         }
     }
@@ -120,8 +120,8 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     QImage qimg;
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry() -> getProfileByName(monitorProfileName);
-    qimg = selection -> convertToQImage(monitorProfile);
+    KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+    qimg = selection->convertToQImage(monitorProfile);
 
     QImageDrag *qimgDrag = new QImageDrag(qimg);
     KMultipleDrag *multiDrag = new KMultipleDrag();
@@ -133,7 +133,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 
 
     QClipboard *cb = QApplication::clipboard();
-    cb -> setData(multiDrag);
+    cb->setData(multiDrag);
     m_pushedClipboard = true;
 }
 
@@ -149,36 +149,36 @@ KisPaintDeviceSP KisClipboard::clip()
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
 
-        if (store -> hasFile("profile.icc")) {
+        if (store->hasFile("profile.icc")) {
             QByteArray data;
-            store -> open("profile.icc");
-            data = store -> read(store -> size());
-            store -> close();
+            store->open("profile.icc");
+            data = store->read(store->size());
+            store->close();
            profile = new KisProfile(data);
         }
 
         QString csName;
         // ColorSpace id of layer data
-        if (store -> hasFile("colorspace")) {
-            store -> open("colorspace");
-            csName = QString(store->read(store -> size()));
-            store -> close();
+        if (store->hasFile("colorspace")) {
+            store->open("colorspace");
+            csName = QString(store->read(store->size()));
+            store->close();
         }
 
         KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
 
         m_clip = new KisPaintDevice(cs, "clip");
 
-        if (store -> hasFile("layerdata")) {
-            store -> open("layerdata");
+        if (store->hasFile("layerdata")) {
+            store->open("layerdata");
             m_clip->read(store);
-            store -> close();
+            store->close();
         }
         delete store;
     }
     else
     {
-        QImage qimg = cb -> image();
+        QImage qimg = cb->image();
 
         if (qimg.isNull())
             return 0;
@@ -201,7 +201,7 @@ KisPaintDeviceSP KisClipboard::clip()
         cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""), profileName);
         m_clip = new KisPaintDevice(cs, "from paste");
         Q_CHECK_PTR(m_clip);
-        m_clip -> convertFromQImage(qimg, profileName);
+        m_clip->convertFromQImage(qimg, profileName);
     }
 
     return m_clip;
@@ -212,7 +212,7 @@ void KisClipboard::clipboardDataChanged()
     if (!m_pushedClipboard) {
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
-        QImage qimg = cb -> image();
+        QImage qimg = cb->image();
         QMimeSource *cbData = cb->data();
         QCString mimeType("application/x-krita-selection");
 
@@ -247,37 +247,37 @@ QSize KisClipboard::clipSize()
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
 
-        if (store -> hasFile("profile.icc")) {
+        if (store->hasFile("profile.icc")) {
             QByteArray data;
-            store -> open("profile.icc");
-            data = store -> read(store -> size());
-            store -> close();
+            store->open("profile.icc");
+            data = store->read(store->size());
+            store->close();
             profile = new KisProfile(data);
         }
 
         QString csName;
         // ColorSpace id of layer data
-        if (store -> hasFile("colorspace")) {
-            store -> open("colorspace");
-            csName = QString(store->read(store -> size()));
-            store -> close();
+        if (store->hasFile("colorspace")) {
+            store->open("colorspace");
+            csName = QString(store->read(store->size()));
+            store->close();
         }
 
         KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
 
         clip = new KisPaintDevice(cs, "clip");
 
-        if (store -> hasFile("layerdata")) {
-            store -> open("layerdata");
+        if (store->hasFile("layerdata")) {
+            store->open("layerdata");
             clip->read(store);
-            store -> close();
+            store->close();
         }
         delete store;
 
         return clip->exactBounds().size();
     }
     else {
-        QImage qimg = cb -> image();
+        QImage qimg = cb->image();
         return qimg.size();
     }
 ;

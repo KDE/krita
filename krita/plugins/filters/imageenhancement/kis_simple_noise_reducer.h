@@ -50,7 +50,7 @@ class KisSimpleNoiseReducer : public KisFilter
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
         static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reducer")); };
-        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPainting() { return false; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
 };

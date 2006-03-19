@@ -83,7 +83,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t =  new KisToolSelectContiguous(); 
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t->setup(ac); 
         return t; 
     }
     virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous Select Tool")); }

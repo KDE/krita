@@ -52,11 +52,11 @@ void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 
     // initialize with random data
     for (int y2 = 0; y2 < h; y2++) {
-        KisHLineIterator i = m_device -> createHLineIterator(x, y + y2, w, true);
+        KisHLineIterator i = m_device->createHLineIterator(x, y + y2, w, true);
         while (!i.isDone()) {
             WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
             WetPix* w = &(pack->adsorb);
-            w -> h = (Q_UINT16)floor(128 + hscale * rand());
+            w->h = (Q_UINT16)floor(128 + hscale * rand());
             ++i;
         }
     }
@@ -65,22 +65,22 @@ void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
 
     // Blur horizontally
     for (int y2 = 0; y2 < h; y2++) {
-        KisHLineIterator i = m_device -> createHLineIterator(x, y + y2, w, true);
+        KisHLineIterator i = m_device->createHLineIterator(x, y + y2, w, true);
 
         WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
         WetPix* w = &(pack->adsorb);
-        lh = w -> h;
+        lh = w->h;
         ++i;
 
         while (!i.isDone()) {
             pack = reinterpret_cast<WetPack*>(i.rawData());
             w = &(pack->adsorb);
-            w -> h += ((lh - w -> h) * ibh + 128) >> 8;
-            lh = w -> h;
+            w->h += ((lh - w->h) * ibh + 128) >> 8;
+            lh = w->h;
             // XXX to make it easier for us later on, we store the height data in paint
             // as well!
             w = &(pack->paint);
-            w -> h = lh;
+            w->h = lh;
             ++i;
         }
     }

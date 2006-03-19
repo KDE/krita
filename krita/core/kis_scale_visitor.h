@@ -106,7 +106,7 @@ public:
         , m_filterStrategy(filterStrategy)
     {
         if ( progress )
-            progress -> setSubject(this, true, true);
+            progress->setSubject(this, true, true);
         emit notifyProgressStage(i18n("Scaling..."),0);
     }
 
@@ -133,7 +133,7 @@ public:
     {
         // XXX: If all is well, then the image's undoadapter will have started a macro for us
         //      This will break in a more multi-threaded environment
-        if (m_img->undoAdapter() && m_img->undoAdapter()->undo()) {
+        if (m_img->undo()) {
             KisTransaction * cmd = new KisTransaction("", layer->paintDevice());
             m_img->undoAdapter()->addCommand(cmd);
         }

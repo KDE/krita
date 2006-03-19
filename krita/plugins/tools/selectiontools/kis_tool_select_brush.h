@@ -71,7 +71,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t =  new KisToolSelectBrush();
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t->setup(ac); 
         return t; 
     }
     virtual KisID id() { return KisID("brushselect", i18n("Brush Select Tool")); }

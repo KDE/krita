@@ -485,8 +485,8 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
-    l -> add(m_page);
-    m_filter -> setAutoUpdate(false);
+    l->add(m_page);
+    m_filter->setAutoUpdate(false);
     m_page->txtSourceLayer->setText( "" );
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
 }

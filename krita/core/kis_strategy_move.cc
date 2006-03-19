@@ -51,7 +51,7 @@ void KisStrategyMove::reset(KisCanvasSubject *subject)
     m_dragging = false;
 
     if (m_subject) {
-        m_controller = subject -> canvasController();
+        m_controller = subject->canvasController();
     } else {
         m_controller = 0;
     }
@@ -65,12 +65,12 @@ void KisStrategyMove::startDrag(const QPoint& pos)
         KisImageSP img;
         KisLayerSP dev;
 
-        if (!(img = m_subject -> currentImg()))
+        if (!(img = m_subject->currentImg()))
             return;
 
-        dev = img -> activeLayer();
+        dev = img->activeLayer();
 
-        if (!dev || !dev -> visible())
+        if (!dev || !dev->visible())
             return;
 
         m_dragging = true;
@@ -87,15 +87,15 @@ void KisStrategyMove::drag(const QPoint& original)
     // original is the position of the user chosen handle point
 
     if (m_subject && m_dragging) {
-        KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject->currentImg();
         KisLayerSP dev;
 
-        if (img && (dev = img -> activeLayer())) {
+        if (img && (dev = img->activeLayer())) {
             QPoint pos = original;
             QRect rc;
 
             pos -= m_dragStart; // convert to delta
-            rc = dev -> extent();
+            rc = dev->extent();
             dev->setX(dev->x() + pos.x());
             dev->setY(dev->y() + pos.y());
             rc = rc.unite(dev->extent());
@@ -111,20 +111,20 @@ void KisStrategyMove::drag(const QPoint& original)
 void KisStrategyMove::endDrag(const QPoint& pos, bool undo)
 {
     if (m_subject && m_dragging) {
-        KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject->currentImg();
         KisLayerSP dev;
 
-        if (img && (dev = img -> activeLayer())) {
+        if (img && (dev = img->activeLayer())) {
             drag(pos);
             m_dragging = false;
 
-            if (undo) {
-                KCommand *cmd = dev -> moveCommand(m_layerStart, m_layerPosition);
+            if (undo && img->undo()) {
+                KCommand *cmd = dev->moveCommand(m_layerStart, m_layerPosition);
                 Q_CHECK_PTR(cmd);
-                KisUndoAdapter *adapter = img -> undoAdapter();
-
+                
+                KisUndoAdapter *adapter = img->undoAdapter();
                 if (adapter) {
-                    adapter -> addCommand(cmd);
+                    adapter->addCommand(cmd);
                 } else {
                     delete cmd;
                 }

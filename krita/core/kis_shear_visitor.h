@@ -31,13 +31,13 @@
 class KisShearVisitor : public KisLayerVisitor {
 public:
     KisShearVisitor(double xshear, double yshear, KisProgressDisplayInterface *progress)
-    : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {};
+        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {};
 
     void setStrategy(KisFilterStrategy* strategy) { m_strategy = strategy; }
     void setUndoAdapter(KisUndoAdapter* undo) { m_undo = undo; }
 public:
     virtual bool visit(KisPaintLayer* layer) {
-        KisPaintDeviceSP dev = layer -> paintDevice();
+        KisPaintDeviceSP dev = layer->paintDevice();
         if(!dev)
             return true;
 
@@ -49,7 +49,7 @@ public:
 
         KisTransaction* t = 0;
 
-        if (m_undo && m_undo -> undo())
+        if (m_undo && m_undo->undo())
             t = new KisTransaction("", dev.data());
 
         //Doesn't do anything, internally transforms x and y shear to 0 each :-///
@@ -60,13 +60,13 @@ public:
         v.visitKisPaintDevice(dev);
         v.shear(m_xshear, m_yshear, m_progress);
 
-        if (m_undo && m_undo -> undo())
-            m_undo -> addCommand(t);
+        if (m_undo && m_undo->undo())
+            m_undo->addCommand(t);
 
         if (!m_strategy)
             delete strategy;
 
-        layer -> setDirty();
+        layer->setDirty();
 
         return true;
     }
@@ -76,8 +76,8 @@ public:
 
         while(child)
         {
-            child -> accept(*this);
-            child = child -> nextSibling();
+            child->accept(*this);
+            child = child->nextSibling();
         }
         return true;
     }

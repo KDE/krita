@@ -58,7 +58,7 @@ public:
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
     static inline KisID id() { return KisID("sobel", i18n("Sobel")); };
-    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSobelFilterConfiguration(true,true,true,true)); return list; }

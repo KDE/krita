@@ -202,7 +202,7 @@ bool KisBrush::init()
         const char *text = &m_data[sizeof(GimpBrushV1Header)];
         name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
     } else {
-        // ### Version = 3 -> cinepaint; may be float16 data!
+        // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
         name = QString::fromUtf8(&m_data[sizeof(GimpBrushHeader)],
                                   bh.header_size - sizeof(GimpBrushHeader));
@@ -274,8 +274,8 @@ bool KisBrush::init()
 bool KisBrush::initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int h) {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image -> convertToQImage(0, x, y, w, h));
-    setName(image -> name());
+    setImage(image->convertToQImage(0, x, y, w, h));
+    setName(image->name());
 
     m_brushType = IMAGE;
     m_hasColor = true;
@@ -315,13 +315,13 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     // Write header: first bh, then the name
     QByteArray bytes;
     bytes.setRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
-    wrote = dev -> writeBlock(bytes);
+    wrote = dev->writeBlock(bytes);
     bytes.resetRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
 
     if (wrote == -1)
         return false;
 
-    wrote = dev -> writeBlock(name, nameLength); // No +1 for the trailing NULL it seems...
+    wrote = dev->writeBlock(name, nameLength); // No +1 for the trailing NULL it seems...
     if (wrote == -1)
         return false;
 
@@ -349,7 +349,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
         }
     }
 
-    wrote = dev -> writeBlock(bytes);
+    wrote = dev->writeBlock(bytes);
     if (wrote == -1)
         return false;
 
@@ -397,17 +397,17 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
         KisAlphaMaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
         KisAlphaMaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
 
-        double t = (scale - belowBrush -> scale()) / (aboveBrush -> scale() - belowBrush -> scale());
+        double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputMask = KisAlphaMask::interpolate(scaledBelowMask, scaledAboveMask, t);
     } else {
-        if (fabs(scale - aboveBrush -> scale()) < DBL_EPSILON) {
+        if (fabs(scale - aboveBrush->scale()) < DBL_EPSILON) {
             // Exact match.
             outputMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
         } else {
             // We are smaller than the smallest mask, which is always 1x1.
-            double s = scale / aboveBrush -> scale();
-            outputMask = scaleSinglePixelMask(s, aboveBrush -> mask() -> alphaAt(0, 0), subPixelX, subPixelY);
+            double s = scale / aboveBrush->scale();
+            outputMask = scaleSinglePixelMask(s, aboveBrush->mask()->alphaAt(0, 0), subPixelX, subPixelY);
         }
     }
 
@@ -436,17 +436,17 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
         QImage scaledAboveImage = scaleImage(aboveBrush, scale, subPixelX, subPixelY);
         QImage scaledBelowImage = scaleImage(belowBrush, scale, subPixelX, subPixelY);
 
-        double t = (scale - belowBrush -> scale()) / (aboveBrush -> scale() - belowBrush -> scale());
+        double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputImage = interpolate(scaledBelowImage, scaledAboveImage, t);
     } else {
-        if (fabs(scale - aboveBrush -> scale()) < DBL_EPSILON) {
+        if (fabs(scale - aboveBrush->scale()) < DBL_EPSILON) {
             // Exact match.
             outputImage = scaleImage(aboveBrush, scale, subPixelX, subPixelY);
         } else {
             // We are smaller than the smallest brush, which is always 1x1.
-            double s = scale / aboveBrush -> scale();
-            outputImage = scaleSinglePixelImage(s, aboveBrush -> image().pixel(0, 0), subPixelX, subPixelY);
+            double s = scale / aboveBrush->scale();
+            outputImage = scaleSinglePixelImage(s, aboveBrush->image().pixel(0, 0), subPixelX, subPixelY);
         }
     }
 
@@ -458,7 +458,7 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
     Q_CHECK_PTR(layer);
 
     for (int y = 0; y < outputHeight; y++) {
-        KisHLineIterator iter = layer -> createHLineIterator( 0, y, outputWidth, true);
+        KisHLineIterator iter = layer->createHLineIterator( 0, y, outputWidth, true);
         for (int x = 0; x < outputWidth; x++) {
 	    Q_UINT8 * p = iter.rawData();
 
@@ -629,14 +629,14 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
     KisAlphaMaskSP dstMask = new KisAlphaMask(dstWidth, dstHeight);
     Q_CHECK_PTR(dstMask);
 
-    KisAlphaMaskSP srcMask = srcBrush -> mask();
+    KisAlphaMaskSP srcMask = srcBrush->mask();
 
     // Compute scales to map the scaled brush onto the required scale.
-    double xScale = srcBrush -> xScale() / scale;
-    double yScale = srcBrush -> yScale() / scale;
+    double xScale = srcBrush->xScale() / scale;
+    double yScale = srcBrush->yScale() / scale;
 
-    int srcWidth = srcMask -> width();
-    int srcHeight = srcMask -> height();
+    int srcWidth = srcMask->width();
+    int srcHeight = srcMask->height();
 
     for (int dstY = 0; dstY < dstHeight; dstY++) {
         for (int dstX = 0; dstX < dstWidth; dstX++) {
@@ -663,10 +663,10 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
 
             double yInterp = srcY - topY;
 
-            Q_UINT8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
-            Q_UINT8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask -> alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
+            Q_UINT8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
+            Q_UINT8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
+            Q_UINT8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;
@@ -685,7 +685,7 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
                 d = OPACITY_OPAQUE;
             }
 
-            dstMask -> setAlphaAt(dstX, dstY, static_cast<Q_UINT8>(d));
+            dstMask->setAlphaAt(dstX, dstY, static_cast<Q_UINT8>(d));
         }
     }
 
@@ -701,11 +701,11 @@ QImage KisBrush::scaleImage(const ScaledBrush *srcBrush, double scale, double su
     QImage dstImage(dstWidth, dstHeight, 32);
     dstImage.setAlphaBuffer(true);
 
-    const QImage srcImage = srcBrush -> image();
+    const QImage srcImage = srcBrush->image();
 
     // Compute scales to map the scaled brush onto the required scale.
-    double xScale = srcBrush -> xScale() / scale;
-    double yScale = srcBrush -> yScale() / scale;
+    double xScale = srcBrush->xScale() / scale;
+    double yScale = srcBrush->yScale() / scale;
 
     int srcWidth = srcImage.width();
     int srcHeight = srcImage.height();
@@ -951,7 +951,7 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     while (true) {
         *aboveBrush = &(m_scaledBrushes[current]);
 
-        if (fabs((*aboveBrush) -> scale() - scale) < DBL_EPSILON) {
+        if (fabs((*aboveBrush)->scale() - scale) < DBL_EPSILON) {
             // Scale matches exactly
             break;
         }
@@ -1009,7 +1009,7 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, Q_UINT8 maskValue, d
                 d = OPACITY_OPAQUE;
             }
 
-            outputMask -> setAlphaAt(x, y, static_cast<Q_UINT8>(d));
+            outputMask->setAlphaAt(x, y, static_cast<Q_UINT8>(d));
         }
     }
 
@@ -1266,18 +1266,18 @@ void KisBrush::generateBoundary() {
         KisColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"");
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
         for (int y = 0; y < h; y++) {
-            KisHLineIteratorPixel it = dev -> createHLineIterator(0, y, w, true);
+            KisHLineIteratorPixel it = dev->createHLineIterator(0, y, w, true);
             int x = 0;
 
             while(!it.isDone()) {
-                cs -> setAlpha(it.rawData(), amask -> alphaAt(x++, y), 1);
+                cs->setAlpha(it.rawData(), amask->alphaAt(x++, y), 1);
                 ++it;
             }
         }
     }
 
     m_boundary = new KisBoundary(dev);
-    m_boundary -> generateBoundary(w, h);
+    m_boundary->generateBoundary(w, h);
 }
 
 KisBoundary KisBrush::boundary() {
@@ -1315,16 +1315,16 @@ void KisBrush::makeMaskImage() {
 
 KisBrush* KisBrush::clone() const {
     KisBrush* c = new KisBrush("");
-    c -> m_spacing = m_spacing;
-    c -> m_useColorAsMask = m_useColorAsMask;
-    c -> m_hasColor = m_useColorAsMask;
-    c -> m_img = m_img;
-    c -> m_width = m_width;
-    c -> m_height = m_height;
-    c -> m_ownData = false;
-    c -> m_hotSpot = m_hotSpot;
-    c -> m_brushType = m_brushType;
-    c -> setValid(true);
+    c->m_spacing = m_spacing;
+    c->m_useColorAsMask = m_useColorAsMask;
+    c->m_hasColor = m_useColorAsMask;
+    c->m_img = m_img;
+    c->m_width = m_width;
+    c->m_height = m_height;
+    c->m_ownData = false;
+    c->m_hotSpot = m_hotSpot;
+    c->m_brushType = m_brushType;
+    c->setValid(true);
 
     return c;
 }

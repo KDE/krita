@@ -42,12 +42,12 @@ KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
     m_page = new WdgApplyProfile(this);
 
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
     // XXX: This is BAD! (bsar)
     fillCmbProfiles(KisID("RGBA", ""));
     KisConfig cfg;
-    m_page -> grpRenderIntent -> setButton(cfg.renderIntent());
+    m_page->grpRenderIntent->setButton(cfg.renderIntent());
 
 }
 
@@ -61,35 +61,35 @@ KisProfile *  KisDlgApplyProfile::profile() const
 {
     QString profileName;
 
-    profileName = m_page -> cmbProfile -> currentText();
+    profileName = m_page->cmbProfile->currentText();
 
     return KisMetaRegistry::instance()->csRegistry()->getProfileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
 {
-    return m_page -> grpRenderIntent -> selectedId();
+    return m_page->grpRenderIntent->selectedId();
 }
 
 
 // XXX: Copy & paste from kis_custom_image_widget -- refactor to separate class
 void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
 {
-    m_page -> cmbProfile -> clear();
+    m_page->cmbProfile->clear();
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
         return;
     }
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            m_page -> cmbProfile -> insertItem((*it) -> productName());
+            m_page->cmbProfile->insertItem((*it)->productName());
     }
-    m_page -> cmbProfile -> setCurrentText(csf->defaultProfile());
+    m_page->cmbProfile->setCurrentText(csf->defaultProfile());
 }
 
 #include "kis_dlg_apply_profile.moc"

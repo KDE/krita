@@ -89,7 +89,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) {
         KisToolFill * t = new KisToolFill();
         Q_CHECK_PTR(t);
-        t -> setup(ac);
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("fill", i18n("Fill Tool")); }

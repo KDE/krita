@@ -49,7 +49,7 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringLis
         Q_CHECK_PTR(colorSpaceGRAYU16);
         f->add(csf);
 
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
     }

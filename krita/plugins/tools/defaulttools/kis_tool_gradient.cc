@@ -87,14 +87,14 @@ void KisToolGradient::paint(KisCanvasPainter& gc, const QRect&)
 
 void KisToolGradient::buttonPress(KisButtonPressEvent *e)
 {
-    if (!m_subject || !m_subject -> currentImg()) {
+    if (!m_subject || !m_subject->currentImg()) {
         return;
     }
 
-    if (e -> button() == QMouseEvent::LeftButton) {
+    if (e->button() == QMouseEvent::LeftButton) {
         m_dragging = true;
-        m_startPos = e -> pos();
-        m_endPos = e -> pos();
+        m_startPos = e->pos();
+        m_endPos = e->pos();
     }
 }
 
@@ -105,11 +105,11 @@ void KisToolGradient::move(KisMoveEvent *e)
             paintLine();
         }
 
-        if ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
-            m_endPos = straightLine(e -> pos());
+        if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
+            m_endPos = straightLine(e->pos());
         }
         else {
-            m_endPos = e -> pos();
+            m_endPos = e->pos();
         }
 
         paintLine();
@@ -118,46 +118,46 @@ void KisToolGradient::move(KisMoveEvent *e)
 
 void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_dragging && e -> button() == QMouseEvent::LeftButton) {
+    if (m_dragging && e->button() == QMouseEvent::LeftButton) {
 
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisImageSP img = m_subject -> currentImg();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisImageSP img = m_subject->currentImg();
 
         m_dragging = false;
 
         if (m_startPos == m_endPos) {
-            controller -> updateCanvas();
+            controller->updateCanvas();
             m_dragging = false;
             return;
         }
 
-        if ((e -> state() & Qt::ShiftButton) == Qt::ShiftButton) {
-            m_endPos = straightLine(e -> pos());
+        if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
+            m_endPos = straightLine(e->pos());
         }
         else {
-            m_endPos = e -> pos();
+            m_endPos = e->pos();
         }
 
         KisPaintDeviceSP device;
 
-        if (img && (device = img -> activeDevice())) {
+        if (img && (device = img->activeDevice())) {
 
             KisGradientPainter painter(device);
 
-            painter.beginTransaction(i18n("Gradient"));
+            if (img->undo())  painter.beginTransaction(i18n("Gradient"));
 
-            painter.setPaintColor(m_subject -> fgColor());
-            painter.setGradient(*(m_subject -> currentGradient()));
+            painter.setPaintColor(m_subject->fgColor());
+            painter.setGradient(*(m_subject->currentGradient()));
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
 
-            KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
+            KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
             if (progress) {
-                progress -> setSubject(&painter, true, true);
+                progress->setSubject(&painter, true, true);
             }
 
-            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_subject -> currentImg() -> width(), m_subject -> currentImg() -> height());
+            bool painted = painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
 
             if (painted) {
                 // does whole thing at moment
@@ -165,16 +165,14 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 
                 notifyModified();
 
-                KisUndoAdapter *adapter = img -> undoAdapter();
-
-                if (adapter) {
-                    adapter -> addCommand(painter.endTransaction());
+                if (img->undo()) {
+                    img->undoAdapter()->addCommand(painter.endTransaction());
                 }
             }
 
             /* remove remains of the line drawn while moving */
-            if (controller -> kiscanvas()) {
-                controller -> kiscanvas() -> update();
+            if (controller->kiscanvas()) {
+                controller->kiscanvas()->update();
             }
 
         }
@@ -200,8 +198,8 @@ KisPoint KisToolGradient::straightLine(KisPoint point)
 void KisToolGradient::paintLine()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> kiscanvas();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
         KisCanvasPainter gc(canvas);
 
         paintLine(gc);
@@ -211,10 +209,10 @@ void KisToolGradient::paintLine()
 void KisToolGradient::paintLine(KisCanvasPainter& gc)
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint start = controller -> windowToView(m_startPos);
-        KisPoint end = controller -> windowToView(m_endPos);
+        KisPoint start = controller->windowToView(m_startPos);
+        KisPoint end = controller->windowToView(m_endPos);
 
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
@@ -241,18 +239,18 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 
     m_cmbShape = new QComboBox(false, widget, "shape_combo");
     connect(m_cmbShape, SIGNAL(activated(int)), this, SLOT(slotSetShape(int)));
-    m_cmbShape -> insertItem(i18n("Linear"));
-    m_cmbShape -> insertItem(i18n("Bi-Linear"));
-    m_cmbShape -> insertItem(i18n("Radial"));
-    m_cmbShape -> insertItem(i18n("Square"));
-    m_cmbShape -> insertItem(i18n("Conical"));
-    m_cmbShape -> insertItem(i18n("Conical Symmetric"));
+    m_cmbShape->insertItem(i18n("Linear"));
+    m_cmbShape->insertItem(i18n("Bi-Linear"));
+    m_cmbShape->insertItem(i18n("Radial"));
+    m_cmbShape->insertItem(i18n("Square"));
+    m_cmbShape->insertItem(i18n("Conical"));
+    m_cmbShape->insertItem(i18n("Conical Symmetric"));
 
     m_cmbRepeat = new QComboBox(false, widget, "repeat_combo");
     connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
-    m_cmbRepeat -> insertItem(i18n("None"));
-    m_cmbRepeat -> insertItem(i18n("Forwards"));
-    m_cmbRepeat -> insertItem(i18n("Alternating"));
+    m_cmbRepeat->insertItem(i18n("None"));
+    m_cmbRepeat->insertItem(i18n("Forwards"));
+    m_cmbRepeat->insertItem(i18n("Alternating"));
 
     addOptionWidgetOption(m_cmbShape, m_lbShape);
 
@@ -263,8 +261,8 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
 
     m_slAntiAliasThreshold = new KDoubleNumInput(widget, "threshold_slider");
-    m_slAntiAliasThreshold -> setRange( 0, 1); 
-    m_slAntiAliasThreshold -> setValue(m_antiAliasThreshold);
+    m_slAntiAliasThreshold->setRange( 0, 1); 
+    m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
     addOptionWidgetOption(m_slAntiAliasThreshold, m_lbAntiAliasThreshold);
@@ -294,15 +292,15 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
 
 void KisToolGradient::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Gradient"),
                         "tool_gradient", Qt::Key_G, this,
                         SLOT(activate()), collection,
                         name());
-        m_action -> setToolTip(i18n("Draw a gradient"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Draw a gradient"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

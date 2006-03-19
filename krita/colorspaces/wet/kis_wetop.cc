@@ -81,9 +81,9 @@ KisWetOp::KisWetOp(const KisWetOpSettings * settings, KisPainter * painter)
     : super(painter)
 {
     if (settings) {
-        m_size = settings -> varySize();
-        m_wetness = settings -> varyWetness();
-        m_strength = settings -> varyStrength();
+        m_size = settings->varySize();
+        m_wetness = settings->varyWetness();
+        m_strength = settings->varyStrength();
     } else {
         m_size = false;
         m_wetness = false;
@@ -99,15 +99,15 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
 
-    if (!m_painter -> device()) return;
-    KisPaintDeviceSP device = m_painter -> device();
+    if (!m_painter->device()) return;
+    KisPaintDeviceSP device = m_painter->device();
 
-    if (!m_painter -> device()) return;
+    if (!m_painter->device()) return;
 
-    KisBrush *brush = m_painter -> brush();
+    KisBrush *brush = m_painter->brush();
     Q_ASSERT(brush);
 
-    if (! brush -> canPaintFor(info) )
+    if (! brush->canPaintFor(info) )
         return;
 
     KisPaintInformation inf(info);
@@ -117,29 +117,29 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = 0;
 
-    if (brush -> brushType() == IMAGE || brush -> brushType() == PIPE_IMAGE) {
-        dab = brush -> image(KisMetaRegistry::instance() -> csRegistry() -> getAlpha8(), inf);
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), inf);
     }
     else {
-        KisAlphaMaskSP mask = brush -> mask(inf);
-        dab = computeDab(mask, KisMetaRegistry::instance() -> csRegistry() -> getAlpha8());
+        KisAlphaMaskSP mask = brush->mask(inf);
+        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->getAlpha8());
     }
 
-    KisColorSpace * cs = device -> colorSpace();
+    KisColorSpace * cs = device->colorSpace();
 
-    if (cs -> id() != KisID("WET","")) {
+    if (cs->id() != KisID("WET","")) {
         kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
         return;
     }
 
-    KisColor paintColor = m_painter -> paintColor();
+    KisColor paintColor = m_painter->paintColor();
     paintColor.convertTo(cs);
     // hopefully this does
-    // nothing, conversions are bad ( wet -> rgb -> wet gives horrible mismatches, due to
+    // nothing, conversions are bad ( wet->rgb->wet gives horrible mismatches, due to
     // the conversion to rgb actually rendering the paint above white
 
     WetPack* paintPack = reinterpret_cast<WetPack*>(paintColor.data());
-    WetPix paint = paintPack -> paint;
+    WetPix paint = paintPack->paint;
 
     // Get the paint info (we store the strength in the otherwise unused (?) height field of
     // the paint
@@ -156,15 +156,15 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     double eff_height;
     double press, contact;
 
-    int maskW = brush -> maskWidth(inf);
-    int maskH = brush -> maskHeight(inf);
-    KoPoint dest = (pos - (brush -> hotSpot(inf)));
+    int maskW = brush->maskWidth(inf);
+    int maskH = brush->maskHeight(inf);
+    KoPoint dest = (pos - (brush->hotSpot(inf)));
     int xStart = (int)dest.x();
     int yStart = (int)dest.y();
 
     for (int y = 0; y < maskH; y++) {
-        KisHLineIteratorPixel dabIt = dab -> createHLineIterator(0, y, maskW, false);
-        KisHLineIteratorPixel it = device -> createHLineIterator(xStart, yStart+y, maskW, true);
+        KisHLineIteratorPixel dabIt = dab->createHLineIterator(0, y, maskW, false);
+        KisHLineIteratorPixel it = device->createHLineIterator(xStart, yStart+y, maskW, true);
 
         while (!dabIt.isDone()) {
             // This only does something with .paint, and not with adsorb.
@@ -217,5 +217,5 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         }
     }
 
-    m_painter -> addDirtyRect(QRect(xStart, yStart, maskW, maskH));
+    m_painter->addDirtyRect(QRect(xStart, yStart, maskW, maskH));
 }

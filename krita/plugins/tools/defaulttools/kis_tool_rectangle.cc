@@ -63,9 +63,9 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
 
 void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event -> button() == LeftButton) {
+    if (m_currentImage && event->button() == LeftButton) {
         m_dragging = true;
-        m_dragStart = m_dragCenter = m_dragEnd = event -> pos();
+        m_dragStart = m_dragCenter = m_dragEnd = event->pos();
         draw(m_dragStart, m_dragEnd);
     }
 }
@@ -76,15 +76,15 @@ void KisToolRectangle::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize rectangle
-        if (event -> state() & Qt::AltButton) {
-            KisPoint trans = event -> pos() - m_dragEnd;
+        if (event->state() & Qt::AltButton) {
+            KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KisPoint diag = event -> pos() - (event->state() & Qt::ControlButton
+            KisPoint diag = event->pos() - (event->state() & Qt::ControlButton
                     ? m_dragCenter : m_dragStart);
             // square?
-            if (event -> state() & Qt::ShiftButton) {
+            if (event->state() & Qt::ShiftButton) {
                 double size = QMAX(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
@@ -92,7 +92,7 @@ void KisToolRectangle::move(KisMoveEvent *event)
             }
 
             // resize around center point?
-            if (event -> state() & Qt::ControlButton) {
+            if (event->state() & Qt::ControlButton) {
                 m_dragStart = m_dragCenter - diag;
                 m_dragEnd = m_dragCenter + diag;
             } else {
@@ -117,7 +117,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
     if (!device) return;
         
-    if (m_dragging && event -> button() == LeftButton) {
+    if (m_dragging && event->button() == LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -130,25 +130,24 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 
         
         KisPainter painter (device);
-        painter.beginTransaction (i18n ("Rectangle"));
+        if (m_currentImage->undo()) painter.beginTransaction (i18n ("Rectangle"));
         
-        painter.setPaintColor(m_subject -> fgColor());
-        painter.setBackgroundColor(m_subject -> bgColor());
+        painter.setPaintColor(m_subject->fgColor());
+        painter.setBackgroundColor(m_subject->bgColor());
         painter.setFillStyle(fillStyle());
-        painter.setBrush(m_subject -> currentBrush());
-        painter.setPattern(m_subject -> currentPattern());
+        painter.setBrush(m_subject->currentBrush());
+        painter.setPattern(m_subject->currentPattern());
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
         KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
         painter.setPaintOp(op);
 
-        painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event -> pressure()*/, event -> xTilt(), event -> yTilt());
+        painter.paintRect(m_dragStart, m_dragEnd, PRESSURE_DEFAULT/*event->pressure()*/, event->xTilt(), event->yTilt());
         device->setDirty( painter.dirtyRect() );
         notifyModified();
 
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-        if (adapter) {
-            adapter -> addCommand(painter.endTransaction());
+        if (m_currentImage->undo()) {
+            m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
         }
     }
 }
@@ -169,7 +168,7 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Rectangle"),
@@ -179,8 +178,8 @@ void KisToolRectangle::setup(KActionCollection *collection)
                         SLOT(activate()),
                         collection,
                         name());
-        m_action -> setToolTip(i18n("Draw a rectangle"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Draw a rectangle"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

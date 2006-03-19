@@ -67,12 +67,12 @@ void KisAlphaColorSpace::getAlpha(const Q_UINT8 *pixel, Q_UINT8 *alpha) const
 
 void KisAlphaColorSpace::toQColor(const Q_UINT8 */*src*/, QColor *c, KisProfile * /*profile*/)
 {
-    c -> setRgb(255, 255, 255);
+    c->setRgb(255, 255, 255);
 }
 
 void KisAlphaColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
-    c -> setRgb(255, 255, 255);
+    c->setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
 }
 
@@ -107,14 +107,14 @@ bool KisAlphaColorSpace::convertPixelsTo(const Q_UINT8 *src,
                      Q_INT32 /*renderingIntent*/)
 {
     // No lcms trickery here, we are only a opacity channel
-    Q_INT32 size = dstColorSpace -> pixelSize();
+    Q_INT32 size = dstColorSpace->pixelSize();
 
     Q_UINT32 j = 0;
     Q_UINT32 i = 0;
 
     while ( i < numPixels ) {
 
-        dstColorSpace -> fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j));
+        dstColorSpace->fromQColor(Qt::red, OPACITY_OPAQUE - *(src + i), (dst + j));
 
         i += 1;
         j += size;
@@ -246,7 +246,7 @@ KisCompositeOpList KisAlphaColorSpace::userVisiblecompositeOps() const
 QString KisAlphaColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
 }
@@ -254,7 +254,7 @@ QString KisAlphaColorSpace::channelValueText(const Q_UINT8 *pixel, Q_UINT32 chan
 QString KisAlphaColorSpace::normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
-    Q_UINT32 channelPosition = m_channels[channelIndex] -> pos();
+    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }

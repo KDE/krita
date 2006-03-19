@@ -67,37 +67,37 @@ void KisToolSelectBrush::activate()
     if (!m_optWidget)
         return;
 
-    m_optWidget -> slotActivated();
+    m_optWidget->slotActivated();
 }
 
 void KisToolSelectBrush::initPaint(KisEvent* /*e*/) 
 {
-    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
     m_mode = PAINT;
     m_dragDist = 0;
 
     // Create painter
-    KisPaintDeviceSP dev = m_currentImage -> activeDevice();
+    KisPaintDeviceSP dev = m_currentImage->activeDevice();
     if (m_painter)
         delete m_painter;
     bool hasSelection = dev->hasSelection();
-    m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
+    if (m_currentImage->undo()) m_transaction = new KisSelectedTransaction(i18n("Selection Brush"), dev);
     if(! hasSelection)
     {
         dev->selection()->clear();
         dev->emitSelectionChanged();
     }
-    KisSelectionSP selection = dev -> selection();
+    KisSelectionSP selection = dev->selection();
 
     m_painter = new KisPainter(selection.data());
     Q_CHECK_PTR(m_painter);
-    m_painter -> setPaintColor(KisColor(Qt::black, selection->colorSpace()));
-    m_painter -> setBrush(m_subject -> currentBrush());
-    m_painter -> setOpacity(OPACITY_OPAQUE);//m_subject->fgColor().colorSpace()->intensity8(m_subject->fgColor().data()));
-    m_painter -> setCompositeOp(COMPOSITE_OVER);
-    KisPaintOp * op = KisPaintOpRegistry::instance() -> paintOp("paintbrush", 0, painter());
-    painter() -> setPaintOp(op); // And now the painter owns the op and will destroy it.
+    m_painter->setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+    m_painter->setBrush(m_subject->currentBrush());
+    m_painter->setOpacity(OPACITY_OPAQUE);//m_subject->fgColor().colorSpace()->intensity8(m_subject->fgColor().data()));
+    m_painter->setCompositeOp(COMPOSITE_OVER);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, painter());
+    painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
 
     // Set the cursor -- ideally. this should be a mask created from the brush,
     // now that X11 can handle colored cursors.
@@ -111,12 +111,11 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 void KisToolSelectBrush::endPaint() 
 {
     m_mode = HOVER;
-    if (m_currentImage && m_currentImage -> activeLayer()) {
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-        if (adapter && m_painter) {
+    if (m_currentImage && m_currentImage->activeLayer()) {
+        if (m_currentImage->undo() && m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
-            adapter -> addCommand(m_transaction);
+            m_currentImage->undoAdapter()->addCommand(m_transaction);
         }
         delete m_painter;
         m_painter = 0;
@@ -127,7 +126,7 @@ void KisToolSelectBrush::endPaint()
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Selection Brush"),
@@ -135,8 +134,8 @@ void KisToolSelectBrush::setup(KActionCollection *collection)
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action -> setToolTip(i18n("Paint a selection"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Paint a selection"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -145,7 +144,7 @@ QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget -> setCaption(i18n("Selection Brush"));
+    m_optWidget->setCaption(i18n("Selection Brush"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));

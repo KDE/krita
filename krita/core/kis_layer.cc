@@ -52,8 +52,8 @@ namespace {
 
     void KisLayerCommand::setUndo(bool undo)
     {
-        if (m_layer -> undoAdapter()) {
-            m_layer -> undoAdapter() -> setUndo(undo);
+        if (m_layer->undoAdapter()) {
+            m_layer->undoAdapter()->setUndo(undo);
         }
     }
 
@@ -79,14 +79,14 @@ namespace {
     void KisLayerLockedCommand::execute()
     {
         setUndo(false);
-        m_layer -> setLocked(m_newLocked);
+        m_layer->setLocked(m_newLocked);
         setUndo(true);
     }
 
     void KisLayerLockedCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setLocked(!m_newLocked);
+        m_layer->setLocked(!m_newLocked);
         setUndo(true);
     }
 
@@ -114,14 +114,14 @@ namespace {
     void KisLayerOpacityCommand::execute()
     {
         setUndo(false);
-        m_layer -> setOpacity(m_newOpacity);
+        m_layer->setOpacity(m_newOpacity);
         setUndo(true);
     }
 
     void KisLayerOpacityCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setOpacity(m_oldOpacity);
+        m_layer->setOpacity(m_oldOpacity);
         setUndo(true);
     }
 
@@ -147,14 +147,14 @@ namespace {
     void KisLayerVisibilityCommand::execute()
     {
         setUndo(false);
-        m_layer -> setVisible(m_newVisibility);
+        m_layer->setVisible(m_newVisibility);
         setUndo(true);
     }
 
     void KisLayerVisibilityCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setVisible(!m_newVisibility);
+        m_layer->setVisible(!m_newVisibility);
         setUndo(true);
     }
 
@@ -183,14 +183,14 @@ namespace {
     void KisLayerCompositeOpCommand::execute()
     {
         setUndo(false);
-        m_layer -> setCompositeOp(m_newCompositeOp);
+        m_layer->setCompositeOp(m_newCompositeOp);
         setUndo(true);
     }
 
     void KisLayerCompositeOpCommand::unexecute()
     {
         setUndo(false);
-        m_layer -> setCompositeOp(m_oldCompositeOp);
+        m_layer->setCompositeOp(m_oldCompositeOp);
         setUndo(true);
     }
 
@@ -248,8 +248,8 @@ namespace {
             m_layer->undoAdapter()->setUndo(false);
         }
 
-        m_layer -> setX(pos.x());
-        m_layer -> setY(pos.y());
+        m_layer->setX(pos.x());
+        m_layer->setY(pos.y());
 
         m_layer->setDirty(m_updateRect);
 
@@ -373,14 +373,14 @@ KisLayerSP KisLayer::prevSibling() const
 {
     if (!parent())
         return 0;
-    return parent() -> at(index() - 1);
+    return parent()->at(index() - 1);
 }
 
 KisLayerSP KisLayer::nextSibling() const
 {
     if (!parent())
         return 0;
-    return parent() -> at(index() + 1);
+    return parent()->at(index() + 1);
 }
 
 int KisLayer::index() const
@@ -392,15 +392,15 @@ void KisLayer::setIndex(int i)
 {
     if (!parent())
         return;
-    parent() -> setIndex(this, i);
+    parent()->setIndex(this, i);
 }
 
 KisLayerSP KisLayer::findLayer(const QString& n) const
 {
     if (name() == n)
         return const_cast<KisLayer*>(this); //HACK any less ugly way? findLayer() is conceptually const...
-    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
-        if (KisLayerSP found = layer -> findLayer(n))
+    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+        if (KisLayerSP found = layer->findLayer(n))
             return found;
     return 0;
 }
@@ -409,8 +409,8 @@ KisLayerSP KisLayer::findLayer(int i) const
 {
     if (id() == i)
         return const_cast<KisLayer*>(this); //HACK
-    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
-        if (KisLayerSP found = layer -> findLayer(i))
+    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+        if (KisLayerSP found = layer->findLayer(i))
             return found;
     return 0;
 }
@@ -419,8 +419,8 @@ int KisLayer::numLayers(int flags) const
 {
     int num = 0;
     if (matchesFlags(flags)) num++;
-    for (KisLayerSP layer = firstChild(); layer; layer = layer -> nextSibling())
-        num += layer -> numLayers(flags);
+    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+        num += layer->numLayers(flags);
     return num;
 }
 
@@ -475,8 +475,8 @@ void KisLayer::setVisible(bool v)
         notifyPropertyChanged();
         setDirty();
 
-        if (undoAdapter()) {
-            undoAdapter() -> addCommand(setVisibleCommand(v));
+        if (undoAdapter() && undoAdapter()->undo()) {
+            undoAdapter()->addCommand(setVisibleCommand(v));
         }
     }
 }
@@ -497,8 +497,8 @@ void KisLayer::setLocked(bool l)
         m_locked = l;
         notifyPropertyChanged();
 
-        if (undoAdapter()) {
-            undoAdapter() -> addCommand(setLockedCommand(l));
+        if (undoAdapter() && undoAdapter()->undo()) {
+            undoAdapter()->addCommand(setLockedCommand(l));
         }
     }
 }
@@ -556,7 +556,7 @@ KNamedCommand *KisLayer::moveCommand(QPoint oldPosition, QPoint newPosition)
 KisUndoAdapter *KisLayer::undoAdapter() const
 {
     if (m_image) {
-        return m_image -> undoAdapter();
+        return m_image->undoAdapter();
     }
     return 0;
 }
@@ -581,7 +581,7 @@ QImage KisLayer::createThumbnail(Q_INT32, Q_INT32)
 void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
-        image() -> notifyPropertyChanged(this);
+        image()->notifyPropertyChanged(this);
 }
 
 #include "kis_layer.moc"

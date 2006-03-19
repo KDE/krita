@@ -29,7 +29,7 @@ KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool m
     : super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
     QHBox* layout = new QHBox(this);
-    layout -> setSpacing( 6 );
+    layout->setSpacing( 6 );
 
     m_containerFrame = new QFrame( layout, "container" );
 

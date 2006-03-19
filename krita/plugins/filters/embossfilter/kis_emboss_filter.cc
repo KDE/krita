@@ -95,8 +95,8 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
         for (int y = 0 ; !cancelRequested() && (y < Height) ; ++y)
         {
-        KisHLineIteratorPixel it = src -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), false);
-        KisHLineIteratorPixel dstIt = dst -> createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
+        KisHLineIteratorPixel it = src->createHLineIterator(rect.x(), rect.y() + y, rect.width(), false);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y() + y, rect.width(), true);
 
         for (int x = 0 ; !cancelRequested() && (x < Width) ; ++x, ++it, ++dstIt)
         {
@@ -105,11 +105,11 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 // XXX: COLORSPACE_INDEPENDENCE
 
                 QColor color1;
-                src -> colorSpace() -> toQColor(it.rawData(), &color1);
+                src->colorSpace()->toQColor(it.rawData(), &color1);
 
                 QColor color2;
                 Q_UINT8 opacity2;
-                src -> pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
+                src->pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
 
                 R = abs((int)((color1.red() - color2.red()) * Depth + (Q_UINT8_MAX / 2)));
                 G = abs((int)((color1.green() - color2.green()) * Depth + (Q_UINT8_MAX / 2)));
@@ -117,7 +117,7 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
 
                 Gray = CLAMP((R + G + B) / 3, 0, Q_UINT8_MAX);
 
-                dst -> colorSpace() -> fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
+                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
             }
         }
 

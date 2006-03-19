@@ -43,7 +43,7 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
     m_page = new WdgSeparations(this, "separate_image");
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
     m_page->lblColormodel->setText(layerCS);
     m_page->grpOutput->hide();

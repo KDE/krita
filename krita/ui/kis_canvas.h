@@ -208,7 +208,7 @@ public:
             // Position, pressure and wheel are normalised to 0 - 1
             KisPoint pos() const { return m_pos; }
             double pressure() const { return m_pressure; }
-            // Tilt is normalised to -1 -> +1
+            // Tilt is normalised to -1->+1
             KisVector2D tilt() const { return m_tilt; }
             double wheel() const { return m_wheel; }
             // Wacom tool id and serial number of device.

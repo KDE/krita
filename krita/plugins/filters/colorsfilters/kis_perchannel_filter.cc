@@ -245,6 +245,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         }
         setProgress(pixelsProcessed);
     }
+    delete adj;
     setProgressDone();
 }
 
@@ -260,7 +261,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_histogram->setChannel(ch);
 
     double highest = (double)m_histogram->calculations().getHighest();
-    Q_INT32 bins = m_histogram->producer() -> numberOfBins();
+    Q_INT32 bins = m_histogram->producer()->numberOfBins();
 
     if (m_histogram->getHistogramType() == LINEAR) {
         double factor = (double)height / highest;
@@ -300,14 +301,14 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
         m_curves[ch].append(new QPair<double,double>(1, 1));
     }
 
-    l -> add(m_page);
+    l->add(m_page);
     height = 256;
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
     // Fill in the channel chooser
     QValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
     for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
-        m_page->cmbChannel -> insertItem(channels.at(val)->name());
+        m_page->cmbChannel->insertItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // Create the horizontal gradient label

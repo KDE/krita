@@ -38,8 +38,8 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
     QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
-    l -> add(m_page);
-    nfilter -> setAutoUpdate(false);
+    l->add(m_page);
+    nfilter->setAutoUpdate(false);
     
 //     connect(  m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numDetail, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
@@ -60,16 +60,16 @@ KisCImgFilterConfiguration * KisCImgconfigWidget::config()
     KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
     Q_CHECK_PTR(cfg);
 
-    cfg -> power1         = m_page -> numDetail -> value();
-    cfg -> power2         = m_page -> numGradient -> value();
-    cfg -> dt             = m_page -> numTimeStep -> value();
-    cfg -> sigma          = m_page -> numBlur -> value();
-    cfg -> nb_iter        = m_page -> numBlurIterations -> value();
-    cfg -> dtheta         = m_page -> numAngularStep -> value();
-    cfg -> dlength        = m_page -> numIntegralStep -> value();
-    cfg -> gauss_prec     = m_page -> numGaussian -> value();
-    cfg -> linear         = m_page -> chkLinearInterpolation -> isChecked();
-    cfg -> onormalize     = m_page -> chkNormalize -> isChecked();
+    cfg->power1         = m_page->numDetail->value();
+    cfg->power2         = m_page->numGradient->value();
+    cfg->dt             = m_page->numTimeStep->value();
+    cfg->sigma          = m_page->numBlur->value();
+    cfg->nb_iter        = m_page->numBlurIterations->value();
+    cfg->dtheta         = m_page->numAngularStep->value();
+    cfg->dlength        = m_page->numIntegralStep->value();
+    cfg->gauss_prec     = m_page->numGaussian->value();
+    cfg->linear         = m_page->chkLinearInterpolation->isChecked();
+    cfg->onormalize     = m_page->chkNormalize->isChecked();
 
     return cfg;
 

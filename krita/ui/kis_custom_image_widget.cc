@@ -39,14 +39,14 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
     : WdgNewImage(parent) {
     m_doc = doc;
 
-    txtName -> setText(imageName);
+    txtName->setText(imageName);
 
-    intWidth -> setValue(defWidth);
-    intHeight -> setValue(defHeight);
-    doubleResolution -> setValue(resolution);
+    intWidth->setValue(defWidth);
+    intHeight->setValue(defHeight);
+    doubleResolution->setValue(resolution);
 
-    cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
-    cmbColorSpaces -> setCurrentText(defColorSpaceName);
+    cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    cmbColorSpaces->setCurrentText(defColorSpaceName);
 
     connect(cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
@@ -57,7 +57,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
 }
 
 void KisCustomImageWidget::buttonClicked() {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cmbColorSpaces -> currentItem(), cmbProfile->currentText());
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
     QColor qc(cmbColor->color());
 
@@ -67,7 +67,7 @@ void KisCustomImageWidget::buttonClicked() {
 
 Q_UINT8 KisCustomImageWidget::backgroundOpacity() const
 {
-    Q_INT32 opacity = sliderOpacity -> value();
+    Q_INT32 opacity = sliderOpacity->value();
 
     if (!opacity)
         return 0;
@@ -77,21 +77,21 @@ Q_UINT8 KisCustomImageWidget::backgroundOpacity() const
 
 void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
 {
-    cmbProfile -> clear();
+    cmbProfile->clear();
 
     if (!KisMetaRegistry::instance()->csRegistry()->exists(s)) {
         return;
     }
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            cmbProfile -> insertItem((*it) -> productName());
+            cmbProfile->insertItem((*it)->productName());
     }
-    cmbProfile -> setCurrentText(csf->defaultProfile());
+    cmbProfile->setCurrentText(csf->defaultProfile());
 }
 
 #include "kis_custom_image_widget.moc"

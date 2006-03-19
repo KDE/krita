@@ -47,7 +47,7 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList 
         KisColorSpaceFactory * csFactory = new KisRgbU16ColorSpaceFactory();
         f->add( csFactory );
 
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
                 (KisID("RGB16HISTO", i18n("RGB16 Histogram")), colorSpaceRGBU16) );
     }

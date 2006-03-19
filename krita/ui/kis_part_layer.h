@@ -94,10 +94,10 @@ public:
 
     virtual void setX(Q_INT32 x);
     virtual void setY(Q_INT32 y);
-    virtual Q_INT32 x() const { return m_doc -> geometry() . x(); }
-    virtual Q_INT32 y() const { return m_doc -> geometry() . y(); } //m_paintLayer -> y(); }
-    virtual QRect extent() const { return m_doc -> geometry(); }
-    virtual QRect exactBounds() const { return m_doc -> geometry(); }
+    virtual Q_INT32 x() const { return m_doc->geometry() . x(); }
+    virtual Q_INT32 y() const { return m_doc->geometry() . y(); } //m_paintLayer->y(); }
+    virtual QRect extent() const { return m_doc->geometry(); }
+    virtual QRect exactBounds() const { return m_doc->geometry(); }
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
 

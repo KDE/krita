@@ -52,16 +52,16 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
 
-    dev -> exactBounds(x, y, w, h);
+    dev->exactBounds(x, y, w, h);
 
-    KisColorSpace * cs = dev -> colorSpace();
+    KisColorSpace * cs = dev->colorSpace();
 
     for (int y2 = y; y2 < y + h; ++y2) {
-        KisHLineIterator hiter = dev -> createHLineIterator(x, y2, w, false);
-        KisHLineIterator selIter = selection -> createHLineIterator(x, y2, w, true);
+        KisHLineIterator hiter = dev->createHLineIterator(x, y2, w, false);
+        KisHLineIterator selIter = selection->createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
-            //if (dev -> colorSpace() -> hasAlpha())
-            //    opacity = dev -> colorSpace() -> getAlpha(hiter.rawData());
+            //if (dev->colorSpace()->hasAlpha())
+            //    opacity = dev->colorSpace()->getAlpha(hiter.rawData());
 
             Q_UINT8 match = cs->difference(c, hiter.rawData());
 
@@ -111,7 +111,7 @@ void KisToolSelectSimilar::activate()
     setPickerCursor(m_currentSelectAction);
 
     if (m_selectionOptionsWidget) {
-        m_selectionOptionsWidget -> slotActivated();
+        m_selectionOptionsWidget->slotActivated();
     }
 }
 
@@ -130,33 +130,33 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         QPoint pos;
         Q_UINT8 opacity = OPACITY_OPAQUE;
 
-        if (e -> button() != QMouseEvent::LeftButton && e -> button() != QMouseEvent::RightButton)
+        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
             return;
 
-        if (!(img = m_subject -> currentImg()))
+        if (!(img = m_subject->currentImg()))
             return;
 
-        dev = img -> activeDevice();
+        dev = img->activeDevice();
 
         if (!dev || !img->activeLayer()->visible())
             return;
 
-        pos = QPoint(e -> pos().floorX(), e -> pos().floorY());
-
-        KisSelectedTransaction *t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
+        pos = QPoint(e->pos().floorX(), e->pos().floorY());
+        KisSelectedTransaction *t = 0;
+        if (img->undo()) t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
         KisColor c = dev->colorAt(pos.x(), pos.y());
-        opacity = dev -> colorSpace() -> getAlpha(c.data());
+        opacity = dev->colorSpace()->getAlpha(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
-        selectByColor(dev, dev -> selection(), c.data(), m_fuzziness, m_currentSelectAction);
+        selectByColor(dev, dev->selection(), c.data(), m_fuzziness, m_currentSelectAction);
 
         dev->emitSelectionChanged();
 
-        if(img -> undoAdapter())
-            img -> undoAdapter() -> addCommand(t);
-        m_subject -> canvasController() -> updateCanvas();
+        if(img->undo())
+            img->undoAdapter()->addCommand(t);
+        m_subject->canvasController()->updateCanvas();
 
         QApplication::restoreOverrideCursor();
     }
@@ -198,13 +198,13 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 
 void KisToolSelectSimilar::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Similar Selection"), "tool_similar_selection", "Ctrl+E", this, SLOT(activate()), collection, name());
         Q_CHECK_PTR(m_action);
-        m_action -> setToolTip(i18n("Select similar colors"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Select similar colors"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }
@@ -230,7 +230,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     m_optWidget = new QWidget(parent);
     Q_CHECK_PTR(m_optWidget);
 
-    m_optWidget -> setCaption(i18n("Similar Selection"));
+    m_optWidget->setCaption(i18n("Similar Selection"));
 
     QVBoxLayout * l = new QVBoxLayout(m_optWidget, 0, 6);
     Q_CHECK_PTR(l);
@@ -238,7 +238,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
     Q_CHECK_PTR(m_selectionOptionsWidget);
 
-    l -> addWidget(m_selectionOptionsWidget);
+    l->addWidget(m_selectionOptionsWidget);
     connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QHBoxLayout * hbox = new QHBoxLayout(l);
@@ -247,14 +247,14 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
     Q_CHECK_PTR(lbl);
 
-    hbox -> addWidget(lbl);
+    hbox->addWidget(lbl);
 
     KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
     Q_CHECK_PTR(input);
 
-    input -> setRange(0, 200, 10, true);
-    input -> setValue(20);
-    hbox -> addWidget(input);
+    input->setRange(0, 200, 10, true);
+    input->setValue(20);
+    hbox->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));

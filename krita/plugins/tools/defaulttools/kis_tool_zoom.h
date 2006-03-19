@@ -87,7 +87,7 @@ public:
     virtual KisTool * createTool(KActionCollection * ac) { 
         KisTool * t = new KisToolZoom(); 
         Q_CHECK_PTR(t);
-        t -> setup(ac); 
+        t->setup(ac); 
         return t; 
     }
     virtual KisID id() { return KisID("zoom", i18n("Zoom Tool")); }

@@ -97,7 +97,7 @@ QString KisF32BaseColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32
 {
     Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
     const float *pixel = reinterpret_cast<const float *>(U8_pixel);
-    Q_UINT32 channelPosition = channels()[channelIndex] -> pos() / sizeof(float);
+    Q_UINT32 channelPosition = channels()[channelIndex]->pos() / sizeof(float);
 
     return QString().setNum(pixel[channelPosition]);
 }
@@ -106,7 +106,7 @@ QString KisF32BaseColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel
 {
     Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
     const float *pixel = reinterpret_cast<const float *>(U8_pixel);
-    Q_UINT32 channelPosition = channels()[channelIndex] -> pos() / sizeof(float);
+    Q_UINT32 channelPosition = channels()[channelIndex]->pos() / sizeof(float);
 
     return QString().setNum(100.0 * pixel[channelPosition]);
 }

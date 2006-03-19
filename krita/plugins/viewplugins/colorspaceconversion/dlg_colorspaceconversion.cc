@@ -47,13 +47,13 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
-    m_page -> cmbColorSpaces -> setIDList(KisMetaRegistry::instance()->csRegistry() -> listKeys());
+    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
 
-    fillCmbDestProfile(m_page -> cmbColorSpaces -> currentItem());
+    fillCmbDestProfile(m_page->cmbColorSpaces->currentItem());
 
-    connect(m_page -> cmbColorSpaces, SIGNAL(activated(const KisID &)),
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbDestProfile(const KisID &)));
 
 
@@ -77,12 +77,12 @@ void DlgColorSpaceConversion::okClicked()
 
 void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
-    m_page -> cmbDestProfile -> clear();
+    m_page->cmbDestProfile->clear();
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry() -> profilesFor(s);
+    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
         QValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page -> cmbDestProfile -> insertItem((*it) -> productName());
+        m_page->cmbDestProfile->insertItem((*it)->productName());
 
     }
 }

@@ -78,9 +78,9 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         if (!ok)
             return;
 
-        KisUndoAdapter *undoAdapter = img -> undoAdapter();
+        KisUndoAdapter *undoAdapter = img->undoAdapter();
         if (undoAdapter) {
-            undoAdapter -> beginMacro(i18n("Text"));
+            undoAdapter->beginMacro(i18n("Text"));
         }
 
         QFontMetrics metrics(m_font);
@@ -118,8 +118,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
             }
         }
 
-        layer -> setOpacity(m_opacity);
-        layer -> setCompositeOp(m_compositeOp);
+        layer->setOpacity(m_opacity);
+        layer->setCompositeOp(m_compositeOp);
 
         Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
         Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
@@ -129,7 +129,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         layer->setDirty();
 
         if (undoAdapter) {
-            undoAdapter -> endMacro();
+            undoAdapter->endMacro();
         }
     }
 }
@@ -159,7 +159,7 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 
 void KisToolText::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("T&ext"), 
@@ -169,8 +169,8 @@ void KisToolText::setup(KActionCollection *collection)
                         SLOT(activate()),
                         collection,
                         name());
-        m_action -> setExclusiveGroup("tools");
-        m_action -> setToolTip(i18n("Text"));
+        m_action->setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Text"));
         m_ownAction = true;
     }
 }

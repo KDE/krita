@@ -241,8 +241,8 @@ bool KisFilterManager::apply()
     //Apply the filter
     m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget);
 
-    QRect r1 = dev -> extent();
-    QRect r2 = img -> bounds();
+    QRect r1 = dev->extent();
+    QRect r2 = img->bounds();
 
     // Filters should work only on the visible part of an image.
     QRect rect = r1.intersect(r2);
@@ -257,8 +257,9 @@ bool KisFilterManager::apply()
     m_view->progressDisplay()->setSubject(m_lastFilter, true, true);
     m_lastFilter->setProgressDisplay( m_view->progressDisplay());
 
-    KisTransaction * cmd = new KisTransaction(m_lastFilter->id().name(), dev);
-    Q_CHECK_PTR(cmd);
+    KisTransaction * cmd = 0;
+    if (img->undo()) cmd = new KisTransaction(m_lastFilter->id().name(), dev);
+    
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
@@ -268,8 +269,10 @@ bool KisFilterManager::apply()
     
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
-        cmd -> unexecute();
-        delete cmd;
+        if (cmd) {
+            cmd->unexecute();
+            delete cmd;
+        }
         m_lastFilter->disableProgress();
         QApplication::restoreOverrideCursor();
         return false;
@@ -277,7 +280,7 @@ bool KisFilterManager::apply()
     } else {
         if (dev->parentLayer()) dev->parentLayer()->setDirty(rect);
         m_doc->setModified(true);
-        img->undoAdapter()->addCommand(cmd);
+        if (img->undo() && cmd) img->undoAdapter()->addCommand(cmd);
         m_lastFilter->disableProgress();
         QApplication::restoreOverrideCursor();
         return true;
@@ -344,7 +347,7 @@ void KisFilterManager::slotApplyFilter(int i)
 
         QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_lastDialog->container(), 1, 1);
 
-        widgetLayout -> addWidget(m_lastWidget, 0 , 0);
+        widgetLayout->addWidget(m_lastWidget, 0 , 0);
 
         m_lastDialog->container()->setMinimumSize(m_lastWidget->minimumSize());
 
@@ -385,12 +388,12 @@ void KisFilterManager::refreshPreview( )
     if( m_lastDialog == 0 )
         return;
 
-    KisPaintDeviceSP dev = m_lastDialog -> previewWidget()->getDevice();
+    KisPaintDeviceSP dev = m_lastDialog->previewWidget()->getDevice();
     if (!dev) return;
 
     KisFilterConfiguration* config = m_lastFilter->configuration(m_lastWidget);
 
-    QRect rect = dev -> extent();
+    QRect rect = dev->extent();
     KisTransaction cmd("Temporary transaction", dev);
     m_lastFilter->process(dev, dev, config, rect);
     m_lastDialog->previewWidget()->slotUpdate();

@@ -66,9 +66,9 @@ void KisGradientChooser::update(KoIconItem *item)
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 
     if (item) {
-        KisGradient *gradient = static_cast<KisGradient *>(kisItem -> resource());
+        KisGradient *gradient = static_cast<KisGradient *>(kisItem->resource());
 
-        m_lbName -> setText(gradient -> name());
+        m_lbName->setText(gradient->name());
     }
 }
 

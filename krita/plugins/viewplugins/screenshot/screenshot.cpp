@@ -62,13 +62,13 @@ Screenshot::~Screenshot()
 
 void Screenshot::slotScreenshot()
 {
-    snapshot -> show();
+    snapshot->show();
 }
 
 void Screenshot::slotScreenGrabbed()
 {
     KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
-    snapshot -> save(temp.name());
+    snapshot->save(temp.name());
 
     KisView *view = dynamic_cast<KisView *>(parent());
     if(view)

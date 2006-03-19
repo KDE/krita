@@ -73,38 +73,38 @@ ShearImage::~ShearImage()
 
 void ShearImage::slotShearImage()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
     DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
 
-    dlgShearImage -> setCaption(i18n("Shear Image"));
+    dlgShearImage->setCaption(i18n("Shear Image"));
 
-        if (dlgShearImage -> exec() == QDialog::Accepted) {
-        Q_INT32 angleX = dlgShearImage -> angleX();
-                Q_INT32 angleY = dlgShearImage -> angleY();
-                m_view -> shearCurrentImage(angleX, angleY);
+        if (dlgShearImage->exec() == QDialog::Accepted) {
+        Q_INT32 angleX = dlgShearImage->angleX();
+                Q_INT32 angleY = dlgShearImage->angleY();
+                m_view->shearCurrentImage(angleX, angleY);
     }
         delete dlgShearImage;
 }
 
 void ShearImage::slotShearLayer()
 {
-    KisImageSP image = m_view -> canvasSubject() -> currentImg();
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
     if (!image) return;
 
     DlgShearImage * dlgShearImage = new DlgShearImage(m_view, "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
-    dlgShearImage -> setCaption(i18n("Shear Layer"));
+    dlgShearImage->setCaption(i18n("Shear Layer"));
 
-    if (dlgShearImage -> exec() == QDialog::Accepted) {
-                Q_INT32 angleX = dlgShearImage -> angleX();
-                Q_INT32 angleY = dlgShearImage -> angleY();
-                m_view -> shearLayer(angleX, angleY);
+    if (dlgShearImage->exec() == QDialog::Accepted) {
+                Q_INT32 angleX = dlgShearImage->angleX();
+                Q_INT32 angleY = dlgShearImage->angleY();
+                m_view->shearLayer(angleX, angleY);
 
     }
     delete dlgShearImage;

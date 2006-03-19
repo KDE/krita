@@ -110,7 +110,7 @@ QString KisPaletteWidget::palette() const
 void KisPaletteWidget::slotSetPalette( const QString &_paletteName )
 {
     setPalette( _paletteName );
-    m_view -> slotColorCellSelected(0); // FIXME: We need to save the current value!!
+    m_view->slotColorCellSelected(0); // FIXME: We need to save the current value!!
 }
 
 
@@ -139,19 +139,19 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
         }
     }
 
-    m_view -> setPalette(m_currentPalette);
+    m_view->setPalette(m_currentPalette);
 }
 
 void KisPaletteWidget::slotAddPalette(KisResource * palette)
 {
     KisPalette * p = dynamic_cast<KisPalette*>(palette);
 
-    m_namedPaletteMap.insert(palette -> name(), p);
+    m_namedPaletteMap.insert(palette->name(), p);
 
-    combo -> insertItem(palette -> name());
+    combo->insertItem(palette->name());
 
     if (!init) {
-        combo -> setCurrentItem(0);
+        combo->setCurrentItem(0);
         setPalette(combo ->currentText());
         init = true;
     }

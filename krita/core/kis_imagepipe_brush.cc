@@ -180,7 +180,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
         m_brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
-    setImage(m_brushes.at(0) -> img());
+    setImage(m_brushes.at(0)->img());
 
     m_brushType = PIPE_IMAGE;
 }
@@ -246,15 +246,15 @@ bool KisImagePipeBrush::init()
 
     if (!m_brushes.isEmpty()) {
         setValid(true);
-        if (m_brushes.at( 0 ) -> brushType() == MASK) {
+        if (m_brushes.at( 0 )->brushType() == MASK) {
             m_brushType = PIPE_MASK;
         }
         else {
             m_brushType = PIPE_IMAGE;
         }
-        setSpacing(m_brushes.at(m_brushes.count() - 1) -> spacing());
-        setWidth(m_brushes.at(0) -> width());
-        setHeight(m_brushes.at(0) -> height());
+        setSpacing(m_brushes.at(m_brushes.count() - 1)->spacing());
+        setWidth(m_brushes.at(0)->width());
+        setHeight(m_brushes.at(0)->height());
     }
 
     m_data.resize(0);
@@ -287,22 +287,22 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     // Gimp Pipe Brush header format: Name\n<number of brushes> <parasite>\n
 
     // The name\n
-    if (dev -> writeBlock(name, len) == -1)
+    if (dev->writeBlock(name, len) == -1)
         return false;
 
-    if (dev -> putch('\n') == -1)
+    if (dev->putch('\n') == -1)
         return false;
 
     // Write the parasite (also writes number of brushes)
     if (!m_parasite.saveToDevice(dev))
         return false;
 
-    if (dev -> putch('\n') == -1)
+    if (dev->putch('\n') == -1)
         return false;
 
     // <gbr brushes>
     for (uint i = 0; i < m_brushes.count(); i++)
-        if (!m_brushes.at(i) -> saveToDevice(dev))
+        if (!m_brushes.at(i)->saveToDevice(dev))
             return false;
 
     return true;
@@ -314,7 +314,7 @@ QImage KisImagePipeBrush::img()
         return 0;
     }
     else {
-        return m_brushes.at(0) -> img();
+        return m_brushes.at(0)->img();
     }
 }
 
@@ -322,14 +322,14 @@ KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double s
 {
     if (m_brushes.isEmpty()) return 0;
     selectNextBrush(info);
-    return m_brushes.at(m_currentBrush) -> mask(info, subPixelX, subPixelY);
+    return m_brushes.at(m_currentBrush)->mask(info, subPixelX, subPixelY);
 }
 
 KisPaintDeviceSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return 0;
     selectNextBrush(info);
-    return m_brushes.at(m_currentBrush) -> image(colorSpace, info, subPixelX, subPixelY);
+    return m_brushes.at(m_currentBrush)->image(colorSpace, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
@@ -352,7 +352,7 @@ enumBrushType KisImagePipeBrush::brushType() const
 bool KisImagePipeBrush::useColorAsMask() const
 {
     if (m_brushes.count() > 0) {
-        return m_brushes.at(0) -> useColorAsMask();
+        return m_brushes.at(0)->useColorAsMask();
     }
     else {
         return false;
@@ -362,14 +362,14 @@ bool KisImagePipeBrush::useColorAsMask() const
 void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
 {
     for (uint i = 0; i < m_brushes.count(); i++) {
-        m_brushes.at(i) -> setUseColorAsMask(useColorAsMask);
+        m_brushes.at(i)->setUseColorAsMask(useColorAsMask);
     }
 }
 
 bool KisImagePipeBrush::hasColor() const
 {
     if (m_brushes.count() > 0) {
-        return m_brushes.at(0) -> hasColor();
+        return m_brushes.at(0)->hasColor();
     }
     else {
         return false;
@@ -378,7 +378,7 @@ bool KisImagePipeBrush::hasColor() const
 
 KisBoundary KisImagePipeBrush::boundary() {
     Q_ASSERT(!m_brushes.isEmpty());
-    return m_brushes.at(0) -> boundary();
+    return m_brushes.at(0)->boundary();
 }
 
 void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
@@ -423,7 +423,7 @@ bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
 
 void KisImagePipeBrush::makeMaskImage() {
     for (uint i = 0; i < m_brushes.count(); i++)
-        m_brushes.at(i) -> makeMaskImage();
+        m_brushes.at(i)->makeMaskImage();
 
     setBrushType(PIPE_MASK);
     setUseColorAsMask(false);
@@ -442,7 +442,7 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
     for (uint i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
                 KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), "clone pd" );
-        pd -> convertFromQImage(m_brushes.at(i) -> img(), "");
+        pd->convertFromQImage(m_brushes.at(i)->img(), "");
         devices.at(0).append(pd);
     }
 

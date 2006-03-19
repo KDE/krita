@@ -53,28 +53,28 @@ public:
         location += m_img->name() + QString("/layers/layer%1").arg(m_count);
 
         // Layer data
-        if (m_store -> open(location)) {
-            if (!layer->paintDevice() -> write(m_store)) {
-                layer->paintDevice() -> disconnect();
-                m_store -> close();
+        if (m_store->open(location)) {
+            if (!layer->paintDevice()->write(m_store)) {
+                layer->paintDevice()->disconnect();
+                m_store->close();
                 //IODone();
                 return false;
             }
 
-            m_store -> close();
+            m_store->close();
         }
 
-        if (layer->paintDevice() -> colorSpace() -> getProfile()) {
-            KisAnnotationSP annotation = layer->paintDevice() -> colorSpace() -> getProfile() -> annotation();
+        if (layer->paintDevice()->colorSpace()->getProfile()) {
+            KisAnnotationSP annotation = layer->paintDevice()->colorSpace()->getProfile()->annotation();
 
             if (annotation) {
                 // save layer profile
                 location = m_external ? QString::null : m_uri;
                 location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".icc";
 
-                if (m_store -> open(location)) {
-                    m_store -> write(annotation -> annotation());
-                    m_store -> close();
+                if (m_store->open(location)) {
+                    m_store->write(annotation->annotation());
+                    m_store->close();
                 }
             }
         }
@@ -113,14 +113,14 @@ public:
             location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".selection";
 
             // Layer data
-            if (m_store -> open(location)) {
-                if (!layer->selection() -> write(m_store)) {
-                    layer->selection() -> disconnect();
-                    m_store -> close();
+            if (m_store->open(location)) {
+                if (!layer->selection()->write(m_store)) {
+                    layer->selection()->disconnect();
+                    m_store->close();
                     //IODone();
                     return false;
                 }
-                m_store -> close();
+                m_store->close();
             }
         }
 
@@ -129,10 +129,10 @@ public:
             location = m_external ? QString::null : m_uri;
             location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
 
-            if (m_store -> open(location)) {
+            if (m_store->open(location)) {
                 QString s = layer->filter()->toString();
-                m_store -> write(s.utf8(), qstrlen(s.utf8()));
-                m_store -> close();
+                m_store->write(s.utf8(), qstrlen(s.utf8()));
+                m_store->close();
             }
         }
         m_count++;

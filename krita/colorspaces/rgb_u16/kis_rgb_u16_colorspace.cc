@@ -65,20 +65,20 @@ void KisRgbU16ColorSpace::setPixel(Q_UINT8 *dst, Q_UINT16 red, Q_UINT16 green, Q
 {
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> red = red;
-    dstPixel -> green = green;
-    dstPixel -> blue = blue;
-    dstPixel -> alpha = alpha;
+    dstPixel->red = red;
+    dstPixel->green = green;
+    dstPixel->blue = blue;
+    dstPixel->alpha = alpha;
 }
 
 void KisRgbU16ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT16 *red, Q_UINT16 *green, Q_UINT16 *blue, Q_UINT16 *alpha) const
 {
     const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
 
-    *red = srcPixel -> red;
-    *green = srcPixel -> green;
-    *blue = srcPixel -> blue;
-    *alpha = srcPixel -> alpha;
+    *red = srcPixel->red;
+    *green = srcPixel->green;
+    *blue = srcPixel->blue;
+    *alpha = srcPixel->alpha;
 }
 
 void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
@@ -89,12 +89,12 @@ void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        Q_UINT32 alpha = pixel -> alpha;
+        Q_UINT32 alpha = pixel->alpha;
         Q_UINT32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
-        totalRed += UINT16_MULT(pixel -> red, alphaTimesWeight);
-        totalGreen += UINT16_MULT(pixel -> green, alphaTimesWeight);
-        totalBlue += UINT16_MULT(pixel -> blue, alphaTimesWeight);
+        totalRed += UINT16_MULT(pixel->red, alphaTimesWeight);
+        totalGreen += UINT16_MULT(pixel->green, alphaTimesWeight);
+        totalBlue += UINT16_MULT(pixel->blue, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -105,7 +105,7 @@ void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
 
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> alpha = newAlpha;
+    dstPixel->alpha = newAlpha;
 
     if (newAlpha > 0) {
         totalRed = UINT16_DIVIDE(totalRed, newAlpha);
@@ -113,9 +113,9 @@ void KisRgbU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weigh
         totalBlue = UINT16_DIVIDE(totalBlue, newAlpha);
     }
 
-    dstPixel -> red = totalRed;
-    dstPixel -> green = totalGreen;
-    dstPixel -> blue = totalBlue;
+    dstPixel->red = totalRed;
+    dstPixel->green = totalGreen;
+    dstPixel->blue = totalBlue;
 }
 
 
@@ -684,7 +684,7 @@ void KisRgbU16ColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s -> alpha;
+            Q_UINT16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -695,7 +695,7 @@ void KisRgbU16ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = UINT16_MULT(srcAlpha, d -> alpha);
+            d->alpha = UINT16_MULT(srcAlpha, d->alpha);
         }
 
         dst += dstRowSize;

@@ -141,9 +141,9 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
                                view->actionCollection(),
                                "paintops");
 
-    m_brushWidget -> setFixedSize( 26, 26 );
-    m_patternWidget -> setFixedSize( 26, 26 );
-    m_gradientWidget -> setFixedSize( 26, 26 );
+    m_brushWidget->setFixedSize( 26, 26 );
+    m_patternWidget->setFixedSize( 26, 26 );
+    m_gradientWidget->setFixedSize( 26, 26 );
 
     createBrushesChooser(m_view);
     createPatternsChooser(m_view);
@@ -161,26 +161,26 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 void KisControlFrame::slotSetBrush(KoIconItem *item)
 {
     if (item)
-        m_brushWidget -> slotSetItem(*item);
+        m_brushWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetPattern(KoIconItem *item)
 {
     if (item)
-        m_patternWidget -> slotSetItem(*item);
+        m_patternWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotSetGradient(KoIconItem *item)
 {
     if (item)
-        m_gradientWidget -> slotSetItem(*item);
+        m_gradientWidget->slotSetItem(*item);
 }
 
 void KisControlFrame::slotBrushChanged(KisBrush * brush)
 {
         KisIconItem *item;
 
-        if((item = m_brushMediator -> itemFor(brush)))
+        if((item = m_brushMediator->itemFor(brush)))
         {
                 slotSetBrush(item);
         } else {
@@ -195,7 +195,7 @@ void KisControlFrame::slotPatternChanged(KisPattern * pattern)
         if (!pattern)
                 return;
 
-        if ( (item = m_patternMediator -> itemFor(pattern)) )
+        if ( (item = m_patternMediator->itemFor(pattern)) )
                 slotSetPattern(item);
         else
                 slotSetPattern( new KisIconItem(pattern) );
@@ -208,7 +208,7 @@ void KisControlFrame::slotGradientChanged(KisGradient * gradient)
         if (!gradient)
                 return;
 
-        if ( (item = m_gradientMediator -> itemFor(gradient)) )
+        if ( (item = m_gradientMediator->itemFor(gradient)) )
                 slotSetGradient(item);
         else
                 slotSetGradient( new KisIconItem(gradient) );
@@ -238,13 +238,13 @@ void KisControlFrame::createBrushesChooser(KisView * view)
 
     KisCustomBrush* customBrushes = new KisCustomBrush(m_brushesTab, "custombrush",
             i18n("Custom Brush"), m_view);
-    m_brushesTab -> addTab( customBrushes, i18n("Custom Brush"));
+    m_brushesTab->addTab( customBrushes, i18n("Custom Brush"));
     connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
             m_view, SLOT(brushActivated(KisResource*)));
 #ifdef HAVE_TEXT_BRUSH
     KisTextBrush* textBrushes = new KisTextBrush(m_brushesTab, "textbrush",
             i18n("Text Brush")/*, m_view*/);
-    m_brushesTab -> addTab( textBrushes, i18n("Text Brush"));
+    m_brushesTab->addTab( textBrushes, i18n("Text Brush"));
     connect(textBrushes, SIGNAL(activatedResource(KisResource*)),
             m_view, SLOT(brushActivated(KisResource*)));
 #endif
@@ -254,15 +254,15 @@ void KisControlFrame::createBrushesChooser(KisView * view)
     connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance() -> get("ImagePipeBrushServer");
-    m_brushMediator -> connectServer(rServer);
-    rServer = KisResourceServerRegistry::instance() -> get("BrushServer");
-    m_brushMediator -> connectServer(rServer);
+    rServer = KisResourceServerRegistry::instance()->get("ImagePipeBrushServer");
+    m_brushMediator->connectServer(rServer);
+    rServer = KisResourceServerRegistry::instance()->get("BrushServer");
+    m_brushMediator->connectServer(rServer);
 
     KisControlFrame::connect(view, SIGNAL(brushChanged(KisBrush *)), this, SLOT(slotBrushChanged( KisBrush *)));
     m_brushChooser->setCurrent( 0 );
     m_brushMediator->setActiveItem( m_brushChooser->currentItem() );
-    customBrushes -> setResourceServer(rServer);
+    customBrushes->setResourceServer(rServer);
 
     m_autobrush->activate();
 }
@@ -287,8 +287,8 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 
     KisCustomPattern* customPatterns = new KisCustomPattern(m_patternsTab, "custompatterns",
             i18n("Custom Pattern"), m_view);
-    customPatterns -> setFont(m_font);
-    m_patternsTab -> addTab( customPatterns, i18n("Custom Pattern"));
+    customPatterns->setFont(m_font);
+    m_patternsTab->addTab( customPatterns, i18n("Custom Pattern"));
 
 
     m_patternMediator = new KisResourceMediator( chooser, view);
@@ -297,14 +297,14 @@ void KisControlFrame::createPatternsChooser(KisView * view)
             view, SLOT(patternActivated(KisResource*)));
 
     KisResourceServerBase* rServer;
-    rServer = KisResourceServerRegistry::instance() -> get("PatternServer");
-    m_patternMediator -> connectServer(rServer);
+    rServer = KisResourceServerRegistry::instance()->get("PatternServer");
+    m_patternMediator->connectServer(rServer);
 
     KisControlFrame::connect(view, SIGNAL(patternChanged(KisPattern *)), this, SLOT(slotPatternChanged( KisPattern *)));
     chooser->setCurrent( 0 );
     m_patternMediator->setActiveItem( chooser->currentItem() );
 
-    customPatterns -> setResourceServer(rServer);
+    customPatterns->setResourceServer(rServer);
 }
 
 
@@ -332,7 +332,7 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("GradientServer");
-    m_gradientMediator -> connectServer(rServer);
+    m_gradientMediator->connectServer(rServer);
 
     connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
     m_gradientChooser->setCurrent( 0 );

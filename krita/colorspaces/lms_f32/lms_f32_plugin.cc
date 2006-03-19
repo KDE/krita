@@ -48,9 +48,9 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const char *name, const QStringList 
         KisColorSpace * colorSpaceLMSF32  = new KisLmsF32ColorSpace(f, 0);
 
         KisColorSpaceFactory * csf  = new KisLmsF32ColorSpaceFactory();
-        f -> add(csf);
+        f->add(csf);
 
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
             (KisID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32) );
     }

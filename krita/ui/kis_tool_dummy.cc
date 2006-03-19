@@ -54,12 +54,12 @@ void KisToolDummy::update(KisCanvasSubject *subject)
 
 void KisToolDummy::buttonPress(KisButtonPressEvent *e)
 {
-    if (m_subject && !m_dragging && e -> button() == Qt::LeftButton) {
-        KisCanvasController *controller = m_subject -> canvasController();
+    if (m_subject && !m_dragging && e->button() == Qt::LeftButton) {
+        KisCanvasController *controller = m_subject->canvasController();
 
-        m_origScrollX = controller -> horzValue();
-        m_origScrollY = controller -> vertValue();
-        m_dragPos = controller -> windowToView(e -> pos());
+        m_origScrollX = controller->horzValue();
+        m_origScrollY = controller->vertValue();
+        m_dragPos = controller->windowToView(e->pos());
         m_dragging = true;
     }
 }
@@ -67,28 +67,28 @@ void KisToolDummy::buttonPress(KisButtonPressEvent *e)
 void KisToolDummy::move(KisMoveEvent *e)
 {
     if (m_subject && m_dragging) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
 
-        KisPoint currPos = controller -> windowToView(e -> pos());
+        KisPoint currPos = controller->windowToView(e->pos());
         KisPoint delta = currPos - m_dragPos;
-        controller -> scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
+        controller->scrollTo(m_origScrollX - delta.floorX(), m_origScrollY - delta.floorY());
     }
 }
 
 void KisToolDummy::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && m_dragging && e -> button() == Qt::LeftButton) {
+    if (m_subject && m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
     }
 }
 
 void KisToolDummy::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Dummy"), "tool_dummy", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
-        m_action -> setExclusiveGroup("tools");
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

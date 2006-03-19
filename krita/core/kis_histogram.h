@@ -108,7 +108,7 @@ public:
     /** The information on the current selection for the current channel */
     Calculations selectionCalculations();
 
-    inline Q_UINT32 getValue(Q_UINT8 i) { return m_producer -> getBinAt(m_channel, i); }
+    inline Q_UINT32 getValue(Q_UINT8 i) { return m_producer->getBinAt(m_channel, i); }
 
     inline enumHistogramType getHistogramType() { return m_type; }
     inline void setHistogramType(enumHistogramType type) { m_type = type; }

@@ -57,7 +57,7 @@ public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
     static inline KisID id() { return KisID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
-    virtual bool supportsPainting() { return true; }
+    virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
     virtual bool supportsThreading() { return false; };

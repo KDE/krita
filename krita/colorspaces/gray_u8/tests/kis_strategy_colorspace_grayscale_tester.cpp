@@ -55,26 +55,26 @@ void KisGrayColorSpaceTester::testBasics()
     pixel[KisGrayColorSpace::PIXEL_GRAY] = 255;
     pixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA] = 128;
 
-    QString valueText = cs -> channelValueText(pixel, GRAY_CHANNEL);
+    QString valueText = cs->channelValueText(pixel, GRAY_CHANNEL);
     CHECK(valueText, QString("255"));
 
-    valueText = cs -> channelValueText(pixel, ALPHA_CHANNEL);
+    valueText = cs->channelValueText(pixel, ALPHA_CHANNEL);
     CHECK(valueText, QString("128"));
 
-    valueText = cs -> normalisedChannelValueText(pixel, GRAY_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, GRAY_CHANNEL);
     CHECK(valueText, QString().setNum(1.0));
 
-    valueText = cs -> normalisedChannelValueText(pixel, ALPHA_CHANNEL);
+    valueText = cs->normalisedChannelValueText(pixel, ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(128.0 / 255.0));
 
-    cs -> setPixel(pixel, 128, 192l);
+    cs->setPixel(pixel, 128, 192l);
     CHECK((uint)pixel[KisGrayColorSpace::PIXEL_GRAY], 128u);
     CHECK((uint)pixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 192u);
 
     Q_UINT8 gray;
     Q_UINT8 alpha;
 
-    cs -> getPixel(pixel, &gray, &alpha);
+    cs->getPixel(pixel, &gray, &alpha);
     CHECK((uint)gray, 128u);
     CHECK((uint)alpha, 192u);
 
@@ -105,7 +105,7 @@ void KisGrayColorSpaceTester::testMixColors()
     weights[0] = 255;
     weights[1] = 0;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 255);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 255);
@@ -113,7 +113,7 @@ void KisGrayColorSpaceTester::testMixColors()
     weights[0] = 0;
     weights[1] = 255;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 0);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 0);
@@ -121,7 +121,7 @@ void KisGrayColorSpaceTester::testMixColors()
     weights[0] = 128;
     weights[1] = 127;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
      
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 255);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 128);
@@ -132,7 +132,7 @@ void KisGrayColorSpaceTester::testMixColors()
     pixel2[KisGrayColorSpace::PIXEL_GRAY] = 100;
     pixel2[KisGrayColorSpace::PIXEL_GRAY_ALPHA] = 255;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 150);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 255);
@@ -146,7 +146,7 @@ void KisGrayColorSpaceTester::testMixColors()
     weights[0] = 89;
     weights[1] = 166;
 
-    cs -> mixColors(pixelPtrs, weights, 2, outputPixel);
+    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 255);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 165);

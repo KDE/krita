@@ -89,9 +89,9 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
 void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
 {
     if (y > h -1) y = h -1;
-    Q_UINT32 pixelSize = src -> pixelSize();
+    Q_UINT32 pixelSize = src->pixelSize();
 
-    src -> readBytes( data, x, y, w, 1 );
+    src->readBytes( data, x, y, w, 1 );
 
     for (Q_UINT32 b = 0; b < pixelSize; b++) {
         int offset = pixelSize - b;
@@ -105,12 +105,12 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x
 
 void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
-    QRect rect = rc; //src -> exactBounds();
+    QRect rect = rc; //src->exactBounds();
     Q_UINT32 x = rect.x();
     Q_UINT32 y = rect.y();
     Q_UINT32 width = rect.width();
     Q_UINT32 height = rect.height();
-    Q_UINT32 pixelSize = src -> pixelSize();
+    Q_UINT32 pixelSize = src->pixelSize();
 
     setProgressTotalSteps( height );
     setProgressStage(i18n("Applying sobel filter..."),0);
@@ -173,7 +173,7 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
             nr = tmp;
 
             //store the dest
-            dst -> writeBytes(dest, x, row, width, 1);
+            dst->writeBytes(dest, x, row, width, 1);
 
             if ( makeOpaque )
                 {

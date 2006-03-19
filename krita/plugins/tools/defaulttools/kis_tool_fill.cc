@@ -66,7 +66,7 @@ KisToolFill::KisToolFill()
 void KisToolFill::update(KisCanvasSubject *subject)
 {
     m_subject = subject;
-    m_currentImage = subject -> currentImg();
+    m_currentImage = subject->currentImg();
 
     super::update(m_subject);
 }
@@ -81,46 +81,45 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
-        KisPaintDeviceSP filled = new KisPaintDevice(device -> colorSpace(),  "filled");
+        KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace(),  "filled");
         KisFillPainter painter(filled);
         // XXX: The fillRect methods should either set the dirty rect or return it,
         // so we don't have to blit over all of the image, but only the part that's
         // really filled.
         if (m_usePattern)
-            painter.fillRect(0, 0, m_currentImage -> width(), m_currentImage -> height(),
-                             m_subject -> currentPattern());
+            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+                             m_subject->currentPattern());
         else
-            painter.fillRect(0, 0, m_currentImage -> width(), m_currentImage -> height(),
-                             m_subject -> fgColor(), m_opacity);
+            painter.fillRect(0, 0, m_currentImage->width(), m_currentImage->height(),
+                             m_subject->fgColor(), m_opacity);
         painter.end();
         KisPainter painter2(device);
-        painter2.beginTransaction(i18n("Fill"));
+        if (m_currentImage->undo()) painter2.beginTransaction(i18n("Fill"));
         painter2.bltSelection(0, 0, m_compositeOp, filled, m_opacity,
-                              0, 0, m_currentImage -> width(), m_currentImage -> height());
+                              0, 0, m_currentImage->width(), m_currentImage->height());
 
         device->setDirty(filled->extent());
         notifyModified();
 
-        KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-        if (adapter) {
-            adapter -> addCommand(painter2.endTransaction());
+        if (m_currentImage->undo()) {
+            m_currentImage->undoAdapter()->addCommand(painter2.endTransaction());
         }
         return true;
     }
 
     KisFillPainter painter(device);
-    painter.beginTransaction(i18n("Flood Fill"));
-    painter.setPaintColor(m_subject -> fgColor());
+    if (m_currentImage->undo()) painter.beginTransaction(i18n("Flood Fill"));
+    painter.setPaintColor(m_subject->fgColor());
     painter.setOpacity(m_opacity);
     painter.setFillThreshold(m_threshold);
     painter.setCompositeOp(m_compositeOp);
-    painter.setPattern(m_subject -> currentPattern());
+    painter.setPattern(m_subject->currentPattern());
     painter.setSampleMerged(m_sampleMerged);
     painter.setCareForSelection(true);
 
-    KisProgressDisplayInterface *progress = m_subject -> progressDisplay();
+    KisProgressDisplayInterface *progress = m_subject->progressDisplay();
     if (progress) {
-        progress -> setSubject(&painter, true, true);
+        progress->setSubject(&painter, true, true);
     }
 
     if (m_usePattern)
@@ -131,9 +130,8 @@ bool KisToolFill::flood(int startX, int startY)
     device->setDirty(painter.dirtyRect());
     notifyModified();
 
-    KisUndoAdapter *adapter = m_currentImage -> undoAdapter();
-    if (adapter) {
-        adapter -> addCommand(painter.endTransaction());
+    if (m_currentImage->undo()) {
+        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
     }
 
     return true;
@@ -142,12 +140,12 @@ bool KisToolFill::flood(int startX, int startY)
 void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
     if (!m_subject) return;
-    if (!m_currentImage || !m_currentImage -> activeDevice()) return;
+    if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != QMouseEvent::LeftButton) return;
     int x, y;
-    x = e -> pos().floorX();
-    y = e -> pos().floorY();
-    if (!m_currentImage -> bounds().contains(x, y)) {
+    x = e->pos().floorX();
+    y = e->pos().floorY();
+    if (!m_currentImage->bounds().contains(x, y)) {
         return;
     }
     flood(x, y);
@@ -160,8 +158,8 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KIntNumInput( widget, "int_widget");
-    m_slThreshold -> setRange( 0, 255);
-    m_slThreshold -> setValue(m_threshold);
+    m_slThreshold->setRange( 0, 255);
+    m_slThreshold->setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
     m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
@@ -173,7 +171,7 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
 
     m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
-    m_checkFillSelection -> setChecked(m_fillOnlySelection);
+    m_checkFillSelection->setChecked(m_fillOnlySelection);
     connect(m_checkFillSelection, SIGNAL(stateChanged(int)), this, SLOT(slotSetFillSelection(int)));
 
     addOptionWidgetOption(m_slThreshold, m_lbThreshold);
@@ -213,7 +211,7 @@ void KisToolFill::slotSetFillSelection(int state)
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Fill"),
@@ -223,8 +221,8 @@ void KisToolFill::setup(KActionCollection *collection)
                         SLOT(activate()),
                         collection,
                         name());
-        m_action -> setToolTip(i18n("Contiguous fill"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Contiguous fill"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

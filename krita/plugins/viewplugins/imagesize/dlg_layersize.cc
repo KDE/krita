@@ -55,11 +55,11 @@ DlgLayerSize::DlgLayerSize( QWidget *  parent,
     m_page = new WdgLayerSize(this, "layer_size");
     Q_CHECK_PTR(m_page);
     
-    m_page -> cmbFilterType -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
-    m_page -> cmbFilterType -> setCurrentText("Mitchell");
+    m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    m_page->cmbFilterType->setCurrentText("Mitchell");
 
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
     unblockAll();
 
@@ -78,8 +78,8 @@ void DlgLayerSize::setWidth(Q_UINT32 w)
 {
     blockAll();
 
-    m_page -> lblWidthOriginal -> setNum((int)w);
-    m_page -> intWidth -> setValue(w);
+    m_page->lblWidthOriginal->setNum((int)w);
+    m_page->intWidth->setValue(w);
     m_oldW = w;
     m_origW = w;
 
@@ -90,7 +90,7 @@ void DlgLayerSize::setWidthPercent(Q_UINT32 w)
 {
     blockAll();
 
-    m_page -> intWidthPercent -> setValue(w);
+    m_page->intWidthPercent->setValue(w);
     m_oldWPercent = w;
 
     unblockAll();
@@ -99,22 +99,22 @@ void DlgLayerSize::setWidthPercent(Q_UINT32 w)
 
 void DlgLayerSize::setMaximumWidth(Q_UINT32 w)
 {
-    m_page -> intWidth -> setMaxValue(w);
+    m_page->intWidth->setMaxValue(w);
     m_maxW = w;
 }
 
 Q_INT32 DlgLayerSize::width()
 {
     //return (Q_INT32)qRound(m_oldW);
-    return (Q_INT32)qRound(m_page -> intWidth -> value());
+    return (Q_INT32)qRound(m_page->intWidth->value());
 }
 
 void DlgLayerSize::setHeight(Q_UINT32 h)
 {
     blockAll();
 
-    m_page -> lblHeightOriginal -> setNum((int)h);
-    m_page -> intHeight -> setValue(h);
+    m_page->lblHeightOriginal->setNum((int)h);
+    m_page->intHeight->setValue(h);
     m_oldH = h;
     m_origH = h;
 
@@ -126,7 +126,7 @@ void DlgLayerSize::setHeightPercent(Q_UINT32 h)
 {
     blockAll();
 
-    m_page -> intHeightPercent -> setValue(h);
+    m_page->intHeightPercent->setValue(h);
     m_oldHPercent = h;
 
     unblockAll();
@@ -134,20 +134,20 @@ void DlgLayerSize::setHeightPercent(Q_UINT32 h)
 
 void DlgLayerSize::setMaximumHeight(Q_UINT32 h)
 {
-    m_page -> intHeight -> setMaxValue(h);
+    m_page->intHeight->setMaxValue(h);
     m_maxH = h;
 }
 
 Q_INT32 DlgLayerSize::height()
 {
     //return (Q_INT32)qRound(m_oldH);
-    return (Q_INT32)qRound(m_page -> intHeight -> value());
+    return (Q_INT32)qRound(m_page->intHeight->value());
 }
 
 KisFilterStrategy *DlgLayerSize::filterType()
 {
-    KisID filterID = m_page -> cmbFilterType -> currentItem();
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+    KisID filterID = m_page->cmbFilterType->currentItem();
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(filterID);
     return filter;
 }
 
@@ -165,14 +165,14 @@ void DlgLayerSize::slotWidthPixelsChanged(int w)
 
     double wPercent = double(w) * 100 / double(m_origW);
 
-    m_page -> intWidthPercent -> setValue(qRound(wPercent));
+    m_page->intWidthPercent->setValue(qRound(wPercent));
 
     // Set height in pixels and percent of necessary
-    if (m_page -> chkConstrain -> isChecked()) {
-        m_page -> intHeightPercent -> setValue(qRound(wPercent));
+    if (m_page->chkConstrain->isChecked()) {
+        m_page->intHeightPercent->setValue(qRound(wPercent));
 
         m_oldH = qRound(m_origH * wPercent / 100);
-        m_page -> intHeight -> setValue(qRound(m_oldH));
+        m_page->intHeight->setValue(qRound(m_oldH));
 
     }
     m_oldW = w;
@@ -186,14 +186,14 @@ void DlgLayerSize::slotHeightPixelsChanged(int h)
 
     double hPercent = double(h) * 100 / double(m_origH);
 
-    m_page -> intHeightPercent -> setValue(qRound(hPercent));
+    m_page->intHeightPercent->setValue(qRound(hPercent));
 
     // Set width in pixels and percent of necessary
-    if (m_page -> chkConstrain -> isChecked()) {
-        m_page -> intWidthPercent -> setValue(qRound(hPercent));
+    if (m_page->chkConstrain->isChecked()) {
+        m_page->intWidthPercent->setValue(qRound(hPercent));
 
         m_oldW = qRound(m_origW * hPercent / 100);
-        m_page -> intWidth -> setValue(qRound(m_oldW));
+        m_page->intWidth->setValue(qRound(m_oldW));
 
     }
     m_oldH = h;
@@ -205,11 +205,11 @@ void DlgLayerSize::slotWidthPercentChanged(int w)
 {
     blockAll();
 
-    m_page -> intWidth -> setValue(qRound(w * m_origW / 100));
+    m_page->intWidth->setValue(qRound(w * m_origW / 100));
 
-    if (m_page -> chkConstrain -> isChecked()) {
-        m_page -> intHeightPercent -> setValue(w);
-        m_page -> intHeight -> setValue(qRound( w * m_origH / 100));
+    if (m_page->chkConstrain->isChecked()) {
+        m_page->intHeightPercent->setValue(w);
+        m_page->intHeight->setValue(qRound( w * m_origH / 100));
     }
 
     unblockAll();
@@ -219,10 +219,10 @@ void DlgLayerSize::slotHeightPercentChanged(int h)
 {
     blockAll();
 
-    m_page -> intHeight -> setValue(qRound(h * m_origH / 100));
-    if (m_page -> chkConstrain -> isChecked()) {
-        m_page -> intWidthPercent -> setValue(h);
-        m_page -> intWidth -> setValue(qRound( h * m_origW / 100));
+    m_page->intHeight->setValue(qRound(h * m_origH / 100));
+    if (m_page->chkConstrain->isChecked()) {
+        m_page->intWidthPercent->setValue(h);
+        m_page->intWidth->setValue(qRound( h * m_origW / 100));
     }
 
     unblockAll();
@@ -233,26 +233,26 @@ void DlgLayerSize::slotHeightPercentChanged(int h)
 void DlgLayerSize::blockAll()
 {
     // XXX: more efficient to use blockSignals?
-    m_page -> intWidth -> disconnect();
-    m_page -> intHeight -> disconnect();
-    m_page -> intWidthPercent -> disconnect();
-    m_page -> intHeightPercent -> disconnect();
+    m_page->intWidth->disconnect();
+    m_page->intHeight->disconnect();
+    m_page->intWidthPercent->disconnect();
+    m_page->intHeightPercent->disconnect();
 
 }
 
 void DlgLayerSize::unblockAll()
 {
     // XXX: more efficient to use blockSignals?
-    connect (m_page -> intWidth, SIGNAL(valueChanged(int)),
+    connect (m_page->intWidth, SIGNAL(valueChanged(int)),
          this, SLOT(slotWidthPixelsChanged(int)));
 
-    connect (m_page -> intHeight, SIGNAL(valueChanged(int)),
+    connect (m_page->intHeight, SIGNAL(valueChanged(int)),
          this, SLOT(slotHeightPixelsChanged(int)));
 
-    connect (m_page -> intWidthPercent, SIGNAL(valueChanged(int)),
+    connect (m_page->intWidthPercent, SIGNAL(valueChanged(int)),
          this, SLOT(slotWidthPercentChanged(int)));
 
-    connect (m_page -> intHeightPercent, SIGNAL(valueChanged(int)),
+    connect (m_page->intHeightPercent, SIGNAL(valueChanged(int)),
          this, SLOT(slotHeightPercentChanged(int)));
 
 

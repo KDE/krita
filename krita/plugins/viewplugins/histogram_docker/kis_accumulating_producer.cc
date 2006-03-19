@@ -45,8 +45,8 @@ public:
 KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source)
     : KisBasicHistogramProducer(
         KisID("ACCHISTO", ""),
-        source -> at(0) -> channels().count(),
-        source -> at(0) -> numberOfBins(),
+        source->at(0)->channels().count(),
+        source->at(0)->numberOfBins(),
         0),
       m_source(source)
 {
@@ -54,34 +54,34 @@ KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHist
 }
 
 KisAccumulatingHistogramProducer::~KisAccumulatingHistogramProducer() {
-    m_thread -> cancel();
-    m_thread -> wait();
+    m_thread->cancel();
+    m_thread->wait();
     delete m_thread;
 }
 
 void KisAccumulatingHistogramProducer::addRegionsToBinAsync() {
-    m_thread -> cancel();
-    m_thread -> wait();
+    m_thread->cancel();
+    m_thread->wait();
     clear();
-    m_thread -> start();
+    m_thread->start();
 }
 
 void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
     m_stop = false;
 
-    uint count = m_source -> m_source -> count(); // Talk about bad naming schemes...
-    KisCachedHistogramObserver::Producers* source = m_source -> m_source;
-    QValueVector<vBins>& bins = m_source -> m_bins;
-    int channels = m_source -> m_channels;
-    int nrOfBins = m_source -> m_nrOfBins;
+    uint count = m_source->m_source->count(); // Talk about bad naming schemes...
+    KisCachedHistogramObserver::Producers* source = m_source->m_source;
+    QValueVector<vBins>& bins = m_source->m_bins;
+    int channels = m_source->m_channels;
+    int nrOfBins = m_source->m_nrOfBins;
 
     for (uint i = 0; i < count && !m_stop; i++) {
-        KisHistogramProducer* p = source -> at(i);
-        m_source -> m_count += p -> count();
+        KisHistogramProducer* p = source->at(i);
+        m_source->m_count += p->count();
 
         for (int j = 0; j < channels && !m_stop; j++) {
             for (int k = 0; k < nrOfBins; k++) {
-                bins.at(j).at(k) += p -> getBinAt(j, k);
+                bins.at(j).at(k) += p->getBinAt(j, k);
             }
         }
     }
@@ -93,7 +93,7 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 }
 
 void KisAccumulatingHistogramProducer::customEvent(QCustomEvent* e) {
-    if (e -> type() == EmitCompletedType) {
+    if (e->type() == EmitCompletedType) {
         emit completed();
     }
 }

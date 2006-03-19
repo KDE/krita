@@ -62,7 +62,7 @@ public:
         kdDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
                 << ", temporary: " << layer->temporary() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
-        if (!layer -> visible())
+        if (!layer->visible())
             return true;
 
         Q_INT32 sx, sy, dx, dy, w, h;
@@ -93,7 +93,7 @@ public:
         kdDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
                 
-        if (!layer -> visible())
+        if (!layer->visible())
             return true;
         
         Q_INT32 sx, sy, dx, dy, w, h;
@@ -124,16 +124,16 @@ public:
         if (m_projection == 0) {
             return false;
         }
-        if (!layer -> visible())
+        if (!layer->visible())
             return true;
 
-        KisPaintDeviceSP dev(layer -> prepareProjection(m_projection, m_rc));
+        KisPaintDeviceSP dev(layer->prepareProjection(m_projection, m_rc));
         if (!dev)
             return true;
 
         Q_INT32 sx, sy, dx, dy, w, h;
 
-        QRect rc = dev -> extent() & m_rc;
+        QRect rc = dev->extent() & m_rc;
 
         sx= rc.left();
         sy = rc.top();

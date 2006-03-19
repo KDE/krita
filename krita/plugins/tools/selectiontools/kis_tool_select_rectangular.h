@@ -81,7 +81,7 @@ public:
 
     virtual KisTool * createTool(KActionCollection * ac) {
         KisTool * t =  new KisToolSelectRectangular();
-        t -> setup(ac);
+        t->setup(ac);
         Q_CHECK_PTR(t);
         return t;
     }

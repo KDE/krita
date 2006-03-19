@@ -46,13 +46,13 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
     for( Q_INT32 i = 0; i < m_nbboolWidgets; ++i)
     {
         m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
-        m_boolWidgets[i] -> setChecked( iwparam[i].initvalue );
-        m_boolWidgets[i] -> setText( iwparam[i].label );
+        m_boolWidgets[i]->setChecked( iwparam[i].initvalue );
+        m_boolWidgets[i]->setText( iwparam[i].label );
         connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
-        widgetLayout -> add( m_boolWidgets[i]);
+        widgetLayout->add( m_boolWidgets[i]);
     }
 //     QSpacerItem * sp = new QSpacerItem(1, 1);
-    widgetLayout -> addStretch();
+    widgetLayout->addStretch();
 }
 
 

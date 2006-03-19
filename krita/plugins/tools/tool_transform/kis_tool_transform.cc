@@ -158,7 +158,7 @@ void KisToolTransform::deactivate()
 {
     if (m_subject && m_subject->undoAdapter()) m_subject->undoAdapter()->removeCommandHistoryListener( this );
 
-    KisImageSP img = m_subject -> currentImg();
+    KisImageSP img = m_subject->currentImg();
     if (!img) return;
 
     paintOutline();
@@ -171,15 +171,15 @@ void KisToolTransform::activate()
         //connect(m_subject, commandExecuted(KCommand *c), this, notifyCommandAdded( KCommand * c));
         m_subject->undoAdapter()->setCommandHistoryListener( this );
 
-        KisToolControllerInterface *controller = m_subject -> toolController();
+        KisToolControllerInterface *controller = m_subject->toolController();
 
         if (controller)
             controller->setCurrentTool(this);
 
         TransformCmd * cmd=0;
 
-        if(m_subject -> currentImg()->undoAdapter()->presentCommand())
-            cmd = dynamic_cast<TransformCmd*>(m_subject -> currentImg()->undoAdapter()->presentCommand());
+        if(m_subject->currentImg()->undoAdapter()->presentCommand())
+            cmd = dynamic_cast<TransformCmd*>(m_subject->currentImg()->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             initHandles();
@@ -198,9 +198,9 @@ void KisToolTransform::activate()
 void KisToolTransform::initHandles()
 {
     Q_INT32 x,y,w,h;
-    KisImageSP img = m_subject -> currentImg();
+    KisImageSP img = m_subject->currentImg();
 
-    KisPaintDeviceSP dev = img -> activeDevice();
+    KisPaintDeviceSP dev = img->activeDevice();
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());
@@ -228,7 +228,7 @@ void KisToolTransform::initHandles()
     m_translateX = m_org_cenX;
     m_translateY = m_org_cenY;
 
-    m_subject -> canvasController() ->updateCanvas();
+    m_subject->canvasController() ->updateCanvas();
 }
 
 void KisToolTransform::paint(KisCanvasPainter& gc)
@@ -245,48 +245,48 @@ void KisToolTransform::paint(KisCanvasPainter& gc, const QRect& rc)
 void KisToolTransform::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject) {
-        KisImageSP img = m_subject -> currentImg();
+        KisImageSP img = m_subject->currentImg();
 
-        if (img && img -> activeDevice() && e -> button() == LeftButton) {
+        if (img && img->activeDevice() && e->button() == LeftButton) {
             switch(m_function)
             {
                 case ROTATE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                         - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
                     m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
                     m_clickoffset = QPoint(0, 0);
                     break;
                 case MOVE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                         - QPoint(static_cast<int>(m_translateX),static_cast<int>(m_translateY));
                     break;
                 case TOPSCALE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                             - QPoint((m_topleft + m_topright)/2);
                     break;
                 case TOPRIGHTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() - m_topright;
+                    m_clickoffset = e->pos().floorQPoint() - m_topright;
                     break;
                 case RIGHTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                             - QPoint((m_topright + m_bottomright)/2);
                     break;
                 case BOTTOMRIGHTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() - m_bottomright;
+                    m_clickoffset = e->pos().floorQPoint() - m_bottomright;
                     break;
                 case BOTTOMSCALE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                             - QPoint((m_bottomleft + m_bottomright)/2);
                     break;
                 case BOTTOMLEFTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() - m_bottomleft;
+                    m_clickoffset = e->pos().floorQPoint() - m_bottomleft;
                     break;
                 case LEFTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint()
+                    m_clickoffset = e->pos().floorQPoint()
                             - QPoint((m_topleft + m_bottomleft)/2);
                     break;
                 case TOPLEFTSCALE:
-                    m_clickoffset = e -> pos().floorQPoint() - m_topleft;
+                    m_clickoffset = e->pos().floorQPoint() - m_topleft;
                     break;
             }
             m_selecting = true;
@@ -352,7 +352,7 @@ void KisToolTransform::setFunctionalCursor()
 void KisToolTransform::move(KisMoveEvent *e)
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
 
         Q_ASSERT(controller);
         QPoint topleft = m_topleft;
@@ -360,7 +360,7 @@ void KisToolTransform::move(KisMoveEvent *e)
         QPoint bottomleft = m_bottomleft;
         QPoint bottomright = m_bottomright;
 
-        QPoint mousePos = e -> pos().floorQPoint();
+        QPoint mousePos = e->pos().floorQPoint();
 
         if (m_subject && m_selecting) {
             paintOutline();
@@ -610,7 +610,7 @@ void KisToolTransform::move(KisMoveEvent *e)
 
 void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 {
-    KisImageSP img = m_subject -> currentImg();
+    KisImageSP img = m_subject->currentImg();
 
     if (!img)
         return;
@@ -627,8 +627,8 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
 void KisToolTransform::paintOutline()
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
-        KisCanvas *canvas = controller -> kiscanvas();
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
         KisCanvasPainter gc(canvas);
         QRect rc;
 
@@ -663,7 +663,7 @@ void KisToolTransform::recalcOutline()
 void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
-        KisCanvasController *controller = m_subject -> canvasController();
+        KisCanvasController *controller = m_subject->canvasController();
         RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
@@ -671,10 +671,10 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
         Q_ASSERT(controller);
 
         recalcOutline();
-        QPoint topleft = controller -> windowToView(m_topleft);
-        QPoint topright = controller -> windowToView(m_topright);
-        QPoint bottomleft = controller -> windowToView(m_bottomleft);
-        QPoint bottomright = controller -> windowToView(m_bottomright);
+        QPoint topleft = controller->windowToView(m_topleft);
+        QPoint topright = controller->windowToView(m_topright);
+        QPoint bottomleft = controller->windowToView(m_bottomleft);
+        QPoint bottomright = controller->windowToView(m_bottomright);
 
         gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
@@ -702,7 +702,7 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 void KisToolTransform::transform()
 {
 
-    KisImageSP img = m_subject -> currentImg();
+    KisImageSP img = m_subject->currentImg();
 
     if (!img || !img->activeDevice())
         return;
@@ -713,7 +713,7 @@ void KisToolTransform::transform()
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, img->activeDevice().data(), m_scaleX,
-                                                            m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
+                                                  m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
@@ -756,8 +756,11 @@ void KisToolTransform::transform()
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()
     // method.
-    if (transaction && img -> undoAdapter()) {
-        img -> undoAdapter() -> addCommand(transaction);
+    if (transaction) {
+        if (img->undo())
+            img->undoAdapter()->addCommand(transaction);
+        else
+            delete transaction;
     }
 }
 
@@ -777,8 +780,8 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
     Q_UNUSED(command);
     TransformCmd * cmd=0;
 
-    if(m_subject -> currentImg()->undoAdapter()->presentCommand())
-        cmd = dynamic_cast<TransformCmd*>(m_subject -> currentImg()->undoAdapter()->presentCommand());
+    if(m_subject->currentImg()->undoAdapter()->presentCommand())
+        cmd = dynamic_cast<TransformCmd*>(m_subject->currentImg()->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours
@@ -791,13 +794,13 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
         // We should ask for tool args and orig selection
         cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
         m_origSelection = cmd->origSelection(m_startPos, m_endPos);
-        m_subject -> canvasController() ->updateCanvas();
+        m_subject->canvasController() ->updateCanvas();
     }
 }
 
 void KisToolTransform::slotSetFilter(const KisID &filterID)
 {
-    m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+    m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 }
 
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
@@ -806,21 +809,21 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
     m_optWidget = new WdgToolTransform(parent);
     Q_CHECK_PTR(m_optWidget);
 
-    m_optWidget -> cmbFilter -> clear();
-    m_optWidget -> cmbFilter -> setIDList(KisFilterStrategyRegistry::instance() -> listKeys());
+    m_optWidget->cmbFilter->clear();
+    m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 
-    m_optWidget -> cmbFilter -> setCurrentText("Mitchell");
-    connect(m_optWidget -> cmbFilter, SIGNAL(activated(const KisID &)),
+    m_optWidget->cmbFilter->setCurrentText("Mitchell");
+    connect(m_optWidget->cmbFilter, SIGNAL(activated(const KisID &)),
         this, SLOT(slotSetFilter(const KisID &)));
 
-    KisID filterID = m_optWidget -> cmbFilter -> currentItem();
-    m_filter = KisFilterStrategyRegistry::instance() -> get(filterID);
+    KisID filterID = m_optWidget->cmbFilter->currentItem();
+    m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 
 /*
-    connect(m_optWidget -> intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
-    connect(m_optWidget -> intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
-    connect(m_optWidget -> intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
-    connect(m_optWidget -> intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
+    connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
+    connect(m_optWidget->intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
+    connect(m_optWidget->intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
+    connect(m_optWidget->intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
 */
     return m_optWidget;
 }
@@ -832,7 +835,7 @@ QWidget* KisToolTransform::optionWidget()
 
 void KisToolTransform::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection -> action(name()));
+    m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Transform"),
@@ -843,8 +846,8 @@ void KisToolTransform::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action -> setToolTip(i18n("Transform a layer or a selection"));
-        m_action -> setExclusiveGroup("tools");
+        m_action->setToolTip(i18n("Transform a layer or a selection"));
+        m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }
 }

@@ -47,9 +47,9 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList 
         KisColorSpace * colorSpaceRGBF32  = new KisRgbF32ColorSpace(f, 0);
 
         KisColorSpaceFactory * csf  = new KisRgbF32ColorSpaceFactory();
-        f -> add(csf);
+        f->add(csf);
 
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
             (KisID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
     }

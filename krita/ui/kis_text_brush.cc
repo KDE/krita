@@ -63,8 +63,8 @@ void KisTextBrush::getFont()
 
 void KisTextBrush::rebuildTextBrush()
 {
-	lblFont -> setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
-	lblFont -> setFont(m_font);
+	lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
+	lblFont->setFont(m_font);
 	m_textBrushResource->setFont(m_font);
 	m_textBrushResource->setText(lineEdit->text());
 	m_textBrushResource->updateBrush();

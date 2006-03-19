@@ -92,7 +92,7 @@ private:
     KisColorSpace* m_cs;
     KisHistogramProducerSP m_currentProducer;
     QValueVector<KisChannelInfo *> m_channels;
-    // Maps the channels in m_channels to a real channel offset in the producer -> channels()
+    // Maps the channels in m_channels to a real channel offset in the producer->channels()
     QValueVector<Q_INT32> m_channelToOffset;
     QStringList m_channelStrings;
     bool m_color;

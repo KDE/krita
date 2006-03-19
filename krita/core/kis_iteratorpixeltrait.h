@@ -96,7 +96,7 @@ public:
     inline Q_UINT8 selectedness() const
         {
             if (m_selectionIterator)
-                return *(m_selectionIterator -> rawData());
+                return *(m_selectionIterator->rawData());
             else {
                 return MAX_SELECTED;
             }

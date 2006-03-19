@@ -55,19 +55,19 @@ public:
     bool visit(KisPaintLayer *layer) 
     {
         KisPaintDeviceSP dev = layer->paintDevice();
-
-        KisSelectedTransaction * t = new KisSelectedTransaction(i18n("Crop"), dev.data());
-        Q_CHECK_PTR(t);
+        KisSelectedTransaction * t = 0;
+        if (layer->undoAdapter() && layer->undoAdapter()->undo())
+            t = new KisSelectedTransaction(i18n("Crop"), dev.data());
 
         dev->crop(m_rect);
 
-        if (layer->undoAdapter()) {
+        if (layer->undoAdapter() && layer->undoAdapter()->undo()) {
             layer->undoAdapter()->addCommand(t);
         }
         
         if(m_movelayers) {
-    	    KNamedCommand * cmd = dev -> moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-    	    if(layer->undoAdapter()) {
+            if(layer->undoAdapter() && layer->undoAdapter()->undo()) {
+                KNamedCommand * cmd = dev->moveCommand(layer->x() - m_rect.x(), layer->y() - m_rect.y());
       	        layer->undoAdapter()->addCommand(cmd);
     	    }
         }

@@ -180,21 +180,20 @@ DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  p
     m_dev = dev;
     m_view = view;
 
-    m_subject = view -> canvasSubject();
+    m_subject = view->canvasSubject();
 
     m_page = new WdgColorRange(this, "color_range");
     Q_CHECK_PTR(m_page);
 
     setCaption(i18n("Color Range"));
     setMainWidget(m_page);
-    resize(m_page -> sizeHint());
+    resize(m_page->sizeHint());
 
-    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
-    Q_CHECK_PTR(m_transaction);
+    if (m_dev->image()->undo()) m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
 
-    if(! m_dev -> hasSelection())
-        m_dev -> selection() -> clear();
-    m_selection = m_dev -> selection();
+    if(! m_dev->hasSelection())
+        m_dev->selection()->clear();
+    m_selection = m_dev->selection();
 
         updatePreview();
 
@@ -208,22 +207,22 @@ DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  p
     connect(this, SIGNAL(cancelClicked()),
         this, SLOT(cancelClicked()));
 
-    connect(m_page -> chkInvert, SIGNAL(clicked()),
+    connect(m_page->chkInvert, SIGNAL(clicked()),
         this, SLOT(slotInvertClicked()));
 
-    connect(m_page -> cmbSelect, SIGNAL(activated(int)),
+    connect(m_page->cmbSelect, SIGNAL(activated(int)),
         this, SLOT(slotSelectionTypeChanged(int)));
 
-    connect (m_page -> radioAdd, SIGNAL(toggled(bool)),
+    connect (m_page->radioAdd, SIGNAL(toggled(bool)),
          this, SLOT(slotAdd(bool)));
 
-    connect (m_page -> radioSubtract, SIGNAL(toggled(bool)),
+    connect (m_page->radioSubtract, SIGNAL(toggled(bool)),
          this, SLOT(slotSubtract(bool)));
 
-    connect (m_page -> bnSelect, SIGNAL(clicked()),
+    connect (m_page->bnSelect, SIGNAL(clicked()),
         this, SLOT(slotSelectClicked()));
 
-    connect (m_page -> bnDeselect, SIGNAL(clicked()),
+    connect (m_page->bnDeselect, SIGNAL(clicked()),
         this, SLOT(slotDeselectClicked()));
 
 }
@@ -239,29 +238,29 @@ void DlgColorRange::updatePreview()
     if (!m_selection) return;
 
     Q_INT32 x, y, w, h;
-    m_dev -> exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap(m_selection -> maskImage().smoothScale(350, 350, QImage::ScaleMin));
-    m_subject -> canvasController() -> updateCanvas();
-    m_page -> pixSelection -> setPixmap(pix);
+    m_dev->exactBounds(x, y, w, h);
+    QPixmap pix = QPixmap(m_selection->maskImage().smoothScale(350, 350, QImage::ScaleMin));
+    m_subject->canvasController()->updateCanvas();
+    m_page->pixSelection->setPixmap(pix);
 }
 
 void DlgColorRange::okClicked()
 {
-    m_subject -> undoAdapter() -> addCommand(m_transaction);
+    if (m_dev->image()->undo()) m_subject->undoAdapter()->addCommand(m_transaction);
     accept();
 }
 
 void DlgColorRange::cancelClicked()
 {
-    m_transaction -> unexecute();
+    if (m_dev->image()->undo()) m_transaction->unexecute();
 
-    m_subject -> canvasController() -> updateCanvas();
+    m_subject->canvasController()->updateCanvas();
     reject();
 }
 
 void DlgColorRange::slotInvertClicked()
 {
-    m_invert = m_page -> chkInvert -> isChecked();
+    m_invert = m_page->chkInvert->isChecked();
 }
 
 void DlgColorRange::slotSelectionTypeChanged(int index)
@@ -285,16 +284,16 @@ void DlgColorRange::slotSelectClicked()
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     // XXX: Multithread this!
     Q_INT32 x, y, w, h;
-    m_dev -> exactBounds(x, y, w, h);
-    KisColorSpace * cs = m_dev -> colorSpace();
+    m_dev->exactBounds(x, y, w, h);
+    KisColorSpace * cs = m_dev->colorSpace();
     Q_UINT8 opacity;
     for (int y2 = y; y2 < h - y; ++y2) {
-        KisHLineIterator hiter = m_dev -> createHLineIterator(x, y2, w, false);
-        KisHLineIterator selIter = m_selection  -> createHLineIterator(x, y2, w, true);
+        KisHLineIterator hiter = m_dev->createHLineIterator(x, y2, w, false);
+        KisHLineIterator selIter = m_selection ->createHLineIterator(x, y2, w, true);
         while (!hiter.isDone()) {
             QColor c;
 
-            cs -> toQColor(hiter.rawData(), &c, &opacity);
+            cs->toQColor(hiter.rawData(), &c, &opacity);
             // Don't try to select transparent pixels.
             if (opacity > OPACITY_TRANSPARENT) {
                 Q_UINT8 match = matchColors(c, m_currentAction);
@@ -341,7 +340,7 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    m_dev -> selection() -> clear();
+    m_dev->selection()->clear();
     updatePreview();
 }
 

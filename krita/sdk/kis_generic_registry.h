@@ -71,7 +71,7 @@ public:
         typename storageMap::iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
             m_storage.erase(it);
-            p = it -> second;
+            p = it->second;
         }
         return p;
     }
@@ -94,7 +94,7 @@ public:
         _T p = 0;
         typename storageMap::const_iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
-            p = it -> second;
+            p = it->second;
         }
         return p;
     }

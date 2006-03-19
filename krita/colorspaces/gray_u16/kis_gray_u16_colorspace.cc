@@ -67,10 +67,10 @@ void KisGrayU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        Q_UINT32 alpha = pixel -> alpha;
+        Q_UINT32 alpha = pixel->alpha;
         Q_UINT32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
-        totalGray += UINT16_MULT(pixel -> gray, alphaTimesWeight);
+        totalGray += UINT16_MULT(pixel->gray, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -81,13 +81,13 @@ void KisGrayU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
 
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel -> alpha = newAlpha;
+    dstPixel->alpha = newAlpha;
 
     if (newAlpha > 0) {
         totalGray = UINT16_DIVIDE(totalGray, newAlpha);
     }
 
-    dstPixel -> gray = totalGray;
+    dstPixel->gray = totalGray;
 }
 
 void KisGrayU16ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst,
@@ -477,7 +477,7 @@ void KisGrayU16ColorSpace::compositeErase(Q_UINT8 *dst,
 
         for (Q_INT32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s -> alpha;
+            Q_UINT16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -488,7 +488,7 @@ void KisGrayU16ColorSpace::compositeErase(Q_UINT8 *dst,
                 }
                 mask++;
             }
-            d -> alpha = UINT16_MULT(srcAlpha, d -> alpha);
+            d->alpha = UINT16_MULT(srcAlpha, d->alpha);
         }
 
         dst += dstRowSize;

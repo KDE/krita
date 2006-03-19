@@ -40,7 +40,7 @@ public:
     virtual void setView(double from, double size) { m_from = from; m_width = size; }
 
     virtual const KisID& id() const { return m_id; }
-    virtual QValueVector<KisChannelInfo *> channels() { return m_colorSpace -> channels(); }
+    virtual QValueVector<KisChannelInfo *> channels() { return m_colorSpace->channels(); }
     virtual Q_INT32 numberOfBins() { return m_nrOfBins; }
     virtual double viewFrom() const { return m_from; }
     virtual double viewWidth() const { return m_width; }
@@ -128,7 +128,7 @@ public:
         : KisHistogramProducerFactory(id), m_cs(colorSpace) {}
     virtual ~KisBasicHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
-    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace -> id() == m_cs -> id(); }
+    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
     virtual float preferrednessLevelWith(KisColorSpace* /*colorSpace*/) const { return 1.0; }
 protected:
     KisColorSpace *m_cs;

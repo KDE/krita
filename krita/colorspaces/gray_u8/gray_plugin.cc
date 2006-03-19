@@ -63,7 +63,7 @@ GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
 
         f->add(csf);
 
-        KisHistogramProducerFactoryRegistry::instance() -> add(
+        KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
             (KisID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), colorSpaceGrayA) );
     }

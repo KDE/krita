@@ -35,7 +35,7 @@ void KisIconWidget::slotSetItem(KoIconItem& item)
 void KisIconWidget::drawButtonLabel(QPainter *p)
 {
     if (m_item) {
-        const QPixmap& pix = m_item -> pixmap();
+        const QPixmap& pix = m_item->pixmap();
         Q_INT32 x = 2;
         Q_INT32 y = 2;
         Q_INT32 pw = pix.width();
@@ -50,10 +50,10 @@ void KisIconWidget::drawButtonLabel(QPainter *p)
         if (ph < itemHeight)
             y = (cw - ph) / 2;
 
-        if (!m_item -> hasValidThumb() || (pw <= itemWidth && ph <= itemHeight)) {
-            p -> drawPixmap(x, y, pix, 0, 0, itemWidth, itemHeight);
+        if (!m_item->hasValidThumb() || (pw <= itemWidth && ph <= itemHeight)) {
+            p->drawPixmap(x, y, pix, 0, 0, itemWidth, itemHeight);
         } else {
-            const QPixmap& thumbpix = m_item -> thumbPixmap();
+            const QPixmap& thumbpix = m_item->thumbPixmap();
 
             x = 2;
             y = 2;
@@ -68,11 +68,11 @@ void KisIconWidget::drawButtonLabel(QPainter *p)
             if (ph < itemHeight)
                 y = (cw - ph) / 2;
 
-            p -> drawPixmap(x, y, thumbpix, 0, 0, itemWidth, itemHeight);
+            p->drawPixmap(x, y, thumbpix, 0, 0, itemWidth, itemHeight);
         }
 
-        p -> setPen(gray);
-        p -> drawRect(0, 0, cw + 1, ch + 1);
+        p->setPen(gray);
+        p->drawRect(0, 0, cw + 1, ch + 1);
     }
 }
 

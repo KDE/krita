@@ -56,28 +56,28 @@ public:
         location += m_img->name() + "/layers/" + m_layerFilenames[layer];
 
         // Layer data
-        if (m_store -> open(location)) {
-            if (!layer->paintDevice() -> read(m_store)) {
-                layer->paintDevice() -> disconnect();
-                m_store -> close();
+        if (m_store->open(location)) {
+            if (!layer->paintDevice()->read(m_store)) {
+                layer->paintDevice()->disconnect();
+                m_store->close();
                 //IODone();
                 return false;
             }
 
-            m_store -> close();
+            m_store->close();
         }
 
         // icc profile
         location = m_external ? QString::null : m_uri;
         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".icc";
 
-        if (m_store -> hasFile(location)) {
+        if (m_store->hasFile(location)) {
             QByteArray data;
-            m_store -> open(location);
-            data = m_store -> read(m_store -> size());
-            m_store -> close();
+            m_store->open(location);
+            data = m_store->read(m_store->size());
+            m_store->close();
             // Create a colorspace with the embedded profile
-            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() -> getColorSpace(layer->paintDevice()->colorSpace()->id(),
+            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(layer->paintDevice()->colorSpace()->id(),
                                                                                             new KisProfile(data));
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
@@ -126,24 +126,24 @@ public:
             m_store->open(location);
             KisSelectionSP selection = new KisSelection();
             if (!selection->read(m_store)) {
-                selection -> disconnect();
-                m_store -> close();
+                selection->disconnect();
+                m_store->close();
             }
             else {
                 layer->setSelection( selection );
             }
-            m_store -> close();
+            m_store->close();
         }
 
         // filter configuration
         location = m_external ? QString::null : m_uri;
         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
 
-        if (m_store -> hasFile(location) && layer->filter()) {
+        if (m_store->hasFile(location) && layer->filter()) {
             QByteArray data;
-            m_store -> open(location);
-            data = m_store -> read(m_store -> size());
-            m_store -> close();
+            m_store->open(location);
+            data = m_store->read(m_store->size());
+            m_store->close();
             if (data) {
                 KisFilterConfiguration * kfc = layer->filter();
                 kfc->fromXML(QString(data));

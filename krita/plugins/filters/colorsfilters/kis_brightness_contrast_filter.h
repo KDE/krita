@@ -59,6 +59,7 @@ public:
     static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsIncrementalPainting() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };

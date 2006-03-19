@@ -92,8 +92,8 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
 
             KisPaintDeviceSP dev = img->activeDevice();
             if (!dev) return;
-            QRect r1 = dev -> exactBounds();
-            QRect r2 = img -> bounds();
+            QRect r1 = dev->exactBounds();
+            QRect r2 = img->bounds();
 
             QRect rect = r1.intersect(r2);
 
@@ -113,11 +113,14 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
 
             delete config;
             if (filter->cancelRequested()) {
-                cmd -> unexecute();
+                cmd->unexecute();
                 delete cmd;
             } else {
                 dev->setDirty(rect);
-                img->undoAdapter()->addCommand(cmd);
+                if (img->undo())
+                    img->undoAdapter()->addCommand(cmd);
+                else
+                    delete cmd;
             }
             filter->disableProgress();
             QApplication::restoreOverrideCursor();

@@ -227,6 +227,9 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, 
         for (QValueList<KisID>::const_iterator pit = m_paintops->begin(); pit != m_paintops->end(); ++pit) {
             KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(*pit, this, inputDevice);
             settingsArray.append(settings);
+            if (settings && settings->widget()) {
+                settings->widget()->hide();
+            }
         }
         m_inputDevicePaintopSettings[inputDevice] = settingsArray;
     } else {

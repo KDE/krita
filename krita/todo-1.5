@@ -57,7 +57,6 @@ Also: see UIcomments!
 Regressions
 
 * saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale
-* Cubism filter breaks on cmyk16
 * autocontrast filter on lms crashes
 * painting in lab16 with a green color shows red fringes
 * zooming in leaves display artefacts (see Bart's mail)
@@ -65,10 +64,10 @@ Regressions
 
 Painting with filters
 
-Brightness-contrast: way too wslow, paints circles
-desature: too slow
+Brightness-contrast: way too slow, paints circles
+desaturate: too slow
 sharpen: works badly, paints circles -- this used to be okay!
 small tiles: makes circles, otherwise effect is fun
 
-Note: make kivio flowchart of what happens when painting with and without filters, with and without selectiom, direct or indirect,
-because I don't follow anymore
+Note: make kivio flowchart of what happens when painting with and without filters,
+with and without selection, direct or indirect, because I don't follow anymore

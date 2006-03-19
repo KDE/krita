@@ -38,6 +38,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <kis_painter.h>
 #include <kis_meta_registry.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
@@ -88,23 +89,22 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
         cubism(src, dst, rect, tileSize, tileSaturation);
     }
     else {
-        if (src == dst) {
-            src->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
-        }
-        else {
-            src->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
-            dst->convertTo(KisMetaRegistry::instance()->csRegistry()->getRGB8());
-        }
-        cubism(src, dst, rect, tileSize, tileSaturation);
+        if (src->image()) src->image()->lock();
+    
+        KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary");
+        KisPainter gc(dev);
+        gc.bitBlt(0, 0, COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
+        gc.end();
         
-        if (src == dst) {
-            src->convertTo(cs);
-        }
-        else {
-            src->convertTo(cs);
-            dst->convertTo(cs);
-        }
-        
+        kdDebug() << src->colorSpace()->id().id() << endl;
+        cubism(dev, dev, QRect(0, 0, rect.width(), rect.height()), tileSize, tileSaturation);
+
+        gc.begin(dst);
+        gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, dev, 0, 0, rect.width(), rect.height());
+        gc.end();      
+        if (src->image()) src->image()->unlock();
+    
+        kdDebug() << src->colorSpace()->id().id() << endl;
     }
 }
 
@@ -230,7 +230,6 @@ void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst,
         }
 
         Q_INT32 pixelSize = src->pixelSize();
-
         //get the extents of the polygon
         double dMinX, dMinY, dMaxX, dMaxY;
         poly->extents (dMinX, dMinY, dMaxX, dMaxY);
@@ -370,7 +369,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
         //fill the destination image with the background color (black for now)
         KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
         Q_INT32 depth = src->colorSpace()->nColorChannels();
-
+        kdDebug() << src->colorSpace()->id().id() << ", depth: " << depth << endl;
         while( ! dstIt.isDone() )
         {
                 for( Q_INT32 i = 0; i < depth; i++)

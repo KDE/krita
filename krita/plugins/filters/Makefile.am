@@ -2,7 +2,6 @@ SUBDIRS = \
     bumpmap  \
     cimg \
     convolutionfilters \
-    cubismfilter \
     embossfilter \
     example \
     imageenhancement \

@@ -300,7 +300,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             sum=0;
             for(int num = 0; num<span; ++num)
             {
-                filterWeights[center].weight[num] = static_cast<Q_UINT8>(filterWeights[center].weight[num] * fixfactor);
+                filterWeights[center].weight[num] = int(filterWeights[center].weight[num] * fixfactor);
                 sum+=filterWeights[center].weight[num];
             }
         }
@@ -412,6 +412,7 @@ bool KisTransformWorker::run()
 
     KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1");;
     KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
+    KisPaintDeviceSP tmpdev3 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;
@@ -458,16 +459,21 @@ bool KisTransformWorker::run()
             break;
     }
 
+/* orig
     yscale *= cos(rotation);
     yshear = xscale*sin(rotation);
     xscale *= 1/cos(rotation);
     xshear = -tan(rotation);
     xtranslate += int(tan(rotation)*ytranslate);
+*/
+    yshear = sin(rotation);
+    xshear = -tan(rotation/2);
+    xtranslate -= int(xshear*ytranslate);
 
     m_progressTotalSteps = int(yscale * r.width() * r.height());
     m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
 
-    //Calculate progress so we only report 32 steps.
+    //Calculate progress so we only report 16-32 steps.
     m_progressScaler=0;
     int totalSteps = m_progressTotalSteps;
     while(totalSteps>0)
@@ -487,7 +493,17 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisVLineIteratorPixel>(srcdev, tmpdev2, yscale, yshear, ytranslate, m_filter);
+    transformPass <KisHLineIteratorPixel>(srcdev, tmpdev2, xscale, yscale*xshear, 0, m_filter);
+
+    if(m_dev->hasSelection())
+        m_dev->selection()->clear();
+
+    if ( m_cancelRequested) {
+        emit notifyProgressDone();
+        return false;
+    }
+
+    transformPass <KisVLineIteratorPixel>(tmpdev2, tmpdev3, yscale, yshear, ytranslate, m_filter);
 //printf("time taken first pass %d\n",time.restart());
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
@@ -498,7 +514,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(tmpdev2, m_dev, xscale, xshear, xtranslate, m_filter);
+    transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter);
 
 //printf("time taken second pass %d\n",time.elapsed());
 //printf("%d %d\n",xtranslate, ytranslate);

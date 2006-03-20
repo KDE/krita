@@ -712,7 +712,7 @@ void KisToolTransform::transform()
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, img->activeDevice().data(), m_scaleX,
+    TransformCmd * transaction = new TransformCmd(this, img->activeDevice(), m_scaleX,
                                                   m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
     // Copy the original state back.

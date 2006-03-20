@@ -171,6 +171,8 @@
  <Action name="deselect"/>
  <Action name="invert"/>
  <Separator/>
+ <Action name="duplicate_layer"/>
+ <Separator/>
  <Action name="koffice_undo"/>
  <Action name="koffice_redo"/>
  <Separator/>

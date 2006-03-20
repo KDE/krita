@@ -236,7 +236,6 @@ KisDesaturateFilter::KisDesaturateFilter()
 
 KisDesaturateFilter::~KisDesaturateFilter()
 {
-    delete m_lastCS;
     delete m_adj;
 }
 

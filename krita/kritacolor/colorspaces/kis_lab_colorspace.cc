@@ -30,20 +30,21 @@
 #include <klocale.h>
 
 #include "kis_lab_colorspace.h"
-#include "kis_u16_base_colorspace.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
 
 KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p)
-    : KisAbstractColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")),
+    : KisU16BaseColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")),
         COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1),
          icSigLabData, parent, p)
 
 {
     m_channels.push_back(new KisChannelInfo(i18n("Lightness"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16), QColor(150,150,150)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::INT16, sizeof(Q_INT16), QColor(200,200,200)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 6, KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+
+    m_alphaPos = 3 * sizeof(Q_UINT16);
 
     init();
 }
@@ -71,7 +72,7 @@ Q_UINT8 KisLabColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
 void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
 {
     Q_UINT32 totalLightness = 0, totalAlpha = 0;
-    Q_INT32 totala = 0, totalb = 0;
+    Q_UINT32 totala = 0, totalb = 0;
 
     while (nColors--)
     {
@@ -101,12 +102,12 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         totalLightness = UINT16_MAX;
     ((Pixel *)dst)->lightness = totalLightness;
 
-    if (totala > INT16_MAX)
-        totala = INT16_MAX;
+    if (totala > UINT16_MAX)
+        totala = UINT16_MAX;
     ((Pixel *)dst)->a = totala;
 
-    if (totalb > INT16_MAX)
-        totalb = INT16_MAX;
+    if (totalb > UINT16_MAX)
+        totalb = UINT16_MAX;
     ((Pixel *)dst)->b = totalb;
 }
 
@@ -232,8 +233,8 @@ printf("%d %d %d\n", src->lightness, src->a, src->b);
 printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
 */
                         dst->lightness = UINT16_BLEND(src->lightness, dst->lightness, srcBlend);
-                        dst->a = INT16_BLEND(src->a, dst->a, srcBlend);
-                        dst->b = INT16_BLEND(src->b, dst->b, srcBlend);
+                        dst->a = UINT16_BLEND(src->a, dst->a, srcBlend);
+                        dst->b = UINT16_BLEND(src->b, dst->b, srcBlend);
 //printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
                     }
                 }
@@ -290,25 +291,6 @@ void KisLabColorSpace::compositeErase(Q_UINT8 *dst,
         if(srcAlphaMask) {
             srcAlphaMask += maskRowStride;
         }
-    }
-}
-
-void KisLabColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 */*maskRowStart*/, Q_INT32 /*maskRowStride*/, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
-{
-    Q_UINT8 *dst = dstRowStart;
-    const Q_UINT8 *src = srcRowStart;
-    Q_INT32 bytesPerPixel = pixelSize();
-
-    while (rows > 0) {
-        memcpy(dst, src, numColumns * bytesPerPixel);
-
-        if (opacity != OPACITY_OPAQUE) {
-            multiplyAlpha(dst, opacity, numColumns);
-        }
-
-        dst += dstRowStride;
-        src += srcRowStride;
-        --rows;
     }
 }
 
@@ -455,60 +437,6 @@ KisCompositeOpList KisLabColorSpace::userVisiblecompositeOps() const
 
     return list;
 }
-//////////////
-Q_UINT8 KisLabColorSpace::getAlpha(const Q_UINT8 * U8_pixel) const
-{
-    const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
-
-    return UINT16_TO_UINT8(pix->alpha);
-}
-
-
-void KisLabColorSpace::setAlpha(Q_UINT8 *U8_pixels, Q_UINT8 alpha, Q_INT32 nPixels) const
-{
-    Pixel *pix = reinterpret_cast<Pixel *>(U8_pixels);
-
-    while (nPixels--) {
-        pix->alpha = UINT8_TO_UINT16(alpha);
-
-        ++pix;
-    }
-}
-
-void KisLabColorSpace::multiplyAlpha(Q_UINT8 *U8_pixels, Q_UINT8 U8_alpha, Q_INT32 nPixels)
-{
-    Pixel *pix = reinterpret_cast<Pixel *>(U8_pixels);
-
-    while (nPixels--) {
-        pix->alpha = UINT8_MULT(pix->alpha, U8_alpha);
-
-        ++pix;
-    }
-}
-
-void KisLabColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixels, Q_UINT8 * alpha8, Q_INT32 nPixels)
-{
-    Pixel *pix = reinterpret_cast<Pixel *>(U8_pixels);
-
-    while (nPixels--) {
-        pix->alpha = UINT8_MULT(pix->alpha, *alpha8);
-
-        ++pix;
-        ++alpha8;
-    }
-}
-
-void KisLabColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * U8_pixels, Q_UINT8 * alpha8, Q_INT32 nPixels)
-{
-    Pixel *pix = reinterpret_cast<Pixel *>(U8_pixels);
-
-    while(nPixels--) {
-            pix->alpha = UINT8_MULT(pix->alpha, (MAX_SELECTED - *alpha8));
-
-            ++pix;
-            ++alpha8;
-    }
-}
 
 QString KisLabColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
 {
@@ -533,30 +461,21 @@ QString KisLabColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
     Q_ASSERT(channelIndex < nChannels());
+
+    // These convert from lcms encoded format to standard ranges.
+
     switch(channelIndex)
     {
         case 0:
-            return QString().setNum(static_cast<float>(pix->lightness) / UINT16_MAX);
+            return QString().setNum(100.0 * static_cast<float>(pix->lightness) / 0xff00);
         case 1:
-            return QString().setNum(static_cast<float>(pix->a) / INT16_MAX);
+            return QString().setNum(100.0 * ((static_cast<float>(pix->a) - 0x8000) / 0xffff));
         case 2:
-            return QString().setNum(static_cast<float>(pix->b) / INT16_MAX);
+            return QString().setNum(100.0 * ((static_cast<float>(pix->b) - 0x8000) / 0xffff));
         case 3:
-            return QString().setNum(static_cast<float>(pix->alpha) / UINT16_MAX);
+            return QString().setNum(100.0 * static_cast<float>(pix->alpha) / UINT16_MAX);
         default:
             return QString("Error");
     }
-}
-
-Q_UINT8 KisLabColorSpace::scaleToU8(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
-{
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    return UINT16_TO_UINT8(pixel[channelPos]);
-}
-
-Q_UINT16 KisLabColorSpace::scaleToU16(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
-{
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    return pixel[channelPos];
 }
 

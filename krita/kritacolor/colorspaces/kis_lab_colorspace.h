@@ -25,10 +25,9 @@
 
 #include "kis_global.h"
 #include "kis_integer_maths.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_u16_base_colorspace.h"
 
-
-class KisLabColorSpace : public KisAbstractColorSpace {
+class KisLabColorSpace : public KisU16BaseColorSpace {
 public:
     KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisLabColorSpace();
@@ -60,16 +59,6 @@ public:
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const;
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
-    virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
-
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-
 protected:
 
     virtual void bitBlt(Q_UINT8 *dst,
@@ -82,8 +71,6 @@ protected:
                 Q_INT32 rows,
                 Q_INT32 cols,
                 const KisCompositeOp& op);
-
-    void compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity);
 
     void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
 /*
@@ -105,8 +92,8 @@ protected:
 private:
     struct Pixel {
         Q_UINT16 lightness;
-        Q_INT16 a;
-        Q_INT16 b;
+        Q_UINT16 a;
+        Q_UINT16 b;
         Q_UINT16 alpha;
     };
     static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;

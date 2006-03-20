@@ -26,18 +26,21 @@
 
 class WdgBrightnessContrast;
 class QWidget;
+class KisColorAdjustment;
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
     
 public:
     
     KisBrightnessContrastFilterConfiguration();
+    virtual ~KisBrightnessContrastFilterConfiguration();
     virtual void fromXML( const QString&  );
     virtual QString toString();
     
 public:
     Q_UINT16 transfer[256];
     QPtrList<QPair<double,double> >  curve;
+    KisColorAdjustment * m_adjustment;
 };
 
 /**

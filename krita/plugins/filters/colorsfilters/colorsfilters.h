@@ -23,26 +23,14 @@
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
 
+class KisColorSpace;
+class KisColorAdjustment;
 
 class ColorsFilters : public KParts::Plugin
 {
     public:
         ColorsFilters(QObject *parent, const char *name, const QStringList &);
         virtual ~ColorsFilters();
-};
-
-class KisDesaturateFilter : public KisFilter {
-public:
-    KisDesaturateFilter();
-public:
-    virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
-    virtual bool supportsPainting() { return true; }
-    virtual bool supportsPreview() { return true; }
-    virtual bool supportsIncrementalPainting() { return false; }
-    
-    virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
-    virtual bool workWith(KisColorSpace* cs);
 };
 
 class KisAutoContrast : public KisFilter {
@@ -58,6 +46,27 @@ public:
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
     virtual bool workWith(KisColorSpace* cs);
 
+};
+
+
+class KisDesaturateFilter : public KisFilter {
+    public:
+        KisDesaturateFilter();
+        ~KisDesaturateFilter();
+    public:
+        virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
+        static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
+        virtual bool supportsPainting() { return true; }
+        virtual bool supportsPreview() { return true; }
+        virtual bool supportsIncrementalPainting() { return false; }
+    
+        virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
+        virtual bool workWith(KisColorSpace* cs);
+
+    private:
+
+        KisColorSpace * m_lastCS;
+        KisColorAdjustment * m_adj;
 };
 
 #endif

@@ -229,6 +229,15 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 KisDesaturateFilter::KisDesaturateFilter()
     : KisFilter(id(), "adjust", i18n("&Desaturate"))
 {
+    m_lastCS = 0;
+    m_adj = 0;
+            
+}
+
+KisDesaturateFilter::~KisDesaturateFilter()
+{
+    delete m_lastCS;
+    delete m_adj;
 }
 
 bool KisDesaturateFilter::workWith(KisColorSpace* cs)
@@ -244,8 +253,11 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         gc.end();
     }
 
-    KisColorAdjustment *adj = src->colorSpace()->createDesaturateAdjustment();
-
+    if (m_adj == 0 || (m_lastCS && m_lastCS != src->colorSpace())) {
+        m_adj = src->colorSpace()->createDesaturateAdjustment();
+        m_lastCS = src->colorSpace();
+    }
+    
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
@@ -279,14 +291,14 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, adj, npix);
+                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, m_adj, npix);
                 pixelsProcessed += npix;
                 break;
             }
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), adj, 1);
+                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), m_adj, 1);
                 const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
@@ -296,6 +308,5 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         }
         setProgress(pixelsProcessed);
     }
-    delete adj;
     setProgressDone();
 }

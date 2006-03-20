@@ -44,7 +44,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 {
     // XXX: It would be nice be able to interleave this, instead of having the same loop over
     //      our pixels three times.
-    flow(src, dst, rect);
+    //flow(src, dst, rect);
     if (m_adsorbCount++ == 2) {
         // XXX I think we could combine dry and adsorb, yes
         adsorb(src, dst, rect);

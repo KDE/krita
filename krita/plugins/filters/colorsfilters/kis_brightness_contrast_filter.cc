@@ -51,8 +51,13 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
         transfer[i] = i * 257;
     }
     curve.setAutoDelete(true);
+    m_adjustment = 0;
 }
 
+KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfiguration()
+{
+    delete m_adjustment;
+}
 
 void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
 {
@@ -182,7 +187,10 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
         gc.end();
     }
 
-    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
+    if (configBC->m_adjustment == 0) {
+        configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
+    }
+    
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
@@ -216,14 +224,14 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
                     ++npix;
                 }
                 // adjust
-                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, adj, npix);
+                src->colorSpace()->applyAdjustment(firstPixel, firstPixel, configBC->m_adjustment, npix);
                 pixelsProcessed += npix;
                 break;
             }
 
             default:
                 // adjust, but since it's partially selected we also only partially adjust
-                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), adj, 1);
+                src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), configBC->m_adjustment, 1);
                 const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
                 Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
@@ -234,7 +242,6 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
         setProgress(pixelsProcessed);
     }
 
-    delete adj;
     setProgressDone();
 }
 

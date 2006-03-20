@@ -59,9 +59,5 @@ private:
     KisFilterConfiguration* m_filterConfiguration;
 };
 
-inline void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)
-{
-    m_filterConfiguration = filterConfiguration;
-}
 
 #endif // KIS_FILTEROP_H_

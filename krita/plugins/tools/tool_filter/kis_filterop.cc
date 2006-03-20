@@ -31,14 +31,13 @@
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
-
+#include "kis_colorspace.h"
 #include "kis_filterop.h"
 
 
 KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 {
     KisPaintOp * op = new KisFilterOp(painter);
-    Q_CHECK_PTR(op);
     return op;
 }
 
@@ -46,10 +45,12 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettings */*settings*/
 KisFilterOp::KisFilterOp(KisPainter * painter)
     : super(painter)
 {
+    m_filterConfiguration = 0;
 }
 
 KisFilterOp::~KisFilterOp()
 {
+    delete m_filterConfiguration;
 }
 
 void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
@@ -138,4 +139,10 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
     m_painter->addDirtyRect(dstRect);
+}
+
+void KisFilterOp::setFilterConfiguration(KisFilterConfiguration* filterConfiguration)
+{
+    delete m_filterConfiguration;
+    m_filterConfiguration = filterConfiguration;
 }

@@ -36,7 +36,6 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_filterConfig = kfc;
     setSelection( selection );
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
-    m_selection->setParentLayer(this);
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -90,15 +89,19 @@ KisSelectionSP KisAdjustmentLayer::selection()
 
 void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
-    if (selection)
-        m_selection = new KisSelection( *selection.data() );
-    else {
-        m_selection = new KisSelection();
-        KisFillPainter gc(m_selection.data());
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    m_selection = new KisSelection();
+    KisFillPainter gc(m_selection.data());
+    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+
+    if (selection) {
+        gc.bitBlt(0, 0, COMPOSITE_COPY, selection.data(),
+                  0, 0, image()->bounds().width(), image()->bounds().height());
+    } else {
         gc.fillRect(image()->bounds(), KisColor(Qt::white, cs), MAX_SELECTED);
-        gc.end();
     }
+
+    gc.end();
+
     m_selection->setParentLayer(this);
 }
 

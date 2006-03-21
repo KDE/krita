@@ -48,7 +48,6 @@
 #include <kis_painter.h>
 #include <kis_profile.h>
 #include <kis_types.h>
-#include <kis_scale_visitor.h>
 #include <kis_undo_adapter.h>
 
 #include "kis_previewwidgetbase.h"

@@ -49,7 +49,6 @@
 #include <kis_progress_display_interface.h>
 #include <kis_paint_device.h>
 #include <kis_filter_strategy.h>
-#include <kis_scale_visitor.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
 

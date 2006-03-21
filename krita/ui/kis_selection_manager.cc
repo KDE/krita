@@ -41,6 +41,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_channelinfo.h"

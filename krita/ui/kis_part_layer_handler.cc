@@ -25,6 +25,7 @@
 #include "kis_move_event.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
+#include "kis_group_layer.h"
 #include "kis_part_layer_handler.h"
 
 KisPartLayerHandler::KisPartLayerHandler(KisView* view, const KoDocumentEntry& entry,

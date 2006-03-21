@@ -32,6 +32,7 @@
 #include "kis_types.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_part_layer.h"
+#include "kis_group_layer.h"
 #include "kis_factory.h"
 #include "kis_paint_device.h"
 #include <kis_meta_registry.h>

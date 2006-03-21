@@ -30,6 +30,7 @@
 #include <kopalettemanager.h>
 
 #include <kis_colorspace_factory_registry.h>
+#include "kis_progress_display_interface.h"
 #include <kis_dlg_filtersgallery.h>
 #include <kis_doc.h>
 #include <kis_filter.h>
@@ -38,6 +39,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_view.h>
+#include <kis_transaction.h>
 
 namespace Krita {
 namespace Plugins {

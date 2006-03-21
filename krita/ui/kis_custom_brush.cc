@@ -37,6 +37,7 @@
 #include "kis_resource_mediator.h"
 #include "kis_resourceserver.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 
 KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString& caption, KisView* view)
     : KisWdgCustomBrush(parent, name), m_view(view)

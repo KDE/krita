@@ -45,6 +45,8 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view.h>
+#include <kis_image.h>
+#include <kis_layer.h>
 
 #include "kritascripting/kis_script_progress.h"
 #include "kritascripting/kis_script_monitor.h"

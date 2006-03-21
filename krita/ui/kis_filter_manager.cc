@@ -32,6 +32,7 @@
 #include "kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+#include "kis_paint_layer.h"
 #include "kis_filter_manager.h"
 #include "kis_filter_config_widget.h"
 #include "kis_previewwidget.h"

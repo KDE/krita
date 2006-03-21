@@ -1840,7 +1840,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
         Q_CHECK_PTR(t);
     }
 
-    KisScaleWorker worker (dev, sx, sy, filterStrategy);
+    KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_progress, filterStrategy);
     worker.run();
 
     if (undo) undoAdapter()->addCommand(t);

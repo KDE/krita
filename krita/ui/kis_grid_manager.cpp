@@ -30,12 +30,14 @@
 
 #include <kaction.h>
 #include <kdialogbase.h>
+#include <klocale.h>
 
 #include "kis_grid_manager.h"
 #include "kis_grid_manager.moc"
 
 #include "kis_config.h"
 #include "kis_view.h"
+#include "kis_image.h"
 
 KisGridManager::KisGridManager(KisView * parent)
     : QObject(parent), m_view(parent)

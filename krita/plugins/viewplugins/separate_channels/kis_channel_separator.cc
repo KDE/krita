@@ -106,7 +106,8 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     QRect rect = src->exactBounds();
 
     int i = 0;
-    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
+    Q_UINT32 channelIndex = 0;
+    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
     {
 
         KisChannelInfo * ch = (*it);
@@ -148,8 +149,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 if (srcIt.isSelected())
                 {
                     if (toColor) {
-                        // Copy the complete channel. We know we are using the same color strategy
-                        memcpy(dstIt.rawData() + channelPos, srcIt.rawData() + channelPos, channelSize);
+                        dstCs->getSingleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelIndex);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);

@@ -49,6 +49,7 @@ public:
 
     virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
     virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual void getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex);
 
     virtual Q_UINT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
@@ -98,6 +99,18 @@ private:
     };
     static const Q_UINT16 U16_OPACITY_OPAQUE = UINT16_MAX;
     static const Q_UINT16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
+
+    static const Q_UINT32 NUM_CHANNELS = 4;
+    static const Q_UINT32 NUM_COLOR_CHANNELS = 3;
+
+    static const Q_UINT32 CHANNEL_L = 0;
+    static const Q_UINT32 CHANNEL_A = 1;
+    static const Q_UINT32 CHANNEL_B = 2;
+    static const Q_UINT32 CHANNEL_ALPHA = 3;
+
+    static const Q_UINT32 MAX_CHANNEL_L = 0xff00;
+    static const Q_UINT32 MAX_CHANNEL_AB = 0xffff;
+    static const Q_UINT32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 
     friend class KisLabColorSpaceTester;
 };

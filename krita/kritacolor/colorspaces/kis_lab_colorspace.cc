@@ -39,12 +39,12 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
          icSigLabData, parent, p)
 
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), 4, KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 6, KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
-    m_alphaPos = 3 * sizeof(Q_UINT16);
+    m_alphaPos = CHANNEL_ALPHA * sizeof(Q_UINT16);
 
     init();
 }
@@ -88,8 +88,10 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         colors++;
     }
 
-    if (totalAlpha > UINT16_MAX)
+    if (totalAlpha > UINT16_MAX) {
         totalAlpha = UINT16_MAX;
+    }
+
     ((Pixel *)dst)->alpha = totalAlpha;
 
     if (totalAlpha > 0) {
@@ -98,16 +100,22 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
         totalb /= totalAlpha;
     } // else the values are already 0 too
 
-    if (totalLightness > UINT16_MAX)
-        totalLightness = UINT16_MAX;
+    if (totalLightness > MAX_CHANNEL_L) {
+        totalLightness = MAX_CHANNEL_L;
+    }
+
     ((Pixel *)dst)->lightness = totalLightness;
 
-    if (totala > UINT16_MAX)
-        totala = UINT16_MAX;
+    if (totala > MAX_CHANNEL_AB) {
+        totala = MAX_CHANNEL_AB;
+    }
+
     ((Pixel *)dst)->a = totala;
 
-    if (totalb > UINT16_MAX)
-        totalb = UINT16_MAX;
+    if (totalb > MAX_CHANNEL_AB) {
+        totalb = MAX_CHANNEL_AB;
+    }
+
     ((Pixel *)dst)->b = totalb;
 }
 
@@ -119,9 +127,9 @@ void KisLabColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
     {
         Pixel * s = reinterpret_cast<Pixel *>( src );
 
-        s->lightness = Q_UINT16_MAX - s->lightness;
-        s->a = Q_UINT16_MAX - s->a;
-        s->b = Q_UINT16_MAX - s->b;
+        s->lightness = MAX_CHANNEL_L - s->lightness;
+        s->a = MAX_CHANNEL_AB - s->a;
+        s->b = MAX_CHANNEL_AB - s->b;
 
         src += psize;
     }
@@ -165,12 +173,12 @@ QValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
 
 Q_UINT32 KisLabColorSpace::nChannels() const
 {
-    return 4;
+    return NUM_CHANNELS;
 }
 
 Q_UINT32 KisLabColorSpace::nColorChannels() const
 {
-    return 3;
+    return NUM_COLOR_CHANNELS;
 }
 
 Q_UINT32 KisLabColorSpace::pixelSize() const
@@ -178,6 +186,41 @@ Q_UINT32 KisLabColorSpace::pixelSize() const
     return sizeof(Pixel);
 }
 
+void KisLabColorSpace::getSingleChannelPixel(Q_UINT8 *dst, const Q_UINT8 *src, Q_UINT32 channelIndex)
+{
+    if (channelIndex < NUM_CHANNELS) {
+
+        const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
+        Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
+
+        switch (channelIndex) {
+        case CHANNEL_L:
+            dstPixel->lightness = srcPixel->lightness;
+            dstPixel->a = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->b = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->alpha = U16_OPACITY_TRANSPARENT;
+            break;
+        case CHANNEL_A:
+            dstPixel->lightness = MAX_CHANNEL_L / 2;
+            dstPixel->a = srcPixel->a;
+            dstPixel->b = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->alpha = U16_OPACITY_TRANSPARENT;
+            break;
+        case CHANNEL_B:
+            dstPixel->lightness = MAX_CHANNEL_L / 2;
+            dstPixel->a = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->b = srcPixel->b;
+            dstPixel->alpha = U16_OPACITY_TRANSPARENT;
+            break;
+        case CHANNEL_ALPHA:
+            dstPixel->lightness = MAX_CHANNEL_L / 2;
+            dstPixel->a = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->b = CHANNEL_AB_ZERO_OFFSET;
+            dstPixel->alpha = srcPixel->alpha;
+            break;
+        }
+    }
+}
 
 void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
 {
@@ -444,13 +487,13 @@ QString KisLabColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 cha
     Q_ASSERT(channelIndex < nChannels());
     switch(channelIndex)
     {
-        case 0:
+        case CHANNEL_L:
             return QString().setNum(pix->lightness);
-        case 1:
+        case CHANNEL_A:
             return QString().setNum(pix->a);
-        case 2:
+        case CHANNEL_B:
             return QString().setNum(pix->b);
-        case 3:
+        case CHANNEL_ALPHA:
             return QString().setNum(pix->alpha);
         default:
             return QString("Error");
@@ -466,13 +509,13 @@ QString KisLabColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
 
     switch(channelIndex)
     {
-        case 0:
-            return QString().setNum(100.0 * static_cast<float>(pix->lightness) / 0xff00);
-        case 1:
-            return QString().setNum(100.0 * ((static_cast<float>(pix->a) - 0x8000) / 0xffff));
-        case 2:
-            return QString().setNum(100.0 * ((static_cast<float>(pix->b) - 0x8000) / 0xffff));
-        case 3:
+        case CHANNEL_L:
+            return QString().setNum(100.0 * static_cast<float>(pix->lightness) / MAX_CHANNEL_L);
+        case CHANNEL_A:
+            return QString().setNum(100.0 * ((static_cast<float>(pix->a) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
+        case CHANNEL_B:
+            return QString().setNum(100.0 * ((static_cast<float>(pix->b) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
+        case CHANNEL_ALPHA:
             return QString().setNum(100.0 * static_cast<float>(pix->alpha) / UINT16_MAX);
         default:
             return QString("Error");

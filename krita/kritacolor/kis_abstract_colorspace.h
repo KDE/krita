@@ -93,6 +93,8 @@ public:
 
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
+    virtual void getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex);
+
     //========== Identification ===============================================//
 
     virtual KisID id() const { return m_id; }

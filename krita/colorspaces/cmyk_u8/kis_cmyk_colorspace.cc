@@ -194,6 +194,19 @@ Q_UINT32 KisCmykColorSpace::pixelSize() const
     return cmyk::MAX_CHANNEL_CMYKA;
 }
 
+void KisCmykColorSpace::getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex)
+{
+    if (channelIndex < (Q_UINT32)cmyk::MAX_CHANNEL_CMYKA) {
+
+        memset(dstPixel, 0, cmyk::MAX_CHANNEL_CMYKA * sizeof(Q_UINT8));
+
+        if (OPACITY_TRANSPARENT != 0) {
+            dstPixel[PIXEL_CMYK_ALPHA] = OPACITY_TRANSPARENT;
+        }
+
+        memcpy(dstPixel + (channelIndex * sizeof(Q_UINT8)), srcPixel + (channelIndex * sizeof(Q_UINT8)), sizeof(Q_UINT8));
+    }
+}
 
 void KisCmykColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {

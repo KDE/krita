@@ -63,7 +63,7 @@ public:
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;
-
+    virtual void getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex);
     
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 

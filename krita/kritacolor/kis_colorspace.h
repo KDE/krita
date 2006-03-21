@@ -123,6 +123,13 @@ public:
      */
      virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
 
+     /**
+      * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
+      * should be set to whatever makes sense for 'empty' channels of this colour space,
+      * with the intent being that the pixel should look like it only has the given channel.
+      */
+     virtual void getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex) = 0;
+
     //========== Identification ===============================================//
 
     /**

@@ -177,6 +177,17 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opa
     *opacity = getAlpha(src);
 }
 
+void KisAbstractColorSpace::getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex)
+{
+    if (channelIndex < m_channels.count()) {
+
+        fromQColor(Qt::black, OPACITY_TRANSPARENT, dstPixel);
+
+        const KisChannelInfo *channelInfo = m_channels[channelIndex];
+        memcpy(dstPixel + channelInfo->pos(), srcPixel + channelInfo->pos(), channelInfo->size());
+    }
+}
+
 bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 					    Q_UINT8 * dst,
 					    KisColorSpace * dstColorSpace,

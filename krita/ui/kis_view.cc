@@ -1864,7 +1864,7 @@ void KisView::rotateLayer(double angle)
         Q_CHECK_PTR(t);
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Box"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
     angle *= M_PI/180;
     Q_INT32 w = currentImg()->width();
     Q_INT32 h = currentImg()->height();

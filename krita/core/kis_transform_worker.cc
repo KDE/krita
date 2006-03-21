@@ -231,7 +231,6 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
-//printf("dim was %d %d %d %d\n",srcStart, srcLen,firstLine,numLines);
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
 
@@ -410,8 +409,6 @@ bool KisTransformWorker::run()
         r = m_dev->selection()->selectedExactRect();
     else
         r = m_dev->exactBounds();
-//kdDebug() << "pre layer Size: " << m_dev->extent() << endl;
-//kdDebug() << "pre layer exact: " << r << endl;
 
     KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1");;
     KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
@@ -502,8 +499,6 @@ bool KisTransformWorker::run()
     //progress info
     emit notifyProgressDone();
     m_dev->emitSelectionChanged();
-
-//kdDebug() << "layerj Size: " << m_dev->extent() << endl;
 
     return m_cancelRequested;
 }

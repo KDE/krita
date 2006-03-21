@@ -204,7 +204,8 @@ void KisFilterManager::updateGUI()
     }
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
-        m_reapplyAction->setText(i18n("Apply Filter Again") + ": " + m_lastFilterConfig->name());
+        m_reapplyAction->setText(i18n("Apply Filter Again") + ": " 
+            + KisFilterRegistry::instance()->get(m_lastFilterConfig->name())->id().name());
     else
         m_reapplyAction->setText(i18n("Apply Filter Again"));
     
@@ -264,7 +265,9 @@ bool KisFilterManager::apply()
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
-        m_reapplyAction->setText(i18n("Apply Filter Again") + ":" + m_lastFilterConfig->name());
+        m_reapplyAction->setText(i18n("Apply Filter Again") + ": "
+            + KisFilterRegistry::instance()->get(m_lastFilterConfig->name())->id().name());
+
     else
         m_reapplyAction->setText(i18n("Apply Filter Again"));
     

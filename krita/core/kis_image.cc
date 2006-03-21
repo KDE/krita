@@ -57,7 +57,6 @@
 #include "kis_undo_adapter.h"
 #include "kis_merge_visitor.h"
 #include "kis_transaction.h"
-#include "kis_scale_visitor.h"
 #include "kis_crop_visitor.h"
 #include "kis_transform_visitor.h"
 #include "kis_filter_strategy.h"
@@ -764,7 +763,7 @@ void KisImage::scale(double sx, double sy, KisProgressDisplayInterface *progress
         }
 
         {
-            KisScaleVisitor visitor (this, sx, sy, progress, filterStrategy);
+            KisTransformVisitor visitor (this, sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
             m_rootLayer->accept(visitor);
         }
 

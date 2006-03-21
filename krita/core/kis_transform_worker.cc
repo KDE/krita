@@ -231,6 +231,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
+//printf("dim was %d %d %d %d\n",srcStart, srcLen,firstLine,numLines);
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
 
@@ -382,10 +383,10 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
         //progress info
         m_progressStep += dstLen;
-        if(m_lastProgressReport != (m_progressStep>>m_progressScaler))
+        if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
         {
-            m_lastProgressReport = (m_progressStep>>m_progressScaler);
-            emit notifyProgress((m_progressStep * 100) / m_progressTotalSteps);
+            m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
+            emit notifyProgress(m_lastProgressReport);
         }
         if (m_cancelRequested) {
             break;
@@ -409,6 +410,8 @@ bool KisTransformWorker::run()
         r = m_dev->selection()->selectedExactRect();
     else
         r = m_dev->exactBounds();
+//kdDebug() << "pre layer Size: " << m_dev->extent() << endl;
+//kdDebug() << "pre layer exact: " << r << endl;
 
     KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1");;
     KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
@@ -459,13 +462,6 @@ bool KisTransformWorker::run()
             break;
     }
 
-/* orig
-    yscale *= cos(rotation);
-    yshear = xscale*sin(rotation);
-    xscale *= 1/cos(rotation);
-    xshear = -tan(rotation);
-    xtranslate += int(tan(rotation)*ytranslate);
-*/
     yshear = sin(rotation);
     xshear = -tan(rotation/2);
     xtranslate -= int(xshear*ytranslate);
@@ -473,28 +469,14 @@ bool KisTransformWorker::run()
     m_progressTotalSteps = int(yscale * r.width() * r.height());
     m_progressTotalSteps += int(xscale * r.width() * (r.height() * yscale + r.width()*yshear));
 
-    //Calculate progress so we only report 16-32 steps.
-    m_progressScaler=0;
-    int totalSteps = m_progressTotalSteps;
-    while(totalSteps>0)
-    {
-        m_progressScaler++;
-        totalSteps>>=1;
-    }
-    m_progressScaler-=5;
-    if(m_progressScaler<0)
-        m_progressScaler=0;
     m_lastProgressReport=0;
 
-//QTime time;
-//time.start();
     if ( m_cancelRequested) {
         emit notifyProgressDone();
         return false;
     }
 
     transformPass <KisHLineIteratorPixel>(srcdev, tmpdev2, xscale, yscale*xshear, 0, m_filter);
-
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
@@ -504,10 +486,8 @@ bool KisTransformWorker::run()
     }
 
     transformPass <KisVLineIteratorPixel>(tmpdev2, tmpdev3, yscale, yshear, ytranslate, m_filter);
-//printf("time taken first pass %d\n",time.restart());
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
-//printf("time taken to clear selection %d\n",time.restart());
 
     if ( m_cancelRequested) {
         emit notifyProgressDone();
@@ -515,12 +495,6 @@ bool KisTransformWorker::run()
     }
 
     transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter);
-
-//printf("time taken second pass %d\n",time.elapsed());
-//printf("%d %d\n",xtranslate, ytranslate);
-//printf("%d %d\n",m_progressStep,m_progressTotalSteps);
-//printf("%f\n",rotation);
-
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }
@@ -528,6 +502,8 @@ bool KisTransformWorker::run()
     //progress info
     emit notifyProgressDone();
     m_dev->emitSelectionChanged();
+
+//kdDebug() << "layerj Size: " << m_dev->extent() << endl;
 
     return m_cancelRequested;
 }

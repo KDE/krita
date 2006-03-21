@@ -39,10 +39,12 @@ class KisTransformVisitor : public KisLayerVisitor {
 
 public:
 
-    KisTransformVisitor(KisImageSP img, double  /*xscale*/, double  /*yscale*/,
+    KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
         Q_INT32  tx, Q_INT32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter) 
         : KisLayerVisitor()
+        , m_sx(xscale)
+        , m_sy(yscale)
         , m_tx(tx)
         , m_ty(ty)
         , m_filter(filter)
@@ -70,7 +72,7 @@ public:
             Q_CHECK_PTR(t);
 	}
 
-        KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, m_angle, m_tx, m_ty, m_progress, m_filter);
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);
         tw.run();
 
         if (m_img->undo()) {
@@ -106,7 +108,8 @@ public:
     
 
 private:
-    Q_INT32 m_tx,m_ty;
+    double m_sx, m_sy;
+    Q_INT32 m_tx, m_ty;
     KisFilterStrategy *m_filter;
     double m_angle;
     KisProgressDisplayInterface *m_progress;

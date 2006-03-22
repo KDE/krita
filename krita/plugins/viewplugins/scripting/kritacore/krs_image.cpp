@@ -22,9 +22,11 @@
 
 #include <kis_colorspace_factory_registry.h>
 #include <kis_image.h>
+#include <kis_filter_strategy.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
+
 
 #include "krs_paint_layer.h"
 
@@ -41,6 +43,8 @@ namespace KritaCore {
     addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("createPaintLayer", &Image::createPaintLayer, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("colorSpaceId", &Image::colorSpaceId);
+    addFunction("scale", &Image::scale);
+    addFunction("resize", &Image::resize);
 }
 
 
@@ -115,6 +119,29 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     return new PaintLayer(layer);
 
 }
+
+Kross::Api::Object::Ptr Image::scale(Kross::Api::List::Ptr args)
+{
+    double cw = Kross::Api::Variant::toDouble(args->item(0));
+    double ch = Kross::Api::Variant::toDouble(args->item(1));
+    m_image->scale( cw, ch, 0, KisFilterStrategyRegistry::instance()->get( "Mitchell") );
+    return 0;
+}
+Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
+{
+    int nw = Kross::Api::Variant::toInt(args->item(0));
+    int nh = Kross::Api::Variant::toInt(args->item(1));
+    int x = 0;
+    int y = 0;
+    if(args->count() > 2)
+    {
+        x = Kross::Api::Variant::toInt(args->item(2));
+        y = Kross::Api::Variant::toInt(args->item(3));
+    }
+    m_image->resize( nw, nh, x, y );
+    return 0;
+}
+
 
 }
 

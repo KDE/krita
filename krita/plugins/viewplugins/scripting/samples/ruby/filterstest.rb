@@ -27,6 +27,5 @@ height = layer.getHeight()
 
 filter = Krosskritacore::getFilter("invert")
 
-filter.process(layer, layer)
-filter.process(layer, layer, 10, 10, 20, 20 )
-	 
+filter.process(layer )
+filter.process(layer, 10, 10, 20, 20 )

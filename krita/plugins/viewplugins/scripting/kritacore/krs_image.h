@@ -49,6 +49,14 @@ class Image : public Kross::Api::Class<Image>
          */
         Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
         /**
+         * Resize an image
+         */
+        Kross::Api::Object::Ptr resize(Kross::Api::List::Ptr);
+        /**
+         * Scale an image
+         */
+        Kross::Api::Object::Ptr Image::scale(Kross::Api::List::Ptr);
+        /**
          * Convert the image to a colorspace.
          * This function takes one argument :
          *  - the name of the destination colorspace

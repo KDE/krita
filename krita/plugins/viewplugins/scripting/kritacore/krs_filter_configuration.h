@@ -32,7 +32,7 @@ namespace KritaCore {
 class FilterConfiguration : public Kross::Api::Class<FilterConfiguration>
 {
     public:
-        FilterConfiguration(const QString name, Q_INT32 version);
+        FilterConfiguration(KisFilterConfiguration*);
         ~FilterConfiguration();
     public:
         virtual const QString getClassName() const;
@@ -51,6 +51,10 @@ class FilterConfiguration : public Kross::Api::Class<FilterConfiguration>
          *  - the name of the parameter
          */
         Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr args);
+        /**
+         * Deserialize
+         */
+        Kross::Api::Object::Ptr fromXML(Kross::Api::List::Ptr args);
     private:
         KisFilterConfiguration* m_fConfig;
 };

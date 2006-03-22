@@ -25,11 +25,12 @@
 namespace Kross {
 namespace KritaCore {
 
-FilterConfiguration::FilterConfiguration(const QString name, Q_INT32 version)
-    : Kross::Api::Class<FilterConfiguration>("KritaFilterConfiguration"), m_fConfig(new KisFilterConfiguration(name, version))
+    FilterConfiguration::FilterConfiguration(KisFilterConfiguration* fConfig)
+    : Kross::Api::Class<FilterConfiguration>("KritaFilterConfiguration"), m_fConfig(fConfig)
 {
     addFunction("setProperty", &FilterConfiguration::setProperty, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("getProperty", &FilterConfiguration::getProperty, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("fromXML", &FilterConfiguration::fromXML);
 }
 
 FilterConfiguration::~FilterConfiguration()
@@ -58,6 +59,13 @@ Kross::Api::Object::Ptr FilterConfiguration::getProperty(Kross::Api::List::Ptr a
     } else {
         return 0;
     }
+}
+
+Kross::Api::Object::Ptr FilterConfiguration::fromXML(Kross::Api::List::Ptr args)
+{
+    QString xml = Kross::Api::Variant::toString(args->item(0));
+    m_fConfig->fromXML( xml );
+    return 0;
 }
 
 }

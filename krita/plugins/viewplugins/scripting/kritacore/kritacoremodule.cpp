@@ -273,7 +273,7 @@ const QString KritaCoreModule::getClassName() const
 
 Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
-    kdDebug(41011) << "KritaCoreModule::call" << name << endl;
+    kdDebug(41011) << "KritaCoreModule::call = " << name << endl;
     if( m_factory->isAFunction(name))
     {
         return m_factory->call(name, arguments);

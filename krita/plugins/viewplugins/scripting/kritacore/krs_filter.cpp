@@ -28,9 +28,9 @@ namespace Kross {
 namespace KritaCore {
 
 Filter::Filter(KisFilter* filter)
-    : Kross::Api::Class<Filter>("KritaFilter"), m_filter(filter), m_config(new FilterConfiguration( m_filter->id().id(), 1 ) )
+    : Kross::Api::Class<Filter>("KritaFilter"), m_filter(filter), m_config( new FilterConfiguration(filter->configuration()) )
 {
-    addFunction("process", &Filter::process, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("process", &Filter::process, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("getFilterConfiguration", &Filter::getFilterConfiguration);
 
 }
@@ -51,13 +51,17 @@ Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
 Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 {
     PaintLayer* src = (PaintLayer*)args->item(0).data();
-    QRect rect;
-    if( args->count() >2)
+    if(!m_filter->workWith( src->paintLayer()->paintDevice()->colorSpace()))
     {
-        uint x = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
-        uint y = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
-        uint w = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
-        uint h = Kross::Api::Variant::toVariant(args->item(5)).toUInt();
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("process") ) );
+    }
+    QRect rect;
+    if( args->count() >1)
+    {
+        uint x = Kross::Api::Variant::toVariant(args->item(1)).toUInt();
+        uint y = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
+        uint w = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
+        uint h = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
         rect = QRect(x, y, w, h);
     } else {
         QRect r1 = src->paintLayer()->paintDevice()->extent();

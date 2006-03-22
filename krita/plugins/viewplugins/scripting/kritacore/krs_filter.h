@@ -39,9 +39,8 @@ class Filter : public Kross::Api::Class<Filter>
         Kross::Api::Object::Ptr getFilterConfiguration(Kross::Api::List::Ptr args);
         /**
          * This function will apply the filter.
-         * It takes at least two arguments :
+         * It takes one argument :
          *  - the source layer
-         *  - the destination layer
          * You can also use this four aguments :
          *  - x
          *  - y

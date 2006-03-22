@@ -142,7 +142,12 @@ KisProfile * KisDlgImageProperties::profile()
 {
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
     Q_UINT32 index = m_page->cmbProfile->currentItem();
-    return profileList.at(index);
+
+    if (index < profileList.count()) {
+        return profileList.at(index);
+    } else {
+        return 0;
+    }
 }
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class

@@ -494,7 +494,7 @@ void KisTileManager::reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize) {
 void KisTileManager::configChanged() {
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
+    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  4000);
     m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     m_swapMutex->lock();

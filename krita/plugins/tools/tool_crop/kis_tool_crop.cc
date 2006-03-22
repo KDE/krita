@@ -190,6 +190,22 @@ void KisToolCrop::move(KisMoveEvent *e)
                     if( m_mouseOnHandleType == Inside )
                     {
                         m_rectCrop.moveBy( ( m_dragStop.x() - m_dragStart.x() ),  ( m_dragStop.y() - m_dragStart.y() ) );
+                        if( m_rectCrop.left() < 0 )
+                        {
+                            m_rectCrop.moveLeft( 0 );
+                        }
+                        if( m_rectCrop.right() > imageWidth )
+                        {
+                            m_rectCrop.moveRight( imageWidth  );
+                        }
+                        if( m_rectCrop.top() < 0 )
+                        {
+                            m_rectCrop.moveTop( 0 );
+                        }
+                        if( m_rectCrop.bottom() > imageHeight )
+                        {
+                            m_rectCrop.moveBottom( imageHeight  );
+                        }
                     } else if(m_optWidget->boolRatio->isChecked())
                     {
                         QPoint drag = m_dragStop - m_dragStart;
@@ -248,7 +264,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                     } else {
                         if( m_optWidget->boolWidth->isChecked() )
                         {
-                            m_rectCrop.setWidth( m_optWidget->intWidth->value() );
+                            m_rectCrop.setWidth( m_optWidget->intWidth->value() + 1 );
                         } else {
                             switch (m_mouseOnHandleType)
                             {
@@ -268,7 +284,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                         }
                         if( m_optWidget->boolHeight->isChecked() )
                         {
-                            m_rectCrop.setHeight( m_optWidget->intHeight->value() );
+                            m_rectCrop.setHeight( m_optWidget->intHeight->value() + 1 );
                         } else {
                             switch (m_mouseOnHandleType)
                             {
@@ -287,38 +303,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                             }
                         }
                     }
-                    if( m_rectCrop.width() > imageWidth)
-                    {
-                        m_rectCrop.setLeft( 0 );
-                        m_rectCrop.setWidth( imageWidth );
-                    } else if( m_rectCrop.width() < 0) {
-                        m_rectCrop.setWidth( 0 );
-                    } else {
-                        if( m_rectCrop.left() < 0 )
-                        {
-                            m_rectCrop.moveLeft( 0 );
-                        }
-                        if( m_rectCrop.right() > imageWidth )
-                        {
-                            m_rectCrop.moveRight( imageWidth );
-                        }
-                    }
-                    if( m_rectCrop.height() > imageHeight)
-                    {
-                        m_rectCrop.setTop( 0 );
-                        m_rectCrop.setHeight( imageHeight );
-                    } else if( m_rectCrop.height() < 0) {
-                        m_rectCrop.setHeight( 0 );
-                    } else {
-                        if( m_rectCrop.top() < 0 )
-                        {
-                            m_rectCrop.moveTop( 0 );
-                        }
-                        if( m_rectCrop.bottom() > imageHeight )
-                        {
-                            m_rectCrop.moveBottom( imageHeight );
-                        }
-                    }
+                    m_rectCrop = m_rectCrop.intersect( QRect(0,0, imageWidth + 1, imageHeight + 1 ) );
                     m_dragStart = e->pos().floorQPoint();
                     paintOutlineWithHandles();
                 }
@@ -340,12 +325,13 @@ void KisToolCrop::move(KisMoveEvent *e)
 
 void KisToolCrop::updateWidgetValues(bool updateratio)
 {
-    setOptionWidgetX(m_rectCrop.x());
-    setOptionWidgetY(m_rectCrop.y());
-    setOptionWidgetWidth(m_rectCrop.width());
-    setOptionWidgetHeight(m_rectCrop.height());
+    QRect r = realRectCrop();
+    setOptionWidgetX(r.x());
+    setOptionWidgetY(r.y());
+    setOptionWidgetWidth(r.width() );
+    setOptionWidgetHeight(r.height() );
     if(updateratio && !m_optWidget->boolRatio->isChecked() )
-        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
+        setOptionWidgetRatio((double)r.width() / (double)r.height() );
 }
 
 void KisToolCrop::buttonRelease(KisButtonReleaseEvent *e)
@@ -481,14 +467,10 @@ void KisToolCrop::crop() {
     if (!img)
         return;
 
-    QRect rc = m_rectCrop.normalize();
+    QRect rc =  realRectCrop().normalize();
 
-    // We don't want the border of the 'rectangle' to be included in our selection
-    rc.setSize(rc.size() - QSize(1,1));
 
     // The visitor adds the undo steps to the macro
-
-
     if (m_optWidget->cmbType->currentItem() == 0) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
@@ -553,7 +535,7 @@ void KisToolCrop::setCropWidth(int w)
         paintOutlineWithHandles(); // remove outlines
     }
 
-    m_rectCrop.setWidth(w);
+    m_rectCrop.setWidth(w + 1);
 
     if( m_optWidget->boolRatio->isChecked() )
     {
@@ -576,7 +558,7 @@ void KisToolCrop::setCropHeight(int h)
         paintOutlineWithHandles(); // remove outlines
     }
 
-    m_rectCrop.setHeight(h);
+    m_rectCrop.setHeight(h + 1);
 
     if( m_optWidget->boolRatio->isChecked() )
     {
@@ -610,10 +592,10 @@ void KisToolCrop::setRatio(double )
         } else {
             int newwidth = (int) (m_optWidget->doubleRatio->value() * m_rectCrop.height());
             newwidth = (newwidth + m_rectCrop.width()) / 2;
-            m_rectCrop.setWidth( newwidth );
+            m_rectCrop.setWidth( newwidth + 1);
             setOptionWidgetWidth( newwidth );
-            m_rectCrop.setHeight( (int) (newwidth / m_optWidget->doubleRatio->value()) );
-            setOptionWidgetHeight( m_rectCrop.height() );
+            m_rectCrop.setHeight( (int) (newwidth / m_optWidget->doubleRatio->value()) + 1 );
+            setOptionWidgetHeight( m_rectCrop.height() - 1 );
         }
         validateSelection(false);
         paintOutlineWithHandles();

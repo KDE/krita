@@ -90,10 +90,12 @@ private slots:
     void setCropHeight(int y);
     void setRatio(double ratio);
 
+    inline QRect realRectCrop() { QRect r = m_rectCrop; r.setSize(r.size() - QSize(1,1)); return r; }
+    
 private:
     void updateWidgetValues(bool updateratio = true);
     KisCanvasSubject *m_subject;
-    QRect m_rectCrop;
+    QRect m_rectCrop; // Is the coordinate of the outline rect and not of the region to crop (to get the region to crop you need to remove 1 to width and height
 //     QPoint m_startPos;
 //     QPoint m_endPos;
     bool m_selecting;

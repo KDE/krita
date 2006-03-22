@@ -934,7 +934,6 @@ void KisPaintDevice::deselect()
     if (m_selection && m_hasSelection) {
         m_hasSelection = false;
         m_selectionDeselected = true;
-        //emitSelectionChanged();
     }
 }
 
@@ -942,23 +941,23 @@ void KisPaintDevice::reselect()
 {
     m_hasSelection = true;
     m_selectionDeselected = false;
-    //emitSelectionChanged();
 }
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
+
     KisPainter painter(this->selection().data());
-    Q_INT32 x, y, w, h;
-    selection->extent(x, y, w, h);
-    painter.bitBlt(x, y, COMPOSITE_OVER, selection.data(), x, y, w, h);
+    QRect r = selection->selectedExactRect();
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, selection.data(), r.x(), r.y(), r.width(), r.height());
     painter.end();
 }
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
-    Q_INT32 x, y, w, h;
     KisPainter painter(this->selection().data());
     selection->invert();
-    selection->extent(x, y, w, h);
-    painter.bitBlt(x, y, COMPOSITE_ERASE, selection.data(), x, y, w, h);
+
+    QRect r = selection->selectedExactRect();
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, selection.data(), r.x(), r.y(), r.width(), r.height());
+    
     selection->invert();
     painter.end();
 }

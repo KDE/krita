@@ -183,10 +183,6 @@ void KisToolFreehand::initPaint(KisEvent *)
             m_tempLayer->setCompositeOp( m_compositeOp );
             m_tempLayer->setOpacity( m_opacity );
 
-            if (device->hasSelection()) {
-                m_target->addSelection(device->selection());
-            }
-
             m_tempLayer->setVisible(true);
 
             currentImage()->addLayer(m_tempLayer, m_currentImage->activeLayer()->parent().data(), m_currentImage->activeLayer());
@@ -214,6 +210,15 @@ void KisToolFreehand::initPaint(KisEvent *)
         m_painter->setOpacity( OPACITY_OPAQUE );
 
     }
+
+/*    kdDebug() << "target: " << m_target << "( " << m_target->name() << " )"
+            << " source: " << m_source << "( " << m_source->name() << " )"
+            << ", incremental " << m_paintIncremental
+            << ", paint on selection: " << m_paintOnSelection
+            << ", active device has selection: " << device->hasSelection()
+            << ", target has selection: " << m_target->hasSelection()
+            << endl;
+*/
 }
 
 void KisToolFreehand::endPaint()

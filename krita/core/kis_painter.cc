@@ -248,7 +248,14 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
     if (m_device == 0) return;
 
     if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
-        // Blitting outside selection rect
+/*
+        kdDebug() << "Blitting outside selection rect\n";
+
+        kdDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
+                << ", seldev: " << seldev << " (" << seldev->name() << ")"
+                << ". dx, dy " << dx << "," << dy
+                << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
+*/
         return;
     }
 
@@ -342,7 +349,6 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
                   Q_INT32 sw, Q_INT32 sh)
 {
     if (m_device == 0) return;
-
     if (!m_device->hasSelection()) {
         bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
     }

@@ -409,7 +409,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 dy = (newY - m_scaleY * (m_startPos.y() - m_org_cenY)) / 2;
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
 
-                // enforce same acpect if shift button is pressed
+                // enforce same aspect if shift button is pressed
                 if(e->state() & Qt::ShiftButton)
                 {
                     if(m_scaleX < m_scaleY)

@@ -594,19 +594,19 @@ QString PerfTest::rotateTest(Q_UINT32 testCount)
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
 
-        KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
         doc->undoAdapter()->setUndo( false );
         QTime t;
 
         for (uint i = 0; i < testCount; ++i) {
             for (double angle = 0; angle < 360; ++angle) {
                 kdDebug() << "Rotating " << (*it).name() << " at " << angle << " degrees\n";
+                KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
                 img->rotate(angle, m_view->canvasSubject()->progressDisplay());
                 kdDebug() << "Size: " << img->projection()->extent() << endl;
+                delete img;
             }
         }
         report = report.append(QString("    rotated  1000 x 1000 pixels over 360 degrees, degree by degree, %1 times: %2\n").arg(testCount).arg(t.elapsed()));
-        delete img;
     }
     return report;
 }

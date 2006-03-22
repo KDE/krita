@@ -17,6 +17,7 @@
  */
 #include "kopalettemanager.h"
 
+#include "kis_part_layer.h"
 #include "kis_tool_manager.h"
 #include "kis_tool_registry.h"
 #include "kis_tool_dummy.h"
@@ -29,6 +30,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_input_device.h"
+
 
 KisToolManager::KisToolManager(KisCanvasSubject * parent, KisCanvasController * controller)
     : m_subject(parent),
@@ -134,9 +136,13 @@ void KisToolManager::updateGUI()
     KisLayerSP l = 0;
 
     bool enable = false;
+
+
+    KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
+    
     if (img) {
         l = img->activeLayer();
-        enable = l && !l->locked() && l->visible();
+        enable = l && !l->locked() && l->visible() && (partLayer == 0);
     }
 
     m_toolBox->enableTools( enable );

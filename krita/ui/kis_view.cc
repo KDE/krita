@@ -1241,6 +1241,8 @@ void KisView::layerUpdateGUI(bool enable)
     Q_INT32 nlayers = 0;
     Q_INT32 nvisible = 0;
 
+    
+    
     if (img) {
         layer = img->activeLayer();
         nlayers = img->nlayers();
@@ -1248,7 +1250,7 @@ void KisView::layerUpdateGUI(bool enable)
     }
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-
+        
     if (pl && ( m_currentColorChooserDisplay != KisID("BLA") ||
                 pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
         if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
@@ -1289,6 +1291,12 @@ void KisView::layerUpdateGUI(bool enable)
     m_toolManager->updateGUI();
     m_gridManager->updateGUI();
 
+
+    KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
+    if (partLayer) {
+        setCanvasCursor( KisCursor::arrowCursor() ); 
+    }
+    
     if (img && img->activeDevice())
         emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
 

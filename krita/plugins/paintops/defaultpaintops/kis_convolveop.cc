@@ -30,7 +30,7 @@
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_paintop.h"
-
+#include "kis_selection.h"
 #include "kis_convolveop.h"
 
 

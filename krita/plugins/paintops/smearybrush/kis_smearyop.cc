@@ -29,6 +29,7 @@
 #include "kis_paintop.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
+#include "kis_selection.h"
 #include "kis_smearyop.h"
 #include "kis_point.h"
 
@@ -160,7 +161,14 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     vr = vr - vl;
     vr.normalize();
 
-    m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab.data(), m_painter->opacity(), x - 32, y -32, 64, 64);
+    if (m_source->hasSelection()) {
+        m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab.data(),
+                                m_source->selection(), m_painter->opacity(), x - 32, y -32, 64, 64);
+    }
+    else {
+        m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab.data(), m_painter->opacity(), x - 32, y -32, 64, 64);
+    }
+
     m_painter->addDirtyRect(QRect(x -32, y -32, 64, 64));
 }
 

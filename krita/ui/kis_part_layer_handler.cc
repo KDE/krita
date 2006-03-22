@@ -20,7 +20,9 @@
 #include <fixx11h.h> // kis_canvas.h does X11 stuff
 
 #include <qpainter.h>
+#include <qcursor.h>
 
+#include "kis_cursor.h"
 #include "kis_canvas_painter.h"
 #include "kis_move_event.h"
 #include "kis_button_press_event.h"
@@ -32,6 +34,7 @@ KisPartLayerHandler::KisPartLayerHandler(KisView* view, const KoDocumentEntry& e
                                          KisGroupLayerSP parent, KisLayerSP above)
     : m_parent(parent), m_above(above), m_view(view), m_entry(entry) {
     m_started = false;
+    view->getCanvasController()->setCanvasCursor( KisCursor::selectCursor() );
 }
 
 void KisPartLayerHandler::done() {

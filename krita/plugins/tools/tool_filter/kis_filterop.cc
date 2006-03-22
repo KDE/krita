@@ -32,6 +32,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
 #include "kis_colorspace.h"
+#include "kis_selection.h"
 #include "kis_filterop.h"
 
 
@@ -105,7 +106,6 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     filter->enableProgress();
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-
     for (int y = 0; y < maskHeight; y++)
     {
         KisHLineIterator hiter = tmpDev->createHLineIterator(0, y, maskWidth, false);
@@ -120,7 +120,6 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     }
 
     // Blit the paint device onto the layer
-
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
@@ -137,7 +136,14 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
 
-    m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
+    if (m_source->hasSelection()) {
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev.data(),
+                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+    else {
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev.data(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+
     m_painter->addDirtyRect(dstRect);
 }
 

@@ -30,6 +30,7 @@
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
 
+#include "kis_part_layer.h"
 #include "kis_clipboard.h"
 #include "kis_types.h"
 #include "kis_view.h"
@@ -279,7 +280,9 @@ void KisSelectionManager::updateGUI()
         dev = img->activeDevice();
 
 
-        enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible();
+        KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
+        
+        enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible() && (partLayer==0);
 
         if(dev)
             m_reselect->setEnabled( dev->selectionDeselected() );

@@ -26,6 +26,7 @@
 
 #include "kaction.h"
 
+#include "kis_part_layer.h"
 #include "kis_id.h"
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -196,7 +197,9 @@ void KisFilterManager::updateGUI()
     KisLayerSP layer = img->activeLayer();
     if (!layer) return;
 
-    bool enable =  !(layer->locked() || !layer->visible());
+    KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
+    
+    bool enable =  !(layer->locked() || !layer->visible() || partLayer);
     KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>( layer.data());
     if(!player)
     {

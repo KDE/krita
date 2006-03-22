@@ -36,7 +36,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_input_device.h"
-
+#include "kis_selection.h"
 #include "kis_brushop.h"
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
@@ -190,8 +190,14 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sy = dstRect.y() - y;
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
-
-    m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+    
+    if (m_source->hasSelection()) {
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),
+                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+    else {
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+    }
     m_painter->addDirtyRect(dstRect);
 
     m_painter->setOpacity(origOpacity);

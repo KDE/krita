@@ -33,7 +33,7 @@
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
-
+#include "kis_selection.h"
 #include "kis_eraseop.h"
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
@@ -127,7 +127,13 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_INT32 sw = dstRect.width();
     Q_INT32 sh = dstRect.height();
 
-    m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), OPACITY_OPAQUE, sx, sy, sw, sh);
+    if (m_source->hasSelection()) {
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(),
+                                m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
+    }
+    else {
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+    }
 
     m_painter->addDirtyRect(dstRect);
 }

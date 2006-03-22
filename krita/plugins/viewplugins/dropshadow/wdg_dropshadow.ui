@@ -12,6 +12,9 @@
             <height>294</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgDropshadow</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -198,6 +201,15 @@
         <slot>setValue(int)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>xOffsetSpinBox</tabstop>
+    <tabstop>yOffsetSpinBox</tabstop>
+    <tabstop>blurRadiusSpinBox</tabstop>
+    <tabstop>shadowColorButton</tabstop>
+    <tabstop>opacitySlider</tabstop>
+    <tabstop>opacitySpinBox</tabstop>
+    <tabstop>allowResizingCheckBox</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>

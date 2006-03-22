@@ -399,8 +399,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
 bool KisTransformWorker::run()
 {
-        //progress info
-        m_cancelRequested = false;
+    //progress info
+    m_cancelRequested = false;
+    if(m_progress)
         m_progress->setSubject(this, true, true);
     m_progressTotalSteps = 0;
     m_progressStep = 0;

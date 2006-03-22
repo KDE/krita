@@ -151,7 +151,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     else
         strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
-    kdDebug() << "Strength: " << strength << endl;
+    //kdDebug() << "Strength: " << strength << endl;
     
     WetPack currentPack;
     WetPix currentPix;
@@ -180,18 +180,18 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
             else
                 press = -1;
 
-            kdDebug() << "Rawdata: " << *dabIt.rawData() << endl;
-            kdDebug() << "Press: " << press << endl;
+//            kdDebug() << "Rawdata: " << *dabIt.rawData() << endl;
+//            kdDebug() << "Press: " << press << endl;
             
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
-            kdDebug() << "eff_height: " << eff_height << endl;
+//            kdDebug() << "eff_height: " << eff_height << endl;
             contact = (press + eff_height) * 0.2;
-            kdDebug() << "contact: " << contact << endl;
+//            kdDebug() << "contact: " << contact << endl;
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
             if (press != -1 && currentData.h < 161) {
-                kdDebug() << contact << " " << press << " " << eff_height << endl;
+                //kdDebug() << contact << " " << press << " " << eff_height << endl;
             }
             if (contact > 0.0001) {
                 int v;

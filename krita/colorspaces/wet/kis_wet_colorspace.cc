@@ -504,7 +504,7 @@ QString KisWetColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
-
+/*
 QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
 {
     QValueList<KisFilter *> filterList;
@@ -512,3 +512,4 @@ QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
     filterList << f;
     return filterList;
 }
+*/

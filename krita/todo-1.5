@@ -25,10 +25,6 @@ P  * Try to optimize histogram docker
 P  * Try to fix display glitches in selection creation.
 ?  * after hiding and reshowing all palettes, the wrong ones are active
 
-Files and Import/Export
-
-C  * add support for YCbCr in TIFF and fix the reading of deflate files
-
 Plugins
 
 C  * finish, polish and document scripting support
@@ -45,8 +41,7 @@ Also: see UIcomments!
 
 Regressions
 
-? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale
-? autocontrast filter on lms crashes
+? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
 ? zooming in leaves display artefacts (see Bart's mail)
 ? Crash when setting the image colorspace to watercolor -- see CRASHES file.
 

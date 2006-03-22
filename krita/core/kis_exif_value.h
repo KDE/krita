@@ -89,7 +89,7 @@ class ExifValue {
         {
             if(m_type == EXIF_TYPE_UNDEFINED)
             {
-                ((UByteArray*)m_value)->setRawData(data, size);
+                ((UByteArray*)m_value)->duplicate(data, size);
                 m_components = size;
             }
         }

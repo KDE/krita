@@ -150,10 +150,10 @@
                         <cstring>opacitySlider</cstring>
                     </property>
                     <property name="maxValue">
-                        <number>255</number>
+                        <number>100</number>
                     </property>
                     <property name="value">
-                        <number>204</number>
+                        <number>80</number>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -163,11 +163,14 @@
                     <property name="name">
                         <cstring>opacitySpinBox</cstring>
                     </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
                     <property name="maxValue">
-                        <number>255</number>
+                        <number>100</number>
                     </property>
                     <property name="value">
-                        <number>204</number>
+                        <number>80</number>
                     </property>
                 </widget>
             </hbox>

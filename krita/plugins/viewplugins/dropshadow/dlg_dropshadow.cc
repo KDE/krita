@@ -71,7 +71,9 @@ Q_INT32 DlgDropshadow::getBlurRadius()
 
 Q_UINT8 DlgDropshadow::getShadowOpacity()
 {
-    return m_page->opacitySpinBox->value();
+    double opacity = (double)m_page->opacitySpinBox->value();
+    //convert percent to a 8 bit opacity value
+    return (Q_UINT8)(opacity / 100 * 255);
 }
 
 QColor DlgDropshadow::getShadowColor()

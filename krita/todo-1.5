@@ -37,6 +37,18 @@ Bugs
 
 Also: see UIcomments!
 
+Michael's bugs:
+
+* Open an image, add image as new layer, resize layer, undo: undo removes the layer
+* The change layer size dialog is not the same as the change image dialog, and should
+  therefore be called the scale layer dialog. (Resizing a layer makes no sense)
+* open an image, add an adjustment layer to the image (I used the pixelize 
+  filter). Click on the original layer in the layer dialog box and paint 
+  something. The undo the painting and undo add layer. Krita's toolbox will 
+  become greyed out and you can't paint. I think this is already a bug and 
+  should be fixed. But next, try to add an adjustment layer again -> Krita 
+  crashes.
+
 Regressions
 
 ? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)

@@ -67,7 +67,12 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
-    m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
+    KisIDList colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    KisIDList::iterator i = colorSpaces.find(KisID("WET",""));
+    if (i != colorSpaces.end()) {
+        colorSpaces.remove(i);
+    }
+    m_page->cmbColorSpaces->setIDList(colorSpaces);
     m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
             
     fillCmbProfiles(image->colorSpace()->id());

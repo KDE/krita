@@ -24,6 +24,7 @@
 #include <qpen.h>
 #include <qpushbutton.h>
 #include <qobject.h>
+#include <qlabel.h>
 #include <qcombobox.h>
 #include <qapplication.h>
 
@@ -825,6 +826,14 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
     connect(m_optWidget->intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
     connect(m_optWidget->intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
 */
+    m_optWidget->intStartX->hide();
+    m_optWidget->intStartY->hide();
+    m_optWidget->intEndX->hide();
+    m_optWidget->intEndY->hide();
+    m_optWidget->textLabel1->hide();
+    m_optWidget->textLabel2->hide();
+    m_optWidget->textLabel3->hide();
+    m_optWidget->textLabel4->hide();
     return m_optWidget;
 }
 

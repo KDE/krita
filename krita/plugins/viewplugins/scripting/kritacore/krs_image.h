@@ -55,7 +55,7 @@ class Image : public Kross::Api::Class<Image>
         /**
          * Scale an image
          */
-        Kross::Api::Object::Ptr Image::scale(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr scale(Kross::Api::List::Ptr);
         /**
          * Convert the image to a colorspace.
          * This function takes one argument :

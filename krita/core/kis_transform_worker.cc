@@ -349,7 +349,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         while(!dstIt.isDone())
         {
             if(scale < 0)
-                center = ((srcLen<<8) + (((i<<8)) * scaleDenom)) / scale;
+                center = (srcLen<<8) + (((i<<8)) * scaleDenom) / scale;
             else
                 center = (((i<<8)) * scaleDenom) / scale;
 

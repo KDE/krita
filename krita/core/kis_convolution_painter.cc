@@ -115,7 +115,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y
     yLastMinuskhh = y + (h - khalfHeight);
 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || kw&1 == 0 || kh&1 == 0 || kernel->factor == 0 ) return;
+    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor == 0 ) return;
 
     m_cancelRequested = false;
     int lastProgressPercent = 0;

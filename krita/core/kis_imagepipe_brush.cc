@@ -95,7 +95,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
             }
         } else if (index.startsWith("rank")) {
             int rankIndex = index.mid(strlen("rank")).toInt();
-            if (rankIndex < 0 && rankIndex > dim) {
+            if (rankIndex < 0 || rankIndex > dim) {
                 kdWarning(41001) << "Rankindex out of range: " << rankIndex << endl;
                 continue;
             }

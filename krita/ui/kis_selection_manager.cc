@@ -888,13 +888,13 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     circ -= xradius;
     max -= xradius;
     //XXXX: replace delete by delete[] where it is necessary to avoid memory leaks!
-    delete circ;
-    delete buffer;
-    delete max;
+    delete[] circ;
+    delete[] buffer;
+    delete[] max;
     for (Q_INT32 i = 0; i < yradius + 1; i++)
-        delete buf[i];
-    delete buf;
-    delete out;
+        delete[] buf[i];
+    delete[] buf;
+    delete[] out;
 
     dev->emitSelectionChanged();
 
@@ -1054,13 +1054,13 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
     max -= xradius;
     //free the memmory
     //XXXX: replace delete by delete[] where it is necessary to avoid memory leaks!
-    delete circ;
-    delete buffer;
-    delete max;
+    delete[] circ;
+    delete[] buffer;
+    delete[] max;
     for (Q_INT32 i = 0; i < yradius + 1; i++)
             delete buf[i];
-    delete buf;
-    delete out;
+    delete[] buf;
+    delete[] out;
 
     dev->emitSelectionChanged();
 }
@@ -1126,9 +1126,9 @@ void KisSelectionManager::smooth()
     }
 
     for (Q_INT32 i = 0; i < 3; i++)
-        delete buf[i];
+        delete[] buf[i];
 
-    delete out;
+    delete[] out;
 
     dev->emitSelectionChanged();
 }
@@ -1200,9 +1200,9 @@ void KisSelectionManager::erode()
     }
 
     for (Q_INT32 i = 0; i < 3; i++)
-        delete buf[i];
+        delete[] buf[i];
 
-    delete out;
+    delete[] out;
 
     dev->emitSelectionChanged();
 }
@@ -1273,9 +1273,9 @@ void KisSelectionManager::dilate()
     }
 
     for (Q_INT32 i = 0; i < 3; i++)
-        delete buf[i];
+        delete[] buf[i];
 
-    delete out;
+    delete[] out;
 
     dev->emitSelectionChanged();
 }
@@ -1333,8 +1333,8 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         }
 
         for (Q_INT32 i = 0; i < 3; i++)
-            delete source[i];
-        delete transition;
+            delete[] source[i];
+        delete[] transition;
         return;
     }
 
@@ -1507,14 +1507,14 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         delete buf[i];
 
     max -= xradius;
-    delete max;
+    delete[] max;
 
     for (Q_INT32 i = 0; i < yradius + 1; i++)
     {
         transition[i] -= xradius;
         delete transition[i];
     }
-    delete transition;
+    delete[] transition;
 
     for (Q_INT32 i = 0; i < xradius + 1 ; i++)
     {
@@ -1522,7 +1522,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         delete density[i];
     }
     density -= xradius;
-    delete density;
+    delete[] density;
 
     dev->emitSelectionChanged();
 }

@@ -74,7 +74,7 @@ KisAbstractColorSpace::KisAbstractColorSpace(const KisID& id,
     m_alphaPos = -1;
     m_alphaSize = -1;
     m_qcolordata = 0;
-    m_lastUsedDstProfile = 0;
+    m_lastUsedDstColorSpace = 0;
     m_lastUsedTransform = 0;
     m_lastRGBProfile = 0;
     m_lastToRGB = 0;
@@ -208,9 +208,11 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
     Q_INT32 srcPixelSize = pixelSize();
     Q_INT32 dstPixelSize = dstColorSpace->pixelSize();
 
-    if (m_lastUsedTransform != 0) {
-        if (dstColorSpace->getProfile() == m_lastUsedDstProfile)
+    if (m_lastUsedTransform != 0 && m_lastUsedDstColorSpace != 0) {
+        if (dstColorSpace->colorSpaceType() == m_lastUsedDstColorSpace->colorSpaceType() && 
+            dstColorSpace->getProfile() == m_lastUsedDstColorSpace->getProfile()) {
             tf = m_lastUsedTransform;
+        }
     }
 
     if (!tf && m_profile && dstColorSpace->getProfile()) {
@@ -231,7 +233,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
 
         if ( tf ) {
             m_lastUsedTransform = tf;
-            m_lastUsedDstProfile = dstColorSpace->getProfile();
+            m_lastUsedDstColorSpace = dstColorSpace;
         }
     }
 

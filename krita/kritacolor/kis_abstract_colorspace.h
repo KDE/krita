@@ -230,7 +230,7 @@ private:
     cmsHTRANSFORM m_defaultFromLab;
 
     KisProfile *  m_profile;
-    KisProfile *  m_lastUsedDstProfile;
+    KisColorSpace *m_lastUsedDstColorSpace;
     cmsHTRANSFORM m_lastUsedTransform;
 
     KisID m_id;

@@ -1142,6 +1142,8 @@ bool KisImage::removeLayer(KisLayerSP layer)
         KisLayerSP wasAbove = layer->nextSibling();
         KisLayerSP wasBelow = layer->prevSibling();
         const bool wasActive = layer == activeLayer();
+        // sigLayerRemoved can set it to 0, we don't want that in the else of wasActive!
+        KisLayerSP actLayer = activeLayer();
         const bool success = parent->removeLayer(layer);
         if (success) {
             layer->setImage(0);
@@ -1159,6 +1161,8 @@ bool KisImage::removeLayer(KisLayerSP layer)
                         activate(parent.data());
                     else
                         activate(rootLayer()->firstChild());
+                } else {
+                    activate(actLayer);
                 }
             }
         }

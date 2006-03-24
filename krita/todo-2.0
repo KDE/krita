@@ -14,6 +14,7 @@ G = Gábor Level
 S = Sander Koning
 TZ = Thomas Zander (to refer to his ui hints)
 
+Also: see UIcomments!
 
 Wet colorspace
 
@@ -70,7 +71,7 @@ New ruler system
 
 New selection system
 
-?  * selections, adj. masks, wetness, heigh masks (all 8-bit mask ideas)
+?  * selections, adj. masks, wetness, height masks (all 8-bit mask ideas)
       as sublayers to paint layers, and make them movable between layers
       and x,y, toggle on/off.
 ?  * add opacity slider to selection painting tools so you can select something 50%.
@@ -83,7 +84,18 @@ New selection system
 ?  * the selection tools should allow pressing shift to go to 'substract' 
       mode without adjusting the combobox for the current tool.  (a different 
       pointer would be nice as well)
+?  * add marching ants representation of the active selection?
 
+Paths
+
+Note: all path functionality should be shared with Karbon and flake. Basically,
+only the integration into our rendering stack & the conversion from path to
+selection mask should give us work. Query: should path objects be attached to
+a paint layer, or form their own layer? The latter should be easier to do.
+
+?  * Add path capability 
+?  * Make it possible to stroke paths & filter stroked paths
+?  * Make it possible to convert a path into a seletction.
 
 History & versioning
 
@@ -97,6 +109,9 @@ Fileformat and import/export
 ?  * save & load more information, like PNG comments, gamma information, etc
 ?  * fix gimp XCF PSD and import/export (ImageMagick hacking...)
 ?  * fix imports to import metadata.
+?  * Saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually 
+     saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
+R  * Coordinate & create an OASIS File format spec on the CREATE list
 
 
 Core
@@ -111,24 +126,28 @@ Core
 ?  * anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
 ?  * load/save configuration of everything user-settable.
 ?  * long painter operations (e.g., convolution painter) should use the
-         progressbar and be cancelable.
-?  * the fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
-      tool should use that rect to blit and notify the image, instead of notifying the complete image.s
+      progressbar and be cancelable.
+?  * the fill painter (and perhaps other paitners, too) should call addDirtyRect, 
+      and the floodfill tool should use that rect to blit and notify the image, instead 
+      of notifying the complete image.s
 
 
 General user interface
 
-?  * new palette/docker system, much like now but better implemented with QT4. (actually in kofficelib)
-                - tabs in dockers drag-and-droppable (vector of docker windows, create new docker if tab
-                  dropped outside existing docker window)
-                - disable dragging the toolbox from dock position to dock position (see Karbon) if QT4 doesn't fix relayout
+?  * new palette/docker system, much like now but better implemented with QT4. 
+      (actually in kofficelib)
+     - tabs in dockers drag-and-droppable (vector of docker windows, create new docker if tab
+        dropped outside existing docker window)
+     - disable dragging the toolbox from dock position to dock position (see Karbon) if QT4 
+        doesn't fix relayout
 ?  * after hiding and reshowing all palettes, the wrong ones are active
 ?  * color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
       we should try to make the listview a lot smaller. Maybe just use labels here?
 ?  * the edit palette dialog two-step should be changed into a single dialog
 ?  * add end poly entry to the popup menu when the poly tool is active (note:
-      make this more generically useful for tools. Great idea by David Herman
-B  * make scaling filter more user friendly by removing the combo and just presenting "fast" and "good"
+      make this more generically useful for tools. Great idea by David Herman)
+B  * make scaling filter more user friendly by removing the combo and just presenting "fast" 
+      and "good"
 ?  * add a cheatsheet widget that integrates with knewstuff to have tutorials that people
       can download and follow from Krita.
 ?  * create opacity widget (One that grows more white or transparent (showing those gray blocks) based on the input)
@@ -163,23 +182,21 @@ R  * develop thorough test plan and exercise it on several installations
 
 Bugs
 
-* Open an image, add image as new layer, resize layer, undo: undo removes the layer
-* The change layer size dialog is not the same as the change image dialog, and should
+? Open an image, add image as new layer, resize layer, undo: undo removes the layer
+? The change layer size dialog is not the same as the change image dialog, and should
   therefore be called the scale layer dialog. (Resizing a layer makes no sense)
-* open an image, add an adjustment layer to the image (I used the pixelize 
+? open an image, add an adjustment layer to the image (I used the pixelize 
   filter). Click on the original layer in the layer dialog box and paint 
   something. The undo the painting and undo add layer. Krita's toolbox will 
   become greyed out and you can't paint. I think this is already a bug and 
   should be fixed. But next, try to add an adjustment layer again -> Krita 
   crashes.
+? zooming in leaves display artefacts (see Bart's mail)
 
-Also: see UIcomments!
 
 
 Regressions
 
-? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
-? zooming in leaves display artefacts (see Bart's mail)
 
 
 Painting with filters
@@ -189,3 +206,7 @@ Painting with filters
 
 Note: make kivio flowchart of what happens when painting with and without filters,
 with and without selection, direct or indirect, because I don't follow anymore
+
+File format
+
+

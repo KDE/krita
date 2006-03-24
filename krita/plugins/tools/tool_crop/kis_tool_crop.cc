@@ -99,6 +99,23 @@ void KisToolCrop::activate()
     }
 }
 
+void KisToolCrop::deactivate()
+{
+    if (m_subject) {
+        KisCanvasController *controller = m_subject->canvasController();
+        KisImageSP img = m_subject->currentImg();
+
+        Q_ASSERT(controller);
+
+        controller->kiscanvas()->update();
+
+        m_rectCrop = QRect(0,0,0,0);
+
+        updateWidgetValues();
+        m_selecting = false;
+    }
+}
+
 void KisToolCrop::paint(KisCanvasPainter& gc)
 {
     paintOutlineWithHandles(gc, QRect());

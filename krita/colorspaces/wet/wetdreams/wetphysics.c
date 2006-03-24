@@ -13,7 +13,7 @@ void wet_pix_combine(WetPixDbl * dst, WetPixDbl * src1, WetPixDbl * src2)
 {
 	dst->rd = src1->rd + src2->rd;
 	dst->rw = src1->rw + src2->rw;
-#if 0
+#if 1
 	g_print("rd %f rw %f\n", dst->rd, dst->rw);
 #endif
 	dst->gd = src1->gd + src2->gd;
@@ -21,7 +21,7 @@ void wet_pix_combine(WetPixDbl * dst, WetPixDbl * src1, WetPixDbl * src2)
 	dst->bd = src1->bd + src2->bd;
 	dst->bw = src1->bw + src2->bw;
 	dst->w = src1->w + src2->w;
-#if 0
+#if 1
 	g_print("%f + %f -> %f\n", src1->w, src2->w, dst->w);
 #endif
 }
@@ -32,7 +32,7 @@ void wet_pix_dilute(WetPixDbl * dst, WetPix * src, double dilution)
 
 
 	dst->rd = src->rd * scale;
-#if 0
+#if 1
 	g_print("dilution %f scale %f rd %f\n", dilution, scale, dst->rd);
 #endif
 	dst->rw = src->rw * scale;
@@ -166,6 +166,7 @@ void wet_flow(WetLayer * layer)
 				fluid[ix] =
 				    0.4 * sqrt(wet_line[x].w * 1.0 /
 					       255.0);
+				g_print("Fluid: %f\n", fluid[ix]);
 
 				/* smooth out the flow a bit */
 				flow_t[ix] =
@@ -250,7 +251,7 @@ void wet_flow(WetLayer * layer)
 				wet_pix_from_double(&wet_line[x],
 						    &wet_mix);
 
-#if 0
+#if 1
 				if (ix % 3201 == 0)
 					g_print("%f %f %f %f %f %f\n",
 						outflow[ix],

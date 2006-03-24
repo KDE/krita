@@ -12,6 +12,9 @@ wet_dab(WetLayer * layer,
 	WetPix * paint,
 	double x, double y, double r, double pressure, double strength)
 {
+
+    g_print("wet_dab. x:%f y:%f r:%f pressure:%f strength:%f \n", x, y, r, pressure, strength);
+
 	double r_fringe;
 	int x0, y0;
 	int x1, y1;
@@ -48,13 +51,13 @@ wet_dab(WetLayer * layer,
 				press = pressure * 0.25;
 			else
 				press = -1;
-			eff_height =
-			    (wet_line[xp].h + wet_line[xp].w -
-			     192) * (1.0 / 255);
+
+			/*g_print("After mysterious line, press becomes %f\n", press);*/
+			eff_height = (wet_line[xp].h + wet_line[xp].w - 192) * (1.0 / 255);
 			contact = (press + eff_height) * 0.2;
 			if (contact > 0.5)
-				contact =
-				    1 - 0.5 * exp(-2.0 * contact - 1);
+				contact = 1 - 0.5 * exp(-2.0 * contact - 1);
+			g_print("Contact has become %f\n", contact);
 			if (contact > 0.0001) {
 				int v;
 				double rnd = rand() * (1.0 / RAND_MAX);
@@ -64,11 +67,13 @@ wet_dab(WetLayer * layer,
 				    floor(v +
 					  (paint->rd * strength -
 					   v) * contact + rnd);
+				g_print("Rd was: %i, and became %i\n", v, wet_line[xp].rd);
 				v = wet_line[xp].rw;
 				wet_line[xp].rw =
 				    floor(v +
 					  (paint->rw * strength -
 					   v) * contact + rnd);
+				g_print("Rw was: %i, and became %i\n", v, wet_line[xp].rw);
 				v = wet_line[xp].gd;
 				wet_line[xp].gd =
 				    floor(v +
@@ -93,6 +98,7 @@ wet_dab(WetLayer * layer,
 				wet_line[xp].w =
 				    floor(v + (paint->w - v) * contact +
 					  rnd);
+				
 
 			}
 		}

@@ -101,7 +101,13 @@ public:
 
 
 public:
+    /**
+     * Start the long-running background filters. This is typically done from
+     * paint layers
+     */
+    void startBackgroundFilters();
 
+public:
     /**
      * Write the pixels of this paint device into the specified file store.
      */

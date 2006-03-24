@@ -163,6 +163,7 @@ KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
     m_conversionMap[getH(118, 16, 135)] = m_paintbox[11]; // Interference Lilac
     m_conversionMap[getH(254, 254, 254)] = m_paintbox[12]; // Titanium White
     m_conversionMap[getH(64, 64, 74)] = m_paintbox[13]; // Ivory Black
+    m_conversionMap[getH(0, 0, 0)] = m_paintbox[14]; // Water
 
     m_paintwetness = false;
     phasebig = 0;
@@ -247,7 +248,11 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*pr
     // Composite the two layers in each pixelSize
 
     WetPack * wp = (WetPack*)src;
-
+    rgb[0] = 128 + (wp->adsorb.h / 4);
+    rgb[1] = 128 + (wp->adsorb.h / 4);
+    rgb[2] = 128 + (wp->adsorb.h / 4);
+    
+    
     // First the adsorption layer
     wet_composite(RGB, rgb, &wp->adsorb);
 
@@ -259,9 +264,10 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*pr
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 */*opacity*/, KisProfile * /*profile*/)
+void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
 {
     toQColor(src, c);
+    *opacity = OPACITY_OPAQUE;
 }
 
 void KisWetColorSpace::mixColors(const Q_UINT8 **/*colors*/, const Q_UINT8 */*weights*/, Q_UINT32 /*nColors*/, Q_UINT8 */*dst*/) const
@@ -306,7 +312,8 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 {
 
     QImage img(width, height, 32);
-
+    img.setAlphaBuffer(true);
+    
     Q_UINT8 *rgb = (Q_UINT8*) img.bits();
     const WetPack* wetData = reinterpret_cast<const WetPack*>(data);
 
@@ -318,9 +325,15 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
     Q_INT32 i = 0;
     while ( i < width * height) {
+        
         // First the adsorption layers
         WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
         // XXX Probably won't work on MSB archs!
+        rgb[0] = 128 + (wp->adsorb.h / 4);
+        rgb[1] = 128 + (wp->adsorb.h / 4);
+        rgb[2] = 128 + (wp->adsorb.h / 4);
+        rgb[3] = OPACITY_OPAQUE;
+        
         wet_composite(BGR, rgb, &(wp->adsorb));
         // Then the paint layer (which comes first in our double-packed pixel)
         wet_composite(BGR, rgb, &(wp->paint));
@@ -339,7 +352,6 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
 
         i++;
         rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
-
     }
 
     return img;
@@ -504,7 +516,7 @@ QString KisWetColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
-/*
+
 QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
 {
     QValueList<KisFilter *> filterList;
@@ -512,4 +524,4 @@ QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
     filterList << f;
     return filterList;
 }
-*/
+

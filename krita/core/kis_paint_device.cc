@@ -230,12 +230,6 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
     m_selectionDeselected = false;
     m_selection = 0;
 
-    m_longRunningFilters = colorSpace->createBackgroundFilters();
-    if (!m_longRunningFilters.isEmpty()) {
-        m_longRunningFilterTimer = new QTimer(this);
-        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
-        m_longRunningFilterTimer->start(800);
-    }
 }
 
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
@@ -272,13 +266,6 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     Q_CHECK_PTR(m_datamanager);
     m_extentIsValid = true;
 
-    
-    m_longRunningFilters = colorSpace->createBackgroundFilters();
-    if (!m_longRunningFilters.isEmpty()) {
-        m_longRunningFilterTimer = new QTimer(this);
-        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
-        m_longRunningFilterTimer->start(800);
-    }
 }
 
  
@@ -334,6 +321,17 @@ DCOPObject *KisPaintDevice::dcopObject()
         Q_CHECK_PTR(m_dcop);
     }
     return m_dcop;
+}
+
+
+void KisPaintDevice::startBackgroundFilters()
+{
+    m_longRunningFilters = m_colorSpace->createBackgroundFilters();
+    if (!m_longRunningFilters.isEmpty()) {
+        m_longRunningFilterTimer = new QTimer(this);
+        connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));
+        m_longRunningFilterTimer->start(800);
+    }
 }
 
 KisLayer *KisPaintDevice::parentLayer() const
@@ -1147,7 +1145,7 @@ KisExifInfo* KisPaintDevice::exifInfo()
 
 void KisPaintDevice::runBackgroundFilters()
 {
-    QRect rc = extent();
+    QRect rc = exactBounds();
     if (!m_longRunningFilters.isEmpty()) {
         QValueList<KisFilter*>::iterator it;
         QValueList<KisFilter*>::iterator end = m_longRunningFilters.end();

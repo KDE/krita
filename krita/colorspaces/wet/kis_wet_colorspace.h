@@ -71,6 +71,7 @@ struct _WetPix {
 struct _WetPack {
     WetPix paint;  /* Paint layer */
     WetPix adsorb; /* Adsorbtion layer */
+    Q_UINT8 alpha;  /* for layer composition */
 };
 
 struct _WetPixDbl {
@@ -109,9 +110,6 @@ public:
 
 public:
 
-    // Semi-clever: we have only fifteen wet paint colors that are mapped to the
-    // qcolors that are put in the painter by the special wet paint palette. Other
-    // QColors are mapped to plain water...
     virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
     virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
 
@@ -144,7 +142,7 @@ public:
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-    //virtual QValueList<KisFilter*> createBackgroundFilters();
+    virtual QValueList<KisFilter*> createBackgroundFilters();
     
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 

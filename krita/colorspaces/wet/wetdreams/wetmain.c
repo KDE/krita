@@ -80,20 +80,22 @@ static double strength_func(double strength, double pressure)
 
 static gint wet_button_press(GtkWidget * widget, GdkEventButton * event)
 {
-#define noVERBOSE
+#define VERBOSE
 #ifdef VERBOSE
-	g_print("button press %f %f %f\n", event->x, event->y,
-		event->pressure);
+	g_print("button press: x,y %f,%f. Pressure:%f. Strenght: %f\n", 
+		event->x, 
+		event->y,
+		event->pressure,
+		(GtkAdjustment *) strength_adjust);
 
 #endif
 	wet_dab(pack->layers[1],
 		&paint,
 		event->x,
 		event->y,
-		((GtkAdjustment *) brushsize_adjust)->value *
-		event->pressure, 0.75 + 0.25 * event->pressure,
-		strength_func(((GtkAdjustment *) strength_adjust)->value,
-			      event->pressure));
+		((GtkAdjustment *) brushsize_adjust)->value * event->pressure,
+		0.75 + 0.25 * event->pressure,
+		strength_func(((GtkAdjustment *) strength_adjust)->value, event->pressure));
 
 	lastx = event->x;
 	lasty = event->y;
@@ -108,7 +110,7 @@ static gint wet_button_press(GtkWidget * widget, GdkEventButton * event)
 static gint wet_motion(GtkWidget * widget, GdkEventMotion * event)
 {
 	double delta;
-#ifdef VERBOSE
+#if 0
 	g_print("motion %f %f %f %d\n", event->x, event->y,
 		event->pressure, event->state);
 
@@ -149,7 +151,7 @@ static void dry(GtkWidget * da)
 	gtk_label_set_text(GTK_LABEL(paintname), "drying...");
 	gtk_widget_draw(paintname, NULL);
 	gdk_flush();
-	wet_flow(pack->layers[1]);
+	//wet_flow(pack->layers[1]);
 	adsorb_cnt++;
 	if (adsorb_cnt == 2) {
 		wet_adsorb(pack->layers[1], pack->layers[0]);

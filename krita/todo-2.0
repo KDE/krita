@@ -126,7 +126,6 @@ General user interface
 ?  * color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
       we should try to make the listview a lot smaller. Maybe just use labels here?
 ?  * the edit palette dialog two-step should be changed into a single dialog
-?  * "Paint direct" should be renamed "paint directly"
 ?  * add end poly entry to the popup menu when the poly tool is active (note:
       make this more generically useful for tools. Great idea by David Herman
 B  * make scaling filter more user friendly by removing the combo and just presenting "fast" and "good"
@@ -140,6 +139,7 @@ Integration
 ?  * a krita document embedded in KWord has the wrong scaling and transparency
 ?  * a krita document embedded in another document prints at the wrong place
 ?  * embedded KOffice objects don't paint themselves correctly
+
 
 Transform tool
 

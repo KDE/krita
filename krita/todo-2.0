@@ -1,0 +1,191 @@
+This file is for our Things To Do for 2.0
+
+(We still have the TODO file for longterm goals beyond 2.0)
+
+Please update & commit this list with every fix you make
+
+? = Alice Nonymus
+A = Adrian Page
+B = Casper Boemann
+C = Cyrille Berger
+R = Boudewijn Rempt
+P = Bart Coppens
+G = Gábor Level
+S = Sander Koning
+TZ = Thomas Zander (to refer to his ui hints)
+
+
+Wet colorspace
+
+R  * Fix drying the wet colorspace
+R  * Fix fill in wet
+
+
+Indexed colorspace
+
+?  * create colorspace (allow the actual indexed colors to be of any cs)
+
+
+Wet & sticky colorspace
+
+?  * finish (in progress already)
+?  * Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
+
+
+Colorspace core stuff
+
+?  * add an input profile combobox to the import image & scan dialogs
+?  * add an export profile combobox to the export image/print dialogs
+?  * support out-of-gamut warning indications for parts of an image 
+      containing unprintable colours
+?  * preferences dialog can show non-existent profile for the monitor profile -> confusing
+?  * check and double check the cms capabilities: especially the use of profiles
+      in the render/convert/edit paths.
+B * make sure conversion between each and every colorspace is possible (API change)
+
+
+Painterly core stuff
+
+?  * make required changes in core to do painterly stuff
+?  * Sumi-e brush tool
+?  * Natural media tools (chalk, ink, oil, watercolour -- fun!)
+
+
+Printing and WYSIWYG
+
+?  * fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
+?  * make sure displays with non-square pixels also show images correctly
+?  * implement resolution dialogs whereever needed (image creation, rescale, zoom etc)
+?  * use the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
+?  * make sure the printing is colormanaged (check X-PDF and gutenprint)
+
+
+New ruler system
+
+?  * make and use koffice-wide ruler (do this in cooperation with flake and kofficelib)
+?  * allow snapping to guides.
+?  * implement autoguides from kofficelib
+?  * use koffice wide modifierkeys standard
+
+
+New selection system
+
+?  * selections, adj. masks, wetness, heigh masks (all 8-bit mask ideas)
+      as sublayers to paint layers, and make them movable between layers
+      and x,y, toggle on/off.
+?  * add opacity slider to selection painting tools so you can select something 50%.
+?  * loading and saving of selections
+?  * BUG 121975: selections and group layers.
+?  * doing a copy of a selection, but having the wrong layer selected gives 
+      me an empty selection (all transparent).  Pressing paste should say so 
+      (popup) instead of creating a new useless layer.
+?  * add deselect with rmb -- maybe also selectable actions with other tools on rmb?
+?  * the selection tools should allow pressing shift to go to 'substract' 
+      mode without adjusting the combobox for the current tool.  (a different 
+      pointer would be nice as well)
+
+
+History & versioning
+
+?  * create history docker
+?  * investigate if per layer history is a good idea
+
+
+Fileformat and import/export
+
+?  * save & load all annotations in .kra files
+?  * save & load more information, like PNG comments, gamma information, etc
+?  * fix gimp XCF PSD and import/export (ImageMagick hacking...)
+?  * fix imports to import metadata.
+
+
+Core
+
+?  * move core/ui class private members to d-pointers
+?  * fix KisFilter::colorSpaceIndependence/worksWith overlap
+?  * add api & gui to exclude channels from compositing
+?  * add a mechanism for cspaces to start long-running filters when a paintdev
+      is created -- and a gui to turn that on and off, perhaps something analogous
+      to a channels box
+?  * make set of filter categories extensible
+?  * anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
+?  * load/save configuration of everything user-settable.
+?  * long painter operations (e.g., convolution painter) should use the
+         progressbar and be cancelable.
+?  * the fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
+      tool should use that rect to blit and notify the image, instead of notifying the complete image.s
+
+
+General user interface
+
+?  * new palette/docker system, much like now but better implemented with QT4. (actually in kofficelib)
+                - tabs in dockers drag-and-droppable (vector of docker windows, create new docker if tab
+                  dropped outside existing docker window)
+                - disable dragging the toolbox from dock position to dock position (see Karbon) if QT4 doesn't fix relayout
+?  * after hiding and reshowing all palettes, the wrong ones are active
+?  * color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
+      we should try to make the listview a lot smaller. Maybe just use labels here?
+?  * the edit palette dialog two-step should be changed into a single dialog
+?  * "Paint direct" should be renamed "paint directly"
+?  * add end poly entry to the popup menu when the poly tool is active (note:
+      make this more generically useful for tools. Great idea by David Herman
+B  * make scaling filter more user friendly by removing the combo and just presenting "fast" and "good"
+?  * add a cheatsheet widget that integrates with knewstuff to have tutorials that people
+      can download and follow from Krita.
+?  * create opacity widget (One that grows more white or transparent (showing those gray blocks) based on the input)
+
+
+Integration
+
+?  * a krita document embedded in KWord has the wrong scaling and transparency
+?  * a krita document embedded in another document prints at the wrong place
+?  * embedded KOffice objects don't paint themselves correctly
+
+Transform tool
+
+?  * make a good option widget
+?  * implement gui, create cursors and update visitor for shearing
+
+
+Plugins
+
+C  * finish, polish and document scripting support
+R  * document plugin API
+?  * create plugin that merges grayscale layers back into one color image.
+?  * as many filters as possible :-)
+
+
+Release
+
+R  * develop thorough test plan and exercise it on several installations
+     before release
+
+
+Bugs
+
+* Open an image, add image as new layer, resize layer, undo: undo removes the layer
+* The change layer size dialog is not the same as the change image dialog, and should
+  therefore be called the scale layer dialog. (Resizing a layer makes no sense)
+* open an image, add an adjustment layer to the image (I used the pixelize 
+  filter). Click on the original layer in the layer dialog box and paint 
+  something. The undo the painting and undo add layer. Krita's toolbox will 
+  become greyed out and you can't paint. I think this is already a bug and 
+  should be fixed. But next, try to add an adjustment layer again -> Krita 
+  crashes.
+
+Also: see UIcomments!
+
+
+Regressions
+
+? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
+? zooming in leaves display artefacts (see Bart's mail)
+
+
+Painting with filters
+
+? sharpen: works badly, paints circles -- this used to be okay!
+? small tiles: makes circles, otherwise effect is fun
+
+Note: make kivio flowchart of what happens when painting with and without filters,
+with and without selection, direct or indirect, because I don't follow anymore

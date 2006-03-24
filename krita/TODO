@@ -1,86 +1,15 @@
-After 1.5 cleanups
-
-* Move core/ui class private members to d-pointers
-* Selections, adj. masks, wetness, heigh masks (all 8-bit mask ideas)
-  as sublayers to paint layers, and make them movable between layers
-  and x,y, toggle on/off.
-* Fix KisFilter::colorSpaceIndependence/worksWith overlap
-* Add api & gui to exclude channels from compositing
-* Add a mechanism for cspaces to start long-running filters when a paintdev
-  is created -- and a gui to turn that on and off, perhaps something analogous
-  to a channels box
-* Make set of filter categories extensible
-* BUG 121975: selections and group layers.
-* Add end poly entry to the popup menu when the poly tool is active (note:
-  make this more generically useful for tools. Great idea by David Herman
-* Paint direct should be paint directly
-          
-UI stuff:
-
-* color picker: top combo should be as wide as the whole widget; the widget is a bit too big,
-  we should try to make the listview a lot smaller. Maybe just use labels here?
-* The edit palette dialog two-step should be changed into a single dialog
-          
-Code organization
-
-Transform tool (CBR)
-
-	* Implement native integer versions for bell, bspline, lanczos3 and mitchell filters
-	* The option widget should be connected
-	* Figure out why scaling down produces sum of weights <255 (Hermite filter)
-	* Implement gui, create cursors and update visitor for shearing
+This file is for longterm goals
 
 Integration
 
-	* A krita document embedded in KWord has the wrong scaling and transparency
-	* A krita document embedded in another document prints at the wrong place
-	* Embedded KOffice objects don't paint themselves correctly
-	* There is currently no kimgio module for Krita images: implement one by
-	  saving a rendered png image into the krita file and extracting that from
-	  kimgio. (Saving of a png image in .kra files is done; now we just need to 
-          add the kimgio file)
-        * There is no easy way to get back from editing an embedded document (if the image is larger
-          than the window)
-          
-Colorspace independence (found with the test colorstrategy)
-
-	* Check and double check the cms capabilities: especially the use of
-          profiles in the render/convert/edit paths.
-	* Merge grayscale layers back into one color image.
-    
-Core
-
-     * The fill painter (and perhaps other paitners, too) should call addDirtyRect, and the floodfill
-          tool should use that rect to blit and notify the image, instead of notifying the complete image.s
-	* Fix image resolution handling (zooming, pixel-for-pixel, 100% == zoomed to dpi/xdpi etc.)
-	* Loading and saving of selections
-	* Anti-aliased filling (requires some simple colorspace function to merge 2 Pixels)
-	* Load/save configuration of everything user-settable.
-	* Long painter operations (e.g., convolution painter) should use the
-          progressbar and be cancelable.
-    * Color adjustment filters seem to have a problem with partially selected pixels
-
-File Format:
-
-	* Save & load all annotations in .kra files
-	* Save & load more information, like PNG comments, gamma information, etc
-
-
-Import/Export
-
-    * Fix gimp XCF PSD and import/export (ImageMagick hacking...)
-	* Fix imports to import metadata.
+?  * there is currently no kimgio module for Krita images: implement one by
+      saving a rendered png image into the krita file and extracting that from
+      kimgio. (Saving of a png image in .kra files is done; now we just need to 
+      add the kimgio file)
 
 User Interface
-    * Add an explanatory textframe to the scaling filter combobox.
-    * Add a good crosshair cursor and a crosshair cursor that extends to the rulers.
-    * Add a cheatsheet widget that integrates with knewstuff to have tutorials that people
-      can download and follow from Krita.
-    * Add opacity widget (One that grows more white or transparent (showing those gray blocks) based on the
-	  input)
     * Add out-of-gamut selection
     * Fix layout problems in tool option widgets.
-    * Disable dragging the toolbox from dock position to dock position (see Karbon)
     * Disable all relevant actions when a layer is locked or invisible. See bug #90456. Show locked status of current layer in statusbar.
     * Add link check to new image dialog to sync width and height
     * The description field in color settings is empty
@@ -90,55 +19,13 @@ User Interface
 				gradient dialog, and allow saving gradients.
 
     * Show which tool is associated with which pointer (mouse, stylus, eraser, other stylusses) In the statusbar.
-    * Allow guides to be disabled. Allow diagonal guides (useful for perspective drawings) Bug #108398
-    * Allow snapping to guides.
     * Create templates for often-used image formats. Add save-as-template
-    * Add deselect with rmb -- maybe also selectable actions with other tools on rmb?
     * Fix crop tool: when pressing shift, keep aspect ratio, implement gray mask.
 	  (Michael Thaler)
     * Allow shape tools to be filled with gradients
-
-	Dockers
-		* Tabs in dockers drag-and-droppable (vector of docker
-		  windows, create new docker if tab dropped outside existing
-		  docker window)
-		* Add bird's eye view tab to dockers.
-		* Add action (macro) docker
-		* Add navigation/zoom docker
-		* Add history docker
-
-    * Doing a copy of a selection, but having the wrong layer selected gives 
-      me an empty selection (all transparent).  Pressing paste should say so 
-      (popup) instead of creating a new useless layer.
-    * the selection tools should allow pressing shift to go to 'substract' 
-      mode without adjusting the combobox for the current tool.  (a different 
-      pointer would be nice as well)
-
     * Pressing save for the first time gives me the 'save document as' dialog 
-      which is set to 'png' as default file format.
-      I suggest to set the default format (in the "save as" dialog) to the krita 
+      which is set to 'png' as default file format. I suggest to set the default format (in the "save as" dialog) to the krita 
       format for any image that has more then 1 layer.  
-
-
-Selections
-
-    * On shearing, the whole image is mirrored, not the selected
-	  bits.
-    * Add opacity slider to selection painting tools so you can
-          select something 50%.
-
-Profiles
-
-	* Add an input profile combobox to the import image & scan dialogs
-	* Add an export profile combobox to the export image/print dialogs
-    * Add loading and saving of profiles associated with images in .krita 
-          files.
-    * Export profiles in tiff, png and jpg (this and the previous item
-      depend on ImageMagick or GraphicsMagick supporting this in some way.)
-    * Support out-of-gamut warning indications for parts of an image 
-      containing unprintable colours (no idea how to implement this). -> this
-      is pretty easy with lcms
-	* preferences dialog can show non-existent profile for the monitor profile -> confusing
 
 
 Tools
@@ -159,23 +46,3 @@ Tools
 	* Pressure sensivitize all relevant tools (e.g. line tool)
     * Add resize slider to freehand tools that resizes the mean brush size.
 	* Implement path tools (Michael Thaler?)
-	* Sumi-e brush tool
-	* Natural media tools (chalk, ink, oil, watercolour -- fun!)
-
-Plugins
-
-	* As many filters as possible :-)
-
-Modules
-
-	* Add color models for HSV, YUV etc.
-	* Add Wet & Sticky model (in progress already)
-	* Implement Curtiss et. al. for watercolour (Levien, wet dreams. In progress)
-	* The composite ops in RGB -> composite.h do not take mask into account
-	 - this goes for COPY and CLEAR in grayscale also
-
-Printing
-
-	* No use of the resolution parameter (but the resolution dialog is still only a .ui file and not implemented at all)
-	* Use gutenprint or something better for image printing.
-

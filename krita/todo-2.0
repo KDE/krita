@@ -42,7 +42,7 @@ Colorspace core stuff
 ?  * check and double check the cms capabilities: especially the use of profiles
       in the render/convert/edit paths.
 B * make sure conversion between each and every colorspace is possible (API change)
-
+P * add something for whitebalance
 
 Painterly core stuff
 

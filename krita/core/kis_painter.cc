@@ -779,8 +779,6 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
 
     KisPaintDeviceSP polygon = new KisPaintDevice(m_device->colorSpace(), "polygon");
     Q_CHECK_PTR(polygon);
-    polygon->setX(m_device->getX());
-    polygon->setY(m_device->getY());
 
     KisFillPainter fillPainter(polygon);
     QRect boundingRectangle(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
@@ -811,8 +809,6 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     }
 
     KisSelectionSP polygonMask = new KisSelection(polygon);
-    polygonMask->setX(polygon->getX());
-    polygonMask->setY(polygon->getY());
 
     for (y=y0; y<=y1; y++) {        /* step through scanlines */
         /* scanline y is at y+.5 in continuous coordinates */

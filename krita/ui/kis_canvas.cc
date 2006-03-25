@@ -297,38 +297,46 @@ void KisCanvasWidget::doubleClickEvent(KisDoubleClickEvent *e)
 
 void KisCanvasWidget::translateTabletEvent(KisEvent *e)
 {
-    bool checkThresholdOnly = false;
+    if (QApplication::activeModalWidget() == 0) {
 
-    if (e->type() == KisEvent::ButtonPressEvent || e->type() == KisEvent::ButtonReleaseEvent) {
-        KisButtonEvent *b = static_cast<KisButtonEvent *>(e);
+        bool checkThresholdOnly = false;
 
-        if (b->button() == Qt::MidButton || b->button() == Qt::RightButton) {
+        if (e->type() == KisEvent::ButtonPressEvent || e->type() == KisEvent::ButtonReleaseEvent) {
+            KisButtonEvent *b = static_cast<KisButtonEvent *>(e);
 
-            if (e->type() == KisEvent::ButtonPressEvent) {
-                buttonPressEvent(static_cast<KisButtonPressEvent *>(e));
-            } else {
-                buttonReleaseEvent(static_cast<KisButtonReleaseEvent *>(e));
+            if (b->button() == Qt::MidButton || b->button() == Qt::RightButton) {
+
+                if (e->type() == KisEvent::ButtonPressEvent) {
+                    buttonPressEvent(static_cast<KisButtonPressEvent *>(e));
+                } else {
+                    buttonReleaseEvent(static_cast<KisButtonReleaseEvent *>(e));
+                }
+
+                checkThresholdOnly = true;
             }
+        }
 
-            checkThresholdOnly = true;
+        double previousPressure = m_lastPressure;
+
+        // Store the last pressure before we generate a button press/release event as the event might cause
+        // us to enter another event loop, and then the same pressure difference would generate another button event,
+        // leading to endless recursion.
+        m_lastPressure = e->pressure();
+
+        // Use pressure threshold to detect 'left button' press/release
+        if (e->pressure() >= PRESSURE_THRESHOLD && previousPressure < PRESSURE_THRESHOLD) {
+            KisButtonPressEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
+            buttonPressEvent(&ke);
+        } else if (e->pressure() < PRESSURE_THRESHOLD && previousPressure >= PRESSURE_THRESHOLD) {
+            KisButtonReleaseEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
+            buttonReleaseEvent(&ke);
+        } else {
+            if (!checkThresholdOnly) {
+                KisMoveEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->state());
+                moveEvent(&ke);
+            }
         }
     }
-
-    // Use pressure threshold to detect 'left button' press/release
-    if (e->pressure() >= PRESSURE_THRESHOLD && m_lastPressure < PRESSURE_THRESHOLD) {
-        KisButtonPressEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
-        buttonPressEvent(&ke);
-    } else if (e->pressure() < PRESSURE_THRESHOLD && m_lastPressure >= PRESSURE_THRESHOLD) {
-        KisButtonReleaseEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
-        buttonReleaseEvent(&ke);
-    } else {
-        if (!checkThresholdOnly) {
-            KisMoveEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->state());
-            moveEvent(&ke);
-        }
-    }
-
-    m_lastPressure = e->pressure();
 }
 
 #ifdef Q_WS_X11
@@ -908,7 +916,8 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
     }
     else
 #if defined(EXTENDED_X11_TABLET_SUPPORT)
-    if (event->type == X11DeviceMotionNotifyEvent || event->type == X11DeviceButtonPressEvent || event->type == X11DeviceButtonReleaseEvent) {
+    if ((event->type == X11DeviceMotionNotifyEvent || event->type == X11DeviceButtonPressEvent || event->type == X11DeviceButtonReleaseEvent)
+        && QApplication::activeModalWidget() == 0) {
         // Tablet event.
         int deviceId;
         const int *axisData;

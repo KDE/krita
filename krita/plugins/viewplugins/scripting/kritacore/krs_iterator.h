@@ -21,8 +21,8 @@
 
 #include <qobject.h>
 #include <api/class.h>
-#include <api/proxy.h>
-#include <api/variant.h>
+//#include <api/proxy.h>
+//#include <api/variant.h>
 
 #include <klocale.h>
 

@@ -63,6 +63,7 @@ public:
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual QString quickHelp() const;
     void finish();
+    virtual void keyPress(QKeyEvent *e);
 
 public slots:
 

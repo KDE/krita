@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritamodifyselection" version="6">
+    <MenuBar>
+        <Menu name="Select"><text>&amp;Select</text>
+            <Action name="growselection"/>
+            <Action name="shrinkselection"/>
+            <Action name="borderselection"/>
+        </Menu>
+    </MenuBar>
+</kpartgui>

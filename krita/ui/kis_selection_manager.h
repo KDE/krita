@@ -76,7 +76,6 @@ public slots:
     void border();
     void expand();
     void contract();
-    void grow();
     void smooth();
     void similar();
     void transform();
@@ -121,7 +120,6 @@ private:
     KAction *m_expand;
     KAction *m_smooth;
     KAction *m_contract;
-    KAction *m_grow;
     KAction *m_similar;
     KAction *m_transform;
     KAction *m_load;

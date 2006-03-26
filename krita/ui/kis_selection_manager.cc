@@ -76,7 +76,6 @@ KisSelectionManager::KisSelectionManager(KisView * parent, KisDoc * doc)
       m_expand(0),
       m_smooth(0),
       m_contract(0),
-      m_grow(0),
       m_similar(0),
       m_transform(0),
       m_load(0),
@@ -207,11 +206,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 0, 0,
                 this, SLOT(contract()),
                 collection, "contract");
-    m_grow =
-        new KAction(i18n("Grow"),
-                0, 0,
-                this, SLOT(grow()),
-                collection, "grow");
     m_similar =
         new KAction(i18n("Similar"),
                 0, 0,
@@ -304,7 +298,6 @@ void KisSelectionManager::updateGUI()
     m_expand->setEnabled(enable);
     m_smooth->setEnabled(enable);
     m_contract->setEnabled(enable);
-    m_grow->setEnabled(enable);
     m_similar->setEnabled(enable);
     m_transform->setEnabled(enable);
 //    m_load->setEnabled(enable);
@@ -745,7 +738,6 @@ bool KisSelectionManager::displaySelection()
 void KisSelectionManager::border() {}
 void KisSelectionManager::expand() {}
 void KisSelectionManager::contract() {}
-void KisSelectionManager::grow() { grow(5, 5); /*shrink(5, 5, true)*/ }
 void KisSelectionManager::similar() {}
 void KisSelectionManager::transform() {}
 void KisSelectionManager::load() {}

@@ -67,6 +67,7 @@ protected:
     void draw(KisCanvasPainter& gc);
     void draw();
     void finish();
+    virtual void keyPress(QKeyEvent *e);
 protected:
     KisPoint m_dragStart;
     KisPoint m_dragEnd;

@@ -70,6 +70,8 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
+    btnZoomOneToOne->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", KIcon::MainToolbar, 16 ));
+    connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
 
 
@@ -234,6 +236,11 @@ void KisPreviewWidget::zoomOut() {
    }
 }
 
+void KisPreviewWidget::zoomOneToOne() {
+    double oldZoom = m_zoom;
+    m_zoom = 1;
+    if( !zoomChanged() ) m_zoom = oldZoom;
+}
 
 
 #include "kis_previewwidget.moc"

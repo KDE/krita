@@ -82,6 +82,7 @@ private slots:
 
     void zoomIn();
     void zoomOut();
+    void zoomOneToOne();
 
     void forceUpdate();
     

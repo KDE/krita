@@ -11,6 +11,7 @@ SUBDIRS = \
     histogram \
     histogram_docker \
     imagesize \
+    modify_selection \
     rotateimage \
     screenshot \
     separate_channels \

@@ -61,9 +61,9 @@ DCOPRef KoViewIface::action( const Q3CString &name )
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
 
-QCStringList KoViewIface::actions()
+DCOPCStringList KoViewIface::actions()
 {
-    QCStringList res;
+    DCOPCStringList res;
     Q3ValueList<KAction *> lst = m_actionProxy->actions();
     Q3ValueList<KAction *>::ConstIterator it = lst.begin();
     Q3ValueList<KAction *>::ConstIterator end = lst.end();

@@ -100,7 +100,7 @@ DCOPRef KoDocumentIface::action( const Q3CString &name )
 
 DCOPCStringList KoDocumentIface::actions()
 {
-    QCStringList res;
+    DCOPCStringList res;
     Q3ValueList<KAction *> lst = m_actionProxy->actions();
     Q3ValueList<KAction *>::ConstIterator it = lst.begin();
     Q3ValueList<KAction *>::ConstIterator end = lst.end();

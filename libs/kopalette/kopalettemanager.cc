@@ -547,7 +547,7 @@ void KoPaletteManager::save()
 
         cfg->setGroup("palette-" + itP.currentKey());
 
-        if ( p->area() == m_view->mainWindow()->leftDock() ) {
+        if ( m_view->mainWindow()->dockWidgetArea (p->area()) == Qt::LeftDockWidgetArea) {
             cfg->writeEntry("dockarea", "left");
         }
         else {

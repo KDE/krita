@@ -90,14 +90,24 @@ void KisToolCrop::activate()
     // No current crop rectangle, try to use the selection of the device to make a rectangle
     if (m_subject && m_subject->currentImg() && m_subject->currentImg()->activeDevice()) {
         KisPaintDeviceSP device = m_subject->currentImg()->activeDevice();
-        if (!device->hasSelection())
-            return;
+        if (!device->hasSelection()) {
+            //m_rectCrop = m_subject->currentImg()->bounds();
+            //validateSelection();
+        }
+        else {
 
-        m_rectCrop = device->selection()->exactBounds();
-        validateSelection();
-        crop();
+            m_rectCrop = device->selection()->exactBounds();
+            validateSelection();
+            crop();
+        }
     }
 }
+
+void KisToolCrop::deactivate()
+{
+    clearRect();
+}
+
 
 void KisToolCrop::paint(KisCanvasPainter& gc)
 {
@@ -111,7 +121,9 @@ void KisToolCrop::paint(KisCanvasPainter& gc, const QRect& rc)
 
 void KisToolCrop::clearRect()
 {
+    kdDebug() << "Clearing\n";
     if (m_subject) {
+
         KisCanvasController *controller = m_subject->canvasController();
         KisImageSP img = m_subject->currentImg();
 
@@ -469,9 +481,11 @@ void KisToolCrop::crop() {
 
     QRect rc =  realRectCrop().normalize();
 
-
     // The visitor adds the undo steps to the macro
     if (m_optWidget->cmbType->currentItem() == 0) {
+
+        QRect dirty = img->bounds();
+
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
         if (img->undo())
@@ -480,7 +494,7 @@ void KisToolCrop::crop() {
         KisCropVisitor v(rc, false);
         KisLayerSP layer = img->activeLayer();
         layer->accept(v);
-
+        layer->setDirty( dirty );
         if (img->undo())
             img->undoAdapter()->endMacro();
 
@@ -543,7 +557,7 @@ void KisToolCrop::setCropWidth(int w)
     } else {
         setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
     }
-    
+
     validateSelection();
     paintOutlineWithHandles();
 
@@ -566,7 +580,7 @@ void KisToolCrop::setCropHeight(int h)
     } else {
         setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
     }
-    
+
     validateSelection();
     paintOutlineWithHandles();
 

@@ -55,6 +55,7 @@ set(KROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kross ${CMAKE_BINARY_DIR}/libs/kross
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
+include_directories(${KOFFICECORE_INCLUDES})
 
 set(libkdgantt_SRCS
 	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttView.cpp         

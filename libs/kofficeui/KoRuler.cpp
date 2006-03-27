@@ -36,6 +36,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <KoPageLayout.h>
+#include <q3tl.h>
 
 class KoRulerPrivate {
 public:

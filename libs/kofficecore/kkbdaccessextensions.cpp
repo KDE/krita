@@ -41,6 +41,7 @@
 #include <kmainwindow.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <q3tl.h>
 
 // KKbdAccessExtensions includes
 #include "kkbdaccessextensions.h"

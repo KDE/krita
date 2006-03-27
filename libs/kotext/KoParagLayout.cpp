@@ -37,6 +37,7 @@
 #include <Q3CString>
 
 #include <float.h>
+#include <q3tl.h>
 
 QString* KoParagLayout::shadowCssCompat = 0L;
 

@@ -60,6 +60,7 @@
 #include <qlayout.h>
 #include <qapplication.h>
 #include <q3widgetstack.h>
+#include <q3tl.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
     :QWidget( parent, name ),

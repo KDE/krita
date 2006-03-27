@@ -24,6 +24,7 @@
 #include <q3valuelist.h>
 
 #include <klocale.h>
+#include <q3tl.h>
 
 KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix, 
   const KShortcut& cut, QObject* parent, const char* name ):

@@ -163,6 +163,16 @@ void KoXmlWriter::endElement()
     }
 }
 
+void KoXmlWriter::addTextNode( const QByteArray& cstr )
+{
+    // Same as the const char* version below, but here we know the size
+    prepareForTextNode();
+    char* escaped = escapeForXML( cstr.constData(), cstr.size() );
+    writeCString( escaped );
+    if(escaped != m_escapeBuffer)
+        delete[] escaped;
+}
+
 void KoXmlWriter::addTextNode( const char* cstr )
 {
     prepareForTextNode();

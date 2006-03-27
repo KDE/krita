@@ -109,7 +109,7 @@ void StoreDropTest::showZipContents( QByteArray data, const char* mimeType, bool
         setText( "No data!" );
         return;
     }
-    QBuffer buffer( data );
+    QBuffer buffer( &data );
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
     if ( store->bad() ) {
         setText( "Invalid ZIP!" );

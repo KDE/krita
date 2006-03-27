@@ -119,12 +119,10 @@ public:
      * which is a bit slower because it needs to convert @p str to utf8 first.
      */
     inline void addTextNode( const QString& str ) {
-        addTextNode( str );
+        addTextNode( str.toUtf8() );
     }
     /// Overloaded version of the one taking a const char* argument
-    inline void addTextNode( const QByteArray& cstr ) {
-        addTextNode( cstr.data() );
-    }
+    void addTextNode( const QByteArray& cstr );
     /**
      * @brief Adds a text node as a child of the current element.
      *

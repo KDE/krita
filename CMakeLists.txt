@@ -36,13 +36,25 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 #macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories( 
-	${CMAKE_SOURCE_DIR}/libs/kofficecore/
-	${CMAKE_SOURCE_DIR}/libs/store/
-	${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
-# TODO remove this (wrong order) once we have per-lib variables to use like in kdelibs.
-include_directories( ${KDE4_INCLUDE_DIRS} )
+# kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
+set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDE_DIRS})
+# kofficecore depends on kostore
+set(KOFFICECORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_BINARY_DIR}/libs/kofficecore ${KOSTORE_INCLUDES})
+# kofficeui depends on kofficecore
+set(KOFFICEUI_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_BINARY_DIR}/libs/kofficeui ${KOFFICECORE_INCLUDES})
+
+# The rest must be specified independently, in addition to one of the above three
+set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kwmf ${CMAKE_BINARY_DIR}/libs/kwmf)
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_BINARY_DIR}/libs/kotext)
+set(KOPAINTER_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopainter ${CMAKE_BINARY_DIR}/libs/kopainter)
+set(KOPALETTE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopalette ${CMAKE_BINARY_DIR}/libs/kopalette)
+set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula ${CMAKE_BINARY_DIR}/libs/kformula)
+set(KROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kross ${CMAKE_BINARY_DIR}/libs/kross)
+# Those are included with e.g. <koproperty/set.h>
+set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
+
 
 set(libkdgantt_SRCS
 	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttView.cpp         
